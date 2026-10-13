@@ -158,6 +158,7 @@ int main(int argc, char** argv)
 			for (char C : T) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C);
 			std::fprintf(F, "bad\t%s\t%s\n", E.c_str(), Parse(B.Text).Error.c_str());
 		}
+		std::fprintf(F, "events\t%s\n", [&] { std::string E; for (char C : WriteEvents(41, {{EventKind::Seen, "pack-1-1", {1.25, -2, 3}, 1}, {EventKind::Hit, "pack-1-2", {0, 0, 0}, 12.5}, {EventKind::Down, "pack-1-2", {7, 8, 9}, 0}, {EventKind::Player, "player", {-100.5, 20, 0}, 87.5}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "roster\t%s\n", [&] { std::string E; for (char C : WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {-4.25, 5, 6}, false}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
 		std::fclose(F);

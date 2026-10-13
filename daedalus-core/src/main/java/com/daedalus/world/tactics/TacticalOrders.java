@@ -306,6 +306,64 @@ public final class TacticalOrders {
         return out.toString();
     }
 
+    /** A DTE 1 batch: the host tick it was taken at and the events in order. */
+    public record Events(long tick, List<Event> events) {
+        public Events {
+            events = List.copyOf(events);
+        }
+    }
+
+    /** At most this many events in one batch: the host keeps 512 and drops the oldest. */
+    public static final int MAX_EVENTS = 512;
+
+    /**
+     * Reads a DTE 1 batch, as written by {@code UDaedalusTactics::TakeEvents} (C++ {@code WriteEvents}):
+     * <pre>
+     * DTE 1
+     * tick &lt;n&gt;
+     * event &lt;SEEN|HIT|DOWN|PLAYER&gt; &lt;unit|player&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;value&gt;
+     * </pre>
+     * Throws {@link IllegalArgumentException} naming the line. Values are observations, not authority: HIT is
+     * damage taken, PLAYER is the hero's health (-1 = unknown), SEEN is 1 or 0, DOWN is 0.
+     */
+    public static Events parseEvents(String text) {
+        String[] lines = text.split("\n", -1);
+        if (lines.length < 2 || !lines[0].equals("DTE 1")) {
+            throw new IllegalArgumentException("line 1: expected 'DTE 1'");
+        }
+        List<String> h = words(lines[1]);
+        double tick = h.size() == 2 && h.get(0).equals("tick") ? number(h.get(1)) : Double.NaN;
+        if (Double.isNaN(tick) || tick < 0 || tick != Math.floor(tick)) {
+            throw new IllegalArgumentException("line 2: expected 'tick <n>'");
+        }
+        List<Event> events = new ArrayList<>();
+        for (int i = 2; i < lines.length; i++) {
+            if (lines[i].isEmpty()) {
+                continue;
+            }
+            List<String> t = words(lines[i]);
+            EventKind kind = null;
+            if (t.size() == 7 && t.get(0).equals("event")) {
+                for (EventKind k : EventKind.values()) {
+                    if (k.name().equals(t.get(1))) {
+                        kind = k;
+                    }
+                }
+            }
+            double[] v = new double[4];
+            boolean ok = kind != null && token(t.get(2)) && (kind != EventKind.PLAYER || t.get(2).equals("player"));
+            for (int k = 0; ok && k < 4; k++) {
+                v[k] = number(t.get(3 + k));
+                ok = !Double.isNaN(v[k]);
+            }
+            if (!ok || events.size() >= MAX_EVENTS) {
+                throw new IllegalArgumentException("line " + (i + 1) + ": bad event line");
+            }
+            events.add(new Event(kind, t.get(2), new Vec(v[0], v[1], v[2]), v[3]));
+        }
+        return new Events((long) tick, events);
+    }
+
     /** One unit of a DTR 1 roster: the host's trusted bootstrap for a squad (ADR-060, Astra's Frame needs it). */
     public record RosterUnit(String unit, String kind, double health, double maxHealth, Vec at, boolean seesPlayer) {
     }
@@ -314,6 +372,15 @@ public final class TacticalOrders {
     public record Roster(String session, String squad, long tick, List<RosterUnit> units) {
         public Roster {
             units = List.copyOf(units);
+        }
+
+        /** The units as the directors take them (SquadDirector, and AdaptiveDirector's Frame); the fallen keep health 0. */
+        public List<SquadDirector.Unit> toUnits() {
+            List<SquadDirector.Unit> out = new ArrayList<>();
+            for (RosterUnit u : units) {
+                out.add(new SquadDirector.Unit(u.unit(), u.at(), u.health(), u.maxHealth(), u.seesPlayer()));
+            }
+            return out;
         }
     }
 

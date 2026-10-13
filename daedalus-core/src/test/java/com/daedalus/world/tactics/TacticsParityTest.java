@@ -159,4 +159,33 @@ class TacticsParityTest {
         assertThat(spec.orders()).anyMatch(o -> o.unit().equals("b0")).noneMatch(o -> o.unit().equals("b299"));
         assertThat(TacticalOrders.parse(TacticalOrders.write(spec)).ok()).isTrue();
     }
+
+    @Test
+    void readsTheCppEventsAndRoundTrips() throws IOException {
+        String line = Files.readAllLines(PARITY).stream().filter(l -> l.startsWith("events\t")).findFirst().orElseThrow();
+        String text = unescape(line.substring(7));
+        TacticalOrders.Events e = TacticalOrders.parseEvents(text);
+        assertThat(e.tick()).isEqualTo(41);
+        assertThat(e.events()).extracting(TacticalOrders.Event::kind).containsExactly(TacticalOrders.EventKind.SEEN,
+                TacticalOrders.EventKind.HIT, TacticalOrders.EventKind.DOWN, TacticalOrders.EventKind.PLAYER);
+        assertThat(e.events().get(3).value()).isEqualTo(87.5);
+        assertThat(TacticalOrders.writeEvents(e.tick(), e.events())).isEqualTo(text);
+        for (String bad : List.of("", "DTE 2\ntick 1\n", "DTE 1\ntock 1\n", "DTE 1\ntick 1\nevent JUMP a 0 0 0 0\n",
+                "DTE 1\ntick 1\nevent PLAYER notplayer 0 0 0 0\n", "DTE 1\ntick 1\nevent HIT a 0 0 0\n",
+                "DTE 1\ntick 1\nevent HIT a 0x1 0 0 0\n")) {
+            org.assertj.core.api.Assertions.assertThatThrownBy(() -> TacticalOrders.parseEvents(bad))
+                    .as(bad).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void aRosterFeedsTheDirectorWithTheFallenAtZero() throws IOException {
+        String line = Files.readAllLines(PARITY).stream().filter(l -> l.startsWith("roster\t")).findFirst().orElseThrow();
+        TacticalOrders.Roster r = TacticalOrders.parseRoster(unescape(line.substring(7)));
+        List<Unit> units = r.toUnits();
+        assertThat(units).extracting(Unit::name).containsExactly("pack-1-1", "pack-1-2");
+        assertThat(units.get(1).health()).isZero();
+        var spec = SquadDirector.decide(r.squad(), r.tick(), units, new Vec(0, 0, 0));
+        assertThat(TacticalOrders.parse(TacticalOrders.write(spec)).ok()).isTrue();
+    }
 }
