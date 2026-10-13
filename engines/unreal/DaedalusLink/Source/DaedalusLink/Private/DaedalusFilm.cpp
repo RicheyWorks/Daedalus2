@@ -23,3 +23,13 @@ ASceneCapture2D* UDaedalusFilm::SpawnFilmCamera(const UObject* WorldContext)
 	}
 	return Cam;
 }
+
+AActor* UDaedalusFilm::SpawnInPlay(const UObject* WorldContext, TSubclassOf<AActor> Class, FVector Location, FRotator Rotation)
+{
+	UWorld* W = WorldContext ? WorldContext->GetWorld() : nullptr;
+	if (!W || !*Class) return nullptr;
+	FActorSpawnParameters P;
+	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	P.ObjectFlags |= RF_Transient;
+	return W->SpawnActor<AActor>(*Class, Location, Rotation, P);
+}

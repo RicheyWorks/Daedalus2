@@ -938,16 +938,19 @@ def scenario_shiny(p):
     w = world()
     at = h.get_actor_location()
     fwd = h.get_actor_forward_vector()
-    plain = w.spawn_actor(unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, -150, 100), unreal.Rotator(0, 0, 0))
-    shiny = w.spawn_actor(unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, 150, 100), unreal.Rotator(0, 0, 0))
+    # Python can only spawn into the editor world; UDaedalusFilm.spawn_in_play puts actors into the Play world.
+    # BeginPlay runs at spawn, so shiny is set right after and Rebuild applies it.
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    plain = spawn(h, unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, -150, 100), unreal.Rotator(0, 0, 0))
+    shiny = spawn(h, unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, 150, 100), unreal.Rotator(0, 0, 0))
     for c in (plain, shiny):
         c.set_editor_property("species", "Mob_Sheep")
     shiny.set_editor_property("shiny", True)
     plain.rebuild()
     shiny.rebuild()
-    foe_plain = w.spawn_actor(unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, -200, 100), unreal.Rotator(0, 0, 0))
-    foe_shiny = w.spawn_actor(unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, 200, 100), unreal.Rotator(0, 0, 0))
-    foe_shiny.set_editor_property("shiny", True)
+    foe_plain = spawn(h, unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, -200, 100), unreal.Rotator(0, 0, 0))
+    foe_shiny = spawn(h, unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, 200, 100), unreal.Rotator(0, 0, 0))
+    foe_shiny.make_shiny()
     for f in (foe_plain, foe_shiny):
         f.set_editor_property("hunts", False)
     yield from _frames(3)

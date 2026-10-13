@@ -52,6 +52,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bHunts = true;
 	/** Shiny (ADR-065): the mint's very rare roll. More health, taller, and lit by a rainbow glow with orbiting sparks. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bShiny = false;
+	/** Turn an already-playing foe shiny (the mint's roll arriving after spawn). Idempotent. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void MakeShiny();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float AggroRange = 2600.f;
 
 	// The record (the harness reads these).
