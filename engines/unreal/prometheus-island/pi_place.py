@@ -70,7 +70,6 @@ if old:
     if t: C=t[0].get_actor_location()
 for a in old: es.destroy_actor(a)
 C=unreal.Vector(2000000,2000000,0)  # ARK_ORIGIN from BOARD island grid (msg 17138)
-C=unreal.Vector(2000000,2000000,0)  # ARK_ORIGIN from BOARD island grid (msg 17138)
 if C is None:
     for rr in (160000,220000,280000):
         for k in range(12):
