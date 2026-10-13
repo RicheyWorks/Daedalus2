@@ -826,6 +826,12 @@ if ($Open -and -not $WhatIfOnly) {
         # multi-editor.ps1 -Join leaves the Multi-User session arguments here (ADR-059).
         $extraFile = Join-Path (Join-Path (Split-Path $Project) "Saved\Daedalus") "editor-args.txt"
         $extra = if (Test-Path $extraFile) { (Get-Content $extraFile -Raw).Trim() } else { "" }
+        # The shared editor always runs D3D11 with GPU crash breadcrumbs: a no-flag D3D12 launch hit a GPU page fault
+        # twice under imports (bot-team LESSONS-LEARNED-UNREAL, hephaestus 2026-10-13 05:58).
+        foreach ($flag in @("-d3d11", "-gpucrashdebugging")) {
+            if ($extra -notmatch [regex]::Escape($flag)) { $extra = ($extra + " " + $flag).Trim() }
+        }
+        Write-Host "    editor flags: $extra"
         Start-Process -FilePath $exe -ArgumentList ("`"$Project`" " + $extra).Trim()
         # Answer the startup dialogs (rebuild modules, restore packages) so nobody has to click them.
         $watch = Join-Path $PSScriptRoot "dialog-watch.ps1"
