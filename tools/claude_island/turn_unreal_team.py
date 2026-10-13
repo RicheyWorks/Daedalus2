@@ -21,6 +21,7 @@ Nothing here deletes files or closes other programs.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -31,14 +32,15 @@ sys.path.insert(0, os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
 REPORT = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "Daedalus", "jobs", "turn-report.json")
 SCENARIOS = ["tactics", "tactics_remote", "wild", "orrery"]
+PYDIR = os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\")
 THREE_NPC = os.path.join(REPO, "docs", "benchmarks", "adaptive-initial", "three-npc.dto")
 
 PLACE = r'''
 import sys, types, importlib
 for n in ("bpy", "bmesh"):
     sys.modules.setdefault(n, types.ModuleType(n))
-p = r"%s"
-if p not in sys.path: sys.path.insert(0, p)
+for p in (r"%s", r"%s"):   # tools/claude_island (orr_*) and the plugin's Content/Python (daedalus_*), freshest first
+    if p not in sys.path: sys.path.insert(0, p)
 import orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands
 for m in (orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands): importlib.reload(m)
 result = {"place": str(orr_place.run())[:300], "reach": {k: v for k, v in orr_reach.run().items()},
@@ -121,8 +123,11 @@ class Turn:
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "fetch", "-q", "origin"])
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "checkout", "-q", "--detach", "origin/main"])
         started = self.run(["powershell", "-NoProfile", "-File", job, "-Start", "-Fast"])
+        m = re.search(r"(build-\d{4}-\d{6})", started or "")
+        jid = ["-Id", m.group(1)] if m else []   # wait on THIS job: an older log's BUILD OK once let a turn run on early
+        self.sleep(5)
         for _ in range(tries):
-            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait"])
+            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait"] + jid)
             if "BUILD FAILED" in out:
                 raise RuntimeError(out[-600:])
             if "BUILD OK" in out:
@@ -160,7 +165,23 @@ class Turn:
         self.step("save", lambda: self.call("save"))
         return self.finish(None, before.get("result"), before.get("result"))
 
-    def go(self, dry=False, light=False):
+    def after_build(self):
+        """The turn from 'bridge up' on, for when the build already ran (or ran outside this script)."""
+        before = self.step("ram before", self.ram)
+        self.step("bridge up", lambda: self.call("ping", timeout=180))
+        self.step("place isles + islands.json", lambda: self.call("execute_python", code=PLACE % (PYDIR, HERE.replace("\\", "\\\\")),
+                                                                  unattended=False, bridge_timeout=300))
+        after = self.step("ram after", self.ram)
+        self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
+            "execute_python", code=AUDIT % PYDIR, unattended=False, bridge_timeout=300))
+        for s in SCENARIOS:
+            self.step("scenario " + s, lambda s=s: self.scenario(s))
+        self.step("save", lambda: self.call("save"))
+        return self.finish(None, before.get("result"), after.get("result"))
+
+    def go(self, dry=False, light=False, after_build=False):
+        if after_build and not dry:
+            return self.after_build()
         plan = ["ram", "preflight", "build", "place", "ram", "ram audit", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
         if light:
             plan = ["ram", "preflight", "ram audit", "islands.json + islands.dsb", "save", "post"]
@@ -176,7 +197,7 @@ class Turn:
         if not build["ok"]:
             return self.finish("build failed")
         self.step("bridge up", lambda: self.call("ping", timeout=180))
-        self.step("place isles + islands.json", lambda: self.call("execute_python", code=PLACE % HERE.replace("\\", "\\\\"),
+        self.step("place isles + islands.json", lambda: self.call("execute_python", code=PLACE % (PYDIR, HERE.replace("\\", "\\\\")),
                                                                   unattended=False, bridge_timeout=300))
         after = self.step("ram after", self.ram)
         self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
@@ -206,6 +227,7 @@ def main(argv):
     from asset_pipeline import wire
     dry = "--dry-run" in argv
     light = "--light" in argv
+    after_build = "--after-build" in argv
 
     def call(kind, timeout=600, **params):
         return wire.call(wire.UNREAL, kind, timeout=timeout, side="Unreal", **params)
@@ -220,7 +242,7 @@ def main(argv):
         subprocess.run([sys.executable, "-m", "asset_pipeline.teamlink", "send", "--me", "unreal-team", "--to", "*",
                         "--type", "note", "--text", text], cwd=os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
-    report = Turn(call, run, ram, link).go(dry, light)
+    report = Turn(call, run, ram, link).go(dry, light, after_build)
     if not dry:
         os.makedirs(os.path.dirname(REPORT), exist_ok=True)
         with open(REPORT, "w", encoding="utf-8") as f:
