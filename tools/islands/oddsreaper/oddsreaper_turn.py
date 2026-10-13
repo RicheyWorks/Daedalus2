@@ -4,11 +4,11 @@
 Steps: preflight -> build DaedalusLink (unreal-job -Start -Fast; reopens editor) -> sky director -> island ->
 SAVE sublevel+DaedalusWorld (before shot; bridge timeout can't zero the turn) -> write island_result.json ->
 hero shot (SceneCapture2D warm, then viewport retry + HighResShot) -> 20 s Play check + shot (if time) ->
-stop Play -> save -> tidy -> post DONE + HANDOFF art-master-flex on the team link.
+stop Play -> save -> tidy -> post DONE + HANDOFF $OR_NEXT (default art-master-flex) on the team link.
 Talks to the Claude Unreal Bridge (127.0.0.1:9877, PROTOCOL.md). Whatever fails, it always stops Play and saves.
 Bridge liveness PREFLIGHT before TURN START: short ping; if the bridge is dead (GPU-crashed editor, refused or hung)
 it posts one HOLD note, does NOT start the 18-min clock or place anything, re-pings every OR_PREFLIGHT_S (default 30 s)
-and needs two good pings in a row, until alive or GIVE_UP (default 23:00 local). Each check writes
+and needs two good pings in a row, until alive or give-up (default turn start + 60 min, OR_GIVE_UP_MIN; OR_GIVE_UP=HH:MM rolls past midnight). Each check writes
 bot-team/shots/oddsreaper/bridge_status.json {ok, ts, detail}. Build (-Fast) only runs after the bridge is alive
 (or after a successful preflight recovery); never burn the turn on a dead editor."""
 import base64, datetime as dt, json, os, shutil, socket, subprocess, sys, time
@@ -22,11 +22,12 @@ SHOTS = r"C:\Users\730ri\projects\bot-team\shots\oddsreaper"
 RESULT = os.path.join(SHOTS, "island_result.json")
 OUTBOX = r"C:\Users\730ri\projects\bot-team\link\outbox\oddsreaper.jsonl"
 TIDY = r"C:\Users\730ri\projects\studio-screen-connector\tidy.ps1"
-NEXT = "art-master-flex"  # round-2 order after oddsreaper
+NEXT = os.environ.get("OR_NEXT", "art-master-flex")  # round 3+: set OR_NEXT to whoever the referee names
 PORT = int(os.environ.get("OR_BRIDGE_PORT", "9877"))
 PREFLIGHT_S = int(os.environ.get("OR_PREFLIGHT_S", "30"))
 PING_S = int(os.environ.get("OR_PING_S", "5"))
-GIVE_UP_HHMM = os.environ.get("OR_GIVE_UP", "23:00")
+GIVE_UP_HHMM = os.environ.get("OR_GIVE_UP", "")  # "" = start + OR_GIVE_UP_MIN; a passed HH:MM rolls to tomorrow
+GIVE_UP_MIN = int(os.environ.get("OR_GIVE_UP_MIN", "60"))
 LOG = []
 
 
@@ -74,9 +75,15 @@ def wait_bridge(secs):
     raise RuntimeError("editor bridge did not come up")
 
 
-def _give_up_dt():
+def _give_up_dt(now=None):
+    """Round-3 turns run past 23:00: a fixed 23:00 cut-off made preflight() return False at once (no ping).
+    Default is start + GIVE_UP_MIN; an explicit HH:MM that has already passed means tomorrow (after midnight)."""
+    now = now or dt.datetime.now()
+    if not GIVE_UP_HHMM:
+        return now + dt.timedelta(minutes=GIVE_UP_MIN)
     h, m = GIVE_UP_HHMM.split(":")
-    return dt.datetime.combine(dt.date.today(), dt.time(int(h), int(m)))
+    t = dt.datetime.combine(now.date(), dt.time(int(h), int(m)))
+    return t if t > now else t + dt.timedelta(days=1)
 
 
 def bridge_alive():
@@ -308,14 +315,14 @@ def main():
     os.makedirs(SHOTS, exist_ok=True)
     # Preflight BEFORE TURN START / build: GPU-dead editor (D3D Device Removed) must not burn the slot.
     if not preflight():
-        say(f"bridge 127.0.0.1:{PORT} still dead at {GIVE_UP_HHMM}; not starting")
-        link(f"BLOCKED editor turn (oddsreaper): bridge {PORT} stayed dead until {GIVE_UP_HHMM}; never started, "
+        say(f"bridge 127.0.0.1:{PORT} still dead at give-up {dt.datetime.now():%H:%M}; not starting")
+        link(f"BLOCKED editor turn (oddsreaper): bridge {PORT} stayed dead until {dt.datetime.now():%H:%M}; never started, "
              "did not touch the editor. Need a make-up once the editor is back.")
         write_result({"stage": "preflight_blocked", "ok": False, "error": "bridge dead until give-up"})
         return {"blocked": "bridge_dead"}
     global T0
     T0 = time.time()  # clock starts only after bridge is alive
-    link("DOING editor-slot oddsreaper: turn started (round-2; HANDOFF -> art-master-flex)")
+    link(f"DOING editor-slot oddsreaper: turn started (HANDOFF -> {NEXT})")
     if "--skip-build" not in sys.argv:
         say("build DaedalusLink (-Fast; editor reopens)")
         subprocess.run(["powershell", "-NoProfile", "-File", REPO + r"\engines\unreal\unreal-job.ps1", "-Start", "-Fast"], check=True)
