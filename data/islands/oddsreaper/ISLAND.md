@@ -141,3 +141,11 @@ sun/sky floors (MIN_SUN 1.0 / MIN_SKY 0.5), DirectionalLight count guard (no sec
 live sky restore on their round-4 turn; OddsReaper next editor turn still owes: framed PIE SceneCapture storm hero
 on-island (r4 was off-island) after world is Clear on disk, then Play-stop + save OddsReaperIsland (do not leave
 director at storm on the persistent map).
+
+## Round-4 off-editor: mechanics.json (Oct 13, 2026, ~00:57 PT)
+
+Added data/islands/oddsreaper/mechanics.json (disksaver-mechanics-v1) derived from water.json / livestock.json /
+herbs.json storm_parlay_cookbook: DiceSpring+StormCistern sources, CoinbackGoat/DicebeakHen products, 8 wager herbs,
+8 storm-parlay teas, Reaper Ledger balance 30/30/30/10. Validator check_mechanics.py cross-checks tea inputs,
+cookbook membership, water/livestock ids, and balance sum. Headless: python data/islands/oddsreaper/check_mechanics.py -> OK.
+No Unreal touched.
