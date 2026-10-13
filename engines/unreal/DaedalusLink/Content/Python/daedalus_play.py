@@ -1115,7 +1115,7 @@ def scenario_cast(p):
     def through(talker, picks):
         """Talk, closing plain lines with B+A and answering asks with the given picks, until the box is down."""
         lines = []
-        used = talker.use(h)
+        used = talker.talk_to(h)
         for _ in range(12):
             st = h.dialogue_input("state")
             if st.startswith("closed"):
