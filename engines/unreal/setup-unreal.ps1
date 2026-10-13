@@ -425,7 +425,9 @@ if (-not $WhatIfOnly -and (Test-Path $Project)) {
     Set-IniValue $ini $win "+D3D12TargetedShaderFormats" "PCD3D_SM6"
     Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "EditorStartupMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
     Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "GameDefaultMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
-    Write-Host "    project settings: DirectX 12 with Shader Model 6 (for Nanite), Daedalus level at startup"
+    # No camera motion blur: a fast mouse turn smeared the whole screen (Richey, 2026-10-13).
+    Set-IniValue $ini "/Script/Engine.RendererSettings" "r.DefaultFeature.MotionBlur" "False"
+    Write-Host "    project settings: DirectX 12 with Shader Model 6 (for Nanite), Daedalus level at startup, no motion blur"
 }
 
 # --- 5. World Package ----------------------------------------------------------------------------------------

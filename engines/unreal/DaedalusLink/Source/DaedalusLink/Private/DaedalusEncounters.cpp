@@ -92,8 +92,12 @@ bool UDaedalusEncounters::FindGround(const APawn* Player, FVector& Out)
 	for (const TWeakObjectPtr<AActor>& A : Islands)
 	{
 		if (!A.IsValid()) continue;
-		const float D = FVector::Dist2D(A->GetActorLocation(), P);
-		if (D > 1200.f && D < 7500.f) Near.Add(A.Get());
+		// Distance to the island's edge, not its pivot: on a wide island the pivot can be far while you stand on it.
+		FVector O, E;
+		A->GetActorBounds(false, O, E);
+		const float Dx = FMath::Max(0.f, FMath::Abs(P.X - O.X) - E.X);
+		const float Dy = FMath::Max(0.f, FMath::Abs(P.Y - O.Y) - E.Y);
+		if (FMath::Sqrt(Dx * Dx + Dy * Dy) < 7500.f) Near.Add(A.Get());
 	}
 	if (Near.Num() == 0) return false;
 

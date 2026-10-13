@@ -25,8 +25,8 @@ public:
 	/** The Mob_ asset, e.g. "Mob_Sheep". Set before BeginPlay (or call Rebuild). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString Species = TEXT("Mob_Sheep");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") int32 Seed = 1;
-	/** How far from home it strays (cm). */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float Range = 1200.f;
+	/** How far from home it strays (cm). 40 m so a herd roams its island; the step trace already stops it at ledges. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float Range = 4000.f;
 
 	// The record (the harness reads these).
 	/** GRAZE, WALK, FLEE. */
