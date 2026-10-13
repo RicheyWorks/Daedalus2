@@ -105,6 +105,33 @@ int main(int argc, char** argv)
         Check("unbound: over at once", C.Talk().Over && C.Picked(0).Over);
     }
 
+    // ---- every shipped cast parses, and each has a quest chain that sets a flag
+    for (const char* F : {"parcels", "bricks", "labyrinth"})
+    {
+        Cast C;
+        std::string E;
+        const bool Loaded = C.Parse(ReadAll(Dir + "/" + F + ".dcs"), E);
+        Check(std::string("the ") + F + " cast parses", Loaded, E);
+        if (!Loaded) continue;
+        int Flags = 0, Asks = 0;
+        for (const Script& S : C.Scripts) for (const Step& T : S.Steps) for (const Node& N : T.Nodes) { Flags += N.K == Node::Kind::Set; Asks += N.K == Node::Kind::Ask; }
+        Check(std::string(F) + ": at least ten roles, flags and questions", C.Scripts.size() >= 10 && Flags >= 5 && Asks >= 8, std::to_string(C.Scripts.size()) + " " + std::to_string(Flags) + " " + std::to_string(Asks));
+    }
+    {
+        // The Riddler's door and the Apprentice share a realm-wide flag: the host copies it in on bind.
+        Cast L;
+        std::string E;
+        L.Parse(ReadAll(Dir + "/labyrinth.dcs"), E);
+        Conversation R;
+        R.Bind(L.Find("Gate Riddler"));
+        R.Talk(); R.Talk(); R.Talk();
+        Check("the right answer opens the door", R.Picked(0).Text.find("The door is yours") != std::string::npos && R.Has("riddle_done"));
+        Conversation A;
+        A.Bind(L.Find("The Architect's Apprentice"));
+        A.Restore("start:0 " + std::string("riddle_done"));
+        Check("and the Apprentice tells the story once it is open", A.Talk().Text.find("cut it") != std::string::npos);
+    }
+
     std::cout << Ok << "/" << Total << "\n";
     return Ok == Total ? 0 : 1;
 }

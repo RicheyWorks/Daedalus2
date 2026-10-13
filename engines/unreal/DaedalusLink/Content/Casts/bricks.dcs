@@ -1,0 +1,186 @@
+DCS 1
+cast BRICKS
+# Brick Realm (REALM-CASTS.md): baseplates, studs for money, blueprints for quests.
+
+who Foreman Kip
+voice 4 1.0
+step start
+if bridge_done -> tower
+if bridge -> waiting
+say Builder! The river plate's got no bridge and the Twins won't swim.
+ask Build the bridge? Blueprint's yours. | On it=accept | Not yet=later
+step accept
+set bridge
+say Red bricks, forty of them, and a grey plate for the deck. Snap them on the line; the plan shows where.
+end
+step later
+say The river's not going anywhere. The Twins might.
+end
+step waiting
+ask Bridge up? | Not yet=hint | It's up=done
+step hint
+say Count your reds. Forty. The Baker's got more if you're short.
+end
+step done
+set bridge_done
+say She holds! Next: a tower. Forty studs tall. The Archivist has the plan.
+end
+step tower
+say Tower next. Forty studs. Don't lean it; Bloom's cousin rates these.
+end
+
+who Brick Baker
+voice 2 0.9
+step start
+say Reds by the thousand. Blues when the kiln's hot. Clear ones once a week, if the glass holds.
+ask Buying? | Red=red | Blue=blue | Clear=clear
+step red
+say Ten for a stud. Take a hundred; everyone runs short of red.
+end
+step blue
+say Three for a stud. Kiln's hot today, you're lucky.
+end
+step clear
+say One, and it's a stud a piece. The Collector would trade you a realm for it.
+end
+
+who Blueprint Archivist
+voice 6 0.85
+step start
+if bridge_done -> tower_plan
+say Every design ever snapped is in here. Most of them twice. Bring me a plan and I'll file it; ask and I'll find one.
+ask Find a plan? | A bridge=bridge | A tower=locked | Nothing=no
+step bridge
+say Bridge, forty reds, one grey deck. Kip's favourite. Here.
+end
+step locked
+say Tower's behind the bridge, builder. Rules of the library.
+end
+step no
+say The shelves will wait. They are shelves.
+end
+step tower_plan
+set tower_plan
+say The bridge is up? Then the tower plan is yours. Forty studs, and the top brick is clear, if you have one.
+end
+
+who Crane Operator Sal
+voice 1 0.8
+step start
+say Built something in the wrong place? Sal lifts it. Whole. Don't ask how.
+ask Move a build? | Yes=move | Not now=no
+step move
+say Point at it. ...There. Mind your head; it's coming over.
+end
+step no
+say Sal waits. Sal has a crane.
+end
+
+who Demolition Duo
+voice 10 1.2
+step start
+say WE KNOCK THINGS DOWN. Race you to the old wall: first to flatten it wins a plate.
+ask Race? | GO=race | Not today=no
+step race
+set race
+say THREE TWO ONE... (They are already gone.)
+end
+step no
+say Coward's a strong word. We'll use it anyway.
+end
+
+who Mayor Minifold
+voice 8 1.05
+step start
+say Citizen! The city needs a yellow district. Yellow bricks, yellow plates, yellow everything. For morale.
+ask Help the Mayor? | For morale=yes | That's a lot of yellow=no
+step yes
+set yellow
+say Excellent. The hat approves. The hat is most of me.
+end
+step no
+say The hat has noted your name.
+end
+
+who Airfield Ace Nova
+voice 7 1.1
+step start
+if prop -> ready
+say Your plane's prop is stock. Stock loses laps. I've got one that doesn't.
+ask Fit the racing prop? | Fit it=fit | Keep stock=no
+step fit
+set prop
+say Fitted. Three laps of the runway, then we talk about the Cup.
+end
+step no
+say Stock's fine for sightseeing.
+end
+step ready
+say Prop's spinning sweet. The Cup's Sunday.
+end
+
+who Toy Soldier Sergeant
+voice 0 0.75
+step start
+say SQUAD. Four of you, one of me. Formation is a shape. Hold the shape and nothing gets through.
+ask Drill? | Yes, Sergeant=drill | Later, Sergeant=no
+step drill
+set drilled
+say WEDGE. LINE. BOX. Again. ...Not bad. You'll do.
+end
+step no
+say Dismissed. Temporarily.
+end
+
+who Missing-Piece Collector
+voice 9 0.95
+step start
+say One rare brick from every realm. That's the set. I've got four. There are more realms than four.
+ask Got one for me? | A clear brick=clear | Not yet=no
+step clear
+set collector_clear
+say A clear! From here? That counts. Five. Bring me a mural piece from the city of frames next.
+end
+step no
+say The set waits. Sets are patient. Collectors aren't.
+end
+
+who Glue Witch
+voice 11 0.8
+step start
+say Snap it, and it comes apart. Glue it, and it never does. Never is the price.
+ask Buy glue? | One pot=pot | Never's too long=no
+step pot
+say One pot. Use it on something you're sure of. Nobody ever is.
+end
+step no
+say Wise. Or scared. The glue doesn't care which.
+end
+
+who Studmonger
+voice 3 1.0
+step start
+say Studs in, studs out. Pigment, honey, chalk: I'll change any of it, at a rate you won't like.
+ask Exchange? | Pigment to studs=pigment | Studs to honey=honey | No=no
+step pigment
+say Two studs a pigment. Red. Blue's four. Gold, we'll talk.
+end
+step honey
+say A jar for ten studs. The bees are far and the Crow takes a cut.
+end
+step no
+say The rate was better yesterday. It always was.
+end
+
+who Builder Kids Club
+voice 5 1.15
+step start
+say Our fort's got a secret room! You'll never find it! ...It's behind the blue bricks. Don't tell the others.
+ask Look for the secret? | I'll find it=yes | I won't tell=no
+step yes
+set fort_secret
+say You found it! Okay you're in the club. Rule one: no grown-ups. Rule two: more bricks.
+end
+step no
+say Good. Rule one: no telling.
+end
