@@ -30,4 +30,16 @@ ppv.set_editor_property("settings", s)
 ues.set_level_viewport_camera_info(O + unreal.Vector(-3800, -3800, 2600), unreal.Rotator(0, -28, 45))
 unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, SHOT)
 out["shot"] = SHOT
+# fallback (bridge viewport shots have timed out for other bots): SceneCapture2D -> render target -> PNG
+try:
+    rt = unreal.RenderingLibrary.create_render_target2d(w, 1600, 900, unreal.TextureRenderTargetFormat.RTF_RGBA8)
+    cap = tmp(unreal.SceneCapture2D, O + unreal.Vector(-3800, -3800, 2600), unreal.Rotator(0, -28, 45), "Capture")
+    cc = cap.capture_component2d
+    cc.set_editor_property("texture_target", rt)
+    cc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
+    cc.capture_scene()
+    d, f = os.path.split(SHOT)
+    unreal.RenderingLibrary.export_render_target(w, rt, d, f.replace(".png", "_capture.png"))
+    out["capture"] = os.path.join(d, f.replace(".png", "_capture.png"))
+except Exception as e: out["capture_err"] = str(e)[:120]
 result = out
