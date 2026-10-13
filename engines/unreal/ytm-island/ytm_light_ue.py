@@ -50,7 +50,12 @@ if not found["SkyLight"] and (found["DirectionalLight"] or ADD_SUN):
     sc = s.get_component_by_class(unreal.SkyLightComponent); sc.set_mobility(unreal.ComponentMobility.MOVABLE)
     sc.set_editor_property("real_time_capture", True); added.append("skylight")
 # global sun already present but island dark -> bounded post-process around the island, auto exposure +2 EV only
-if found["DirectionalLight"]:
+# oddsreaper #26482: world dark was the saved Sky Director storm state (sun 0 lux), now restored -> only add the
+# PPV if the world sun is still near-zero at run time.
+def _lux(a):
+    try: return a.get_component_by_class(unreal.DirectionalLightComponent).get_editor_property("intensity")
+    except Exception: return 0
+if found["DirectionalLight"] and max(_lux(a) for _, _, a in found["DirectionalLight"]) < 0.5:
     pp = spawn(unreal.PostProcessVolume, O + unreal.Vector(0, 0, 2000), label="YTM_Exposure")
     pp.set_editor_property("unbound", False); pp.set_actor_scale3d(unreal.Vector(160, 160, 60))  # ~320x320x120 m
     st = pp.get_editor_property("settings")
