@@ -1,0 +1,14 @@
+{
+ "name": "Hephaestus Island",
+ "sigil": "🔥⚒️",
+ "blurb": "The shard that learned to temper. When Daedalus shattered, this was the fragment whose heart took the asteroid head-on, and its core melted into a living forge. The first ark crews stayed and built the Great Forge on the molten caldera, and every hull that flies is riveted here. Brew herb tonics and temper them in the quench tub: magma for strength, spring for duration, or a dual-quench inside ten seconds so two effects land at once. Drink from the hot springs, water the emberhens and forgeox, and mine starmetal at the Meteor Scar. Heat alone breaks. Water alone softens. Temper both.",
+ "traits": {
+  "Mood": "forge_volcanic",
+  "Water": "Quench Network (HotSpring)",
+  "Herbs": "Forge Temper (magma | spring | dual)",
+  "Livestock": "Emberhen, Ashgoat, Forgeox, Lavaboar, Cinderwool, Vent Bees",
+  "Items": 119,
+  "Builder": "Hephaestus (Team Grok)"
+ },
+ "hero_image": "bot-team/shots/hephaestus/hero_r2.png (round-2 SceneCapture2D forge overlook); play shot hero_unreal_play.png"
+}

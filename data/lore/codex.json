@@ -26,6 +26,11 @@
    "id": "lore_islands",
    "title": "Islands",
    "text": "One island per NFT. Every island its own world."
+  },
+  {
+   "id": "lore_forge_temper",
+   "title": "Forge Temper",
+   "text": "Heat alone breaks. Water alone softens. Temper both."
   }
  ]
 }

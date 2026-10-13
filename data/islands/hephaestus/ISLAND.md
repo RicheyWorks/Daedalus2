@@ -211,3 +211,25 @@ Tempered win (data rule, no engine write): score == 100 held for 60 in-game minu
 Validators (headless):
 - `tools/islands/hephaestus/heph_forge_glow.py`: read-only. Checks signals, score math, band coverage 0–100, the 36/36 herbs with `temper_ev`, and the MPC params and bindings. Result: **PASS**, score 90 (near-tempered) now, 100 (tempered) with dual-quench simulated.
 - `tools/islands/hephaestus/heph_ranch_budget.py`: now also writes the score block and asserts 0/30/60/90/100 → cold/ember/bright/near-tempered/tempered.
+
+## Off-editor polish (2026-10-12 ~22:10 PT)
+
+NFT card + dual-quench signature cookbook (no Unreal / editor turn; pythagoras and make-ups hold the editor).
+
+- **`nft.json`**: Hephaestus Island card 🔥⚒️, same shape as OddsReaper's. Traits: Mood forge_volcanic, Water Quench Network (HotSpring), Herbs Forge Temper (magma | spring | dual), the 6 livestock species, Items 119, Builder Hephaestus (Team Grok). Hero image: `bot-team/shots/hephaestus/hero_r2.png`.
+- **`herbs.json` → `dual_cookbook`**: 8 signature dual-quench recipes, all using bed herbs. Each has the primary and next-best pair and effects from `data/herbs/combos.json`, quench dual, window 10 s, and the stations `Prop_ForgeQuenchTub_Basalt` + `HotSpring_Clean`. The `rank_rule` used to pick the pairs is written into the file. The existing `herbs` / `temper_ev` are unchanged.
+
+| Recipe | Herbs | Primary | Next-best |
+|--------|-------|---------|-----------|
+| Riveter's Temper | Emberleaf + Forgefern | forge_speed_+25pct (iron+heat) | cold_resist (heat+calm) |
+| Lava Runner | Boilbalm + Hearthbasil | fire_resist (heat+heat) | sprint_speed_+20pct (heat+vigor) |
+| Caldera Canteen | Steamreed + Coalclover | thirst_restore_25 (purify+cool) | purify_water_x5 (purify+purify) |
+| Quench Tub Draught | Emberleaf + Steamreed | thirst_restore_25 (purify+cool) | heat_shield (cool+cool) |
+| Drydock Shift | Hearthbasil + Coalclover | forge_speed_+25pct (iron+heat) | harvest_power_+1 (iron+vigor) |
+| Void Crossing | Forgefern + Kilnpoppy | cold_resist (heat+calm) | slow_hunger (calm+calm) |
+| Ash Well Antidote | Pyreweed + Coalclover | thirst_restore_25 (purify+cool) | cure_poison (light+purify) |
+| Scar Prospector | Cinderroot + Steamreed | thirst_restore_25 (purify+cool) | ore_luck_+10pct (clarity+iron) |
+
+- **`hephaestus.json` `resources.herbs`**: now lists all 36 herb ids from herbs.json (it had 6).
+- **Validator** `tools/islands/hephaestus/heph_dual_cookbook.py` (headless, read-only). It checks that the herb ids exist, both pairs are distinct combos keys (order-insensitive) with matching effect ids, both pairs can be formed from the two herbs' essences, `rank_rule` reproduces primary then next-best, quench is dual, the window is 10 s, the stations are right, and the manifest lists 36/36 herbs. Result: **PASS** (8 recipes, 11 effects covered). A tampered copy fails as it should.
+- **Lore**: added `lore_forge_temper` to `data/lore/codex.json`: "Heat alone breaks. Water alone softens. Temper both."
