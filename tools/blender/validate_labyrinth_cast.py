@@ -5,7 +5,8 @@ from pathlib import Path
 def validate(root):
     manifest=json.loads((root/'manifest.json').read_text())
     skeleton=None; rows=[]
-    bba=(root/'labyrinth-cast.bba').read_text().splitlines();assert bba[0]=='BBA 1'
+    candidates=list(root.glob('*.bba'));assert len(candidates)==1,'expected one BBA manifest'
+    bba=candidates[0].read_text().splitlines();assert bba[0]=='BBA 1'
     for record in manifest['assets']:
         raw=(root/record['file']).read_bytes()
         magic,version,length=struct.unpack_from('<4sII',raw)
