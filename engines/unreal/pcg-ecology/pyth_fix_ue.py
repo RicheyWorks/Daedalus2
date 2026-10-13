@@ -25,25 +25,28 @@ def make_mat(name, c1, c2, rough, scale):
     MEL.recompile_material(m); eal.save_asset(p); return m
 grass = make_mat("M_PYT_IslandGrass_v3", (0.32, 0.58, 0.14), (0.50, 0.70, 0.22), 0.85, 0.004)
 acts = [a for a in eas.get_all_level_actors() if a.actor_has_tag(TAG)]
-SKIP = ("PYT_Island_", "PYT_Habitat_", "PYT_Label_", "HerbBed_", "PYT_FoodTable")
+import importlib, pyth_groundfit as GF; importlib.reload(GF)
 fixed = checked = 0; worst_before = 0.0
 for a in acts:
     lb = a.get_actor_label()
     if lb == "PYT_Island_Ground": a.static_mesh_component.set_material(0, grass)
-    if not isinstance(a, unreal.StaticMeshActor) or lb.startswith(SKIP) or "Mob_Bee" in lb: continue
-    if a.static_mesh_component.static_mesh and a.static_mesh_component.static_mesh.get_name().startswith(("Item_", "Tool_")): continue   # table props
+    if not isinstance(a, unreal.StaticMeshActor): continue
+    sm = a.static_mesh_component.static_mesh
+    if GF.excluded(lb, sm.get_name() if sm else ""): continue
     L = a.get_actor_location()
     h = unreal.SystemLibrary.line_trace_single(ew, unreal.Vector(L.x, L.y, L.z + 600), unreal.Vector(L.x, L.y, L.z - 3000),
         unreal.TraceTypeQuery.ECC_VISIBILITY, False, [a], unreal.DrawDebugTrace.NONE, True)
     t = h.to_tuple(); checked += 1
     if not t[0]: continue
     d = L.z - t[4].z; worst_before = max(worst_before, abs(d))
-    if abs(d) > 5: a.set_actor_location(unreal.Vector(L.x, L.y, t[4].z), False, False); fixed += 1
-gone = []
-for old in ("M_PYT_IslandGrass", "M_PYT_IslandRock", "M_PYT_HerbSoil", "M_PYT_IslandGrass_v2"):
-    p = "/Game/Pythagoras/Materials/" + old
-    if eal.does_asset_exist(p) and not unreal.EditorAssetLibrary.find_package_referencers_for_asset(p, False):
-        if eal.delete_asset(p): gone.append(old)
+    if GF.classify(d, 5.0) != "ok": a.set_actor_location(unreal.Vector(L.x, L.y, t[4].z), False, False); fixed += 1
+# old materials: swap every reference to the working replacement, then delete (consolidate does both, ours only)
+gone = []; MAT = "/Game/Pythagoras/Materials/"
+for old, new in (("M_PYT_IslandGrass", "M_PYT_IslandGrass_v3"), ("M_PYT_IslandGrass_v2", "M_PYT_IslandGrass_v3"),
+                 ("M_PYT_IslandRock", "M_PYT_IslandRock_v2"), ("M_PYT_HerbSoil", "M_PYT_HerbSoil_v2")):
+    if eal.does_asset_exist(MAT + old) and eal.does_asset_exist(MAT + new):
+        if eal.consolidate_assets(unreal.load_asset(MAT + new), [unreal.load_asset(MAT + old)]): gone.append(old)
+        if eal.does_asset_exist(MAT + old) and not eal.find_package_referencers_for_asset(MAT + old, False) and eal.delete_asset(MAT + old) and old not in gone: gone.append(old)
 # --- batch 3: import new glbs (skip existing) + chapter set pieces
 import os, glob, random
 GLB = r"C:\Users\730ri\projects\bot-team\art\glb\pythagoras"
