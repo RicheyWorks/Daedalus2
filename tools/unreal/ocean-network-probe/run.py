@@ -7,7 +7,7 @@ import socket
 import subprocess
 import time
 
-def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=False):
+def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=False, dock=False):
     mode='submarine' if dive else 'boat'
     output.mkdir(parents=True,exist_ok=True)
     server_log=output/(mode+'-server.log');client_log=output/(mode+'-client.log')
@@ -20,6 +20,8 @@ def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=
     if non_owner: common.append('-ProbeNonOwner')
     if keyboard: common.append('-ProbeKeyboard')
     if gamepad: common.append('-ProbeGamepad')
+    if dock: common.append('-ProbeDock')
+    if dock: common.append('-ExecCmds=daedalus.Server http://127.0.0.1:9')
     flags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess,'CREATE_NO_WINDOW') else 0
     children=[];started=time.monotonic()
     try:
@@ -42,11 +44,15 @@ def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=
                         '-ProbeAttack',f'-abslog={attacker_log}',*common],stdout=subprocess.DEVNULL,
                         stderr=subprocess.STDOUT,creationflags=flags)
                     children.append(attacker)
-            if 'OCEAN_NETWORK_PASS' in log:
+            marker='OCEAN_REMOTE_BOARD_PASS' if dock else 'OCEAN_NETWORK_PASS'
+            if marker in log:
                 assert client is not None
                 client_text=client_log.read_text(errors='replace')
                 assert 'Welcomed by server' in client_text,'Missing actual connection evidence'
-                assert 'OCEAN_REPLICATED_IDENTITY' in client_text,'Missing replicated configuration evidence'
+                if dock:
+                    assert 'OCEAN_REMOTE_DOCK_REQUEST' in client_text and 'OCEAN_REMOTE_BOARD_CLIENT_POSSESSION' in client_text
+                else:
+                    assert 'OCEAN_REPLICATED_IDENTITY' in client_text,'Missing replicated configuration evidence'
                 if keyboard:
                     assert 'OCEAN_KEY_INPUT_PRESSED' in client_text and 'OCEAN_KEY_INPUT_RELEASED' in client_text
                 if gamepad:
@@ -59,8 +65,8 @@ def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=
                 return {'mode':mode,'elapsed_seconds':round(time.monotonic()-started,3),
                     'server_pid':server.pid,'client_pid':client.pid,'port':port,
                     **({'foreign_client_pid':attacker.pid} if non_owner else {}),
-                    'result':next(line for line in log.splitlines() if 'OCEAN_NETWORK_PASS' in line),
-                    'replicated_identity':next(line for line in client_text.splitlines() if 'OCEAN_REPLICATED_IDENTITY' in line),
+                    'result':next(line for line in log.splitlines() if marker in line),
+                    'replicated_identity':next((line for line in client_text.splitlines() if 'OCEAN_REPLICATED_IDENTITY' in line),None),
                     'transport':'localhost Unreal IpNetDriver; actual remote owner RPC',
                     'rendered_gameplay_proven':False}
             if server.poll() is not None: raise RuntimeError(f'Server terminated without pass: {server_log}')
@@ -79,20 +85,36 @@ if __name__=='__main__':
     parser.add_argument('--non-owner',action='store_true')
     inputs=parser.add_mutually_exclusive_group()
     inputs.add_argument('--keyboard',action='store_true');inputs.add_argument('--gamepad',action='store_true')
+    inputs.add_argument('--dock',action='store_true')
     args=parser.parse_args()
-    results=[run(args.engine,args.project,args.output,dive,args.non_owner,args.keyboard,args.gamepad) for dive in [False,True]]
+    if args.dock and args.non_owner: parser.error('Dock probe currently supports one owner client')
+    results=[run(args.engine,args.project,args.output,dive,args.non_owner,args.keyboard,args.gamepad,args.dock) for dive in [False,True]]
     for row in results:
         row['server_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-server.log')).read_bytes()).hexdigest()
         row['client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-client.log')).read_bytes()).hexdigest()
         row['keyboard_dispatch_verified']=args.keyboard
         row['gamepad_axis_dispatch_verified']=args.gamepad
+        row['remote_dock_boarding_verified']=args.dock
         if args.non_owner:
             row['non_owner_refused']=True
             row['foreign_client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-foreign-client.log')).read_bytes()).hexdigest()
     source=args.project.parent/'Plugins/DaedalusLink/Source/DaedalusLink'
     inputs=['Public/DaedalusOceanTravelComponent.h','Private/DaedalusOceanTravelComponent.cpp',
             'Public/OceanNetworkProbe.h','Private/OceanNetworkProbe.cpp']
+    if args.dock:
+        inputs+=['Public/DaedalusOceanDock.h','Private/DaedalusOceanDock.cpp',
+                 'Public/DaedalusOceanInteractor.h','Private/DaedalusOceanInteractor.cpp',
+                 'Public/DaedalusHero.h','Private/DaedalusHero.cpp']
     hashes={name:hashlib.sha256((source/name).read_bytes()).hexdigest() for name in inputs}
-    (args.output/'proof.json').write_text(json.dumps({'passed':results,'owned_children_stopped':True,
-        'compiled_input_sha256':hashes},indent=2))
+    proof={'passed':results,'owned_children_stopped':True,'compiled_input_sha256':hashes}
+    manifest_path=args.project.parent/'source-manifest.json'
+    if manifest_path.exists():
+        manifest=json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+        plugin=args.project.parent/'Plugins/DaedalusLink'
+        for name,digest in manifest['files'].items():
+            relative=name.removeprefix('engines/unreal/DaedalusLink/')
+            assert hashlib.sha256((plugin/relative).read_bytes()).hexdigest()==digest,'Production source overlay'
+        proof.update(full_plugin_source_head=manifest['source_head'],production_input_count=len(manifest['files']),
+                     declared_test_additions=['Public/OceanNetworkProbe.h','Private/OceanNetworkProbe.cpp'])
+    (args.output/'proof.json').write_text(json.dumps(proof,indent=2))
     print(json.dumps(results,indent=2))

@@ -19,6 +19,8 @@ private:
     bool IdentityLogged=false;
     bool KeysPressed=false;
     bool KeysReleased=false;
+    bool DockRequested=false;
+    bool BoardClientLogged=false;
 };
 
 UCLASS()
@@ -36,4 +38,6 @@ private:
     FVector Previous=FVector::ZeroVector;
     bool Moved=false;
     TWeakObjectPtr<class ADaedalusOceanVessel> Target;
+    TWeakObjectPtr<class ADaedalusHero> DockHero;
+    float BoardTime=0;
 };

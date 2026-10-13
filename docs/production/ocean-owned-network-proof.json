@@ -1,0 +1,55 @@
+{
+  "passed": [
+    {
+      "mode": "boat",
+      "elapsed_seconds": 17.625,
+      "server_pid": 16472,
+      "client_pid": 22508,
+      "port": 51558,
+      "result": "[2026.10.13-22.36.12:124][237]LogTemp: Display: OCEAN_REMOTE_BOARD_PASS mode=boat authority_possession=1 saved_avatar_hidden=1",
+      "replicated_identity": null,
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "f9382c89fab46850320cf8454245ba6fbad3441ca4830539f19be5f8dc7c5c50",
+      "client_log_sha256": "f46a9ee490cec5ceb2778d00a2bf638a3e52656f57469ca349a86d4bdb07a586",
+      "keyboard_dispatch_verified": false,
+      "gamepad_axis_dispatch_verified": false,
+      "remote_dock_boarding_verified": true
+    },
+    {
+      "mode": "submarine",
+      "elapsed_seconds": 17.61,
+      "server_pid": 62584,
+      "client_pid": 12624,
+      "port": 61529,
+      "result": "[2026.10.13-22.36.29:989][241]LogTemp: Display: OCEAN_REMOTE_BOARD_PASS mode=submarine authority_possession=1 saved_avatar_hidden=1",
+      "replicated_identity": null,
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "9ad50c2352d1b3addacaeaf6e737e05c0ef9259ddd9f43bdf0a5f4348d0faafd",
+      "client_log_sha256": "267662cb830fa4f08fe84707350ac5fc576114de2f74eb14e55623b69b22b5d2",
+      "keyboard_dispatch_verified": false,
+      "gamepad_axis_dispatch_verified": false,
+      "remote_dock_boarding_verified": true
+    }
+  ],
+  "owned_children_stopped": true,
+  "compiled_input_sha256": {
+    "Public/DaedalusOceanTravelComponent.h": "332dd82472ac691c4a04093d419c2daf35168b0df3c8d4e62b3cc8057d8ec87e",
+    "Private/DaedalusOceanTravelComponent.cpp": "99f77ac36348e6d64eae834270d53d9c70a28dc45aa3249c9e81c596860a230c",
+    "Public/OceanNetworkProbe.h": "4a207fe11935ba0b06690f5a1ae4dbbcb848f6b65b593ea2281589dcbc787516",
+    "Private/OceanNetworkProbe.cpp": "d3c481283a376dfb8590f676577b01fa7e5b78b9bd3b3927d86bf6f1a1f7974f",
+    "Public/DaedalusOceanDock.h": "f4093f48e360e2c8a4fdbc068f3d741e04f729839e6d31896eea33adf3143e6d",
+    "Private/DaedalusOceanDock.cpp": "7a0df7146e74b7d1bb8698bb7c91d82d109ab53e96dbde43cdc4bbeade66b1a1",
+    "Public/DaedalusOceanInteractor.h": "e821e278e7fd327d61c2128de1bf2a66af726d604ab929cedd76302626679989",
+    "Private/DaedalusOceanInteractor.cpp": "f1bf51952c07d01d9ecfea2fe520922ceccb8ad40009694437f2d50fd4996c3e",
+    "Public/DaedalusHero.h": "2c49eafbbcbf7cecc025f47b2d34cc683510042a674860ba850ea79602f0bc93",
+    "Private/DaedalusHero.cpp": "42df99d4cffda0b34c92ecae063de0018329a7651734c1a7df7441825f4215a4"
+  },
+  "full_plugin_source_head": "ec748df7cfa8dbb4c7906e8b0d7bcf8f3c6e042b",
+  "production_input_count": 128,
+  "declared_test_additions": [
+    "Public/OceanNetworkProbe.h",
+    "Private/OceanNetworkProbe.cpp"
+  ]
+}

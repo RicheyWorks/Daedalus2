@@ -14,8 +14,8 @@ retain hero possession. Prompt distinguishes boats, submarines, occupied vessels
 and unavailable references.
 
 This is the local/server-side boarding interaction for an already loaded realm.
-Remote client interaction still needs an owning-player RPC adapter and session
-permissions. It is not the Portal-to-Ocean realm transfer: the loader, destination
+Remote clients use the owned OceanInteractor adapter after host attachment;
+session permissions still need integration. It is not the Portal-to-Ocean realm transfer: the loader, destination
 anchors and persistent player state still need integration. Never count a boarded
 vessel as proof that a realm transition happened.
 
@@ -29,7 +29,7 @@ Daedalus.Ocean.HeroDockInteraction and the existing HostEligibility test passed
 with zero test errors/warnings. Exact source/DLL/log hashes and runtime report
 are ocean-dock-build-proof.json and ocean-dock-runtime-proof.json. This verifies
 the native interaction function path; physical E/X device dispatch, assigned art,
-remote interaction and realm transfer remain acceptance gates.
+cross-player component misuse and realm transfer remain acceptance checks.
 
 The first build caught an Unreal reflected-name collision between the proposed
 ADaedalusOceanDock actor and existing FDaedalusOceanDock data struct. Only the new

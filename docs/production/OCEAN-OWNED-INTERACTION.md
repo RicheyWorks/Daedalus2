@@ -20,4 +20,24 @@ is not success: authoritative vessel possession is the result signal.
 
 This adds remote boarding requests in an already loaded realm. Remote vessel
 exit input, Portal-to-Ocean transfer, persistence and assigned art remain separate
-gates. Native and actual transport verification are pending for this change.
+gates.
+
+Verification: the complete 128-file plugin passed UE 5.8 UHT/compile/DLL link,
+44 actions in 187.98 seconds, without production source overlays. Both existing
+native ocean tests passed with the owned endpoint, including idempotent attachment,
+null-request refusal and actual validated possession. The production DLL was
+preserved before adding the two declared network fixture files.
+
+Two-process localhost tests then passed for boat and submarine. The remote
+controller invoked Hero.Interact; the replicated owned component sent the dock
+request, the server verified vessel possession plus saved-avatar hidden/collision
+state, and the client observed possession with the expected vessel type/realm.
+The scenarios took 17.625 and 17.610 seconds including engine startup/handshake.
+All 128 production files still matched their recorded hashes; only declared
+test fixture classes were added. See ocean-owned-build-proof.json,
+ocean-owned-runtime-proof.json and ocean-owned-network-proof.json.
+
+The fixture freezes its synthetic Hero in place to isolate interaction and sends
+optional foe-rule GETs to an unused loopback port. This proves the remote function
+path, not hardware E/X dispatch, walking, account/session authentication,
+cross-player component misuse, visual art or realm transfer.

@@ -6,6 +6,11 @@ DaedalusLink validation module containing the current ocean component/core, then
 rebuild its editor host. Refresh source discovery if a newly added directory is
 not compiled. No production GameMode or Hero changes are required.
 
+The current fixture includes the actual Hero, dock and owned-interactor APIs;
+use a full-plugin host from full_plugin_host.py rather than minimal source stubs.
+The runner checks the original production manifest after testing and records the
+two declared fixture additions separately.
+
 Run the bundled Python runner with UnrealEditor-Cmd.exe, the scratch .uproject
 and a fresh output directory as its three positional arguments. It starts a
 127.0.0.1-bound server on an available UDP port, waits for its listener, then
@@ -60,3 +65,13 @@ avoids direct helm setters and passed both modes over actual transport while
 foreign-client attempts continued. Proof is ocean-gamepad-network-proof.json;
 logs Documents/Codex/2026-10-13/ocean-network-gamepad-1. These are engine analog
 events, not physical hardware input. --keyboard and --gamepad are mutually exclusive.
+
+With --dock, the server starts the client as an actual stationary Hero with a
+public unoccupied vessel and replicated dock control. The client invokes the
+existing Hero.Interact path after the owned component and actor references arrive.
+The server must verify possession and hidden/nonblocking saved Hero; the client
+must observe possession with the expected boat/submarine type and realm. No direct
+server boarding call is made by the fixture. This mode currently takes one owner
+client and rejects --non-owner. Its proof is ocean-owned-network-proof.json,
+logs Documents/Codex/2026-10-13/ocean-remote-board-typed-1. Physical Interact input,
+cross-player component misuse and realm transition are separate tests.
