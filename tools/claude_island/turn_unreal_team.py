@@ -21,6 +21,7 @@ Nothing here deletes files or closes other programs.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -121,12 +122,19 @@ class Turn:
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "fetch", "-q", "origin"])
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "checkout", "-q", "--detach", "origin/main"])
         started = self.run(["powershell", "-NoProfile", "-File", job, "-Start", "-Fast"])
+        match = re.search(r"(?m)^started (build-\d{4}-\d{6}) pid=\d+\s*$", started)
+        if not match:
+            raise RuntimeError("Build start did not return a job id; refusing to wait for an unrelated build")
+        job_id = match.group(1)
         for _ in range(tries):
-            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait"])
-            if "BUILD FAILED" in out:
+            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait", "-Id", job_id])
+            status = re.search(r"(?m)^(BUILD OK|BUILD FAILED|JOB ENDED|RUNNING) (build-\d{4}-\d{6})(?:\s|$)", out)
+            if not status or status.group(2) != job_id:
+                raise RuntimeError("Build wait returned no matching status for " + job_id)
+            if status.group(1) in ("BUILD FAILED", "JOB ENDED"):
                 raise RuntimeError(out[-600:])
-            if "BUILD OK" in out:
-                return {"started": started.strip()[-80:], "result": "BUILD OK"}
+            if status.group(1) == "BUILD OK":
+                return {"started": started.strip()[-80:], "job_id": job_id, "result": "BUILD OK"}
         raise RuntimeError("build still running after %d waits" % tries)
 
     def scenario(self, name, limit=90):

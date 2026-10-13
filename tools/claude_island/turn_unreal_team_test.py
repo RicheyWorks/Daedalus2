@@ -35,7 +35,9 @@ class Fake:
         self.runs.append(" ".join(cmd))
         if self.fail_run and self.fail_run in " ".join(cmd):
             raise RuntimeError("boom " + self.fail_run)
-        return "BUILD OK" if "-Wait" in cmd else "fine"
+        if "-Start" in cmd:
+            return "started build-1013-073247 pid=58092"
+        return "BUILD OK build-1013-073247" if "-Wait" in cmd else "fine"
 
     def now(self):
         self.t += 1.0
@@ -76,5 +78,33 @@ r = turn(f).go()
 check("a failed build stops before placing anything", r["stopped"] == "build failed" and "execute_python" not in f.calls, f.calls)
 
 check("dry run only plans", T.Turn(None, None, None, None).go(dry=True)["plan"][0] == "ram")
+
+class BuildReply(Fake):
+    def __init__(self, replies, start="started build-1013-073247 pid=58092"):
+        super().__init__()
+        self.replies, self.start = iter(replies), start
+
+    def run(self, cmd):
+        result = super().run(cmd)
+        if "-Start" in cmd:
+            return self.start
+        if "-Wait" in cmd:
+            return next(self.replies)
+        return result
+
+f = BuildReply(["RUNNING build-1013-073247 (0 KB of log)", "BUILD OK build-1013-073247\neditor bridge: up"])
+result = turn(f).build()
+waits = [x for x in f.runs if "-Wait" in x]
+check("all waits pin the started job even before its log exists", len(waits) == 2
+      and all("-Id build-1013-073247" in x for x in waits)
+      and result["job_id"] == "build-1013-073247", waits)
+for label, reply, start in [
+        ("old successful job", "BUILD OK build-1013-060000", "started build-1013-073247 pid=58092"),
+        ("missing job id", "BUILD OK", "fine"),
+        ("ended without build success", "JOB ENDED build-1013-073247", "started build-1013-073247 pid=58092"),
+        ("failed build", "BUILD FAILED build-1013-073247", "started build-1013-073247 pid=58092")]:
+    f = BuildReply([reply], start)
+    r = turn(f).go()
+    check(label + " stops before editor calls", r["stopped"] == "build failed" and not f.calls, f.calls)
 print("%d/%d" % (ok, total))
 sys.exit(0 if ok == total else 1)
