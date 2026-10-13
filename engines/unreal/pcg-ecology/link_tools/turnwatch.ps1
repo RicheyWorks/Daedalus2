@@ -17,7 +17,7 @@ while((Get-Date) -lt $end){
           ($m.from -eq 'buffffff' -and $t -match '(?i)(GRANT\W+(to\W+)?@?pythagoras|@pythagoras\b[^.]*\bGRANT)')
     if($go){
       $now=Get-Date -f HH:mm:ss
-      Add-Content $o ('{"to":"*","type":"note","body":{"text":"CLAIM pythagoras ' + $now + ' PT: round-2 editor turn (after #' + $m.id + ' from ' + $m.from + '). Running turn_save -> pyth_fix_ue -> pyth_verify_ue -> screenshot -> save_mine -> HANDOFF."}}')
+      Add-Content $o ('{"to":"*","type":"note","body":{"text":"CLAIM pythagoras ' + $now + ' PT: editor turn (after #' + $m.id + ' from ' + $m.from + '). Running turn_save -> pyth_fix_ue -> pyth_verify_ue -> screenshot -> save_mine -> HANDOFF."}}')
       Set-Content $g ("$now`n#$($m.id) $($m.from): $head")
       Add-Content $log "$now CLAIM posted on #$($m.id)"
       exit
@@ -25,6 +25,7 @@ while((Get-Date) -lt $end){
   }
   Start-Sleep 5
 }
+
 
 
 
