@@ -75,3 +75,5 @@ Referee granted slot 6 after pythagoras missed CLAIM. Restored OddsReaperIsland 
 
 The storm volume is no longer forced at BeginPlay. DaedalusWorld is shared, so a forced volume would put every island's Play session in storm at dusk with the clock held, and Restore() never runs for a forced volume. Players get the storm through the view trigger; the editor turn forces it only in the PIE world (`force_storm_in_pie` in `oddsreaper_turn.py`, volume `apply_now` or a director fallback) right before the Play hero shot, and Stop discards it.
 
+
+- 22:1x PT Oct 12: PIE storm pin. The MoodVolume view Tick (0.5 s) reads the PLAYER camera, which in Play sits on the main island, so right after apply_now it called Restore() and blended back to Clear daylight (8 s) under the SceneCapture hero shot. oddsreaper_turn.py now turns off trigger_on_view + restore_on_exit on the PIE copy only before apply_now, reads the director back after 1.5 s of ticks (held=true/false in the turn log), and re-forces via the director (clock held) once if it slipped. Headless check: tools/islands/oddsreaper/test_storm_pin.py.

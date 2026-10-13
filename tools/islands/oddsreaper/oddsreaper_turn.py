@@ -227,13 +227,38 @@ w = unreal.EditorLevelLibrary.get_game_world()
 d = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []
 v = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume) if 'OddsReaper' in a.get_actor_label()] if w else []
 def st(x): return {'hour': round(x.get_hour(), 2), 'weather': str(x.get_editor_property('weather')), 'mood': str(x.get_editor_property('mood'))}
+def setp(o, name, val):
+    for p in (name, 'b_' + name):
+        try: o.set_editor_property(p, val); return True
+        except Exception: pass
+    return False
 before = st(d[0]) if d else None
 via = None
+pinned = {}
 if v and hasattr(v[0], 'apply_now'):
+    # PIE copy only (Stop discards it). The volume's 0.5 s view Tick reads the PLAYER camera, which sits on the
+    # main island 4 km away, so it would call Restore() right after apply_now and blend back to Clear daylight
+    # before the SceneCapture hero shot. Pin it: no view trigger, no restore on exit.
+    pinned = {'trigger_on_view_off': setp(v[0], 'trigger_on_view', False), 'restore_on_exit_off': setp(v[0], 'restore_on_exit', False)}
     v[0].apply_now(True); via = 'volume.apply_now'
 elif d:
+    setp(d[0], 'clock_running', False); d[0].set_editor_property('auto_weather_hours', 0.0)
     d[0].set_time_of_day(18.75); d[0].set_mood('oddsreaper_storm', True); d[0].set_weather(unreal.DaedalusWeather.STORM, True); via = 'director'
-result = {'directors': len(d), 'volumes': len(v), 'via': via, 'before': before, 'after': st(d[0]) if d else None}"""
+result = {'directors': len(d), 'volumes': len(v), 'via': via, 'pinned': pinned, 'before': before, 'after': st(d[0]) if d else None}"""
+
+# Read-back after a few game ticks: proves the storm held (not restored by a volume Tick) before the shot.
+STORM_CHECK_CODE = r"""import unreal
+w = unreal.EditorLevelLibrary.get_game_world()
+d = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []
+x = d[0] if d else None
+result = {'hour': round(x.get_hour(), 2), 'weather': str(x.get_editor_property('weather')), 'mood': str(x.get_editor_property('mood'))} if x else None"""
+
+
+def storm_held(state):
+    """True when a director read-back shows the OddsReaper storm look (headless-testable)."""
+    if not isinstance(state, dict):
+        return False
+    return "STORM" in str(state.get("weather", "")).upper() and str(state.get("mood", "")) == "oddsreaper_storm"
 
 
 def force_storm_in_pie():
@@ -242,7 +267,17 @@ def force_storm_in_pie():
     view), so force the OddsReaper look in the PIE world only, right before the Play shot. Stop discards PIE, so the
     saved DaedalusWorld director stays Clear for every other island. Falls back to the director if the old class is live."""
     try:
-        return py(STORM_CODE, 30)
+        r = py(STORM_CODE, 30)
+        time.sleep(1.5)  # let the PIE world tick (volume Tick is 0.5 s) before trusting the look
+        chk = py(STORM_CHECK_CODE, 20)
+        if not storm_held(chk) and isinstance(r, dict) and r.get("directors"):
+            py(STORM_CODE.replace("if v and hasattr(v[0], 'apply_now'):", "if False:"), 30)  # director path, clock held
+            time.sleep(1.0)
+            chk = py(STORM_CHECK_CODE, 20)
+            if isinstance(r, dict): r["reforced"] = "director"
+        if isinstance(r, dict):
+            r["held"] = storm_held(chk); r["check"] = chk
+        return r
     except Exception as e:
         return {"error": str(e)[:200]}
 
