@@ -116,4 +116,31 @@ class ChunkPaletteTest {
         assertEquals(1, c.revision());
         assertEquals(0, c.bitsPerBlock());
     }
+
+    @Test
+    void runsRoundTripAndShrink() {
+        Random r = new Random(7);
+        for (int round = 0; round < 30; round++) {
+            Chunk c = new Chunk();
+            int kinds = 1 + r.nextInt(round < 15 ? 4 : TYPES.length - 1);
+            for (int n = 0; n < 1 + r.nextInt(5000); n++) {
+                c.set(r.nextInt(16), r.nextInt(16), r.nextInt(16), TYPES[r.nextInt(kinds + 1)]);
+            }
+            assertArrayEquals(c.ordinals(), Chunk.ofRuns(c.runs()), "round " + round);
+            assertArrayEquals(c.ordinals(), Chunk.ofRuns(c.copy().runs()), "narrowed copy, round " + round);
+        }
+        assertEquals(3, new Chunk().runs().length);
+        Chunk ground = new Chunk();
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = 0; y < 8; y++) {
+                    ground.set(x, y, z, TYPES[1]);
+                }
+            }
+        }
+        assertTrue(ground.runs().length <= 3 * 2 * 256, "flat ground is one run per column pair, got " + ground.runs().length);
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 0, 1}));
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 0, 0}));
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 1, 16}));
+    }
 }

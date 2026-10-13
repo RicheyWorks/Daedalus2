@@ -125,3 +125,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   before meshing, so faces and AO corners are array reads instead of ~70 string-keyed Map lookups per cube; colours
   convert once per kind. Same bytes as the old mesher on 60 random chunks (`node tools/realm_mesh_check.mjs`), 2.4x
   faster; World Zero (53 chunks) renders the same in headless Chromium.
+- **One request per world, run-length encoded (the wire side of rule 1):** `GET /api/v1/world/{id}/chunks/blocks`
+  sends every non-empty chunk as base64 (ordinal, len lo, len hi) triples (`Chunk.runs()` / `Chunk.ofRuns`). World
+  Zero: 53 chunks in 1 request and 35 KB, against 54 requests and ~320 KB (23 KB of runs vs 217 KB dense). realm.js
+  uses it and falls back to per-chunk on an older server. The per-chunk endpoint stays for other clients.

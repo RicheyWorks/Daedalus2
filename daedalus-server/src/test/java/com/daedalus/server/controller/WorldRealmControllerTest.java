@@ -129,6 +129,26 @@ class WorldRealmControllerTest {
     }
 
     @Test
+    void theBatchHoldsEveryChunkRunLengthEncodedAndMatchesThePerChunkPayload() throws Exception {
+        mvc.perform(post("/api/v1/world/world-zero/islands").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"seed\":11}")).andExpect(status().isOk());
+        JsonNode list = body(mvc.perform(get("/api/v1/world/world-zero/chunks")));
+        JsonNode batch = body(mvc.perform(get("/api/v1/world/world-zero/chunks/blocks")));
+        assertThat(batch.get("chunks").size()).isEqualTo(list.get("chunks").size()).isGreaterThan(0);
+        assertThat(batch.get("palette").get(0).asText()).isEqualTo("AIR");
+        long runBytes = 0;
+        for (JsonNode row : batch.get("chunks")) {
+            byte[] runs = Base64.getDecoder().decode(row.get("runs").asText());
+            runBytes += runs.length;
+            JsonNode one = body(mvc.perform(get("/api/v1/world/world-zero/chunk/blocks")
+                    .param("x", row.get("x").asText()).param("y", row.get("y").asText()).param("z", row.get("z").asText())));
+            assertThat(com.daedalus.world.Chunk.ofRuns(runs)).isEqualTo(Base64.getDecoder().decode(one.get("data").asText()));
+        }
+        assertThat(runBytes).isLessThan(4096L * batch.get("chunks").size() / 2);
+        mvc.perform(get("/api/v1/world/nope/chunks/blocks")).andExpect(status().isNotFound());
+    }
+
+    @Test
     void raisingFillsTheLaneSlotBySlotAndAnnouncesOneRevision() throws Exception {
         mvc.perform(post("/api/v1/world/world-zero/islands").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"seed\":11}"))

@@ -276,6 +276,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
 | `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
+| `GET` | `/api/v1/world/{id}/chunks/blocks` | public | Every non-empty chunk's cubes in one response, run-length encoded: base64 (ordinal, len lo, len hi) triples per chunk (ADR-064) |
 | `GET` | `/api/v1/worlds` | public | Every mounted world (id, style, seed, title, islands) and every world style with whether it is ready (ADR-030) |
 | `POST` | `/api/v1/worlds` | required | Mount a new world of a ready style, grown from a seed (`CreateWorldRequest`); exists, bad id, style-not-ready and full are named results (ADR-030) |
 | `GET` | `/api/v1/world/{id}/package` | public | The world as a Daedalus World Package (zip): `manifest.json`, `world.glb` (glTF 2.0, a node per chunk), `assets/ark.glb`. Load it in Blender, Unreal, Godot or three.js (ADR-032) |

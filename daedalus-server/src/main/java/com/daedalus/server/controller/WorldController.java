@@ -7,6 +7,7 @@ import com.daedalus.api.dto.BlockInspectResponse;
 import com.daedalus.api.dto.BlockMutationResponse;
 import com.daedalus.api.dto.CargoRow;
 import com.daedalus.api.dto.ChunkBlocksResponse;
+import com.daedalus.api.dto.ChunkRunsRow;
 import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.ChunkRow;
 import com.daedalus.api.dto.DenyParcelRequest;
@@ -50,6 +51,7 @@ import com.daedalus.api.dto.ObbyResponse;
 import com.daedalus.api.dto.PlotRow;
 import com.daedalus.api.dto.WorldPlotsResponse;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
+import com.daedalus.api.dto.WorldBlocksResponse;
 import com.daedalus.api.dto.WorldChunksResponse;
 import com.daedalus.api.dto.WorldInspectResponse;
 import com.daedalus.api.dto.WorldIslandsResponse;
@@ -708,6 +710,31 @@ public class WorldController {
             }
         }
         return ResponseEntity.ok(new WorldChunksResponse(id, world.revision().value(), Chunk.SIZE, rows));
+    }
+
+    @GetMapping("/world/{id}/chunks/blocks")
+    @Operation(summary = "Every non-empty chunk's cubes in one response, run-length encoded (ADR-064).")
+    public ResponseEntity<WorldBlocksResponse> allChunkBlocks(@PathVariable String id) {
+        World world = mounted(id);
+        long revision = world.revision().value();
+        List<ChunkCoordinate> keys = new ArrayList<>(world.chunkKeys());
+        keys.sort(Comparator.comparingInt(ChunkCoordinate::y)
+                .thenComparingInt(ChunkCoordinate::z)
+                .thenComparingInt(ChunkCoordinate::x));
+        List<ChunkRunsRow> rows = new ArrayList<>(keys.size());
+        Base64.Encoder b64 = Base64.getEncoder();
+        for (ChunkCoordinate cc : keys) {
+            Chunk chunk = world.chunk(cc);
+            if (chunk != null && !chunk.isEmpty()) {
+                rows.add(new ChunkRunsRow(cc.x(), cc.y(), cc.z(), chunk.revision(), chunk.occupied(),
+                        b64.encodeToString(chunk.runs())));
+            }
+        }
+        List<String> palette = new ArrayList<>();
+        for (BlockType t : BlockType.values()) {
+            palette.add(t.name());
+        }
+        return ResponseEntity.ok(new WorldBlocksResponse(id, revision, Chunk.SIZE, palette, rows));
     }
 
     @GetMapping("/world/{id}/chunk/blocks")

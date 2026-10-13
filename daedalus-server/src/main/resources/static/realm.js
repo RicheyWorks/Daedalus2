@@ -480,7 +480,33 @@ async function loadWorld() {
   if (state.species.length) refreshCreatures();
 }
 
+/** Dense ordinals from the batch's run-length payload: (ordinal, len lo, len hi) triples, 4096 cubes in all. */
+function decodeRuns(b64) {
+  const runs = decode(b64), out = new Uint8Array(SIZE * SIZE * SIZE);
+  let at = 0;
+  for (let k = 0; k + 2 < runs.length; k += 3) {
+    const n = runs[k + 1] | (runs[k + 2] << 8);
+    out.fill(runs[k], at, at + n);
+    at += n;
+  }
+  return out;
+}
+
 async function fetchWorld() {
+  // One request for the whole world, run-length encoded (ADR-064); older servers answer 404 and we go per chunk.
+  let batch = null;
+  try { batch = await api(API + "/chunks/blocks"); } catch (e) { batch = null; }
+  if (batch && Array.isArray(batch.chunks)) {
+    state.revision = batch.revision;
+    state.palette = batch.palette;
+    for (const r of batch.chunks) state.chunks.set(key(r.x, r.y, r.z), decodeRuns(r.runs));
+    for (const k of state.chunks.keys()) {
+      const [a, b, c] = k.split(",").map(Number);
+      buildChunk(a, b, c);
+    }
+    status();
+    return batch.chunks.length;
+  }
   const list = await api(API + "/chunks");
   state.revision = list.revision;
   const rows = list.chunks;

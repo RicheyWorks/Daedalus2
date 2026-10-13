@@ -237,6 +237,55 @@ public final class Chunk {
         return dense(store);
     }
 
+    /**
+     * Run-length form for the wire: triples of (ordinal, run length low byte, high byte) in index order
+     * ({@code x + 16 * (y + 16 * z)}), runs 1..4096. A uniform chunk is 3 bytes; a terrain chunk a few hundred,
+     * against 4,096 dense. {@link #ofRuns} reads it back.
+     */
+    public byte[] runs() {
+        Store s = store;
+        if (s.bits == 0) {
+            return new byte[] {s.palette[0], (byte) (VOLUME & 0xff), (byte) (VOLUME >>> 8)};
+        }
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream(256);
+        int run = 0;
+        int cur = s.ordinal(0);
+        for (int i = 0; i <= VOLUME; i++) {
+            int o = i < VOLUME ? s.ordinal(i) : -1;
+            if (o == cur) {
+                run++;
+                continue;
+            }
+            out.write(cur);
+            out.write(run & 0xff);
+            out.write(run >>> 8);
+            cur = o;
+            run = 1;
+        }
+        return out.toByteArray();
+    }
+
+    /** Dense ordinals from {@link #runs()} output; refuses runs that don't cover exactly 4,096 cubes. */
+    public static byte[] ofRuns(byte[] runs) {
+        if (runs == null || runs.length % 3 != 0) {
+            throw new IllegalArgumentException("runs must be whole (ordinal, lo, hi) triples");
+        }
+        byte[] dense = new byte[VOLUME];
+        int at = 0;
+        for (int k = 0; k < runs.length; k += 3) {
+            int n = (runs[k + 1] & 0xff) | (runs[k + 2] & 0xff) << 8;
+            if (n == 0 || at + n > VOLUME) {
+                throw new IllegalArgumentException("run " + (k / 3) + " has length " + n + " at cube " + at);
+            }
+            Arrays.fill(dense, at, at + n, runs[k]);
+            at += n;
+        }
+        if (at != VOLUME) {
+            throw new IllegalArgumentException("runs cover " + at + " cubes, not " + VOLUME);
+        }
+        return dense;
+    }
+
     static Chunk ofPayload(byte[] payload, long revision) {
         if (payload == null || payload.length != VOLUME) {
             throw new IllegalArgumentException("Chunk payload must be " + VOLUME + " bytes");

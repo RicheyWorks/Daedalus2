@@ -193,6 +193,7 @@ public class ProdSecurityConfig {
                         // cubes in one chunk, and which seeds grew which islands. Read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/plots").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/obby").permitAll()
