@@ -1,0 +1,451 @@
+{
+ "island": "Hephaestus",
+ "placements": 119,
+ "unique_assets": 72,
+ "status": {
+  "in_unreal": 71,
+  "engine": 1
+ },
+ "living": {
+  "water": 24,
+  "livestock": 16,
+  "herbs": 12
+ },
+ "living_ok": true,
+ "blocking": [],
+ "needs_import": [],
+ "assets": [
+  {
+   "asset": "Item_Herb_Ashmint",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Boilbalm",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Cinderroot",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Coalclover",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Emberleaf",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Forgefern",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Hearthbasil",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Kilnpoppy",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Lavathistle",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Pyreweed",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Steamreed",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Herb_Ventmoss",
+   "uses": 1,
+   "category": "herbs",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Shard_Asteroid",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Item_Shard_Planet",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Bee",
+   "uses": 2,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "uses": 3,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "uses": 3,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Cow",
+   "uses": 2,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Goat",
+   "uses": 3,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "uses": 3,
+   "category": "livestock",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ArkRivetCrate",
+   "uses": 3,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeAnvil_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeAnvil_Obsidian",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeBellows_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeChimney_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeCrucible_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeEmberBrazier_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeForgeAltar_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeGrindstone_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeIngotStack_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeLavaRock_Basalt",
+   "uses": 3,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeLavaRock_Obsidian",
+   "uses": 2,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeMagmaPool_Basalt",
+   "uses": 2,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeObsidianSpire_Basalt",
+   "uses": 7,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeQuenchTub_Basalt",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeToolRack_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeVentPlume_Basalt",
+   "uses": 2,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_ForgeWorkbench_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_HephaestusAnvil_Great",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_HephaestusForge_Great",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_LavaLantern",
+   "uses": 3,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchCoop_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchFeeder_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchFencePost_Wood",
+   "uses": 8,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchFenceRail_Wood",
+   "uses": 8,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchGate_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchHaybale_Wood",
+   "uses": 2,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchHutch_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchMilkpail_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchNestbox_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchStall_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchStall_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchTrough_Iron",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_RanchTrough_Wood",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterBarrel_Iron",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterBoiler_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterBucket_Clay",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterCanteen_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterCistern_Clay",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterJug_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterPipeElbow_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterPipe_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterPipe_Iron",
+   "uses": 6,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterRainCatch_Clay",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterRainCatch_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterSpigot_Iron",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterStill_Copper",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterTrough_Iron",
+   "uses": 2,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterWellhead_Clay",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_WaterWellhead_Wood",
+   "uses": 1,
+   "category": "water",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "Tool_HephaestusHammer",
+   "uses": 1,
+   "category": "other",
+   "status": "in_unreal"
+  },
+  {
+   "asset": "WaterPlane_HotSpring",
+   "uses": 2,
+   "category": "water",
+   "status": "engine"
+  }
+ ]
+}
