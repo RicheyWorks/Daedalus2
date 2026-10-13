@@ -3085,281 +3085,281 @@
                       "asset":  "Prop_DS_Tree_00",
                       "kind":  "prop",
                       "size":  "~2.0 m",
-                      "tris":  24,
-                      "max_dim_m":  2.0
+                      "tris":  84,
+                      "max_dim_m":  2.24
                   },
                   {
                       "asset":  "Prop_DS_Tree_01",
                       "kind":  "prop",
                       "size":  "~2.2 m",
-                      "tris":  36,
-                      "max_dim_m":  2.59
+                      "tris":  96,
+                      "max_dim_m":  2.7
                   },
                   {
                       "asset":  "Prop_DS_Tree_02",
                       "kind":  "prop",
                       "size":  "~2.5 m",
-                      "tris":  24,
-                      "max_dim_m":  2.5
+                      "tris":  84,
+                      "max_dim_m":  2.8
                   },
                   {
                       "asset":  "Prop_DS_Tree_03",
                       "kind":  "prop",
                       "size":  "~2.8 m",
-                      "tris":  36,
-                      "max_dim_m":  3.16
+                      "tris":  96,
+                      "max_dim_m":  3.3
                   },
                   {
                       "asset":  "Prop_DS_Tree_04",
                       "kind":  "prop",
                       "size":  "~3.0 m",
-                      "tris":  24,
-                      "max_dim_m":  3.0
+                      "tris":  84,
+                      "max_dim_m":  3.36
                   },
                   {
                       "asset":  "Prop_DS_Tree_05",
                       "kind":  "prop",
                       "size":  "~3.2 m",
-                      "tris":  36,
-                      "max_dim_m":  3.74
+                      "tris":  96,
+                      "max_dim_m":  3.9
                   },
                   {
                       "asset":  "Prop_DS_Tree_06",
                       "kind":  "prop",
                       "size":  "~3.5 m",
-                      "tris":  24,
-                      "max_dim_m":  3.5
+                      "tris":  84,
+                      "max_dim_m":  3.92
                   },
                   {
                       "asset":  "Prop_DS_Tree_07",
                       "kind":  "prop",
                       "size":  "~3.8 m",
-                      "tris":  36,
-                      "max_dim_m":  4.31
+                      "tris":  96,
+                      "max_dim_m":  4.5
                   },
                   {
                       "asset":  "Prop_DS_Tree_08",
                       "kind":  "prop",
                       "size":  "~4.0 m",
-                      "tris":  24,
-                      "max_dim_m":  4.0
+                      "tris":  84,
+                      "max_dim_m":  4.48
                   },
                   {
                       "asset":  "Prop_DS_Tree_09",
                       "kind":  "prop",
                       "size":  "~4.2 m",
-                      "tris":  36,
-                      "max_dim_m":  4.89
+                      "tris":  96,
+                      "max_dim_m":  5.1
                   },
                   {
                       "asset":  "Prop_DS_Tree_10",
                       "kind":  "prop",
                       "size":  "~4.5 m",
-                      "tris":  24,
-                      "max_dim_m":  4.5
+                      "tris":  84,
+                      "max_dim_m":  5.04
                   },
                   {
                       "asset":  "Prop_DS_Tree_11",
                       "kind":  "prop",
                       "size":  "~4.8 m",
-                      "tris":  36,
-                      "max_dim_m":  5.46
+                      "tris":  96,
+                      "max_dim_m":  5.7
                   },
                   {
                       "asset":  "Prop_DS_Tree_12",
                       "kind":  "prop",
                       "size":  "~5.0 m",
-                      "tris":  24,
-                      "max_dim_m":  5.0
+                      "tris":  84,
+                      "max_dim_m":  5.6
                   },
                   {
                       "asset":  "Prop_DS_Tree_13",
                       "kind":  "prop",
                       "size":  "~5.2 m",
-                      "tris":  36,
-                      "max_dim_m":  6.04
+                      "tris":  96,
+                      "max_dim_m":  6.3
                   },
                   {
                       "asset":  "Prop_DS_Tree_14",
                       "kind":  "prop",
                       "size":  "~5.5 m",
-                      "tris":  24,
-                      "max_dim_m":  5.5
+                      "tris":  84,
+                      "max_dim_m":  6.16
                   },
                   {
                       "asset":  "Prop_DS_Tree_15",
                       "kind":  "prop",
                       "size":  "~5.8 m",
-                      "tris":  36,
-                      "max_dim_m":  6.61
+                      "tris":  96,
+                      "max_dim_m":  6.9
                   },
                   {
                       "asset":  "Prop_DS_Tree_16",
                       "kind":  "prop",
                       "size":  "~6.0 m",
-                      "tris":  24,
-                      "max_dim_m":  6.0
+                      "tris":  84,
+                      "max_dim_m":  6.72
                   },
                   {
                       "asset":  "Prop_DS_Tree_17",
                       "kind":  "prop",
                       "size":  "~6.2 m",
-                      "tris":  36,
-                      "max_dim_m":  7.19
+                      "tris":  96,
+                      "max_dim_m":  7.5
                   },
                   {
                       "asset":  "Prop_DS_Tree_18",
                       "kind":  "prop",
                       "size":  "~6.5 m",
-                      "tris":  24,
-                      "max_dim_m":  6.5
+                      "tris":  84,
+                      "max_dim_m":  7.28
                   },
                   {
                       "asset":  "Prop_DS_Tree_19",
                       "kind":  "prop",
                       "size":  "~6.8 m",
-                      "tris":  36,
-                      "max_dim_m":  7.76
+                      "tris":  96,
+                      "max_dim_m":  8.1
                   },
                   {
                       "asset":  "Prop_DS_Tree_20",
                       "kind":  "prop",
                       "size":  "~7.0 m",
-                      "tris":  24,
-                      "max_dim_m":  7.0
+                      "tris":  84,
+                      "max_dim_m":  7.84
                   },
                   {
                       "asset":  "Prop_DS_Tree_21",
                       "kind":  "prop",
                       "size":  "~7.2 m",
-                      "tris":  36,
-                      "max_dim_m":  8.34
+                      "tris":  96,
+                      "max_dim_m":  8.7
                   },
                   {
                       "asset":  "Prop_DS_Tree_22",
                       "kind":  "prop",
                       "size":  "~7.5 m",
-                      "tris":  24,
-                      "max_dim_m":  7.5
+                      "tris":  84,
+                      "max_dim_m":  8.4
                   },
                   {
                       "asset":  "Prop_DS_Tree_23",
                       "kind":  "prop",
                       "size":  "~7.8 m",
-                      "tris":  36,
-                      "max_dim_m":  8.91
+                      "tris":  96,
+                      "max_dim_m":  9.3
                   },
                   {
                       "asset":  "Prop_DS_Tree_24",
                       "kind":  "prop",
                       "size":  "~8.0 m",
-                      "tris":  24,
-                      "max_dim_m":  8.0
+                      "tris":  84,
+                      "max_dim_m":  8.96
                   },
                   {
                       "asset":  "Prop_DS_Tree_25",
                       "kind":  "prop",
                       "size":  "~8.2 m",
-                      "tris":  36,
-                      "max_dim_m":  9.49
+                      "tris":  96,
+                      "max_dim_m":  9.9
                   },
                   {
                       "asset":  "Prop_DS_Tree_26",
                       "kind":  "prop",
                       "size":  "~8.5 m",
-                      "tris":  24,
-                      "max_dim_m":  8.5
+                      "tris":  84,
+                      "max_dim_m":  9.52
                   },
                   {
                       "asset":  "Prop_DS_Tree_27",
                       "kind":  "prop",
                       "size":  "~8.8 m",
-                      "tris":  36,
-                      "max_dim_m":  10.06
+                      "tris":  96,
+                      "max_dim_m":  10.5
                   },
                   {
                       "asset":  "Prop_DS_Tree_28",
                       "kind":  "prop",
                       "size":  "~9.0 m",
-                      "tris":  24,
-                      "max_dim_m":  9.0
+                      "tris":  84,
+                      "max_dim_m":  10.08
                   },
                   {
                       "asset":  "Prop_DS_Tree_29",
                       "kind":  "prop",
                       "size":  "~9.2 m",
-                      "tris":  36,
-                      "max_dim_m":  10.64
+                      "tris":  96,
+                      "max_dim_m":  11.1
                   },
                   {
                       "asset":  "Prop_DS_Tree_30",
                       "kind":  "prop",
                       "size":  "~9.5 m",
-                      "tris":  24,
-                      "max_dim_m":  9.5
+                      "tris":  84,
+                      "max_dim_m":  10.64
                   },
                   {
                       "asset":  "Prop_DS_Tree_31",
                       "kind":  "prop",
                       "size":  "~9.8 m",
-                      "tris":  36,
-                      "max_dim_m":  11.21
+                      "tris":  96,
+                      "max_dim_m":  11.7
                   },
                   {
                       "asset":  "Prop_DS_Tree_32",
                       "kind":  "prop",
                       "size":  "~10.0 m",
-                      "tris":  24,
-                      "max_dim_m":  10.0
+                      "tris":  84,
+                      "max_dim_m":  11.2
                   },
                   {
                       "asset":  "Prop_DS_Tree_33",
                       "kind":  "prop",
                       "size":  "~10.2 m",
-                      "tris":  36,
-                      "max_dim_m":  11.79
+                      "tris":  96,
+                      "max_dim_m":  12.3
                   },
                   {
                       "asset":  "Prop_DS_Tree_34",
                       "kind":  "prop",
                       "size":  "~10.5 m",
-                      "tris":  24,
-                      "max_dim_m":  10.5
+                      "tris":  84,
+                      "max_dim_m":  11.76
                   },
                   {
                       "asset":  "Prop_DS_Tree_35",
                       "kind":  "prop",
                       "size":  "~10.8 m",
-                      "tris":  36,
-                      "max_dim_m":  12.36
+                      "tris":  96,
+                      "max_dim_m":  12.9
                   },
                   {
                       "asset":  "Prop_DS_Tree_36",
                       "kind":  "prop",
                       "size":  "~11.0 m",
-                      "tris":  24,
-                      "max_dim_m":  11.0
+                      "tris":  84,
+                      "max_dim_m":  12.32
                   },
                   {
                       "asset":  "Prop_DS_Tree_37",
                       "kind":  "prop",
                       "size":  "~11.2 m",
-                      "tris":  36,
-                      "max_dim_m":  12.94
+                      "tris":  96,
+                      "max_dim_m":  13.5
                   },
                   {
                       "asset":  "Prop_DS_Tree_38",
                       "kind":  "prop",
                       "size":  "~11.5 m",
-                      "tris":  24,
-                      "max_dim_m":  11.5
+                      "tris":  84,
+                      "max_dim_m":  12.88
                   },
                   {
                       "asset":  "Prop_DS_Tree_39",
                       "kind":  "prop",
                       "size":  "~11.8 m",
-                      "tris":  36,
-                      "max_dim_m":  13.51
+                      "tris":  96,
+                      "max_dim_m":  14.1
                   },
                   {
                       "asset":  "Prop_DS_Campfire_V0",

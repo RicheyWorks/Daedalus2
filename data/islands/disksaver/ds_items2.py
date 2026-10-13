@@ -100,7 +100,7 @@ for tn,tm in TILES:
     asset(f"Prop_DS_Tile_{tn}_{v}","prop",f"~{w} m",lambda col,h=h,w=w,tm=tm:box(col,w,w,h,0,0,0,tm))
 for i in range(40):
   h=2+0.25*i; lm=mat(f"DS_Leaf{i%4}",shade("#3F9F3A",i%4-1))
-  asset(f"Prop_DS_Tree_{i:02d}","prop",f"~{h:.1f} m",lambda col,h=h,lm=lm,i=i:(box(col,0.3,0.3,h*0.6,0,0,0,BARK),box(col,h*0.5,h*0.5,h*0.4,0,0,h*0.6,lm),box(col,h*0.3,h*0.3,h*0.2,0,0,h*0.95,lm) if i%2 else None))
+  asset(f"Prop_DS_Tree_{i:02d}","prop",f"~{h:.1f} m",lambda col,h=h,lm=lm,i=i:(box(col,0.3,0.3,h*0.6,0,0,0,BARK),box(col,h*0.55,h*0.55,h*0.38,0,0,h*0.55,lm),[box(col,h*0.32,h*0.32,h*0.26,dx*h*0.3,dy*h*0.3,h*0.5,lm) for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))],box(col,h*0.34,h*0.34,h*0.22,0,0,h*0.9,lm),box(col,h*0.18,h*0.18,h*0.12,0,0,h*1.08,lm) if i%2 else None))
 MISC=[("Campfire",lambda col:(box(col,0.8,0.8,0.15,0,0,0,STONE),box(col,0.3,0.3,0.4,0,0,0.15,mat("DS_Fire","#FF7A1A")))),
       ("Cauldron",lambda col:(box(col,0.7,0.7,0.6,0,0,0,dk),box(col,0.6,0.6,0.05,0,0,0.56,WATER))),
       ("Haystack",lambda col:box(col,1.2,1.2,1.0,0,0,0,mat("DS_Hay","#E2C25A"))),
