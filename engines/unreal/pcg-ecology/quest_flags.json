@@ -1,1 +1,19 @@
-{"teas": ["ladder"], "island_years": 3.0, "burn_rate": 0.03}
+{
+ "_note": "demo playthrough save: player-only facts the editor cannot see",
+ "teas": [
+  "ladder",
+  "climax"
+ ],
+ "survived": [
+  "windthrow"
+ ],
+ "bramble_choice": "goats",
+ "islet_species": [
+  "Grass",
+  "Pine",
+  "Willow",
+  "Oak"
+ ],
+ "burn_rate": 0.03,
+ "burn_cells": []
+}
