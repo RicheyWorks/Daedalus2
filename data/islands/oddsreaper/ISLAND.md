@@ -48,3 +48,13 @@ Round 1 placed the island 591/591 and saved, but bridge `viewport_screenshot` ti
 hephaestus). `oddsreaper_turn.py` now retries three sizes, then falls back to Unreal `HighResShot` /
 `Shot` under `Saved/Screenshots`, and only runs the 20 s Play check when enough time remains. Round-2
 HANDOFF goes to art-master-flex. Do not launch Unreal until the referee grants the editor slot.
+
+## Round-2 prep: save-before-shot + SceneCapture + materials MPC
+
+oddsreaper_turn.py now saves the OddsReaper sublevel and DaedalusWorld **before** the hero capture and writes
+bot-team/shots/oddsreaper/island_result.json, matching hephaestus's bridge-timeout lesson (blender-team make-up
+scored 0 when the bridge hung mid-job with nothing saved). Hero capture prefers warm SceneCapture2D (exposure +1,
+5200 K, bloom 0.4) at layout.json hero_cam_m / hero_target_m, then the old viewport retries and HighResShot.
+
+materials_mpc.json is the off-editor contract for MPC_OR_SkyWeather (WindStrength, WindDirection, Wetness,
+NightMask, StormPulse) bound to felt mesa, dice cliffs, cistern gold, and wager-herb leaves. Apply on the editor turn.
