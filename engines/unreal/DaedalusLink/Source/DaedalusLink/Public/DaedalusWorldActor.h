@@ -135,6 +135,10 @@ public:
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Daedalus")
 	void LoadWorld();
 
+	/** Hide (and uncollide) the imported static chunk_ meshes in a game world; the live chunks stand in for them. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus")
+	int32 HideImportedChunks();
+
 	/** Remove every chunk and ark this actor built. */
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Daedalus")
 	void ClearWorld();

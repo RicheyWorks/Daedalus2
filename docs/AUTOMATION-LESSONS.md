@@ -321,3 +321,10 @@ check the device (file times, positions) before saying what did or didn't happen
 NewObject<UStaticMeshComponent>/<UPointLightComponent> at runtime default to Static mobility; SetRelativeLocation on
 them silently does nothing in Play. The shiny sparks "orbited" in code and never moved. SetMobility(Movable) before
 SetupAttachment. The scenario caught it only once it measured motion over game time with the distance in the detail.
+
+## The stale imported world showed through the live one (2026-10-13)
+World Zero is in the level twice: the imported static chunk_ meshes (an old package) and the live ADaedalusWorldActor
+chunks. The hide-the-import step waited for `ChunkMeshes.Num() > 0` at announce time, which the batch load hadn't
+produced yet, so it was skipped: bare LOG trunks from the old import poked through the live island (the "rough"
+look), and the old collision walled animals in. Hide the import in BeginPlay, unconditionally, and again on announce.
+When the world looks wrong, trace what the camera is hitting (actor + component name) before tuning anything.

@@ -58,10 +58,38 @@ FVector ADaedalusWorldActor::ToUnreal(const FVector& D) const
 void ADaedalusWorldActor::BeginPlay()
 {
 	Super::BeginPlay();
+	// Play: the imported static chunks (chunk_x_y_z meshes from import_world_package.py) are a stale, undiggable copy
+	// of the same world; the live one takes their place. Done here, before the first load, so it never depends on how
+	// many chunks that load produced (until 2026-10-13 it waited for ChunkMeshes > 0 at announce time and was skipped:
+	// the stale copy showed through the live world as bare tree trunks, and its collision walled animals in).
+	if (bReplaceImportedChunks && bLoadOnBeginPlay)
+	{
+		HideImportedChunks();
+	}
 	if (bLoadOnBeginPlay)
 	{
 		LoadWorld();
 	}
+}
+
+int32 ADaedalusWorldActor::HideImportedChunks()
+{
+	UWorld* W = GetWorld();
+	if (!W || !W->IsGameWorld()) return 0;
+	int32 Hidden = 0;
+	for (TActorIterator<AStaticMeshActor> It(W); It; ++It)
+	{
+		const UStaticMeshComponent* C = It->GetStaticMeshComponent();
+		const UStaticMesh* M = C ? C->GetStaticMesh() : nullptr;
+		if (M && M->GetName().StartsWith(TEXT("chunk_")))
+		{
+			It->SetActorHiddenInGame(true);
+			It->SetActorEnableCollision(false);
+			++Hidden;
+		}
+	}
+	if (Hidden > 0) UE_LOG(LogDaedalus, Log, TEXT("Live world in place of %d imported chunks"), Hidden);
+	return Hidden;
 }
 
 void ADaedalusWorldActor::EndPlay(const EEndPlayReason::Type Reason)
@@ -414,22 +442,9 @@ void ADaedalusWorldActor::FinishOne()
 	{
 		bAnnounced = true;
 		// Play: the imported static chunks can't be dug, so the live, editable copy takes their place.
-		UWorld* W = GetWorld();
-		if (bReplaceImportedChunks && W && W->IsGameWorld() && ChunkMeshes.Num() > 0)
+		if (bReplaceImportedChunks)
 		{
-			int32 Hidden = 0;
-			for (TActorIterator<AStaticMeshActor> It(W); It; ++It)
-			{
-				const UStaticMeshComponent* C = It->GetStaticMeshComponent();
-				const UStaticMesh* M = C ? C->GetStaticMesh() : nullptr;
-				if (M && M->GetName().StartsWith(TEXT("chunk_")))
-				{
-					It->SetActorHiddenInGame(true);
-					It->SetActorEnableCollision(false);
-					++Hidden;
-				}
-			}
-			UE_LOG(LogDaedalus, Log, TEXT("Live world in place of %d imported chunks"), Hidden);
+			HideImportedChunks();   // again, for chunks a sublevel streamed in since BeginPlay
 		}
 		UE_LOG(LogDaedalus, Log, TEXT("%s built: %d chunks, %d arks"), *WorldId, ChunkMeshes.Num(), ArkComponents.Num());
 		OnWorldLoaded.Broadcast(WorldId);
