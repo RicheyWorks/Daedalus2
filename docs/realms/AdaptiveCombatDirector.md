@@ -16,12 +16,13 @@ The branch includes the reviewed Living World work from PR29; neither branch is 
 | Benchmark harness, `LivingWorldBenchmark` | Extend existing example module, with raw samples summarized separately from capacity claims. |
 | Pythagoras battlefield ecology | Owner supplies cover/concealment. This slice does not duplicate fire, cover or ecology calculations. |
 
-DTE 1 does not carry a trusted encounter/session identity, complete roster, maximum health,
-or faction. The host must supply these explicitly. Its current PLAYER value is emitted as
-zero by Unreal, so it must not be interpreted as an authoritative player-death observation.
-The current native ApplyOrders path does not reject stale ticks. Java rejects stale inputs;
-the bridge owner must fence outgoing order application by session/tick before enabling a
-network producer. These are integration requirements, not claims of completed transport.
+DTE 1 alone does not carry a complete trusted roster or faction. Claude's integrated main
+changes add DTR 1 with session, squad, tick, health/maxHealth and downed members retained;
+`AdaptiveDirector.fromRoster` reuses `TacticalOrders.Roster.toUnits` and validates the Frame.
+The host still supplies trusted player/objective observations, faction and weapon style.
+PLAYER now carries health, with -1 meaning unknown. Native ApplyOrders rejects stale ticks
+and treats repeats separately; a new world session receives a new identity. Transport must
+still fence sessions and use authenticated authoritative inputs; this is not deployed transport.
 
 ## Deterministic policy and bounds
 
@@ -63,7 +64,7 @@ automatic merge into the Living World sidecar is installed in this slice.
 The trusted host assembles Frame from its roster plus validated authoritative events, calls
 `AdaptiveDirector.decide(memory, frame)`, durably stores the returned memory, and emits
 `TacticalOrders.write(decision.orders())`. Submit the text asynchronously to
-`UDaedalusTactics.ApplyOrders`; renew about once a second. Keep session/tick fencing at the
+`UDaedalusTactics.ApplyOrders`; proposed cadence is 2 Hz per squad. Keep session/tick fencing at the
 adapter. Never await Java inside movement, firing, collision, animation or replication.
 Missing/expired Java decisions use the existing native fallback (ADR-060's three-second hold).
 Unit identity, faction assignment, objective location and line-of-sight come from the server,
@@ -140,3 +141,41 @@ Unreal Public header directory as an include path; it has no Unreal runtime depe
 The generated restart proof verifies identical DTO decisions after a faction file reload.
 Actual movement/navigation/combat and cross-process network latency still require the
 Unreal owner's authorized integration window.
+
+## Unreal-focused allocation pass and native handoff (2026-10-13)
+
+JFR `profile` recordings of the same fixed-heap benchmark sampled temporary Vec/Unit/list
+strings beneath `AdaptiveDirector.frameHash`. One pre-sized builder now preserves the
+original record text without those intermediate strings. A compatibility test compares
+against the original record hash for 0/1/3/32/128/256 units, all weapon styles, fractional
+and boundary coordinates, signed zero, and checkpoint retry. DTO 1 and DTM 1 are unchanged.
+
+Raw same-harness measurements are in `../benchmarks/adaptive-profile-before/baseline.csv`
+and `../benchmarks/adaptive-profile-after/baseline.csv`. Both used JFR profile recording;
+the after run overlapped validation on this shared machine. They are allocation evidence,
+not an isolated latency comparison or an Unreal FPS measurement.
+
+| Population | Decision bytes before | Decision bytes after | Decision + wire bytes before | Decision + wire bytes after |
+|---:|---:|---:|---:|---:|
+| 3 | 9,793 | 8,570 | 13,448 | 12,224 |
+| 32 | 54,944 | 36,672 | 89,720 | 71,480 |
+| 128 | 204,324 | 130,032 | 355,304 | 281,320 |
+| 256 | 403,880 | 255,888 | 706,800 | 558,808 |
+| 1,024 | 1,590,528 | 1,027,144 | 2,806,792 | 2,243,408 |
+
+At 256 units decision allocation drops 36.6%, combined allocation 20.9%. Combined p95
+in these recordings increases from 259.6 to 310.1 us; no latency speedup is claimed.
+The first target is reduced backend allocation pressure while keeping gameplay native.
+
+Claude acknowledged the integration in hub messages 27629/27632/27656; Astra replied in
+27673. Proposed budget: Java decisions and DTO writing off the game thread at 2 Hz per
+squad, asynchronous delivery, C++ parse + apply below 0.2 ms per 256-order spec. The
+native budget is a target, not a measured result. Claude owns native binding, compilation,
+navigation validation and the first post-break tactics playtest; that window is unscheduled.
+Initial live binding uses the squad spawn centre as objective and threatened=false.
+The deterministic DTO fixture separately demonstrates defend/flank/retreat. No-contact
+HOLD is intentional: retreat must not consume a hidden player's position.
+
+Remaining acceptance: authenticated delivery and session fencing; measured native parse,
+apply, queue age and Unreal game-thread/frame cost; screenshot/video of actual three-enemy
+behavior. Native core tests and a wire roundtrip alone do not establish those results.

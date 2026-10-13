@@ -20,6 +20,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AdaptiveDirectorTest {
+    @Test void nativeRosterDrivesDecisionsAndRetainsCasualtyPressure() {
+        var roster = TacticalOrders.parseRoster("DTR 1\nsession session-1 squad pack-1 tick 9\n"
+                + "unit guard SLIME 100 100 0 0 0 1\n"
+                + "unit scout SLIME 100 100 200 0 0 1\n"
+                + "unit wounded SLIME 20 100 300 0 0 1\n"
+                + "unit fallen SLIME 0 100 400 0 0 0\n");
+        var f = AdaptiveDirector.fromRoster(roster, new Vec(1000, 0, 0), new Vec(0, 0, 0), true, WeaponStyle.UNKNOWN);
+        var decision = AdaptiveDirector.decide(initial(), f);
+        assertThat(decision.memory().casualtyPressure()).isEqualTo(1);
+        assertThat(decision.orders().orders()).extracting(TacticalOrders.Order::verb)
+                .containsExactly(Verb.DEFEND, Verb.FLANK, Verb.RETREAT);
+        assertThat(decision.orders().tick()).isEqualTo(9);
+        assertThat(decision.orders().squad()).isEqualTo("pack-1");
+        assertThatThrownBy(() -> AdaptiveDirector.fromRoster(null, f.player(), f.objective(), true, f.weapon()))
+                .isInstanceOf(NullPointerException.class);
+        var wrongSession = new TacticalOrders.Roster("other", roster.squad(), roster.tick(), roster.units());
+        assertThatThrownBy(() -> AdaptiveDirector.decide(initial(),
+                AdaptiveDirector.fromRoster(wrongSession, f.player(), f.objective(), true, f.weapon())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     @Test void optimizedReceiptsRemainCompatibleWithOriginalRecordHashAndCheckpoint() {
         var random = new java.util.Random(42);
         for (int count : new int[] {0, 1, 3, 32, 128, 256}) {

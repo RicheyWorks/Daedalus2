@@ -72,6 +72,14 @@ public final class AdaptiveDirector {
 
     private AdaptiveDirector() { }
 
+    /** Adapt a trusted Unreal DTR 1 snapshot; objective and player observations remain host-owned. */
+    public static Frame fromRoster(TacticalOrders.Roster roster, Vec player, Vec objective,
+                                   boolean objectiveThreatened, WeaponStyle weapon) {
+        Objects.requireNonNull(roster);
+        return new Frame(roster.squad(), roster.session(), roster.tick(), roster.toUnits(),
+                player, objective, objectiveThreatened, weapon);
+    }
+
     public static Decision decide(Memory before, Frame f) {
         Objects.requireNonNull(before); Objects.requireNonNull(f);
         if (!before.session().equals(f.session())) throw new IllegalArgumentException("Session mismatch");
