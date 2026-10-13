@@ -91,22 +91,41 @@ def link_note(text):
     except OSError as e: log(f"link: {e}")
 
 
+def resolve_glb(name):
+    """Prefer blender-team _LOD1.glb when present (lower tris/RAM). HEPH_PREFER_LOD1=0 forces hi-res only."""
+    prefer = os.environ.get("HEPH_PREFER_LOD1", "1") != "0"
+    hi = os.path.join(GLB, name + ".glb")
+    lod1 = os.path.join(GLB, name + "_LOD1.glb")
+    if prefer and os.path.exists(lod1):
+        return lod1, "lod1"
+    if os.path.exists(hi):
+        return hi, "hi"
+    if os.path.exists(lod1):
+        return lod1, "lod1"
+    return None, None
+
+
 def import_missing(names):
     # RAM guard (team rule 20:05, disk-saver pattern): heph_turn sets HEPH_NO_IMPORT=1 when free RAM < 1 GB, so the turn
     # only places meshes already in Content (preflight: all 72 present) and never risks an out-of-memory editor crash.
     if os.environ.get("HEPH_NO_IMPORT") == "1":
         log("RAM guard: imports skipped (HEPH_NO_IMPORT=1)"); return 0
-    tasks = []
+    # HEPH_FORCE_LOD1=1 reimports even when the mesh already exists, swapping in blender-team LOD1 (landmarks).
+    force_lod1 = os.environ.get("HEPH_FORCE_LOD1", "0") == "1"
+    tasks, used = [], []
     for n in names:
-        f = os.path.join(GLB, n + ".glb")
-        if n in ENGINE or mesh(n) is not None or not os.path.exists(f): continue
+        if n in ENGINE: continue
+        already = mesh(n) is not None
+        f, kind = resolve_glb(n)
+        if f is None: continue
+        if already and not (force_lod1 and kind == "lod1"): continue
         t = unreal.AssetImportTask()
         for k, v in (("filename", f), ("destination_path", f"{ART}/{kind_of(n)}/{n}"), ("automated", True),
                      ("replace_existing", True), ("save", True)):
             t.set_editor_property(k, v)
-        tasks.append(t)
+        tasks.append(t); used.append(f"{n}:{kind}")
     if tasks: unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks)
-    log(f"imported {len(tasks)} new")
+    log(f"imported {len(tasks)} new ({', '.join(used) if used else 'none'})")
     return len(tasks)
 
 

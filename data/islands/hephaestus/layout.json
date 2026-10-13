@@ -1227,6 +1227,8 @@
    "Prop_Grok_Monolith",
    "Prop_Grok_SeedPod"
   ],
-  "note": "Off-editor wire-up; next granted editor turn imports glb_only assets then places. Do not touch Unreal off-turn."
+  "note": "QUEUE 1360-1366 imported round-4 editor turn 2026-10-12 23:45 PT (126/126 placed). blender-team LOD1 ready for all 7 (art/glb/*_LOD1.glb). Next editor turn: set HEPH_FORCE_LOD1=1 to swap hi-res for LOD1 (lower tris), then lit forge-overlook hero (Sky Director restored Clear by oddsreaper 23:54). Do not touch Unreal off-turn.",
+  "imported_round": 4,
+  "lod1_ready": true
  }
 }

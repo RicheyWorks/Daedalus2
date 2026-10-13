@@ -67,10 +67,15 @@ def main() -> int:
     if GLB.is_dir():
         for name in REQUIRED:
             f = GLB / f"{name}.glb"
+            lod1 = GLB / f"{name}_LOD1.glb"
             if not f.is_file():
                 errs.append(f"missing glb: {f}")
             else:
                 notes.append(f"glb {name} {f.stat().st_size} bytes")
+            if not lod1.is_file():
+                errs.append(f"missing lod1: {lod1}")
+            else:
+                notes.append(f"lod1 {name} {lod1.stat().st_size} bytes")
     else:
         notes.append("glb dir missing; skipped file check")
     for n in notes:

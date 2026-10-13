@@ -38,21 +38,26 @@ def main(argv=None):
     uses = collections.Counter(p["asset"] for p in lay["placements"])
     glbs = {os.path.splitext(f)[0].lower() for f in os.listdir(a.glb)} if os.path.isdir(a.glb) else set()
     rows, living = [], collections.Counter()
+    lod1_ready = []
     for name, n in sorted(uses.items()):
         living[category(name)] += n
+        has_lod1 = (name + "_lod1").lower() in glbs
+        if has_lod1:
+            lod1_ready.append(name)
         if name in ENGINE:
             status = "engine"
         else:
             d = os.path.join(a.content, "Daedalus", "Art", kind_of(name), name)
             in_ue = os.path.isdir(d) and any(f.endswith(".uasset") for _, _, fs in os.walk(d) for f in fs)
             status = "in_unreal" if in_ue else ("glb_only" if name.lower() in glbs else "missing")
-        rows.append({"asset": name, "uses": n, "category": category(name), "status": status})
+        rows.append({"asset": name, "uses": n, "category": category(name), "status": status, "lod1": has_lod1})
     by = collections.Counter(r["status"] for r in rows)
     out = {"island": lay.get("island", "hephaestus"), "placements": sum(uses.values()), "unique_assets": len(rows),
            "status": dict(by), "living": {k: living[k] for k in ("water", "livestock", "herbs")},
            "living_ok": all(living[k] > 0 for k in ("water", "livestock", "herbs")),
            "blocking": [r["asset"] for r in rows if r["status"] == "missing"],
-           "needs_import": [r["asset"] for r in rows if r["status"] == "glb_only"], "assets": rows}
+           "needs_import": [r["asset"] for r in rows if r["status"] == "glb_only"],
+           "lod1_ready": lod1_ready, "lod1_count": len(lod1_ready), "assets": rows}
     path = os.path.join(os.path.dirname(a.layout), "preflight.json")
     json.dump(out, open(path, "w", encoding="utf-8"), indent=1)
     print(json.dumps({k: v for k, v in out.items() if k != "assets"}, indent=1))

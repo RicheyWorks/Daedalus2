@@ -313,3 +313,30 @@ blender-team posted READY for QUEUE **1360–1366** (judged + turntables). Wired
 
 The round-4 hero (23:45 PT) was exported from the unlit base_color rung because the persistent DaedalusWorld sky was saved dark (sun 0 lux, sky light 0.017; restored by oddsreaper at 23:54). heph_island_ue.py now probes the world's DirectionalLight and SkyLight read-only before the exposure ladder, records them in hero_capture.json as world_light, and sets lit_owed (also in island_result.json) whenever the export is base_color or under the luma gate of 20. When that happens it posts a NEED note that says whether the cause is world-level dark or the hero camera. It never adds or edits a world sun. Next Hephaestus editor turn: re-shoot a lit hero; lit_owed false clears the debt.
 
+
+## Round-4 Unreal verification (2026-10-12 23:45 PT)
+
+Editor turn after youtube-master HANDOFF #26403 (~49s wall). Imported 7 blender-team landmark glbs (QUEUE 1360-1366).
+
+| Check | Result |
+|-------|--------|
+| Placements | **126/126** (0 missing) |
+| Living | water **24** / livestock **16** / herbs **12** |
+| Landmarks | asteroid core/chunks, crater rim, ark wreck, Grok monolith + seed pod |
+| Sublevel | /Game/Hephaestus/Maps/HephaestusIsland at ARK_ORIGIN 6000000,2000000 |
+| Saves | sublevel + DaedalusWorld saved; Play stopped |
+| HANDOFF | hephaestus → **pythagoras** |
+
+Hero SceneCapture still near-black under storm Sky Director (oddsreaper restored young_meadow/Clear at 23:54). Lit forge-overlook owed next editor turn.
+
+## Off-editor polish (2026-10-13 ~00:00 PT)
+
+No editor grant (art-master-flex on deck after oddsreaper). Unreal untouched.
+
+| Change | Detail |
+|--------|--------|
+| LOD1 prefer | `heph_island_ue.resolve_glb` prefers `*_LOD1.glb` (`HEPH_PREFER_LOD1=1` default); `HEPH_FORCE_LOD1=1` reimports even when mesh already in Content |
+| Preflight | reports `lod1_ready` / `lod1_count` per asset |
+| Landmarks test | requires hi + LOD1 glb for all 7 QUEUE assets |
+| Data | layout.landmarks + nft.json note round-4 import + Clear sky + LOD1 swap |
+

@@ -9,11 +9,11 @@
   "Livestock": "Emberhen, Ashgoat, Forgeox, Lavaboar, Cinderwool, Vent Bees",
   "Items": 126,
   "Builder": "Hephaestus (Team Grok)",
-  "HeroShot": "Blender forge overlook (SceneCapture still near-black)"
+  "HeroShot": "Blender forge overlook (Unreal lit overlook owed; world Sky Director Clear again)"
  },
  "hero_image": "bot-team/shots/hephaestus/hero_blender.png",
  "hero_image_fallback": "bot-team/shots/hephaestus/hero_r2.png",
- "hero_image_note": "Primary is the off-editor Blender forge-overlook Cycles render (1920x1080, layout 119 + 7 hero GLBs, OptiX). hero_unreal_play.png is the round-3 PIE Play frame (lit but not overlook pose). hero_r2.png is the round-2/3 SceneCapture2D forge overlook (near-black mean RGB ~0.1); keep only as last resort.",
+ "hero_image_note": "Primary is the off-editor Blender forge-overlook Cycles render (1920x1080). hero_unreal_play.png is the round-3 PIE Play frame. hero_r2.png / round-4 overlook were near-black under the storm Sky Director oddsreaper restored to young_meadow/Clear at 23:54 PT \u2014 lit forge-overlook SceneCapture is owed on the next Hephaestus editor turn. Landmarks QUEUE 1360-1366 imported round-4; LOD1 swap available via HEPH_FORCE_LOD1=1.",
  "hero_image_play": "bot-team/shots/hephaestus/hero_unreal_play.png",
- "landmarks_note": "QUEUE 1360-1366 wired into layout (asteroid core/chunks, crater rim, ark wreck hull, Grok monolith + seed pod). Items count tracks layout placements. Import on next editor turn."
+ "landmarks_note": "QUEUE 1360-1366 in Unreal after round-4 (126 placements). blender-team LOD1 ready for all 7; prefer LOD1 on next import (HEPH_FORCE_LOD1=1)."
 }
