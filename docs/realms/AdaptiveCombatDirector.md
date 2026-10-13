@@ -186,3 +186,32 @@ HOLD is intentional: retreat must not consume a hidden player's position.
 Remaining acceptance: authenticated delivery and session fencing; measured native parse,
 apply, queue age and Unreal game-thread/frame cost; screenshot/video of actual three-enemy
 behavior. Native core tests and a wire roundtrip alone do not establish those results.
+
+## Adaptive host binding (2026-10-13 follow-up)
+
+Claude's main 5a67d3f7 supplies `TacticsHost`, POST `/api/v1/tactics/decide`, and the
+asynchronous native client. The endpoint still defaults to the baseline SquadDirector.
+This branch adds a backward-compatible `TacticsHost.withContext(ContextBrain)` factory:
+the existing four-argument Brain constructor remains supported, while the new interface
+passes the complete DTR roster including session identity.
+
+`AdaptiveTacticsBrain` implements that interface. Construct it with a trusted context
+provider (faction, stable objective, threat and weapon style) and a Checkpoints store, then
+pass it to `TacticsHost.withContext`. Its key is session + squad + faction; it loads DTM 1,
+validates observations, decides, validates outgoing DTO, atomically commits the changed
+checkpoint, and only then returns orders. A failed save throws and publishes no orders.
+An identical replay after adapter reconstruction returns the same result without writing.
+Wrong-faction, corrupt, conflicting and stale checkpoints/observations fail closed.
+
+The storage implementation must provide atomic durable save and one writer per key. This
+adapter serializes its own calls but is not a distributed lock. It stores no unbounded map
+itself. The production store, retention policy, faction authorization and controller wiring
+remain host integration requirements; no automatic in-memory substitute is installed and
+the baseline HTTP endpoint is not silently switched to adaptive mode. Persistent storage
+may dominate latency and must remain off Unreal's game thread.
+
+Host regressions also cover rejected stale/repeated requests poisoning the shared player
+position. Player observations now advance by event tick only after a successful decision;
+an older event from another squad cannot rewind the session's remembered player. Brain
+failure leaves the host's player state and receipt unpublished. Existing same-tick requests
+still return the cached spec, preserving the transport's first-observation-wins behavior.
