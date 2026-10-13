@@ -144,4 +144,4 @@ sc.view_settings.view_transform="Filmic"; sc.view_settings.look="Medium High Con
 sc.render.filepath=os.path.abspath(OUT); sc.render.image_settings.file_format="PNG"
 import mathutils; objs=[o for o in sc.objects if o.type=="MESH" and not o.hide_render and o.name not in ("PI_Terrain",sea.name)]; cen=sum((o.location for o in objs),mathutils.Vector())/max(1,len(objs)); print("PIB centroid",tuple(round(v,1) for v in cen))
 print("PIB placed",n,"unique",len([v for v in SRC.values() if v]),"device",cy.device)
-bpy.ops.render.render(write_still=True); print("PIB wrote",sc.render.filepath)
+if not os.environ.get("PIB_NORENDER"): bpy.ops.render.render(write_still=True); print("PIB wrote",sc.render.filepath)
