@@ -9,6 +9,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import * as core from "/reach-core.js";
+import * as orrery from "/orrery-core.js";
 
 // Presentation only: each isle's grass and stone, as orr_reach.py paints them in Unreal (the shape is the core's).
 const LOOK = {
@@ -191,11 +192,17 @@ function applySky(hour) {
   const up = Math.sin(a);
   sun.position.set(Math.cos(a) * 600, up * 600, 250);
   sun.intensity = Math.max(0, up) * 2.4;
-  hemi.intensity = 0.25 + Math.max(0, up) * 1.0;
+  hemi.intensity = 0.5 + Math.max(0, up) * 0.8;   // never pitch black: dusk and night stay readable
   stars.material.opacity = Math.max(0, Math.min(1, -up * 3));
   bloom.strength = 0.5 + Math.max(0, -up) * 0.8;
   const hh = Math.floor(hour) % 24, mm = Math.floor((hour % 1) * 60);
   document.getElementById("clock").textContent = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+  // The starbloom of this hour (one per hour), its constellation partner, and the brew they make together.
+  const h = orrery.inBloom(hour);
+  const partner = orrery.HERBS.find((x) => x.constellation === h.constellation && x.name !== h.name);
+  document.getElementById("bloom").textContent =
+    `In bloom: ${h.name} (${h.constellation}, ${orrery.isDay(h.hour) ? "day" : "night"}). ` +
+    `With ${partner.name} at ${String(partner.hour).padStart(2, "0")}:00 it steeps a ${orrery.brewOf(h.name, partner.name)}.`;
 }
 
 function flyTo(name) {

@@ -30,5 +30,24 @@ for (const line of lines) {
   console.log(`${good ? "ok  " : "FAIL"} seed ${seed} radius ${radius}${good ? "" : `\n  want ${want}\n  got  ${got}`}`);
   ok += good;
 }
-console.log(`${ok}/${lines.length}`);
-process.exit(ok === lines.length ? 0 : 1);
+// The Orrery herbs and brews (orrery-core.js) against the C++ table and all 576 brews.
+const orr = await import(join(root, "daedalus-server/src/main/resources/static/orrery-core.js"));
+const rows = readFileSync(join(root, "engines/unreal/core-test/orrery_parity.txt"), "utf8").split("\n").filter((l) => l && !l.startsWith("#"));
+let herbsOk = 0, brewsOk = 0, herbs = 0, brews = 0;
+for (const r of rows) {
+  const [kind, a, b, ...rest] = r.split(" ");
+  if (kind === "herb") {
+    herbs++;
+    const h = orr.findHerb(a);
+    herbsOk += !!h && h.hour === Number(b) && h.constellation === rest[0] && (orr.isDay(h.hour) ? 1 : 0) === Number(rest[1]);
+  } else {
+    brews++;
+    const want = rest.join(" ") === "-" ? "" : rest.join(" ");
+    brewsOk += orr.brewOf(a, b) === want;
+  }
+}
+const orrGood = herbs === 24 && brews === 576 && herbsOk === herbs && brewsOk === brews && orr.HERBS.length === 24;
+console.log(`${orrGood ? "ok  " : "FAIL"} orrery herbs ${herbsOk}/${herbs}, brews ${brewsOk}/${brews}`);
+const total = lines.length + 1, passed = ok + (orrGood ? 1 : 0);
+console.log(`${passed}/${total}`);
+process.exit(passed === total ? 0 : 1);

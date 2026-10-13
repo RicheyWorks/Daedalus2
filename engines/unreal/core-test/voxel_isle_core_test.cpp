@@ -7,6 +7,8 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <set>
+#include <tuple>
 using namespace daedalus::isle;
 static int Passed = 0, Total = 0;
 static void Check(const char* Name, bool OK) { ++Total; Passed += OK; std::printf("%s %s\n", OK ? "PASS" : "FAIL", Name); }
@@ -35,6 +37,42 @@ static const Params Set[] = {
 	{2147483647, 24, 30, 10, -10, 0, 6},
 };
 
+
+// Every visible face, brute force from the columns: (normal, x, y, z, layer) for each solid cube face with air beside.
+using Face = std::tuple<int, int, int, int, int>;
+static std::set<Face> Faces(const Params& P)
+{
+	std::set<Face> F;
+	auto Solid = [&](int X, int Y, int Z) {
+		const int T = ColumnTop(P, X, Y);
+		return T != Off && Z <= T && Z >= ColumnBottom(P, X, Y);
+	};
+	const int D[6][3] = {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
+	Build(P, [&](int X, int Y, int Z, Layer L) {
+		for (int k = 0; k < 6; ++k)
+			if (!Solid(X + D[k][0], Y + D[k][1], Z + D[k][2])) F.insert(Face{k, X, Y, Z, static_cast<int>(L)});
+	});
+	return F;
+}
+
+// The quads, rasterised back to unit faces; Twice counts any face covered more than once.
+static std::set<Face> Raster(const std::vector<Quad>& Q, long& Twice)
+{
+	std::set<Face> F;
+	Twice = 0;
+	for (const Quad& q : Q)
+		for (int u = q.U0; u < q.U1; ++u)
+			for (int v = q.V0; v < q.V1; ++v)
+			{
+				int X, Y, Z;
+				if (q.Normal <= 1) { X = q.Normal == 0 ? q.Plane - 1 : q.Plane; Y = u; Z = v; }
+				else if (q.Normal <= 3) { Y = q.Normal == 2 ? q.Plane - 1 : q.Plane; X = u; Z = v; }
+				else { Z = q.Normal == 4 ? q.Plane - 1 : q.Plane; X = u; Y = v; }
+				Twice += !F.insert(Face{q.Normal, X, Y, Z, q.Layer}).second;
+			}
+	return F;
+}
+
 int main(int argc, char** argv)
 {
 	const char* Out = (argc > 2 && std::strcmp(argv[1], "--write") == 0) ? argv[2] : nullptr;
@@ -58,6 +96,25 @@ int main(int argc, char** argv)
 	Check("no pond when its radius is 0", ColumnTop(NoPond, P.PondX, P.PondY) != -2);
 	Summary C = Run(Set[0]);
 	Check("Claude Island is about 100k cubes (budget for one HISM per layer)", C.Cubes > 40000 && C.Cubes < 250000);
+
+
+	// --- the merged surface mesh shows exactly the faces the cubes show, each once
+	for (const Params& S : {Set[3], Set[1], Set[5], Set[6]})
+	{
+		long Twice = 0;
+		const std::vector<Quad> Q = Mesh(S);
+		const std::set<Face> Want = Faces(S), Got = Raster(Q, Twice);
+		char Name[96];
+		std::snprintf(Name, sizeof Name, "mesh = cube faces, none twice (seed %d: %zu faces in %zu quads)", S.Seed, Want.size(), Q.size());
+		Check(Name, Got == Want && Twice == 0);
+	}
+	{
+		const std::vector<Quad> Q = Mesh(Set[0]);
+		long Cubes = 0;
+		Build(Set[0], [&](int, int, int, Layer) { ++Cubes; });
+		std::printf("Claude Island: %ld cubes (x12 tris = %ld) -> %zu quads (x2 tris = %zu)\n", Cubes, Cubes * 12, Q.size(), Q.size() * 2);
+		Check("Claude Island's mesh is under a tenth of the cube triangles", static_cast<long>(Q.size()) * 2 * 10 < Cubes * 12);
+	}
 
 	// --- the parity file for the Java port
 	if (Out)

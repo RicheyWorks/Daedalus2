@@ -146,3 +146,4 @@ Safety: our sublevel and /Game/DiskSaver only, overwrite-reimport, no deletes, n
 ## Status and next steps (00:45 PT, Oct 13)
 - Done in Unreal: 199 actors. Single-mesh assets with tree canopies (round 4); grass, stone, water and leaf materials; 22 herb Starbloom pickups; 9 livestock tags; 4 kettles; 2 water filters; 4 drinkable and 10 raw water tags.
 - Open: (1) DaedalusWaterSource and DaedalusLivestock (youtube-master's DaedalusHomestead files) need a DaedalusLink build before water sources and animal wander/feed can be hooked; the fix script picks them up automatically via hasattr. (2) A lit hero shot: `turn5.ps1` (temporary island-only lights; the world is at night). (3) mechanics.json still has to be loaded by the gameplay classes.
+- Update 01:10 PT: the lit hero shot is done. Round 5 produced `diskSaver_island_v5.png` (temporary island-only lights, removed, world untouched). The remaining open item is (1), the homestead classes build.

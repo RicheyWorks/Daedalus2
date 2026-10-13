@@ -25,6 +25,8 @@ OUTBOX = r"C:\Users\730ri\projects\bot-team\link\outbox\hephaestus.jsonl"
 SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
 HERO_PNG = "hero_r2.png"  # stable path for referee / round-2 living note
 HOTSPRING_MI = "/Game/Hephaestus/Materials/MI_HotSpring"
+BASALT_MI = "/Game/Hephaestus/Materials/MI_BasaltGround"
+BASALT_COLOR = (0.045, 0.038, 0.035)  # dark basalt: the white 1024 m blockout disc washed out the round-5 hero
 
 
 def log(m): unreal.log("[hephaestus-island] " + m)
@@ -82,6 +84,58 @@ def hotspring_material():
         return mi
     except Exception as e:
         log(f"hotspring material: {e}"); return None
+
+
+# Hero framing (round-5 lesson): the fixed hero_cam_m (140,-160,90) m sits ~230 m from the forge, so the lit round-5
+# capture (luma 174) was a pale 1024 m disc with the caldera props as specks. Fit the camera to the hero zone instead:
+# keep the layout's view direction, trim outliers, and back off just far enough that the core cluster fills the frame.
+HERO_FRAME_ZONES = ("caldera_forge",)
+HERO_FRAME_TRIM = 0.75   # radius quantile (drops a few far props so the core reads)
+HERO_FRAME_MARGIN_M = 6.0
+HERO_FRAME_FILL = 0.7    # cluster radius / half-frame at the target
+HERO_FRAME_MIN_M = 30.0
+
+
+def hero_pose_from_layout(lay, env=None):
+    """Pure: (cam_m, target_m, fov, info). Fits the hero cam to HERO_FRAME_ZONES placements along the layout's view
+    direction. HEPH_HERO_FIT=0, fewer than 3 points, or bad data -> the layout's fixed hero_cam_m / hero_target_m."""
+    env = os.environ if env is None else env
+    c0 = list(lay.get("hero_cam_m", [140, -160, 90])); t0 = list(lay.get("hero_target_m", [0, 0, 5]))
+    fov = float(lay.get("hero_fov", 55))
+    fixed = (c0, t0, fov, {"fit": False})
+    if str(env.get("HEPH_HERO_FIT", "1")) == "0":
+        fixed[3]["reason"] = "HEPH_HERO_FIT=0"; return fixed
+    pts = [(float(p["x"]), float(p["y"]), float(p.get("z", 0))) for p in lay.get("placements") or []
+           if p.get("zone") in HERO_FRAME_ZONES and not p.get("skip")]
+    if len(pts) < 3:
+        fixed[3]["reason"] = f"only {len(pts)} hero-zone points"; return fixed
+    cx = sum(p[0] for p in pts) / len(pts); cy = sum(p[1] for p in pts) / len(pts)
+    ds = sorted(math.hypot(p[0] - cx, p[1] - cy) for p in pts)
+    r = ds[min(len(ds) - 1, int(HERO_FRAME_TRIM * (len(ds) - 1) + 0.5))] + HERO_FRAME_MARGIN_M
+    v = [c0[i] - t0[i] for i in range(3)]; n = math.sqrt(sum(x * x for x in v))
+    if n < 1e-6:
+        fixed[3]["reason"] = "hero_cam_m == hero_target_m"; return fixed
+    d = max(HERO_FRAME_MIN_M, r / (HERO_FRAME_FILL * math.tan(math.radians(fov) / 2)))
+    tz = t0[2]
+    tgt = [round(cx, 2), round(cy, 2), tz]
+    cam = [round(tgt[i] + v[i] / n * d, 2) for i in range(3)]
+    return cam, tgt, fov, {"fit": True, "zones": list(HERO_FRAME_ZONES), "points": len(pts), "radius_m": round(r, 1),
+                           "dist_m": round(d, 1), "fixed_dist_m": round(n, 1)}
+
+
+def basalt_material():
+    """Dark basalt instance of the engine basic-shape material for the blockout ground disc (was default white)."""
+    try:
+        if eal.does_asset_exist(BASALT_MI): return unreal.load_asset(BASALT_MI)
+        parent = unreal.load_asset("/Engine/BasicShapes/BasicShapeMaterial")
+        mi = unreal.AssetToolsHelpers.get_asset_tools().create_asset(
+            "MI_BasaltGround", "/Game/Hephaestus/Materials", unreal.MaterialInstanceConstant, unreal.MaterialInstanceConstantFactoryNew())
+        unreal.MaterialEditingLibrary.set_material_instance_parent(mi, parent)
+        unreal.MaterialEditingLibrary.set_material_instance_vector_parameter_value(mi, "Color", unreal.LinearColor(*BASALT_COLOR, 1.0))
+        eal.save_asset(BASALT_MI)
+        return mi
+    except Exception as e:
+        log(f"basalt material: {e}"); return None
 
 
 def link_note(text):
@@ -166,14 +220,29 @@ EXPOSURE_LADDER = (
     ("base_color", "SCS_BASE_COLOR", None, 0.0),
 )
 MIN_CAPTURE_LUM = 20.0  # same gate test_heph_nft_card uses for the card's primary hero
+# Washout gate (01:33 2026-10-13): round-5 SceneCapture cleared luma 174 but the forge was a speck on a pale
+# 1024 m blockout disc — the luma>=20 gate only catches dark frames. A washed hero has a bright mean AND a nearly
+# all-pale center (the disc fills the view). Dark frames stay lit_owed; this flag is framing debt for the next turn.
+WASHOUT_PALE_LUM = 160.0
+WASHOUT_CENTER_PALE_FRAC = 0.85  # 3x3 center of the 9x9 probe
+WASHOUT_MIN_MEAN = 80.0  # below this, lit_owed handles it
+
+
+def pixel_rgb(c):
+    """(r, g, b) 0-255 from a UE LinearColor-like object or a 3-tuple."""
+    return (c.r, c.g, c.b) if hasattr(c, "r") else c[:3]
+
+
+def luma601(r, g, b):
+    return 0.299 * r + 0.587 * g + 0.114 * b
 
 
 def mean_lum(colors):
     """Mean Rec.601 luma (0-255) of sampled pixels; each is an (r, g, b) 0-255 tuple or an object with .r/.g/.b."""
     tot, n = 0.0, 0
     for c in colors:
-        r, g, b = (c.r, c.g, c.b) if hasattr(c, "r") else c[:3]
-        tot += 0.299 * r + 0.587 * g + 0.114 * b; n += 1
+        r, g, b = pixel_rgb(c)
+        tot += luma601(r, g, b); n += 1
     return tot / n if n else 0.0
 
 
@@ -182,6 +251,48 @@ def sample_grid(w, h, n=9):
     xs = [int(w * (0.05 + 0.9 * i / (n - 1))) for i in range(n)]
     ys = [int(h * (0.05 + 0.9 * j / (n - 1))) for j in range(n)]
     return [(x, y) for y in ys for x in xs]
+
+
+def probe_lumas(colors):
+    """Rec.601 luma list from the same color objects mean_lum accepts (row-major n x n)."""
+    out = []
+    for c in colors:
+        r, g, b = pixel_rgb(c)
+        out.append(luma601(r, g, b))
+    return out
+
+
+def washout_stats(lumas, n=9):
+    """Stats for the n x n brightness probe. center_* uses the middle 3x3 when n>=3."""
+    if not lumas:
+        return {"mean": 0.0, "std": 0.0, "span": 0.0, "pale_frac": 0.0,
+                "center_mean": 0.0, "center_pale_frac": 0.0, "n": 0, "n_side": n}
+    mean = sum(lumas) / len(lumas)
+    var = sum((x - mean) ** 2 for x in lumas) / len(lumas)
+    pale = sum(1 for x in lumas if x >= WASHOUT_PALE_LUM) / len(lumas)
+    center = []
+    if n >= 3 and len(lumas) == n * n:
+        lo, hi = n // 2 - 1, n // 2 + 1  # inclusive 3-wide band around the middle
+        for j in range(n):
+            for i in range(n):
+                if lo <= i <= hi and lo <= j <= hi:
+                    center.append(lumas[j * n + i])
+    else:
+        center = list(lumas)
+    cmean = sum(center) / len(center) if center else 0.0
+    cpale = sum(1 for x in center if x >= WASHOUT_PALE_LUM) / len(center) if center else 0.0
+    return {"mean": round(mean, 1), "std": round(var ** 0.5, 1), "span": round(max(lumas) - min(lumas), 1),
+            "pale_frac": round(pale, 3), "center_mean": round(cmean, 1),
+            "center_pale_frac": round(cpale, 3), "n": len(lumas), "n_side": n}
+
+
+def washout_owed(stats, min_mean=None, center_pale=None):
+    """Bright + nearly all-pale center => washed blockout disc, not a usable forge overlook."""
+    if not stats or not stats.get("n"):
+        return False
+    min_mean = WASHOUT_MIN_MEAN if min_mean is None else min_mean
+    center_pale = WASHOUT_CENTER_PALE_FRAC if center_pale is None else center_pale
+    return stats["mean"] >= min_mean and stats.get("center_pale_frac", 0.0) >= center_pale
 
 
 # World-light probe (round 4, 23:45): every island's shot went near-black after the 22:59 editor restart because the
@@ -235,7 +346,36 @@ def restore_sky():
         return {"ok": False, "error": str(e)[:160]}
 
 
+# Temp island-only lights (disk-saver round-5 lit-capture pattern, 2026-10-13): when DaedalusWorld sky is
+# storm-dark or SceneCapture has no eye-adaptation history, spawn a tagged HEPH_TEMP DirectionalLight
+# (atmosphere_sun_light=False so it does NOT drive the world sky / time of day), a PointLight fill, and a
+# bounded PostProcessVolume next to the island origin. Destroy every HEPH_TEMP_* before returning so the
+# post-capture save_world cannot bake them into Content. HEPH_TEMP_LIGHTS=0 disables. Tuned values match
+# disk-saver's good v5 shot (fill 5e5, EV100 9; commit 4f45d840).
+TEMP_LIGHT_TAG = "HEPH_TempCapture"
+TEMP_LIGHT_PREFIX = "HEPH_TEMP_"
+TEMP_FILL_INTENSITY = 5.0e5
+TEMP_SUN_INTENSITY = 8.0
+TEMP_EV100 = 9.0
+
+
+def temp_lights_plan(env=None):
+    """Pure decision: should hero_capture spawn island-only temp lights? Returns (use, reason)."""
+    env = os.environ if env is None else env
+    if env.get("HEPH_TEMP_LIGHTS", "1") == "0":
+        return False, "disabled (HEPH_TEMP_LIGHTS=0)"
+    return True, "spawn island-only HEPH_TEMP sun/fill/PPV (no atmosphere sun; destroy before save)"
+
+
+def is_temp_light_actor(label, tags=None):
+    """True for actors this module spawned for a one-shot hero capture (label or tag)."""
+    label = str(label or "")
+    tags = [str(t) for t in (tags or [])]
+    return label.startswith(TEMP_LIGHT_PREFIX) or TEMP_LIGHT_TAG in tags
+
+
 def probe_world_light():
+
     suns, skies = [], []
     try:
         for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
@@ -248,7 +388,7 @@ def probe_world_light():
     return world_light_verdict(suns, skies)
 
 
-def hero_capture(cam_loc, target_loc, fov=55.0):
+def hero_capture(cam_loc, target_loc, fov=55.0, origin=None):
     """SceneCapture2D hero shot with an exposure ladder and a brightness gate.
     Bypasses viewport_screenshot (bridge 9877 often times out). Tries each EXPOSURE_LADDER rung, probes a 9x9 pixel
     grid of the render target, and exports the first rung whose mean luma >= MIN_CAPTURE_LUM to SHOTS/hero_r2.png
@@ -260,9 +400,11 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         ue_sub = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
         world = ue_sub.get_editor_world()
         actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-        # clear prior capture actors from a partial run
+        # clear prior capture / leftover temp-light actors from a partial run (never leave HEPH_TEMP in Content)
         for a in actors.get_all_level_actors():
-            if str(a.get_actor_label()).startswith("Hephaestus Hero Capture"):
+            lab = str(a.get_actor_label())
+            tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+            if lab.startswith("Hephaestus Hero Capture") or is_temp_light_actor(lab, tags):
                 try: actors.destroy_actor(a)
                 except Exception: pass
         rt = unreal.RenderingLibrary.create_render_target2d(
@@ -286,6 +428,71 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         else:
             log(f"sky restore skipped: {why}")
 
+        # Island-only temp lights (disk-saver pattern): lit hero even if world sky stays dark. Never saved.
+        origin_v = origin if origin is not None else unreal.Vector(
+            (cam_loc.x + target_loc.x) * 0.5, (cam_loc.y + target_loc.y) * 0.5, 0.0)
+        use_tmp, tmp_why = temp_lights_plan()
+        temp_info = {"used": False, "reason": tmp_why, "spawned": [], "removed": []}
+
+        def _spawn_temp(cls, loc, rot, nm):
+            a = actors.spawn_actor_from_class(cls, loc, rot)
+            a.tags = [TEMP_LIGHT_TAG]
+            a.set_actor_label(TEMP_LIGHT_PREFIX + nm)
+            a.set_folder_path(f"{FOLDER}/TempCapture")
+            temp_info["spawned"].append(a.get_actor_label())
+            return a
+
+        def _cleanup_temps():
+            removed = []
+            for a in list(actors.get_all_level_actors()):
+                lab = str(a.get_actor_label())
+                tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+                if is_temp_light_actor(lab, tags):
+                    try:
+                        actors.destroy_actor(a); removed.append(lab)
+                    except Exception as e:
+                        log(f"temp light cleanup {lab}: {e}")
+            temp_info["removed"] = removed
+            return removed
+
+        if use_tmp:
+            try:
+                sun = _spawn_temp(unreal.DirectionalLight, origin_v + unreal.Vector(0, 0, 3000),
+                                  unreal.Rotator(0, -40, 35), "Sun")
+                sc_sun = sun.light_component
+                sc_sun.set_editor_property("intensity", TEMP_SUN_INTENSITY)
+                sc_sun.set_editor_property("light_color", unreal.Color(255, 244, 225, 255))
+                try: sc_sun.set_editor_property("atmosphere_sun_light", False)
+                except Exception: pass
+                fill = _spawn_temp(unreal.PointLight, origin_v + unreal.Vector(0, 0, 6000),
+                                   unreal.Rotator(0, 0, 0), "Fill")
+                fc = fill.point_light_component
+                fc.set_editor_property("intensity", TEMP_FILL_INTENSITY)
+                fc.set_editor_property("attenuation_radius", 20000.0)
+                fc.set_editor_property("cast_shadows", False)
+                ppv = _spawn_temp(unreal.PostProcessVolume, origin_v, unreal.Rotator(0, 0, 0), "PPV")
+                ppv.set_editor_property("unbound", False)
+                ppv.set_actor_scale3d(unreal.Vector(200, 200, 100))
+                s = ppv.settings
+                for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM),
+                             ("auto_exposure_min_brightness", TEMP_EV100),
+                             ("auto_exposure_max_brightness", TEMP_EV100),
+                             ("auto_exposure_bias", 0.5)):
+                    try:
+                        s.set_editor_property("override_" + k, True)
+                        s.set_editor_property(k, v)
+                    except Exception as e:
+                        temp_info.setdefault("notes", []).append(f"{k}: {str(e)[:60]}")
+                ppv.set_editor_property("settings", s)
+                temp_info["used"] = True
+                log(f"temp lights spawned: {temp_info['spawned']} (fill={TEMP_FILL_INTENSITY}, EV100={TEMP_EV100})")
+            except Exception as e:
+                temp_info["error"] = str(e)[:160]
+                log(f"temp lights spawn failed: {e}")
+                _cleanup_temps()
+        else:
+            log(f"temp lights skipped: {tmp_why}")
+
         def shoot(rung):
             label, src, ev100, bias = rung
             sc.set_editor_property("capture_source", getattr(unreal.SceneCaptureSource, src))
@@ -306,16 +513,21 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
             sc.set_editor_property("post_process_settings", pp)
             sc.set_editor_property("post_process_blend_weight", 1.0)
             sc.capture_scene()
-            return mean_lum(unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid)
+            colors = [unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid]
+            stats = washout_stats(probe_lumas(colors), n=9)
+            return stats
 
-        tried, best = [], None
+        tried, best = [], None  # best = (rung, stats)
         for rung in EXPOSURE_LADDER:
-            try: lum = shoot(rung)
+            try: stats = shoot(rung)
             except Exception as e:
                 log(f"hero capture rung {rung[0]}: {e}"); continue
-            tried.append({"rung": rung[0], "lum": round(lum, 1)})
-            log(f"hero capture rung {rung[0]}: mean luma {lum:.1f}")
-            if best is None or lum > best[1]: best = (rung, lum)
+            lum = stats["mean"]
+            tried.append({"rung": rung[0], "lum": lum, "std": stats["std"],
+                          "center_pale_frac": stats["center_pale_frac"],
+                          "washout": washout_owed(stats)})
+            log(f"hero capture rung {rung[0]}: mean luma {lum:.1f} center_pale {stats['center_pale_frac']:.2f}")
+            if best is None or lum > best[1]["mean"]: best = (rung, stats)
             if lum >= MIN_CAPTURE_LUM: break
         if best and tried[-1]["rung"] != best[0][0]:  # none passed: re-shoot the brightest rung before export
             try: shoot(best[0])
@@ -323,26 +535,51 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, HERO_PNG)
         try:
             with open(os.path.join(SHOTS, "hero_capture.json"), "w", encoding="utf-8") as f:
-                chosen, blum = (best[0][0], best[1]) if best else (None, None)
-                json.dump({"tried": tried, "chosen": chosen, "lum": round(blum, 1) if best else None,
-                           "gate": MIN_CAPTURE_LUM, "world_light": wl, "sky_restore": sky_fix,
-                           "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
+                chosen = best[0][0] if best else None
+                blum = best[1]["mean"] if best else None
+                wstats = best[1] if best else None
+                washed = washout_owed(wstats) if wstats else False
+                json.dump({"tried": tried, "chosen": chosen, "lum": blum,
+                           "gate": MIN_CAPTURE_LUM, "washout_gate": {
+                               "pale_lum": WASHOUT_PALE_LUM, "center_pale_frac": WASHOUT_CENTER_PALE_FRAC,
+                               "min_mean": WASHOUT_MIN_MEAN},
+                           "probe": wstats, "world_light": wl, "sky_restore": sky_fix,
+                           "temp_lights": temp_info, "lit_owed": lit_owed(chosen, blum),
+                           "washout_owed": washed}, f, indent=1)
         except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
+        # ALWAYS strip HEPH_TEMP_* before any later save_world (run() re-saves after a successful shot).
+        _cleanup_temps()
+        log(f"temp lights removed: {temp_info.get('removed')}")
         # brief settle + existence check
         time.sleep(0.5)
-        if best and lit_owed(best[0][0], best[1]):
+        if best and lit_owed(best[0][0], best[1]["mean"]):
             link_note(f"NEED island:hephaestus lit hero owed: export fell back to {best[0][0]} (lit rungs {tried[:-1]}); "
-                      f"world light sun {wl['sun_lux']} lux / sky {wl['sky']} -> "
-                      + ("world-level dark (DaedalusWorld sun/sky), not an island fault; no sun added"
+                      f"world light sun {wl['sun_lux']} lux / sky {wl['sky']}; temp_lights used={temp_info.get('used')} -> "
+                      + ("world-level dark (DaedalusWorld sun/sky); temp island lights were used (not saved)"
                          if wl["dark"] else "world is lit, so re-aim hero cam / exposure next turn"))
-        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1] >= MIN_CAPTURE_LUM:
-            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]:.1f})")
+        elif best and washout_owed(best[1]):
+            link_note(f"NEED island:hephaestus washout hero owed: {best[0][0]} luma {best[1]['mean']} but center_pale "
+                      f"{best[1]['center_pale_frac']:.2f} >= {WASHOUT_CENTER_PALE_FRAC} (pale disc fills the view; "
+                      f"fit hero cam / basalt ground — see hero_pose fit). lit_owed false; framing debt remains.")
+        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1]["mean"] >= MIN_CAPTURE_LUM:
+            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]['mean']:.1f} "
+                f"washout={washout_owed(best[1])})")
             return out_path
         log(f"hero SceneCapture too dark or missing ({tried}); trying HighResShot")
     except Exception as e:
         log(f"hero SceneCapture failed: {e}")
+        try:
+            eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+            for a in list(eas.get_all_level_actors()):
+                lab = str(a.get_actor_label())
+                tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+                if is_temp_light_actor(lab, tags) or lab.startswith("Hephaestus Hero Capture"):
+                    try: eas.destroy_actor(a)
+                    except Exception: pass
+        except Exception as ce:
+            log(f"temp light emergency cleanup: {ce}")
     # HighResShot fallback from the same hero pose (documented in ISLAND.md)
     try:
         unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).set_level_viewport_camera_info(
@@ -397,6 +634,10 @@ def run():
     fx, fy = lay.get("footprint_m", [1024, 1024])
     g = actors.spawn_actor_from_object(unreal.load_asset("/Engine/BasicShapes/Cylinder"), unreal.Vector(ox, oy, oz - 1000))
     g.set_actor_scale3d(unreal.Vector(fx, fy, 20)); g.set_actor_label("Hephaestus Ground (blockout)"); g.set_folder_path(f"{FOLDER}/ground")
+    basalt = basalt_material()
+    if basalt is not None:
+        try: g.static_mesh_component.set_material(0, basalt)
+        except Exception as e: log(f"ground mat: {e}")
     placed, missing = 0, set()
     living = {"water": 0, "livestock": 0, "herbs": 0}
     spring_mi = hotspring_material()
@@ -425,7 +666,8 @@ def run():
         lc.set_light_color(unreal.LinearColor(1.0, 0.42, 0.12, 1.0)); lc.set_intensity(50000.0); lc.set_attenuation_radius(6000.0)
     except Exception as e: log(f"light: {e}")
     # hero camera: high three-quarter view of caldera forge with drydock and springs behind
-    c, t = lay.get("hero_cam_m", [140, -160, 90]), lay.get("hero_target_m", [0, 0, 5])
+    c, t, hero_fov, hero_fit = hero_pose_from_layout(lay)
+    log(f"hero pose: cam {c} m target {t} m fov {hero_fov} {hero_fit}")
     cl = unreal.Vector(ox + c[0] * 100, oy + c[1] * 100, oz + c[2] * 100)
     dx, dy, dz = t[0] - c[0], t[1] - c[1], t[2] - c[2]
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
@@ -440,10 +682,11 @@ def run():
     link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
               f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
               f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
-    write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved})
+    write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved,
+                  "hero_pose": {"cam_m": c, "target_m": t, "fov": hero_fov, **hero_fit}})
     # Warm SceneCapture hero PNG (bridge viewport_screenshot often times out on 9877).
     tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
-    shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)))
+    shot = hero_capture(cl, tl, fov=hero_fov, origin=unreal.Vector(ox, oy, oz))
     if shot:
         link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D exposure ladder, see hero_capture.json)")
     else:
@@ -453,7 +696,9 @@ def run():
     try: cap = json.load(open(os.path.join(SHOTS, "hero_capture.json"), encoding="utf-8"))
     except Exception: cap = {}
     write_result({"stage": "done", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved, "shot": shot,
-                  "hero_rung": cap.get("chosen"), "lit_owed": cap.get("lit_owed", True), "world_light": cap.get("world_light")})
+                  "hero_rung": cap.get("chosen"), "lit_owed": cap.get("lit_owed", True),
+                  "washout_owed": cap.get("washout_owed", False), "world_light": cap.get("world_light"),
+                  "hero_probe": cap.get("probe")})
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
             "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw],
             "shot": shot, "hero_target": [tl.x, tl.y, tl.z]}

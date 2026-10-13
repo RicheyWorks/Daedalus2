@@ -141,3 +141,31 @@ sun/sky floors (MIN_SUN 1.0 / MIN_SKY 0.5), DirectionalLight count guard (no sec
 live sky restore on their round-4 turn; OddsReaper next editor turn still owes: framed PIE SceneCapture storm hero
 on-island (r4 was off-island) after world is Clear on disk, then Play-stop + save OddsReaperIsland (do not leave
 director at storm on the persistent map).
+
+## Round-4 off-editor: mechanics.json (Oct 13, 2026, ~00:57 PT)
+
+Added data/islands/oddsreaper/mechanics.json (disksaver-mechanics-v1) derived from water.json / livestock.json /
+herbs.json storm_parlay_cookbook: DiceSpring+StormCistern sources, CoinbackGoat/DicebeakHen products, 8 wager herbs,
+8 storm-parlay teas, Reaper Ledger balance 30/30/30/10. Validator check_mechanics.py cross-checks tea inputs,
+cookbook membership, water/livestock ids, and balance sum. Headless: python data/islands/oddsreaper/check_mechanics.py -> OK.
+No Unreal touched.
+
+## RAM gate (01:08 PT Oct 13, off-editor)
+
+oddsreaper_turn.py now checks host free RAM (GlobalMemoryStatusEx) before the heavy steps: the -Fast build is skipped below OR_MIN_BUILD_GB (default 2.0) and the 20 s PIE storm check below OR_MIN_PLAY_GB (default 1.5); save + editor SceneCapture hero still run. Unreadable RAM fails open. Headless: tools/islands/oddsreaper/test_ram_gate.py. Reason: round-5 editor ran at 0.86-1.07 GB free.
+
+## Storm-cool OR_TEMP lights (01:20 PT Oct 13, off-editor)
+
+scene_capture_hero now optionally spawns island-only OR_TEMP_* DirectionalLight + PointLight + bounded PPV
+(disk-saver/hephaestus lit-capture pattern) with a cool storm tint RGB(180,200,255), fill 2.5e5, EV100 10 —
+half the warm daylight fill so we do not wash oddsreaper_storm to Clear. atmosphere_sun_light=False so the
+world sky/time is untouched. ALWAYS destroyed before any save. OR_TEMP_LIGHTS=0 disables. Headless:
+tools/islands/oddsreaper/test_temp_lights.py. Apply on next editor grant (with framed PIE SceneCapture).
+
+## Auto-CLAIM watcher (01:31 PT Oct 13, off-editor)
+
+Missed round-5 CLAIM window (no CLAIM by 01:23:26 after pythagoras HANDOFF; referee never posted an explicit @oddsreaper OPEN). Added `tools/islands/oddsreaper/or_autoclaim.py`: every-minute Scheduled Task `OddsReaperAutoClaim` reads `bot-team/link/log.jsonl`, matches referee `@oddsreaper ... OPEN` **or** a real HANDOFF act from ledger predecessor (`pythagoras`), posts ONE CLAIM per turn, expires 08:00 PT. Headless: `test_autoclaim.py`. Never touches Unreal. Framing + OR_TEMP storm lights still verified PASS.
+
+## Post-Play save rule (01:45 PT Oct 13, off-editor)
+
+No blind bridge `save` after Play: it runs save_dirty_packages and wrote oddsreaper_storm (Storm / 18.75 / clock paused) into shared DaedalusWorld in rounds 3-4. `oddsreaper_turn.py` finally now runs `post_play_save()` in this order: Stop Play -> `restore_world_sky.py` (young_meadow / Clear / 9.4 / clock running, its own verified save) -> save the **OddsReaperIsland sublevel only** (set current + save_current_level) -> read back the director. If DaedalusWorld.umap mtime moved during our sublevel save, or the world is not Clear, it re-runs restore_world_sky and checks again. The result goes in island_result.json (`post_play`) and the DONE line. Headless test: `tools/islands/oddsreaper/test_sublevel_save_plan.py`.

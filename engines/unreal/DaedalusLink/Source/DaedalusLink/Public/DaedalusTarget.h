@@ -53,6 +53,20 @@ public:
 
 	// The record (the harness reads these).
 	/** IDLE, HUNT, WINDUP, CHARGE, DYING. */
+	/** Squad tactics (ADR-060): foes with the same Squad take orders together from UDaedalusTactics (the local
+	 * director, or Java's combat director through DTO 1). Empty = the foe fights alone, as before. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Tactics") FString Squad;
+	/** This foe's id in DTO 1 specs; empty = its actor name. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Tactics") FString UnitId;
+	/** The order it is carrying out (HOLD, ATTACK, FLANK, DEFEND, RETREAT, REINFORCE), and why. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Tactics") FString OrderVerb;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Tactics") FString OrderWhy;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Tactics") FVector OrderPoint = FVector::ZeroVector;
+	/** Take an order for Seconds (then it lapses and the foe fights alone again). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Tactics") void SetOrder(const FString& Verb, FVector Point, const FString& Why, float Seconds = 4.f);
+	UFUNCTION(BlueprintPure, Category = "Daedalus|Tactics") FString TacticalId() const { return UnitId.IsEmpty() ? GetName() : UnitId; }
+	bool IsAlive() const { return Dying < 0.f && Health > 0.f; }
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FString State = TEXT("IDLE");
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Attacks = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Landed = 0;
@@ -107,6 +121,7 @@ private:
 	float WindupTime = 0.5f;
 	float ChargeLeft = 0.f;
 	float SightCheck = 0.f;
+	float OrderLeft = 0.f;
 	float SinceHurt = 100.f;
 	void TickBar();
 	TArray<FVector> Route;

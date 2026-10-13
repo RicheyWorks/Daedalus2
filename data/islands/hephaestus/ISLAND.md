@@ -1,4 +1,4 @@
-# Hephaestus Island (Team Grok, hephaestus)
+﻿# Hephaestus Island (Team Grok, hephaestus)
 
 Theme: the forge island — a 1024 m volcanic planet-shard whose core took the asteroid's direct strike. Twice normal size. Manifest: `data/islands/hephaestus.json`. Pack: `layout.json`, `water.json`, `herbs.json`, `livestock.json`.
 
@@ -368,3 +368,35 @@ Owed next editor turn: HEPH_FORCE_LOD1=1 landmark swap + lit forge-overlook hero
 ### Auto HEPH_FORCE_LOD1 (2026-10-13 ~00:55 PT, off-editor)
 
 `heph_turn.py` now reads `preflight.json` before the in-editor run. When `lod1_ready` is non-empty and `needs_import` is empty (hi-res landmarks already in Unreal), it sets `HEPH_FORCE_LOD1=1` in its own env and in the execute_python code, so `heph_island_ue` reimports the 7 landmarks as LOD1. `HEPH_FORCE_LOD1=0` disables; `=1` forces. The RAM guard (`HEPH_NO_IMPORT=1`) still wins. Pure helper `should_force_lod1(preflight, env)`, covered by `test_heph_force_lod1.py`. Index of this folder: `README.md`.
+
+## Temp island-only hero lights (2026-10-13)
+
+On a granted editor turn, `heph_island_ue.hero_capture` spawns tagged `HEPH_TEMP_*` lights (DirectionalLight with `atmosphere_sun_light=False`, PointLight fill 5e5, bounded PostProcessVolume EV100 9) at the island origin — the disk-saver round-5 lit-capture pattern — so the forge-overlook SceneCapture stays lit even when DaedalusWorld sky is storm-dark. Actors are destroyed before `save_world`; they are never committed to Content. `HEPH_TEMP_LIGHTS=0` disables. See `test_heph_temp_lights.py`.
+
+## Round 5 turn (2026-10-13 01:12-01:14 PT)
+- --now turn after referee GRANT #26915 and CLAIM #26922: placed 126/126, imported 21 hero glbs (LOD1 auto swap, 7 landmarks QUEUE 1360-1366), missing none.
+- Hero: SceneCapture rung auto+1, luma 174.3 (gate 20), HEPH_TEMP sun/fill/PPV used, and none were left in the level afterwards (checked via the bridge).
+- Saved sublevel + all maps (dirty_maps []), Play stopped, TURN DONE + HANDOFF -> pythagoras about 01:13:46.
+- Log: bot-team\shots\hephaestus\turn_r5_run.log; capture: shots\hephaestus\hero_capture.json.
+
+
+## Hero framing + basalt ground (2026-10-13 ~01:30 PT, off-editor)
+
+No editor grant (round 5 done 01:13, pythagoras then the referee's next call). Unreal untouched.
+
+Round-5 SceneCapture is lit (auto+1, luma 174.3, lit_owed false; archived as `bot-team/shots/hephaestus/hero_unreal_lit_r5.png`), but it is not a usable hero yet: the fixed `hero_cam_m` (140,-160,90) m is ~229 m from the forge, so the frame is mostly the pale 1024 m blockout disc (default white BasicShapeMaterial) and the caldera props are specks. The luma gate only catches dark frames, not washed-out ones.
+
+- `heph_island_ue.hero_pose_from_layout(lay)`: keeps the layout's view direction, targets the `caldera_forge` centroid, uses the 75th-percentile prop radius + 6 m, and backs off until that fills 70% of the half-frame (min 30 m). Real layout: 15 points, radius 28.3 m, distance 77.7 m (was 229 m), target (1.2, 5.5, 5) m. `HEPH_HERO_FIT=0` keeps the fixed pose; fewer than 3 points falls back too. The pose is written to `island_result.json` as `hero_pose`.
+- `basalt_material()`: `MI_BasaltGround` (BasicShapeMaterial, Color 0.045/0.038/0.035) on the blockout ground disc, same pattern as `MI_HotSpring`.
+- `test_heph_hero_frame.py` (headless): fit closer than fixed, direction kept, all 12 core props inside the 55 deg cone, env/thin fallbacks, run() wiring. ALL PASS; the other 8 `test_heph_*` still pass.
+- `nft.json`: Blender overlook stays primary; `hero_image_unreal_lit` points at the round-5 archive. Promote the Unreal capture once a refit shot lands on the next granted turn.
+
+## Off-editor polish (2026-10-13 ~01:33 PT)
+
+No editor grant (art-master-flex holds round-5; blender-team on deck). Unreal untouched.
+
+Round-5 tip still owed: the `luma >= 20` gate misses washed-out frames. The archived `hero_unreal_lit_r5.png` is lit (mean luma 174.3, `lit_owed` false) but its 9x9 probe center is 100% pale (luma >= 160) — the white 1024 m blockout disc fills the view and the caldera is a speck.
+
+- `heph_island_ue.py`: `washout_stats` / `washout_owed` on the SceneCapture probe (bright mean + center pale frac >= 0.85). `hero_capture.json` now carries `probe`, `washout_owed`, and the washout gate constants; a NEED note posts when washout fires without `lit_owed`. `island_result.json` copies `washout_owed` + `hero_probe`. Framing fix from 043942f3 (fit cam ~78 m + `MI_BasaltGround`) still runs on the next granted turn; this gate is how we know the debt is cleared.
+- Validator: `test_heph_washout.py` (synthetic grids + archived r5/Blender PNGs).
+
