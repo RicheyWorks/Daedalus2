@@ -5,8 +5,13 @@ Steps: preflight -> build DaedalusLink (unreal-job -Start -Fast; reopens editor)
 SAVE sublevel+DaedalusWorld (before shot; bridge timeout can't zero the turn) -> write island_result.json ->
 hero shot (SceneCapture2D warm, then viewport retry + HighResShot) -> 20 s Play check + shot (if time) ->
 stop Play -> save -> tidy -> post DONE + HANDOFF art-master-flex on the team link.
-Talks to the Claude Unreal Bridge (127.0.0.1:9877, PROTOCOL.md). Whatever fails, it always stops Play and saves."""
-import base64, json, os, shutil, socket, subprocess, sys, time, datetime
+Talks to the Claude Unreal Bridge (127.0.0.1:9877, PROTOCOL.md). Whatever fails, it always stops Play and saves.
+Bridge liveness PREFLIGHT before TURN START: short ping; if the bridge is dead (GPU-crashed editor, refused or hung)
+it posts one HOLD note, does NOT start the 18-min clock or place anything, re-pings every OR_PREFLIGHT_S (default 30 s)
+and needs two good pings in a row, until alive or GIVE_UP (default 23:00 local). Each check writes
+bot-team/shots/oddsreaper/bridge_status.json {ok, ts, detail}. Build (-Fast) only runs after the bridge is alive
+(or after a successful preflight recovery); never burn the turn on a dead editor."""
+import base64, datetime as dt, json, os, shutil, socket, subprocess, sys, time
 
 T0 = time.time(); CAP = 18 * 60
 REPO = r"C:\Users\730ri\projects\Daedalus2"
@@ -18,6 +23,10 @@ RESULT = os.path.join(SHOTS, "island_result.json")
 OUTBOX = r"C:\Users\730ri\projects\bot-team\link\outbox\oddsreaper.jsonl"
 TIDY = r"C:\Users\730ri\projects\studio-screen-connector\tidy.ps1"
 NEXT = "art-master-flex"  # round-2 order after oddsreaper
+PORT = int(os.environ.get("OR_BRIDGE_PORT", "9877"))
+PREFLIGHT_S = int(os.environ.get("OR_PREFLIGHT_S", "30"))
+PING_S = int(os.environ.get("OR_PING_S", "5"))
+GIVE_UP_HHMM = os.environ.get("OR_GIVE_UP", "23:00")
 LOG = []
 
 
@@ -29,7 +38,7 @@ def link(text, to="*"):
 
 def write_result(d):
     """Outcome on disk so a bridge timeout mid-capture does not lose the turn (hephaestus 20:36 pattern)."""
-    d = dict(d, ts=datetime.datetime.now().isoformat(timespec="seconds"))
+    d = dict(d, ts=dt.datetime.now().isoformat(timespec="seconds"))
     try:
         os.makedirs(SHOTS, exist_ok=True)
         with open(RESULT, "w", encoding="utf-8") as f:
@@ -41,7 +50,7 @@ def write_result(d):
 
 def call(kind, timeout=120, **params):
     params["bridge_timeout"] = timeout
-    with socket.create_connection(("127.0.0.1", 9877), timeout=timeout + 10) as s:
+    with socket.create_connection(("127.0.0.1", PORT), timeout=timeout + 10) as s:
         s.sendall((json.dumps({"id": int(time.time() * 1000), "type": kind, "params": params}) + "\n").encode())
         buf = b""
         while not buf.endswith(b"\n"):
@@ -63,6 +72,53 @@ def wait_bridge(secs):
         try: return call("ping", timeout=10)
         except Exception: time.sleep(5)
     raise RuntimeError("editor bridge did not come up")
+
+
+def _give_up_dt():
+    h, m = GIVE_UP_HHMM.split(":")
+    return dt.datetime.combine(dt.date.today(), dt.time(int(h), int(m)))
+
+
+def bridge_alive():
+    """Short liveness ping. GPU-dead editor may refuse the socket or never answer; both count as dead.
+    Writes shots/oddsreaper/bridge_status.json {ok, ts, detail} on every check."""
+    try:
+        p = call("ping", timeout=PING_S)
+        ok, detail = True, f"level={p.get('level')} playing={p.get('playing')}"
+    except Exception as e:
+        ok, detail = False, f"{type(e).__name__}: {e}"[:300]
+    try:
+        os.makedirs(SHOTS, exist_ok=True)
+        with open(os.path.join(SHOTS, "bridge_status.json"), "w", encoding="utf-8") as f:
+            json.dump({"ok": ok, "ts": dt.datetime.now().isoformat(timespec="seconds"), "port": PORT, "detail": detail}, f)
+    except OSError:
+        pass
+    return ok, detail
+
+
+def preflight():
+    """Do not TURN START while the bridge is dead: a crashed editor must not burn our 18-minute turn.
+    True once the bridge answers (twice in a row if it had been dead), False if still dead at GIVE_UP."""
+    give_up = _give_up_dt()
+    held = False
+    while dt.datetime.now() < give_up:
+        ok, detail = bridge_alive()
+        if ok and held:
+            time.sleep(10)
+            ok, detail = bridge_alive()
+        if ok:
+            say(f"preflight: bridge 127.0.0.1:{PORT} alive ({detail})")
+            if held:
+                link(f"DOING oddsreaper: bridge {PORT} answering again ({detail}); starting turn")
+            return True
+        say(f"preflight: bridge 127.0.0.1:{PORT} DEAD ({detail}); NOT starting or placing; re-ping in {PREFLIGHT_S}s "
+            f"(give-up {give_up:%H:%M})")
+        if not held:
+            link(f"HOLD oddsreaper: bridge {PORT} is dead ({detail[:120]}); NOT starting the turn or placing; "
+                 f"re-pinging every {PREFLIGHT_S}s until it answers or {give_up:%H:%M}. Turn clock not started.")
+            held = True
+        time.sleep(PREFLIGHT_S)
+    return False
 
 
 def scene_capture_hero(cam, target, name="hero_unreal_editor.png"):
@@ -190,6 +246,15 @@ def hero_target_from_layout(isle):
 
 def main():
     os.makedirs(SHOTS, exist_ok=True)
+    # Preflight BEFORE TURN START / build: GPU-dead editor (D3D Device Removed) must not burn the slot.
+    if not preflight():
+        say(f"bridge 127.0.0.1:{PORT} still dead at {GIVE_UP_HHMM}; not starting")
+        link(f"BLOCKED editor turn (oddsreaper): bridge {PORT} stayed dead until {GIVE_UP_HHMM}; never started, "
+             "did not touch the editor. Need a make-up once the editor is back.")
+        write_result({"stage": "preflight_blocked", "ok": False, "error": "bridge dead until give-up"})
+        return {"blocked": "bridge_dead"}
+    global T0
+    T0 = time.time()  # clock starts only after bridge is alive
     link("DOING editor-slot oddsreaper: turn started (round-2; HANDOFF -> art-master-flex)")
     if "--skip-build" not in sys.argv:
         say("build DaedalusLink (-Fast; editor reopens)")
@@ -254,17 +319,23 @@ def main():
 
 
 if __name__ == "__main__":
-    ok, err = True, ""
-    try: main()
-    except Exception as e: ok, err = False, str(e); say(f"FAIL {e}")
+    ok, err, blocked = True, "", False
+    try:
+        r = main()
+        if isinstance(r, dict) and r.get("blocked") == "bridge_dead":
+            blocked = True
+            ok, err = False, "bridge_dead"
+    except Exception as e:
+        ok, err = False, str(e); say(f"FAIL {e}")
     finally:
-        for step, fn in (("stop", lambda: call("stop", timeout=60)), ("save", lambda: call("save", timeout=180)),
-                         ("tidy", lambda: subprocess.run(["powershell", "-NoProfile", "-File", TIDY, "-Once"], timeout=60))):
-            try: fn(); say(step)
-            except Exception as e: say(f"{step} failed: {e}")
-        mins = (time.time() - T0) / 60
-        write_result({"stage": "done", "ok": ok, "error": err or None, "mins": round(mins, 2)})
-        link(f"{'DONE' if ok else 'BLOCKED'} island:OddsReaper editor turn {mins:.1f} min: sky director + island placed, shots in {SHOTS}" +
-             ("" if ok else f" | {err[:200]}") + " | Play stopped, saved, tidied")
-        link(f"HANDOFF oddsreaper -> {NEXT}: editor saved, Play stopped", to=NEXT)
+        if not blocked:
+            for step, fn in (("stop", lambda: call("stop", timeout=60)), ("save", lambda: call("save", timeout=180)),
+                             ("tidy", lambda: subprocess.run(["powershell", "-NoProfile", "-File", TIDY, "-Once"], timeout=60))):
+                try: fn(); say(step)
+                except Exception as e: say(f"{step} failed: {e}")
+            mins = (time.time() - T0) / 60
+            write_result({"stage": "done", "ok": ok, "error": err or None, "mins": round(mins, 2)})
+            link(f"{'DONE' if ok else 'BLOCKED'} island:OddsReaper editor turn {mins:.1f} min: sky director + island placed, shots in {SHOTS}" +
+                 ("" if ok else f" | {err[:200]}") + " | Play stopped, saved, tidied")
+            link(f"HANDOFF oddsreaper -> {NEXT}: editor saved, Play stopped", to=NEXT)
         open(os.path.join(SHOTS, "turn.log"), "w").write("\n".join(LOG))

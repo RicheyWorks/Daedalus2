@@ -58,3 +58,10 @@ scored 0 when the bridge hung mid-job with nothing saved). Hero capture prefers 
 
 materials_mpc.json is the off-editor contract for MPC_OR_SkyWeather (WindStrength, WindDirection, Wetness,
 NightMask, StormPulse) bound to felt mesa, dice cliffs, cistern gold, and wager-herb leaves. Apply on the editor turn.
+
+## Round-2 prep: bridge liveness preflight
+
+oddsreaper_turn.py now matches hephaestus: before TURN START it pings bridge 9877 with a 5 s timeout. If the
+editor is GPU-dead (refused or hung), it posts one HOLD, does not start the 18-min clock, re-pings every 30 s,
+and needs two good pings in a row before claiming; else BLOCKED at 23:00. Each check writes
+bot-team/shots/oddsreaper/bridge_status.json. Apply on next grant (not while clock-held).
