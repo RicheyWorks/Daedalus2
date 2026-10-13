@@ -36,6 +36,10 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  shards:
+    enabled: false # Opt-in read-only realm/district directory; not distributed writer authority.
+    revision: 1 # Increment with an operator-reviewed route assignment change.
+    routes: "" # Semicolon-separated realm,firstDistrict,lastDistrict,httpsOrigin entries.
   audio:
     host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
   kennel:

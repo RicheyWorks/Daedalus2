@@ -313,6 +313,7 @@ public consumers).
 | `POST` | `/api/v1/tactics/decide` | required | Unreal's squad round trip: `{roster: DTR 1, events: DTE 1}` in, `{result: APPLY/REPEAT/STALE, spec: DTO 1}` out, fenced per session and squad (ADR-060) |
 | `POST` | `/api/v1/kennel/brew` | required | Configured engine host calculates a deterministic TONIC 1 from herbs/coat/drinker/stage/charm/seed; no inventory mutation. [Contract and fixtures](docs/contracts/tonic-v1/README.md). |
 | `POST` | `/api/v1/audio/design` | required | Configured engine host designs AUD 1 ambience layers and a PCS 1 creature call from biome/weather/genome inputs. [Contract](docs/contracts/aud-v1/README.md). |
+| `GET` | `/api/v1/realms/{realm}/districts/{district}/route` | required | Opt-in configured HTTPS shard directory; does not grant ownership or certify worker health. [Configuration and limits](docs/realms/MULTI-SERVER-FOUNDATION.md). |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |
