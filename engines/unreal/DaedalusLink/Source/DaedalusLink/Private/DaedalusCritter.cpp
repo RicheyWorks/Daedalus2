@@ -92,6 +92,16 @@ void ADaedalusCritter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	const float Dt = FMath::Min(DeltaSeconds, 0.1f);
 	Age += Dt;
+	if (Settles < 3 && Age >= NextSettle)
+	{
+		// Ground again at 1.5, 4 and 8 s: whatever streamed in after BeginPlay (the live world, an island) is
+		// under the critter's feet now, so it is not walled in by a "step up" that is really the new surface.
+		const FVector Before = GetActorLocation();
+		Settle();
+		Home += GetActorLocation() - Before;
+		++Settles;
+		NextSettle = Settles == 1 ? 4.f : 8.f;
+	}
 	const APawn* Who = UGameplayStatics::GetPlayerPawn(this, 0);
 	const float Dist = Who ? FVector::Dist(Who->GetActorLocation(), GetActorLocation()) : 1e9f;
 	// Out of sight, out of mind: far animals think once a second.
