@@ -222,8 +222,11 @@ Validated on 2026-10-13 with JDK 21.0.4 after rebasing onto main `5fbaa5e6`, inc
 the shared voxel-island core. Full server reactor `mvn -B -ntp -pl daedalus-server -am verify`
 passes: 575 core, 23 Plugin API, 8 wallet, 33 plugin-runtime and 751 server tests, plus
 every module's coverage, Checkstyle and SpotBugs gates. A subsequent focused real-HTTP
-restart test also passes, bringing the latest tested total to 1,391. Existing world-store,
+restart test also passes. Desktop (74 tests) and Explore (82 tests) bring the latest
+tested total to 1,547. Existing world-store,
 world-package API, deterministic generation, authentication and rate-limit checks remain green.
+The subsequent entire-reactor `mvn -B -ntp -DskipTests verify` passes all eight modules,
+reusing these test coverage reports for the coverage and static-analysis gates.
 
 New tests cover deterministic replay through checkpoint compaction, corruption and
 checksummed malformed payloads, dry-spell recovery, finite transfer/quest/NPC memory,
@@ -248,6 +251,20 @@ Review blockers were repaired without reducing thresholds:
 - Presence snapshots now own their maps. Invalid report entries still reach the normal
   refusal path; animation parsing uses `Locale.ROOT`. The three representation/boxing
   findings are fixed in code. SpotBugs reports no server findings.
+- Desktop render snapshots defensively copy collections and nested arrays; negative
+  odd tile coordinates use correct parity checks. Unused private paint wrappers were
+  removed, follow-route failures retain debug diagnostics, and animation completion
+  copies its lists. A regression test proves input/accessor mutation isolation.
+  All 32 previously hidden desktop SpotBugs findings are resolved in code.
+- Following `TESTING.md`'s coverage ratchet, desktop's floor rises from 28% to 38%
+  (39.40% measured; 41% ceiling), and Explore's from 90% to 94%
+  (95.66% measured; 97% ceiling). These gates were previously blocked by upstream
+  failures; no coverage floor is lowered.
+- Explore mesh triangles are immutable; its live-world accessor intentionally retains
+  shared collision state, with a single method-specific SpotBugs exception and regression
+  test. Host rendering handles missing triangles/status before dereferencing. Integer
+  ray-sampling steps and constant-time yaw normalization replace floating-point loops;
+  pairwise color sums use widened arithmetic. Mutable UI palette arrays are internal.
 
 The simulation's two immutable timeline-field exclusions and one shared metrics-field
 exclusion remain narrowly scoped and explained in the existing filter. No broad exclusions
@@ -259,4 +276,5 @@ Reproduce the full checks and stronger restart test:
 ```text
 mvn -B -ntp -pl daedalus-server -am verify
 mvn -B -ntp -pl daedalus-server -am test -Dtest=LivingWorldHttpRestartTest -Dsurefire.failIfNoSpecifiedTests=false
+mvn -B -ntp clean install
 ```

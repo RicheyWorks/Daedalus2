@@ -74,7 +74,7 @@ makes the ratchet mechanical instead of aspirational; the cost is that improving
 occasionally means a one-line pom edit, paid by the person who improved it rather than by
 whoever regresses it later. Both directions are proven by `mutants/ratchetteeth.py`.
 
-Floors as of 2026-08-26 (not 0.00 exemptions):
+Floors as of 2026-10-13 (not 0.00 exemptions):
 
 | module | floor | ceiling |
 |---|---|---|
@@ -82,8 +82,8 @@ Floors as of 2026-08-26 (not 0.00 exemptions):
 | daedalus-core | 0.90 | 0.93 |
 | daedalus-plugin-runtime | 0.84 | 0.87 |
 | daedalus-plugin-api | 0.96 | 0.99 |
-| daedalus-desktop | 0.28 | 0.31 |
-| daedalus-explore | 0.89 | 0.92 |
+| daedalus-desktop | 0.38 | 0.41 |
+| daedalus-explore | 0.94 | 0.97 |
 
 Parent and module pom comments that still said "visible 0.00 exemption" were corrected on
 2026-08-26. The 0.00 figures above are the July audit, not the current poms.

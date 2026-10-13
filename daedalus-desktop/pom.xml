@@ -23,9 +23,10 @@
     <properties>
         <!-- Coverage ratchet: thin-shell policy (ADR-003, TESTING.md P3) — no TestFX.
              DesktopWork, DesktopWalk, and DesktopPaint are tested; FXML is not.
-             Measured 0.30 after DesktopPaint; 0.28 / 0.31 is the 3-point pair. -->
-        <jacoco.check.minimum>0.28</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.31</jacoco.check.ceiling>
+             Measured 39.40% on 2026-10-13 (74 tests); raise the floor rather than
+             retaining the outdated 0.28 / 0.31 pair that now fails its ceiling. -->
+        <jacoco.check.minimum>0.38</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.41</jacoco.check.ceiling>
     </properties>
 
     <dependencies>

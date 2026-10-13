@@ -19,6 +19,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WorldMeshTest {
 
     @Test
+    void trianglesAreImmutableButCollisionUsesTheLiveWorld() {
+        World world = World.zero();
+        WorldMesh mesh = WorldMesh.of(world);
+        assertThat(mesh.world()).isSameAs(world);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> mesh.triangles().clear())
+                .isInstanceOf(UnsupportedOperationException.class);
+        BlockCoordinate at = new BlockCoordinate(50, 0, 50);
+        assertThat(mesh.blocked(50.5, 0.5, 50.5)).isFalse();
+        world.place(at, BlockType.STONE);
+        assertThat(mesh.blocked(50.5, 0.5, 50.5)).isTrue();
+    }
+
+    @Test
     void occupancyCellsMeshWhenAirAndDoNotBlock() {
         WorldMesh mesh = WorldMesh.of(World.zero());
         assertThat(mesh.triangles()).isNotEmpty();

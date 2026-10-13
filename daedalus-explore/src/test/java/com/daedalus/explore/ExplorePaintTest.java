@@ -1434,6 +1434,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.facing(Math.PI / 2)).isEqualTo("E");
         assertThat(ExplorePaint.facing(Math.PI)).isEqualTo("S");
         assertThat(ExplorePaint.facing(-Math.PI / 2)).isEqualTo("W");
+        assertThat(ExplorePaint.facing(10 * Math.PI)).isEqualTo("N");
+        assertThat(ExplorePaint.facing(-Math.PI)).isEqualTo("S");
+        org.junit.jupiter.api.Assertions.assertTimeoutPreemptively(java.time.Duration.ofSeconds(1),
+                () -> assertThat(ExplorePaint.facing(Double.POSITIVE_INFINITY)).isEqualTo("N"));
     }
 
     @Test

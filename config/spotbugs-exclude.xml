@@ -210,4 +210,12 @@
         <Class name="com.daedalus.world.ecology.Ecosystem$DayReport"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
+    <!-- WorldMesh exposes the same live World used by blocked() and material
+         lookup; cloning it would disconnect collision from world edits. The
+         generated triangle list is separately immutable. Preserve this contract. -->
+    <Match>
+        <Class name="com.daedalus.explore.WorldMesh"/>
+        <Method name="world"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
 </FindBugsFilter>

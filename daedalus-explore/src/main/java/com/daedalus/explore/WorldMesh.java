@@ -54,7 +54,7 @@ public final class WorldMesh {
 
     private WorldMesh(World world, List<Triangle> triangles) {
         this.world = world;
-        this.triangles = triangles;
+        this.triangles = List.copyOf(triangles);
     }
 
     public static WorldMesh of(World world) {
