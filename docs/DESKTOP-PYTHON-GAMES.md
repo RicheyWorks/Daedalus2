@@ -152,6 +152,21 @@ not reduce rendering, physical-controller, rigging or multiplayer acceptance to 
 
 ## Next Java additions: observed API facts
 
+### Approved upstream repair adoption
+
+PR51's prior head `d29329b717860d3f020be17276aba883712d950f` failed only the
+inherited `RetroRealmTest:163` fixture parity check (690 core tests, one failure).
+The approved canonical PR53 head `7427deffef766ce6e6ef83e6d1acd33cbe680938` and
+current-main fixes at `d57a388e7ae59b804d033b52c76e2b8df529d5d6` were adopted in
+this isolated feature branch without conflicts. The review is stacked on
+`codex/realm-production-queue`; its existing owner retains parent/main merging.
+All eleven Desktop runtime blobs, the game test tree and original source-pin
+blob are unchanged; [preservation proof](desktop-games-approved-repair.json)
+records both sides. Existing CI gates also run on that approved stack base.
+Actual final-head CI is recorded in PR51 and its existing queued handoff pin.
+No fixture regeneration, duplicated catalog implementation, original-source
+edit, editor lease, art request or live acceptance is implied by this repair.
+
 Keep Java authoritative for both games. The proposed C++ adapters perform asynchronous
 requests, bounded validation, presentation and lifecycle cleanup, with per-session serialized
 commands and cancellation/generation guards against stale responses. These are integration
