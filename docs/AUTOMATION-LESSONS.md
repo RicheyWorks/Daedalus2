@@ -311,3 +311,8 @@ Check takes numerically (mean, % black, % clipped per sampled frame) before watc
 ## Motion blur off for a fast mouse (2026-10-13)
 Default camera motion blur (0.5) smeared the screen on fast turns. r.DefaultFeature.MotionBlur=False in
 DefaultEngine.ini (setup-unreal.ps1 writes it) and the PostFX volume overrides amount 0.
+
+## An interrupted bridge call can still have run (2026-10-13)
+The island-layout apply() was interrupted in chat after the PC had already executed it: 14 levels moved in the
+editor and one was saved, while I reported "nothing moved". After any interrupted, rejected or timed-out device call,
+check the device (file times, positions) before saying what did or didn't happen. Reverted from the undo table.
