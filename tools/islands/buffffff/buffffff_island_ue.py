@@ -19,6 +19,7 @@ if CORE:
     for i, n in enumerate(extra):  # core meshes with no layout spot: ring near the village
         ang = 2 * math.pi * i / max(1, len(extra)); lay.append({"asset": n, "x": 35 * math.cos(ang), "y": 35 * math.sin(ang), "yaw": 0, "s": 1})
     keep = set(CS) | {x.split("/")[4] for x in eas.list_assets(DEST, recursive=True) if x.count("/") >= 5}
+    if int(globals().get("BUF_CORE_ONLY", 0)): keep = set(CS)
     lay = [a for a in lay if a["asset"] in keep]
     HALF = 0
 uniq = sorted({a["asset"] for a in lay}); mid = len(uniq)//2
@@ -46,7 +47,7 @@ if not _stop:
     if not eas.does_asset_exist(SUB):
         unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, False)
     ls = unreal.GameplayStatics.get_streaming_level(world, SUB.split("/")[-1]) or unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
-    unreal.EditorLevelUtils.make_level_current(ls.get_loaded_level())
+    unreal.EditorLevelUtils.make_level_current(ls)
     for x in act.get_all_level_actors():
         if x.actor_has_tag(TAG): act.destroy_actor(x)
     base = act.spawn_actor_from_class(unreal.StaticMeshActor, OFFSET - unreal.Vector(0, 0, 800), unreal.Rotator(0, 0, 0))
@@ -83,6 +84,8 @@ if not _stop:
     tagc = lambda t: sum(1 for x in act.get_all_level_actors() if x.actor_has_tag(t))
     print("BUF counts total", tagc(TAG), "livestock", tagc("Livestock"), "drinkable", tagc("Drinkable"), "herbbed", tagc("HerbBed"), "world", world.get_path_name())
     print("BUF placed", ok, "missing", len(miss), miss[:10])
+
+
 
 
 
