@@ -142,3 +142,9 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   step (retrying briefly when Windows holds the file, then falling back to a plain copy), so a crash or full disk
   mid-save leaves the last good world, not a truncated one. A buffered stream cut edit + save to ~1.1 ms on the
   200-chunk world. WorldStoreTest checks a save that dies half way leaves the old bytes and no temp files.
+- **Greedy World Package meshes (rule 3 for exported worlds):** `WorldMesher.meshGreedy` and C++
+  `MeshChunkGreedy` merge each chunk's visible faces into rectangles per direction and cube type (no per-cube grain,
+  which is what made every face unique). Java and C++ match byte for byte (isle8.mesh.txt `greedy` lines, mesh_core_test
+  91/91), and MeshFixtureTest checks the quads cover exactly the same unit faces, none twice. Measured: Gallery City
+  183k faces -> 51k quads, glb 30.4 MB -> 8.7 MB; Parcels 58k -> 4.9k (9.7 -> 1.0 MB); Bricks 35k -> 436
+  (5.8 MB -> 179 KB); World Zero 2.1x.

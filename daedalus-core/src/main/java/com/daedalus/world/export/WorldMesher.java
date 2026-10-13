@@ -127,6 +127,114 @@ public final class WorldMesher {
         return out;
     }
 
+    /**
+     * The same faces merged into rectangles, one greedy mesh per chunk (ADR-064 rule 3, as Minecraft and the Unreal
+     * isle core do): per face direction and slice, runs of visible faces of one cube type become one quad. Colours
+     * are the face's shade without the per-cube grain (grain is what made every face unique), so an engine gives the
+     * surface its texture instead. The covered area per type and direction equals {@link #mesh}'s exactly;
+     * {@code DaedalusMeshCore.h}'s {@code MeshChunkGreedy} matches it byte for byte (isle8.mesh.txt "greedy" lines).
+     */
+    public static List<ChunkMesh> meshGreedy(World world) {
+        List<ChunkCoordinate> keys = new ArrayList<>(world.chunkKeys());
+        keys.sort(Comparator.comparingInt(ChunkCoordinate::y).thenComparingInt(ChunkCoordinate::z)
+                .thenComparingInt(ChunkCoordinate::x));
+        List<ChunkMesh> out = new ArrayList<>();
+        BlockType[] palette = BlockType.values();
+        int size = Chunk.SIZE;
+        int[] mask = new int[size * size];
+        for (ChunkCoordinate cc : keys) {
+            Chunk chunk = world.chunk(cc);
+            if (chunk == null || chunk.isEmpty()) {
+                continue;
+            }
+            Part opaque = new Part();
+            Part translucent = new Part();
+            byte[] cubes = chunk.ordinals();
+            int[] origin = {cc.x() * size, cc.y() * size, cc.z() * size};
+            for (int f = 0; f < 6; f++) {
+                int[] n = NORMALS[f];
+                int d = n[0] != 0 ? 0 : n[1] != 0 ? 1 : 2;
+                int u = d == 0 ? 1 : 0;
+                int v = d == 2 ? 1 : 2;
+                int[] l = new int[3];
+                for (int k = 0; k < size; k++) {
+                    for (int vv = 0; vv < size; vv++) {
+                        for (int uu = 0; uu < size; uu++) {
+                            l[d] = k;
+                            l[u] = uu;
+                            l[v] = vv;
+                            int t = Byte.toUnsignedInt(cubes[l[0] + size * (l[1] + size * l[2])]);
+                            int m = 0;
+                            if (t != 0) {
+                                int ax = l[0] + n[0];
+                                int ay = l[1] + n[1];
+                                int az = l[2] + n[2];
+                                BlockType nb = ax >= 0 && ax < size && ay >= 0 && ay < size && az >= 0 && az < size
+                                        ? palette[Byte.toUnsignedInt(cubes[ax + size * (ay + size * az)])]
+                                        : world.get(new BlockCoordinate(origin[0] + ax, origin[1] + ay, origin[2] + az));
+                                if (nb.seeThrough() && nb.ordinal() != t) {
+                                    m = t;
+                                }
+                            }
+                            mask[uu + size * vv] = m;
+                        }
+                    }
+                    for (int vv = 0; vv < size; vv++) {
+                        for (int uu = 0; uu < size; ) {
+                            int t = mask[uu + size * vv];
+                            if (t == 0) {
+                                uu++;
+                                continue;
+                            }
+                            int w = 1;
+                            while (uu + w < size && mask[uu + w + size * vv] == t) {
+                                w++;
+                            }
+                            int h = 1;
+                            grow:
+                            while (vv + h < size) {
+                                for (int i = 0; i < w; i++) {
+                                    if (mask[uu + i + size * (vv + h)] != t) {
+                                        break grow;
+                                    }
+                                }
+                                h++;
+                            }
+                            for (int j = 0; j < h; j++) {
+                                for (int i = 0; i < w; i++) {
+                                    mask[uu + i + size * (vv + j)] = 0;
+                                }
+                            }
+                            BlockType type = palette[t];
+                            Part part = BlockColors.translucent(type) ? translucent : opaque;
+                            float[] linear = linear(BlockColors.rgb(type));
+                            double s = SHADE[f];
+                            int[] o = new int[3];
+                            o[d] = origin[d] + k;
+                            o[u] = origin[u] + uu;
+                            o[v] = origin[v] + vv;
+                            int[] ext = new int[3];
+                            ext[d] = 1;
+                            ext[u] = w;
+                            ext[v] = h;
+                            int base = part.vertexCount();
+                            for (int[] c : CORNERS[f]) {
+                                part.vertex(o[0] + c[0] * ext[0], o[1] + c[1] * ext[1], o[2] + c[2] * ext[2], n[0], n[1], n[2],
+                                        clamp(linear[0] * s), clamp(linear[1] * s), clamp(linear[2] * s));
+                            }
+                            part.indices.add(base).add(base + 1).add(base + 2).add(base).add(base + 2).add(base + 3);
+                            uu += w;
+                        }
+                    }
+                }
+            }
+            if (!opaque.isEmpty() || !translucent.isEmpty()) {
+                out.add(new ChunkMesh(cc, opaque, translucent));
+            }
+        }
+        return out;
+    }
+
     private static float clamp(double v) {
         return (float) Math.max(0.0, Math.min(1.0, v));
     }

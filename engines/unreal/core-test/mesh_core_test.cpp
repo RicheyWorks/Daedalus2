@@ -88,14 +88,15 @@ int main(int Argc, char** Argv)
         {
             L >> WantTriangles;
         }
-        else if (Kind == "expect")
+        else if (Kind == "expect" || Kind == "greedy")
         {
             ChunkKey K;
             Sums Want[2];
             L >> K.X >> K.Y >> K.Z;
             for (Sums& W : Want) L >> W.Faces >> W.Pos >> W.NormalDotPos >> W.Color >> W.Winding;
             Part Opaque, Translucent;
-            MeshChunk(Store, Pal, K, Opaque, Translucent);
+            if (Kind == "greedy") MeshChunkGreedy(Store, Pal, K, Opaque, Translucent);
+            else MeshChunk(Store, Pal, K, Opaque, Translucent);
             const Sums Got[2] = {SumsOf(Opaque), SumsOf(Translucent)};
             for (int P = 0; P < 2; ++P)
             {
@@ -110,8 +111,8 @@ int main(int Argc, char** Argv)
                 }
                 else
                 {
-                    std::printf("FAIL chunk %d %d %d %s: faces %lld/%lld pos %lld/%lld n.p %lld/%lld colour %lld/%lld winding %lld/%lld\n",
-                        K.X, K.Y, K.Z, P == 0 ? "opaque" : "translucent", Got[P].Faces, Want[P].Faces, Got[P].Pos,
+                    std::printf("FAIL %s chunk %d %d %d %s: faces %lld/%lld pos %lld/%lld n.p %lld/%lld colour %lld/%lld winding %lld/%lld\n",
+                        Kind.c_str(), K.X, K.Y, K.Z, P == 0 ? "opaque" : "translucent", Got[P].Faces, Want[P].Faces, Got[P].Pos,
                         Want[P].Pos, Got[P].NormalDotPos, Want[P].NormalDotPos, Got[P].Color, Want[P].Color, Got[P].Winding,
                         Want[P].Winding);
                 }
