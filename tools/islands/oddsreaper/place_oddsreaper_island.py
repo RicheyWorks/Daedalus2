@@ -78,8 +78,16 @@ def run():
     # signature mood: perpetual storm over the island via my Sky Director
     vol = actors.spawn_actor_from_class(unreal.DaedalusMoodVolume, unreal.Vector(ox, oy, oz + 3000))
     vol.set_actor_label("OddsReaper Storm Mood"); vol.set_folder_path(FOLDER)
-    vol.set_actor_scale3d(unreal.Vector(1.4 * lay["scale"], 1.4 * lay["scale"], 1.5))
+    # Cover the whole 260 m island AND the hero camera (175 m south, 32 m up): half-extent 200 m x 200 m x 90 m.
+    vol.set_actor_location(unreal.Vector(ox, oy, oz + 3000), False, False)
+    vol.set_actor_scale3d(unreal.Vector(4.0, 4.0, 3.0))
     vol.set_editor_property("mood", lay["mood"])
+    # Storm must show in Play even though the pawn spawns on another island: trigger on the view, force at BeginPlay,
+    # hold the clock at dusk (18.75 h reads as storm, not daylight) while the island is the subject.
+    for name, val in (("trigger_on_view", True), ("force_on_begin_play", True), ("hold_while_inside", True), ("set_hour", 18.75)):
+        for prop in (name, "b_" + name):
+            try: vol.set_editor_property(prop, val); break
+            except Exception: pass
     for prop in ("set_weather", "b_set_weather"):  # UE python strips the b prefix; accept either
         try: vol.set_editor_property(prop, True); break
         except Exception: pass
@@ -91,6 +99,7 @@ def run():
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
     cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("OddsReaper Hero Cam"); cam.set_folder_path(FOLDER)
+    # The director lives in the persistent level and defaults to Clear/young_meadow: that is what the round-2 Play shot showed.
     les.save_current_level()
     unreal.EditorAssetLibrary.save_directory(ART, only_if_is_dirty=True, recursive=True)
     ok = placed >= 450 and not missing
