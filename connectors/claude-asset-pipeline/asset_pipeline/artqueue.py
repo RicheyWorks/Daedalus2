@@ -27,8 +27,9 @@ Every few seconds the watcher reads QUEUE.md. For each READY row it:
   4. adds the brief's own rules: the triangle budget for the kind and at most 3 material slots per mesh;
   5. writes SHIPPED or REJECTED: <the first failed check> into the row, the report, and a feed line.
 
-Only the Status and Notes cells of a row are ever rewritten, and only when the file hasn't changed underneath
-(read, compute, re-read, compare, write), so a bot editing another row at the same moment is not overwritten.
+Only the Status and Notes cells of an existing row are rewritten. Observed producer changes are preserved by
+re-reading before replacement and checking claim revisions. External writers still need a shared locking
+protocol to close the final compare/replace race.
 
     python -m asset_pipeline.artqueue --once            # one pass
     python -m asset_pipeline.artqueue --every 10        # watch (Ctrl+C to stop)
@@ -43,6 +44,9 @@ import sys
 import threading
 import time
 import traceback
+import tempfile
+import uuid
+import stat
 
 from . import ship as pipeline
 from . import teamlink
@@ -54,6 +58,68 @@ KINDS = ("Tool", "Item", "Mob", "Veh", "Bld", "Prop", "Sky", "Wpn")
 BUDGET = {"Tool": 3000, "Item": 3000, "Wpn": 3000, "Prop": 3000, "Mob": 6000, "Veh": 12000, "Bld": 15000,
           "Sky": 15000}
 MAX_SLOTS = 3
+PUBLICATION_ATTEMPTS = 5
+PUBLICATION_RETRY_S = 0.05
+PRODUCER_JOIN_S = 0.5
+HANDOFF_WAIT_S = 0.05
+
+
+class PublicationError(OSError):
+    """Local ledger publication failed; this does not imply an import failed."""
+
+
+class RowConflict(PublicationError):
+    """The asset's own revision changed; never publish over its new owner."""
+
+
+_BOARD_LOCKS = {}
+_BOARD_LOCKS_GUARD = threading.Lock()
+
+
+def board_lock(path):
+    # Cooperating Watcher objects in this process share the same row critical section.
+    key = os.path.normcase(os.path.abspath(path))
+    with _BOARD_LOCKS_GUARD:
+        return _BOARD_LOCKS.setdefault(key, threading.RLock())
+
+
+class WatcherLease:
+    """Exclusive admission, also for --once. Unknown/stale owners require reconciliation."""
+
+    def __init__(self, folder):
+        self.path = os.path.join(folder, ".watcher-admission.json")
+        self.token = uuid.uuid4().hex
+        self.owned = False
+
+    def acquire(self):
+        try:
+            with open(self.path, "x", encoding="utf-8") as stream:
+                self.owned = True
+                json.dump({"token": self.token, "pid": os.getpid(),
+                           "created_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()}, stream)
+                stream.flush()
+                os.fsync(stream.fileno())
+        except FileExistsError:
+            return False
+        # A failed initial write intentionally leaves an uncertain lease in place.
+        return True
+
+    def release(self):
+        if not self.owned:
+            return False
+        try:
+            info = os.lstat(self.path)
+            if not stat.S_ISREG(info.st_mode) or os.path.islink(self.path) or info.st_size > 4096:
+                return False
+            with open(self.path, encoding="utf-8") as stream:
+                owner = json.load(stream)
+            if not isinstance(owner, dict) or owner.get("token") != self.token:
+                return False
+            os.unlink(self.path)
+            self.owned = False
+            return True
+        except (OSError, ValueError):
+            return False
 
 
 # ------------------------------------------------------------------------------------------------ the board
@@ -108,6 +174,15 @@ def set_row(text, asset, status, notes=None):
             lines[r["line"]] = "| " + " | ".join(cells) + " |"
             return "\n".join(lines)
     raise KeyError(asset)
+
+
+def conditional_row(text, asset, expected_cells, status, notes=None):
+    """Compare the asset revision on EVERY retry; other rows may safely advance."""
+    rows, _ = parse(text)
+    row = next((r for r in rows if r["asset"] == asset), None)
+    if row is None or tuple(row["cells"]) != expected_cells:
+        raise RowConflict("asset revision changed before publication: " + asset)
+    return set_row(text, asset, status, notes)
 
 
 def add_row(text, asset, status, notes=""):
@@ -197,7 +272,12 @@ class Watcher:
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
         self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
         self.first = []             # name fragments shipped ahead of the rest (--first), e.g. a team's own slot
-        self.lock = threading.RLock()   # the board and the feed, shared by the two halves of an overlapped ship
+        self.lock = board_lock(self.queue)
+        self._claims = {}
+        self._pending_publications = {}
+        self._report_versions = {}
+        self._witnesses_discovered = False
+        self._producer = None
 
     # -- files
 
@@ -216,17 +296,231 @@ class Watcher:
             return self._update(asset, status, notes)
 
     def _update(self, asset, status, notes):
-        for _ in range(5):
-            before = self.read()
-            after = set_row(before, asset, status, notes)
-            if self.read() != before:
-                continue
-            tmp = self.queue + ".tmp"
-            with open(tmp, "w", encoding="utf-8", newline="") as f:
-                f.write(after)
-            os.replace(tmp, self.queue)
-            return True
+        return self._change_board(set_row, asset, status, notes)
+
+    def _change_board(self, change, *args):
+        """Unique staging file, bounded sharing retries and a fresh conflict check.
+        This optimistic check preserves observed producer edits; independent writers
+        still need a shared locking protocol to close the final compare/replace gap.
+        """
+        last_error = None
+        with self.lock:
+            for attempt in range(PUBLICATION_ATTEMPTS):
+                tmp = None
+                try:
+                    before = self.read()
+                    after = change(before, *args)
+                    fd, tmp = tempfile.mkstemp(prefix=os.path.basename(self.queue) + ".", suffix=".tmp",
+                                              dir=os.path.dirname(self.queue))
+                    with os.fdopen(fd, "w", encoding="utf-8", newline="") as stream:
+                        stream.write(after)
+                        stream.flush()
+                        os.fsync(stream.fileno())
+                    if self.read() != before:
+                        continue
+                    os.replace(tmp, self.queue)
+                    return True
+                except OSError as error:
+                    if not isinstance(error, PermissionError) and getattr(error, "winerror", None) not in (5, 32, 33):
+                        raise
+                    last_error = error
+                    if attempt + 1 < PUBLICATION_ATTEMPTS:
+                        time.sleep(PUBLICATION_RETRY_S)
+                finally:
+                    if tmp is not None:
+                        try:
+                            os.unlink(tmp)
+                        except FileNotFoundError:
+                            pass
+                        except OSError:
+                            pass  # A locked staging file is not proof that the import failed.
+        if last_error is not None:
+            raise PublicationError("queue publication exhausted sharing retries") from last_error
         return False
+
+    def _require_update(self, asset, status, notes=None):
+        if not self.update(asset, status, notes):
+            raise PublicationError("queue changed throughout bounded publication attempts: " + asset)
+
+    def _owned_update(self, asset, status, notes=None):
+        """An old attempt cannot reject/block a producer's newer revision."""
+        token = self._claims.get(asset)
+        if token is None:
+            return self._require_update(asset, status, notes)
+        with self.lock:
+            rows, _ = parse(self.read())
+            row = next((r for r in rows if r["asset"] == asset), None)
+            if row is None or state(row["status"]) != "SHIPPING" or "[queue-claim:%s]" % token not in row["notes"]:
+                raise RowConflict("claim changed before outcome publication: " + asset)
+            if notes is None:
+                notes = re.sub(r"\s*\[queue-(?:stage|claim):[^\]]*\]", "", row["notes"])
+            if not self._change_board(conditional_row, asset, tuple(row["cells"]), status, notes):
+                raise PublicationError("queue changed throughout outcome publication: " + asset)
+
+    def _claim(self, asset):
+        with self.lock:
+            rows, _ = parse(self.read())
+            row = next(r for r in rows if r["asset"] == asset)
+            if state(row["status"]) not in ("READY", "WAITING", "BLOCKED"):
+                raise RowConflict("asset is no longer eligible for claim: " + asset)
+            if "[queue-stage:import-started]" in row["notes"]:
+                raise RowConflict("unresolved import dispatch requires reconciliation: " + asset)
+            token = uuid.uuid4().hex
+            notes = row["notes"] + " [queue-claim:%s] [queue-stage:claimed-not-exported]" % token
+            if not self._change_board(conditional_row, asset, tuple(row["cells"]), "SHIPPING", notes.strip()):
+                raise PublicationError("queue changed throughout claim publication: " + asset)
+            self._claims[asset] = token
+            return token
+
+    def _stage(self, asset, stage):
+        """Durable distinction between not dispatched and uncertain editor operations."""
+        with self.lock:
+            if stage == "import-started" and not self._witnesses_discovered:
+                self.reconcile_pending()
+            rows, _ = parse(self.read())
+            if stage == "import-started" and self.unresolved_imports(rows):
+                raise RowConflict("an earlier import outcome requires owner reconciliation before new dispatch")
+            row = next((r for r in rows if r["asset"] == asset), None)
+            token = self._claims.get(asset)
+            if row is None or not token or state(row["status"]) != "SHIPPING" or "[queue-claim:%s]" % token not in row["notes"]:
+                raise RowConflict("claim changed before dispatch: " + asset)
+            notes = re.sub(r"\s*\[queue-stage:[^\]]*\]", "", row["notes"])
+            notes += " [queue-stage:%s]" % stage
+            if not self._change_board(conditional_row, asset, tuple(row["cells"]), "SHIPPING", notes):
+                raise PublicationError("queue changed throughout dispatch publication: " + asset)
+            if stage == "import-started":
+                witness = {"_queue_uncertainty": {"state": "unresolved", "asset": asset,
+                           "claim_token": token, "reason": "import dispatch outcome not yet committed"}}
+                self._pending_publications[asset] = witness  # Latch BEFORE I/O; failure never authorizes dispatch.
+                try:
+                    self._save_report(asset, witness)
+                except OSError as error:
+                    raise PublicationError("cannot persist import dispatch witness: " + asset) from error
+
+    def _save_report(self, asset, report):
+        os.makedirs(self.reports, exist_ok=True)
+        target = os.path.join(self.reports, asset + ".json")
+        fd, tmp = tempfile.mkstemp(prefix=asset + ".", suffix=".tmp", dir=self.reports)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                json.dump(report, stream, indent=2, default=str)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(tmp, target)
+        finally:
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+
+    def _pending_report(self, asset):
+        if asset in self._pending_publications:
+            return self._pending_publications[asset]
+        try:
+            with open(os.path.join(self.reports, asset + ".json"), encoding="utf-8") as stream:
+                report = json.load(stream)
+        except FileNotFoundError:
+            return None
+        except (OSError, ValueError):
+            # A present but unreadable witness is not permission to repeat an import.
+            report = {"_queue_publication": {"state": "pending", "asset": asset, "invalid_report": True}}
+        if not isinstance(report, dict):
+            report = {"_queue_publication": {"state": "pending", "asset": asset, "invalid_report": True}}
+        if "_queue_uncertainty" in report:
+            self._pending_publications[asset] = report
+            return report
+        if "_queue_publication" in report:
+            publication = report["_queue_publication"]
+            if isinstance(publication, dict) and publication.get("state") == "published" and self._valid_publication(asset, report):
+                return None
+            # Explicit but malformed witness metadata is not absence of a witness.
+            self._pending_publications[asset] = report
+            return report
+        return None
+
+    def _valid_publication(self, asset, report):
+        publication = report.get("_queue_publication")
+        if not isinstance(publication, dict) or report.get("ok") is not True or publication.get("state") not in ("pending", "published"):
+            return False
+        dest = report.get("dest")
+        token, status, notes = (publication.get(k) for k in ("claim_token", "status", "notes"))
+        return (publication.get("asset") == asset and kind_of(asset) is not None
+                and re.fullmatch(r"[A-Za-z0-9_]{1,200}", asset) is not None
+                and isinstance(token, str) and re.fullmatch(r"[0-9a-f]{32}", token) is not None
+                and isinstance(status, str) and re.fullmatch(r"SHIPPED \([0-9]+ tris, [0-9]+\.[0-9]{2} m\)", status) is not None
+                and len(status) <= 200 and isinstance(dest, str) and 0 < len(dest) <= 1024
+                and dest.startswith("/Game/") and not any(c in dest for c in "\r\n|")
+                and isinstance(notes, str) and notes == "in Unreal: " + dest)
+
+    def reconcile_pending(self):
+        """No editor calls: discover durable witnesses and retry only ledger publication."""
+        assets = set(self._pending_publications)
+        if os.path.isdir(self.reports):
+            with os.scandir(self.reports) as entries:
+                for entry in entries:
+                    if entry.name.endswith(".json") and entry.is_file(follow_symlinks=False):
+                        asset = entry.name[:-5]
+                        info = entry.stat(follow_symlinks=False)
+                        version = (info.st_mtime_ns, info.st_size)
+                        if asset not in assets and self._report_versions.get(asset) == version:
+                            continue
+                        self._report_versions[asset] = version
+                        if self._pending_report(asset) is not None:
+                            assets.add(asset)
+        results = [self.reconcile_publication(asset) for asset in sorted(assets)]
+        self._witnesses_discovered = True
+        return results
+
+    def unresolved_imports(self, rows):
+        uncertain = {asset for asset, report in self._pending_publications.items() if "_queue_uncertainty" in report}
+        for row in rows:
+            if "[queue-stage:import-started]" not in row["notes"] or state(row["status"]) not in ("READY", "SHIPPING", "WAITING"):
+                continue
+            asset = row["asset"]
+            report = self._pending_publications.get(asset, {})
+            publication = report.get("_queue_publication")
+            completed = (self._valid_publication(asset, report)
+                         and "[queue-claim:%s]" % publication["claim_token"] in row["notes"])
+            if not completed:
+                uncertain.add(asset)
+        return uncertain
+
+    def reconcile_publication(self, asset):
+        """Publish a correlated completed report, never repeat its editor operation."""
+        report = self._pending_report(asset)
+        if report is None:
+            return None
+        if not self._valid_publication(asset, report):
+            return (asset, "RECONCILIATION_REQUIRED")
+        publication = report["_queue_publication"]
+        token = publication.get("claim_token", "")
+        rows, _ = parse(self.read())
+        row = next((r for r in rows if r["asset"] == asset), None)
+        if not re.fullmatch(r"[0-9a-f]{32}", token) or row is None:
+            return (asset, "RECONCILIATION_REQUIRED")
+        already = row["status"] == publication.get("status") and row["notes"] == publication.get("notes")
+        if not already and (state(row["status"]) != "SHIPPING" or "[queue-claim:%s]" % token not in row["notes"]):
+            return (asset, "RECONCILIATION_REQUIRED")  # A new producer revision must not be overwritten.
+        try:
+            self._save_report(asset, report)  # Durable witness BEFORE publishing the row.
+            if not already:
+                if not self._change_board(conditional_row, asset, tuple(row["cells"]),
+                                          publication["status"], publication["notes"]):
+                    raise PublicationError("queue changed throughout report publication: " + asset)
+            # Events are at least once across a crash between feed and report writes;
+            # importantly, reconciliation NEVER repeats the editor import.
+            self.event(asset, "shipped", result=publication["status"], dest=report["dest"],
+                       exported_s=report.get("exported_s"), imported_s=report.get("imported_s"))
+            publication["state"] = "published"
+            self._save_report(asset, report)
+        except RowConflict:
+            publication["state"] = "pending"
+            return (asset, "RECONCILIATION_REQUIRED")
+        except (OSError, KeyError):
+            publication["state"] = "pending"
+            return (asset, "PUBLICATION_PENDING")
+        self._pending_publications.pop(asset, None)
+        return (asset, state(publication["status"]))
 
     def event(self, asset, what, **detail):
         with self.lock:
@@ -301,17 +595,7 @@ class Watcher:
         return False
 
     def write_board(self, change, *args):
-        for _ in range(5):
-            before = self.read()
-            after = change(before, *args)
-            if self.read() != before:
-                continue
-            tmp = self.queue + ".tmp"
-            with open(tmp, "w", encoding="utf-8", newline="") as f:
-                f.write(after)
-            os.replace(tmp, self.queue)
-            return True
-        return False
+        return self._change_board(change, *args)
 
     def counts(self):
         rows, _ = parse(self.read())
@@ -356,6 +640,10 @@ class Watcher:
                    if state(r["status"]) == "BLOCKED"]
         if blocked:
             out += ["", "**Blocked on Unreal, not the asset (retrying on its own):** " + "; ".join(blocked)]
+        shipping = [r["asset"] for r in rows if state(r["status"]) == "SHIPPING"]
+        if shipping:
+            out += ["", "**SHIPPING claims (kept until completion or owner reconciliation):** "
+                    + ", ".join(shipping[:8]) + (" …" if len(shipping) > 8 else "")]
         if todo:
             out += ["", "**Up next (TODO):** " + ", ".join(todo[:8]) + (" …" if len(todo) > 8 else "")]
         out += ["", "## Last events", ""]
@@ -372,16 +660,31 @@ class Watcher:
     # -- one pass
 
     def tick(self):
+        done = self.reconcile_pending()
+        held = {asset for asset, result in done if result in ("PUBLICATION_PENDING", "RECONCILIATION_REQUIRED")}
         rows, header = parse(self.read())
+        uncertain = self.unresolved_imports(rows)
+        if uncertain:
+            # A lost reply can leave the previous editor operation running. Pause
+            # this watcher's NEW calls, including unrelated assets, until its owner
+            # verifies resolution. Completed reports above still publish normally.
+            self.waiting_on = "Unreal import outcome unresolved; owner reconciliation required: " + ", ".join(sorted(uncertain)[:8])
+            self.track_wait()
+            self.summary()
+            return done
+        if self._producer is not None and self._producer.is_alive():
+            self.waiting_on = "previous export producer still finishing; no new dispatch"
+            self.track_wait()
+            self.summary()
+            return done
         if header is None:
             self.waiting_on = "QUEUE.md has no table with Asset and Status columns"
             self.track_wait()
             self.summary()
-            return []
+            return done
         now = self.clock()
-        ready = [r for r in rows if state(r["status"]) in ("READY", "WAITING")
-                 or (state(r["status"]) == "BLOCKED" and now - self.blocked_at.get(r["asset"], 0) >= BLOCKED_RETRY_S)]
-        done = []
+        ready = [r for r in rows if r["asset"] not in held and (state(r["status"]) in ("READY", "WAITING")
+                 or (state(r["status"]) == "BLOCKED" and now - self.blocked_at.get(r["asset"], 0) >= BLOCKED_RETRY_S))]
         if ready:
             up_b, up_u = wire.reachable(self.blender), wire.reachable(self.unreal)
             missing = [n for n, up in (("Blender (connector on 9876)", up_b), ("Unreal (bridge on 9877)", up_u)) if not up]
@@ -407,9 +710,12 @@ class Watcher:
                     done.extend(self.ship_overlapped(assets))
                 else:
                     for a in assets:
-                        done.append(self.ship_one(a))
+                        result = self.ship_one(a)
+                        done.append(result)
+                        if result[1] == "UNCERTAIN_IMPORT":
+                            break
         else:
-            self.waiting_on = ""
+            self.waiting_on = "queue publication/reconciliation required for %d asset(s)" % len(held) if held else ""
         self.track_wait()
         self.summary()
         return done
@@ -424,20 +730,17 @@ class Watcher:
             self.waiting_since = None
 
     def recover(self):
-        """At start: a SHIPPING row belongs to a watcher that stopped mid-ship (no one else ships), so put it back
-        to READY and it ships again. Returns the rows recovered."""
-        rows, header = parse(self.read())
-        back = [r["asset"] for r in rows if header is not None and state(r["status"]) == "SHIPPING"]
-        for a in back:
-            self.update(a, "READY", "re-queued: the last watcher stopped while shipping it")
-            self.event(a, "requeued", why="watcher restarted mid-ship")
-        return back
+        """Reconcile matching publication witnesses; unknown SHIPPING stays uncertain."""
+        return [asset for asset, result in self.reconcile_pending() if result == "SHIPPED"]
 
     def prepare(self, asset):
         """Blender's first steps for one asset: (asset, kind, objects), or a finished (asset, status) result."""
+        pending = self.reconcile_publication(asset)
+        if pending is not None:
+            return pending
         kind = kind_of(asset)
         if not kind:
-            self.update(asset, "REJECTED: name must start with one of " + "/".join(KINDS) + "_")
+            self._require_update(asset, "REJECTED: name must start with one of " + "/".join(KINDS) + "_")
             self.event(asset, "rejected", why="bad name")
             return (asset, "REJECTED")
         blend = os.path.join(self.folder, kind, asset + ".blend")
@@ -450,25 +753,25 @@ class Watcher:
                 sent = json.load(f)
             names = [o["name"] for o in sent.get("objects", [])]
             if not names:
-                self.update(asset, "REJECTED: %s.sent.json lists no objects" % asset)
+                self._require_update(asset, "REJECTED: %s.sent.json lists no objects" % asset)
                 self.event(asset, "rejected", why="empty sent.json")
                 return (asset, "REJECTED")
-            self.update(asset, "SHIPPING")
+            self._claim(asset)
             self.event(asset, "shipping", objects=names, source="prebuilt glb")
             return (asset, kind, {"objects": names, "source": "prebuilt", "glb": glb_path, "sent": sent})
         # Open the file, never at the cost of someone's unsaved work.
         if os.path.exists(blend):
             opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))["result"]
             if opened.get("blocked"):
-                self.update(asset, "WAITING: Blender has unsaved work in %s; save it and I'll continue" % opened.get("current", "another file"))
+                self._require_update(asset, "WAITING: Blender has unsaved work in %s; save it and I'll continue" % opened.get("current", "another file"))
                 self.event(asset, "waiting", why="unsaved work in Blender")
                 return (asset, "WAITING")
         objects = wire.call(self.blender, "execute_code", side="Blender", code=PICK_OBJECTS % json.dumps(asset))["result"]
         if not objects["objects"]:
-            self.update(asset, "REJECTED: no meshes (make a collection named %s, or save %s\\%s.blend)" % (asset, kind, asset))
+            self._require_update(asset, "REJECTED: no meshes (make a collection named %s, or save %s\\%s.blend)" % (asset, kind, asset))
             self.event(asset, "rejected", why="no meshes")
             return (asset, "REJECTED")
-        self.update(asset, "SHIPPING")
+        self._claim(asset)
         self.event(asset, "shipping", objects=objects["objects"], source=objects["source"])
         return (asset, kind, objects)
 
@@ -478,6 +781,7 @@ class Watcher:
             return got
         _, kind, objects = got
         try:
+            self._stage(asset, "import-started")
             if objects.get("source") == "prebuilt":
                 report = pipeline.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind,
                                        True, self.unreal) if not hasattr(self.ship, "land") else \
@@ -485,17 +789,31 @@ class Watcher:
             else:
                 report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
                                    os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
-        except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
-            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
+        except PublicationError:
+            raise
+        except Exception as e:
+            self.event(asset, "error", why="import outcome uncertain: %s" % str(e)[:120])
+            return (asset, "UNCERTAIN_IMPORT")  # Keep SHIPPING; an import may have succeeded before transport failed.
         return self.finish(asset, kind, report)
 
     def ship_overlapped(self, assets):
         """Ship many at once with the two editors working side by side: a Blender thread opens and exports each
         asset while this thread imports the previous one into Unreal. The board, feed and link are written under
         one lock, so the two never interleave a row."""
+        if self._producer is not None and self._producer.is_alive():
+            raise PublicationError("previous export producer still finishing; no new dispatch")
         results = []
         handoff = _queue.Queue(maxsize=2)   # Blender stays at most two exports ahead
         stop = threading.Event()
+
+        def enqueue(item):
+            while not stop.is_set():
+                try:
+                    handoff.put(item, timeout=HANDOFF_WAIT_S)
+                    return True
+                except _queue.Full:
+                    pass
+            return False
 
         def blender_side():
             for a in assets:
@@ -507,38 +825,63 @@ class Watcher:
                         results.append(got)
                         continue
                     _, kind, objects = got
+                    if stop.is_set():
+                        break  # Claimed, but export/import never started; retain the claim for reconciliation.
                     if objects.get("source") == "prebuilt":
                         rep = pipeline.prebuilt(a, objects["glb"], objects["sent"])
                     else:
                         rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
-                    handoff.put((a, kind, rep, None))
+                    self._stage(a, "exported-not-imported")
+                    if stop.is_set():
+                        break
+                    if not enqueue((a, kind, rep, None)):
+                        break
                 except Exception as e:
-                    handoff.put((a, None, None, e))
-            handoff.put(None)
+                    if not enqueue((a, None, None, e)):
+                        break
+            enqueue(None)
 
         t = threading.Thread(target=blender_side, name="artqueue-blender", daemon=True)
+        self._producer = t
         t.start()
-        while True:
-            item = handoff.get()
-            if item is None:
-                break
-            a, kind, rep, err = item
-            if err is not None:
-                results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error"))
-                continue
-            try:
-                rep = self.ship.land(rep, "/Game/Daedalus/Art/" + kind, True, self.unreal)
-            except Exception as e:
-                results.append(self.block(a, "pipeline error: %s" % str(e)[:120], "error"))
-                if isinstance(e, OSError):   # Unreal went away: let the Blender side stop early
-                    stop.set()
-                continue
-            results.append(self.finish(a, kind, rep))
-            if len(results) % 10 == 0:   # a long run keeps the board live instead of showing the last pass's wait
-                self.track_wait()
-                with self.lock:
-                    self.summary()
-        t.join(timeout=5)
+        try:
+            while True:
+                try:
+                    item = handoff.get(timeout=HANDOFF_WAIT_S)
+                except _queue.Empty:
+                    if stop.is_set() or not t.is_alive():
+                        break
+                    continue
+                if item is None:
+                    break
+                if stop.is_set():
+                    break  # Queued exports are not evidence that any Unreal import started.
+                a, kind, rep, err = item
+                if err is not None:
+                    if isinstance(err, PublicationError):
+                        raise err
+                    results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error"))
+                    continue
+                try:
+                    self._stage(a, "import-started")
+                    rep = self.ship.land(rep, "/Game/Daedalus/Art/" + kind, True, self.unreal)
+                except PublicationError:
+                    raise
+                except Exception as e:
+                    stop.set()  # Includes bridge EOF, decode and judge errors after dispatch.
+                    self.event(a, "error", why="import outcome uncertain: %s" % str(e)[:120])
+                    results.append((a, "UNCERTAIN_IMPORT"))
+                    break
+                results.append(self.finish(a, kind, rep))
+                if len(results) % 10 == 0:
+                    self.track_wait()
+                    with self.lock:
+                        self.summary()
+        finally:
+            stop.set()
+            t.join(timeout=PRODUCER_JOIN_S)
+            if not t.is_alive():
+                self._producer = None
         return results
 
     def finish(self, asset, kind, report):
@@ -550,27 +893,30 @@ class Watcher:
         checks.append({"check": "material slots ≤ %d" % MAX_SLOTS, "ok": slots <= MAX_SLOTS, "detail": "%d" % slots})
         report["checks"] = checks
         report["ok"] = all(c["ok"] for c in checks)
-        os.makedirs(self.reports, exist_ok=True)
-        with open(os.path.join(self.reports, asset + ".json"), "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=2, default=str)
         dims = [max(o["dims"]) for o in report["blender"]["objects"]]
         if report["ok"]:
             result = "SHIPPED (%d tris, %.2f m)" % (tris, max(dims or [0]))
-            self.update(asset, result, "in Unreal: %s" % report["dest"])
-            self.event(asset, "shipped", result=result, dest=report["dest"],
-                       exported_s=report.get("exported_s"), imported_s=report.get("imported_s"))
+            report["_queue_publication"] = {"state": "pending", "asset": asset,
+                "claim_token": self._claims.get(asset, ""), "status": result, "notes": "in Unreal: %s" % report["dest"]}
+            self._pending_publications[asset] = report
+            published = self.reconcile_publication(asset)
+            if published[1] != "SHIPPED":
+                return published
             return (asset, "SHIPPED")
         why = unreal_side_failure(report)
+        self._save_report(asset, report)
         if why:
             return self.block(asset, why, "blocked")
         failed = next(c for c in checks if not c["ok"])
-        self.update(asset, "REJECTED: %s (%s)" % (failed["check"], failed["detail"]))
+        self._owned_update(asset, "REJECTED: %s (%s)" % (failed["check"], failed["detail"]))
+        self._pending_publications.pop(asset, None)
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
 
     def block(self, asset, why, event):
         self.blocked_at[asset] = self.clock()
-        self.update(asset, "BLOCKED: %s" % why, "not the asset's fault; retrying every %d s" % BLOCKED_RETRY_S)
+        self._owned_update(asset, "BLOCKED: %s" % why, "not the asset's fault; retrying every %d s" % BLOCKED_RETRY_S)
+        self._pending_publications.pop(asset, None)
         self.event(asset, event, why=why)
         return (asset, "BLOCKED")
 
@@ -616,17 +962,39 @@ def main(argv=None):
     ap.add_argument("--no-link", action="store_true", help="don't join the team link (ADR-053)")
     ap.add_argument("--first", default="", help="comma-separated name fragments to ship first (e.g. _Orr_)")
     a = ap.parse_args(argv)
-    link = None if a.no_link else teamlink.Link("unreal-team")
-    w = Watcher(a.folder, link=link)
+    w = Watcher(a.folder)
     w.first = [f for f in a.first.split(",") if f]
     lock = os.path.join(a.folder, ".watcher.lock")
-    if not a.once:
-        if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:
-            print("another watcher is running (%s is fresh)" % lock)
-            return 3
+    if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:
+        print("another legacy watcher may be running (%s is fresh)" % lock)
+        return 3
+    lease = WatcherLease(a.folder)
+    if not lease.acquire():
+        print("watcher admission held (%s); owner release/reconciliation required" % lease.path)
+        return 3
+    try:
+        return watch(a, w, lock)
+    finally:
+        if w._producer is not None and w._producer.is_alive():
+            print("watcher admission retained: previous export producer still finishing", flush=True)
+        else:
+            lease.release()
+            # Only release the legacy compatibility heartbeat that this process wrote.
+            try:
+                with open(lock, encoding="utf-8") as stream:
+                    owned = stream.read(64) == str(os.getpid())
+                if owned:
+                    os.unlink(lock)
+            except OSError:
+                pass
+
+
+def watch(a, w, lock):
+    link = None if a.no_link else teamlink.Link("unreal-team")
+    w.link = link
     print("watching %s every %.0fs%s" % (w.queue, a.every, "" if link is None else ", live on the team link"))
     for asset in w.recover():
-        print("re-queued %s (was SHIPPING when the last watcher stopped)" % asset, flush=True)
+        print("reconciled %s from a completed publication witness; no re-import" % asset, flush=True)
     after = 0
     if link is not None and link.health():
         link.register("Unreal team (Claude): ships Blender art into Unreal", ["asset.ready", "ping", "queue.status"],
@@ -636,15 +1004,17 @@ def main(argv=None):
             w.on_message(m)
         after = (link.health() or {}).get("last", 0)
     while True:
+        failed = False
         try:
             with open(lock, "w") as f:
                 f.write(str(os.getpid()))
             for asset, result in w.tick():
                 print(datetime.datetime.now().strftime("%H:%M:%S"), asset, result, flush=True)
         except Exception:   # keep watching; the trace goes to the feed
+            failed = True
             w.event("-", "watcher-error", why=traceback.format_exc()[-400:])
         if a.once:
-            return 0
+            return 1 if failed else 0
         if link is None:
             time.sleep(a.every)
             continue
