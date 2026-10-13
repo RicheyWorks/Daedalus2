@@ -13,6 +13,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Dom/JsonObject.h"
 #include "HttpModule.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Serialization/JsonReader.h"
@@ -24,7 +26,7 @@ static TAutoConsoleVariable<int32> CVarTactics(TEXT("daedalus.Tactics"), 1,
 static TAutoConsoleVariable<int32> CVarTacticsRemote(TEXT("daedalus.TacticsRemote"), 0,
 	TEXT("1 = also ask the Java director (daedalus.Server /api/v1/tactics/decide) once a second per squad, without waiting."));
 static TAutoConsoleVariable<FString> CVarTacticsToken(TEXT("daedalus.TacticsToken"), TEXT(""),
-	TEXT("Bearer token for the Java director in prod (the game host's sign-in); empty in dev."));
+	TEXT("Bearer token for the Java director (the game host's sign-in). Empty: read Saved/Daedalus/tactics.token."));
 
 namespace
 {
@@ -214,8 +216,19 @@ void UDaedalusTactics::AskRemote(const FString& Squad, const FString& Events)
 	Req->SetURL(Base + TEXT("/api/v1/tactics/decide"));
 	Req->SetVerb(TEXT("POST"));
 	Req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-	const FString Token = CVarTacticsToken.GetValueOnGameThread();
-	if (!Token.IsEmpty()) Req->SetHeader(TEXT("Authorization"), TEXT("Bearer ") + Token);
+	FString Token = CVarTacticsToken.GetValueOnGameThread();
+	if (Token.IsEmpty())
+	{
+		// Written by whoever signs the game host in (never by a bot); read once and again after a refusal.
+		if (CachedToken.IsEmpty())
+		{
+			FString Text;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Daedalus"), TEXT("tactics.token"))))
+				CachedToken = Text.TrimStartAndEnd();
+		}
+		Token = CachedToken;
+	}
+	if (!Token.IsEmpty()) Req->SetHeader(TEXT("Authorization"), TEXT("Bearer ") + Token);   // never logged
 	Req->SetContentAsString(Json);
 	Req->SetTimeout(2.f);   // past this the local director has already decided twice
 	TWeakObjectPtr<UDaedalusTactics> Self(this);
@@ -238,10 +251,13 @@ void UDaedalusTactics::RemoteAnswer(const FString& Squad, int32 Code, const FStr
 {
 	InFlight.Remove(Squad);
 	TSharedPtr<FJsonObject> O;
+	if (Code == 401 || Code == 403) CachedToken.Reset();   // the token file may have been renewed; read it again
 	if (Code != 200 || !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Body), O) || !O.IsValid())
 	{
 		++RemoteFailed;
-		LastError = FString::Printf(TEXT("director %d"), Code);
+		LastError = Code == 401 ? TEXT("director 401: no or expired token (daedalus.TacticsToken or Saved/Daedalus/tactics.token)")
+			: Code == 403 ? TEXT("director 403: this host is not the configured tactics subject/squad")
+			: FString::Printf(TEXT("director %d"), Code);
 		return;
 	}
 	++Answered;

@@ -80,6 +80,7 @@ private:
 	void AskRemote(const FString& Squad, const FString& Events);
 	void RemoteAnswer(const FString& Squad, int32 Code, const FString& Body);
 	int32 Asked = 0, Answered = 0, RemoteFailed = 0;
+	FString CachedToken;   // from Saved/Daedalus/tactics.token; never logged
 	float Next = 1.f;
 	int64 TickNo = 0;
 	int32 Applied = 0, Refused = 0, Decided = 0, Dropped = 0;
