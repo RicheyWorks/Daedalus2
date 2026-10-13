@@ -565,6 +565,7 @@ int main(int Argc, char** Argv)
             if (!Walkable(T) || T == Tile::Portal || T == Tile::Town || T == Tile::Castle || T == Tile::Cave) continue;
             Tap(F, B); Settle(F);
             ++Steps;
+            if (F.TopBox() == "MESSAGE") Dismiss(F);   // a land's banner (ADR-065)
             if (F.CurrentMode() == Mode::Battle)
             {
                 for (const Foe& Fo : F.Foes()) Seen.insert(F.World().Monsters[static_cast<size_t>(Fo.Kind)].Id);
@@ -765,6 +766,47 @@ int main(int Argc, char** Argv)
         Check("the drake survives a save and restore", Back.HasDrake() && Back.Members().size() == 4 && Back.Members()[3].Lvl == Eg.Members()[3].Lvl, Back.Describe());
         Eg.ForceBattle({"BLIGHT_SLIME", "BLIGHT_SLIME"});
         Check("it fights in the fourth slot", AutoFight(Eg) && Eg.Members()[3].Alive());
+    }
+
+    // ---- lands (ADR-065): plots with deeds; the owner's first visit brings the deed's dragon egg
+    {
+        Realm La;
+        std::string E;
+        La.Load(Text, E);
+        Dismiss(La);
+        Check("the realm lists its lands", S.Lands.size() == 3 && S.Lands[1].Number == 1 && S.Lands[1].Owner == "HERO" && S.Lands[0].Owner.empty());
+        {
+            Spec Bad;
+            std::string E2;
+            Check("a land off its map is refused", !Bad.Parse(Text + "land 9 FIELD 62 62 4 4 -\n", E2) && E2.find("runs off") != std::string::npos, E2);
+            Check("a land numbered twice is refused", !Bad.Parse(Text + "land 1 FIELD 2 2 2 2 -\n", E2) && E2.find("twice") != std::string::npos, E2);
+            Check("a land past 9999 is refused", !Bad.Parse(Text + "land 10000 FIELD 2 2 2 2 -\n", E2), E2);
+        }
+        Check("the spawn is on no land", La.Describe().find("land=-1") != std::string::npos, La.Describe());
+        const int EggsBefore = La.Count("DRAGON_EGG");
+        Tap(La, Button::Left); Settle(La);   // 29,32: land 1, the hero's own
+        Check("stepping onto your land hands over the deed's egg", La.TopBox() == "MESSAGE" && La.LastMessage().find("LAND 1. YOURS") != std::string::npos
+            && La.Count("DRAGON_EGG") == EggsBefore + 1 && La.DeedsTaken() == 1, La.Describe() + " " + La.LastMessage());
+        Dismiss(La);
+        Tap(La, Button::Right); Settle(La); Dismiss(La);
+        Tap(La, Button::Left); Settle(La);
+        Check("the second visit only names it", La.LastMessage() == "LAND 1. YOURS." && La.Count("DRAGON_EGG") == EggsBefore + 1, La.LastMessage());
+        Dismiss(La);
+        for (int k = 0; k < 4; ++k) { Tap(La, Button::Left); Settle(La); Dismiss(La); }   // 25,32: land 0, for sale
+        Check("an unsold land says so", La.LastMessage() == "LAND 0. FOR SALE." && La.Describe().find("land=0") != std::string::npos, La.LastMessage());
+        La.Place("FIELD", 26, 37, 0); Tap(La, Button::Left); Settle(La);   // from the hill east of land 2 onto it
+        Check("another's land names them", La.LastMessage() == "LAND 2. OSTRA'S.", La.LastMessage());
+        Dismiss(La);
+        La.SetOwner(0, "HERO");
+        La.Place("FIELD", 30, 32, 0);
+        for (int k = 0; k < 6; ++k) { Tap(La, Button::Left); Settle(La); Dismiss(La); }
+        Check("a deed the server just minted brings its egg too", La.Count("DRAGON_EGG") == EggsBefore + 2 && La.DeedsTaken() == 2, La.Describe());
+        const std::string Saved = La.Save();
+        Realm Back;
+        Back.Load(Text, E);
+        Back.Restore(Saved);
+        Check("deeds taken survive a save", Saved.find("deeds 0 1") != std::string::npos && Back.DeedsTaken() == 2, Saved.substr(Saved.find("deeds"), 12));
+        Check("describe counts the deeds", La.Describe().find("deeds=2/3") != std::string::npos, La.Describe());
     }
 
     // ---- home through the portal
