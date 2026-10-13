@@ -43,3 +43,6 @@ Ending hook: Great Oak acorns can be carried by Ark to other players' islands â€
 - **Windthrow storms:** old forest tiles fall (8% per storm) and become fresh gaps, so a climax island naturally re-opens into a mosaic.
 - **Nurse facilitation:** oak seedlings only establish next to a stage-2+ tile (nurse pine/scrub), so you have to grow pine before oak, as in real secondary succession.
 - **Quest progress:** `quest_progress(island, flags)` checks the Climax Seed chapters in order against the sim plus UE world facts.
+
+## Chapter 7 - Seed Rain (epilogue)
+The Great Oak drops one Climax Seed, but acorns only travel ~0.6 km and the bare islet is 2 km out. `colonise()` (succession_depth.py) settles the islet: wind seed rain as usual, every Ark Raft cargo species arrives for sure, and each Jay Feeder gives a 50% chance per crossing that jays cache acorns there (real jays move acorns km-scale). Goal: 2 Jay Feeders + 1 Ark Raft placed and 4+ islet species including Oak. 48 new props in pyth_items4.py (ClimaxSeed, JayFeeder, AcornCache, ArkRaft, IsletBeacon, SeedPod, ColonistCairn, SeedSorter); 714 glbs total. Tests: succession_depth 11/11.

@@ -85,6 +85,12 @@ put("Prop_Dress_PYT_StormShelter_V1", -1200, 4400, 30)
 put("Prop_Water_PYT_BeaverDam_V1", 1100, 200, 90)
 for i in range(3): put("Prop_Live_PYT_Beaver_V%d" % (1 + i), 1200 + R.uniform(-300, 300), 600 + R.uniform(-200, 200), R.uniform(0, 360))
 put("Tool_PYT_StreamSpade_V1", -4700, 400); put("Tool_PYT_GrazingCrook_V1", -3700, -1200)
+# chapter 7 "Seed Rain": jays at the old-growth oaks, Ark Raft + Islet Beacon on the east shore, Climax Seed by the oaks
+for i in range(2): put("Prop_Live_PYT_JayFeeder_V%d" % (1 + i), -3900 + i * 1300, 2500, R.uniform(0, 360))
+for i in range(3): put("Prop_Food_PYT_AcornCache_V%d" % (1 + i), -3500 + i * 500, 3900, R.uniform(0, 360))
+put("Prop_Quest_PYT_ClimaxSeed_V1", -3200, 3200); put("Prop_Quest_PYT_SeedPod_V1", -2900, 3350); put("Prop_Quest_PYT_SeedPod_V2", -3450, 3000)
+put("Prop_Veh_PYT_ArkRaft_V1", 5300, -1500, 90); put("Prop_Dress_PYT_IsletBeacon_V1", 5500, -400); put("Prop_Craft_PYT_SeedSorter_V1", 4600, -1500, 90)
+put("Prop_Dress_PYT_ColonistCairn_V1", 5400, 600)
 les.save_current_level()
 E = unreal.EditorLoadingAndSavingUtils
 mine = [p for p in E.get_dirty_content_packages() if p.get_name().startswith("/Game/Pythagoras/")]

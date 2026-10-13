@@ -29,6 +29,13 @@ def oak_can_establish(island, x, y):
         for i in range(max(0, x - 1), min(island.n, x + 2)):
             if (i, j) != (x, y) and island.stage(i, j) >= 2: return True
     return False
+def colonise(src_pool, dst_pool, dist_km, rng, ark=(), jays=0, wind_aligned=False):
+    """Chapter 7: settle the bare islet. Wind seed rain as usual; each Ark cargo species arrives for sure;
+    each jay feeder adds an independent 50% chance per crossing that acorns get cached on the islet (jays carry acorns km-scale)."""
+    got = set(seed_rain(src_pool, dst_pool, dist_km, wind_aligned, rng))
+    got |= {sp for sp in ark if sp in src_pool and sp not in dst_pool}
+    if "Oak" in src_pool and "Oak" not in dst_pool and any(rng.random() < 0.5 for _ in range(jays)): got.add("Oak")
+    return sorted(got)
 def quest_progress(island, flags):
     """flags: dict of world facts from UE (livestock count, hives, drinkable, survived windthrow, brewed teas, grazed/dug tiles)."""
     Q = json.load(open(__file__.replace("succession_depth.py", "climax_seed_quest.json"), encoding="utf-8"))
@@ -46,6 +53,7 @@ def quest_progress(island, flags):
             elif t == "place": ok &= flags.get(g["asset"], 0) >= g["n"]
             elif t == "survive_event": ok &= g["event"] in flags.get("survived", ())
             elif t == "species": ok &= flags.get("oaks", 0) >= g["min"]
+            elif t == "colonised": ok &= len(flags.get("islet_species", ())) >= g["n"] and (not g.get("need_oak") or "Oak" in flags.get("islet_species", ()))
             elif t == "choice": ok &= flags.get("bramble_choice") in g["options"]
         done.append((ch["id"], ok))
         if not ok: break   # chapters unlock in order
@@ -54,6 +62,10 @@ if __name__ == "__main__":
     ok = True
     def c(n, v):
         global ok; ok &= bool(v); print(("PASS " if v else "FAIL ") + n)
+    import random as _r
+    c("ark guarantees cargo species", "Willow" in colonise(["Willow", "Oak"], [], 50, _r.Random(1), ark=["Willow"]))
+    c("acorns never make 20 km by wind alone", not any("Oak" in colonise(["Oak"], [], 20, _r.Random(i)) for i in range(200)))
+    c("jays carry acorns across", sum("Oak" in colonise(["Oak"], [], 20, _r.Random(i), jays=2) for i in range(400)) > 250)
     c("big near island richer than small far one", len(species_pool(0.5, 200)) > len(species_pool(20, 2)))
     c("pioneers always present", "Fireweed" in species_pool(50, 0.5))
     rng = random.Random(1); arr = [seed_rain(POOL_ALL, ["Fireweed"], 1.0, True, rng) for _ in range(400)]

@@ -130,6 +130,33 @@
     "Prop_Tree_PYT_GreatOak"
    ],
    "sign": "ADV_Chapter6_Sign"
+  },
+  {
+   "id": "seed_rain",
+   "title": "Seed Rain",
+   "text": "The Great Oak drops one Climax Seed. Acorns fall 0.6 km at most, and the bare islet is 2 km out. Feed the jays, load the Ark Raft, and light the Islet Beacon: the climax forest must start again somewhere new.",
+   "goals": [
+    {
+     "type": "place",
+     "asset": "Prop_Live_PYT_JayFeeder",
+     "n": 2
+    },
+    {
+     "type": "place",
+     "asset": "Prop_Veh_PYT_ArkRaft",
+     "n": 1
+    },
+    {
+     "type": "colonised",
+     "n": 4,
+     "need_oak": true
+    }
+   ],
+   "reward": [
+    "Prop_Quest_PYT_ClimaxSeed",
+    "Prop_Dress_PYT_ColonistCairn"
+   ],
+   "sign": "ADV_Chapter7_Sign"
   }
  ]
 }
