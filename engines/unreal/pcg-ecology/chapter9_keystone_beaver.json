@@ -23,6 +23,7 @@
  ],
  "fail_hint": {
   "drowned": "The old oaks are standing in water. Move the dam downstream.",
-  "too_simple": "Still only dry land. Let the beavers build."
+  "too_simple": "Still only dry land. Let the beavers build.",
+  "over_flooded": "The stream is a lake now and the meadow is gone. One dam too many."
  }
 }

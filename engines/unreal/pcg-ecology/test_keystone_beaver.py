@@ -6,3 +6,7 @@ def test_dams_by_the_oaks_drown_them(): assert outcome([(2, 8), (4, 8)])["old_gr
 def test_too_many_dams_fail(): assert not ok(outcome([(7, 6), (10, 6), (9, 2)]))
 def test_two_well_placed_dams_pass(): assert ok(outcome([(7, 6), (10, 6)]))
 def test_naive_even_spacing_fails(): assert not ok(outcome(best_dams(2)))
+from keystone_beaver import diagnose
+def test_diagnose_keys():
+    assert diagnose([])[0] == "too_simple" and diagnose([(2, 8), (4, 8)])[0] == "drowned"
+    assert diagnose([(7, 6), (10, 6)])[0] == "pass" and diagnose([(7, 6), (10, 6), (9, 2)])[0] == "over_flooded"

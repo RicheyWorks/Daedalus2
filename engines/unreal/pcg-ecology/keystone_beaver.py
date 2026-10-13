@@ -17,3 +17,10 @@ def best_dams(k):
     return [STREAM[int((n + 0.5) * len(STREAM) / k)] for n in range(k)] if k else []
 if __name__ == "__main__":
     for k in range(0, 9): print(k, outcome(best_dams(k)))
+
+def diagnose(dams, min_h=1.55, min_old=30):
+    """Player feedback key for the ch.9 sign: pass / drowned / too_simple / over_flooded."""
+    o = outcome(dams)
+    if o["old_growth"] < min_old: return "drowned", o
+    if o["H"] >= min_h: return "pass", o
+    return ("too_simple" if len(dams) < 2 else "over_flooded"), o
