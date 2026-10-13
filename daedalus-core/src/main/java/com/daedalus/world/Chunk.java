@@ -6,6 +6,17 @@ import java.util.Arrays;
 
 /**
  * One {@code 16×16×16} payload. Worlds omit empty chunks; a missing chunk is AIR.
+ *
+ * <p>Stored the way Minecraft stores a chunk section (ADR-064 rule 1): a palette of the block kinds present plus the
+ * fewest bits per cube that can index it.
+ * <ul>
+ *   <li><b>uniform</b> (one kind, e.g. solid stone under an island): no per-cube array at all, about 60 bytes;</li>
+ *   <li><b>4 bits</b> (2 to 16 kinds, nearly every terrain chunk): 2 KiB instead of 4;</li>
+ *   <li><b>8 bits</b> (more than 16 kinds): the dense 4 KiB array, as before.</li>
+ * </ul>
+ * Writes widen the storage when a new kind arrives and never narrow it; {@link #copy()} and loading from a payload
+ * pick the narrowest form. Reads are lock-free, as {@link World} needs: a widen builds a new {@code Store} whose
+ * fields are final (safe publication), and a 4-bit index can never point outside the 16-entry palette.
  */
 public final class Chunk {
 
@@ -14,21 +25,60 @@ public final class Chunk {
 
     /** BlockType.values() clones its array on every call; get() is the hottest read in the engine, so keep one. */
     private static final BlockType[] TYPES = BlockType.values();
+    private static final int NIBBLE_KINDS = 16;
 
-    private final byte[] blocks;
+    /** A storage form. {@code bits} 0 = uniform ({@code palette[0]}), 4 = nibbles into the palette, 8 = ordinals. */
+    private static final class Store {
+        final int bits;
+        final byte[] palette;
+        final byte[] data;
+        int kinds;
+
+        Store(int bits, byte[] palette, byte[] data, int kinds) {
+            this.bits = bits;
+            this.palette = palette;
+            this.data = data;
+            this.kinds = kinds;
+        }
+
+        int ordinal(int i) {
+            switch (bits) {
+                case 0:
+                    return palette[0] & 0xff;
+                case 4:
+                    return palette[(data[i >> 1] >> ((i & 1) << 2)) & 0x0f] & 0xff;
+                default:
+                    return data[i] & 0xff;
+            }
+        }
+
+        long bytes() {
+            // object headers + arrays, the way a heap dump counts them (16-byte header, 16-byte array header)
+            return 32 + 16 + palette.length + (data == null ? 0 : 16 + data.length);
+        }
+    }
+
+    /** Final fields in Store make a widened store safely visible to lock-free readers without volatile. */
+    private Store store;
+    private int occupied;
     private long revision;
 
     public Chunk() {
-        this.blocks = new byte[VOLUME];
+        this.store = uniform(0);
     }
 
-    private Chunk(byte[] blocks, long revision) {
-        this.blocks = blocks;
+    private Chunk(Store store, int occupied, long revision) {
+        this.store = store;
+        this.occupied = occupied;
         this.revision = revision;
     }
 
+    private static Store uniform(int ordinal) {
+        return new Store(0, new byte[] {(byte) ordinal}, null, 1);
+    }
+
     public BlockType get(int localX, int localY, int localZ) {
-        return TYPES[Byte.toUnsignedInt(blocks[index(localX, localY, localZ)])];
+        return TYPES[store.ordinal(index(localX, localY, localZ))];
     }
 
     public BlockType set(int localX, int localY, int localZ, BlockType type) {
@@ -36,48 +86,155 @@ public final class Chunk {
             throw new IllegalArgumentException("BlockType is required");
         }
         int i = index(localX, localY, localZ);
-        BlockType previous = TYPES[Byte.toUnsignedInt(blocks[i])];
-        blocks[i] = (byte) type.ordinal();
+        Store s = store;
+        int before = s.ordinal(i);
+        int after = type.ordinal();
         revision++;
-        return previous;
+        if (before == after) {
+            return TYPES[before];
+        }
+        write(s, i, after);
+        if (before == 0) {
+            occupied++;
+        } else if (after == 0) {
+            occupied--;
+        }
+        return TYPES[before];
+    }
+
+    private void write(Store s, int i, int ordinal) {
+        if (s.bits == 8) {
+            s.data[i] = (byte) ordinal;
+            return;
+        }
+        if (s.bits == 0) {
+            // widen: the old kind becomes palette slot 0, which an all-zero nibble array already means
+            byte[] palette = new byte[NIBBLE_KINDS];
+            palette[0] = s.palette[0];
+            palette[1] = (byte) ordinal;
+            byte[] data = new byte[VOLUME / 2];
+            setNibble(data, i, 1);
+            store = new Store(4, palette, data, 2);
+            return;
+        }
+        int slot = slot(s, ordinal);
+        if (slot < 0 && s.kinds < NIBBLE_KINDS) {
+            slot = s.kinds;
+            s.palette[slot] = (byte) ordinal;   // written before any nibble can name it
+            s.kinds++;
+        }
+        if (slot >= 0) {
+            setNibble(s.data, i, slot);
+            return;
+        }
+        byte[] dense = dense(s);
+        dense[i] = (byte) ordinal;
+        store = new Store(8, new byte[0], dense, 0);
+    }
+
+    private static int slot(Store s, int ordinal) {
+        for (int k = 0; k < s.kinds; k++) {
+            if ((s.palette[k] & 0xff) == ordinal) {
+                return k;
+            }
+        }
+        return -1;
+    }
+
+    private static void setNibble(byte[] data, int i, int slot) {
+        int shift = (i & 1) << 2;
+        int b = data[i >> 1] & ~(0x0f << shift);
+        data[i >> 1] = (byte) (b | (slot << shift));
+    }
+
+    private static byte[] dense(Store s) {
+        byte[] out = new byte[VOLUME];
+        if (s.bits == 8) {
+            System.arraycopy(s.data, 0, out, 0, VOLUME);
+        } else if (s.bits == 0) {
+            Arrays.fill(out, s.palette[0]);
+        } else {
+            for (int i = 0; i < VOLUME; i++) {
+                out[i] = (byte) s.ordinal(i);
+            }
+        }
+        return out;
+    }
+
+    /** The narrowest store for a dense payload, and how many cubes are not AIR. */
+    private static Chunk compact(byte[] dense, long revision) {
+        int[] slotOf = new int[256];
+        Arrays.fill(slotOf, -1);
+        byte[] palette = new byte[NIBBLE_KINDS];
+        int kinds = 0;
+        int occupied = 0;
+        for (byte b : dense) {
+            int o = b & 0xff;
+            if (o != 0) {
+                occupied++;
+            }
+            if (slotOf[o] < 0) {
+                if (kinds < NIBBLE_KINDS) {
+                    palette[kinds] = b;
+                }
+                slotOf[o] = kinds++;
+            }
+        }
+        if (kinds == 1) {
+            return new Chunk(uniform(dense[0] & 0xff), occupied, revision);
+        }
+        if (kinds > NIBBLE_KINDS) {
+            return new Chunk(new Store(8, new byte[0], dense.clone(), 0), occupied, revision);
+        }
+        byte[] data = new byte[VOLUME / 2];
+        for (int i = 0; i < VOLUME; i++) {
+            setNibble(data, i, slotOf[dense[i] & 0xff]);
+        }
+        return new Chunk(new Store(4, palette, data, kinds), occupied, revision);
     }
 
     public boolean isEmpty() {
-        return occupied() == 0;
+        return occupied == 0;
     }
 
+    /** Cubes that are not AIR. O(1): kept up to date by {@link #set}. */
     public int occupied() {
-        int n = 0;
-        for (byte b : blocks) {
-            if (b != 0) {
-                n++;
-            }
-        }
-        return n;
+        return occupied;
     }
 
     public long revision() {
         return revision;
     }
 
+    /** Bits per cube in the current storage: 0 (one kind), 4 or 8. */
+    public int bitsPerBlock() {
+        return store.bits;
+    }
+
+    /** Heap bytes this chunk's block storage holds (arrays and headers), for RAM reports. */
+    public long storageBytes() {
+        return 24 + store.bytes();
+    }
+
+    /** A copy in the narrowest storage form. */
     public Chunk copy() {
-        return new Chunk(blocks.clone(), revision);
+        return compact(dense(store), revision);
     }
 
     /**
      * Dense ordinal payload, a copy: {@code index = x + 16 * (y + 16 * z)} in local coordinates,
      * each byte a {@link BlockType} ordinal. This is what a renderer meshes from; the chunk's own
-     * array never leaves the class.
+     * storage never leaves the class.
      */
     public byte[] ordinals() {
-        return blocks.clone();
+        return dense(store);
     }
 
     /**
      * Dense ordinal payload for a later snapshot. Callers must not mutate the array.
      */
     byte[] payload() {
-        return blocks.clone();
+        return dense(store);
     }
 
     static Chunk ofPayload(byte[] payload, long revision) {
@@ -91,7 +248,7 @@ public final class Chunk {
                 throw new IllegalArgumentException("Unknown block ordinal " + ordinal);
             }
         }
-        return new Chunk(payload.clone(), revision);
+        return compact(payload, revision);
     }
 
     private static int index(int localX, int localY, int localZ) {
@@ -111,11 +268,11 @@ public final class Chunk {
         if (!(o instanceof Chunk other)) {
             return false;
         }
-        return revision == other.revision && Arrays.equals(blocks, other.blocks);
+        return revision == other.revision && Arrays.equals(dense(store), dense(other.store));
     }
 
     @Override
     public int hashCode() {
-        return 31 * Arrays.hashCode(blocks) + Long.hashCode(revision);
+        return 31 * Arrays.hashCode(dense(store)) + Long.hashCode(revision);
     }
 }
