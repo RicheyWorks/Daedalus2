@@ -77,7 +77,7 @@ FString ADaedalusTalker::State() const
 {
 	FString Flags;
 	for (const std::string& F : Talk.Flags()) { if (!Flags.IsEmpty()) Flags += TEXT(","); Flags += UTF8_TO_TCHAR(F.c_str()); }
-	return FString::Printf(TEXT("who=%s bound=%d where=%s flags=%s talks=%d asking=%d"), *Who, Talk.Bound() ? 1 : 0, UTF8_TO_TCHAR(Talk.Where().c_str()), *Flags, Talks, bAsking ? 1 : 0);
+	return FString::Printf(TEXT("who=%s bound=%d where=%s flags=%s talks=%d asking=%d given=%s"), *Who, Talk.Bound() ? 1 : 0, UTF8_TO_TCHAR(Talk.Where().c_str()), *Flags, Talks, bAsking ? 1 : 0, *Given);
 }
 
 bool ADaedalusTalker::Use(ADaedalusHero* Hero)
@@ -104,6 +104,14 @@ void ADaedalusTalker::Deliver(ADaedalusHero* Hero, const daedalus::cast::Beat& B
 {
 	Progress = UTF8_TO_TCHAR(Talk.Save().c_str());
 	for (const std::string& F : Talk.Flags()) SharedFlags(GetWorld(), Cast).Add(UTF8_TO_TCHAR(F.c_str()));
+	// Gifts go into the realm's satchel (the inventory's catalog names them); the script pays each once.
+	for (const auto& G : B.Gifts)
+	{
+		const FString Id = UTF8_TO_TCHAR(G.first.c_str());
+		Hero->Satchel.FindOrAdd(Id) += G.second;
+		Given += (Given.IsEmpty() ? TEXT("") : TEXT(",")) + Id;
+		UE_LOG(LogDaedalus, Log, TEXT("%s gives %s x%d"), *Who, *Id, G.second);
+	}
 	if (B.Over)
 	{
 		bAsking = false;

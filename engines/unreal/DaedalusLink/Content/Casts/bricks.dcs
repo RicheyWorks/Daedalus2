@@ -11,6 +11,7 @@ say Builder! The river plate's got no bridge and the Twins won't swim.
 ask Build the bridge? Blueprint's yours. | On it=accept | Not yet=later
 step accept
 set bridge
+give PLAN_BRIDGE 1
 say Red bricks, forty of them, and a grey plate for the deck. Snap them on the line; the plan shows where.
 end
 step later
@@ -61,6 +62,7 @@ say The shelves will wait. They are shelves.
 end
 step tower_plan
 set tower_plan
+give PLAN_TOWER 1
 say The bridge is up? Then the tower plan is yours. Forty studs, and the top brick is clear, if you have one.
 end
 
@@ -110,6 +112,7 @@ say Your plane's prop is stock. Stock loses laps. I've got one that doesn't.
 ask Fit the racing prop? | Fit it=fit | Keep stock=no
 step fit
 set prop
+give PLANE_PROP 1
 say Fitted. Three laps of the runway, then we talk about the Cup.
 end
 step no
@@ -151,6 +154,7 @@ step start
 say Snap it, and it comes apart. Glue it, and it never does. Never is the price.
 ask Buy glue? | One pot=pot | Never's too long=no
 step pot
+give GLUE_POT 1
 say One pot. Use it on something you're sure of. Nobody ever is.
 end
 step no

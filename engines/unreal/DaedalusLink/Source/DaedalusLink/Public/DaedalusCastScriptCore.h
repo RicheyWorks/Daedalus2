@@ -15,6 +15,7 @@
 //   step yes
 //   say Thank you. Start with the Echo Choir.
 //   set heartstone                                remember a flag on this character (saved by the host)
+//   give FRAME_PLATE 1                            hand the player an item of the realm's catalog (DIC 1), once per set
 //   end                                           the conversation closes here
 //   step later
 //   say Come back when you are ready.
@@ -40,8 +41,9 @@ struct Choice { std::string Label, Goto; };
 
 struct Node
 {
-    enum class Kind { Say, Ask, Set, Goto, End, If } K = Kind::Say;
-    std::string Text;                // Say/Ask text, Set flag, Goto step, If flag
+    enum class Kind { Say, Ask, Set, Goto, End, If, Give } K = Kind::Say;
+    std::string Text;                // Say/Ask text, Set flag, Goto step, If flag, Give item id
+    int Amount = 1;                  // Give
     std::vector<Choice> Choices;     // Ask
     std::string Target;              // If: the step to jump to
 };
@@ -162,6 +164,14 @@ struct Cast
             else if (K == "set") { if (!IsId(Rest)) return Fail(I, "set needs a flag"); N.K = Node::Kind::Set; N.Text = Rest; }
             else if (K == "goto") { if (!IsId(Rest)) return Fail(I, "goto needs a step"); N.K = Node::Kind::Goto; N.Text = Rest; Refs.push_back({I, Rest}); }
             else if (K == "end") { N.K = Node::Kind::End; }
+            else if (K == "give")
+            {
+                const std::vector<std::string> F = Split(Rest, ' ');
+                if (F.empty() || !IsId(F[0])) return Fail(I, "give needs an item id");
+                N.K = Node::Kind::Give; N.Text = F[0];
+                N.Amount = F.size() > 1 && !F[1].empty() ? std::atoi(F[1].c_str()) : 1;
+                if (N.Amount < 1 || N.Amount > 999) return Fail(I, "give amount is 1..999");
+            }
             else if (K == "if")
             {
                 const size_t Arrow = Rest.find("->");
@@ -199,6 +209,7 @@ struct Beat
     bool Over = false;
     std::string Text;
     std::vector<std::string> Choices;
+    std::vector<std::pair<std::string, int>> Gifts;   // items handed over on the way to this beat (id, amount)
 };
 
 /** A conversation with one character: holds the step, the node, and the flags. Save() / Restore() are one line. */
@@ -259,7 +270,7 @@ public:
     std::string Where() const { return StepId + ":" + std::to_string(Node); }
 
 private:
-    Beat Over() { Beat B; B.Over = true; StepId = "start"; Node = 0; LastAsk.clear(); return B; }
+    Beat Over(std::vector<std::pair<std::string, int>> Gifts = {}) { Beat B; B.Over = true; B.Gifts = std::move(Gifts); StepId = "start"; Node = 0; LastAsk.clear(); return B; }
     void Jump(const std::string& To) { StepId = To; Node = 0; ApplyIfs(); }
     void ApplyIfs()
     {
@@ -273,24 +284,32 @@ private:
     }
     Beat Advance()
     {
+        std::vector<std::pair<std::string, int>> Gifts;
         for (int Guard = 0; Guard < 64; ++Guard)
         {
             const Step* S = Sc->Find(StepId);
-            if (!S) return Over();
-            if (Node >= static_cast<int>(S->Nodes.size())) return Over();   // a step that runs out ends the talk
+            if (!S) return Over(Gifts);
+            if (Node >= static_cast<int>(S->Nodes.size())) return Over(Gifts);   // a step that runs out ends the talk
             const daedalus::cast::Node& N = S->Nodes[static_cast<size_t>(Node)];
             ++Node;
             switch (N.K)
             {
-            case daedalus::cast::Node::Kind::Say: { Beat B; B.Text = N.Text; return B; }
-            case daedalus::cast::Node::Kind::Ask: { Beat B; B.Text = N.Text; for (const Choice& C : N.Choices) B.Choices.push_back(C.Label); LastAsk = N.Choices; return B; }
+            case daedalus::cast::Node::Kind::Say: { Beat B; B.Text = N.Text; B.Gifts = Gifts; return B; }
+            case daedalus::cast::Node::Kind::Ask: { Beat B; B.Text = N.Text; for (const Choice& C : N.Choices) B.Choices.push_back(C.Label); LastAsk = N.Choices; B.Gifts = Gifts; return B; }
             case daedalus::cast::Node::Kind::Set: Set.insert(N.Text); break;
+            case daedalus::cast::Node::Kind::Give:
+            {
+                // Once: the gift is a flag too ("gave_<ID>"), so a replayed step never pays twice.
+                const std::string Flag = "gave_" + N.Text;
+                if (!Has(Flag)) { Set.insert(Flag); Gifts.push_back({N.Text, N.Amount}); }
+                break;
+            }
             case daedalus::cast::Node::Kind::Goto: Jump(N.Text); break;
             case daedalus::cast::Node::Kind::If: if (Has(N.Text)) Jump(N.Target); break;
-            case daedalus::cast::Node::Kind::End: return Over();
+            case daedalus::cast::Node::Kind::End: return Over(Gifts);
             }
         }
-        return Over();
+        return Over(Gifts);
     }
 
     const Script* Sc = nullptr;

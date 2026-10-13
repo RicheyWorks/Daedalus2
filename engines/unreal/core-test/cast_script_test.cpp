@@ -71,7 +71,8 @@ int main(int argc, char** argv)
         Check("a conversation saves its place and flags in one line", Saved.find("heartstone") != std::string::npos && D.Has("heartstone") && D.Where() == C.Where(), Saved);
         B = C.Talk();
         B = C.Picked(1);
-        Check("'I have it' sets done and hands over the plate", C.Has("heartstone_done") && B.Text.find("Frame Plate") != std::string::npos, B.Text);
+        Check("'I have it' sets done and hands over the plate", C.Has("heartstone_done") && B.Text.find("Frame Plate") != std::string::npos
+            && B.Gifts.size() == 1 && B.Gifts[0].first == "FRAME_PLATE" && B.Gifts[0].second == 1 && C.Has("gave_FRAME_PLATE"), B.Text);
         C.Talk();
         B = C.Talk();
         Check("after that, thanks every time", B.Text.rfind("The Choir sang", 0) == 0, B.Text);
@@ -103,6 +104,36 @@ int main(int argc, char** argv)
     {
         Conversation C;
         Check("unbound: over at once", C.Talk().Over && C.Picked(0).Over);
+    }
+
+    // ---- gifts pay once and name items of the realm's catalog
+    {
+        Cast B;
+        std::string E;
+        Check("a gift needs an item", !B.Parse("DCS 1\ncast X\nwho A\nstep start\ngive\n", E) && E.find("item id") != std::string::npos, E);
+        Check("a gift amount is bounded", !B.Parse("DCS 1\ncast X\nwho A\nstep start\ngive X 1000\n", E) && E.find("1..999") != std::string::npos, E);
+        Cast P;
+        P.Parse(ReadAll(Dir + "/parcels.dcs"), E);
+        Conversation H;
+        H.Bind(P.Find("Beekeeper Hollis"));
+        H.Restore("start:0 route");
+        Beat Bt = H.Talk();
+        Check("Hollis hands over two honey jars with the stamped route", Bt.Gifts.size() == 1 && Bt.Gifts[0].first == "HONEY_JAR" && Bt.Gifts[0].second == 2 && H.Has("route_done"), Bt.Text);
+        H.Talk();
+        Bt = H.Talk();
+        Check("and never twice", Bt.Gifts.empty() && Bt.Text.find("honey's holding") != std::string::npos, Bt.Text);
+        // every gift in every cast names an item of that realm's catalog
+        for (const char* F : {"gallery-city", "parcels", "bricks", "labyrinth"})
+        {
+            Cast C;
+            C.Parse(ReadAll(Dir + "/" + F + ".dcs"), E);
+            const std::string Dic = ReadAll(Dir + "/../Inventory/" + F + ".dic");
+            bool AllKnown = true;
+            int Gifts = 0;
+            for (const Script& S : C.Scripts) for (const Step& T : S.Steps) for (const Node& N : T.Nodes)
+                if (N.K == Node::Kind::Give) { ++Gifts; AllKnown &= Dic.find("item " + N.Text + " ") != std::string::npos; }
+            Check(std::string(F) + ": every gift is an item of its realm's catalog", AllKnown && Gifts >= 3, std::to_string(Gifts));
+        }
     }
 
     // ---- every shipped cast parses, and each has a quest chain that sets a flag

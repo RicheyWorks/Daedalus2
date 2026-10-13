@@ -10,6 +10,7 @@ say Every path here forgets you by morning. Thread doesn't. Tie it at the gate a
 ask Take a spool? | Yes=take | I know the way=no
 step take
 set thread
+give THREAD_SPOOL 1
 say Tie it tight. The Wallwright can move a wall; he can't move a knot.
 end
 step no
@@ -57,6 +58,7 @@ step start
 say Maps! Partial maps, mostly true. False maps, entirely false, very collectible.
 ask Which? | A partial map=partial | A false map=false | Which is which?=which
 step partial
+give MAP_PARTIAL 1
 say Half the maze, and the half I remember. Mostly.
 end
 step false
@@ -90,6 +92,7 @@ say What walks the maze at dusk and leaves no thread?
 ask Your answer? | The Wallwright=right | A shadow=wrong | A Hornback=wrong
 step right
 set riddle_done
+give RIDDLE_ANSWER 1
 say The Wallwright. Yes. He leaves walls instead. The door is yours.
 end
 step wrong
@@ -107,6 +110,7 @@ say The sky-striders nest on the hedge tops. One's taken to you. I can see it fr
 ask Bond with the strider? | Yes=bond | Not yet=no
 step bond
 set strider
+give STRIDER_SADDLE 1
 say Hold still. There. She'll carry you over any wall the Wallwright builds. He hates that.
 end
 step no

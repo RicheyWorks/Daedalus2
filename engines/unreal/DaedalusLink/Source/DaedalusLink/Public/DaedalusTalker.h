@@ -30,6 +30,8 @@ public:
 	/** The conversation's place and flags, one line (saved with the realm). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") FString Progress;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") int32 Talks = 0;
+	/** Item ids this talker handed over (a 'give' line), for the harness. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") FString Given;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UTextRenderComponent> Label;
 
 	virtual FString Prompt(const ADaedalusHero* Hero) const override;

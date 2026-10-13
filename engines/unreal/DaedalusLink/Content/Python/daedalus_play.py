@@ -1148,6 +1148,7 @@ def scenario_cast(p):
         _check("'Of course' sets the quest flag", "heartstone" in s2 and "talks=2" in s2, s2),
         _check("the third talk starts at 'waiting' and 'I have it' finishes the quest", "heartstone_done" in s3 and any("Any word" in l or "page=" in l for l in third), s3),
         _check("the Choir hears the realm-wide flag and sings", "heartstone_done" in s4 and used4, s4),
+        _check("the Curator's Frame Plate landed in the satchel", "given=FRAME_PLATE" in s3 and dict(h.get_editor_property("satchel")).get("FRAME_PLATE", 0) >= 1, s3),
     ]}
 
 

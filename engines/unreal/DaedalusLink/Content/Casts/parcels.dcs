@@ -12,6 +12,7 @@ say There's a letter for Beekeeper Hollis, out past the sunflowers. Stamp it whe
 ask Take the route? | I'll take it=accept | Not today=later
 step accept
 set route
+give LETTER_GRUE 1
 say Good. The stamp hammer's on your belt. Don't let the parcel shield get sticky.
 end
 step later
@@ -96,6 +97,7 @@ say The chopper's fuelled. Skids need work; you'll bounce off a fence post the w
 ask Fit the new skids? | Do it=fit | Fly as is=no
 step fit
 set skid
+give HELI_SKID 1
 say Done. Land on a post if you like. Don't land on the Crow.
 end
 step no
@@ -125,6 +127,7 @@ say I carried a letter for a painter in the city of frames. I never got there. W
 ask Take the lost letter? | I'll deliver it=take | I can't cross realms=no
 step take
 set lost_letter
+give LOST_LETTER 1
 say Thank you. It's for someone called Vell. Tell them the Parcels remember.
 end
 step no
@@ -140,6 +143,7 @@ end
 step letter
 if route_done -> thanks
 set route_done
+give HONEY_JAR 2
 say A letter? From Grue! Stamp it, courier; that's a route done. Here, honey for the road.
 end
 step thanks

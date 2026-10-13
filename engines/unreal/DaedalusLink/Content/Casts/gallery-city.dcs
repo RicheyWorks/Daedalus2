@@ -25,6 +25,7 @@ say Try the Pigment Miner. Thieves need to cut a stone that size.
 end
 step found
 set heartstone_done
+give FRAME_PLATE 1
 say The Heartstone! The Choir will sing tonight. Take this: a Frame Plate from the vault.
 end
 step thanks
@@ -142,6 +143,7 @@ say Your drone's rotor is scuffed. Frames do that; they swing at anything that f
 ask Fit a new rotor? | Yes=fit | Later=no
 step fit
 set rotor
+give DRONE_ROTOR 1
 say Fitted. She'll climb to the top frames now. Don't land on the Choir.
 end
 step no
@@ -154,6 +156,7 @@ step start
 say I rate what you build. Honestly. That is my gift to the city, whether it wants it or not.
 ask Rate my build? | Please=rate | Spare me=no
 step rate
+give PIGMENT_BLUE 1
 say Composition: bold. Palette: brave. Structure: it leans. Two stars, and a pigment for the courage.
 end
 step no
