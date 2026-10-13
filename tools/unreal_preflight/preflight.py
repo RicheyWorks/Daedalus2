@@ -13,6 +13,9 @@ Every rule comes from a real failure on 2026-10-12 (docs/AUTOMATION-LESSONS.md):
   P5 py-bool    get/set_editor_property("b_...") in editor Python. Python names drop the b ("clean_water").
   P6 py-static  calling a static C++ helper from Python that is not a UFUNCTION (unreal.X.get(...)). Needs a
                 UFUNCTION(BlueprintPure/Callable) wrapper, e.g. GetOrrery.
+  P7 tarray-std a TArray of std:: types, or of a struct holding them (std::string, std::vector...). TArray moves
+                its elements with memcpy, and MSVC's std::string points into its own buffer: moved copies dangle.
+                Use std::vector for plain-C++ core types (2026-10-13, UDaedalusTactics::TakeRoster).
 """
 import os
 import re
@@ -31,6 +34,30 @@ ARRAY_RE = re.compile(r"UPROPERTY\((?P<spec>[^)]*)\)\s*TArray<\s*TObjectPtr<\s*(
 ERROR_RE = re.compile(r"(?<![:\w])Error(?:\s+\w+\s*[,)=;]|::)")
 PYBOOL_RE = re.compile(r"""[gs]et_editor_property\(\s*["']b_\w+""")
 PYSTATIC_RE = re.compile(r"\bunreal\.Daedalus\w+\.(get)\(")
+STRUCT_RE = re.compile(r"\b(?:struct|class)\s+(\w+)\s*(?::[^{;]*)?\{(.*?)\n\s*\};", re.S)
+TARRAY_RE = re.compile(r"\bTArray<\s*(?P<type>(?:\w+::)*\w+)\s*(?:<[^>]*>)?\s*>")
+
+
+def std_holders(texts):
+    """Names of structs/classes (in any scanned file) with a std:: container or string member."""
+    bodies = [(m.group(1), m.group(2)) for t in texts for m in STRUCT_RE.finditer(t)]
+    names = set()
+    for name, body in bodies:
+        if re.search(r"^\s*(?:const\s+)?std::(?:string|vector|map|unordered_map|set|function|array|deque|list)\b", body, re.M):
+            names.add(name)
+    # transitively: a struct with a member of a holder type is a holder too (FRow { RosterUnit U; })
+    grew = True
+    while grew:
+        grew = False
+        for name, body in bodies:
+            if name in names:
+                continue
+            for h in list(names):
+                if re.search(r"^\s*(?:const\s+)?(?:\w+::)*%s\s+\w+\s*[;={]" % re.escape(h), body, re.M):
+                    names.add(name)
+                    grew = True
+                    break
+    return names
 
 
 def _actor_classes(text):
@@ -77,7 +104,7 @@ def line_of(text, pos):
     return text.count("\n", 0, pos) + 1
 
 
-def check_cpp(path, text, errors, sources):
+def check_cpp(path, text, errors, sources, holders=frozenset()):
     # P1: shadowed actor members
     for cls, base, s, e in _actor_classes(text):
         body = text[s:e]
@@ -108,6 +135,14 @@ def check_cpp(path, text, errors, sources):
                            "(a saved older copy overrides it on load)" % name))
 
 
+    # P7: TArray of std:: types (directly, or a struct holding them)
+    for m in TARRAY_RE.finditer(text):
+        t = m.group("type")
+        if t.startswith("std::") or t.split("::")[-1] in holders:
+            errors.append((path, line_of(text, m.start()), "P7", "TArray<%s> moves elements with memcpy; %s holds std:: members "
+                           "(dangling after a move on MSVC). Use std::vector" % (t, t)))
+
+
 def check_py(path, text, errors):
     for m in PYBOOL_RE.finditer(text):
         errors.append((path, line_of(text, m.start()), "P5", "Python property names drop the b prefix (b_clean_water -> clean_water)"))
@@ -126,10 +161,11 @@ def scan(paths):
             files += [os.path.join(root, n) for n in names if n.endswith((".h", ".cpp", ".py"))]
     texts = {f: open(f, encoding="utf-8", errors="replace").read() for f in files}
     cpp_sources = [t for f, t in texts.items() if f.endswith(".cpp")]
+    holders = std_holders([t for f, t in texts.items() if f.endswith((".h", ".cpp"))])
     errors = []
     for f, t in sorted(texts.items()):
         if f.endswith((".h", ".cpp")):
-            check_cpp(f, t, errors, cpp_sources + [t])
+            check_cpp(f, t, errors, cpp_sources + [t], holders)
         elif f.endswith(".py") and "preflight" not in os.path.basename(f):
             check_py(f, t, errors)
     return errors
