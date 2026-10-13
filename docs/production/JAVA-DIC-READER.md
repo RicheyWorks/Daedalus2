@@ -35,3 +35,11 @@ dump ordered UTF-8 field encodings; the comparison includes realm/theme, tabs,
 slots and every item's ID/tab/slot/name/detail/action sequence. Local native
 adapter compiled with MSVC /W4 /WX. CI runs the same comparison using GCC.
 This closes full-file parser parity, but not deployed auth or item transactions.
+
+Production-profile local HTTP verification now passes: the endpoint is explicitly
+registered as authenticated in ProdAuthPostureTest and the README API table.
+Real booted-server tests refuse unauthenticated requests, serve GALLERY-CITY
+definitions with a test JWT, expose no player quantity/count fields and return
+404 for an authenticated unknown realm. Four posture tests pass alongside the
+catalog/realm integration tests. Public deployment, packaged-server smoke and
+authoritative item transactions remain pending.

@@ -39,7 +39,7 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Shared inventory format reader
-        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest,RetroRealmTest,RetroLandTest -Dsurefire.failIfNoSpecifiedTests=false test
+        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest,RetroRealmTest,RetroLandTest,ProdAuthPostureTest -Dsurefire.failIfNoSpecifiedTests=false test
       - name: Actual C++ and Java catalog parity
         run: |
           g++ -std=c++17 -O2 -Wall -Wextra -Werror engines/unreal/core-test/inventory_catalog_dump.cpp -o "$RUNNER_TEMP/inventory_dump"
