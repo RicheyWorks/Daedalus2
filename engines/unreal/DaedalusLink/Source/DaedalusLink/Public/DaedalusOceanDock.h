@@ -13,8 +13,9 @@ public:
     ADaedalusOceanDockControl();
     virtual FString Prompt(const ADaedalusHero* Hero) const override;
     virtual bool Use(ADaedalusHero* Hero) override;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") FString DockId;
-    UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Daedalus|Ocean") TObjectPtr<AActor> TravelHost;
-    UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Daedalus|Ocean") TObjectPtr<ADaedalusOceanVessel> Vessel;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float InteractionReachCm=250;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") FString DockId;
+    UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") TObjectPtr<AActor> TravelHost;
+    UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") TObjectPtr<ADaedalusOceanVessel> Vessel;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float InteractionReachCm=250;
 };

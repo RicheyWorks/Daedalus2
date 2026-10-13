@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "DaedalusHero.h"
 #include "DaedalusOceanTravelComponent.h"
+#include "DaedalusOceanInteractor.h"
 #include "GameFramework/PlayerController.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanDockTest,"Daedalus.Ocean.HeroDockInteraction",
@@ -21,6 +22,11 @@ bool FDaedalusOceanDockTest::RunTest(const FString& Parameters)
     auto* Travel=NewObject<UDaedalusOceanTravelComponent>(Host);
     Host->AddInstanceComponent(Travel);Travel->RegisterComponent();
     Player->Possess(Hero);Vessel->CurrentRealm=TEXT("Ocean Realm");
+    auto* Interactor=UDaedalusOceanInteractor::EnsureOnHero(Hero);
+    TestNotNull(TEXT("Host attaches owned interactor"),Interactor);
+    TestTrue(TEXT("Attachment is idempotent"),UDaedalusOceanInteractor::EnsureOnHero(Hero)==Interactor);
+    Interactor->RequestDockUse(nullptr);
+    TestTrue(TEXT("Null dock request retains hero"),Player->GetPawn()==Hero);
     FDaedalusOceanDock Definition;
     Definition.Id=TEXT("harbour");Definition.Realm=Vessel->CurrentRealm;
     Definition.ArrivalAnchor=TEXT("harbour_arrival");Definition.ExitLocation=FVector(0,300,0);
@@ -39,6 +45,9 @@ bool FDaedalusOceanDockTest::RunTest(const FString& Parameters)
     TestFalse(TEXT("Unpossessed hero cannot reuse dock"),Dock->Use(Hero));
     TestTrue(TEXT("Existing exit restores hero"),Travel->DisembarkAtDock(Player,Vessel,Definition.Id));
     TestTrue(TEXT("Hero restored"),Player->GetPawn()==Hero);
+    Hero->SetActorLocation(FVector(0,-300,0));
+    Interactor->RequestDockUse(Dock);
+    TestTrue(TEXT("Owned endpoint boards validated hero"),Player->GetPawn()==Vessel);
     World->DestroyWorld(false);return true;
 }
 #endif

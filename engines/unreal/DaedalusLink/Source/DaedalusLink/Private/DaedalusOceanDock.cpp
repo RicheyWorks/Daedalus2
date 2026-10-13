@@ -2,6 +2,9 @@
 #include "DaedalusHero.h"
 #include "DaedalusOceanTravelComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/PlayerController.h"
+#include "DaedalusOceanInteractor.h"
+#include "Net/UnrealNetwork.h"
 
 ADaedalusOceanDockControl::ADaedalusOceanDockControl()
 {
@@ -15,6 +18,15 @@ FString ADaedalusOceanDockControl::Prompt(const ADaedalusHero* Hero) const
 }
 bool ADaedalusOceanDockControl::Use(ADaedalusHero* Hero)
 {
+    if (!HasAuthority())
+    {
+        if (!IsValid(Hero) || Hero->GetWorld()!=GetWorld()) return false;
+        auto* Player=Cast<APlayerController>(Hero->GetController());
+        auto* Interactor=Hero->FindComponentByClass<UDaedalusOceanInteractor>();
+        if (!IsValid(Player) || !Player->IsLocalController() || Player->GetPawn()!=Hero || !Interactor) return false;
+        Interactor->RequestDockUse(this);
+        return true; // Request queued; server possession is the success signal.
+    }
     if (!HasAuthority() || !IsValid(Hero) || !Hero->HasAuthority()
         || Hero->GetWorld()!=GetWorld() || !IsValid(Vessel) || !IsValid(TravelHost)
         || TravelHost->GetWorld()!=GetWorld() || Vessel->GetWorld()!=GetWorld()
@@ -25,4 +37,12 @@ bool ADaedalusOceanDockControl::Use(ADaedalusHero* Hero)
     auto* Player=Hero->GetController();
     if (!Travel || !IsValid(Player) || Player->GetPawn()!=Hero) return false;
     return Travel->BoardAtDock(Player,Vessel,DockId);
+}
+void ADaedalusOceanDockControl::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    DOREPLIFETIME(ADaedalusOceanDockControl,DockId);
+    DOREPLIFETIME(ADaedalusOceanDockControl,TravelHost);
+    DOREPLIFETIME(ADaedalusOceanDockControl,Vessel);
+    DOREPLIFETIME(ADaedalusOceanDockControl,InteractionReachCm);
 }
