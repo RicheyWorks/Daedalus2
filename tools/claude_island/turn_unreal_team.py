@@ -10,7 +10,8 @@ Steps (each one is timed and reported; a step that fails is recorded and the tur
   3. Fast build from the clean worktree (..\\D2-build at origin/main) through unreal-job.ps1, then wait for the bridge.
      This compiles the merged-mesh isles, LODs, the island streamer, tactics (DTO/DTE/DTR) and the casualty roster.
   4. Re-place Claude Island and the Reach (merged meshes now) and write Saved/Daedalus/islands.json.
-  5. RAM after: the same numbers, so ADR-064 gets its first real measurement.
+  5. RAM after: the same numbers, so ADR-064 gets its first real measurement. Then the RAM audit: texture and mesh
+     sizes per owner folder from asset-registry tags (daedalus_ram_audit, read-only, loads nothing).
   6. Play scenarios: tactics, wild, orrery. Each is started and polled for up to 90 s.
   7. Astra's three-npc.dto (PR32) applied to a live squad through ApplyOrders, when the file is present.
   8. Stop Play, save only unreal-team's levels, write turn-report.json, post DONE + HANDOFF on the team link.
@@ -40,6 +41,15 @@ import orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands
 for m in (orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands): importlib.reload(m)
 result = {"place": str(orr_place.run())[:300], "reach": {k: v for k, v in orr_reach.run().items()},
           "islands": daedalus_islands.write()}
+'''
+
+AUDIT = r'''
+import sys, importlib
+p = r"%s"
+if p not in sys.path: sys.path.insert(0, p)
+import daedalus_ram_audit
+importlib.reload(daedalus_ram_audit)
+result = daedalus_ram_audit.run()
 '''
 
 APPLY_DTO = r'''
@@ -122,7 +132,7 @@ class Turn:
                 "failed": [c["check"] for c in res.get("checks", []) if not c.get("pass")]}
 
     def go(self, dry=False):
-        plan = ["ram", "preflight", "build", "place", "ram", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
+        plan = ["ram", "preflight", "build", "place", "ram", "ram audit", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
         if dry:
             return {"plan": plan}
         before = self.step("ram before", self.ram)
@@ -136,6 +146,9 @@ class Turn:
         self.step("place isles + islands.json", lambda: self.call("execute_python", code=PLACE % HERE.replace("\\", "\\\\"),
                                                                   unattended=False, bridge_timeout=300))
         after = self.step("ram after", self.ram)
+        self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
+            "execute_python", code=AUDIT % os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\"),
+            unattended=False, bridge_timeout=300))
         for s in SCENARIOS:
             self.step("scenario " + s, lambda s=s: self.scenario(s))
         if os.path.exists(THREE_NPC):
