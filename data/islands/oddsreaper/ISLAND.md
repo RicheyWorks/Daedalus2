@@ -80,4 +80,27 @@ The storm volume is no longer forced at BeginPlay. DaedalusWorld is shared, so a
 
 ## Round-3 off-editor: Storm Parlay Cookbook (Oct 12, 2026, 22:25 PT)
 
-herbs.json now carries storm_parlay_cookbook — 8 signature two-herb brews (ReapersFavor, LightningLedger, LongOdds, HouseHedge, GhostBluff, CoinFlipDouble, ThunderSprint, OddsWhisper) with clear / storm / storm+cistern EV. Clear EV is always 1.0; storm multiplies boostable legs by 1.2 (cap 0.95; Parlayvine fixed); cistern adds x1.05. Headless auditor: 	ools/islands/oddsreaper/or_wager_ev.py (also re-checks every herb storm_ev against the formula). No Unreal touched.
+herbs.json now carries storm_parlay_cookbook — 8 signature two-herb brews (ReapersFavor, LightningLedger, LongOdds, HouseHedge, GhostBluff, CoinFlipDouble, ThunderSprint, OddsWhisper) with clear / storm / storm+cistern EV. Clear EV is always 1.0; storm multiplies boostable legs by 1.2 (cap 0.95; Parlayvine fixed); cistern adds x1.05. Headless auditor: tools/islands/oddsreaper/or_wager_ev.py (also re-checks every herb storm_ev against the formula). No Unreal touched.
+
+
+## Round-3 turn runner: give-up + OR_NEXT (Oct 12, 2026, 22:17 PT)
+
+oddsreaper_turn.py no longer aborts preflight at a fixed 23:00. Give-up defaults to turn start + 60 min (OR_GIVE_UP_MIN); an explicit OR_GIVE_UP=HH:MM that has already passed rolls to tomorrow. HANDOFF target is OR_NEXT (whoever the referee names; default art-master-flex only as a fallback). Headless: tools/islands/oddsreaper/test_give_up.py.
+
+## Round-3 nft card (Oct 12, 2026, 22:30 PT)
+
+nft.json hero_image now points at bot-team/shots/oddsreaper/hero_unreal_play.png (the real 1920x1080 Play shot from the round-2 turn). The editor SceneCapture2D export was all black and must not be used as the island card. Items stays 591. Headless: tools/islands/oddsreaper/test_nft_card.py.
+
+## Storm Parlay Cookbook EV (from herbs.json)
+
+| Brew | Herbs | EV clear | EV storm | EV storm+cistern |
+|---|---|---|---|---|
+| ReapersFavor | Luckroot+Vigweed | 1.00 | 1.44 | 1.588 |
+| LightningLedger | Stormbloom+Oddsthistle | 1.00 | 1.383 | 1.506 |
+| LongOdds | Longshot+Parlayvine | 1.00 | 1.20 | 1.26 |
+| HouseHedge | Hedgeleaf+Luckroot | 1.00 | 1.267 | 1.33 |
+| GhostBluff | Bluffmoss+Stormbloom | 1.00 | 1.383 | 1.506 |
+| CoinFlipDouble | Luckroot+Parlayvine | 1.00 | 1.20 | 1.26 |
+| ThunderSprint | Longshot+Vigweed | 1.00 | 1.44 | 1.588 |
+| OddsWhisper | Oddsthistle+Hedgeleaf | 1.00 | 1.267 | 1.33 |
+
