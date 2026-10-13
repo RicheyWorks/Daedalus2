@@ -2,14 +2,18 @@
 
 package com.daedalus.world;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -48,15 +52,63 @@ public final class WorldStore {
         save(world.snapshot(), file);
     }
 
+    /**
+     * Writes the snapshot to a temporary file beside {@code file}, then moves it over {@code file} in one step, so a
+     * crash or a full disk mid-write leaves the previous world intact instead of a truncated one. Buffered: the
+     * format is many small fields, and an unbuffered stream made each one a system call.
+     */
     public static void save(WorldSnapshot snapshot, Path file) throws IOException {
         requirePath(file);
-        Path parent = file.getParent();
-        if (parent != null) {
-            Files.createDirectories(parent);
+        Path parent = file.toAbsolutePath().getParent();
+        Path name = file.getFileName();
+        if (parent == null || name == null) {
+            throw new IOException("A world file needs a directory and a name: " + file);
         }
-        try (OutputStream raw = Files.newOutputStream(file);
-             DataOutputStream out = new DataOutputStream(raw)) {
-            write(snapshot, out);
+        Files.createDirectories(parent);
+        Path tmp = Files.createTempFile(parent, name + ".", ".tmp");
+        try {
+            try (OutputStream raw = Files.newOutputStream(tmp);
+                 DataOutputStream out = new DataOutputStream(new BufferedOutputStream(raw, 1 << 16))) {
+                write(snapshot, out);
+            }
+            replace(tmp, file);
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
+    }
+
+    /**
+     * Moves {@code tmp} over {@code file}. On Windows a scanner (antivirus, indexer) can hold the target for a moment,
+     * so a refused move is retried briefly; if it still fails, the bytes are copied over the file the old,
+     * non-atomic way, which is never worse than before this method existed.
+     */
+    private static void replace(Path tmp, Path file) throws IOException {
+        java.nio.file.FileSystemException last = null;
+        for (int attempt = 0; attempt < 5; attempt++) {
+            try {
+                try {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException e) {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
+                }
+                return;
+            } catch (java.nio.file.FileSystemException e) {
+                last = e;
+                try {
+                    Thread.sleep(20L << attempt);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        try {
+            Files.copy(tmp, file, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            if (last != null) {
+                e.addSuppressed(last);
+            }
+            throw e;
         }
     }
 
@@ -67,7 +119,7 @@ public final class WorldStore {
     public static WorldSnapshot loadSnapshot(Path file) throws IOException {
         requirePath(file);
         try (InputStream raw = Files.newInputStream(file);
-             DataInputStream in = new DataInputStream(raw)) {
+             DataInputStream in = new DataInputStream(new BufferedInputStream(raw, 1 << 16))) {
             return read(in);
         }
     }

@@ -138,3 +138,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   snapshot copied every chunk (4 KiB each) and the save re-encoded every chunk. Now `Chunk.copy()` shares storage
   copy-on-write, and each store caches its runs until written. A 200-chunk world: edit + save 6.0 -> 1.6 ms (the
   rest is the file write); the cost per edit no longer grows with the number of untouched chunks' cubes.
+- **Saves are atomic and buffered:** `WorldStore.save` writes a temp file beside the world and moves it over in one
+  step (retrying briefly when Windows holds the file, then falling back to a plain copy), so a crash or full disk
+  mid-save leaves the last good world, not a truncated one. A buffered stream cut edit + save to ~1.1 ms on the
+  200-chunk world. WorldStoreTest checks a save that dies half way leaves the old bytes and no temp files.

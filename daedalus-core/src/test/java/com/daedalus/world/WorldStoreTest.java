@@ -271,4 +271,21 @@ class WorldStoreTest {
         Files.write(file, b);
         assertThatThrownBy(() -> WorldStore.load(file)).isInstanceOf(IOException.class).hasMessageContaining("Bad chunk runs");
     }
+
+    @Test
+    void aFailedSaveLeavesThePreviousWorldIntactAndNoTempFiles() throws Exception {
+        World live = terrain();
+        Path file = tmp.resolve("safe.daew");
+        WorldStore.save(live, file);
+        byte[] good = Files.readAllBytes(file);
+        // a field past writeUTF's 65,535-byte limit fails after the chunks are written: a save that dies half way
+        WorldSnapshot broken = new WorldSnapshot(live.id(), live.revision(), live.snapshot().chunks(), null, null, null,
+                null, java.util.List.of(), java.util.Map.of(), "", "", "x".repeat(70_000), "");
+        assertThatThrownBy(() -> WorldStore.save(broken, file)).isInstanceOf(IOException.class);
+        assertThat(Files.readAllBytes(file)).isEqualTo(good);
+        try (var listing = Files.list(tmp)) {
+            assertThat(listing.map(p -> p.getFileName().toString()).filter(n -> n.endsWith(".tmp")).toList()).isEmpty();
+        }
+        assertThat(WorldStore.load(file).chunkCount()).isEqualTo(live.chunkCount());
+    }
 }
