@@ -139,7 +139,31 @@ public final class AdaptiveDirector {
     }
 
     private static String frameHash(Frame f) {
-        return digest(f.toString()); // records + canonical name ordering + locale-independent double text
+        // Preserve the original record text exactly: persisted DTM 1 receipts depend on it.
+        // A single builder avoids intermediate Vec, Unit and collection strings per observation.
+        var text = new StringBuilder(256 + f.units().size() * 160);
+        text.append("Frame[squad=").append(f.squad()).append(", session=").append(f.session())
+                .append(", tick=").append(f.tick()).append(", units=[");
+        boolean separator = false;
+        for (Unit u : f.units()) {
+            if (separator) text.append(", ");
+            separator = true;
+            text.append("Unit[name=").append(u.name()).append(", at=");
+            appendPoint(text, u.at());
+            text.append(", health=").append(u.health()).append(", maxHealth=").append(u.maxHealth())
+                    .append(", seesPlayer=").append(u.seesPlayer()).append(']');
+        }
+        text.append("], player=");
+        appendPoint(text, f.player());
+        text.append(", objective=");
+        appendPoint(text, f.objective());
+        text.append(", objectiveThreatened=").append(f.objectiveThreatened())
+                .append(", weapon=").append(f.weapon()).append(']');
+        return digest(text.toString());
+    }
+
+    private static void appendPoint(StringBuilder text, Vec v) {
+        text.append("Vec[x=").append(v.x()).append(", y=").append(v.y()).append(", z=").append(v.z()).append(']');
     }
 
     private static double distance2(Vec a, Vec b) {

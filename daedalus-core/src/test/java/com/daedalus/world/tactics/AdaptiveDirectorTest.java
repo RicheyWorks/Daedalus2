@@ -20,6 +20,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AdaptiveDirectorTest {
+    @Test void optimizedReceiptsRemainCompatibleWithOriginalRecordHashAndCheckpoint() {
+        var random = new java.util.Random(42);
+        for (int count : new int[] {0, 1, 3, 32, 128, 256}) {
+            var units = new ArrayList<Unit>();
+            for (int i = 0; i < count; i++) {
+                units.add(new Unit("unit-" + i, new Vec(random.nextDouble() * 1.0e8, -0.0, 1.0e-9),
+                        random.nextDouble() * 100, 100, i % 2 == 0));
+            }
+            for (WeaponStyle style : WeaponStyle.values()) {
+                var f = new Frame("pack-1", "session-1", count, units,
+                        new Vec(-1.0e8, 0, -0.0), new Vec(1.0e-10, 0, 1.0e8), count % 2 == 0, style);
+                var decision = AdaptiveDirector.decide(initial(), f);
+                String originalHash = AdaptiveDirector.digest(f.toString());
+                assertThat(decision.memory().frameHash()).isEqualTo(originalHash);
+                var oldReceipt = new Memory("raiders", "session-1", count,
+                        decision.memory().elevatedSamples(), decision.memory().casualtyPressure(), originalHash);
+                assertThat(AdaptiveDirector.decide(TacticalMemory.decode(TacticalMemory.encode(oldReceipt)), f))
+                        .isEqualTo(decision);
+            }
+        }
+    }
+
     @TempDir Path temp;
     private static Unit unit(String name, double health) { return new Unit(name, new Vec(100, 0, 0), health, 100, true); }
     private static Frame frame(long tick, List<Unit> units, Vec player, boolean threat) {
