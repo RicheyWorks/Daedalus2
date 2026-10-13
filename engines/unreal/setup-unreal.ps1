@@ -50,7 +50,9 @@ param(
     [switch]$Connector,   # also open the Claude extension installer (once)
     [switch]$SkipPackage,
     [switch]$NoServerStart,
-    [switch]$WhatIfOnly
+    [switch]$WhatIfOnly,
+    [ValidateSet("greedy", "faces")]
+    [string]$Mesh = "greedy"   # greedy: merged faces, far fewer triangles in the editor (ADR-064); faces: one quad per cube face
 )
 
 $ErrorActionPreference = "Stop"
@@ -563,6 +565,7 @@ $PackageDir = Join-Path (Join-Path $ProjectDir "Saved") "Daedalus"
 $PackageFile = Join-Path $PackageDir "$World.daedalus.zip"
 if (-not $SkipPackage) {
     $url = "$($Server.TrimEnd('/'))/api/v1/world/$World/package"
+    if ($Mesh -eq "greedy") { $url += "?mesh=greedy" }
     Say "World Package" $url
     if ($WhatIfOnly) {
         Write-Host "    would save it to $PackageFile"

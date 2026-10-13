@@ -104,22 +104,31 @@ public class WorldPackageService {
 
     /** The package of world {@code id}, built or reused; null when no such world is mounted. */
     public Built build(String id, String baseUrl) {
+        return build(id, baseUrl, false);
+    }
+
+    /**
+     * As {@link #build(String, String)}; {@code greedy} meshes with {@link WorldMesher#meshGreedy} (merged faces, no
+     * per-cube grain: 3.6x to 80x fewer triangles, ADR-064). The two forms are cached separately.
+     */
+    public Built build(String id, String baseUrl, boolean greedy) {
         WorldService w = hub.get(id);
         if (w == null) {
             return null;
         }
         long revision = w.revision(id);
-        Geometry geo = geometry.get(id);
+        String cacheKey = greedy ? id + "\u0000greedy" : id;
+        Geometry geo = geometry.get(cacheKey);
         if (geo == null || geo.revision != revision) {
             World copy = w.copy(id);
             revision = copy.revision().value();
-            List<WorldMesher.ChunkMesh> chunks = WorldMesher.mesh(copy);
+            List<WorldMesher.ChunkMesh> chunks = greedy ? WorldMesher.meshGreedy(copy) : WorldMesher.mesh(copy);
             long tris = 0;
             for (WorldMesher.ChunkMesh c : chunks) {
                 tris += 2L * (c.opaque().faceCount() + c.translucent().faceCount());
             }
             geo = new Geometry(revision, Glb.write(chunks, "Daedalus World Package v" + VERSION), chunks.size(), tris);
-            geometry.put(id, geo);
+            geometry.put(cacheKey, geo);
             meshes.incrementAndGet();
         }
         // Arks sail and gates open without touching a cube, so the manifest is always written fresh.

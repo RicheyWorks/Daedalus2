@@ -148,3 +148,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   91/91), and MeshFixtureTest checks the quads cover exactly the same unit faces, none twice. Measured: Gallery City
   183k faces -> 51k quads, glb 30.4 MB -> 8.7 MB; Parcels 58k -> 4.9k (9.7 -> 1.0 MB); Bricks 35k -> 436
   (5.8 MB -> 179 KB); World Zero 2.1x.
+- **Unreal imports greedy by default:** the package endpoints take `?mesh=greedy` (cached apart from the per-face
+  mesh; WorldPackageControllerTest 6/6), and `setup-unreal.ps1 -Mesh greedy` (default) / `import_world_package.fetch`
+  ask for it, so an imported Gallery City is 51k quads instead of 183k faces in the editor. `-Mesh faces` keeps the
+  old look with per-cube grain; live_parity still checks the per-face mesh against C++.
