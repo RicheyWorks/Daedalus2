@@ -11,8 +11,10 @@ if ($n -eq 0 -and (Test-Path (Join-Path $Take "frames_jpg"))) { $n = (Get-ChildI
 if ($n -lt 30) { throw "only $n frames in $frames" }
 # UE's PNGs trip ffmpeg's decoder ("chunk too big"); Pillow re-saves them as JPEGs ffmpeg reads cleanly.
 $jpg = Join-Path $Take "frames_jpg"
-if (Test-Path $frames) { & python (Join-Path $PSScriptRoot "normalize_frames.py") $frames $jpg | Out-Null }
-if ($LASTEXITCODE -ne 0) { throw "normalize_frames.py failed" }
+if (Test-Path $frames) {
+    & python (Join-Path $PSScriptRoot "normalize_frames.py") $frames $jpg | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "normalize_frames.py failed" }
+}
 $fps = 30
 $dur = [math]::Round($n / $fps, 2)
 $font = "C\:/Windows/Fonts/segoeuib.ttf"
