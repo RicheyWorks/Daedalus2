@@ -18,3 +18,11 @@ They live on BLACKBEARD in bot-team/art/prometheus_island and C:/Unreal/Daedalus
   complex line traces against the heightmap. It keeps the result only if the mean error is under 3 m, otherwise it restores the old transform.
   It then snaps every PI_ item to the traced surface, keeping each item's designed offset, saves PrometheusIsland + /Game/Prometheus, and re-captures.
 - Blender: `pi_blender_hero_v2.py` with `PIB_PARITY=1` places items from `data/islands/prometheus/ue_transforms.json`, the real UE export; `PIB3=1` gives the v3 framing.
+
+## Hero render modes (pi_blender_hero_v2.py)
+- `PIB_PARITY=1`: place items from the real UE export `ue_transforms.json`. Lanterns are lit.
+- `PIB3=1`: horizon glow tamed, sun behind the camera, frames heart -> stream -> cistern. Tune with `PIB3_UP`, `PIB3_BACK`, `PIB3_SIDE`.
+- `PIB3_FOCUS=water|pens`: close-ups of the water chain or the livestock pens.
+- `PIB4=1`: warm area fills along the gorge plus a faint teal water glow.
+- Final hero: `PIB_PARITY=1 PIB3=1 PIB3_UP=32 PIB4=1 blender -b -P pi_blender_hero_v2.py -- PI_hero_v4.png 256 100` (about 40 s on an RTX 4090).
+- Do not render while another bot holds the editor turn (referee rule, 00:50).
