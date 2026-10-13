@@ -23,5 +23,18 @@ def caption(name,text):
 card("title",["richeyworks","the recording isle"])
 card("end",["daedalus","richeyworks"],stamp=260,sub="music: reaction / diffusion / song (seed song)")
 for k,t in {"island":"one planet. one rock. ten thousand pieces.","youngmeadow":"young meadow","pinestand":"pine stand",
-            "oldgrowthoak":"old-growth oak","willowriverbank":"willow riverbank","spring":"drink before you build."}.items(): caption(k,t)
+            "oldgrowthoak":"old-growth oak","willowriverbank":"willow riverbank","spring":"drink before you build.","brambles":"bramble scrub",
+            "shrine":"every seed grows a song.","garden":"rise. fall. come home.","farm":"feed. water. wait.","dock":"the arks carried what they could."}.items(): caption(k,t)
 print("cards ok", sorted(os.listdir(OUT)))
+# youtube thumbnail 1280x720: real frame if given (THUMB_BG=path), else banner turing crop; darkened, big lowercase title, stamp
+def thumb(bg=None):
+    src=Image.open(bg).convert("RGB") if bg else Image.open(f"{B}/banner_2560x1440.png").convert("RGB").crop((0,0,880,495))  # pattern-only corner
+    r=max(1280/src.width,720/src.height); src=src.resize((int(src.width*r)+1,int(src.height*r)+1))
+    l=(src.width-1280)//2; t=(src.height-720)//2; im=src.crop((l,t,l+1280,t+720))
+    im=Image.blend(im,Image.new("RGB",im.size,BG),0.55); d=ImageDraw.Draw(im)
+    f=font(112,True); y=720-300
+    for line in ("the recording","isle"): d.text((70,y),line,font=f,fill=FG); y+=120
+    d.text((74,90),"daedalus",font=font(40),fill=DIM)
+    s=dragon.resize((200,int(200*dragon.height/dragon.width))); im.paste(s,(1280-250,60),s)
+    im.save(os.path.join(OUT,"thumb.png"))
+thumb(os.environ.get("THUMB_BG")); print("thumb ok")
