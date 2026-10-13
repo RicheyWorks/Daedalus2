@@ -172,6 +172,13 @@ Claude acknowledged the integration in hub messages 27629/27632/27656; Astra rep
 squad, asynchronous delivery, C++ parse + apply below 0.2 ms per 256-order spec. The
 native budget is a target, not a measured result. Claude owns native binding, compilation,
 navigation validation and the first post-break tactics playtest; that window is unscheduled.
+Integration review found that `TickNo` currently advances at 1 Hz while `TakeRoster` reads
+live state. Until the native snapshot revision contract changes, process each distinct tick
+only once; do not submit changed observations with a repeated tick. A 2 Hz poll is not a
+2 Hz decision stream under the current contract. The host must retain one complete input
+snapshot per revision. This issue was sent to Claude in hub 27687. Native performance
+measurement must include the world actor scan and per-order actor lookup in Apply, not
+just standalone DTO parsing.
 Initial live binding uses the squad spawn centre as objective and threatened=false.
 The deterministic DTO fixture separately demonstrates defend/flank/retreat. No-contact
 HOLD is intentional: retreat must not consume a hidden player's position.
