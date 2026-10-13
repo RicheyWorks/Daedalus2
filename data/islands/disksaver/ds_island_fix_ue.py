@@ -6,7 +6,7 @@ import unreal, os, time, math
 T0 = time.time(); LIMIT = 330
 SUB = "/Game/DiskSaver/Maps/Island_DiskSaver"; TAG = "DS_Island"; MAP = "/Game/Daedalus/DaedalusWorld"
 GLB = r"C:\Users\730ri\projects\bot-team\art\NOTES\disksaver\glb"
-SHOT = r"C:\Users\730ri\projects\bot-team\art\NOTES\disksaver\diskSaver_island_v2.png"
+SHOT = r"C:\Users\730ri\projects\bot-team\art\NOTES\disksaver\diskSaver_island_v3.png"
 eal = unreal.EditorAssetLibrary; eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
 out = {"reimported": 0, "swapped": 0, "materials": 0, "hooks": {}, "missing": [], "notes": []}
@@ -38,18 +38,32 @@ def lab(a): return a.get_actor_label()
 def smc(a):
     try: return a.static_mesh_component
     except Exception: return None
-# ---------- 1. meshes: overwrite-reimport our glbs (offsets now baked into vertices) and point actors at them
-def first_mesh(folder):
-    if eal.does_directory_exist(folder):
-        for p in eal.list_assets(folder, True, False):
-            x = unreal.load_asset(p)
-            if isinstance(x, unreal.StaticMesh): return x
+# ---------- 1. meshes: actors are identified by their mesh ASSET FOLDER (labels are often just "Cube").
+ART_ROOTS = ("/Game/DiskSaver/Art/", "/Game/Daedalus/Art/")
+def asset_of(a):
+    c = smc(a)
+    if not c or not c.static_mesh: return None
+    p = c.static_mesh.get_path_name()
+    for r in ART_ROOTS:
+        if p.startswith(r):
+            parts = p.split("/")
+            return parts[5] if len(parts) > 5 else None
     return None
 names = {}
 for a in mine:
-    c = smc(a)
-    if c and c.static_mesh and "_DS_" in c.static_mesh.get_name() and ("Tree" in c.static_mesh.get_name() or not c.static_mesh.get_path_name().startswith("/Game/DiskSaver/")):
-        names.setdefault(c.static_mesh.get_name(), []).append(a)
+    n = asset_of(a)
+    if n and "_DS_" in n: names.setdefault(n, []).append(a)
+out["distinct_assets"] = len(names)
+def own_mesh(n):
+    p = "/Game/DiskSaver/Art/%s/%s/%s" % (n.split("_")[0], n, n)
+    if eal.does_asset_exist(p): return unreal.load_asset(p)
+    d = "/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n)
+    if eal.does_directory_exist(d):
+        for q in eal.list_assets(d, True, False):
+            if q.split("/")[-1].split(".")[0] == n:
+                x = unreal.load_asset(q)
+                if isinstance(x, unreal.StaticMesh): return x
+    return None
 tasks = []
 for n in names:
     f = os.path.join(GLB, n + ".glb")
@@ -57,87 +71,108 @@ for n in names:
     t = unreal.AssetImportTask(); t.filename = f; t.destination_path = "/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n)
     t.destination_name = n; t.automated = True; t.save = True; t.replace_existing = True; tasks.append(t)
 for i in range(0, len(tasks), 10):
-    if late(): out["notes"].append("reimport cut by time"); break
+    if late(): out["notes"].append("reimport cut early"); break
     unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i+10]); out["reimported"] += len(tasks[i:i+10])
 for n, acts in names.items():
     if late(): break
-    m = first_mesh("/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n))
-    if m is None: continue
+    m = own_mesh(n)
+    if m is None: out["notes"].append("no single mesh " + n) if len(out["notes"]) < 30 else None; continue
     for a in acts:
         if smc(a).static_mesh != m: smc(a).set_static_mesh(m); out["swapped"] += 1
-# ---------- 2. materials: grass ground, stone skirt, visible water (instances under /Game/DiskSaver/Materials)
-mel = unreal.MaterialEditingLibrary; at = unreal.AssetToolsHelpers.get_asset_tools()
-def mic(name, parent_path, rgb, opacity=None):
-    path = "/Game/DiskSaver/Materials/" + name
-    if eal.does_asset_exist(path): return unreal.load_asset(path)
-    parent = unreal.load_asset(parent_path)
-    if parent is None: out["notes"].append("no parent " + parent_path); return None
-    mi = at.create_asset(name, "/Game/DiskSaver/Materials", unreal.MaterialInstanceConstant, unreal.MaterialInstanceConstantFactoryNew())
-    mel.set_material_instance_parent(mi, parent)
-    vn = [str(x) for x in mel.get_vector_parameter_names(parent)]
-    pick = [x for x in vn if "color" in x.lower() or "base" in x.lower() or "tint" in x.lower()] or vn
-    if pick: mel.set_material_instance_vector_parameter_value(mi, pick[0], unreal.LinearColor(rgb[0], rgb[1], rgb[2], 1.0))
-    else: out["notes"].append(name + ": parent has no vector params")
-    if opacity is not None:
-        for s in [str(x) for x in mel.get_scalar_parameter_names(parent)]:
-            if "opac" in s.lower(): mel.set_material_instance_scalar_parameter_value(mi, s, opacity)
+        if lab(a).startswith("Cube") or lab(a) == "": a.set_actor_label(n)
+# ---------- 2. materials: own tint parents (Color vector param) + instances under /Game/DiskSaver/Materials
+mel = unreal.MaterialEditingLibrary; at = unreal.AssetToolsHelpers.get_asset_tools(); MD = "/Game/DiskSaver/Materials"
+def tint_parent(name, translucent):
+    p = MD + "/" + name
+    if eal.does_asset_exist(p): return unreal.load_asset(p)
+    m = at.create_asset(name, MD, unreal.Material, unreal.MaterialFactoryNew())
+    v = mel.create_material_expression(m, unreal.MaterialExpressionVectorParameter, -400, 0)
+    v.set_editor_property("parameter_name", "Color"); v.set_editor_property("default_value", unreal.LinearColor(1, 1, 1, 1))
+    mel.connect_material_property(v, "", unreal.MaterialProperty.MP_BASE_COLOR)
+    r = mel.create_material_expression(m, unreal.MaterialExpressionScalarParameter, -400, 200)
+    r.set_editor_property("parameter_name", "Roughness"); r.set_editor_property("default_value", 0.8)
+    mel.connect_material_property(r, "", unreal.MaterialProperty.MP_ROUGHNESS)
+    if translucent:
+        m.set_editor_property("blend_mode", unreal.BlendMode.BLEND_TRANSLUCENT)
+        o = mel.create_material_expression(m, unreal.MaterialExpressionScalarParameter, -400, 350)
+        o.set_editor_property("parameter_name", "Opacity"); o.set_editor_property("default_value", 0.6)
+        mel.connect_material_property(o, "", unreal.MaterialProperty.MP_OPACITY)
+    mel.recompile_material(m); eal.save_asset(p); return m
+def mic(name, parent, rgb, rough=0.8, opacity=None):
+    path = MD + "/" + name
+    mi = unreal.load_asset(path) if eal.does_asset_exist(path) else at.create_asset(name, MD, unreal.MaterialInstanceConstant, unreal.MaterialInstanceConstantFactoryNew())
+    mel.set_material_instance_parent(mi, parent)   # existing round-2 instances are re-parented, not deleted
+    mel.set_material_instance_vector_parameter_value(mi, "Color", unreal.LinearColor(rgb[0], rgb[1], rgb[2], 1.0))
+    mel.set_material_instance_scalar_parameter_value(mi, "Roughness", rough)
+    if opacity is not None: mel.set_material_instance_scalar_parameter_value(mi, "Opacity", opacity)
     eal.save_asset(path); out["materials"] += 1; return mi
-grass = mic("MI_DS_Grass", "/Game/Daedalus/Materials/M_DaedalusOpaque", (0.20, 0.55, 0.16))
-stone = unreal.load_asset("/Game/Daedalus/Materials/M_Stone") or mic("MI_DS_Stone", "/Game/Daedalus/Materials/M_DaedalusOpaque", (0.42, 0.42, 0.45))
-water = mic("MI_DS_Water", "/Game/Daedalus/Materials/M_DaedalusTranslucent", (0.12, 0.38, 0.85), 0.65)
+P_OP = tint_parent("M_DS_Tint", False); P_TR = tint_parent("M_DS_TintWater", True)
+grass = mic("MI_DS_Grass", P_OP, (0.13, 0.42, 0.10)); stone = mic("MI_DS_Stone", P_OP, (0.35, 0.34, 0.33), 0.9)
+water = mic("MI_DS_Water", P_TR, (0.05, 0.25, 0.75), 0.1, 0.6); leaf = mic("MI_DS_Leaf", P_OP, (0.16, 0.50, 0.14))
 for a in mine:
     L = lab(a); c = smc(a)
     if not c: continue
-    if L == "DS_Ground" and grass: c.set_material(0, grass); hook("grass")
-    elif L == "DS_RockSkirt" and stone: c.set_material(0, stone); hook("stone")
-    elif L.startswith("W3_Stream") and water: c.set_material(0, water); hook("water_plane")
-# ---------- 3. gameplay hooks (DaedalusLink classes; skipped cleanly if a class is not compiled)
+    if L == "DS_Ground": c.set_material(0, grass); hook("grass")
+    elif L == "DS_RockSkirt": c.set_material(0, stone); hook("stone")
+    elif L.startswith("W3_Stream"): c.set_material(0, water); hook("water_plane")
+    elif L.startswith("W4_Pond") or L.startswith("W8_Cistern"):
+        for i, mt in enumerate(c.get_materials()):
+            if mt and "water" in mt.get_name().lower(): c.set_material(i, water); hook("water_slot")
+    n = asset_of(a)
+    if n and "_DS_Tree_" in n:
+        for i, mt in enumerate(c.get_materials()):
+            if mt and "leaf" in mt.get_name().lower(): c.set_material(i, leaf); hook("leaf_slot")
+# ---------- 3. gameplay hooks by asset name (DaedalusLink classes; skipped cleanly if not compiled)
+have = set(lab(x) for x in eas.get_all_level_actors())
 def spawn(cls, loc, label, tags):
-    x = eas.spawn_actor_from_class(cls, loc, unreal.Rotator(0, 0, 0))
+    if label in have: return None
+    x = eas.spawn_actor_from_class(cls, loc, unreal.Rotator(0, 0, 0)); have.add(label)
     x.tags = [TAG] + tags; x.set_folder_path("DiskSaver/Gameplay"); x.set_actor_label(label); return x
 DRINK = ("W1_Spring", "W2_Well", "W6_Bucket", "W6_Canteen")
 RAW = ("W3_Stream", "W4_Pond", "W8_Cistern", "W7_Gutter", "W9_Trough")
+PROD = {"ByteHen": ("Egg", 4.0), "MossGoat": ("GoatMilk", 8.0), "TidePig": ("Manure", 6.0), "CacheCow": ("Milk", 10.0), "DriftDuck": ("Egg", 5.0)}
+k = 0
 for a in mine:
     if late(): break
-    L = lab(a); loc = a.get_actor_location(); tags = [str(t) for t in a.tags]
-    if L.startswith(DRINK) or L.startswith(RAW):
-        q = "Drinkable" if L.startswith(DRINK) else "RawWater"
-        if q not in tags: a.tags = tags + ["DS_Water", q]; hook("water_tag_" + q)
-        if hasattr(unreal, "DaedalusWaterSource") and not L.startswith("W3_Stream_") or (L == "W3_Stream_0" and hasattr(unreal, "DaedalusWaterSource")):
+    k += 1
+    L = lab(a); loc = a.get_actor_location(); tags = [str(t) for t in a.tags]; n = asset_of(a) or ""
+    if (L.startswith(DRINK) or L.startswith(RAW)) and "DS_Water" not in tags:
+        q = "Drinkable" if L.startswith(DRINK) else "RawWater"; a.tags = tags + ["DS_Water", q]; hook("water_tag_" + q)
+        if hasattr(unreal, "DaedalusWaterSource") and not (L.startswith("W3_Stream_") and L != "W3_Stream_0"):
             ws = spawn(unreal.DaedalusWaterSource, loc, "DS_WaterSource_" + L, ["DS_WaterLogic"])
-            try: ws.set_editor_property("quality", "clean" if q == "Drinkable" else "raw")
-            except Exception as e: out["notes"].append("WaterSource prop: " + str(e)[:80])
-            hook("WaterSource")
+            if ws:
+                try: ws.set_editor_property("quality", "clean" if q == "Drinkable" else "raw")
+                except Exception as e: out["notes"].append("WaterSource prop: " + str(e)[:80])
+                hook("WaterSource")
     if L.startswith("W5_FilterBarrel") and hasattr(unreal, "DaedalusWaterFilter"):
-        spawn(unreal.DaedalusWaterFilter, loc + unreal.Vector(0, -120, 0), "DS_Filter_" + L, ["DS_WaterTreat", "Filter"]); hook("WaterFilter")
-    if L.startswith(("Prop_DS_Cauldron", "Prop_DS_Campfire")) and hasattr(unreal, "DaedalusKettle"):
-        spawn(unreal.DaedalusKettle, loc + unreal.Vector(0, 150, 0), "DS_BoilKettle_" + L, ["DS_WaterTreat", "Boil"]); hook("Kettle_boil")
-    if L.startswith(("Prop_DS_HerbCompressor", "Prop_DS_DryingRack")) and hasattr(unreal, "DaedalusKettle"):
-        k = spawn(unreal.DaedalusKettle, loc + unreal.Vector(150, 0, 0), "DS_Brew_" + ("Compressor" if "Compressor" in L else "TeaRack"), ["DS_Brew"])
-        hook("Kettle_brew")
-    if "_DS_Herb_" in L and L.endswith("_S3") or ("_DS_Herb_" in L and "_S3" in L):
+        if spawn(unreal.DaedalusWaterFilter, loc + unreal.Vector(0, -120, 0), "DS_Filter_" + L, ["DS_WaterTreat", "Filter"]): hook("WaterFilter")
+    if ("_DS_Cauldron" in n or "_DS_Campfire" in n) and hasattr(unreal, "DaedalusKettle"):
+        if spawn(unreal.DaedalusKettle, loc + unreal.Vector(0, 150, 0), "DS_BoilKettle_%d" % k, ["DS_WaterTreat", "Boil"]): hook("Kettle_boil")
+    if ("_DS_HerbCompressor" in n or "_DS_DryingRack" in n) and hasattr(unreal, "DaedalusKettle"):
+        if spawn(unreal.DaedalusKettle, loc + unreal.Vector(150, 0, 0), "DS_Brew_" + ("Compressor" if "Compressor" in n else "TeaRack_%d" % k), ["DS_Brew"]): hook("Kettle_brew")
+    if "_DS_Herb_" in n and "_S3" in n and "DS_Herb" not in tags:
+        sp = n.split("_DS_Herb_")[1].split("_")[0]
+        a.tags = tags + ["DS_Herb", "Harvestable", sp]; hook("herb_tag")
         if hasattr(unreal, "DaedalusStarbloom"):
-            sp = L.split("_DS_Herb_")[1].split("_")[0]
-            b = spawn(unreal.DaedalusStarbloom, loc, "DS_Herb_" + sp + "_%d" % out["hooks"].get("Starbloom", 0), ["DS_Herb", "Harvestable", sp])
-            try:
-                b.set_editor_property("species", sp)
-                if smc(a) and smc(a).static_mesh: b.get_editor_property("body").set_static_mesh(smc(a).static_mesh)
-                a.set_actor_hidden_in_game(True)   # the Starbloom carries the same mesh and is pickable; original kept, not deleted
-            except Exception as e: out["notes"].append("Starbloom: " + str(e)[:80])
-            hook("Starbloom")
-        else:
-            a.tags = tags + ["DS_Herb", "Harvestable"]; hook("herb_tag")
-    if L.startswith("Mob_DS_"):
-        sp = L.split("Mob_DS_")[1].split("_")[0]
+            b = spawn(unreal.DaedalusStarbloom, loc, "DS_Herb_%s_%d" % (sp, k), ["DS_Herb", "Harvestable", sp])
+            if b:
+                try:
+                    b.set_editor_property("species", sp)
+                    b.get_editor_property("body").set_static_mesh(smc(a).static_mesh)
+                    a.set_actor_hidden_in_game(True)   # pickable Starbloom carries the same mesh; original kept, not deleted
+                except Exception as e: out["notes"].append("Starbloom: " + str(e)[:80])
+                hook("Starbloom")
+    if n.startswith("Mob_DS_") and "DS_Livestock" not in tags:
+        sp = n.split("Mob_DS_")[1].split("_")[0]
         a.tags = tags + ["DS_Livestock", sp, "Pen_West", "Feeds_W9_Trough"]; hook("livestock_tag")
         if hasattr(unreal, "DaedalusLivestock"):
-            PROD = {"ByteHen": ("Egg", 4.0), "MossGoat": ("GoatMilk", 8.0), "TidePig": ("Manure", 6.0), "CacheCow": ("Milk", 10.0), "DriftDuck": ("Egg", 5.0)}
-            l = spawn(unreal.DaedalusLivestock, loc, "DS_Livestock_" + sp + "_%d" % out["hooks"].get("Livestock", 0), ["DS_LivestockLogic"])
-            for k, v in (("species", sp), ("product", PROD.get(sp, ("", 5.0))[0]), ("produce_every_min", PROD.get(sp, ("", 5.0))[1])):
-                try: l.set_editor_property(k, v)
-                except Exception: pass
-            a.attach_to_actor(l, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
-            hook("Livestock")
+            l = spawn(unreal.DaedalusLivestock, loc, "DS_Livestock_%s_%d" % (sp, k), ["DS_LivestockLogic"])
+            if l:
+                for kk, v in (("species", sp), ("product", PROD.get(sp, ("", 5.0))[0]), ("produce_every_min", PROD.get(sp, ("", 5.0))[1])):
+                    try: l.set_editor_property(kk, v)
+                    except Exception: pass
+                a.attach_to_actor(l, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
+                hook("Livestock")
 for cls in ("DaedalusWaterSource", "DaedalusLivestock", "DaedalusWaterFilter", "DaedalusKettle", "DaedalusStarbloom"):
     if not hasattr(unreal, cls): out["notes"].append(cls + " not compiled: skipped")
 # ---------- 4. save our sublevel + DaedalusWorld, screenshot

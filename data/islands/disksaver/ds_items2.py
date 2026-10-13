@@ -24,6 +24,10 @@ def box(col,sx,sy,sz,x,y,z,m):
 def export(name,col):
     bpy.ops.object.select_all(action='DESELECT')
     for o in col.objects: o.select_set(True)
+    obs=list(col.objects)
+    if len(obs)>1:   # one mesh per asset, named after it: Unreal imports one StaticMesh <name> (no stray Cube/Cube.001 parts)
+        bpy.context.view_layer.objects.active=obs[0]; bpy.ops.object.join()
+    o=col.objects[0]; o.name=name; o.data.name=name
     bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),use_selection=True,export_format='GLB',export_apply=True)
 made=[]
 def asset(name,kind,size,build):
