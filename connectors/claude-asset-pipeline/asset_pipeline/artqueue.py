@@ -473,12 +473,14 @@ class Watcher:
             return (asset, kind, {"objects": names, "source": "prebuilt", "glb": glb_path, "sent": sent})
         # Open the file, never at the cost of someone's unsaved work.
         if os.path.exists(blend):
-            opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))["result"]
+            opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))
+            opened = wire.obj(opened, "Blender", "opening the .blend")
             if opened.get("blocked"):
                 self.update(asset, "WAITING: Blender has unsaved work in %s; save it and I'll continue" % opened.get("current", "another file"))
                 self.event(asset, "waiting", why="unsaved work in Blender")
                 return (asset, "WAITING")
-        objects = wire.call(self.blender, "execute_code", side="Blender", code=PICK_OBJECTS % json.dumps(asset))["result"]
+        objects = wire.call(self.blender, "execute_code", side="Blender", code=PICK_OBJECTS % json.dumps(asset))
+        objects = wire.obj(objects, "Blender", "picking the objects")
         if not objects["objects"]:
             self.update(asset, "REJECTED: no meshes (make a collection named %s, or save %s\\%s.blend)" % (asset, kind, asset))
             self.event(asset, "rejected", why="no meshes")
@@ -488,7 +490,10 @@ class Watcher:
         return (asset, kind, objects)
 
     def ship_one(self, asset):
-        got = self.prepare(asset)
+        try:
+            got = self.prepare(asset)
+        except Exception as e:   # Blender answered oddly (or went away): the asset is not at fault
+            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e))
         if len(got) == 2:
             return got
         _, kind, objects = got
@@ -501,7 +506,7 @@ class Watcher:
                 report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
                                    os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
         except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
-            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
+            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e))
         return self.finish(asset, kind, report)
 
     def ship_overlapped(self, assets):
@@ -539,12 +544,12 @@ class Watcher:
                 break
             a, kind, rep, err = item
             if err is not None:
-                results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error"))
+                results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error", trace=_trace(err)))
                 continue
             try:
                 rep = self.ship.land(rep, "/Game/Daedalus/Art/" + kind, True, self.unreal)
             except Exception as e:
-                results.append(self.block(a, "pipeline error: %s" % str(e)[:120], "error"))
+                results.append(self.block(a, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e)))
                 if isinstance(e, OSError):   # Unreal went away: let the Blender side stop early
                     stop.set()
                 continue
@@ -583,11 +588,19 @@ class Watcher:
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
 
-    def block(self, asset, why, event):
+    def block(self, asset, why, event, trace=None):
         self.blocked_at[asset] = self.clock()
         self.update(asset, "BLOCKED: %s" % why, "not the asset's fault; retrying every %d s" % BLOCKED_RETRY_S)
-        self.event(asset, event, why=why)
+        if trace:   # the feed keeps where it broke, so a one-line BLOCKED cell can be traced
+            self.event(asset, event, why=why, trace=trace)
+        else:
+            self.event(asset, event, why=why)
         return (asset, "BLOCKED")
+
+
+def _trace(e, keep=1500):
+    """The tail of an exception's traceback (file:line of each frame), kept short for feed.jsonl."""
+    return "".join(traceback.format_exception(type(e), e, e.__traceback__))[-keep:]
 
 
 PLAYING = "import unreal\nresult = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_game_world() is not None\n"
