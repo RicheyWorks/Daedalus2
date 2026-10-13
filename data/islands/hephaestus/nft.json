@@ -8,7 +8,10 @@
   "Herbs": "Forge Temper (magma | spring | dual)",
   "Livestock": "Emberhen, Ashgoat, Forgeox, Lavaboar, Cinderwool, Vent Bees",
   "Items": 119,
-  "Builder": "Hephaestus (Team Grok)"
+  "Builder": "Hephaestus (Team Grok)",
+  "HeroShot": "Play viewport (round-2 SceneCapture was near-black)"
  },
- "hero_image": "bot-team/shots/hephaestus/hero_r2.png (round-2 SceneCapture2D forge overlook); play shot hero_unreal_play.png"
+ "hero_image": "bot-team/shots/hephaestus/hero_unreal_play.png",
+ "hero_image_fallback": "bot-team/shots/hephaestus/hero_r2.png",
+ "hero_image_note": "Primary is the round-2 20s PIE Play shot (1280x720). hero_r2.png is the round-2 SceneCapture2D forge overlook fallback (1920x1080); it came out near-black (mean RGB ~0.1), so use it only if the Play shot is missing."
 }

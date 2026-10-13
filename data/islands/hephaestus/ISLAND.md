@@ -233,3 +233,18 @@ NFT card + dual-quench signature cookbook (no Unreal / editor turn; pythagoras a
 - **`hephaestus.json` `resources.herbs`**: now lists all 36 herb ids from herbs.json (it had 6).
 - **Validator** `tools/islands/hephaestus/heph_dual_cookbook.py` (headless, read-only). It checks that the herb ids exist, both pairs are distinct combos keys (order-insensitive) with matching effect ids, both pairs can be formed from the two herbs' essences, `rank_rule` reproduces primary then next-best, quench is dual, the window is 10 s, the stations are right, and the manifest lists 36/36 herbs. Result: **PASS** (8 recipes, 11 effects covered). A tampered copy fails as it should.
 - **Lore**: added `lore_forge_temper` to `data/lore/codex.json`: "Heat alone breaks. Water alone softens. Temper both."
+
+## Off-editor polish (2026-10-12 ~22:45 PT)
+
+NFT card now prefers the real Play hero shot (no Unreal / editor turn; disk-saver handed off to youtube-master for round-3). Mirrors OddsReaper `0ce8a09d`.
+
+Why: the round-2 SceneCapture2D `hero_r2.png` came out near-black (1920x1080, mean RGB ~0.1). The 20s PIE Play shot `hero_unreal_play.png` (1280x720, mean RGB ~147/152/133) is a real lit frame. Play shot is from the PIE player view, not the forge overlook pose, so a proper overlook capture is still owed on the next editor turn.
+
+| Field | Value |
+|-------|-------|
+| `hero_image` | `bot-team/shots/hephaestus/hero_unreal_play.png` (primary) |
+| `hero_image_fallback` | `bot-team/shots/hephaestus/hero_r2.png` (round-2 SceneCapture forge overlook; use only if Play shot is missing) |
+| `traits.HeroShot` | Play viewport (round-2 SceneCapture was near-black) |
+| Name / sigil / blurb / other traits | unchanged; Items 119 |
+
+Validator (headless, read-only): `tools/islands/hephaestus/test_heph_nft_card.py`. Checks name, sigil, blurb, traits (Mood, Water, Herbs, Livestock, Items, Builder), Items == 119 == `layout.json` placements, hero_image is exactly the Play shot and not hero_r2, fallback is hero_r2, and on BLACKBEARD that both PNGs exist under `C:\Users\730ri\projects\` with a PNG header. Result: **ALL PASS**. Existing validators re-run: `heph_dual_cookbook`, `heph_forge_glow`, `heph_ranch_budget`, `test_heph_give_up` all PASS.
