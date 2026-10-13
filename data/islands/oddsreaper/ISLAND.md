@@ -125,6 +125,10 @@ The 23:01 turn held storm only via the director path (volumes=0). Off-editor dia
 
 Storm MoodVolume path is fixed off-editor (flush_level_streaming + mood=oddsreaper_storm fallback; commit ef0d9c69). On the next OddsReaper editor turn:
 
-1. Verify Play hero still gates green: ot-team/shots/oddsreaper/hero_unreal_play.png must stay stormish (round-3c was mean RGB ~76/65/47 lum~66). If daylightish_rgb / lum>140, re-force storm in PIE, settle, re-shot.
+1. Verify Play hero still gates green: bot-team/shots/oddsreaper/hero_unreal_play.png must stay stormish (round-3c was mean RGB ~76/65/47 lum~66). If daylightish_rgb / lum>140, re-force storm in PIE, settle, re-shot.
 2. Confirm MoodVolume path now finds volumes after flush (log volumes_all / vmatch / flushed); director fallback is fine but volume pin is preferred.
 3. Do not force storm at BeginPlay on the shared DaedalusWorld. HANDOFF via OR_NEXT when done.
+
+## Round-4 off-editor: full mood CSV sync gate (Oct 12, 2026, 23:40 PT)
+
+mood.json now mirrors every column of the wild_biomes_moods.csv oddsreaper_storm row (added FogHeightFalloff 0.4 + FogStartDistance 0). test_mood_row.py parses SunColor/SkyColor/FogColor and asserts all scalars + mpc_storm + pie_hour 18.75 — the data-table half of the daylight-hero diagnosis. No Unreal touched.

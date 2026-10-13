@@ -2,15 +2,30 @@
   "id": "oddsreaper_storm",
   "source_csv": "engines/unreal/DaedalusLink/Content/Python/wild_biomes_moods.csv",
   "note": "Canonical OddsReaper sky mood row. set_mood('oddsreaper_storm') reads this CSV via daedalus_sky_director; a missing/mismatched row falls back to young_meadow daylight (round-2 Play hero bug class).",
-  "SunColor": {"R": 0.62, "G": 0.6, "B": 0.95, "A": 1.0},
+  "SunColor": {
+    "R": 0.62,
+    "G": 0.6,
+    "B": 0.95,
+    "A": 1.0
+  },
   "SunIntensity": 6.0,
-  "SkyColor": {"R": 0.55, "G": 0.6, "B": 0.9, "A": 1.0},
+  "SkyColor": {
+    "R": 0.55,
+    "G": 0.6,
+    "B": 0.9,
+    "A": 1.0
+  },
   "SkyLightIntensity": 0.6,
-  "FogColor": {"R": 0.08, "G": 0.3, "B": 0.2, "A": 1.0},
+  "FogColor": {
+    "R": 0.08,
+    "G": 0.3,
+    "B": 0.2,
+    "A": 1.0
+  },
   "FogMultiplier": 2.2,
-  "DefaultWeather": "Storm",
   "FogHeightFalloff": 0.4,
   "FogStartDistance": 0,
+  "DefaultWeather": "Storm",
   "pie_hour": 18.75,
   "mpc_storm": {
     "WindStrength": 0.95,
