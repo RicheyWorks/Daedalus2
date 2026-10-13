@@ -86,6 +86,22 @@ def call(kind, timeout=60, **params):
     return r.get("result", {})
 
 
+def free_ram_gb():
+    """Free physical RAM in GB (Windows GlobalMemoryStatusEx; no psutil needed). None if unknown."""
+    try:
+        import ctypes
+        class M(ctypes.Structure):
+            _fields_ = [("len", ctypes.c_ulong), ("load", ctypes.c_ulong), ("total", ctypes.c_ulonglong),
+                        ("avail", ctypes.c_ulonglong), ("tp", ctypes.c_ulonglong), ("ap", ctypes.c_ulonglong),
+                        ("tv", ctypes.c_ulonglong), ("av", ctypes.c_ulonglong), ("ext", ctypes.c_ulonglong)]
+        m = M(); m.len = ctypes.sizeof(M)
+        return m.avail / 2**30 if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)) else None
+    except Exception: return None
+
+
+RAM_MIN_GB = float(os.environ.get("HEPH_RAM_MIN_GB", "1.0"))  # team rule 20:05: no imports under 1 GB free
+
+
 def left(): return (HARD_STOP - dt.timedelta(seconds=SAVE_S) - dt.datetime.now()).total_seconds()
 
 
@@ -118,7 +134,14 @@ def main():
     if p is None: raise RuntimeError(f"bridge 127.0.0.1:{PORT} never answered")
     say(f"editor: {p.get('level')} playing={p.get('playing')}")
     if p.get("playing"): call("stop")
-    code = (f"import runpy,sys; sys.path.insert(0, r'{TOOL}'); "
+    ram = free_ram_gb()
+    for _ in range(6):  # give the box up to ~60s to free memory before deciding
+        if ram is None or ram >= RAM_MIN_GB or left() < 120: break
+        say(f"RAM guard: {ram:.2f} GB free < {RAM_MIN_GB} GB; waiting"); time.sleep(10); ram = free_ram_gb()
+    low = ram is not None and ram < RAM_MIN_GB
+    say(f"RAM {'unknown' if ram is None else f'{ram:.2f} GB'} free; imports {'SKIPPED (place-only)' if low else 'allowed'}")
+    if low: link(f"DOING island:hephaestus: RAM guard {ram:.2f} GB free < {RAM_MIN_GB} GB, place-only turn (no glb imports)")
+    code = (f"import os,runpy,sys; os.environ['HEPH_NO_IMPORT']='{'1' if low else '0'}'; sys.path.insert(0, r'{TOOL}'); "
             f"result = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_turn')['run']()")
     isle = call("execute_python", timeout=int(max(30, left() - 25)), code=code).get("result"); say(f"island: {isle}")
     if isle and left() > 20:

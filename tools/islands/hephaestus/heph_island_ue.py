@@ -90,6 +90,10 @@ def link_note(text):
 
 
 def import_missing(names):
+    # RAM guard (team rule 20:05, disk-saver pattern): heph_turn sets HEPH_NO_IMPORT=1 when free RAM < 1 GB, so the turn
+    # only places meshes already in Content (preflight: all 72 present) and never risks an out-of-memory editor crash.
+    if os.environ.get("HEPH_NO_IMPORT") == "1":
+        log("RAM guard: imports skipped (HEPH_NO_IMPORT=1)"); return 0
     tasks = []
     for n in names:
         f = os.path.join(GLB, n + ".glb")
