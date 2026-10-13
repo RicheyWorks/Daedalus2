@@ -1,51 +1,57 @@
-﻿{
-    "name":  "Prometheus Island",
-    "description":  "Prometheus Island was grown, not built: its ridges and gorges come from a single Turing reaction-diffusion seed, and a spring at the summit feeds the stream that cuts through them. At its heart a jukebox keeps the island song, and twelve herb beds ring the garden on the circle of fifths, so a major triad heals, a fifth shields and a tritone poisons. The livestock wear coats grown from the same equations, and each one sings its genome as a call.",
-    "image":  "data/islands/prometheus/shots/PI_hero_v4.png",
-    "attributes":  [
-                       {
-                           "value":  "Grok",
-                           "trait_type":  "Team"
-                       },
-                       {
-                           "value":  "Turing seed 15, 480 m, 38 m peak",
-                           "trait_type":  "Terrain"
-                       },
-                       {
-                           "value":  500,
-                           "trait_type":  "Items built"
-                       },
-                       {
-                           "value":  485,
-                           "trait_type":  "Items placed in Unreal"
-                       },
-                       {
-                           "value":  "spring -\u003e 40-segment stream -\u003e 6 cisterns -\u003e 16 pipes -\u003e 12 troughs; 12 rain catchers; 10-part solar still",
-                           "trait_type":  "Water chain"
-                       },
-                       {
-                           "value":  "12 beds on the circle of fifths, 108 herb meshes; triad=heal, fifth=shield, triplet=speed, tritone=poison",
-                           "trait_type":  "Herb system"
-                       },
-                       {
-                           "value":  18,
-                           "trait_type":  "Livestock"
-                       },
-                       {
-                           "value":  "18 genome calls (11 sounds)",
-                           "trait_type":  "Livestock calls"
-                       },
-                       {
-                           "value":  "Turing-pattern coats (8 base + 3 bred)",
-                           "trait_type":  "Coats"
-                       },
-                       {
-                           "value":  "Jukebox + record presser",
-                           "trait_type":  "Heart"
-                       },
-                       {
-                           "value":  "prometheus/island",
-                           "trait_type":  "Branch"
-                       }
-                   ]
+{
+  "name": "Prometheus Island",
+  "description": "Prometheus Island was grown, not built: its ridges and gorges come from a single Turing reaction-diffusion seed, and a spring at the summit feeds the stream that cuts through them. At its heart a jukebox keeps the island song, and twelve herb beds ring the garden on the circle of fifths, so a major triad heals, a fifth shields and a tritone poisons. The livestock wear coats grown from the same equations, and each one sings its genome as a call.",
+  "image": "data/islands/prometheus/shots/PI_hero_v4.png",
+  "attributes": [
+    {
+      "value": "Grok",
+      "trait_type": "Team"
+    },
+    {
+      "value": "Turing seed 15, 480 m, 38 m peak",
+      "trait_type": "Terrain"
+    },
+    {
+      "value": 500,
+      "trait_type": "Items built"
+    },
+    {
+      "value": 485,
+      "trait_type": "Items placed in Unreal"
+    },
+    {
+      "value": "spring -> 40-segment stream -> 6 cisterns -> 16 pipes -> 12 troughs; 12 rain catchers; 10-part solar still",
+      "trait_type": "Water chain"
+    },
+    {
+      "value": "12 beds on the circle of fifths, 108 herb meshes; triad=heal, fifth=shield, triplet=speed, tritone=poison",
+      "trait_type": "Herb system"
+    },
+    {
+      "value": 18,
+      "trait_type": "Livestock"
+    },
+    {
+      "value": "18 genome calls (11 sounds)",
+      "trait_type": "Livestock calls"
+    },
+    {
+      "value": "Turing-pattern coats (8 base + 3 bred)",
+      "trait_type": "Coats"
+    },
+    {
+      "value": "Jukebox + record presser",
+      "trait_type": "Heart"
+    },
+    {
+      "value": "prometheus/island",
+      "trait_type": "Branch"
+    }
+  ],
+  "gallery": [
+    "data/islands/prometheus/shots/PI_hero_v4.png",
+    "data/islands/prometheus/shots/PI_v4_waterchain.png",
+    "data/islands/prometheus/shots/PI_v4_pens.png",
+    "data/islands/prometheus/shots/PI_hero_ue_r4.png"
+  ]
 }
