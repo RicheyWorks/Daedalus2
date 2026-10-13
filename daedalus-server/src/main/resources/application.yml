@@ -36,6 +36,8 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  audio:
+    host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
   kennel:
     host-subject: "" # Explicit authenticated engine identity; blank denies brew calculations.
   tactics:
@@ -238,6 +240,11 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      audioDesign:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
       kennelBrew:
         limit-for-period: 120
         limit-refresh-period: 1m
