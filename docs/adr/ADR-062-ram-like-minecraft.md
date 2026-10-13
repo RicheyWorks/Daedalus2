@@ -89,3 +89,16 @@ then runs over the coarse grid (`MeshGrid`).
   overview distance the picture is unchanged, and SwiftShader frames went from 5.52 to 6.01 fps, rising to 4.80 →
   6.68 fps with most isles far away.
 - **Held:** the same swap for `ADaedalusVoxelIsle` in Unreal, by distance, waits for an editor build.
+
+## Addendum, 2026-10-13: rule 1 for generated plans, and the hottest read
+
+- **`IslandPlan` packs its cubes** like a chunk section: one long per cube (y, z and x in 21 bits each, so the
+  numeric order is the generator's ORDER) plus one type byte. `blocks()` is a read-only map view: binary search for
+  `get`, entries made as you iterate.
+  - A radius-46 land went from 14.5 MB to 2.3 MB retained, from 64 to 10 bytes per cube.
+  - The constructor's extra TreeMap copy is gone.
+  - Golden digests are unchanged. daedalus-core passes 635 tests with checkstyle and SpotBugs, and the island and
+    world server tests are green.
+  - The first try unpacked z and y into each other's places, and the equality tests caught it at once.
+- **`Chunk.get`** no longer clones `BlockType.values()` on every read: 22 ns down to about 1 to 3 ns per read, and
+  0 GCs where there were 23 per 24M reads.
