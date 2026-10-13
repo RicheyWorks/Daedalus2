@@ -263,7 +263,7 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> CallVehicleAction;
 	UPROPERTY() TObjectPtr<UInputAction> NextCubeAction;
 	UPROPERTY() TObjectPtr<USceneComponent> Cursor;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> PickBlocks;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> PickBlocks;
 	bool bHasTarget = false;
 	FIntVector PlaceAt = FIntVector::ZeroValue;
 	FIntVector MiningCube = FIntVector(MAX_int32, 0, 0);
@@ -275,11 +275,11 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> ViewAction;
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> LeftDeadzones;
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> RightDeadzones;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> Legs;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> Arms;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> BodyBlocks;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> SwordBlocks;
-	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> GunBlocks;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> Legs;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> Arms;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> BodyBlocks;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> SwordBlocks;
+	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> GunBlocks;
 	UPROPERTY() TObjectPtr<UStaticMeshComponent> GunTip;
 	UPROPERTY() TObjectPtr<UMaterialInterface> FlashMaterial;
 

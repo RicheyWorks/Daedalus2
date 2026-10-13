@@ -1,0 +1,217 @@
+{
+ "island": "OddsReaper",
+ "schema": "disksaver-mechanics-v1",
+ "source": "Derived from water.json / livestock.json / herbs.json storm_parlay_cookbook (off-editor 2026-10-13 ~00:57 PT)",
+ "water": {
+  "sources": {
+   "DiceSpring": "clean",
+   "StormCistern": "raw",
+   "GardenChannel": "animal",
+   "PenPipe": "animal"
+  },
+  "treat": {
+   "filter_s": 20,
+   "boil_s": 30,
+   "settle_cistern_s": 60
+  },
+  "raw_queasy_chance": 0.25,
+  "clean_thirst": 35,
+  "storm_cistern_brew_mult": 1.05,
+  "containers": {
+   "Waterskin": 2,
+   "Canteen": 3,
+   "Bucket": 8
+  },
+  "supply_L_day": {
+   "DiceSpring": 600,
+   "StormCistern_storm_peak": 19200
+  },
+  "demand_L_day_at_cap": 87,
+  "note": "spring alone (600 L/day) keeps player + 4 goats + 4 hens + 32 herbs alive (~70 L/day), and still covers the full capped herd (6 goats + 8 hens, see livestock.json) at ~87 L/day, so even a sour d6 morning never starves the island; the cistern feeds growth surplus and brewing. The island never dies of thirst; storms make it rich."
+ },
+ "livestock": {
+  "animals": {
+   "CoinbackGoat": {
+    "product": "Milk",
+    "every_min": 24,
+    "needs": "clean_water_in_trough",
+    "drink_L_day": 8,
+    "pen_cap": 6,
+    "note": "1 in 6 days sheds a Reaper Coin from coin-scale ridge"
+   },
+   "DicebeakHen": {
+    "product": "Egg",
+    "every_min": 24,
+    "needs": "clean_water_in_trough",
+    "drink_L_day": 0.5,
+    "coop_cap": 8,
+    "note": "dawn d6: 6 = golden egg (sell or hatch if coop has room)"
+   }
+  },
+  "trough_capacity": 10,
+  "hungry_after_cycles": 2,
+  "heads_cap_total": 14,
+  "expected_coins_per_day_at_cap": 2.3
+ },
+ "herbs": {
+  "species": [
+   "Luckroot",
+   "Hedgeleaf",
+   "Bluffmoss",
+   "Longshot",
+   "Parlayvine",
+   "Stormbloom",
+   "Vigweed",
+   "Oddsthistle"
+  ],
+  "regrow_hours_per_stage": 24,
+  "stages": 4,
+  "storm_p_mult": 1.2,
+  "p_cap": 0.95,
+  "dry_s": 60,
+  "water_L_day_per_plant": 1
+ },
+ "teas": [
+  {
+   "id": "ReapersFavor",
+   "name": "ReapersFavor",
+   "in": [
+    "Luckroot",
+    "Vigweed",
+    "CleanWater"
+   ],
+   "effect": "heal 10 + stamina 20",
+   "jackpot": "heal 40 + regen 10s + no stamina cost 20s",
+   "ev_clear": 1.0,
+   "ev_storm": 1.44,
+   "ev_storm_cistern": 1.588,
+   "role": "mid-odds storm workhorse",
+   "min": 5
+  },
+  {
+   "id": "LightningLedger",
+   "name": "LightningLedger",
+   "in": [
+    "Stormbloom",
+    "Oddsthistle",
+    "CleanWater"
+   ],
+   "effect": "lightning resist + reveal odds",
+   "jackpot": "chain lightning + see next drop/craft",
+   "ev_clear": 1.0,
+   "ev_storm": 1.383,
+   "ev_storm_cistern": 1.506,
+   "role": "storm-native intel brew",
+   "min": 5
+  },
+  {
+   "id": "LongOdds",
+   "name": "LongOdds",
+   "in": [
+    "Longshot",
+    "Parlayvine",
+    "CleanWater"
+   ],
+   "effect": "speed +5% 10s",
+   "jackpot": "speed +60% 30s at 20x payout",
+   "ev_clear": 1.0,
+   "ev_storm": 1.2,
+   "ev_storm_cistern": 1.26,
+   "role": "max variance dial",
+   "min": 5
+  },
+  {
+   "id": "HouseHedge",
+   "name": "HouseHedge",
+   "in": [
+    "Hedgeleaf",
+    "Luckroot",
+    "CleanWater"
+   ],
+   "effect": "shield 10 + heal 10",
+   "jackpot": "shield 20 + heal 40 + regen 10s",
+   "ev_clear": 1.0,
+   "ev_storm": 1.267,
+   "ev_storm_cistern": 1.33,
+   "role": "safer parlay; Hedgeleaf soft-caps storm",
+   "min": 5
+  },
+  {
+   "id": "GhostBluff",
+   "name": "GhostBluff",
+   "in": [
+    "Bluffmoss",
+    "Stormbloom",
+    "CleanWater"
+   ],
+   "effect": "stealth 5s + lightning resist",
+   "jackpot": "invisible 15s + chain lightning",
+   "ev_clear": 1.0,
+   "ev_storm": 1.383,
+   "ev_storm_cistern": 1.506,
+   "role": "stealth under lightning",
+   "min": 5
+  },
+  {
+   "id": "CoinFlipDouble",
+   "name": "CoinFlipDouble",
+   "in": [
+    "Luckroot",
+    "Parlayvine",
+    "CleanWater"
+   ],
+   "effect": "heal 10",
+   "jackpot": "heal 40 + regen 10s at 4x payout",
+   "ev_clear": 1.0,
+   "ev_storm": 1.2,
+   "ev_storm_cistern": 1.26,
+   "role": "classic variance catalyst",
+   "min": 5
+  },
+  {
+   "id": "ThunderSprint",
+   "name": "ThunderSprint",
+   "in": [
+    "Longshot",
+    "Vigweed",
+    "CleanWater"
+   ],
+   "effect": "speed +5% 10s + stamina 20",
+   "jackpot": "speed +60% 30s + no stamina cost 20s",
+   "ev_clear": 1.0,
+   "ev_storm": 1.44,
+   "ev_storm_cistern": 1.588,
+   "role": "bold speed/stamina storm play",
+   "min": 5
+  },
+  {
+   "id": "OddsWhisper",
+   "name": "OddsWhisper",
+   "in": [
+    "Oddsthistle",
+    "Hedgeleaf",
+    "CleanWater"
+   ],
+   "effect": "reveal odds + shield 10",
+   "jackpot": "see next outcome + shield 20",
+   "ev_clear": 1.0,
+   "ev_storm": 1.267,
+   "ev_storm_cistern": 1.33,
+   "role": "info + safety; soft-capped storm",
+   "min": 5
+  }
+ ],
+ "wager_ledger": {
+  "maps_to": "Reaper Ledger score_0_100 (cistern_or_spring_running / pens_producing / herb_beds_watered / storm_parlay_in_pack)",
+  "storm_parlay_recipe_count": 8,
+  "fair_clear_ev": 1.0
+ },
+ "balance": {
+  "water": 30,
+  "animals": 30,
+  "herbs3": 30,
+  "tea": 10,
+  "saved_after_hours_at_100": 3,
+  "maps_to": "Reaper Ledger score_0_100 (cistern_or_spring_running / pens_producing / herb_beds_watered / storm_parlay_in_pack)"
+ }
+}

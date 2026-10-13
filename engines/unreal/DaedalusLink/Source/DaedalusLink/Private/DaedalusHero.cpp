@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusHero.h"
+#include "DaedalusOrrery.h"
 #include "DaedalusLinkModule.h"
 
 #include "Camera/CameraComponent.h"
@@ -1126,6 +1127,12 @@ bool ADaedalusHero::Interact()
 {
 	UWorld* W = GetWorld();
 	if (!W || IsSettingsOpen() || IsFieldOpen()) return false;
+	// The Orrery Reach (ADR-057): herbs, kettles, charts, the filter and the Keeper come first when one is in reach.
+	if (ADaedalusUsable* U = ADaedalusUsable::Nearest(this, InteractReach))
+	{
+		U->Use(this);
+		return true;
+	}
 	ADaedalusGhost* Best = nullptr;
 	float BestD = InteractReach * InteractReach;
 	for (TActorIterator<ADaedalusGhost> It(W); It; ++It)

@@ -1,0 +1,9049 @@
+{
+"island": "BlenderBoss",
+"origin_cm": [
+-6000000,
+6000000,
+0
+],
+"radius_m": 120.0,
+"base_asset": "Prop_Island_BlenderBoss_Base",
+"hero_cam_m": [
+235,
+-255,
+130
+],
+"hero_target_m": [
+50,
+-10,
+-5
+],
+"placements": [
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": -2.76,
+"y": -59.46,
+"z": 9.68,
+"yaw": 59.6,
+"scale": 1.22,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": 54.53,
+"y": -63.71,
+"z": 8.4,
+"yaw": 110.7,
+"scale": 1.474,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 66.65,
+"y": -26.55,
+"z": 7.88,
+"yaw": 39.3,
+"scale": 1.394,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": 53.92,
+"y": -64.95,
+"z": 8.34,
+"yaw": 125.3,
+"scale": 1.039,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": -16.52,
+"y": 10.69,
+"z": 18.9,
+"yaw": 299.7,
+"scale": 1.48,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": -4.4,
+"y": -51.57,
+"z": 10.79,
+"yaw": 112.9,
+"scale": 1.575,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 10.55,
+"y": -87.34,
+"z": 5.94,
+"yaw": 72.4,
+"scale": 1.274,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 81.27,
+"y": -4.18,
+"z": 7.89,
+"yaw": 15.8,
+"scale": 1.371,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": -12.27,
+"y": 6.07,
+"z": 15.13,
+"yaw": 228.6,
+"scale": 1.372,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 47.21,
+"y": 10.31,
+"z": 11.79,
+"yaw": 287.4,
+"scale": 1.271,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 10.47,
+"y": 32.41,
+"z": 14.51,
+"yaw": 284.5,
+"scale": 1.366,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": -23.69,
+"y": -43.91,
+"z": 12.86,
+"yaw": 305.4,
+"scale": 1.333,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": 50.65,
+"y": 42.31,
+"z": 10.23,
+"yaw": 279.1,
+"scale": 1.317,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 81.78,
+"y": -9.66,
+"z": 7.13,
+"yaw": 323.6,
+"scale": 1.442,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 51.55,
+"y": -70.99,
+"z": 7.91,
+"yaw": 126.9,
+"scale": 1.451,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": -14.29,
+"y": -43.93,
+"z": 12.4,
+"yaw": 47.0,
+"scale": 1.154,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": 61.92,
+"y": -14.56,
+"z": 8.48,
+"yaw": 342.9,
+"scale": 1.492,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 67.85,
+"y": -81.76,
+"z": 3.32,
+"yaw": 218.3,
+"scale": 1.333,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 84.56,
+"y": -70.89,
+"z": 2.25,
+"yaw": 56.0,
+"scale": 1.258,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 7.51,
+"y": -55.75,
+"z": 10.14,
+"yaw": 243.7,
+"scale": 1.041,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": -12.76,
+"y": -60.13,
+"z": 11.38,
+"yaw": 220.7,
+"scale": 1.115,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": 8.55,
+"y": -34.11,
+"z": 11.09,
+"yaw": 141.5,
+"scale": 1.427,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 55.88,
+"y": 32.46,
+"z": 9.3,
+"yaw": 57.3,
+"scale": 1.375,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": -22.38,
+"y": -13.75,
+"z": 14.63,
+"yaw": 216.0,
+"scale": 1.193,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": 10.52,
+"y": -55.08,
+"z": 10.18,
+"yaw": 281.1,
+"scale": 1.566,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": 58.33,
+"y": -48.64,
+"z": 8.32,
+"yaw": 136.5,
+"scale": 1.183,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 17.62,
+"y": -45.1,
+"z": 11.21,
+"yaw": 85.2,
+"scale": 1.492,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 42.92,
+"y": -43.92,
+"z": 9.46,
+"yaw": 302.8,
+"scale": 1.416,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": 26.99,
+"y": 25.19,
+"z": 14.15,
+"yaw": 50.2,
+"scale": 1.357,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 66.4,
+"y": -63.54,
+"z": 6.39,
+"yaw": 40.9,
+"scale": 1.227,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 35.7,
+"y": -9.01,
+"z": 11.61,
+"yaw": 192.6,
+"scale": 1.474,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 83.08,
+"y": -48.03,
+"z": 4.89,
+"yaw": 342.1,
+"scale": 1.062,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -18.78,
+"y": -26.96,
+"z": 12.96,
+"yaw": 178.7,
+"scale": 1.387,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 61.81,
+"y": -22.32,
+"z": 9.05,
+"yaw": 233.7,
+"scale": 1.587,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": -15.58,
+"y": -69.73,
+"z": 9.0,
+"yaw": 284.7,
+"scale": 1.441,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": 66.77,
+"y": 26.72,
+"z": 8.38,
+"yaw": 287.7,
+"scale": 1.389,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -25.93,
+"y": -9.74,
+"z": 14.14,
+"yaw": 9.0,
+"scale": 1.404,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": -20.74,
+"y": 2.84,
+"z": 17.4,
+"yaw": 258.4,
+"scale": 1.061,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 81.46,
+"y": -55.49,
+"z": 3.98,
+"yaw": 70.9,
+"scale": 1.515,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 80.76,
+"y": -0.48,
+"z": 8.41,
+"yaw": 88.4,
+"scale": 1.547,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": 49.58,
+"y": -33.71,
+"z": 9.43,
+"yaw": 118.2,
+"scale": 1.136,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": -10.64,
+"y": -40.33,
+"z": 11.59,
+"yaw": 305.4,
+"scale": 1.117,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 12.76,
+"y": -60.69,
+"z": 9.91,
+"yaw": 337.4,
+"scale": 1.348,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": 5.56,
+"y": -86.63,
+"z": 6.49,
+"yaw": 41.4,
+"scale": 1.036,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": 9.49,
+"y": -61.06,
+"z": 9.73,
+"yaw": 103.3,
+"scale": 1.167,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": 32.82,
+"y": -30.45,
+"z": 9.97,
+"yaw": 133.8,
+"scale": 1.511,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 39.32,
+"y": -64.51,
+"z": 9.93,
+"yaw": 273.4,
+"scale": 1.454,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 92.67,
+"y": -4.81,
+"z": 6.18,
+"yaw": 143.0,
+"scale": 1.481,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": 57.75,
+"y": 18.78,
+"z": 8.75,
+"yaw": 26.5,
+"scale": 1.405,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 60.7,
+"y": 38.83,
+"z": 9.16,
+"yaw": 56.9,
+"scale": 1.384,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 44.49,
+"y": 28.52,
+"z": 11.95,
+"yaw": 67.0,
+"scale": 1.048,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 103.02,
+"y": -16.25,
+"z": 3.71,
+"yaw": 37.5,
+"scale": 1.314,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": 70.29,
+"y": -43.16,
+"z": 6.92,
+"yaw": 176.6,
+"scale": 1.031,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 53.64,
+"y": -60.33,
+"z": 8.64,
+"yaw": 119.0,
+"scale": 1.466,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 27.86,
+"y": -46.36,
+"z": 11.39,
+"yaw": 22.3,
+"scale": 1.323,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": 18.57,
+"y": -66.01,
+"z": 9.84,
+"yaw": 352.9,
+"scale": 1.023,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": 88.08,
+"y": -11.06,
+"z": 6.67,
+"yaw": 357.1,
+"scale": 1.26,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": -9.98,
+"y": -56.45,
+"z": 10.84,
+"yaw": 32.2,
+"scale": 1.337,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 92.1,
+"y": -31.35,
+"z": 5.38,
+"yaw": 11.6,
+"scale": 1.463,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 55.3,
+"y": 1.56,
+"z": 9.43,
+"yaw": 72.5,
+"scale": 1.372,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": 54.23,
+"y": -64.03,
+"z": 8.39,
+"yaw": 77.7,
+"scale": 1.203,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": 64.51,
+"y": -83.57,
+"z": 3.54,
+"yaw": 30.9,
+"scale": 1.161,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 78.92,
+"y": -46.08,
+"z": 5.75,
+"yaw": 73.7,
+"scale": 1.091,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": 82.45,
+"y": -59.65,
+"z": 3.56,
+"yaw": 0.8,
+"scale": 1.098,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": 38.32,
+"y": 16.38,
+"z": 12.38,
+"yaw": 263.0,
+"scale": 1.186,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": -9.79,
+"y": -1.2,
+"z": 13.05,
+"yaw": 145.3,
+"scale": 1.554,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 44.38,
+"y": 3.62,
+"z": 12.32,
+"yaw": 339.5,
+"scale": 1.499,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": -20.92,
+"y": -35.78,
+"z": 12.44,
+"yaw": 36.2,
+"scale": 1.034,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": -0.17,
+"y": -37.89,
+"z": 9.38,
+"yaw": 91.7,
+"scale": 1.525,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 10.07,
+"y": 27.47,
+"z": 14.32,
+"yaw": 212.0,
+"scale": 1.385,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 22.32,
+"y": -27.91,
+"z": 11.75,
+"yaw": 336.6,
+"scale": 1.194,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": -24.32,
+"y": 3.74,
+"z": 18.65,
+"yaw": 60.9,
+"scale": 1.386,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -0.74,
+"y": 10.46,
+"z": 13.83,
+"yaw": 68.3,
+"scale": 1.013,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 20.23,
+"y": -65.76,
+"z": 9.94,
+"yaw": 176.2,
+"scale": 1.186,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 1.1,
+"y": -54.14,
+"z": 10.17,
+"yaw": 46.0,
+"scale": 1.272,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": 3.48,
+"y": 5.14,
+"z": 13.0,
+"yaw": 90.6,
+"scale": 1.046,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -18.8,
+"y": -49.4,
+"z": 12.63,
+"yaw": 66.8,
+"scale": 1.15,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 9.02,
+"y": 11.72,
+"z": 14.76,
+"yaw": 181.5,
+"scale": 1.307,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 13.66,
+"y": -89.13,
+"z": 5.74,
+"yaw": 279.4,
+"scale": 1.401,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 20.82,
+"y": 16.06,
+"z": 14.16,
+"yaw": 276.2,
+"scale": 1.233,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": 89.16,
+"y": 15.58,
+"z": 6.89,
+"yaw": 252.1,
+"scale": 1.141,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": 19.48,
+"y": -82.98,
+"z": 6.56,
+"yaw": 223.7,
+"scale": 1.568,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 100.58,
+"y": -5.58,
+"z": 4.73,
+"yaw": 314.4,
+"scale": 1.369,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": 43.54,
+"y": -79.31,
+"z": 7.79,
+"yaw": 255.9,
+"scale": 1.206,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": 96.97,
+"y": -50.59,
+"z": 2.48,
+"yaw": 274.0,
+"scale": 1.579,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": 32.23,
+"y": -37.15,
+"z": 11.63,
+"yaw": 327.7,
+"scale": 1.369,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": -5.83,
+"y": -7.98,
+"z": 13.21,
+"yaw": 84.1,
+"scale": 1.268,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 21.39,
+"y": -73.49,
+"z": 8.18,
+"yaw": 211.8,
+"scale": 1.242,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": 33.9,
+"y": 4.41,
+"z": 12.33,
+"yaw": 112.9,
+"scale": 1.001,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 71.86,
+"y": -18.55,
+"z": 8.24,
+"yaw": 39.7,
+"scale": 1.134,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 42.72,
+"y": -22.52,
+"z": 11.17,
+"yaw": 208.9,
+"scale": 1.139,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 25.65,
+"y": 20.4,
+"z": 14.35,
+"yaw": 241.2,
+"scale": 1.313,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": 16.31,
+"y": 18.71,
+"z": 15.2,
+"yaw": 301.0,
+"scale": 1.358,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": -8.98,
+"y": -69.91,
+"z": 8.92,
+"yaw": 195.4,
+"scale": 1.556,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": -24.42,
+"y": -17.25,
+"z": 14.3,
+"yaw": 318.7,
+"scale": 1.166,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": -3.02,
+"y": -33.0,
+"z": 9.37,
+"yaw": 359.8,
+"scale": 1.238,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -10.48,
+"y": -32.85,
+"z": 11.95,
+"yaw": 356.8,
+"scale": 1.087,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 4.48,
+"y": -52.41,
+"z": 10.21,
+"yaw": 337.0,
+"scale": 1.508,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 40.11,
+"y": 10.68,
+"z": 12.5,
+"yaw": 304.7,
+"scale": 1.377,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 65.49,
+"y": -0.56,
+"z": 9.2,
+"yaw": 40.1,
+"scale": 1.378,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": 10.69,
+"y": -86.86,
+"z": 5.97,
+"yaw": 210.2,
+"scale": 1.115,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": -24.43,
+"y": 11.89,
+"z": 22.03,
+"yaw": 341.8,
+"scale": 1.525,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 43.92,
+"y": -23.0,
+"z": 11.15,
+"yaw": 4.0,
+"scale": 1.408,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": -24.33,
+"y": -49.45,
+"z": 11.65,
+"yaw": 24.4,
+"scale": 1.313,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": -28.51,
+"y": -31.68,
+"z": 13.02,
+"yaw": 193.7,
+"scale": 1.079,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": 71.09,
+"y": -30.25,
+"z": 7.8,
+"yaw": 92.4,
+"scale": 1.324,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 64.58,
+"y": -2.09,
+"z": 9.34,
+"yaw": 73.1,
+"scale": 1.57,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 36.61,
+"y": -62.05,
+"z": 10.76,
+"yaw": 45.4,
+"scale": 1.166,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": 73.89,
+"y": 28.07,
+"z": 8.26,
+"yaw": 259.6,
+"scale": 1.058,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 32.86,
+"y": -5.8,
+"z": 11.84,
+"yaw": 147.2,
+"scale": 1.377,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": -6.45,
+"y": -5.3,
+"z": 14.03,
+"yaw": 99.3,
+"scale": 1.536,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 11.88,
+"y": 36.13,
+"z": 14.28,
+"yaw": 136.6,
+"scale": 1.159,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -12.31,
+"y": -69.91,
+"z": 9.11,
+"yaw": 65.6,
+"scale": 1.315,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": -5.31,
+"y": -26.59,
+"z": 10.8,
+"yaw": 355.6,
+"scale": 1.595,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": -9.38,
+"y": -12.74,
+"z": 11.54,
+"yaw": 338.8,
+"scale": 1.168,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": 60.39,
+"y": 2.58,
+"z": 9.74,
+"yaw": 220.0,
+"scale": 1.472,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": 15.64,
+"y": -23.19,
+"z": 11.41,
+"yaw": 111.6,
+"scale": 1.328,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 15.03,
+"y": 39.87,
+"z": 14.11,
+"yaw": 136.4,
+"scale": 1.101,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 6.98,
+"y": -35.98,
+"z": 11.03,
+"yaw": 308.9,
+"scale": 1.379,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 26.52,
+"y": -26.9,
+"z": 11.28,
+"yaw": 309.9,
+"scale": 1.223,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": 9.31,
+"y": -56.26,
+"z": 10.01,
+"yaw": 83.3,
+"scale": 1.375,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": 32.07,
+"y": -93.9,
+"z": 4.17,
+"yaw": 244.7,
+"scale": 1.154,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": 6.93,
+"y": -83.73,
+"z": 6.51,
+"yaw": 17.7,
+"scale": 1.398,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": -3.83,
+"y": -67.49,
+"z": 8.84,
+"yaw": 277.3,
+"scale": 1.015,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": 79.94,
+"y": -63.62,
+"z": 3.35,
+"yaw": 333.2,
+"scale": 1.377,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": -33.98,
+"y": -28.51,
+"z": 13.27,
+"yaw": 331.0,
+"scale": 1.3,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": -7.1,
+"y": -40.5,
+"z": 10.87,
+"yaw": 338.4,
+"scale": 1.14,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": -32.97,
+"y": -39.81,
+"z": 13.11,
+"yaw": 315.8,
+"scale": 1.112,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": 72.95,
+"y": -70.18,
+"z": 4.03,
+"yaw": 142.7,
+"scale": 1.066,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 70.77,
+"y": -16.71,
+"z": 8.33,
+"yaw": 242.7,
+"scale": 1.251,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": 32.91,
+"y": -73.13,
+"z": 9.12,
+"yaw": 162.0,
+"scale": 1.373,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 11.28,
+"y": 12.87,
+"z": 15.17,
+"yaw": 169.1,
+"scale": 1.429,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": 95.66,
+"y": 3.03,
+"z": 5.94,
+"yaw": 183.4,
+"scale": 1.159,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 79.98,
+"y": -11.03,
+"z": 7.07,
+"yaw": 189.7,
+"scale": 1.53,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 90.17,
+"y": 12.5,
+"z": 6.82,
+"yaw": 278.1,
+"scale": 1.374,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": 99.76,
+"y": -39.55,
+"z": 3.09,
+"yaw": 116.8,
+"scale": 1.415,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": 18.36,
+"y": 8.5,
+"z": 12.27,
+"yaw": 81.5,
+"scale": 1.329,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 38.39,
+"y": -36.89,
+"z": 9.78,
+"yaw": 210.6,
+"scale": 1.077,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 29.61,
+"y": 16.16,
+"z": 13.78,
+"yaw": 296.4,
+"scale": 1.157,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": 53.29,
+"y": -2.05,
+"z": 10.2,
+"yaw": 153.4,
+"scale": 1.157,
+"zone": "orchard-forest"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": -14.44,
+"y": 59.29,
+"z": 12.76,
+"yaw": 156.6,
+"scale": 1.476,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": -38.91,
+"y": 85.65,
+"z": 5.6,
+"yaw": 198.2,
+"scale": 1.205,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": -8.81,
+"y": 92.2,
+"z": 5.81,
+"yaw": 40.2,
+"scale": 1.091,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": 1.04,
+"y": 74.64,
+"z": 9.62,
+"yaw": 356.6,
+"scale": 1.329,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": -23.13,
+"y": 66.83,
+"z": 11.06,
+"yaw": 76.7,
+"scale": 1.122,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": 8.59,
+"y": 43.64,
+"z": 12.84,
+"yaw": 79.8,
+"scale": 1.193,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": 7.83,
+"y": 45.22,
+"z": 12.72,
+"yaw": 285.1,
+"scale": 1.371,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": -9.47,
+"y": 39.8,
+"z": 18.67,
+"yaw": 23.6,
+"scale": 1.043,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": -42.62,
+"y": 74.16,
+"z": 6.92,
+"yaw": 184.2,
+"scale": 1.319,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": 4.16,
+"y": 80.55,
+"z": 8.27,
+"yaw": 59.4,
+"scale": 1.437,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": -45.63,
+"y": 68.51,
+"z": 7.96,
+"yaw": 0.8,
+"scale": 1.354,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": -11.01,
+"y": 42.91,
+"z": 18.29,
+"yaw": 315.8,
+"scale": 1.407,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -5.43,
+"y": 62.79,
+"z": 11.89,
+"yaw": 53.4,
+"scale": 1.379,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 2.04,
+"y": 30.07,
+"z": 15.41,
+"yaw": 128.9,
+"scale": 1.219,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": -10.69,
+"y": 52.48,
+"z": 15.38,
+"yaw": 47.6,
+"scale": 1.392,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": -16.52,
+"y": 79.63,
+"z": 8.49,
+"yaw": 255.6,
+"scale": 1.018,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -4.4,
+"y": 25.41,
+"z": 18.35,
+"yaw": 292.0,
+"scale": 1.342,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": -17.84,
+"y": 68.8,
+"z": 9.8,
+"yaw": 254.7,
+"scale": 1.388,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": 14.71,
+"y": 45.51,
+"z": 13.9,
+"yaw": 216.2,
+"scale": 1.465,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": -40.91,
+"y": 68.61,
+"z": 9.08,
+"yaw": 103.6,
+"scale": 1.048,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": -1.03,
+"y": 69.71,
+"z": 11.06,
+"yaw": 226.7,
+"scale": 1.414,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": -21.26,
+"y": 67.89,
+"z": 9.97,
+"yaw": 356.2,
+"scale": 1.441,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": -9.13,
+"y": 94.97,
+"z": 5.22,
+"yaw": 226.0,
+"scale": 1.345,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": -2.56,
+"y": 49.47,
+"z": 14.36,
+"yaw": 249.0,
+"scale": 1.129,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": -28.22,
+"y": 24.36,
+"z": 28.17,
+"yaw": 177.2,
+"scale": 1.101,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": -12.05,
+"y": 51.92,
+"z": 15.64,
+"yaw": 19.5,
+"scale": 1.052,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": -30.47,
+"y": 57.83,
+"z": 17.25,
+"yaw": 322.2,
+"scale": 1.184,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": 8.49,
+"y": 71.11,
+"z": 10.87,
+"yaw": 154.1,
+"scale": 1.194,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": -31.91,
+"y": 43.49,
+"z": 24.69,
+"yaw": 166.8,
+"scale": 1.268,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": -3.24,
+"y": 93.53,
+"z": 5.77,
+"yaw": 160.0,
+"scale": 1.377,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": -14.11,
+"y": 99.21,
+"z": 4.23,
+"yaw": 11.8,
+"scale": 1.273,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": -21.11,
+"y": 45.22,
+"z": 20.59,
+"yaw": 202.0,
+"scale": 1.436,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -33.59,
+"y": 59.22,
+"z": 15.82,
+"yaw": 270.1,
+"scale": 1.114,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": 11.47,
+"y": 46.4,
+"z": 13.12,
+"yaw": 66.1,
+"scale": 1.426,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 1.24,
+"y": 34.82,
+"z": 15.16,
+"yaw": 132.7,
+"scale": 1.299,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": -14.97,
+"y": 42.24,
+"z": 19.93,
+"yaw": 267.1,
+"scale": 1.1,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -42.14,
+"y": 28.23,
+"z": 26.07,
+"yaw": 346.3,
+"scale": 1.215,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": -2.77,
+"y": 50.82,
+"z": 14.24,
+"yaw": 145.3,
+"scale": 1.328,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": -11.62,
+"y": 96.14,
+"z": 5.16,
+"yaw": 358.3,
+"scale": 1.111,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": -12.77,
+"y": 94.29,
+"z": 5.39,
+"yaw": 297.6,
+"scale": 1.033,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Bamboo_Mature",
+"x": -38.04,
+"y": 39.73,
+"z": 26.63,
+"yaw": 216.8,
+"scale": 1.428,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Banana_Mature",
+"x": -1.27,
+"y": 50.74,
+"z": 13.15,
+"yaw": 304.9,
+"scale": 1.219,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Baobab_Mature",
+"x": -1.45,
+"y": 54.01,
+"z": 12.71,
+"yaw": 45.7,
+"scale": 1.41,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Birch_Mature",
+"x": -56.53,
+"y": 55.31,
+"z": 11.77,
+"yaw": 238.1,
+"scale": 1.289,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cedar_Mature",
+"x": -24.92,
+"y": 32.34,
+"z": 26.67,
+"yaw": 126.9,
+"scale": 1.402,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cherry_Mature",
+"x": -22.68,
+"y": 90.74,
+"z": 5.74,
+"yaw": 328.3,
+"scale": 1.135,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Coconut_Mature",
+"x": -56.52,
+"y": 58.76,
+"z": 9.76,
+"yaw": 219.8,
+"scale": 1.311,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Cypress_Mature",
+"x": -31.38,
+"y": 69.62,
+"z": 9.95,
+"yaw": 38.5,
+"scale": 1.034,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Ironwood_Mature",
+"x": -17.53,
+"y": 95.9,
+"z": 5.2,
+"yaw": 128.5,
+"scale": 1.289,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Joshua_Mature",
+"x": -5.22,
+"y": 87.26,
+"z": 6.96,
+"yaw": 111.4,
+"scale": 1.103,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kapok_Mature",
+"x": -27.44,
+"y": 82.53,
+"z": 7.27,
+"yaw": 344.7,
+"scale": 1.423,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Kelp_Mature",
+"x": 11.33,
+"y": 74.02,
+"z": 9.88,
+"yaw": 86.6,
+"scale": 1.4,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Larch_Mature",
+"x": -20.91,
+"y": 78.55,
+"z": 8.38,
+"yaw": 191.8,
+"scale": 1.34,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Mangrove_Mature",
+"x": -33.73,
+"y": 96.79,
+"z": 3.85,
+"yaw": 38.5,
+"scale": 1.347,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Maple_Mature",
+"x": 5.09,
+"y": 58.81,
+"z": 12.23,
+"yaw": 273.9,
+"scale": 1.256,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Moonbark_Mature",
+"x": -56.17,
+"y": 70.28,
+"z": 6.2,
+"yaw": 15.8,
+"scale": 1.374,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Oak_Mature",
+"x": -31.06,
+"y": 74.88,
+"z": 8.65,
+"yaw": 47.4,
+"scale": 1.336,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Palm_Mature",
+"x": 10.45,
+"y": 38.95,
+"z": 13.98,
+"yaw": 148.0,
+"scale": 1.332,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Pine_Mature",
+"x": -57.35,
+"y": 45.94,
+"z": 14.74,
+"yaw": 171.6,
+"scale": 1.499,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Tree_Spruce_Mature",
+"x": -36.6,
+"y": 63.07,
+"z": 13.0,
+"yaw": 51.1,
+"scale": 1.265,
+"zone": "north-grove"
+},
+{
+"asset": "Prop_Herb_Aloe",
+"x": -51.4,
+"y": -40.0,
+"z": 10.92,
+"yaw": 124.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Angelica",
+"x": -51.62,
+"y": -37.93,
+"z": 11.04,
+"yaw": 129.8,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_ArcticThyme",
+"x": -53.04,
+"y": -36.14,
+"z": 10.81,
+"yaw": 99.0,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Basil",
+"x": -55.37,
+"y": -35.33,
+"z": 10.98,
+"yaw": 345.4,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Bogmyrtle",
+"x": -57.97,
+"y": -35.92,
+"z": 10.96,
+"yaw": 284.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Chamomile",
+"x": -60.01,
+"y": -37.93,
+"z": 10.16,
+"yaw": 108.8,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Cinchona",
+"x": -60.71,
+"y": -40.91,
+"z": 9.82,
+"yaw": 31.5,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Cinchona_V9",
+"x": -59.66,
+"y": -44.0,
+"z": 9.94,
+"yaw": 344.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Clover",
+"x": -57.0,
+"y": -46.19,
+"z": 9.8,
+"yaw": 30.4,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Dandelion",
+"x": -53.38,
+"y": -46.67,
+"z": 9.78,
+"yaw": 115.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_DesertSage",
+"x": -49.88,
+"y": -45.1,
+"z": 11.03,
+"yaw": 299.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Edelwort",
+"x": -47.61,
+"y": -41.75,
+"z": 11.62,
+"yaw": 28.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Edelwort_V9",
+"x": -47.44,
+"y": -37.52,
+"z": 11.59,
+"yaw": 270.8,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Ginger",
+"x": -49.62,
+"y": -33.66,
+"z": 11.61,
+"yaw": 114.8,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Lavender",
+"x": -53.67,
+"y": -31.42,
+"z": 11.32,
+"yaw": 198.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Lemongrass",
+"x": -58.49,
+"y": -31.66,
+"z": 11.22,
+"yaw": 268.0,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Lemongrass_V9",
+"x": -62.63,
+"y": -34.5,
+"z": 9.99,
+"yaw": 290.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Lichen",
+"x": -64.74,
+"y": -39.27,
+"z": 9.72,
+"yaw": 225.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Marshmallow",
+"x": -64.01,
+"y": -44.64,
+"z": 9.35,
+"yaw": 158.1,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Mint",
+"x": -60.45,
+"y": -48.97,
+"z": 9.4,
+"yaw": 144.4,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Moonpetal",
+"x": -54.95,
+"y": -50.86,
+"z": 9.64,
+"yaw": 62.9,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Moonpetal_V9",
+"x": -49.09,
+"y": -49.54,
+"z": 10.1,
+"yaw": 79.0,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Nettle",
+"x": -44.65,
+"y": -45.21,
+"z": 11.47,
+"yaw": 253.8,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Rosemary",
+"x": -43.09,
+"y": -39.0,
+"z": 12.87,
+"yaw": 24.6,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Sage",
+"x": -45.08,
+"y": -32.71,
+"z": 12.07,
+"yaw": 286.1,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Saltbush",
+"x": -50.21,
+"y": -28.26,
+"z": 11.51,
+"yaw": 1.4,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_SeaSalt",
+"x": -57.11,
+"y": -27.13,
+"z": 11.72,
+"yaw": 355.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Sorrel",
+"x": -63.76,
+"y": -29.86,
+"z": 9.95,
+"yaw": 15.5,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Stardust",
+"x": -68.12,
+"y": -35.83,
+"z": 9.17,
+"yaw": 45.0,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Thyme",
+"x": -68.72,
+"y": -43.39,
+"z": 8.83,
+"yaw": 68.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Valerian",
+"x": -65.18,
+"y": -50.31,
+"z": 8.76,
+"yaw": 15.6,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Voidleaf",
+"x": -58.37,
+"y": -54.47,
+"z": 9.31,
+"yaw": 357.0,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Voidleaf_V9",
+"x": -50.2,
+"y": -54.44,
+"z": 10.02,
+"yaw": 203.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Watercress",
+"x": -43.08,
+"y": -50.03,
+"z": 11.5,
+"yaw": 123.2,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_WildGarlic",
+"x": -39.24,
+"y": -42.38,
+"z": 13.78,
+"yaw": 218.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Wormwood",
+"x": -39.98,
+"y": -33.64,
+"z": 12.28,
+"yaw": 220.6,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Yarrow",
+"x": -45.31,
+"y": -26.44,
+"z": 12.16,
+"yaw": 314.7,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Aloe",
+"x": -53.8,
+"y": -23.01,
+"z": 11.28,
+"yaw": 52.1,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Angelica",
+"x": -63.03,
+"y": -24.57,
+"z": 9.69,
+"yaw": 49.9,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_ArcticThyme",
+"x": -70.22,
+"y": -30.85,
+"z": 9.24,
+"yaw": 39.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Basil",
+"x": -73.12,
+"y": -40.16,
+"z": 8.09,
+"yaw": 86.5,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Bogmyrtle",
+"x": -70.67,
+"y": -49.8,
+"z": 7.96,
+"yaw": 37.6,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Chamomile",
+"x": -63.4,
+"y": -56.87,
+"z": 8.28,
+"yaw": 220.9,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Cinchona",
+"x": -53.31,
+"y": -59.13,
+"z": 9.26,
+"yaw": 176.4,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Cinchona_V9",
+"x": -43.34,
+"y": -55.72,
+"z": 11.34,
+"yaw": 32.2,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Clover",
+"x": -36.51,
+"y": -47.45,
+"z": 12.85,
+"yaw": 82.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Herb_Dandelion",
+"x": -34.99,
+"y": -36.62,
+"z": 13.07,
+"yaw": 87.3,
+"scale": 1.2,
+"zone": "herb-spiral"
+},
+{
+"asset": "Prop_Bloom_BananaFlower",
+"x": -79.16,
+"y": -27.05,
+"z": 7.9,
+"yaw": 140.1,
+"scale": 1.185,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise",
+"x": -51.03,
+"y": -29.37,
+"z": 11.52,
+"yaw": 2.2,
+"scale": 1.271,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V24",
+"x": -52.3,
+"y": -66.09,
+"z": 8.38,
+"yaw": 130.6,
+"scale": 0.974,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V4",
+"x": -49.67,
+"y": -25.14,
+"z": 12.36,
+"yaw": 57.7,
+"scale": 1.055,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V9",
+"x": -35.3,
+"y": -55.45,
+"z": 11.48,
+"yaw": 151.1,
+"scale": 1.067,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Bluebell",
+"x": -58.96,
+"y": -37.14,
+"z": 10.87,
+"yaw": 199.1,
+"scale": 1.009,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower",
+"x": -33.85,
+"y": -25.23,
+"z": 13.09,
+"yaw": 268.4,
+"scale": 1.251,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V24",
+"x": -69.53,
+"y": -32.14,
+"z": 9.2,
+"yaw": 299.0,
+"scale": 1.24,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V9",
+"x": -36.77,
+"y": -36.48,
+"z": 13.03,
+"yaw": 266.0,
+"scale": 0.938,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold",
+"x": -35.4,
+"y": -28.23,
+"z": 12.6,
+"yaw": 179.7,
+"scale": 0.984,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V24",
+"x": -50.83,
+"y": -52.45,
+"z": 10.01,
+"yaw": 9.8,
+"scale": 1.198,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V4",
+"x": -49.72,
+"y": -34.48,
+"z": 11.54,
+"yaw": 179.0,
+"scale": 1.076,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V9",
+"x": -39.18,
+"y": -62.7,
+"z": 10.15,
+"yaw": 94.1,
+"scale": 0.905,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed",
+"x": -72.14,
+"y": -61.19,
+"z": 6.14,
+"yaw": 286.2,
+"scale": 1.275,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V24",
+"x": -77.17,
+"y": -51.92,
+"z": 5.64,
+"yaw": 45.4,
+"scale": 1.125,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V4",
+"x": -60.51,
+"y": -42.42,
+"z": 9.58,
+"yaw": 91.0,
+"scale": 1.076,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V9",
+"x": -58.83,
+"y": -28.74,
+"z": 11.49,
+"yaw": 105.5,
+"scale": 0.974,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Foxglove",
+"x": -44.63,
+"y": -33.47,
+"z": 12.15,
+"yaw": 192.3,
+"scale": 1.281,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid",
+"x": -49.55,
+"y": -11.06,
+"z": 11.46,
+"yaw": 253.4,
+"scale": 1.124,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V24",
+"x": -52.8,
+"y": -42.7,
+"z": 10.77,
+"yaw": 208.5,
+"scale": 0.997,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V4",
+"x": -31.87,
+"y": -56.24,
+"z": 11.13,
+"yaw": 96.7,
+"scale": 1.188,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V9",
+"x": -51.48,
+"y": -67.94,
+"z": 8.22,
+"yaw": 14.1,
+"scale": 1.126,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold",
+"x": -50.5,
+"y": -57.26,
+"z": 9.81,
+"yaw": 175.1,
+"scale": 1.042,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V24",
+"x": -65.0,
+"y": -54.12,
+"z": 8.44,
+"yaw": 311.9,
+"scale": 1.117,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V4",
+"x": -56.11,
+"y": -68.7,
+"z": 6.98,
+"yaw": 213.7,
+"scale": 1.025,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V9",
+"x": -41.96,
+"y": -46.04,
+"z": 11.96,
+"yaw": 27.5,
+"scale": 0.958,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Orchid",
+"x": -34.1,
+"y": -21.32,
+"z": 14.04,
+"yaw": 199.3,
+"scale": 1.274,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Poppy",
+"x": -66.47,
+"y": -17.15,
+"z": 10.03,
+"yaw": 238.6,
+"scale": 1.151,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Rafflesia",
+"x": -66.53,
+"y": -23.13,
+"z": 9.68,
+"yaw": 266.5,
+"scale": 1.125,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_SeaHolly",
+"x": -30.76,
+"y": -32.48,
+"z": 14.15,
+"yaw": 155.1,
+"scale": 1.114,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BananaFlower",
+"x": -42.95,
+"y": -63.28,
+"z": 10.05,
+"yaw": 17.6,
+"scale": 1.152,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise",
+"x": -37.79,
+"y": -25.72,
+"z": 12.37,
+"yaw": 253.7,
+"scale": 1.268,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V24",
+"x": -61.08,
+"y": -55.44,
+"z": 8.89,
+"yaw": 341.7,
+"scale": 1.24,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V4",
+"x": -66.16,
+"y": -42.73,
+"z": 9.25,
+"yaw": 243.3,
+"scale": 1.233,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V9",
+"x": -52.98,
+"y": -62.36,
+"z": 8.89,
+"yaw": 72.6,
+"scale": 1.059,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Bluebell",
+"x": -59.67,
+"y": -53.71,
+"z": 9.35,
+"yaw": 236.3,
+"scale": 1.085,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower",
+"x": -66.97,
+"y": -22.82,
+"z": 9.57,
+"yaw": 78.2,
+"scale": 1.053,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V24",
+"x": -65.07,
+"y": -27.5,
+"z": 9.74,
+"yaw": 154.3,
+"scale": 1.15,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V9",
+"x": -43.65,
+"y": -20.02,
+"z": 11.44,
+"yaw": 358.4,
+"scale": 1.011,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold",
+"x": -44.71,
+"y": -16.08,
+"z": 11.09,
+"yaw": 15.3,
+"scale": 1.276,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V24",
+"x": -53.12,
+"y": -16.14,
+"z": 11.02,
+"yaw": 81.7,
+"scale": 0.984,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V4",
+"x": -71.19,
+"y": -16.87,
+"z": 8.95,
+"yaw": 340.0,
+"scale": 1.173,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold_V9",
+"x": -74.16,
+"y": -35.24,
+"z": 8.41,
+"yaw": 42.6,
+"scale": 1.023,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed",
+"x": -35.63,
+"y": -36.01,
+"z": 12.88,
+"yaw": 338.5,
+"scale": 1.272,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V24",
+"x": -46.27,
+"y": -42.83,
+"z": 11.58,
+"yaw": 305.0,
+"scale": 1.103,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V4",
+"x": -29.51,
+"y": -47.77,
+"z": 11.68,
+"yaw": 32.7,
+"scale": 1.094,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Fireweed_V9",
+"x": -53.52,
+"y": -36.19,
+"z": 10.78,
+"yaw": 43.6,
+"scale": 0.939,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Foxglove",
+"x": -58.78,
+"y": -10.95,
+"z": 10.75,
+"yaw": 227.1,
+"scale": 1.23,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid",
+"x": -55.61,
+"y": -22.08,
+"z": 10.88,
+"yaw": 100.2,
+"scale": 1.193,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V24",
+"x": -40.55,
+"y": -35.08,
+"z": 12.48,
+"yaw": 274.5,
+"scale": 0.905,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V4",
+"x": -33.52,
+"y": -46.28,
+"z": 12.55,
+"yaw": 240.9,
+"scale": 1.232,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_GhostOrchid_V9",
+"x": -61.8,
+"y": -46.93,
+"z": 9.3,
+"yaw": 336.2,
+"scale": 1.075,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold",
+"x": -33.79,
+"y": -28.27,
+"z": 13.74,
+"yaw": 72.1,
+"scale": 1.118,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V24",
+"x": -37.69,
+"y": -57.21,
+"z": 11.38,
+"yaw": 199.6,
+"scale": 1.213,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V4",
+"x": -83.42,
+"y": -47.32,
+"z": 5.34,
+"yaw": 267.3,
+"scale": 1.273,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Marigold_V9",
+"x": -27.25,
+"y": -46.31,
+"z": 11.64,
+"yaw": 256.4,
+"scale": 1.211,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Orchid",
+"x": -65.55,
+"y": -51.81,
+"z": 8.62,
+"yaw": 103.3,
+"scale": 1.28,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Poppy",
+"x": -55.72,
+"y": -65.66,
+"z": 7.9,
+"yaw": 338.0,
+"scale": 1.274,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Rafflesia",
+"x": -68.02,
+"y": -63.9,
+"z": 6.11,
+"yaw": 144.9,
+"scale": 1.01,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_SeaHolly",
+"x": -26.09,
+"y": -46.46,
+"z": 11.82,
+"yaw": 159.2,
+"scale": 1.287,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BananaFlower",
+"x": -60.41,
+"y": -31.12,
+"z": 10.96,
+"yaw": 97.4,
+"scale": 1.213,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise",
+"x": -46.52,
+"y": -20.12,
+"z": 11.41,
+"yaw": 25.8,
+"scale": 1.189,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V24",
+"x": -59.82,
+"y": -60.41,
+"z": 8.19,
+"yaw": 131.5,
+"scale": 1.284,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V4",
+"x": -33.77,
+"y": -60.01,
+"z": 11.0,
+"yaw": 55.7,
+"scale": 1.18,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_BirdofParadise_V9",
+"x": -38.6,
+"y": -28.41,
+"z": 12.15,
+"yaw": 308.2,
+"scale": 0.963,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Bluebell",
+"x": -68.92,
+"y": -24.78,
+"z": 9.11,
+"yaw": 210.0,
+"scale": 1.181,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower",
+"x": -63.19,
+"y": -57.13,
+"z": 8.21,
+"yaw": 120.9,
+"scale": 0.918,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V24",
+"x": -27.04,
+"y": -46.46,
+"z": 11.63,
+"yaw": 249.7,
+"scale": 0.931,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_Cornflower_V9",
+"x": -55.14,
+"y": -25.54,
+"z": 11.32,
+"yaw": 69.6,
+"scale": 0.936,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_Bloom_DesertMarigold",
+"x": -67.02,
+"y": -57.98,
+"z": 7.25,
+"yaw": 250.6,
+"scale": 1.002,
+"zone": "bloom-meadow"
+},
+{
+"asset": "Prop_OreNode_Coal_Large",
+"x": -51.37,
+"y": 32.31,
+"z": 20.92,
+"yaw": 10.6,
+"scale": 1.145,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Large",
+"x": -10.01,
+"y": 28.27,
+"z": 20.51,
+"yaw": 349.1,
+"scale": 1.393,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Large",
+"x": -45.77,
+"y": 47.44,
+"z": 18.87,
+"yaw": 174.7,
+"scale": 1.138,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Large",
+"x": -47.71,
+"y": 11.27,
+"z": 21.18,
+"yaw": 165.5,
+"scale": 1.377,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Large",
+"x": -44.47,
+"y": 20.78,
+"z": 23.8,
+"yaw": 291.4,
+"scale": 1.593,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Iron_Large",
+"x": -53.69,
+"y": 38.33,
+"z": 18.75,
+"yaw": 235.7,
+"scale": 1.053,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Starmetal_Large",
+"x": -21.93,
+"y": 42.35,
+"z": 22.17,
+"yaw": 40.3,
+"scale": 1.546,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Coal_Small",
+"x": -46.46,
+"y": 45.81,
+"z": 19.14,
+"yaw": 192.0,
+"scale": 1.638,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Small",
+"x": -36.0,
+"y": 41.09,
+"z": 26.07,
+"yaw": 321.8,
+"scale": 1.052,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Small",
+"x": -35.29,
+"y": 48.07,
+"z": 22.18,
+"yaw": 43.6,
+"scale": 1.359,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Small",
+"x": -15.15,
+"y": 19.92,
+"z": 23.49,
+"yaw": 338.9,
+"scale": 1.446,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Small",
+"x": -49.07,
+"y": 9.85,
+"z": 20.61,
+"yaw": 281.5,
+"scale": 1.623,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Iron_Small",
+"x": -38.65,
+"y": 12.61,
+"z": 23.04,
+"yaw": 350.0,
+"scale": 1.257,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Starmetal_Small",
+"x": -50.16,
+"y": 23.46,
+"z": 21.99,
+"yaw": 239.3,
+"scale": 1.663,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Coal_Large",
+"x": -50.77,
+"y": 10.75,
+"z": 19.91,
+"yaw": 285.3,
+"scale": 1.689,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Large",
+"x": -31.12,
+"y": 28.76,
+"z": 30.36,
+"yaw": 177.4,
+"scale": 1.411,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Large",
+"x": -55.91,
+"y": 29.48,
+"z": 19.07,
+"yaw": 72.7,
+"scale": 1.007,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Large",
+"x": -19.87,
+"y": 38.54,
+"z": 23.23,
+"yaw": 295.9,
+"scale": 1.097,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Large",
+"x": -28.68,
+"y": 39.24,
+"z": 25.27,
+"yaw": 215.6,
+"scale": 1.19,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Iron_Large",
+"x": -33.92,
+"y": 14.98,
+"z": 23.69,
+"yaw": 288.7,
+"scale": 1.653,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Starmetal_Large",
+"x": -49.08,
+"y": 26.24,
+"z": 22.08,
+"yaw": 208.4,
+"scale": 1.336,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Coal_Small",
+"x": -54.0,
+"y": 13.89,
+"z": 19.73,
+"yaw": 311.8,
+"scale": 1.003,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Small",
+"x": -25.29,
+"y": 28.79,
+"z": 28.14,
+"yaw": 227.1,
+"scale": 1.591,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Small",
+"x": -14.89,
+"y": 28.07,
+"z": 24.82,
+"yaw": 275.6,
+"scale": 1.309,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Small",
+"x": -57.87,
+"y": 19.27,
+"z": 19.1,
+"yaw": 292.7,
+"scale": 1.294,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Small",
+"x": -32.94,
+"y": 30.5,
+"z": 30.8,
+"yaw": 194.1,
+"scale": 1.167,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Iron_Small",
+"x": -33.51,
+"y": 10.81,
+"z": 22.14,
+"yaw": 114.4,
+"scale": 1.546,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Starmetal_Small",
+"x": -49.55,
+"y": 29.29,
+"z": 21.49,
+"yaw": 84.8,
+"scale": 1.206,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Coal_Large",
+"x": -12.41,
+"y": 40.88,
+"z": 19.94,
+"yaw": 52.2,
+"scale": 1.773,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Large",
+"x": -37.01,
+"y": 51.41,
+"z": 20.35,
+"yaw": 214.0,
+"scale": 1.588,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Large",
+"x": -45.06,
+"y": 16.48,
+"z": 23.22,
+"yaw": 271.7,
+"scale": 1.443,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Large",
+"x": -36.11,
+"y": 29.07,
+"z": 30.45,
+"yaw": 35.0,
+"scale": 1.114,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Large",
+"x": -40.66,
+"y": 30.66,
+"z": 27.58,
+"yaw": 167.7,
+"scale": 1.06,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Iron_Large",
+"x": -53.56,
+"y": 41.74,
+"z": 18.13,
+"yaw": 267.2,
+"scale": 1.361,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Starmetal_Large",
+"x": -59.17,
+"y": 33.69,
+"z": 16.96,
+"yaw": 205.2,
+"scale": 1.292,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Coal_Small",
+"x": -50.28,
+"y": 34.96,
+"z": 21.52,
+"yaw": 236.4,
+"scale": 1.51,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Copper_Small",
+"x": -31.98,
+"y": 55.15,
+"z": 18.8,
+"yaw": 56.6,
+"scale": 1.78,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Crystal_Small",
+"x": -37.3,
+"y": 32.0,
+"z": 29.69,
+"yaw": 152.0,
+"scale": 1.627,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Gold_Small",
+"x": -48.81,
+"y": 41.9,
+"z": 20.68,
+"yaw": 154.8,
+"scale": 1.46,
+"zone": "quarry-hill"
+},
+{
+"asset": "Prop_OreNode_Heartstone_Small",
+"x": -43.2,
+"y": 17.16,
+"z": 23.48,
+"yaw": 139.0,
+"scale": 1.753,
+"zone": "quarry-hill"
+},
+{
+"asset": "Bld_Mill",
+"x": 24.0,
+"y": 5.0,
+"z": 12.3,
+"yaw": 180.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Bld_Orr_Water_Mill",
+"x": 22.12,
+"y": 12.0,
+"z": 11.91,
+"yaw": 210.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Anvil",
+"x": 17.0,
+"y": 17.12,
+"z": 15.24,
+"yaw": 240.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Anvil_Starmetal",
+"x": 10.0,
+"y": 19.0,
+"z": 15.55,
+"yaw": 270.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V1",
+"x": 3.0,
+"y": 17.12,
+"z": 14.22,
+"yaw": 300.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V2",
+"x": -2.12,
+"y": 12.0,
+"z": 14.25,
+"yaw": 330.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V3",
+"x": -4.0,
+"y": 5.0,
+"z": 14.1,
+"yaw": 360.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V4",
+"x": -2.13,
+"y": -2.0,
+"z": 14.4,
+"yaw": 390.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V5",
+"x": 3.0,
+"y": -7.12,
+"z": 12.88,
+"yaw": 420.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Decor_Bench_V6",
+"x": 10.0,
+"y": -9.0,
+"z": 12.89,
+"yaw": 450.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Kitchen_Mill",
+"x": 17.0,
+"y": -7.13,
+"z": 12.58,
+"yaw": 480.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_BUF_Water_SunStill_V1",
+"x": 22.12,
+"y": -2.0,
+"z": 12.05,
+"yaw": 510.0,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Ark_Locker",
+"x": 14.0,
+"y": 5.0,
+"z": 14.5,
+"yaw": 325.5,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Gold",
+"x": 12.16,
+"y": 8.37,
+"z": 14.38,
+"yaw": 53.1,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Iron",
+"x": 8.34,
+"y": 8.64,
+"z": 13.74,
+"yaw": 330.9,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Large",
+"x": 6.04,
+"y": 5.56,
+"z": 13.01,
+"yaw": 253.9,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Large_Wood",
+"x": 7.39,
+"y": 1.97,
+"z": 14.74,
+"yaw": 129.9,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Prop_Chest_Starmetal",
+"x": 11.13,
+"y": 1.16,
+"z": 15.34,
+"yaw": 6.2,
+"scale": 1.0,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Mob_Forest_Crawler_K13",
+"x": 67.67,
+"y": 39.57,
+"z": 8.47,
+"yaw": 306.3,
+"scale": 0.928,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K18",
+"x": 40.75,
+"y": 39.0,
+"z": 12.17,
+"yaw": 273.8,
+"scale": 1.065,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K23",
+"x": 55.64,
+"y": 59.37,
+"z": 8.26,
+"yaw": 200.1,
+"scale": 1.206,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K28",
+"x": 59.59,
+"y": 56.08,
+"z": 6.95,
+"yaw": 110.7,
+"scale": 0.932,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K3",
+"x": 60.47,
+"y": 24.09,
+"z": 8.78,
+"yaw": 329.8,
+"scale": 1.146,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K8",
+"x": 55.65,
+"y": 25.58,
+"z": 9.24,
+"yaw": 295.7,
+"scale": 0.924,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K13",
+"x": 57.57,
+"y": 28.93,
+"z": 9.49,
+"yaw": 214.1,
+"scale": 1.104,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K18",
+"x": 48.32,
+"y": 48.33,
+"z": 10.11,
+"yaw": 354.7,
+"scale": 1.107,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K23",
+"x": 52.13,
+"y": 24.16,
+"z": 9.8,
+"yaw": 218.6,
+"scale": 1.138,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K28",
+"x": 72.19,
+"y": 50.16,
+"z": 6.89,
+"yaw": 44.0,
+"scale": 0.921,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K3",
+"x": 41.21,
+"y": 30.4,
+"z": 11.99,
+"yaw": 15.0,
+"scale": 0.924,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K8",
+"x": 60.11,
+"y": 33.32,
+"z": 9.15,
+"yaw": 66.7,
+"scale": 1.11,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K13",
+"x": 48.78,
+"y": 44.53,
+"z": 10.26,
+"yaw": 70.1,
+"scale": 1.011,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K18",
+"x": 35.6,
+"y": 54.07,
+"z": 11.6,
+"yaw": 150.6,
+"scale": 1.263,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K23",
+"x": 70.06,
+"y": 39.6,
+"z": 8.45,
+"yaw": 61.0,
+"scale": 1.217,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K28",
+"x": 44.79,
+"y": 56.59,
+"z": 9.66,
+"yaw": 7.3,
+"scale": 0.912,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K3",
+"x": 34.93,
+"y": 36.9,
+"z": 12.7,
+"yaw": 111.2,
+"scale": 1.179,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K8",
+"x": 58.85,
+"y": 48.31,
+"z": 8.3,
+"yaw": 135.1,
+"scale": 1.253,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K13",
+"x": 37.43,
+"y": 35.2,
+"z": 12.82,
+"yaw": 267.4,
+"scale": 0.918,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K18",
+"x": 66.35,
+"y": 33.11,
+"z": 8.99,
+"yaw": 287.6,
+"scale": 1.034,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K23",
+"x": 47.83,
+"y": 45.71,
+"z": 10.89,
+"yaw": 114.1,
+"scale": 1.298,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K28",
+"x": 65.25,
+"y": 55.52,
+"z": 6.72,
+"yaw": 13.3,
+"scale": 1.137,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K3",
+"x": 51.89,
+"y": 59.17,
+"z": 9.04,
+"yaw": 68.2,
+"scale": 1.223,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K8",
+"x": 70.05,
+"y": 36.65,
+"z": 8.43,
+"yaw": 142.0,
+"scale": 0.973,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K13",
+"x": 55.19,
+"y": 27.25,
+"z": 9.16,
+"yaw": 0.1,
+"scale": 0.971,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K18",
+"x": 43.93,
+"y": 48.14,
+"z": 10.82,
+"yaw": 203.1,
+"scale": 1.187,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K23",
+"x": 61.13,
+"y": 35.96,
+"z": 9.29,
+"yaw": 219.8,
+"scale": 1.136,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K28",
+"x": 63.0,
+"y": 53.01,
+"z": 6.87,
+"yaw": 268.4,
+"scale": 1.074,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K3",
+"x": 38.9,
+"y": 47.35,
+"z": 11.98,
+"yaw": 0.1,
+"scale": 0.915,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Grazer_K8",
+"x": 74.92,
+"y": 51.7,
+"z": 6.62,
+"yaw": 54.8,
+"scale": 1.075,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K13",
+"x": 73.74,
+"y": 48.73,
+"z": 6.92,
+"yaw": 100.0,
+"scale": 1.295,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K18",
+"x": 66.08,
+"y": 35.84,
+"z": 9.1,
+"yaw": 30.2,
+"scale": 0.993,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K23",
+"x": 46.86,
+"y": 53.63,
+"z": 9.97,
+"yaw": 23.6,
+"scale": 0.916,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K28",
+"x": 42.98,
+"y": 59.03,
+"z": 9.28,
+"yaw": 82.0,
+"scale": 1.018,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K3",
+"x": 73.15,
+"y": 55.3,
+"z": 6.46,
+"yaw": 204.2,
+"scale": 0.926,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Hopper_K8",
+"x": 48.99,
+"y": 56.09,
+"z": 9.64,
+"yaw": 114.6,
+"scale": 1.041,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K13",
+"x": 34.49,
+"y": 47.37,
+"z": 12.48,
+"yaw": 254.4,
+"scale": 1.165,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K18",
+"x": 45.04,
+"y": 27.89,
+"z": 11.98,
+"yaw": 225.1,
+"scale": 1.173,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K23",
+"x": 58.41,
+"y": 49.75,
+"z": 8.22,
+"yaw": 358.5,
+"scale": 1.058,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Forest_Crawler_K28",
+"x": 48.9,
+"y": 61.95,
+"z": 8.8,
+"yaw": 337.1,
+"scale": 0.94,
+"zone": "livestock-pen"
+},
+{
+"asset": "Mob_Crew_Botanist",
+"x": 17.0,
+"y": 5.0,
+"z": 13.75,
+"yaw": 180.0,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Captain",
+"x": 16.07,
+"y": 8.48,
+"z": 13.95,
+"yaw": 209.8,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Deckhand",
+"x": 13.54,
+"y": 11.04,
+"z": 14.88,
+"yaw": 239.6,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Engineer",
+"x": 10.08,
+"y": 12.0,
+"z": 15.12,
+"yaw": 269.4,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Kid",
+"x": 6.59,
+"y": 11.11,
+"z": 14.41,
+"yaw": 299.2,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Lookout",
+"x": 4.0,
+"y": 8.61,
+"z": 12.36,
+"yaw": 329.0,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Medic",
+"x": 3.0,
+"y": 5.15,
+"z": 13.26,
+"yaw": 358.8,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Merchant",
+"x": 3.85,
+"y": 1.65,
+"z": 13.99,
+"yaw": 388.6,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Navigator",
+"x": 6.33,
+"y": -0.96,
+"z": 13.1,
+"yaw": 418.4,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Shipwright",
+"x": 9.77,
+"y": -2.0,
+"z": 14.07,
+"yaw": 448.1,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Mob_Crew_Smith",
+"x": 13.28,
+"y": -1.18,
+"z": 14.23,
+"yaw": 477.9,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Prop_CookingPot_Lit",
+"x": 2,
+"y": -4,
+"z": 12.81,
+"yaw": 291.2,
+"scale": 1.2,
+"zone": "crafting-plaza"
+},
+{
+"asset": "Mob_Crew_Cook",
+"x": 3.2,
+"y": -4,
+"z": 12.67,
+"yaw": 90.0,
+"scale": 1.0,
+"zone": "crew-npc"
+},
+{
+"asset": "Prop_BBIsle_Arch_00",
+"x": 2.8,
+"y": -74.99,
+"z": 8.73,
+"yaw": 92.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_01",
+"x": -82.73,
+"y": -39.46,
+"z": 5.96,
+"yaw": 25.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_02",
+"x": 72.74,
+"y": 8.31,
+"z": 8.77,
+"yaw": -173.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_03",
+"x": 54.84,
+"y": -30.54,
+"z": 9.25,
+"yaw": 150.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_04",
+"x": -68.5,
+"y": 23.13,
+"z": 12.97,
+"yaw": -18.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_05",
+"x": 65.99,
+"y": -35.53,
+"z": 6.99,
+"yaw": 151.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_06",
+"x": 10.34,
+"y": -95.04,
+"z": 5.43,
+"yaw": 96.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_07",
+"x": 83.01,
+"y": -31.68,
+"z": 6.04,
+"yaw": 159.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_08",
+"x": 62.15,
+"y": -56.5,
+"z": 7.24,
+"yaw": 137.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_09",
+"x": -96.9,
+"y": 13.85,
+"z": 5.31,
+"yaw": -8.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_10",
+"x": -37.24,
+"y": -75.72,
+"z": 8.71,
+"yaw": 63.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_11",
+"x": 90.77,
+"y": 36.39,
+"z": 5.66,
+"yaw": -158.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_12",
+"x": 71.96,
+"y": -51.24,
+"z": 5.7,
+"yaw": 144.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_13",
+"x": -4.4,
+"y": 78.44,
+"z": 8.62,
+"yaw": -86.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_14",
+"x": 38.85,
+"y": 87.23,
+"z": 5.53,
+"yaw": -114.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_15",
+"x": -44.85,
+"y": 82.38,
+"z": 5.63,
+"yaw": -61.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_16",
+"x": -72.72,
+"y": 40.3,
+"z": 7.81,
+"yaw": -29.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_17",
+"x": 65.84,
+"y": 12.27,
+"z": 8.02,
+"yaw": -169.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_18",
+"x": -68.89,
+"y": 10.23,
+"z": 11.99,
+"yaw": -8.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Arch_19",
+"x": -9.27,
+"y": 74.93,
+"z": 9.45,
+"yaw": -82.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_00",
+"x": 2.18,
+"y": 39.18,
+"z": 13.89,
+"yaw": 88.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_01",
+"x": 42.11,
+"y": 22.79,
+"z": 12.5,
+"yaw": 265.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_02",
+"x": -20.24,
+"y": 9.08,
+"z": 20.26,
+"yaw": 82.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_03",
+"x": -10.19,
+"y": 16.93,
+"z": 19.99,
+"yaw": 168.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_04",
+"x": -16.82,
+"y": 33.76,
+"z": 23.47,
+"yaw": 100.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_05",
+"x": 3.24,
+"y": -13.72,
+"z": 11.45,
+"yaw": 240.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_06",
+"x": -35.15,
+"y": -8.45,
+"z": 12.59,
+"yaw": 322.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_07",
+"x": 5.29,
+"y": -25.69,
+"z": 9.94,
+"yaw": 66.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_08",
+"x": -0.8,
+"y": -46.79,
+"z": 10.04,
+"yaw": 236.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_09",
+"x": -35.97,
+"y": 7.96,
+"z": 21.73,
+"yaw": 83.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_10",
+"x": -17.77,
+"y": -21.99,
+"z": 14.01,
+"yaw": 26.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_11",
+"x": -13.04,
+"y": 32.61,
+"z": 21.77,
+"yaw": 76.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_12",
+"x": 54.34,
+"y": -8.46,
+"z": 10.87,
+"yaw": 155.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_13",
+"x": 60.19,
+"y": -7.9,
+"z": 9.1,
+"yaw": 72.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_14",
+"x": 38.06,
+"y": 2.38,
+"z": 11.93,
+"yaw": 40.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_15",
+"x": -35.96,
+"y": 2.52,
+"z": 19.89,
+"yaw": 313.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_16",
+"x": -27.37,
+"y": 6.89,
+"z": 20.93,
+"yaw": 33.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_17",
+"x": -8.6,
+"y": 11.9,
+"z": 16.91,
+"yaw": 151.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_18",
+"x": 35.13,
+"y": -19.71,
+"z": 9.81,
+"yaw": 110.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Banner_19",
+"x": 15.7,
+"y": 23.74,
+"z": 14.5,
+"yaw": 155.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_00",
+"x": 33.05,
+"y": -16.78,
+"z": 11.5,
+"yaw": 19.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_01",
+"x": -6.08,
+"y": 31.99,
+"z": 18.5,
+"yaw": 290.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_02",
+"x": -41.36,
+"y": -10.93,
+"z": 12.27,
+"yaw": 182.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_03",
+"x": -21.55,
+"y": 29.46,
+"z": 26.42,
+"yaw": 249.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_04",
+"x": 13.11,
+"y": -42.82,
+"z": 9.81,
+"yaw": 268.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_05",
+"x": 22.37,
+"y": 22.48,
+"z": 14.41,
+"yaw": 274.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_06",
+"x": -34.26,
+"y": -12.76,
+"z": 12.79,
+"yaw": 197.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_07",
+"x": 51.39,
+"y": 13.98,
+"z": 10.92,
+"yaw": 102.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_08",
+"x": 44.06,
+"y": -14.57,
+"z": 11.19,
+"yaw": 26.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_09",
+"x": 6.37,
+"y": 24.6,
+"z": 15.3,
+"yaw": 358.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_10",
+"x": 30.38,
+"y": -40.79,
+"z": 11.39,
+"yaw": 22.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_11",
+"x": 22.28,
+"y": -39.18,
+"z": 12.17,
+"yaw": 164.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_12",
+"x": 12.12,
+"y": -25.16,
+"z": 9.54,
+"yaw": 106.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_13",
+"x": -17.25,
+"y": 3.62,
+"z": 16.21,
+"yaw": 194.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_14",
+"x": 0.98,
+"y": 22.41,
+"z": 15.9,
+"yaw": 125.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_15",
+"x": 46.66,
+"y": 0.71,
+"z": 12.45,
+"yaw": 264.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_16",
+"x": 47.82,
+"y": -20.22,
+"z": 10.91,
+"yaw": 340.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_17",
+"x": 17.79,
+"y": -16.31,
+"z": 12.1,
+"yaw": 338.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_18",
+"x": -3.45,
+"y": 17.63,
+"z": 16.86,
+"yaw": 108.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Barrel_19",
+"x": 48.23,
+"y": -11.58,
+"z": 11.6,
+"yaw": 314.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_00",
+"x": 22.94,
+"y": 64.66,
+"z": 11.67,
+"yaw": 149.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_01",
+"x": 80.49,
+"y": 26.98,
+"z": 8.0,
+"yaw": 89.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_02",
+"x": 69.43,
+"y": 64.12,
+"z": 5.93,
+"yaw": 213.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_03",
+"x": 30.32,
+"y": 52.07,
+"z": 11.67,
+"yaw": 9.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_04",
+"x": 92.91,
+"y": 44.91,
+"z": 4.89,
+"yaw": 264.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_05",
+"x": 33.68,
+"y": 70.75,
+"z": 9.17,
+"yaw": 342.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_06",
+"x": 49.62,
+"y": 31.92,
+"z": 10.76,
+"yaw": 136.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_07",
+"x": 61.6,
+"y": 15.82,
+"z": 8.58,
+"yaw": 287.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_08",
+"x": 49.24,
+"y": 17.16,
+"z": 10.92,
+"yaw": 223.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_09",
+"x": 33.61,
+"y": 19.84,
+"z": 13.76,
+"yaw": 125.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_10",
+"x": 18.94,
+"y": 60.05,
+"z": 12.57,
+"yaw": 71.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_11",
+"x": 76.72,
+"y": 12.24,
+"z": 8.89,
+"yaw": 321.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_12",
+"x": 37.63,
+"y": 19.89,
+"z": 13.02,
+"yaw": 196.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_13",
+"x": 49.78,
+"y": 73.3,
+"z": 6.86,
+"yaw": 85.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_14",
+"x": 76.04,
+"y": 45.07,
+"z": 7.13,
+"yaw": 20.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_15",
+"x": 50.35,
+"y": 4.86,
+"z": 11.23,
+"yaw": 157.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_16",
+"x": 60.53,
+"y": 65.07,
+"z": 7.13,
+"yaw": 88.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_17",
+"x": 54.12,
+"y": 19.23,
+"z": 9.88,
+"yaw": 237.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_18",
+"x": 35.77,
+"y": 41.37,
+"z": 12.62,
+"yaw": 280.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Beehive_19",
+"x": 58.42,
+"y": 11.56,
+"z": 8.74,
+"yaw": 306.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_00",
+"x": -18.44,
+"y": -16.9,
+"z": 14.73,
+"yaw": 17.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_01",
+"x": 27.72,
+"y": 37.45,
+"z": 13.12,
+"yaw": 255.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_02",
+"x": -2.66,
+"y": -16.18,
+"z": 10.97,
+"yaw": 91.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_03",
+"x": 7.36,
+"y": 36.62,
+"z": 13.07,
+"yaw": 334.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_04",
+"x": 15.88,
+"y": -39.13,
+"z": 10.24,
+"yaw": 234.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_05",
+"x": 1.95,
+"y": -19.51,
+"z": 9.47,
+"yaw": 242.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_06",
+"x": 19.22,
+"y": -34.48,
+"z": 12.1,
+"yaw": 101.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_07",
+"x": -17.1,
+"y": -12.84,
+"z": 12.7,
+"yaw": 265.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_08",
+"x": -14.09,
+"y": -27.52,
+"z": 11.86,
+"yaw": 21.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_09",
+"x": 16.5,
+"y": 56.67,
+"z": 12.8,
+"yaw": 90.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_10",
+"x": 20.09,
+"y": 32.37,
+"z": 14.05,
+"yaw": 233.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_11",
+"x": 63.8,
+"y": 4.77,
+"z": 9.31,
+"yaw": 201.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_12",
+"x": 37.41,
+"y": -26.61,
+"z": 9.26,
+"yaw": 346.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_13",
+"x": -24.84,
+"y": -25.43,
+"z": 13.94,
+"yaw": 123.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_14",
+"x": 41.23,
+"y": -8.46,
+"z": 11.04,
+"yaw": 307.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_15",
+"x": -6.88,
+"y": 42.54,
+"z": 17.17,
+"yaw": 334.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_16",
+"x": 34.38,
+"y": 10.5,
+"z": 12.82,
+"yaw": 279.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_17",
+"x": -20.93,
+"y": -20.41,
+"z": 14.91,
+"yaw": 239.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_18",
+"x": -28.35,
+"y": -4.54,
+"z": 14.68,
+"yaw": 53.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bell_19",
+"x": 26.58,
+"y": -14.95,
+"z": 12.88,
+"yaw": 278.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_00",
+"x": -7.91,
+"y": 23.33,
+"z": 19.11,
+"yaw": -45.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_01",
+"x": -29.64,
+"y": 0.73,
+"z": 18.34,
+"yaw": 6.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_02",
+"x": 41.96,
+"y": 34.99,
+"z": 12.76,
+"yaw": -136.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_03",
+"x": 32.21,
+"y": 32.92,
+"z": 12.79,
+"yaw": -128.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_04",
+"x": 29.71,
+"y": 2.41,
+"z": 12.17,
+"yaw": 172.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_05",
+"x": -26.11,
+"y": 14.97,
+"z": 23.25,
+"yaw": -15.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_06",
+"x": -1.92,
+"y": 33.05,
+"z": 16.88,
+"yaw": -67.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_07",
+"x": 20.56,
+"y": 45.51,
+"z": 13.82,
+"yaw": -104.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_08",
+"x": -35.9,
+"y": 20.14,
+"z": 25.03,
+"yaw": -18.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_09",
+"x": 20.16,
+"y": -21.41,
+"z": 12.4,
+"yaw": 111.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_10",
+"x": -9.57,
+"y": 56.03,
+"z": 13.86,
+"yaw": -69.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_11",
+"x": 42.59,
+"y": -3.43,
+"z": 11.65,
+"yaw": 165.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_12",
+"x": 45.95,
+"y": -26.99,
+"z": 10.12,
+"yaw": 138.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_13",
+"x": -22.22,
+"y": -7.44,
+"z": 12.81,
+"yaw": 21.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_14",
+"x": -28.9,
+"y": 17.7,
+"z": 24.35,
+"yaw": -18.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_15",
+"x": 6.67,
+"y": 49.37,
+"z": 13.13,
+"yaw": -85.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_16",
+"x": 36.73,
+"y": -15.49,
+"z": 10.9,
+"yaw": 142.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_17",
+"x": -15.18,
+"y": 49.66,
+"z": 16.9,
+"yaw": -60.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_18",
+"x": -33.41,
+"y": 35.65,
+"z": 29.18,
+"yaw": -35.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bench_19",
+"x": 24.61,
+"y": -11.53,
+"z": 11.84,
+"yaw": 131.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_00",
+"x": -90.49,
+"y": 7.98,
+"z": 6.57,
+"yaw": 141.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_01",
+"x": -25.03,
+"y": -59.91,
+"z": 11.03,
+"yaw": 172.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_02",
+"x": -61.1,
+"y": 0.81,
+"z": 12.05,
+"yaw": 229.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_03",
+"x": -78.57,
+"y": 26.21,
+"z": 7.98,
+"yaw": 253.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_04",
+"x": 55.29,
+"y": -41.07,
+"z": 8.35,
+"yaw": 171.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_05",
+"x": 71.2,
+"y": -57.86,
+"z": 5.55,
+"yaw": 230.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_06",
+"x": -78.6,
+"y": 53.88,
+"z": 5.22,
+"yaw": 272.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_07",
+"x": 36.15,
+"y": 79.23,
+"z": 6.87,
+"yaw": 173.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_08",
+"x": 40.47,
+"y": -89.29,
+"z": 5.41,
+"yaw": 27.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_09",
+"x": -12.4,
+"y": 84.18,
+"z": 8.13,
+"yaw": 91.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_10",
+"x": -86.34,
+"y": 1.43,
+"z": 7.79,
+"yaw": 298.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_11",
+"x": 33.82,
+"y": -88.05,
+"z": 5.49,
+"yaw": 81.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_12",
+"x": 5.54,
+"y": 94.64,
+"z": 5.17,
+"yaw": 32.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_13",
+"x": 71.04,
+"y": 19.84,
+"z": 8.61,
+"yaw": 221.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_14",
+"x": -78.7,
+"y": 18.89,
+"z": 8.84,
+"yaw": 10.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_15",
+"x": 89.24,
+"y": 25.7,
+"z": 6.28,
+"yaw": 257.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_16",
+"x": -84.72,
+"y": 19.39,
+"z": 7.16,
+"yaw": 110.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_17",
+"x": 80.2,
+"y": 20.61,
+"z": 8.32,
+"yaw": 17.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_18",
+"x": 10.94,
+"y": -76.71,
+"z": 7.9,
+"yaw": 118.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Bridge_19",
+"x": -85.06,
+"y": -4.71,
+"z": 7.21,
+"yaw": 21.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_00",
+"x": -17.46,
+"y": -31.22,
+"z": 12.52,
+"yaw": 161.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_01",
+"x": 32.36,
+"y": -21.85,
+"z": 10.07,
+"yaw": 46.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_02",
+"x": 42.47,
+"y": -34.7,
+"z": 8.54,
+"yaw": 276.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_03",
+"x": 44.89,
+"y": -7.72,
+"z": 11.2,
+"yaw": 216.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_04",
+"x": 30.09,
+"y": 11.99,
+"z": 12.35,
+"yaw": 34.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_05",
+"x": 2.95,
+"y": 43.76,
+"z": 12.8,
+"yaw": 311.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_06",
+"x": 1.88,
+"y": 26.06,
+"z": 15.64,
+"yaw": 105.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_07",
+"x": 24.43,
+"y": 52.98,
+"z": 11.81,
+"yaw": 49.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_08",
+"x": 40.6,
+"y": -28.11,
+"z": 9.11,
+"yaw": 2.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_09",
+"x": 14.06,
+"y": 29.23,
+"z": 14.41,
+"yaw": 270.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_10",
+"x": -9.62,
+"y": -7.65,
+"z": 12.89,
+"yaw": 228.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_11",
+"x": -22.66,
+"y": 35.25,
+"z": 24.9,
+"yaw": 149.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_12",
+"x": 47.17,
+"y": 23.66,
+"z": 11.66,
+"yaw": 219.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_13",
+"x": -19.37,
+"y": 15.75,
+"z": 21.41,
+"yaw": 328.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_14",
+"x": 15.98,
+"y": 35.98,
+"z": 14.01,
+"yaw": 289.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_15",
+"x": -17.75,
+"y": -7.79,
+"z": 12.12,
+"yaw": 111.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_16",
+"x": 19.02,
+"y": 50.63,
+"z": 13.07,
+"yaw": 164.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_17",
+"x": 55.12,
+"y": 15.63,
+"z": 10.2,
+"yaw": 199.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_18",
+"x": -18.18,
+"y": -0.66,
+"z": 14.94,
+"yaw": 90.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Cart_19",
+"x": -14.26,
+"y": -18.45,
+"z": 12.09,
+"yaw": 277.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_00",
+"x": 26.21,
+"y": 45.02,
+"z": 12.12,
+"yaw": 114.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_01",
+"x": 52.41,
+"y": 63.26,
+"z": 8.43,
+"yaw": 225.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_02",
+"x": 79.36,
+"y": 46.6,
+"z": 6.59,
+"yaw": 113.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_03",
+"x": 66.41,
+"y": 22.74,
+"z": 8.33,
+"yaw": 186.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_04",
+"x": 44.69,
+"y": 72.55,
+"z": 8.21,
+"yaw": 23.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_05",
+"x": 67.37,
+"y": 69.49,
+"z": 5.59,
+"yaw": 109.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_06",
+"x": 80.71,
+"y": 34.47,
+"z": 7.92,
+"yaw": 142.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_07",
+"x": 39.93,
+"y": 83.57,
+"z": 5.92,
+"yaw": 252.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_08",
+"x": 49.15,
+"y": 27.92,
+"z": 11.04,
+"yaw": 105.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_09",
+"x": 64.0,
+"y": 44.45,
+"z": 8.05,
+"yaw": 21.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_10",
+"x": 33.34,
+"y": 76.42,
+"z": 8.12,
+"yaw": 208.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_11",
+"x": 32.17,
+"y": 24.88,
+"z": 12.9,
+"yaw": 88.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_12",
+"x": 39.07,
+"y": 67.09,
+"z": 8.68,
+"yaw": 294.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_13",
+"x": 90.02,
+"y": 47.21,
+"z": 5.18,
+"yaw": 214.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_14",
+"x": 53.19,
+"y": 36.33,
+"z": 10.08,
+"yaw": 113.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_15",
+"x": 29.73,
+"y": 58.48,
+"z": 11.09,
+"yaw": 300.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_16",
+"x": 45.23,
+"y": 40.63,
+"z": 12.1,
+"yaw": 107.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_17",
+"x": 84.03,
+"y": 44.83,
+"z": 6.01,
+"yaw": 337.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_18",
+"x": 88.23,
+"y": 51.4,
+"z": 4.98,
+"yaw": 304.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Coop_19",
+"x": 38.15,
+"y": 74.51,
+"z": 8.36,
+"yaw": 119.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_00",
+"x": 27.86,
+"y": -23.54,
+"z": 12.05,
+"yaw": 114.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_01",
+"x": 29.47,
+"y": 48.64,
+"z": 12.34,
+"yaw": 31.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_02",
+"x": 15.3,
+"y": -12.52,
+"z": 12.57,
+"yaw": 347.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_03",
+"x": 20.86,
+"y": 40.93,
+"z": 14.14,
+"yaw": 77.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_04",
+"x": 10.76,
+"y": -38.84,
+"z": 9.74,
+"yaw": 155.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_05",
+"x": -13.47,
+"y": 0.58,
+"z": 14.5,
+"yaw": 145.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_06",
+"x": 45.27,
+"y": 18.23,
+"z": 11.4,
+"yaw": 305.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_07",
+"x": 33.23,
+"y": 14.2,
+"z": 12.86,
+"yaw": 92.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_08",
+"x": 54.09,
+"y": -16.39,
+"z": 9.83,
+"yaw": 97.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_09",
+"x": 18.84,
+"y": 21.67,
+"z": 14.74,
+"yaw": 185.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_10",
+"x": 15.05,
+"y": 50.27,
+"z": 13.89,
+"yaw": 111.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_11",
+"x": -6.81,
+"y": 35.58,
+"z": 18.32,
+"yaw": 250.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_12",
+"x": 23.59,
+"y": -7.8,
+"z": 12.23,
+"yaw": 171.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_13",
+"x": 3.57,
+"y": 51.74,
+"z": 12.41,
+"yaw": 110.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_14",
+"x": 29.51,
+"y": -34.78,
+"z": 11.94,
+"yaw": 65.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_15",
+"x": -8.66,
+"y": -27.83,
+"z": 11.08,
+"yaw": 254.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_16",
+"x": 57.49,
+"y": -18.99,
+"z": 9.65,
+"yaw": 209.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_17",
+"x": 11.24,
+"y": 56.68,
+"z": 13.02,
+"yaw": 183.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_18",
+"x": 28.52,
+"y": 28.63,
+"z": 13.11,
+"yaw": 64.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Crate_19",
+"x": -8.85,
+"y": 3.36,
+"z": 13.83,
+"yaw": 133.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_00",
+"x": 48.93,
+"y": 81.71,
+"z": 5.16,
+"yaw": 204.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_01",
+"x": 76.93,
+"y": 33.7,
+"z": 8.02,
+"yaw": 231.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_02",
+"x": 64.07,
+"y": 58.98,
+"z": 6.67,
+"yaw": 12.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_03",
+"x": 64.74,
+"y": 63.36,
+"z": 6.68,
+"yaw": 345.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_04",
+"x": 34.82,
+"y": 59.62,
+"z": 9.77,
+"yaw": 341.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_05",
+"x": 87.35,
+"y": 18.98,
+"z": 7.08,
+"yaw": 223.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_06",
+"x": 85.94,
+"y": 30.33,
+"z": 6.78,
+"yaw": 256.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_07",
+"x": 82.89,
+"y": 17.78,
+"z": 8.13,
+"yaw": 294.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_08",
+"x": 74.21,
+"y": 17.54,
+"z": 8.83,
+"yaw": 254.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_09",
+"x": 53.37,
+"y": 84.12,
+"z": 4.14,
+"yaw": 248.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_10",
+"x": 89.19,
+"y": 42.73,
+"z": 5.7,
+"yaw": 263.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_11",
+"x": 45.43,
+"y": 76.22,
+"z": 6.81,
+"yaw": 36.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_12",
+"x": 73.84,
+"y": 58.78,
+"z": 5.91,
+"yaw": 263.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_13",
+"x": 68.79,
+"y": 58.22,
+"z": 6.59,
+"yaw": 4.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_14",
+"x": 32.07,
+"y": 55.79,
+"z": 11.58,
+"yaw": 65.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_15",
+"x": 54.17,
+"y": 77.95,
+"z": 5.65,
+"yaw": 72.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_16",
+"x": 31.63,
+"y": 40.1,
+"z": 12.57,
+"yaw": 185.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_17",
+"x": 55.45,
+"y": 9.46,
+"z": 9.9,
+"yaw": 173.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_18",
+"x": 20.87,
+"y": 26.05,
+"z": 13.91,
+"yaw": 276.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Fence_19",
+"x": 91.09,
+"y": 30.52,
+"z": 5.79,
+"yaw": 98.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_00",
+"x": -30.19,
+"y": 4.69,
+"z": 20.18,
+"yaw": 331.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_01",
+"x": -30.69,
+"y": -16.85,
+"z": 14.39,
+"yaw": 169.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_02",
+"x": -15.09,
+"y": 24.12,
+"z": 24.28,
+"yaw": 339.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_03",
+"x": -1.12,
+"y": -9.85,
+"z": 12.26,
+"yaw": 57.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_04",
+"x": 23.41,
+"y": -33.75,
+"z": 12.19,
+"yaw": 44.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_05",
+"x": -39.4,
+"y": 23.77,
+"z": 25.81,
+"yaw": 186.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_06",
+"x": 42.6,
+"y": -18.47,
+"z": 11.1,
+"yaw": 36.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_07",
+"x": 36.16,
+"y": -4.14,
+"z": 12.23,
+"yaw": 275.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_08",
+"x": -42.39,
+"y": -3.85,
+"z": 15.77,
+"yaw": 148.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_09",
+"x": -23.99,
+"y": 22.35,
+"z": 26.56,
+"yaw": 228.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_10",
+"x": 41.88,
+"y": 14.5,
+"z": 12.43,
+"yaw": 289.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_11",
+"x": 34.54,
+"y": -43.91,
+"z": 11.21,
+"yaw": 216.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_12",
+"x": 28.57,
+"y": -10.6,
+"z": 12.64,
+"yaw": 90.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_13",
+"x": 8.09,
+"y": -41.86,
+"z": 10.26,
+"yaw": 153.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_14",
+"x": 13.04,
+"y": -16.32,
+"z": 12.46,
+"yaw": 185.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_15",
+"x": 7.88,
+"y": -29.34,
+"z": 10.77,
+"yaw": 59.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_16",
+"x": -33.33,
+"y": 23.45,
+"z": 27.12,
+"yaw": 68.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_17",
+"x": -39.61,
+"y": 5.46,
+"z": 20.93,
+"yaw": 351.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_18",
+"x": 18.43,
+"y": -30.67,
+"z": 11.62,
+"yaw": 75.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Lamp_19",
+"x": 26.66,
+"y": 12.8,
+"z": 11.97,
+"yaw": 10.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_00",
+"x": -87.15,
+"y": -31.87,
+"z": 5.73,
+"yaw": 215.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_01",
+"x": -18.03,
+"y": -91.21,
+"z": 6.49,
+"yaw": 175.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_02",
+"x": -6.78,
+"y": -83.0,
+"z": 6.97,
+"yaw": 318.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_03",
+"x": -92.87,
+"y": -8.46,
+"z": 6.21,
+"yaw": 60.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_04",
+"x": -54.61,
+"y": -79.03,
+"z": 5.62,
+"yaw": 295.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_05",
+"x": 1.54,
+"y": -94.9,
+"z": 5.94,
+"yaw": 73.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_06",
+"x": -23.17,
+"y": -69.34,
+"z": 9.6,
+"yaw": 147.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_07",
+"x": 10.55,
+"y": 84.31,
+"z": 6.81,
+"yaw": 21.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_08",
+"x": -68.03,
+"y": 72.06,
+"z": 4.77,
+"yaw": 169.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_09",
+"x": -90.12,
+"y": -22.79,
+"z": 5.7,
+"yaw": 191.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_10",
+"x": -51.42,
+"y": 65.6,
+"z": 8.04,
+"yaw": 34.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_11",
+"x": -79.67,
+"y": -10.63,
+"z": 8.16,
+"yaw": 56.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_12",
+"x": 92.97,
+"y": -23.7,
+"z": 5.41,
+"yaw": 74.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_13",
+"x": 46.6,
+"y": -53.8,
+"z": 9.25,
+"yaw": 172.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_14",
+"x": 76.48,
+"y": -24.36,
+"z": 6.88,
+"yaw": 204.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_15",
+"x": 25.7,
+"y": 80.83,
+"z": 7.21,
+"yaw": 109.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_16",
+"x": -21.32,
+"y": 57.11,
+"z": 15.9,
+"yaw": 235.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_17",
+"x": -80.96,
+"y": -19.97,
+"z": 7.03,
+"yaw": 146.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_18",
+"x": -90.05,
+"y": 30.22,
+"z": 5.23,
+"yaw": 277.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Obelisk_19",
+"x": -80.59,
+"y": 12.57,
+"z": 8.77,
+"yaw": 339.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_00",
+"x": 68.76,
+"y": 46.45,
+"z": 7.84,
+"yaw": 177.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_01",
+"x": 62.27,
+"y": 19.74,
+"z": 8.39,
+"yaw": 28.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_02",
+"x": 24.98,
+"y": 33.23,
+"z": 13.83,
+"yaw": 270.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_03",
+"x": 45.99,
+"y": 32.17,
+"z": 11.66,
+"yaw": 170.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_04",
+"x": 70.07,
+"y": 53.16,
+"z": 6.67,
+"yaw": 45.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_05",
+"x": 39.08,
+"y": 60.78,
+"z": 9.33,
+"yaw": 53.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_06",
+"x": 77.73,
+"y": 58.11,
+"z": 5.51,
+"yaw": 268.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_07",
+"x": 40.56,
+"y": 55.83,
+"z": 9.6,
+"yaw": 186.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_08",
+"x": 78.37,
+"y": 41.83,
+"z": 7.16,
+"yaw": 248.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_09",
+"x": 54.15,
+"y": 54.31,
+"z": 8.91,
+"yaw": 139.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_10",
+"x": 77.01,
+"y": 65.6,
+"z": 4.79,
+"yaw": 166.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_11",
+"x": 46.11,
+"y": 67.73,
+"z": 8.44,
+"yaw": 341.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_12",
+"x": 37.45,
+"y": 29.03,
+"z": 12.22,
+"yaw": 275.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_13",
+"x": 78.14,
+"y": 38.02,
+"z": 7.97,
+"yaw": 34.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_14",
+"x": 26.28,
+"y": 69.26,
+"z": 9.67,
+"yaw": 35.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_15",
+"x": 37.06,
+"y": 50.87,
+"z": 11.77,
+"yaw": 195.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_16",
+"x": 50.28,
+"y": 77.86,
+"z": 5.85,
+"yaw": 226.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_17",
+"x": 58.16,
+"y": 78.66,
+"z": 5.49,
+"yaw": 33.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_18",
+"x": 73.14,
+"y": 43.08,
+"z": 8.08,
+"yaw": 275.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Planter_19",
+"x": 24.76,
+"y": 48.99,
+"z": 12.4,
+"yaw": 239.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_00",
+"x": 82.68,
+"y": 55.93,
+"z": 5.05,
+"yaw": 9.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_01",
+"x": 43.54,
+"y": 79.29,
+"z": 6.4,
+"yaw": 133.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_02",
+"x": 51.88,
+"y": 8.75,
+"z": 11.54,
+"yaw": 276.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_03",
+"x": 38.09,
+"y": 7.27,
+"z": 12.72,
+"yaw": 278.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_04",
+"x": 28.51,
+"y": 66.23,
+"z": 9.82,
+"yaw": 248.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_05",
+"x": 71.07,
+"y": 30.41,
+"z": 8.51,
+"yaw": 228.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_06",
+"x": 83.08,
+"y": 14.04,
+"z": 8.09,
+"yaw": 349.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_07",
+"x": 59.54,
+"y": 85.38,
+"z": 3.7,
+"yaw": 282.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_08",
+"x": 29.98,
+"y": 62.06,
+"z": 10.16,
+"yaw": 109.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_09",
+"x": 61.27,
+"y": 61.2,
+"z": 6.88,
+"yaw": 138.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_10",
+"x": 78.06,
+"y": 70.3,
+"z": 3.74,
+"yaw": 138.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_11",
+"x": 41.66,
+"y": 52.33,
+"z": 9.87,
+"yaw": 359.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_12",
+"x": 49.1,
+"y": 38.79,
+"z": 11.51,
+"yaw": 272.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_13",
+"x": 37.77,
+"y": 24.52,
+"z": 12.6,
+"yaw": 97.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_14",
+"x": 67.61,
+"y": 79.83,
+"z": 3.68,
+"yaw": 55.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_15",
+"x": 40.77,
+"y": 44.29,
+"z": 12.13,
+"yaw": 276.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_16",
+"x": 88.76,
+"y": 57.14,
+"z": 3.59,
+"yaw": 289.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_17",
+"x": 48.57,
+"y": 85.67,
+"z": 4.05,
+"yaw": 63.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_18",
+"x": 63.9,
+"y": 70.92,
+"z": 6.02,
+"yaw": 83.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Scarecrow_19",
+"x": 63.79,
+"y": 48.86,
+"z": 7.04,
+"yaw": 179.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_00",
+"x": 49.48,
+"y": -17.13,
+"z": 10.8,
+"yaw": 268.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_01",
+"x": -30.05,
+"y": -8.28,
+"z": 14.4,
+"yaw": 55.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_02",
+"x": -20.45,
+"y": 22.85,
+"z": 26.07,
+"yaw": 343.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_03",
+"x": -5.76,
+"y": -43.88,
+"z": 10.82,
+"yaw": 106.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_04",
+"x": -26.62,
+"y": -20.32,
+"z": 14.19,
+"yaw": 44.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_05",
+"x": 33.27,
+"y": -1.5,
+"z": 11.81,
+"yaw": 170.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_06",
+"x": -30.65,
+"y": -22.31,
+"z": 13.94,
+"yaw": 187.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_07",
+"x": 29.03,
+"y": -5.89,
+"z": 12.87,
+"yaw": 276.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_08",
+"x": 28.13,
+"y": -30.32,
+"z": 12.1,
+"yaw": 163.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_09",
+"x": 29.02,
+"y": -17.62,
+"z": 12.04,
+"yaw": 344.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_10",
+"x": 24.65,
+"y": 57.41,
+"z": 11.57,
+"yaw": 84.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_11",
+"x": 9.88,
+"y": -45.41,
+"z": 10.97,
+"yaw": 305.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_12",
+"x": 3.6,
+"y": -40.71,
+"z": 9.91,
+"yaw": 96.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_13",
+"x": 14.37,
+"y": -31.32,
+"z": 11.38,
+"yaw": 43.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_14",
+"x": 13.4,
+"y": 53.79,
+"z": 12.85,
+"yaw": 255.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_15",
+"x": 24.01,
+"y": -47.76,
+"z": 10.89,
+"yaw": 0.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_16",
+"x": 45.36,
+"y": -32.63,
+"z": 8.93,
+"yaw": 291.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_17",
+"x": 29.77,
+"y": 8.16,
+"z": 11.4,
+"yaw": 278.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_18",
+"x": 19.69,
+"y": 37.0,
+"z": 14.05,
+"yaw": 297.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Shelf_19",
+"x": 27.85,
+"y": -0.89,
+"z": 12.17,
+"yaw": 193.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_00",
+"x": 33.47,
+"y": -12.63,
+"z": 11.42,
+"yaw": 143.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_01",
+"x": -37.79,
+"y": -21.98,
+"z": 12.44,
+"yaw": 29.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_02",
+"x": -22.06,
+"y": -3.02,
+"z": 14.31,
+"yaw": 14.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_03",
+"x": -1.33,
+"y": 28.29,
+"z": 17.9,
+"yaw": -64.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_04",
+"x": 5.08,
+"y": -21.44,
+"z": 10.84,
+"yaw": 79.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_05",
+"x": 44.08,
+"y": 7.24,
+"z": 12.48,
+"yaw": -176.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_06",
+"x": -13.04,
+"y": -23.87,
+"z": 11.87,
+"yaw": 51.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_07",
+"x": 56.11,
+"y": -5.04,
+"z": 9.5,
+"yaw": 167.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_08",
+"x": 52.55,
+"y": -19.83,
+"z": 11.03,
+"yaw": 149.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_09",
+"x": 38.44,
+"y": -1.16,
+"z": 12.17,
+"yaw": 167.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_10",
+"x": -13.57,
+"y": -10.84,
+"z": 12.1,
+"yaw": 33.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_11",
+"x": -12.06,
+"y": 22.32,
+"z": 22.26,
+"yaw": -38.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_12",
+"x": 0.87,
+"y": -32.78,
+"z": 9.37,
+"yaw": 76.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_13",
+"x": -3.96,
+"y": -11.96,
+"z": 11.16,
+"yaw": 50.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_14",
+"x": -7.18,
+"y": -20.1,
+"z": 9.89,
+"yaw": 55.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_15",
+"x": -38.62,
+"y": -5.04,
+"z": 14.71,
+"yaw": 11.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_16",
+"x": 25.38,
+"y": 16.34,
+"z": 12.7,
+"yaw": -143.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_17",
+"x": 42.18,
+"y": 0.23,
+"z": 11.78,
+"yaw": 171.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_18",
+"x": -14.02,
+"y": -37.59,
+"z": 12.22,
+"yaw": 60.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sign_19",
+"x": 37.46,
+"y": -22.46,
+"z": 9.62,
+"yaw": 135.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_00",
+"x": 15.98,
+"y": 92.15,
+"z": 5.49,
+"yaw": -99.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_01",
+"x": -95.55,
+"y": 18.37,
+"z": 5.56,
+"yaw": -10.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_02",
+"x": -47.58,
+"y": -72.45,
+"z": 8.27,
+"yaw": 56.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_03",
+"x": 19.72,
+"y": 69.58,
+"z": 10.95,
+"yaw": -105.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_04",
+"x": 52.03,
+"y": -48.63,
+"z": 8.85,
+"yaw": 136.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_05",
+"x": -81.4,
+"y": -14.07,
+"z": 7.92,
+"yaw": 9.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_06",
+"x": -92.51,
+"y": 37.41,
+"z": 3.9,
+"yaw": -22.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_07",
+"x": 75.81,
+"y": -37.14,
+"z": 6.58,
+"yaw": 153.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_08",
+"x": -41.61,
+"y": 88.82,
+"z": 5.03,
+"yaw": -64.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_09",
+"x": 74.3,
+"y": 37.0,
+"z": 8.31,
+"yaw": -153.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_10",
+"x": -32.34,
+"y": -70.02,
+"z": 9.34,
+"yaw": 65.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_11",
+"x": 90.19,
+"y": 7.54,
+"z": 6.81,
+"yaw": -175.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_12",
+"x": 71.38,
+"y": -9.51,
+"z": 8.76,
+"yaw": 172.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_13",
+"x": -65.99,
+"y": -8.3,
+"z": 10.04,
+"yaw": 7.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_14",
+"x": 39.04,
+"y": -49.22,
+"z": 11.38,
+"yaw": 128.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_15",
+"x": 89.57,
+"y": 3.84,
+"z": 6.7,
+"yaw": -177.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_16",
+"x": -43.45,
+"y": 42.67,
+"z": 23.12,
+"yaw": -44.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_17",
+"x": 32.2,
+"y": 86.55,
+"z": 6.26,
+"yaw": -110.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_18",
+"x": -73.67,
+"y": -13.19,
+"z": 8.91,
+"yaw": 10.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Statue_19",
+"x": -79.84,
+"y": 43.22,
+"z": 5.67,
+"yaw": -28.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_00",
+"x": 50.54,
+"y": 67.09,
+"z": 8.16,
+"yaw": 135.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_01",
+"x": 1.05,
+"y": 92.75,
+"z": 5.62,
+"yaw": 355.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_02",
+"x": 70.98,
+"y": 69.79,
+"z": 5.0,
+"yaw": 268.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_03",
+"x": -84.64,
+"y": 51.75,
+"z": 4.08,
+"yaw": 117.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_04",
+"x": 80.72,
+"y": 50.13,
+"z": 6.17,
+"yaw": 236.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_05",
+"x": -26.08,
+"y": 87.0,
+"z": 6.3,
+"yaw": 252.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_06",
+"x": -38.81,
+"y": 74.68,
+"z": 7.87,
+"yaw": 131.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_07",
+"x": -74.32,
+"y": -25.74,
+"z": 8.46,
+"yaw": 301.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_08",
+"x": 49.69,
+"y": -67.88,
+"z": 8.58,
+"yaw": 350.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_09",
+"x": -86.79,
+"y": -24.26,
+"z": 6.1,
+"yaw": 173.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_10",
+"x": 89.11,
+"y": -23.49,
+"z": 5.79,
+"yaw": 99.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_11",
+"x": -1.96,
+"y": 97.63,
+"z": 5.07,
+"yaw": 187.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_12",
+"x": 44.61,
+"y": -47.67,
+"z": 9.85,
+"yaw": 269.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_13",
+"x": -23.52,
+"y": 95.57,
+"z": 5.18,
+"yaw": 173.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_14",
+"x": -94.72,
+"y": 30.05,
+"z": 4.78,
+"yaw": 251.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_15",
+"x": -46.73,
+"y": 75.54,
+"z": 6.32,
+"yaw": 256.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_16",
+"x": -88.32,
+"y": -8.56,
+"z": 7.0,
+"yaw": 80.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_17",
+"x": -55.69,
+"y": 64.96,
+"z": 7.01,
+"yaw": 166.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_18",
+"x": 68.83,
+"y": -13.37,
+"z": 8.73,
+"yaw": 246.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Sundial_19",
+"x": 12.33,
+"y": -72.78,
+"z": 8.46,
+"yaw": 329.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_00",
+"x": 51.13,
+"y": -26.89,
+"z": 9.93,
+"yaw": 226.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_01",
+"x": 0.1,
+"y": -24.73,
+"z": 10.27,
+"yaw": 184.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_02",
+"x": -1.82,
+"y": 38.89,
+"z": 15.99,
+"yaw": 328.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_03",
+"x": -41.62,
+"y": 0.22,
+"z": 17.65,
+"yaw": 333.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_04",
+"x": 7.73,
+"y": -16.07,
+"z": 10.73,
+"yaw": 11.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_05",
+"x": 10.71,
+"y": -21.69,
+"z": 10.76,
+"yaw": 229.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_06",
+"x": -32.38,
+"y": -1.75,
+"z": 16.92,
+"yaw": 17.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_07",
+"x": -15.82,
+"y": -34.57,
+"z": 12.15,
+"yaw": 246.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_08",
+"x": 59.75,
+"y": 6.28,
+"z": 9.44,
+"yaw": 23.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_09",
+"x": -7.13,
+"y": -36.48,
+"z": 10.78,
+"yaw": 169.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_10",
+"x": 62.02,
+"y": 10.16,
+"z": 8.56,
+"yaw": 61.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_11",
+"x": -8.64,
+"y": 47.24,
+"z": 15.91,
+"yaw": 154.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_12",
+"x": -18.38,
+"y": 27.71,
+"z": 25.82,
+"yaw": 152.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_13",
+"x": 51.58,
+"y": -5.69,
+"z": 11.5,
+"yaw": 278.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_14",
+"x": -10.71,
+"y": -19.19,
+"z": 11.55,
+"yaw": 325.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_15",
+"x": 20.68,
+"y": -11.41,
+"z": 11.51,
+"yaw": 73.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_16",
+"x": -26.98,
+"y": 35.89,
+"z": 26.96,
+"yaw": 12.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_17",
+"x": 31.8,
+"y": -27.09,
+"z": 10.99,
+"yaw": 342.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_18",
+"x": 29.6,
+"y": 20.02,
+"z": 14.57,
+"yaw": 25.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Table_19",
+"x": 19.73,
+"y": -41.63,
+"z": 11.78,
+"yaw": 1.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_00",
+"x": 3.75,
+"y": -13.11,
+"z": 11.66,
+"yaw": 163.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_01",
+"x": 10.18,
+"y": -48.07,
+"z": 10.93,
+"yaw": 123.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_02",
+"x": 12.06,
+"y": 42.07,
+"z": 12.79,
+"yaw": 321.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_03",
+"x": 6.71,
+"y": 49.13,
+"z": 13.1,
+"yaw": 43.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_04",
+"x": 21.59,
+"y": -19.72,
+"z": 12.04,
+"yaw": 125.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_05",
+"x": 5.34,
+"y": 43.84,
+"z": 12.6,
+"yaw": 190.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_06",
+"x": -31.42,
+"y": -8.54,
+"z": 14.03,
+"yaw": 75.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_07",
+"x": 11.91,
+"y": 24.05,
+"z": 14.44,
+"yaw": 325.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_08",
+"x": 23.83,
+"y": 21.64,
+"z": 14.05,
+"yaw": 341.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_09",
+"x": -9.03,
+"y": 0.17,
+"z": 13.86,
+"yaw": 35.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_10",
+"x": 30.3,
+"y": -8.21,
+"z": 12.71,
+"yaw": 158.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_11",
+"x": -1.37,
+"y": 22.99,
+"z": 16.74,
+"yaw": 294.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_12",
+"x": -15.04,
+"y": -4.3,
+"z": 12.83,
+"yaw": 71.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_13",
+"x": 49.49,
+"y": -17.39,
+"z": 10.84,
+"yaw": 23.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_14",
+"x": -11.05,
+"y": -1.7,
+"z": 13.19,
+"yaw": 218.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_15",
+"x": -16.36,
+"y": 2.03,
+"z": 16.03,
+"yaw": 347.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_16",
+"x": 13.12,
+"y": -18.05,
+"z": 11.45,
+"yaw": 103.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_17",
+"x": 43.12,
+"y": -17.0,
+"z": 11.05,
+"yaw": 79.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_18",
+"x": -7.66,
+"y": 34.22,
+"z": 18.75,
+"yaw": 159.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Tent_19",
+"x": -18.3,
+"y": -27.46,
+"z": 12.83,
+"yaw": 63.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_00",
+"x": -39.99,
+"y": -83.34,
+"z": 7.04,
+"yaw": 192.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_01",
+"x": 13.46,
+"y": 61.04,
+"z": 12.74,
+"yaw": 348.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_02",
+"x": 3.97,
+"y": -61.87,
+"z": 9.25,
+"yaw": 71.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_03",
+"x": -17.41,
+"y": -64.54,
+"z": 9.92,
+"yaw": 163.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_04",
+"x": 0.71,
+"y": -68.99,
+"z": 9.24,
+"yaw": 96.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_05",
+"x": 25.58,
+"y": 93.7,
+"z": 5.15,
+"yaw": 277.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_06",
+"x": -10.87,
+"y": 64.97,
+"z": 10.89,
+"yaw": 13.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_07",
+"x": 60.23,
+"y": -34.82,
+"z": 8.48,
+"yaw": 40.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_08",
+"x": -52.72,
+"y": -71.23,
+"z": 7.15,
+"yaw": 4.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_09",
+"x": 47.28,
+"y": -45.11,
+"z": 9.26,
+"yaw": 284.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_10",
+"x": -67.37,
+"y": 43.63,
+"z": 10.21,
+"yaw": 162.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_11",
+"x": -69.35,
+"y": -6.77,
+"z": 9.68,
+"yaw": 216.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_12",
+"x": 88.75,
+"y": -45.89,
+"z": 4.18,
+"yaw": 282.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_13",
+"x": -28.92,
+"y": -68.7,
+"z": 9.78,
+"yaw": 227.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_14",
+"x": -95.01,
+"y": -24.8,
+"z": 4.96,
+"yaw": 321.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_15",
+"x": 8.53,
+"y": 91.21,
+"z": 5.78,
+"yaw": 316.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_16",
+"x": 34.8,
+"y": -56.57,
+"z": 11.43,
+"yaw": 201.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_17",
+"x": 56.93,
+"y": -77.39,
+"z": 6.16,
+"yaw": 195.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_18",
+"x": -46.69,
+"y": 59.34,
+"z": 12.53,
+"yaw": 298.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Totem_19",
+"x": -22.04,
+"y": -61.74,
+"z": 10.15,
+"yaw": 260.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_00",
+"x": 25.42,
+"y": 61.98,
+"z": 11.13,
+"yaw": 158.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_01",
+"x": 55.27,
+"y": 73.93,
+"z": 6.15,
+"yaw": 139.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_02",
+"x": 67.87,
+"y": 15.4,
+"z": 7.98,
+"yaw": 294.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_03",
+"x": 82.96,
+"y": 60.91,
+"z": 4.18,
+"yaw": 302.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_04",
+"x": 66.11,
+"y": 73.91,
+"z": 5.09,
+"yaw": 206.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_05",
+"x": 61.28,
+"y": 27.97,
+"z": 8.75,
+"yaw": 177.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_06",
+"x": 70.94,
+"y": 25.4,
+"z": 8.7,
+"yaw": 195.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_07",
+"x": 87.52,
+"y": 38.95,
+"z": 6.31,
+"yaw": 162.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_08",
+"x": 78.05,
+"y": 17.15,
+"z": 8.83,
+"yaw": 31.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_09",
+"x": 82.73,
+"y": 38.15,
+"z": 7.19,
+"yaw": 129.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_10",
+"x": 34.92,
+"y": 65.84,
+"z": 9.0,
+"yaw": 301.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_11",
+"x": 50.61,
+"y": 52.17,
+"z": 9.62,
+"yaw": 38.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_12",
+"x": 62.73,
+"y": 81.18,
+"z": 4.14,
+"yaw": 347.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_13",
+"x": 45.96,
+"y": 36.83,
+"z": 11.94,
+"yaw": 286.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_14",
+"x": 70.3,
+"y": 73.49,
+"z": 4.11,
+"yaw": 96.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_15",
+"x": 40.63,
+"y": 71.63,
+"z": 8.49,
+"yaw": 17.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_16",
+"x": 30.82,
+"y": 73.75,
+"z": 8.73,
+"yaw": 199.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_17",
+"x": 74.39,
+"y": 73.53,
+"z": 3.66,
+"yaw": 8.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_18",
+"x": 52.61,
+"y": 30.03,
+"z": 9.58,
+"yaw": 341.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Trough_19",
+"x": 74.83,
+"y": 24.21,
+"z": 8.16,
+"yaw": 91.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_00",
+"x": 0.58,
+"y": -43.33,
+"z": 9.18,
+"yaw": 274.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_01",
+"x": -44.4,
+"y": 4.26,
+"z": 18.97,
+"yaw": 133.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_02",
+"x": 5.03,
+"y": -46.6,
+"z": 10.9,
+"yaw": 253.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_03",
+"x": 5.43,
+"y": 31.42,
+"z": 14.09,
+"yaw": 39.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_04",
+"x": -29.76,
+"y": 11.75,
+"z": 23.2,
+"yaw": 332.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_05",
+"x": -3.64,
+"y": -19.91,
+"z": 9.9,
+"yaw": 132.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_06",
+"x": -19.65,
+"y": -39.7,
+"z": 13.22,
+"yaw": 147.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_07",
+"x": 19.01,
+"y": -26.3,
+"z": 12.13,
+"yaw": 23.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_08",
+"x": 6.55,
+"y": 53.66,
+"z": 12.98,
+"yaw": 121.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_09",
+"x": 54.24,
+"y": -24.59,
+"z": 9.61,
+"yaw": 132.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_10",
+"x": -15.71,
+"y": 6.99,
+"z": 17.21,
+"yaw": 55.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_11",
+"x": -25.6,
+"y": -28.86,
+"z": 14.14,
+"yaw": 136.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_12",
+"x": -28.32,
+"y": 43.67,
+"z": 24.26,
+"yaw": 25.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_13",
+"x": -29.46,
+"y": 32.62,
+"z": 29.31,
+"yaw": 149.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_14",
+"x": 25.45,
+"y": 41.26,
+"z": 13.19,
+"yaw": 65.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_15",
+"x": -27.42,
+"y": -15.18,
+"z": 14.6,
+"yaw": 16.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_16",
+"x": -9.8,
+"y": -46.0,
+"z": 11.43,
+"yaw": 225.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_17",
+"x": -6.3,
+"y": 53.45,
+"z": 14.23,
+"yaw": 351.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_18",
+"x": 51.17,
+"y": 0.96,
+"z": 11.32,
+"yaw": 71.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Well_19",
+"x": 38.93,
+"y": -41.68,
+"z": 10.01,
+"yaw": 270.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_00",
+"x": 64.46,
+"y": 39.48,
+"z": 8.5,
+"yaw": 358.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_01",
+"x": 27.3,
+"y": 67.64,
+"z": 9.94,
+"yaw": 317.6,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_02",
+"x": 64.23,
+"y": 42.17,
+"z": 8.24,
+"yaw": 110.9,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_03",
+"x": 90.27,
+"y": 39.23,
+"z": 5.75,
+"yaw": 201.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_04",
+"x": 24.73,
+"y": 66.42,
+"z": 10.87,
+"yaw": 45.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_05",
+"x": 59.74,
+"y": 29.72,
+"z": 9.16,
+"yaw": 212.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_06",
+"x": 41.9,
+"y": 69.59,
+"z": 8.46,
+"yaw": 353.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_07",
+"x": 45.17,
+"y": 59.64,
+"z": 9.11,
+"yaw": 255.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_08",
+"x": 21.96,
+"y": 58.42,
+"z": 12.38,
+"yaw": 265.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_09",
+"x": 86.9,
+"y": 46.16,
+"z": 5.61,
+"yaw": 81.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_10",
+"x": 70.23,
+"y": 76.23,
+"z": 3.78,
+"yaw": 114.2,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_11",
+"x": 50.88,
+"y": 63.98,
+"z": 8.55,
+"yaw": 268.5,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_12",
+"x": 45.48,
+"y": 26.78,
+"z": 12.2,
+"yaw": 326.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_13",
+"x": 57.38,
+"y": 23.96,
+"z": 9.08,
+"yaw": 80.7,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_14",
+"x": 43.28,
+"y": 83.0,
+"z": 5.49,
+"yaw": 263.8,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_15",
+"x": 45.56,
+"y": 78.38,
+"z": 6.38,
+"yaw": 36.4,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_16",
+"x": 77.01,
+"y": 49.94,
+"z": 6.58,
+"yaw": 12.0,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_17",
+"x": 63.46,
+"y": 46.86,
+"z": 7.78,
+"yaw": 150.3,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_18",
+"x": 42.06,
+"y": 39.61,
+"z": 12.02,
+"yaw": 355.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_BBIsle_Windmill_19",
+"x": 85.46,
+"y": 25.22,
+"z": 6.99,
+"yaw": 217.1,
+"scale": 1.0,
+"zone": "bbisle-unique"
+},
+{
+"asset": "Prop_Island_Boulder_K11V0",
+"x": 104.87,
+"y": 43.39,
+"z": 1.98,
+"yaw": 268.5,
+"scale": 1.802,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V1",
+"x": -72.04,
+"y": 79.77,
+"z": 2.89,
+"yaw": 341.6,
+"scale": 1.812,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V2",
+"x": -97.65,
+"y": 43.02,
+"z": 2.85,
+"yaw": 352.4,
+"scale": 1.001,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V3",
+"x": -91.61,
+"y": 62.87,
+"z": 2.18,
+"yaw": 153.6,
+"scale": 1.98,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V4",
+"x": 99.8,
+"y": 31.3,
+"z": 3.88,
+"yaw": 288.8,
+"scale": 0.848,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V0",
+"x": -59.74,
+"y": 86.14,
+"z": 3.55,
+"yaw": 142.8,
+"scale": 0.929,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V1",
+"x": 65.47,
+"y": -88.38,
+"z": 2.66,
+"yaw": 9.7,
+"scale": 0.9,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V2",
+"x": 110.77,
+"y": 2.69,
+"z": 2.31,
+"yaw": 189.7,
+"scale": 1.754,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V3",
+"x": 12.07,
+"y": -103.82,
+"z": 3.5,
+"yaw": 324.1,
+"scale": 1.071,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V4",
+"x": 46.4,
+"y": -93.97,
+"z": 3.68,
+"yaw": 243.0,
+"scale": 1.325,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V0",
+"x": -36.54,
+"y": -99.51,
+"z": 3.53,
+"yaw": 105.7,
+"scale": 1.457,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V1",
+"x": 102.55,
+"y": -24.26,
+"z": 3.46,
+"yaw": 287.5,
+"scale": 1.665,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V2",
+"x": -30.36,
+"y": -107.18,
+"z": 2.36,
+"yaw": 169.1,
+"scale": 1.89,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V3",
+"x": -26.23,
+"y": 110.12,
+"z": 1.82,
+"yaw": 9.0,
+"scale": 1.591,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V4",
+"x": -44.44,
+"y": -97.83,
+"z": 3.13,
+"yaw": 66.7,
+"scale": 1.288,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V0",
+"x": 98.49,
+"y": 46.55,
+"z": 3.19,
+"yaw": 49.0,
+"scale": 1.817,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V1",
+"x": 111.44,
+"y": -9.23,
+"z": 2.24,
+"yaw": 167.1,
+"scale": 0.844,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V2",
+"x": -11.56,
+"y": 106.79,
+"z": 3.14,
+"yaw": 30.8,
+"scale": 1.948,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V3",
+"x": -5.77,
+"y": 110.25,
+"z": 2.48,
+"yaw": 279.9,
+"scale": 1.928,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V4",
+"x": 80.01,
+"y": 71.43,
+"z": 3.23,
+"yaw": 38.2,
+"scale": 1.951,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V0",
+"x": -29.71,
+"y": -108.77,
+"z": 2.11,
+"yaw": 243.1,
+"scale": 1.433,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V1",
+"x": -75.86,
+"y": -77.29,
+"z": 2.84,
+"yaw": 13.6,
+"scale": 1.101,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V2",
+"x": 69.03,
+"y": 89.69,
+"z": 1.93,
+"yaw": 320.0,
+"scale": 1.74,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V3",
+"x": 102.7,
+"y": 34.43,
+"z": 3.15,
+"yaw": 45.2,
+"scale": 1.225,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V4",
+"x": -82.26,
+"y": -66.13,
+"z": 3.39,
+"yaw": 256.5,
+"scale": 1.626,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V0",
+"x": -101.39,
+"y": 37.59,
+"z": 2.78,
+"yaw": 95.4,
+"scale": 1.032,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V1",
+"x": -84.22,
+"y": -75.17,
+"z": 1.98,
+"yaw": 56.4,
+"scale": 1.119,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V2",
+"x": -112.99,
+"y": 8.91,
+"z": 1.88,
+"yaw": 285.7,
+"scale": 0.823,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V3",
+"x": 103.78,
+"y": -7.49,
+"z": 3.67,
+"yaw": 109.0,
+"scale": 1.698,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V4",
+"x": -50.55,
+"y": -97.31,
+"z": 2.64,
+"yaw": 251.1,
+"scale": 1.788,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V0",
+"x": -28.78,
+"y": -102.84,
+"z": 3.27,
+"yaw": 70.7,
+"scale": 1.01,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V1",
+"x": -29.15,
+"y": -109.02,
+"z": 2.11,
+"yaw": 34.8,
+"scale": 0.854,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V2",
+"x": 13.15,
+"y": 110.29,
+"z": 2.31,
+"yaw": 334.7,
+"scale": 1.561,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V3",
+"x": -112.45,
+"y": 12.64,
+"z": 1.84,
+"yaw": 166.3,
+"scale": 1.949,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V4",
+"x": 90.89,
+"y": 66.3,
+"z": 2.08,
+"yaw": 80.8,
+"scale": 1.641,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V0",
+"x": 110.29,
+"y": -12.4,
+"z": 2.37,
+"yaw": 300.6,
+"scale": 1.09,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V1",
+"x": 41.35,
+"y": -96.27,
+"z": 3.54,
+"yaw": 104.4,
+"scale": 1.433,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V2",
+"x": -38.56,
+"y": 98.14,
+"z": 3.5,
+"yaw": 128.3,
+"scale": 1.481,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V3",
+"x": 31.28,
+"y": -98.9,
+"z": 3.45,
+"yaw": 307.2,
+"scale": 1.975,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V4",
+"x": 107.98,
+"y": 23.98,
+"z": 2.55,
+"yaw": 28.7,
+"scale": 0.951,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V0",
+"x": 107.97,
+"y": 28.79,
+"z": 2.32,
+"yaw": 259.4,
+"scale": 1.446,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V1",
+"x": 21.35,
+"y": 105.46,
+"z": 2.99,
+"yaw": 345.4,
+"scale": 1.043,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V2",
+"x": 19.97,
+"y": -103.4,
+"z": 3.47,
+"yaw": 96.6,
+"scale": 1.906,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V3",
+"x": -96.43,
+"y": 57.58,
+"z": 1.92,
+"yaw": 350.6,
+"scale": 1.14,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K1V4",
+"x": 108.25,
+"y": -28.97,
+"z": 2.15,
+"yaw": 267.9,
+"scale": 1.447,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V0",
+"x": -41.31,
+"y": -97.75,
+"z": 3.5,
+"yaw": 283.2,
+"scale": 1.176,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V1",
+"x": 91.9,
+"y": -47.26,
+"z": 3.59,
+"yaw": 332.9,
+"scale": 1.49,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V2",
+"x": 101.87,
+"y": 39.87,
+"z": 3.04,
+"yaw": 191.6,
+"scale": 1.051,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V3",
+"x": -103.99,
+"y": 4.14,
+"z": 3.59,
+"yaw": 57.7,
+"scale": 1.139,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K21V4",
+"x": 1.51,
+"y": 107.4,
+"z": 2.99,
+"yaw": 28.5,
+"scale": 1.07,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V0",
+"x": -109.03,
+"y": -17.7,
+"z": 2.35,
+"yaw": 20.0,
+"scale": 1.156,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V1",
+"x": -105.31,
+"y": 17.62,
+"z": 3.14,
+"yaw": 157.2,
+"scale": 1.021,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V2",
+"x": 46.14,
+"y": -94.49,
+"z": 3.58,
+"yaw": 310.6,
+"scale": 1.343,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V3",
+"x": 31.13,
+"y": 98.72,
+"z": 3.86,
+"yaw": 92.6,
+"scale": 1.766,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K26V4",
+"x": 62.18,
+"y": -86.75,
+"z": 3.41,
+"yaw": 235.0,
+"scale": 1.344,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V0",
+"x": 94.94,
+"y": -43.12,
+"z": 3.66,
+"yaw": 275.6,
+"scale": 1.612,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V1",
+"x": -82.21,
+"y": 65.31,
+"z": 3.38,
+"yaw": 342.2,
+"scale": 1.271,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V2",
+"x": 103.68,
+"y": 20.34,
+"z": 3.59,
+"yaw": 255.5,
+"scale": 1.706,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V3",
+"x": 57.67,
+"y": 94.04,
+"z": 2.43,
+"yaw": 133.0,
+"scale": 1.664,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K6V4",
+"x": -112.54,
+"y": 15.3,
+"z": 1.78,
+"yaw": 347.3,
+"scale": 1.365,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V0",
+"x": -68.41,
+"y": -82.33,
+"z": 2.92,
+"yaw": 340.4,
+"scale": 1.664,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V1",
+"x": -1.02,
+"y": -105.57,
+"z": 3.55,
+"yaw": 336.6,
+"scale": 1.228,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V2",
+"x": -79.64,
+"y": -80.32,
+"z": 1.93,
+"yaw": 343.6,
+"scale": 1.468,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V3",
+"x": -26.85,
+"y": -106.22,
+"z": 2.75,
+"yaw": 276.1,
+"scale": 1.438,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K11V4",
+"x": 81.53,
+"y": -69.13,
+"z": 2.88,
+"yaw": 246.5,
+"scale": 0.955,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V0",
+"x": -112.11,
+"y": -5.43,
+"z": 1.97,
+"yaw": 59.8,
+"scale": 1.776,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V1",
+"x": 14.54,
+"y": -103.05,
+"z": 3.63,
+"yaw": 171.1,
+"scale": 1.002,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V2",
+"x": 104.34,
+"y": -45.52,
+"z": 1.73,
+"yaw": 293.7,
+"scale": 1.956,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V3",
+"x": 5.4,
+"y": 113.55,
+"z": 1.88,
+"yaw": 226.9,
+"scale": 1.352,
+"zone": "shore"
+},
+{
+"asset": "Prop_Island_Boulder_K16V4",
+"x": -107.35,
+"y": -18.93,
+"z": 2.59,
+"yaw": 80.0,
+"scale": 1.01,
+"zone": "shore"
+},
+{
+"asset": "Veh_ArkPart_DockClamp_Bone",
+"x": 103.2,
+"y": 4.5,
+"z": 4.72,
+"yaw": 0.0,
+"scale": 1.2,
+"zone": "ark-dock"
+},
+{
+"asset": "Veh_ArkPart_DockClamp_Copper",
+"x": 111.2,
+"y": 4.5,
+"z": 4.72,
+"yaw": 0.0,
+"scale": 1.2,
+"zone": "ark-dock"
+},
+{
+"asset": "Veh_ArkPart_DockClamp_Coral",
+"x": 119.2,
+"y": 4.5,
+"z": 4.72,
+"yaw": 0.0,
+"scale": 1.2,
+"zone": "ark-dock"
+},
+{
+"asset": "Veh_ArkPart_DockClamp_Crystal",
+"x": 127.2,
+"y": 4.5,
+"z": 4.72,
+"yaw": 0.0,
+"scale": 1.2,
+"zone": "ark-dock"
+},
+{
+"asset": "Veh_Ark",
+"x": 138.4,
+"y": -12,
+"z": 8.72,
+"yaw": 90.0,
+"scale": 1.0,
+"zone": "ark-dock"
+}
+]
+}

@@ -1,0 +1,97 @@
+{
+ "system": "OddsReaper Material Parameter Collection",
+ "mpc": "MPC_OR_SkyWeather",
+ "source": "Daedalus Sky Director (GetWind, GetWetness, GetHour / night mask)",
+ "note": "Data contract for OR island materials. Applied on the round-2 editor turn into felt mesa, dice cliffs, cistern gold, and herb leaf MIDs. No Unreal write from this file alone.",
+ "params": {
+  "WindStrength": {
+   "type": "scalar",
+   "range": [
+    0.0,
+    1.0
+   ],
+   "default": 0.35,
+   "storm": 0.95,
+   "drives": [
+    "felt flag cloth",
+    "herb sway",
+    "ledger leaf flutter"
+   ]
+  },
+  "WindDirection": {
+   "type": "vector",
+   "default": [
+    0.7,
+    0.1,
+    0.0
+   ],
+   "note": "XY planar; Z unused"
+  },
+  "Wetness": {
+   "type": "scalar",
+   "range": [
+    0.0,
+    1.0
+   ],
+   "default": 0.0,
+   "rain": 0.6,
+   "storm": 1.0,
+   "drives": [
+    "cliff darken",
+    "felt sheen",
+    "cistern gold specular",
+    "herb gloss"
+   ]
+  },
+  "NightMask": {
+   "type": "scalar",
+   "range": [
+    0.0,
+    1.0
+   ],
+   "default": 0.0,
+   "rule": "smoothstep dusk: 0 at hour 18, 1 at hour 21; reverse at dawn 5->7",
+   "drives": [
+    "odds-board cyan emissive",
+    "skull rim light",
+    "dice-well glow"
+   ]
+  },
+  "StormPulse": {
+   "type": "scalar",
+   "range": [
+    0.0,
+    1.0
+   ],
+   "default": 0.0,
+   "storm": 1.0,
+   "drives": [
+    "lightning flash on boards",
+    "Parlayvine leaf flicker"
+   ]
+  }
+ },
+ "bindings": [
+  {
+   "mid": "MI_OR_FeltMesa",
+   "Wetness": "Roughness mul 0.55 when wet",
+   "NightMask": "emissive board slots x (0.2+0.8*NightMask)"
+  },
+  {
+   "mid": "MI_OR_DiceCliff",
+   "Wetness": "BaseColor darken * (1-0.25*Wetness)",
+   "WindStrength": "n/a (static)"
+  },
+  {
+   "mid": "MI_OR_CisternGold",
+   "Wetness": "Specular +0.2*Wetness",
+   "StormPulse": "emissive pulse"
+  },
+  {
+   "mid": "MI_OR_WagerHerbLeaf",
+   "WindStrength": "world-position offset sway",
+   "Wetness": "gloss",
+   "StormPulse": "Stormbloom only"
+  }
+ ]
+}

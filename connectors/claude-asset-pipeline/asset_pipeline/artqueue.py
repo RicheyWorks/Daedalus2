@@ -196,6 +196,7 @@ class Watcher:
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
         self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
+        self.first = []             # name fragments shipped ahead of the rest (--first), e.g. a team's own slot
         self.lock = threading.RLock()   # the board and the feed, shared by the two halves of an overlapped ship
 
     # -- files
@@ -400,6 +401,8 @@ class Watcher:
                     missing = ["play"]
             if not missing:
                 assets = [r["asset"] for r in ready]
+                if self.first:   # stable: the board's order within each group
+                    assets.sort(key=lambda a: not any(f in a for f in self.first))
                 if len(assets) > 1 and hasattr(self.ship, "export") and hasattr(self.ship, "land"):
                     done.extend(self.ship_overlapped(assets))
                 else:
@@ -438,6 +441,24 @@ class Watcher:
             self.event(asset, "rejected", why="bad name")
             return (asset, "REJECTED")
         blend = os.path.join(self.folder, kind, asset + ".blend")
+        # Built elsewhere (a cloud Blender): <Kind>\<Asset>.glb with <Asset>.sent.json, Blender's report of what it
+        # sent. No Blender on this PC is needed; the judge still checks report = file = Unreal.
+        glb_path = os.path.join(self.folder, kind, asset + ".glb")
+        sent_path = os.path.join(self.folder, kind, asset + ".sent.json")
+        # A glb at least as new as the .blend wins, so a cloud rebuild replaces older PC art without deleting it.
+        fresh = os.path.exists(glb_path) and os.path.exists(sent_path) and (
+            not os.path.exists(blend) or os.path.getmtime(glb_path) >= os.path.getmtime(blend))
+        if fresh:
+            with open(sent_path, encoding="utf-8") as f:
+                sent = json.load(f)
+            names = [o["name"] for o in sent.get("objects", [])]
+            if not names:
+                self.update(asset, "REJECTED: %s.sent.json lists no objects" % asset)
+                self.event(asset, "rejected", why="empty sent.json")
+                return (asset, "REJECTED")
+            self.update(asset, "SHIPPING")
+            self.event(asset, "shipping", objects=names, source="prebuilt glb")
+            return (asset, kind, {"objects": names, "source": "prebuilt", "glb": glb_path, "sent": sent})
         # Open the file, never at the cost of someone's unsaved work.
         if os.path.exists(blend):
             opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))["result"]
@@ -460,8 +481,13 @@ class Watcher:
             return got
         _, kind, objects = got
         try:
-            report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
-                               os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
+            if objects.get("source") == "prebuilt":
+                report = pipeline.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind,
+                                       True, self.unreal) if not hasattr(self.ship, "land") else \
+                    self.ship.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind, True, self.unreal)
+            else:
+                report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
+                                   os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
         except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
             return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
         return self.finish(asset, kind, report)
@@ -484,7 +510,10 @@ class Watcher:
                         results.append(got)
                         continue
                     _, kind, objects = got
-                    rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
+                    if objects.get("source") == "prebuilt":
+                        rep = pipeline.prebuilt(a, objects["glb"], objects["sent"])
+                    else:
+                        rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
                     handoff.put((a, kind, rep, None))
                 except Exception as e:
                     handoff.put((a, None, None, e))
@@ -588,9 +617,11 @@ def main(argv=None):
     ap.add_argument("--every", type=float, default=10.0, help="seconds between passes")
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--no-link", action="store_true", help="don't join the team link (ADR-053)")
+    ap.add_argument("--first", default="", help="comma-separated name fragments to ship first (e.g. _Orr_)")
     a = ap.parse_args(argv)
     link = None if a.no_link else teamlink.Link("unreal-team")
     w = Watcher(a.folder, link=link)
+    w.first = [f for f in a.first.split(",") if f]
     lock = os.path.join(a.folder, ".watcher.lock")
     if not a.once:
         if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:

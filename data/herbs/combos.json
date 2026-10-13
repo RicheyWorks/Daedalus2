@@ -6,7 +6,8 @@
   "Recipes are hidden. A new effect is logged to the player's Herbal journal on first discovery (saved in save/schema quests-like 'discoveries').",
   "No matching pair: 'Murky Brew' (no effect, 50% chance of -5 hunger). Dried herbs give +1 potency, fresh give +50% duration.",
   "Potency sum scales duration: dur * (0.5 + 0.25*sum). Triple mixes can stack two effects if two different pairs match.",
-  "Same 3 herbs + 'purify' essence = no side effects."
+  "Same 3 herbs + 'purify' essence = no side effects.",
+  "Forge Temper (Hephaestus): after brewing, quench path modifies the effect \u2014 magma temper strength x2 duration x0.5; spring quench duration x2 strength x0.5; dual-quench (magma then spring or reverse within 10s) applies dual effect (primary pair + next-best pair at base). See data/islands/hephaestus/herbs.json."
  ],
  "effects": {
   "heat+heat": {

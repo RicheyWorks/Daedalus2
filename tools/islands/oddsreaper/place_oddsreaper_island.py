@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """OddsReaper Island, editor turn script (safe to run again). Run inside the editor on a granted turn only.
-1. imports the 500 OddsReaper glbs into /Game/OddsReaper/Art (skips assets that already exist)
+1. imports the 524 OddsReaper glbs into /Game/OddsReaper/Art (skips assets that already exist)
 2. creates/opens the sublevel /Game/OddsReaper/Maps/OddsReaperIsland under DaedalusWorld and makes it current
 3. places layout.json, a storm Mood Volume over the island, and a hero camera
 4. saves ONLY the sublevel. Prints PASS/FAIL.
@@ -50,7 +50,7 @@ def open_sublevel():
     les.load_level(PERSIST)
     world = unreal.EditorLevelLibrary.get_editor_world()
     if not eal.does_asset_exist(SUB):
-        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, move_selected_actors_into_new_level=False)
+        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, move_selected_actors_into_new_level=False)
     else:  # already made: make sure it's streamed into DaedalusWorld (harmless error if it already is)
         try: unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
         except Exception as e: log(f"add_level_to_world: {e}")
@@ -72,21 +72,41 @@ def run():
         m = mesh(p["asset"])
         if m is None: missing.add(p["asset"]); continue
         loc = unreal.Vector(ox + p["x"] * 100, oy + p["y"] * 100, oz + p["z"] * 100)
-        a = actors.spawn_actor_from_object(m, loc, unreal.Rotator(0, 0, p["yaw"]))
+        a = actors.spawn_actor_from_object(m, loc, unreal.Rotator(roll=0, pitch=0, yaw=p["yaw"]))
         a.set_actor_scale3d(unreal.Vector(p["scale"], p["scale"], p["scale"]))
         a.set_folder_path(f"{FOLDER}/{p['zone']}"); a.set_actor_label(p["asset"]); placed += 1
     # signature mood: perpetual storm over the island via my Sky Director
     vol = actors.spawn_actor_from_class(unreal.DaedalusMoodVolume, unreal.Vector(ox, oy, oz + 3000))
     vol.set_actor_label("OddsReaper Storm Mood"); vol.set_folder_path(FOLDER)
-    vol.set_actor_scale3d(unreal.Vector(1.4 * lay["scale"], 1.4 * lay["scale"], 1.5))
-    vol.set_editor_property("mood", lay["mood"]); vol.set_editor_property("b_set_weather", True)
+    # Cover the whole 260 m island AND the hero camera (175 m south, 32 m up): half-extent 200 m x 200 m x 90 m.
+    vol.set_actor_location(unreal.Vector(ox, oy, oz + 3000), False, False)
+    vol.set_actor_scale3d(unreal.Vector(4.0, 4.0, 3.0))
+    vol.set_editor_property("mood", lay["mood"])
+    # Storm must show in Play even though the pawn spawns on another island: trigger on the view (not forced at BeginPlay),
+    # hold the clock at dusk (18.75 h reads as storm, not daylight) while the island is the subject.
+    # NOT force_on_begin_play: DaedalusWorld is shared, a forced volume would put every island's Play in storm/dusk
+    # and Restore() skips forced volumes. The view trigger covers players; the turn script forces it in PIE only.
+    for name, val in (("trigger_on_view", True), ("force_on_begin_play", False), ("hold_while_inside", True), ("set_hour", 18.75)):
+        for prop in (name, "b_" + name):
+            try: vol.set_editor_property(prop, val); break
+            except Exception: pass
+    for prop in ("set_weather", "b_set_weather"):  # UE python strips the b prefix; accept either
+        try: vol.set_editor_property(prop, True); break
+        except Exception: pass
     vol.set_editor_property("weather", getattr(unreal.DaedalusWeather, lay["weather"].upper()))
-    cam = actors.spawn_actor_from_class(unreal.CineCameraActor, unreal.Vector(ox - 19000, oy - 32000, oz + 11000), unreal.Rotator(0, -16, 58))
+    import math
+    c, t = lay["hero_cam_m"], lay["hero_target_m"]
+    cl = unreal.Vector(ox + c[0] * 100, oy + c[1] * 100, oz + c[2] * 100)
+    dx, dy, dz = (t[0] - c[0]), (t[1] - c[1]), (t[2] - c[2])
+    rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
+    cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("OddsReaper Hero Cam"); cam.set_folder_path(FOLDER)
+    # The director lives in the persistent level and defaults to Clear/young_meadow: that is what the round-2 Play shot showed.
     les.save_current_level()
+    unreal.EditorAssetLibrary.save_directory(ART, only_if_is_dirty=True, recursive=True)
     ok = placed >= 450 and not missing
     log(f"placed={placed} missing={sorted(missing)[:10]} {'PASS' if ok else 'FAIL'}")
-    return ok
+    return {"ok": ok, "placed": placed, "missing": sorted(missing), "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw]}
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""OddsReaper Island: 500 low-poly items, deterministic, headless.
+"""OddsReaper Island: 524 low-poly items (500 + 24 water), deterministic, headless.
 blender -b --factory-startup -P gen_oddsreaper_items.py -- <out_dir> [limit]
 Writes <out_dir>/<Name>.glb (metres; Unreal imports as cm x100) and manifest.json. Same seed -> same 500 items.
 """
@@ -13,7 +13,7 @@ os.makedirs(OUT, exist_ok=True)
 PAL = {"bone": (0.88, 0.85, 0.76), "gold": (0.95, 0.72, 0.2), "green": (0.05, 0.45, 0.2), "felt": (0.04, 0.3, 0.15),
        "red": (0.7, 0.05, 0.06), "black": (0.04, 0.04, 0.05), "violet": (0.35, 0.12, 0.6), "storm": (0.25, 0.3, 0.42),
        "silver": (0.75, 0.77, 0.8), "copper": (0.72, 0.4, 0.22), "ivory": (0.95, 0.93, 0.86), "teal": (0.1, 0.55, 0.55),
-       "burlap": (0.55, 0.42, 0.25), "stone": (0.38, 0.36, 0.38), "wood": (0.35, 0.22, 0.12), "cyan": (0.3, 0.85, 1.0)}
+       "burlap": (0.55, 0.42, 0.25), "stone": (0.38, 0.36, 0.38), "wood": (0.35, 0.22, 0.12), "cyan": (0.3, 0.85, 1.0), "water": (0.08, 0.35, 0.6)}
 MATS = {}
 
 
@@ -26,6 +26,8 @@ def mat(name):
         b.inputs["Roughness"].default_value = 0.3 if name in ("gold", "silver", "copper", "cyan") else 0.7
         if name == "cyan":
             b.inputs["Emission Color"].default_value = (*PAL[name], 1); b.inputs["Emission Strength"].default_value = 4.0
+        if name == "water":
+            b.inputs["Roughness"].default_value = 0.05; b.inputs["Alpha"].default_value = 0.8
         MATS[name] = m
     return MATS[name]
 
@@ -160,15 +162,45 @@ def f_core(r, i):  # island landmass, 2x planned size
     s = 250 + 10 * i; cyl("stone", (0, 0, -s * 0.08), (s, s, s * 0.16), 16); cone("stone", (0, 0, -s * 0.31), (s, s, s * 0.3), 16, (math.pi, 0, 0))
     cyl("felt", (0, 0, 0.05), (s * 0.95, s * 0.95, 0.4), 16); return "island core"
 
+# ---- water (referee fix): cistern, dice-carved spring well, troughs, channels, waterskins ----
+def f_cistern(r, i):
+    d = 6 + 2 * i; h = 3 + i
+    cyl("stone", (0, 0, h / 2), (d, d, h), 16); cyl("water", (0, 0, h - 0.3), (d * 0.9, d * 0.9, 0.1), 16)
+    for k in range(8): a = k * math.pi / 4; cone("gold", (math.cos(a) * d * 0.55, math.sin(a) * d * 0.55, h + 1.2), (0.6, 0.6, 2.4), 6, (math.pi, 0, 0))  # rain funnels
+    skull("bone", h, 1.4 + 0.2 * i); return "storm-fed cistern"
+def f_well(r, i):
+    s = 1.6 + 0.3 * i; cube("ivory", (0, 0, s / 2), (s, s, s))  # a giant carved die
+    for k in range(1 + i % 6): ball("black", (-s / 2 - 0.01, (k % 3 - 1) * s * 0.25, s * (0.3 + 0.2 * (k // 3))), (0.05, s * 0.12, s * 0.12))
+    cyl("water", (0, 0, s + 0.02), (s * 0.7, s * 0.7, 0.05), 16)
+    for x in (-1, 1): cube("wood", (x * s * 0.45, 0, s + 0.8), (0.12, 0.12, 1.6))
+    cube("wood", (0, 0, s + 1.6), (s, 0.15, 0.12)); cyl("copper", (0, 0, s + 1.1), (0.3, 0.3, 0.35), 10); return "dice-carved spring well"
+def f_trough(r, i):
+    l = 1.5 + 0.5 * (i % 3); cube("wood", (0, 0, 0.3), (l, 0.6, 0.5)); cube("water", (0, 0, 0.5), (l * 0.9, 0.45, 0.05))
+    for x in (-1, 1): cube("wood", (x * l * 0.4, 0, 0.1), (0.12, 0.7, 0.2))
+    return "pen trough"
+def f_channel(r, i):
+    l = 4.0 + 2 * (i % 2); cube("stone", (0, 0, 0.15), (l, 0.8, 0.3)); cube("water", (0, 0, 0.29), (l, 0.5, 0.04))
+    if i >= 4: cyl("copper", (0, 0, 0.6), (0.3, 0.3, l), 10, (0, math.pi / 2, 0))  # pipe variant
+    return "water channel" if i < 4 else "copper pipe"
+def f_skin(r, i):
+    ball("burlap" if i == 0 else "black", (0, 0, 0.15), (0.2, 0.14, 0.3)); cyl("gold", (0, 0, 0.32), (0.04, 0.04, 0.06), 8); return "waterskin"
+
 FAMILIES = [("Item_OR_Chip", 50, f_chip), ("Item_OR_Die", 40, f_die), ("Item_OR_Coin", 30, f_coin), ("Item_OR_MoneyBag", 30, f_bag),
             ("Prop_OR_SkullTotem", 16, f_skulltotem), ("Prop_OR_OddsBoard", 24, f_oddsboard), ("Prop_OR_Roulette", 8, f_roulette),
             ("Bld_OR_Pillar", 16, f_pillar), ("Item_OR_Cards", 20, f_cards), ("Prop_OR_Lantern", 16, f_lantern),
             ("Prop_OR_Crystal", 24, f_crystal), ("Prop_OR_Herb", 32, f_herb), ("Item_OR_Herb", 8, f_herbitem), ("Item_OR_Tonic", 64, f_tonic),
             ("Mob_OR_CoinbackGoat", 4, f_goat), ("Mob_OR_DicebeakHen", 4, f_hen), ("Prop_OR_DiceRock", 40, f_dicerock),
             ("Prop_OR_LedgerTree", 24, f_tree), ("Bld_OR_SkullArch", 12, f_arch), ("Prop_OR_FeltTable", 8, f_table),
-            ("Item_OR_Food", 10, f_food), ("Sky_OR_StormShard", 12, f_shard), ("Prop_OR_Sigil", 6, f_sigil), ("Bld_OR_IslandCore", 2, f_core)]
-assert sum(n for _, n, _ in FAMILIES) == 500, sum(n for _, n, _ in FAMILIES)
+            ("Item_OR_Food", 10, f_food), ("Sky_OR_StormShard", 12, f_shard), ("Prop_OR_Sigil", 6, f_sigil), ("Bld_OR_IslandCore", 2, f_core),
+            ("Bld_OR_Cistern", 4, f_cistern), ("Bld_OR_DiceWell", 4, f_well), ("Prop_OR_Trough", 6, f_trough),
+            ("Prop_OR_Channel", 8, f_channel), ("Item_OR_Waterskin", 2, f_skin)]
+assert sum(n for _, n, _ in FAMILIES) == 524, sum(n for _, n, _ in FAMILIES)
 
+GLTF_KW = dict(export_format="GLB", use_selection=True, export_apply=True)
+try:  # Blender 4.2+: export the colour attribute even though materials don't read it
+    bpy.ops.export_scene.gltf.get_rna_type().properties["export_vertex_color"]; GLTF_KW["export_vertex_color"] = "ACTIVE"
+except Exception:
+    GLTF_KW["export_colors"] = True
 manifest = []
 for prefix, n, build in FAMILIES:
     for i in range(n):
@@ -176,6 +208,11 @@ for prefix, n, build in FAMILIES:
         name = f"{prefix}_{i:02d}"; r = random.Random(f"oddsreaper:{name}")
         clear(); desc = build(r, i)
         objs = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+        for ob in objs:  # vertex colour = palette colour, so items read in Unreal even untextured
+            col = ob.data.materials[0].node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value
+            ca = ob.data.color_attributes.new("Col", "BYTE_COLOR", "CORNER")
+            for d in ca.data: d.color = col
+            ob.data.color_attributes.active_color = ca
         bpy.ops.object.select_all(action="DESELECT")
         for o in objs: o.select_set(True)
         bpy.context.view_layer.objects.active = objs[0]
@@ -184,7 +221,8 @@ for prefix, n, build in FAMILIES:
         o = bpy.context.active_object; o.name = name
         tris = sum(len(p.vertices) - 2 for p in o.data.polygons)
         dims = [round(d, 3) for d in o.dimensions]
-        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, name + ".glb"), export_format="GLB", use_selection=True, export_apply=True)
-        manifest.append({"name": name, "desc": desc, "tris": tris, "size_m": dims})
+        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, name + ".glb"), **GLTF_KW)
+        manifest.append({"name": name, "desc": desc, "tris": tris, "size_m": dims,
+                         "materials": sorted({m.name for m in o.data.materials if m})})
 json.dump({"island": "OddsReaper", "count": len(manifest), "items": manifest}, open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 print(f"ODDSREAPER_ITEMS {len(manifest)} -> {OUT}")

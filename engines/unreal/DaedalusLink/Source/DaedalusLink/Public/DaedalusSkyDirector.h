@@ -23,11 +23,11 @@ USTRUCT(BlueprintType)
 struct FDaedalusSkyState
 {
 	GENERATED_BODY()
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) float TimeOfDay = 9.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Day = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) EDaedalusWeather Weather = EDaedalusWeather::Clear;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) FName Mood;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) float Wetness = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|Sky") float TimeOfDay = 9.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|Sky") int32 Day = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|Sky") EDaedalusWeather Weather = EDaedalusWeather::Clear;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|Sky") FName Mood;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|Sky") float Wetness = 0.f;
 };
 
 /** How a weather state looks, as multipliers/targets the director blends between. */
@@ -35,15 +35,15 @@ USTRUCT(BlueprintType)
 struct FDaedalusWeatherLook
 {
 	GENERATED_BODY()
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float SunScale = 1.f;       // x mood sun intensity
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float SkyLightScale = 1.f;  // x mood sky light
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float FogDensity = 0.02f;   // absolute, x mood fog multiplier
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float CloudBottomKm = 5.f;  // lower = heavier sky
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float CloudThicknessKm = 10.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float Rain = 0.f;           // 0..1 rain FX intensity
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) FLinearColor Desaturate = FLinearColor::White; // tints the sun
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float Wind = 0.2f;          // 0..1 foliage wind strength
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float LightningPerMinute = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float SunScale = 1.f;       // x mood sun intensity
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float SkyLightScale = 1.f;  // x mood sky light
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float FogDensity = 0.02f;   // absolute, x mood fog multiplier
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float CloudBottomKm = 5.f;  // lower = heavier sky
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float CloudThicknessKm = 10.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float Rain = 0.f;           // 0..1 rain FX intensity
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") FLinearColor Desaturate = FLinearColor::White; // tints the sun
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float Wind = 0.2f;          // 0..1 foliage wind strength
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float LightningPerMinute = 0.f;
 
 	static FDaedalusWeatherLook Lerp(const FDaedalusWeatherLook& A, const FDaedalusWeatherLook& B, float T);
 	static FDaedalusWeatherLook Default(EDaedalusWeather W);
@@ -54,15 +54,15 @@ USTRUCT(BlueprintType)
 struct FDaedalusLightMood : public FTableRowBase
 {
 	GENERATED_BODY()
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) FLinearColor SunColor = FLinearColor(1.f, 0.96f, 0.9f);
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float SunIntensity = 10.f;   // lux at noon
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) FLinearColor SkyColor = FLinearColor::White;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float SkyLightIntensity = 1.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) FLinearColor FogColor = FLinearColor(0.45f, 0.55f, 0.7f);
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float FogMultiplier = 1.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float FogHeightFalloff = 0.2f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float FogStartDistance = 0.f;  // cm
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) EDaedalusWeather DefaultWeather = EDaedalusWeather::Clear;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") FLinearColor SunColor = FLinearColor(1.f, 0.96f, 0.9f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float SunIntensity = 10.f;   // lux at noon
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") FLinearColor SkyColor = FLinearColor::White;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float SkyLightIntensity = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") FLinearColor FogColor = FLinearColor(0.45f, 0.55f, 0.7f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float FogMultiplier = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float FogHeightFalloff = 0.2f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") float FogStartDistance = 0.f;  // cm
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Sky") EDaedalusWeather DefaultWeather = EDaedalusWeather::Clear;
 
 	static FDaedalusLightMood Lerp(const FDaedalusLightMood& A, const FDaedalusLightMood& B, float T);
 };

@@ -17,11 +17,14 @@ for p in lay["placements"]:
 sc = bpy.context.scene
 sc.render.engine = "BLENDER_EEVEE_NEXT"; sc.render.resolution_x, sc.render.resolution_y = 1600, 900
 w = bpy.data.worlds.new("Storm"); sc.world = w; w.use_nodes = True
-w.node_tree.nodes["Background"].inputs[0].default_value = (0.05, 0.06, 0.1, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.6
+w.node_tree.nodes["Background"].inputs[0].default_value = (0.09, 0.07, 0.16, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.6
 bpy.ops.object.light_add(type="SUN", rotation=(math.radians(55), 0, math.radians(-30))); bpy.context.active_object.data.energy = 2.5
 bpy.context.active_object.data.color = (0.65, 0.62, 1.0)
 bpy.ops.object.light_add(type="POINT", location=(0, 0, 60)); bpy.context.active_object.data.energy = 4e5; bpy.context.active_object.data.color = (0.5, 0.85, 1)
-bpy.ops.object.camera_add(location=(-190, -320, 110)); cam = bpy.context.active_object; sc.camera = cam
-d = (0 - cam.location.x, 0 - cam.location.y, 5 - cam.location.z)
+for x, y in ((0, -70), (-30, -60), (30, -60), (0, -10)):  # cyan odds-glow pools near the plaza
+    bpy.ops.object.light_add(type="POINT", location=(x, y, 12)); bpy.context.active_object.data.energy = 6e4; bpy.context.active_object.data.color = (0.4, 0.9, 1)
+c, t = lay.get("hero_cam_m", [-190, -320, 110]), lay.get("hero_target_m", [0, 0, 5])
+bpy.ops.object.camera_add(location=c); cam = bpy.context.active_object; sc.camera = cam
+d = (t[0] - c[0], t[1] - c[1], t[2] - c[2])
 cam.rotation_euler = (math.atan2(math.hypot(d[0], d[1]), -d[2]), 0, math.atan2(d[1], d[0]) - math.pi / 2); cam.data.lens = 32
 sc.render.filepath = out; bpy.ops.render.render(write_still=True); print("HERO", out)

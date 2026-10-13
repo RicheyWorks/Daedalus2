@@ -2,7 +2,7 @@
 # Metres, origin bottom centre, flat colour slots, one collection per asset, Kind_BUF_Name. Writes GLBs + manifest.
 import bpy, os, json, math, random
 ROOT = r"C:\Users\730ri\projects\bot-team\art\buffffff"
-OUT = os.path.join(ROOT, "glb"); os.makedirs(OUT, exist_ok=True)
+OUT = os.path.join(ROOT, "glb"); ART = r"C:\Users\730ri\projects\bot-team\art"; SAVE_BLEND = True; os.makedirs(OUT, exist_ok=True)
 random.seed(666666)
 def hexc(h): h=h.lstrip('#'); return tuple(int(h[i:i+2],16)/255 for i in (0,2,4))+(1,)
 MATS={}
@@ -41,6 +41,9 @@ def asset(name,kind,build,group):
     bpy.ops.export_scene.gltf(filepath=p,use_selection=True,export_format='GLB',export_apply=True)
     tris=sum(len(o.data.polygons) for o in col.objects)
     made.append({"asset":name,"kind":kind,"group":group,"faces":tris})
+    if SAVE_BLEND:
+        kd=os.path.join(ART,name.split("_")[0]); os.makedirs(kd,exist_ok=True)
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.join(kd,name+".blend"),copy=True)
 WOOD=mat("Wood","#8A5A32"); STONE=mat("Stone","#8C8C94"); DARK=mat("Dark","#2A2A2A"); SOIL=mat("Soil","#5A3B22")
 WATER=mat("Water","#3A9BD5"); CLEAN=mat("CleanWater","#8FE3FF"); STEM=mat("Stem","#3E7A2E"); GOLD=mat("BuffGold","#F2B630")
 GLASS=mat("Glass","#CFEFFF"); CLAY=mat("Clay","#B8643C"); ROOF=mat("Roof","#5B2A86")
@@ -148,9 +151,38 @@ asset("Prop_BUF_Landmark_DeedStone","prop",lambda col:(box(col,1.6,0.4,1.2,0,0,0
 asset("Prop_BUF_Landmark_BuffStatue","prop",lambda col:(box(col,2,2,1,0,0,0,STONE),ball(col,1.0,0,0,1,GOLD,1.3),ball(col,0.5,0,-0.9,2.2,GOLD)),"nft")
 for i,(f,(c,e)) in enumerate(FAM.items()):
     asset(f"Prop_BUF_Banner_{f}","prop",lambda col,c=c,f=f:(cyl(col,0.05,4,0,0,0,WOOD,6),box(col,1.0,0.05,1.6,0.5,0,2.2,mat("Ban_"+f,c))),"nft")
+# ---- v2 additions: apiary (honey seal), fences/gates, paths, decor, herb plots, lamps, signs, boats = 160
+HIVE=mat("Hive","#E8B830"); HONEY=mat("Honey","#F2A020")
+for v in range(1,7): asset(f"Prop_BUF_Apiary_Hive_V{v}","prop",lambda col,v=v:[box(col,0.6,0.5,0.25,0,0,0.3*k,HIVE if k%2==0 else WOOD) for k in range(v%3+2)],"apiary")
+for it in ("HoneyJar","HoneyComb","Beeswax","Smoker","BeeSuit","Extractor"): asset(f"Item_BUF_Apiary_{it}","item",lambda col:(cyl(col,0.1,0.18,0,0,0,GLASS,10),cyl(col,0.08,0.12,0,0,0.02,HONEY,10)),"apiary")
+for f in FAM:
+    for v in range(1,5): asset(f"Prop_BUF_HerbPlot_{f}_V{v}","prop",lambda col,f=f,v=v:(box(col,1.5+0.5*v,1.2,0.25,0,0,0,SOIL),box(col,1.6+0.5*v,0.1,0.35,0,0.6,0,WOOD),[ball(col,0.12,-0.6+0.4*k,0,0.25,mat("Herb_"+f+"0",FAM[f][0])) for k in range(v+2)]),"herb")
+for v in range(1,13): asset(f"Prop_BUF_Fence_V{v}","prop",lambda col,v=v:([cyl(col,0.06,1+0.1*(v%3),x,0,0,WOOD,6) for x in (-1,1)],[box(col,2.1,0.06,0.1,0,0,z,GOLD if v>9 else WOOD) for z in (0.4,0.8)]),"farm")
+for v in range(1,5): asset(f"Prop_BUF_Gate_V{v}","prop",lambda col,v=v:(cyl(col,0.1,1.6,-1.2,0,0,WOOD,6),cyl(col,0.1,1.6,1.2,0,0,WOOD,6),box(col,2.2,0.08,1.0,0,0,0.3,WOOD),box(col,0.4,0.1,0.3,0,0,1.5,GOLD)),"farm")
+for v in range(1,21): asset(f"Prop_BUF_Path_V{v}","prop",lambda col,v=v:[cyl(col,0.4+0.05*(k%3),0.08,k*0.9,0.2*((k*v)%3-1),0,STONE,7) for k in range(3+v%4)],"kit")
+for n,c in (("Lamp","#F2E070"),("Sign","#8A5A32"),("Bench","#8A5A32"),("Barrel","#6A4A32"),("Crate","#A07A4A"),("Cart","#8A5A32"),("Wheelbarrow","#6A6A6A"),("Scarecrow","#D8B65A")):
+    for v in range(1,7): asset(f"Prop_BUF_Decor_{n}_V{v}","prop",lambda col,c=c,v=v:(box(col,0.5+0.1*v,0.5,0.6+0.15*v,0,0,0,mat("D_"+c,c)),ball(col,0.12,0,0,0.6+0.15*v,GOLD)),"decor")
+for v in range(1,5): asset(f"Prop_BUF_Dock_V{v}","prop",lambda col,v=v:([cyl(col,0.12,2,x,y,-1,WOOD,6) for x in (-1.5,1.5) for y in (0,2*v)],box(col,3.4,2*v+0.4,0.15,0,v,1,WOOD)),"water")
+for v in range(1,5): asset(f"Veh_BUF_Raft_V{v}","vehicle",lambda col,v=v:[cyl(col,0.15,2+0.5*v,0.32*k,0,0,WOOD,8) for k in range(5)],"water")
+for f in FAM:
+    for v in (1,2): asset(f"Prop_BUF_Shrine_{f}_V{v}","prop",lambda col,f=f,v=v:(box(col,1.2,1.2,0.6,0,0,0,STONE),cone(col,0.5,1.0+0.5*v,0,0,0.6,mat("Herb_"+f+"1",FAM[f][0]),6)),"nft")
+for v in range(1,13): asset(f"Prop_BUF_FlowerPatch_V{v}","prop",lambda col,v=v:[ball(col,0.1,random.Random(v*9+k).uniform(-0.6,0.6),random.Random(v*7+k).uniform(-0.6,0.6),0,mat("Fl"+str((v+k)%6),list(FAM.values())[(v+k)%6][0])) for k in range(8)],"kit")
+# ---- v3 additions: livestock tack, storage, pests/remedies, weather, signage = 120
+for sp,_,_ in LIV:
+    for t,c in (("Bell","#C9A040"),("Collar","#7A3AB6"),("Feeder","#8A5A32"),("Bed","#D8C070"),("NameTag","#F2B630")):
+        asset(f"Prop_BUF_Tack_{sp}_{t}","prop",lambda col,c=c,t=t:(box(col,0.4,0.3,0.15 if t!="Feeder" else 0.4,0,0,0,mat("T_"+t,c)),ball(col,0.06,0,0,0.2,GOLD)),"livestock")
+for st in ("Jar","Crock","Sack","Basket","Shelf","Cellar","Smokerack","Saltbox"):
+    for v in (1,2,3): asset(f"Prop_BUF_Store_{st}_V{v}","prop",lambda col,v=v:(cyl(col,0.2+0.1*v,0.3+0.15*v,0,0,0,CLAY if v!=2 else WOOD,10),cyl(col,0.15+0.1*v,0.04,0,0,0.3+0.15*v,DARK,10)),"food")
+for p,c in (("Aphid","#7CCB4A"),("Mite","#C8505A"),("Slug","#8A7A5A"),("Mildew","#E8E8E8"),("Rot","#5A3B22"),("Locust","#B8A040")):
+    asset(f"Mob_BUF_Pest_{p}","mob",lambda col,c=c:(ball(col,0.05,0,0,0,mat("Pest_"+c,c),0.6),ball(col,0.03,0,-0.05,0.03,DARK)),"herb")
+    asset(f"Item_BUF_Remedy_{p}","item",lambda col,c=c:(cyl(col,0.06,0.14,0,0,0,GLASS,8),cyl(col,0.05,0.08,0,0,0.01,mat("Rem_"+c,c),8)),"herb")
+for w in ("RainGauge","WindVane","SunDial","Lightning Rod","FogNet","DewCollector","StormShelter","Weathercock"):
+    w=w.replace(" ","")
+    for v in (1,2): asset(f"Prop_BUF_Weather_{w}_V{v}","prop",lambda col,v=v:(cyl(col,0.05,1.5+v,0,0,0,DARK,6),box(col,0.6,0.1,0.4,0,0,1.5+v,GOLD)),"water")
+for v in range(1,13): asset(f"Prop_BUF_Signpost_V{v}","prop",lambda col,v=v:(cyl(col,0.06,1.8,0,0,0,WOOD,6),[box(col,0.8,0.05,0.2,0.3*(1 if k%2 else -1),0,1.2+0.25*k,mat("Ban_"+fl[(v+k)%6],FAM[fl[(v+k)%6]][0])) for k in range(1+v%3)]),"decor")
 # ---- ISLAND KIT: rocks/cliffs/trees/bushes/logs/paths to reach 560+
 n=0; ROCKC=["#8C8C94","#6E6A64","#A89F8C","#5A6470","#7A8A70"]
-while len(made)<560:
+while len(made)<860:
     n+=1; kind=["Rock","Cliff","Boulder","Tree","Bush","Log","PathStone","Pine"][n%8]
     def b(col,seed=n,kind=kind):
         r=random.Random(seed*7)
