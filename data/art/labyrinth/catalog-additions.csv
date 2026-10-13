@@ -1,0 +1,68 @@
+name,kind,category,world,owner,status,queue_status,blender_files,uassets,path
+Mob_Lab_Wayfinder,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_Wayfinder.glb
+Mob_Lab_ThreadSpinnerAri,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_ThreadSpinnerAri.glb
+Mob_Lab_LanternKeeper,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_LanternKeeper.glb
+Mob_Lab_Wallwright,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_Wallwright.glb
+Mob_Lab_LostCartographer,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_LostCartographer.glb
+Mob_Lab_EchoHermit,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_EchoHermit.glb
+Mob_Lab_GateRiddler,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_GateRiddler.glb
+Mob_Lab_StriderTamerOona,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_StriderTamerOona.glb
+Mob_Lab_StatueGardener,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_StatueGardener.glb
+Mob_Lab_HerdWardenTobi,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_HerdWardenTobi.glb
+Mob_Lab_Trapsmith,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_Trapsmith.glb
+Mob_Lab_TwinDoors,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_TwinDoors.glb
+Mob_Lab_ArchitectApprentice,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/humanoids/labyrinth-humanoid-cast.blend,,labyrinth-full/humanoids/Mob_Lab_ArchitectApprentice.glb
+Mob_Lab_CornerRat,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_CornerRat.glb
+Mob_Lab_ChalkEater,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_ChalkEater.glb
+Mob_Lab_GlowGrub,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_GlowGrub.glb
+Mob_Lab_HedgeStalker,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_HedgeStalker.glb
+Mob_Lab_MirrorBat,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_MirrorBat.glb
+Mob_Lab_WallMimic,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_WallMimic.glb
+Mob_Lab_ThreadSpider,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_ThreadSpider.glb
+Mob_Lab_HornbackBull,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_HornbackBull.glb
+Mob_Lab_SentinelSphinxling,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_SentinelSphinxling.glb
+Mob_Lab_FoldingMaze,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_FoldingMaze.glb
+Mob_Lab_MossSnail,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_MossSnail.glb
+Mob_Lab_EchoCricket,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_EchoCricket.glb
+Mob_Lab_SkyStrider,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_SkyStrider.glb
+Mob_Lab_CorridorHound,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_CorridorHound.glb
+Mob_Lab_LanternWisp,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_LanternWisp.glb
+Mob_Lab_ChalkKitten,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_ChalkKitten.glb
+Mob_Lab_CompassBeetle,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_CompassBeetle.glb
+Mob_Lab_Mazemouse,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_Mazemouse.glb
+Mob_Lab_ThreadMoth,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_ThreadMoth.glb
+Mob_Lab_VenusGuide,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_VenusGuide.glb
+Mob_Lab_PitcherMedic,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_PitcherMedic.glb
+Mob_Lab_SundewGuardian,Mob,fauna,Labyrinth,team-codex,blender_only,READY,labyrinth-full/creatures/labyrinth-creature-cast.blend,,labyrinth-full/creatures/Mob_Lab_SundewGuardian.glb
+Prop_Lab_Floor4m,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_Floor4m.glb
+Prop_Lab_Wall4m,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_Wall4m.glb
+Prop_Lab_Corner4m,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_Corner4m.glb
+Prop_Lab_GateArch,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_GateArch.glb
+Prop_Lab_ThreadAnchor,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_ThreadAnchor.glb
+Prop_Lab_ChalkMarker,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_ChalkMarker.glb
+Prop_Lab_TrapPlate,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_TrapPlate.glb
+Prop_Lab_MirrorPanel,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_MirrorPanel.glb
+Prop_Lab_HedgePlanter,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_HedgePlanter.glb
+Prop_Lab_StriderPerch,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_StriderPerch.glb
+Prop_Lab_HornbackTrough,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_HornbackTrough.glb
+Prop_Lab_EchoBell,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/environment/labyrinth-environment.blend,,labyrinth-full/environment/Prop_Lab_EchoBell.glb
+Prop_Lab_DM_NarratorLectern,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_NarratorLectern.glb
+Prop_Lab_DM_ChoiceTrident,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_ChoiceTrident.glb
+Prop_Lab_DM_ChronicleArchive,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_ChronicleArchive.glb
+Prop_Lab_DM_QuestSeal,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_QuestSeal.glb
+Prop_Lab_DM_ReturnWaymarker,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_ReturnWaymarker.glb
+Prop_Lab_DM_RiftThreshold,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_RiftThreshold.glb
+Prop_Lab_DM_PartyRally,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_PartyRally.glb
+Prop_Lab_DM_RewardReliquary,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/dungeon-master/labyrinth-dungeon-master-kit.blend,,labyrinth-full/dungeon-master/Prop_Lab_DM_RewardReliquary.glb
+Prop_Lab_Halloween_PumpkinLantern,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_PumpkinLantern.glb
+Prop_Lab_Halloween_SkullEffigy,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_SkullEffigy.glb
+Prop_Lab_Halloween_Gravestone,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_Gravestone.glb
+Prop_Lab_Halloween_Coffin,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_Coffin.glb
+Prop_Lab_Halloween_Cauldron,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_Cauldron.glb
+Prop_Lab_Halloween_CandleCluster,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_CandleCluster.glb
+Prop_Lab_Halloween_FriendlyGhostLantern,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_FriendlyGhostLantern.glb
+Prop_Lab_Halloween_WitchHatStand,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_WitchHatStand.glb
+Prop_Lab_Halloween_CrowPerch,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_CrowPerch.glb
+Prop_Lab_Halloween_CobwebFrame,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_CobwebFrame.glb
+Prop_Lab_Halloween_CryptGate,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_CryptGate.glb
+Prop_Lab_Halloween_PumpkinCrate,Prop,props (other),Labyrinth,team-codex,blender_only,READY,labyrinth-full/halloween/labyrinth-halloween.blend,,labyrinth-full/halloween/Prop_Lab_Halloween_PumpkinCrate.glb
