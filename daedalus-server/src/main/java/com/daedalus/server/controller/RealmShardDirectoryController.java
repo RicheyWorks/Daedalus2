@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 /** Opt-in configured directory; does not migrate state, grant access or promise worker health. */
 @RestController
 @RequestMapping("/api/v1/realms")
-@ConditionalOnProperty(name="daedalus.shards.enabled", havingValue="true")
+@ConditionalOnProperty(name = "daedalus.shards.enabled", havingValue = "true")
 public class RealmShardDirectoryController {
     private static final Pattern REALM = Pattern.compile("[a-z0-9][a-z0-9-]{0,63}");
     private final Map<String,String> routes;
