@@ -32,6 +32,17 @@ void AOceanProbeController::Tick(float Dt)
     }
     if (auto* Vessel=Cast<ADaedalusOceanVessel>(GetPawn()))
     {
+        const bool Dive=FParse::Param(FCommandLine::Get(),TEXT("ProbeDive"));
+        const auto Expected=Dive ? EDaedalusOceanVessel::Submarine : EDaedalusOceanVessel::Boat;
+        if (Vessel->VesselType!=Expected || Vessel->CurrentRealm!=TEXT("Ocean Realm")
+            || Vessel->CruiseSpeedCm!=700 || Vessel->SeaLevelCm!=25 || Vessel->MaxDepthCm!=15000) return;
+        if (!IdentityLogged)
+        {
+            UE_LOG(LogTemp,Display,TEXT("OCEAN_REPLICATED_IDENTITY mode=%s realm=%s speed=%.0f sea=%.0f depth=%.0f"),
+                   Dive ? TEXT("submarine") : TEXT("boat"),*Vessel->CurrentRealm,
+                   Vessel->CruiseSpeedCm,Vessel->SeaLevelCm,Vessel->MaxDepthCm);
+            IdentityLogged=true;
+        }
         Elapsed+=Dt;
         if (Elapsed<3)
             Vessel->SetHelmInput(1,0,FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? -1 : 0);
@@ -54,6 +65,8 @@ void AOceanProbeGameMode::Tick(float Dt)
     const bool NonOwner=FParse::Param(FCommandLine::Get(),TEXT("ProbeNonOwner"));
     for (TActorIterator<ADaedalusOceanVessel> It(GetWorld());It;++It)
     {
+        It->CurrentRealm=TEXT("Ocean Realm");
+        It->CruiseSpeedCm=700; It->SeaLevelCm=25; It->MaxDepthCm=15000;
         if (FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")))
             It->VesselType=EDaedalusOceanVessel::Submarine;
         if (!Target.IsValid() && It->GetActorLocation().X>100) Target=*It;

@@ -16,6 +16,7 @@ private:
     float Elapsed=0;
     float AttackClock=0;
     bool AttackLogged=false;
+    bool IdentityLogged=false;
 };
 
 UCLASS()

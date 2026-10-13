@@ -62,6 +62,14 @@ server-owned vessel identity and current realm; do not populate these fields fro
 client request payloads. A request should contain dock IDs only. The existing
 realm loader remains owned by Claude's team. No Hero/Realm files were changed.
 
+VesselType, CurrentRealm, cruise speed, sea level and depth now replicate from
+the server along with actor movement. Previously clients retained class-default
+identity/configuration, even while motion replicated. Fresh two-client network
+probes required client receipt of non-default server values before any input:
+Ocean Realm, Boat/Submarine, 700 cm/s, 25 cm sea level and 15,000 cm depth.
+Both modes then passed owner motion, input expiry and foreign-client refusal.
+See ocean-replication-proof.json for exact logs and compiled input hashes.
+
 BoardAtDock performs native possession transfer when the requesting controller
 already possesses an authority avatar and both avatar and unoccupied vessel are
 within the configured dock radius. The vessel must match the dock realm; surface

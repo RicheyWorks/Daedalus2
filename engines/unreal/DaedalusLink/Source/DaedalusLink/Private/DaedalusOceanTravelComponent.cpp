@@ -2,6 +2,7 @@
 #include "Engine/World.h"
 #include "GameFramework/Controller.h"
 #include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 
 namespace
 {
@@ -34,6 +35,16 @@ void ADaedalusOceanVessel::SetHelmInput_Implementation(float Forward, float Turn
     Helm = FVector(FMath::Clamp(Forward,-1.0f,1.0f),FMath::Clamp(Turn,-1.0f,1.0f),
                    FMath::Clamp(Dive,-1.0f,1.0f));
     InputAge = 0;
+}
+
+void ADaedalusOceanVessel::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    DOREPLIFETIME(ADaedalusOceanVessel,VesselType);
+    DOREPLIFETIME(ADaedalusOceanVessel,CurrentRealm);
+    DOREPLIFETIME(ADaedalusOceanVessel,CruiseSpeedCm);
+    DOREPLIFETIME(ADaedalusOceanVessel,SeaLevelCm);
+    DOREPLIFETIME(ADaedalusOceanVessel,MaxDepthCm);
 }
 
 void ADaedalusOceanVessel::Tick(float DeltaSeconds)

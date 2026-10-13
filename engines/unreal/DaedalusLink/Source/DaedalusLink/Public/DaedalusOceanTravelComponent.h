@@ -18,16 +18,17 @@ class DAEDALUSLINK_API ADaedalusOceanVessel : public APawn
 public:
     ADaedalusOceanVessel();
     virtual void Tick(float DeltaSeconds) override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
     UFUNCTION(Server, Unreliable, BlueprintCallable, Category="Daedalus|Ocean")
     void SetHelmInput(float Forward, float Turn, float Dive);
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float SeaLevelCm = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float SeaLevelCm = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     TObjectPtr<UStaticMeshComponent> VesselMesh;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     EDaedalusOceanVessel VesselType = EDaedalusOceanVessel::Boat;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     FString CurrentRealm;
 private:
     FVector Helm = FVector::ZeroVector;

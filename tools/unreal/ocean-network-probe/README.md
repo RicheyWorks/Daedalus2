@@ -34,3 +34,13 @@ Both boat and submarine passed October 13; proof is ocean-nonowner-proof.json,
 full logs Documents/Codex/2026-10-13/ocean-network-nonowner-1. This verifies
 non-owner refusal through Unreal's normal client RPC API. It does not emulate
 forged network packets or establish production authentication/session security.
+
+The current fixture also sets non-default server-only vessel identity/configuration:
+Ocean Realm, Boat/Submarine type, cruise 700 cm/s, sea level 25 cm and depth
+15,000 cm. Owner clients wait for all five replicated values and log their receipt
+before generating input. The runner requires that identity marker, preventing
+default values or client-side configuration from masquerading as replication.
+The updated three-process runs passed both modes; latest proof is
+docs/production/ocean-replication-proof.json, logs in
+Documents/Codex/2026-10-13/ocean-network-identity-1. Earlier proof files retain
+their original tested source hashes and results.

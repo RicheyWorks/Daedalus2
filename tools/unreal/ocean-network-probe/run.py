@@ -44,6 +44,7 @@ def run(engine, project, output, dive, non_owner=False):
                 assert client is not None
                 client_text=client_log.read_text(errors='replace')
                 assert 'Welcomed by server' in client_text,'Missing actual connection evidence'
+                assert 'OCEAN_REPLICATED_IDENTITY' in client_text,'Missing replicated configuration evidence'
                 if non_owner:
                     attack_text=attacker_log.read_text(errors='replace')
                     assert 'Welcomed by server' in attack_text
@@ -53,6 +54,7 @@ def run(engine, project, output, dive, non_owner=False):
                     'server_pid':server.pid,'client_pid':client.pid,'port':port,
                     **({'foreign_client_pid':attacker.pid} if non_owner else {}),
                     'result':next(line for line in log.splitlines() if 'OCEAN_NETWORK_PASS' in line),
+                    'replicated_identity':next(line for line in client_text.splitlines() if 'OCEAN_REPLICATED_IDENTITY' in line),
                     'transport':'localhost Unreal IpNetDriver; actual remote owner RPC',
                     'rendered_gameplay_proven':False}
             if server.poll() is not None: raise RuntimeError(f'Server terminated without pass: {server_log}')
