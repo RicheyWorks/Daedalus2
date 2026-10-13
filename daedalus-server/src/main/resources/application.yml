@@ -260,6 +260,11 @@ resilience4j:
         limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: false
+      oceanChunks:
+        limit-for-period: 32          # bounded sector streaming; separate from maze-generation quota
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
       mazeGenerate:
         limit-for-period: 30          # 30 generations
         limit-refresh-period: 1m      # per minute
