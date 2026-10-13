@@ -8,7 +8,7 @@
                         1024,
                         1024
                     ],
-    "story":  "The 10,000 islands are fragments of one shattered planet, the biggest world ever known. Hephaestus Island is the fragment whose core took the asteroid\u0027s direct strike: the impact melted its heart into a living forge. The first ark crews tamed that molten core and built the Great Forge on it, and every ark hull since has been riveted here.",
+    "story":  "The 10,000 islands are fragments of one shattered planet, the biggest world ever known. Hephaestus Island is the fragment whose core took the asteroid's direct strike: the impact melted its heart into a living forge. The first ark crews tamed that molten core and built the Great Forge on it, and every ark hull since has been riveted here.",
     "zones":  [
                   {
                       "id":  "caldera_forge",
@@ -24,7 +24,7 @@
                   },
                   {
                       "id":  "meteor_scar",
-                      "desc":  "Impact scar where the asteroid struck the fragment\u0027s core: asteroid shard fused into planet rock, starmetal + emberite ore (Item_Shard_Asteroid, Item_Shard_Planet)",
+                      "desc":  "Impact scar where the asteroid struck the fragment's core: asteroid shard fused into planet rock, starmetal + emberite ore (Item_Shard_Asteroid, Item_Shard_Planet)",
                       "art":  [
                                   "Prop_Asteroid_Core",
                                   "Prop_ForgeObsidianSpire_*",
@@ -42,7 +42,7 @@
                   },
                   {
                       "id":  "ash_fields",
-                      "desc":  "Fertile ash slopes: herbs, emberhens, ashgoats",
+                      "desc":  "Fertile ash slopes: herb beds, ranch pens for emberhens, ashgoats, forgeox, lavaboar, cinderwool, and vent bees",
                       "art":  [
                                   "Item_Herb_*",
                                   "Prop_Ranch*"
@@ -88,6 +88,8 @@
                                       "emberhen",
                                       "ashgoat",
                                       "forgeox",
+                                      "lavaboar",
+                                      "cinderwool",
                                       "vent_bees"
                                   ]
                   },
@@ -97,7 +99,8 @@
                 ],
     "quests":  [
                    "q_crater",
-                   "q_ark"
+                   "q_ark",
+                   "q_forge_temper"
                ],
     "jukebox":  "forge-anvil rhythm stem (ask prometheus)"
 }
