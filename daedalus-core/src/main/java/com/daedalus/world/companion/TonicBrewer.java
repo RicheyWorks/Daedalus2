@@ -52,9 +52,41 @@ public final class TonicBrewer {
         return book.recipe(herbs).map(r -> scale(r, coatPattern, drinkerKind, stage, matchingCharm));
     }
 
+    /** Percent chance a Labyrinth coat lands a second roll (tonics.json coat.Labyrinth.secondRollPct). */
+    public static final int LABYRINTH_SECOND_ROLL_PCT = 10;
+
+    /** A brew plus whether the Labyrinth second roll landed (the tonic hits twice: factor doubled, 2x cap). */
+    public record RolledBrew(Brew brew, boolean secondRoll) { }
+
+    /**
+     * Seeded brew: like {@link #brew} but a Labyrinth coat gets a deterministic 10% second roll that applies the
+     * effect again (strength factor doubled, still clamped to 2). The same seed and herbs always give the same result.
+     */
+    public Optional<RolledBrew> brew(Collection<String> herbs, String coatPattern, String drinkerKind, int stage,
+                                     boolean matchingCharm, long seed) {
+        return book.recipe(herbs).map(r -> {
+            boolean second = "Labyrinth".equals(coatPattern) && secondRoll(seed, r.id());
+            Brew b = scale(r, coatPattern, drinkerKind, stage, matchingCharm, second ? 2.0 : 1.0);
+            return new RolledBrew(b, second);
+        });
+    }
+
+    /** Deterministic 10% roll from a seed and recipe id (SplitMix64 finaliser). */
+    static boolean secondRoll(long seed, String recipeId) {
+        long z = seed ^ (0x9E3779B97F4A7C15L * recipeId.hashCode());
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= z >>> 31;
+        return Math.floorMod(z, 100L) < LABYRINTH_SECOND_ROLL_PCT;
+    }
+
     Brew scale(Recipe r, String coatPattern, String drinkerKind, int stage, boolean matchingCharm) {
+        return scale(r, coatPattern, drinkerKind, stage, matchingCharm, 1.0);
+    }
+
+    Brew scale(Recipe r, String coatPattern, String drinkerKind, int stage, boolean matchingCharm, double extra) {
         double raw = book.coatMultiplier(coatPattern, r.shape()) * book.drinkerMultiplier(drinkerKind)
-            * book.stageMultiplier(stage);
+            * book.stageMultiplier(stage) * extra;
         double f = Math.max(0.0, Math.min(2.0, raw));
         List<Mod> out = new ArrayList<>();
         for (Mod m : r.mods()) {

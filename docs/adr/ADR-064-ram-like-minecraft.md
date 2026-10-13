@@ -116,3 +116,29 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   that doesn't fit is skipped, never half-loaded, and a smaller farther one may still fit. Always islands load
   regardless. `daedalus.StreamRamBudgetMiB` (0 = off) turns it on in game; `islands.json` rows may carry `ram_kib`.
   stream_core_test 20/20; 10,000 islands still plan in ~1.4 ms (hash sets, not a scan per step).
+- **Chunk palette (rule 1, like a Minecraft chunk section):** `Chunk` stores a palette plus 0, 4 or 8 bits per cube.
+  Empty or solid chunks hold no per-cube array (~60 B instead of 4 KiB); terrain chunks with 16 or fewer kinds hold
+  2 KiB. Writes widen, `copy()`/load narrow. `occupied()` is O(1) now (it scanned 4,096 bytes on every remove).
+  Reads stay lock-free (final fields in the store). Cost: get ~3 ns instead of ~2. ChunkPaletteTest 6/6 checks
+  40 random edit runs against a dense model.
+- **Realm mesher (web, rule 6's cost):** `realm-mesh.js` copies a chunk plus a 2-cube border into one flat array
+  before meshing, so faces and AO corners are array reads instead of ~70 string-keyed Map lookups per cube; colours
+  convert once per kind. Same bytes as the old mesher on 60 random chunks (`node tools/realm_mesh_check.mjs`), 2.4x
+  faster; World Zero (53 chunks) renders the same in headless Chromium.
+- **One request per world, run-length encoded (the wire side of rule 1):** `GET /api/v1/world/{id}/chunks/blocks`
+  sends every non-empty chunk as base64 (ordinal, len lo, len hi) triples (`Chunk.runs()` / `Chunk.ofRuns`). World
+  Zero: 53 chunks in 1 request and 35 KB, against 54 requests and ~320 KB (23 KB of runs vs 217 KB dense). realm.js
+  uses it and falls back to per-chunk on an older server. The per-chunk endpoint stays for other clients.
+- **Saved worlds as runs (DAEW version 14):** chunks are written as `Chunk.runs()` triples instead of 4,096 dense
+  bytes. World Zero's file: 218 KB -> 25 KB (53 chunks); a 120-chunk test world: 494 KB -> 48 KB. Version 13 and
+  older files still load (and re-save as 14, byte-identical to a fresh save); broken runs refuse the file. An older
+  server cannot read a version-14 file, so roll servers forward, not back. In RAM the same worlds hold 114 KB and
+  258 KB of chunk storage instead of 221 KB and 500 KB (the palette above).
+- **Saves redo only dirty chunks (rule 6 for persistence):** every block edit snapshots and saves the world. A
+  snapshot copied every chunk (4 KiB each) and the save re-encoded every chunk. Now `Chunk.copy()` shares storage
+  copy-on-write, and each store caches its runs until written. A 200-chunk world: edit + save 6.0 -> 1.6 ms (the
+  rest is the file write); the cost per edit no longer grows with the number of untouched chunks' cubes.
+- **Saves are atomic and buffered:** `WorldStore.save` writes a temp file beside the world and moves it over in one
+  step (retrying briefly when Windows holds the file, then falling back to a plain copy), so a crash or full disk
+  mid-save leaves the last good world, not a truncated one. A buffered stream cut edit + save to ~1.1 ms on the
+  200-chunk world. WorldStoreTest checks a save that dies half way leaves the old bytes and no temp files.

@@ -121,6 +121,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunks/blocks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/plots", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/obby", Posture.PUBLIC);
@@ -156,6 +157,8 @@ class ProdAuthPostureTest {
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
+        // Squad orders for Unreal (ADR-060): only the trusted game host drives NPCs.
+        EXPECTED.put("POST /api/v1/tactics/decide", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/breed", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/live", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/traffic", Posture.AUTHENTICATED);
