@@ -28,7 +28,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
 REPORT = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "Daedalus", "jobs", "turn-report.json")
-SCENARIOS = ["tactics", "wild", "orrery"]
+SCENARIOS = ["tactics", "tactics_remote", "wild", "orrery"]
 THREE_NPC = os.path.join(REPO, "docs", "benchmarks", "adaptive-initial", "three-npc.dto")
 
 PLACE = r'''

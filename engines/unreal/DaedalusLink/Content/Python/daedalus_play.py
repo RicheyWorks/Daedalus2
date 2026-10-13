@@ -875,6 +875,49 @@ def scenario_tactics(p):
     ], "states": sorted(states), "stats": tac.stats(), "spec": spec}
 
 
+def scenario_tactics_remote(p):
+    """The Java director over HTTP (ADR-060 transport): with the local director off and daedalus.TacticsRemote 1, a
+    squad's orders come from POST /api/v1/tactics/decide on daedalus.Server, applied without blocking a frame.
+    Needs the Daedalus server running; when it is not, the first check says so."""
+    import urllib.request
+    h = hero()
+    _clear_foes()
+    h.set_editor_property("invulnerable", True)
+    w = world()
+    server = unreal.SystemLibrary.get_console_variable_string_value("daedalus.Server") or "http://localhost:8088"
+    try:
+        up = urllib.request.urlopen(server + "/api/v1/worlds", timeout=2).status == 200
+    except Exception as e:  # reported as the first check
+        up, server = False, "%s (%s)" % (server, e)
+    unreal.SystemLibrary.execute_console_command(w, "daedalus.FoesHunt 1")
+    unreal.SystemLibrary.execute_console_command(w, "daedalus.Tactics 0")
+    unreal.SystemLibrary.execute_console_command(w, "daedalus.TacticsRemote 1")
+    placed = h.spawn_foes(3)
+    for i, f in enumerate(sorted(foes(), key=lambda f: f.get_name())):
+        f.set_editor_property("squad", "remote-squad")
+        f.set_editor_property("unit_id", "r%d" % (i + 1))
+    tac = unreal.DaedalusTactics.get_tactics(w)
+    frames = 0
+    for _ in range(300):   # about 5 s: four or five round trips at one a second
+        frames += 1
+        yield
+    stats = tac.stats()
+    kv = dict(x.split("=", 1) for x in stats.split() if "=" in x)
+    answered, asked = (int(v) for v in kv.get("remote", "0/0").split("/"))
+    verbs = sorted(f.get_editor_property("order_verb") for f in foes() if f.get_editor_property("order_verb"))
+    unreal.SystemLibrary.execute_console_command(w, "daedalus.TacticsRemote 0")
+    unreal.SystemLibrary.execute_console_command(w, "daedalus.Tactics 1")
+    h.set_editor_property("invulnerable", False)
+    return {"checks": [
+        _check("the Daedalus server answers", up, server),
+        _check("three foes placed as one squad", placed == 3, f"placed={placed}"),
+        _check("the squad was asked about once a second", asked >= 3, stats),
+        _check("Java answered", answered >= 2, stats),
+        _check("Java's orders were applied (local director off)", int(kv.get("applied", "0")) >= 1 and len(verbs) == 3, str(verbs)),
+        _check("nothing failed", kv.get("failed", "0") == "0", stats),
+    ], "stats": stats, "frames": frames}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -890,6 +933,7 @@ SCENARIOS = {
     "wild": scenario_wild,
     "orrery": scenario_orrery,
     "tactics": scenario_tactics,
+    "tactics_remote": scenario_tactics_remote,
 }
 
 

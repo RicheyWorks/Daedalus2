@@ -17,6 +17,9 @@ class ADaedalusTarget;
  *   one attacks, two flank, the badly hurt retreat.
  * - Movement, attacks and hits stay in ADaedalusTarget every frame. Nothing here waits on Java.
  * - Events (HIT, DOWN, SEEN, PLAYER) are kept as DTE 1 lines for Java to collect with TakeEvents.
+ * - daedalus.TacticsRemote 1: once a second each squad's roster (and the events) are POSTed to the Java director
+ *   (daedalus.Server + /api/v1/tactics/decide) without blocking; the spec that comes back goes through ApplyOrders.
+ *   One request per squad in flight; a slow or missing answer just leaves the local director in charge.
  * daedalus.Tactics 0 turns the local director off. It runs in Play and in the game, never in the editor world.
  */
 UCLASS()
@@ -72,6 +75,11 @@ private:
 	struct FDowned { FString Unit, Kind; float MaxHealth = 0.f; FVector At = FVector::ZeroVector; };
 	TMap<FString, TArray<FDowned>> Downed;   // per squad, this session   // per squad: an outside spec older than this is refused (stale fencing)
 	FString Session;
+	/** Squads with a request to the Java director in flight (one each, so a slow server can't pile them up). */
+	TSet<FString> InFlight;
+	void AskRemote(const FString& Squad, const FString& Events);
+	void RemoteAnswer(const FString& Squad, int32 Code, const FString& Body);
+	int32 Asked = 0, Answered = 0, RemoteFailed = 0;
 	float Next = 1.f;
 	int64 TickNo = 0;
 	int32 Applied = 0, Refused = 0, Decided = 0, Dropped = 0;

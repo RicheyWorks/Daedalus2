@@ -155,3 +155,11 @@ every unit HOLDs and the brain is not asked. The brain is `SquadDirector` by def
 `TacticsHost.Brain` (Astra's AdaptiveDirector plugs in there). Bounded to 4,096 squads; authenticated in prod; rate
 limit `tacticsDecide` 1,200/min per caller. TacticsHostTest 6/6, TacticsControllerTest, posture 3/3. Unreal side:
 an async HTTP poster in UDaedalusTactics (next).
+
+Unreal side (same day, compiles in the first post-break slot): `daedalus.TacticsRemote 1` makes UDaedalusTactics POST
+each live squad's `TakeRoster` (plus the drained `TakeEvents`, once per second) to `daedalus.Server` +
+`/api/v1/tactics/decide`, with a 2 s timeout and at most one request per squad in flight; `daedalus.TacticsToken`
+carries the bearer token in prod. The HTTP completion runs on the game thread and hands APPLY/REPEAT specs to
+`ApplyOrders`, which fences ticks again, so a late answer for an old tick is refused. Stats adds
+`remote=answered/asked failed inflight`. Play scenario `tactics_remote` proves it (needs the server running) and is
+in the turn script.
