@@ -28,3 +28,10 @@ realm lookup, and exercise HTTP JSON/status serialization using standalone MVC.
 Full deployed-server auth/packaging smoke tests and C++ differential parsing
 remain pending. Ocean and Portal catalogs are not fabricated from art rosters;
 they still need authoritative item definitions and native catalog support.
+
+Differential parity now passes all five canonical files and four corrupted
+refusals. The actual native reader (unchanged from main 1c987e09) and Java reader
+dump ordered UTF-8 field encodings; the comparison includes realm/theme, tabs,
+slots and every item's ID/tab/slot/name/detail/action sequence. Local native
+adapter compiled with MSVC /W4 /WX. CI runs the same comparison using GCC.
+This closes full-file parser parity, but not deployed auth or item transactions.
