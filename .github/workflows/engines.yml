@@ -9,10 +9,10 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "connectors/claude-unreal-connector/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     branches: [ main ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "connectors/claude-unreal-connector/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -63,6 +63,23 @@ jobs:
           $e = $null
           [System.Management.Automation.Language.Parser]::ParseFile("$PWD\engines\unreal\setup-unreal.ps1", [ref]$null, [ref]$e) | Out-Null
           if ($e.Count) { $e; exit 1 }
+      - name: background worker console policy and gateway fixtures (no live editor)
+        shell: powershell
+        run: |
+          $paths = @('connectors/claude-unreal-connector/extension/server/worker-console-policy.ps1', 'connectors/claude-unreal-connector/extension/server/worker-console.ps1', 'connectors/claude-unreal-connector/extension/server/win.ps1', 'engines/unreal/start-background-worker.ps1')
+          foreach ($p in $paths) {
+            $e = $null
+            [System.Management.Automation.Language.Parser]::ParseFile("$PWD\$p", [ref]$null, [ref]$e) | Out-Null
+            if ($e.Count) { $e; exit 1 }
+          }
+          . .\connectors\claude-unreal-connector\extension\server\worker-console.ps1
+          Initialize-DaedalusWorkerConsoleNative
+          .\connectors\claude-unreal-connector\harness\worker_console_test.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node .\connectors\claude-unreal-connector\harness\worker_console_gateway_test.js
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python .\connectors\claude-unreal-connector\harness\worker_launch_test.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: plan only
         shell: pwsh
         run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly

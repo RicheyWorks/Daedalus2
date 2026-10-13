@@ -48,6 +48,8 @@ const TOOLS = [
   { name: 'editor_windows', local: 'list', timeout: 60000,
     description: 'List every open Unreal Editor window, including dialogs and popups, each with a picture. This works OUTSIDE the editor, so use it whenever another tool times out: a modal dialog (a message box, a save prompt, "build lighting", a crash reporter) has frozen the editor and its bridge. The largest window is the editor itself (main: true). Then answer the dialog with window_input. Windows only.',
     inputSchema: { type: 'object', properties: { max_images: { type: 'integer', minimum: 0, maximum: 12, description: 'Pictures for at most this many windows (default 6)' } }, additionalProperties: false } },
+  { name: 'background_worker_windows', local: 'workers', timeout: 30000, inputSchema: none,
+    description: 'Detect and minimize dedicated classic consoles for the current user\'s Daedalus jobs/lodworker.py worker. Verifies the exact Python command, process creation time, session, console host and exclusive console membership. Reports minimized, already minimized or unavailable; keeps running jobs and logs intact. Also runs during editor window polling. Windows only.' },
   { name: 'window_input', local: 'input', timeout: 30000,
     description: 'Answer an Unreal dialog, or drive any editor window, from outside the editor: brings the window (hwnd from editor_windows) to the front, optionally clicks at (x, y) in that window\'s own pixels as seen in its editor_windows picture (divide by image_scale if the picture was scaled), then presses keys. Keys: enter, escape, tab, space, left, right, up, down, y, n, alt+f4, separated by spaces (e.g. "tab enter"). Or pass action to close, minimize, restore, maximize or move a window without guessing where its buttons are. Reports whether the window closed. Windows only.',
     inputSchema: { type: 'object', properties: {
@@ -98,8 +100,8 @@ function callUnreal(type, params, timeoutMs) {
 // The window harness: win.ps1 run by Windows PowerShell, outside the editor.
 function runWindows(op, args, timeoutMs) {
   return new Promise((resolve) => {
-    if (process.platform !== 'win32') return resolve({ ok: false, message: 'editor_windows and window_input work on Windows only' });
-    const a = ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
+    if (process.platform !== 'win32') return resolve({ ok: false, message: 'window tools work on Windows only' });
+    const a = ['-NoProfile', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
     if (op === 'list' && args.max_images !== undefined) a.push('-MaxImages', String(args.max_images));
     if (op === 'input') {
       a.push('-Hwnd', String(args.hwnd));

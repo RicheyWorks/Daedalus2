@@ -11,7 +11,7 @@
 #   -Op input -Hwnd N -Action move -X 100 -Y 100 [-W 1200 -H 800]   move (and size) window N on screen
 # Output: one JSON object on stdout.
 param(
-    [ValidateSet("list", "input")][string]$Op = "list",
+    [ValidateSet("list", "input", "workers")][string]$Op = "list",
     [long]$Hwnd = 0,
     [string]$Keys = "",
     [int]$X = -1,
@@ -22,6 +22,16 @@ param(
     [int]$MaxImages = 6
 )
 $ErrorActionPreference = "Stop"
+$workerConsoles = $null
+if ($Op -eq 'list' -or $Op -eq 'workers') {
+    # Kept separate from editor windows: the dialog watcher must never press keys on a worker console.
+    . (Join-Path $PSScriptRoot 'worker-console.ps1')
+    $workerConsoles = Invoke-DaedalusWorkerConsoleCheck
+    if ($Op -eq 'workers') {
+        @{ ok = $true; worker_consoles = $workerConsoles } | ConvertTo-Json -Depth 5 -Compress
+        exit 0
+    }
+}
 Add-Type -AssemblyName System.Drawing
 Add-Type @"
 using System;
@@ -109,7 +119,7 @@ function Send-Chord([string]$chord) {
 
 try {
     $pids = Get-EditorPids
-    if ($pids.Count -eq 0) { @{ ok = $true; windows = @(); note = "no UnrealEditor is running" } | ConvertTo-Json -Compress; exit 0 }
+    if ($pids.Count -eq 0) { @{ ok = $true; windows = @(); worker_consoles = $workerConsoles; note = "no UnrealEditor is running" } | ConvertTo-Json -Depth 5 -Compress; exit 0 }
     if ($Op -eq "list") {
         $out = @(); $n = 0
         # Largest window first: that is the main editor; dialogs and popups follow.
@@ -133,7 +143,7 @@ try {
             }
             $out += [pscustomobject]$entry
         }
-        @{ ok = $true; foreground = [long][DaedalusWin]::GetForegroundWindow(); windows = $out } | ConvertTo-Json -Depth 4 -Compress
+        @{ ok = $true; foreground = [long][DaedalusWin]::GetForegroundWindow(); windows = $out; worker_consoles = $workerConsoles } | ConvertTo-Json -Depth 5 -Compress
     } else {
         $h = [IntPtr]$Hwnd
         $owned = [DaedalusWin]::Windows($pids) | Where-Object { $_ -eq $h }
