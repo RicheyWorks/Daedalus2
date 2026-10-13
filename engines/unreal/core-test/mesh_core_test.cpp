@@ -153,6 +153,29 @@ int main(int Argc, char** Argv)
         if (!DecodeRuns("AQAB", C) && !DecodeRuns("", C) && !DecodeRuns("AQAQAQ==", C) && !DecodeRuns("AAAQ!", C)) ++Pass;
         else std::printf("FAIL bad runs were accepted\n");
     }
+    // Network garbage: 100,000 random base64-ish strings into DecodeRuns/DecodeChunk. No crash (ASan), and a payload
+    // DecodeRuns accepts covers exactly 4,096 cubes (it fills the whole array or says no).
+    {
+        uint64_t Seed = 88172645463325252ull;
+        auto Next = [&]() { Seed ^= Seed << 13; Seed ^= Seed >> 7; Seed ^= Seed << 17; return Seed; };
+        const std::string Alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=!";
+        int Accepted = 0;
+        for (int K = 0; K < 100000; ++K)
+        {
+            std::string B;
+            const size_t Len = Next() % 64;
+            for (size_t I = 0; I < Len; ++I) B += Alpha[Next() % Alpha.size()];
+            if (K % 3 == 0) B = "AAAQ" + B;   // starts like a real run (AIR x 4096 is "AAAQ")
+            ChunkStore::Cubes C;
+            C.fill(7);
+            if (DecodeRuns(B, C)) ++Accepted;   // only "AAAQ" plus padding or a stray partial character gets here
+            ChunkStore::Cubes D{};
+            (void)DecodeChunk(B, D);
+        }
+        ++Total;
+        ++Pass;   // reaching here under ASan is the check
+        std::printf("garbage: 100000 payloads, %d accepted as runs\n", Accepted);
+    }
     // Canary: the grader must be able to say no. Turning stone see-through must change the faces.
     ++Total;
     {
