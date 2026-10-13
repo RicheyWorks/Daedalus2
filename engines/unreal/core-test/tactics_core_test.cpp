@@ -183,6 +183,35 @@ int main(int argc, char** argv)
 		Check("Number takes '+1.5' and refuses 'inf', '0x10', '1.5d'", Number("+1.5", X) && X == 1.5 && !Number("inf", X) && !Number("0x10", X) && !Number("1.5d", X));
 	}
 
+	// --- garbage in from the network (the spec now arrives over HTTP): 200,000 random byte strings, biased toward the
+	// grammar's own pieces. Under ASan/UBSan nothing may crash, and anything accepted must write back and re-read to
+	// itself (all or nothing, never half a spec).
+	{
+		std::mt19937_64 G(2026);
+		const std::vector<std::string> Bits = {"DTO 1\n", "squad s tick 3\n", "order ", "a ", "ATTACK ", "FLANK ", "LEFT ",
+			"- ", "1.5 ", "-0 ", "1e8 ", "1e9 ", "nan ", "| why", "\n", "\r\n", " ", "\t", "#", "\0", "\xff", "|", "squad ",
+			"tick ", "99999999999999999999", "0x1 "};
+		int Accepted = 0, Broken = 0;
+		for (int K = 0; K < 200000; ++K)
+		{
+			std::string T;
+			const int Parts = 1 + static_cast<int>(G() % 24);
+			for (int P2 = 0; P2 < Parts; ++P2)
+			{
+				if (G() % 4 == 0) T += static_cast<char>(G() % 256);
+				else T += Bits[static_cast<size_t>(G() % Bits.size())];
+			}
+			const ParseResult R = Parse(T);
+			if (!R.Ok) { if (R.Error.empty() || !R.Out.Orders.empty()) ++Broken; continue; }
+			++Accepted;
+			const std::string W = Write(R.Out);
+			const ParseResult Again = Parse(W);
+			if (!Again.Ok || Write(Again.Out) != W) ++Broken;
+		}
+		std::printf("  garbage: 200000 inputs, %d accepted, %d broken\n", Accepted, Broken);
+		Check("random bytes never crash the parser, and what it accepts round-trips", Broken == 0);
+	}
+
 	// --- the parity file for the Java port (VoxelIsle-style): 40 seeded squads, their decided specs, plus round-trips
 	if (argc > 2 && std::string(argv[1]) == "--write")
 	{
