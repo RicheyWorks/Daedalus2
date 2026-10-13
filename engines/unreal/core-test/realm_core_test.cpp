@@ -577,6 +577,37 @@ int main(int Argc, char** Argv)
         L.ForceBattle({"BLIGHT_SLIME", "BLIGHT_SLIME"});
         AutoFight(L);
         Check("two fights take a fresh hero to level 2", L.Members()[0].Lvl >= 2 && L.Members()[0].Exp >= 7, L.Describe());
+        // ---- a shiny foe (ADR-065 rule 9): announced, tougher, pays double, and a damage number pops when it is hit
+        {
+            Realm Sh;
+            std::string E4;
+            Sh.Load(Text, E4);
+            Dismiss(Sh);
+            Sh.MembersMut()[0].Atk = 60;
+            const int ExpBefore = Sh.Members()[0].Exp, GoldBefore = Sh.Gold();
+            Sh.ForceShinyNext(true);
+            Sh.ForceBattle({"BLIGHT_SLIME"});
+            Sh.ForceShinyNext(false);
+            const auto& Mon = Sh.World().Monsters[static_cast<size_t>(Sh.Foes()[0].Kind)];
+            Check("the shiny glitters when it appears", Sh.Foes()[0].Shiny && Sh.ShiniesSeen() == 1 && Sh.Foes()[0].MaxHp == Mon.Hp * 3 / 2, Sh.Describe());
+            bool Heard = false;
+            for (const std::string& S : Sh.TakeSfx()) Heard |= S == "SHINY";
+            Check("and its chime is raised for the jukebox", Heard);
+            int Popped = 0;
+            for (int k = 0; k < 200 && Popped == 0 && Sh.CurrentMode() == Mode::Battle; ++k)
+            {
+                const std::string U = Sh.TopBox();
+                if (U == "COMMAND" || U == "TARGET" || U == "INTRO") Tap(Sh, Button::A);   // everyone FIGHTs the slime
+                else Sh.Tick(0.05);
+                Popped = Sh.PopCount();
+            }
+            Check("a damage number pops where the hit lands", Popped > 0, std::to_string(Popped));
+            Png(Sh.Render(), Out + "/realm_13_shiny.png");
+            for (int k = 0; k < 40; ++k) Sh.Tick(0.05);
+            Check("and it fades away", Sh.PopCount() == 0, std::to_string(Sh.PopCount()));
+            AutoFight(Sh);
+            Check("a shiny pays double exp and gold", Sh.Members()[0].Exp - ExpBefore == Mon.Exp * 2 && Sh.Gold() - GoldBefore == Mon.Gold * 2, Sh.Describe());
+        }
         // SAGE casts ZAP at a slime: FIGHT for the hero, SPELL ZAP for the sage, DEFEND for the scout.
         L.ForceBattle({"PUFFCAP"});
         Tap(L, Button::A);              // intro

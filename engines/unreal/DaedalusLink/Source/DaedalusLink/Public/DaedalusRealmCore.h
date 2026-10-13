@@ -71,6 +71,8 @@ struct Foe
     int Kind = 0;
     int Hp = 1, MaxHp = 1;
     bool Fled = false;
+    /** Shiny (ADR-065): 1 in 256 of any kind. Every stat x1.5, double the exp and gold, a sparkle in battle. */
+    bool Shiny = false;
     bool Down() const { return Hp <= 0 || Fled; }
 };
 
@@ -209,6 +211,10 @@ public:
     std::vector<Member>& MembersMut() { return Party; }
     const std::vector<Foe>& Foes() const { return Enemies; }
     std::string LastMessage() const { return LastSaid; }
+    /** The harness: make every foe of the next battle shiny; how many shinies have shown; the live damage numbers. */
+    void ForceShinyNext(bool On) { ForceShiny = On; }
+    int ShiniesSeen() const { return ShinySeen; }
+    int PopCount() const { return static_cast<int>(Pops.size()); }
     int Count(int Item) const { for (const auto& E : Bag) if (E.first == Item) return E.second; return 0; }
     int Count(const std::string& Id) const { return Count(W.ItemIndex(Id)); }
     int ChestsOpened() const { int N = 0; for (bool O : Opened) N += O; return N; }
@@ -440,23 +446,25 @@ private:
         OpenCommand();
     }
 
+    static std::string Quote(const std::string& L) { return L.empty() ? L : "'" + L + "'"; }
+
     void Talk(int N)
     {
         const NpcDef& D = W.Npcs[static_cast<size_t>(N)];
-        // Townsfolk turn to face you.
+        // What a person says is in quotes, a paragraph a line, the way the genre marks speech from narration.
         std::string S;
-        for (const std::string& L : D.Lines) S += L + "\n";
+        for (const std::string& L : D.Lines) S += Quote(L) + "\n";
         switch (D.R)
         {
         case Role::News:
-            S += "NEWS OF THE DAY:\n";
-            for (const std::string& L : W.News) S += "* " + L + "\n";
+            S += Quote("NEWS OF THE DAY:") + "\n";
+            for (const std::string& L : W.News) S += Quote("* " + L) + "\n";
             Say(S);
             break;
         case Role::Inn:
         {
             const int Price = D.Price;
-            Say(S + "A NIGHT IS " + std::to_string(Price) + " GOLD. WILL YOU STAY?", [this, Price]() { AskInn(Price); });
+            Say(S + Quote("A NIGHT IS " + std::to_string(Price) + " GOLD. WILL YOU STAY?"), [this, Price]() { AskInn(Price); });
             break;
         }
         case Role::Shop:
@@ -470,8 +478,8 @@ private:
             for (Member& P : Party) { P.Hp = P.MaxHp; P.Mp = P.MaxMp; P.Poisoned = false; P.Asleep = 0; }
             RespawnMap = Cur; RespawnX = D.At.X; RespawnY = D.At.Y + 1;
             const Member& H = Party[0];
-            Say(S + "MAY THE STARS GUARD YOU. I WILL REMEMBER YOU HERE.\n" + H.Name + " NEEDS "
-                + std::to_string(std::max(0, ExpToNext(H.Lvl) - H.Exp)) + " EXP TO REACH LEVEL " + std::to_string(H.Lvl + 1) + ".");
+            Say(S + Quote("MAY THE STARS GUARD YOU. I WILL REMEMBER YOU HERE.") + "\n" + Quote(H.Name + " NEEDS "
+                + std::to_string(std::max(0, ExpToNext(H.Lvl) - H.Exp)) + " EXP TO REACH LEVEL " + std::to_string(H.Lvl + 1) + "."));
             Sfx.push_back("BLESS");
             break;
         }
@@ -896,6 +904,11 @@ private:
         std::string Sound;
     };
     struct Act { int Who = 0; int What = 0; int Target = -1; int Arg = -1; };   // What: 0 fight 1 spell 2 item 3 defend 4 run
+    /** A number that pops where a hit landed and rises away: foe slot or member card, amount, life left. */
+    struct Pop { int Foe = -1, Mem = -1, Amount = 0; double Life = 0.0; };
+    std::vector<Pop> Pops;
+    bool ForceShiny = false;   // the harness: every foe of the next battle is shiny
+    int ShinySeen = 0;
 
     enum class Phase { Intro, Command, Target, Play, Ending };
     Phase Ph = Phase::Intro;
@@ -910,6 +923,7 @@ private:
     bool NoRun = false, Won = false, Lost = false, Fled = false;
     double PlayT = 0.0;
     std::vector<int> FoeFlash;
+    mutable std::vector<int> FoeSlotX;   // where each foe was drawn this frame (for the damage numbers)
 
     void StartBattle(const std::vector<int>& Kinds, bool Boss, int BossIndex, int ChestIndex)
     {
@@ -920,11 +934,15 @@ private:
             Foe F;
             F.Kind = Kinds[i];
             F.Hp = F.MaxHp = M.Hp + R.Range(0, M.Hp / 8);
+            F.Shiny = ForceShiny || R.Chance(256);
+            if (F.Shiny) { F.Hp = F.MaxHp = F.MaxHp * 3 / 2; ++ShinySeen; }
             Enemies.push_back(F);
         }
         FoeShown.clear(); FoeGoneShown.clear();
         for (const Foe& F : Enemies) { FoeShown.push_back(F.Hp); FoeGoneShown.push_back(false); }
         FoeFlash.assign(Enemies.size(), 0);
+        FoeSlotX.assign(Enemies.size(), 0);
+        Pops.clear();
         MemShown.clear();
         for (const Member& P : Party) MemShown.push_back(P.Hp);
         ModeNow = Mode::Battle;
@@ -937,6 +955,7 @@ private:
         SetCue(NoRun ? "BOSS" : "BATTLE");
         Sfx.push_back("AMBUSH");
         std::string Names = Mon(Enemies[0].Kind).Name;
+        for (const Foe& F : Enemies) if (F.Shiny) { Log.push_back("A SHINY " + Mon(F.Kind).Name + " GLITTERS!"); Sfx.push_back("SHINY"); }
         if (Enemies.size() > 1) Log.push_back("MONSTERS APPEAR!");
         else
         {
@@ -1196,7 +1215,7 @@ private:
             F.Kind = E.Kind;
             F.Hp = F.MaxHp = M.Hp;
             Enemies.push_back(F);
-            FoeShown.push_back(0); FoeGoneShown.push_back(false); FoeFlash.push_back(0);
+            FoeShown.push_back(0); FoeGoneShown.push_back(false); FoeFlash.push_back(0); FoeSlotX.push_back(0);
             EmitFoe(M.Name + " CALLS FOR HELP! ANOTHER APPEARS.", static_cast<int>(Enemies.size()) - 1, "CALL");
             return;
         }
@@ -1218,7 +1237,7 @@ private:
             if (!P.Alive()) Emit(P.Name + " FALLS!", "FALL");
             return;
         }
-        int D = Damage(M.Atk, DefOf(P));
+        int D = Damage(E.Shiny ? M.Atk * 3 / 2 : M.Atk, DefOf(P));
         if (Defending[static_cast<size_t>(Who)]) D = D / 2;
         P.Hp = std::max(0, P.Hp - D);
         Emit(M.Name + " ATTACKS!", "SWING");
@@ -1242,8 +1261,8 @@ private:
             {
                 if (F.Fled) continue;
                 const MonsterDef& M = Mon(F.Kind);
-                Exp += M.Exp; GoldWon += M.Gold;
-                if (M.Drop >= 0 && R.Chance(M.DropOneIn)) Drops.push_back(M.Drop);
+                Exp += F.Shiny ? M.Exp * 2 : M.Exp; GoldWon += F.Shiny ? M.Gold * 2 : M.Gold;
+                if (M.Drop >= 0 && R.Chance(F.Shiny ? std::max(1, M.DropOneIn / 2) : M.DropOneIn)) Drops.push_back(M.Drop);
             }
             if (Exp == 0 && GoldWon == 0) { Emit("THE MONSTERS ARE GONE."); return; }
             GoldHeld += GoldWon;
@@ -1291,11 +1310,19 @@ private:
         LastSaid = L.Text;
         if (L.Foe >= 0 && L.Foe < static_cast<int>(FoeShown.size()))
         {
-            if (L.FoeHp < FoeShown[static_cast<size_t>(L.Foe)]) FoeFlash[static_cast<size_t>(L.Foe)] = 6;
+            if (L.FoeHp < FoeShown[static_cast<size_t>(L.Foe)])
+            {
+                FoeFlash[static_cast<size_t>(L.Foe)] = 6;
+                Pops.push_back({L.Foe, -1, FoeShown[static_cast<size_t>(L.Foe)] - L.FoeHp, 0.9});
+            }
             FoeShown[static_cast<size_t>(L.Foe)] = L.FoeHp;
             FoeGoneShown[static_cast<size_t>(L.Foe)] = L.Gone;
         }
-        if (L.Mem >= 0) { if (L.MemHp < MemShown[static_cast<size_t>(L.Mem)]) Flash = 0.12; MemShown[static_cast<size_t>(L.Mem)] = L.MemHp; }
+        if (L.Mem >= 0)
+        {
+            if (L.MemHp < MemShown[static_cast<size_t>(L.Mem)]) { Flash = 0.12; Pops.push_back({-1, L.Mem, MemShown[static_cast<size_t>(L.Mem)] - L.MemHp, 0.9}); }
+            MemShown[static_cast<size_t>(L.Mem)] = L.MemHp;
+        }
         if (!L.Sound.empty()) Sfx.push_back(L.Sound);
         PlayT = 0.0;
     }
@@ -1494,6 +1521,8 @@ inline void Realm::Tick(double Dt)
     if (Flash > 0.0) Flash -= Dt;
     if (MoveT < 1.0) MoveT = std::min(1.0, MoveT + Dt / 0.2);
     for (int& F : FoeFlash) if (F > 0) --F;
+    for (Pop& P : Pops) P.Life -= Dt;
+    Pops.erase(std::remove_if(Pops.begin(), Pops.end(), [](const Pop& P) { return P.Life <= 0.0; }), Pops.end());
     if (ModeNow == Mode::Battle)
     {
         if (Ph == Phase::Play || (Ph == Phase::Ending && !Queue.empty()))
@@ -1617,7 +1646,7 @@ inline void Realm::RenderBoxes(Frame& F, int Anim)
             break;
         case BoxKind::ShopTop: ListBox(F, 160, 8, 88, B, Anim, 4); break;
         case BoxKind::Members: ListBox(F, 112, 72, 80, B, Anim, 3); break;
-        case BoxKind::YesNo: ListBox(F, 176, 104, 64, B, Anim, 2); break;
+        case BoxKind::YesNo: ListBox(F, 184, 124, 64, B, Anim, 2); break;
         case BoxKind::Items: case BoxKind::Equip: case BoxKind::ShopBuy: case BoxKind::ShopSell: ListBox(F, 40, 40, 192, B, Anim, 8); break;
         case BoxKind::Spells: ListBox(F, 72, 56, 112, B, Anim, 4); break;
         case BoxKind::Status:
@@ -1661,7 +1690,22 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
         ++Slot;
         const MonsterDef& M = Mon(Enemies[static_cast<size_t>(i)].Kind);
         Monster(F, X, 74, M, Anim + i * 5, FoeFlash[static_cast<size_t>(i)] > 0 && (FoeFlash[static_cast<size_t>(i)] % 2));
-        if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Text(F, X + 28, 140, "*", Pal::Gold);
+        if (Enemies[static_cast<size_t>(i)].Shiny) Ui::Sparkle(F, X + 32, 106, Anim + i * 3);
+        if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Ui::Cursor(F, X + 28, 140, Ui::Current().Hot);
+        FoeSlotX[static_cast<size_t>(i)] = X;
+    }
+    for (const Pop& P : Pops)
+    {
+        const int Rise = static_cast<int>((0.9 - P.Life) * 30.0);
+        const std::string T = std::to_string(P.Amount);
+        if (P.Foe >= 0 && P.Foe < static_cast<int>(FoeSlotX.size()))
+            Ui::TextB(F, FoeSlotX[static_cast<size_t>(P.Foe)] + 32 - static_cast<int>(T.size()) * 4, 96 - Rise, T, P.Life > 0.3 ? Pal::White : Ui::Current().Dim);
+        else if (P.Mem >= 0)
+        {
+            const int N = static_cast<int>(Party.size());
+            const int CardX = (ScreenW - (N * 56 + (N - 1) * 4)) / 2 + P.Mem * 60;
+            Ui::TextB(F, CardX + 16, 40 - Rise / 3, T, Pal::Red);
+        }
     }
     // Commands (left) and the log (right).
     Ui::Window(F, 8, 152, 76, 80, "FIGHT");

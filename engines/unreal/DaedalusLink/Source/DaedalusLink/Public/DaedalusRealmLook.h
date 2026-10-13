@@ -56,6 +56,21 @@ inline void Cursor(Frame& F, int X, int Y, uint32_t C = 0)
     }
 }
 
+/** A shiny's sparkle: four-point stars that twinkle round a point (ADR-065's rare roll, seen at a glance). */
+inline void Sparkle(Frame& F, int CX, int CY, int Anim)
+{
+    static const int Dx[6] = {-26, 24, -18, 20, 0, -8}, Dy[6] = {-20, -16, 14, 18, -30, 26};
+    for (int k = 0; k < 6; ++k)
+    {
+        const int Ph = (Anim / 3 + k * 2) % 6;
+        if (Ph > 3) continue;
+        const int R = Ph == 0 ? 1 : Ph == 1 ? 3 : Ph == 2 ? 2 : 1;
+        const uint32_t C = k % 2 ? Pal::White : Current().Hot;
+        F.Rect(CX + Dx[k] - R, CY + Dy[k], 2 * R + 1, 1, C);
+        F.Rect(CX + Dx[k], CY + Dy[k] - R, 1, 2 * R + 1, C);
+    }
+}
+
 /** The paging arrow: a down triangle. */
 inline void PageArrow(Frame& F, int X, int Y, uint32_t C = 0)
 {
