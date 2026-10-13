@@ -27,6 +27,8 @@ check("P3: bare Error as a type is caught (parameter and case label)",
 check("P4: a constructor-filled component array without Transient is caught",
       rules("bad_transient.h", "bad_transient.cpp") == ["P4"], rules("bad_transient.h", "bad_transient.cpp"))
 check("P4: ...but only when a constructor fills it", rules("bad_transient.h") == [], rules("bad_transient.h"))
+check("P7: TArray of std::string, of a std::-holding struct, and of a struct holding one (transitively) are caught",
+      [e[2] for e in preflight.scan([os.path.join(F, "bad_tarray.h")])] == ["P7", "P7", "P7"], preflight.scan([os.path.join(F, "bad_tarray.h")]))
 check("P5 + P6: b_ property names and non-UFUNCTION statics in Python are caught", rules("bad_py.py") == ["P5", "P6"],
       rules("bad_py.py"))
 check("P3: the enum's own header, inside its namespace, is not flagged", rules("ok_enum_home.h") == [], rules("ok_enum_home.h"))
