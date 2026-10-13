@@ -29,6 +29,12 @@ int main(int argc, char** argv)
 	ParseResult Again = Parse(Write(R.Out));
 	Check("write then parse gives the same manifest", Again.Ok && Write(Again.Out) == Write(R.Out));
 	Check("a header-only manifest is empty, not an error", Parse("DSB 1\n").Ok && Parse("DSB 1\n").Out.Islands.empty());
+	Check("maximum comment line accepts CRLF", Parse("DSB 1\r\n#" + std::string(MaxLine - 1, 'x') + "\r\n").Ok);
+	ParseResult Huge = Parse("DSB 1\nisland a x 0 y 0 ram 1 disk 1\n" + std::string(1024 * 1024, 'x'));
+	Check("huge final line refuses without partial output", !Huge.Ok && Huge.Out.Islands.empty()
+		&& Huge.Error == "line 3: line too long");
+	Check("empty lines preserve diagnostic line numbers", Parse("\n\nDSB 1\n\ninvalid").Error == "line 5: unknown record invalid");
+	Check("no trailing newline remains valid", Parse("DSB 1\nisland a x 0 y 0 ram 1 disk 1").Ok);
 	const Manifest& M = R.Out;   // file order: Iz_B (d 1000), Ia_A (d 0), Ic_C (d 5000)
 	{
 		PickResult P = Pick(M, 0, 0, 2000, 6000, 10000, {});
