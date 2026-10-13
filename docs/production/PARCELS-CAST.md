@@ -19,3 +19,16 @@ Binding metadata does not install meshes or establish working native interaction
 
 Output: Documents/Codex/2026-10-13/parcels-buildout/cast. Creature/mount/pet and
 environment kits, worksheet reconciliation, import and Play remain pending.
+
+The creature kit adds nineteen validated role candidates on the shared eight-bone
+rest: field creatures, mailbox/cart/combine constructs, ambient birds, helicopter,
+draft ox, gyro goat and four helpful pets. Vehicle geometry does not implement
+flight/driving; the Blight Bailiff is a visual boss proposal with no deed powers.
+Together, the first Parcels cast has thirty-two role models. Rigid-part anatomy
+and locomotion are prototypes pending visual/native acceptance.
+
+realm_creature.py isolates rig/primitives from Portal gameplay-table assertions.
+Gallery now extracts the exact existing rig function without executing the Portal
+table initializer. A refactor experiment changed normal/index export bytes, so
+the verified Gallery delivery was restored from its owned archive; published
+Gallery hashes/worksheet data remain unchanged. No equivalence claim is made.

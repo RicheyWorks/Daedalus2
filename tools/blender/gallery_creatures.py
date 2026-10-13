@@ -1,6 +1,12 @@
 """Original Gallery City creatures, vehicles and pets; behavior remains proposed."""
 from pathlib import Path
-exec(compile(Path(__file__).with_name('portal_monsters.py').read_text().split('variants=')[0],__file__,'exec'))
+import ast
+exec(compile(Path(__file__).with_name('portal_common.py').read_text(),__file__,'exec'))
+# Reuse exactly the verified rig function without executing Portal gameplay-table
+# initialization. Adding a Portal species must not break Gallery art generation.
+tree=ast.parse(Path(__file__).with_name('portal_monsters.py').read_text())
+rig_function=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name=='monster_rig')
+exec(compile(ast.Module(body=[rig_function],type_ignores=[]),__file__,'exec'))
 # Humanoid primitives default to spine; creatures use body. Never leave weights
 # pointing at a nonexistent spine, which makes glTF invent a neutral joint.
 _box,_cone,_ring=box,cone,ring
