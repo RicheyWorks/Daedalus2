@@ -103,6 +103,14 @@ for i in range(3): put("Prop_Ground_PYT_ReedBed_V%d" % (1 + i), 1400 + i * 1500,
 for i in range(2): put("Prop_Dress_PYT_FloodMarker_V%d" % (1 + i), 1100 + i * 3400, -400)
 for i in range(4): put("Prop_Live_PYT_Frog_V%d" % (1 + i), 1600 + i * 900, 1200 + R.uniform(-150, 150), R.uniform(0, 360))
 put("Prop_Food_PYT_WillowBark_V1", 3700, 1300)
+# readable signs for ch.7-9: sign mesh + facing TextRender with the sign text from chapterN_*.json
+import json as _json
+for n, fn, (x, y) in ((7, "chapter7_seed_rain.json", (5000, -2100)), (8, "chapter8_fire_keeper.json", (-1500, -4700)), (9, "chapter9_keystone_beaver.json", (3400, 1500))):
+    put("Prop_Sign_PYT_Chapter_V%d" % (1 + n % 5), x, y, 0)
+    txt = _json.load(open(r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecology\\" + fn, encoding="utf-8-sig"))["sign"]["text"]
+    t = eas.spawn_actor_from_class(unreal.TextRenderActor, ORIGIN + unreal.Vector(x, y, gz(x, y) + 260), unreal.Rotator(yaw=180))
+    t.text_render.set_text(txt.replace(". ", ".\n")); t.text_render.set_world_size(40); t.text_render.set_horizontal_alignment(unreal.HorizTextAligment.EHTA_CENTER)
+    t.tags = [TAG, "PYT_Chapter"]; t.set_folder_path("Pythagoras/Island/Chapters"); t.set_actor_label("ADV_Chapter%d_SignText" % n)
 # prototype quest hook: one hidden TriggerBox per chapter (tags PYT_Quest + Quest_<id>) that gameplay/Blueprint can bind to
 for a in eas.get_all_level_actors():
     if a.actor_has_tag("PYT_Quest"): eas.destroy_actor(a)
