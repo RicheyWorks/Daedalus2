@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-10-13T19:22:59.9787666Z",
+  "baselineCommit": "ddbf5b372e0d8543df85408684d27efa849d42c9",
+  "engine": {
+    "changelist": 58210709,
+    "version": "5.8.3",
+    "windowsSdk": "10.0.22621.0",
+    "msvc": "14.44.35207"
+  },
+  "isolatedFolder": "java-arcade-ue-compile-v2",
+  "sourceDescriptorFilesVerified": 83,
+  "sourceManifestSha256": "806610EFCDCEB2690C78AADE13DD6B961366AB0BC41664AAD45A36173C857618",
+  "uhtGenerated": {
+    "reflectionCppSha256": "B555E12D9A57602AEA854392A801B0F8F79FE69FFE9256E3B4F5AD20458BF16A",
+    "headerSha256": "CE6395A32F5B182C10871E1655ADEE31C636EABE1BA7DCC71EB11B659B89E945"
+  },
+  "stages": [
+    {
+      "exitCode": 0,
+      "translationUnit": "DaedalusJavaArcade.cpp",
+      "objectSha256": "CDEFA4076FA95E694E840D778337C5F3BEA66B4EDB5762FF1C48F22837145385",
+      "stage": "Compile"
+    },
+    {
+      "exitCode": 0,
+      "translationUnit": "SDaedalusJavaArcade.cpp",
+      "objectSha256": "9E0C866C5A66B47FBD2B4449FBFBBF050201540E58BE591E37DCF8EEA4C259CF",
+      "stage": "Compile"
+    },
+    {
+      "exitCode": 0,
+      "translationUnit": "DaedalusJavaArcade.gen.cpp",
+      "objectSha256": "D78792C02529D48E5B02D4234D5DE6E0BF009D5BD59AE82FA1192AD18C2E4112",
+      "stage": "Reflection"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+      "sha256": "4D7D0E0E18EE7279C611B7EFBAC1CA9942391293D5AE3B159E5FECC5CF8FEF95"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h",
+      "sha256": "9B819430250B9386E2686EBB423121CA733C0111585E453A49CFAD557DB6CBA0"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+      "sha256": "5F381E5C487F0242F935BC8B490F269AB25AE1D1608D88528D29AD6B08D8CD63"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+      "sha256": "1DE82930EE72211EACA9C4ABEFB02882BB312304FB04995B673DA4D8ED52C869"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
+      "sha256": "5BA9EC7E169ACB57F87DD590F042B8C52B4C4B293E350EAE84368A3492247CA0"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
+      "sha256": "7264206EE93950115AC91C916BB576BC6811A7660A6236276354BFEF68279C5B"
+    }
+  ],
+  "portableTest": {
+    "checks": 1330,
+    "sha256": "62B7D8CD2504BE9D2AE9068829F5E86C6F17C668470735BB34CC83CC0200466C",
+    "compiler": "MSVC C++17 /W4 /WX /permissive-"
+  },
+  "limits": [
+    "No plugin link/load, editor launch or hot reload",
+    "No Java services, runtime packaging, multiplayer or in-world acceptance",
+    "Unreal JSON callbacks and HTTP/WebSocket handlers were not executed by portable tests"
+  ],
+  "initialSnapshotResult": "Two UE5.8 compiler diagnostics fixed before the verified fresh v2 snapshot; initial failed snapshot preserved"
+}
