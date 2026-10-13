@@ -1,0 +1,10 @@
+JAVA_PCM 1
+genome ff
+seed af64724c8602eb6e
+rng 01df27c8adb0f2d1 96cf985fe1ff7ef9 4373be646dbc9628 73f70b201b509963 40f3528ed3180b3d 34b8f9fdaa496a2d 389e393ba54426fc 084d683a2ecbccde
+PCS 1 hz=5200.000 sweep=1.000 harm=8 bright=1.000 pulses=8 pulse_ms=83 gap_ms=230 vib_hz=12.000 vib_st=0.800 breath=0.300
+sample_rate 22050
+samples 50137
+checksum 4676a53d4a5bd518
+selected 0:0 1:0 17:279 915:-15345 1829:-18 25068:0 50136:-32
+end
