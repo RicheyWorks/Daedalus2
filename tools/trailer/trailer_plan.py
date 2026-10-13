@@ -76,3 +76,50 @@ def shot_starts(shots=SHOTS, fps=FPS):
         out[name] = (i, n, caption)
         i += n
     return out
+
+
+# ---- Part 2: past the rainbows (ADR-031 sky gates, ADR-052 portal realm). Cameras are relative to live positions
+# (the gate row and each realm's bounds), so they are computed in trailer_realms_ue.py from these specs.
+# (name, seconds, caption). The order is the order the player meets them.
+REALM_SEGMENTS = [
+    ("rainbows", 5.0, "PAST THE RAINBOWS"),
+    ("through", 5.0, "GATES IN THE CLOUDS"),
+    ("realm:0", 5.0, None),          # caption = the far world's title
+    ("realm:1", 5.0, None),
+    ("realm:2", 5.0, None),
+    ("pixel", 7.0, "THROUGH THE PORTAL, AN 8-BIT REALM"),
+    ("heal", 4.0, "HEAL THE SHATTERED PLANET"),
+]
+
+
+def seg_frames(name, fps=FPS, segments=REALM_SEGMENTS):
+    for n, secs, _ in segments:
+        if n == name:
+            return max(1, int(round(secs * fps)))
+    raise KeyError(name)
+
+
+def gate_row_shots(gates):
+    """Wide and fly-through cameras for a row of gate centres [(x, y, z)] (Unreal cm, sorted by gate).
+    Gates stand far out from the islands on -Y; the rainbow is ~40 m in front of each ring (toward the islands)."""
+    xs = [g[0] for g in gates]
+    cx = sum(xs) / len(xs)
+    gy = sum(g[1] for g in gates) / len(gates)
+    gz = sum(g[2] for g in gates) / len(gates)
+    span = max(xs) - min(xs) + 6000.0
+    wide = {"e0": (cx - span * 0.2, gy + span * 0.9, gz + 2500), "e1": (cx + span * 0.2, gy + span * 0.7, gz + 1500),
+            "t0": (cx, gy, gz), "t1": (cx, gy, gz)}
+    g0 = gates[0]
+    through = {"e0": (g0[0] + 600, g0[1] + 9000, g0[2] - 300), "e1": (g0[0], g0[1] + 900, g0[2]),
+               "t0": g0, "t1": (g0[0], g0[1] - 2000, g0[2])}
+    heal = {"e0": (cx, gy + span * 0.6, gz + 1200), "e1": (cx, gy + span * 2.2, gz + span * 1.4),
+            "t0": (cx, gy, gz), "t1": (cx, gy - span, gz - span * 0.3)}
+    return {"rainbows": wide, "through": through, "heal": heal}
+
+
+def realm_orbit(origin, extent):
+    """An orbit that frames a whole realm from its bounds (origin, half-extent), Unreal cm."""
+    ox, oy, oz = origin
+    ex, ey, ez = extent
+    r = max(ex, ey, 2000.0) * 1.25
+    return {"c": (ox, oy, oz), "r": r, "h": max(ez, 1500.0) + r * 0.35, "a0": 210, "a1": 260, "lz": oz}

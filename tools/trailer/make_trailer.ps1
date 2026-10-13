@@ -7,17 +7,20 @@ $root = "C:\Unreal\DaedalusRealm\Saved\Daedalus\trailer"
 if (-not $Take) { $Take = (Get-Content (Join-Path $root "latest.txt") -Raw).Trim() }
 $frames = Join-Path $Take "frames"
 $n = (Get-ChildItem $frames -Filter "f_*.png").Count
+if ($n -eq 0 -and (Test-Path (Join-Path $Take "frames_jpg"))) { $n = (Get-ChildItem (Join-Path $Take "frames_jpg") -Filter "f_*.jpg").Count }
 if ($n -lt 30) { throw "only $n frames in $frames" }
 # UE's PNGs trip ffmpeg's decoder ("chunk too big"); Pillow re-saves them as JPEGs ffmpeg reads cleanly.
 $jpg = Join-Path $Take "frames_jpg"
-& python (Join-Path $PSScriptRoot "normalize_frames.py") $frames $jpg | Out-Null
+if (Test-Path $frames) { & python (Join-Path $PSScriptRoot "normalize_frames.py") $frames $jpg | Out-Null }
 if ($LASTEXITCODE -ne 0) { throw "normalize_frames.py failed" }
 $fps = 30
 $dur = [math]::Round($n / $fps, 2)
 $font = "C\:/Windows/Fonts/segoeuib.ttf"
 # captions from the plan's shot table (start frame, frames, caption)
 $py = "import sys; sys.path.insert(0, r'$PSScriptRoot'); import trailer_plan as t; [print('%d|%d|%s' % v) for v in t.shot_starts().values()]"
-$rows = & python -c $py
+# a take that wrote its own captions (part 2, or a combined cut) uses them
+$capFile = Join-Path $Take "captions.txt"
+$rows = if (Test-Path $capFile) { Get-Content $capFile | Where-Object { $_ } } else { & python -c $py }
 $draw = @()
 foreach ($r in $rows) {
     $a, $b, $cap = $r.Split("|", 3)

@@ -10,6 +10,9 @@ import sys
 from PIL import Image
 
 
+W, H = 1280, 720
+
+
 def main(src, dst):
     os.makedirs(dst, exist_ok=True)
     names = sorted(n for n in os.listdir(src) if n.startswith("f_") and n.endswith(".png"))
@@ -17,7 +20,14 @@ def main(src, dst):
     for n in names:
         out = os.path.join(dst, n[:-4] + ".jpg")
         if not os.path.exists(out):
-            Image.open(os.path.join(src, n)).convert("RGB").save(out, quality=94)
+            im = Image.open(os.path.join(src, n)).convert("RGB")
+            if im.size != (W, H):   # the 8-bit realm's framebuffer: scale crisp, letterbox to 16:9
+                k = min(W / im.width, H / im.height)
+                im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.NEAREST)
+                bg = Image.new("RGB", (W, H), (8, 8, 16))
+                bg.paste(im, ((W - im.width) // 2, (H - im.height) // 2))
+                im = bg
+            im.save(out, quality=94)
         done += 1
     print(done)
 
