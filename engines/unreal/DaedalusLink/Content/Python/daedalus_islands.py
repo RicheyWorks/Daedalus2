@@ -44,10 +44,18 @@ def _cost_fns():
     return deps, size
 
 
+def _streaming_levels(world):
+    """The world's streaming levels. UE 5.8 Python has no World.get_streaming_levels(); the property works everywhere."""
+    try:
+        return list(world.get_editor_property("streaming_levels") or [])
+    except Exception:
+        return list(world.get_streaming_levels())
+
+
 def _rows(prefixes):
     world = unreal.EditorLevelLibrary.get_editor_world()
     rows, notes = [], []
-    for sl in world.get_streaming_levels():
+    for sl in _streaming_levels(world):
         pkg = str(sl.get_world_asset_package_name())
         if not any(pkg.startswith(p) for p in prefixes):
             continue
