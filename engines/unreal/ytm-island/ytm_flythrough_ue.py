@@ -19,6 +19,7 @@ STYLE = {
     "PineStand":       (5000, 2500, 150, 28),
     "OldGrowthOak":    (4000, 1800, 100, 21),
     "WillowRiverbank": (4500, 600, 110, 35),
+    "YTMIsland":       (14000, 4000, 160, 24),
 }
 eas = unreal.EditorAssetLibrary
 ell = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
@@ -26,13 +27,23 @@ ell = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 def actors():
     return ell.get_all_level_actors()
 
+def _key(n): return n.lower().replace("_","").replace(" ","")
 def biome_centres():
-    found = {}
+    """Real centres first: pythagoras WB_Label_<name>, then centroid of Habitat_<name>/PYTH_WB_<name> actors
+    (wild_biomes_ue.py), names matched loosely (YoungMeadow == young_meadow). Fallback ring only if none."""
+    want = {_key(b): b for b in BIOMES}; found = {}; pts = {}
     for a in actors():
-        n = a.get_actor_label()
-        for b in BIOMES:
-            if n == "WB_Label_" + b:
-                found[b] = a.get_actor_location()
+        lab = a.get_actor_label(); tags = [str(t) for t in a.tags]
+        if lab.startswith("WB_Label_") and _key(lab[9:]) in want:
+            found[want[_key(lab[9:])]] = a.get_actor_location()
+        for t in tags:
+            for pre in ("Habitat_", "PYTH_WB_"):
+                if t.startswith(pre) and _key(t[len(pre):]) in want:
+                    pts.setdefault(want[_key(t[len(pre):])], []).append(a.get_actor_location())
+    for b, ps_ in pts.items():
+        if b not in found:
+            found[b] = unreal.Vector(sum(p.x for p in ps_)/len(ps_), sum(p.y for p in ps_)/len(ps_), sum(p.z for p in ps_)/len(ps_))
+    unreal.log("YTM: real biome centres for %s" % sorted(found))
     if len(found) < len(BIOMES):
         ps = next((a for a in actors() if isinstance(a, unreal.PlayerStart)), None)
         o = ps.get_actor_location() if ps else unreal.Vector(0, 0, 0)
@@ -41,7 +52,10 @@ def biome_centres():
                 r = 450000 + i * (1600000 - 450000) / max(1, len(BIOMES) - 1)
                 t = 2 * math.pi * i / len(BIOMES)
                 found[b] = unreal.Vector(o.x + r * math.cos(t), o.y + r * math.sin(t), o.z)
-                unreal.log_warning("YTM: no WB_Label_%s, using fallback ring" % b)
+                unreal.log_warning("YTM: no centre for %s, using fallback ring" % b)
+    # Youtube Master Island hero shot (spawn marker placed by ytm_island_ue.py)
+    sp = next((a for a in actors() if a.actor_has_tag("YTM_Spawn")), None)
+    if sp: found["YTMIsland"] = sp.get_actor_location()
     return found
 
 def look_rot(src, dst):
@@ -85,13 +99,14 @@ def run():
         eas.make_directory(ROOT)
     centres = biome_centres()
     frames = FPS * SHOT_SECONDS
-    master = make_sequence("WB_Flythrough_Master", frames * len(BIOMES))
-    for i, b in enumerate(BIOMES):
+    shots = BIOMES + (["YTMIsland"] if "YTMIsland" in centres else [])
+    master = make_sequence("WB_Flythrough_Master", frames * len(shots))
+    for i, b in enumerate(shots):
         s = make_sequence("WB_Flythrough_" + b, frames)
         add_camera(s, centres[b], STYLE[b], 0, frames)
         add_camera(master, centres[b], STYLE[b], i * frames, frames)
         eas.save_loaded_asset(s)
     eas.save_loaded_asset(master)
-    unreal.log("YTM: flythroughs written to %s (%d biomes, %ds each)" % (ROOT, len(BIOMES), SHOT_SECONDS))
+    unreal.log("YTM: flythroughs written to %s (%d shots, %ds each)" % (ROOT, len(shots), SHOT_SECONDS))
 
 run()
