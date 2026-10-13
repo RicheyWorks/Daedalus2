@@ -44,7 +44,7 @@ rm.use_nodes = True; rm.node_tree.nodes["Principled BSDF"].inputs[0].default_val
 for c in cone.users_collection: c.objects.unlink(cone)
 root.objects.link(cone)
 # catalog
-names = sorted(f[:-4] for f in os.listdir(GLB) if f.endswith(".glb"))
+names = sorted(f[:-4] for f in os.listdir(GLB) if f.endswith(".glb") and not f.endswith("_LOD1.glb"))   # LOD1s are not separate models
 def pick(rx, n): return [x for x in names if re.match(rx, x) and "_Harvested" not in x and "_Depleted" not in x][:n]
 proto = {}
 def load(an):
@@ -121,8 +121,9 @@ def mat(n, c, emit=0.0, alpha=1.0):
     m = bpy.data.materials.get(n) or bpy.data.materials.new(n); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
     p.inputs[0].default_value = c; m.diffuse_color = c
     if alpha < 1: p.inputs["Alpha"].default_value = alpha; p.inputs["Roughness"].default_value = 0.05
+    if emit: p.inputs["Emission Color"].default_value = c; p.inputs["Emission Strength"].default_value = emit
     return m
-MW, MS, MWOOD = mat("M_BB_Water", (0.15, 0.45, 0.85, 1), alpha=0.8), mat("M_BB_Stone", (0.62, 0.60, 0.56, 1)), mat("M_BB_WaterWood", (0.42, 0.28, 0.16, 1))
+MW, MS, MWOOD = mat("M_BB_Water", (0.10, 0.75, 1.0, 1), emit=0.6, alpha=0.9), mat("M_BB_Stone", (0.62, 0.60, 0.56, 1)), mat("M_BB_WaterWood", (0.42, 0.28, 0.16, 1))
 def blk(n, size, loc, m, rz=0.0):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc); o = bpy.context.object; o.scale = size; o.rotation_euler.z = rz; o.name = NAME + "_Water_" + n
     o.data.materials.append(m)
@@ -138,7 +139,9 @@ def run(n, a, b2, w, m, lift=0.4, arches=False):
     (ax, ay), (bx, by) = a, b2; L = math.hypot(bx-ax, by-ay); rz = math.atan2(by-ay, bx-ax); seg = max(1, int(L/4))
     for i in range(seg):
         t0 = (i+0.5)/seg; x, y = ax+(bx-ax)*t0, ay+(by-ay)*t0; zt = h(x, y) + lift + (2.5 if arches else 0)
-        blk("%s_%02d_bed" % (n, i), (L/seg+0.05, w+0.5, 0.35), (x, y, zt), MS, rz); blk("%s_%02d_w" % (n, i), (L/seg+0.05, w, 0.1), (x, y, zt+0.2), MW, rz)
+        W = w * 1.6; blk("%s_%02d_bed" % (n, i), (L/seg+0.05, W+0.8, 0.3), (x, y, zt-0.35), MS, rz)                     # deeper: floor sits lower
+        for sd in (-1, 1): blk("%s_%02d_wall%d" % (n, i, sd), (L/seg+0.05, 0.4, 0.9), (x - sd*math.sin(rz)*(W/2+0.2), y + sd*math.cos(rz)*(W/2+0.2), zt), MS, rz)
+        blk("%s_%02d_w" % (n, i), (L/seg+0.05, W, 0.12), (x, y, zt+0.05), MW, rz)
         if arches and i % 2 == 0: blk("%s_%02d_pier" % (n, i), (0.8, w+0.5, 2.5), (x, y, h(x, y)+lift+1.1), MS, rz)
 SPRING, CIST, WELL, WHEEL = (-35, 30), (-12, 8), (16, -10), (30, 20)
 z = h(*SPRING); cyl("Spring_Pool", 4.5, 0.6, (SPRING[0], SPRING[1], z+0.2), MS); cyl("Spring_Water", 4.0, 0.15, (SPRING[0], SPRING[1], z+0.5), MW)
@@ -177,8 +180,16 @@ for o in root.all_objects: o.select_set(True)
 out = os.path.join(GLB, NAME+".glb")
 bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_apply=True)
 for o in bpy.data.objects: o.select_set(False)
-for o in BASE: o.select_set(True)
+# Base = ONE mesh (multi-material). A multi-node glb imports into Unreal as hundreds of StaticMeshes and the island script
+# then found only one stray part (a pier block): "base ok" but no terrain visible. Join copies so the scene/.blend keep parts.
+bpy.ops.object.select_all(action="DESELECT"); _dup = []
+for o in BASE:
+    c = o.copy(); c.data = o.data.copy(); bpy.context.scene.collection.objects.link(c); c.select_set(True); _dup.append(c)
+bpy.context.view_layer.objects.active = _dup[0]; bpy.ops.object.join(); _jb = bpy.context.view_layer.objects.active
+_jb.name = _jb.data.name = "Prop_Island_BlenderBoss_Base"; bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+bpy.ops.object.select_all(action="DESELECT"); _jb.select_set(True)
 bpy.ops.export_scene.gltf(filepath=os.path.join(GLB, "Prop_Island_BlenderBoss_Base.glb"), use_selection=True, export_apply=True)
+print("BASE_JOINED", len(BASE), len(_jb.data.polygons), len(_jb.data.materials)); bpy.data.objects.remove(_jb)
 json.dump({"island": "BlenderBoss", "origin_cm": [-6000000, 6000000, 0], "radius_m": R, "base_asset": "Prop_Island_BlenderBoss_Base",
            "hero_cam_m": [235, -255, 130], "hero_target_m": [50, -10, -5], "placements": LAYOUT}, open(os.path.join(ART, "flagship", "layout.json"), "w"), indent=0)
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ART, "flagship", NAME+".blend"))

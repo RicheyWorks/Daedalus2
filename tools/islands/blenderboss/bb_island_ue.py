@@ -15,6 +15,8 @@ ART = "/Game/Daedalus/Art"
 SUB, PERSIST, SUBNAME = "/Game/BlenderBoss/Maps/BlenderBossIsland", "/Game/Daedalus/DaedalusWorld", "BlenderBossIsland"
 FOLDER = "BlenderBoss"
 IMPORT_BUDGET_S = float(os.environ.get("BB_IMPORT_S", "200"))
+MAKEUP = os.environ.get("BB_MODE", "") == "makeup"   # keep existing placements; re-place base + place only assets with no actor yet
+BASE_MIN_CM = 10000.0   # the island is 240 m across; a base mesh smaller than 100 m means the wrong asset was found
 SHOT = os.environ.get("BB_SHOT", r"C:\Users\730ri\projects\bot-team\shots\blenderboss\ue_island.png")
 eal = unreal.EditorAssetLibrary
 
@@ -31,13 +33,13 @@ def mesh(name):
     _MC[name] = _mesh(name); return _MC[name]
 
 
-def _mesh(name):
+def _mesh(name, exact=False):
     base = f"{ART}/{kind_of(name)}/{name}"
     for p in (f"{base}/{name}/StaticMeshes/{name}", f"{base}/{name}", f"{base}/StaticMeshes/{name}"):
         if eal.does_asset_exist(p):
             a = unreal.load_asset(p)
             if isinstance(a, unreal.StaticMesh): return a
-    if eal.does_directory_exist(base):
+    if eal.does_directory_exist(base) and not exact:
         for p in eal.list_assets(base, recursive=True):
             a = unreal.load_asset(p)
             if isinstance(a, unreal.StaticMesh): return a
@@ -93,12 +95,21 @@ def run():
     imported = import_missing([base] + names, force=(base,))   # base always re-imported (water chain lives there)
     les = open_sublevel()
     actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-    for a in actors.get_all_level_actors():   # rerun: clear only our own previous placements
-        if str(a.get_folder_path()).startswith(FOLDER): actors.destroy_actor(a)
-    bm = mesh(base)
+    present = set()
+    for a in actors.get_all_level_actors():   # rerun: clear only our own previous placements (make-up: only base + cam)
+        fp = str(a.get_folder_path())
+        if not fp.startswith(FOLDER): continue
+        if MAKEUP and fp != f"{FOLDER}/base" and fp != FOLDER: present.add(a.get_actor_label()); continue
+        actors.destroy_actor(a)
+    bm = _mesh(base, exact=True)   # never fall back to a random part of the base folder
+    base_cm = 0.0
+    if bm:
+        ext = bm.get_bounds().box_extent; base_cm = 2 * max(ext.x, ext.y)
+        if base_cm < BASE_MIN_CM: log(f"base mesh only {base_cm:.0f} cm across: wrong asset, not placing"); bm = None
     if bm: spawn(actors, bm, unreal.Vector(ox, oy, oz), 0, 1.0, f"{FOLDER}/base", "BlenderBoss Island Base")
     placed, missing = 0, set()
     for p in lay["placements"]:
+        if MAKEUP and p["asset"] in present: continue
         m = mesh(p["asset"])
         if m is None: missing.add(p["asset"]); continue
         # Blender is right-handed Z-up metres; Unreal is left-handed cm: flip Y and yaw
@@ -117,9 +128,10 @@ def run():
         os.makedirs(os.path.dirname(SHOT), exist_ok=True)
         unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, SHOT, camera=cam); shot = SHOT
     except Exception as e: log(f"screenshot: {e}")
-    want = len(lay["placements"]); ok = bool(bm) and placed >= int(0.9 * want)
+    want = len(lay["placements"]); kept = sum(1 for p in lay["placements"] if p["asset"] in present); total = placed + kept
+    ok = bool(bm) and total >= int(0.9 * want)
     log(f"base={'ok' if bm else 'MISSING'} placed={placed}/{want} imported={imported} missing={len(missing)} {'PASS' if ok else 'FAIL'}")
-    return {"ok": ok, "base": bool(bm), "placed": placed, "want": want, "imported": imported, "missing_n": len(missing), "missing": sorted(missing)[:20], "shot": shot}
+    return {"ok": ok, "base": bool(bm), "placed": total, "new": placed, "kept": kept, "base_cm": round(base_cm), "want": want, "imported": imported, "missing_n": len(missing), "missing": sorted(missing)[:20], "shot": shot}
 
 
 RESULT = run()
