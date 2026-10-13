@@ -236,14 +236,16 @@ FString ADaedalusDresser::Dress()
 						}
 						continue;
 					}
+					// Ground cover first (Richey 2026-10-13: the world looked "rough and scarce"): at Density 1 about 6 cubes in
+					// 10 carry something, most of it grass and flowers; trees stay sparse and spaced. Density scales the lot.
 					const double D = Density;
 					const TCHAR* Cat = nullptr;
 					if (R < 0.025 * D) Cat = TEXT("Tree");
 					else if (R < 0.055 * D) Cat = TEXT("Shrub");
-					else if (R < 0.105 * D) Cat = TEXT("Flower");
-					else if (R < 0.185 * D) Cat = TEXT("Grass");
-					else if (R < 0.195 * D) Cat = TEXT("Mushroom");
-					else if (R < 0.210 * D) Cat = TEXT("Herb");
+					else if (R < 0.135 * D) Cat = TEXT("Flower");
+					else if (R < 0.585 * D) Cat = TEXT("Grass");
+					else if (R < 0.595 * D) Cat = TEXT("Mushroom");
+					else if (R < 0.610 * D) Cat = TEXT("Herb");
 					if (!Cat) continue;
 					const bool bTree = FCString::Strcmp(Cat, TEXT("Tree")) == 0;
 					if (bTree)
