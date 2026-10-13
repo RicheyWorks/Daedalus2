@@ -8,7 +8,7 @@ weather, because its payout ignored the second roll.
 The fix: a storm multiplies p by 1.2 (cap 0.95), and storm-cistern water multiplies it by a further 1.05.
 The payout stays at 1/p_base, so every herb gets the same edge and the choice is about effects and variance,
 not a broken number. Stormbloom pays 1/p_eff with p_eff = 1-(1-p)^2 = 0.551, so its re-roll is fair in clear
-weather and earns the same storm edge as everything else. Parlayvine is a catalyst and stays at p 1.0.
+weather and earns the same storm edge as everything else. Parlayvine is a variance catalyst at a fixed p 0.5 (see below).
 
 | Herb | p clear | EV clear | p storm | EV storm | p storm + cistern | EV |
 |---|---|---|---|---|---|---|
@@ -24,6 +24,23 @@ Stormbloom's storm row applies the x1.2 to the single-roll p (0.33 to 0.396) bef
 the cap, which keeps the safe bet safe instead of free. Parlays multiply the boosted p values, so a storm parlay
 of two herbs earns about 1.44x: the Reaper rewards the bold who brew in the lightning, but no single herb breaks
 the table.
+
+## Parlayvine fix (round-2)
+
+Round 1 gave Parlayvine p 1.0 and a jackpot that doubled the other herb's payout. Under the parlay rule
+(p = pA * pB, payout 1/p) that meant Parlayvine + Luckroot kept p 0.5 but paid 2/0.5 = 4x, an expected value
+of 2.0 on every brew, so every tonic worth making had Parlayvine in it. Now Parlayvine is a fair leg at a
+fixed p 0.5: it halves the partner's jackpot odds and the parlay rule doubles the payout, so EV stays 1.0 in
+clear weather. It gets no storm boost, so a storm brew with Parlayvine earns 1.2x (only the partner is
+boosted) instead of the 1.44x of a two-herb storm parlay. It is now a pure variance dial: same average, bigger
+swings.
+
+| Brew (clear) | p | payout | EV |
+|---|---|---|---|
+| Luckroot alone | 0.50 | 2x | 1.00 |
+| Luckroot + Parlayvine, round 1 | 0.50 | 4x | 2.00 |
+| Luckroot + Parlayvine, round 2 | 0.25 | 4x | 1.00 |
+| Longshot + Parlayvine, round 2 | 0.05 | 20x | 1.00 |
 
 ## Round-2 owed: Unreal hero shot
 

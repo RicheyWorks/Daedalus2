@@ -1,6 +1,6 @@
 {
  "system": "Wager Herbs",
- "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 1.0) while the payout stays at 1/p_base, so every herb gets the same +20% EV edge in a storm: the Reaper favors the bold, evenly. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
+ "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 0.5) while the payout stays at 1/p_base, so every herb gets the same +20% EV edge in a storm: the Reaper favors the bold, evenly. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
  "herbs": [
   {
    "id": "Luckroot",
@@ -29,10 +29,10 @@
   },
   {
    "id": "Parlayvine",
-   "p": 1.0,
+   "p": 0.5,
    "base": "none",
-   "jackpot": "doubles the other herb's payout",
-   "note": "catalyst"
+   "jackpot": "parlay leg: halves the other herb's jackpot odds and doubles its payout (fair, EV 1.0)",
+   "note": "variance catalyst; no storm boost on this leg. Was p 1.0 + double payout = free 2x EV, fixed r2"
   },
   {
    "id": "Stormbloom",
