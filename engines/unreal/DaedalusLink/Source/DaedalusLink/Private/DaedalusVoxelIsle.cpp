@@ -122,6 +122,8 @@ FString ADaedalusVoxelIsle::Build()
 	{
 		UHierarchicalInstancedStaticMeshComponent* H = Layer(L, Colors[L], L == Heart);
 		H->ClearInstances();
+		const bool bRock = L == Stone || L == Heart;
+		H->SetCollisionEnabled(bRock && !bRockCollision ? ECollisionEnabled::NoCollision : ECollisionEnabled::QueryAndPhysics);
 		H->AddInstances(Out[L], false);
 		Cubes += Out[L].Num();
 	}
@@ -144,7 +146,10 @@ FString ADaedalusVoxelIsle::Build()
 		Falls->SetRelativeLocation(FVector(Out2.X * Edge * C, Out2.Y * Edge * C, -Depth * 0.35f * C));
 		Falls->SetRelativeScale3D(FVector(4.f * C / 100.f, 4.f * C / 100.f, Depth * 0.7f * C / 100.f));
 	}
-	LastStats = FString::Printf(TEXT("cubes=%d columns=%d radius=%d"), Cubes, Columns, Radius);
+	int32 Solid = 0;
+	for (int32 L = 0; L < Count; ++L)
+		if (bRockCollision || (L != Stone && L != Heart)) Solid += Out[L].Num();
+	LastStats = FString::Printf(TEXT("cubes=%d columns=%d radius=%d colliding=%d"), Cubes, Columns, Radius, Solid);
 	return LastStats;
 }
 

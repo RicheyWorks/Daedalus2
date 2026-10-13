@@ -41,6 +41,9 @@ public:
 	/** Pond centre, in cubes from the isle's centre; radius 0 = no pond. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FIntPoint PondAt = FIntPoint(-70, 45);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") int32 PondRadius = 14;
+	/** Collision on the hanging rock (stone and heartstone) too. Off by default: nobody walks under an isle, and those
+	 * cubes are about half of all of them, so this halves the physics bodies (and their RAM). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") bool bRockCollision = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor GrassColor = FLinearColor(0.34f, 0.72f, 0.26f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor SandColor = FLinearColor(0.92f, 0.82f, 0.56f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor DirtColor = FLinearColor(0.50f, 0.34f, 0.20f);
