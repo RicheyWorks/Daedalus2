@@ -1,0 +1,3513 @@
+﻿{
+    "island":  "DiskSaver",
+    "items":  [
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.17
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_CacheLeaf",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_BufferBloom",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_OverclockThorn",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_DefragMoss",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_SwapRoot",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_ParityPetal",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_ChecksumClover",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_LatencyLily",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_ZipVine",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Item_DS_Herb_ArchiveSage",
+                      "kind":  "item",
+                      "size":  "~0.3 m",
+                      "tris":  24,
+                      "max_dim_m":  0.2
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat",
+                      "kind":  "mob",
+                      "size":  "~1.0 m",
+                      "tris":  72,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig",
+                      "kind":  "mob",
+                      "size":  "~0.8 m",
+                      "tris":  72,
+                      "max_dim_m":  0.8
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow",
+                      "kind":  "mob",
+                      "size":  "~1.6 m",
+                      "tris":  72,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.45
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Egg",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  12,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GoatMilk",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  12,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Stew",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  12,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_HerbTea",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  12,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Bread",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  12,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Bld_DS_Coop",
+                      "kind":  "building",
+                      "size":  "~2 m",
+                      "tris":  24,
+                      "max_dim_m":  2.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Trough",
+                      "kind":  "prop",
+                      "size":  "~0.6 m",
+                      "tris":  24,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_FencePen",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  72,
+                      "max_dim_m":  3.2
+                  },
+                  {
+                      "asset":  "Prop_DS_HerbCompressor",
+                      "kind":  "prop",
+                      "size":  "~1.4 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_DryingRack",
+                      "kind":  "prop",
+                      "size":  "~1.6 m",
+                      "tris":  36,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S1_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S2_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S3_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Clover_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S1_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S2_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S3_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Groat_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S1_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S2_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S3_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Kelpweed_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S1_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S2_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S3_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Bitroot_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S1_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S2_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S3_V0",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Crop_Spudlet_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.5 m",
+                      "tris":  60,
+                      "max_dim_m":  0.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_CacheLeaf_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_BufferBloom_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_OverclockThorn_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_DefragMoss_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_SwapRoot_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ParityPetal_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ChecksumClover_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_LatencyLily_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ZipVine_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S1_V1",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  48,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S1_V2",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  60,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S1_V3",
+                      "kind":  "prop",
+                      "size":  "~0.25 m",
+                      "tris":  72,
+                      "max_dim_m":  0.16
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S2_V1",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  60,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S2_V2",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  72,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S2_V3",
+                      "kind":  "prop",
+                      "size":  "~0.45 m",
+                      "tris":  84,
+                      "max_dim_m":  0.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S3_V1",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S3_V2",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  84,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Herb_ArchiveSage_S3_V3",
+                      "kind":  "prop",
+                      "size":  "~0.70 m",
+                      "tris":  96,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_00",
+                      "kind":  "prop",
+                      "size":  "~0.4 m",
+                      "tris":  24,
+                      "max_dim_m":  0.4
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_01",
+                      "kind":  "prop",
+                      "size":  "~0.6 m",
+                      "tris":  24,
+                      "max_dim_m":  0.55
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_02",
+                      "kind":  "prop",
+                      "size":  "~0.7 m",
+                      "tris":  24,
+                      "max_dim_m":  0.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_03",
+                      "kind":  "prop",
+                      "size":  "~0.8 m",
+                      "tris":  24,
+                      "max_dim_m":  0.85
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_04",
+                      "kind":  "prop",
+                      "size":  "~1.0 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_05",
+                      "kind":  "prop",
+                      "size":  "~1.1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.15
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_06",
+                      "kind":  "prop",
+                      "size":  "~1.3 m",
+                      "tris":  24,
+                      "max_dim_m":  1.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_07",
+                      "kind":  "prop",
+                      "size":  "~1.5 m",
+                      "tris":  24,
+                      "max_dim_m":  1.45
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_08",
+                      "kind":  "prop",
+                      "size":  "~1.6 m",
+                      "tris":  24,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_09",
+                      "kind":  "prop",
+                      "size":  "~1.8 m",
+                      "tris":  24,
+                      "max_dim_m":  1.75
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_10",
+                      "kind":  "prop",
+                      "size":  "~1.9 m",
+                      "tris":  24,
+                      "max_dim_m":  1.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_11",
+                      "kind":  "prop",
+                      "size":  "~2.0 m",
+                      "tris":  24,
+                      "max_dim_m":  2.05
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_12",
+                      "kind":  "prop",
+                      "size":  "~2.2 m",
+                      "tris":  24,
+                      "max_dim_m":  2.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_13",
+                      "kind":  "prop",
+                      "size":  "~2.4 m",
+                      "tris":  24,
+                      "max_dim_m":  2.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_14",
+                      "kind":  "prop",
+                      "size":  "~2.5 m",
+                      "tris":  24,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_15",
+                      "kind":  "prop",
+                      "size":  "~2.6 m",
+                      "tris":  24,
+                      "max_dim_m":  2.65
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_16",
+                      "kind":  "prop",
+                      "size":  "~2.8 m",
+                      "tris":  24,
+                      "max_dim_m":  2.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_17",
+                      "kind":  "prop",
+                      "size":  "~2.9 m",
+                      "tris":  24,
+                      "max_dim_m":  2.95
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_18",
+                      "kind":  "prop",
+                      "size":  "~3.1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_19",
+                      "kind":  "prop",
+                      "size":  "~3.2 m",
+                      "tris":  24,
+                      "max_dim_m":  3.25
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_20",
+                      "kind":  "prop",
+                      "size":  "~3.4 m",
+                      "tris":  24,
+                      "max_dim_m":  3.4
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_21",
+                      "kind":  "prop",
+                      "size":  "~3.5 m",
+                      "tris":  24,
+                      "max_dim_m":  3.55
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_22",
+                      "kind":  "prop",
+                      "size":  "~3.7 m",
+                      "tris":  24,
+                      "max_dim_m":  3.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_23",
+                      "kind":  "prop",
+                      "size":  "~3.8 m",
+                      "tris":  24,
+                      "max_dim_m":  3.85
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_24",
+                      "kind":  "prop",
+                      "size":  "~4.0 m",
+                      "tris":  24,
+                      "max_dim_m":  4.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_25",
+                      "kind":  "prop",
+                      "size":  "~4.2 m",
+                      "tris":  24,
+                      "max_dim_m":  4.15
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_26",
+                      "kind":  "prop",
+                      "size":  "~4.3 m",
+                      "tris":  24,
+                      "max_dim_m":  4.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_27",
+                      "kind":  "prop",
+                      "size":  "~4.5 m",
+                      "tris":  24,
+                      "max_dim_m":  4.45
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_28",
+                      "kind":  "prop",
+                      "size":  "~4.6 m",
+                      "tris":  24,
+                      "max_dim_m":  4.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_29",
+                      "kind":  "prop",
+                      "size":  "~4.8 m",
+                      "tris":  24,
+                      "max_dim_m":  4.75
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_30",
+                      "kind":  "prop",
+                      "size":  "~4.9 m",
+                      "tris":  24,
+                      "max_dim_m":  4.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_31",
+                      "kind":  "prop",
+                      "size":  "~5.0 m",
+                      "tris":  24,
+                      "max_dim_m":  5.05
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_32",
+                      "kind":  "prop",
+                      "size":  "~5.2 m",
+                      "tris":  24,
+                      "max_dim_m":  5.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_33",
+                      "kind":  "prop",
+                      "size":  "~5.4 m",
+                      "tris":  24,
+                      "max_dim_m":  5.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_34",
+                      "kind":  "prop",
+                      "size":  "~5.5 m",
+                      "tris":  24,
+                      "max_dim_m":  5.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_35",
+                      "kind":  "prop",
+                      "size":  "~5.7 m",
+                      "tris":  24,
+                      "max_dim_m":  5.65
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_36",
+                      "kind":  "prop",
+                      "size":  "~5.8 m",
+                      "tris":  24,
+                      "max_dim_m":  5.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_37",
+                      "kind":  "prop",
+                      "size":  "~6.0 m",
+                      "tris":  24,
+                      "max_dim_m":  5.95
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_38",
+                      "kind":  "prop",
+                      "size":  "~6.1 m",
+                      "tris":  24,
+                      "max_dim_m":  6.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Rock_39",
+                      "kind":  "prop",
+                      "size":  "~6.2 m",
+                      "tris":  24,
+                      "max_dim_m":  6.25
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_00",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_01",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_02",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_03",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_04",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_05",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_06",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_07",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_08",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_09",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_10",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Seg_11",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_12",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_13",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_14",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_15",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_16",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_17",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_18",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Fence_Gate_19",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  48,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Egg_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Egg_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Egg_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Egg_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GoatMilk_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GoatMilk_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GoatMilk_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GoatMilk_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Stew_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Stew_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Stew_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Stew_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_HerbTea_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_HerbTea_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_HerbTea_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_HerbTea_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Bread_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Bread_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Bread_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Bread_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Cheese_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Cheese_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Cheese_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_Cheese_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_RoastSpud_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_RoastSpud_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_RoastSpud_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_RoastSpud_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_BitrootSoup_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_BitrootSoup_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_BitrootSoup_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_BitrootSoup_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GroatPorridge_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GroatPorridge_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GroatPorridge_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_GroatPorridge_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Item_DS_Food_KelpWrap_V0",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.18
+                  },
+                  {
+                      "asset":  "Item_DS_Food_KelpWrap_V1",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.22
+                  },
+                  {
+                      "asset":  "Item_DS_Food_KelpWrap_V2",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.26
+                  },
+                  {
+                      "asset":  "Item_DS_Food_KelpWrap_V3",
+                      "kind":  "item",
+                      "size":  "~0.25 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Young0",
+                      "kind":  "mob",
+                      "size":  "~0.3 m",
+                      "tris":  72,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Young1",
+                      "kind":  "mob",
+                      "size":  "~0.3 m",
+                      "tris":  72,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Adult2",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.55
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Adult3",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.57
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Adult4",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Mob_DS_ByteHen_Adult5",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.62
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Young0",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Young1",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.6
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Adult2",
+                      "kind":  "mob",
+                      "size":  "~1.1 m",
+                      "tris":  72,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Adult3",
+                      "kind":  "mob",
+                      "size":  "~1.1 m",
+                      "tris":  72,
+                      "max_dim_m":  1.15
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Adult4",
+                      "kind":  "mob",
+                      "size":  "~1.2 m",
+                      "tris":  72,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Mob_DS_MossGoat_Adult5",
+                      "kind":  "mob",
+                      "size":  "~1.2 m",
+                      "tris":  72,
+                      "max_dim_m":  1.25
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Young0",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.48
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Young1",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.48
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Adult2",
+                      "kind":  "mob",
+                      "size":  "~0.9 m",
+                      "tris":  72,
+                      "max_dim_m":  0.88
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Adult3",
+                      "kind":  "mob",
+                      "size":  "~0.9 m",
+                      "tris":  72,
+                      "max_dim_m":  0.92
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Adult4",
+                      "kind":  "mob",
+                      "size":  "~1.0 m",
+                      "tris":  72,
+                      "max_dim_m":  0.96
+                  },
+                  {
+                      "asset":  "Mob_DS_TidePig_Adult5",
+                      "kind":  "mob",
+                      "size":  "~1.0 m",
+                      "tris":  72,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Young0",
+                      "kind":  "mob",
+                      "size":  "~1.0 m",
+                      "tris":  72,
+                      "max_dim_m":  0.96
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Young1",
+                      "kind":  "mob",
+                      "size":  "~1.0 m",
+                      "tris":  72,
+                      "max_dim_m":  0.96
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Adult2",
+                      "kind":  "mob",
+                      "size":  "~1.8 m",
+                      "tris":  72,
+                      "max_dim_m":  1.76
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Adult3",
+                      "kind":  "mob",
+                      "size":  "~1.8 m",
+                      "tris":  72,
+                      "max_dim_m":  1.84
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Adult4",
+                      "kind":  "mob",
+                      "size":  "~1.9 m",
+                      "tris":  72,
+                      "max_dim_m":  1.92
+                  },
+                  {
+                      "asset":  "Mob_DS_CacheCow_Adult5",
+                      "kind":  "mob",
+                      "size":  "~2.0 m",
+                      "tris":  72,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Young0",
+                      "kind":  "mob",
+                      "size":  "~0.3 m",
+                      "tris":  72,
+                      "max_dim_m":  0.27
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Young1",
+                      "kind":  "mob",
+                      "size":  "~0.3 m",
+                      "tris":  72,
+                      "max_dim_m":  0.27
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Adult2",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Adult3",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.52
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Adult4",
+                      "kind":  "mob",
+                      "size":  "~0.5 m",
+                      "tris":  72,
+                      "max_dim_m":  0.54
+                  },
+                  {
+                      "asset":  "Mob_DS_DriftDuck_Adult5",
+                      "kind":  "mob",
+                      "size":  "~0.6 m",
+                      "tris":  72,
+                      "max_dim_m":  0.56
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Well_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  60,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Well_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  60,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Well_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  60,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Well_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  60,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Well_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  60,
+                      "max_dim_m":  1.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_CisternBarrel_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_CisternBarrel_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_CisternBarrel_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_CisternBarrel_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_CisternBarrel_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_FilterBarrel_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_FilterBarrel_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_FilterBarrel_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_FilterBarrel_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_FilterBarrel_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Canteen_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.24
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Canteen_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.24
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Canteen_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.24
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Canteen_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.24
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Canteen_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.24
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Bucket_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Bucket_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Bucket_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Bucket_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Bucket_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_SpringRocks_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_SpringRocks_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_SpringRocks_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_SpringRocks_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_SpringRocks_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  36,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Gutter_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Gutter_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Gutter_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Gutter_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_Gutter_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_PondEdge_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_PondEdge_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_PondEdge_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_PondEdge_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Water_PondEdge_V4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Grass_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Dirt_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Sand_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Stone_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Moss_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_4",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_5",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_6",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_7",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_8",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tile_Clay_9",
+                      "kind":  "prop",
+                      "size":  "~2 m",
+                      "tris":  12,
+                      "max_dim_m":  2.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_00",
+                      "kind":  "prop",
+                      "size":  "~2.0 m",
+                      "tris":  24,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_01",
+                      "kind":  "prop",
+                      "size":  "~2.2 m",
+                      "tris":  36,
+                      "max_dim_m":  1.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_02",
+                      "kind":  "prop",
+                      "size":  "~2.5 m",
+                      "tris":  24,
+                      "max_dim_m":  1.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_03",
+                      "kind":  "prop",
+                      "size":  "~2.8 m",
+                      "tris":  36,
+                      "max_dim_m":  1.65
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_04",
+                      "kind":  "prop",
+                      "size":  "~3.0 m",
+                      "tris":  24,
+                      "max_dim_m":  1.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_05",
+                      "kind":  "prop",
+                      "size":  "~3.2 m",
+                      "tris":  36,
+                      "max_dim_m":  1.95
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_06",
+                      "kind":  "prop",
+                      "size":  "~3.5 m",
+                      "tris":  24,
+                      "max_dim_m":  2.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_07",
+                      "kind":  "prop",
+                      "size":  "~3.8 m",
+                      "tris":  36,
+                      "max_dim_m":  2.25
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_08",
+                      "kind":  "prop",
+                      "size":  "~4.0 m",
+                      "tris":  24,
+                      "max_dim_m":  2.4
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_09",
+                      "kind":  "prop",
+                      "size":  "~4.2 m",
+                      "tris":  36,
+                      "max_dim_m":  2.55
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_10",
+                      "kind":  "prop",
+                      "size":  "~4.5 m",
+                      "tris":  24,
+                      "max_dim_m":  2.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_11",
+                      "kind":  "prop",
+                      "size":  "~4.8 m",
+                      "tris":  36,
+                      "max_dim_m":  2.85
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_12",
+                      "kind":  "prop",
+                      "size":  "~5.0 m",
+                      "tris":  24,
+                      "max_dim_m":  3.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_13",
+                      "kind":  "prop",
+                      "size":  "~5.2 m",
+                      "tris":  36,
+                      "max_dim_m":  3.15
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_14",
+                      "kind":  "prop",
+                      "size":  "~5.5 m",
+                      "tris":  24,
+                      "max_dim_m":  3.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_15",
+                      "kind":  "prop",
+                      "size":  "~5.8 m",
+                      "tris":  36,
+                      "max_dim_m":  3.45
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_16",
+                      "kind":  "prop",
+                      "size":  "~6.0 m",
+                      "tris":  24,
+                      "max_dim_m":  3.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_17",
+                      "kind":  "prop",
+                      "size":  "~6.2 m",
+                      "tris":  36,
+                      "max_dim_m":  3.75
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_18",
+                      "kind":  "prop",
+                      "size":  "~6.5 m",
+                      "tris":  24,
+                      "max_dim_m":  3.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_19",
+                      "kind":  "prop",
+                      "size":  "~6.8 m",
+                      "tris":  36,
+                      "max_dim_m":  4.05
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_20",
+                      "kind":  "prop",
+                      "size":  "~7.0 m",
+                      "tris":  24,
+                      "max_dim_m":  4.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_21",
+                      "kind":  "prop",
+                      "size":  "~7.2 m",
+                      "tris":  36,
+                      "max_dim_m":  4.35
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_22",
+                      "kind":  "prop",
+                      "size":  "~7.5 m",
+                      "tris":  24,
+                      "max_dim_m":  4.5
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_23",
+                      "kind":  "prop",
+                      "size":  "~7.8 m",
+                      "tris":  36,
+                      "max_dim_m":  4.65
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_24",
+                      "kind":  "prop",
+                      "size":  "~8.0 m",
+                      "tris":  24,
+                      "max_dim_m":  4.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_25",
+                      "kind":  "prop",
+                      "size":  "~8.2 m",
+                      "tris":  36,
+                      "max_dim_m":  4.95
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_26",
+                      "kind":  "prop",
+                      "size":  "~8.5 m",
+                      "tris":  24,
+                      "max_dim_m":  5.1
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_27",
+                      "kind":  "prop",
+                      "size":  "~8.8 m",
+                      "tris":  36,
+                      "max_dim_m":  5.25
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_28",
+                      "kind":  "prop",
+                      "size":  "~9.0 m",
+                      "tris":  24,
+                      "max_dim_m":  5.4
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_29",
+                      "kind":  "prop",
+                      "size":  "~9.2 m",
+                      "tris":  36,
+                      "max_dim_m":  5.55
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_30",
+                      "kind":  "prop",
+                      "size":  "~9.5 m",
+                      "tris":  24,
+                      "max_dim_m":  5.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_31",
+                      "kind":  "prop",
+                      "size":  "~9.8 m",
+                      "tris":  36,
+                      "max_dim_m":  5.85
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_32",
+                      "kind":  "prop",
+                      "size":  "~10.0 m",
+                      "tris":  24,
+                      "max_dim_m":  6.0
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_33",
+                      "kind":  "prop",
+                      "size":  "~10.2 m",
+                      "tris":  36,
+                      "max_dim_m":  6.15
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_34",
+                      "kind":  "prop",
+                      "size":  "~10.5 m",
+                      "tris":  24,
+                      "max_dim_m":  6.3
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_35",
+                      "kind":  "prop",
+                      "size":  "~10.8 m",
+                      "tris":  36,
+                      "max_dim_m":  6.45
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_36",
+                      "kind":  "prop",
+                      "size":  "~11.0 m",
+                      "tris":  24,
+                      "max_dim_m":  6.6
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_37",
+                      "kind":  "prop",
+                      "size":  "~11.2 m",
+                      "tris":  36,
+                      "max_dim_m":  6.75
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_38",
+                      "kind":  "prop",
+                      "size":  "~11.5 m",
+                      "tris":  24,
+                      "max_dim_m":  6.9
+                  },
+                  {
+                      "asset":  "Prop_DS_Tree_39",
+                      "kind":  "prop",
+                      "size":  "~11.8 m",
+                      "tris":  36,
+                      "max_dim_m":  7.05
+                  },
+                  {
+                      "asset":  "Prop_DS_Campfire_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Campfire_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Campfire_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Campfire_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.8
+                  },
+                  {
+                      "asset":  "Prop_DS_Cauldron_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Cauldron_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Cauldron_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Cauldron_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  0.7
+                  },
+                  {
+                      "asset":  "Prop_DS_Haystack_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Haystack_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Haystack_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Prop_DS_Haystack_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  1.2
+                  },
+                  {
+                      "asset":  "Prop_DS_FeedSack_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Prop_DS_FeedSack_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Prop_DS_FeedSack_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Prop_DS_FeedSack_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  12,
+                      "max_dim_m":  0.5
+                  },
+                  {
+                      "asset":  "Prop_DS_CompostBin_V0",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_CompostBin_V1",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_CompostBin_V2",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  },
+                  {
+                      "asset":  "Prop_DS_CompostBin_V3",
+                      "kind":  "prop",
+                      "size":  "~1 m",
+                      "tris":  24,
+                      "max_dim_m":  1.0
+                  }
+              ],
+    "count":  500,
+    "note":  ".blend sources (~1 GB, one per item) stay in bot-team\\art\\\u003cKind\u003e\\\u003cAsset\u003e.blend; too big for git without LFS. glb exports are in glb/.",
+    "bot":  "disk-saver",
+    "origin":  [
+                   4000000,
+                   4000000,
+                   0
+               ]
+}
