@@ -782,7 +782,7 @@ def scenario_realm(p):
         if _kv(h.realm_state()).get("ui") == "NONE":
             break
         h.realm_input("b")
-    for c in ("b", "down", "down", "a"):
+    for c in ("b", "down", "a"):   # COMMAND is a 2x3 grid: TALK SPELL / STATUS ITEM / SEARCH EQUIP
         h.realm_input(c)
     status = _kv(h.realm_state()).get("ui") == "STATUS"
     cap("realm_status.png")
@@ -791,10 +791,11 @@ def scenario_realm(p):
     h.realm_input("portal")
     h.realm_input("up")
     said = _kv(h.realm_state()).get("msg", "")
-    h.realm_input("a")
-    for _ in range(60):
+    for _ in range(60):   # A finishes the typewriter, A again turns the page or closes
         if not h.is_realm_open():
             break
+        if _kv(h.realm_state()).get("ui") == "MESSAGE":
+            h.realm_input("a")
         yield
     save_path = os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusRealm.sav")
     saved = os.path.exists(save_path) and open(save_path).read().startswith("DRS 1")
