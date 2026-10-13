@@ -35,6 +35,8 @@
     display: flex; align-items: center; gap: 10px; }
   #sky input { flex: 1; accent-color: var(--gold); }
   #clock { font-variant-numeric: tabular-nums; color: var(--gold); min-width: 46px; }
+  #bloombar { bottom: 64px; left: 12px; right: 12px; margin: 0 auto; max-width: 520px; padding: 6px 14px;
+    font-size: 12px; color: var(--dim); text-align: center; }
   #hint { color: var(--dim); font-size: 12px; margin-top: 6px; }
   @media (max-width: 520px) { #hint { display: none; } }
 </style>
@@ -52,6 +54,7 @@
   <input id="hour" type="range" min="0" max="24" step="0.05" value="12" aria-label="Hour of the sky">
   <button id="play" type="button" aria-pressed="false">Play</button>
 </div>
+<div id="bloombar" class="panel"><span id="bloom" aria-live="polite"></span></div>
 <script type="module" src="/reach.js"></script>
 </body>
 </html>

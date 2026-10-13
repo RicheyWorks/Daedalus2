@@ -82,7 +82,7 @@ public class ProdSecurityConfig {
      * well at {@code /} stays the default and is untouched by it.
      */
     public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb",
-            "/reach.html", "/reach.js", "/reach-core.js");
+            "/reach.html", "/reach.js", "/reach-core.js", "/orrery-core.js");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",

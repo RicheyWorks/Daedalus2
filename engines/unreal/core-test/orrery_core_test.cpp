@@ -10,7 +10,7 @@ using namespace daedalus::orrery;
 static int Passed = 0, Total = 0;
 static void Check(const char* Name, bool OK) { ++Total; Passed += OK; std::printf("%s %s\n", OK ? "PASS" : "FAIL", Name); }
 
-int main()
+int main(int argc, char** argv)
 {
 	// --- the table
 	std::set<int> Hours; std::set<std::string> Names;
@@ -90,6 +90,17 @@ int main()
 	Check("reaching 6 with all charts goes on to 7", Early.Advance(6) && Early.Step == 7);
 	Check("step text is clamped", std::string(StepText(-3)) == StepText(0) && std::string(StepText(99)) == StepText(8));
 
+	// The parity file for the browser (static/orrery-core.js): the table, then every ordered pair's brew.
+	if (argc > 2 && std::string(argv[1]) == "--write")
+	{
+		FILE* F = std::fopen(argv[2], "w");
+		std::fprintf(F, "# orrery_core_test.cpp --write: herbs (name hour constellation day), then BrewOf(a, b) for all 576 pairs\n");
+		for (const Herb& H : Herbs()) std::fprintf(F, "herb %s %d %s %d\n", H.Name, H.Hour, H.Constellation, IsDay(H.Hour) ? 1 : 0);
+		for (const Herb& A : Herbs())
+			for (const Herb& B : Herbs()) std::fprintf(F, "brew %s %s %s\n", A.Name, B.Name, BrewOf(A.Name, B.Name).empty() ? "-" : BrewOf(A.Name, B.Name).c_str());
+		std::fclose(F);
+		std::printf("wrote %s\n", argv[2]);
+	}
 	std::printf("%d/%d\n", Passed, Total);
 	return Passed == Total ? 0 : 1;
 }
