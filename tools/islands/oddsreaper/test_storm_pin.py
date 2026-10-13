@@ -34,4 +34,7 @@ assert src.index("force_storm_in_pie()", play_i) < src.index("time.sleep(20)", p
 assert "storm slipped after settle" in src
 assert src.index("time.sleep(20)", play_i) < src.index("storm slipped after settle", play_i)
 assert "hero_storm_rgb" in src and "daylightish" in src
+# volumes=0 fix: flush streaming before the search, fall back to the mood row when PIE labels miss
+assert "flush_level_streaming" in c and c.index("flush_level_streaming") < c.index("get_all_actors_of_class(w, unreal.DaedalusMoodVolume)")
+assert '== "oddsreaper_storm"' in c and '"vmatch": vmatch' in c
 print("test_storm_pin: ALL PASS")

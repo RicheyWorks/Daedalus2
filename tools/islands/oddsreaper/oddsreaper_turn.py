@@ -253,7 +253,21 @@ if w:
             except Exception: pass
         streamed.append(pkg)
 d = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []
-v = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume) if "OddsReaper" in a.get_actor_label()] if w else []
+# Round-3 turn logged volumes=0 even after the streaming flip: should_be_loaded only takes effect on a later
+# streaming update (same-tick search sees nothing), and PIE copies may not carry the editor actor label.
+# Flush streaming first, then match by label OR by the volume's mood row (set from layout.json at placement).
+flushed = False
+if w and streamed:
+    try: unreal.GameplayStatics.flush_level_streaming(w); flushed = True
+    except Exception: pass
+allv = list(unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume)) if w else []
+def _vmood(a):
+    try: return str(a.get_editor_property("mood"))
+    except Exception: return ""
+v = [a for a in allv if "OddsReaper" in a.get_actor_label()]
+vmatch = "label" if v else None
+if not v:
+    v = [a for a in allv if _vmood(a) == "oddsreaper_storm"]; vmatch = "mood" if v else None
 def st(x): return {"hour": round(x.get_hour(), 2), "weather": str(x.get_editor_property("weather")), "mood": str(x.get_editor_property("mood"))}
 def setp(o, name, val):
     for p in (name, "b_" + name):
@@ -289,7 +303,7 @@ try:
         mpc_set = {"skipped": "mpc asset missing (data contract only until editor turn)"}
 except Exception as e:
     mpc_set = {"error": str(e)[:80]}
-result = {"directors": len(d), "volumes": len(v), "via": via, "pinned": pinned, "streamed": streamed, "mpc": mpc_set, "before": before, "after": st(d[0]) if d else None}"""
+result = {"directors": len(d), "volumes": len(v), "volumes_all": len(allv), "vmatch": vmatch, "flushed": flushed, "via": via, "pinned": pinned, "streamed": streamed, "mpc": mpc_set, "before": before, "after": st(d[0]) if d else None}"""
 # Read-back after a few game ticks: proves the storm held (not restored by a volume Tick) before the shot.
 STORM_CHECK_CODE = r"""import unreal
 w = unreal.EditorLevelLibrary.get_game_world()

@@ -116,3 +116,8 @@ Diagnosed on-disk hero_unreal_play.png as still daylightish (mean RGB ~142/148/1
 ## Round-3 editor turn: storm Play hero (Oct 12, 2026, 23:01 PT)
 
 CLAIM after pythagoras HANDOFF. Bridge died once mid-Play (washed lum~220 false OK); retried as 3c: editor director seeded oddsreaper_storm @ 18.75, PIE force held STORM, Play viewport hero_unreal_play.png mean RGB ~76/65/47 lum~66 stormish. MoodVolume count was 0 (director path). Play stopped; OddsReaperIsland + DaedalusWorld saved; HANDOFF art-master-flex. daylightish_rgb now also rejects lum>140 washed sky.
+
+## Round-3 follow-up: MoodVolume count 0 (Oct 12, 2026, 23:10 PT)
+
+The 23:01 turn held storm only via the director path (volumes=0). Off-editor diagnosis: the PIE streaming flip (should_be_loaded/visible) only lands on a later streaming update, so the same-tick volume search saw nothing; PIE copies may also miss the editor actor label. STORM_CODE now calls GameplayStatics.flush_level_streaming before the search and falls back to matching any DaedalusMoodVolume whose mood row is oddsreaper_storm; result logs volumes_all / vmatch / flushed. test_storm_pin.py extended, ALL PASS. No Unreal touched.
+
