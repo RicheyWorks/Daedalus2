@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT
+     The Orrery Reach in the browser (ADR-058): Claude Island and its four neighbours, grown from the same seeds by the
+     same voxel isle core as Unreal (reach-core.js = DaedalusVoxelIsleCore.h = VoxelIsle.java, parity-tested).
+     The isle list comes from /api/v1/reach/orrery. Vanilla JS and an import map, no build step, like the realm. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Orrery Reach</title>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<style>
+  :root { --panel: rgba(14, 16, 34, 0.84); --line: rgba(150, 170, 255, 0.25); --text: #eef0ff;
+    --dim: #9aa3cc; --gold: #f5c96a; --ok: #6be3a0; --warn: #ff8a7a; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #0b0d1e; color: var(--text);
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+  #view { position: fixed; inset: 0; display: block; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  #top { top: 12px; left: 12px; padding: 10px 14px; max-width: min(380px, calc(100vw - 24px)); }
+  h1 { margin: 0; font-size: 17px; letter-spacing: .08em; color: var(--gold); }
+  #status { margin-top: 4px; color: var(--dim); font-size: 12px; }
+  #status b.ok { color: var(--ok); } #status b.warn { color: var(--warn); }
+  #isles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  button { font: inherit; font-size: 12px; color: var(--text); background: rgba(255,255,255,.06);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; cursor: pointer; }
+  button:hover, button:focus-visible { border-color: var(--gold); outline: none; }
+  #sky { bottom: 12px; left: 12px; right: 12px; margin: 0 auto; max-width: 520px; padding: 8px 14px;
+    display: flex; align-items: center; gap: 10px; }
+  #sky input { flex: 1; accent-color: var(--gold); }
+  #clock { font-variant-numeric: tabular-nums; color: var(--gold); min-width: 46px; }
+  #hint { color: var(--dim); font-size: 12px; margin-top: 6px; }
+  @media (max-width: 520px) { #hint { display: none; } }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="top" class="panel">
+  <h1>THE ORRERY REACH</h1>
+  <div id="status">Growing the isles…</div>
+  <div id="isles"></div>
+  <div id="hint">Drag to turn, scroll to zoom, right-drag to pan. The Vault has no bridge: the logbook ends there.</div>
+</div>
+<div id="sky" class="panel">
+  <span id="clock">12:00</span>
+  <input id="hour" type="range" min="0" max="24" step="0.05" value="12" aria-label="Hour of the sky">
+  <button id="play" type="button" aria-pressed="false">Play</button>
+</div>
+<script type="module" src="/reach.js"></script>
+</body>
+</html>

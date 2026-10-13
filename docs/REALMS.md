@@ -51,6 +51,7 @@ Status key:
 | **Parcels** | Decentraland | SERVER | A district of 60 claimable 16×16 plots, streets, sidewalks and a plaza with a helipad. Owners build scenes on their plots, and a helicopter flies to the cloud gate. | Street furniture, storefronts, plaza art, low-poly soft-lit buildings, the helicopter | 033 |
 | **Bricks** | Roblox | SERVER | A studded baseplate, bright bricks, a spawn pad, a runway with a plane, and an obby over lava with checkpoints and a gold trophy finish. You play as a blocky avatar. | Plastic-stud props, obby pieces, blocky avatars and hats, the plane | 034 |
 | **Gallery City** | Cryptovoxels (Voxels) | SERVER | A 5×5-block city with named streets (Ash Lane, Pixel Street, Origin Way, Gallery Row…), 68 addressed parcels, height limits, the Origin plaza with a crystal spire and drone pad, and galleries of maze art. | Small-voxel pastel architecture, frames, sculptures, the drone | 035 |
+| **The Orrery Reach** (Claude's domain) | a cosy herbalist sky-village under a living sky | LIVE (Unreal) + WEB VIEW | Claude Island and four neighbouring voxel isles (Bloomfields, Tidewells, Lens Forge, the sealed Vault), with sky bridges between them. There are 24 starbloom herbs, one for each sky hour, which you steep into teas, constellation brews and eclipse brews. Clean-water and food loops, islanders with daily schedules, and the 9-step Keeper's Logbook. In the browser, `/reach.html` draws the same isles. | Celestial herbalism, brass instruments, orreries, telescopes, kettles, cisterns. The 509 `*_Orr_*` items are shipped. | 057, 058 |
 | **The Labyrinth** | Daedalus itself | NAMED | World One's mazes at walking scale: 23 generators and 10 solvers, with stone walls and torchlight. Mazes also appear in every other realm. | Stone, torches, gates, traps, maze guardians | 029 |
 | **Space (Phase 2)** | — | NAMED | Moons, suns, other planets, meteors and Earth. | Orbital debris, meteors, sky hints for now | canon above |
 | **Your own realm** | anything | PROPOSE ONE | A new style or era with its own play, such as a 64-bit-era kart-and-adventure realm. See *Build your own realm* below. | Whatever your realm needs, all original | this file |
@@ -115,6 +116,7 @@ How to propose one:
 | Many worlds on one server, and the five styles | `docs/adr/ADR-030-many-worlds.md` |
 | Gates and mounts | `docs/adr/ADR-031-sky-gates.md` |
 | Lands, ores and richness | `docs/adr/ADR-050-lands.md` |
+| The Orrery Reach | `docs/realms/OrreryReach.md`, `docs/adr/ADR-058-one-isle-core.md`, `/reach.html`, server `GET /api/v1/reach/orrery` |
 | The 8-bit Portal Realm | `docs/adr/ADR-052-portal-realm.md`, server `GET /api/v1/retro/{seed}` |
 | Shipping art into Unreal | `docs/adr/ADR-051-art-queue.md`, `docs/TEAMLINK.md` |
 | Island docs other bots wrote | `docs/islands/` |

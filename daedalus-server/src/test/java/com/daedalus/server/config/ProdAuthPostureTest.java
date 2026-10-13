@@ -149,6 +149,8 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/retro/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/retro/" + ID + "/check", Posture.PUBLIC);
+        // The Orrery Reach (ADR-058): read-only, deterministic isle shapes for the web page.
+        EXPECTED.put("GET /api/v1/reach/orrery", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);

@@ -305,6 +305,7 @@ public consumers).
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `GET` | `/api/v1/retro/{seed}` | public | The 8-bit realm behind a portal, generated whole from a seed (field, towns, castle, three cave floors, every chest, lock and monster table) as the plain-text DRR 1 spec the C++ core plays (ADR-052) |
 | `GET` | `/api/v1/retro/{seed}/check` | public | Walks that realm like a party would and reports whether every chest, lock, guardian and townsperson can be reached (ADR-052) |
+| `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |
