@@ -14,6 +14,11 @@ There is no Java rules rewrite or embedded JavaFX window.
 | Blackjack unchanged core | [BlackJackPro](https://github.com/RicheyWorks/BlackJackPro/tree/1ec1801ac635e62945072974cbe8c78398a17849), `1ec1801ac635e62945072974cbe8c78398a17849` |
 | Additive Blackjack API | [draft PR62](https://github.com/RicheyWorks/BlackJackPro/pull/62), `a4d5987a94a5cb53ed161f1778030907f64c356e` |
 
+PR55 now incorporates the approved PR53 dependency and current-main fixes;
+its focused review is stacked on that existing owner's branch. See
+[verification-followup.md](verification-followup.md) for full linking, disposable
+Java services and exact acceptance limits.
+
 Original desktop projects, Python games, the dirty Buff Blackjack checkout,
 shared Unreal work, audio integration and source game saves remain untouched.
 The facade compiles against the visible Buff core API, but none of that checkout's
@@ -92,8 +97,9 @@ cannot be reached, its sessions expire after 15 idle minutes or one hour absolut
 
 ## Deliberate first-pilot limits
 
-- Standalone local overlay and placeholder mesh only. No editor import, live
-  service launch, packaged runtime, multiplayer or in-world acceptance is proven.
+- Standalone local overlay and placeholder mesh only. Disposable local Java
+  service checks and isolated DLL linking are recorded in the follow-up;
+  editor import, packaged runtime, multiplayer and in-world acceptance are pending.
 - Sudoku saved-list picker, pencil toggle, auto-solve, competitive and spectator
   UI are deferred. Explicit own save/resume IDs work through existing endpoints.
 - Blackjack rule/deck/split-limit Blueprint calls exist, with their Slate settings
