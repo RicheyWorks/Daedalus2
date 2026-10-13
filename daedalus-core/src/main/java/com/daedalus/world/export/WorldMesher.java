@@ -80,6 +80,7 @@ public final class WorldMesher {
                 .thenComparingInt(ChunkCoordinate::x));
         List<ChunkMesh> out = new ArrayList<>();
         BlockType[] palette = BlockType.values();
+        float[][] linearOf = new float[palette.length][];
         for (ChunkCoordinate cc : keys) {
             Chunk chunk = world.chunk(cc);
             if (chunk == null || chunk.isEmpty()) {
@@ -103,10 +104,20 @@ public final class WorldMesher {
                 int y = oy + ly;
                 int z = oz + lz;
                 Part part = BlockColors.translucent(type) ? translucent : opaque;
-                float[] linear = linear(BlockColors.rgb(type));
+                float[] linear = linearOf[type.ordinal()];
+                if (linear == null) {
+                    linear = linear(BlockColors.rgb(type));
+                    linearOf[type.ordinal()] = linear;
+                }
                 for (int f = 0; f < 6; f++) {
                     int[] n = NORMALS[f];
-                    BlockType nb = world.get(new BlockCoordinate(x + n[0], y + n[1], z + n[2]));
+                    int ax = lx + n[0];
+                    int ay = ly + n[1];
+                    int az = lz + n[2];
+                    // inside the chunk: read its own array; only edge faces ask the world (the hash lookup)
+                    BlockType nb = ax >= 0 && ax < Chunk.SIZE && ay >= 0 && ay < Chunk.SIZE && az >= 0 && az < Chunk.SIZE
+                            ? palette[Byte.toUnsignedInt(cubes[ax + Chunk.SIZE * (ay + Chunk.SIZE * az)])]
+                            : world.get(new BlockCoordinate(x + n[0], y + n[1], z + n[2]));
                     if (!nb.seeThrough() || nb == type) {
                         continue;
                     }
