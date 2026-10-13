@@ -2,7 +2,9 @@
 // DBE 1 / DBE-E 1 (ADR-061): the Unreal side of Reactive Battlefield Ecology, plain C++17, no Unreal types.
 // Mirrors com.daedalus.world.battlefield.Dbe: all-or-nothing parsing with the line number and reason.
 #pragma once
+#include <cerrno>
 #include <cmath>
+#include <cstdlib>
 #include <cstdint>
 #include <sstream>
 #include <string>
@@ -47,14 +49,14 @@ inline std::vector<std::string> Split(const std::string& L)
 inline bool Int(const std::string& S, long long& Out)
 {
 	if (S.empty()) { return false; }
-	size_t P = 0; try { Out = std::stoll(S, &P); } catch (...) { return false; }
-	return P == S.size();
+	char* E = nullptr; errno = 0; Out = std::strtoll(S.c_str(), &E, 10);
+	return errno == 0 && E == S.c_str() + S.size(); // no exceptions: Unreal game builds compile without /EHsc
 }
 inline bool Num(const std::string& S, double& Out)
 {
 	if (S.empty()) { return false; }
-	size_t P = 0; try { Out = std::stod(S, &P); } catch (...) { return false; }
-	return P == S.size() && std::isfinite(Out);
+	char* E = nullptr; errno = 0; Out = std::strtod(S.c_str(), &E);
+	return errno == 0 && E == S.c_str() + S.size() && std::isfinite(Out);
 }
 inline Result Bad(size_t Line, const std::string& Why) { return {false, "DBE line " + std::to_string(Line) + ": " + Why}; }
 inline std::vector<std::string> Lines(const std::string& Spec)
