@@ -122,6 +122,37 @@
    "reward": {
     "platinum": 2
    }
+  },
+  {
+   "id": "q_forge_temper",
+   "title": "Temper the Hull",
+   "island": "island_hephaestus",
+   "steps": [
+    {
+     "type": "talk",
+     "npc": "npc_forge_smith"
+    },
+    {
+     "type": "harvest",
+     "node": "Item_Ore_Emberite",
+     "count": 5
+    },
+    {
+     "type": "interact",
+     "target": "Prop_ForgeQuenchTub_Basalt",
+     "note": "quench heated rivets — Forge Temper"
+    },
+    {
+     "type": "deliver",
+     "item": "ark_rivet_tempered",
+     "count": 10,
+     "npc": "npc_drydock_riveter"
+    }
+   ],
+   "reward": {
+    "fire_resist_tonic": 2,
+    "starmetal_ingot": 1
+   }
   }
  ]
 }
