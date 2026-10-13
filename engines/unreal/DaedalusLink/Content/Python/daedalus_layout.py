@@ -40,6 +40,39 @@ def pack(boxes, gap=GAP_CM, row=ROW_CM, origin=ORIGIN):
     return out
 
 
+def groups(rows, gap=GAP_CM):
+    """rows: {level: (cx, cy, w, d)}. Levels whose footprints touch (within one gap) are one island and move
+    together (AMF's pets level sits on AMF's island). Returns {group name: (members, (cx, cy, w, d))}."""
+    names = sorted(rows)
+    parent = {n: n for n in names}
+
+    def find(n):
+        while parent[n] != n:
+            parent[n] = parent[parent[n]]
+            n = parent[n]
+        return n
+
+    def box(n):
+        cx, cy, w, d = rows[n]
+        return cx - w / 2, cy - d / 2, cx + w / 2, cy + d / 2
+
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            A, B = box(a), box(b)
+            if A[0] - gap < B[2] and B[0] - gap < A[2] and A[1] - gap < B[3] and B[1] - gap < A[3]:
+                parent[find(a)] = find(b)
+    out = {}
+    for n in names:
+        out.setdefault(find(n), []).append(n)
+    res = {}
+    for members in out.values():
+        bs = [box(m) for m in members]
+        x0, y0 = min(b[0] for b in bs), min(b[1] for b in bs)
+        x1, y1 = max(b[2] for b in bs), max(b[3] for b in bs)
+        res["+".join(members)] = (members, ((x0 + x1) / 2, (y0 + y1) / 2, x1 - x0, y1 - y0))
+    return res
+
+
 def _median(v):
     s = sorted(v)
     return s[len(s) // 2] if s else 0.0
@@ -88,12 +121,14 @@ def plan():
             pts.append((o.x, o.y, e.x, e.y))
         if pts:
             rows[lv] = footprint(pts)
-    target = pack([(lv, f[2], f[3]) for lv, f in rows.items()])
+    gs = groups(rows)
+    target = pack([(g, f[2], f[3]) for g, (_, f) in gs.items()])
     out = []
-    for lv, (cx, cy, w, d) in sorted(rows.items()):
-        tx, ty = target[lv]
-        out.append({"level": lv, "from": [round(cx), round(cy)], "to": [round(tx), round(ty)],
-                    "size_m": [round(w / 100), round(d / 100)], "move": [round(tx - cx), round(ty - cy)]})
+    for g, (members, (cx, cy, w, d)) in sorted(gs.items()):
+        tx, ty = target[g]
+        for lv in members:
+            out.append({"level": lv, "group": g, "from": [round(cx), round(cy)], "to": [round(tx), round(ty)],
+                        "size_m": [round(w / 100), round(d / 100)], "move": [round(tx - cx), round(ty - cy)]})
     return out
 
 

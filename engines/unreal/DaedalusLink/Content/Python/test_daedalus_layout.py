@@ -43,5 +43,9 @@ check("everything is north of the lane (south edge at ORIGIN y)", min(ys) >= L.O
 check("deterministic", L.pack(list(reversed(boxes))) == pos)
 fx = L.footprint([(0, 0, 100, 100), (300, 0, 100, 100), (10_000_000, 0, 50, 50)])
 check("a stray far actor doesn't inflate the footprint", fx[2] == 500 and abs(fx[0] - 150) < 1e-6)
+g = L.groups({"AMF": (4000000, 2000000, 6000, 6300), "AMF_Pets": (3999800, 2000200, 3100, 5100),
+              "Disk": (4000000, 4000000, 9000, 9000)})
+check("a level sitting on another island moves with it", any(set(m) == {"AMF", "AMF_Pets"} for m, _ in g.values()))
+check("separate islands stay separate groups", len(g) == 2)
 print("%d/%d" % (ok, total))
 raise SystemExit(0 if ok == total else 1)
