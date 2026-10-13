@@ -128,6 +128,7 @@ private:
     struct BoardingState
     {
         TWeakObjectPtr<APawn> Avatar;
+        TWeakObjectPtr<ADaedalusOceanVessel> Vessel;
         bool bCollision = true;
         bool bHidden = false;
     };

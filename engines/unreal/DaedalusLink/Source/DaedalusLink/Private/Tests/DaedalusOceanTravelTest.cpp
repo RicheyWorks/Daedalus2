@@ -72,6 +72,15 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Nearby player boards vessel"),Component->BoardAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Boarded avatar hidden and nonblocking"),Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
     TestTrue(TEXT("Boarded vessel can resolve route"),Resolve(Player));
+    TestFalse(TEXT("Cannot erase docks during active passenger session"),Component->ConfigureHost(Realms,{},{}));
+    TestTrue(TEXT("Refused reload preserves boarded route"),Resolve(Player));
+    auto* OtherVessel=World->SpawnActor<ADaedalusOceanVessel>(FVector(0,1000,0),FRotator::ZeroRotator);
+    OtherVessel->CurrentRealm=Home.Realm;
+    Player->Possess(OtherVessel);OtherVessel->SetActorLocation(FVector::ZeroVector);
+    TestFalse(TEXT("Different possessed vessel cannot restore passenger"),Component->DisembarkAtDock(Player,OtherVessel,Home.Id));
+    TestTrue(TEXT("Wrong-vessel exit retains current possession"),Player->GetPawn()==OtherVessel);
+    TestTrue(TEXT("Wrong-vessel exit preserves saved avatar state"),Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
+    Player->Possess(Vessel);OtherVessel->Destroy();
     TestFalse(TEXT("Another controller cannot take occupied vessel"),Component->BoardAtDock(Stranger,Vessel,Home.Id));
     TestFalse(TEXT("Unknown exit dock refused"),Component->DisembarkAtDock(Player,Vessel,TEXT("invented")));
     TestTrue(TEXT("Rejected exit retains vessel"),Player->GetPawn()==Vessel);
@@ -81,6 +90,7 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Dock restores original avatar"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
     TestTrue(TEXT("Avatar visibility and collision restored"),!Avatar->IsHidden() && Avatar->GetActorEnableCollision());
+    TestTrue(TEXT("Configuration allowed after passenger exits"),Component->ConfigureHost(Realms,{Home,Sea},{Connection}));
     TestFalse(TEXT("Repeated disembark refused"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("New boarding cycle allowed"),Component->BoardAtDock(Player,Vessel,Home.Id));
     Vessel->SetActorLocation(FVector::ZeroVector);

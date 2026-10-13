@@ -197,6 +197,9 @@ bool UDaedalusOceanTravelComponent::ConfigureHost(const TArray<FString>& Registe
 {
     if (!IsHost() || RegisteredRealms.Num() > 32 || Docks.Num() > 1024
         || Connections.Num() > 4096) return false;
+    // A reload cannot remove or relocate the exit of a boarded passenger.
+    for (const auto& Session : BoardingAvatars)
+        if (Session.Key.IsValid() && Session.Value.Avatar.IsValid()) return false;
     std::vector<std::string> Realms;
     std::vector<DaedalusOceanTravel::Dock> CoreDocks;
     std::vector<DaedalusOceanTravel::DockConnection> CoreConnections;
@@ -280,7 +283,7 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
     }
     Player->Possess(Vessel);
     if (Player->GetPawn() != Vessel || Vessel->GetController() != Player) return false;
-    BoardingAvatars.Add(Player, {Avatar, Avatar->GetActorEnableCollision(), Avatar->IsHidden()});
+    BoardingAvatars.Add(Player, {Avatar, Vessel, Avatar->GetActorEnableCollision(), Avatar->IsHidden()});
     Avatar->SetActorEnableCollision(false);
     Avatar->SetActorHiddenInGame(true);
     return true;
@@ -294,6 +297,7 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
         || Vessel->GetWorld() != GetWorld() || Player->GetPawn() != Vessel
         || Vessel->GetController() != Player) return false;
     const auto* Original = BoardingAvatars.Find(Player);
+    if (!Original || Original->Vessel.Get() != Vessel) return false;
     APawn* Avatar = Original ? Original->Avatar.Get() : nullptr;
     if (!IsValid(Avatar) || Avatar == Vessel || !Avatar->HasAuthority()
         || Avatar->GetWorld() != GetWorld() || Avatar->GetController()) return false;
