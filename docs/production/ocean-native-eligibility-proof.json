@@ -1,0 +1,44 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "BLACKBEARD",
+			"instance": "3FC647184EA563D06FD373970DCB0FA6",
+			"instanceName": "BLACKBEARD-22872",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (26H2) [10.0.26300.9550] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 4090",
+			"cPUModel": "AMD Ryzen 9 7900X 12-Core Processor            ",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.10.13-21.05.15",
+	"succeeded": 1,
+	"succeededWithWarnings": 0,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.010483101010322571,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "HostEligibility",
+			"fullTestPath": "Daedalus.Ocean.HostEligibility",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"3FC647184EA563D06FD373970DCB0FA6"
+			],
+			"duration": 0.010483101010322571,
+			"dateTime": "2026.10.13-21.05.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}
