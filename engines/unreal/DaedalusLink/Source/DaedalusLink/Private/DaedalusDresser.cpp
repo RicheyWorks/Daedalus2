@@ -147,10 +147,19 @@ FString ADaedalusDresser::Dress()
 	{
 		const FString N = A.AssetName.ToString();
 		ByName.Add(N, A);
+		// A plant that ships in two meshes (Prop_Tree_Oak_Mature + Prop_Tree_Oak_Mature_Top: trunk and crown) is one plant;
+		// the _Top goes on when the base is placed. Before 2026-10-13 crowns stood on the ground and trunks stood bare.
+		if (N.EndsWith(TEXT("_Top")) || N.EndsWith(TEXT("_Harvested"))) continue;
 		for (const TCHAR* Cat : {TEXT("Tree"), TEXT("Shrub"), TEXT("Flower"), TEXT("Grass"), TEXT("Mushroom"), TEXT("Herb")})
 			if (N.StartsWith(FString(TEXT("Prop_")) + Cat)) ByCat.FindOrAdd(Cat).Add(A);
 	}
 	auto Load = [](const FAssetData& A) { return Cast<UStaticMesh>(A.GetAsset()); };
+	/** The crown that sits on a base mesh, if it ships one. */
+	auto TopOf = [&](const FAssetData& Base) -> UStaticMesh*
+	{
+		const FAssetData* T = ByName.Find(Base.AssetName.ToString() + TEXT("_Top"));
+		return T ? Load(*T) : nullptr;
+	};
 
 	auto Ground = [&](uint8 T) -> EGround
 	{
@@ -263,12 +272,20 @@ FString ADaedalusDresser::Dress()
 					// Neighbouring plants of one kind cluster: pick by a coarse cell, not per cube.
 					const int32 Pick = FMath::Min(Fit.Num() - 1, static_cast<int32>(Roll(X / 6, 0, Z / 6, Seed, 2) * Fit.Num()));
 					const int32 Pick2 = FMath::Min(Fit.Num() - 1, static_cast<int32>(Roll(X, Y, Z, Seed, 3) * Fit.Num()));
-					UStaticMesh* M = Load(*Fit[Roll(X, Y, Z, Seed, 4) < 0.7 ? Pick : Pick2]);
+					const FAssetData& Chosen = *Fit[Roll(X, Y, Z, Seed, 4) < 0.7 ? Pick : Pick2];
+					UStaticMesh* M = Load(Chosen);
 					if (!M) continue;
 					const float Yaw = static_cast<float>(Roll(X, Y, Z, Seed, 5) * 360.0);
 					const float Sc = static_cast<float>(0.85 + Roll(X, Y, Z, Seed, 6) * 0.35);
 					const FVector Jit((Roll(X, Y, Z, Seed, 7) - 0.5) * U * 0.6, (Roll(X, Y, Z, Seed, 8) - 0.5) * U * 0.6, 0.0);
-					Pool(M, bTree)->AddInstance(FTransform(FRotator(0, Yaw, 0), Top(X, Y, Z) + Jit, FVector(Sc)), true);
+					const FVector At = Top(X, Y, Z) + Jit;
+					Pool(M, bTree)->AddInstance(FTransform(FRotator(0, Yaw, 0), At, FVector(Sc)), true);
+					if (UStaticMesh* Crown = TopOf(Chosen))
+					{
+						// The crown shares the base's origin with its height baked in (Oak_Mature_Top starts at z = 182 over
+						// a 220 trunk), so it goes at the same place, scale and yaw.
+						Pool(Crown, false)->AddInstance(FTransform(FRotator(0, Yaw, 0), At, FVector(Sc)), true);
+					}
 					++Placed;
 					if (bTree) { ++Trees; TreeAt.Add(FIntPoint(X, Z)); } else ++Plants;
 				}
