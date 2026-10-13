@@ -138,9 +138,14 @@
      "count": 5
     },
     {
+     "type": "brew_quench",
+     "path": "dual",
+     "note": "Forge Temper: magma then spring (or reverse) within 10s on a mortar tonic"
+    },
+    {
      "type": "interact",
      "target": "Prop_ForgeQuenchTub_Basalt",
-     "note": "quench heated rivets — Forge Temper"
+     "note": "quench heated rivets \u2014 Forge Temper"
     },
     {
      "type": "deliver",

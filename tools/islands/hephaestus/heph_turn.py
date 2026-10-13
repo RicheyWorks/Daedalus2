@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Hephaestus's 10-minute editor turn (referee equal-turn order: youtube-master -> hephaestus -> pythagoras). Run ONLY for a granted turn.
     python heph_turn.py [--now]
 The referee HOLDS the turn clock while the editor is down, so every slot after the hold shifts. This runner is therefore
@@ -22,7 +22,7 @@ PORT = int(os.environ.get("HEPH_BRIDGE_PORT", "9877"))
 TODAY = dt.date.today()
 EARLIEST = dt.datetime.combine(TODAY, dt.time(17, 43))  # referee slot before any hold shift; never earlier
 SINCE = dt.datetime.combine(TODAY, dt.time(17, 30))     # only HANDOFF/GRANT posts newer than this count
-GIVE_UP = dt.datetime.combine(TODAY, dt.time(21, 0))    # stop waiting; post BLOCKED and go to the back of the line
+GIVE_UP = dt.datetime.combine(TODAY, dt.time(23, 0))  # round-2 can land after 21:00; stop waiting then post BLOCKED
 TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
 HANDOFF_US = re.compile(r"HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
@@ -115,15 +115,27 @@ def main():
     code = (f"import runpy,sys; sys.path.insert(0, r'{TOOL}'); "
             f"result = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_turn')['run']()")
     isle = call("execute_python", timeout=int(max(30, left() - 25)), code=code).get("result"); say(f"island: {isle}")
-    if isle and left() > 15:
+    if isle and left() > 20:
         cam, rot = isle["cam"], isle["cam_rot"]
         call("execute_python", timeout=15, code="import unreal; unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)."
              f"set_level_viewport_camera_info(unreal.Vector({cam[0]},{cam[1]},{cam[2]}), unreal.Rotator(roll=0,pitch={rot[0]},yaw={rot[1]}))")
-        time.sleep(3)
-        r = call("viewport_screenshot", timeout=30, width=1920, height=1080)
+        # Round-1 timed out on viewport_screenshot (modal/busy). Retry with settle + 1280 fallback.
         path = os.path.join(SHOTS, "hero_unreal_editor.png")
-        with open(path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
-        say(f"shot {path}")
+        shot_ok = False
+        for attempt, (w, h, settle, to) in enumerate(((1920, 1080, 5, 45), (1920, 1080, 8, 60), (1280, 720, 5, 45)), 1):
+            if left() < 15: break
+            try:
+                time.sleep(settle)
+                r = call("viewport_screenshot", timeout=to, width=w, height=h)
+                with open(path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                say(f"shot {path} ({w}x{h} attempt {attempt})")
+                shot_ok = True
+                break
+            except Exception as e:
+                say(f"viewport_screenshot attempt {attempt} failed: {e}")
+        if not shot_ok:
+            say("viewport_screenshot FAILED after retries; hero shot still owed")
+            link("NEED island:hephaestus: viewport_screenshot still failing after retries; hero shot owed on next granted turn (unreal-team bridge 9877)")
     return isle
 
 
