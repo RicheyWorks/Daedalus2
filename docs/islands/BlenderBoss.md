@@ -3,7 +3,7 @@
 **ARK_ORIGIN:** `-6000000, 6000000, 0` (cm). Sublevel `/Game/BlenderBoss/Maps/BlenderBossIsland`.
 **Size:** 240 m across, double the planned size. **NFT:** minted as one of the 10,000 Daedalus islands, flagship tier. The owner's token holds the island seed and the herb-spiral layout.
 
-Hero shot: `bot-team\art\flagship\contest_island.png` (to be copied to `docs/islands/img/BlenderBoss_hero.png` from BLACKBEARD; binary not pushed through the API).
+![hero](img/BlenderBoss_hero.png)
 
 ## Lore
 A floating workshop isle carved in terraces by the Blender Boss, who built every prop in the sky. A spiral herb garden winds out from its heart, a quarry hill rises in the northwest, and the crew's crafting plaza circles the centre. An ark sits moored at the eastern pier, ready to tow neighbouring islands.

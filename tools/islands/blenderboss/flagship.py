@@ -3,7 +3,7 @@ import bpy, bmesh, sys, os, math, random, re, json
 from mathutils import Vector, noise
 a = sys.argv[sys.argv.index("--")+1:]; ART, PNG = a[0], a[1]
 os.makedirs(os.path.join(ART, "flagship"), exist_ok=True); GLB = os.path.join(ART, "glb"); NAME = "Prop_Island_Flagship_BlenderBoss"
-R = 120.0  # radius m: double the 60 m planned island radius (240 m across)
+BASE = []; R = 120.0  # radius m: double the 60 m planned island radius (240 m across)
 random.seed(1337)
 bpy.ops.wm.read_factory_settings(use_empty=True); sc = bpy.context.scene
 root = bpy.data.collections.new(NAME); sc.collection.children.link(root)
@@ -55,7 +55,7 @@ def load(an):
         for c in list(o.users_collection): c.objects.unlink(o)
     proto[an] = [o for o in objs if o.parent is None and o.type in ("MESH","EMPTY")] or objs; proto[an+"__all"] = objs
     return proto[an]
-placed = []; LAYOUT = []; BASE = []   # BASE = terrain/water/pier objects -> Prop_Island_BlenderBoss_Base.glb
+placed = []; LAYOUT = []   # BASE = terrain/water/pier objects -> Prop_Island_BlenderBoss_Base.glb
 def put(an, x, y, s=1.0, rot=None, zoff=0.0, tag=""):
     z = h(x, y) + zoff
     for src in load(an):
