@@ -100,3 +100,27 @@ Herbs (the 10 compression species: CacheLeaf, BufferBloom, OverclockThorn, Defra
 | Purifier's Tea | ChecksumClover + ParityPetal + boiled water | immune to Queasy from raw water |
 | Keeper's Memory | any 3 herbs + Goat Milk at full balance | reveals one lore note; island "saved" progress +1 |
 Teas stack only with different effects; brewing uses the Orrery's Brews/Satchel tracking.
+
+### Balance meter (win condition) and failure states
+The HerbCompressor shows a 0–100 **Balance** value, recomputed every in-game hour:
+- +30 when at least one Clean Water source is stocked (Canteen/Bucket filled or the Cistern was filtered in the last hour)
+- +30 when every penned animal is fed (trough not empty) and produced at least once
+- +30 when at least 3 herb species are mature (S3) in the garden
+- +10 for each tea brewed in the last hour (max +10)
+At **100 for 3 consecutive hours** the island is *Saved*: the compressor glows cyan, the Keeper's last lore note unlocks and the island's resource decay stops.
+Failure states (nothing is lost, the island just slips):
+- **Drought:** cistern empty and no rain for 2 hours, so the trough dries up and production pauses.
+- **Hunger:** animals unfed for 2 cycles walk to the trough and idle there, and production stops until fed.
+- **Wilt:** herbs not watered for 3 hours drop one growth stage (S3 to S2).
+- **Waste:** any harvested product left in the satchel for 6 hours spoils into Compost, which can still feed the garden. The island never fully wastes anything, true to its rule.
+
+### Tuning table (implementation defaults)
+| Value | Default | Notes |
+|---|---|---|
+| Filter time | 20 s | DaedalusWaterFilter |
+| Boil time | 30 s | DaedalusKettle |
+| Herb regrow | 1 in-game hour/stage | DaedalusStarbloom |
+| Drying time | 60 s | DryingRack |
+| Tea duration | 5 min | stacking only across different effects |
+| Raw-water Queasy chance | 40% | cured by Cache Calm / Purifier's Tea |
+| Trough capacity | 10 feed | 1 feed per animal per cycle |

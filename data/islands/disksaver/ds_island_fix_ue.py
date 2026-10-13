@@ -4,6 +4,7 @@
 # replaced looks are overwrite-reimports, swapped meshes or hidden-in-game originals. ~6 min guard, then save.
 import unreal, os, time, math
 T0 = time.time(); LIMIT = 330
+LIGHT = False   # True in ds_island_fix_light_ue.py: no imports (RAM < 1 GB), only swap to already-imported meshes + materials + hooks
 SUB = "/Game/DiskSaver/Maps/Island_DiskSaver"; TAG = "DS_Island"; MAP = "/Game/Daedalus/DaedalusWorld"
 GLB = r"C:\Users\730ri\projects\bot-team\art\NOTES\disksaver\glb"
 SHOT = r"C:\Users\730ri\projects\bot-team\art\NOTES\disksaver\diskSaver_island_v3.png"
@@ -70,6 +71,7 @@ for n in names:
     if not os.path.exists(f): out["missing"].append(n); continue
     t = unreal.AssetImportTask(); t.filename = f; t.destination_path = "/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n)
     t.destination_name = n; t.automated = True; t.save = True; t.replace_existing = True; tasks.append(t)
+if LIGHT: out["notes"].append("LIGHT: %d reimports skipped" % len(tasks)); tasks = []
 for i in range(0, len(tasks), 10):
     if late(): out["notes"].append("reimport cut early"); break
     unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i+10]); out["reimported"] += len(tasks[i:i+10])
