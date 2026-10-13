@@ -1,9 +1,10 @@
 {
  "island": "Hephaestus",
- "placements": 119,
- "unique_assets": 72,
+ "placements": 126,
+ "unique_assets": 79,
  "status": {
   "in_unreal": 71,
+  "glb_only": 7,
   "engine": 1
  },
  "living": {
@@ -13,7 +14,15 @@
  },
  "living_ok": true,
  "blocking": [],
- "needs_import": [],
+ "needs_import": [
+  "Prop_ArkWreck_Hull",
+  "Prop_Asteroid_Chunk_Large",
+  "Prop_Asteroid_Chunk_Small",
+  "Prop_Asteroid_Core",
+  "Prop_Crater_RimRock",
+  "Prop_Grok_Monolith",
+  "Prop_Grok_SeedPod"
+ ],
  "assets": [
   {
    "asset": "Item_Herb_Ashmint",
@@ -142,6 +151,36 @@
    "status": "in_unreal"
   },
   {
+   "asset": "Prop_ArkWreck_Hull",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Large",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Small",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
+   "asset": "Prop_Asteroid_Core",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
+   "asset": "Prop_Crater_RimRock",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
    "asset": "Prop_ForgeAnvil_Basalt",
    "uses": 1,
    "category": "other",
@@ -242,6 +281,18 @@
    "uses": 1,
    "category": "other",
    "status": "in_unreal"
+  },
+  {
+   "asset": "Prop_Grok_Monolith",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
+  },
+  {
+   "asset": "Prop_Grok_SeedPod",
+   "uses": 1,
+   "category": "other",
+   "status": "glb_only"
   },
   {
    "asset": "Prop_HephaestusAnvil_Great",

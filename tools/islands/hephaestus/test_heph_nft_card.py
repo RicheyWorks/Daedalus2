@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Headless: Hephaestus nft.json card is complete and points at the Blender forge-overlook hero.
 
-Read-only. Checks required fields, trait keys, Items == layout.json placement count (119),
+Read-only. Checks required fields, trait keys, Items == layout.json placement count,
 hero_image -> hero_blender.png (primary), hero_image_play -> hero_unreal_play.png,
 hero_image_fallback -> hero_r2.png (near-black SceneCapture, last resort).
 On BLACKBEARD it checks PNGs exist, are real PNGs, and primary mean RGB is lit (not near-black).
@@ -20,7 +20,7 @@ FALLBACK = "bot-team/shots/hephaestus/hero_r2.png"
 PROJECTS = Path(r"C:\Users\730ri\projects")
 REQUIRED = ("name", "sigil", "blurb", "traits", "hero_image")
 TRAIT_KEYS = ("Mood", "Water", "Herbs", "Livestock", "Items", "Builder")
-EXPECTED_ITEMS = 119
+EXPECTED_ITEMS = 126  # keep in sync with layout + nft traits.Items
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 MIN_MEAN_LUM = 20.0
 

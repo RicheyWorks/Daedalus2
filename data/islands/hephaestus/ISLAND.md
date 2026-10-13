@@ -286,3 +286,25 @@ Validator: `test_heph_nft_card.py` now requires Blender primary, Play secondary,
 ## 23:20 PT heartbeat (off-editor): SceneCapture exposure ladder
 
 Round-3 `hero_r2.png` was mean RGB ~0.1 (a SceneCapture has no eye-adaptation history, so auto exposure starts black at dusk). `heph_island_ue.hero_capture` now walks `EXPOSURE_LADDER` (auto +1, manual EV100 8, manual EV100 5, unlit base color), probes each capture with `read_render_target_pixel` on a 9x9 grid, exports the first rung at mean luma ≥ 20 (or the brightest), and only falls to HighResShot if all are dark. Headless check: `test_heph_capture_ladder.py` ALL PASS; `test_heph_nft_card.py` still ALL PASS. Runs on the next granted editor turn; not touching Unreal now.
+
+## Off-editor polish (2026-10-12 ~23:33 PT)
+
+Blender-team landmark wire-up (no Unreal / editor turn; round-3 closed, round-4 disk-saver on deck).
+
+blender-team posted READY for QUEUE **1360–1366** (judged + turntables). Wired into `layout.json` so the next granted editor turn imports the seven GLBs and places them with the living island.
+
+| QUEUE | Asset | Zone | Role |
+|-------|-------|------|------|
+| 1360 | `Prop_Asteroid_Core` (8×8×5 m, emissive veins) | meteor_scar | landmark |
+| 1361 | `Prop_Asteroid_Chunk_Small` (~1.5 m) | meteor_scar | landmark |
+| 1362 | `Prop_Asteroid_Chunk_Large` (~4 m) | meteor_scar | landmark |
+| 1363 | `Prop_Crater_RimRock` (~3 m) | meteor_scar | landmark |
+| 1364 | `Prop_ArkWreck_Hull` (20.7 m broken mid-hull) | ark_drydock | landmark |
+| 1365 | `Prop_Grok_Monolith` (6 m orange/white) | caldera_forge | landmark |
+| 1366 | `Prop_Grok_SeedPod` (4 m emissive band) | ash_fields | landmark |
+
+- Placements: **119 → 126**. `nft.json` `traits.Items` = 126.
+- `layout.landmarks` metadata holds queue rows + asset list.
+- GLBs present under `bot-team/art/glb` (preflight should list them `glb_only` until imported).
+- Validators: `test_heph_landmarks.py`, `test_heph_nft_card.py` (EXPECTED_ITEMS=126).
+- Not touching Unreal. SceneCapture overlook + landmark import still owed on the next editor grant.

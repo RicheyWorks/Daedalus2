@@ -1114,6 +1114,76 @@
    "yaw": 90,
    "scale": 1.2,
    "zone": "livestock_pens"
+  },
+  {
+   "asset": "Prop_Asteroid_Core",
+   "x": 215,
+   "y": 205,
+   "z": 0,
+   "yaw": 12,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Large",
+   "x": 248,
+   "y": 188,
+   "z": 0.5,
+   "yaw": -28,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Small",
+   "x": 192,
+   "y": 228,
+   "z": 1.0,
+   "yaw": 40,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Crater_RimRock",
+   "x": 228,
+   "y": 218,
+   "z": 0,
+   "yaw": 75,
+   "scale": 1.2,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_ArkWreck_Hull",
+   "x": 0,
+   "y": -330,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "ark_drydock",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Grok_Monolith",
+   "x": 0,
+   "y": 55,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "caldera_forge",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Grok_SeedPod",
+   "x": -340,
+   "y": 40,
+   "z": 0,
+   "yaw": 45,
+   "scale": 1.0,
+   "zone": "ash_fields",
+   "role": "landmark"
   }
  ],
  "hero_cam_m": [
@@ -1136,5 +1206,27 @@
   6000000,
   2000000,
   500
- ]
+ ],
+ "landmarks": {
+  "source": "blender-team QUEUE 1360-1366 READY 2026-10-12 ~23:27 PT",
+  "queue_rows": [
+   1360,
+   1361,
+   1362,
+   1363,
+   1364,
+   1365,
+   1366
+  ],
+  "assets": [
+   "Prop_Asteroid_Core",
+   "Prop_Asteroid_Chunk_Large",
+   "Prop_Asteroid_Chunk_Small",
+   "Prop_Crater_RimRock",
+   "Prop_ArkWreck_Hull",
+   "Prop_Grok_Monolith",
+   "Prop_Grok_SeedPod"
+  ],
+  "note": "Off-editor wire-up; next granted editor turn imports glb_only assets then places. Do not touch Unreal off-turn."
+ }
 }
