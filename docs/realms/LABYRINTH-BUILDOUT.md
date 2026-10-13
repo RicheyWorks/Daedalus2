@@ -1,15 +1,15 @@
 # Labyrinth buildout and Broken Survey chapter
 
-2026-10-13, team-codex/Sol (same Astra seat). Art import and live proof: unreal-team/Claude. This delivery covers all **32 proposed cast roles** and **20 props**. It is a complete first roster and modular kit, not a finished playable realm. Animation polish, collision, navigation, interactions, rewards and live acceptance remain tracked work.
+2026-10-13, team-codex/Sol (same Astra seat). Art import and live proof: unreal-team/Claude. This delivery covers all **32 proposed cast roles, three friendly plant helpers and 32 props**. It is a complete first roster and modular kit, not a finished playable realm. Animation polish, collision, navigation, interactions, rewards and live acceptance remain tracked work.
 
 ## Delivered and reused
 
 - 13 humanoids: Wayfinder plus the twelve NPC roles in `REALM-CASTS.md`. Shared 14-bone `LabyrinthHumanoidV1`, Idle/Walk clips.
-- 19 creatures: twelve encounter/ambient roles, three mounts/companions and four pets. Shared eight-bone `LabyrinthCreatureV1`, Idle/Move clips. Rigid-part animation is deliberately simple; Move is a motion prototype, not a species-specific flying, crawling or combat controller.
+- 22 creatures: twelve encounter/ambient roles, three mounts/companions, four pets and three friendly carnivorous plant helpers. Shared eight-bone `LabyrinthCreatureV1`, Idle/Move clips. Rigid-part animation is deliberately simple; Move is a motion prototype, not a species-specific flying, crawling or combat controller.
 - 12 new environment props: 4 m floor/wall/corner modules, gate arch, thread anchor, chalk marker, trap plate, mirror panel, hedge planter, strider perch, Hornback trough and echo bell.
 - Eight Dungeon Master props reused from the earlier integration kit: narrator lectern, choice trident, chronicle archive, quest seal, return waymarker, rift threshold, party rally and reward reliquary. These eight count once in the combined delivery; the earlier PR remains their source.
 
-The combined manifest contains **52 unique IDs and 36,022 triangles**. Characters have skins and looped clips; environment/interaction props are static. BBA rows explicitly use `lod1 -`; reduced geometry is not delivered. The creature GLBs export at their common canonical rig scale. Their manifest's `recommended_scale` sets suggested Unreal actor size. The contact-sheet scene applies that size for presentation only, preserving compatible exported rest transforms. Humanoid source and creature source are original procedural work with flat authored materials.
+The combined manifest contains **67 unique IDs and 45,210 triangles**. Characters have skins and looped clips; environment/interaction props are static. BBA rows explicitly use `lod1 -`; reduced geometry is not delivered. The creature GLBs export at their common canonical rig scale. Their manifest's `recommended_scale` sets suggested Unreal actor size. The contact-sheet scene applies that size for presentation only, preserving compatible exported rest transforms. Humanoid source and creature source are original procedural work with flat authored materials.
 
 Delivery root: `C:/Users/730ri/Documents/Codex/2026-10-13/labyrinth-full/`. `production-data.json` reconciles the four manifests, roles, filenames and SHA256 hashes. The workbook records build/export/Unreal/mechanic stages independently. Registry rows are additive for Buff/catalog-owner ingestion. No shared MASTER workbook was overwritten.
 
@@ -52,3 +52,14 @@ The remaining full-realm work includes terrain/caves, gameplay-ready fauna anima
 ## Lessons
 
 Export a shared rest rig before applying per-character display scale. Keep the manifest and BBA counts reconciled to actual exported triangles. Review every contact sheet for collisions and readability. Record a mechanic sparked by art with an explicit implementation stage. Do not count recycled interaction props twice or claim model export as a live NPC.
+
+
+## Confirmed Halloween and friendly carnivorous plants
+
+Richey confirmed that Halloween content belongs in Labyrinth. The seasonal kit adds twelve original props: pumpkin lantern/crate, skull effigy, gravestone, coffin, cauldron, candle cluster, friendly ghost lantern, witch-hat stand, crow perch, cobweb frame and crypt gate. These are scenery/interaction silhouettes; no runtime flame, magic or collision is claimed. Their inclusion does not change other realms' distinct styles.
+
+Richey also confirmed that carnivorous plants are nice and help the player. Venus Guide points out safer paths and defends against active hostile threats. Pitcher Medic offers aid and care quests. Sundew Guardian slows hostile pursuers. The plant names and exact abilities are our proposals; their friendliness is confirmed. A plant may consume hostile pests as ecology, but never eat, trap or harm players, allies or their companions.
+
+The new `FriendlyPlantRules` portable policy implements the target boundary: only an explicitly HOSTILE target actively threatening a player yields DEFEND. Players/allies may receive OFFER_AID or GUIDE; neutral/unknown targets yield NONE. Exhaustive player/ally threat/injury/lost combinations are tested to forbid DEFEND. Hostile threat, no-threat, unknown disposition and null input are tested. This is a rules core, not a wired attack/heal controller; trusted host classification, range, cooldowns, healing values, inventory/reward and replication remain native/server work.
+
+Story proposal: **Kindness in the Hungry Garden.** Ari's loose thread leads to a Halloween courtyard where a Venus Guide protects a broken lantern. The player repairs its water source, frees its path from debris and earns a safe route clue. The Pitcher Medic asks for clean water rather than prey; the Sundew Guardian holds a hostile pursuer long enough for a lost surveyor to escape. Rewards should reinforce care and navigation. None of these plants is a surprise betrayal encounter. The Halloween scenery can be eerie while its helpful inhabitants remain trustworthy.
