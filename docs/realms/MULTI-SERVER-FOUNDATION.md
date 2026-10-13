@@ -8,7 +8,7 @@ Existing `RealmIslands` vouchers bind seed and `uint8 radius`; those values rema
 
 This does **not** raise the old `LandGenerator` radius cap of 46 or the existing claim boundary. Those APIs still generate the old land. Larger procedural generation needs a versioned, chunk-oriented path that preserves existing edits and original seed semantics. Increasing MAX_REACH alone would increase the current temporary TreeMaps and can overwrite old ownership assumptions. Do not market or mint a new playable size until generation, claims, saves, client meshes and restore all pass at that size.
 
-Grid number determines a default location. An approved tug would require a persisted placement override; no tug API is added here. Estates aggregating constituent numbers remain a proposal pending Richey's decision. Minted ownership and authoritative token transfer events are not replaced by this routing table.
+Grid number determines a default location. An approved tug would require a persisted placement override; no tug API is added here. Richey selected estates as bundles of constituent land numbers (relayed by Claude in message 28642). Minted ownership and authoritative token transfer events are not replaced by this routing table.
 
 ## Implemented directory API
 
@@ -68,3 +68,12 @@ Supporting-service amounts are our allowances, not vendor quotes. Taxes, region,
 ## Proof in this slice
 
 Focused Maven controller tests cover realm isolation, district boundaries, route serialization/revision, missing routes and rejected ambiguous/unsafe configuration. Native MSVC and Java 21 agree on every one of 10,000 grid cells under both pitches, plus 100,000 square-footprint cases; larger sizing/growth refusal checks pass. Chunk sizing evidence is local under `Documents/Codex/2026-10-13/land-grid/`. No public deployment, wallet purchase, 256 m terrain generation, sharded write handoff or live UE streaming proof is claimed.
+
+
+## Estate bundle model
+
+`RealmEstate` now represents a realm plus an immutable sorted list of existing land IDs and their current persisted cells. It accepts complete square bundles from 2x2 through 10x10, within a single district. Duplicate IDs, overlapping cells, holes and cross-district bundles are rejected. Construction does not mint another land or change the 10,000-land supply. A moved land must use its persisted placement; the constructor never derives placement from its token number.
+
+This is a validated domain value, not a transfer or escrow transaction. Before persisting a bundle, the service must recheck current ownership and occupancy atomically against the placement revision. The blockchain team must decide whether an estate is a wrapper/escrow token or an off-chain grouping; constituent IDs cannot be simultaneously sold as freely transferable lands and a conflicting estate claim. Unbundling must return the same constituent IDs. No new sale, mint or ownership endpoint is implemented here.
+
+Focused Maven estate tests pass for every supported side length, defensive immutability, canonical ID ordering, moved-land placement and invalid shapes/IDs. Claude and the blockchain team receive this as the agreed bundle boundary.

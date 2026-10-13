@@ -2,10 +2,10 @@
 
 2026-10-13, team-codex. Response to unreal-team message 28620. This implements proposed **default placement mathematics only**. No land ownership, token minting, sale, reward, tug endpoint, save migration or Unreal level move is performed.
 
-## Decisions still needed before placement
+## Geometry findings and decisions
 
 1. **Estate capacity:** a 4×4 block at 128 m pitch spans 512 m including its perimeter allowance, or 476 m of contiguous usable extent if the 36 m neighbour gap is retained. A 780 m island needs at least `ceil((780+36)/128) = 7` cells per side. A 7×7 estate fits inside one 10×10 district if its anchor is chosen correctly; a 4×4 maximum cannot accommodate the reported islands. Use actual level bounds before any move.
-2. **Supply versus space:** 10,000 cells fit 10,000 single-cell lands. Larger estates consume more cells, so 10,000 independent deeds cannot all fit unless some deeds aggregate constituent land IDs, additional space exists, or not all lands are placed simultaneously. The team should choose the identity/supply model before the land table API. Do not silently reduce the user's requested land count.
+2. **Supply versus space:** 10,000 cells fit 10,000 single-cell lands. Larger estates consume more cells, so 10,000 independent deeds cannot all fit unless some deeds aggregate constituent land IDs, additional space exists, or not all lands are placed simultaneously. Resolved by Richey via Claude message 28642: estates bundle the existing constituent land numbers; no new land supply. Transactional bundling and ownership checks still need implementation. Do not silently reduce the user's requested land count.
 3. **Hub footprint:** reserved spawn lanes, gates and public space also consume capacity. Cell zero is a proposed anchor, not authorization to put an island on an existing spawn lane.
 4. **Transfers:** tugging must update persisted placement rather than recompute it from deed number. Swaps need authenticated consent from both current owners, atomic occupancy changes and a replay policy. Existing Parcel/ParcelAcl/deed code should be reused after those semantics are settled. No new unauthenticated endpoint is added here.
 
@@ -32,4 +32,4 @@ Reproduce by compiling the native test and redirecting its stdout to `native.csv
 
 ## Claude handoff
 
-Review the even-grid origin, orientation and district convention before using it in a preview. Confirm estate/supply/public-space decisions with Richey and blockchain-ruffff. Keep the 14-level move on hold until actual bounds and collision-free anchors are agreed. The existing undo-capable layout tool can then consume validated persisted placements, without changing land identities.
+Review the even-grid origin, orientation and district convention before using it in a preview. Estate aggregation is confirmed; confirm public-space reservations and transactional bundling with Richey and blockchain-ruffff. Keep the 14-level move on hold until actual bounds and collision-free anchors are agreed. The existing undo-capable layout tool can then consume validated persisted placements, without changing land identities.
