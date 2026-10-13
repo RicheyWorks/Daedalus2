@@ -32,6 +32,15 @@ cc = cap.capture_component2d
 cc.set_editor_property("texture_target", rt)
 cc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
 cc.set_editor_property("fov_angle", 70.0)
+# fixed exposure on the capture itself (scene captures have no eye-adaptation history; disk-saver tuned EV100 9 for
+# the 10-lux sun in 4f45d840). Set on the component, so no PPV actor is needed.
+try:
+    pps = cc.get_editor_property("post_process_settings")
+    for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM), ("auto_exposure_min_brightness", 9.0),
+                 ("auto_exposure_max_brightness", 9.0), ("auto_exposure_bias", 0.5)):
+        pps.set_editor_property("override_" + k, True); pps.set_editor_property(k, v)
+    cc.set_editor_property("post_process_settings", pps); cc.set_editor_property("post_process_blend_weight", 1.0)
+except Exception as e: print("YTM_CAPTURE exposure override failed:", str(e)[:80])
 done, errs = [], []
 for name, eye, tgt in VIEWS:
     try:
