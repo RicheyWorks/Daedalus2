@@ -306,8 +306,11 @@ def storm_held(state):
 
 
 def daylightish_rgb(mean_r, mean_b, lum):
-    """Gate: warm + bright = daylight (round-2 Play hero bug class)."""
-    return float(lum) > 95 and float(mean_r) > float(mean_b) + 5
+    """Gate: warm+bright OR washed-bright (lum>140) = not storm. Round-2 was warm daylight; round-3 false OK was cool washed sky lum~220."""
+    lum = float(lum); mean_r = float(mean_r); mean_b = float(mean_b)
+    if lum > 140:
+        return True
+    return lum > 95 and mean_r > mean_b + 5
 
 
 def hero_storm_rgb(path):

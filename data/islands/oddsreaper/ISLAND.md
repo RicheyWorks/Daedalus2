@@ -112,3 +112,7 @@ oddsreaper_turn.py PIE storm path now (1) forces OddsReaperIsland streaming leve
 ## Round-3 storm polish: post-settle re-pin + RGB daylight gate (Oct 12, 2026, 22:51 PT)
 
 Diagnosed on-disk hero_unreal_play.png as still daylightish (mean RGB ~142/148/130, lum ~145, R>B) — the round-2 Play frame before storm fixes land in-editor. oddsreaper_turn.py now (1) re-checks storm_held after the 20s settle and re-forces if slipped, (2) runs hero_storm_rgb on the Play PNG and if daylightish does one storm+5s+reshoot pass. Headless: test_hero_storm_rgb.py + updated test_storm_pin.py. No Unreal touched; storm Play reshoot still owed on next editor grant.
+
+## Round-3 editor turn: storm Play hero (Oct 12, 2026, 23:01 PT)
+
+CLAIM after pythagoras HANDOFF. Bridge died once mid-Play (washed lum~220 false OK); retried as 3c: editor director seeded oddsreaper_storm @ 18.75, PIE force held STORM, Play viewport hero_unreal_play.png mean RGB ~76/65/47 lum~66 stormish. MoodVolume count was 0 (director path). Play stopped; OddsReaperIsland + DaedalusWorld saved; HANDOFF art-master-flex. daylightish_rgb now also rejects lum>140 washed sky.
