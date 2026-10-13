@@ -46,6 +46,18 @@ if ($Run) {
     $log = Join-Path $Jobs "$Id.log"
     Set-Location $Repo
     Set-FullSpeedDefault
+    # Preflight (tools/unreal_preflight): catch the mistakes that cost a whole build slot (a shadowed actor member, a
+    # missing Category, a bare Error, a saved component array) BEFORE the editor is closed. Fails = no build, editor stays up.
+    git pull --ff-only *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+    $py = (Get-Command python -ErrorAction SilentlyContinue)
+    if ($py) {
+        & python (Join-Path $Repo "tools\unreal_preflight\preflight.py") *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+        if ($LASTEXITCODE -ne 0) {
+            "PREFLIGHT FAILED: fix the lines above; the editor was left open" | Out-File -FilePath $log -Append -Encoding utf8
+            "done 2" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
+            exit
+        }
+    }
     for ($attempt = 1; $attempt -le 2; $attempt++) {
         # Wait (up to 5 min) for any other Unreal build to finish instead of colliding with it.
         $until = (Get-Date).AddMinutes(5)

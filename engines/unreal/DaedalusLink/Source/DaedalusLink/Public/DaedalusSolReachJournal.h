@@ -18,35 +18,35 @@ struct FDaedalusSolSnapshot
 {
     GENERATED_BODY()
     // This key must come from the existing authenticated deed service; it grants no ownership.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) FString DeedJournalKey;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Schema = 1;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 CleanWater = 20;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 DirtyWater = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Eggs = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Milk = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) TArray<int32> Herbs = {3,3,3,3,3,3};
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Facts = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 Discoveries = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame) int32 KeeperMeals = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") FString DeedJournalKey;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 Schema = 1;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 CleanWater = 20;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 DirtyWater = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 Eggs = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 Milk = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") TArray<int32> Herbs = {3,3,3,3,3,3};
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 Facts = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 Discoveries = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Daedalus|SolReach") int32 KeeperMeals = 0;
 };
 
 USTRUCT(BlueprintType)
 struct FDaedalusSolEffect
 {
     GENERATED_BODY()
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FName Id;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) double DurationSeconds = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|SolReach") FName Id;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|SolReach") double DurationSeconds = 0;
 };
 
 USTRUCT(BlueprintType)
 struct FDaedalusSolBrewResult
 {
     GENERATED_BODY()
-    UPROPERTY(BlueprintReadOnly) bool bSuccess = false;
-    UPROPERTY(BlueprintReadOnly) FName Effect;
-    UPROPERTY(BlueprintReadOnly) double DurationSeconds = 0;
-    UPROPERTY(BlueprintReadOnly) bool bDoubled = false;
-    UPROPERTY(BlueprintReadOnly) FString Failure;
+    UPROPERTY(BlueprintReadOnly, Category = "Daedalus|SolReach") bool bSuccess = false;
+    UPROPERTY(BlueprintReadOnly, Category = "Daedalus|SolReach") FName Effect;
+    UPROPERTY(BlueprintReadOnly, Category = "Daedalus|SolReach") double DurationSeconds = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "Daedalus|SolReach") bool bDoubled = false;
+    UPROPERTY(BlueprintReadOnly, Category = "Daedalus|SolReach") FString Failure;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusSolJournalChanged, FDaedalusSolSnapshot, Snapshot);

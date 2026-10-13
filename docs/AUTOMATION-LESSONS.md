@@ -249,3 +249,9 @@ to it when something new breaks.
   v1.3.0. Don't reuse a parameter's name in any case.
 - **Python can't spawn into the Play world or add components there** (`begin_deferred_actor_spawn_from_class`
   and `add_component_by_class` aren't exposed). A play-camera capture needs C++ or the restored viewport.
+- **Check the C++ before you close the editor.** Every bad build cost a whole rotation slot: closing the editor,
+  failing the compile, reopening. `tools/unreal_preflight/preflight.py` now runs first in `unreal-job.ps1 -Run`.
+  It catches what bit us on 2026-10-12: an `AActor` member name reused (`Layers`), a `UPROPERTY` with no
+  `Category`, a bare `Error` type, a component array filled by the constructor but not `Transient`, and Python
+  `b_` names or `.get(` on a class. If it fails, the editor stays open and the job exits with code 2.
+  Fixtures plus `preflight_test.py` prove each rule can say no.
