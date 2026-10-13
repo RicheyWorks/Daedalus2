@@ -6,7 +6,7 @@ Built for a short (3 min) slot: almost every mesh is already shipped by the art 
 2. lays a 1024 m basalt ground disc at ARK_ORIGIN (6000000, 2000000, 0) cm
 3. places data/islands/hephaestus/layout.json (hot-spring water as a tinted engine plane), a forge-glow light, a hero camera;
    multipart Mob_ livestock (head/body/legs as separate StaticMeshes) gets every part placed, not just the first
-4. saves ONLY its own sublevel (and the few new assets). Prints PASS/FAIL and returns a dict.
+4. saves its sublevel, then DaedalusWorld (every dirty map package), and reports dirty maps left. Prints PASS/FAIL and returns a dict.
 5. living check (Richey's rule: an island counts only with water, livestock and herbs in Unreal and the map saved):
    counts placed water / livestock / herb actors, fails the turn if any is zero, and posts the counts to the team link.
 Env: HEPH_GLB (glb folder), HEPH_LAYOUT (layout.json)."""
@@ -117,6 +117,19 @@ def open_sublevel():
     return les
 
 
+def save_world():
+    """Referee rule (6:22 PM): every turn ends with DaedalusWorld AND my sublevel saved. The sublevel is current, so
+    save it, then save every dirty map package (DaedalusWorld carries the new streaming entry), and report what is left."""
+    res = {"sublevel": False, "maps": False, "dirty_maps": None}
+    try: res["sublevel"] = bool(unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).save_current_level())
+    except Exception as e: log(f"save sublevel: {e}")
+    try: res["maps"] = bool(unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False))
+    except Exception as e: log(f"save maps: {e}")
+    try: res["dirty_maps"] = [str(k.get_name()) for k in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()]
+    except Exception as e: log(f"dirty map check: {e}")
+    return res
+
+
 def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]
@@ -163,15 +176,16 @@ def run():
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
     cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("Hephaestus Hero Cam"); cam.set_folder_path(FOLDER)
-    les.save_current_level()
+    saved = save_world()
     want = sum(1 for p in lay["placements"] if not p.get("skip"))
     alive = all(living.values())
     ok = placed >= int(0.9 * want) and alive
     log(f"placed={placed}/{want} imported={imported} missing={sorted(missing)} living={living} {'PASS' if ok else 'FAIL'}")
     link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
-              f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; sublevel saved")
+              f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
+              f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
-            "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw]}
+            "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw]}
 
 
 if __name__ == "__main__":
