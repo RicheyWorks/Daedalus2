@@ -117,7 +117,7 @@ function isleMeshes(isle) {
   const look = LOOK[isle.name] || LOOK["Claude Island"];
   const g = look.grass;
   const colours = [g, SAND, DIRT, look.stone, HEART, [g[0] * 1.25 + 0.04, g[1] * 1.18, g[2] * 0.8]];
-  // One merged surface mesh per layer (ADR-062, Minecraft's rule 3): only the visible faces, merged greedily by the
+  // One merged surface mesh per layer (ADR-064, Minecraft's rule 3): only the visible faces, merged greedily by the
   // same core as Unreal (mesh() = DaedalusVoxelIsleCore Mesh(), parity-tested), instead of an instanced cube per block.
   // Far away (rule 5, like Distant Horizons) the coarse meshLod() versions stand in: 4x4 then 8x8 columns per cell.
   const mats = colours.map((col, l) => {

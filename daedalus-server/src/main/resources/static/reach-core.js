@@ -93,7 +93,7 @@ export function build(p, emit) {
 }
 
 /**
- * The isle's visible surface as merged quads, a port of DaedalusVoxelIsleCore.h's Mesh() (ADR-062: one mesh, not a
+ * The isle's visible surface as merged quads, a port of DaedalusVoxelIsleCore.h's Mesh() (ADR-064: one mesh, not a
  * cube per block). Each quad is [layer, normal, plane, u0, u1, v0, v1]. Normal is 0 +X, 1 -X, 2 +Y, 3 -Y, 4 +Z,
  * 5 -Z. The quad lies in its normal axis's plane, at `plane`. The u/v axes are (Y, Z) for X normals, (X, Z) for Y
  * normals and (X, Y) for Z normals.

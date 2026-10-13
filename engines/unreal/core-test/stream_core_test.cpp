@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Island streaming (ADR-062): Minecraft's view distance for islands, checked without Unreal.
+// Island streaming (ADR-064): Minecraft's view distance for islands, checked without Unreal.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public stream_core_test.cpp
 #include "DaedalusStreamCore.h"
 #include <chrono>

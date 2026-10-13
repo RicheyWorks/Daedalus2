@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 #pragma once
-// Minecraft's "view distance" for Daedalus islands (ADR-062), in plain C++ with no Unreal types, tested in core-test.
+// Minecraft's "view distance" for Daedalus islands (ADR-064), in plain C++ with no Unreal types, tested in core-test.
 //
 // Minecraft holds only the chunks near a player in RAM, and loads and unloads them as the player moves. We do the
 // same with whole islands: each island is a streaming sublevel with a known centre and radius.

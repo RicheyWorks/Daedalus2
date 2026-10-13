@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Write Saved/Daedalus/islands.json for UDaedalusStreamer (ADR-062): one row per island sublevel, with its centre and
+"""Write Saved/Daedalus/islands.json for UDaedalusStreamer (ADR-064): one row per island sublevel, with its centre and
 radius taken from its own actors' bounds. That is Minecraft's chunk list, with islands as the chunks.
 
     import daedalus_islands; daedalus_islands.write()            # or write(["/Game/Claude/", "/Game/Buffffff/"])

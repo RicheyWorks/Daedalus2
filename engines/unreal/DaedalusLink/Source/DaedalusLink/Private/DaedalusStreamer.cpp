@@ -15,7 +15,7 @@
 #include "Serialization/JsonSerializer.h"
 
 static TAutoConsoleVariable<int32> CVarStream(TEXT("daedalus.Stream"), 1,
-	TEXT("1 = load island sublevels by distance, like Minecraft's view distance (ADR-062); 0 = leave them alone."));
+	TEXT("1 = load island sublevels by distance, like Minecraft's view distance (ADR-064); 0 = leave them alone."));
 static TAutoConsoleVariable<float> CVarLoadKm(TEXT("daedalus.StreamLoadKm"), 1.5f, TEXT("Load an island within this many km of its edge."));
 static TAutoConsoleVariable<float> CVarUnloadKm(TEXT("daedalus.StreamUnloadKm"), 2.5f, TEXT("Unload an island beyond this many km of its edge."));
 

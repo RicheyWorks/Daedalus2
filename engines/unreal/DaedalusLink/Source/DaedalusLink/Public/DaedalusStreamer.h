@@ -7,7 +7,7 @@
 #include "DaedalusStreamer.generated.h"
 
 /**
- * Minecraft's view distance for islands (ADR-062). In Play and in the game, it loads island sublevels as the player
+ * Minecraft's view distance for islands (ADR-064). In Play and in the game, it loads island sublevels as the player
  * comes near and unloads them as the player leaves, so only nearby islands use RAM. The decisions come from
  * DaedalusStreamCore.h, which is tested in core-test.
  *

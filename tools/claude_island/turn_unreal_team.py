@@ -10,7 +10,7 @@ Steps (each one is timed and reported; a step that fails is recorded and the tur
   3. Fast build from the clean worktree (..\\D2-build at origin/main) through unreal-job.ps1, then wait for the bridge.
      This compiles the merged-mesh isles, LODs, the island streamer, tactics (DTO/DTE/DTR) and the casualty roster.
   4. Re-place Claude Island and the Reach (merged meshes now) and write Saved/Daedalus/islands.json.
-  5. RAM after: the same numbers, so ADR-062 gets its first real measurement.
+  5. RAM after: the same numbers, so ADR-064 gets its first real measurement.
   6. Play scenarios: tactics, wild, orrery. Each is started and polled for up to 90 s.
   7. Astra's three-npc.dto (PR32) applied to a live squad through ApplyOrders, when the file is present.
   8. Stop Play, save only unreal-team's levels, write turn-report.json, post DONE + HANDOFF on the team link.

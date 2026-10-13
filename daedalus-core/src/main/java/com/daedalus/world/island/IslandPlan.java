@@ -32,7 +32,7 @@ public final class IslandPlan {
 
     private final IslandTraits traits;
     /**
-     * The cubes, packed like Minecraft's chunk sections rather than as a map of objects (ADR-062): one long per
+     * The cubes, packed like Minecraft's chunk sections rather than as a map of objects (ADR-064): one long per
      * cube, in ORDER (y, then z, then x, which is the packed numeric order), and one byte for its type. That is
      * 9 bytes per cube instead of about 64 for a TreeMap entry plus its BlockCoordinate (measured: a radius-46
      * land of 225,885 cubes went from 14.5 MB to about 2 MB).

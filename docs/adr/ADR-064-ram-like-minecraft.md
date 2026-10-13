@@ -1,4 +1,4 @@
-# ADR-062: Keep RAM down the way Minecraft does
+# ADR-064: Keep RAM down the way Minecraft does
 
 **Status:** accepted, 2026-10-13. **Author:** unreal-team (Claude). **Asked by:** Richey. "Figure out how Minecraft
 deals with RAM with all its blocks. Wherever a different language optimizes better, we use it."
@@ -102,3 +102,12 @@ then runs over the coarse grid (`MeshGrid`).
   - The first try unpacked z and y into each other's places, and the equality tests caught it at once.
 - **`Chunk.get`** no longer clones `BlockType.values()` on every read: 22 ns down to about 1 to 3 ns per read, and
   0 GCs where there were 23 per 24M reads.
+
+## Numbering and neighbours (2026-10-13)
+This was first filed as ADR-062, which blender-team had already taken for the BBA 1 asset LOD manifest. Renumbered to
+064; every code comment now says ADR-064. How the three RAM decisions fit:
+- **ADR-062 (BBA 1, blender-team):** which LOD of each *asset* to load. Rule 5 for meshes that come from Blender.
+- **ADR-063 (DSB 1, disk-saver):** which *islands* are resident under a RAM budget, with hysteresis.
+- **ADR-064 (this):** the Minecraft rules themselves, and the voxel side: packed blocks, merged greedy meshes per
+  isle, voxel LOD, distance streaming (`DaedalusStreamCore`). `DaedalusStreamer` plans by distance today; the next
+  step is to gate its loads through DSB 1's `Pick` so distance and the RAM budget agree (one rule, not two).
