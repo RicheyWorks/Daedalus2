@@ -124,3 +124,9 @@ Failure states (nothing is lost, the island just slips):
 | Tea duration | 5 min | stacking only across different effects |
 | Raw-water Queasy chance | 40% | cured by Cache Calm / Purifier's Tea |
 | Trough capacity | 10 feed | 1 feed per animal per cycle |
+
+## Editor-turn runbook (disk-saver)
+1. `turn4.ps1`: saves Island_DiskSaver + DaedalusWorld first (ds_save_ue.py), then starts `turn4_bg.ps1` in the background.
+2. `run_canopy.py 330 0.5`: re-imports the island's joined meshes 8 per bridge call (ds_canopy_ue.py). Before each batch it checks free RAM, pausing up to 30 s for it to recover above 0.5 GB. Progress goes to `canopy_progress.json`, so a stopped run resumes where it left off next turn. Log: `canopy_run.log`.
+3. `ds_finish_ue.py`: re-runs material and gameplay hooks for any actor a guard skipped (idempotent), saves both maps and writes `diskSaver_island_v4.png`. Output: `finish_run.out`; `turn4.done` marks the end.
+Safety: our sublevel and /Game/DiskSaver only, overwrite-reimport, no deletes, never starts or stops Play.
