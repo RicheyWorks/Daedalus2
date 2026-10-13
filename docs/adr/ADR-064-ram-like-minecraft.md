@@ -1,4 +1,4 @@
-# ADR-062: Keep RAM down the way Minecraft does
+# ADR-064: Keep RAM down the way Minecraft does
 
 **Status:** accepted, 2026-10-13. **Author:** unreal-team (Claude). **Asked by:** Richey. "Figure out how Minecraft
 deals with RAM with all its blocks. Wherever a different language optimizes better, we use it."
@@ -75,3 +75,44 @@ Before, it drew one instanced cube per visible block.
   faster. Ready time went from 2.0 s to 2.6 s, because meshing happens once on load.
 - **JS heap:** about the same (27 to 30 MB), since cube instances and quads cost similar bytes. The win is GPU work
   per frame. This is the same change ADR-058 made for Unreal, which still waits on an editor build.
+
+## Addendum, 2026-10-13 05:0x: rule 5, far isles are cheap
+
+`MeshLod(P, Step)` in the C++ core turns Step x Step columns into one coarse cell. A cell is land when a quarter of
+its columns are; its top is the highest top in the cell and its bottom the lowest bottom. The same greedy mesher
+then runs over the coarse grid (`MeshGrid`).
+- **Claude Island:** 53,579 quads in full, 9,929 at step 4, 3,406 at step 8.
+- **Tests:** the outline stays within one cell, and the summit and the deepest rock are kept. `core-test` passes
+  25/25, and the full mesh is byte-identical to before.
+- **JS port:** `meshLod()` matches C++ for all 14 LOD rows; `reach_parity.mjs` passes 29/29.
+- **Web:** `/reach.html` uses `THREE.LOD` per isle: full under 700 m, step 4 under 1.6 km, step 8 beyond. At an
+  overview distance the picture is unchanged, and SwiftShader frames went from 5.52 to 6.01 fps, rising to 4.80 →
+  6.68 fps with most isles far away.
+- **Held:** the same swap for `ADaedalusVoxelIsle` in Unreal, by distance, waits for an editor build.
+
+## Addendum, 2026-10-13: rule 1 for generated plans, and the hottest read
+
+- **`IslandPlan` packs its cubes** like a chunk section: one long per cube (y, z and x in 21 bits each, so the
+  numeric order is the generator's ORDER) plus one type byte. `blocks()` is a read-only map view: binary search for
+  `get`, entries made as you iterate.
+  - A radius-46 land went from 14.5 MB to 2.3 MB retained, from 64 to 10 bytes per cube.
+  - The constructor's extra TreeMap copy is gone.
+  - Golden digests are unchanged. daedalus-core passes 635 tests with checkstyle and SpotBugs, and the island and
+    world server tests are green.
+  - The first try unpacked z and y into each other's places, and the equality tests caught it at once.
+- **`Chunk.get`** no longer clones `BlockType.values()` on every read: 22 ns down to about 1 to 3 ns per read, and
+  0 GCs where there were 23 per 24M reads.
+
+## Numbering and neighbours (2026-10-13)
+This was first filed as ADR-062, which blender-team had already taken for the BBA 1 asset LOD manifest. Renumbered to
+064; every code comment now says ADR-064. How the three RAM decisions fit:
+- **ADR-062 (BBA 1, blender-team):** which LOD of each *asset* to load. Rule 5 for meshes that come from Blender.
+- **ADR-063 (DSB 1, disk-saver):** which *islands* are resident under a RAM budget, with hysteresis.
+- **ADR-064 (this):** the Minecraft rules themselves, and the voxel side: packed blocks, merged greedy meshes per
+  isle, voxel LOD, distance streaming (`DaedalusStreamCore`). `DaedalusStreamer` plans by distance today; the next
+  step is to gate its loads through DSB 1's `Pick` so distance and the RAM budget agree (one rule, not two).
+- **Done (same day):** `DaedalusStreamCore::Plan` takes `Settings.RamBudgetKiB` and each island's `RamKiB` (DSB 1's
+  `ram`), and applies ADR-063's rule: what stays resident counts first, then loads nearest first while they fit; one
+  that doesn't fit is skipped, never half-loaded, and a smaller farther one may still fit. Always islands load
+  regardless. `daedalus.StreamRamBudgetMiB` (0 = off) turns it on in game; `islands.json` rows may carry `ram_kib`.
+  stream_core_test 20/20; 10,000 islands still plan in ~1.4 ms (hash sets, not a scan per step).

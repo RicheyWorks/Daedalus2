@@ -15,9 +15,11 @@
 #include "Serialization/JsonSerializer.h"
 
 static TAutoConsoleVariable<int32> CVarStream(TEXT("daedalus.Stream"), 1,
-	TEXT("1 = load island sublevels by distance, like Minecraft's view distance (ADR-062); 0 = leave them alone."));
+	TEXT("1 = load island sublevels by distance, like Minecraft's view distance (ADR-064); 0 = leave them alone."));
 static TAutoConsoleVariable<float> CVarLoadKm(TEXT("daedalus.StreamLoadKm"), 1.5f, TEXT("Load an island within this many km of its edge."));
 static TAutoConsoleVariable<float> CVarUnloadKm(TEXT("daedalus.StreamUnloadKm"), 2.5f, TEXT("Unload an island beyond this many km of its edge."));
+static TAutoConsoleVariable<float> CVarBudgetMiB(TEXT("daedalus.StreamRamBudgetMiB"), 0.f,
+	TEXT("0 = no budget; else skip island loads that would pass this many MiB resident (ADR-063 DSB rule, ram_kib in islands.json)."));
 
 namespace
 {
@@ -69,6 +71,8 @@ int32 UDaedalusStreamer::Reload()
 		I.Centre = FVector((*O)->GetNumberField(TEXT("x")), (*O)->GetNumberField(TEXT("y")), (*O)->GetNumberField(TEXT("z")));
 		I.Radius = FMath::Max(0.0, (*O)->GetNumberField(TEXT("radius")));
 		(*O)->TryGetBoolField(TEXT("always"), I.bAlways);
+		double Ram = 0;
+		if ((*O)->TryGetNumberField(TEXT("ram_kib"), Ram)) I.RamKiB = FMath::Max(0.0, Ram);
 		Isles.Add(I);
 	}
 	return Isles.Num();
@@ -89,10 +93,11 @@ void UDaedalusStreamer::Tick(float DeltaTime)
 	std::vector<daedalus::stream::Island> In;
 	for (const FIsle& I : Isles)
 		if (ULevelStreaming* const* L = Levels.Find(I.Package))
-			In.push_back({TCHAR_TO_UTF8(*I.Package), I.Centre.X, I.Centre.Y, I.Centre.Z, I.Radius, (*L)->ShouldBeLoaded(), I.bAlways});
+			In.push_back({TCHAR_TO_UTF8(*I.Package), I.Centre.X, I.Centre.Y, I.Centre.Z, I.Radius, (*L)->ShouldBeLoaded(), I.bAlways, I.RamKiB});
 	daedalus::stream::Settings S;
 	S.LoadDistance = CVarLoadKm.GetValueOnGameThread() * 100000.0;
 	S.UnloadDistance = CVarUnloadKm.GetValueOnGameThread() * 100000.0;
+	S.RamBudgetKiB = FMath::Max(0.f, CVarBudgetMiB.GetValueOnGameThread()) * 1024.0;
 	const FVector P = Player->GetActorLocation();
 	for (const daedalus::stream::Step& Step : daedalus::stream::Plan(In, P.X, P.Y, P.Z, S))
 	{

@@ -116,6 +116,28 @@ int main(int argc, char** argv)
 		Check("Claude Island's mesh is under a tenth of the cube triangles", static_cast<long>(Q.size()) * 2 * 10 < Cubes * 12);
 	}
 
+	// --- far-away LODs (ADR-062 rule 5)
+	{
+		const std::vector<Quad> Full = Mesh(Set[0]), L4 = MeshLod(Set[0], 4), L8 = MeshLod(Set[0], 8);
+		std::printf("Claude Island LOD: full %zu quads, step 4 %zu, step 8 %zu\n", Full.size(), L4.size(), L8.size());
+		Check("LOD step 1 is the full mesh", MeshLod(Set[0], 1).size() == Full.size());
+		Check("LOD 4 is under a quarter of the full mesh", L4.size() * 4 < Full.size());
+		Check("LOD 8 is smaller again", L8.size() < L4.size());
+		auto Box = [](const std::vector<Quad>& Q, int& X0, int& X1, int& Z0, int& Z1) {
+			X0 = Z0 = 1 << 30; X1 = Z1 = -(1 << 30);
+			for (const Quad& q : Q)
+				if (q.Normal >= 4) { X0 = std::min(X0, q.U0); X1 = std::max(X1, q.U1); Z0 = std::min(Z0, q.Plane); Z1 = std::max(Z1, q.Plane); }
+		};
+		int A0, A1, AZ0, AZ1, B0, B1, BZ0, BZ1;
+		Box(Full, A0, A1, AZ0, AZ1);
+		Box(L4, B0, B1, BZ0, BZ1);
+		Check("LOD 4 keeps the isle's width within a cell", std::abs(A0 - B0) <= 4 && std::abs(A1 - B1) <= 4);
+		Check("LOD 4 keeps the summit and the deepest rock", AZ1 == BZ1 && AZ0 == BZ0);
+		bool Aligned = true;
+		for (const Quad& q : L4) Aligned = Aligned && q.U0 % 4 == 0 && q.U1 % 4 == 0 && (q.Normal >= 4 ? (q.V0 % 4 == 0 && q.V1 % 4 == 0) : q.Plane % 4 == 0);
+		Check("LOD 4 quads sit on the 4-cube grid", Aligned);
+	}
+
 	// --- the parity file for the Java port
 	if (Out)
 	{
@@ -148,6 +170,15 @@ int main(int argc, char** argv)
 				for (int v : {q.Layer, q.Normal, q.Plane, q.U0, q.U1, q.V0, q.V1}) { H ^= static_cast<uint32_t>(v); H *= 1099511628211ull; }
 			std::fprintf(M, "%d %d %d %d %d %d %d | %zu %llu\n", S.Seed, S.Radius, S.SummitHeight, S.Depth, S.PondX, S.PondY, S.PondRadius,
 				Q.size(), static_cast<unsigned long long>(H));
+			for (int Step : {4, 8})
+			{
+				const std::vector<Quad> QL = MeshLod(S, Step);
+				uint64_t HL = 14695981039346656037ull;
+				for (const Quad& q : QL)
+					for (int v : {q.Layer, q.Normal, q.Plane, q.U0, q.U1, q.V0, q.V1}) { HL ^= static_cast<uint32_t>(v); HL *= 1099511628211ull; }
+				std::fprintf(M, "lod%d %d %d %d %d %d %d %d | %zu %llu\n", Step, S.Seed, S.Radius, S.SummitHeight, S.Depth, S.PondX, S.PondY,
+					S.PondRadius, QL.size(), static_cast<unsigned long long>(HL));
+			}
 		}
 		std::fclose(M);
 		std::printf("wrote %s\n", MeshOut.c_str());

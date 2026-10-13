@@ -157,26 +157,15 @@ struct Quad
  * - Sides: the faces of a column not covered by its neighbour's [bottom, top], in runs of one layer, merged along
  *   the wall with the next column when they line up.
  */
-inline std::vector<Quad> Mesh(const Params& P)
+/** The greedy mesher over any column grid [-N, N]^2: Tops[I] (Off = none), Bots[I], LayerAt(X, Y, Z). Output
+ * coordinates across (X, Y) are multiplied by Scale (1 for the full isle, Step for a far-away LOD); heights are not. */
+template <typename LayerFn>
+inline std::vector<Quad> MeshGrid(int N, const std::vector<int>& Tops, const std::vector<int>& Bots, LayerFn&& LayerAt, int Scale)
 {
-	const int N = P.Radius + 2, W = 2 * N + 1;
-	std::vector<int> Tops(static_cast<size_t>(W) * W), Bots(static_cast<size_t>(W) * W);
-	std::vector<char> Sh(static_cast<size_t>(W) * W, 0);
-	for (int Y = -N; Y <= N; ++Y)
-		for (int X = -N; X <= N; ++X)
-		{
-			const int I = (Y + N) * W + (X + N);
-			Tops[I] = ColumnTop(P, X, Y);
-			Bots[I] = Tops[I] == Off ? 0 : ColumnBottom(P, X, Y);
-		}
+	const int W = 2 * N + 1;
 	auto Idx = [&](int X, int Y) { return (Y + N) * W + (X + N); };
 	auto Top = [&](int X, int Y) { return (X < -N || X > N || Y < -N || Y > N) ? Off : Tops[Idx(X, Y)]; };
 	auto Bot = [&](int X, int Y) { return (X < -N || X > N || Y < -N || Y > N) ? 0 : Bots[Idx(X, Y)]; };
-	for (int Y = -N; Y <= N; ++Y)
-		for (int X = -N; X <= N; ++X)
-			if (Top(X, Y) != Off) Sh[Idx(X, Y)] = Shore(P, X, Y) ? 1 : 0;
-	auto LayerAt = [&](int X, int Y, int Z) { return LayerOf(P, X, Y, Z, Top(X, Y), Bot(X, Y), Sh[Idx(X, Y)] != 0); };
-
 	std::vector<Quad> Out;
 	// --- tops (Normal 4) and bottoms (Normal 5): greedy rectangles over (height, layer)
 	for (int Face = 4; Face <= 5; ++Face)
@@ -208,7 +197,7 @@ inline std::vector<Quad> Mesh(const Params& P)
 				}
 				for (int AY = Y; AY <= Y1; ++AY)
 					for (int AX = X; AX <= X1; ++AX) Done[Idx(AX, AY)] = 1;
-				Out.push_back({L, Face, Face == 4 ? H + 1 : H, X, X1 + 1, Y, Y1 + 1});
+				Out.push_back({L, Face, Face == 4 ? H + 1 : H, X * Scale, (X1 + 1) * Scale, Y * Scale, (Y1 + 1) * Scale});
 			}
 	}
 	// --- sides: per wall line, per z, merge runs along the wall; each cell is one exposed face (X, Y, Z, layer)
@@ -261,11 +250,77 @@ inline std::vector<Quad> Mesh(const Params& P)
 					for (int AZ = Z; AZ <= Z1; ++AZ)
 						for (int A = K; A <= K1; ++A) Face[AZ * W + A] = -1;
 					const int Plane = (D == 0 || D == 2) ? Line + 1 : Line;   // a +X face sits on the cube's far side
-					Out.push_back({L, D, Plane, K - N, K1 + 1 - N, Z + ZMin, Z1 + 1 + ZMin});
+					Out.push_back({L, D, Plane * Scale, (K - N) * Scale, (K1 + 1 - N) * Scale, Z + ZMin, Z1 + 1 + ZMin});
 				}
 		}
 	}
 	return Out;
+}
+
+inline std::vector<Quad> Mesh(const Params& P)
+{
+	const int N = P.Radius + 2, W = 2 * N + 1;
+	std::vector<int> Tops(static_cast<size_t>(W) * W), Bots(static_cast<size_t>(W) * W);
+	std::vector<char> Sh(static_cast<size_t>(W) * W, 0);
+	for (int Y = -N; Y <= N; ++Y)
+		for (int X = -N; X <= N; ++X)
+		{
+			const int I = (Y + N) * W + (X + N);
+			Tops[I] = ColumnTop(P, X, Y);
+			Bots[I] = Tops[I] == Off ? 0 : ColumnBottom(P, X, Y);
+			if (Tops[I] != Off) Sh[I] = Shore(P, X, Y) ? 1 : 0;
+		}
+	auto LayerAt = [&](int X, int Y, int Z) {
+		const int I = (Y + N) * W + (X + N);
+		return LayerOf(P, X, Y, Z, Tops[I], Bots[I], Sh[I] != 0);
+	};
+	return MeshGrid(N, Tops, Bots, LayerAt, 1);
+}
+
+inline int FloorDivI(int A, int B) { return (A >= 0) ? A / B : -((-A + B - 1) / B); }
+
+/**
+ * A far-away version of the isle (Minecraft rule 5, like Distant Horizons): Step x Step columns become one coarse
+ * column. A cell counts as land when at least a quarter of its columns are land, so the outline doesn't shrink. Its
+ * top is the highest top in the cell, and its bottom the lowest bottom. Its top face takes the layer of the column
+ * that reached that height. It is meshed by the same greedy mesher, so Step 4 has about 1/16 of the top quads.
+ */
+inline std::vector<Quad> MeshLod(const Params& P, int Step)
+{
+	if (Step <= 1) return Mesh(P);
+	const int Fine = P.Radius + 2;
+	const int N = FloorDivI(Fine, Step) + 1, W = 2 * N + 1;
+	std::vector<int> Tops(static_cast<size_t>(W) * W, Off), Bots(static_cast<size_t>(W) * W, 0);
+	std::vector<int> RepX(static_cast<size_t>(W) * W, 0), RepY(static_cast<size_t>(W) * W, 0);
+	std::vector<char> RepShore(static_cast<size_t>(W) * W, 0);
+	for (int CY = -N; CY <= N; ++CY)
+		for (int CX = -N; CX <= N; ++CX)
+		{
+			int Land = 0, Hi = Off, Lo = 0, BX = 0, BY = 0;
+			for (int Y = CY * Step; Y < (CY + 1) * Step; ++Y)
+				for (int X = CX * Step; X < (CX + 1) * Step; ++X)
+				{
+					if (X < -Fine || X > Fine || Y < -Fine || Y > Fine) continue;
+					const int T = ColumnTop(P, X, Y);
+					if (T == Off) continue;
+					const int B = ColumnBottom(P, X, Y);
+					if (Land == 0 || T > Hi) { Hi = T; BX = X; BY = Y; }
+					Lo = Land == 0 ? B : (B < Lo ? B : Lo);
+					++Land;
+				}
+			if (Land * 4 < Step * Step) continue;
+			const int I = (CY + N) * W + (CX + N);
+			Tops[I] = Hi;
+			Bots[I] = Lo;
+			RepX[I] = BX;
+			RepY[I] = BY;
+			RepShore[I] = Shore(P, BX, BY) ? 1 : 0;
+		}
+	auto LayerAt = [&](int CX, int CY, int Z) {
+		const int I = (CY + N) * W + (CX + N);
+		return LayerOf(P, RepX[I], RepY[I], Z, Tops[I], Bots[I], RepShore[I] != 0);
+	};
+	return MeshGrid(N, Tops, Bots, LayerAt, Step);
 }
 
 }}  // namespace daedalus::isle
