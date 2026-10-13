@@ -172,4 +172,20 @@ class ChunkPaletteTest {
             assertArrayEquals(b.ordinals(), Chunk.ofRuns(b.runs()));
         }
     }
+
+    @Test
+    void aWorldReportsItsChunkStorage() {
+        World w = new World(new WorldId("ram"));
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                w.place(new BlockCoordinate(x, 0, z), BlockType.STONE);
+            }
+        }
+        w.place(new BlockCoordinate(40, 0, 0), BlockType.STONE);
+        World.Storage s = w.storage();
+        assertEquals(2, s.chunks());
+        assertEquals(2, s.nibble());
+        assertEquals(0, s.uniform() + s.dense());
+        assertTrue(s.bytes() < s.denseBytes(), s.bytes() + " vs " + s.denseBytes());
+    }
 }

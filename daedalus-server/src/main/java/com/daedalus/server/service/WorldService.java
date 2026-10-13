@@ -225,6 +225,12 @@ public class WorldService {
      * A private copy of the world taken under the world lock (ADR-032): an exporter can mesh it for
      * seconds while players keep building, and still see one consistent revision.
      */
+    /** RAM held by this world's cubes (ADR-064), or null when it is not this service's world. */
+    public World.Storage storage(String id) {
+        World live = require(id);
+        return live == null ? null : live.storage();
+    }
+
     public World copy(String id) {
         World live = require(id);
         if (live == null) {

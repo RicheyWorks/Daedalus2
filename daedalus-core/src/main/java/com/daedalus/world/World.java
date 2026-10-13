@@ -192,6 +192,27 @@ public final class World {
         }
     }
 
+    /** What this world's cubes hold in RAM (ADR-064): chunks by storage form and their bytes. */
+    public record Storage(int chunks, long bytes, int uniform, int nibble, int dense) {
+        /** What the same chunks held before palettes: 4 KiB of cubes each plus the array header. */
+        public long denseBytes() {
+            return (long) chunks * (Chunk.VOLUME + 16);
+        }
+    }
+
+    /** Chunk storage now: read without the lock (a chunk widening mid-count only shifts it by one). */
+    public Storage storage() {
+        int n = 0;
+        long bytes = 0;
+        int[] byBits = new int[9];
+        for (Chunk c : chunks.values()) {
+            n++;
+            bytes += c.storageBytes();
+            byBits[c.bitsPerBlock()]++;
+        }
+        return new Storage(n, bytes, byBits[0], byBits[4], byBits[8]);
+    }
+
     public int chunkCount() {
         return chunks.size();
     }

@@ -139,6 +139,8 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/arks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/worlds", Posture.PUBLIC);
         EXPECTED.put("POST /api/v1/worlds", Posture.AUTHENTICATED);
+        // Operator view of RAM per world (ADR-064): not drive-by readable.
+        EXPECTED.put("GET /api/v1/worlds/ram", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/world/" + ID + "/gates", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/package", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/package/manifest", Posture.PUBLIC);
