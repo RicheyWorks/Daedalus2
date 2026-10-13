@@ -424,630 +424,630 @@
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_CacheLeaf_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_BufferBloom_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_OverclockThorn_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_DefragMoss_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_SwapRoot_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ParityPetal_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ChecksumClover_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_LatencyLily_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ZipVine_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S1_V1",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 48,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S1_V2",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 60,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.31
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S1_V3",
   "kind": "prop",
   "size": "~0.25 m",
   "tris": 72,
-  "max_dim_m": 0.16
+  "max_dim_m": 0.34
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S2_V1",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 60,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S2_V2",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 72,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S2_V3",
   "kind": "prop",
   "size": "~0.45 m",
   "tris": 84,
-  "max_dim_m": 0.35
+  "max_dim_m": 0.45
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S3_V1",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S3_V2",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 84,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Herb_ArchiveSage_S3_V3",
   "kind": "prop",
   "size": "~0.70 m",
   "tris": 96,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.7
  },
  {
   "asset": "Prop_DS_Rock_00",
@@ -1334,140 +1334,140 @@
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_01",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.5
+  "max_dim_m": 1.62
  },
  {
   "asset": "Prop_DS_Fence_Seg_02",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_03",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.5
+  "max_dim_m": 2.62
  },
  {
   "asset": "Prop_DS_Fence_Seg_04",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_05",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.5
+  "max_dim_m": 1.62
  },
  {
   "asset": "Prop_DS_Fence_Seg_06",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_07",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.5
+  "max_dim_m": 2.62
  },
  {
   "asset": "Prop_DS_Fence_Seg_08",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_09",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.5
+  "max_dim_m": 1.62
  },
  {
   "asset": "Prop_DS_Fence_Seg_10",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.12
  },
  {
   "asset": "Prop_DS_Fence_Seg_11",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.5
+  "max_dim_m": 2.62
  },
  {
   "asset": "Prop_DS_Fence_Gate_12",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.12
  },
  {
   "asset": "Prop_DS_Fence_Gate_13",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.5
+  "max_dim_m": 1.62
  },
  {
   "asset": "Prop_DS_Fence_Gate_14",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.12
  },
  {
   "asset": "Prop_DS_Fence_Gate_15",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.5
+  "max_dim_m": 2.62
  },
  {
   "asset": "Prop_DS_Fence_Gate_16",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.12
  },
  {
   "asset": "Prop_DS_Fence_Gate_17",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 1.5
+  "max_dim_m": 1.62
  },
  {
   "asset": "Prop_DS_Fence_Gate_18",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.12
  },
  {
   "asset": "Prop_DS_Fence_Gate_19",
   "kind": "prop",
   "size": "~1 m",
   "tris": 48,
-  "max_dim_m": 2.5
+  "max_dim_m": 2.62
  },
  {
   "asset": "Item_DS_Food_Egg_V0",
@@ -1754,350 +1754,350 @@
   "kind": "mob",
   "size": "~0.3 m",
   "tris": 72,
-  "max_dim_m": 0.3
+  "max_dim_m": 0.38
  },
  {
   "asset": "Mob_DS_ByteHen_Young1",
   "kind": "mob",
   "size": "~0.3 m",
   "tris": 72,
-  "max_dim_m": 0.3
+  "max_dim_m": 0.38
  },
  {
   "asset": "Mob_DS_ByteHen_Adult2",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.55
+  "max_dim_m": 0.7
  },
  {
   "asset": "Mob_DS_ByteHen_Adult3",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.57
+  "max_dim_m": 0.73
  },
  {
   "asset": "Mob_DS_ByteHen_Adult4",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.77
  },
  {
   "asset": "Mob_DS_ByteHen_Adult5",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.62
+  "max_dim_m": 0.8
  },
  {
   "asset": "Mob_DS_MossGoat_Young0",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.77
  },
  {
   "asset": "Mob_DS_MossGoat_Young1",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.6
+  "max_dim_m": 0.77
  },
  {
   "asset": "Mob_DS_MossGoat_Adult2",
   "kind": "mob",
   "size": "~1.1 m",
   "tris": 72,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.4
  },
  {
   "asset": "Mob_DS_MossGoat_Adult3",
   "kind": "mob",
   "size": "~1.1 m",
   "tris": 72,
-  "max_dim_m": 1.15
+  "max_dim_m": 1.47
  },
  {
   "asset": "Mob_DS_MossGoat_Adult4",
   "kind": "mob",
   "size": "~1.2 m",
   "tris": 72,
-  "max_dim_m": 1.2
+  "max_dim_m": 1.53
  },
  {
   "asset": "Mob_DS_MossGoat_Adult5",
   "kind": "mob",
   "size": "~1.2 m",
   "tris": 72,
-  "max_dim_m": 1.25
+  "max_dim_m": 1.59
  },
  {
   "asset": "Mob_DS_TidePig_Young0",
   "kind": "mob",
   "size": "~0.5 m",
   "tris": 72,
-  "max_dim_m": 0.48
+  "max_dim_m": 0.61
  },
  {
   "asset": "Mob_DS_TidePig_Young1",
   "kind": "mob",
   "size": "~0.5 m",
   "tris": 72,
-  "max_dim_m": 0.48
+  "max_dim_m": 0.61
  },
  {
   "asset": "Mob_DS_TidePig_Adult2",
   "kind": "mob",
   "size": "~0.9 m",
   "tris": 72,
-  "max_dim_m": 0.88
+  "max_dim_m": 1.12
  },
  {
   "asset": "Mob_DS_TidePig_Adult3",
   "kind": "mob",
   "size": "~0.9 m",
   "tris": 72,
-  "max_dim_m": 0.92
+  "max_dim_m": 1.17
  },
  {
   "asset": "Mob_DS_TidePig_Adult4",
   "kind": "mob",
   "size": "~1.0 m",
   "tris": 72,
-  "max_dim_m": 0.96
+  "max_dim_m": 1.22
  },
  {
   "asset": "Mob_DS_TidePig_Adult5",
   "kind": "mob",
   "size": "~1.0 m",
   "tris": 72,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.28
  },
  {
   "asset": "Mob_DS_CacheCow_Young0",
   "kind": "mob",
   "size": "~1.0 m",
   "tris": 72,
-  "max_dim_m": 0.96
+  "max_dim_m": 1.22
  },
  {
   "asset": "Mob_DS_CacheCow_Young1",
   "kind": "mob",
   "size": "~1.0 m",
   "tris": 72,
-  "max_dim_m": 0.96
+  "max_dim_m": 1.22
  },
  {
   "asset": "Mob_DS_CacheCow_Adult2",
   "kind": "mob",
   "size": "~1.8 m",
   "tris": 72,
-  "max_dim_m": 1.76
+  "max_dim_m": 2.24
  },
  {
   "asset": "Mob_DS_CacheCow_Adult3",
   "kind": "mob",
   "size": "~1.8 m",
   "tris": 72,
-  "max_dim_m": 1.84
+  "max_dim_m": 2.35
  },
  {
   "asset": "Mob_DS_CacheCow_Adult4",
   "kind": "mob",
   "size": "~1.9 m",
   "tris": 72,
-  "max_dim_m": 1.92
+  "max_dim_m": 2.45
  },
  {
   "asset": "Mob_DS_CacheCow_Adult5",
   "kind": "mob",
   "size": "~2.0 m",
   "tris": 72,
-  "max_dim_m": 2.0
+  "max_dim_m": 2.55
  },
  {
   "asset": "Mob_DS_DriftDuck_Young0",
   "kind": "mob",
   "size": "~0.3 m",
   "tris": 72,
-  "max_dim_m": 0.27
+  "max_dim_m": 0.34
  },
  {
   "asset": "Mob_DS_DriftDuck_Young1",
   "kind": "mob",
   "size": "~0.3 m",
   "tris": 72,
-  "max_dim_m": 0.27
+  "max_dim_m": 0.34
  },
  {
   "asset": "Mob_DS_DriftDuck_Adult2",
   "kind": "mob",
   "size": "~0.5 m",
   "tris": 72,
-  "max_dim_m": 0.5
+  "max_dim_m": 0.63
  },
  {
   "asset": "Mob_DS_DriftDuck_Adult3",
   "kind": "mob",
   "size": "~0.5 m",
   "tris": 72,
-  "max_dim_m": 0.52
+  "max_dim_m": 0.66
  },
  {
   "asset": "Mob_DS_DriftDuck_Adult4",
   "kind": "mob",
   "size": "~0.5 m",
   "tris": 72,
-  "max_dim_m": 0.54
+  "max_dim_m": 0.69
  },
  {
   "asset": "Mob_DS_DriftDuck_Adult5",
   "kind": "mob",
   "size": "~0.6 m",
   "tris": 72,
-  "max_dim_m": 0.56
+  "max_dim_m": 0.72
  },
  {
   "asset": "Prop_DS_Water_Well_V0",
   "kind": "prop",
   "size": "~1 m",
   "tris": 60,
-  "max_dim_m": 1.6
+  "max_dim_m": 2.55
  },
  {
   "asset": "Prop_DS_Water_Well_V1",
   "kind": "prop",
   "size": "~1 m",
   "tris": 60,
-  "max_dim_m": 1.6
+  "max_dim_m": 2.55
  },
  {
   "asset": "Prop_DS_Water_Well_V2",
   "kind": "prop",
   "size": "~1 m",
   "tris": 60,
-  "max_dim_m": 1.6
+  "max_dim_m": 2.55
  },
  {
   "asset": "Prop_DS_Water_Well_V3",
   "kind": "prop",
   "size": "~1 m",
   "tris": 60,
-  "max_dim_m": 1.6
+  "max_dim_m": 2.55
  },
  {
   "asset": "Prop_DS_Water_Well_V4",
   "kind": "prop",
   "size": "~1 m",
   "tris": 60,
-  "max_dim_m": 1.6
+  "max_dim_m": 2.55
  },
  {
   "asset": "Prop_DS_Water_CisternBarrel_V0",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.13
  },
  {
   "asset": "Prop_DS_Water_CisternBarrel_V1",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.13
  },
  {
   "asset": "Prop_DS_Water_CisternBarrel_V2",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.13
  },
  {
   "asset": "Prop_DS_Water_CisternBarrel_V3",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.13
  },
  {
   "asset": "Prop_DS_Water_CisternBarrel_V4",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 1.1
+  "max_dim_m": 1.13
  },
  {
   "asset": "Prop_DS_Water_FilterBarrel_V0",
   "kind": "prop",
   "size": "~1 m",
   "tris": 36,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.2
  },
  {
   "asset": "Prop_DS_Water_FilterBarrel_V1",
   "kind": "prop",
   "size": "~1 m",
   "tris": 36,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.2
  },
  {
   "asset": "Prop_DS_Water_FilterBarrel_V2",
   "kind": "prop",
   "size": "~1 m",
   "tris": 36,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.2
  },
  {
   "asset": "Prop_DS_Water_FilterBarrel_V3",
   "kind": "prop",
   "size": "~1 m",
   "tris": 36,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.2
  },
  {
   "asset": "Prop_DS_Water_FilterBarrel_V4",
   "kind": "prop",
   "size": "~1 m",
   "tris": 36,
-  "max_dim_m": 1.0
+  "max_dim_m": 1.2
  },
  {
   "asset": "Prop_DS_Water_Canteen_V0",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 0.24
+  "max_dim_m": 0.29
  },
  {
   "asset": "Prop_DS_Water_Canteen_V1",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 0.24
+  "max_dim_m": 0.29
  },
  {
   "asset": "Prop_DS_Water_Canteen_V2",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 0.24
+  "max_dim_m": 0.29
  },
  {
   "asset": "Prop_DS_Water_Canteen_V3",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 0.24
+  "max_dim_m": 0.29
  },
  {
   "asset": "Prop_DS_Water_Canteen_V4",
   "kind": "prop",
   "size": "~1 m",
   "tris": 24,
-  "max_dim_m": 0.24
+  "max_dim_m": 0.29
  },
  {
   "asset": "Prop_DS_Water_Bucket_V0",
@@ -2664,280 +2664,280 @@
   "kind": "prop",
   "size": "~2.0 m",
   "tris": 24,
-  "max_dim_m": 1.2
+  "max_dim_m": 2.0
  },
  {
   "asset": "Prop_DS_Tree_01",
   "kind": "prop",
   "size": "~2.2 m",
   "tris": 36,
-  "max_dim_m": 1.35
+  "max_dim_m": 2.59
  },
  {
   "asset": "Prop_DS_Tree_02",
   "kind": "prop",
   "size": "~2.5 m",
   "tris": 24,
-  "max_dim_m": 1.5
+  "max_dim_m": 2.5
  },
  {
   "asset": "Prop_DS_Tree_03",
   "kind": "prop",
   "size": "~2.8 m",
   "tris": 36,
-  "max_dim_m": 1.65
+  "max_dim_m": 3.16
  },
  {
   "asset": "Prop_DS_Tree_04",
   "kind": "prop",
   "size": "~3.0 m",
   "tris": 24,
-  "max_dim_m": 1.8
+  "max_dim_m": 3.0
  },
  {
   "asset": "Prop_DS_Tree_05",
   "kind": "prop",
   "size": "~3.2 m",
   "tris": 36,
-  "max_dim_m": 1.95
+  "max_dim_m": 3.74
  },
  {
   "asset": "Prop_DS_Tree_06",
   "kind": "prop",
   "size": "~3.5 m",
   "tris": 24,
-  "max_dim_m": 2.1
+  "max_dim_m": 3.5
  },
  {
   "asset": "Prop_DS_Tree_07",
   "kind": "prop",
   "size": "~3.8 m",
   "tris": 36,
-  "max_dim_m": 2.25
+  "max_dim_m": 4.31
  },
  {
   "asset": "Prop_DS_Tree_08",
   "kind": "prop",
   "size": "~4.0 m",
   "tris": 24,
-  "max_dim_m": 2.4
+  "max_dim_m": 4.0
  },
  {
   "asset": "Prop_DS_Tree_09",
   "kind": "prop",
   "size": "~4.2 m",
   "tris": 36,
-  "max_dim_m": 2.55
+  "max_dim_m": 4.89
  },
  {
   "asset": "Prop_DS_Tree_10",
   "kind": "prop",
   "size": "~4.5 m",
   "tris": 24,
-  "max_dim_m": 2.7
+  "max_dim_m": 4.5
  },
  {
   "asset": "Prop_DS_Tree_11",
   "kind": "prop",
   "size": "~4.8 m",
   "tris": 36,
-  "max_dim_m": 2.85
+  "max_dim_m": 5.46
  },
  {
   "asset": "Prop_DS_Tree_12",
   "kind": "prop",
   "size": "~5.0 m",
   "tris": 24,
-  "max_dim_m": 3.0
+  "max_dim_m": 5.0
  },
  {
   "asset": "Prop_DS_Tree_13",
   "kind": "prop",
   "size": "~5.2 m",
   "tris": 36,
-  "max_dim_m": 3.15
+  "max_dim_m": 6.04
  },
  {
   "asset": "Prop_DS_Tree_14",
   "kind": "prop",
   "size": "~5.5 m",
   "tris": 24,
-  "max_dim_m": 3.3
+  "max_dim_m": 5.5
  },
  {
   "asset": "Prop_DS_Tree_15",
   "kind": "prop",
   "size": "~5.8 m",
   "tris": 36,
-  "max_dim_m": 3.45
+  "max_dim_m": 6.61
  },
  {
   "asset": "Prop_DS_Tree_16",
   "kind": "prop",
   "size": "~6.0 m",
   "tris": 24,
-  "max_dim_m": 3.6
+  "max_dim_m": 6.0
  },
  {
   "asset": "Prop_DS_Tree_17",
   "kind": "prop",
   "size": "~6.2 m",
   "tris": 36,
-  "max_dim_m": 3.75
+  "max_dim_m": 7.19
  },
  {
   "asset": "Prop_DS_Tree_18",
   "kind": "prop",
   "size": "~6.5 m",
   "tris": 24,
-  "max_dim_m": 3.9
+  "max_dim_m": 6.5
  },
  {
   "asset": "Prop_DS_Tree_19",
   "kind": "prop",
   "size": "~6.8 m",
   "tris": 36,
-  "max_dim_m": 4.05
+  "max_dim_m": 7.76
  },
  {
   "asset": "Prop_DS_Tree_20",
   "kind": "prop",
   "size": "~7.0 m",
   "tris": 24,
-  "max_dim_m": 4.2
+  "max_dim_m": 7.0
  },
  {
   "asset": "Prop_DS_Tree_21",
   "kind": "prop",
   "size": "~7.2 m",
   "tris": 36,
-  "max_dim_m": 4.35
+  "max_dim_m": 8.34
  },
  {
   "asset": "Prop_DS_Tree_22",
   "kind": "prop",
   "size": "~7.5 m",
   "tris": 24,
-  "max_dim_m": 4.5
+  "max_dim_m": 7.5
  },
  {
   "asset": "Prop_DS_Tree_23",
   "kind": "prop",
   "size": "~7.8 m",
   "tris": 36,
-  "max_dim_m": 4.65
+  "max_dim_m": 8.91
  },
  {
   "asset": "Prop_DS_Tree_24",
   "kind": "prop",
   "size": "~8.0 m",
   "tris": 24,
-  "max_dim_m": 4.8
+  "max_dim_m": 8.0
  },
  {
   "asset": "Prop_DS_Tree_25",
   "kind": "prop",
   "size": "~8.2 m",
   "tris": 36,
-  "max_dim_m": 4.95
+  "max_dim_m": 9.49
  },
  {
   "asset": "Prop_DS_Tree_26",
   "kind": "prop",
   "size": "~8.5 m",
   "tris": 24,
-  "max_dim_m": 5.1
+  "max_dim_m": 8.5
  },
  {
   "asset": "Prop_DS_Tree_27",
   "kind": "prop",
   "size": "~8.8 m",
   "tris": 36,
-  "max_dim_m": 5.25
+  "max_dim_m": 10.06
  },
  {
   "asset": "Prop_DS_Tree_28",
   "kind": "prop",
   "size": "~9.0 m",
   "tris": 24,
-  "max_dim_m": 5.4
+  "max_dim_m": 9.0
  },
  {
   "asset": "Prop_DS_Tree_29",
   "kind": "prop",
   "size": "~9.2 m",
   "tris": 36,
-  "max_dim_m": 5.55
+  "max_dim_m": 10.64
  },
  {
   "asset": "Prop_DS_Tree_30",
   "kind": "prop",
   "size": "~9.5 m",
   "tris": 24,
-  "max_dim_m": 5.7
+  "max_dim_m": 9.5
  },
  {
   "asset": "Prop_DS_Tree_31",
   "kind": "prop",
   "size": "~9.8 m",
   "tris": 36,
-  "max_dim_m": 5.85
+  "max_dim_m": 11.21
  },
  {
   "asset": "Prop_DS_Tree_32",
   "kind": "prop",
   "size": "~10.0 m",
   "tris": 24,
-  "max_dim_m": 6.0
+  "max_dim_m": 10.0
  },
  {
   "asset": "Prop_DS_Tree_33",
   "kind": "prop",
   "size": "~10.2 m",
   "tris": 36,
-  "max_dim_m": 6.15
+  "max_dim_m": 11.79
  },
  {
   "asset": "Prop_DS_Tree_34",
   "kind": "prop",
   "size": "~10.5 m",
   "tris": 24,
-  "max_dim_m": 6.3
+  "max_dim_m": 10.5
  },
  {
   "asset": "Prop_DS_Tree_35",
   "kind": "prop",
   "size": "~10.8 m",
   "tris": 36,
-  "max_dim_m": 6.45
+  "max_dim_m": 12.36
  },
  {
   "asset": "Prop_DS_Tree_36",
   "kind": "prop",
   "size": "~11.0 m",
   "tris": 24,
-  "max_dim_m": 6.6
+  "max_dim_m": 11.0
  },
  {
   "asset": "Prop_DS_Tree_37",
   "kind": "prop",
   "size": "~11.2 m",
   "tris": 36,
-  "max_dim_m": 6.75
+  "max_dim_m": 12.94
  },
  {
   "asset": "Prop_DS_Tree_38",
   "kind": "prop",
   "size": "~11.5 m",
   "tris": 24,
-  "max_dim_m": 6.9
+  "max_dim_m": 11.5
  },
  {
   "asset": "Prop_DS_Tree_39",
   "kind": "prop",
   "size": "~11.8 m",
   "tris": 36,
-  "max_dim_m": 7.05
+  "max_dim_m": 13.51
  },
  {
   "asset": "Prop_DS_Campfire_V0",

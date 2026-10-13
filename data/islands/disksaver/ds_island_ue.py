@@ -50,12 +50,14 @@ if lvl is None:
     else: unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, False)
     w = ues.get_editor_world()
     lvl = [l for l in unreal.EditorLevelUtils.get_levels(w) if SUB in l.get_path_name()][0]
-unreal.EditorLevelUtils.make_level_current(lvl)
+_sl = unreal.GameplayStatics.get_streaming_level(w, "Island_DiskSaver")
+if _sl is None: raise SystemExit("could not find streaming level for " + SUB)
+unreal.EditorLevelUtils.make_level_current(_sl)
 R = random.Random(4004)
 import time
 T0 = time.time()
 def put(sm, x, y, z=0, yaw=0, s=1.0, label=None, folder="DiskSaver"):
-    if time.time() - T0 > 420: out["timed_out"] = True; return None
+    if time.time() - T0 > 240: out["timed_out"] = True; return None
     if isinstance(sm, str): sm = unreal.load_asset(sm) if sm.startswith("/") else mesh(sm)
     if sm is None: return None
     a = eas.spawn_actor_from_object(sm, ORIGIN + unreal.Vector(x, y, z), unreal.Rotator(0, 0, yaw))
@@ -112,7 +114,11 @@ for i in range(28):
 for i in range(12):
     a = R.uniform(0, 2 * math.pi); rr = R.uniform(2800, 3300)
     put("Prop_DS_Herb_%s_S3" % herbs[i % 10], math.cos(a) * rr, math.sin(a) * rr, folder="Herbs")
-unreal.EditorLoadingAndSavingUtils.save_map(lvl.get_outer() if hasattr(lvl, "get_outer") else lvl, SUB)
+out["levels_saved"] = bool(unreal.EditorLevelLibrary.save_all_dirty_levels())
+try:
+    out["world_saved"] = bool(unreal.EditorLoadingAndSavingUtils.save_map(ues.get_editor_world(), MAP))
+except Exception as e:
+    out["world_save_err"] = str(e)
 try:
     ues.set_level_viewport_camera_info(ORIGIN + unreal.Vector(-5200, -5200, 4200), unreal.Rotator(0, -32, 45))
     unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, SHOT)
@@ -121,3 +127,4 @@ except Exception as e:
     out["screenshot_err"] = str(e)
 unreal.log("DS_ISLAND_DONE %s" % out)
 print("DS_ISLAND_DONE", out)
+result = out

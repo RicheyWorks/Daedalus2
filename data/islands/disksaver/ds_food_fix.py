@@ -17,7 +17,7 @@ def reset():
 def box(col,sx,sy,sz,x,y,z,m):
     bpy.ops.mesh.primitive_cube_add(size=1,location=(x,y,z+sz/2))
     o=bpy.context.active_object; o.scale=(sx,sy,sz)
-    bpy.ops.object.transform_apply(scale=True)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
     o.data.materials.append(m)
     for c in o.users_collection: c.objects.unlink(o)
     col.objects.link(o); return o
@@ -30,7 +30,8 @@ def asset(name,kind,size,build):
     reset(); col=bpy.data.collections.new(name); bpy.context.scene.collection.children.link(col)
     build(col); export(name,col)
     tris=sum(len(o.data.polygons)*2 for o in col.objects)
-    dims=[max(o.location[i]+o.dimensions[i]/2 for o in col.objects)-min(o.location[i]-o.dimensions[i]/2 for o in col.objects) for i in range(3)]
+    vs=[v.co for o in col.objects for v in o.data.vertices]
+    dims=[max(v[i] for v in vs)-min(v[i] for v in vs) for i in range(3)]
     k=name.split("_",1)[0]; os.makedirs(os.path.join(ART,k),exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ART,k,name+".blend"),copy=True)
     made.append({"asset":name,"kind":kind,"size":size,"tris":tris,"max_dim_m":round(max(dims),2)})
