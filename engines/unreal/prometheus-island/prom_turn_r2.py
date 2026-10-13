@@ -101,7 +101,7 @@ for k in ("PI_Jukebox","PI_Water_Cistern_0","PI_Label_Garden","PI_Water_SpringBa
 stk=[a for l,a in A.items() if re.match(r"PI_Stock_.+_\d\d$",l)]
 if stk: t=stk[0].get_actor_location(); snap("PI_v2_livestock",t+unreal.Vector(-1600,-1200,700),t)
 for l,a in [(l,a) for l,a in {x.get_actor_label():x for x in es.get_all_level_actors()}.items() if l.startswith("DA_WB_Amb_")]:
-    snap("wb_"+l[10:],a.get_actor_location(),unreal.Vector(-1800,-1200,900))
+    t=a.get_actor_location(); snap("wb_"+l[10:],t+unreal.Vector(-1800,-1200,900),t)
 R["shots"]=shots
 try: unreal.get_editor_subsystem(unreal.AssetEditorSubsystem).close_all_asset_editors()
 except Exception: pass
