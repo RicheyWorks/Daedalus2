@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
 #include <cstdint>
-#include <stdexcept>
 #include <vector>
 #include <limits>
 
@@ -28,7 +27,9 @@ inline Patch Build(Realm realm, double originX, double originY,
                    unsigned cells, double spacing)
 {
     if (cells == 0 || cells > 256 || !std::isfinite(spacing) || spacing <= 0.0
-        || !std::isfinite(originX) || !std::isfinite(originY))
+        || !std::isfinite(originX) || !std::isfinite(originY)
+        || !std::isfinite(originX + cells * spacing)
+        || !std::isfinite(originY + cells * spacing))
         return {};
     Patch result;
     const unsigned stride = cells + 1;
@@ -48,5 +49,14 @@ inline Patch Build(Realm realm, double originX, double originY,
             result.Indices.insert(result.Indices.end(), {a,b,c,b,d,c});
         }
     return result;
+}
+inline Vertex SurfaceNormal(Realm realm, double x, double y)
+{
+    // World-coordinate derivative: shared patch edges have identical normals.
+    constexpr double delta = 0.01;
+    const double dx = (Height(realm,x+delta,y)-Height(realm,x-delta,y))/(2.0*delta);
+    const double dy = (Height(realm,x,y+delta)-Height(realm,x,y-delta))/(2.0*delta);
+    const double length = std::sqrt(dx*dx+dy*dy+1.0);
+    return {-dx/length,-dy/length,1.0/length};
 }
 }

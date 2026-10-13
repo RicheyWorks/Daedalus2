@@ -34,7 +34,7 @@ void ADaedalusExplorationTerrain::OnConstruction(const FTransform& Transform)
     {
         Vertices.Add(FVector((V.X-SampleOriginMetres.X)*100.0,
                             (V.Y-SampleOriginMetres.Y)*100.0,V.Z*100.0));
-        UVs.Add(FVector2D((V.X-SampleOriginMetres.X)/4.0,(V.Y-SampleOriginMetres.Y)/4.0));
+        UVs.Add(FVector2D(V.X/4.0,V.Y/4.0));
     }
     // Core uses mathematical CCW; Unreal rendering uses the reverse winding.
     for (std::size_t I=0;I<Patch.Indices.size();I+=3)
@@ -44,6 +44,15 @@ void ADaedalusExplorationTerrain::OnConstruction(const FTransform& Transform)
         Indices.Add(static_cast<int32>(Patch.Indices[I+1]));
     }
     UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices,Indices,UVs,Normals,Tangents);
+    for (int32 I=0;I<Vertices.Num();++I)
+    {
+        const auto& V=Patch.Vertices[static_cast<std::size_t>(I)];
+        const auto N=SurfaceNormal(bOcean?Realm::Ocean:Realm::Prairie,V.X,V.Y);
+        Normals[I]=FVector(N.X,N.Y,N.Z);
+        // Increasing world U follows +X projected onto the terrain tangent plane.
+        const FVector T=(FVector::ForwardVector-Normals[I]*Normals[I].X).GetSafeNormal();
+        Tangents[I]=FProcMeshTangent(T,false);
+    }
     Surface->CreateMeshSection_LinearColor(0,Vertices,Indices,Normals,UVs,TArray<FLinearColor>(),Tangents,true);
     if (SurfaceMaterial) Surface->SetMaterial(0,SurfaceMaterial);
 }

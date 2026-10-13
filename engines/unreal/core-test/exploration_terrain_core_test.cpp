@@ -15,6 +15,9 @@ int main()
             const auto& a=left.Vertices[row*65+64];
             const auto& b=right.Vertices[row*65];
             CHECK(a.X==b.X && a.Y==b.Y && a.Z==b.Z);
+            const auto n=SurfaceNormal(realm,a.X,a.Y), m=SurfaceNormal(realm,b.X,b.Y);
+            CHECK(n.X==m.X && n.Y==m.Y && n.Z==m.Z);
+            CHECK(std::abs(n.X*n.X+n.Y*n.Y+n.Z*n.Z-1.0)<1.e-10 && n.Z>0);
         }
         for (auto index:left.Indices) CHECK(index<left.Vertices.size());
         for (const auto& v:left.Vertices) CHECK(std::isfinite(v.Z));
@@ -33,5 +36,7 @@ int main()
     }
     CHECK(Build(Realm::Ocean,0,0,257,4).Vertices.empty());
     CHECK(std::isnan(Height(Realm::Prairie,std::numeric_limits<double>::infinity(),0)));
+    CHECK(Build(Realm::Ocean,std::numeric_limits<double>::max(),0,256,
+                std::numeric_limits<double>::max()).Vertices.empty());
     std::cout << "EXPLORATION_TERRAIN_PASS " << checks << " checks\n";
 }

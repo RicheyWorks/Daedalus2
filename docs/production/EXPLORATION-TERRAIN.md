@@ -48,3 +48,8 @@ generated normals/tangents, assignable material and static terrain collision.
 Its UHT/module compile and live placement are not yet verified. Invalid dimensions
 return an empty core patch; invalid sample coordinates return NaN rather than
 throwing, for Unreal builds that disable C++ exceptions.
+
+Patch normals now sample world-coordinate derivatives, and UVs use world
+coordinates, so neighboring patches share shading and texture phase. Patch
+dimension overflow refuses generation. MSVC /W4 /WX passes 78,383 checks after
+these changes; source-level tests do not establish rendered Unreal appearance.
