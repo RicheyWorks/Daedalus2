@@ -14,6 +14,7 @@ public class LandGridParity {
             var c=RealmLandGrid.defaultCell(i);require(seen.add(c));districts[c.district()]++;
             String row=i+","+c.x()+","+c.z()+","+c.district()+","+c.offsetXcm()+","+c.offsetZcm();
             for(int n=1;n<=10;n++) row+=","+(c.fitsSquare(n)?1:0);
+            row+=","+RealmLandGrid.EXPANSION_LAYOUT.offsetXcm(c)+","+RealmLandGrid.EXPANSION_LAYOUT.offsetZcm(c);
             require(row.equals(lines.get(i)));
         }
         // Rank each coordinate on an unbounded spiral, then sort the finite square.
@@ -26,6 +27,11 @@ public class LandGridParity {
             try {RealmLandGrid.defaultCell(bad);throw new AssertionError();} catch(IllegalArgumentException expected) {}
         }
         require(!new RealmLandGrid.Cell(0,0).fitsSquare(Integer.MAX_VALUE));
+        require(RealmLandGrid.EXPANSION_LAYOUT.canGrow(9200,4600,25600,12800));
+        require(!RealmLandGrid.LEGACY_LAYOUT.fits(25600,12800));
+        require(!RealmLandGrid.EXPANSION_LAYOUT.canGrow(25600,12800,9200,4600));
+        require(!RealmLandGrid.EXPANSION_LAYOUT.fits(50000,12800));
+        try {new RealmLandGrid.Layout(Integer.MAX_VALUE,0);throw new AssertionError();}catch(IllegalArgumentException expected){}
         System.out.println("PASS: all 10000 coordinates, districts, offsets and 100000 footprint parity cases; independent ring oracle");
     }
     static int rank(RealmLandGrid.Cell c) {

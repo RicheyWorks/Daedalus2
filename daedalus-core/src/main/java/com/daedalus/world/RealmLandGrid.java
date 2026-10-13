@@ -9,6 +9,25 @@ public final class RealmLandGrid {
     private static final Cell[] CELLS = build();
     private RealmLandGrid() {}
 
+    /** Runtime geometry, deliberately separate from immutable NFT seed/radius. */
+    public record Layout(int pitchCm, int clearanceCm) {
+        public Layout {
+            if (pitchCm < 100 || pitchCm > 1_000_000 || clearanceCm < 0 || clearanceCm >= pitchCm)
+                throw new IllegalArgumentException("invalid layout dimensions");
+        }
+        public int offsetXcm(Cell cell) { return cell.x() * pitchCm; }
+        public int offsetZcm(Cell cell) { return cell.z() * pitchCm; }
+        public boolean fits(int widthCm, int depthCm) {
+            return widthCm > 0 && depthCm > 0 && widthCm <= pitchCm - clearanceCm;
+        }
+        public boolean canGrow(int oldWidthCm, int oldDepthCm, int widthCm, int depthCm) {
+            return fits(oldWidthCm, oldDepthCm) && fits(widthCm, depthCm)
+                    && widthCm >= oldWidthCm && depthCm >= oldDepthCm;
+        }
+    }
+    public static final Layout LEGACY_LAYOUT = new Layout(12_800, 3_600);
+    public static final Layout EXPANSION_LAYOUT = new Layout(51_200, 1_600);
+
     /** Logical X/Z plane; Unreal maps logical Z to horizontal Y. */
     public record Cell(int x, int z) {
         public Cell {

@@ -16,6 +16,21 @@ struct Cell {
             && (X+49)/10==(X+49+N-1)/10 && (Z+49)/10==(Z+49+N-1)/10;
     }
 };
+struct Layout {
+    int PitchCm=12800, ClearanceCm=3600;
+    bool Valid() const {return PitchCm>=100 && PitchCm<=1000000 && ClearanceCm>=0 && ClearanceCm<PitchCm;}
+    bool Fits(int WidthCm,int DepthCm) const {
+        return Valid() && WidthCm>0 && DepthCm>0 && WidthCm<=PitchCm-ClearanceCm;
+    }
+    bool CanGrow(int OldWidthCm,int OldDepthCm,int WidthCm,int DepthCm) const {
+        return Fits(OldWidthCm,OldDepthCm) && Fits(WidthCm,DepthCm) && WidthCm>=OldWidthCm && DepthCm>=OldDepthCm;
+    }
+    bool Offsets(const Cell& C,int& Xcm,int& Zcm) const {
+        if(!Valid() || !C.Valid()) return false;
+        Xcm=C.X*PitchCm;Zcm=C.Z*PitchCm;return true;
+    }
+};
+constexpr Layout LegacyLayout{12800,3600}, ExpansionLayout{51200,1600};
 inline const std::array<Cell,Count>& Cells() {
     static const auto Table=[] {
         std::array<Cell,Count> Result{};
