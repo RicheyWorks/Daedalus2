@@ -32,6 +32,37 @@ GIVE_UP_MIN = int(os.environ.get("OR_GIVE_UP_MIN", "60"))
 LOG = []
 
 
+MIN_BUILD_GB = float(os.environ.get("OR_MIN_BUILD_GB", "2.0"))  # -Fast build reopens the editor (big RAM spike)
+MIN_PLAY_GB = float(os.environ.get("OR_MIN_PLAY_GB", "1.5"))    # PIE duplicates the world; referee: ~1 GB free, batch small
+
+
+def free_ram_gb():
+    """Host free physical RAM in GB (Windows GlobalMemoryStatusEx); None if unreadable (gate then fails open)."""
+    try:
+        import ctypes
+        class MS(ctypes.Structure):
+            _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong),
+                        ("ullTotalPhys", ctypes.c_ulonglong), ("ullAvailPhys", ctypes.c_ulonglong),
+                        ("ullTotalPageFile", ctypes.c_ulonglong), ("ullAvailPageFile", ctypes.c_ulonglong),
+                        ("ullTotalVirtual", ctypes.c_ulonglong), ("ullAvailVirtual", ctypes.c_ulonglong),
+                        ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
+        m = MS(); m.dwLength = ctypes.sizeof(MS)
+        if not ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)): return None
+        return m.ullAvailPhys / 2**30
+    except Exception:
+        return None
+
+
+def ram_ok(step, need_gb, free=None):
+    """True if the heavy step may run. Low RAM (round 5: 0.86-1.07 GB free) skips build/PIE instead of OOM-ing the shared editor."""
+    free = free_ram_gb() if free is None else free
+    if free is None:
+        say(f"RAM gate {step}: free RAM unreadable; allowing"); return True
+    if free < need_gb:
+        say(f"RAM gate {step}: SKIP, free {free:.2f} GB < {need_gb:.2f} GB"); return False
+    say(f"RAM gate {step}: ok, free {free:.2f} GB"); return True
+
+
 def left(): return CAP - (time.time() - T0)
 def say(m): line = f"[{(time.time() - T0) / 60:5.1f}m] {m}"; print(line, flush=True); LOG.append(line)
 def link(text, to="*"):
@@ -431,7 +462,7 @@ def main():
     global T0
     T0 = time.time()  # clock starts only after bridge is alive
     link(f"DOING editor-slot oddsreaper: turn started (HANDOFF -> {NEXT})")
-    if "--skip-build" not in sys.argv:
+    if "--skip-build" not in sys.argv and ram_ok("build", MIN_BUILD_GB):
         say("build DaedalusLink (-Fast; editor reopens)")
         subprocess.run(["powershell", "-NoProfile", "-File", REPO + r"\engines\unreal\unreal-job.ps1", "-Start", "-Fast"], check=True)
         while left() > 600:
@@ -472,7 +503,7 @@ def main():
     })
 
     # 20s Play check only if time remains (save window needs ~2 min)
-    if left() > 120:
+    if left() > 120 and ram_ok("play", MIN_PLAY_GB):
         try:
             # Force storm at Play start, then settle 20s under storm before the hero shot (round-2 shot sat in
             # Clear daylight for 20s and only flipped at the end — MPC wetness/StormPulse never had time to read).
@@ -522,7 +553,7 @@ def main():
             try: call("stop", timeout=20)
             except Exception: pass
     else:
-        say(f"skip Play check; only {left():.0f}s left before save window")
+        say(f"skip Play check ({left():.0f}s left before save window, or RAM gate)")
     if not shot_ok and not os.path.exists(os.path.join(SHOTS, "hero_unreal_editor.png")):
         say("hero shot missing after retries; turn continues to save/HANDOFF")
     return isle

@@ -149,3 +149,7 @@ herbs.json storm_parlay_cookbook: DiceSpring+StormCistern sources, CoinbackGoat/
 8 storm-parlay teas, Reaper Ledger balance 30/30/30/10. Validator check_mechanics.py cross-checks tea inputs,
 cookbook membership, water/livestock ids, and balance sum. Headless: python data/islands/oddsreaper/check_mechanics.py -> OK.
 No Unreal touched.
+
+## RAM gate (01:08 PT Oct 13, off-editor)
+
+oddsreaper_turn.py now checks host free RAM (GlobalMemoryStatusEx) before the heavy steps: the -Fast build is skipped below OR_MIN_BUILD_GB (default 2.0) and the 20 s PIE storm check below OR_MIN_PLAY_GB (default 1.5); save + editor SceneCapture hero still run. Unreadable RAM fails open. Headless: tools/islands/oddsreaper/test_ram_gate.py. Reason: round-5 editor ran at 0.86-1.07 GB free.
