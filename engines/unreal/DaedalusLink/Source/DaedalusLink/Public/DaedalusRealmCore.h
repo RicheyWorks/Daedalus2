@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "DaedalusBattleStageCore.h"
 #include "DaedalusRealmLook.h"
 #include "DaedalusRealmSpec.h"
 #include "DaedalusRealmSprites.h"
@@ -291,6 +292,9 @@ public:
     void ForceShinyNext(bool On) { ForceShiny = On; }
     int ShiniesSeen() const { return ShinySeen; }
     int PopCount() const { return static_cast<int>(Pops.size()); }
+    /** The battle stage director (hub 28710): cues for a 3D stage, lifted from the battle lines as they play. */
+    std::vector<stage::Cue> TakeStage() { return Stage.Take(); }
+    size_t StagePending() const { return Stage.Pending(); }
     int Count(int Item) const { for (const auto& E : Bag) if (E.first == Item) return E.second; return 0; }
     int Count(const std::string& Id) const { return Count(W.ItemIndex(Id)); }
     int ChestsOpened() const { int N = 0; for (bool O : Opened) N += O; return N; }
@@ -993,6 +997,7 @@ private:
     struct Pop { int Foe = -1, Mem = -1, Amount = 0; double Life = 0.0; };
     std::vector<Pop> Pops;
     bool ForceShiny = false;   // the harness: every foe of the next battle is shiny
+    stage::Director Stage;
     int ShinySeen = 0;
 
     enum class Phase { Intro, Command, Target, Play, Ending };
@@ -1040,6 +1045,11 @@ private:
         SetCue(NoRun ? "BOSS" : "BATTLE");
         Sfx.push_back("AMBUSH");
         std::string Names = Mon(Enemies[0].Kind).Name;
+        {
+            std::vector<bool> Sh;
+            for (const Foe& F : Enemies) Sh.push_back(F.Shiny);
+            Stage.Begin(static_cast<int>(Party.size()), static_cast<int>(Enemies.size()), Sh);
+        }
         for (const Foe& F : Enemies) if (F.Shiny) { Log.push_back("A SHINY " + Mon(F.Kind).Name + " GLITTERS!"); Sfx.push_back("SHINY"); }
         if (Enemies.size() > 1) Log.push_back("MONSTERS APPEAR!");
         else
@@ -1391,6 +1401,17 @@ private:
         if (Queue.empty()) return;
         Line L = Queue.front();
         Queue.pop_front();
+        {
+            stage::LineFacts F;
+            F.Text = L.Text; F.Sound = L.Sound;
+            F.Foe = L.Foe; F.FoeGone = L.Gone;
+            if (L.Foe >= 0 && L.Foe < static_cast<int>(FoeShown.size())) { F.FoeHpBefore = FoeShown[static_cast<size_t>(L.Foe)]; F.FoeHpAfter = L.FoeHp; }
+            F.Mem = L.Mem;
+            if (L.Mem >= 0 && L.Mem < static_cast<int>(MemShown.size())) { F.MemHpBefore = MemShown[static_cast<size_t>(L.Mem)]; F.MemHpAfter = L.MemHp; }
+            for (const Member& P : Party) F.MemberNames.push_back(P.Name);
+            for (const Foe& E : Enemies) F.FoeNames.push_back(Mon(E.Kind).Name);
+            Stage.OnLine(F);
+        }
         Log.push_back(L.Text);
         if (Log.size() > 40) Log.erase(Log.begin());
         LastSaid = L.Text;

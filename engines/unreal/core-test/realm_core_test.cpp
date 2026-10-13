@@ -768,6 +768,44 @@ int main(int Argc, char** Argv)
         Check("it fights in the fourth slot", AutoFight(Eg) && Eg.Members()[3].Alive());
     }
 
+    // ---- the battle stage director (hub 28710): a fight's lines become cues a 3D stage can play
+    {
+        Realm St;
+        std::string E;
+        St.Load(Text, E);
+        Dismiss(St);
+        St.MembersMut()[0].Atk = 60;
+        St.ForceShinyNext(true);
+        St.ForceBattle({"BLIGHT_SLIME", "PUFFCAP"});
+        St.ForceShinyNext(false);
+        std::vector<daedalus::stage::Cue> Cues;
+        for (int k = 0; k < 4000 && St.CurrentMode() == Mode::Battle; ++k)
+        {
+            const std::string U = St.TopBox();
+            if (U == "COMMAND" || U == "TARGET" || U == "INTRO" || U == "ENDING") Tap(St, Button::A);
+            else St.Tick(0.5);
+            for (const daedalus::stage::Cue& C : St.TakeStage()) Cues.push_back(C);
+        }
+        auto N = [&](daedalus::stage::Kind K) { int n = 0; for (const auto& C : Cues) n += C.K == K; return n; };
+        using daedalus::stage::Kind;
+        Check("the stage opens on two foes with a wide shot", !Cues.empty() && Cues[0].K == Kind::Enter && Cues[0].Amount == 2 && Cues[1].K == Kind::Camera && Cues[1].Text == "wide");
+        Check("both shiny foes glitter on entry", N(Kind::Shiny) == 2);
+        Check("swings step in, land as flinches with numbers", N(Kind::StepIn) >= 2 && N(Kind::Swing) >= 2 && N(Kind::Flinch) >= 2 && N(Kind::Pop) >= 2, std::to_string(N(Kind::Swing)) + " " + std::to_string(N(Kind::Flinch)));
+        Check("every swing is by someone and the camera follows the swinger", [&] {
+            for (size_t i = 0; i < Cues.size(); ++i) if (Cues[i].K == Kind::Swing && Cues[i].Actor < 0) return false;
+            int Follow = 0;
+            for (const auto& C : Cues) Follow += C.K == Kind::Camera && (C.Text.rfind("member:", 0) == 0 || C.Text.rfind("foe:", 0) == 0);
+            return Follow >= 2; }());
+        Check("the foes fall and the party wins", N(Kind::Fall) == 2 && N(Kind::Victory) == 1 && N(Kind::Defeat) == 0 && St.Wins() == 1, St.Describe());
+        Check("cues carry their beat and are taken once", Cues.back().Dur > 0.0 && St.TakeStage().empty());
+        bool Ordered = true;
+        for (const auto& C : Cues) Ordered &= C.At >= 0.0 && C.At <= 1.0;
+        Check("every cue sits inside its line's beat", Ordered);
+        std::cout << "  stage: ";
+        for (size_t i = 0; i < Cues.size() && i < 12; ++i) std::cout << Cues[i].Describe() << (i + 1 < Cues.size() ? " | " : "");
+        std::cout << "\n";
+    }
+
     // ---- lands (ADR-065): plots with deeds; the owner's first visit brings the deed's dragon egg
     {
         Realm La;

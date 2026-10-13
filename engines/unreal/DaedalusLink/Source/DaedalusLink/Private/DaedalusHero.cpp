@@ -1339,6 +1339,13 @@ FString ADaedalusHero::RealmInput(const FString& Command)
 	}
 	else if (Verb == TEXT("save")) return RealmView->SaveText();
 	else if (Verb == TEXT("spec")) return RealmSource;
+	else if (Verb == TEXT("stage"))
+	{
+		// The battle stage director's cues since the last take (hub 28710), one per line: for a 3D stage and the harness.
+		FString Out;
+		for (const daedalus::stage::Cue& C : G.TakeStage()) Out += FString::Printf(TEXT("%s @%.2f +%.2f\n"), UTF8_TO_TCHAR(C.Describe().c_str()), C.At, C.Dur);
+		return Out.IsEmpty() ? TEXT("(no cues)") : Out;
+	}
 	else return TEXT("unknown realm command: ") + Command;
 	RealmView->Refresh();
 	return RealmState();
