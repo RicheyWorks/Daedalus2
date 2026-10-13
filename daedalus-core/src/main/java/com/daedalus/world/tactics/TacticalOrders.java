@@ -1,0 +1,313 @@
+// SPDX-License-Identifier: MIT
+
+package com.daedalus.world.tactics;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * DTO 1, the squad-orders contract between the Java combat director and Unreal (ADR-060), ported line for line from
+ * the Unreal plugin's {@code DaedalusTacticsCore.h}. {@code TacticsParityTest} checks it against
+ * {@code engines/unreal/core-test/tactics_parity.txt}, which the C++ test writes: the same specs refused with the same
+ * messages, and the same decided specs written byte for byte.
+ *
+ * <pre>
+ * DTO 1
+ * squad &lt;id&gt; tick &lt;n&gt;
+ * order &lt;unit&gt; &lt;HOLD|ATTACK|FLANK|DEFEND|RETREAT|REINFORCE&gt; &lt;LEFT|RIGHT|-&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; | &lt;why&gt;
+ * </pre>
+ * Points are in Unreal centimetres. Specs are all or nothing: one bad line refuses the whole spec, so a squad never
+ * gets half an order.
+ */
+public final class TacticalOrders {
+
+    public static final int VERSION = 1;
+    public static final int MAX_ORDERS = 256;
+    public static final int MAX_LINE = 512;
+    public static final double MAX_COORD = 1.0e8;
+
+    public enum Verb { HOLD, ATTACK, FLANK, DEFEND, RETREAT, REINFORCE }
+
+    public enum Side {
+        NONE("-"), LEFT("LEFT"), RIGHT("RIGHT");
+
+        private final String wire;
+
+        Side(String wire) {
+            this.wire = wire;
+        }
+
+        public String wire() {
+            return wire;
+        }
+    }
+
+    /** A point in Unreal centimetres. */
+    public record Vec(double x, double y, double z) {
+    }
+
+    public record Order(String unit, Verb verb, Side side, Vec at, String why) {
+    }
+
+    public record Spec(String squad, long tick, List<Order> orders) {
+        public Spec {
+            orders = List.copyOf(orders);
+        }
+    }
+
+    /** Either a spec, or the first problem with its line number (and then no orders at all). */
+    public record ParseResult(boolean ok, String error, Spec spec) {
+    }
+
+    public enum EventKind { SEEN, HIT, DOWN, PLAYER }
+
+    /** HIT: damage taken; SEEN: 1 or 0; DOWN: 0; PLAYER: health. The PLAYER event's unit is "player". */
+    public record Event(EventKind kind, String unit, Vec at, double value) {
+    }
+
+    private TacticalOrders() {
+    }
+
+    static boolean token(String s) {
+        if (s.isEmpty() || s.length() > 64) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            boolean ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')
+                    || c == '_' || c == '-' || c == '.';
+            if (!ok) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Plain decimals only, the same grammar as the C++: [+-]? (digits [. digits?] | . digits) ([eE] [+-]? digits)?. */
+    static boolean decimal(String s) {
+        int i = 0;
+        int n = s.length();
+        if (i < n && (s.charAt(i) == '+' || s.charAt(i) == '-')) {
+            i++;
+        }
+        int b = i;
+        while (i < n && Character.isDigit(s.charAt(i)) && s.charAt(i) < 128) {
+            i++;
+        }
+        int whole = i - b;
+        int frac = 0;
+        if (i < n && s.charAt(i) == '.') {
+            i++;
+            b = i;
+            while (i < n && Character.isDigit(s.charAt(i)) && s.charAt(i) < 128) {
+                i++;
+            }
+            frac = i - b;
+        }
+        if (whole == 0 && frac == 0) {
+            return false;
+        }
+        if (i < n && (s.charAt(i) == 'e' || s.charAt(i) == 'E')) {
+            i++;
+            if (i < n && (s.charAt(i) == '+' || s.charAt(i) == '-')) {
+                i++;
+            }
+            b = i;
+            while (i < n && Character.isDigit(s.charAt(i)) && s.charAt(i) < 128) {
+                i++;
+            }
+            if (i == b) {
+                return false;
+            }
+        }
+        return i == n;
+    }
+
+    /** The number, or NaN if it is not a plain decimal within MAX_COORD. */
+    static double number(String s) {
+        if (s.isEmpty() || !decimal(s)) {
+            return Double.NaN;
+        }
+        double v = Double.parseDouble(s);
+        return Double.isFinite(v) && Math.abs(v) <= MAX_COORD ? v : Double.NaN;
+    }
+
+    private static ParseResult fail(int line, String why) {
+        return new ParseResult(false, "line " + line + ": " + why, null);
+    }
+
+    private static List<String> words(String body) {
+        List<String> out = new ArrayList<>();
+        for (String w : body.split("[ \\t\\x0B\\f\\r\\n]+")) {
+            if (!w.isEmpty()) {
+                out.add(w);
+            }
+        }
+        return out;
+    }
+
+    public static ParseResult parse(String text) {
+        String[] lines = text.split("\n", -1);
+        int count = text.endsWith("\n") ? lines.length - 1 : lines.length;   // getline never sees the trailing empty line
+        if (text.isEmpty()) {
+            count = 0;
+        }
+        boolean head = false;
+        boolean squadSeen = false;
+        String squad = null;
+        long tick = 0;
+        List<Order> orders = new ArrayList<>();
+        int n = 0;
+        for (int li = 0; li < count; li++) {
+            ++n;
+            String line = lines[li];
+            if (line.endsWith("\r")) {
+                line = line.substring(0, line.length() - 1);
+            }
+            if (line.getBytes(StandardCharsets.UTF_8).length > MAX_LINE) {   // bytes, as in C++
+                return fail(n, "line too long");
+            }
+            if (line.isEmpty() || line.charAt(0) == '#') {
+                continue;
+            }
+            String body = line;
+            String why = "";
+            int bar = line.indexOf('|');
+            if (bar >= 0) {
+                body = line.substring(0, bar);
+                why = line.substring(bar + 1).replaceFirst("^ +", "");
+            }
+            List<String> t = words(body);
+            if (t.isEmpty()) {
+                return fail(n, "a line with only a reason");
+            }
+            if (!head) {
+                if (t.size() != 2 || !t.get(0).equals("DTO")) {
+                    return fail(n, "expected 'DTO 1'");
+                }
+                if (!t.get(1).equals(Integer.toString(VERSION))) {
+                    return fail(n, "unsupported version " + t.get(1));
+                }
+                head = true;
+                continue;
+            }
+            if (t.get(0).equals("squad")) {
+                if (squadSeen) {
+                    return fail(n, "second squad line");
+                }
+                if (t.size() != 4 || !t.get(2).equals("tick") || !token(t.get(1))) {
+                    return fail(n, "expected 'squad <id> tick <n>'");
+                }
+                double tk = number(t.get(3));
+                if (Double.isNaN(tk) || tk < 0 || tk != Math.floor(tk)) {
+                    return fail(n, "bad tick");
+                }
+                squad = t.get(1);
+                tick = (long) tk;
+                squadSeen = true;
+                continue;
+            }
+            if (t.get(0).equals("order")) {
+                if (!squadSeen) {
+                    return fail(n, "order before the squad line");
+                }
+                if (t.size() != 7) {
+                    return fail(n, "expected 'order <unit> <VERB> <SIDE> <x> <y> <z>'");
+                }
+                if (orders.size() >= MAX_ORDERS) {
+                    return fail(n, "more than " + MAX_ORDERS + " orders");
+                }
+                if (!token(t.get(1))) {
+                    return fail(n, "bad unit id");
+                }
+                Verb verb = null;
+                for (Verb v : Verb.values()) {
+                    if (v.name().equals(t.get(2))) {
+                        verb = v;
+                    }
+                }
+                if (verb == null) {
+                    return fail(n, "unknown verb " + t.get(2));
+                }
+                Side side = null;
+                for (Side sd : Side.values()) {
+                    if (sd.wire().equals(t.get(3))) {
+                        side = sd;
+                    }
+                }
+                if (side == null) {
+                    return fail(n, "unknown side " + t.get(3));
+                }
+                if (verb == Verb.FLANK && side == Side.NONE) {
+                    return fail(n, "FLANK needs LEFT or RIGHT");
+                }
+                double x = number(t.get(4));
+                double y = number(t.get(5));
+                double z = number(t.get(6));
+                if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
+                    return fail(n, "bad point");
+                }
+                String unit = t.get(1);
+                for (Order prev : orders) {
+                    if (prev.unit().equals(unit)) {
+                        return fail(n, "two orders for " + unit);
+                    }
+                }
+                orders.add(new Order(unit, verb, side, new Vec(x, y, z), why));
+                continue;
+            }
+            return fail(n, "unknown line '" + t.get(0) + "'");
+        }
+        if (!head) {
+            return fail(0, "empty spec");
+        }
+        if (!squadSeen) {
+            return fail(n, "no squad line");
+        }
+        return new ParseResult(true, "", new Spec(squad, tick, orders));
+    }
+
+    /** C's printf("%.1f"): the exact binary value rounded half-even, keeping the sign of a negative that rounds to 0. */
+    static String num(double v) {
+        String s = new BigDecimal(v).setScale(1, RoundingMode.HALF_EVEN).toPlainString();
+        boolean negative = v < 0 || (v == 0 && 1.0 / v < 0);
+        if (negative && !s.startsWith("-")) {
+            s = "-" + s;
+        }
+        return s;
+    }
+
+    public static String write(Spec s) {
+        StringBuilder out = new StringBuilder("DTO 1\nsquad ").append(s.squad()).append(" tick ").append(s.tick()).append('\n');
+        for (Order o : s.orders()) {
+            out.append("order ").append(o.unit()).append(' ').append(o.verb().name()).append(' ').append(o.side().wire())
+                    .append(' ').append(num(o.at().x())).append(' ').append(num(o.at().y())).append(' ')
+                    .append(num(o.at().z()));
+            String why = o.why() == null ? "" : o.why().replace('\n', ' ');
+            if (!why.isEmpty()) {
+                out.append(" | ").append(why);
+            }
+            out.append('\n');
+        }
+        return out.toString();
+    }
+
+    public static String writeEvents(long tick, List<Event> events) {
+        StringBuilder out = new StringBuilder("DTE 1\ntick ").append(tick).append('\n');
+        for (Event e : events) {
+            out.append("event ").append(e.kind().name()).append(' ').append(e.unit()).append(' ')
+                    .append(num(e.at().x())).append(' ').append(num(e.at().y())).append(' ').append(num(e.at().z()))
+                    .append(' ').append(num(e.value())).append('\n');
+        }
+        return out.toString();
+    }
+
+    /** Lower-case name, for logs. */
+    public static String label(Verb v) {
+        return v.name().toLowerCase(Locale.ROOT);
+    }
+}

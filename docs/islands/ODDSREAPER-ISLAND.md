@@ -33,8 +33,8 @@ switches the sky as you sail in, and the Wild Biomes moods return as you leave.
 
 ## Unique herb mechanic: Wager Herbs (`herbs.json`)
 Every brew is a bet: the base effect always lands, and the jackpot lands with probability p. Two herbs **parlay**:
-p = pA × pB, and the payout scales by 1/p, so the odds are fair and there is no house edge. Brewing in a storm adds
-+0.1 to p. Parlayvine doubles a payout, Stormbloom re-rolls once, and Oddsthistle shows you the roll before you
+p = pA × pB, and the payout scales by 1/p, so the odds are fair and there is no house edge. Brewing in a storm multiplies
+p by 1.2 (cap 0.95) at the same 1/p payout, a flat +20% edge for every herb (EV table in `data/islands/oddsreaper/ISLAND.md`). Parlayvine doubles a payout, Stormbloom re-rolls once, and Oddsthistle shows you the roll before you
 commit. 8 herbs make 64 tonics. No other bot's system uses probability as the core mechanic.
 
 ## Water: Reaper Waterworks (`water.json`)

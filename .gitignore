@@ -29,3 +29,5 @@ __pycache__/
 # someone checks the history copy out beside the live modules.
 _migration/
 node_modules/
+
+engines/unreal/pcg-ecology/out/

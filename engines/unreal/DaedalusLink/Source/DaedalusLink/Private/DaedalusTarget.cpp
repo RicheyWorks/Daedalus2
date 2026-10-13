@@ -2,6 +2,8 @@
 
 #include "DaedalusTarget.h"
 
+#include "DaedalusTactics.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusMob.h"
 #include "DaedalusNav.h"
@@ -334,9 +336,31 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 	const bool bHunting = Who && bHunts && CVarFoesHunt.GetValueOnGameThread() != 0 && Dist < AggroRange
 		&& (bSeesPlayer || Windup >= 0.f || ChargeLeft > 0.f || Dist < 900.f);
 
+	// Squad orders (ADR-060). Moving orders (RETREAT; FLANK, REINFORCE and DEFEND until there) take over the feet and
+	// stop attacks. FLANK and REINFORCE end on arrival, and the foe hunts from its new spot. HOLD and DEFEND only fight
+	// a player who comes close. ATTACK is the foe's own hunting.
+	OrderLeft = FMath::Max(0.f, OrderLeft - Dt);
+	if (OrderLeft <= 0.f && !OrderVerb.IsEmpty()) { OrderVerb.Reset(); OrderWhy.Reset(); }
+	const FVector ToGoal(OrderPoint.X - Home.X, OrderPoint.Y - Home.Y, 0.f);
+	const bool bThere = ToGoal.Size() < 200.f;
+	const bool bMoveOrder = OrderVerb == TEXT("RETREAT") || OrderVerb == TEXT("FLANK") || OrderVerb == TEXT("REINFORCE") || OrderVerb == TEXT("DEFEND");
+	if (bThere && (OrderVerb == TEXT("FLANK") || OrderVerb == TEXT("REINFORCE"))) OrderLeft = 0.f;   // in position: now hunt
+	const bool bMoving = bMoveOrder && !bThere && OrderLeft > 0.f;
+	const bool bStayPut = (OrderVerb == TEXT("HOLD") || OrderVerb == TEXT("DEFEND") || OrderVerb == TEXT("RETREAT")) && Dist > 900.f;
+
 	float Bob = FMath::Sin(Age * 2.f) * 40.f;
 	float Glow = 0.f;
-	if (!bHunting)
+	if (bMoving)
+	{
+		State = OrderVerb;
+		Windup = -1.f;
+		ChargeLeft = 0.f;
+		SetActorRotation(FRotator(0.f, ToGoal.Rotation().Yaw, 0.f));
+		const float Speed = Kind == TEXT("DUST_WISP") ? 360.f : Kind == TEXT("SHARDBACK") ? 380.f : Kind == TEXT("STONE_KNIGHT") ? 240.f : 300.f;
+		if (!StepToward(ToGoal, OrderVerb == TEXT("RETREAT") ? Speed * 1.15f : Speed, Dt)) OrderLeft = 0.f;   // blocked: fight alone
+		if (Kind == TEXT("BLIGHT_SLIME")) Bob = FMath::Abs(FMath::Sin(Age * 7.f)) * 45.f;
+	}
+	else if (!bHunting || bStayPut)
 	{
 		State = TEXT("IDLE");
 		Windup = -1.f;
@@ -482,10 +506,21 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 	}
 }
 
+void ADaedalusTarget::SetOrder(const FString& Verb, FVector Point, const FString& Why, float Seconds)
+{
+	OrderVerb = Verb.ToUpper();
+	OrderPoint = Point;
+	OrderWhy = Why;
+	OrderLeft = FMath::Clamp(Seconds, 0.f, 30.f);
+}
+
 float ADaedalusTarget::TakeDamage(float Damage, const FDamageEvent& Event, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (Dying >= 0.f) return 0.f;
 	Health -= Damage;
+	if (!Squad.IsEmpty())
+		if (UDaedalusTactics* Tac = GetWorld()->GetSubsystem<UDaedalusTactics>())
+			Tac->Note(Health <= 0.f ? TEXT("DOWN") : TEXT("HIT"), TacticalId(), GetActorLocation(), Health <= 0.f ? 0.f : Damage);
 	StartScale = GetActorScale3D();
 	Flash = 1.f;
 	SinceHurt = 0.f;

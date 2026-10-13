@@ -56,6 +56,14 @@ class FakeBlender:
         return {"result": {"source": "collection", "objects": self.objects}}
 
 
+def _raises(fn):
+    try:
+        fn()
+    except wire.BridgeError:
+        return True
+    return False
+
+
 def report(ok=True, tris=1200, slots=2, failed=None):
     checks = [{"check": "triangles: Blender = file", "ok": failed != "tri", "detail": "x"}]
     return {"ok": ok, "checks": checks, "dest": "/Game/Daedalus/Art/Tool/Tool_Pickaxe",
@@ -441,6 +449,220 @@ back = w.recover()
 check("restart: a SHIPPING row goes back to READY", back == ["Tool_Pickaxe"] and row(d, "Tool_Pickaxe")["status"] == "READY", back)
 check("restart: other rows untouched", row(d, "Mob_BlightSlime")["status"] == "DOING (grok)" and row(d, "Item_Coal")["status"] == "TODO")
 check("restart: nothing to recover is a no-op", w.recover() == [])
+shutil.rmtree(d)
+
+# 15. STATUS.md and QUEUE.md agree after every asset (they drifted: STATUS.md was only rewritten every 10 assets)
+BOARD15 = BOARD.replace("| 2 | Item_Coal | item | 0.35 m | TODO | |", "| 2 | Tool_Axe | tool | 0.9 m | READY | |")
+d, w, fb = setup(board=BOARD15)
+os.makedirs(os.path.join(d, "Tool"), exist_ok=True)
+seen15 = []
+orig = w.summary
+
+
+def _peek():
+    orig()
+    st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+    seen15.append((st.split("\n")[4], dict(w.counts())))
+
+
+w.summary = _peek
+w.ship_one("Tool_Pickaxe")
+st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+c = w.counts()
+check("counts: STATUS.md refreshed right after one asset, matching QUEUE.md",
+      st.split("\n")[4] == "| " + " | ".join("%s %d" % kv for kv in sorted(c.items())) + " |" and c.get("SHIPPED") == 1
+      and c.get("READY") == 1, (st.split("\n")[4], c))
+check("counts: STATUS.md states the row total", "QUEUE.md rows: 3" in st, st[:300])
+check("counts: tally() is the one count", artqueue.tally(artqueue.parse(BOARD)[0]) == {"READY": 1, "TODO": 1, "DOING": 1})
+shutil.rmtree(d)
+# 14. a bridge whose script result is a bare bool (BLOCKED rows 2026-10-12: "'bool' object is not subscriptable")
+class BoolBlender(FakeBlender):
+    def call(self, addr, command, timeout=600, side="bridge", **p):
+        if "open_mainfile" not in p["code"] and "get_game_world" not in p["code"]:
+            return {"result": True}
+        return FakeBlender.call(self, addr, command, timeout, side, **p)
+
+
+d, w, fb = setup(blender=BoolBlender())
+w.tick()
+r = row(d, "Tool_Pickaxe")
+check("bool result: BLOCKED (not the asset's fault), names the side and the call",
+      r["status"].startswith("BLOCKED: pipeline error: Blender") and "picking the objects" in r["status"]
+      and "bool" in r["status"] and "subscriptable" not in r["status"], r["status"])
+ev = [e for e in feed(d) if e["event"] == "error"]
+check("bool result: the feed keeps the traceback (file and line)", ev and "Traceback" in ev[-1].get("trace", "")
+      and "artqueue.py" in ev[-1]["trace"], ev[-1:] if ev else feed(d))
+shutil.rmtree(d)
+check("wire.obj: dict passes, bool/None/str raise BridgeError",
+      wire.obj({"result": {"a": 1}}) == {"a": 1}
+      and all(_raises(lambda v=v: wire.obj({"result": v}, "Unreal", "x")) for v in (True, False, None, "s")))
+
+# 16. a ready-made .glb in art\glb ships as it is (2026-10-12: with no .blend the watcher exported the open
+# Blender scene's visible meshes over Prop_Island_Flagship_BlenderBoss.glb: 445,294 tris became 36)
+import struct as _struct   # noqa: E402
+from asset_pipeline import ship as _pipeline   # noqa: E402
+
+
+def make_glb(path, parts):
+    """A minimal GLB: one node per (name, triangles) part, indexed, 1 m cubes."""
+    acc, meshes, nodes = [], [], []
+    for i, (name, tris) in enumerate(parts):
+        acc.append({"count": 3, "type": "VEC3", "componentType": 5126, "min": [0, 0, 0], "max": [1, 1, 1]})
+        acc.append({"count": tris * 3, "type": "SCALAR", "componentType": 5125})
+        meshes.append({"name": name, "primitives": [{"attributes": {"POSITION": 2 * i}, "indices": 2 * i + 1}]})
+        nodes.append({"name": name, "mesh": i})
+    doc = json.dumps({"asset": {"version": "2.0"}, "accessors": acc, "meshes": meshes, "nodes": nodes}).encode()
+    doc += b" " * (-len(doc) % 4)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "wb") as f:
+        f.write(_struct.pack("<4sII", b"glTF", 2, 20 + len(doc)) + _struct.pack("<I4s", len(doc), b"JSON") + doc)
+
+
+class FakeShip:
+    """export/land like asset_pipeline.ship; land judges with an Unreal that made exactly what the file holds."""
+    def __init__(self):
+        self.exported, self.landed = [], []
+
+    def __call__(self, *a, **k):
+        self.exported.append(a[0])
+        return report()
+
+    def export(self, name, objects, folder, blender):
+        self.exported.append(name)
+        r = report()
+        r["name"] = name
+        return r
+
+    def land(self, rep, dest, save, unreal):
+        if "file" not in rep:
+            return rep
+        self.landed.append(rep["path"])
+        f = rep["file"]
+        made = {"meshes": [{"triangles": f["meshes"][n["mesh"]]["triangles"], "materials": ["d"],
+                            "dims_cm": [d * 100 for d in n["dims"]]} for n in f["nodes"]], "materials": []}
+        checks = _pipeline.judge(rep["blender"], f, made)
+        rep.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, dest=dest + "/" + rep["name"])
+        return rep
+
+
+BOARD16 = BOARD.replace("| 1 | Tool_Pickaxe | tool | 0.9 m | READY | stone head |",
+                        "| 1 | Tool_Pickaxe | tool | 0.9 m | READY | stone head |\n| 4 | Prop_Isle | prop | 2 m | READY | |")
+fs = FakeShip()
+d, w, fb = setup(board=BOARD16.replace("| 1 | Tool_Pickaxe | tool | 0.9 m | READY |", "| 1 | Tool_Pickaxe | tool | 0.9 m | SHIPPED |"),
+                 ship=fs, blend=False)
+calls = []
+inner = fb.call
+wire.call = lambda *a, **k: (calls.append(k.get("code", "")), inner(*a, **k))[1]
+gp = os.path.join(d, "glb", "Prop_Isle.glb")
+make_glb(gp, [("Rock", 400), ("Tree", 900), ("Hut", 1200)])
+before = open(gp, "rb").read()
+w.tick()
+r = row(d, "Prop_Isle")
+check("saved glb: shipped as it is, every node's tris", r["status"].startswith("SHIPPED (2500 tris"), r["status"])
+check("saved glb: never exported (Blender not asked to export)", fs.exported == [] and fs.landed == [os.path.abspath(gp)], (fs.exported, fs.landed))
+check("saved glb: Blender never opened or asked for objects", not any("open_mainfile" in c or "bpy.data.collections" in c for c in calls))
+check("saved glb: the file is byte for byte the same", open(gp, "rb").read() == before)
+check("saved glb: feed says source glb", any(e.get("source") == "glb" for e in feed(d)))
+check("saved glb: judge ran on all 3 nodes", len(json.load(open(os.path.join(d, "reports", "Prop_Isle.json")))["unreal"]["meshes"]) == 3)
+shutil.rmtree(d)
+
+# 16b. Blender down: a saved glb still imports (only Unreal is needed)
+fs = FakeShip()
+d, w, fb = setup(board=BOARD16.replace("| 1 | Tool_Pickaxe | tool | 0.9 m | READY |", "| 1 | Tool_Pickaxe | tool | 0.9 m | SHIPPED |"),
+                 ship=fs, blend=False, up=(False, True))
+make_glb(os.path.join(d, "glb", "Prop_Isle.glb"), [("Rock", 400)])
+w.tick()
+check("saved glb, Blender down: still ships", row(d, "Prop_Isle")["status"].startswith("SHIPPED (400 tris"), row(d, "Prop_Isle")["status"])
+shutil.rmtree(d)
+
+# 16c. no glb, no .blend, no collection named after it: REJECTED, the open scene is never exported
+fs = FakeShip()
+
+
+class SceneBlender(FakeBlender):
+    def call(self, addr, command, timeout=600, side="bridge", **p):
+        if "bpy.data.collections" in p["code"]:
+            return {"result": {"source": "visible", "objects": ["Somebody_Elses_Cube"]}}
+        return FakeBlender.call(self, addr, command, timeout, side, **p)
+
+
+d, w, fb = setup(blend=False, ship=fs, blender=SceneBlender())
+w.tick()
+r = row(d, "Tool_Pickaxe")
+check("no source: REJECTED, says no source", r["status"].startswith("REJECTED: no source"), r["status"])
+check("no source: nothing exported", fs.exported == [])
+check("no source: no glb written", not os.path.exists(os.path.join(d, "glb", "Tool_Pickaxe.glb")))
+shutil.rmtree(d)
+
+# 16d. a collection named after the asset (no .blend, no glb) still exports
+d, w, fb = setup(blend=False)
+w.tick()
+check("collection source: still ships", row(d, "Tool_Pickaxe")["status"].startswith("SHIPPED"), row(d, "Tool_Pickaxe")["status"])
+shutil.rmtree(d)
+
+# 16e. a .blend saved after the glb is newer work: export it
+fs = FakeShip()
+d, w, fb = setup(ship=fs)
+make_glb(os.path.join(d, "glb", "Tool_Pickaxe.glb"), [("Old", 10)])
+os.utime(os.path.join(d, "glb", "Tool_Pickaxe.glb"), (1000, 1000))
+w.tick()
+check("blend newer than glb: exported from the .blend", fs.exported == ["Tool_Pickaxe"] and fs.landed == [], (fs.exported, fs.landed))
+shutil.rmtree(d)
+
+# 16f. glb newer than the .blend: the glb is used as it is
+fs = FakeShip()
+d, w, fb = setup(ship=fs)
+make_glb(os.path.join(d, "glb", "Tool_Pickaxe.glb"), [("New", 10)])
+os.utime(os.path.join(d, "Tool", "Tool_Pickaxe.blend"), (1000, 1000))
+w.tick()
+check("glb newer than blend: imported as it is", fs.exported == [] and len(fs.landed) == 1 and fb.opened == [], (fs.exported, fs.landed))
+shutil.rmtree(d)
+
+# 16g. overlapped ship: a glb asset next to a Blender asset; only the Blender one is exported
+fs = FakeShip()
+d, w, fb = setup(board=BOARD16, ship=fs)
+make_glb(os.path.join(d, "glb", "Prop_Isle.glb"), [("Rock", 400), ("Tree", 900)])
+w.tick()
+check("overlapped: glb landed as it is, other exported", fs.exported == ["Tool_Pickaxe"] and len(fs.landed) == 1, (fs.exported, fs.landed))
+check("overlapped: glb row shipped", row(d, "Prop_Isle")["status"].startswith("SHIPPED (1300 tris"), row(d, "Prop_Isle")["status"])
+shutil.rmtree(d)
+
+# 16h. a bad glb is REJECTED (the file is the Blender team's), not exported over
+fs = FakeShip()
+d, w, fb = setup(board=BOARD16.replace("| 1 | Tool_Pickaxe | tool | 0.9 m | READY |", "| 1 | Tool_Pickaxe | tool | 0.9 m | SHIPPED |"),
+                 ship=fs, blend=False)
+os.makedirs(os.path.join(d, "glb"))
+with open(os.path.join(d, "glb", "Prop_Isle.glb"), "wb") as f:
+    f.write(b"glTF" + b"\x01\x00\x00\x00" + b"\x00" * 4)
+w.tick()
+check("bad glb: REJECTED unreadable, not exported", row(d, "Prop_Isle")["status"].startswith("REJECTED: unreadable glb") and fs.exported == [],
+      row(d, "Prop_Isle")["status"])
+shutil.rmtree(d)
+
+# 17. one asset, two rows (a rebuild re-queued under the same name): the newest row is the live one
+DUP = BOARD.replace("| 3 | Mob_BlightSlime | foe | 0.8 m | DOING (grok) | |",
+                    "| 3 | Mob_BlightSlime | foe | 0.8 m | DOING (grok) | |\n| 4 | Tool_Pickaxe | tool | 0.9 m | READY | v2 |").replace(
+                    "| 1 | Tool_Pickaxe | tool | 0.9 m | READY | stone head |", "| 1 | Tool_Pickaxe | tool | 0.9 m | SHIPPED (36 tris) | old |")
+out = artqueue.set_row(DUP, "Tool_Pickaxe", "SHIPPED (9 tris)", "new")
+rows17, _ = artqueue.parse(out)
+check("duplicate asset: set_row updates the newest row", rows17[3]["status"] == "SHIPPED (9 tris)" and rows17[0]["status"] == "SHIPPED (36 tris)",
+      [r["status"] for r in rows17])
+
+# 18. every state is a column in STATUS.md and counts(), 0 included; BLOCKED rows are counted
+BL = BOARD.replace("| 2 | Item_Coal | item | 0.35 m | TODO | |", "| 2 | Item_Coal | item | 0.35 m | BLOCKED: waiting on watcher fix | |")
+d, w, fb = setup(board=BL, up=(False, False))
+w.tick()
+st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+c = w.counts()
+check("counts: BLOCKED counted in counts() and STATUS.md", c["BLOCKED"] == 1 and "BLOCKED 1" in st, (c, st[:200]))
+check("counts: zero states still listed (READY 0 style)", all(k in c for k in artqueue.STATES) and "SHIPPED 0" in st and "WAITING 0" in st)
+d2, w2, _ = setup(up=(False, False))
+w2.tick()
+st2 = open(os.path.join(d2, "STATUS.md"), encoding="utf-8").read()
+check("counts: BLOCKED 0 and READY columns shown when none are blocked", "BLOCKED 0" in st2 and "READY 1" in st2 and w2.counts()["BLOCKED"] == 0, st2[:200])
+shutil.rmtree(d2)
+wire.call = fb.call
+check("counts: STATUS.md table equals counts()", st.split("\n")[4] == "| " + " | ".join("%s %d" % kv for kv in sorted(c.items())) + " |")
 shutil.rmtree(d)
 
 n = sum(results)

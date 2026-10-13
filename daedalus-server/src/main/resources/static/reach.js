@@ -9,6 +9,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import * as core from "/reach-core.js";
+import * as orrery from "/orrery-core.js";
 
 // Presentation only: each isle's grass and stone, as orr_reach.py paints them in Unreal (the shape is the core's).
 const LOOK = {
@@ -74,7 +75,6 @@ resize();
 // Unreal is X/Y across and Z up, in cm; here one cube is one unit with Y up: (x, y, z)ue -> (x, z, y).
 const toScene = (x, y, z) => new THREE.Vector3(x, z, y);
 
-const cube = new THREE.BoxGeometry(1, 1, 1);
 const centres = {};
 
 function isleMeshes(isle) {
@@ -84,23 +84,39 @@ function isleMeshes(isle) {
   const look = LOOK[isle.name] || LOOK["Claude Island"];
   const g = look.grass;
   const colours = [g, SAND, DIRT, look.stone, HEART, [g[0] * 1.25 + 0.04, g[1] * 1.18, g[2] * 0.8]];
-  const lists = colours.map(() => []);
-  const cubes = { n: 0 };
-  core.build(p, (x, y, z, l) => { lists[l].push(x, y, z); cubes.n++; });
+  // One merged surface mesh per layer (ADR-062, Minecraft's rule 3): only the visible faces, merged greedily by the
+  // same core as Unreal (mesh() = DaedalusVoxelIsleCore Mesh(), parity-tested), instead of an instanced cube per block.
+  const quads = core.mesh(p);
+  const per = colours.map(() => ({ pos: [], nrm: [], idx: [] }));
+  const NRM = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+  const corner = (q, u, v) => q[1] <= 1 ? [q[2], u, v] : q[1] <= 3 ? [u, q[2], v] : [u, v, q[2]];
+  for (const q of quads) {
+    const b = per[q[0]];
+    const pts = [corner(q, q[3], q[5]), corner(q, q[4], q[5]), corner(q, q[4], q[6]), corner(q, q[3], q[6])]
+      .map(([x, y, z]) => toScene(ox + x, oy + y, oz + z));
+    const n = NRM[q[1]];
+    const ns = toScene(n[0], n[1], n[2]);
+    const base = b.pos.length / 3;
+    for (const v of pts) { b.pos.push(v.x, v.y, v.z); b.nrm.push(ns.x, ns.y, ns.z); }
+    // three.js front faces wind counter-clockwise seen from the normal; the axis swap flips handedness, so check.
+    const e1 = pts[1].clone().sub(pts[0]), e2 = pts[2].clone().sub(pts[0]);
+    const ccw = e1.cross(e2).dot(ns) > 0;
+    if (ccw) b.idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    else b.idx.push(base, base + 2, base + 1, base, base + 3, base + 2);
+  }
   const group = new THREE.Group();
-  const m4 = new THREE.Matrix4();
-  lists.forEach((list, l) => {
-    if (!list.length) return;
+  const cubes = { n: quads.length };
+  per.forEach((b, l) => {
+    if (!b.idx.length) return;
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(b.pos, 3));
+    geo.setAttribute("normal", new THREE.Float32BufferAttribute(b.nrm, 3));
+    geo.setIndex(b.pos.length / 3 > 65535 ? new THREE.Uint32BufferAttribute(b.idx, 1) : new THREE.Uint16BufferAttribute(b.idx, 1));
     const c = new THREE.Color().setRGB(...colours[l], THREE.SRGBColorSpace);
     const mat = l === core.HEART
-      ? new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5, roughness: 0.4 })
-      : new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 });
-    const mesh = new THREE.InstancedMesh(cube, mat, list.length / 3);
-    for (let i = 0; i < list.length; i += 3) {
-      m4.makeTranslation(toScene(ox + list[i] + 0.5, oy + list[i + 1] + 0.5, oz + list[i + 2] + 0.5));
-      mesh.setMatrixAt(i / 3, m4);
-    }
-    group.add(mesh);
+      ? new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5, roughness: 0.4, flatShading: true })
+      : new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, flatShading: true });
+    group.add(new THREE.Mesh(geo, mat));
   });
   if (p.pondRadius > 0) {
     const water = new THREE.Mesh(new THREE.CircleGeometry(p.pondRadius * 1.05, 48),
@@ -191,11 +207,17 @@ function applySky(hour) {
   const up = Math.sin(a);
   sun.position.set(Math.cos(a) * 600, up * 600, 250);
   sun.intensity = Math.max(0, up) * 2.4;
-  hemi.intensity = 0.25 + Math.max(0, up) * 1.0;
+  hemi.intensity = 0.5 + Math.max(0, up) * 0.8;   // never pitch black: dusk and night stay readable
   stars.material.opacity = Math.max(0, Math.min(1, -up * 3));
   bloom.strength = 0.5 + Math.max(0, -up) * 0.8;
   const hh = Math.floor(hour) % 24, mm = Math.floor((hour % 1) * 60);
   document.getElementById("clock").textContent = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+  // The starbloom of this hour (one per hour), its constellation partner, and the brew they make together.
+  const h = orrery.inBloom(hour);
+  const partner = orrery.HERBS.find((x) => x.constellation === h.constellation && x.name !== h.name);
+  document.getElementById("bloom").textContent =
+    `In bloom: ${h.name} (${h.constellation}, ${orrery.isDay(h.hour) ? "day" : "night"}). ` +
+    `With ${partner.name} at ${String(partner.hour).padStart(2, "0")}:00 it steeps a ${orrery.brewOf(h.name, partner.name)}.`;
 }
 
 function flyTo(name) {
@@ -259,7 +281,7 @@ async function main() {
   const verdict = bad === 0
     ? `<b class="ok">matches the server's ${checked} sampled columns</b>`
     : `<b class="warn">${bad} of ${checked} sampled columns differ from the server</b>`;
-  statusEl.innerHTML = `${reach.isles.length} isles, ${total.toLocaleString()} cubes, ${reach.bridges.length} sky bridges. ${verdict}.`;
+  statusEl.innerHTML = `${reach.isles.length} isles, ${total.toLocaleString()} merged faces, ${reach.bridges.length} sky bridges. ${verdict}.`;
   flyTo(reach.isles[0].name);
 }
 
@@ -275,6 +297,7 @@ playBtn.addEventListener("click", () => {
 applySky(Number(hourInput.value));
 
 let last = performance.now();
+window.__reachInfo = () => renderer.info;   // for the headless check: triangles and geometries drawn
 renderer.setAnimationLoop((now) => {
   const dt = (now - last) / 1000;
   last = now;

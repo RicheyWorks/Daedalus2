@@ -1,59 +1,182 @@
 {
  "system": "Wager Herbs",
- "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) adds +0.1 to p: the Reaper favors the bold. Stormbloom may re-roll a failed jackpot once.",
+ "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 0.5) while the payout stays at 1/p_base, so a storm brew pays +20% EV: the Reaper favors the bold. Exceptions are listed per herb as storm_ev: Hedgeleaf hits the 0.95 cap (1.056), Stormbloom's re-roll dilutes the boost (1.153), Parlayvine stays fair (1.0). r2 audit: the old 'same +20% for every herb' claim was false. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
  "herbs": [
   {
    "id": "Luckroot",
    "p": 0.5,
    "base": "heal 10",
-   "jackpot": "heal 40 + regen 10s"
+   "jackpot": "heal 40 + regen 10s",
+   "storm_ev": 1.2
   },
   {
    "id": "Hedgeleaf",
    "p": 0.9,
    "base": "shield 10",
    "jackpot": "shield 20",
-   "note": "the safe bet; lowers parlay variance"
+   "note": "the safe bet; lowers parlay variance",
+   "storm_ev": 1.056
   },
   {
    "id": "Bluffmoss",
    "p": 0.4,
    "base": "stealth 5s",
-   "jackpot": "invisible 15s"
+   "jackpot": "invisible 15s",
+   "storm_ev": 1.2
   },
   {
    "id": "Longshot",
    "p": 0.1,
    "base": "speed +5% 10s",
-   "jackpot": "speed +60% 30s"
+   "jackpot": "speed +60% 30s",
+   "storm_ev": 1.2
   },
   {
    "id": "Parlayvine",
-   "p": 1.0,
+   "p": 0.5,
    "base": "none",
-   "jackpot": "doubles the other herb's payout",
-   "note": "catalyst"
+   "jackpot": "parlay leg: halves the other herb's jackpot odds and doubles its payout (fair, EV 1.0)",
+   "note": "variance catalyst; no storm boost on this leg. Was p 1.0 + double payout = free 2x EV, fixed r2",
+   "storm_ev": 1.0
   },
   {
    "id": "Stormbloom",
    "p": 0.33,
    "base": "lightning resist",
    "jackpot": "chain lightning strike",
-   "note": "one free re-roll"
+   "note": "one free re-roll",
+   "storm_ev": 1.153
   },
   {
    "id": "Vigweed",
    "p": 0.75,
    "base": "stamina 20",
-   "jackpot": "no stamina cost 20s"
+   "jackpot": "no stamina cost 20s",
+   "storm_ev": 1.2
   },
   {
    "id": "Oddsthistle",
    "p": 0.25,
    "base": "reveal odds",
-   "jackpot": "see the next drop/craft outcome before committing"
+   "jackpot": "see the next drop/craft outcome before committing",
+   "storm_ev": 1.2
   }
  ],
  "tonics": "8x8 = 64 combos (Item_OR_Tonic_00..63; index = 8*a + b)",
- "water": "Every tonic brew consumes 0.5 L water. Spring water: normal. Storm-cistern water brewed during Rain/Storm: +0.05 jackpot p (stacks with the storm +0.1). Herb plants need 1 L/day or pause growth."
+ "water": "Every tonic brew consumes 0.5 L water. Spring water: normal. Storm-cistern water brewed during Rain/Storm: jackpot p x1.05 (stacks with the storm x1.2, cap 0.95). Herb plants need 1 L/day or pause growth.",
+ "storm_parlay_cookbook": {
+  "system": "Storm Parlay Cookbook",
+  "rule": "Signature two-herb brews for OddsReaper Island. Clear EV is always 1.0 (fair odds). Storm multiplies each boostable leg p by 1.2 (cap 0.95; Parlayvine fixed); cistern water multiplies a further 1.05 during Rain/Storm. Payout stays 1/p_clear so EV = p_storm / p_clear. Stormbloom uses p_eff=1-(1-p)^2 before the product.",
+  "storm_mult": 1.2,
+  "cistern_mult": 1.05,
+  "p_cap": 0.95,
+  "recipes": [
+   {
+    "id": "ReapersFavor",
+    "herbs": [
+     "Luckroot",
+     "Vigweed"
+    ],
+    "role": "mid-odds storm workhorse",
+    "base_stack": "heal 10 + stamina 20",
+    "jackpot_stack": "heal 40 + regen 10s + no stamina cost 20s",
+    "ev_clear": 1.0,
+    "ev_storm": 1.44,
+    "ev_storm_cistern": 1.588
+   },
+   {
+    "id": "LightningLedger",
+    "herbs": [
+     "Stormbloom",
+     "Oddsthistle"
+    ],
+    "role": "storm-native intel brew",
+    "base_stack": "lightning resist + reveal odds",
+    "jackpot_stack": "chain lightning + see next drop/craft",
+    "ev_clear": 1.0,
+    "ev_storm": 1.383,
+    "ev_storm_cistern": 1.506,
+    "note": "Stormbloom re-roll dilutes single-leg boost; still beats clear"
+   },
+   {
+    "id": "LongOdds",
+    "herbs": [
+     "Longshot",
+     "Parlayvine"
+    ],
+    "role": "max variance dial",
+    "base_stack": "speed +5% 10s",
+    "jackpot_stack": "speed +60% 30s at 20x payout",
+    "ev_clear": 1.0,
+    "ev_storm": 1.2,
+    "ev_storm_cistern": 1.26,
+    "note": "Parlayvine leg unboosted; only Longshot rides the storm"
+   },
+   {
+    "id": "HouseHedge",
+    "herbs": [
+     "Hedgeleaf",
+     "Luckroot"
+    ],
+    "role": "safer parlay; Hedgeleaf soft-caps storm",
+    "base_stack": "shield 10 + heal 10",
+    "jackpot_stack": "shield 20 + heal 40 + regen 10s",
+    "ev_clear": 1.0,
+    "ev_storm": 1.267,
+    "ev_storm_cistern": 1.33
+   },
+   {
+    "id": "GhostBluff",
+    "herbs": [
+     "Bluffmoss",
+     "Stormbloom"
+    ],
+    "role": "stealth under lightning",
+    "base_stack": "stealth 5s + lightning resist",
+    "jackpot_stack": "invisible 15s + chain lightning",
+    "ev_clear": 1.0,
+    "ev_storm": 1.383,
+    "ev_storm_cistern": 1.506
+   },
+   {
+    "id": "CoinFlipDouble",
+    "herbs": [
+     "Luckroot",
+     "Parlayvine"
+    ],
+    "role": "classic variance catalyst",
+    "base_stack": "heal 10",
+    "jackpot_stack": "heal 40 + regen 10s at 4x payout",
+    "ev_clear": 1.0,
+    "ev_storm": 1.2,
+    "ev_storm_cistern": 1.26
+   },
+   {
+    "id": "ThunderSprint",
+    "herbs": [
+     "Longshot",
+     "Vigweed"
+    ],
+    "role": "bold speed/stamina storm play",
+    "base_stack": "speed +5% 10s + stamina 20",
+    "jackpot_stack": "speed +60% 30s + no stamina cost 20s",
+    "ev_clear": 1.0,
+    "ev_storm": 1.44,
+    "ev_storm_cistern": 1.588
+   },
+   {
+    "id": "OddsWhisper",
+    "herbs": [
+     "Oddsthistle",
+     "Hedgeleaf"
+    ],
+    "role": "info + safety; soft-capped storm",
+    "base_stack": "reveal odds + shield 10",
+    "jackpot_stack": "see next outcome + shield 20",
+    "ev_clear": 1.0,
+    "ev_storm": 1.267,
+    "ev_storm_cistern": 1.33
+   }
+  ]
+ }
 }

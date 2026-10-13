@@ -11,5 +11,5 @@
  "demand_per_day": {"player": 3, "CoinbackGoat": 8, "DicebeakHen": 0.5, "herb_plant": 1, "tonic_brew": 0.5},
  "thirst": {"player": "thirst 0..100, +4/h (x1.5 in Clear daylight), drink 1 L = -35; >80 halves stamina regen; 100 = 1 hp/10 s",
             "animals": "unwatered 1 day: no milk/eggs; 3 days: animal leaves", "herbs": "unwatered herbs pause growth; Stormbloom grows only if the plant had rain that day"},
- "balance": "spring alone (600 L/day) keeps player + 4 goats + 4 hens + 32 herbs alive (~70 L/day); the cistern feeds growth surplus and brewing. The island never dies of thirst; storms make it rich.",
+ "balance": "spring alone (600 L/day) keeps player + 4 goats + 4 hens + 32 herbs alive (~70 L/day), and still covers the full capped herd (6 goats + 8 hens, see livestock.json) at ~87 L/day, so even a sour d6 morning never starves the island; the cistern feeds growth surplus and brewing. The island never dies of thirst; storms make it rich.",
  "items": "Item_OR_Waterskin_00..01 (2 L, refill at any source)"}

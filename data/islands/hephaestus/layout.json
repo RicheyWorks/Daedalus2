@@ -24,7 +24,8 @@
   "ark_drydock",
   "ash_fields",
   "hot_springs",
-  "basalt_coast"
+  "basalt_coast",
+  "livestock_pens"
  ],
  "placements": [
   {
@@ -944,6 +945,290 @@
    "yaw": 0,
    "scale": 1.0,
    "zone": "water_chain"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -130,
+   "y": 150,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -124,
+   "y": 150,
+   "z": 0,
+   "yaw": 73,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -118,
+   "y": 150,
+   "z": 0,
+   "yaw": 146,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -130,
+   "y": 158,
+   "z": 0,
+   "yaw": 47,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -124,
+   "y": 158,
+   "z": 0,
+   "yaw": 120,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -118,
+   "y": 158,
+   "z": 0,
+   "yaw": 193,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Cow",
+   "x": -130,
+   "y": 166,
+   "z": 0,
+   "yaw": 94,
+   "scale": 1.1,
+   "zone": "livestock_pens",
+   "animal": "forgeox"
+  },
+  {
+   "asset": "Mob_Cow",
+   "x": -124,
+   "y": 166,
+   "z": 0,
+   "yaw": 167,
+   "scale": 1.1,
+   "zone": "livestock_pens",
+   "animal": "forgeox"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -130,
+   "y": 174,
+   "z": 0,
+   "yaw": 141,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -124,
+   "y": 174,
+   "z": 0,
+   "yaw": 214,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -118,
+   "y": 174,
+   "z": 0,
+   "yaw": 287,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -130,
+   "y": 182,
+   "z": 0,
+   "yaw": 188,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -124,
+   "y": 182,
+   "z": 0,
+   "yaw": 261,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -118,
+   "y": 182,
+   "z": 0,
+   "yaw": 334,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Bee",
+   "x": -130,
+   "y": 190,
+   "z": 0,
+   "yaw": 235,
+   "scale": 1.5,
+   "zone": "livestock_pens",
+   "animal": "vent_bees"
+  },
+  {
+   "asset": "Mob_Bee",
+   "x": -124,
+   "y": 190,
+   "z": 0,
+   "yaw": 308,
+   "scale": 1.5,
+   "zone": "livestock_pens",
+   "animal": "vent_bees"
+  },
+  {
+   "asset": "Prop_WaterTrough_Iron",
+   "x": -138,
+   "y": 170,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.2,
+   "zone": "livestock_pens"
+  },
+  {
+   "asset": "Prop_Asteroid_Core",
+   "x": 215,
+   "y": 205,
+   "z": 0,
+   "yaw": 12,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Large",
+   "x": 248,
+   "y": 188,
+   "z": 0.5,
+   "yaw": -28,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Asteroid_Chunk_Small",
+   "x": 192,
+   "y": 228,
+   "z": 1.0,
+   "yaw": 40,
+   "scale": 1.0,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Crater_RimRock",
+   "x": 228,
+   "y": 218,
+   "z": 0,
+   "yaw": 75,
+   "scale": 1.2,
+   "zone": "meteor_scar",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_ArkWreck_Hull",
+   "x": 0,
+   "y": -330,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "ark_drydock",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Grok_Monolith",
+   "x": 0,
+   "y": 55,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "caldera_forge",
+   "role": "landmark"
+  },
+  {
+   "asset": "Prop_Grok_SeedPod",
+   "x": -340,
+   "y": 40,
+   "z": 0,
+   "yaw": 45,
+   "scale": 1.0,
+   "zone": "ash_fields",
+   "role": "landmark"
   }
- ]
+ ],
+ "hero_cam_m": [
+  140,
+  -160,
+  90
+ ],
+ "hero_target_m": [
+  0,
+  0,
+  5
+ ],
+ "hero_fov": 55,
+ "hero_cam_cm": [
+  6014000,
+  1984000,
+  9000
+ ],
+ "hero_target_cm": [
+  6000000,
+  2000000,
+  500
+ ],
+ "landmarks": {
+  "source": "blender-team QUEUE 1360-1366 READY 2026-10-12 ~23:27 PT",
+  "queue_rows": [
+   1360,
+   1361,
+   1362,
+   1363,
+   1364,
+   1365,
+   1366
+  ],
+  "assets": [
+   "Prop_Asteroid_Core",
+   "Prop_Asteroid_Chunk_Large",
+   "Prop_Asteroid_Chunk_Small",
+   "Prop_Crater_RimRock",
+   "Prop_ArkWreck_Hull",
+   "Prop_Grok_Monolith",
+   "Prop_Grok_SeedPod"
+  ],
+  "note": "QUEUE 1360-1366 imported round-4 editor turn 2026-10-12 23:45 PT (126/126 placed). blender-team LOD1 ready for all 7 (art/glb/*_LOD1.glb). Next editor turn: set HEPH_FORCE_LOD1=1 to swap hi-res for LOD1 (lower tris), then lit forge-overlook hero (Sky Director restored Clear by oddsreaper 23:54). Do not touch Unreal off-turn.",
+  "imported_round": 4,
+  "lod1_ready": true
+ }
 }

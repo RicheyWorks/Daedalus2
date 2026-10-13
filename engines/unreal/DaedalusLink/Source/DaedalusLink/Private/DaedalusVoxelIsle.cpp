@@ -5,6 +5,7 @@
 #include "DaedalusVoxelIsleCore.h"
 
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Materials/MaterialInstanceDynamic.h"
@@ -32,6 +33,10 @@ ADaedalusVoxelIsle::ADaedalusVoxelIsle()
 		H->SetCullDistances(0, 80000);
 		IsleLayers.Add(H);
 	}
+	Surface = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Surface"));
+	Surface->SetupAttachment(RootComponent);
+	Surface->bUseComplexAsSimpleCollision = true;
+	Surface->SetCollisionProfileName(TEXT("BlockAll"));
 	PondWater = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PondWater"));
 	PondWater->SetupAttachment(RootComponent);
 	PondWater->SetStaticMesh(Cyl.Object);
@@ -118,10 +123,56 @@ FString ADaedalusVoxelIsle::Build()
 		Out[L].Add(FTransform(FRotator::ZeroRotator, FVector((X + 0.5f) * C, (Y + 0.5f) * C, (Z + 0.5f) * C), Scale));
 	});
 	int32 Cubes = 0;
-	for (int32 L = 0; L < Count; ++L)
+	int32 Quads = 0;
+	if (Surface) Surface->ClearAllMeshSections();
+	if (bMergedMesh && Surface)
+	{
+		// One section per layer, from the core's merged quads (the same faces the cubes would show).
+		const std::vector<daedalus::isle::Quad> Q = daedalus::isle::Mesh(IsleParams(*this));
+		Quads = static_cast<int32>(Q.size());
+		TArray<FVector> V[Count];
+		TArray<int32> T[Count];
+		TArray<FVector> Nrm[Count];
+		TArray<FVector2D> UV[Count];
+		static const FVector Normals[6] = {FVector(1.0, 0.0, 0.0), FVector(-1.0, 0.0, 0.0), FVector(0.0, 1.0, 0.0),
+			FVector(0.0, -1.0, 0.0), FVector(0.0, 0.0, 1.0), FVector(0.0, 0.0, -1.0)};
+		for (const daedalus::isle::Quad& q : Q)
+		{
+			auto P3 = [&](int32 U, int32 W) {
+				const double Pl = q.Plane, Ud = U, Wd = W;
+				if (q.Normal <= 1) return FVector(Pl, Ud, Wd) * C;
+				if (q.Normal <= 3) return FVector(Ud, Pl, Wd) * C;
+				return FVector(Ud, Wd, Pl) * C;
+			};
+			const FVector A = P3(q.U0, q.V0), B = P3(q.U1, q.V0), Cc = P3(q.U1, q.V1), D = P3(q.U0, q.V1);
+			const FVector& N = Normals[q.Normal];
+			const int32 L = q.Layer, Base = V[L].Num();
+			V[L].Append({A, B, Cc, D});
+			Nrm[L].Append({N, N, N, N});
+			UV[L].Append({FVector2D(q.U0, q.V0), FVector2D(q.U1, q.V0), FVector2D(q.U1, q.V1), FVector2D(q.U0, q.V1)});
+			// Unreal's front faces wind so that the cross product points away from the normal (as in the engine's
+			// own GenerateBoxMesh), so pick the order per quad rather than per axis.
+			const bool Flip = FVector::DotProduct(FVector::CrossProduct(B - A, Cc - A), N) > 0;
+			if (Flip) T[L].Append({Base, Base + 2, Base + 1, Base, Base + 3, Base + 2});
+			else T[L].Append({Base, Base + 1, Base + 2, Base, Base + 2, Base + 3});
+		}
+		for (int32 L = 0; L < Count; ++L)
+		{
+			IsleLayers[L]->ClearInstances();
+			if (V[L].Num() == 0) continue;
+			const bool bRock = L == Stone || L == Heart;
+			Surface->CreateMeshSection_LinearColor(L, V[L], T[L], Nrm[L], UV[L], TArray<FLinearColor>(), TArray<FProcMeshTangent>(),
+				!bRock || bRockCollision);
+			Surface->SetMaterial(L, Layer(L, Colors[L], L == Heart)->GetMaterial(0));
+		}
+		for (const TArray<FTransform>& Layer_ : Out) Cubes += Layer_.Num();   // the cubes it stands for
+	}
+	for (int32 L = 0; L < Count && !(bMergedMesh && Surface); ++L)
 	{
 		UHierarchicalInstancedStaticMeshComponent* H = Layer(L, Colors[L], L == Heart);
 		H->ClearInstances();
+		const bool bRock = L == Stone || L == Heart;
+		H->SetCollisionEnabled(bRock && !bRockCollision ? ECollisionEnabled::NoCollision : ECollisionEnabled::QueryAndPhysics);
 		H->AddInstances(Out[L], false);
 		Cubes += Out[L].Num();
 	}
@@ -144,7 +195,11 @@ FString ADaedalusVoxelIsle::Build()
 		Falls->SetRelativeLocation(FVector(Out2.X * Edge * C, Out2.Y * Edge * C, -Depth * 0.35f * C));
 		Falls->SetRelativeScale3D(FVector(4.f * C / 100.f, 4.f * C / 100.f, Depth * 0.7f * C / 100.f));
 	}
-	LastStats = FString::Printf(TEXT("cubes=%d columns=%d radius=%d"), Cubes, Columns, Radius);
+	int32 Solid = 0;
+	for (int32 L = 0; L < Count; ++L)
+		if (bRockCollision || (L != Stone && L != Heart)) Solid += Out[L].Num();
+	LastStats = FString::Printf(TEXT("cubes=%d columns=%d radius=%d colliding=%d mesh=%s quads=%d"), Cubes, Columns, Radius, Solid,
+		bMergedMesh ? TEXT("merged") : TEXT("cubes"), Quads);
 	return LastStats;
 }
 

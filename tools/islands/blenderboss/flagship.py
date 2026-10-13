@@ -3,7 +3,7 @@ import bpy, bmesh, sys, os, math, random, re, json
 from mathutils import Vector, noise
 a = sys.argv[sys.argv.index("--")+1:]; ART, PNG = a[0], a[1]
 os.makedirs(os.path.join(ART, "flagship"), exist_ok=True); GLB = os.path.join(ART, "glb"); NAME = "Prop_Island_Flagship_BlenderBoss"
-R = 120.0  # radius m: double the 60 m planned island radius (240 m across)
+BASE = []; R = 120.0  # radius m: double the 60 m planned island radius (240 m across)
 random.seed(1337)
 bpy.ops.wm.read_factory_settings(use_empty=True); sc = bpy.context.scene
 root = bpy.data.collections.new(NAME); sc.collection.children.link(root)
@@ -27,15 +27,24 @@ lip = [bm.verts.new((v.co.x*1.01, v.co.y*1.01, -3.0)) for v in rings[-1]]
 for j in range(SEG): bm.faces.new((rings[-1][j], lip[j], lip[(j+1) % SEG], rings[-1][(j+1) % SEG]))
 me = bpy.data.meshes.new(NAME+"_Terrain"); bm.normal_update(); bm.to_mesh(me); bm.free()
 ter = bpy.data.objects.new(NAME+"_Terrain", me); root.objects.link(ter); BASE.append(ter)
-col = me.color_attributes.new("Col", "BYTE_COLOR", "CORNER")
+# flat material slots (Unreal's glTF import ignores vertex colours -> terrain showed white): 0 grass 1 rock 2 sand 3 dirt 4 water
+def tmat(n, c, a=1.0):
+    m = bpy.data.materials.new(n); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs["Base Color"].default_value = c; p.inputs["Roughness"].default_value = 0.9 if a == 1.0 else 0.1
+    if a < 1.0: p.inputs["Alpha"].default_value = a; m.blend_method = "BLEND"
+    me.materials.append(m)
+tmat("M_BB_Grass", (0.20, 0.50, 0.12, 1)); tmat("M_BB_TerrainRock", (0.45, 0.42, 0.38, 1)); tmat("M_BB_Sand", (0.80, 0.72, 0.50, 1))
+tmat("M_BB_Dirt", (0.36, 0.26, 0.17, 1)); tmat("M_BB_ShoreWater", (0.10, 0.62, 0.85, 1))
 for poly in me.polygons:
-    z = sum(me.vertices[k].co.z for k in poly.vertices)/len(poly.vertices)
-    c = (0.80,0.72,0.50,1) if z < 1.5 else (0.20,0.50,0.12,1) if z < 13 else (0.45,0.42,0.38,1)
-    if z < -0.5: c = (0.30,0.24,0.20,1)
-    for li in poly.loop_indices: col.data[li].color = c
-m = bpy.data.materials.new("M_BB_Terrain"); m.use_nodes = True
-vc = m.node_tree.nodes.new("ShaderNodeVertexColor"); vc.layer_name = "Col"
-m.node_tree.links.new(vc.outputs[0], m.node_tree.nodes["Principled BSDF"].inputs[0]); me.materials.append(m)
+    vs = [me.vertices[k].co for k in poly.vertices]; z = sum(v.z for v in vs)/len(vs); cx = sum(v.x for v in vs)/len(vs); cy = sum(v.y for v in vs)/len(vs)
+    d = math.hypot(cx, cy) / R; steep = poly.normal.z < 0.80 if poly.area > 0 else False
+    if z < -0.5: k = 3                                          # rim lip / underside edge
+    elif d > 0.93 and z < 0.5: k = 4                            # wet shoreline ring
+    elif z < 1.5: k = 2                                         # beach
+    elif z >= 13 or steep: k = 1                                # hilltop / cliffs
+    elif math.hypot(cx + 35, cy - 30) < 26 or math.hypot(cx, cy) < 14: k = 3   # quarry floor + plaza dirt
+    else: k = 0
+    poly.material_index = k
 for p in me.polygons: p.use_smooth = True
 # underside: inverted cone
 bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=R*1.0, depth=80, location=(0, 0, -42.5)); cone = bpy.context.object
@@ -44,7 +53,7 @@ rm.use_nodes = True; rm.node_tree.nodes["Principled BSDF"].inputs[0].default_val
 for c in cone.users_collection: c.objects.unlink(cone)
 root.objects.link(cone)
 # catalog
-names = sorted(f[:-4] for f in os.listdir(GLB) if f.endswith(".glb"))
+names = sorted(f[:-4] for f in os.listdir(GLB) if f.endswith(".glb") and not f.endswith("_LOD1.glb"))   # LOD1s are not separate models
 def pick(rx, n): return [x for x in names if re.match(rx, x) and "_Harvested" not in x and "_Depleted" not in x][:n]
 proto = {}
 def load(an):
@@ -55,7 +64,7 @@ def load(an):
         for c in list(o.users_collection): c.objects.unlink(o)
     proto[an] = [o for o in objs if o.parent is None and o.type in ("MESH","EMPTY")] or objs; proto[an+"__all"] = objs
     return proto[an]
-placed = []; LAYOUT = []; BASE = []   # BASE = terrain/water/pier objects -> Prop_Island_BlenderBoss_Base.glb
+placed = []; LAYOUT = []   # BASE = terrain/water/pier objects -> Prop_Island_BlenderBoss_Base.glb
 def put(an, x, y, s=1.0, rot=None, zoff=0.0, tag=""):
     z = h(x, y) + zoff
     for src in load(an):
@@ -121,8 +130,9 @@ def mat(n, c, emit=0.0, alpha=1.0):
     m = bpy.data.materials.get(n) or bpy.data.materials.new(n); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
     p.inputs[0].default_value = c; m.diffuse_color = c
     if alpha < 1: p.inputs["Alpha"].default_value = alpha; p.inputs["Roughness"].default_value = 0.05
+    if emit: p.inputs["Emission Color"].default_value = c; p.inputs["Emission Strength"].default_value = emit
     return m
-MW, MS, MWOOD = mat("M_BB_Water", (0.15, 0.45, 0.85, 1), alpha=0.8), mat("M_BB_Stone", (0.62, 0.60, 0.56, 1)), mat("M_BB_WaterWood", (0.42, 0.28, 0.16, 1))
+MW, MS, MWOOD = mat("M_BB_Water", (0.10, 0.75, 1.0, 1), emit=0.6, alpha=0.9), mat("M_BB_Stone", (0.62, 0.60, 0.56, 1)), mat("M_BB_WaterWood", (0.42, 0.28, 0.16, 1))
 def blk(n, size, loc, m, rz=0.0):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc); o = bpy.context.object; o.scale = size; o.rotation_euler.z = rz; o.name = NAME + "_Water_" + n
     o.data.materials.append(m)
@@ -138,7 +148,9 @@ def run(n, a, b2, w, m, lift=0.4, arches=False):
     (ax, ay), (bx, by) = a, b2; L = math.hypot(bx-ax, by-ay); rz = math.atan2(by-ay, bx-ax); seg = max(1, int(L/4))
     for i in range(seg):
         t0 = (i+0.5)/seg; x, y = ax+(bx-ax)*t0, ay+(by-ay)*t0; zt = h(x, y) + lift + (2.5 if arches else 0)
-        blk("%s_%02d_bed" % (n, i), (L/seg+0.05, w+0.5, 0.35), (x, y, zt), MS, rz); blk("%s_%02d_w" % (n, i), (L/seg+0.05, w, 0.1), (x, y, zt+0.2), MW, rz)
+        W = w * 1.6; blk("%s_%02d_bed" % (n, i), (L/seg+0.05, W+0.8, 0.3), (x, y, zt-0.35), MS, rz)                     # deeper: floor sits lower
+        for sd in (-1, 1): blk("%s_%02d_wall%d" % (n, i, sd), (L/seg+0.05, 0.4, 0.9), (x - sd*math.sin(rz)*(W/2+0.2), y + sd*math.cos(rz)*(W/2+0.2), zt), MS, rz)
+        blk("%s_%02d_w" % (n, i), (L/seg+0.05, W, 0.12), (x, y, zt+0.05), MW, rz)
         if arches and i % 2 == 0: blk("%s_%02d_pier" % (n, i), (0.8, w+0.5, 2.5), (x, y, h(x, y)+lift+1.1), MS, rz)
 SPRING, CIST, WELL, WHEEL = (-35, 30), (-12, 8), (16, -10), (30, 20)
 z = h(*SPRING); cyl("Spring_Pool", 4.5, 0.6, (SPRING[0], SPRING[1], z+0.2), MS); cyl("Spring_Water", 4.0, 0.15, (SPRING[0], SPRING[1], z+0.5), MW)
@@ -177,8 +189,16 @@ for o in root.all_objects: o.select_set(True)
 out = os.path.join(GLB, NAME+".glb")
 bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_apply=True)
 for o in bpy.data.objects: o.select_set(False)
-for o in BASE: o.select_set(True)
+# Base = ONE mesh (multi-material). A multi-node glb imports into Unreal as hundreds of StaticMeshes and the island script
+# then found only one stray part (a pier block): "base ok" but no terrain visible. Join copies so the scene/.blend keep parts.
+bpy.ops.object.select_all(action="DESELECT"); _dup = []
+for o in BASE:
+    c = o.copy(); c.data = o.data.copy(); bpy.context.scene.collection.objects.link(c); c.select_set(True); _dup.append(c)
+bpy.context.view_layer.objects.active = _dup[0]; bpy.ops.object.join(); _jb = bpy.context.view_layer.objects.active
+_jb.name = _jb.data.name = "Prop_Island_BlenderBoss_Base"; bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+bpy.ops.object.select_all(action="DESELECT"); _jb.select_set(True)
 bpy.ops.export_scene.gltf(filepath=os.path.join(GLB, "Prop_Island_BlenderBoss_Base.glb"), use_selection=True, export_apply=True)
+print("BASE_JOINED", len(BASE), len(_jb.data.polygons), len(_jb.data.materials)); bpy.data.objects.remove(_jb)
 json.dump({"island": "BlenderBoss", "origin_cm": [-6000000, 6000000, 0], "radius_m": R, "base_asset": "Prop_Island_BlenderBoss_Base",
            "hero_cam_m": [235, -255, 130], "hero_target_m": [50, -10, -5], "placements": LAYOUT}, open(os.path.join(ART, "flagship", "layout.json"), "w"), indent=0)
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ART, "flagship", NAME+".blend"))

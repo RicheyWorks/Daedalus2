@@ -26,7 +26,7 @@
    "gives": [
     "eggs: d6 roll per dawn; 6 = golden egg (sells or hatches)"
    ],
-   "breeds": "golden egg hatches into a hen",
+   "breeds": "golden egg hatches into a hen only if the coop has room (cap 8 hens); a full coop sells it for 1 Reaper Coin instead",
    "drinks": "0.5 L/day from pen troughs"
   }
  ],
@@ -37,6 +37,7 @@
   "Player eats coinfruit, eggs, milk, cheese, bread (coinfruit + hen egg at the felt-table oven).",
   "Goats eat Hedgeleaf + windfall; hens eat Vigweed seed + pulp. Unfed animals stop producing after 1 day, leave after 3.",
   "Coins from goats/golden eggs are staked at the odds boards to buy seed packs: the island is self-sufficient but rewards smart bets.",
-  "Thirst: player drinks 3 L/day (waterskin or any source); unwatered animals stop producing after 1 day and leave after 3."
+  "Thirst: player drinks 3 L/day (waterskin or any source); unwatered animals stop producing after 1 day and leave after 3.",
+  "Flock cap (r2 balance): each hen rolls a golden egg 1 in 6 per dawn, so uncapped hatching grew 4 hens to about 12 in a week (x7/6 per day) and their water and Vigweed demand outran the garden. The coop now caps at 8 hens and the pen at 6 goats; past the cap, golden eggs and kids sell for coins. Expected coin flow at cap: 8 hens x 1/6 = 1.33 golden eggs/day plus 6 goats x 1/6 = 1 Reaper Coin/day, about 2.3 coins/day, enough for one seed pack every two days without ever needing a bet; at cap the whole herd drinks about 87 L/day, still well under the spring's 600."
  ]
 }

@@ -7,8 +7,9 @@
   "Water": "Storm Cistern + Dice Spring",
   "Herbs": "Wager Herbs (parlay odds)",
   "Livestock": "Coinback Goat, Dicebeak Hen",
-  "Items": 524,
-  "Builder": "OddsReaper (Team Grok)"
+  "Items": 591,
+  "Builder": "OddsReaper (Team Grok)",
+  "HeroShot": "Play viewport (editor SceneCapture was black)"
  },
- "hero_image": "bot-team/shots/oddsreaper/hero_unreal_editor.png (after turn); preview hero_blender.png"
+ "hero_image": "bot-team/shots/oddsreaper/hero_unreal_play.png"
 }
