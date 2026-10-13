@@ -5,6 +5,10 @@ The referee HOLDS the turn clock while the editor is down, so every slot after t
 handoff-driven, not clock-driven: it never starts before EARLIEST, and it starts only when the previous holder (youtube-master)
 posts a HANDOFF, or the referee (buffffff) / 2hot2trot posts a GRANT or GO addressed to hephaestus. No fixed-time fallback.
 The 10 minutes are counted from the moment it starts: work hard-stops at start+8 min, Play stop + save by start+9 min.
+Bridge liveness PREFLIGHT before CLAIM: once cleared, it pings the bridge with a short timeout; while the bridge is dead
+(GPU-crashed editor, socket refused or ping never answers) it does NOT post TURN START, does not start the 10-minute clock and
+does not place anything; it posts one HOLD note, re-pings every HEPH_PREFLIGHT_S (default 30 s) and needs two good pings in a
+row after a failure, until the bridge recovers or GIVE_UP. Each check writes shots/hephaestus/bridge_status.json {ok, ts, detail}.
 Then: ping bridge (retries while the editor comes back) -> stop Play if running -> heph_island_ue.run() -> hero shot -> save ->
 post DONE + HANDOFF -> pythagoras. Bridge port: HEPH_BRIDGE_PORT (default 9877; editor B in the multi-editor plan is 9878).
 Whatever fails, it stops Play and saves."""
@@ -33,6 +37,8 @@ TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
 HANDOFF_US = re.compile(r"HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
 GRANT_US = re.compile(r"GRANT[^.]{0,40}?hephaestus|GO hephaestus", re.I)
+PREFLIGHT_S = int(os.environ.get("HEPH_PREFLIGHT_S", "30"))  # re-ping period while the bridge is dead
+PING_S = int(os.environ.get("HEPH_PING_S", "5"))               # liveness ping timeout (call() adds +10 s socket slack)
 LOG = []
 T0 = None
 HARD_STOP = None
@@ -86,6 +92,44 @@ def call(kind, timeout=60, **params):
     return r.get("result", {})
 
 
+def bridge_alive():
+    """Short liveness ping. A GPU-dead editor may refuse the socket or accept it and never answer; both count as dead.
+    Writes shots/hephaestus/bridge_status.json {ok, ts, detail} on every check."""
+    try:
+        p = call("ping", timeout=PING_S)
+        ok, detail = True, f"level={p.get('level')} playing={p.get('playing')}"
+    except Exception as e:
+        ok, detail = False, f"{type(e).__name__}: {e}"[:300]
+    try:
+        os.makedirs(SHOTS, exist_ok=True)
+        with open(os.path.join(SHOTS, "bridge_status.json"), "w", encoding="utf-8") as f:
+            json.dump({"ok": ok, "ts": dt.datetime.now().isoformat(timespec="seconds"), "port": PORT, "detail": detail}, f)
+    except OSError: pass
+    return ok, detail
+
+
+def preflight(why):
+    """Do not CLAIM while the bridge is dead: a crashed editor must not burn our 10-minute turn. True once the bridge
+    answers (twice in a row if it had been dead), False if still dead at GIVE_UP."""
+    held = False
+    while dt.datetime.now() < GIVE_UP:
+        ok, detail = bridge_alive()
+        if ok and held:  # just came back: make sure it stays up before we claim
+            time.sleep(10); ok, detail = bridge_alive()
+        if ok:
+            say(f"preflight: bridge 127.0.0.1:{PORT} alive ({detail})")
+            if held: link(f"DOING hephaestus: bridge {PORT} answering again ({detail}); claiming turn cleared by {why}")
+            return True
+        say(f"preflight: bridge 127.0.0.1:{PORT} DEAD ({detail}); NOT claiming or placing; re-ping in {PREFLIGHT_S}s "
+            f"(give-up {GIVE_UP:%H:%M})")
+        if not held:
+            link(f"HOLD hephaestus: cleared by {why} but bridge {PORT} is dead ({detail[:120]}); NOT claiming the turn or "
+                 f"placing; re-pinging every {PREFLIGHT_S}s until it answers or {GIVE_UP:%H:%M}. Turn clock not started.")
+            held = True
+        time.sleep(PREFLIGHT_S)
+    return False
+
+
 def free_ram_gb():
     """Free physical RAM in GB (Windows GlobalMemoryStatusEx; no psutil needed). None if unknown."""
     try:
@@ -120,6 +164,11 @@ def main():
             link(f"BLOCKED editor turn (hephaestus): no HANDOFF from {PREV} or referee GRANT by {GIVE_UP:%H:%M}; "
                  "did not touch the editor. Back of the line; need a new turn.")
             return None
+    if not preflight(why):
+        say(f"bridge 127.0.0.1:{PORT} still dead at {GIVE_UP:%H:%M}; not starting")
+        link(f"BLOCKED editor turn (hephaestus): cleared by {why} but bridge {PORT} stayed dead until {GIVE_UP:%H:%M}; "
+             "never claimed, did not touch the editor. Need a make-up turn once the editor is back.")
+        return None
     T0 = time.time()
     start = dt.datetime.now()
     HARD_STOP = start + dt.timedelta(seconds=WORK_S + SAVE_S)
