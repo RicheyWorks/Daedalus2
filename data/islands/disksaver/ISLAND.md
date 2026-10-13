@@ -142,3 +142,7 @@ Safety: our sublevel and /Game/DiskSaver only, overwrite-reimport, no deletes, n
 
 ## Layout map
 `ds_layout.png` is a top-down plot of all 171 placements, made off-editor by running `ds_island_ue.py` against a stub of the Unreal module (`layout.py`). The rocky centre holds the spring and well. The stream runs south-east to the pond. The herb garden is to the south, the crop beds to the east, the pen, coop and livestock to the north-west, and a ring of trees surrounds it all.
+
+## Status and next steps (00:45 PT, Oct 13)
+- Done in Unreal: 199 actors. Single-mesh assets with tree canopies (round 4); grass, stone, water and leaf materials; 22 herb Starbloom pickups; 9 livestock tags; 4 kettles; 2 water filters; 4 drinkable and 10 raw water tags.
+- Open: (1) DaedalusWaterSource and DaedalusLivestock (youtube-master's DaedalusHomestead files) need a DaedalusLink build before water sources and animal wander/feed can be hooked; the fix script picks them up automatically via hasattr. (2) A lit hero shot: `turn5.ps1` (temporary island-only lights; the world is at night). (3) mechanics.json still has to be loaded by the gameplay classes.
