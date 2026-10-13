@@ -1,0 +1,50 @@
+{
+  "sourceRepository": "https://github.com/RicheyWorks/Daedalus2",
+  "sourceCommit": "2ca96368fff13a4722ed266741972dd13c138250",
+  "sourceBlobs": {
+    "daedalus-core/src/main/java/com/daedalus/world/simulation/LivingWorld.java": "5f14d482dfa1a18f9bb3ee4de74105d2b5193552",
+    "daedalus-core/src/main/java/com/daedalus/world/simulation/SimulationCodec.java": "1f78e26d91130afc35c292d45588af883705857a",
+    "daedalus-core/src/main/java/com/daedalus/world/ChunkCoordinate.java": "c62a01fb5d1395a8b70f91d5789a9b5c8bbcf394",
+    "daedalus-core/src/main/java/com/daedalus/world/BlockCoordinate.java": "1ebb32cc20b84e5061dff2f89d68cc422286a37b",
+    "daedalus-core/src/main/java/com/daedalus/world/WorldId.java": "b0e0a7d333a88d39b6afdad6a7e35656bc05c98c",
+    "daedalus-core/src/main/java/com/daedalus/world/Npc.java": "af1a7ea942a1ade544a40390c4e162172664b875",
+    "daedalus-server/src/main/java/com/daedalus/server/service/simulation/LivingWorldService.java": "ea17d3e6bcbe05dc91602827d5755e35adc89e93",
+    "daedalus-core/src/main/java/com/daedalus/world/Chunk.java": "82ee0fd7287e5e7f54511b444a325f83aecc283b",
+    "daedalus-core/src/main/java/com/daedalus/world/NpcState.java": "9a2c503375669287030699f32250805ac4d2ca63",
+    "daedalus-server/src/main/java/com/daedalus/server/service/simulation/SimulationRepository.java": "ed226c97b41a776ea60f9041740bf2709434f762",
+    "daedalus-core/src/main/java/com/daedalus/world/NpcResult.java": "f06b16fb68cc97bb4b8b6c003ea0ce33678a9398",
+    "daedalus-core/src/main/java/com/daedalus/world/BlockType.java": "26b3692cef05e05d637975d383914fc3ea352c0f",
+    "daedalus-core/src/main/java/com/daedalus/world/simulation/SimulationTimeline.java": "2e5edf90ad0e7c5a955d137c007414fe686f1536"
+  },
+  "javaRelease": 21,
+  "serializer": "com.fasterxml.jackson.databind.ObjectMapper 2.21.4",
+  "dependencies": [
+    "com/fasterxml/jackson/core/jackson-databind/2.21.4/jackson-databind-2.21.4.jar",
+    "com/fasterxml/jackson/core/jackson-core/2.21.4/jackson-core-2.21.4.jar",
+    "com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar",
+    "org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar",
+    "io/micrometer/micrometer-core/1.17.1/micrometer-core-1.17.1.jar",
+    "io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar",
+    "io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar",
+    "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar"
+  ],
+  "offlineInputs": {
+    "seed": 0,
+    "worldId": "world-zero",
+    "advanceClockMillis": 7000,
+    "tickMillis": 1000,
+    "supplyWater": 3,
+    "epochMillis": 1000,
+    "steward": "alice",
+    "supplyRequestId": "00000000-0000-0000-0000-000000000001"
+  },
+  "fixtureSha256": {
+    "supply-duplicate.json": "f7d81605c9c822d2fb1490877e9d5b55c21eb46ff46cb13fb59bda8e68b1fcb1",
+    "supply-result.json": "cf8b6c570ef5ad790bee3ae2d2c249b760826b9fccc7595ee3e9e99efd5e2d51",
+    "initial.json": "3ff2fedbadd3e1c6dc1b1351809ffe41ba5726a3e7cd32743795f40ac5479f46",
+    "work-update.json": "be218fe035717310a5d2d96cac894d3f6a1582ef8ab952518ee6e0ae04044f81",
+    "work.json": "f7788ad4b32e62c5d8b6fb0192733495afc195a8991f05d955d8432daa9f0cae",
+    "request-water-update.json": "03f990d8cd3eac6bd4e4e71018f9e69c73533a3c02142d70db51f022068fb747",
+    "request-water.json": "95c62e2cb96e70899ec0392744ff44aec54d3ab0c61f08c8ec3f99887844d930"
+  }
+}
