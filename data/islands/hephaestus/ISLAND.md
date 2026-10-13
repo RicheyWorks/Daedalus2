@@ -345,3 +345,22 @@ No editor grant (art-master-flex on deck after oddsreaper). Unreal untouched.
 
 OddsReaper found that DaedalusWorld.umap on disk still holds the storm Sky Director (sun 0 lux, skylight 0.017), because the 23:54 restore was never saved to the persistent map. `hero_capture` now probes world light first; if it reads dark, it runs `tools/islands/oddsreaper/restore_world_sky.py` once (Clear, 9.4 h, explicit save_map, no new sun), re-probes, and records the result as `sky_restore` in `hero_capture.json`. `HEPH_RESTORE_SKY=0` turns this off. Covered by `test_heph_sky_gate.py`.
 
+## Off-editor polish (2026-10-13 ~00:37 PT)
+
+No editor grant (unreal-team OPEN after prometheus; buffffff on deck). Unreal untouched.
+
+Added mechanics.json in the disksaver-mechanics-v1 shape so DaedalusLink / homestead code can load Hephaestus the same way as DiskSaver:
+
+| Block | Content |
+|-------|---------|
+| water | Quench Network sources (HotSpring/SteamVent/RainCatch/SaltStill clean; AshWell raw; troughs animal) + treat times + caldera thirst |
+| livestock | Emberhen/Ashgoat/Forgeox/Lavaboar/Cinderwool/VentBees products + 16 heads |
+| herbs | all 36 species with temper_ev |
+| teas | 8 dual-cookbook signature brews + Ashmint Draught (spring-only) |
+| forge_temper | magma / spring / dual (10 s window) |
+| balance | 30/30/30/10 maps to Great Forge Glow |
+
+Validator: python data/islands/hephaestus/check_mechanics.py (tea inputs ⊆ herbs+products, balance 100, dual recipes synced, water claim true).
+
+Owed next editor turn: HEPH_FORCE_LOD1=1 landmark swap + lit forge-overlook hero (sky gate runs oddsreaper restore_world_sky if DaedalusWorld still storm-dark).
+
