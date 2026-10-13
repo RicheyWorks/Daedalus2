@@ -217,6 +217,46 @@ int main(int argc, char** argv)
 		std::fprintf(F, "events\t%s\n", [&] { std::string E; for (char C : WriteEvents(41, {{EventKind::Seen, "pack-1-1", {1.25, -2, 3}, 1}, {EventKind::Hit, "pack-1-2", {0, 0, 0}, 12.5}, {EventKind::Down, "pack-1-2", {7, 8, 9}, 0}, {EventKind::Player, "player", {-100.5, 20, 0}, 87.5}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "roster\t%s\n", [&] { std::string E; for (char C : WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {-4.25, 5, 6}, false}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
+		// fuzz: 600 mutated specs (ASCII only, so Java reads the same bytes). Each line: hex of the text, then either
+		// "ok" and hex of Write(parsed) or "err" and the message. Java must agree on every one (TacticsFuzzParityTest).
+		{
+			auto Hex = [](const std::string& T) { static const char* D = "0123456789abcdef"; std::string H; for (unsigned char C : T) { H += D[C >> 4]; H += D[C & 15]; } return H; };
+			std::mt19937 Fz(4242);
+			auto Pick = [&](int N) { return static_cast<int>(Fz() % static_cast<unsigned>(N)); };
+			const std::vector<std::string> Nums = {"1e5", "+3", ".5", "5.", "-0", "1e", "0x1", "inf", "nan", "1.5d", "1e400",
+				"123456789012", "-1e8", "100000000.5", "00012", "1_0", "--1", "1e+2", "1E-2", "", "+", "."};
+			const std::string Alphabet = " \t\v\f\r\n|#.-+eE0123456789aZ_LEFTRIGHT";
+			const std::string Base = Write(Decide("fz", 3, {{"a", {100, 0, 0}, 60, 60, true}, {"b", {300, 50, 0}, 10, 60, true},
+				{"c", {-200, 80, 0}, 60, 60, false}, {"d", {0, -400, 0}, 60, 60, true}}, P)) + "# trailer\n";
+			int Oks = 0;
+			for (int K = 0; K < 600; ++K)
+			{
+				std::string T = Base;
+				const int Ops = 1 + Pick(4);
+				for (int O = 0; O < Ops && !T.empty(); ++O)
+				{
+					const size_t At = static_cast<size_t>(Pick(static_cast<int>(T.size())));
+					switch (Pick(7))
+					{
+					case 0: T.erase(At, 1); break;
+					case 1: T.insert(At, 1, Alphabet[static_cast<size_t>(Pick(static_cast<int>(Alphabet.size())))]); break;
+					case 2: { const size_t B = T.rfind('\n', At), E = T.find('\n', At); const std::string L = T.substr(B == std::string::npos ? 0 : B + 1, E == std::string::npos ? std::string::npos : E - (B == std::string::npos ? 0 : B + 1)); T.insert(E == std::string::npos ? T.size() : E + 1, L + "\n"); break; }
+					case 3: { // replace one number-looking token
+						size_t B = At; while (B < T.size() && !(std::isdigit(static_cast<unsigned char>(T[B])) || T[B] == '-')) ++B;
+						size_t E = B; while (E < T.size() && T[E] != ' ' && T[E] != '\n') ++E;
+						if (B < T.size()) T.replace(B, E - B, Nums[static_cast<size_t>(Pick(static_cast<int>(Nums.size())))]);
+						break; }
+					case 4: T.insert(At, std::string(static_cast<size_t>(1 + Pick(3)), " \t\v\f"[Pick(4)])); break;
+					case 5: T.insert(At, std::string(static_cast<size_t>(500 + Pick(40)), 'x')); break;
+					default: T.insert(At, " | why"); break;
+					}
+				}
+				const ParseResult R = Parse(T);
+				Oks += R.Ok;
+				std::fprintf(F, "fuzz\t%s\t%s\t%s\n", Hex(T).c_str(), R.Ok ? "ok" : "err", R.Ok ? Hex(Write(R.Out)).c_str() : R.Error.c_str());
+			}
+			std::printf("  fuzz: 600 mutated specs, %d still parse\n", Oks);
+		}
 		std::fclose(F);
 		std::printf("wrote %s\n", argv[2]);
 	}
