@@ -102,22 +102,29 @@ def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]; base = lay["base_asset"]
     names = sorted({p["asset"] for p in lay["placements"]})
-    if SHOTONLY:
+    if SHOTONLY:   # SceneCapture2D (HighResShot of the hidden viewport came out black; prometheus/hephaestus capture works)
         actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-        cams = [a for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Hero Cam"]
+        world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
         base_n = sum(1 for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Island Base")
-        tmp = None
-        if not cams:
-            c, t = lay["hero_cam_m"], lay["hero_target_m"]; cl = unreal.Vector(ox + c[0] * 100, oy - c[1] * 100, oz + c[2] * 100)
-            dx, dy, dz = t[0] - c[0], -(t[1] - c[1]), t[2] - c[2]
-            rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
-            tmp = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot); cams = [tmp]
-        shot = os.environ.get("BB_SHOT2", SHOT.replace(".png", "_lit.png"))
-        try: os.remove(shot)
+        c, t = lay["hero_cam_m"], lay["hero_target_m"]
+        cl = unreal.Vector(ox + c[0] * 100, oy - c[1] * 100, oz + c[2] * 100); tl = unreal.Vector(ox + t[0] * 100, oy - t[1] * 100, oz + t[2] * 100)
+        rt = unreal.RenderingLibrary.create_render_target2d(world, 1600, 900, unreal.TextureRenderTargetFormat.RTF_RGBA8)
+        cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, cl, unreal.MathLibrary.find_look_at_rotation(cl, tl))
+        cap.set_actor_label("BlenderBoss Lit Capture"); cap.set_folder_path(FOLDER)
+        sc = cap.capture_component2d; sc.set_editor_property("texture_target", rt); sc.set_editor_property("fov_angle", 50.0)
+        grid = [(int(1600 * (0.05 + 0.9 * i / 8)), int(900 * (0.05 + 0.9 * j / 8))) for j in range(9) for i in range(9)]
+        def shoot(src, name):
+            sc.set_editor_property("capture_source", getattr(unreal.SceneCaptureSource, src)); sc.capture_scene()
+            px = [unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid]
+            lum = sum(0.299 * p.r + 0.587 * p.g + 0.114 * p.b for p in px) / len(px)
+            green = 100.0 * sum(1 for p in px if p.g > 40 and p.g > p.r * 1.15 and p.g > p.b * 1.15) / len(px)
+            unreal.RenderingLibrary.export_render_target(world, rt, os.path.dirname(SHOT), name)
+            return round(lum, 1), round(green, 1)
+        lit = shoot("SCS_FINAL_COLOR_LDR", "ue_island_lit.png"); albedo = shoot("SCS_BASE_COLOR", "ue_island_basecolor.png")
+        try: actors.destroy_actor(cap)
         except Exception: pass
-        os.makedirs(os.path.dirname(shot), exist_ok=True)
-        unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, shot, camera=cams[0])
-        return {"ok": True, "mode": "shot", "base_actors": base_n, "cam": "existing" if tmp is None else "temporary", "shot": shot}
+        return {"ok": True, "mode": "shot", "base_actors": base_n, "lit_lum": lit[0], "lit_green_pct": lit[1], "albedo_lum": albedo[0], "albedo_green_pct": albedo[1],
+                "shot": os.path.join(os.path.dirname(SHOT), "ue_island_lit.png")}
     imported = import_missing([base] + ([] if BASEONLY else names), force=(base,))   # base always re-imported (water chain lives there)
     les = open_sublevel()
     actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
