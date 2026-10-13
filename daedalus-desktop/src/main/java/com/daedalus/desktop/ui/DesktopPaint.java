@@ -258,7 +258,7 @@ public final class DesktopPaint {
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
      */
-    public static final String[] EMPTY_MARK = {
+    static final String[] EMPTY_MARK = {
             "###########",
             "# #   #   #",
             "# ### ### #",
@@ -703,7 +703,7 @@ public final class DesktopPaint {
      * Sequential distance ramp — bit-identical to {@code caption.js}
      * {@code DISTANCE_RAMP}. Torch amber, monotone in lightness.
      */
-    public static final String[] DISTANCE_RAMP = {
+    static final String[] DISTANCE_RAMP = {
             "#4a2210", "#6e3014", "#943c18", "#b85a20",
             "#d47828", "#e09840", "#e8b868", "#f2d8a0"
     };
@@ -727,7 +727,7 @@ public final class DesktopPaint {
      * Heuristic lens bands — bit-identical to {@code caption.js} {@code LENS_COLORS}.
      * Must, tie, never.
      */
-    public static final String[] LENS_COLORS = {"#e5484d", "#f2c94c", "#8aaa50"};
+    static final String[] LENS_COLORS = {"#e5484d", "#f2c94c", "#8aaa50"};
     public static final double LENS_MUST_ALPHA = 0.42;
     public static final double LENS_NEVER_ALPHA = 0.16;
     public static final double LENS_OPENING_ALPHA = 0.2;
@@ -791,7 +791,7 @@ public final class DesktopPaint {
      * Compare-all routes — first three stay overlay ice / gold / coral;
      * leftover seats wear named lamp inks, not leftover mint and purple.
      */
-    public static final String[] COMPARE = {
+    static final String[] COMPARE = {
             "#8fb8ff", "#f0b429", "#e5484d", "#8aaa50", "#c07850", "#d4b06a"
     };
     public static final double COMPARE_ALPHA = 0.22;
@@ -968,6 +968,20 @@ public final class DesktopPaint {
      */
     public record Layout(double cellSize, double wall, double offsetX, double offsetY,
                          int tileRows, int tileCols, double[] offX, double[] offY) {
+        public Layout {
+            offX = offX.clone();
+            offY = offY.clone();
+        }
+
+        @Override
+        public double[] offX() {
+            return offX.clone();
+        }
+
+        @Override
+        public double[] offY() {
+            return offY.clone();
+        }
 
         /**
          * Fit a tile grid into {@code width}×{@code height}. {@code null} when
@@ -1102,6 +1116,9 @@ public final class DesktopPaint {
      * same reveal contract as {@code draw.js} {@code fogRevealsTile}.
      */
     public record Fog(Set<String> seen, Point position, Point goal) {
+        public Fog {
+            seen = Set.copyOf(seen);
+        }
 
         public static Fog of(List<Point> walk, Point position, Point goal) {
             Set<String> next = new HashSet<>();
@@ -1348,6 +1365,10 @@ public final class DesktopPaint {
 
     /** Cell wash plus the quieter openings — same two-pass as {@code draw.js}. */
     public record HotWash(List<Hotspot> cells, List<TileRect> openings) {
+        public HotWash {
+            cells = List.copyOf(cells);
+            openings = List.copyOf(openings);
+        }
     }
 
     /**
@@ -1409,6 +1430,14 @@ public final class DesktopPaint {
 
     /** Breadth-first field from the goal — same shape as {@code draw.js} {@code scene.field}. */
     public record Field(int maxDistance, int[][] distances) {
+        public Field {
+            distances = copyGrid(distances);
+        }
+
+        @Override
+        public int[][] distances() {
+            return copyGrid(distances);
+        }
 
         public static Field of(int[][] distances) {
             if (distances == null || distances.length == 0) {
@@ -1492,6 +1521,25 @@ public final class DesktopPaint {
     public record LensWash(int[][] bands, int mustExpand, int tie, int never,
                            int actualExpansions, int routeLength, int optimalCost,
                            boolean routeOptimal) {
+        public LensWash {
+            bands = copyGrid(bands);
+        }
+
+        @Override
+        public int[][] bands() {
+            return copyGrid(bands);
+        }
+    }
+
+    private static int[][] copyGrid(int[][] grid) {
+        if (grid == null) {
+            return null;
+        }
+        int[][] copy = new int[grid.length][];
+        for (int i = 0; i < grid.length; i++) {
+            copy[i] = grid[i] == null ? null : grid[i].clone();
+        }
+        return copy;
     }
 
     /** Two recorded searches — same arena as {@code draw.js} {@code scene.race}. */
@@ -1571,6 +1619,10 @@ public final class DesktopPaint {
 
     /** Min-cut passages plus dead-end specks — same overlay as {@code draw.js} analysis. */
     public record Cuts(int cutSize, List<MazeFlow.Passage> chokepoints, List<Point> deadEnds) {
+        public Cuts {
+            chokepoints = List.copyOf(chokepoints);
+            deadEnds = List.copyOf(deadEnds);
+        }
     }
 
     /**
@@ -2177,15 +2229,15 @@ public final class DesktopPaint {
         if (fog == null) {
             return true;
         }
-        if (tileRow % 2 == 1 && tileCol % 2 == 1) {
+        if (tileRow % 2 != 0 && tileCol % 2 != 0) {
             return fog.seen((tileRow - 1) / 2, (tileCol - 1) / 2);
         }
-        if (tileRow % 2 == 1 && tileCol % 2 == 0) {
+        if (tileRow % 2 != 0 && tileCol % 2 == 0) {
             int row = (tileRow - 1) / 2;
             int col = tileCol / 2;
             return fog.seen(row, col - 1) || fog.seen(row, col);
         }
-        if (tileRow % 2 == 0 && tileCol % 2 == 1) {
+        if (tileRow % 2 == 0 && tileCol % 2 != 0) {
             int row = tileRow / 2;
             int col = (tileCol - 1) / 2;
             return fog.seen(row - 1, col) || fog.seen(row, col);
@@ -2223,15 +2275,15 @@ public final class DesktopPaint {
             return 1;
         }
         Point at = fog.position();
-        if (tileRow % 2 == 1 && tileCol % 2 == 1) {
+        if (tileRow % 2 != 0 && tileCol % 2 != 0) {
             return nearestLamp(manhattan(at, (tileRow - 1) / 2, (tileCol - 1) / 2));
         }
-        if (tileRow % 2 == 1 && tileCol % 2 == 0) {
+        if (tileRow % 2 != 0 && tileCol % 2 == 0) {
             int row = (tileRow - 1) / 2;
             int col = tileCol / 2;
             return nearestLamp(manhattan(at, row, col - 1), manhattan(at, row, col));
         }
-        if (tileRow % 2 == 0 && tileCol % 2 == 1) {
+        if (tileRow % 2 == 0 && tileCol % 2 != 0) {
             int row = tileRow / 2;
             int col = (tileCol - 1) / 2;
             return nearestLamp(manhattan(at, row - 1, col), manhattan(at, row, col));
@@ -2284,7 +2336,7 @@ public final class DesktopPaint {
 
     public static boolean floorHi(Layout layout, int tileRow, int tileCol, double lamp, double scale) {
         return layout != null
-                && tileRow % 2 == 1 && tileCol % 2 == 1
+                && tileRow % 2 != 0 && tileCol % 2 != 0
                 && shineCell(layout.cellSize(), scale)
                 && lamp > 0.7;
     }

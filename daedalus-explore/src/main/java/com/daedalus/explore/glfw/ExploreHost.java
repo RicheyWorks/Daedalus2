@@ -458,8 +458,11 @@ public final class ExploreHost {
         int tw = tiles == null || tiles[0] == null ? 1 : tiles[0].length;
         glBegin(GL_TRIANGLES);
         for (WorldMesh.Triangle tri : world.blocks().triangles()) {
+            if (tri == null) {
+                continue;
+            }
             double edge = 0;
-            if (tri != null && tri.at() != null) {
+            if (tri.at() != null) {
                 int col = ExploreMesh.cellCol(tri.at().x() + 0.5);
                 int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
                 edge = ExplorePaint.mapEdge(2 * row + 1, 2 * col + 1, 0, th - 1, 0, tw - 1);
@@ -674,10 +677,13 @@ public final class ExploreHost {
     }
 
     private static void paintKeys(double aspect, ExplorePaint.Status line, double seconds) {
+        if (line == null) {
+            return;
+        }
         int marks = Math.max(0, Math.min(8, line.marks()));
-        boolean startSeen = line != null && line.startSeen();
-        boolean goalSeen = line != null && line.goalSeen();
-        boolean blockSeen = line != null && line.blockSeen();
+        boolean startSeen = line.startSeen();
+        boolean goalSeen = line.goalSeen();
+        boolean blockSeen = line.blockSeen();
         if (marks == 0 && !startSeen && !goalSeen && !blockSeen) {
             return;
         }

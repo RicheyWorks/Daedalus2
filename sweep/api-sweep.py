@@ -296,11 +296,22 @@ def t_complexity():
          f"'{bt['claimed']}'; unknown generator/metric -> {unknown}/{badmetric}")
 
 # ---- 17. maze fingerprint (ADR-007 idea 4) ---------------------------------------
+def fingerprint_when_ready(path, attempts=20):
+    """Allow at most 19 half-second waits for the classifier's explicit warmup state."""
+    for attempt in range(attempts):
+        status, payload = call("GET", path)
+        warming = (status == 503 and isinstance(payload, dict)
+                   and payload.get("kind") == "classifier-warming")
+        if not warming or attempt == attempts - 1:
+            return status, payload
+        time.sleep(0.5)
+
+
 def t_fingerprint():
     hits, notes = 0, []
     for g in ["ellers", "prims", "dungeon", "binary-tree"]:
         m = gen(g, 31, 31, 4242)
-        s, f = call("GET", f"/maze/{m['id']}/fingerprint")
+        s, f = fingerprint_when_ready(f"/maze/{m['id']}/fingerprint")
         if s != 200:
             return False, f"fingerprint {s}: {f}"
         if f["agrees"]:
@@ -519,38 +530,43 @@ def t_heuristic_lens():
         f"optimum {inflated['optimalCost']}; 200x200 -> 400")
 
 
-for name, fn in [
-    ("1. generation + determinism", t_generate),
-    ("2. all solvers return routes", t_solvers),
-    ("3. replay records expansions", t_replay),
-    ("4. living mazes erode", t_living),
-    ("5. traffic congests + decays", t_traffic),
-    ("6. fog-of-war agents", t_agents),
-    ("7. daily + per-maze board", t_daily_board),
-    ("8. session ghosts", t_ghost),
-    ("9. chokepoint analytics", t_analysis),
-    ("10. crossbreeding + rock", t_breed),
-    ("11. spectator view", t_spectator),
-    ("12. campaign ladder", t_campaign),
-    ("13. multiplayer + legality", t_multiplayer_and_legality),
-    ("14. ascii export", t_exports),
-    ("15. waypoint tour + optimum", t_tour),
-    ("16. complexity lab", t_complexity),
-    ("17. maze fingerprint", t_fingerprint),
-    ("18. hardest route", t_hardest_route),
-    ("19. distance field + sanctuaries", t_topography),
-    ("20. solver cost guard", t_solver_budget),
-    ("21. tournament + adversarial seed", t_tournament),
-    ("22. heuristic lens", t_heuristic_lens),
-]:
-    check(name, fn)
+def main():
+    for name, fn in [
+        ("1. generation + determinism", t_generate),
+        ("2. all solvers return routes", t_solvers),
+        ("3. replay records expansions", t_replay),
+        ("4. living mazes erode", t_living),
+        ("5. traffic congests + decays", t_traffic),
+        ("6. fog-of-war agents", t_agents),
+        ("7. daily + per-maze board", t_daily_board),
+        ("8. session ghosts", t_ghost),
+        ("9. chokepoint analytics", t_analysis),
+        ("10. crossbreeding + rock", t_breed),
+        ("11. spectator view", t_spectator),
+        ("12. campaign ladder", t_campaign),
+        ("13. multiplayer + legality", t_multiplayer_and_legality),
+        ("14. ascii export", t_exports),
+        ("15. waypoint tour + optimum", t_tour),
+        ("16. complexity lab", t_complexity),
+        ("17. maze fingerprint", t_fingerprint),
+        ("18. hardest route", t_hardest_route),
+        ("19. distance field + sanctuaries", t_topography),
+        ("20. solver cost guard", t_solver_budget),
+        ("21. tournament + adversarial seed", t_tournament),
+        ("22. heuristic lens", t_heuristic_lens),
+    ]:
+        check(name, fn)
 
-passed = sum(1 for _, ok, _ in results if ok)
-print(f"\n=== {passed}/{len(results)} checks passed ===")
-failed = 0
-for n, ok, ev in results:
-    if not ok:
-        failed += 1
-        print(f"FAILED: {n} -- {ev}")
-if failed:
-    raise SystemExit(1)
+    passed = sum(1 for _, ok, _ in results if ok)
+    print(f"\n=== {passed}/{len(results)} checks passed ===")
+    failed = 0
+    for n, ok, ev in results:
+        if not ok:
+            failed += 1
+            print(f"FAILED: {n} -- {ev}")
+    if failed:
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

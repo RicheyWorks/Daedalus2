@@ -337,8 +337,11 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/npc` | public | Inspect the programmable NPC |
 | `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking and deny are named results. Optional actorId uses the parcel gate |
 | `POST` | `/api/v1/world/{id}/npc/hush` | required | Hush the NPC. Already-idle and deny are named results. Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/simulation/v1` | required | Inspect the opt-in persistent settlement simulation ([contract](docs/realms/LivingWorldSimulation.md)) |
+| `POST` | `/api/v1/world/{id}/simulation/v1/actions/supply` | required | Idempotent water delivery; authenticated settlement steward required in every profile |
 
-In dev / test profiles every endpoint is open. The "Auth (prod)" column applies when
+In dev / test profiles the security filter permits every endpoint; simulation delivery
+still requires an authenticated steward. The "Auth (prod)" column applies when
 `spring.profiles.active=prod` (see `ProdSecurityConfig`), and it is **executable**:
 `ProdAuthPostureTest` boots a prod context, drives an unauthenticated request at every row above,
 and fails the build if the answer disagrees with the word in that column — in either direction,

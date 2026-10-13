@@ -709,8 +709,10 @@ public class MainController {
                     solvedExpansions = null;
                     redraw();
                 });
-            } catch (Exception ignored) {
-                // budget refusal: keep the last ribbon
+            } catch (Exception failure) {
+                // Keep the last ribbon, but retain diagnostics for unexpected failures.
+                System.getLogger(MainController.class.getName()).log(
+                        System.Logger.Level.DEBUG, "Follow route refresh failed", failure);
             }
         }, "daedalus-desktop-follow");
         worker.setDaemon(true);
@@ -1595,8 +1597,8 @@ public class MainController {
                 currentPath = full.isEmpty() ? List.of() : DesktopPaint.pathPrefix(full, pathP);
                 redraw();
                 if (searchP >= 1 && pathP >= 1) {
-                    currentExpansions = search;
-                    currentPath = full;
+                    currentExpansions = List.copyOf(search);
+                    currentPath = List.copyOf(full);
                     stopPathReveal();
                 }
             }
@@ -3082,11 +3084,6 @@ public class MainController {
     }
 
     private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
-                                       List<Point> walk, Color color, double baseAlpha) {
-        paintWalkTrail(g, layout, walk, color, baseAlpha, null);
-    }
-
-    private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
                                        List<Point> walk, Color color, double baseAlpha,
                                        String rimHex) {
         if (g == null || layout == null || walk == null || walk.isEmpty() || color == null) {
@@ -3117,12 +3114,6 @@ public class MainController {
             g.fillRect(layout.x(otc), layout.y(otr), layout.w(otc), layout.h(otr));
         }
         g.setGlobalAlpha(1);
-    }
-
-    /** Solver / race / tour ribbon — softens toward the start, tip stays full. */
-    private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
-                                        List<Point> path, Color color, double baseAlpha) {
-        paintPathRibbon(g, layout, path, color, baseAlpha, null);
     }
 
     /**
@@ -3180,10 +3171,6 @@ public class MainController {
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
-    private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
-        paintDisc(g, mark, color, 0);
-    }
-
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color,
                                   double wave) {
         if (mark == null || color == null) {
@@ -3229,10 +3216,6 @@ public class MainController {
                                     double cellFraction) {
         return DesktopPaint.discStroke(diameter, radiusFrac, cellFraction,
                 g.getTransform().getMyy());
-    }
-
-    private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line) {
-        paintHairline(g, line, Color.web(DesktopPaint.FLOOR_HI));
     }
 
     private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line, Color ink) {

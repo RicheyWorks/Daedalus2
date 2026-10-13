@@ -28,7 +28,8 @@ import java.util.Objects;
  *   <li><b>Bounded:</b> at most {@link #MAX_SQUADS} (session, squad) entries, oldest dropped first; the parsers
  *       already cap a roster at 256 units and a batch at 512 events.</li>
  * </ul>
- * Thread-safe: one lock, held only for the map work and the decision (microseconds at 256 units).
+ * Thread-safe: one lock covers map work and the decision. A custom brain may perform durable storage;
+ * its latency serializes requests to this host and must be measured off Unreal's game thread.
  */
 public final class TacticsHost {
 
@@ -38,6 +39,12 @@ public final class TacticsHost {
     @FunctionalInterface
     public interface Brain {
         Spec decide(String squad, long tick, List<SquadDirector.Unit> units, Vec player);
+    }
+
+    /** Context-aware strategy retains the authoritative session and complete roster. */
+    @FunctionalInterface
+    public interface ContextBrain {
+        Spec decide(Roster roster, Vec player);
     }
 
     /** What happened to a request: APPLY (new spec), REPEAT (same tick, same spec), STALE (older tick, no spec). */
@@ -54,9 +61,11 @@ public final class TacticsHost {
         String spec;
     }
 
-    private final Brain brain;
+    private record PlayerObservation(long tick, Vec at) { }
+
+    private final ContextBrain brain;
     private final Object lock = new Object();
-    private final Map<String, Vec> players = new LinkedHashMap<>(16, 0.75f, true);
+    private final Map<String, PlayerObservation> players = new LinkedHashMap<>(16, 0.75f, true);
     private final Map<Key, Squad> squads = new LinkedHashMap<>(16, 0.75f, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Key, Squad> eldest) {
@@ -69,7 +78,16 @@ public final class TacticsHost {
     }
 
     public TacticsHost(Brain brain) {
+        Objects.requireNonNull(brain, "brain");
+        this.brain = (roster, player) -> brain.decide(roster.squad(), roster.tick(), roster.toUnits(), player);
+    }
+
+    private TacticsHost(ContextBrain brain) {
         this.brain = Objects.requireNonNull(brain, "brain");
+    }
+
+    public static TacticsHost withContext(ContextBrain brain) {
+        return new TacticsHost(brain);
     }
 
     /**
@@ -88,12 +106,6 @@ public final class TacticsHost {
             }
         }
         synchronized (lock) {
-            if (latest != null) {
-                players.put(roster.session(), latest);
-                while (players.size() > MAX_SQUADS) {
-                    players.remove(players.keySet().iterator().next());
-                }
-            }
             Key key = new Key(roster.session(), roster.squad());
             Squad s = squads.get(key);
             if (s != null && roster.tick() == s.tick) {
@@ -102,16 +114,28 @@ public final class TacticsHost {
             if (s != null && roster.tick() < s.tick) {
                 return new Decision(Result.STALE, "", "stale tick " + roster.tick() + " < " + s.tick);
             }
-            Vec player = players.get(roster.session());
+            PlayerObservation previous = players.get(roster.session());
+            PlayerObservation observation = previous;
+            if (latest != null && (previous == null || events.tick() > previous.tick())) {
+                observation = new PlayerObservation(events.tick(), latest);
+            }
+            Vec player = observation == null ? null : observation.at();
             List<SquadDirector.Unit> units = roster.toUnits();
             Spec spec = player == null ? holdAll(roster.squad(), roster.tick(), units)
-                    : brain.decide(roster.squad(), roster.tick(), units, player);
+                    : brain.decide(roster, player);
+            String wire = TacticalOrders.write(spec);
+            if (observation != null) {
+                players.put(roster.session(), observation);
+                while (players.size() > MAX_SQUADS) {
+                    players.remove(players.keySet().iterator().next());
+                }
+            }
             if (s == null) {
                 s = new Squad();
                 squads.put(key, s);
             }
             s.tick = roster.tick();
-            s.spec = TacticalOrders.write(spec);
+            s.spec = wire;
             return new Decision(Result.APPLY, s.spec, player == null ? "no PLAYER event yet: hold" : "decided");
         }
     }

@@ -22,6 +22,35 @@ import static org.assertj.core.api.Assertions.within;
 class DesktopPaintTest {
 
     @Test
+    void renderSnapshotsIsolateCallerAndAccessorMutations() {
+        double[] offsets = {0, 2, 6};
+        var layout = new DesktopPaint.Layout(4, 2, 0, 0, 2, 2, offsets, offsets);
+        offsets[1] = 99;
+        layout.offX()[1] = 98;
+        layout.offY()[1] = 97;
+        assertThat(layout.offX()).containsExactly(0, 2, 6);
+        assertThat(layout.offY()).containsExactly(0, 2, 6);
+
+        int[][] grid = {{1, 2}, {3, 4}};
+        var field = new DesktopPaint.Field(4, grid);
+        var lens = new DesktopPaint.LensWash(grid, 1, 2, 3, 4, 5, 6, true);
+        grid[0][0] = 99;
+        field.distances()[0][0] = 98;
+        lens.bands()[0][0] = 97;
+        assertThat(field.distances()[0]).containsExactly(1, 2);
+        assertThat(lens.bands()[0]).containsExactly(1, 2);
+
+        var seen = new java.util.HashSet<String>();
+        seen.add("0,0");
+        var fog = new DesktopPaint.Fog(seen, new Point(0, 0), null);
+        seen.clear();
+        assertThat(fog.seen(0, 0)).isTrue();
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> fog.seen().clear())
+                .isInstanceOf(UnsupportedOperationException.class);
+        assertThat(DesktopPaint.fogRevealsTile(fog, -1, 1)).isFalse();
+    }
+
+    @Test
     void aSquareCanvasUsesThinWallsAndAWideCanvasLetterboxes() {
         DesktopPaint.Layout square = DesktopPaint.Layout.fit(5, 5, 100, 100);
         assertThat(square)

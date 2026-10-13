@@ -36,6 +36,27 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  tactics:
+    host:
+      subject: "" # Explicit authenticated JWT subject of the trusted Unreal host; blank denies all requests.
+      squad: "" # Only this squad may be controlled by that host; sessions are correlation keys, not credentials.
+    adaptive:
+      enabled: false # Opt-in single-encounter host; native Unreal fallback remains available.
+      directory: "" # Required explicit checkpoint directory when enabled; exclusive writer, 4096-file cap.
+      squad: pack-1 # Only this trusted encounter is accepted by the adaptive brain.
+      faction: raiders
+      objective-x: 0 # Fixed trusted objective in Unreal centimetres; set before enabling.
+      objective-y: 0
+      objective-z: 0
+  # Optional single-settlement simulation; see docs/realms/LivingWorldSimulation.md.
+  simulation:
+    enabled: ${DAEDALUS_SIMULATION_ENABLED:false}
+    # Required when enabled: exclusive sidecar path and authenticated principal name.
+    file: ${DAEDALUS_SIMULATION_FILE}
+    steward: ${DAEDALUS_SIMULATION_STEWARD}
+    world-id: ${DAEDALUS_SIMULATION_WORLD_ID:world-zero}
+    tick-ms: ${DAEDALUS_SIMULATION_TICK_MS:1000}
+    poll-ms: ${DAEDALUS_SIMULATION_POLL_MS:1000}
   plugins:
     directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
     scan-on-startup: true

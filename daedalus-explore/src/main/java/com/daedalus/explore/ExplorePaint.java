@@ -37,7 +37,7 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_LIP_B = 49;
     /** Idle-maze stamp — same 2px tiles as the well tab / desktop stage icons. */
     public static final int WINDOW_ICON_CELL = 2;
-    public static final String[] WINDOW_ICON_MARK = {
+    private static final String[] WINDOW_ICON_MARK = {
             "###########",
             "# #   #   #",
             "# ### ### #",
@@ -902,9 +902,9 @@ public final class ExplorePaint {
         }
         int[] shine = floorPaver(x, band == 0 ? y + 1 : y - 1);
         return new int[] {
-                (color[0] + shine[0]) / 2,
-                (color[1] + shine[1]) / 2,
-                (color[2] + shine[2]) / 2};
+                (int) (((long) color[0] + shine[0]) / 2),
+                (int) (((long) color[1] + shine[1]) / 2),
+                (int) (((long) color[2] + shine[2]) / 2)};
     }
 
     private static int[] floorSeam(int x, int y, int[] here) {
@@ -926,9 +926,9 @@ public final class ExplorePaint {
         }
         int[] next = floorPaver(hx, hy);
         return new int[] {
-                (here[0] + next[0]) / 2,
-                (here[1] + next[1]) / 2,
-                (here[2] + next[2]) / 2};
+                (int) (((long) here[0] + next[0]) / 2),
+                (int) (((long) here[1] + next[1]) / 2),
+                (int) (((long) here[2] + next[2]) / 2)};
     }
 
     public static int[] floorPaver(int x, int y) {
@@ -983,9 +983,9 @@ public final class ExplorePaint {
         }
         int[] shine = ceilingFace(x, band == 0 ? y + 1 : y - 1);
         return new int[] {
-                (color[0] + shine[0]) / 2,
-                (color[1] + shine[1]) / 2,
-                (color[2] + shine[2]) / 2};
+                (int) (((long) color[0] + shine[0]) / 2),
+                (int) (((long) color[1] + shine[1]) / 2),
+                (int) (((long) color[2] + shine[2]) / 2)};
     }
 
     private static int[] ceilingSeam(int x, int y, int[] here) {
@@ -1007,9 +1007,9 @@ public final class ExplorePaint {
         }
         int[] next = ceilingFace(hx, hy);
         return new int[] {
-                (here[0] + next[0]) / 2,
-                (here[1] + next[1]) / 2,
-                (here[2] + next[2]) / 2};
+                (int) (((long) here[0] + next[0]) / 2),
+                (int) (((long) here[1] + next[1]) / 2),
+                (int) (((long) here[2] + next[2]) / 2)};
     }
 
     /** Vertical plank joint on the lip row, leaving the shine mix alone. */
@@ -1020,9 +1020,9 @@ public final class ExplorePaint {
         }
         int[] next = ceilingFace(lx == 0 ? x - 1 : x + 1, y);
         return new int[] {
-                (here[0] + next[0]) / 2,
-                (here[1] + next[1]) / 2,
-                (here[2] + next[2]) / 2};
+                (int) (((long) here[0] + next[0]) / 2),
+                (int) (((long) here[1] + next[1]) / 2),
+                (int) (((long) here[2] + next[2]) / 2)};
     }
 
     public static int[] ceilingFace(int x, int y) {
@@ -1186,9 +1186,9 @@ public final class ExplorePaint {
         }
         int[] next = faceCell(nx, ny, grim);
         return new int[] {
-                (here[0] + next[0]) / 2,
-                (here[1] + next[1]) / 2,
-                (here[2] + next[2]) / 2};
+                (int) (((long) here[0] + next[0]) / 2),
+                (int) (((long) here[1] + next[1]) / 2),
+                (int) (((long) here[2] + next[2]) / 2)};
     }
 
     private static int[] faceCell(int x, int y, int grim) {
@@ -1751,7 +1751,8 @@ public final class ExplorePaint {
         double yaw = body.yaw();
         double sx = Math.sin(yaw);
         double sz = -Math.cos(yaw);
-        for (double d = 0.45; d <= 4.0; d += 0.25) {
+        for (int step = 0; step < 15; step++) {
+            double d = 0.45 + step * 0.25;
             double x = body.x() + sx * d;
             double z = body.z() + sz * d;
             for (double y : new double[] {0.45, ExploreBody.EYE_Y}) {
@@ -2599,13 +2600,7 @@ public final class ExplorePaint {
     }
 
     static String facing(double yaw) {
-        double a = yaw;
-        while (a <= -Math.PI) {
-            a += Math.PI * 2.0;
-        }
-        while (a > Math.PI) {
-            a -= Math.PI * 2.0;
-        }
+        double a = Math.IEEEremainder(yaw, Math.PI * 2.0);
         if (a > Math.PI * 0.75 || a <= -Math.PI * 0.75) {
             return "S";
         }

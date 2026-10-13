@@ -10,6 +10,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 class TacticsHostTest {
+    @Test
+    void rejectedRequestsAndOlderOtherSquadsCannotRewindPlayerObservations() {
+        var positions = new java.util.ArrayList<TacticalOrders.Vec>();
+        TacticsHost host = TacticsHost.withContext((r, p) -> {
+            positions.add(p);
+            return SquadDirector.decide(r.squad(), r.tick(), r.toUnits(), p);
+        });
+        host.decide(roster("s", "a", 5), PLAYER);
+        String old = "DTE 1\ntick 4\nevent PLAYER player 999 0 0 90\n";
+        host.decide(roster("s", "a", 4), old);
+        host.decide(roster("s", "a", 5), old);
+        host.decide(roster("s", "b", 4), old);
+        host.decide(roster("s", "a", 6), "");
+        assertThat(positions).hasSize(3).allMatch(p -> p.x() == 0);
+    }
+
+    @Test
+    void failedBrainDoesNotPublishPlayerStateOrReceipt() {
+        var fail = new java.util.concurrent.atomic.AtomicBoolean(true);
+        TacticsHost host = TacticsHost.withContext((r, p) -> {
+            if (fail.getAndSet(false)) throw new IllegalStateException("store unavailable");
+            return SquadDirector.decide(r.squad(), r.tick(), r.toUnits(), p);
+        });
+        assertThatThrownBy(() -> host.decide(roster("s", "a", 5), PLAYER)).isInstanceOf(IllegalStateException.class);
+        assertThat(host.squads()).isZero();
+        assertThat(host.decide(roster("s", "a", 5), "").why()).contains("no PLAYER");
+    }
+
 
     private static String roster(String session, String squad, long tick) {
         return "DTR 1\nsession " + session + " squad " + squad + " tick " + tick + "\n"

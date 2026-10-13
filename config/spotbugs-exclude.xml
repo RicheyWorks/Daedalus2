@@ -4,6 +4,25 @@
   justifying each, rather than lowering the global threshold.
 -->
 <FindBugsFilter>
+    <!-- The host publishes into Spring's shared metrics registry; a defensive copy
+         would disconnect the simulation counters from the application's registry. -->
+    <Match>
+        <Class name="com.daedalus.server.service.simulation.LivingWorldService"/>
+        <Field name="metrics"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <!-- SimulationTimeline is final and immutable: all fields are final, state records
+         own immutable collections, entries use List.copyOf, and append returns a new
+         timeline. SpotBugs does not infer this value's immutability. These
+         two record fields intentionally share that immutable value, not a live writer. -->
+    <Match>
+        <Or>
+            <Class name="com.daedalus.world.simulation.SimulationCodec$Stored"/>
+            <Class name="com.daedalus.world.simulation.SimulationTimeline$Commit"/>
+        </Or>
+        <Field name="timeline"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
     <!--
       CT_CONSTRUCTOR_THROW warns that a throwing constructor on a non-final
       class enables a "finalizer attack" (subclass overrides finalize() to
@@ -189,6 +208,14 @@
     -->
     <Match>
         <Class name="com.daedalus.world.ecology.Ecosystem$DayReport"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <!-- WorldMesh exposes the same live World used by blocked() and material
+         lookup; cloning it would disconnect collision from world edits. The
+         generated triangle list is separately immutable. Preserve this contract. -->
+    <Match>
+        <Class name="com.daedalus.explore.WorldMesh"/>
+        <Method name="world"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
 </FindBugsFilter>
