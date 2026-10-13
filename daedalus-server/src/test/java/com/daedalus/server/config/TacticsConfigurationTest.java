@@ -65,4 +65,14 @@ class TacticsConfigurationTest {
     @Test void enabledRequiresExplicitDirectory() {
         runner.withPropertyValues("daedalus.tactics.adaptive.enabled=true").run(c -> assertThat(c).hasFailed());
     }
+
+    @Test void invalidHostConfigurationFailsStartupAndReleasesWriter() {
+        for (String property : java.util.List.of("daedalus.tactics.host.subject=",
+                "daedalus.tactics.host.squad=", "daedalus.tactics.host.squad=other")) {
+            enabled().withPropertyValues(property).run(c -> assertThat(c).hasFailed()
+                    .getFailure().hasRootCauseMessage(
+                            "Adaptive tactics requires a host subject and matching host/adaptive squads"));
+            enabled().run(c -> assertThat(c).hasNotFailed());
+        }
+    }
 }

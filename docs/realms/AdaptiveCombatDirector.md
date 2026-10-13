@@ -290,7 +290,9 @@ This is an explicit single-host/single-squad authorization model. That trusted s
 start new encounter sessions for its squad. Session ids select its own receipts and are not
 secrets or grants; this is not a multi-tenant session ACL system. Separate engine identities
 need separate configured instances and state directories until a multi-host ownership registry
-is designed. In adaptive mode the host and adaptive squad settings must match.
+is designed. In adaptive mode the host and adaptive squad settings must match, and the
+host subject must be nonblank; startup rejects invalid combinations and releases the
+checkpoint writer lease so corrected configuration can start immediately.
 
 Use the production JWT security chain for remote/local authenticated integration. Missing or
 invalid bearer tokens receive HTTP 401 from that chain. An authenticated but wrong subject,

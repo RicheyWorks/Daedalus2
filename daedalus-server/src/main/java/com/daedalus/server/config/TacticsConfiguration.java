@@ -27,6 +27,8 @@ public class TacticsConfiguration {
 
     @Bean
     public TacticsHost tacticsHost(ObjectProvider<FileTacticalCheckpoints> stores,
+            @Value("${daedalus.tactics.host.subject:}") String hostSubject,
+            @Value("${daedalus.tactics.host.squad:}") String hostSquad,
             @Value("${daedalus.tactics.adaptive.squad:pack-1}") String squad,
             @Value("${daedalus.tactics.adaptive.faction:raiders}") String faction,
             @Value("${daedalus.tactics.adaptive.objective-x:0}") double x,
@@ -34,6 +36,9 @@ public class TacticsConfiguration {
             @Value("${daedalus.tactics.adaptive.objective-z:0}") double z) {
         FileTacticalCheckpoints store = stores.getIfAvailable();
         if (store == null) return new TacticsHost();
+        if (hostSubject.isBlank() || !squad.equals(hostSquad)) {
+            throw new IllegalArgumentException("Adaptive tactics requires a host subject and matching host/adaptive squads");
+        }
         // Validate configured identifiers and coordinates before accepting requests.
         new AdaptiveDirector.Frame(squad, "configuration", 0, java.util.List.of(),
                 new TacticalOrders.Vec(x, y, z), new TacticalOrders.Vec(x, y, z), false, AdaptiveDirector.WeaponStyle.UNKNOWN);
