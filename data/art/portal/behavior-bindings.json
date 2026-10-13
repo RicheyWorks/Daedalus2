@@ -1,0 +1,39 @@
+{
+  "realm": "Portal Realm",
+  "stage": "art ready; native bindings pending",
+  "npc_role_candidates": {
+    "InnkeeperRusk": "INN",
+    "SmithGarra": "SHOP",
+    "ItemShopPim": "SHOP",
+    "QueenOfCinders": "QUEEN",
+    "RoyalScribe": "TALK",
+    "FortuneTeller": "NEWS",
+    "Keymaker": "SHOP",
+    "WellChild": "TALK",
+    "NightWatch": "TALK",
+    "RetiredHero": "TALK",
+    "FerryWoman": "TALK",
+    "TavernBard": "NEWS"
+  },
+  "authority": "generated RetroRealm NPC prices/stocks/lines and RetroMonster stats/traits",
+  "visual_tiers_change_stats": false,
+  "golden_puffcap": "proposed, no encounter probability added",
+  "dragon_lifecycle": "proposed art stages; preserve egg identity; no mint/transfer logic",
+  "hero_party": "four art forms; existing three-member engine unchanged",
+  "halloween_in_this_realm": false,
+  "proposed_cross_realm_gossip": {
+    "InnkeeperRusk": "The Parcels keeps a place at the table for travellers.",
+    "SmithGarra": "Brick Realm pilots trust repairs made one plate at a time.",
+    "ItemShopPim": "Gallery City names its colours as carefully as we name our supplies.",
+    "QueenOfCinders": "Every ark carried something worth saving into the shattered sky.",
+    "RoyalScribe": "Labyrinth walls may change, but a remembered journey still matters.",
+    "FortuneTeller": "Look for a few twinkles in the distant clouds. A rainbow leaves a quiet trail.",
+    "Keymaker": "The Labyrinth has two doors that disagree. Listen before you choose.",
+    "WellChild": "Gallery City hangs its streets like paintings. I want to see them someday.",
+    "NightWatch": "The Labyrinth has hungry plants that protect travellers. Treat them kindly.",
+    "RetiredHero": "Most unicorns fear the burning bulls. The mountain alpha stands her ground.",
+    "FerryWoman": "A Parcels farmer showed me how to read a river before crossing it.",
+    "TavernBard": "Our travelling jukebox carries songs farther than any one town."
+  },
+  "gossip_status": "proposed flavour; append after, never replace, generated route hints"
+}
