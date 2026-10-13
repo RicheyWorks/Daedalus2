@@ -16,6 +16,9 @@ Every rule comes from a real failure on 2026-10-12 (docs/AUTOMATION-LESSONS.md):
   P7 tarray-std a TArray of std:: types, or of a struct holding them (std::string, std::vector...). TArray moves
                 its elements with memcpy, and MSVC's std::string points into its own buffer: moved copies dangle.
                 Use std::vector for plain-C++ core types (2026-10-13, UDaedalusTactics::TakeRoster).
+  P8 no-eh      try/catch/throw in plugin C++. Unreal builds game targets without C++ exceptions (/EHsc off), so
+                MSVC stops with C4530 (2026-10-13, DaedalusEcologyCore.h std::stoll in try). Parse with from_chars or
+                strtoll/strtod instead. Comments and strings are ignored.
 """
 import os
 import re
@@ -34,6 +37,8 @@ ARRAY_RE = re.compile(r"UPROPERTY\((?P<spec>[^)]*)\)\s*TArray<\s*TObjectPtr<\s*(
 ERROR_RE = re.compile(r"(?<![:\w])Error(?:\s+\w+\s*[,)=;]|::)")
 PYBOOL_RE = re.compile(r"""[gs]et_editor_property\(\s*["']b_\w+""")
 PYSTATIC_RE = re.compile(r"\bunreal\.Daedalus\w+\.(get)\(")
+EH_RE = re.compile(r"\btry\s*\{|\bcatch\s*\(|\bthrow\b")
+STRIP_RE = re.compile(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'', re.S)
 STRUCT_RE = re.compile(r"\b(?:struct|class)\s+(\w+)\s*(?::[^{;]*)?\{([^{}]*)\}\s*;")   # plain data structs (no nested braces)
 TARRAY_RE = re.compile(r"\bTArray<\s*(?P<type>(?:\w+::)*\w+)\s*(?:<[^>]*>)?\s*>")
 
@@ -135,6 +140,11 @@ def check_cpp(path, text, errors, sources, holders=frozenset()):
                            "(a saved older copy overrides it on load)" % name))
 
 
+    # P8: C++ exceptions (C4530 in a game target). Strip comments and string literals first, keeping line numbers.
+    code = STRIP_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    for m in EH_RE.finditer(code):
+        errors.append((path, line_of(text, m.start()), "P8", "C++ exceptions are off in Unreal game targets (C4530); "
+                       "use from_chars/strtoll/strtod and return a bool instead of try/catch"))
     # P7: TArray of std:: types (directly, or a struct holding them)
     for m in TARRAY_RE.finditer(text):
         t = m.group("type")
