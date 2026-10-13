@@ -1,4 +1,4 @@
-﻿# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: MIT
 """Hephaestus's 10-minute editor turn (referee equal-turn order: youtube-master -> hephaestus -> pythagoras). Run ONLY for a granted turn.
     python heph_turn.py [--now]
 The referee HOLDS the turn clock while the editor is down, so every slot after the hold shifts. This runner is therefore
@@ -20,8 +20,14 @@ NEXT = os.environ.get("HEPH_NEXT", "pythagoras")
 GRANTERS = ("buffffff", "2hot2trot")
 PORT = int(os.environ.get("HEPH_BRIDGE_PORT", "9877"))
 TODAY = dt.date.today()
-EARLIEST = dt.datetime.combine(TODAY, dt.time(17, 43))  # referee slot before any hold shift; never earlier
-SINCE = dt.datetime.combine(TODAY, dt.time(17, 30))     # only HANDOFF/GRANT posts newer than this count
+def _hhmm(name, default):
+    h, m = os.environ.get(name, default).split(":")
+    return dt.datetime.combine(TODAY, dt.time(int(h), int(m)))
+
+
+# round-2 re-arm: HEPH_SINCE=19:40 so round-1's 18:43 youtube-master HANDOFF can't re-trigger a turn
+EARLIEST = _hhmm("HEPH_EARLIEST", os.environ.get("HEPH_SINCE", "17:43"))  # never start earlier than this
+SINCE = _hhmm("HEPH_SINCE", "17:30")     # only HANDOFF/GRANT posts newer than this count
 GIVE_UP = dt.datetime.combine(TODAY, dt.time(23, 0))  # round-2 can land after 21:00; stop waiting then post BLOCKED
 TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
