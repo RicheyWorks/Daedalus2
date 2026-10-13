@@ -15,6 +15,7 @@ NEWREC = ["AndeanPanPipes","AppalachianHighLonesome","ArabicMaqam","ArabicTakht"
 for i, r in enumerate(NEWREC):
     t = math.radians(i * 180 / 11); props.append(("Item", f"Item_YTM_Record_{r}", (-800 + 320*math.cos(t), 1200 + 320*math.sin(t), math.degrees(t) + 90)))
 props.append(("Prop", "Prop_YTM_RecordRack", (-1450, 900, 120)))
+props.append(("Prop", "Prop_YTM_LorePlaque", (600, -600, -135)))  # storyline plaque, faces spawn
 tasks=[]
 for kind,name,_ in props:
     t=unreal.AssetImportTask(); t.filename=f"{GLB}\\{name}.glb"; t.destination_path=f"{ART}/{kind}/{name}"
