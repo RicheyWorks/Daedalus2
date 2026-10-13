@@ -41,8 +41,13 @@ generated no helm input and observed forward motion, submarine descent and then
 two seconds without movement after input expiry. Both clients completed the actual
 IpNetDriver handshake. The runner stopped its owned server/client processes and
 retained logs and hashes. See ocean-network-proof.json and the reproducible
-tools/unreal/ocean-network-probe fixture. Non-owner rejection, WAN conditions,
-production session permissions and player-facing controls remain separate gates.
+tools/unreal/ocean-network-probe fixture. WAN conditions, production session
+permissions and player-facing controls remain separate gates. A subsequent
+three-process probe verified normal-client non-owner RPC refusal for both boats
+and submarines: the foreign client logged owned=0 attempts and Unreal's explicit
+owning-connection refusal while the legitimate vessel completed its motion/stop
+check. See ocean-nonowner-proof.json. This tests the standard Unreal RPC API,
+not malicious packet construction or account security.
 
 ResolveForPlayer checks the component owner, controller and vessel authority,
 same-world identity, actual possession in both directions, finite vessel position,

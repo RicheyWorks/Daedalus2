@@ -24,3 +24,13 @@ Documents/Codex/2026-10-13/ocean-network-test-1. This establishes real localhost
 owner RPC delivery to the server and resulting vessel motion. It does not prove
 WAN behavior, non-owner refusal, client prediction, rendered appearance,
 mesh collision, player-facing inputs, realm transitions or production multiplayer.
+
+Use --non-owner for a server and two clients per mode. The second client attempts
+reverse/turn/dive RPCs on a vessel it does not own, every 0.2 seconds. The runner
+requires its handshake, an attempt marker with owned=0, and Unreal's explicit
+"No owning connection" refusal. The server must still see the legitimate owner's
+movement followed by two stationary seconds while foreign attempts continue.
+Both boat and submarine passed October 13; proof is ocean-nonowner-proof.json,
+full logs Documents/Codex/2026-10-13/ocean-network-nonowner-1. This verifies
+non-owner refusal through Unreal's normal client RPC API. It does not emulate
+forged network packets or establish production authentication/session security.

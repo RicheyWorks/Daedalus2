@@ -14,6 +14,8 @@ public:
     virtual void Tick(float Dt) override;
 private:
     float Elapsed=0;
+    float AttackClock=0;
+    bool AttackLogged=false;
 };
 
 UCLASS()
@@ -29,4 +31,5 @@ private:
     float StillTime=0;
     FVector Previous=FVector::ZeroVector;
     bool Moved=false;
+    TWeakObjectPtr<class ADaedalusOceanVessel> Target;
 };
