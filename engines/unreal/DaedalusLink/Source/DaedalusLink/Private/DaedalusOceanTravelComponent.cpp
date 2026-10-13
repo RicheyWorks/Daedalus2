@@ -13,6 +13,8 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "InputModifiers.h"
+#include "DaedalusOceanDock.h"
+#include "EngineUtils.h"
 
 namespace
 {
@@ -67,6 +69,7 @@ void ADaedalusOceanVessel::SetupPlayerInputComponent(UInputComponent* Input)
     HelmMapping=NewObject<UInputMappingContext>(this);
     auto Make=[this]() {auto* Action=NewObject<UInputAction>(this);Action->ValueType=EInputActionValueType::Axis1D;return Action;};
     ForwardAction=Make();TurnAction=Make();DiveAction=Make();
+    DockAction=NewObject<UInputAction>(this);DockAction->ValueType=EInputActionValueType::Boolean;
     auto Map=[this](UInputAction* Action,FKey Key,bool Negative=false) {
         auto& Binding=HelmMapping->MapKey(Action,Key);
         if (Negative) Binding.Modifiers.Add(NewObject<UInputModifierNegate>(HelmMapping));
@@ -75,6 +78,8 @@ void ADaedalusOceanVessel::SetupPlayerInputComponent(UInputComponent* Input)
     Map(TurnAction,RightKey);Map(TurnAction,LeftKey,true);Map(TurnAction,EKeys::Gamepad_LeftX);
     Map(DiveAction,SurfaceKey);Map(DiveAction,DiveKey,true);
     Map(DiveAction,EKeys::Gamepad_LeftTriggerAxis);Map(DiveAction,EKeys::Gamepad_RightTriggerAxis,true);
+    Map(DockAction,InteractKey);Map(DockAction,EKeys::Gamepad_FaceButton_Left);
+    Enhanced->BindAction(DockAction,ETriggerEvent::Started,this,&ADaedalusOceanVessel::InputDock);
     for (auto Event : {ETriggerEvent::Triggered,ETriggerEvent::Completed,ETriggerEvent::Canceled})
     {
         Enhanced->BindAction(ForwardAction,Event,this,&ADaedalusOceanVessel::InputForward);
@@ -108,6 +113,27 @@ bool ADaedalusOceanVessel::SetLocalHelmInput(float Forward,float Turn,float Dive
 void ADaedalusOceanVessel::InputForward(const FInputActionValue& Value) {SetLocalHelmInput(Value.Get<float>(),LocalHelm.Y,LocalHelm.Z);}
 void ADaedalusOceanVessel::InputTurn(const FInputActionValue& Value) {SetLocalHelmInput(LocalHelm.X,Value.Get<float>(),LocalHelm.Z);}
 void ADaedalusOceanVessel::InputDive(const FInputActionValue& Value) {SetLocalHelmInput(LocalHelm.X,LocalHelm.Y,Value.Get<float>());}
+void ADaedalusOceanVessel::InputDock()
+{
+    if (!IsLocallyControlled()) return;
+    ADaedalusOceanDockControl* Nearest=nullptr;double Best=1000000;
+    for (TActorIterator<ADaedalusOceanDockControl> It(GetWorld());It;++It)
+    {
+        const double Distance=FVector::DistSquared(GetActorLocation(),It->GetActorLocation());
+        if (FMath::IsFinite(Distance) && FMath::IsFinite(It->InteractionReachCm)
+            && It->InteractionReachCm>0 && It->InteractionReachCm<=1000
+            && Distance<=It->InteractionReachCm*It->InteractionReachCm && Distance<Best)
+        {Nearest=*It;Best=Distance;}
+    }
+    if (Nearest) RequestDockExit(Nearest);
+}
+void ADaedalusOceanVessel::RequestDockExit_Implementation(ADaedalusOceanDockControl* Dock)
+{
+    if (!HasAuthority() || !IsValid(Dock) || Dock->GetWorld()!=GetWorld()) return;
+    auto* Player=Cast<APlayerController>(GetController());
+    if (!IsValid(Player) || !Player->HasAuthority() || Player->GetPawn()!=this) return;
+    Dock->ExitVessel(this);
+}
 
 void ADaedalusOceanVessel::SetHelmInput_Implementation(float Forward, float Turn, float Dive)
 {
