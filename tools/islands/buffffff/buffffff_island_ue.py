@@ -10,6 +10,17 @@ eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.Editor
 lay = json.load(open(os.path.join(ROOT, "layout.json")))
 CHAIN = ["Prop_BUF_Water_Spring_V2","Prop_BUF_Pipe_Straight","Prop_BUF_Water_SandFilter_V1","Prop_BUF_Pipe_Elbow","Prop_BUF_Water_CharcoalFilter_V1","Prop_BUF_Pipe_Valve","Prop_BUF_Water_Cistern_V2","Prop_BUF_Pipe_Tee","Prop_BUF_Trough_Long","Prop_BUF_Pipe_Spigot","Prop_BUF_Trough_Round","Prop_BUF_Lore_ShardSpring"]
 for i,c in enumerate(CHAIN): lay.append({"asset":c,"x":-60.0+i*6.0,"y":-45.0,"yaw":0,"s":1,"chain":i})
+CORE = bool(int(globals().get("BUF_CORE", 0)))  # core mode: ~100 key meshes, resumable, ~6 min import budget
+if CORE:
+    import math
+    CS = json.load(open(os.path.join(ROOT, "core.json"), encoding="utf-8-sig"))
+    seen = {a["asset"] for a in lay}
+    extra = [n for n in CS if n not in seen]
+    for i, n in enumerate(extra):  # core meshes with no layout spot: ring near the village
+        ang = 2 * math.pi * i / max(1, len(extra)); lay.append({"asset": n, "x": 35 * math.cos(ang), "y": 35 * math.sin(ang), "yaw": 0, "s": 1})
+    keep = set(CS) | {x.split("/")[-1].split(".")[0] for x in eas.list_assets(DEST, recursive=True)}
+    lay = [a for a in lay if a["asset"] in keep]
+    HALF = 0
 uniq = sorted({a["asset"] for a in lay}); mid = len(uniq)//2
 imp = uniq[:mid] if HALF == 1 else uniq[mid:] if HALF == 2 else [] if HALF == 3 else uniq
 tasks = []
@@ -18,8 +29,12 @@ for n in imp:
     if any(eas.does_asset_exist(p) for p in (f"{DEST}/{n}/{n}", f"{DEST}/{n}", f"/Game/Daedalus/Art/{k}/{n}/{n}", f"/Game/Daedalus/Art/{k}/{n}")): continue
     t = unreal.AssetImportTask(); t.filename = os.path.join(ROOT, "glb", n + ".glb"); t.destination_path = f"{DEST}/{n}"
     t.automated = True; t.replace_existing = True; t.save = True; tasks.append(t)
-for _i in range(0, len(tasks), 20):
-    unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[_i:_i+20]); print("BUF batch", _i, len(tasks))
+import time as _t; _t0 = _t.time(); BUDGET = float(globals().get("BUF_BUDGET", 330)); _left = len(tasks)
+_B = 5 if CORE else 20
+for _i in range(0, len(tasks), _B):
+    if CORE and _t.time() - _t0 > BUDGET: print("BUF import budget hit, remaining", _left, "(resume next turn)"); break
+    _left -= len(tasks[_i:_i+_B])
+    unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[_i:_i+_B]); print("BUF batch", _i, len(tasks))
 def _place():
   return None
 if HALF == 1:
@@ -67,5 +82,7 @@ if not _stop:
     tagc = lambda t: sum(1 for x in act.get_all_level_actors() if x.actor_has_tag(t))
     print("BUF counts total", tagc(TAG), "livestock", tagc("Livestock"), "drinkable", tagc("Drinkable"), "herbbed", tagc("HerbBed"), "world", world.get_path_name())
     print("BUF placed", ok, "missing", len(miss), miss[:10])
+
+
 
 
