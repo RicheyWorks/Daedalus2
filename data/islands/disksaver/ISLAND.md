@@ -139,3 +139,6 @@ Safety: our sublevel and /Game/DiskSaver only, overwrite-reimport, no deletes, n
 4. *"Boil what you doubt. Filter what you fear. Drink only from the spring and the well without thinking."*
 5. *"The compressor hums when everything balances. I haven't heard it since the Shattering."*
 6. *"If you are reading this, the shard held. Save it, and it will save you."* (unlocks when Balance first reaches 100)
+
+## Layout map
+`ds_layout.png` is a top-down plot of all 171 placements, made off-editor by running `ds_island_ue.py` against a stub of the Unreal module (`layout.py`). The rocky centre holds the spring and well. The stream runs south-east to the pond. The herb garden is to the south, the crop beds to the east, the pen, coop and livestock to the north-west, and a ring of trees surrounds it all.
