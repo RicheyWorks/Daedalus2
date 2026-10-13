@@ -9,6 +9,7 @@ function Post($t) { Add-Content $o (@{to='*';type='note';body=@{text=('DOING pyt
 function Ue($s, $to) { $r = python ue_send.py $s $to 2>&1 | Out-String; try { $j = $r | ConvertFrom-Json; if ($j.status -ne "ok") { "ERROR: " + $j.message } else { $j.result.result } } catch { $r.Trim() } }
 $res.turn_save = Ue 'turn_save.py' 120; Post 'turn_save done, running pyth_fix_ue'
 $res.fix = Ue 'pyth_fix_ue.py' 600; Post ('fix done: ' + (($res.fix | ConvertTo-Json -Compress -Depth 3) -replace '"', "'"))
+$res.lighting = Ue 'pyth_lighting_ue.py' 60
 $res.verify = Ue 'pyth_verify_ue.py' 180
 $res.succession = Ue 'pyth_succession_ue.py' 120
 $res.quest = Ue 'pyth_quest_ue.py' 120
@@ -19,6 +20,7 @@ $res.save_mine = Ue 'save_mine.py' 120
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8; $res.next = & powershell -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\730ri\projects\bot-team\art\NOTES\pythagoras\next_bot.ps1'
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8
 'RUNNER_DONE'
+
 
 
 
