@@ -150,3 +150,25 @@ Water budget audit + Forge Temper `temper_ev` (no Unreal / editor turn).
 | claim_check | hot spring covers player + full ranch + herb beds for base **and** caldera, with or without forge_quench — **true** |
 | temper_ev | all 36 herbs: magma P×2 / dur×0.5; spring P×0.5 / dur×2; dual P×1 + dual_effect; best_for_strength=magma, best_for_duration=spring |
 
+## Off-editor polish (2026-10-12 ~21:36 PT)
+
+Ranch production budget + Great Forge glow win meter (no Unreal / editor turn). Heads from layout.json; rates from livestock.json products.
+
+| Product | /day (full care) | Notes |
+|---------|------------------|-------|
+| egg | 432.0 | emberhen ×3 every 10 min |
+| milk | 331.2 | ashgoat + forgeox |
+| truffle_mushroom | 43.2 | lavaboar 30% / 30 min |
+| wool | 144.0 | cinderwool ×3 |
+| honey | 72.0 | vent_bees ×2 |
+| forgeox bellows | +30% forge speed | 2 head near bellows |
+
+| Glow | Condition |
+|------|-----------|
+| cold | 0 of water / pens / herbs |
+| ember | 1 living system |
+| bright | 2 living systems |
+| tempered | all 3 + dual-quench in pack |
+
+Failure: unwatered/unfed 1 day → products stop; 3 days → animal leaves (cozy). Detail: livestock.json → production_budget.
+
