@@ -30,7 +30,8 @@ check(not h.sky_restore_plan(dark, env={}, script_exists=False)[0], "missing res
 check(not h.sky_restore_plan(None, env={})[0], "no probe result -> no restore")
 check(os.path.isfile(h.RESTORE_SKY_SCRIPT), "RESTORE_SKY_SCRIPT resolves to tools/islands/oddsreaper/restore_world_sky.py")
 src = Path(h.RESTORE_SKY_SCRIPT).read_text(encoding="utf-8")
-check("spawn_actor" not in src and "DirectionalLight" not in src, "shared restore adds no new sun (referee rule)")
+# it may count DirectionalLights (_count_suns verifies no second sun); it must never spawn one
+check("spawn_actor" not in src and "spawn_actor_from_class" not in src, "shared restore adds no new sun (referee rule)")
 check("save_map" in src and "umap_written" in src, "shared restore saves the persistent map and checks the umap")
 print("PASS" if not fails else f"FAIL ({len(fails)})")
 sys.exit(1 if fails else 0)

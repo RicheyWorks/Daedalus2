@@ -364,3 +364,7 @@ Validator: python data/islands/hephaestus/check_mechanics.py (tea inputs ⊆ her
 
 Owed next editor turn: HEPH_FORCE_LOD1=1 landmark swap + lit forge-overlook hero (sky gate runs oddsreaper restore_world_sky if DaedalusWorld still storm-dark).
 
+
+### Auto HEPH_FORCE_LOD1 (2026-10-13 ~00:55 PT, off-editor)
+
+`heph_turn.py` now reads `preflight.json` before the in-editor run. When `lod1_ready` is non-empty and `needs_import` is empty (hi-res landmarks already in Unreal), it sets `HEPH_FORCE_LOD1=1` in its own env and in the execute_python code, so `heph_island_ue` reimports the 7 landmarks as LOD1. `HEPH_FORCE_LOD1=0` disables; `=1` forces. The RAM guard (`HEPH_NO_IMPORT=1`) still wins. Pure helper `should_force_lod1(preflight, env)`, covered by `test_heph_force_lod1.py`. Index of this folder: `README.md`.

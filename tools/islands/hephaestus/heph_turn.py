@@ -163,6 +163,23 @@ def free_ram_gb():
 
 
 RAM_MIN_GB = float(os.environ.get("HEPH_RAM_MIN_GB", "1.0"))  # team rule 20:05: no imports under 1 GB free
+PREFLIGHT_JSON = REPO + r"\data\islands\hephaestus\preflight.json"
+
+
+def should_force_lod1(preflight, env):
+    """Auto LOD1 landmark swap. HEPH_FORCE_LOD1=0 disables, =1 forces; otherwise on when preflight lists lod1_ready
+    landmarks and needs_import is empty (hi-res already in Unreal, so only a forced reimport swaps in LOD1)."""
+    v = (env or {}).get("HEPH_FORCE_LOD1")
+    if v == "0": return False
+    if v == "1": return True
+    preflight = preflight or {}
+    return bool(preflight.get("lod1_ready")) and not preflight.get("needs_import")
+
+
+def load_preflight(path=PREFLIGHT_JSON):
+    try:
+        with open(path, encoding="utf-8") as f: return json.load(f)
+    except (OSError, ValueError): return {}
 
 
 def left(): return (HARD_STOP - dt.timedelta(seconds=SAVE_S) - dt.datetime.now()).total_seconds()
@@ -209,7 +226,15 @@ def main():
     low = ram is not None and ram < RAM_MIN_GB
     say(f"RAM {'unknown' if ram is None else f'{ram:.2f} GB'} free; imports {'SKIPPED (place-only)' if low else 'allowed'}")
     if low: link(f"DOING island:hephaestus: RAM guard {ram:.2f} GB free < {RAM_MIN_GB} GB, place-only turn (no glb imports)")
-    code = (f"import os,runpy,sys; os.environ['HEPH_NO_IMPORT']='{'1' if low else '0'}'; sys.path.insert(0, r'{TOOL}'); "
+    pf = load_preflight()
+    lod1 = should_force_lod1(pf, os.environ)
+    if lod1:
+        if os.environ.get("HEPH_FORCE_LOD1") != "1":
+            say(f"auto HEPH_FORCE_LOD1=1: preflight lod1_ready={len(pf.get('lod1_ready') or [])} landmarks, needs_import empty")
+        os.environ["HEPH_FORCE_LOD1"] = "1"
+        if low: say("HEPH_FORCE_LOD1 set but RAM guard skips imports this turn (no LOD1 swap)")
+    code = (f"import os,runpy,sys; os.environ['HEPH_NO_IMPORT']='{'1' if low else '0'}'; "
+            f"os.environ['HEPH_FORCE_LOD1']='{'1' if lod1 else '0'}'; sys.path.insert(0, r'{TOOL}'); "
             f"result = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_turn')['run']()")
     isle = call("execute_python", timeout=int(max(30, left() - 25)), code=code).get("result"); say(f"island: {isle}")
     if isle and left() > 20:
