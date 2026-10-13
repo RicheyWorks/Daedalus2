@@ -17,10 +17,30 @@ ROSTER=[
  ('SkyStrider','bird','Mount: realm sky-strider',1.8),('CorridorHound','hound','Companion: scent route guide',1.0),
  ('LanternWisp','wisp','Companion: bounded route lighting',.75),('ChalkKitten','cat','Pet: finds chalk caches',.65),
  ('CompassBeetle','beetle','Pet: reacts near exits',.6),('Mazemouse','mouse','Pet: narrow-gap scout',.5),
- ('ThreadMoth','moth','Pet: follows marked thread',.65)]
+ ('ThreadMoth','moth','Pet: follows marked thread',.65),('VenusGuide','venus','Friendly carnivorous helper: guides players and defends against hostiles',1.1),('PitcherMedic','pitcher','Friendly carnivorous helper: offers safe shelter and healing quests',1.0),('SundewGuardian','sundew','Friendly carnivorous helper: slows hostile pursuers, never players',1.1)]
 records=[]
 def creature(form):
     body=teal if form in ['hound','snail','grub','cricket'] else slate
+    if form in ['venus','pitcher','sundew']:
+        cone((0,0,.17),.3,.24,.34,gold,'body')
+        segment((0,0,.3),(0,0,1.0),.08,teal,'body')
+        for x in [-.3,.3]:
+            o=ball((x,0,.55),(.32,.13,.07),teal,'wing.L' if x>0 else 'wing.R');o.rotation_euler.y=x
+        if form=='venus':
+            for sign in [-1,1]:
+                o=ball((0,-.02,1.06+sign*.11),(.34,.22,.11),rust,'head');o.rotation_euler.x=sign*.18
+                for x in [-.22,-.10,.10,.22]:cone((x,-.18,1.06+sign*.045),.028,0,.11,ivory,'head')
+            for x in [-.12,.12]:ball((x,-.20,1.25),(.045,.025,.04),ivory,'head')
+        elif form=='pitcher':
+            cone((0,0,1.0),.25,.32,.65,teal,'head');ring((0,0,1.34),.30,.045,rust,'head')
+            box((0,-.18,1.02),(.12,.035,.18),ivory,'head');box((0,-.20,1.02),(.22,.035,.065),ivory,'head')
+            o=ball((0,.16,1.5),(.34,.2,.07),teal,'head');o.rotation_euler.x=.35
+        else:
+            ball((0,0,1.0),(.25,.25,.15),teal,'head')
+            for k in range(8):
+                a=k*math.pi/4;x,y=.40*math.cos(a),.40*math.sin(a)
+                segment((0,0,1.0),(x,y,1.3),.02,rust,'head');ball((x,y,1.3),(.045,.045,.06),light,'head')
+        return
     if form in ['wall','maze']:
         box((0,0,.8),(.9,.55,1.4),slate,'body')
         for x in [-.4,.4]:box((x,-.31,.85),(.10,.08,1.3),gold,'body')
@@ -125,6 +145,6 @@ for loc in [(2,-5,15),(14,15,15)]:
     bpy.ops.object.light_add(type='AREA',location=loc);l=bpy.context.object;l.data.energy=5000;l.data.size=12;l.rotation_euler=(Vector((7,6,0))-l.location).to_track_quat('-Z','Y').to_euler()
 s=bpy.context.scene;s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.render.threads_mode='FIXED';s.render.threads=4;s.render.fps=24;s.render.resolution_x=1800;s.render.resolution_y=1500;s.render.resolution_percentage=100;s.world.color=(.18,.18,.18);s.render.filepath=str(OUT/'contact-sheet.png')
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'labyrinth-creature-cast.blend'));bpy.ops.render.render(write_still=True)
-(OUT/'manifest.json').write_text(json.dumps({'assets':records,'clips':['Idle','Move'],'weighting':'rigid parts','status':'art prototype; Unreal acceptance pending'},indent=2))
+(OUT/'manifest.json').write_text(json.dumps({'assets':records,'clips':['Idle','Move'],'weighting':'rigid parts','status':'art prototype; Unreal acceptance pending','helper_rules':{'VenusGuide':'friendly guide/defender','PitcherMedic':'friendly aid/questgiver','SundewGuardian':'hostile-only snare; never harms players'}},indent=2))
 (OUT/'labyrinth-cast.bba').write_text('BBA 1\n'+''.join(f"asset {r['id']} lod0 {r['triangles']} lod1 - radius {r['radius_cm']} switch {max(500,20*r['radius_cm'])}\n" for r in records))
 print('LAB_CREATURES_OK',len(records))
