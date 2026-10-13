@@ -134,3 +134,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   older files still load (and re-save as 14, byte-identical to a fresh save); broken runs refuse the file. An older
   server cannot read a version-14 file, so roll servers forward, not back. In RAM the same worlds hold 114 KB and
   258 KB of chunk storage instead of 221 KB and 500 KB (the palette above).
+- **Saves redo only dirty chunks (rule 6 for persistence):** every block edit snapshots and saves the world. A
+  snapshot copied every chunk (4 KiB each) and the save re-encoded every chunk. Now `Chunk.copy()` shares storage
+  copy-on-write, and each store caches its runs until written. A 200-chunk world: edit + save 6.0 -> 1.6 ms (the
+  rest is the file write); the cost per edit no longer grows with the number of untouched chunks' cubes.

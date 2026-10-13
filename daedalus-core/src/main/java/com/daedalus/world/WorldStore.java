@@ -89,7 +89,7 @@ public final class WorldStore {
             out.writeInt(c.y());
             out.writeInt(c.z());
             out.writeLong(chunk.revision());
-            byte[] runs = chunk.runs();
+            byte[] runs = chunk.runsView();   // cached per chunk until it changes: saves redo only dirty chunks
             out.writeShort(runs.length / 3);   // at most 4,096 runs
             out.write(runs);
         }

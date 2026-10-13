@@ -64,7 +64,7 @@ class ChunkPaletteTest {
             Chunk copy = c.copy();
             assertEquals(c, copy);
             assertEquals(c.hashCode(), copy.hashCode());
-            assertTrue(copy.bitsPerBlock() <= c.bitsPerBlock(), "copy is never wider");
+            assertTrue(c.compacted().bitsPerBlock() <= c.bitsPerBlock(), "compacted is never wider");
             Chunk loaded = Chunk.ofPayload(c.payload(), c.revision());
             assertEquals(c, loaded);
             assertEquals(occupied, loaded.occupied());
@@ -82,12 +82,12 @@ class ChunkPaletteTest {
             c.set(k % 16, k / 16, 0, TYPES[1]);
         }
         assertEquals(8, c.bitsPerBlock(), "writes never narrow");
-        assertEquals(4, c.copy().bitsPerBlock());
+        assertEquals(4, c.compacted().bitsPerBlock());
         Chunk solid = new Chunk();
         for (int i = 0; i < Chunk.VOLUME; i++) {
             solid.set(i % 16, (i / 16) % 16, i / 256, TYPES[1]);
         }
-        Chunk packed = solid.copy();
+        Chunk packed = solid.compacted();
         assertEquals(0, packed.bitsPerBlock(), "a solid chunk copies to one value");
         assertEquals(Chunk.VOLUME, packed.occupied());
         assertEquals(TYPES[1], packed.get(15, 15, 15));
@@ -127,7 +127,7 @@ class ChunkPaletteTest {
                 c.set(r.nextInt(16), r.nextInt(16), r.nextInt(16), TYPES[r.nextInt(kinds + 1)]);
             }
             assertArrayEquals(c.ordinals(), Chunk.ofRuns(c.runs()), "round " + round);
-            assertArrayEquals(c.ordinals(), Chunk.ofRuns(c.copy().runs()), "narrowed copy, round " + round);
+            assertArrayEquals(c.ordinals(), Chunk.ofRuns(c.compacted().runs()), "narrowed copy, round " + round);
         }
         assertEquals(3, new Chunk().runs().length);
         Chunk ground = new Chunk();
@@ -142,5 +142,34 @@ class ChunkPaletteTest {
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 0, 1}));
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 0, 0}));
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> Chunk.ofRuns(new byte[] {1, 1, 16}));
+    }
+
+    @Test
+    void copiesShareStorageUntilEitherIsWritten() {
+        Random r = new Random(11);
+        for (int round = 0; round < 20; round++) {
+            Chunk a = new Chunk();
+            for (int n = 0; n < 2000; n++) {
+                a.set(r.nextInt(16), r.nextInt(16), r.nextInt(16), TYPES[r.nextInt(round < 10 ? 5 : TYPES.length)]);
+            }
+            byte[] before = a.ordinals();
+            byte[] runsBefore = a.runs();
+            Chunk b = a.copy();
+            Chunk c = b.copy();
+            for (int n = 0; n < 500; n++) {
+                a.set(r.nextInt(16), r.nextInt(16), r.nextInt(16), TYPES[r.nextInt(TYPES.length)]);
+            }
+            assertArrayEquals(before, b.ordinals(), "writing the original leaves its copy alone");
+            assertArrayEquals(before, c.ordinals(), "and the copy's copy");
+            assertArrayEquals(runsBefore, b.runs(), "the copy's cached runs are still right");
+            byte[] afterA = a.ordinals();
+            assertArrayEquals(afterA, Chunk.ofRuns(a.runs()), "the writer's runs follow its writes");
+            b.set(0, 0, 0, TYPES[1]);
+            b.set(15, 15, 15, TYPES[2]);
+            assertArrayEquals(afterA, a.ordinals(), "writing the copy leaves the original alone");
+            assertArrayEquals(before, c.ordinals());
+            assertEquals(TYPES[1], b.get(0, 0, 0));
+            assertArrayEquals(b.ordinals(), Chunk.ofRuns(b.runs()));
+        }
     }
 }

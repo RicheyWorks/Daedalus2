@@ -33,6 +33,8 @@ public final class Chunk {
         final byte[] palette;
         final byte[] data;
         int kinds;
+        /** Chunk.runs() of this store, until an in-place write; volatile so a saver thread sees it whole. */
+        volatile byte[] runs;
 
         Store(int bits, byte[] palette, byte[] data, int kinds) {
             this.bits = bits;
@@ -60,6 +62,8 @@ public final class Chunk {
 
     /** Final fields in Store make a widened store safely visible to lock-free readers without volatile. */
     private Store store;
+    /** True when another Chunk may hold the same store (a copy): the next write clones it first. */
+    private boolean shared;
     private int occupied;
     private long revision;
 
@@ -71,6 +75,10 @@ public final class Chunk {
         this.store = store;
         this.occupied = occupied;
         this.revision = revision;
+    }
+
+    private static Store cloneStore(Store s) {
+        return new Store(s.bits, s.palette.clone(), s.data == null ? null : s.data.clone(), s.kinds);
     }
 
     private static Store uniform(int ordinal) {
@@ -93,6 +101,13 @@ public final class Chunk {
         if (before == after) {
             return TYPES[before];
         }
+        if (shared) {
+            // copy on write: a snapshot still reads the old store, so this chunk takes its own before changing it
+            s = cloneStore(s);
+            store = s;
+            shared = false;
+        }
+        s.runs = null;
         write(s, i, after);
         if (before == 0) {
             occupied++;
@@ -216,8 +231,19 @@ public final class Chunk {
         return 24 + store.bytes();
     }
 
-    /** A copy in the narrowest storage form. */
+    /**
+     * A copy that shares this chunk's storage until either one is written (copy on write), so a world snapshot costs
+     * one small object per chunk instead of 4 KiB. Saving a snapshot reuses each unchanged chunk's cached runs.
+     */
     public Chunk copy() {
+        shared = true;
+        Chunk c = new Chunk(store, occupied, revision);
+        c.shared = true;
+        return c;
+    }
+
+    /** A copy in the narrowest storage form (writes widen and never narrow; this undoes that). */
+    public Chunk compacted() {
         return compact(dense(store), revision);
     }
 
@@ -244,6 +270,26 @@ public final class Chunk {
      */
     public byte[] runs() {
         Store s = store;
+        byte[] cached = s.runs;
+        if (cached == null) {
+            cached = encodeRuns(s);
+            s.runs = cached;
+        }
+        return cached.clone();
+    }
+
+    /** {@link #runs()} without the defensive copy, for WorldStore; callers must not change the array. */
+    byte[] runsView() {
+        Store s = store;
+        byte[] cached = s.runs;
+        if (cached == null) {
+            cached = encodeRuns(s);
+            s.runs = cached;
+        }
+        return cached;
+    }
+
+    private static byte[] encodeRuns(Store s) {
         if (s.bits == 0) {
             return new byte[] {s.palette[0], (byte) (VOLUME & 0xff), (byte) (VOLUME >>> 8)};
         }
