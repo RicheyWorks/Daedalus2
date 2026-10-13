@@ -77,3 +77,7 @@ The storm volume is no longer forced at BeginPlay. DaedalusWorld is shared, so a
 
 
 - 22:1x PT Oct 12: PIE storm pin. The MoodVolume view Tick (0.5 s) reads the PLAYER camera, which in Play sits on the main island, so right after apply_now it called Restore() and blended back to Clear daylight (8 s) under the SceneCapture hero shot. oddsreaper_turn.py now turns off trigger_on_view + restore_on_exit on the PIE copy only before apply_now, reads the director back after 1.5 s of ticks (held=true/false in the turn log), and re-forces via the director (clock held) once if it slipped. Headless check: tools/islands/oddsreaper/test_storm_pin.py.
+
+## Round-3 off-editor: Storm Parlay Cookbook (Oct 12, 2026, 22:25 PT)
+
+herbs.json now carries storm_parlay_cookbook — 8 signature two-herb brews (ReapersFavor, LightningLedger, LongOdds, HouseHedge, GhostBluff, CoinFlipDouble, ThunderSprint, OddsWhisper) with clear / storm / storm+cistern EV. Clear EV is always 1.0; storm multiplies boostable legs by 1.2 (cap 0.95; Parlayvine fixed); cistern adds x1.05. Headless auditor: 	ools/islands/oddsreaper/or_wager_ev.py (also re-checks every herb storm_ev against the formula). No Unreal touched.
