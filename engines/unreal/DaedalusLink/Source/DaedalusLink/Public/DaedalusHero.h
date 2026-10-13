@@ -17,6 +17,7 @@ class UInputModifierDeadZone;
 class UMaterialInterface;
 class SDaedalusSettingsMenu;
 class SDaedalusFieldMenu;
+class SDaedalusInventory;
 class SDaedalusHud;
 class SWidget;
 struct FInputActionValue;
@@ -174,6 +175,20 @@ public:
 	 *  Returns the realm's state line (or the save text for 'save'). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString RealmInput(const FString& Command);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString RealmState() const;
+
+	// The tabbed inventory (hub 28570/28573/28574): I or d-pad up opens it over the game. One interaction in every
+	// realm; the realm's catalog (Content/Inventory/<realm>.dic) brings its tabs, items, slots, actions and theme.
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleInventory();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsInventoryOpen() const;
+	/** For the harness: tab+ tab- up down left right accept back; realm:<name> picks the catalog (world-zero, gallery-city,
+	 *  parcels, bricks, labyrinth); give:<ID>:<n> and wear:<SLOT>:<ID> stock the satchel; state. Returns the model's line. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString InventoryInput(const FString& Command);
+	/** Which catalog this world uses: InventoryRealm when set, else from the map's name, else world-zero. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString InventoryCatalogName() const;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString InventoryRealm;
+	/** A realm's own loot (item id -> count) and what is worn (slot -> item id). World Zero's bag is the cubes + tools. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TMap<FString, int32> Satchel;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TMap<FString, FString> Worn;
 	/** Write the realm's screen to a PNG (3x), straight from its framebuffer: no viewport capture needed. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool RealmCapture(const FString& Path);
 	/** A portal cube at or around the hero's feet, if there is one. */
@@ -273,6 +288,7 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> ShoulderAction;
 	UPROPERTY() TObjectPtr<UInputAction> MenuAction;
 	UPROPERTY() TObjectPtr<UInputAction> ViewAction;
+	UPROPERTY() TObjectPtr<UInputAction> InventoryAction;
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> LeftDeadzones;
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> RightDeadzones;
 	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> Legs;
@@ -287,6 +303,12 @@ private:
 	TSharedPtr<SWidget> MenuHost;
 	TSharedPtr<SDaedalusFieldMenu> Field;
 	TSharedPtr<SWidget> FieldHost;
+	TSharedPtr<SDaedalusInventory> Inventory;
+	TSharedPtr<SWidget> InventoryHost;
+	TSharedPtr<struct FDaedalusCatalogHolder> InventoryCatalog;
+	void InventoryBag(TMap<FString, int32>& OutBag, TMap<FString, FString>& OutWorn) const;
+	void InventoryIntent(const struct FDaedalusInventoryIntent& Intent);
+	FString InventoryLog;
 	TSharedPtr<SDaedalusHud> Hud;
 	TSharedPtr<SWidget> HudHost;
 	TSharedPtr<class SDaedalusRealm> RealmView;

@@ -987,6 +987,71 @@ def scenario_shiny(p):
     ]}
 
 
+def scenario_inventory(p):
+    """The tabbed inventory (hub 28570/28573/28574): the same controls in two realms with different catalogs and
+    themes. Opened over Play, driven by the harness commands the keys map to; the state lines prove the tabs,
+    the per-tab cursor, the actions, and that browsing changed no count. Slate panels don't show in a scene
+    capture, so this is proven by state, like the menus."""
+    h = hero()
+    checks = []
+    runs = {}
+    for realm, stock, worn in (
+        ("gallery-city", {"PAINT_SPRAY": 1, "WIDE_BRUSH": 1, "PIGMENT_RED": 12, "PAINTER_COAT": 1, "HEARTSTONE": 1}, ("HAND", "PAINT_SPRAY")),
+        ("bricks", {"STUD_HAMMER": 1, "BRICK_RED": 240, "BRICK_BLUE": 31, "PLAN_BRIDGE": 1}, ("HAND", "STUD_HAMMER")),
+    ):
+        h.inventory_input("realm:" + realm)
+        for item, n in stock.items():
+            h.inventory_input("give:%s:%d" % (item, n))
+        h.inventory_input("wear:%s:%s" % worn)
+        before = dict(h.get_editor_property("satchel"))
+        h.toggle_inventory()
+        yield from _frames(2)
+        lines = {"open": h.inventory_input("state")}
+        lines["rb"] = h.inventory_input("tab+")
+        lines["right"] = h.inventory_input("right")
+        lines["rb2"] = h.inventory_input("tab+")
+        lines["lb"] = h.inventory_input("tab-")
+        lines["lb0"] = h.inventory_input("tab-")
+        lines["act"] = h.inventory_input("accept")
+        lines["pick"] = h.inventory_input("accept")
+        yield from _frames(2)
+        lines["after"] = h.inventory_input("state")
+        closed = h.inventory_input("back") == "closed" and not h.is_inventory_open()
+        after = dict(h.get_editor_property("satchel"))
+        runs[realm] = {"lines": lines, "closed": closed, "same_counts": before == after}
+    g, b = runs["gallery-city"], runs["bricks"]
+    gl, bl = g["lines"], b["lines"]
+
+    def kv(line):
+        return _kv(line)
+
+    checks += [
+        _check("gallery opens on ALL in its theme", "tab=ALL(1/6)" in gl["open"] and "theme=gallery" in gl["open"], gl["open"]),
+        _check("bricks opens on ALL in its theme", "tab=ALL(1/6)" in bl["open"] and "theme=bricks" in bl["open"], bl["open"]),
+        _check("RB reaches each realm's own second tab", "tab=SPRAYS" in gl["rb"] and "tab=BRICKS" in bl["rb"], gl["rb"] + " | " + bl["rb"]),
+        _check("the tab remembers its cursor after LB", kv(gl["lb"]).get("cursor") == "1" and kv(bl["lb"]).get("cursor") == "1", gl["lb"] + " | " + bl["lb"]),
+        _check("ALL kept its own cursor", kv(gl["lb0"]).get("cursor") == "0" and kv(bl["lb0"]).get("cursor") == "0"),
+        _check("A opens the actions, A picks one, and the host ran it", "actions=" in gl["act"] and "last=UNEQUIP PAINT_SPRAY" in gl["pick"]
+               and "actions=" in bl["act"] and "last=UNEQUIP STUD_HAMMER" in bl["pick"], gl["pick"] + " | " + bl["pick"]),
+        _check("after the host acts the item shows unworn and the place is kept", " worn" not in gl["after"].split(" last=")[0] and "cursor=0" in gl["after"], gl["after"]),
+        _check("browsing changed no count", g["same_counts"] and b["same_counts"]),
+        _check("B closes the panel in both realms", g["closed"] and b["closed"]),
+    ]
+    # World Zero: the hero's own tools, armour and cubes, nothing to stock.
+    h.inventory_input("realm:world-zero")
+    h.toggle_inventory()
+    yield from _frames(2)
+    zero = h.inventory_input("state")
+    h.inventory_input("tab+")
+    tools = h.inventory_input("state")
+    h.inventory_input("back")
+    h.inventory_input("realm:")
+    checks += [
+        _check("world zero lists the tools the hero carries", "realm=WORLD-ZERO" in zero and "tab=TOOLS" in tools and "item=SWORD x1 worn" in tools, tools),
+    ]
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1004,6 +1069,7 @@ SCENARIOS = {
     "tactics": scenario_tactics,
     "tactics_remote": scenario_tactics_remote,
     "shiny": scenario_shiny,
+    "inventory": scenario_inventory,
 }
 
 

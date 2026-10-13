@@ -41,6 +41,7 @@
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "SDaedalusFieldMenu.h"
+#include "SDaedalusInventory.h"
 #include "SDaedalusHud.h"
 #include "SDaedalusRealm.h"
 #include "Containers/Ticker.h"
@@ -295,6 +296,7 @@ void ADaedalusHero::BeginPlay()
 	ShoulderAction = Make(TEXT("IA_Shoulder"), B);
 	MenuAction = Make(TEXT("IA_Menu"), B);
 	ViewAction = Make(TEXT("IA_View"), B);
+	InventoryAction = Make(TEXT("IA_Inventory"), B);
 	Mapping = NewObject<UInputMappingContext>(this, TEXT("IMC_Hero"));
 
 	FDaedalusSettings::Get().Load();
@@ -329,6 +331,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(ShoulderAction, ETriggerEvent::Started, this, &ADaedalusHero::SwapShoulder);
 			EI->BindAction(MenuAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleSettings);
 			EI->BindAction(ViewAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleField);
+			EI->BindAction(InventoryAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleInventory);
 			EI->BindAction(InteractAction, ETriggerEvent::Started, this, &ADaedalusHero::InteractPressed);
 			EI->BindAction(CallVehicleAction, ETriggerEvent::Started, this, &ADaedalusHero::CallVehiclePressed);
 			EI->BindAction(NextCubeAction, ETriggerEvent::Started, this, &ADaedalusHero::NextCube);
@@ -416,6 +419,8 @@ void ADaedalusHero::RebuildBindings()
 	MapSpec(MenuAction, TEXT("F10"));
 	MapSpec(ViewAction, TEXT("Tab"));
 	MapSpec(ViewAction, TEXT("M"));
+	MapSpec(InventoryAction, TEXT("I"));   // the tabbed inventory (hub 28570). The pad is full (d-pad: view, shoulder, cube,
+	                                       // ghost; Menu and View taken): a controller button is Richey's call (open item)
 
 	// The pad's sticks: the thumbstick layout decides which stick axis drives what (Halo Infinite's four layouts).
 	struct FAxis { const TCHAR* Key; int32 Stick; };
@@ -1740,7 +1745,7 @@ void ADaedalusHero::ToggleSettings()
 		ApplySettings();
 		return;
 	}
-	if (Field.IsValid() || RealmView.IsValid()) return;
+	if (Field.IsValid() || RealmView.IsValid() || Inventory.IsValid()) return;
 	Menu = SNew(SDaedalusSettingsMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleSettings))
 		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings))
@@ -1761,7 +1766,7 @@ void ADaedalusHero::ToggleField()
 		HideOverlay(FieldHost);
 		return;
 	}
-	if (Menu.IsValid() || RealmView.IsValid()) return;
+	if (Menu.IsValid() || RealmView.IsValid() || Inventory.IsValid()) return;
 	Field = SNew(SDaedalusFieldMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleField))
 		.Hero(this);
@@ -1779,6 +1784,150 @@ FString ADaedalusHero::FieldInput(const FString& Command)
 	if (Command == TEXT("tab+")) Field->SelectTab(Field->GetTab() + 1);
 	else if (Command == TEXT("tab-")) Field->SelectTab(Field->GetTab() - 1);
 	return FString::Printf(TEXT("field tab %d islands %d"), Field->GetTab(), Field->MapIslands());
+}
+
+// ---------------------------------------------------------------------------------------------- the inventory
+
+/** The catalog lives as long as the widget that reads it. */
+struct FDaedalusCatalogHolder { daedalus::inv::Catalog Catalog; };
+struct FDaedalusInventoryIntent { daedalus::inv::Intent Intent; };
+
+FString ADaedalusHero::InventoryCatalogName() const
+{
+	if (!InventoryRealm.IsEmpty()) return InventoryRealm.ToLower();
+	const FString Map = GetWorld() ? GetWorld()->GetMapName().ToLower() : FString();
+	for (const TCHAR* Name : {TEXT("gallery-city"), TEXT("parcels"), TEXT("bricks"), TEXT("labyrinth")})
+	{
+		FString Key = Name;
+		Key.ReplaceInline(TEXT("-"), TEXT(""));
+		if (Map.Replace(TEXT("-"), TEXT("")).Replace(TEXT("_"), TEXT("")).Contains(Key)) return Name;
+	}
+	return TEXT("world-zero");
+}
+
+void ADaedalusHero::InventoryBag(TMap<FString, int32>& OutBag, TMap<FString, FString>& OutWorn) const
+{
+	OutBag = Satchel;
+	OutWorn = Worn;
+	if (InventoryCatalogName() == TEXT("world-zero"))
+	{
+		// World Zero's bag is what the hero already carries: the three tools, the armour tiers earned, the cubes mined.
+		for (const auto& P : Bag) OutBag.FindOrAdd(P.Key.ToUpper()) += P.Value;
+		for (const TCHAR* Tool : {TEXT("SWORD"), TEXT("BLASTER"), TEXT("PICK")}) OutBag.FindOrAdd(Tool) = 1;
+		static const TCHAR* Tiers[] = {TEXT("RECRUIT"), TEXT("SCOUT"), TEXT("VANGUARD"), TEXT("PARAGON")};
+		for (int32 T = 0; T <= FMath::Clamp(ArmorTier, 0, 3); ++T) OutBag.FindOrAdd(Tiers[T]) = 1;
+		OutWorn.Add(TEXT("HAND"), CurrentWeapon == 2 ? TEXT("PICK") : CurrentWeapon == 1 ? TEXT("BLASTER") : TEXT("SWORD"));
+		OutWorn.Add(TEXT("BODY"), ArmorName());
+	}
+}
+
+void ADaedalusHero::ToggleInventory()
+{
+	if (Inventory.IsValid())
+	{
+		Inventory.Reset();
+		HideOverlay(InventoryHost);
+		return;
+	}
+	if (Menu.IsValid() || Field.IsValid() || RealmView.IsValid()) return;
+	const FString Name = InventoryCatalogName();
+	const FString Path = FPaths::Combine(FPaths::ProjectPluginsDir(), TEXT("DaedalusLink"), TEXT("Content"), TEXT("Inventory"), Name + TEXT(".dic"));
+	FString Text;
+	if (!FFileHelper::LoadFileToString(Text, *Path)) { UE_LOG(LogDaedalus, Warning, TEXT("No inventory catalog at %s"), *Path); InventoryLog = TEXT("no catalog ") + Name; return; }
+	TSharedPtr<FDaedalusCatalogHolder> Holder = MakeShared<FDaedalusCatalogHolder>();
+	std::string Err;
+	if (!Holder->Catalog.Parse(TCHAR_TO_UTF8(*Text), Err)) { UE_LOG(LogDaedalus, Warning, TEXT("Inventory catalog %s: %s"), *Name, UTF8_TO_TCHAR(Err.c_str())); InventoryLog = FString::Printf(TEXT("bad catalog %s: %s"), *Name, UTF8_TO_TCHAR(Err.c_str())); return; }
+	InventoryCatalog = Holder;
+	Inventory = SNew(SDaedalusInventory)
+		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleInventory))
+		.OnIntent(SDaedalusInventory::FOnIntent::CreateLambda([this](const daedalus::inv::Intent& I) { FDaedalusInventoryIntent W; W.Intent = I; InventoryIntent(W); }));
+	TMap<FString, int32> Held;
+	TMap<FString, FString> WornNow;
+	InventoryBag(Held, WornNow);
+	Inventory->Open(InventoryCatalog->Catalog, Held, WornNow);
+	ShowOverlay(Inventory.ToSharedRef(), Inventory.ToSharedRef(), InventoryHost);
+}
+
+bool ADaedalusHero::IsInventoryOpen() const
+{
+	return Inventory.IsValid();
+}
+
+/** The host side of an Intent: the one place a count or a slot changes. Each realm's rules live in its catalog; the
+ *  hero only knows World Zero's tools and armour, and treats every other realm's items as satchel stock. */
+void ADaedalusHero::InventoryIntent(const FDaedalusInventoryIntent& W)
+{
+	const daedalus::inv::Intent& I = W.Intent;
+	const FString Id = UTF8_TO_TCHAR(I.ItemId.c_str()), Action = UTF8_TO_TCHAR(I.Action.c_str()), Slot = UTF8_TO_TCHAR(I.Slot.c_str());
+	const bool bZero = InventoryCatalogName() == TEXT("world-zero");
+	InventoryLog = FString::Printf(TEXT("%s %s x%d"), *Action, *Id, I.Count);
+	if (Action == TEXT("EQUIP"))
+	{
+		if (bZero && Slot == TEXT("HAND")) { CurrentWeapon = Id == TEXT("PICK") ? 2 : Id == TEXT("BLASTER") ? 1 : 0; bAiming = false; ShowWeapon(); }
+		else if (bZero && Slot == TEXT("BODY")) { static const TCHAR* Tiers[] = {TEXT("RECRUIT"), TEXT("SCOUT"), TEXT("VANGUARD"), TEXT("PARAGON")}; for (int32 T = 0; T < 4; ++T) if (Id == Tiers[T]) SetArmorTier(T); }
+		else Worn.Add(Slot, Id);
+	}
+	else if (Action == TEXT("UNEQUIP"))
+	{
+		if (!bZero || (Slot != TEXT("HAND") && Slot != TEXT("BODY"))) Worn.Remove(Slot);   // the hero always holds a tool and wears a plate
+		else InventoryLog += TEXT(" (a tool and a plate are always on)");
+	}
+	else if (Action == TEXT("DROP") || Action == TEXT("USE"))
+	{
+		const int32 N = Action == TEXT("USE") ? 1 : FMath::Max(1, I.Count);
+		if (bZero && Bag.Contains(Id))
+		{
+			int32& Have = Bag[Id];
+			Have -= N;
+			if (Have <= 0) { Bag.Remove(Id); if (SelectedCube == Id) SelectedCube.Empty(); }
+		}
+		else if (int32* Have = Satchel.Find(Id))
+		{
+			*Have -= N;
+			if (*Have <= 0) Satchel.Remove(Id);
+		}
+		if (Worn.FindRef(Slot) == Id && !Satchel.Contains(Id)) Worn.Remove(Slot);
+	}
+	else if (Action == TEXT("PLACE"))
+	{
+		if (bZero && Bag.Contains(Id)) { SelectedCube = Id; ToggleInventory(); return; }   // back to the game with the cube in hand
+		InventoryLog += TEXT(" (this realm places through its own tool: queued)");
+	}
+	else if (Action == TEXT("SPLIT")) InventoryLog += TEXT(" (stack split lands with the trade screen)");
+	// INSPECT: the details panel already shows it.
+	if (Inventory.IsValid())
+	{
+		TMap<FString, int32> Held;
+		TMap<FString, FString> WornNow;
+		InventoryBag(Held, WornNow);
+		Inventory->Refresh(Held, WornNow);
+	}
+}
+
+FString ADaedalusHero::InventoryInput(const FString& Command)
+{
+	FString Key, Rest;
+	if (!Command.Split(TEXT(":"), &Key, &Rest)) Key = Command;
+	if (Key == TEXT("realm")) { InventoryRealm = Rest; return TEXT("realm ") + InventoryCatalogName(); }
+	if (Key == TEXT("give"))
+	{
+		FString Id, N;
+		if (!Rest.Split(TEXT(":"), &Id, &N)) { Id = Rest; N = TEXT("1"); }
+		Satchel.FindOrAdd(Id) += FMath::Max(1, FCString::Atoi(*N));
+		if (Inventory.IsValid()) { TMap<FString, int32> Held; TMap<FString, FString> WornNow; InventoryBag(Held, WornNow); Inventory->Refresh(Held, WornNow); }
+		return FString::Printf(TEXT("gave %s x%d"), *Id, Satchel[Id]);
+	}
+	if (Key == TEXT("wear"))
+	{
+		FString Slot, Id;
+		if (Rest.Split(TEXT(":"), &Slot, &Id)) Worn.Add(Slot, Id);
+		if (Inventory.IsValid()) { TMap<FString, int32> Held; TMap<FString, FString> WornNow; InventoryBag(Held, WornNow); Inventory->Refresh(Held, WornNow); }
+		return TEXT("worn ") + Rest;
+	}
+	if (Key == TEXT("state")) return Inventory.IsValid() ? Inventory->Describe() + TEXT(" last=") + InventoryLog : TEXT("closed last=") + InventoryLog;
+	if (!Inventory.IsValid()) return TEXT("closed");
+	const FString Out = Inventory->Input(Command);
+	return Out + (InventoryLog.IsEmpty() ? TEXT("") : TEXT(" last=") + InventoryLog);
 }
 
 FString ADaedalusHero::MenuInput(const FString& Command)
@@ -1806,7 +1955,7 @@ void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 		const FString Save = RealmView->SaveText();
 		if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
 	}
-	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost, &HudHost, &RealmHost})
+	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost, &HudHost, &RealmHost, &InventoryHost})
 	{
 		if (Host->IsValid() && GEngine && GEngine->GameViewport)
 		{
@@ -1818,6 +1967,7 @@ void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 	Field.Reset();
 	Hud.Reset();
 	RealmView.Reset();
+	Inventory.Reset();
 	Super::EndPlay(Reason);
 }
 
