@@ -38,6 +38,8 @@ public:
 	virtual bool Use(ADaedalusHero* Hero) override;
 	/** Bind a script now (after setting Cast/Who at spawn). Returns false with the parse error logged. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") bool Rebind();
+	/** Talk (what Interact does when this is the nearest usable). For Blueprints and the harness. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") bool TalkTo(ADaedalusHero* Hero) { return Use(Hero); }
 	/** For the harness: "who=.. bound=1 where=start:0 flags=a,b talks=n". */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") FString State() const;
 	/** Realm-wide flags set by any talker of this cast in this world (e.g. heartstone_done lets the Choir sing). */
