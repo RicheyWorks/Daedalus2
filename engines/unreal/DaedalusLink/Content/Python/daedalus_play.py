@@ -962,14 +962,20 @@ def scenario_shiny(p):
         return a.get_components_by_class(unreal.PointLightComponent)
 
     s0 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
-    yield from _frames(20)
+    t0 = unreal.GameplayStatics.get_time_seconds(w)
+    for _ in range(600):   # until a second of game time has passed (Play may run fast or slow)
+        if unreal.GameplayStatics.get_time_seconds(w) - t0 >= 1.0:
+            break
+        yield
+    t1 = unreal.GameplayStatics.get_time_seconds(w)
     s1 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
-    moved = s0 and all((a - b).length() > 5 for a, b in zip(s0, s1))
+    dists = [(a - b).length() for a, b in zip(s0, s1)]
+    moved = bool(dists) and min(dists) > 5
     cap = os.path.join(unreal.Paths.project_saved_dir(), "Daedalus", "shiny.png")
     return {"checks": [
         _check("the shiny critter glows", len(lights(shiny)) == 1 and len(lights(plain)) == 0),
         _check("and wears orbiting sparks", len(sparks(shiny)) == 7 and len(sparks(plain)) == 0),
-        _check("the sparks move", bool(moved)),
+        _check("the sparks move", moved, "dt=%.2fs min=%.1fcm" % (t1 - t0, min(dists) if dists else -1)),
         _check("it stands taller", shiny.get_actor_scale3d().z > plain.get_actor_scale3d().z * 1.1),
         _check("the shiny foe glows too", len(lights(foe_shiny)) == 1 and len(lights(foe_plain)) == 0),
         _check("with more health", foe_shiny.get_editor_property("max_health") > foe_plain.get_editor_property("max_health") * 1.4,
