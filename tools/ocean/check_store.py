@@ -23,6 +23,8 @@ def check(java, classpath, probe, directory):
 
     run('write', 'OCEAN_PROCESS_WRITE_PASS')
     run('read', 'OCEAN_PROCESS_RESTART_PASS')
+    run('window-write', 'OCEAN_WINDOW_WRITE_PASS')
+    run('window-read', 'OCEAN_WINDOW_RESTART_PASS')
     holder = subprocess.Popen(command + ['hold', str(directory)], stdin=subprocess.PIPE,
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     ready = queue.Queue()
@@ -41,9 +43,10 @@ def check(java, classpath, probe, directory):
             holder.communicate(timeout=10)
     run('read', 'OCEAN_PROCESS_RESTART_PASS')
     return {'separate_jvm_edit_and_empty_restart': True, 'os_writer_lock_refused': True,
+            'window_capacity_bound': 3, 'window_edit_eviction_and_restart': True,
             'lock_release_reopen': True, 'owned_holder_stopped': holder.poll() is not None,
             'elapsed_seconds': round(time.monotonic() - start, 3),
-            'scope': 'Java source launch, edit/save, process restart, writer exclusion and reopen',
+            'scope': 'Java source launch, store/window edits, eviction, process restart, writer exclusion and reopen',
             'store_bytes': sum(p.stat().st_size for p in directory.iterdir() if p.is_file()),
             'realm_registration_verified': False, 'unreal_play_verified': False}
 

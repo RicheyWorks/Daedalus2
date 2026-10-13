@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import com.daedalus.world.*;
 import com.daedalus.world.ocean.OceanChunkStore;
+import com.daedalus.world.ocean.OceanChunkWindow;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -9,6 +10,24 @@ class OceanStoreProbe {
     public static void main(String[] args) throws Exception {
         if(args.length!=2)throw new IllegalArgumentException("OceanStoreProbe MODE DIRECTORY");
         Path root=Path.of(args[1]);
+        if(args[0].startsWith("window-")) {
+            try(var window=new OceanChunkWindow(root,42,3)) {
+                var edited=new BlockCoordinate(-1,-1,-1);
+                if(args[0].equals("window-write")) {
+                    window.set(edited,BlockType.WOOD);
+                    for(int x=0;x<20;x++) {
+                        window.get(new BlockCoordinate(x*16,-1,0));
+                        if(window.residentCount()>3)throw new IllegalStateException("Resident cap exceeded");
+                    }
+                    if(window.get(edited)!=BlockType.WOOD)throw new IllegalStateException("Edit lost on eviction");
+                    System.out.println("OCEAN_WINDOW_WRITE_PASS");
+                } else if(args[0].equals("window-read")) {
+                    if(window.get(edited)!=BlockType.WOOD)throw new IllegalStateException("Edit lost on process restart");
+                    System.out.println("OCEAN_WINDOW_RESTART_PASS");
+                } else throw new IllegalArgumentException("Unknown window probe");
+            }
+            return;
+        }
         if(args[0].equals("locked")) {
             try(var unexpected=new OceanChunkStore(root,42)) {
                 throw new IllegalStateException("Concurrent writer unexpectedly acquired lock");
