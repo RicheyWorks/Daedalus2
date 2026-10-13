@@ -1,5 +1,5 @@
 """youtube-master: import 18 READY hero props (QUEUE 6302-6319) + place on YTM_Island. Idempotent (tag YTM_Hero). Saves YTM_Island sublevel only."""
-import unreal
+import unreal, math
 GLB = r"C:\Users\730ri\projects\bot-team\art\glb"; ART = "/Game/Daedalus/Art"; SUB = "/Game/YTM/Maps/YTM_Island"
 OFFSET = unreal.Vector(0, -2600000, 0); TAG = "YTM_Hero"
 eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
@@ -10,7 +10,11 @@ SIGNS = {"TheSpring":(1500,400,-75),"Drink":(1200,-500,-113),"HerbGarden":(4800,
 props = [("Prop",f"Prop_YTM_Sign_{k}",v) for k,v in SIGNS.items()]
 props += [("Prop","Prop_YTM_RecordShrine",(-800,1200,135)),("Prop","Prop_YTM_Jukebox",(-1100,700,120))]
 props += [("Item",f"Item_YTM_Record_{r}",(-800+60*(i-1.5),1000,85)) for i,r in enumerate(["AmericanOldTime","Alpine","CelticPipes","Gamelan"])]
-tasks=[]
+NEWREC = ["AndeanPanPipes","AppalachianHighLonesome","ArabicMaqam","ArabicTakht","ArmenianDuduk","AustralianBushBand","BalineseKecak","BalkanBrass","BaroqueCounterpoint","BulgarianWomensChoir","CairoOrchestra","CarpathianTrembita"]
+# 12 seed-song records stand in an arc behind the shrine (r 260 cm, facing it); rack beside the jukebox
+for i, r in enumerate(NEWREC):
+    t = math.radians(30 + i * 120 / 11); props.append(("Item", f"Item_YTM_Record_{r}", (-800 + 260*math.cos(t), 1200 + 260*math.sin(t), math.degrees(t) + 90)))
+props.append(("Prop", "Prop_YTM_RecordRack", (-1450, 900, 120)))tasks=[]
 for kind,name,_ in props:
     t=unreal.AssetImportTask(); t.filename=f"{GLB}\\{name}.glb"; t.destination_path=f"{ART}/{kind}/{name}"
     t.automated=True; t.replace_existing=True; t.save=True; tasks.append(t)
