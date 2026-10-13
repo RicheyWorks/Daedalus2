@@ -65,13 +65,19 @@ def import_missing(names, force=()):
     return done
 
 
+def _streamed(world):
+    try: return any(str(l.get_world_asset_package_name()) == SUB for l in world.get_streaming_levels())
+    except Exception as e: log(f"streamed check: {e}"); return True   # unsure -> do NOT re-add (re-add can pop a modal)
+
+
 def open_sublevel():
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     les.load_level(PERSIST)
     world = unreal.EditorLevelLibrary.get_editor_world()
     if not eal.does_asset_exist(SUB):
         unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, move_selected_actors_into_new_level=False)
-    else:
+    elif not _streamed(world):
+        # only add when not already streamed: re-adding an existing sublevel opened a modal "Add Level" dialog (22:2x make-up)
         try: unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
         except Exception as e: log(f"add_level_to_world: {e}")
     les.set_current_level_by_name(SUBNAME)
