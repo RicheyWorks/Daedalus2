@@ -55,6 +55,8 @@ class DAEDALUSLINK_API UDaedalusOceanTravelComponent : public UActorComponent
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
+    bool BoardAtDock(AController* Player, ADaedalusOceanVessel* Vessel, const FString& DockId);
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
     bool ConfigureHost(const TArray<FString>& RegisteredRealms,
                        const TArray<FDaedalusOceanDock>& Docks,
                        const TArray<FDaedalusOceanConnection>& Connections);

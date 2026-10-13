@@ -89,3 +89,29 @@ bool UDaedalusOceanTravelComponent::ResolveForPlayer(AController* Player,
     ArrivalAnchor = UTF8_TO_TCHAR(Route.ArrivalAnchor.c_str());
     return true;
 }
+
+bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
+    ADaedalusOceanVessel* Vessel, const FString& DockId)
+{
+    if (!IsHost() || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
+        || !Vessel->HasAuthority() || Player->GetWorld() != GetWorld()
+        || Vessel->GetWorld() != GetWorld() || Vessel->GetController()) return false;
+    APawn* Avatar = Player->GetPawn();
+    if (!IsValid(Avatar) || Avatar == Vessel || Avatar->GetWorld() != GetWorld()
+        || !Avatar->HasAuthority() || Avatar->GetController() != Player) return false;
+    if (Vessel->VesselType != EDaedalusOceanVessel::Boat
+        && Vessel->VesselType != EDaedalusOceanVessel::Submarine) return false;
+    const auto* Dock = ActiveDocks.FindByPredicate([&](const FDaedalusOceanDock& Candidate) {
+        return Candidate.Id == DockId;
+    });
+    if (!Dock || Dock->Realm != Vessel->CurrentRealm
+        || (Dock->bUnderwater && Vessel->VesselType == EDaedalusOceanVessel::Boat)) return false;
+    for (APawn* Pawn : {Avatar, static_cast<APawn*>(Vessel)})
+    {
+        const FVector Position = Pawn->GetActorLocation();
+        if (!Finite(Position) || FVector::DistSquared(Position, Dock->BoardingLocation)
+            > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
+    }
+    Player->Possess(Vessel);
+    return Player->GetPawn() == Vessel && Vessel->GetController() == Player;
+}

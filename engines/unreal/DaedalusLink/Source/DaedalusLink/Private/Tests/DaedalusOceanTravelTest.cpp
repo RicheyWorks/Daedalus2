@@ -56,6 +56,16 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Failed reload preserves route"),Resolve(Player));
     Player->UnPossess();
     TestFalse(TEXT("Unpossessed vessel refused"),Resolve(Player));
+    auto* Avatar = World->SpawnActor<ADaedalusOceanVessel>();
+    Player->Possess(Avatar);
+    Avatar->SetActorLocation(FVector(501,0,0));
+    TestFalse(TEXT("Remote avatar cannot board"),Component->BoardAtDock(Player,Vessel,Home.Id));
+    TestTrue(TEXT("Rejected boarding retains avatar"),Player->GetPawn()==Avatar);
+    Avatar->SetActorLocation(FVector::ZeroVector);
+    TestFalse(TEXT("Unknown dock cannot board"),Component->BoardAtDock(Player,Vessel,TEXT("invented")));
+    TestTrue(TEXT("Nearby player boards vessel"),Component->BoardAtDock(Player,Vessel,Home.Id));
+    TestTrue(TEXT("Boarded vessel can resolve route"),Resolve(Player));
+    TestFalse(TEXT("Another controller cannot take occupied vessel"),Component->BoardAtDock(Stranger,Vessel,Home.Id));
     World->DestroyWorld(false);
     return true;
 }

@@ -24,6 +24,16 @@ server-owned vessel identity and current realm; do not populate these fields fro
 client request payloads. A request should contain dock IDs only. The existing
 realm loader remains owned by Claude's team. No Hero/Realm files were changed.
 
+BoardAtDock performs native possession transfer when the requesting controller
+already possesses an authority avatar and both avatar and unoccupied vessel are
+within the configured dock radius. The vessel must match the dock realm; surface
+boats cannot board at submerged docks. Unknown docks, occupied vessels and remote
+avatars are refused before possession changes. The host must additionally verify
+the avatar's current realm and boarding permissions through its existing player
+session; this component does not own the avatar's realm state. Preserve the old
+avatar in the player session before boarding for later disembarkation. This method
+adds possession, not vehicle propulsion or a completed cross-realm transition.
+
 ## Verification
 
 The actor/component, reflection code and automation test compiled and linked in
