@@ -13,6 +13,7 @@ $res.lighting = Ue 'pyth_lighting_ue.py' 60
 $res.verify = Ue 'pyth_verify_ue.py' 180
 $res.succession = Ue 'pyth_succession_ue.py' 120
 $res.quest = Ue 'pyth_quest_ue.py' 120
+$res.hero = Ue 'pyth_hero_ue.py' 60; Start-Sleep 3
 $w = 'C:\Users\730ri\projects\D2-build\connectors\claude-unreal-connector\extension\server\win.ps1'
 $r = & $w -Op list 2>&1 | Out-String; $m = [regex]::Match($r, '[A-Za-z0-9+/]{5000,}={0,2}')
 if ($m.Success) { [IO.File]::WriteAllBytes('C:\Users\730ri\pyth_island_turn.png', [Convert]::FromBase64String($m.Value)); $res.screenshot = 'C:\Users\730ri\pyth_island_turn.png' }
@@ -20,6 +21,7 @@ $res.save_mine = Ue 'save_mine.py' 120
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8; $res.next = & powershell -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\730ri\projects\bot-team\art\NOTES\pythagoras\next_bot.ps1'
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8
 'RUNNER_DONE'
+
 
 
 
