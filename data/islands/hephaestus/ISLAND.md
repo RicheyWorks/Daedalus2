@@ -372,3 +372,10 @@ Owed next editor turn: HEPH_FORCE_LOD1=1 landmark swap + lit forge-overlook hero
 ## Temp island-only hero lights (2026-10-13)
 
 On a granted editor turn, `heph_island_ue.hero_capture` spawns tagged `HEPH_TEMP_*` lights (DirectionalLight with `atmosphere_sun_light=False`, PointLight fill 5e5, bounded PostProcessVolume EV100 9) at the island origin — the disk-saver round-5 lit-capture pattern — so the forge-overlook SceneCapture stays lit even when DaedalusWorld sky is storm-dark. Actors are destroyed before `save_world`; they are never committed to Content. `HEPH_TEMP_LIGHTS=0` disables. See `test_heph_temp_lights.py`.
+
+## Round 5 turn (2026-10-13 01:12-01:14 PT)
+- --now turn after referee GRANT #26915 and CLAIM #26922: placed 126/126, imported 21 hero glbs (LOD1 auto swap, 7 landmarks QUEUE 1360-1366), missing none.
+- Hero: SceneCapture rung auto+1, luma 174.3 (gate 20), HEPH_TEMP sun/fill/PPV used, and none were left in the level afterwards (checked via the bridge).
+- Saved sublevel + all maps (dirty_maps []), Play stopped, TURN DONE + HANDOFF -> pythagoras about 01:13:46.
+- Log: bot-team\shots\hephaestus\turn_r5_run.log; capture: shots\hephaestus\hero_capture.json.
+
