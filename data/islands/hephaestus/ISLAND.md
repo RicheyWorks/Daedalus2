@@ -120,3 +120,20 @@ Capture path (in `heph_island_ue.hero_capture`, loaded at turn start via runpy):
 
 ## Win condition
 Water running, pens producing, herb beds watered, and at least one dual-quenched tonic in the player's pack. The Great Forge glow brightens when all three living systems are up — the shard is tempered.
+
+## Round-2 Unreal verification (2026-10-12 21:02 PT)
+
+Editor turn after youtube-master HANDOFF #23780 (36s wall). Bridge preflight live; RAM ~9 GB free; imports skipped (all 72 assets already in Content).
+
+| Check | Result |
+|-------|--------|
+| Placements | **119/119** (0 missing) |
+| Living | water **24** / livestock **16** / herbs **12** |
+| Sublevel | /Game/Hephaestus/Maps/HephaestusIsland at ARK_ORIGIN 6000000,2000000 |
+| Saves | sublevel=True, DaedalusWorld+maps=True, dirty=[] |
+| Hero shot | ot-team\shots\hephaestus\hero_r2.png (SceneCapture2D warm, 1920x1080, forge overlook) |
+| Play check | 20s PIE OK; hero_unreal_play.png; Play stopped |
+| HANDOFF | hephaestus → **pythagoras** at 21:03 PT |
+
+Kit: Daedalus2 main `28e1cbf4` (bridge liveness preflight). Contest still active.
+
