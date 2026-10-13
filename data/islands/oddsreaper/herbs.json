@@ -1,6 +1,6 @@
 {
  "system": "Wager Herbs",
- "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) adds +0.1 to p: the Reaper favors the bold. Stormbloom may re-roll a failed jackpot once.",
+ "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 1.0) while the payout stays at 1/p_base, so every herb gets the same +20% EV edge in a storm: the Reaper favors the bold, evenly. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
  "herbs": [
   {
    "id": "Luckroot",
@@ -55,5 +55,5 @@
   }
  ],
  "tonics": "8x8 = 64 combos (Item_OR_Tonic_00..63; index = 8*a + b)",
- "water": "Every tonic brew consumes 0.5 L water. Spring water: normal. Storm-cistern water brewed during Rain/Storm: +0.05 jackpot p (stacks with the storm +0.1). Herb plants need 1 L/day or pause growth."
+ "water": "Every tonic brew consumes 0.5 L water. Spring water: normal. Storm-cistern water brewed during Rain/Storm: jackpot p x1.05 (stacks with the storm x1.2, cap 0.95). Herb plants need 1 L/day or pause growth."
 }
