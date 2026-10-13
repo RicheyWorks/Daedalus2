@@ -70,7 +70,7 @@ def import_missing(names, force=()):
 
 
 def _streamed(world):
-    try: return any(str(l.get_world_asset_package_name()) == SUB for l in world.get_streaming_levels())
+    try: return unreal.GameplayStatics.get_streaming_level(world, SUBNAME) is not None
     except Exception as e: log(f"streamed check: {e}"); return True   # unsure -> do NOT re-add (re-add can pop a modal)
 
 
@@ -107,13 +107,15 @@ def run():
         world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
         base_n = sum(1 for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Island Base")
         stream = "not found"   # LevelStreamingDynamic never loads in PIE (oddsreaper 26627): make ours AlwaysLoaded
-        try:
-            for ls in world.get_streaming_levels():
-                if str(ls.get_world_asset_package_name()) == SUB:
-                    stream = ls.get_class().get_name()
-                    if "AlwaysLoaded" not in stream:
-                        unreal.EditorLevelUtils.set_streaming_class_for_level(ls, unreal.LevelStreamingAlwaysLoaded)
-                        unreal.EditorLevelLibrary.save_all_dirty_levels(); stream += " -> LevelStreamingAlwaysLoaded (saved)"
+        try:   # UE5.x python has no World.get_streaming_levels / set_streaming_class_for_level: remove + re-add (done live r5 01:40)
+            ls = unreal.GameplayStatics.get_streaming_level(world, SUBNAME)
+            if ls:
+                stream = ls.get_class().get_name()
+                if "AlwaysLoaded" not in stream and ls.get_loaded_level():
+                    unreal.EditorLevelUtils.remove_level_from_world(ls.get_loaded_level())
+                    ls2 = unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
+                    saved = unreal.EditorLoadingAndSavingUtils.save_map(world, PERSIST)   # only DaedalusWorld (holds the streaming list)
+                    stream += " -> %s (DaedalusWorld saved=%s)" % (ls2.get_class().get_name() if ls2 else None, saved)
         except Exception as e: stream = "streaming fix failed: %r" % e
         c, t = lay["hero_cam_m"], lay["hero_target_m"]
         cl = unreal.Vector(ox + c[0] * 100, oy - c[1] * 100, oz + c[2] * 100); tl = unreal.Vector(ox + t[0] * 100, oy - t[1] * 100, oz + t[2] * 100)
