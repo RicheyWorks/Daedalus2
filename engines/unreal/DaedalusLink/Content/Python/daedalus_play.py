@@ -1055,22 +1055,29 @@ def scenario_inventory(p):
 def scenario_dialogue(p):
     """Dialogue boxes in the 3D realms (Richey 2026-10-13, Animal Crossing style): an NPC line opens the box in the
     realm's theme, types itself with blips, pages, offers choices; A/B/up/down drive it; the outcome reaches the
-    hero. Proven by state lines (Slate isn't in a scene capture)."""
+    hero. Proven by state lines (Slate isn't in a scene capture). Play's frame rate sets the typewriter's pace, so
+    every step reads the state and acts on it rather than counting frames."""
     h = hero()
     h.inventory_input("realm:gallery-city")
     h.speak("Curator Vell", "Welcome to the Gallery, painter. The Heartstone went missing last night and the Echo Choir has gone quiet. Would you look into it for me?", ["Of course", "Not now"])
     yield from _frames(2)
     opened = h.dialogue_input("state")
-    yield from _frames(20)   # the typewriter runs on Slate's tick, paused game or not
+    yield from _frames(6)
     typed = h.dialogue_input("state")
-    a1 = h.dialogue_input("a")      # finish the page
-    a2 = h.dialogue_input("a")      # next page
-    skip = h.dialogue_input("b")    # to the end: the choices
+    turned = ""
+    for _ in range(4):   # A finishes the page, A turns it; however far the typewriter got
+        turned = h.dialogue_input("a")
+        if "page=2/2" in turned:
+            break
+    skipped = h.dialogue_input("state")
+    if "choosing" not in skipped:
+        skipped = h.dialogue_input("b")   # B skips to the end of the text: the choices
+    was = _kv(skipped).get("choosing", "0/2").split("/")[0]
     down = h.dialogue_input("down")
-    pick = h.dialogue_input("a")    # "Not now"
+    want = str((int(was) + 1) % 2)
+    pick = h.dialogue_input("a")
     yield from _frames(2)
     after = h.dialogue_input("state")
-    # a second line with no choices, then the Keeper's own line through the same box
     h.speak("Street Muralist", "Psst. The wall by the vat has a secret.", [])
     yield from _frames(2)
     h.dialogue_input("b")
@@ -1079,10 +1086,10 @@ def scenario_dialogue(p):
     h.inventory_input("realm:")
     return {"checks": [
         _check("the line opens the box in the realm's era", "open=1 era=MODERN who=Curator Vell page=1/2" in opened, opened),
-        _check("it types itself with blips", _kv(typed).get("shown", "0/1").split("/")[0] != "0" and int(_kv(typed).get("blips", "0")) > 5, typed),
-        _check("A finishes the page, A turns it", "page=1/2" in a1 and "page=2/2" in a2, a1 + " | " + a2),
-        _check("B skips to the choices", "choosing=0/2" in skip, skip),
-        _check("down moves the choice and A picks it for the hero", "choosing=1/2" in down and "last=choice:1:Curator Vell" in pick, down + " | " + pick),
+        _check("it types itself with blips", int(_kv(typed).get("blips", "0")) > 5, typed),
+        _check("A finishes the page and turns it", "page=2/2" in turned, turned),
+        _check("the end of the text is the choices", "choosing=" in skipped, skipped),
+        _check("down moves the choice and A picks it for the hero", ("choosing=%s/2" % want) in down and ("last=choice:%s:Curator Vell" % want) in pick, down + " | " + pick),
         _check("the box is down afterwards", after.startswith("closed") and not h.is_dialogue_open(), after),
         _check("a line without choices closes on A", "last=closed:Street Muralist" in closed and not h.is_dialogue_open(), closed),
     ]}
