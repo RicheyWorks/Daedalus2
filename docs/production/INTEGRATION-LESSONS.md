@@ -44,3 +44,9 @@
 - Bound resident chunks and per-call warmup separately. A cache count bound does not establish a process-RAM, disk, frame-time or multiplayer-capacity budget.
 - Save a candidate edit before publishing it in cache; on failed disk I/O retain the original cached state. Load before evicting so a corrupt destination does not discard useful data.
 - A write-through cache has no unsaved dirty eviction queue. Keep snapshots independent and prohibit bypass writes while its store owns the directory.
+
+### Ocean host API
+- Reuse ChunkBlocksResponse so native meshing does not need a second block protocol. Authentication must precede any generation or disk access.
+- Give sea chunk reads a distinct rate-limit bucket; sharing the maze-generation quota creates unrelated feature contention. Verify 429 and independent JWT-subject buckets over real production-profile HTTP.
+- Default-disabled configuration is separate from production authorization. Development permitAll does not supply a JWT decoder; fail closed and use the production resource-server setup for authenticated access.
+- Distinguish an opt-in sector endpoint from world registration and native realm loading. HTTP/restart proof does not establish a visible dock transition.
