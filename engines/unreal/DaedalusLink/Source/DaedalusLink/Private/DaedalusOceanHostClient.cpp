@@ -90,6 +90,10 @@ void UDaedalusOceanHostClient::OnComponentDestroyed(bool Destroying)
 {
     ClearSession();Super::OnComponentDestroyed(Destroying);
 }
+void UDaedalusOceanHostClient::EndPlay(const EEndPlayReason::Type Reason)
+{
+    ClearSession();Super::EndPlay(Reason);
+}
 bool UDaedalusOceanHostClient::RequestChunk(int32 X,int32 Y,int32 Z)
 {
     if (!IsInGameThread() || Pending || BearerToken.IsEmpty() || !Axis(X)||!Axis(Y)||!Axis(Z)) return false;

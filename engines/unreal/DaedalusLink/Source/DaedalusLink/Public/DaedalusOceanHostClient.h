@@ -30,6 +30,7 @@ public:
     UPROPERTY(BlueprintAssignable) FDaedalusOceanChunkReceived OnChunk;
     UPROPERTY(BlueprintAssignable) FDaedalusOceanRequestFailed OnFailure;
     virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
+    virtual void EndPlay(const EEndPlayReason::Type Reason) override;
     static bool DecodeChunk(const FString& Json,int32 X,int32 Y,int32 Z,FDaedalusOceanChunkView& Out);
 private:
     // Deliberately not UPROPERTY/config/replicated: credentials are not asset data.
