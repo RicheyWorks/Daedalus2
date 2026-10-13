@@ -87,7 +87,8 @@ def rig_mesh(name):
     return mesh,rig
 
 records=[]
-for index,(name,role) in enumerate([('Wayfinder','Hero: thread, chalk and compass'),('ThreadSpinnerAri','NPC: thread supply and path-marking quests'),('LanternKeeper','NPC: light supply and route guidance')]):
+ROSTER=[('Wayfinder','Hero: thread, chalk and compass'),('ThreadSpinnerAri','NPC: thread supply and path-marking quests'),('LanternKeeper','NPC: light supply and route guidance'),('Wallwright','NPC: maze repairs and wall routes'),('LostCartographer','NPC: partial maps and survey quests'),('EchoHermit','NPC: dead-end echo hints'),('GateRiddler','NPC: riddle gates'),('StriderTamerOona','NPC: sky-strider care and rides'),('StatueGardener','NPC: hedge growth and recovery'),('HerdWardenTobi','NPC: Hornback care and calming'),('Trapsmith','NPC: trap detection and disarming'),('TwinDoors','NPC: paired truth and lie puzzle'),('ArchitectApprentice','NPC: lost construction records')]
+for index,(name,role) in enumerate(ROSTER):
     parts=[];coat=rust if index==1 else teal if index==0 else slate
     cone((0,0,1.22),.27,.23,.48,coat)
     cone((0,0,.96),.30,.23,.20,coat,'pelvis')
@@ -122,7 +123,7 @@ for index,(name,role) in enumerate([('Wayfinder','Hero: thread, chalk and compas
             o=cone((0,.27,z),.105,.105,.44,ivory);o.rotation_euler.y=math.pi/2
             for x in [-.23,.23]:
                 o=cone((x,.27,z),.14,.14,.035,gold);o.rotation_euler.y=math.pi/2
-    else:
+    elif index==2:
         # Tall lantern hat and held cage lantern distinguish the keeper.
         cone((0,0,1.94),.19,.11,.27,slate,'head')
         cone((0,0,2.09),.13,0,.12,gold,'head')
@@ -133,6 +134,43 @@ for index,(name,role) in enumerate([('Wayfinder','Hero: thread, chalk and compas
         for z in [.53,.83]:box((x,y,z),(.25,.25,.055),gold,bone)
         for dx in [-.105,.105]:
             for dy in [-.105,.105]:box((x+dx,y+dy,.68),(.024,.024,.3),dark,bone,0)
+    else:
+        if name=='Wallwright':
+            box((0,0,1.93),(.42,.31,.11),gold,'head');box((0,.24,1.25),(.5,.22,.48),slate)
+            segment((-.38,-.03,.9),(-.38,-.03,1.2),.035,dark,'forearm.R');box((-.38,-.03,1.23),(.30,.14,.17),gold,'forearm.R')
+        elif name=='LostCartographer':
+            box((0,-.30,1.17),(.48,.06,.38),ivory);box((0,.27,1.26),(.40,.18,.44),dark)
+            for x in [-.21,.21]:cone((x,.26,1.48),.055,.055,.6,ivory)
+        elif name=='EchoHermit':
+            cone((0,0,1.95),.24,0,.55,slate,'head');cone((0,-.13,1.51),.15,.025,.24,ivory,'head')
+            ring((-.36,-.05,1.16),.19,.028,gold,'forearm.R').rotation_euler.x=math.pi/2
+        elif name=='GateRiddler':
+            for x in [-.12,.12]:cone((x,0,2.0),.075,0,.42,gold,'head')
+            box((0,-.21,1.75),(.28,.06,.10),gold,'head');box((0,-.29,1.22),(.27,.05,.25),slate)
+        elif name=='StriderTamerOona':
+            for x in [-.13,0,.13]:cone((x,.03,1.98),.04,0,.45,ivory,'head')
+            ring((.36,-.04,1.04),.15,.025,dark,'forearm.L').rotation_euler.x=math.pi/2
+            box((0,.27,1.22),(.40,.22,.2),gold)
+        elif name=='StatueGardener':
+            cone((0,0,1.9),.28,.08,.23,teal,'head')
+            for x in [-.26,.26]:ball((x,0,1.48),(.20,.18,.17),teal,'spine')
+            box((.34,-.03,1.12),(.13,.10,.33),gold,'forearm.L')
+        elif name=='HerdWardenTobi':
+            for x in [-.18,.18]:segment((x,0,1.9),(x*1.4,0,2.12),.055,ivory,'head')
+            box((0,.24,1.26),(.4,.20,.36),rust)
+            ring((-.35,-.04,1.07),.16,.025,gold,'forearm.R').rotation_euler.x=math.pi/2
+        elif name=='Trapsmith':
+            box((0,-.17,1.75),(.3,.07,.09),dark,'head')
+            for x in [-.18,0,.18]:box((x,-.29,1.11),(.11,.1,.2),dark,'pelvis')
+            box((.36,-.04,1.08),(.23,.16,.24),gold,'forearm.L')
+        elif name=='TwinDoors':
+            for x in [-.18,.18]:box((x,-.04,1.8),(.27,.18,.39),gold if x>0 else slate,'head')
+            for x in [-.18,.18]:ring((x,-.15,1.74),.045,.013,ivory,'head').rotation_euler.x=math.pi/2
+            box((0,.03,1.38),(.70,.38,.20),dark)
+        elif name=='ArchitectApprentice':
+            box((0,.25,1.32),(.44,.2,.46),slate)
+            box((0,-.29,1.30),(.36,.05,.28),ivory)
+            for x in [-.16,.16]:segment((x,.25,1.55),(x,.25,1.95),.04,gold,'spine')
     mesh,rig=rig_mesh('Mob_Lab_'+name)
     bpy.context.view_layer.update();tri=sum(len(p.vertices)-2 for p in mesh.data.polygons)
     radius=math.ceil(max(Vector(c).length for c in mesh.bound_box)*100)
@@ -143,19 +181,19 @@ for index,(name,role) in enumerate([('Wayfinder','Hero: thread, chalk and compas
     for tr in rig.animation_data.nla_tracks:tr.mute=True
     for p in rig.pose.bones:p.rotation_euler=(0,0,0);p.location=(0,0,0)
     records.append(dict(id=mesh.name,role=role,triangles=tri,bones=len(BONES),file=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),radius_cm=radius,rig='LabyrinthHumanoidV1'))
-    rig.location.x=index*1.5
-    bpy.ops.object.text_add(location=(index*1.5-.6,-.65,.01));t=bpy.context.object;t.data.body=name;t.data.size=.14;t.data.materials.append(ivory)
+    rig.location.x=(index%5)*1.5;rig.location.y=(index//5)*2.6
+    bpy.ops.object.text_add(location=((index%5)*1.5-.6,(index//5)*2.6-.65,.01));t=bpy.context.object;t.data.body=name;t.data.size=.14;t.data.materials.append(ivory)
 
 bpy.ops.mesh.primitive_plane_add(size=200);bpy.context.object.data.materials.append(slate)
-bpy.ops.object.camera_add(location=(5,-9,5));cam=bpy.context.object;cam.rotation_euler=(Vector((1.5,0,1))-cam.location).to_track_quat('-Z','Y').to_euler()
-cam.data.type='ORTHO';cam.data.ortho_scale=5.6;bpy.context.scene.camera=cam
+bpy.ops.object.camera_add(location=(12,-15,16));cam=bpy.context.object;cam.rotation_euler=(Vector((3,2.6,1))-cam.location).to_track_quat('-Z','Y').to_euler()
+cam.data.type='ORTHO';cam.data.ortho_scale=11;bpy.context.scene.camera=cam
 for loc,power in [((0,-4,7),1300),((4,3,6),1800)]:
     bpy.ops.object.light_add(type='AREA',location=loc);o=bpy.context.object;o.data.energy=power;o.data.shape='DISK';o.data.size=5
-    o.rotation_euler=(Vector((1.5,0,1))-o.location).to_track_quat('-Z','Y').to_euler()
+    o.rotation_euler=(Vector((3,2.6,1))-o.location).to_track_quat('-Z','Y').to_euler()
 s=bpy.context.scene;s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.render.threads_mode='FIXED';s.render.threads=4
-s.render.resolution_x=1500;s.render.resolution_y=1000;s.render.resolution_percentage=100;s.render.fps=24
+s.render.resolution_x=1800;s.render.resolution_y=1300;s.render.resolution_percentage=100;s.render.fps=24
 s.render.filepath=str(OUT/'contact-sheet.png');s.world.color=(.18,.18,.18)
-bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'labyrinth-cast-batch1.blend'));bpy.ops.render.render(write_still=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'labyrinth-humanoid-cast.blend'));bpy.ops.render.render(write_still=True)
 (OUT/'manifest.json').write_text(json.dumps({'assets':records,'status':'rigged-art; Unreal acceptance pending','weighting':'rigid parts, one bone per vertex','clips':['Idle','Walk']},indent=2))
 (OUT/'labyrinth-cast.bba').write_text('BBA 1\n'+''.join(f"asset {r['id']} lod0 {r['triangles']} lod1 - radius {r['radius_cm']} switch {max(500,20*r['radius_cm'])}\n" for r in records))
 print('LABYRINTH_CAST_OK',len(records))

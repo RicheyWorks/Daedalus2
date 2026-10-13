@@ -24,7 +24,7 @@ def validate(root):
             assert start+(a['count']-1)*stride+width<=v.get('byteOffset',0)+v['byteLength']<=len(binary)
             return [struct.unpack_from('<'+fmt*count,binary,start+i*stride) for i in range(a['count'])]
         assert len(doc['skins'])==1
-        joints=doc['skins'][0]['joints'];assert len(joints)==14
+        joints=doc['skins'][0]['joints'];assert len(joints)==record['bones']
         signature=[(doc['nodes'][i]['name'],doc['nodes'][i].get('translation'),doc['nodes'][i].get('rotation')) for i in joints]
         if skeleton is None:skeleton=signature
         assert signature==skeleton,'shared rest skeleton differs'
@@ -42,7 +42,7 @@ def validate(root):
                 tris+=len(indices)//3;vertices+=len(pos)
         assert tris==record['triangles']
         assert hashlib.sha256(raw).hexdigest()==record['sha256']
-        assert {a['name'] for a in doc['animations']}=={'Idle','Walk'}
+        assert {a['name'] for a in doc['animations']}==set(manifest.get('clips',['Idle','Walk']))
         for animation in doc['animations']:
             varies=False
             for channel in animation['channels']:
@@ -60,8 +60,8 @@ def validate(root):
                 assert same,f"clip does not loop: {record['id']} {animation['name']} {channel['target']}"
             assert varies,'animation has no motion'
         assert any(line.startswith(f"asset {record['id']} lod0 {tris} lod1 - ") for line in bba)
-        rows.append({'asset':record['id'],'triangles':tris,'export_vertices':vertices,'joints':14,'clips':['Idle','Walk']})
-    assert len(rows)==3
+        rows.append({'asset':record['id'],'triangles':tris,'export_vertices':vertices,'joints':len(joints),'clips':manifest.get('clips',['Idle','Walk'])})
+    assert len(rows)==len(manifest['assets']) and len(rows)>=3
     (root/'validation.json').write_text(json.dumps({'passed':rows,'unreal_import_proven':False},indent=2))
     print(json.dumps(rows,indent=2))
 
