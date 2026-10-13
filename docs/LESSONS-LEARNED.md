@@ -162,3 +162,28 @@ Offline regression covers a still-running job before its log exists and an older
 Always correlate start, completion and evidence by ID; a successful earlier C++ build is
 not proof that the current Java/C++/Python integration is ready. Live scenarios must be rerun
 by the editor owner after the actual build and bridge readiness checks finish.
+
+## Measure contention before moving work between Java and C++ (2026-10-13)
+
+The adaptive tactics benchmark initially timed decisions and disk writes separately. That
+missed requests waiting behind TacticsHost's shared lock. The concurrent durable-host probe
+in PR37 (`tools/benchmarks/TacticalHostProbe.java`, initial commit `8f266d0c`) measured total
+p95 of 3.21 / 15.11 / 33.71 ms with 1 / 4 / 8 callers. Brain-to-return p95 remained near
+3 ms; pre-brain p95 grew from 0.10 to 31.34 ms. Evidence is recorded in
+`docs/benchmarks/adaptive-profile-after/host-contention.csv`.
+
+**Lesson:** measure the complete path under contention before choosing a language rewrite.
+The results are consistent with serialized durable work dominating added latency; they do
+not demonstrate that porting decision math to C++ would remove that delay. Keep Unreal's
+immediate movement/combat and fallback asynchronous from Java persistence. Reuse the existing
+host, director and store when measuring, and validate receipts and checkpoints during the run.
+
+Pre-brain timing includes parsing, scheduling and bookkeeping as well as lock wait. This
+short closed-loop test on temporary storage is not HTTP/JWT, a production capacity estimate,
+an open-loop overload test, or an Unreal frame/FPS measurement. Do not add independently
+computed percentiles or describe allocation reductions as proven latency improvements.
+
+Next measurement: use the real request cadence and storage volume, include HTTP/authentication,
+and measure queue growth and fallback behavior. Any concurrency change must retain per-session
+tick fencing, checkpoint-before-reply and the exclusive writer contract. Coordinate ownership
+with the native team before changing either side; a green Java suite is not visible gameplay proof.

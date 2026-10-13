@@ -50,6 +50,7 @@ def turn(f):
 
 f = Fake()
 r = turn(f).go()
+Fake_last = f
 names = [s["step"] for s in r["steps"]]
 check("all steps run in order", names[:5] == ["ram before", "preflight", "build", "bridge up", "place isles + islands.json"], names)
 check("every scenario played, polled until done and stopped",
@@ -67,6 +68,15 @@ check("a light turn never builds, plays or relaunches", "build" not in names and
       and not any("unreal-job" in x for x in f.runs) and "play" not in f.calls and "save" in f.calls, (names, f.calls))
 check("a light turn audits RAM and writes islands.json/.dsb", "ram audit (registry tags, nothing loaded)" in names
       and "islands.json + islands.dsb" in names and f.links[0].startswith("TURN DONE"), names)
+
+check("the build waits on the job it started, not the newest old log",
+      any("-Wait -Id build-1013-073247" in x for x in Fake_last.runs), Fake_last.runs)
+
+f = Fake()
+r = turn(f).go(after_build=True)
+names = [s["step"] for s in r["steps"]]
+check("--after-build starts at the bridge: no preflight, no build", names[:3] == ["ram before", "bridge up", "place isles + islands.json"]
+      and not any("unreal-job" in x for x in f.runs) and "save" in f.calls, names)
 
 f = Fake(fail_run="preflight.py")
 r = turn(f).go()

@@ -308,3 +308,38 @@ valid wrong-subject 403, allowed-host wrong-squad 403, configured-host 200, cach
 proof that a rejected caller cannot prime PLAYER state or read an existing receipt. Controller
 tests also exercise unconfigured, anonymous, unauthenticated and forged plain-principal paths.
 The change addresses Pootscoot's hub finding 28446; Claude approved the boundary in 28479.
+
+### Host contention probe
+
+`tools/benchmarks/TacticalHostProbe.java` reuses the real TacticsHost, AdaptiveTacticsBrain
+and FileTacticalCheckpoints. Java 21 source-launch command (Windows):
+
+```powershell
+java --class-path 'daedalus-core/target/classes;daedalus-server/target/classes' tools/benchmarks/TacticalHostProbe.java
+```
+
+Build core/server classes first. Each 1/4/8-worker workload uses a fresh system-temp
+store, one three-unit squad per independent session, five warmup requests per worker,
+and 30 measured requests per worker. A barrier starts the measured phase; each worker
+issues its next request only after the prior one finishes. Every response must be APPLY
+with parseable DTO, and each session's final durable checkpoint tick is verified.
+Only the probe's own temporary directory is removed. Percentiles use nearest rank.
+
+The committed `../benchmarks/adaptive-profile-after/host-contention.csv` run measured:
+
+| Concurrent callers | Total p95 | Pre-brain p95 | Brain-to-return p95 |
+| --- | --- | --- | --- |
+| 1 | 3.21 ms | 0.10 ms | 3.04 ms |
+| 4 | 15.11 ms | 12.73 ms | 2.85 ms |
+| 8 | 33.71 ms | 31.34 ms | 3.01 ms |
+
+Pre-brain time includes parsing, scheduling, waiting for the host lock and host bookkeeping;
+it is not isolated lock-wait instrumentation. Brain-to-return includes the durable decision
+and host reply bookkeeping. Independently calculated percentiles must not be added together.
+Throughput covers the full measured phase, including request construction and receipt
+validation. This short closed-loop saturation probe omits HTTP/JWT, network, real request
+cadence and Unreal frames; it cannot establish production capacity or a latency SLA.
+The results indicate serialization dominates added latency in this workload. Preserve
+asynchronous native requests and fallback; moving decision math to C++ alone is not shown
+to remove the durable host queue. Any concurrency redesign must preserve checkpoint-before-
+reply, per-session fencing and single-writer guarantees, and needs a separate owned change.
