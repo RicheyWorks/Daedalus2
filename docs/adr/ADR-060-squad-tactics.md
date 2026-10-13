@@ -76,3 +76,20 @@ fought before this ADR.
 
 - The editor build and the `tactics` scenario run in unreal-team's next rotation slot.
 - A transport other than the bridge waits for a team-codex request.
+
+## Addendum, 2026-10-13 02:30: orders that use cover (Java)
+
+`SquadDirector.decide(..., CoverField, CoverRules)` moves the FLANK, RETREAT and DEFEND points into the best cover
+nearby:
+- each kind of order searches its own radius: 3 m to flank, 6 m to retreat, 4 m to defend;
+- cover is used only when it scores at least 0.4 against the player, and the why says so, for example
+  "cut off escape, left, into cover (0.80)";
+- ATTACK still goes for the player.
+
+`CoverField` has the same shape as pythagoras's `BattlefieldEcology::bestCover` (ADR-061, branch
+`pythagoras/battlefield-ecology`), so the reactive battlefield plugs straight in once it is merged. Unreal needs no
+change, because the cover-aware points simply arrive in DTO 1.
+
+With no field, the output is exactly the baseline, so C++ parity still holds. `CoverAwareDirectorTest` passes 6/6,
+and the min-score mutant is caught. The full `daedalus-core` verify is green: 576 tests, plus checkstyle and the
+other gates.

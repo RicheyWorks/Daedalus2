@@ -1,0 +1,608 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "daedalus/companion-rules.schema.json",
+  "title": "Daedalus CompanionRules + Companion (DRAFT for ADR-052, modeled on HeroRules/Hero, ADR-037)",
+  "description": "Generic for every species kind in the ADR-021 canon. Served by the server at GET /api/v1/companions/rules (rules) and /api/v1/companions/{id} (record). EXP is only ever granted by the server from its own foe table. There is no max level. Losing costs unspent EXP, never levels. Gear: equipped items add stat mods (server-applied), are crafted from the Daedalus crafting loop, and wear down.",
+  "$defs": {
+    "track": {
+      "enum": [
+        "life",
+        "attack",
+        "magic"
+      ]
+    },
+    "levelCosts": {
+      "type": "object",
+      "required": [
+        "table",
+        "growthPastTable",
+        "cap"
+      ],
+      "properties": {
+        "table": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "EXP cost of levels 2..n"
+        },
+        "growthPastTable": {
+          "type": "number",
+          "description": "each later level costs the last x this (HeroRules uses 1.5)"
+        },
+        "cap": {
+          "type": "integer",
+          "description": "per-level cost ceiling so EXP can always reach it (1e9)"
+        }
+      }
+    },
+    "move": {
+      "type": "object",
+      "required": [
+        "id",
+        "track",
+        "unlock"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "strike",
+            "guard",
+            "debuff",
+            "buff",
+            "heal",
+            "passive"
+          ]
+        },
+        "track": {
+          "$ref": "#/$defs/track",
+          "description": "which level scales it"
+        },
+        "unlock": {
+          "type": "object",
+          "properties": {
+            "track": {
+              "$ref": "#/$defs/track"
+            },
+            "level": {
+              "type": "integer"
+            },
+            "stage": {
+              "type": "integer"
+            }
+          }
+        },
+        "power": {
+          "type": "number"
+        },
+        "magicCost": {
+          "type": "integer"
+        },
+        "cooldownSec": {
+          "type": "number"
+        },
+        "target": {
+          "enum": [
+            "foe",
+            "self",
+            "owner",
+            "party",
+            "area"
+          ]
+        },
+        "clip": {
+          "type": "string"
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "required": [
+        "stage",
+        "name"
+      ],
+      "properties": {
+        "stage": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "requires": {
+          "type": "object",
+          "description": "sum of levels or per-track minimums",
+          "properties": {
+            "totalLevels": {
+              "type": "integer"
+            },
+            "life": {
+              "type": "integer"
+            },
+            "attack": {
+              "type": "integer"
+            },
+            "magic": {
+              "type": "integer"
+            }
+          }
+        },
+        "model": {
+          "type": "string",
+          "description": "GLB asset name, Kind_Name (ADR-051)"
+        }
+      }
+    },
+    "kindRules": {
+      "type": "object",
+      "required": [
+        "canon",
+        "type",
+        "size",
+        "rarity",
+        "base",
+        "costs",
+        "moves",
+        "rig"
+      ],
+      "properties": {
+        "canon": {
+          "type": "string",
+          "description": "species key in species.tsv (ADR-021)"
+        },
+        "type": {
+          "type": "string",
+          "description": "the ADR-021 guild acts as the companion type (MEADOW, MARINE, ...)"
+        },
+        "size": {
+          "enum": [
+            "TINY",
+            "SMALL",
+            "MEDIUM",
+            "LARGE",
+            "HUGE"
+          ]
+        },
+        "rarity": {
+          "enum": [
+            "COMMON",
+            "UNCOMMON",
+            "RARE",
+            "LEGENDARY"
+          ]
+        },
+        "base": {
+          "type": "object",
+          "properties": {
+            "hearts": {
+              "type": "number"
+            },
+            "damage": {
+              "type": "number"
+            },
+            "magicMeter": {
+              "type": "integer"
+            },
+            "speed": {
+              "type": "number"
+            },
+            "loyalty": {
+              "type": "integer"
+            }
+          }
+        },
+        "perLevel": {
+          "type": "object",
+          "description": "what one level of each track adds",
+          "properties": {
+            "life": {
+              "type": "object"
+            },
+            "attack": {
+              "type": "object"
+            },
+            "magic": {
+              "type": "object"
+            }
+          }
+        },
+        "costs": {
+          "type": "object",
+          "required": [
+            "life",
+            "attack",
+            "magic"
+          ],
+          "properties": {
+            "life": {
+              "$ref": "#/$defs/levelCosts"
+            },
+            "attack": {
+              "$ref": "#/$defs/levelCosts"
+            },
+            "magic": {
+              "$ref": "#/$defs/levelCosts"
+            }
+          }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stage"
+          }
+        },
+        "moves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/move"
+          }
+        },
+        "rig": {
+          "type": "object",
+          "required": [
+            "asset",
+            "clips"
+          ],
+          "properties": {
+            "asset": {
+              "type": "string"
+            },
+            "clips": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "boundTo": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "tokenId": {
+              "type": "integer"
+            }
+          }
+        },
+        "gearSlots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gearSlot"
+          },
+          "description": "slots this kind can use (default all)"
+        },
+        "sockets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "slot -> rig node"
+        }
+      }
+    },
+    "companion": {
+      "type": "object",
+      "description": "immutable record like Hero: Beat adds the foe's EXP (server table), Raise spends it on one track and resets to 0, Fall loses unspent EXP and keeps levels",
+      "required": [
+        "id",
+        "canon",
+        "exp",
+        "life",
+        "attack",
+        "magic",
+        "stage"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canon": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "exp": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "life": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "attack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "magic": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stage": {
+          "type": "integer"
+        },
+        "fainted": {
+          "type": "boolean"
+        },
+        "equipped": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/gearSlot"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "gear",
+              "durability"
+            ],
+            "properties": {
+              "gear": {
+                "type": "string"
+              },
+              "durability": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "upgrade": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "gearSlot": {
+      "enum": [
+        "collar",
+        "harness",
+        "boots",
+        "charm"
+      ],
+      "description": "harness also covers armour; one item per slot"
+    },
+    "statMod": {
+      "type": "object",
+      "required": [
+        "stat",
+        "op",
+        "value"
+      ],
+      "properties": {
+        "stat": {
+          "enum": [
+            "hearts",
+            "damage",
+            "magicMeter",
+            "speed",
+            "loyalty",
+            "blunt",
+            "guardPower",
+            "cooldownPct",
+            "expPct",
+            "hazardResist",
+            "carry"
+          ]
+        },
+        "op": {
+          "enum": [
+            "add",
+            "mul"
+          ],
+          "description": "apply all add, then all mul, after level/stage stats"
+        },
+        "value": {
+          "type": "number"
+        },
+        "perUpgrade": {
+          "type": "number",
+          "description": "extra value per upgrade level"
+        }
+      }
+    },
+    "ingredient": {
+      "type": "object",
+      "required": [
+        "item",
+        "qty"
+      ],
+      "properties": {
+        "item": {
+          "type": "string",
+          "description": "asset/item id from the crafting loop, e.g. Item_Iron, Item_Root_IronRoot"
+        },
+        "qty": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "recipe": {
+      "type": "object",
+      "required": [
+        "station",
+        "inputs"
+      ],
+      "properties": {
+        "station": {
+          "enum": [
+            "workbench",
+            "cookpot",
+            "smelter",
+            "forge",
+            "starforge"
+          ],
+          "description": "PROPOSED station ids; align with Team Codex's recipe engine"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ingredient"
+          }
+        },
+        "timeSec": {
+          "type": "number"
+        },
+        "requiresTool": {
+          "type": "string"
+        },
+        "unlock": {
+          "type": "object",
+          "properties": {
+            "playerLevel": {
+              "type": "integer"
+            },
+            "recipeItem": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "gearItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "slot",
+        "tier",
+        "mods",
+        "recipe",
+        "durability",
+        "asset"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slot": {
+          "$ref": "#/$defs/gearSlot"
+        },
+        "tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "1 plant/hide, 2 copper/iron, 3 gold/crystal, 4 starmetal, 5 legendary"
+        },
+        "fits": {
+          "type": "object",
+          "properties": {
+            "sizes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "TINY",
+                  "SMALL",
+                  "MEDIUM",
+                  "LARGE",
+                  "HUGE"
+                ]
+              }
+            },
+            "types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "minStage": {
+              "type": "integer"
+            }
+          }
+        },
+        "mods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/statMod"
+          }
+        },
+        "grantsMove": {
+          "type": "string",
+          "description": "optional move id added while equipped"
+        },
+        "recipe": {
+          "$ref": "#/$defs/recipe"
+        },
+        "durability": {
+          "type": "object",
+          "required": [
+            "max"
+          ],
+          "properties": {
+            "max": {
+              "type": "integer"
+            },
+            "lossPerBattle": {
+              "type": "integer"
+            },
+            "lossOnFaint": {
+              "type": "integer"
+            },
+            "atZero": {
+              "enum": [
+                "inert",
+                "break"
+              ],
+              "description": "inert = mods off until repaired"
+            },
+            "repair": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ingredient"
+              }
+            }
+          }
+        },
+        "maxUpgrade": {
+          "type": "integer"
+        },
+        "upgrade": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ingredient"
+          }
+        },
+        "asset": {
+          "type": "string",
+          "description": "GLB, Item_ prefix (ADR-051)"
+        },
+        "socket": {
+          "type": "string",
+          "description": "rig attach point: neck, spine, paw_*, neck_tag"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "required": [
+    "version",
+    "kinds"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer"
+    },
+    "kinds": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/kindRules"
+      }
+    },
+    "gear": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/gearItem"
+      },
+      "description": "shared gear catalogue for every kind"
+    }
+  }
+}
