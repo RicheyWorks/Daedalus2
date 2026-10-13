@@ -166,6 +166,7 @@ public:
         Enter(W.Spawn.Map, W.Spawn.X, W.Spawn.Y);
         Facing = 0;
         ExitRequested = false;
+        TitleT = TitleHold;
         Say("A PORTAL HUMS. THE WORLD TURNS TO PIXELS.");
     }
 
@@ -211,6 +212,7 @@ public:
     std::vector<Member>& MembersMut() { return Party; }
     const std::vector<Foe>& Foes() const { return Enemies; }
     std::string LastMessage() const { return LastSaid; }
+    double TitleLeft() const { return TitleT; }
     /** The harness: make every foe of the next battle shiny; how many shinies have shown; the live damage numbers. */
     void ForceShinyNext(bool On) { ForceShiny = On; }
     int ShiniesSeen() const { return ShinySeen; }
@@ -1394,6 +1396,9 @@ private:
     bool Torch = false, ExitRequested = false;
     bool Held[4] = {false, false, false, false};
     double MoveT = 1.0, Bump = 0.0, Clock = 0.0, Idle = 0.0, Flash = 0.0;
+    /** The title card: the realm's name on black when the portal drops you in; A, B or 2.5 s clears it. */
+    double TitleT = 0.0;
+    static constexpr double TitleHold = 2.5;
     Frame Screen;
 
     void WanderNpcs(double Dt);
@@ -1401,6 +1406,7 @@ private:
     void RenderBattle(Frame& F, int Anim);
     void RenderBoxes(Frame& F, int Anim);
     void ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Anim, int MaxRows);
+    void RenderTitle(Frame& F, int Anim);
 };
 
 // --------------------------------------------------------------------------------------------- input and time
@@ -1408,6 +1414,11 @@ private:
 inline void Realm::Press(Button B)
 {
     if (!Loaded) return;
+    if (TitleT > 0.0)
+    {
+        if (B == Button::A || B == Button::B || B == Button::Start) TitleT = 0.0;
+        return;
+    }
     if (ModeNow == Mode::Battle && Boxes.empty())
     {
         switch (Ph)
@@ -1513,6 +1524,7 @@ inline void Realm::WanderNpcs(double Dt)
 
 inline void Realm::Tick(double Dt)
 {
+    if (TitleT > 0.0) { Clock += Dt; TitleT -= Dt; return; }   // the card holds the world, the welcome types after it
     for (Box& B : Boxes)
         if (B.Kind == BoxKind::Message && B.Shown < Ui::PageChars(B.Rows, B.Page)) B.Shown += Dt * TypeSpeed;
     if (!Loaded) return;
@@ -1611,13 +1623,39 @@ inline void Realm::ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Ani
     const int N = static_cast<int>(B.Rows.size());
     const int Shown = std::min(N, MaxRows);
     const int First = std::max(0, std::min(B.Cursor - Shown + 1, N - Shown));
-    const char* Title = B.Kind == BoxKind::Items ? "ITEM" : B.Kind == BoxKind::Spells ? "SPELL" : B.Kind == BoxKind::Equip ? "EQUIP"
+    std::string Title = B.Kind == BoxKind::Items ? "ITEM" : B.Kind == BoxKind::Spells ? "SPELL" : B.Kind == BoxKind::Equip ? "EQUIP"
         : B.Kind == BoxKind::ShopBuy ? "BUY" : B.Kind == BoxKind::ShopSell ? "SELL" : B.Kind == BoxKind::Members ? "WHO" : "";
+    std::vector<bool> Can;
+    if (B.Kind == BoxKind::Spells && B.Arg >= 0 && B.Arg < static_cast<int>(Party.size()))
+    {
+        // A spell the caster can't pay for is dimmed, and the window says how much MP they hold.
+        const Member& C = Party[static_cast<size_t>(B.Arg)];
+        for (int i = First; i < First + Shown; ++i) Can.push_back(C.Mp >= SpellCost(B.Ids[static_cast<size_t>(i)]));
+        Title += " MP" + std::to_string(C.Mp);
+    }
     Ui::Window(F, X, Y, WW, Shown * 12 + 20, Title);
     std::vector<std::string> Rows(B.Rows.begin() + First, B.Rows.begin() + First + Shown);
-    Ui::Grid(F, X + 4, Y + 9, Rows, 1, 0, B.Cursor - First, &B == &Boxes.back(), Anim);
+    Ui::Grid(F, X + 4, Y + 9, Rows, 1, 0, B.Cursor - First, &B == &Boxes.back(), Anim, Can.empty() ? nullptr : &Can);
     if (First > 0) Ui::TextB(F, X + WW - 16, Y + 2, "+", Ui::Current().Ink);
     if (First + Shown < N) Ui::TextB(F, X + WW - 16, Y + Shown * 12 + 10, "+", Ui::Current().Ink);
+}
+
+/** The realm's name on black, the way a cartridge opens: the name in the realm's ink, a rule under it, a hint that
+ * blinks once the fade is done. The first 0.4 s fade the name in so the portal's flash reads as the cut. */
+inline void Realm::RenderTitle(Frame& F, int Anim)
+{
+    F.Clear(Pal::Black);
+    const Ui::Style& St = Ui::Current();
+    const double Age = TitleHold - TitleT;
+    const uint32_t Ink = Age < 0.4 ? Shade(St.Ink, static_cast<int>(Age * 10) + 1, 4) : St.Ink;
+    const std::string Name = W.Name.empty() ? "A PORTAL REALM" : W.Name;
+    const int NX = 128 - static_cast<int>(Name.size()) * 4;
+    Ui::TextB(F, NX, 100, Name, Ink);
+    Ui::TextB(F, NX, 100, Name, Ink);   // twice: the bold pass of the kit doubles the stroke on the second draw
+    for (int x = NX - 8; x < NX + static_cast<int>(Name.size()) * 8 + 8; ++x) { F.Set(x, 112, Ink); F.Set(x, 113, St.InkDark); }
+    Ui::TextB(F, 128 - 7 * 4, 120, "A REALM", St.Dim);
+    for (int i = 0; i < 5; ++i) Ui::Sparkle(F, 40 + i * 44, 60 + ((i * 7) % 3) * 6, Anim + i * 5);
+    if (Age > 0.8 && (Anim / 6) % 2 == 0) Ui::TextB(F, 128 - 7 * 4, 180, "PRESS A", St.Text);
 }
 
 inline void Realm::RenderBoxes(Frame& F, int Anim)
@@ -1729,6 +1767,7 @@ inline const Frame& Realm::Render()
     Frame& F = Screen;
     const int Anim = static_cast<int>(Clock * 8);
     if (!Loaded) { F.Clear(Pal::Black); Text(F, 60, 116, "NO REALM LOADED"); return F; }
+    if (TitleT > 0.0) { RenderTitle(F, Anim); return F; }
     if (ModeNow == Mode::Battle) RenderBattle(F, Anim);
     else RenderField(F, Anim);
     RenderBoxes(F, Anim);
@@ -1737,6 +1776,7 @@ inline const Frame& Realm::Render()
 
 inline std::string Realm::TopBox() const
 {
+    if (TitleT > 0.0) return "TITLE";
     if (Boxes.empty()) return ModeNow == Mode::Battle ? (Ph == Phase::Command ? "COMMAND" : Ph == Phase::Target ? "TARGET" : Ph == Phase::Play ? "PLAY" : Ph == Phase::Ending ? "ENDING" : "INTRO") : "NONE";
     static const char* Names[] = {"MESSAGE", "MENU", "ITEMS", "MEMBERS", "SPELLS", "STATUS", "EQUIP", "SHOP", "BUY", "SELL", "YESNO"};
     return Names[static_cast<int>(Boxes.back().Kind)];

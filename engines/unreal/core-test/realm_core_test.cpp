@@ -102,6 +102,7 @@ static bool AutoFight(Realm& G, int Guard = 4000)
 /** Close whatever message is up. */
 static void Dismiss(Realm& G)
 {
+    if (G.TopBox() == "TITLE") Tap(G, Button::A);
     for (int i = 0; i < 20 && G.TopBox() == "MESSAGE"; ++i) Tap(G, Button::A);
 }
 
@@ -208,6 +209,25 @@ int main(int Argc, char** Argv)
     Check("the realm has its maps", S.Maps.size() == 7 && S.MapIndex("CAVE3") >= 0, std::to_string(S.Maps.size()));
     Check("it starts in the field by the portal", G.MapId() == "FIELD" && G.X() == S.Spawn.X && G.Y() == S.Spawn.Y
         && S.Maps[0].At(S.Portal.X, S.Portal.Y) == Tile::Portal);
+    // ---- the title card: the realm's name on black, A or 2.5 s clears it, and the world waits underneath
+    Check("the portal opens on a title card", G.TopBox() == "TITLE" && G.TitleLeft() > 2.0, G.TopBox());
+    {
+        G.Tick(1.0);
+        const Frame& T = G.Render();
+        int Lit = 0;
+        for (int y = 96; y < 112; ++y) for (int x = 0; x < 256; ++x) Lit += T.Get(x, y) == Ui::Current().Ink;
+        Check("it spells the realm's name in the realm's ink", Lit > 100 && T.Get(2, 2) == Pal::Black, std::to_string(Lit));
+        Png(T, Out + "/realm_14_title.png");
+        Tap(G, Button::Up);
+        Check("the card ignores the pad", G.TopBox() == "TITLE" && G.Steps() == 0);
+        G.Press(Button::A); G.Release(Button::A);   // no tick: the welcome must not have started typing yet
+        Check("A clears the card to the welcome", G.TopBox() == "MESSAGE" && G.TitleLeft() <= 0.0, G.TopBox());
+        Realm Late;
+        std::string E;
+        Late.Load(Text, E);
+        for (int k = 0; k < 30; ++k) Late.Tick(0.1);
+        Check("or it clears itself after a moment", Late.TopBox() == "MESSAGE", Late.TopBox());
+    }
     Check("a welcome message waits", G.TopBox() == "MESSAGE");
     {   // the typewriter: nothing yet, some after a quarter second, the whole page after a press of A
         const Frame F0 = G.Render();
@@ -614,6 +634,17 @@ int main(int Argc, char** Argv)
         Tap(L, Button::Down); Tap(L, Button::Down); Tap(L, Button::Down); Tap(L, Button::A);   // hero DEFENDS
         Tap(L, Button::Down); Tap(L, Button::A);   // sage: SPELL
         Check("the sage's spell list", L.TopBox() == "SPELLS", L.TopBox());
+        {
+            // The window says the sage's MP, and a spell they can't pay for is drawn dim.
+            const int MpWas = L.Members()[1].Mp;
+            L.MembersMut()[1].Mp = 2;   // ZAP costs 3, CURE 2
+            const Frame& Sp = L.Render();
+            int Dim = 0, Lit = 0;
+            for (int y = 0; y < 240; ++y) for (int x = 0; x < 256; ++x) { Dim += Sp.Get(x, y) == Ui::Current().Dim; Lit += Sp.Get(x, y) == Ui::Current().Text; }
+            Check("a spell the caster can't afford is dimmed", Dim > 40 && Lit > 40, std::to_string(Dim) + " " + std::to_string(Lit));
+            Png(Sp, Out + "/realm_15_spells_mp.png");
+            L.MembersMut()[1].Mp = MpWas;
+        }
         Png(L.Render(), Out + "/realm_12_spells.png");
         const int MpBefore = L.Members()[1].Mp;
         Tap(L, Button::Down); Tap(L, Button::A);   // ZAP (single foe: no target step)
