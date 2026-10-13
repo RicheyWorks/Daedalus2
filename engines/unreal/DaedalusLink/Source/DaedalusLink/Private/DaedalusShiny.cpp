@@ -42,6 +42,7 @@ namespace DaedalusShiny
 		State.Time = 0.f;
 
 		UPointLightComponent* L = NewObject<UPointLightComponent>(Owner, TEXT("ShinyGlow"));
+		L->SetMobility(EComponentMobility::Movable);   // a runtime component is Static by default, and Static never moves
 		L->SetupAttachment(Under);
 		L->SetRelativeLocation(FVector(0.f, 0.f, State.Size * 0.6f));
 		L->SetIntensityUnits(ELightUnits::Candelas);
@@ -57,6 +58,7 @@ namespace DaedalusShiny
 		for (int32 i = 0; i < Sparks; ++i)
 		{
 			UStaticMeshComponent* S = NewObject<UStaticMeshComponent>(Owner, *FString::Printf(TEXT("ShinySpark%d"), i));
+			S->SetMobility(EComponentMobility::Movable);
 			S->SetupAttachment(Under);
 			S->SetStaticMesh(SparkMesh());
 			S->SetCollisionEnabled(ECollisionEnabled::NoCollision);

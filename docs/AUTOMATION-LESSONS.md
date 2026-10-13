@@ -316,3 +316,8 @@ DefaultEngine.ini (setup-unreal.ps1 writes it) and the PostFX volume overrides a
 The island-layout apply() was interrupted in chat after the PC had already executed it: 14 levels moved in the
 editor and one was saved, while I reported "nothing moved". After any interrupted, rejected or timed-out device call,
 check the device (file times, positions) before saying what did or didn't happen. Reverted from the undo table.
+
+## Runtime components are Static until told otherwise (2026-10-13)
+NewObject<UStaticMeshComponent>/<UPointLightComponent> at runtime default to Static mobility; SetRelativeLocation on
+them silently does nothing in Play. The shiny sparks "orbited" in code and never moved. SetMobility(Movable) before
+SetupAttachment. The scenario caught it only once it measured motion over game time with the distance in the detail.
