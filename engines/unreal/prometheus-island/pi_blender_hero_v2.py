@@ -132,6 +132,7 @@ if os.environ.get("PIB3"):
     sky.sun_intensity=0.06; sky.air_density=1.2; sky.dust_density=1.0; w.node_tree.nodes["Background"].inputs[1].default_value=0.18
     sp=[mathutils.Vector(p) for p in (L(*g["path"](t)) for t in (0.35,0.45,0.55)) if p]; cv=L(g["cx_"],g["cy_"])
     if os.environ.get("PIB3_FOCUS")=="water" and cv: hv=mathutils.Vector(cv); sp=[mathutils.Vector(p) for p in [L(g["penx"],g["peny"])]+[L(*g["path"](t)) for t in (0.5,0.55,0.6)] if p] or [hv+mathutils.Vector((10,0,0))]
+    if os.environ.get("PIB3_FOCUS")=="pens" and L(g["penx"],g["peny"]): hv=mathutils.Vector(L(g["penx"],g["peny"])); sp=[hv+mathutils.Vector((14,-8,0))]
     foc=[hv]+sp+([mathutils.Vector(cv)] if cv else []); tgt=sum(foc,mathutils.Vector())/len(foc)
     dirv=(tgt-hv); dirv.z=0; dirv.normalize(); side=mathutils.Vector((-dirv.y,dirv.x,0))
     cam.location=hv-dirv*float(os.environ.get("PIB3_BACK","30"))+side*float(os.environ.get("PIB3_SIDE","-22"))+mathutils.Vector((0,0,float(os.environ.get("PIB3_UP","16"))))
