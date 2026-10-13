@@ -34,7 +34,12 @@ for n in imp:
 import time as _t; _t0 = _t.time(); BUDGET = float(globals().get("BUF_BUDGET", 330)); _left = len(tasks)
 _B = 5 if CORE else 20
 for _i in range(0, len(tasks), _B):
-    if CORE and _t.time() - _t0 > BUDGET: print("BUF import budget hit, remaining", _left, "(resume next turn)"); break
+    if int(globals().get("BUF_MINRAM_GB", 0)):
+        import ctypes
+        class _M(ctypes.Structure): _fields_=[("l",ctypes.c_ulong),("ml",ctypes.c_ulong),("tp",ctypes.c_ulonglong),("ap",ctypes.c_ulonglong),("a",ctypes.c_ulonglong),("b",ctypes.c_ulonglong),("c",ctypes.c_ulonglong),("d",ctypes.c_ulonglong),("e",ctypes.c_ulonglong)]
+        _m=_M(); _m.l=ctypes.sizeof(_M); ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(_m))
+        if _m.ap/2**30 < float(globals()["BUF_MINRAM_GB"]): print("BUF RAM stop", round(_m.ap/2**30,2), "remaining", _left); break
+    if (CORE or int(globals().get("BUF_BUDGET_ALL", 0))) and _t.time() - _t0 > BUDGET: print("BUF import budget hit, remaining", _left, "(resume next turn)"); break
     _left -= len(tasks[_i:_i+_B])
     unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[_i:_i+_B]); print("BUF batch", _i, len(tasks))
 def _place():
@@ -84,6 +89,7 @@ if not _stop:
     tagc = lambda t: sum(1 for x in act.get_all_level_actors() if x.actor_has_tag(t))
     print("BUF counts total", tagc(TAG), "livestock", tagc("Livestock"), "drinkable", tagc("Drinkable"), "herbbed", tagc("HerbBed"), "world", world.get_path_name())
     print("BUF placed", ok, "missing", len(miss), miss[:10])
+
 
 
 
