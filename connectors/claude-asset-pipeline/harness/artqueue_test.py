@@ -443,6 +443,31 @@ check("restart: other rows untouched", row(d, "Mob_BlightSlime")["status"] == "D
 check("restart: nothing to recover is a no-op", w.recover() == [])
 shutil.rmtree(d)
 
+# 15. STATUS.md and QUEUE.md agree after every asset (they drifted: STATUS.md was only rewritten every 10 assets)
+BOARD15 = BOARD.replace("| 2 | Item_Coal | item | 0.35 m | TODO | |", "| 2 | Tool_Axe | tool | 0.9 m | READY | |")
+d, w, fb = setup(board=BOARD15)
+os.makedirs(os.path.join(d, "Tool"), exist_ok=True)
+seen15 = []
+orig = w.summary
+
+
+def _peek():
+    orig()
+    st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+    seen15.append((st.split("\n")[4], dict(w.counts())))
+
+
+w.summary = _peek
+w.ship_one("Tool_Pickaxe")
+st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+c = w.counts()
+check("counts: STATUS.md refreshed right after one asset, matching QUEUE.md",
+      st.split("\n")[4] == "| " + " | ".join("%s %d" % kv for kv in sorted(c.items())) + " |" and c.get("SHIPPED") == 1
+      and c.get("READY") == 1, (st.split("\n")[4], c))
+check("counts: STATUS.md states the row total", "QUEUE.md rows: 3" in st, st[:300])
+check("counts: tally() is the one count", artqueue.tally(artqueue.parse(BOARD)[0]) == {"READY": 1, "TODO": 1, "DOING": 1})
+shutil.rmtree(d)
+
 n = sum(results)
 print("%d/%d" % (n, len(results)))
 sys.exit(0 if n == len(results) else 1)

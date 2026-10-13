@@ -89,6 +89,15 @@ def parse(text):
     return rows, header
 
 
+def tally(rows):
+    """{STATE: n} over the board's rows; the one count STATUS.md, counts() and queue.state all use."""
+    out = {}
+    for r in rows:
+        k = state(r["status"]) or "?"
+        out[k] = out.get(k, 0) + 1
+    return out
+
+
 def state(status):
     """The status word: TODO, DOING, READY, SHIPPING, SHIPPED, REJECTED, WAITING, BLOCKED (upper case), or ''."""
     m = re.match(r"\s*([A-Za-z]+)", status or "")
@@ -240,6 +249,10 @@ class Watcher:
             f.write(json.dumps(line) + "\n")
         if what in ("shipped", "rejected", "blocked", "error") and asset != "-":
             self.job_result(asset, what, detail)
+            try:   # a row changed: STATUS.md follows now, not ten assets (or a whole pass) later
+                self.summary()
+            except (OSError, ValueError):
+                pass
         if self.link is not None:   # the same event, live, to everyone on the link
             body = {"asset": asset}
             body.update({k: v for k, v in detail.items() if isinstance(v, (str, int, float, bool, list)) or v is None})
@@ -314,17 +327,11 @@ class Watcher:
         return False
 
     def counts(self):
-        rows, _ = parse(self.read())
-        out = {}
-        for r in rows:
-            out[state(r["status"]) or "?"] = out.get(state(r["status"]) or "?", 0) + 1
-        return out
+        return tally(parse(self.read())[0])
 
     def summary(self):
         rows, _ = parse(self.read())
-        counts = {}
-        for r in rows:
-            counts[state(r["status"]) or "?"] = counts.get(state(r["status"]) or "?", 0) + 1
+        counts = tally(rows)   # the same tally as counts() and queue.state, from the same read of QUEUE.md
         recent = []
         if os.path.exists(self.feed):
             with open(self.feed, encoding="utf-8") as f:
@@ -333,6 +340,9 @@ class Watcher:
         out = ["# Art board status", "", "Updated %s by the queue watcher." % now, ""]
         out.append("| " + " | ".join("%s %d" % (k, v) for k, v in sorted(counts.items())) + " |")
         out.append("|" + "---|" * len(counts))
+        out.append("")
+        out.append("QUEUE.md rows: %d (counted from QUEUE.md as it was at %s; refreshed after every asset)"
+                   % (sum(counts.values()), now))
         out.append("")
         out.append("**Waiting on:** %s" % (self.waiting_on or "none"))
         blender = os.path.join(self.folder, "STATUS-blender.json")
@@ -366,8 +376,10 @@ class Watcher:
                                                  e.get("why", e.get("result", ""))))
             except ValueError:
                 pass
-        with open(self.status_md, "w", encoding="utf-8") as f:
+        tmp = self.status_md + ".tmp"   # readers never see a half-written STATUS.md
+        with open(tmp, "w", encoding="utf-8") as f:
             f.write("\n".join(out) + "\n")
+        os.replace(tmp, self.status_md)
 
     # -- one pass
 
