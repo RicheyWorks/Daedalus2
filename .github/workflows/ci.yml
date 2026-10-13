@@ -126,6 +126,7 @@ jobs:
             sleep 2
           done
           curl -sf http://localhost:8080/actuator/health >/dev/null
+          python3 -m unittest discover -s sweep -p 'test_*.py'
           python3 sweep/api-sweep.py
 
       # Coverage upload (BACKLOG: the last outstanding piece of the original

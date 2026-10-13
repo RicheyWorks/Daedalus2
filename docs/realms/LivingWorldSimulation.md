@@ -227,6 +227,10 @@ tested total to 1,547. Existing world-store,
 world-package API, deterministic generation, authentication and rate-limit checks remain green.
 The subsequent entire-reactor `mvn -B -ntp -DskipTests verify` passes all eight modules,
 reusing these test coverage reports for the coverage and static-analysis gates.
+GitHub's clean Linux reactor and every example also pass. The API sweep's fingerprint
+check now retries only the explicit `503 classifier-warming` readiness response, up to
+20 attempts with 19 half-second waits. Three Python tests verify readiness recovery,
+bounded exhaustion, and immediate propagation of other errors; CI runs them before the sweep.
 
 New tests cover deterministic replay through checkpoint compaction, corruption and
 checksummed malformed payloads, dry-spell recovery, finite transfer/quest/NPC memory,
