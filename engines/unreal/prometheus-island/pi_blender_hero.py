@@ -127,6 +127,9 @@ bpy.ops.object.light_add(type="SUN",rotation=(math.radians(76),0,math.radians(21
 if hl: bpy.ops.object.light_add(type="POINT",location=(hl[0],hl[1],hl[2]+6)); l=bpy.context.object.data; l.energy=60000; l.color=(1,0.65,0.35); l.shadow_soft_size=4
 # hero camera (same framing as UE PI_HeroCam / PI_hero_v2)
 CAMX=[float(v) for v in os.environ.get("PIB_CAM","-120,-95,80").split(",")]; TGT=[float(v) for v in os.environ.get("PIB_TGT","-5,15,14").split(",")]
+FOC={"pens":(penx,peny),"garden":(gx,gy),"heart":(hx,hy)}.get(os.environ.get("PIB_FOCUS",""))
+if FOC and L(*FOC):
+    fx,fy,fz=L(*FOC); TGT=[fx,fy,fz+1]; CAMX=[fx-22,fy-18,fz+12]
 bpy.ops.object.camera_add(location=CAMX); cam=bpy.context.object; sc.camera=cam; cam.data.lens=35
 tgt=bpy.data.objects.new("tgt",None); sc.collection.objects.link(tgt); tgt.location=TGT
 c=cam.constraints.new("TRACK_TO"); c.target=tgt; c.track_axis="TRACK_NEGATIVE_Z"; c.up_axis="UP_Y"; cam.data.clip_end=5000
