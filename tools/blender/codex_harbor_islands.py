@@ -7,6 +7,7 @@ Collision and gameplay are deliberately separate Unreal integration steps.
 """
 from pathlib import Path
 import sys, math, random, json, hashlib, argparse, time
+import bmesh
 
 parser = argparse.ArgumentParser()
 parser.add_argument('output')
@@ -134,11 +135,12 @@ def export_role_meshes(name, objects):
     """One origin-centred FBX per role; reuse native StaticMesh import path.
 
     Join temporary copies, preserving the editable scene's individual props.
-    No generated hulls: collision must be supplied by the receiving owner.
+    Blocking roles receive one convex UCX hull per original solid part, avoiding
+    convex bridges across doors, roof gaps and the decorative cave arch.
     """
     role_records = []
     for role in sorted({obj['harbor_role'] for obj in objects}):
-        copies = []
+        copies = []; hulls = []
         try:
             bpy.ops.object.select_all(action='DESELECT')
             for source in objects:
@@ -155,6 +157,26 @@ def export_role_meshes(name, objects):
             bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
             bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
             mesh.data.calc_loop_triangles()
+            blocking = role in {'Terrain', 'Dock', 'Beacon', 'Boathouse', 'CaveArch'}
+            if blocking:
+                bpy.context.view_layer.update()
+                for source in (o for o in objects if o['harbor_role'] == role):
+                    bm = bmesh.new()
+                    try:
+                        for vertex in source.data.vertices:
+                            bm.verts.new(source.matrix_world @ vertex.co)
+                        bmesh.ops.convex_hull(bm, input=list(bm.verts), use_existing_faces=False)
+                        loose = [v for v in bm.verts if not v.link_faces]
+                        if loose: bmesh.ops.delete(bm, geom=loose, context='VERTS')
+                        bm.normal_update()
+                        hull_name = 'UCX_' + mesh.name + f'_{len(hulls):03d}'
+                        hull_data = bpy.data.meshes.new(hull_name)
+                        bm.to_mesh(hull_data)
+                    finally:
+                        bm.free()
+                    hull = bpy.data.objects.new(hull_name, hull_data)
+                    bpy.context.collection.objects.link(hull)
+                    hull.hide_render = True; hull.select_set(True); hulls.append(hull)
             fbx = OUT/(mesh.name+'.fbx')
             started = time.perf_counter()
             bpy.ops.export_scene.fbx(filepath=str(fbx), use_selection=True,
@@ -165,11 +187,12 @@ def export_role_meshes(name, objects):
                 'sha256': hashlib.sha256(fbx.read_bytes()).hexdigest(),
                 'bytes': fbx.stat().st_size, 'triangles': len(mesh.data.loop_triangles),
                 'export_seconds': elapsed, 'source_objects': sum(o['harbor_role']==role for o in objects),
-                'collision': 'not authored', 'pivot': 'common island centre Z=0',
-                'suggested_blocking': role in {'Terrain', 'Dock', 'Beacon', 'Boathouse', 'CaveArch'}})
+                'collision': 'UCX convex per solid source part' if blocking else 'none; nonblocking',
+                'collision_hulls': len(hulls), 'pivot': 'common island centre Z=0',
+                'suggested_blocking': blocking, 'native_collision_verified': False})
         finally:
             # Only remove temporary export copies still registered after join.
-            for clone in copies:
+            for clone in copies + hulls:
                 try:
                     if clone.name in bpy.data.objects:
                         bpy.data.objects.remove(clone, do_unlink=True)
@@ -215,5 +238,5 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     (OUT/'harbor-manifest.json').write_text(json.dumps({'schemaVersion': 1, 'assets': records,
         'native_verified': False, 'author': 'team-codex',
         'placement_contract': 'Metres +Z up; role objects retain local positions; fit to receiving terrain',
-        'collision_contract': 'No collision authored; foliage/water nonblocking; dock/building collision required'}, indent=2)+'\n')
+        'collision_contract': 'FBX blocking roles have per-solid UCX; GLB render only; foliage/water nonblocking; native verification pending'}, indent=2)+'\n')
     print('HARBOR_EXPORTED '+name, flush=True)

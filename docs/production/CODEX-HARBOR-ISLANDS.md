@@ -18,7 +18,9 @@ It also exports one FBX StaticMesh per role using temporary joined copies with a
 common origin. This connects dressing to the existing FBX import format while
 retaining separate editable props in the Blender scene. Manifest records contain
 actual export elapsed seconds, bytes and hashes only after execution. FBX files
-have no UCX hulls; the native owner must configure role-appropriate collision.
+carry per-solid-part UCX convex hulls for blocking roles; water and foliage carry
+none. Separating solid parts avoids one convex bridge over the cave arch opening.
+This is source-authored collision, pending actual export and native verification.
 Use scale1 after the metre-to-centimetre import, retain the common local pivot,
 and add a parent island transform to place each role together.
 
