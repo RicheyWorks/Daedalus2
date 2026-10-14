@@ -170,7 +170,42 @@ def automation(p):
     return {"filter": flt, "done": done, "passed": passed, "failed": failed, "lines": results[-40:], "seconds": round(time.time() - t0, 1)}
 
 
+def pie_guard():
+    """Name the caller of EditorActorSubsystem during Play. The editor logs 'The Editor is currently in a play
+    mode' as an ERROR with no caller (4 per Play, ~15 s apart, 2026-10-13, source unknown). The subsystem type is
+    immutable, so unreal.get_editor_subsystem is wrapped instead: during Play, the listed methods log the Python
+    stack as a warning before running. Idempotent; costs nothing outside Play."""
+    import traceback
+    if getattr(unreal, "_daedalus_pie_guard", None):
+        return False
+    orig = unreal.get_editor_subsystem
+    watched = ("get_all_level_actors", "get_selected_level_actors", "spawn_actor_from_class", "destroy_actor", "set_actor_selection_state")
+
+    class Proxy(object):
+        def __init__(self, sub):
+            object.__setattr__(self, "_s", sub)
+
+        def __getattr__(self, name):
+            v = getattr(self._s, name)
+            if name in watched and callable(v):
+                def wrapped(*a, **k):
+                    if orig(unreal.LevelEditorSubsystem).is_in_play_in_editor():
+                        unreal.log_warning("Daedalus PIE-guard: EditorActorSubsystem.%s during Play from:\n%s" % (name, "".join(traceback.format_stack(limit=7)[:-1])))
+                    return v(*a, **k)
+                return wrapped
+            return v
+
+    def guarded(cls):
+        s = orig(cls)
+        return Proxy(s) if cls is unreal.EditorActorSubsystem else s
+
+    unreal.get_editor_subsystem = guarded
+    unreal._daedalus_pie_guard = True
+    return True
+
+
 def register(bridge):
+    pie_guard()
     bridge.register("daedalus.console", console, "Run a console command (Play world when Play runs, else the editor); returns the log lines it produced", {"cmd": "str (required)"})
     bridge.register("daedalus.cvar", cvar, "Read or set a console variable", {"name": "str (required)", "value": "str|number (optional: set)"})
     bridge.register("daedalus.log_report", log_report, "Errors and warnings since Play began (all: whole log), classified with counts", {"all": "bool"})
