@@ -885,3 +885,7 @@ register_component, add_component_by_class, looping, is_game_world). Owner: Sol 
 ### Count discovered actions without claiming execution (2026-10-14)
 Saved MCPdescriptions can form a reproducible unique toolset/name catalog with preservedschemas/annotations. AbsentreadOnly hints stayunknown; Get names do notestablish effects. Initializeexecutionstate not-executed, captureSHA recorded. The exposedcatalog is not everyUnrealfunction or proof of benchmarkcompletion.
 
+
+### Bind action attempts without inventing effect proof (2026-10-14)
+Saved benchmarkattempts must match the catalogcaptureSHA and an exposedtoolset/name pair, with uniqueattemptIDs andfinitenonnegative timings. Referenced evidencefiles stayinside explicitroot and theirhashes mustmatch. Count recordedattempts separately; returnedcalls andhashedfiles do notverify in-worldeffects. This consumer executesnothing and doesn'toverlap Pootnativeadapter/discovery ownership.
+
