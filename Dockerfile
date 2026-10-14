@@ -15,6 +15,8 @@ WORKDIR /workspace
 # Copy poms first so dependency resolution caches as its own layer;
 # source changes then don't re-download the world. Every reactor module listed in pom.xml must be here.
 COPY pom.xml .
+COPY config config
+COPY .mvn .mvn
 COPY daedalus-plugin-api/pom.xml daedalus-plugin-api/
 COPY daedalus-core/pom.xml daedalus-core/
 COPY daedalus-wallet/pom.xml daedalus-wallet/
@@ -31,6 +33,10 @@ COPY daedalus-plugin-runtime daedalus-plugin-runtime
 COPY daedalus-server daedalus-server
 COPY daedalus-desktop daedalus-desktop
 COPY daedalus-explore daedalus-explore
+# Maven resources intentionally shared with Unreal and the kennel source data.
+# Omitting these directories silently creates JARs that cannot initialize the server.
+COPY engines/unreal/DaedalusLink/Content/Inventory engines/unreal/DaedalusLink/Content/Inventory
+COPY tools/islands/kennel-isle/tonics.json tools/islands/kennel-isle/tonics.json
 # Only the server and what it needs: the desktop and explore apps aren't in the image.
 RUN mvn -B -ntp -DskipTests -pl daedalus-server -am clean install
 
