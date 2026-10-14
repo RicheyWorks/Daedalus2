@@ -56,6 +56,7 @@ def verify(host, exported):
     if not resolved_plugin.is_relative_to(host):
         raise ValueError('Plugin snapshot escapes host root')
     expected = {}
+    checked_sources={}
     data_types = {'Inventory': {'.dic'}, 'Casts': {'.dcs'}, 'Realm': {'.drr', '.dsp'}}
     for name, digest in manifest['files'].items():
         if not isinstance(digest,str) or not re.fullmatch('[0-9a-f]{64}',digest):
@@ -68,6 +69,7 @@ def verify(host, exported):
             raise ValueError('Source snapshot link escapes plugin root')
         if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest() != digest:
             raise ValueError('Snapshot missing or changed: ' + name)
+        checked_sources[source]=digest
         if len(relative.parts) == 3 and relative.parts[0] == 'Content':
             if relative.suffix in data_types.get(relative.parts[1], set()):
                 expected[source.resolve()] = digest
@@ -98,6 +100,15 @@ def verify(host, exported):
             staged.add(resolved)
     if staged != expected.keys():
         raise ValueError('Runtime files omitted: ' + ', '.join(str(p.name) for p in expected.keys() - staged))
+    # Catch normal edits/replacements during the observation window. This is
+    # not an atomic filesystem snapshot or a lock on the producer.
+    for source,digest in checked_sources.items():
+        if not source.resolve().is_relative_to(resolved_plugin) or not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest()!=digest:
+            raise ValueError('Snapshot changed during verification: '+str(source))
+    for path,identity in ((host/'source-manifest.json',manifest_identity),(Path(exported),target_identity)):
+        observed={}
+        read_json(path,observed)
+        if observed!=identity:raise ValueError('Input document changed during verification: '+str(path))
     return {'schema': 1, 'sourceHead': manifest['source_head'],
             'inputDocuments':{'sourceManifest':manifest_identity,'targetExport':target_identity},
             'trackedPluginFiles': manifest['tracked_file_count'],

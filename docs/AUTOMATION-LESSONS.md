@@ -544,3 +544,7 @@ Check Directory.Exists before enumerating optional DSP packs in Unreal module ru
 ### Bind and atomically publish runtime declaration proofs (2026-10-14)
 Record SHA256/length for the exact manifest and UBT export bytes parsed by the verifier, with bounded strict JSON input. Publish proof via fsync-and-replace so serialization/write failure preserves the prior file. Six declaration checks and failed-serialization preservation smoke pass. These are declaration/source proofs, never cook, staged archive or packaged launch acceptance.
 
+
+### Recheck runtime snapshot stability before proof publication (2026-10-14)
+After evaluating staging declarations, rehash all manifest-bound plugin sources and re-read manifest/export identities. Refuse normal file edits/replacements during verification. This finite observation is not an atomicfilesystem snapshot or producer lock; packaged/cook/runtime claims remain separate. Six offline declaration checks passed on this follow-up.
+
