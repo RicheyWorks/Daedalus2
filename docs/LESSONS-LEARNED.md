@@ -219,4 +219,13 @@ before and after restoring the branch. No file resets or stashes were needed.
 Verify the pushed commit and PR base too; a successful push alone does not prove
 that the intended change was published.
 
+### Initialize Unreal test worlds before testing RPC wrappers
+
+Creating a UWorld is insufficient to dispatch actor RPCs in an automation test.
+UE 5.8 AActor::ProcessEvent gates dispatch on AreActorsInitialized unless editor
+script execution is explicitly allowed. InitializeActorsForPlay and assert that
+state before exercising the real wrapper. A direct implementation call can help
+diagnose movement logic but cannot substitute for dispatch verification. Neither
+standalone dispatch nor a direct handler proves client/server network delivery.
+
 

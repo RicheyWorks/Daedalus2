@@ -1,0 +1,47 @@
+{
+  "passed": [
+    {
+      "mode": "boat",
+      "elapsed_seconds": 23.656,
+      "server_pid": 61404,
+      "client_pid": 8644,
+      "port": 53036,
+      "foreign_client_pid": 31888,
+      "result": "[2026.10.13-21.51.41:972][420]LogTemp: Display: OCEAN_NETWORK_PASS mode=boat x=810.204 z=25.000 stopped=2.009",
+      "replicated_identity": "[2026.10.13-21.51.35:978][342]LogTemp: Display: OCEAN_REPLICATED_IDENTITY mode=boat realm=Ocean Realm speed=700 sea=25 depth=15000",
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "08a2cd6e2a519d41073d49fe37719c43b59ca5a2a4a1db0ba1dcbfca15c5a721",
+      "client_log_sha256": "0da7beabfc287168907fd4e13a79a7d8b4a741fb9cae39fdc7e7f38ca726e7a8",
+      "keyboard_dispatch_verified": false,
+      "gamepad_axis_dispatch_verified": true,
+      "non_owner_refused": true,
+      "foreign_client_log_sha256": "5704f11739d86a72be6116f13896f9ed991193a349fed69baf8496d0e5d786a2"
+    },
+    {
+      "mode": "submarine",
+      "elapsed_seconds": 24.406,
+      "server_pid": 30512,
+      "client_pid": 40064,
+      "port": 50208,
+      "foreign_client_pid": 63408,
+      "result": "[2026.10.13-21.52.06:859][446]LogTemp: Display: OCEAN_NETWORK_PASS mode=submarine x=1059.225 z=-444.759 stopped=2.004",
+      "replicated_identity": "[2026.10.13-21.52.00:557][365]LogTemp: Display: OCEAN_REPLICATED_IDENTITY mode=submarine realm=Ocean Realm speed=700 sea=25 depth=15000",
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "6dbf215c2d47f2b84f133d80ffc4bea67123864bfea0b39999ab1ab2a7e377b1",
+      "client_log_sha256": "5383675c68f744ff1d4583002db0f7cbebcc4d2899ec17eef96cef4249229858",
+      "keyboard_dispatch_verified": false,
+      "gamepad_axis_dispatch_verified": true,
+      "non_owner_refused": true,
+      "foreign_client_log_sha256": "fc75bbb8de277617cbbe537a9e5535f5438d31a82d3d8c4dce38fa1a22af663a"
+    }
+  ],
+  "owned_children_stopped": true,
+  "compiled_input_sha256": {
+    "Public/DaedalusOceanTravelComponent.h": "332dd82472ac691c4a04093d419c2daf35168b0df3c8d4e62b3cc8057d8ec87e",
+    "Private/DaedalusOceanTravelComponent.cpp": "99f77ac36348e6d64eae834270d53d9c70a28dc45aa3249c9e81c596860a230c",
+    "Public/OceanNetworkProbe.h": "f01ac68c42dccb3490e8faca688bee7a6597bd4aedb9648436482858b4df8860",
+    "Private/OceanNetworkProbe.cpp": "725ce03cbcdbcab92a8ec3615fae0e846bec1f48630eb9e4304d2ea0da097f09"
+  }
+}
