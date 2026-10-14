@@ -13,21 +13,21 @@ enum class EDaedalusIslandResource : uint8 { Food, Energy, Iron, Copper, Crystal
 USTRUCT(BlueprintType)
 struct DAEDALUSLINK_API FDaedalusIslandStats {
     GENERATED_BODY()
-    UPROPERTY(BlueprintReadOnly) bool Available=false;
-    UPROPERTY(BlueprintReadOnly) TArray<int32> Cargo;
-    UPROPERTY(BlueprintReadOnly) TArray<int32> ProjectedNet;
-    UPROPERTY(BlueprintReadOnly) int64 Cycle=0;
-    UPROPERTY(BlueprintReadOnly) int32 Friendship=0;
-    UPROPERTY(BlueprintReadOnly) int32 Infamy=0;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") bool Available=false;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") TArray<int32> Cargo;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") TArray<int32> ProjectedNet;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") int64 Cycle=0;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") int32 Friendship=0;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") int32 Infamy=0;
 };
 USTRUCT(BlueprintType)
 struct DAEDALUSLINK_API FDaedalusIslandClaimRow {
     GENERATED_BODY()
-    UPROPERTY(BlueprintReadOnly) int32 Island=0;
-    UPROPERTY(BlueprintReadOnly) EDaedalusIslandResource Task=EDaedalusIslandResource::Stone;
-    UPROPERTY(BlueprintReadOnly) int32 Remaining=0;
-    UPROPERTY(BlueprintReadOnly) bool Working=false;
-    UPROPERTY(BlueprintReadOnly) FString WorkerId;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") int32 Island=0;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") EDaedalusIslandResource Task=EDaedalusIslandResource::Stone;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") int32 Remaining=0;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") bool Working=false;
+    UPROPERTY(BlueprintReadOnly,Category="Daedalus|Shardstead") FString WorkerId;
 };
 /** One host-side realm manager. No tick or client RPC; durable ledger must wrap mutations before public use. */
 UCLASS(ClassGroup=(Daedalus),meta=(BlueprintSpawnableComponent))

@@ -984,3 +984,6 @@ Claude keeps feeding Poot a line each time the connector helps or hurts, the sam
 
 ## Production UI must distinguish missing stock from zero (2026-10-14)
 A partial six-resource DTO must not display missing entries as zero or retain a previous crew's claim table while unavailable. Validate the complete nonnegative cargo shape, discard incomplete forecasts, and clear claim rows on unavailable records. This presentation boundary does not authenticate a crew or make provisional stock canonical inventory. Native compile and shared-tab mounting remain separate acceptance stages.
+
+## Run the Unreal preflight on component DTOs before handing off (2026-10-14)
+The Shardstead seam's portable checks did not cover UHT declarations. Existing preflight caught eleven BlueprintReadOnly properties missing Category (P2). Added Daedalus|Shardstead categories and the same four-file scan to Engines CI. Focused scan now reports zero errors. This is source preflight, not actual UHT/native compilation; keep that distinction in the handoff.
