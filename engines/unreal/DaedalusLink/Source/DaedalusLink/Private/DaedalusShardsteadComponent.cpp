@@ -47,6 +47,14 @@ bool UDaedalusShardsteadComponent::ConfirmPersistedFromHost(const FString& Reque
 bool UDaedalusShardsteadComponent::CancelConfirmedUncommittedFromHost(const FString& Request,uint64 ExpectedRevision){
     return Ready&&Host()&&Durable&&Durable->CancelAfterConfirmedNoCommit(Key(Request),ExpectedRevision);
 }
+bool UDaedalusShardsteadComponent::ExportCommittedFromHost(daedalus::shardstead::LedgerSnapshot& Out) const{
+    if(!Ready||!Host()||!Durable)return false;
+    Out=Durable->ExportCommitted();return true;
+}
+bool UDaedalusShardsteadComponent::LedgerRevisionFromHost(uint64& Out) const{
+    if(!Ready||!Host()||!Durable)return false;
+    Out=Durable->CurrentRevision();return true;
+}
 FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& PlayerKey) const {
     FDaedalusIslandStats Out;if(!Ready||!Host())return Out;
     const auto& View=ReadRules();

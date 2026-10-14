@@ -1152,3 +1152,5 @@ Exact feb33ebc seven-file production snapshot compiled and linked with UE5.8 Unr
 
 ## Build snapshots must read the pinned commit, not working files (2026-10-14)
 The existing full_plugin_host helper checked a clean plugin and then copied working files, allowing concurrent edits to mismatch its recorded Git head. It now selects regular files from the pinned commit tree and reads each Git blob, hashes/writes/verifies those exact bytes. Existing/untracked-source guards and fresh-destination refusal remain. Actual execution produced196files at1a7c06e4 in a separate host; no compile/install was launched. Reuse this helper instead of new overlapping build harnesses. It pins committed content, not mutable native Content or runtime state.
+
+Ledger adapter follow-up: expose committed snapshot and CAS revision through the same host guard. Storage must not reconstruct these from UI counts or use a pending candidate as committed state. Failed reads leave output arguments unchanged; consumers must check bool success. This source addition still requires native compilation at its new head.

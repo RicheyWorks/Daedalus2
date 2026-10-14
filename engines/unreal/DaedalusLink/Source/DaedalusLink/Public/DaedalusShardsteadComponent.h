@@ -49,6 +49,8 @@ public:
     const daedalus::shardstead::LedgerSnapshot* PendingFromHost() const;
     bool ConfirmPersistedFromHost(const FString& Request,uint64 CommittedRevision);
     bool CancelConfirmedUncommittedFromHost(const FString& Request,uint64 ExpectedRevision);
+    bool ExportCommittedFromHost(daedalus::shardstead::LedgerSnapshot& Out) const;
+    bool LedgerRevisionFromHost(uint64& Out) const;
 private:
     bool Ready=false;
     int64 BoundSeed=0;
