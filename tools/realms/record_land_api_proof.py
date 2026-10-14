@@ -16,6 +16,7 @@ paths=['daedalus-server/src/main/java/com/daedalus/server/'+s for s in (
 paths+=['daedalus-server/src/test/java/com/daedalus/server/'+s for s in (
     'controller/RealmLandControllerTest.java','service/RealmLandServiceTest.java',
     'service/RealmLandHttpRestartTest.java','config/ProdAuthPostureTest.java')]
+paths+=['daedalus-server/src/main/resources/application.yml']
 if subprocess.run(['git','ls-files','--error-unmatch',*paths],cwd=repo,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode \
         or subprocess.run(['git','diff','--quiet','HEAD','--',*paths],cwd=repo).returncode:
     raise ValueError('Commit verified source before recording proof')

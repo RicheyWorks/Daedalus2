@@ -61,3 +61,5 @@ editor import, a wallet ownership check, mint bundles or a distributed authority
 A JSON number cannot safely carry every procedural int64 seed through Unreal's double-backed
 JSON accessors. Keep seeds as decimal strings at this boundary and test both int64 extremes.
 Also preserve estate identity through realm transfers and moves; never derive it from current cells.
+New `@Value` settings must also appear in application.yml: the configuration coverage gate checks
+operator discoverability, independently of endpoint behavior and the README's authentication table.

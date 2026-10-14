@@ -36,6 +36,9 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  # Operator-provisioned estate snapshots. Blank disables reads; no layouts are auto-created.
+  realm-layout:
+    directory: ${DAEDALUS_REALM_LAYOUT_DIRECTORY:}
   # Optional persisted sea sector. Directory and seed are required only when enabled.
   ocean:
     enabled: ${DAEDALUS_OCEAN_ENABLED:false}
