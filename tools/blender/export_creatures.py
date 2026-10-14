@@ -73,8 +73,12 @@ scene.world.color = (0.62, 0.72, 0.88)
 rigs = sorted([o for o in bpy.data.objects if o.type == "ARMATURE"], key=lambda o: o.name)
 cols = max(1, int(math.ceil(math.sqrt(len(rigs) * 1.6))))
 rows = int(math.ceil(len(rigs) / cols))
+pitch = 2.2
+for o in bpy.data.objects:                       # space the grid by the biggest creature's footprint
+    if o.type == "MESH":
+        pitch = max(pitch, 1.4 * max(o.dimensions.x, o.dimensions.y))
 for i, rig in enumerate(rigs):
-    rig.location = ((i % cols) * 2.2 - cols * 1.1, -(i // cols) * 2.2 + rows * 1.1, 0)
+    rig.location = ((i % cols) * pitch - cols * pitch / 2, -(i // cols) * pitch + rows * pitch / 2, 0)
 for o in bpy.data.objects:
     if o.type == "MESH" and "Col" in o.data.color_attributes:
         o.data.color_attributes.active_color = o.data.color_attributes["Col"]
@@ -82,7 +86,7 @@ cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))
 scene.collection.objects.link(cam)
 scene.camera = cam
 cam.data.lens = 35
-span = max(cols, rows) * 2.2
+span = max(cols, rows) * pitch
 cam.location = (0, -span * 0.9, span * 0.75)
 cam.rotation_euler = (math.radians(50), 0, 0)
 scene.render.filepath = os.path.join(out_dir, "creatures-contact-sheet.png")
