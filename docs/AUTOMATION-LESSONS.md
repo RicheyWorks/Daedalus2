@@ -414,6 +414,13 @@ existing tool before writing a second one.
 AdjustIfPossibleButAlwaysSpawn before their collider existed; FindSpot already traced the ground, so AlwaysSpawn.
 Rule: tools/unreal_play/editor_log_report.py after each Play run; its counts are part of the result line.
 
+## Control over Unreal is a set of named levers, not execute_python (2026-10-13)
+Richey asked for more control over the engine. execute_python can do anything but every call is bespoke and
+PIE-unsafe by accident; what gives control is a small set of named bridge commands any bot can call the same way:
+daedalus.console (any console command in the right world), daedalus.cvar, daedalus.input (real Enhanced Input
+injected into the hero, held for N seconds like a key), daedalus.goto / look / state, daedalus.automation (the
+editor's own test runner, results collected from the log), daedalus.log_report (errors/warnings since Play).
+Scenario 'control' proves each one. Next levers when needed: camera paths, spawn-by-id, time-of-day, save/load.
 ## Verify imported paths and role names against actual assets (2026-10-13)
 The first synthetic battle test used `_Attack` names and passed, but the actual
 Gallery import generated `<MeshName>Attack` below `<Id>/<Id>/SkeletalMeshes`.
