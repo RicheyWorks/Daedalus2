@@ -403,6 +403,24 @@ def lay_portals(realm):
     return {"realm": realm, "made": made, "portals": len(portal_plan(realm))}
 
 
+def lay_cast_steps(realms):
+    """One realm per editor tick: lay_cast for each (daedalus.steps shape)."""
+    out = {}
+    for r in realms:
+        if r in CASTS:
+            out[r] = lay_cast(r)
+            yield "%s cast: %s" % (r, out[r])
+    return out
+
+
+def lay_portals_steps(realms):
+    out = {}
+    for r in realms:
+        out[r] = lay_portals(r)
+        yield "%s portals: %s" % (r, out[r])
+    return out
+
+
 def report(realm):
     import daedalus_plots as P
     have = _labels()
