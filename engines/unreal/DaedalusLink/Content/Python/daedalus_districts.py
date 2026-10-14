@@ -474,6 +474,51 @@ def ground_steps(realms=("GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH")):
     return done
 
 
+def fill_holes_steps(realm="WORLD-ZERO", rings=15, probe_cm=6000.0):
+    """Blocks in the holes (Richey 02:18: "you go to island realm you look around you manually add the blocks"):
+    for every cell within `rings` of the hub, trace straight down through the cell centre; a cell with nothing
+    under it (no plot, no island mesh, no hub slab) gets a plot block (daedalus_plots.lay_one, labelled, with its
+    deed sign) at the realm's ground. One ring per tick. Returns {probed, holes, filled, deeds}."""
+    import unreal
+    import daedalus_land_grid as G
+    import daedalus_plots as P
+    world = _world()
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    if realm == "WORLD-ZERO":
+        estates, hub_cells, hub_cm, ground = P._editor_inputs()
+    else:
+        import daedalus_realm_ground as R
+        hub_cm, ground = R.ORIGINS[realm], R.GROUND_Z
+    have = P._labels_cache(sub)
+    pre = P._prefix(realm)
+    cube = unreal.load_asset(P.CUBE)
+    probed = holes = filled = 0
+    deeds = []
+    for ring in range(1, rings + 1):
+        for n in P.cells_within(ring):
+            x, y = G.cell(n)
+            if max(abs(x - G.HUB), abs(y - G.HUB)) != ring:
+                continue
+            probed += 1
+            wx = hub_cm[0] + (x - G.HUB) * G.PITCH_M * 100.0
+            wy = hub_cm[1] + (y - G.HUB) * G.PITCH_M * 100.0
+            hit = unreal.SystemLibrary.line_trace_single(world, unreal.Vector(wx, wy, ground + probe_cm), unreal.Vector(wx, wy, ground - probe_cm),
+                                                         unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
+            if hit:
+                continue
+            holes += 1
+            label = "%s%d" % (pre, n)
+            if label in have:
+                continue
+            P.lay_one(realm, n, (wx, wy, ground), G.district(n), cube=cube, sub=sub)
+            have.add(label)
+            filled += 1
+            deeds.append(n)
+        yield "%s ring %d: %d holes so far, %d filled" % (realm, ring, holes, filled)
+    P.save_world()
+    return {"realm": realm, "probed": probed, "holes": holes, "filled": filled, "deeds": deeds[:200]}
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 
