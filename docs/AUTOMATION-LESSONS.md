@@ -789,3 +789,6 @@ Completed assets skip; only explicitly non-dispatched/preparation states can rer
 reply-received-without-final-verification holds for reconciliation. Observe the existing Unreal
 lease before each asset, stop after dispatch failure and route rigs away from static imports.
 This executor reuses the pipeline and does not introduce another art board or remote queue.
+### Scene consumer review corrections (2026-10-13)
+An exception string can legitimately be empty. Accept empty diagnostic text while retaining its required field. Explicit observed:null is different from a missing observed key. Catalogue diagnostic count, retained list and truncation flag must agree. Consumer CI must execute actual pinned producer fixtures plus malformed-value regressions; unrelated green pipeline checks do not prove this contract.
+

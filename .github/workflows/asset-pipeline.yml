@@ -26,3 +26,4 @@ jobs:
       - run: python harness/judge_test.py
 
       - run: python -m py_compile asset_pipeline/pipeline_batch.py
+      - run: python harness/scene_observation_test.py

@@ -1,0 +1,602 @@
+{
+  "fixture_origin": "offline_fake_unreal; no editor calls, not a live capture",
+  "schema_version": 1,
+  "snapshot_request": {
+    "limit": 32
+  },
+  "snapshot_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "available": true,
+      "scope": {
+        "loaded_only": true,
+        "atomic": false,
+        "folder": null,
+        "offset": 0,
+        "limit": 32,
+        "total_loaded": 3,
+        "total_matching": 3,
+        "matched_known": 3,
+        "returned": 3,
+        "complete": true,
+        "next_offset": null,
+        "error_count": 0,
+        "errors_truncated": false
+      },
+      "actors": [
+        {
+          "label": "Daedalus World (live) - World Zero",
+          "name": "Daedalus_World_(live)_-_World_Zero",
+          "class": "DaedalusWorldActor",
+          "folder": "Daedalus/world-zero",
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "bounds": {
+            "origin": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "extent": [
+              100.0,
+              100.0,
+              100.0
+            ]
+          },
+          "components": [
+            {
+              "name": "Daedalus World (live) - World Zero_Mesh",
+              "class": "StaticMeshComponent",
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ],
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+          "class_path": "/Script/Engine.DaedalusWorldActor",
+          "parent_path": null,
+          "selected": false
+        },
+        {
+          "label": "Sky",
+          "name": "Sky",
+          "class": "SkyAtmosphere",
+          "folder": "",
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "bounds": {
+            "origin": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "extent": [
+              100.0,
+              100.0,
+              100.0
+            ]
+          },
+          "components": [
+            {
+              "name": "Sky_Mesh",
+              "class": "StaticMeshComponent",
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Sky.Sky_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ],
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Sky",
+          "class_path": "/Script/Engine.SkyAtmosphere",
+          "parent_path": null,
+          "selected": false
+        },
+        {
+          "label": "chunk_0_2_-6",
+          "name": "chunk_0_2_-6",
+          "class": "StaticMeshActor",
+          "folder": "Daedalus/world-zero",
+          "location": [
+            1000.0,
+            2000.0,
+            3000.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "bounds": {
+            "origin": [
+              1000.0,
+              2000.0,
+              3000.0
+            ],
+            "extent": [
+              100.0,
+              100.0,
+              100.0
+            ]
+          },
+          "components": [
+            {
+              "name": "chunk_0_2_-6_Mesh",
+              "class": "StaticMeshComponent",
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.chunk_0_2_-6.chunk_0_2_-6_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ],
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.chunk_0_2_-6",
+          "class_path": "/Script/Engine.StaticMeshActor",
+          "parent_path": null,
+          "selected": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  "verify_match_request": {
+    "schema_version": 1,
+    "context": {
+      "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+      "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "world_kind": "editor",
+      "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+    },
+    "actors": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+        "expected": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parent_path": null,
+          "selected": false,
+          "components": [
+            {
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "verify_match_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "passed": true,
+      "checks": [
+        {
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+          "status": "match",
+          "observed": {
+            "label": "Daedalus World (live) - World Zero",
+            "name": "Daedalus_World_(live)_-_World_Zero",
+            "class": "DaedalusWorldActor",
+            "folder": "Daedalus/world-zero",
+            "location": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "bounds": {
+              "origin": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "extent": [
+                100.0,
+                100.0,
+                100.0
+              ]
+            },
+            "components": [
+              {
+                "name": "Daedalus World (live) - World Zero_Mesh",
+                "class": "StaticMeshComponent",
+                "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+                "mesh": null,
+                "materials": []
+              }
+            ],
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+            "class_path": "/Script/Engine.DaedalusWorldActor",
+            "parent_path": null,
+            "selected": false
+          },
+          "mismatches": []
+        }
+      ],
+      "observation_errors": [],
+      "error_count": 0,
+      "errors_truncated": false
+    }
+  },
+  "verify_mismatch_request": {
+    "schema_version": 1,
+    "context": {
+      "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+      "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "world_kind": "editor",
+      "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+    },
+    "actors": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+        "expected": {
+          "location": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "parent_path": null,
+          "selected": false,
+          "components": [
+            {
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "verify_mismatch_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "passed": false,
+      "checks": [
+        {
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+          "status": "mismatch",
+          "observed": {
+            "label": "Daedalus World (live) - World Zero",
+            "name": "Daedalus_World_(live)_-_World_Zero",
+            "class": "DaedalusWorldActor",
+            "folder": "Daedalus/world-zero",
+            "location": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "bounds": {
+              "origin": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "extent": [
+                100.0,
+                100.0,
+                100.0
+              ]
+            },
+            "components": [
+              {
+                "name": "Daedalus World (live) - World Zero_Mesh",
+                "class": "StaticMeshComponent",
+                "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+                "mesh": null,
+                "materials": []
+              }
+            ],
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+            "class_path": "/Script/Engine.DaedalusWorldActor",
+            "parent_path": null,
+            "selected": false
+          },
+          "mismatches": [
+            {
+              "predicate": "location",
+              "expected": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "observed": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ]
+        }
+      ],
+      "observation_errors": [],
+      "error_count": 0,
+      "errors_truncated": false
+    }
+  },
+  "verify_unavailable_request": {
+    "schema_version": 1,
+    "context": {
+      "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+      "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "world_kind": "editor",
+      "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+    },
+    "actors": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DeletedActor",
+        "expected": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parent_path": null,
+          "selected": false,
+          "components": [
+            {
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "verify_unavailable_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "passed": false,
+      "checks": [
+        {
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DeletedActor",
+          "status": "unavailable",
+          "code": "ACTOR_NOT_LOADED",
+          "observed": null,
+          "mismatches": []
+        }
+      ],
+      "observation_errors": [],
+      "error_count": 0,
+      "errors_truncated": false
+    }
+  },
+  "verify_stale_request": {
+    "schema_version": 1,
+    "context": {
+      "session_id": "an-earlier-session",
+      "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "world_kind": "editor",
+      "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+    },
+    "actors": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+        "expected": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parent_path": null,
+          "selected": false,
+          "components": [
+            {
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "verify_stale_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "passed": false,
+      "code": "STALE_CONTEXT",
+      "checks": []
+    }
+  },
+  "empty_snapshot_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "available": true,
+      "scope": {
+        "loaded_only": true,
+        "atomic": false,
+        "folder": "Missing/Folder",
+        "offset": 0,
+        "limit": 32,
+        "total_loaded": 3,
+        "total_matching": 0,
+        "matched_known": 0,
+        "returned": 0,
+        "complete": true,
+        "next_offset": null,
+        "error_count": 0,
+        "errors_truncated": false
+      },
+      "actors": [],
+      "errors": []
+    }
+  },
+  "partial_page_reply": {
+    "id": "offline-fixture",
+    "status": "ok",
+    "result": {
+      "schema_version": 1,
+      "context": {
+        "session_id": "9f72cfe8808a43d9befd3f84834cf1fb",
+        "world_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+        "world_kind": "editor",
+        "world_epoch": "23db8ee138d84d5d9668f88e5ff973ef"
+      },
+      "available": true,
+      "scope": {
+        "loaded_only": true,
+        "atomic": false,
+        "folder": null,
+        "offset": 0,
+        "limit": 1,
+        "total_loaded": 3,
+        "total_matching": 3,
+        "matched_known": 3,
+        "returned": 1,
+        "complete": false,
+        "next_offset": 1,
+        "error_count": 0,
+        "errors_truncated": false
+      },
+      "actors": [
+        {
+          "label": "Daedalus World (live) - World Zero",
+          "name": "Daedalus_World_(live)_-_World_Zero",
+          "class": "DaedalusWorldActor",
+          "folder": "Daedalus/world-zero",
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "bounds": {
+            "origin": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "extent": [
+              100.0,
+              100.0,
+              100.0
+            ]
+          },
+          "components": [
+            {
+              "name": "Daedalus World (live) - World Zero_Mesh",
+              "class": "StaticMeshComponent",
+              "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero.Daedalus World (live) - World Zero_Mesh",
+              "mesh": null,
+              "materials": []
+            }
+          ],
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.Daedalus_World_(live)_-_World_Zero",
+          "class_path": "/Script/Engine.DaedalusWorldActor",
+          "parent_path": null,
+          "selected": false
+        }
+      ],
+      "errors": []
+    }
+  }
+}
