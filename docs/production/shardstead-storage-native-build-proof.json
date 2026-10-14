@@ -12,5 +12,23 @@
   "allSnapshotHashesRechecked": true,
   "scope": "Full isolated native compile/link including DRSH1 codec, receipt/parser/component consumer and existing systems; no installed/live HTTP/gameplay proof",
   "installed": false,
-  "runtimeVerified": false
+  "runtimeVerified": false,
+  "pendingPayloadBinding": {
+    "utc": "2026-10-14T15:31:36.166719+00:00",
+    "basePluginHead": "b1a33bcf05daf8a4151c4aec9219c3d5d59f8cae",
+    "basePluginFiles": 198,
+    "overlays": {
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusShardsteadComponent.cpp": "94ba4743aa76ae93bf85fee3d4186457cdc44c01e11b88781466a5223273e73c",
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRecordReceiptCore.h": "df57eee2ac34890f45a0ce478d5c2a4dd9cb598dc87b6a64d170e05d6292c530",
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusShardsteadComponent.h": "0618eedd48169d0fadfbb9364ba7c8362a5317076376cab91f1e27bd8e23865e"
+    },
+    "allPluginInputsRechecked": true,
+    "target": "HostProjectEditor Win64 Development",
+    "actions": 6,
+    "seconds": 21.35,
+    "exitCode": 0,
+    "artifactSHA256": "1c1507732590f2cdd603b586dfaf7036d789cf5edf66fc42c4508fddae519e74",
+    "portableReceiptTests": "MSVC C++17 /W4 /WX passed",
+    "scope": "Actual isolated native compile/link, not runtime payload capture/storage/gameplay acceptance"
+  }
 }

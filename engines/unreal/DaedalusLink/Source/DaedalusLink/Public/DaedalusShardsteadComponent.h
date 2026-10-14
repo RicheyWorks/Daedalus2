@@ -61,6 +61,11 @@ public:
     bool LedgerRevisionFromHost(uint64& Out) const;
     bool InitializeLedgerBytesFromHost(int64 RealmSeed,const std::vector<std::uint8_t>& Bytes);
     bool PendingBytesFromHost(std::vector<std::uint8_t>& Out) const;
+    // Copy these outputs into the immutable request context before dispatching async I/O.
+    bool CapturePendingRecordFromHost(const FString& Request,const std::string& Realm,
+        const std::string& RecordKey,uint64 ExpectedStoreRevision,
+        daedalus::records::WriteExpectation& OutExpected,std::vector<std::uint8_t>& OutBytes,
+        uint64& OutDomainRevision) const;
     // Expected context must be captured from the actual outgoing encoded candidate.
     bool ConfirmRecordReplyFromHost(const FString& Request,uint64 PreparedRevision,
         const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,

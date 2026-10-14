@@ -3,6 +3,10 @@
 using namespace daedalus::records;
 int main(){
     const std::string Digest(64,'a');
+    if(!Identity("WORLD-ZERO","Crew_1:ledger.v1")||!Identity(std::string(40,'A'),std::string(100,'a')))return 19;
+    for(const auto& Realm:{"world-zero","1WORLD","WORLD/OTHER","", "WORLD ZERO"})if(Identity(Realm,"ledger"))return 20;
+    for(const auto& Key:{"/ledger",".ledger","ledger?query","ledger/path","", "ledger\n"})if(Identity("WORLD-ZERO",Key))return 21;
+    if(Identity(std::string(41,'A'),"ledger")||Identity("WORLD-ZERO",std::string(101,'a')))return 22;
     WriteExpectation E{"WORLD-ZERO","ledger",Digest,9007199254740992ULL};
     WriteReply R{"UPDATED",E.Realm,E.Key,"9007199254740993",Digest,Digest};
     std::uint64_t Out=7;

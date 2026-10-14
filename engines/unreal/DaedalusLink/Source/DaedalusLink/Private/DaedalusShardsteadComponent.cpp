@@ -2,6 +2,18 @@
 #include "DaedalusShardsteadComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+THIRD_PARTY_INCLUDES_START
+#include <openssl/sha.h>
+THIRD_PARTY_INCLUDES_END
+namespace {
+std::string PayloadHash(const std::vector<std::uint8_t>& Bytes){
+    unsigned char Digest[SHA256_DIGEST_LENGTH];
+    if(Bytes.empty()||!SHA256(Bytes.data(),Bytes.size(),Digest))return {};
+    static const char Hex[]="0123456789abcdef";std::string Result;Result.reserve(64);
+    for(unsigned char Byte:Digest){Result.push_back(Hex[Byte>>4]);Result.push_back(Hex[Byte&15]);}
+    return Result;
+}
+}
 UDaedalusShardsteadComponent::UDaedalusShardsteadComponent(){PrimaryComponentTick.bCanEverTick=false;}
 bool UDaedalusShardsteadComponent::StartCycleClockFromHost(float IntervalSeconds){
     if(!Ready||!Host()||!FMath::IsFinite(IntervalSeconds)||IntervalSeconds<=0.f)return false;
@@ -94,11 +106,25 @@ bool UDaedalusShardsteadComponent::PendingBytesFromHost(std::vector<std::uint8_t
     const auto* Saved=PendingFromHost();
     return Saved&&daedalus::shardstead::EncodeLedgerSave(*Saved,Out);
 }
+bool UDaedalusShardsteadComponent::CapturePendingRecordFromHost(const FString& Request,const std::string& Realm,
+    const std::string& RecordKey,uint64 ExpectedStoreRevision,daedalus::records::WriteExpectation& OutExpected,
+    std::vector<std::uint8_t>& OutBytes,uint64& OutDomainRevision) const{
+    const auto* Saved=PendingFromHost();
+    if(!Saved||!daedalus::records::Identity(Realm,RecordKey)||ExpectedStoreRevision>=static_cast<uint64>(MAX_int64))return false;
+    const auto Entry=Saved->Applied.find(Key(Request));
+    if(Entry==Saved->Applied.end()||Entry->second.Revision!=Saved->Revision)return false;
+    std::vector<std::uint8_t> Bytes;if(!PendingBytesFromHost(Bytes))return false;
+    auto Hash=PayloadHash(Bytes);if(!daedalus::records::Hash(Hash))return false;
+    daedalus::records::WriteExpectation Expected{Realm,RecordKey,std::move(Hash),ExpectedStoreRevision};
+    OutExpected=std::move(Expected);OutBytes=std::move(Bytes);OutDomainRevision=Saved->Revision;return true;
+}
 bool UDaedalusShardsteadComponent::ConfirmRecordReplyFromHost(const FString& Request,uint64 PreparedRevision,
     const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
     const daedalus::records::WriteReply& Reply,uint64& CommittedStoreRevision){
     const auto* Saved=PendingFromHost();
     if(!Saved||Saved->Revision!=PreparedRevision)return false;
+    std::vector<std::uint8_t> Candidate;
+    if(!PendingBytesFromHost(Candidate)||PayloadHash(Candidate)!=Expected.SHA256)return false;
     uint64 StoreRevision=0;
     if(!daedalus::records::ConfirmWrite(TransportOK,HttpStatus,Expected,Reply,StoreRevision))return false;
     if(!ConfirmPersistedFromHost(Request,PreparedRevision))return false;
@@ -110,7 +136,7 @@ bool UDaedalusShardsteadComponent::ConfirmRecordReadBackFromHost(const FString& 
     const std::string& HashHeader,uint64& CommittedStoreRevision){
     const auto* Saved=PendingFromHost();if(!Saved||Saved->Revision!=PreparedRevision)return false;
     std::vector<std::uint8_t> Candidate;uint64 StoreRevision=0;
-    if(!PendingBytesFromHost(Candidate)||!daedalus::records::ConfirmReadBack(TransportOK,HttpStatus,Expected,Candidate,Returned,RevisionHeader,HashHeader,StoreRevision))return false;
+    if(!PendingBytesFromHost(Candidate)||PayloadHash(Candidate)!=Expected.SHA256||!daedalus::records::ConfirmReadBack(TransportOK,HttpStatus,Expected,Candidate,Returned,RevisionHeader,HashHeader,StoreRevision))return false;
     if(!ConfirmPersistedFromHost(Request,PreparedRevision))return false;
     CommittedStoreRevision=StoreRevision;return true;
 }

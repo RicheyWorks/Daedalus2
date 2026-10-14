@@ -10,6 +10,15 @@
 namespace daedalus { namespace records {
 struct WriteExpectation {std::string Realm,Key,SHA256;std::uint64_t StoreRevision=0;};
 struct WriteReply {std::string Result,Realm,Key,RevisionHeader,HeaderSHA256,BodySHA256;};
+inline bool Identity(const std::string& Realm,const std::string& Key){
+    auto Upper=[](char C){return C>='A'&&C<='Z';};
+    auto Alpha=[&](char C){return Upper(C)||(C>='a'&&C<='z');};
+    auto Digit=[](char C){return C>='0'&&C<='9';};
+    if(Realm.empty()||Realm.size()>40||!Upper(Realm[0])||Key.empty()||Key.size()>100||!(Alpha(Key[0])||Digit(Key[0])))return false;
+    for(char C:Realm)if(!(Upper(C)||Digit(C)||C=='-'))return false;
+    for(char C:Key)if(!(Alpha(C)||Digit(C)||C=='.'||C=='_'||C==':'||C=='-'))return false;
+    return true;
+}
 inline bool Hash(const std::string& Value){
     if(Value.size()!=64)return false;
     for(char C:Value)if(!((C>='0'&&C<='9')||(C>='a'&&C<='f')))return false;
@@ -72,7 +81,7 @@ inline bool ParseWriteReply(const std::string& Json,const std::string& RevisionH
 // Caller supplies parsed, duplicate-free fields from a completed no-redirect request.
 // Failure is an unconfirmed write outcome: never cancel/republish a ledger candidate.
 inline bool ConfirmWrite(bool TransportOK,int HttpStatus,const WriteExpectation& Expected,const WriteReply& Reply,std::uint64_t& CommittedStoreRevision){
-    if(!TransportOK||HttpStatus!=200||Expected.Realm.empty()||Expected.Key.empty()||!Hash(Expected.SHA256))return false;
+    if(!TransportOK||HttpStatus!=200||!Identity(Expected.Realm,Expected.Key)||!Hash(Expected.SHA256))return false;
     if(Reply.Result!="UPDATED"&&Reply.Result!="REPLAY")return false;
     if(Reply.Realm!=Expected.Realm||Reply.Key!=Expected.Key||Reply.HeaderSHA256!=Expected.SHA256||Reply.BodySHA256!=Expected.SHA256)return false;
     std::uint64_t Observed=0;
