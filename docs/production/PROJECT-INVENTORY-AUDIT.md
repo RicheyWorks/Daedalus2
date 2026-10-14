@@ -14,6 +14,8 @@ Local reproducible evidence: `C:/Users/730ri/Documents/Codex/2026-10-14/project-
 
 ## Inventory
 
+08:42 PT delivery delta: Claude30320 reports all500 district actors assigned to the saved NativePool, superseding pending mesh acknowledgment; this is owner evidence, not independent500-actor/deed/ledger or walk verification. Later stable map read is211434993bytes/SHAf8a591d0498f37c9c8591316086f1d60de9f81a1b9e61c190f9cc8fb483a1676 at15:42:50UTC. Named Epic binding now actually returned IsPIERunning=false; earlier startup refusal remains historical. PR140 bf641e47 has source-only material-instance mode; live instance/export/new variant proof remains pending. See existing automation lessons and realm handoff for full stage boundaries.
+
 | Area | Observed inventory | Interpretation |
 |---|---|---|
 | Shared checkout | 3,189 nonignored files; seven Maven modules; HEAD c1ce262d | Older than several active worktrees; do not build an integration plan from this checkout alone |

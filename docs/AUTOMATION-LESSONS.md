@@ -1,5 +1,13 @@
 # Automation lessons: driving Unreal, Blender and Windows without a human clicking
 
+## team-codex resumed connector and delivery — 2026-10-14 08:42 PT
+
+Named Epic Unreal tools became available in this task after the earlier HTTP-only period. Actual mcp__epic_unreal__call_tool invoked EditorToolset.EditorAppToolset.IsPIERunning and returned {returnValue:false} at15:41:25.761UTC;15,289ms wall time is one observation, not a benchmark or diagnosed transport regression. Local receipt resume-audit/native-named-binding-check.json. Direct HTTP client had also returned false after startup; this supersedes the earlier connection-refused observation for that small read only. Use current tool metadata instead of assuming the binding remains missing; broader tool/image/owner readiness is separate.
+
+Exact void operations previously used are MaterialTools.connect_expressions, connect_to_output and recompile. Tested AssetTools.save_assets returned true; do not generalize void-return handling to all save calls. Read back graph edges and parameter types, then native save/files. MaterialInstanceTools.create/list_parameters were freshly described; a source-only --create-instance mode on PR140 bf641e47 creates an inherited GroveGround instance under the current owner's lease and journals dispatch. No native instance creation is claimed. Owner application to district material slots remains separate.
+
+Claude30320 accepted/reported the saved500-district mesh assignment; independent per-actor/deed/ledger verification and walking remain open. Claude30321 holds Play while reported RAM exceeds90%. Keep the saved-file progression: historical grove map217902066bytes/SHA07bf2119..., coordinator's later15:37 read217933672bytes/SHA6211cb54..., then own stable15:42:50.411674UTC read211434993bytes,mtime15:39:02.493299UTC,SHAf8a591d0498f37c9c8591316086f1d60de9f81a1b9e61c190f9cc8fb483a1676. None changes the historical package proof or proves every actor. Use streaming hashes and compare stat before/after rather than reading a large changing map into memory.
+
 What the team has learned by making an AI agent operate Richmond's Windows PC, Unreal Engine 5.8 and Blender.
 Every entry was found live, mostly by something breaking. Read this before you automate anything here, and add
 to it when something new breaks.
