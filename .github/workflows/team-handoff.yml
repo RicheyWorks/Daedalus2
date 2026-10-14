@@ -6,6 +6,7 @@ on:
       - 'connectors/claude-asset-pipeline/asset_pipeline/live_handoff.py'
       - 'connectors/claude-asset-pipeline/harness/*handoff_test.py'
       - 'connectors/claude-asset-pipeline/harness/teamlink_test.py'
+      - 'connectors/claude-asset-pipeline/harness/teamlink_doctor_test.py'
       - '.github/workflows/team-handoff.yml'
   workflow_dispatch:
 permissions:
@@ -24,4 +25,7 @@ jobs:
       - run: python harness/live_handoff_test.py
         working-directory: connectors/claude-asset-pipeline
       - run: python harness/teamlink_test.py
+        working-directory: connectors/claude-asset-pipeline
+
+      - run: python harness/teamlink_doctor_test.py
         working-directory: connectors/claude-asset-pipeline

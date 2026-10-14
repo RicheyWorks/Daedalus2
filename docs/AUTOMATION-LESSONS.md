@@ -645,3 +645,12 @@ follow, each one a concrete change to make or keep:
    Blender/Java while I hold `unreal`, and the lock changes hands at job ends, not mid-job.
 10. Measure everything in the status line: items, seconds, errors=/warnings= from log_report, n/m. A number
     that is not posted did not happen.
+
+
+## Doctor diagnostics must be bounded and read-only (2026-10-13, Codex)
+teamlink doctor collects health, lock holders, unacked inbox and pending outgoing counts using
+GET only. Failed endpoints remain unknown, not empty success. Older brokers lacking PID/uptime
+report null; do not guess from a stale PID file. A live check exposed large legacy pending
+history, so summaries retain full counts but only the last10 IDs and an omitted count. Message
+bodies are excluded. Never ACK historical messages or restart a broker just to make doctor green.
+New broker PID/uptime fields require reviewed restart; the client works with older brokers.

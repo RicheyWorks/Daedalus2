@@ -432,7 +432,8 @@ def make_handler(broker):
                 if path == "/log":
                     return self._out(200, {"messages": broker.log(int(q.get("after", 0)), int(q.get("limit", 200)))})
                 if path == "/health":
-                    return self._out(200, {"ok": True, "last": broker.last,
+                    return self._out(200, {"ok": True, "last": broker.last, "pid": os.getpid(),
+                                           "uptime_s": round(max(0, time.time() - broker.since), 3),
                                            "since": datetime.datetime.fromtimestamp(broker.since).isoformat(timespec="seconds")})
                 return self._out(404, {"error": "no such path", "paths": ["/send", "/wait", "/ack", "/pending", "/inbox",
                                                                           "/lock", "/unlock", "/locks",
@@ -671,6 +672,37 @@ class Link:
     def presence(self):
         return self._call("GET", "/presence") or {}
 
+    def doctor(self):
+        """Read-only diagnostics; missing endpoint data is unknown, never empty-success."""
+        health = self._call("GET", "/health")
+        locks = self._call("GET", "/locks")
+        inbox = self._call("GET", "/inbox?" + urllib.parse.urlencode({"me": self.me}))
+        pending = self._call("GET", "/pending?" + urllib.parse.urlencode({"me": self.me}))
+        unavailable = []
+        for name, value in (("health", health), ("locks", locks), ("inbox", inbox), ("pending", pending)):
+            if not isinstance(value, dict):
+                unavailable.append(name)
+        for name, value in (("inbox", inbox), ("pending", pending)):
+            if isinstance(value, dict) and not isinstance(value.get("messages"), list):
+                unavailable.append(name)
+        broker_up = isinstance(health, dict) and health.get("ok") is True
+        if not broker_up and "health" not in unavailable:
+            unavailable.append("health")
+        def summary(value, name):
+            if name in unavailable:
+                return None
+            rows = value["messages"]
+            return {"count": len(rows), "ids": [m.get("id") for m in rows[-10:]], "omitted": max(0, len(rows)-10)}
+        return {"ok": broker_up and not unavailable, "broker_up": broker_up, "me": self.me,
+                "last_id": health.get("last") if isinstance(health, dict) else None,
+                "broker_pid": health.get("pid") if isinstance(health, dict) else None,
+                "broker_uptime_s": health.get("uptime_s") if isinstance(health, dict) else None,
+                "broker_since": health.get("since") if isinstance(health, dict) else None,
+                "locks": locks if "locks" not in unavailable else None,
+                "unacked_inbox": summary(inbox, "inbox"),
+                "pending_outgoing": summary(pending, "pending"), "unavailable": unavailable,
+                "meaning": "Read-only snapshot; delivery is not acceptance. Missing broker PID/uptime may mean an older broker."}
+
     def health(self):
         return self._call("GET", "/health")
 
@@ -685,7 +717,7 @@ def main(argv=None):
     s.add_argument("--port", type=int, default=PORT)
     s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
                    help="where to write {url} for clients to find the broker ('' for none)")
-    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack"):
+    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack", "doctor"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
         p.add_argument("--port", type=int, default=PORT)
@@ -718,6 +750,10 @@ def main(argv=None):
         serve(a.folder, a.port, bus_json=a.bus_json or None)
         return 0
     link = Link(a.me, a.port)
+    if a.cmd == "doctor":
+        out = link.doctor()
+        print(json.dumps(out, ensure_ascii=False, indent=1))
+        return 0 if out["ok"] else 2
     if a.cmd == "send":
         body = json.loads(a.body)
         if a.asset:
