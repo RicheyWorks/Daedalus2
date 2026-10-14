@@ -1,0 +1,79 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "9b62e8d19f2d957f597f8ce4b7915e59973b11343624fae5a5fa5c08f6bca4a6",
+  "views": [
+    {
+      "island": "CodexIsland_cliff_garden_84022",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022.palette-native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 340900,
+          "z": 22915.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "b9fecd20bd034b6e41fcb0482b7b66d21a679ffd890fe2338509542aaec72940",
+      "bytes": 1218583,
+      "when_utc": "2026-10-14T20:08:08.894234+00:00"
+    },
+    {
+      "island": "CodexIsland_river_canyon_84033",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_river_canyon_84033.palette-native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 315300,
+          "z": 23415.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "49c500b9931d31df7ecd145a0e657cddf7b2f831ceb1149bc258b69c000f6f9b",
+      "bytes": 1211666,
+      "when_utc": "2026-10-14T20:08:09.418618+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011.palette-native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 289700,
+          "z": 22215.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "8c586c16b8cbcd19ee044a955f59e9512d6e8a32eba2953b241f2cff5e14169d",
+      "bytes": 1282153,
+      "when_utc": "2026-10-14T20:08:09.846329+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance"
+}

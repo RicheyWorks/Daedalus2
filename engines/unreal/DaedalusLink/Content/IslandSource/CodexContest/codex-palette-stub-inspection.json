@@ -1,0 +1,11 @@
+{
+  "stdout": "",
+  "result": {
+    "path": "/Game/Daedalus/Art/Islands/CodexContest/Palette/M_CodexPalette_v1.M_CodexPalette_v1",
+    "class": "Material",
+    "num_expressions": 0,
+    "used_with_nanite": false,
+    "used_with_instanced_static_meshes": false
+  },
+  "unattended": false
+}

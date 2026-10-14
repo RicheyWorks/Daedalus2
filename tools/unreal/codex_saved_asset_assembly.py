@@ -113,13 +113,17 @@ def _write(path, value):
 
 
 def assemble_saved(manifest_path, saved_path, placements, map_path, map_file, journal_path, timeout=120):
+    """Validate the prepared batch, then execute its additive saved-mesh plan."""
+    return execute_plan(plan_saved(manifest_path, saved_path, placements, map_path, map_file), journal_path, timeout)
+
+
+def execute_plan(plan, journal_path, timeout=120):
     """Execute an additive plan, verifying exact actors and saving only its map.
 
     Call only after the root operator has the actual editor handoff. A failed or
     pending journal deliberately blocks another run; inspect native outcomes
     before selecting a new journal. No actor is removed or moved to resolve it.
     """
-    plan = plan_saved(manifest_path, saved_path, placements, map_path, map_file)
     journal_path = Path(journal_path).resolve()
     if journal_path in (Path(plan["manifest"]), Path(plan["saved_receipt"]), Path(plan["map_file"])):
         raise ValueError("assembly journal must not overwrite an input")

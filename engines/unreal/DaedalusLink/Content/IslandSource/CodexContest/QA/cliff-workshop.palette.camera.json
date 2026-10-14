@@ -1,0 +1,25 @@
+{
+  "when_utc": "2026-10-14T20:05:18.341257+00:00",
+  "camera": {
+    "location": {
+      "x": -367250,
+      "y": 348050,
+      "z": 19165.324
+    },
+    "rotation": {
+      "pitch": -25.01689347810002,
+      "yaw": -126.86989764584402,
+      "roll": -1.7549182616000417e-15
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "width": 1280,
+  "height": 720,
+  "bytes": 1375683,
+  "saved_own_actors": 53,
+  "world_map": "/Game/Daedalus/DaedalusWorld"
+}

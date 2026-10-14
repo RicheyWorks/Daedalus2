@@ -1,0 +1,1010 @@
+{
+  "actors": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3947"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3948"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3949"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3950"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3951"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_island",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3952"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3953"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3954"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3955"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_trees",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3956"
+      },
+      "group": "CodexIsland_summit_rim_84011_HeroR3",
+      "label": "CodexIsland_summit_rim_84011_HeroR3_water",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water",
+      "transform": {
+        "location": {
+          "x": -343550,
+          "y": 297700,
+          "z": 17515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "assembly_s": 2.19259,
+  "created_actors": 10,
+  "folder": "CodexContest/Staging",
+  "map_after": {
+    "bytes": 209237031,
+    "sha256": "e4375173eeac268be806994024df1caf9391fed22d567a8e2f6ed04db5ace31c"
+  },
+  "map_before": {
+    "bytes": 209214272,
+    "sha256": "9b62e8d19f2d957f597f8ce4b7915e59973b11343624fae5a5fa5c08f6bca4a6"
+  },
+  "map_save_s": 20.851415,
+  "native_mutations": [
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3947"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3947"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3948"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3948"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3949"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3949"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3950"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3950"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_island",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3951"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3951"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3952"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3952"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3953"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3953"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3954"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3954"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_trees",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3955"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3955"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water",
+        "name": "CodexIsland_summit_rim_84011_HeroR3_water",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3956"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3956"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "result": true,
+      "state": "responded",
+      "tool": "save_assets",
+      "toolset": "editor_toolset.toolsets.asset.AssetTools"
+    }
+  ],
+  "ownership_tags_added": false,
+  "plan": {
+    "config_sha256": "152f6e51b5afc40e07dfd0d117d96ebe7ec39217f808654204ca50f071e63d72",
+    "entries": [
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_island",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_trees",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_summit_rim_84011_HeroR3",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_water",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water",
+        "transform": {
+          "location": {
+            "x": -343550,
+            "y": 297700,
+            "z": 17515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts\\codex-ingestion-f0499dd9dad812f597cf54dd.json",
+    "manifest_embedded": true,
+    "manifest_fingerprint": {
+      "bytes": 27698,
+      "sha256": "4e149738374ec06a8bcdf897db519a42189d0e0edc3268b17ed90709e7835e3f"
+    },
+    "manifest_key": "f0499dd9dad812f597cf54ddfa9573f852f84490f2fbb5a57bc6d6ae342342ef",
+    "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "map_package": "/Game/Daedalus/DaedalusWorld",
+    "native_output_fingerprints": {
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds": {
+        "bytes": 89975,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_clouds.uasset",
+        "sha256": "d247a4d99779e01e6671d11d5be0e49ea6e124294eb0434b4434cf415fe27ec9"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage": {
+        "bytes": 90867,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_cottage.uasset",
+        "sha256": "6078d323e2fab7bee325fe4476241f2a73ab75585284e24887df3ceeb5ae2615"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals": {
+        "bytes": 80132,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_crystals.uasset",
+        "sha256": "ec09c5ba7d3bc72631be459ecab83fd8ca0de49aa4e03d37cb9aa339d1c1a12e"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers": {
+        "bytes": 83554,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_flowers.uasset",
+        "sha256": "22ac38e0bbfee4289636c1a995a2c550c70a0eb0353d078ad1c1363b47e984a6"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island": {
+        "bytes": 1054610,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_island.uasset",
+        "sha256": "317ef28746d4abadf1244cad71c3b2df42a19b398d1afe8ee242378fa3a2659b"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks": {
+        "bytes": 79063,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_landmarks.uasset",
+        "sha256": "5e210b5029fc87b91e952b91f07de8ed925e428ba1d524a7beab6bca5261f448"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks": {
+        "bytes": 74565,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_rocks.uasset",
+        "sha256": "5427e8adcc9cec07dfac6ff62ae04a90beca07baa103cfb7f7ea42f15c8c650c"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps": {
+        "bytes": 344303,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_route_steps.uasset",
+        "sha256": "74e4555c804323b20a3e453ee3362981b9087c9f7d110762d96f6e3fa2c059bd"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees": {
+        "bytes": 117102,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_trees.uasset",
+        "sha256": "4ddf29896e9485db65eb2bcc766b0ee5f4639ca5d913e26f7f7ee707f6f977b4"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water": {
+        "bytes": 134657,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\f0499dd9dad812f597cf54dd\\CodexIsland_summit_rim_84011_HeroR3_water.uasset",
+        "sha256": "15049375e85509dd96440d904e147578e0f7dc804bbcad0a55c8e400a7c31253"
+      }
+    },
+    "placements_cm": {
+      "CodexIsland_summit_rim_84011_HeroR3": [
+        -343550,
+        297700,
+        17515.324
+      ]
+    },
+    "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts\\codex-ingestion-f0499dd9dad812f597cf54dd.json",
+    "saved_receipt_fingerprint": {
+      "bytes": 27698,
+      "sha256": "4e149738374ec06a8bcdf897db519a42189d0e0edc3268b17ed90709e7835e3f"
+    },
+    "schema": "daedalus.codex-admitted-assembly.v1",
+    "seed": 84011,
+    "source_fingerprint": {
+      "bytes": 2085516,
+      "sha256": "47d14ae998b1e6a28c51404fc81e722a4f21795acf4f4654ed13357e01b5a987"
+    },
+    "validated_saved_meshes": 10
+  },
+  "reused_actors": 0,
+  "save_return": true,
+  "saved_unreal": true,
+  "stage": "placed_and_saved",
+  "staging_only": true
+}

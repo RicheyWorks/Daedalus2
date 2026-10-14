@@ -1,0 +1,65 @@
+{
+  "stage": "source_multiview_rendered",
+  "name": "CodexSalvage_PowerUnit_86100",
+  "seed": 86100,
+  "glb_sha256": "ce022107cc0d757934f8c48a37183db990b8d4249ddd358cd81ad783fae467b3",
+  "views": [
+    {
+      "name": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\QA\\overview.png",
+      "position": [
+        8,
+        -10,
+        7
+      ],
+      "target": [
+        0,
+        -1.5,
+        1.5
+      ],
+      "camera_type": "ORTHO",
+      "framing": 10,
+      "elapsed_s": 34.812504,
+      "sha256": "6f02576e84af0decbf61cd44340c40e24a2c78d7b59e005d1951bd700a5d2cc4"
+    },
+    {
+      "name": "front",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\QA\\front.png",
+      "position": [
+        6,
+        -10,
+        3
+      ],
+      "target": [
+        0,
+        -2,
+        1.5
+      ],
+      "camera_type": "PERSP",
+      "framing": 45,
+      "elapsed_s": 0.274818,
+      "sha256": "f904134c7084109dc4fc687a6dbfabaf4cd7dffdfbdb9a2cd2e0878a3a6300aa"
+    },
+    {
+      "name": "connections",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\QA\\connections.png",
+      "position": [
+        -4,
+        -5,
+        4
+      ],
+      "target": [
+        0,
+        -1.5,
+        2
+      ],
+      "camera_type": "PERSP",
+      "framing": 50,
+      "elapsed_s": 0.249477,
+      "sha256": "e075a7d8bfa7abc755ee860d032d56bb5b2dcb5d3027bcc9928fec05fde8a90f"
+    }
+  ],
+  "saved_unreal": false,
+  "view_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\power-unit.views.json",
+  "acceptance": "appearance only; Unreal, collision and movement remain unverified"
+}

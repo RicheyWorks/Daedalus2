@@ -1,0 +1,82 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "07ba7e6aa40583978d0b1b7d7d410b97dc23713b33e453b411ff4d5272753a1f",
+  "views": [
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR3",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR3.hero-r3-native-overview.png",
+      "camera": {
+        "location": {
+          "x": -337050,
+          "y": 289700,
+          "z": 22515.324
+        },
+        "rotation": {
+          "pitch": -27.211118508284937,
+          "yaw": 129.0938588862295,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "ced87302b4dde635c3f9533d55e9d042c85e453fc7886454df4f559209d2d4e3",
+      "bytes": 1282092,
+      "when_utc": "2026-10-14T20:18:00.184850+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR3",
+      "view": "route",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR3.hero-r3-native-route.png",
+      "camera": {
+        "location": {
+          "x": -340750,
+          "y": 302600,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 3.955881023629843,
+          "yaw": -115.97439396243138,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "35d7b7b27d2555371f0e6ff474ade6ea9e3e30eff70cdfff3b137aac6e9fb5cc",
+      "bytes": 1312107,
+      "when_utc": "2026-10-14T20:18:00.764732+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR3",
+      "view": "crown",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR3.hero-r3-native-crown.png",
+      "camera": {
+        "location": {
+          "x": -345750,
+          "y": 300300,
+          "z": 20815.324
+        },
+        "rotation": {
+          "pitch": -23.769420381420552,
+          "yaw": -49.763641690726196,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "dd86b6173f96d424b300df6c6cf70ac07d6c4ef222508b172a54c0f468dd2d6a",
+      "bytes": 1323328,
+      "when_utc": "2026-10-14T20:18:01.297601+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance"
+}

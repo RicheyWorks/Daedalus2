@@ -1,0 +1,160 @@
+{
+  "stage": "component_palette_saved",
+  "prior": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-cliff-palette-native-v2.json",
+  "prior_sha256": "38273271dd7235a9f84f364c01e3402c784d03d9c3df38c4fa5cb55e42e13ee3",
+  "map_before": {
+    "sha256": "9da80c3ff526988e8897b7e6f7e0c38153aad7b19db16dd2ff83f595042c48cc",
+    "bytes": 209206705
+  },
+  "dirty_mark_reply": {
+    "stdout": "",
+    "result": [
+      {
+        "label": "CodexIsland_cliff_garden_84022_clouds",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_cottage",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_crystals",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_flowers",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_island",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ff6e0e2b002f.MI_Codex_dirt2_ff6e0e2b002f",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_3171c11520db.MI_Codex_grass_3171c11520db",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_7e0cc2d93aea.MI_Codex_grass2_7e0cc2d93aea",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_landmarks",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_rocks",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_trees",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_c805001eae0f.MI_Codex_blossom2_c805001eae0f",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_f1f960fcb6bf.MI_Codex_leaf_f1f960fcb6bf",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+        ]
+      },
+      {
+        "label": "CodexIsland_cliff_garden_84022_water",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_b0adb320d32d.MI_Codex_foam_b0adb320d32d",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_910847e52ff6.MI_Codex_water_910847e52ff6"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_housing",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_shaft",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_rotor",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_crossbeam",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_west_leg",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_east_leg",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_battery",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_spare_wheel",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+        ]
+      },
+      {
+        "label": "CodexDress_CopperPatina_signal_sail",
+        "materials": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4",
+          "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da"
+        ]
+      }
+    ],
+    "unattended": false
+  },
+  "save_return": true,
+  "map_after": {
+    "sha256": "f3464454ccb1b4cdbcf6536235d08d7537cdb55a4eb7d171a19ffcdb6db8edc2",
+    "bytes": 209212275
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "reviewed_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "runtime_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "loaded": [
+    {
+      "name": "daedalus_ingestion_receipts",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py",
+      "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+    },
+    {
+      "name": "daedalus_codex_ingestion",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py",
+      "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+    }
+  ],
+  "passes": [
+    {
+      "phase": "production_import",
+      "elapsed_s": 1.192748,
+      "results": [
+        {
+          "name": "CodexSalvage_PowerUnit_86100",
+          "state": "saved",
+          "unchanged_skipped": false,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\e3f098e65a1dc4ddb1129b79.json",
+          "assets": {
+            "CodexSalvage_PowerUnit_86100_battery": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery",
+            "CodexSalvage_PowerUnit_86100_gearbox": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox",
+            "CodexSalvage_PowerUnit_86100_rotor": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor",
+            "CodexSalvage_PowerUnit_86100_shaft": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft",
+            "CodexSalvage_PowerUnit_86100_support": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "identical_input_reuse",
+      "elapsed_s": 0.055184,
+      "results": [
+        {
+          "name": "CodexSalvage_PowerUnit_86100",
+          "state": "saved",
+          "unchanged_skipped": true,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\e3f098e65a1dc4ddb1129b79.json",
+          "assets": {
+            "CodexSalvage_PowerUnit_86100_battery": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery",
+            "CodexSalvage_PowerUnit_86100_gearbox": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox",
+            "CodexSalvage_PowerUnit_86100_rotor": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor",
+            "CodexSalvage_PowerUnit_86100_shaft": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft",
+            "CodexSalvage_PowerUnit_86100_support": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support"
+          }
+        }
+      ]
+    }
+  ]
+}

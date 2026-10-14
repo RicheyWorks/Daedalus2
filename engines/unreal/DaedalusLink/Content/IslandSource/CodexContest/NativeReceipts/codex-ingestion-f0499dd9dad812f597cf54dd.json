@@ -1,0 +1,523 @@
+{
+  "api": "native.import_all -> AssetImportTasks/FbxImportUI -> SaveLoadedAsset",
+  "assets": {
+    "CodexIsland_summit_rim_84011_HeroR3_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+    "CodexIsland_summit_rim_84011_HeroR3_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+    "CodexIsland_summit_rim_84011_HeroR3_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+    "CodexIsland_summit_rim_84011_HeroR3_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+    "CodexIsland_summit_rim_84011_HeroR3_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+    "CodexIsland_summit_rim_84011_HeroR3_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+    "CodexIsland_summit_rim_84011_HeroR3_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+    "CodexIsland_summit_rim_84011_HeroR3_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+    "CodexIsland_summit_rim_84011_HeroR3_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+    "CodexIsland_summit_rim_84011_HeroR3_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water"
+  },
+  "backend_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "backend_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "background_compilation": "not_queried",
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd",
+  "key": "f0499dd9dad812f597cf54ddfa9573f852f84490f2fbb5a57bc6d6ae342342ef",
+  "manifest": {
+    "backend": {
+      "api": "AssetTools.import_asset_tasks/AssetImportTask/FbxImportUI",
+      "fbx_cvar_readback": 1,
+      "loaded_code": {
+        "_observed_import": "167649bdc5402b5fd892f2bc3c970866e83b5b47da350a53fbd5de5e62fffed3",
+        "_tags": "783eb2319099196fd0abf9a664307e305732a57f6d724c2f94df96a97d512ecf",
+        "_verify": "c65eb78077c9b4e470cecb3642d9f57d8c9a0a58f742b3fe6a63c65fa28b5807",
+        "import_all": "3e1c93cbf9cdbb078d46216b44247fbd0f4073b8a9b4e0e1889d985f52a5641e"
+      },
+      "loaded_receipt_code": {
+        "daedalus_codex_ingestion._manifest": "de8064199eac48220444cf1d0e92438637e25d9db4a09c60d6c0c2109b001848",
+        "daedalus_codex_ingestion._require_manifest": "07d342a06de872850d79872fca1bce46c1da69d1c54f0a02c98780ead4271350",
+        "daedalus_codex_ingestion._verify_saved": "9674dd75359bb3805e6494f63b9a224ef7123ade20bfbbcfa99967d679b5e9a7",
+        "daedalus_codex_ingestion.import_steps": "430c645b0ec8cf33ef31b07cbaf3927ff756550d660f6a47d01c4f008849ceb6",
+        "daedalus_ingestion_receipts.loaded_code_fingerprint": "5893a6ca15a357520f97d6442478dcaa941d6230e2d500ce1dcae998c3fee683",
+        "daedalus_ingestion_receipts.manifest": "bb1350e5b3ebd57b891d84e939e8b3df80260181c55cae3127571ba5f5534fdc",
+        "daedalus_ingestion_receipts.may_skip": "519532bbba58cd3e24cd759493611ea2e10b7d0bdab1c77a99ae5e3e992e051b",
+        "daedalus_ingestion_receipts.require_retry_permission": "a0b4b632d781c6e3d4d99aedcf77fc782afd35527aeda0144b12902c625e1158",
+        "daedalus_ingestion_receipts.validate_receipt": "b36821d96d6c1d5db40a834ceca896bcf863f785789be1e6613749fc92b1aad9",
+        "daedalus_ingestion_receipts.verified_snapshot": "893ca5138f11f12339188b2700c04c0bfd657f6aedd4f1d2a0dae8b7f0ebb3b7",
+        "daedalus_ingestion_receipts.write_receipt": "c9502d92986551a21606bd19dd2ab5b2fc480ee94ad002e785b0a720d81a3249"
+      },
+      "selected_preset": "codex_prepared_existing_options_v1"
+    },
+    "dependencies": {
+      "C:\\Unreal\\DaedalusRealm\\Config\\DefaultEngine.ini": {
+        "bytes": 995,
+        "sha256": "32e7917b6cbdda424e49461222b03314714168a665360e3f838d0e788bb61b35"
+      },
+      "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\ClaudeIslands\\M_VoxelVertexColour.uasset": {
+        "bytes": 9801,
+        "sha256": "5da5a09f183424869300bac051e32da589328a63b28c2dbd8d61714faf3bbd58"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py": {
+        "bytes": 15632,
+        "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py": {
+        "bytes": 9627,
+        "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hero-r3.delivery.json": {
+        "bytes": 36210,
+        "sha256": "8aacea957ee7b366d46815e882f013d83e9ae444a88a8cc6468903465fee4011"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py": {
+        "bytes": 13679,
+        "sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982"
+      }
+    },
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+    "engine": "5.8.3-58210709+++UE5+Release-5.8",
+    "schema": "daedalus.ingestion-receipt.v1",
+    "settings": {
+      "config_sha256": "152f6e51b5afc40e07dfd0d117d96ebe7ec39217f808654204ca50f071e63d72",
+      "kind": "island",
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+      "name": "CodexIsland_summit_rim_84011_HeroR3",
+      "namespace": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+      "objects": [
+        {
+          "dims": [
+            92.0,
+            89.0,
+            43.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_grass",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_island",
+          "triangles": 82320
+        },
+        {
+          "dims": [
+            89.0,
+            87.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_foam",
+            "CodexVoxel_water"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_water",
+          "triangles": 3956
+        },
+        {
+          "dims": [
+            74.0,
+            54.0,
+            15.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_trees",
+          "triangles": 2532
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_door",
+            "CodexVoxel_roof",
+            "CodexVoxel_wall",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            78.0,
+            78.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+          "triangles": 600
+        },
+        {
+          "dims": [
+            44.0,
+            19.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+          "triangles": 48
+        },
+        {
+          "dims": [
+            38.0,
+            37.0,
+            15.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+          "triangles": 420
+        },
+        {
+          "dims": [
+            107.0,
+            80.0,
+            7.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+          "triangles": 1248
+        },
+        {
+          "dims": [
+            17.0,
+            14.0,
+            9.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+          "triangles": 260
+        },
+        {
+          "dims": [
+            37.25,
+            18.25,
+            14.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_w",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+          "triangles": 17448
+        }
+      ],
+      "placement": false,
+      "preset": "codex_prepared_existing_options_v1",
+      "requested_import_options": {
+        "auto_generate_collision": false,
+        "build_nanite": false,
+        "combine_meshes": false,
+        "generate_lightmap_u_vs": false,
+        "import_materials": false,
+        "import_textures": false,
+        "vertex_color_import_option": "REPLACE"
+      },
+      "seed": 84011,
+      "shared_material_policy": "read-only reuse"
+    },
+    "source": {
+      "bytes": 2085516,
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR3\\h84011\\CodexIsland_summit_rim_84011_HeroR3.fbx",
+      "sha256": "47d14ae998b1e6a28c51404fc81e722a4f21795acf4f4654ed13357e01b5a987"
+    }
+  },
+  "name": "CodexIsland_summit_rim_84011_HeroR3",
+  "native_report": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\f0499dd9dad812f597cf54dd\\native.json",
+  "native_result": {
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd",
+    "elapsed_s": {
+      "import": 4.89683
+    },
+    "import_skipped": false,
+    "imported_object_paths": [
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water"
+    ],
+    "kind": "island",
+    "meshes": [
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "save_return": true,
+        "save_s": 0.160298,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_clouds"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "save_return": true,
+        "save_s": 0.125114,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_cottage"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "save_return": true,
+        "save_s": 0.137007,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_crystals"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "save_return": true,
+        "save_s": 0.118224,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_flowers"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+        "save_return": true,
+        "save_s": 0.150228,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_island"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "save_return": true,
+        "save_s": 0.125989,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_landmarks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "save_return": true,
+        "save_s": 0.126393,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_rocks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "save_return": true,
+        "save_s": 0.142842,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_route_steps"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+        "save_return": true,
+        "save_s": 0.13906,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_trees"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water",
+        "save_return": true,
+        "save_s": 0.13793,
+        "source_name": "CodexIsland_summit_rim_84011_HeroR3_water"
+      }
+    ],
+    "name": "CodexIsland_summit_rim_84011_HeroR3",
+    "stage": "assets_saved_held_from_world"
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds": {
+      "bytes": 89975,
+      "sha256": "d247a4d99779e01e6671d11d5be0e49ea6e124294eb0434b4434cf415fe27ec9"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage": {
+      "bytes": 90867,
+      "sha256": "6078d323e2fab7bee325fe4476241f2a73ab75585284e24887df3ceeb5ae2615"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals": {
+      "bytes": 80132,
+      "sha256": "ec09c5ba7d3bc72631be459ecab83fd8ca0de49aa4e03d37cb9aa339d1c1a12e"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers": {
+      "bytes": 83554,
+      "sha256": "22ac38e0bbfee4289636c1a995a2c550c70a0eb0353d078ad1c1363b47e984a6"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island": {
+      "bytes": 1054610,
+      "sha256": "317ef28746d4abadf1244cad71c3b2df42a19b398d1afe8ee242378fa3a2659b"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks": {
+      "bytes": 79063,
+      "sha256": "5e210b5029fc87b91e952b91f07de8ed925e428ba1d524a7beab6bca5261f448"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks": {
+      "bytes": 74565,
+      "sha256": "5427e8adcc9cec07dfac6ff62ae04a90beca07baa103cfb7f7ea42f15c8c650c"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps": {
+      "bytes": 344303,
+      "sha256": "74e4555c804323b20a3e453ee3362981b9087c9f7d110762d96f6e3fa2c059bd"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees": {
+      "bytes": 117102,
+      "sha256": "4ddf29896e9485db65eb2bcc766b0ee5f4639ca5d913e26f7f7ee707f6f977b4"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water": {
+      "bytes": 134657,
+      "sha256": "15049375e85509dd96440d904e147578e0f7dc804bbcad0a55c8e400a7c31253"
+    }
+  },
+  "save_call_completed": true,
+  "save_confirmed": true,
+  "saved_utc": "2026-10-14T19:59:11.829339+00:00",
+  "schema": "daedalus.ingestion-receipt.v1",
+  "snapshot": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\f0499dd9dad812f597cf54dd\\input\\CodexIsland_summit_rim_84011_HeroR3.fbx",
+  "started_utc": "2026-10-14T19:59:04.315211+00:00",
+  "state": "saved",
+  "updated_utc": "2026-10-14T19:59:11.829339+00:00",
+  "world_placed": 0
+}

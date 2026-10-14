@@ -1,0 +1,79 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_save": "9da80c3ff526988e8897b7e6f7e0c38153aad7b19db16dd2ff83f595042c48cc",
+  "views": [
+    {
+      "island": "CodexIsland_cliff_garden_84022",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022.native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 340900,
+          "z": 22915.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "0e3790084735902cc2b33dbe8bce99061e0eb629b26517f9283954456d9b9e06",
+      "bytes": 1210383,
+      "when_utc": "2026-10-14T19:54:18.762371+00:00"
+    },
+    {
+      "island": "CodexIsland_river_canyon_84033",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_river_canyon_84033.native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 315300,
+          "z": 23415.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "be588c8c7e575424fec48d708cd4376b91f95112b7567934534f260f83e734be",
+      "bytes": 1199483,
+      "when_utc": "2026-10-14T19:54:19.230095+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011.native-overview.png",
+      "camera": {
+        "location": {
+          "x": -362650,
+          "y": 289700,
+          "z": 22215.324
+        },
+        "rotation": {
+          "pitch": -25.8766900608275,
+          "yaw": 129.09385888622944,
+          "roll": 3.5349888902177478e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "987a5465356bfa0acc4df57b9be73e6865cf5eaca6206cc3cf90ef6a268f3293",
+      "bytes": 1218224,
+      "when_utc": "2026-10-14T19:54:19.732254+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance"
+}
