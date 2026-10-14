@@ -52,7 +52,7 @@ cam_data.lens = 40
 cam_data.clip_end = 200000
 for i, (dist, yaw_deg, pitch_deg, name) in enumerate(((52000, 40, 30, "a"), (60000, 220, 26, "b"))):
     yaw, pitch = math.radians(yaw_deg), math.radians(pitch_deg)
-    cam.location = (dist * math.cos(yaw) * math.cos(pitch), dist * math.sin(yaw) * math.cos(pitch), dist * math.sin(pitch) - 3000)
+    cam.location = (5000 + dist * math.cos(yaw) * math.cos(pitch), 8500 + dist * math.sin(yaw) * math.cos(pitch), dist * math.sin(pitch) - 3000)
     cam.rotation_euler = (math.radians(90 - pitch_deg), 0.0, yaw + math.radians(90))
     scene.render.filepath = out[:-4] + "_%s.png" % name
     bpy.ops.render.render(write_still=True)
