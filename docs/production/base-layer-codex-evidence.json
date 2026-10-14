@@ -1,0 +1,217 @@
+{
+  "source_head": "b1beb30d5da94cc77845d035117c9f6da6272fe7",
+  "scope": "Manifest counts and source contracts, not a complete project asset census or gameplay/chain acceptance",
+  "art": {
+    "portal": {
+      "manifest_records": 91,
+      "export_status": {
+        "Validated": 91
+      },
+      "file_groups": {
+        "cast": 16,
+        "monsters": 48,
+        "environment": 27
+      },
+      "kinds": {
+        "Character": 64,
+        "Prop": 25,
+        "Item": 2
+      },
+      "counted_roles": 33
+    },
+    "gallery": {
+      "manifest_records": 56,
+      "export_status": {
+        "Validated": 56
+      },
+      "file_groups": {
+        "cast": 13,
+        "creatures": 19,
+        "environment": 24
+      },
+      "kinds": {
+        "Character": 32,
+        "Prop": 24
+      },
+      "counted_roles": 32
+    },
+    "parcels": {
+      "manifest_records": 56,
+      "export_status": {
+        "Validated": 56
+      },
+      "file_groups": {
+        "cast": 13,
+        "creatures": 19,
+        "environment": 24
+      },
+      "kinds": {
+        "Character": 32,
+        "Prop": 24
+      },
+      "counted_roles": 32
+    },
+    "bricks": {
+      "manifest_records": 56,
+      "export_status": {
+        "Validated": 56
+      },
+      "file_groups": {
+        "cast": 13,
+        "creatures": 19,
+        "environment": 24
+      },
+      "kinds": {
+        "Character": 32,
+        "Prop": 24
+      },
+      "counted_roles": 32
+    },
+    "labyrinth": {
+      "manifest_records": 67,
+      "export_status": {
+        "Validated": 67
+      },
+      "file_groups": {
+        "humanoids": 13,
+        "creatures": 22,
+        "environment": 12,
+        "dungeon-master": 8,
+        "halloween": 12
+      },
+      "kinds": {
+        "Character": 35,
+        "Prop": 32
+      },
+      "counted_roles": 0
+    },
+    "ocean": {
+      "manifest_records": 3,
+      "asset_ids": [
+        "Prop_Ocean_TideSkiff",
+        "Prop_Ocean_CoralSubmarine",
+        "Prop_Ocean_HarbourDock"
+      ],
+      "triangles": 16794
+    }
+  },
+  "catalogs": {
+    "bricks": {
+      "items": 13,
+      "tabs": 6
+    },
+    "gallery-city": {
+      "items": 13,
+      "tabs": 6
+    },
+    "labyrinth": {
+      "items": 10,
+      "tabs": 5
+    },
+    "parcels": {
+      "items": 13,
+      "tabs": 6
+    },
+    "world-zero": {
+      "items": 14,
+      "tabs": 5
+    }
+  },
+  "dialogue_scripts": {
+    "bricks": 12,
+    "gallery-city": 12,
+    "labyrinth": 12,
+    "parcels": 12
+  },
+  "portal_population": {
+    "records": 1000,
+    "enemy_target": 500,
+    "friendly_target": 500,
+    "types_per_side": 50,
+    "individuals_per_type": 10,
+    "art_status": {
+      "Export validated": 10,
+      "Planned": 990
+    },
+    "unreal_status": {
+      "Pending": 1000
+    }
+  },
+  "legacy_mint": {
+    "deed_fields": [
+      {
+        "type": "address",
+        "name": "to"
+      },
+      {
+        "type": "uint256",
+        "name": "slot"
+      },
+      {
+        "type": "uint64",
+        "name": "seed"
+      },
+      {
+        "type": "uint8",
+        "name": "radius"
+      },
+      {
+        "type": "uint256",
+        "name": "deadline"
+      }
+    ],
+    "island_slot_limit": 64,
+    "deployment_records_found_in_checkout": false,
+    "on_chain_deployment_verified": false
+  },
+  "saved_estate_layout": {
+    "artifact_sha256": "cbe244ca25e513cb81ae13133747613dc49e160d67446c20d5f1d10d6ceab8e0",
+    "levels": 14,
+    "estate_groups": 13,
+    "estate_cells": 71,
+    "reserved_hub_cells": 9,
+    "overlaps": [],
+    "district_splits": [],
+    "estate_labels": [
+      9,
+      10,
+      13,
+      15,
+      17,
+      19,
+      21,
+      22,
+      44,
+      56,
+      57,
+      58,
+      59
+    ],
+    "undo_schema": "level to two-dimensional move delta; no actor-count proof",
+    "live_positions_verified": false,
+    "minted_ownership_verified": false
+  },
+  "source_sha256": {
+    "data/art/portal/production-manifest.json": "b8c6d897394c0923caaf2f921d13a946855b02f6a2ebc08d40f55d0dca95ea94",
+    "data/art/gallery/production-manifest.json": "0316308a66f5a46868a7332ceaa5416396e2c918e3cfb5f7103033612c56ab34",
+    "data/art/parcels/production-manifest.json": "72d3e47f4298b27e3f157600a8145841864ee4d89fb94b7d2cb255b8ea72c00a",
+    "data/art/bricks/production-manifest.json": "9afdf2ff7770e46895277dea44591d3f8d2c1e6efb28ae0d89bf0d586f9c175a",
+    "data/art/labyrinth/production-manifest.json": "bfc939971b59d3ad84e0ecb2b48deb9172d658638fb094d8fd2465512c2b7698",
+    "data/art/ocean/manifest.json": "fd97a7e69a092fb8203c01609b46871aa0e4ef3c077d8baccebe8d51768a839a",
+    "engines/unreal/DaedalusLink/Content/Inventory/bricks.dic": "b0b3d5ca191c5ea1e214ae37270e1abc067536fb9e28fe7e3015ac29ff0dd3cc",
+    "engines/unreal/DaedalusLink/Content/Inventory/gallery-city.dic": "548b43ac43c1f463172bfefccafae3a5e6191a165117736f4485cc5f65238654",
+    "engines/unreal/DaedalusLink/Content/Inventory/labyrinth.dic": "2362c6c058a67735c0a068d0d8a41f129bc6a86500c8b3c5a1c04ba653e2c15d",
+    "engines/unreal/DaedalusLink/Content/Inventory/parcels.dic": "8162cb87ef1338f4a3d0a09e2b4769326cbbfecda9eec089af2e21737658fad4",
+    "engines/unreal/DaedalusLink/Content/Inventory/world-zero.dic": "0c4e2c72baf68b57cb74e2bdd10b39b94e423167ffcdbf902157d152e5f675ec",
+    "engines/unreal/DaedalusLink/Content/Casts/bricks.dcs": "787b2b77bc1ff6ed8458973612c6341b99e868e49a4b326dff1b08cad6564e03",
+    "engines/unreal/DaedalusLink/Content/Casts/gallery-city.dcs": "cc8284aea2ecf29baaf5fe7a5264b5f0b1650b33cd11d8e210a07391efcfccaf",
+    "engines/unreal/DaedalusLink/Content/Casts/labyrinth.dcs": "01ea21977bd8dcfe299273096d57d4edba4821b378fbd619a8c888b1ca4468e3",
+    "engines/unreal/DaedalusLink/Content/Casts/parcels.dcs": "2787b33e7b4f166576724c463bf80fcfc31cb4f83add6c282cd291324ea2ec6d",
+    "data/art/portal/population-plan.json": "9d2e32385c7132da2b275fac726b2119f36bad1305192e17fad7bd6ba0c71d24",
+    "chain/contracts/RealmIslands.sol": "8d6d6c22905c3dbc2f6fa37265ac326e3ad3de463fb2cc8e7eda840d6d9f8d8a",
+    "daedalus-core/src/main/java/com/daedalus/world/island/IslandOps.java": "58ce74e0ece3fb80a34333ba1779926be73cb94d0a407e671782c68b1087bb11",
+    "docs/adr/ADR-065-ten-thousand-lands-per-realm.md": "15c9f34a00a9d29d1fb837cc18b6e069e5c23bb7e7df3ade31c1b86bfc42e09e",
+    "daedalus-wallet/src/main/java/com/daedalus/wallet/DeedVoucher.java": "ce044bcea7a906084d45221e01d64bef75fe49f55714377a88f5b214b6463685",
+    "daedalus-server/src/main/java/com/daedalus/server/controller/WalletController.java": "c7fb0466625d7ea60f13381b815cb10c227a4b8ac4923ab749520de718cf0129"
+  }
+}
