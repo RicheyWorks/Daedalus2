@@ -40,9 +40,13 @@ public class DaedalusLink : ModuleRules
 		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "Casts", "*.dcs"), StagedFileType.UFS);
 		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "Realm", "*.drr"), StagedFileType.UFS);
 		// Sprite packs are optional (procedural sprites remain the existing fallback).
-		foreach (string Pack in Directory.GetFiles(Path.Combine(PluginDirectory, "Content", "Realm"), "*.dsp"))
+		string RealmDirectory = Path.Combine(PluginDirectory, "Content", "Realm");
+		if (Directory.Exists(RealmDirectory))
 		{
-			RuntimeDependencies.Add(Pack, StagedFileType.UFS);
+			foreach (string Pack in Directory.GetFiles(RealmDirectory, "*.dsp"))
+			{
+				RuntimeDependencies.Add(Pack, StagedFileType.UFS);
+			}
 		}
 	}
 }

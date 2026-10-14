@@ -2,13 +2,29 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
+
+
+def read_json(path):
+    def unique(pairs):
+        result={}
+        for key,value in pairs:
+            if key in result:raise ValueError('Duplicate JSON field: '+key)
+            result[key]=value
+        return result
+    def invalid(value):raise ValueError('Nonfinite JSON value: '+value)
+    value=json.loads(Path(path).read_text(encoding='utf-8-sig'),object_pairs_hook=unique,parse_constant=invalid)
+    if not isinstance(value,dict):raise ValueError('Expected JSON object')
+    return value
 
 
 def verify(host, exported):
     host = Path(host).resolve()
-    manifest = json.loads((host / 'source-manifest.json').read_text())
-    target = json.loads(Path(exported).read_text())
+    manifest = read_json(host / 'source-manifest.json')
+    target = read_json(exported)
+    if not isinstance(manifest.get('files'),dict) or not manifest['files']:
+        raise ValueError('Source manifest files missing')
     if target.get('Configuration') != 'Shipping':
         raise ValueError('Expected an actual Shipping target export')
     module = target.get('Modules', {}).get('DaedalusLink')
@@ -19,6 +35,8 @@ def verify(host, exported):
     expected = {}
     data_types = {'Inventory': {'.dic'}, 'Casts': {'.dcs'}, 'Realm': {'.drr', '.dsp'}}
     for name, digest in manifest['files'].items():
+        if not isinstance(digest,str) or not re.fullmatch('[0-9a-f]{64}',digest):
+            raise ValueError('Source manifest hash is not SHA256')
         relative = Path(name.removeprefix(prefix))
         if not name.startswith(prefix) or relative.is_absolute() or '..' in relative.parts:
             raise ValueError('Invalid source manifest path')

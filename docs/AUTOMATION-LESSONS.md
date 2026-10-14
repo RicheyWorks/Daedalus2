@@ -536,3 +536,7 @@ files as runtime dependencies. Add explicit UFS families and include optional ex
 Evaluate the actual Shipping target rules in an isolated exact-head host with UBT JsonExport; compare every
 expected source hash to covered runtime declarations. Keep that evidence separate from an actual cook,
 staged archive and launch. Do not ship editor Python or developer saves to make a missing-data error disappear.
+
+### Optional runtime-family enumeration (2026-10-14)
+Check Directory.Exists before enumerating optional DSP packs in Unreal module rules; a missing optional directory must not crash rule evaluation. Mandatory DIC/DCS/DRR declarations remain intact. Runtime-declaration verification now rejects duplicate JSON fields, nonfinite values and malformed SHA256s rather than silently accepting collapsed manifest data. Six offline checks pass; the earlier UBT proof remains tied to its earlier head, not this follow-up.
+
