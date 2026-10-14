@@ -26,5 +26,10 @@ t2, n2 = P.lay(t1)
 check("every block becomes a land row; the hero's keeps its number and owner", n1 == 9 and "land 1 FIELD 4 4 4 4 HERO" in t1 and n2 == 9)
 check("laying twice changes nothing", t1 == t2)
 check("new numbers never reuse an existing one", t1.count("land 1 ") == 1)
+tail = "spawn FIELD 4 4\nportal FIELD 4 3\nnews THE ARKS SAIL AT DUSK.\n"
+t3, n3 = P.lay(text + tail)
+check("deeds precede spawn, portal and news like the canonical Java DRR writer",
+      t3.index("land ") < t3.index("spawn ") and t3.endswith(tail))
+check("canonical deed ordering remains idempotent", P.lay(t3) == (t3, n3))
 print("%d/%d" % (ok, total))
 raise SystemExit(0 if ok == total else 1)

@@ -86,7 +86,10 @@ def lay(text):
     body = [l for l in lines if not l.startswith("land ")]
     while body and not body[-1].strip():
         body.pop()
-    out = body + existing + new
+    # RetroCodec's canonical DRR writer emits deeds before spawn, portal and news.
+    # Keep that ordering so the strict Java/native fixture parity check still holds.
+    land_at = next((i for i, l in enumerate(body) if l.startswith("spawn ")), len(body))
+    out = body[:land_at] + existing + new + body[land_at:]
     return "\n".join(out) + "\n", len(existing) + len(new)
 
 
