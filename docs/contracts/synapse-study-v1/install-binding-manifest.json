@@ -1,0 +1,160 @@
+{
+  "schema": "daedalus.synapse-study.native-install-binding.v1",
+  "stage": "source_written_unverified",
+  "repository": "RicheyWorks/Daedalus2",
+  "branch": "codex/synapse-study-terminal-20261014",
+  "baselineCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c",
+  "stackDependency": {
+    "pullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/154",
+    "exactHead": "5e14c374de794a4bc78bf44ae0e80884f600664c",
+    "nativeSourcesModified": false
+  },
+  "revisionBinding": "Install only the exact containing commit / delivered PR head. Resolve this manifest in that revision, not an unpinned moving branch.",
+  "hashNormalization": "SHA256 over UTF-8 without BOM, CRLF normalized to LF; retain all other bytes and final newline.",
+  "claim": {
+    "owner": "pootscoot-practical-apps",
+    "exactScopeMessage": 31102,
+    "continuationAcceptance": 31109,
+    "coordinatorAcceptance": 31115,
+    "runtimeAcceptance": false
+  },
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseClient.h",
+      "sha256": "784c2e051ac8794375885b8ab89a3439c6c856fbb8319e1cdebd8dd9f912153b"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseClient.cpp",
+      "sha256": "409c0718907ab08e51b0ed3853ed96fda4f1fa4625280219768f23a93e47f015"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseTerminal.h",
+      "sha256": "ec1081a832fee09dfc8e8856d75db3e90cf76610e696348edd33ca1d5df9bb2d"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseTerminal.cpp",
+      "sha256": "9cce05db34c1d835a9651f6c130758dc07e47e00e502e5607d682b30cd4e77a9"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapsePanel.h",
+      "sha256": "870b8fdf7b1d2e35aab5194c1ac0d7761989604f81d394dfd1d4a1c61dcd5877"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapsePanel.cpp",
+      "sha256": "d4db126b34c5aa2689f39259751a1ee381a983ab36afdeaec10e0e1f949ea82b"
+    }
+  ],
+  "documentationFiles": [
+    "docs/contracts/synapse-study-v1/native-terminal.md",
+    "docs/contracts/synapse-study-v1/install-binding-manifest.json",
+    "docs/contracts/companion-apps-v1/README.md",
+    "docs/contracts/companion-apps-v1/capability-map.json"
+  ],
+  "binding": {
+    "nativeClass": "/Script/DaedalusLink.DaedalusSynapseTerminal",
+    "module": "DaedalusLink",
+    "interaction": "Existing ADaedalusUsable / possessed local ADaedalusHero Interact",
+    "configuration": "No link, token, session, card, action, service address or vault path in class defaults/maps. Pair through local panel only.",
+    "mesh": "Engine cube placeholder; physical art and placement pending owner",
+    "playerScope": "Matching local possessed Hero/world/realm/reach/viewport/mapped Slate user, no other Hero overlay, UI-only viewport mode without pausing",
+    "existingNativeFilesModified": [],
+    "buildModuleEditsRequiredBySource": false,
+    "existingDependenciesUsed": [
+      "Slate",
+      "SlateCore",
+      "Json",
+      "libcurl"
+    ]
+  },
+  "companion": {
+    "repository": "RicheyWorks/synapse",
+    "pullRequest": "https://github.com/RicheyWorks/synapse/pull/3",
+    "sourceCommit": "793de9fb005648efbb72ef018b71ee300f802522",
+    "service": "Existing opt-in synapse-desk in desktop process; shared Arc<StudyService>, existing vault and scheduler",
+    "pairingGrammar": "http://127.0.0.1:<port>/realm/synapse/#token=<43-base64url-characters>",
+    "capabilities": {
+      "productId": "synapse",
+      "version": 1,
+      "localOnly": true,
+      "actions": [
+        "due",
+        "reveal",
+        "review",
+        "revoke"
+      ]
+    },
+    "sessionRoute": "/v1/session",
+    "sessionSuccessCode": 200,
+    "sessionHeader": "X-Desk-Session",
+    "mutationOrigin": "Exact http://127.0.0.1:<port>, including native calls",
+    "routes": [
+      "GET /v1/capabilities",
+      "POST /v1/session",
+      "GET /v1/due",
+      "POST /v1/reveal",
+      "POST /v1/review",
+      "POST /v1/revoke"
+    ],
+    "selectedCards": "1–100 desktop-approved supported IDs; basic/cloze/code only, no image/assets/new IDs",
+    "installedBinaryVerified": false,
+    "launchOrActivationPerformed": false
+  },
+  "bounds": {
+    "jsonResponseBytes": 524288,
+    "totalResponseHeaderBytes": 8192,
+    "requestJsonBytes": 4096,
+    "appTextBytes": 32768,
+    "cardIdUtf8Bytes": 64,
+    "revisionLowerHexCharacters": 64,
+    "connectTimeoutMilliseconds": 3000,
+    "requestTimeoutMilliseconds": 30000,
+    "shutdownRevokeTimeoutMilliseconds": 3000,
+    "maximumPairingSeconds": 900,
+    "concurrentWorkerRequests": 1
+  },
+  "actionAndCleanup": {
+    "authority": "Only matching action_id/card_id/score and persisted:true validated receipt confirms a review save",
+    "explicitInput": "Reveal and score only on player action; no scheduled/automatic scoring or new save after refresh",
+    "uncertainty": "Freeze card ID, app revision, score and UUID. Block new scores/navigation. Retry exact body; retain pending tuple across disconnect/new grant within client lifetime.",
+    "recovery": "After new pairing, explicit Retry can recover persisted receipt. If reveal_required, only explicit original-revision reveal and exact same-action Retry may proceed; do not replace action/score.",
+    "lostSessionReceipt": "Single-use claim cannot recover lost session token. Require fresh desktop link; no confirmed-revoke claim.",
+    "revoke": "Serialized with app saves; completed reviews remain. An aborted request or local disconnect is not undo.",
+    "close": "Clear visible secret/card/answer, stop client delivery and request bounded best-effort revoke. Closing abandons transient recovery tuple; unknown review may already have saved.",
+    "privacy": "Transient local memory only; no credentials, vault reads, browser external resources, file paths, logs, replication, saved-game or analytics payloads."
+  },
+  "operatorHandoff": {
+    "soleNativeOperator": "codex-play-guard",
+    "currentExecutionPermission": "Deferred: no tests/builds/UHT/CI/service/native/editor/Play actions in this source delivery",
+    "futureSequence": [
+      "Verify exact delivered commit, stack base and source hashes in owner-approved checkout",
+      "Separately establish compilation/UHT/link/loading",
+      "Bind native class through existing Hero interaction; coordinate physical art and realm placement",
+      "Use explicitly approved synthetic-card app fixture to establish due/reveal/score/receipt and persisted schedule readback",
+      "Record exact install/binding/runtime acceptance separately from source delivery"
+    ],
+    "deferredAcceptanceCases": [
+      "Capability mismatch, single-claim and lost session response",
+      "Empty/large/escaped/invalid/plaintext card response and opaque IDs",
+      "Reveal gate, all six explicit scores, exact matching receipt",
+      "Repeated same-action review, interrupted/malformed/failed save, frozen navigation",
+      "Re-pair and original-revision reveal recovery without duplicate scheduling",
+      "Revoke-versus-save ordering, expiry, late responses, no rollback claim",
+      "No token/card leakage or unapproved vault/image/URL access",
+      "Local pawn/controller restart/destruction, focus, realm/reach/pause/end-play lifecycle",
+      "Physical art, binding and actual Play result"
+    ],
+    "relatedKnownSourceIssue": "PR154 photo input-counter correction 5e14c374 is inherited by this stack; builds and controller/native runtime acceptance remain deferred."
+  },
+  "verification": {
+    "sourceReviewed": true,
+    "testsRun": false,
+    "buildsRun": false,
+    "uhtRun": false,
+    "ciRequested": false,
+    "servicesStarted": false,
+    "nativeInstalled": false,
+    "nativeBound": false,
+    "nativeRuntimeVerified": false,
+    "overall": "UNVERIFIED source increment; deferred execution is not a passing result."
+  }
+}

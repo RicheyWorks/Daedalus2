@@ -29,6 +29,7 @@
     "module": "engines/unreal/DaedalusLink/Source/DaedalusLink",
     "interactionSeam": "ADaedalusUsable.Use / existing local Hero interaction",
     "claim": { "hubMessage": 31050, "scope": "Additive photo native client, terminal, panel and selected-file/export helpers plus these inventory documents", "acceptedByCoordinator": true },
+    "currentIncrement": { "id": "synapse-selected-track-terminal", "baselineCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "baselinePullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/154", "branch": "codex/synapse-study-terminal-20261014", "retainedOwnerLaneHubMessage": 31050, "exactClaimHubMessage": 31102, "directUserContinuationHubMessage": 31109, "coordinatorAcknowledgmentHubMessage": 31115, "scopeAccepted": true, "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true },
     "runtimeOperator": "codex-play-guard",
     "installationAcceptance": "pending; a delivered handoff is not acceptance",
     "bindings": [
@@ -74,7 +75,31 @@
         ],
         "states": ["Unpaired", "Paired", "CompanionOpened"],
         "stateProvesCompletedWork": false,
-        "missingCode": ["native image job controls and result/export UI", "native Synapse due/reveal/review receipt UI"]
+        "missingCode": ["native image job controls and result/export UI"],
+        "additiveSourceBindings": ["synapse-native-terminal"]
+      },
+      {
+        "id": "synapse-native-terminal",
+        "stage": "source_written_unverified",
+        "source": [
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseClient.h", "symbols": ["FDaedalusSynapseClient", "FDaedalusSynapseView", "GetView", "Pair", "Refresh", "Reveal", "Score", "RetrySameSave", "Disconnect", "Shutdown", "Tick"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseClient.cpp", "symbols": ["bounded native session/due/reveal/review/revoke implementation"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseTerminal.h", "symbols": ["ADaedalusSynapseTerminal", "GetView", "PairLocalApp", "RefreshCards", "RevealCard", "ScoreCard", "RetrySameSave", "DisconnectApp", "ClosePanel", "IsPanelOpen"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseTerminal.cpp", "symbols": ["local player terminal interaction and lifecycle"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapsePanel.h", "symbols": ["SDaedalusSynapsePanel", "ClearPairingInput", "OwnsUserFocus"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapsePanel.cpp", "symbols": ["masked pairing input, plain card view, explicit reveal and score actions"] }
+        ],
+        "contracts": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
+        "implementedWork": ["validate capabilities then claim desktop-selected IDs once", "exact Origin and X-Desk-Session headers", "show actual due prompt and masked context", "reveal answer only on explicit request", "explicit score 0 through 5", "freeze review identity through uncertainty and retry the same save", "require matching persisted receipt before claiming saved", "disconnect/revoke without promising review undo"],
+        "implementationEvidence": "All six scoped source files delivered by the implementation owners. Functionality is a source implementation pending exercise, not observed execution.",
+        "staticReviews": [
+          { "scope": ["SDaedalusSynapsePanel.h", "SDaedalusSynapsePanel.cpp"], "stage": "complete_source_only", "findings": "No concrete blocker found in independent review of plain-text rendering, explicit actions, answer/receipt flags, weak terminal, focus checks and secret-field replacement." },
+          { "scope": ["DaedalusSynapseTerminal.h", "DaedalusSynapseTerminal.cpp"], "stage": "complete_source_only", "findings": "Actor input-counter restart handling finding corrected and independently re-reviewed; no remaining concrete blocker found, no build or native behavior exercised." },
+          { "scope": ["DaedalusSynapseClient.h", "DaedalusSynapseClient.cpp"], "stage": "complete_source_only", "findings": "Exact-case and length-bounded opaque-card-ID receipt comparison finding corrected and independently re-reviewed at frozen source hashes; no remaining concrete P1/P2 found. No execution performed." }
+        ],
+        "completionAuthority": "synapse-core StudyService::review_once / receipt in the existing Synapse app; not an animation, browser launch or parallel scheduler",
+        "privacy": "transient nonreplicated permission, card and action data; no files, vault-wide enumeration, image paths, settings, analytics, graph or backup routes",
+        "verification": { "built": false, "tested": false, "installed": false, "playAccepted": false }
       }
     ],
     "relevantInfrastructure": {
@@ -88,6 +113,7 @@
       "exampleDirectoriesFound": ["examples/benchmark-harness", "examples/biome-plugin", "examples/dungeon-layout", "examples/loadbalancer-topology", "examples/openxr-plugin"],
       "exampleRole": "Existing examples; no photo/image/Synapse/fax integration found by scoped tracked-source search.",
       "existingContracts": ["docs/contracts/photo-pdf-v1/object.json", "docs/contracts/local-app-v1/objects.json", "docs/contracts/fax-v1/README.md"],
+      "currentIncrementContracts": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
       "scopeExclusions": ["Blackjack PR152", "CSRBT PR153", "shared editor operation", "other owners' game/realm/art sources"]
     }
   },
@@ -301,9 +327,11 @@
             { "path": "src-tauri/src/main.rs", "symbols": ["review_memory", "start_review_session"] }
           ],
           "existingInterface": "Desktop review UI and private browser due/reveal/review endpoints.",
-          "nativeBindings": ["typed-browser"],
-          "bindingStage": "native_unbound",
-          "missingCode": ["native card/reveal/score UI", "Origin-aware desk session client, revision conflicts and stable receipt recovery"],
+          "nativeBindings": ["typed-browser", "synapse-native-terminal"],
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "nativeContractTargets": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
+          "remainingVerification": ["final client static review after written receipt fix", "operator builds, installs and binds the source, then exercises real due/reveal/review and persisted receipt behavior"],
           "evidenceStage": "source_inspected"
         },
         {
@@ -315,9 +343,11 @@
             { "path": "synapse-desk/src/lib.rs", "symbols": ["select_track", "DeskServer::start", "pairing", "revoke", "session"] }
           ],
           "existingInterface": "Desktop grants permission; private browser claims and revokes it.",
-          "nativeBindings": ["typed-browser"],
-          "bindingStage": "native_unbound",
-          "missingCode": ["native transient pairing/claim/disconnect UI preserving single-claim semantics"],
+          "nativeBindings": ["typed-browser", "synapse-native-terminal"],
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "nativeContractTargets": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
+          "remainingVerification": ["final client static review after written receipt fix", "operator verifies expiry/revocation, replacement pairing and absence of unintended card or vault access"],
           "evidenceStage": "source_inspected"
         },
         {
@@ -541,7 +571,7 @@
     "productionDeployment": false,
     "nftMintingOrEntitlementImplementation": false,
     "licenseChanges": false,
-    "completionEvidence": "App job SUCCEEDED plus real authenticated output export, or persisted Synapse receipt. Native installation/placement/Play must be independently accepted by codex-play-guard.",
-    "remainingPortfolioWork": "Build, verify and install the written photo native source, then bind image jobs and selected Synapse reviews; design preparation-only fax/auth bridge; track every intentionally unexposed desktop group before claiming full capability coverage."
+    "completionEvidence": "App job SUCCEEDED plus real authenticated output export, or a matching persisted Synapse receipt. Native installation/placement/Play must be independently accepted by codex-play-guard.",
+    "remainingPortfolioWork": "Operator builds, verifies and installs written photo/Synapse sources when authorized; the photo input-counter correction 5e14c374 is inherited by this stack and still requires native acceptance. Bind image jobs and design a preparation-only fax/auth bridge; track every intentionally unexposed desktop group before claiming full capability coverage."
   }
 }
