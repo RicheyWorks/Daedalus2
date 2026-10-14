@@ -650,6 +650,88 @@ class SceneObservationTests(unittest.TestCase):
             "actors": [{"path": actor.path, "expected": {"location": [0, 0, 0]}}]})
         self.assertTrue(mutant_result["passed"], "legacy rounding must be caught by drift assertion")
 
+    def test_snapshot_identity_drift_is_unavailable_with_unchanged_control(self):
+        actor, control = self.actor("A"), self.actor("B")
+        original_path = actor.path
+        changed_path = original_path.rsplit(".", 1)[0] + ".Z"
+        before = self.snapshot()
+        self.assertTrue(before["scope"]["complete"])
+        self.assertEqual([value["path"] for value in before["actors"]], [original_path, control.path])
+        original_bounds = actor.get_actor_bounds
+
+        def renamed_bounds(only_colliding):
+            actor.path = changed_path
+            return original_bounds(only_colliding)
+
+        actor.get_actor_bounds = renamed_bounds
+        result = self.snapshot()
+        self.assertEqual([value["path"] for value in result["actors"]], [control.path])
+        self.assertFalse(result["scope"]["complete"])
+        self.assertEqual(result["scope"]["total_matching"], 2)
+        self.assertEqual(result["scope"]["returned"], 1)
+        error = result["errors"][0]
+        self.assertEqual(error["path"], original_path)
+        self.assertEqual(error["code"], "ACTOR_UNAVAILABLE")
+        self.assertIn("identity changed", error["message"])
+        self.assertIn(original_path, error["message"])
+        self.assertIn(changed_path, error["message"])
+        json.dumps(result, allow_nan=False)
+
+    def test_verify_identity_drift_is_unavailable_with_unchanged_control(self):
+        actor, control = self.actor("A"), self.actor("B")
+        original_path = actor.path
+        changed_path = original_path.rsplit(".", 1)[0] + ".Z"
+        params = {"schema_version": 1, "context": self.snapshot()["context"],
+                  "actors": [{"path": original_path, "expected": {"location": [0, 0, 0]}},
+                             {"path": control.path, "expected": {"location": [0, 0, 0]}}]}
+        self.assertTrue(self.bridge._scene.verify(params)["passed"])
+        original_bounds = actor.get_actor_bounds
+
+        def renamed_bounds(only_colliding):
+            actor.path = changed_path
+            return original_bounds(only_colliding)
+
+        actor.get_actor_bounds = renamed_bounds
+        result = self.bridge._scene.verify(params)
+        self.assertFalse(result["passed"])
+        unavailable, unchanged = result["checks"]
+        self.assertEqual(unavailable["path"], original_path)
+        self.assertEqual(unavailable["status"], "unavailable")
+        self.assertEqual(unavailable["code"], "ACTOR_UNAVAILABLE")
+        self.assertIsNone(unavailable["observed"])
+        self.assertEqual(unavailable["mismatches"], [])
+        self.assertIn("identity changed", unavailable["message"])
+        self.assertEqual(unchanged["status"], "match")
+        self.assertEqual(unchanged["observed"]["path"], control.path)
+        json.dumps(result, allow_nan=False)
+
+    def test_identity_drift_regression_rejects_removed_guard_mutant(self):
+        actor = self.actor("A")
+        original_path = actor.path
+        changed_path = original_path.rsplit(".", 1)[0] + ".Z"
+        context = self.snapshot()["context"]
+        original_bounds = actor.get_actor_bounds
+
+        def renamed_bounds(only_colliding):
+            actor.path = changed_path
+            return original_bounds(only_colliding)
+
+        actor.get_actor_bounds = renamed_bounds
+        self.assertFalse(self.check(original_path, {"selected": False}, context=context)["passed"])
+        source = SCENE.read_text(encoding="utf-8")
+        guard = '        if value["path"] != expected_path:'
+        self.assertEqual(source.count(guard), 1, "mutant must target the production identity guard")
+        mutant = types.ModuleType("scene_identity_guard_mutant")
+        exec(compile(source.replace(guard, "        if False:"), str(SCENE), "exec"), mutant.__dict__)
+        runner = mutant.SceneCommands(self.bridge._scene.source, self.bridge._scene.serialize)
+        actor.path = original_path
+        mutant_context = runner.snapshot({})["context"]
+        actor.path = original_path
+        result = runner.verify({"schema_version": 1, "context": mutant_context,
+                               "actors": [{"path": original_path, "expected": {"selected": False}}]})
+        self.assertTrue(result["passed"], "removing the guard must reproduce the false identity match")
+        self.assertNotEqual(result["checks"][0]["path"], result["checks"][0]["observed"]["path"])
+
     def test_verify_schema_errors_precede_all_native_reads(self):
         actor = self.actor("A")
         valid = {"schema_version": 1, "context": self.snapshot()["context"],

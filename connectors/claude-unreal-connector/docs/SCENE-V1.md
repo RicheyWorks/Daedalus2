@@ -24,7 +24,11 @@ Scope contains `loaded_only:true`, `atomic:false`, `folder`, `offset`, `limit`, 
 `total_matching`, `matched_known`, `returned`, `complete`, `next_offset`, `error_count`, and
 `errors_truncated`. `total_matching:null` means a catalogue error prevented a reliable count.
 `total_loaded:null` means enumeration failed. Serialization errors preserve the known matching count.
-`complete` is true only for an error-free response containing the entire filtered loaded set, starting
+`total_loaded` counts the eligible actors returned by the active world's enumeration API, not every
+actor physically loaded in that world. The installed UE 5.8 editor actor subsystem excludes pending-kill,
+noneditable, non-outliner, template, and transient actors, plus the builder brush and WorldSettings.
+Play totals cover the game-world API's returned set; they do not imply the same editor eligibility filters.
+`complete` is true only for an error-free response containing the entire filtered API-returned set, starting
 at offset zero. A final page with a nonzero offset is still incomplete. `next_offset:null` means no
 more known paths; it does not repair unknown coverage. Pages are fresh observations and can change
 between calls. They do not form an atomic snapshot, and unloaded World Partition actors are excluded.
@@ -34,7 +38,10 @@ Actor values include legacy label/name/class/folder/transform/bounds/components 
 and, for static-mesh components, nullable mesh and ordered nullable material-slot paths. Parent paths
 may refer outside the filtered page. Scene serialization caps components and material slots at 128;
 an overflow or non-finite/opaque value makes the actor unavailable rather than silently truncating it.
-The native loaded-actor enumeration is not preemptible or bounded by this page-size limit.
+If an actor's serialized path differs from its catalogued path, it is omitted with an
+`ACTOR_UNAVAILABLE` identity-change diagnostic. The response remains incomplete; records are not silently
+reordered to conceal a changed identity. The native actor enumeration is not preemptible or bounded by
+this page-size limit.
 
 ## Verification
 
@@ -69,6 +76,9 @@ Mismatch entries contain `predicate`, `expected`, `observed`, and optional `code
 and unsupported component fields remain explicit even when expected and observed happen to be null.
 Checks for unloaded/deleted/renamed actors do not fall back to labels. Unknown catalogue coverage uses
 `ACTOR_UNOBSERVABLE`; duplicate full paths use `AMBIGUOUS_ACTOR_PATH`.
+A path change between catalogue lookup and serialization returns `unavailable`, `observed:null`, and an
+`ACTOR_UNAVAILABLE` identity-change diagnostic. Matching values under a different observed path cannot
+verify the requested identity.
 
 Verification may include `observation_errors`, `error_count`, and `errors_truncated` for catalogue errors.
 `passed` applies only to the explicitly requested predicates, not whole-scene completeness. A known
@@ -87,7 +97,7 @@ and does not authorize later writes based on a stale context. Native lifetime/ev
 independent slice, as are event deltas and generic reflection schemas.
 
 [Epic's UE 5.8 actor subsystem](https://dev.epicgames.com/documentation/en-us/unreal-engine/python-api/class/EditorActorSubsystem?application_version=5.8)
-documents loaded editor-actor enumeration. Play observations use the game world, never an editor fallback
+documents eligible loaded editor-actor enumeration. Play observations use the game world, never an editor fallback
 when Play's world is unavailable; selection is empty in Play. Current local acceptance uses offline
 fixtures; hosted checks for this exact implementation are pending. Shared-editor validation remains
 owner-controlled.

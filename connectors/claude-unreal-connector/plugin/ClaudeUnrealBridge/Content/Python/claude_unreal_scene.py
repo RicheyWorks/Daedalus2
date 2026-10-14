@@ -59,10 +59,13 @@ class SceneCommands:
     def _base(context=None):
         return {"schema_version": SCHEMA_VERSION, "context": context}
 
-    def _observe(self, actor, selected):
+    def _observe(self, actor, selected, expected_path):
         value = self.serialize(actor, precise=True, selected=selected)
         # A partial/opaque/non-finite native value is unavailable, never an empty JSON substitute.
         json.dumps(value, allow_nan=False)
+        if value["path"] != expected_path:
+            raise ValueError("actor identity changed during observation: catalogued %r, observed %r" %
+                             (expected_path, value["path"]))
         return value
 
     @staticmethod
@@ -115,7 +118,7 @@ class SceneCommands:
         values = []
         for path, actor in page:
             try:
-                values.append(self._observe(actor, selected))
+                values.append(self._observe(actor, selected, path))
             except Exception as e:
                 error_count += 1
                 if len(errors) < MAX_ACTORS:
@@ -209,7 +212,7 @@ class SceneCommands:
                                "observed": None, "mismatches": []})
                 continue
             try:
-                observed = self._observe(actor, selected)
+                observed = self._observe(actor, selected, path)
             except Exception as e:
                 checks.append({"path": path, "status": "unavailable", "code": "ACTOR_UNAVAILABLE",
                                "message": str(e)[:1000], "observed": None, "mismatches": []})
