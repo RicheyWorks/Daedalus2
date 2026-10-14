@@ -8,6 +8,11 @@ Default exports contain props only, supporting the seeded terrain owned by
 codex-play-guard. Optional `--with-terrain` retains the original shell for a standalone
 assembly; it is not the team's seeded voxel terrain implementation.
 
+For the first bounded turn, append `--preset CopperBeacon` to export just one complete
+kit. Selecting a preset retains its original index and seeds; it does not renumber
+the remaining presets. The manifest hashes this generator and both reused helper
+files, so the receiving owner can identify which exact sources produced a batch.
+
 Each preset targets a 92 m island with a lighthouse, dock, boathouse, dry-docked
 boat prop, flowers, clustered trees, lagoon and waterfall. Role-named mesh objects
 remain separate for Unreal material, collision and replacement work. The source

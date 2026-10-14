@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('output')
 parser.add_argument('--with-terrain', action='store_true',
                     help='Optional original shell; default exports additive dressing only')
+parser.add_argument('--preset', choices=['all', 'CopperBeacon', 'BlossomHarbor', 'StormwatchCove'],
+                    default='all', help='Export one complete kit in a bounded shared-tool turn')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 OUT = Path(args.output)
 if OUT.exists() and any(OUT.iterdir()):
@@ -203,6 +205,8 @@ def export_role_meshes(name, objects):
 
 records = []
 for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove']):
+    if args.preset not in {'all', title}:
+        continue
     generation_started = time.perf_counter()
     bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
     parts = []
@@ -237,6 +241,8 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
                     'stage': 'Blender export; Unreal placement, collision and gameplay pending'})
     (OUT/'harbor-manifest.json').write_text(json.dumps({'schemaVersion': 1, 'assets': records,
         'native_verified': False, 'author': 'team-codex',
+        'source_files': {filename: hashlib.sha256(Path(__file__).with_name(filename).read_bytes()).hexdigest()
+                         for filename in ['codex_harbor_islands.py', 'portal_common.py', 'labyrinth_cast.py']},
         'placement_contract': 'Metres +Z up; role objects retain local positions; fit to receiving terrain',
         'collision_contract': 'FBX blocking roles have per-solid UCX; GLB render only; foliage/water nonblocking; native verification pending'}, indent=2)+'\n')
     print('HARBOR_EXPORTED '+name, flush=True)
