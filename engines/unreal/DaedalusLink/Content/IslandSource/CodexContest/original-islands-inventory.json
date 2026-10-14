@@ -1,0 +1,141 @@
+{
+  "schema": "daedalus.original-island-reference-inventory/v1",
+  "scope": "Initial contest roster,2026-10-12 15:02Pacific;13 entries including original proposal/fixture limitations",
+  "roster_source": "C:/Users/730ri/projects/bot-team/BOARD/competition.md",
+  "preservation": "Read-only originals. Derive new namespaces/assets/seeds, preserve per-asset authorship and source path/hash. Unknown authorship must stay unknown.",
+  "coverage": {
+    "all_roster_entries_located_in_catalog": true,
+    "all_whole_islands_visually_reviewed": false,
+    "historical_whole_image_reviews": ["blender-boss","buffffff","disk-saver","prometheus","hephaestus","oddsreaper","pythagoras"],
+    "component_only_reviews": ["sol","orrery"],
+    "unusable_dark_component_image": "youtube-master",
+    "whole_image_gaps": ["kennel","ark-dock","youtube-master","orrery","pootscoot","sol"],
+    "native_map_limit": "14 saved native map files do not mean14 contest entries; extra AMF WildBiomes pets map. Sol saved file found is VisibleRace2 fixture. Poot later PootscootIsland map exists but Tideglass manifest still declares prototype/unverified originality.",
+    "current_district_json_limit": "Saved/Daedalus/islands.json has200 LABYRINTH/GALLERYCITY district rows, not the original contest census",
+    "use_limit": "References locate original designs; no new derived island exported or saved by this inventory task"
+  },
+  "entries": [
+    {
+      "id":"kennel", "name":"Kennel Isle", "author":"art-master-flex", "team":"Grok",
+      "provenance":"ISLAND.md explicitly names art-master-flex (Team Grok)",
+      "sources":["C:/Users/730ri/projects/Daedalus2/tools/islands/kennel-isle/ISLAND.md","C:/Users/730ri/projects/Daedalus2/tools/islands/kennel-isle/amf_island_ue.py"],
+      "manifest":"C:/Users/730ri/projects/Daedalus2/tools/islands/kennel-isle/glb/_amf_report.json",
+      "assets":"C:/Users/730ri/projects/bot-team/art/glb/amf",
+      "native_map":"/Game/AMF/Maps/Island_AMF",
+      "observed_design":"Source design: companion/pet camp; spring->stream->filter->cistern->pipes->trough gravity water chain, kennel rows/goat pen. Whole silhouette not visually established.",
+      "image":null
+    },
+    {
+      "id":"oddsreaper", "name":"OddsReaper Island", "author":"oddsreaper", "team":"Grok",
+      "provenance":"Original competition Grok slot and author-written inventory",
+      "sources":["C:/Users/730ri/projects/Daedalus2/data/islands/oddsreaper/layout.json","C:/Users/730ri/projects/Daedalus2/data/islands/oddsreaper/materials_mpc.json","C:/Users/730ri/projects/Daedalus2/tools/islands/oddsreaper/place_oddsreaper_island.py"],
+      "manifest":"C:/Users/730ri/projects/bot-team/art/oddsreaper/glb/manifest.json",
+      "assets":"C:/Users/730ri/projects/bot-team/art/oddsreaper/glb",
+      "image":"C:/Users/730ri/projects/bot-team/shots/oddsreaper/hero_blender.png",
+      "observed_design":"Viewed historical image: emerald circular plaza, scoreboard blocks with colored cells, axial portal frames, crystal accents and angular perimeter rocks.",
+      "excluded_image":"hero_unreal_play_r4.png explicitly off-island in owner posts26482/27241"
+    },
+    {
+      "id":"youtube-master", "name":"Youtube Master Island / Recording Isle", "author":"youtube-master", "team":"Grok",
+      "provenance":"DESIGN.md explicitly names youtube-master,Team Grok",
+      "sources":["C:/Users/730ri/projects/Daedalus2/engines/unreal/ytm-island/DESIGN.md","C:/Users/730ri/projects/Daedalus2/engines/unreal/ytm-island/ytm_items.py","C:/Users/730ri/projects/Daedalus2/engines/unreal/ytm-island/ytm_island_ue.py"],
+      "manifests":["C:/Users/730ri/projects/bot-team/art/NOTES/youtube-master/batch1.json","C:/Users/730ri/projects/bot-team/art/NOTES/youtube-master/polish_v3.json","C:/Users/730ri/projects/bot-team/art/NOTES/youtube-master/food_water.json"],
+      "native_map":"/Game/YTM/Maps/YTM_Island",
+      "observed_design":"Source design:240m circular cylinder base, spring/water chain near spawn, east spiral note-herb garden, west livestock farm, north kitchen, cliffs/rocks along rim. Melody Brewing distinguishes ordered tunes from Prometheus chords.",
+      "image_limit":"YTM_check_sign_readable.png viewed but dark/component-only; owner26900 says whole capture failed"
+    },
+    {
+      "id":"blender-boss", "name":"Blender Boss Island", "author":"blender-team", "team":null,
+      "provenance":"Original tracker assigns Blender Boss to blender-team; retain per-asset creator fields rather than guessing a team",
+      "sources":["C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/layout.json"],
+      "manifest":"C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/manifest.json",
+      "assets":["C:/Users/730ri/projects/bot-team/art/flagship/Prop_Island_Flagship_BlenderBoss.blend","C:/Users/730ri/projects/bot-team/art/glb/Prop_Island_Flagship_BlenderBoss.glb","C:/Users/730ri/projects/bot-team/art/glb/Prop_Island_BlenderBoss_Base.glb"],
+      "image":"C:/Users/730ri/projects/bot-team/art/flagship/contest_island_v4.png",
+      "observed_design":"Viewed historical image: broad circular rim, water edge/dock, prominent stepped central mountain, pastel multicolor block-canopy trees, paths and scattered settlement landmarks."
+    },
+    {
+      "id":"prometheus", "name":"Prometheus Island", "author":"prometheus", "team":"Grok",
+      "provenance":"Original competition Grok slot; Prometheus registered as Grok bot",
+      "sources":["C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/island.json","C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/heights.json","C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/ue_transforms.json","C:/Users/730ri/projects/Daedalus2/engines/unreal/prometheus-island/terrain_gs.py"],
+      "assets":"C:/Users/730ri/projects/bot-team/art/prometheus_island",
+      "original_seed":15,
+      "image":"C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/shots/PI_hero_blender.png",
+      "observed_design":"Viewed historical image: deep branching river canyon between broad gold-green plateaus, white pillar/garden rings and small functional clusters."
+    },
+    {
+      "id":"disk-saver", "name":"DiskSaver Island", "author":"disk-saver", "team":"Grok",
+      "provenance":"Original competition Grok slot and author-written ISLAND.md",
+      "sources":["C:/Users/730ri/projects/Daedalus2/data/islands/disksaver/ISLAND.md","C:/Users/730ri/projects/Daedalus2/data/islands/disksaver/mechanics.json","C:/Users/730ri/projects/Daedalus2/data/islands/disksaver/ds_island_ue.py"],
+      "manifest":"C:/Users/730ri/projects/Daedalus2/data/islands/disksaver/manifest.json",
+      "assets":"C:/Users/730ri/projects/bot-team/art/NOTES/disksaver/glb",
+      "image":"C:/Users/730ri/projects/Daedalus2/data/islands/disksaver/diskSaver_island_v5.png",
+      "observed_design":"Viewed historical image: vivid green open glade enclosed by tiered block-canopy trees, central stacked dark rocks, small farm/fence clusters."
+    },
+    {
+      "id":"pootscoot", "name":"Tideglass / PootscootIsland", "author":"pootscoot", "team":"Codex",
+      "provenance":"Original manifest owner pootscoot; initial tracker proposal, later saved-placement hub18562",
+      "sources":["C:/Users/730ri/Documents/Codex/2026-10-12/task/pootscoot-island/build_tideglass.py","C:/Users/730ri/Documents/Codex/2026-10-12/task/pootscoot-island/tideglass-validation.json"],
+      "manifest":"C:/Users/730ri/Documents/Codex/2026-10-12/task/pootscoot-island/tideglass-manifest.json",
+      "assets":["C:/Users/730ri/Documents/Codex/2026-10-12/task/pootscoot-island/poot-tideglass-prototypes.blend","C:/Users/730ri/Documents/Codex/2026-10-12/task/pootscoot-island/poot-tideglass-prototypes.glb"],
+      "original_seed_hex":"0x7f360ad8bd380800",
+      "native_map":"/Game/Codex/PootscootIsland/Maps/PootscootIsland",
+      "limit":"Manifest prototype_only=true,gameplay_implemented=false,contest_originality_accepted=false,realm_status=proposed_unverified; later map existence does not supersede these acceptance limits",
+      "image":null
+    },
+    {
+      "id":"buffffff", "name":"Buffffff / Six-F Island", "author":"buffffff", "team":"Grok",
+      "provenance":"Original competition Grok slot and author asset directory",
+      "sources":["C:/Users/730ri/projects/bot-team/art/buffffff/layout.json","C:/Users/730ri/projects/bot-team/art/buffffff/core.json","C:/Users/730ri/projects/Daedalus2/tools/islands/buffffff/buffffff_island_ue.py"],
+      "manifest":"C:/Users/730ri/projects/bot-team/art/buffffff/manifest.json",
+      "assets":["C:/Users/730ri/projects/bot-team/art/buffffff/Buffffff_Island.blend","C:/Users/730ri/projects/bot-team/art/buffffff/glb"],
+      "image":"C:/Users/730ri/projects/bot-team/art/buffffff/hero/Buffffff_Island_hero.png",
+      "observed_design":"Viewed historical image: enclosing angular block-cliff bowl, orderly crop grid and central hub/water structures, lime trees with cyan/lavender accents."
+    },
+    {
+      "id":"pythagoras", "name":"Pythagoras / Wild Biomes", "author":"pythagoras", "team":"Grok",
+      "provenance":"Original competition Grok slot; signed owner27162 links Round5 hero",
+      "sources":["C:/Users/730ri/projects/Daedalus2/engines/unreal/pcg-ecology/ISLAND.md","C:/Users/730ri/projects/Daedalus2/engines/unreal/pcg-ecology/pyth_items.py","C:/Users/730ri/projects/Daedalus2/engines/unreal/pcg-ecology/pyth_island_ue.py"],
+      "manifest":"C:/Users/730ri/projects/bot-team/art/glb/pythagoras/_pyt_report.json",
+      "image":"C:/Users/730ri/projects/Daedalus2-pcg-ecology/engines/unreal/pcg-ecology/hero_r5.png",
+      "observed_design":"Viewed historical editor image: square floating cut-cliff slab with separated forest/scrub/meadow clusters, stream, pale green top and blocky/conifer tree silhouettes. Historical screenshot is not current app data."
+    },
+    {
+      "id":"ark-dock", "name":"Ark Dock Isle", "author":"2hot2trot", "team":"Grok",
+      "provenance":"ark_isle_layout.py explicitly names 2Hot2Trot,Team Grok",
+      "sources":["C:/Users/730ri/projects/Daedalus2/engines/unreal/ark-dock/ark_isle_layout.py","C:/Users/730ri/projects/Daedalus2/engines/unreal/ark-dock/ark_isle_ue.py","C:/Users/730ri/projects/Daedalus2/engines/unreal/ark-dock/README.md","C:/Users/730ri/projects/Daedalus2/engines/unreal/ark-dock/herb_combos.json"],
+      "native_map":"/Game/Grok/Maps/ArkDock_2hot2trot",
+      "observed_design":"Source layout reuses existing shipped art: herb/flower beds, pond flora, forge-lava-rock varieties, cattle/sheep/goat/poultry/pig/stable groups. Whole silhouette/palette not visually established.",
+      "image":null
+    },
+    {
+      "id":"hephaestus", "name":"Hephaestus / Forge Reach", "author":"hephaestus", "team":"Grok",
+      "provenance":"Original competition Grok slot; per-asset job built_by overrides name guesses",
+      "sources":["C:/Users/730ri/projects/Daedalus2/data/islands/hephaestus.json","C:/Users/730ri/projects/Daedalus2/data/islands/hephaestus/layout.json","C:/Users/730ri/projects/Daedalus2/data/islands/hephaestus/materials_mpc.json","C:/Users/730ri/projects/Daedalus2/tools/blender/heph_gen.py"],
+      "asset_receipt":"C:/Users/730ri/projects/bot-team/art/jobs/Prop_ForgeAnvil_Basalt.json",
+      "asset":"C:/Users/730ri/projects/bot-team/art/Prop/Prop_HephaestusForge_Great.blend",
+      "image":"C:/Users/730ri/projects/bot-team/shots/hephaestus/hero_blender.png",
+      "observed_design":"Viewed historical image: forge-centered bright warm ring on a broad brown base, sparse visible distant props. Whole-silhouette coverage weak; do not infer richer terrain than shown.",
+      "excluded_image":"hero_unreal_lit_r5.png owner27029 calls washed out",
+      "authorship_trap":"Generic Prop_Forge job credits Blender team; Prop_ForgeAnvil_Basalt explicitly credits hephaestus (heph_gen.py)"
+    },
+    {
+      "id":"orrery", "name":"Claude Island / Orrery Reach", "author":"unreal-team", "team":"Claude",
+      "provenance":"Original tracker and own Claude island source",
+      "sources":["C:/Users/730ri/projects/Daedalus2/tools/claude_island/orr_build.py","C:/Users/730ri/projects/Daedalus2/tools/claude_island/orr_place.py","C:/Users/730ri/projects/Daedalus2/tools/claude_island/orr_hq.py","C:/Users/730ri/projects/Daedalus2/tools/claude_island/orr_reach.py"],
+      "asset":"C:/Users/730ri/projects/bot-team/art/Prop/Prop_Orr_Orrery_10Planet.blend",
+      "native_map":"/Game/Claude/ClaudeIsland_Sub",
+      "component_image":"C:/Users/730ri/projects/bot-team/shots/orr_sheet3.png",
+      "observed_design":"Viewed prop sheet: gold orrery, pastel cosmic instruments/herbs, blue water well and pink faceted tree. Source orr_reach.py defines Bloomfields low crop isle seed31; Tidewells lake isle seed47; LensForge high stony observatory seed53; Vault tall blue/stony isle seed61. Source-described neighboring archipelago is not a viewed whole-island shot.",
+      "original_neighbor_seeds":{"Bloomfields":31,"Tidewells":47,"LensForge":53,"Vault":61}
+    },
+    {
+      "id":"sol", "name":"Sol Island / Portal Realm", "author":"team-codex/Sol", "team":"Codex",
+      "provenance":"Original sol-reach manifest/layout and own source",
+      "sources":["C:/Users/730ri/projects/Daedalus2/tools/islands/sol/build_sol_art.py","C:/Users/730ri/projects/Daedalus2/tools/islands/sol/place_sol_island.py","C:/Users/730ri/projects/bot-team/art/sol-reach-20261012-v3/layout.json","C:/Users/730ri/projects/bot-team/art/sol-reach-20261012-v3/validation.json"],
+      "manifest":"C:/Users/730ri/projects/bot-team/art/sol-reach-20261012-v3/manifest.json",
+      "component_image":"C:/Users/730ri/projects/bot-team/art/sol-reach-20261012-v3/art-preview.png",
+      "observed_design":"Viewed asset sheet: teal water bowls/well/filter shapes, lavender portal arch, block livestock and small figures. Layout contains spring-bowl rows; whole terrain silhouette not visually established.",
+      "limit":"Manifest500assets/unreal_count0 is historical; saved VisibleRace2 fixture found, not SolIsland.umap. No full-island native acceptance inferred."
+    }
+  ]
+}

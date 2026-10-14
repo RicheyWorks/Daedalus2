@@ -1,0 +1,213 @@
+{
+  "bounds_metres": {
+    "max": [
+      46,
+      46,
+      21
+    ],
+    "min": [
+      -68,
+      -66,
+      -25
+    ]
+  },
+  "config": {
+    "depth": 22,
+    "features": [
+      "circular water rim",
+      "stepped central summit",
+      "pastel block trees"
+    ],
+    "original": "blender-boss",
+    "preset": "summit-rim",
+    "radius": 46,
+    "reference": {
+      "author": "blender-team",
+      "id": "blender-boss",
+      "image": "C:/Users/730ri/projects/bot-team/art/flagship/contest_island_v4.png",
+      "inspection": "historical image and original source catalog; not current native acceptance",
+      "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+      "manifest": "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/manifest.json",
+      "name": "Blender Boss Island",
+      "provenance": "Original tracker assigns Blender Boss to blender-team; retain per-asset creator fields rather than guessing a team",
+      "sources": [
+        "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/layout.json"
+      ],
+      "team": null
+    },
+    "relief": 21,
+    "seed": 84011,
+    "source_sha256": "d6b53f01ed2c25b2e81a59c81adbddaf89db285fa9dfda484df9806e7f339ed8",
+    "terrace": 3,
+    "version": 1,
+    "voxel_metres": 1.0
+  },
+  "config_sha256": "5c48e1ae838c501d79efeddfc4c8e70aa5dd1835e0b1d6cc36b13de80b8f7070",
+  "elapsed_s": {
+    "generation": 0.193543
+  },
+  "name": "CodexIsland_summit_rim_84011",
+  "palette": [
+    "blossom",
+    "blossom2",
+    "cloud",
+    "crystal",
+    "crystal2",
+    "dirt",
+    "dirt2",
+    "door",
+    "flower_r",
+    "flower_w",
+    "flower_y",
+    "foam",
+    "grass",
+    "grass2",
+    "leaf",
+    "leaf2",
+    "rock",
+    "rock2",
+    "roof",
+    "sand",
+    "trunk",
+    "wall",
+    "water",
+    "window"
+  ],
+  "palette_rgb": {
+    "blossom": [
+      0.9,
+      0.38,
+      0.77
+    ],
+    "blossom2": [
+      0.98,
+      0.67,
+      0.89
+    ],
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "crystal": [
+      0.7,
+      0.42,
+      0.96
+    ],
+    "crystal2": [
+      0.55,
+      0.85,
+      0.95
+    ],
+    "dirt": [
+      0.45,
+      0.31,
+      0.19
+    ],
+    "dirt2": [
+      0.52,
+      0.37,
+      0.22
+    ],
+    "door": [
+      0.35,
+      0.22,
+      0.12
+    ],
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "flower_w": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "flower_y": [
+      0.95,
+      0.85,
+      0.25
+    ],
+    "foam": [
+      0.8,
+      0.9,
+      1.0
+    ],
+    "grass": [
+      0.4,
+      0.76,
+      0.28
+    ],
+    "grass2": [
+      0.67,
+      0.83,
+      0.32
+    ],
+    "leaf": [
+      0.27,
+      0.73,
+      0.43
+    ],
+    "leaf2": [
+      0.29,
+      0.82,
+      0.73
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ],
+    "wall": [
+      0.82,
+      0.72,
+      0.55
+    ],
+    "water": [
+      0.14,
+      0.74,
+      0.93
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "saved_unreal": false,
+  "schema": "daedalus.codex-island.v1",
+  "stage": "planned",
+  "voxel_sha256": "44778211ae799c559d2086e571f01174f8205782f68099f17b0feaa1d2fd6687",
+  "voxels": {
+    "clouds": 333,
+    "cottage": 312,
+    "crystals": 50,
+    "flowers": 51,
+    "island": 88738,
+    "landmarks": 0,
+    "rocks": 13,
+    "trees": 1019,
+    "water": 629
+  }
+}
