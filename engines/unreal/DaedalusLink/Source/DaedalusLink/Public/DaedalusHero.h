@@ -199,6 +199,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") bool Teleport(FVector Where, float Yaw, bool bSnap);
 	/** Where the last realm switch put the hero (a marker's label), empty when the realm has no markers. */
 	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realm") FString LandedAt;
+	/** World time of the last successful realm switch: a portal at the landing marker must not take the hero
+	 *  straight back (it did: every gate bounced home within a frame, 2026-10-13 23:40). */
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realm") double LastRealmSwitchAt = -1000.0;
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString LandAt(const FString& Realm, const FString& Hint);
 	/** Point the camera: yaw/pitch in degrees (the control rotation). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") void Look(float Yaw, float Pitch);

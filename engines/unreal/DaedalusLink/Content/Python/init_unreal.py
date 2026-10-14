@@ -9,8 +9,34 @@ Headless runs (commandlets) have no viewport and skip both.
 """
 
 import os
+import sys
 
 import unreal
+
+
+def guard_sys_path(path=None, log=None):
+    """Drop private checkouts from the editor's module path (2026-10-13: a bot prepended its Documents/Codex
+    checkout seven times and the live plugin's modules were shadowed for the next bot's turn). Anything under a
+    user's Documents or Downloads is stripped; the plugin's own folder is put first. Pure: returns the kept list."""
+    path = sys.path if path is None else path
+    here = os.path.dirname(os.path.abspath(__file__))
+    bad = [p for p in path if any(seg in p.replace("/", "\\").lower() for seg in ("\\documents\\", "\\downloads\\"))]
+    kept = [p for p in path if p not in bad]
+    if here not in kept:
+        kept.insert(0, here)
+    if bad and log:
+        log("Daedalus: stripped %d private path(s) from sys.path: %s" % (len(bad), sorted(set(bad))))
+    path[:] = kept
+    return kept
+
+
+guard_sys_path(log=unreal.log_warning)
+
+try:   # the editor must not crawl at one tick per 12 s when another window is in front (00:03)
+    import daedalus_play as _play
+    _play.full_speed()
+except Exception as _e:  # never block startup on a nicety
+    unreal.log_warning("Daedalus: full_speed at start: %r" % (_e,))
 
 try:
     import daedalus_view

@@ -25,6 +25,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 @ActiveProfiles("prod")
 class TacticsHostAuthorizationTest {
+
+    @org.springframework.test.context.DynamicPropertySource
+    static void isolateWorldStorage(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        com.daedalus.server.IsolatedWorldStorage.register(registry);
+    }
+
     @LocalServerPort int port;
     @Autowired JwtTokenService tokens;
     private final ObjectMapper json = new ObjectMapper();

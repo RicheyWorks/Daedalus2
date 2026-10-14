@@ -147,6 +147,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus")
 	bool TravelThroughGate(int32 Gate);
 
+	/** The server's realm directory (/api/v1/realms, DaedalusRealmDirectoryCore): which world hosts which session
+	 *  realm. Fetched by LoadDirectory; DirectoryState says what it holds; WorldIdForRealm answers the hero's
+	 *  SwitchRealm with the world id to load, "" when the realm has no host. */
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Daedalus|Realms") void LoadDirectory();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realms") FString DirectoryState() const;
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realms") FString WorldIdForRealm(const FString& SessionRealm) const;
+	/** Become the world that hosts SessionRealm (the hero went through a gate): sets WorldId and loads. False when
+	 *  the directory has no host for it. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realms") bool TravelToRealm(const FString& SessionRealm);
+	/** At play, follow the hero's realm switches through the directory (TravelToRealm). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Realms") bool bFollowHeroRealm = true;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realms") FString DirectoryJson;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realms") int32 DirectoryRows = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realms") FString DirectoryWhy;
+
 	/** A Daedalus (x, y, z) in metres to this actor's local Unreal space. */
 	UFUNCTION(BlueprintPure, Category = "Daedalus")
 	FVector ToUnreal(const FVector& Daedalus) const;
@@ -196,6 +211,8 @@ private:
 	using FJsonHandler = TFunction<void(const TSharedPtr<FJsonObject>&)>;
 
 	void GetJson(const FString& Path, FJsonHandler OnJson);
+	using FTextHandler = TFunction<void(const FString&, int32)>;
+	void GetText(const FString& Path, FTextHandler OnText);
 	void ReadManifest(const TSharedPtr<FJsonObject>& Json);
 	void Poll();
 	void ReadChunks(const TSharedPtr<FJsonObject>& Json);
