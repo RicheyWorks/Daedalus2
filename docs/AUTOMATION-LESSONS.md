@@ -881,3 +881,7 @@ so a new connector is the first line of the next turn; (2) every connector we ow
 command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
 harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
 register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
+
+### Count distinct quest entities, not repeated event deliveries (2026-10-14)
+Unicornlegendary eligibility reusesPortalQuestProgress butcounts ten distinctburningbull identities withverifiedseaarrival, plusone verifiedtwelve-memberpack. Eithercondition canarrivefirst. Duplicatebull/pack delivery cannotinflateprogress. The core signalseligibility/one-shotclaim only; authoritycomponent, durable hostrewardtransaction andin-worldproof remainunfinished. No inventory/NFTaward is implied.
+
