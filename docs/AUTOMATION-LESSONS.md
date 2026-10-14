@@ -1157,3 +1157,6 @@ Ledger adapter follow-up: expose committed snapshot and CAS revision through the
 
 ## Forecast one crew without cloning the realm (2026-10-14)
 Production UI copied the entire Economy then advanced all crews to forecast one crew. Extracted the same per-plot production rule and forecast only a copied crew against its ordered plots, with no realm copy or state mutation. Still scans plots in three passes; no frame-time claim. Actual strict MSVC parity check matches800crew-cycle outcomes against a real Produce cycle and verifies unchanged source state/missingcrew output. Added the regression to Engines GCC CI; native newhead compile remains pending.
+
+## Broaden native acceptance from a seam to the whole plugin (2026-10-14)
+Exact04f7dda4 full plugin snapshot196Gitblob files compiled and linked under UE5.8 UnrealEditor Win64 Development:61actions,exit0,298.82s. Allsnapshot hashes rechecked. This includes current component/Slate forecast with existing Hero, Inventory, Ocean and reflectedmodule. Existing RawInput/cloudreflection deprecations reported to Claude; not edited midbuild. Keep this full compile distinct from installation and runtime proof. PR139 andPR94 are separate source branches: future sync must preserve nativeUFS staging, GameFeatureData config andcurrent34landDRR additions.

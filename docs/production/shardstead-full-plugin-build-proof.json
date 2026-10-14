@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-14T13:35:05.601954+00:00",
+  "sourceHead": "04f7dda4c5b38739bde44fa0a299d10ca2fbf69a",
+  "trackedPluginFiles": 196,
+  "sourceManifestSHA256": "c81fc81de691e2ec60ead55848968b08b0cc380b4841e61b5a3f57be39237c3d",
+  "target": "UnrealEditor Win64 Development",
+  "exitCode": 0,
+  "actions": 61,
+  "seconds": 298.82,
+  "dllBytes": 8257536,
+  "dllSHA256": "6c5b02710b04b8eb1b29d8f67dcb1f449723d768edf62c81b46f902934c63f13",
+  "allSnapshotHashesRechecked": true,
+  "warnings": [
+    "Existing RawInput deprecation",
+    "Existing SkyDirector SetReflectionSampleCountScale deprecated"
+  ],
+  "scope": "Full plugin isolated compile and link with production component/Slate plus existing hero/inventory/ocean systems; not installed or runtime-play proof",
+  "installed": false,
+  "gameplayVerified": false
+}
