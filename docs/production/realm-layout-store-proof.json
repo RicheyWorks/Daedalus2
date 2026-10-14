@@ -1,0 +1,18 @@
+{
+  "scope": "Local core realm placement ledger and versioned persistence; no live API, distributed database, Unreal import or wallet ownership proof",
+  "new_tests": 8,
+  "core_tests": 731,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "verify_seconds": 50.348,
+  "coverage_passed": true,
+  "spotbugs_findings": 0,
+  "maximum_tested_estates_per_realm": 10000,
+  "full_grid_snapshot_bytes_less_than": 300000,
+  "restart_roundtrip": true,
+  "stale_writer_refused": true,
+  "same_process_lock_contention_refused": true,
+  "mint_authorization_implemented": false,
+  "district_api_implemented": false
+}
