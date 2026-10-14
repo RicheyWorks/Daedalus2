@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111e2b">
+  <meta name="description" content="Walk the sixty plots of the Parcels district and recover the shattered planet's Heartstone signal.">
+  <title>Parcels · The Signal District · Daedalus</title>
+  <link rel="stylesheet" href="parcels-realm.css">
+  <script src="parcels-realm.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="metaverse.html" aria-label="Return to the Daedalus realm hub"><span class="brand-mark">D</span> DAEDALUS <span class="brand-sub">THE SHATTERED PLANET</span></a>
+    <div class="head-status"><span class="status-dot" id="connectionDot"></span><span id="connectionStatus">Local visitor draft</span><a href="realm.html" id="serverRealmLink">Server realm ↗</a></div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="realmTitle">
+      <div><p class="eyebrow">REALM 03 / PARCELS</p><h1 id="realmTitle">The Signal District<span class="title-dot">.</span></h1><p class="lede">Sixty plots. One surviving city. Follow the Heartstone echoes home.</p></div>
+      <form id="districtForm" class="district-form"><label for="seedInput">District seed<input id="seedInput" name="seed" value="33033" inputmode="numeric" pattern="-?[0-9]+" maxlength="20" required></label><button type="submit">Explore seed <span aria-hidden="true">↗</span></button></form>
+    </section>
+
+    <div class="expedition-layout">
+      <aside class="panel journal" aria-labelledby="journalTitle">
+        <div class="panel-kicker"><span>FIELD JOURNAL</span><span class="tiny-tag">LOCAL</span></div>
+        <h2 id="journalTitle">A city worth<br>coming back to.</h2>
+        <p class="story">The meteor tore Daedalus apart. This fragment kept its streets. Surveyor <strong>Neri Vale</strong> is tracing the Heartstone echoes beneath them, one neighborhood at a time.</p>
+        <div class="progress-head"><span id="missionCount">0 / 6 signals</span><span id="surveyPercent">0%</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Local expedition progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="missionProgress"><div id="missionProgressFill"></div></div>
+        <ol class="mission-list" id="missionList"></ol>
+        <div class="active-mission"><span class="eyebrow">CURRENT CHECKPOINT</span><h3 id="missionTitle">The plaza remembers</h3><p id="missionCopy">Find the orange helipad and speak to Neri.</p><button id="waypointButton" type="button">Show waypoint <span aria-hidden="true">⌖</span></button></div>
+        <p class="save-note" id="saveStatus">Visitor progress saves on this device. It never changes land ownership.</p>
+        <button class="text-button" type="button" id="resetProgressButton">Restart this local expedition</button>
+      </aside>
+
+      <section class="world-panel" aria-label="Interactive district explorer">
+        <div class="map-bar"><div><span class="map-status-dot"></span><strong id="districtLabel">SEED 33033</strong><span class="map-bar-sub" id="districtMode">LOCAL DRAFT</span></div><div class="map-tools"><button type="button" id="zoomOutButton" aria-label="Zoom out">−</button><button type="button" id="zoomInButton" aria-label="Zoom in">+</button><button type="button" id="overviewButton" aria-pressed="true">Overview</button></div></div>
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="districtCanvas" tabindex="0" role="img" aria-label="Playable Parcels district map. Use W A S D or arrow keys to walk, E to survey the current checkpoint. Tap a plot to inspect it.">Your browser needs canvas to draw the district. All plot information remains available in the plot directory.</canvas>
+          <div class="map-caption"><span class="map-caption-kicker">A FRAGMENT OF THE OLD WORLD</span><strong>Heartstone echoes<br>under city streets.</strong></div>
+          <div class="compass" aria-hidden="true"><span>N</span><span class="compass-arrow">↑</span></div>
+          <div class="world-hud"><span id="coordinates">X 48 / Z −74</span><span id="locationLabel">PUBLIC PLAZA</span></div>
+          <div class="interact-card" id="interactCard"><span id="interactHint">You are at Neri’s briefing point.</span><button id="interactButton" type="button"><span class="keycap">E</span> Survey checkpoint</button></div>
+          <div class="touch-controls" aria-label="Touch movement controls"><button type="button" data-move="up" aria-label="Walk north">↑</button><button type="button" data-move="left" aria-label="Walk west">←</button><button type="button" data-move="down" aria-label="Walk south">↓</button><button type="button" data-move="right" aria-label="Walk east">→</button></div>
+          <div class="map-toast" id="mapToast" role="status" aria-live="polite"></div>
+        </div>
+        <div class="map-footer"><span><i class="legend-dot lawn"></i>Plot <i class="legend-dot held"></i>Server owner <i class="legend-dot signal"></i>Signal</span><span>WASD / ↑↓←→ walk · Shift run · E survey</span></div>
+        <div class="expedition-stats"><div><strong id="visitedCount">0</strong><span>plots observed locally</span></div><div><strong id="echoCount">0</strong><span>Heartstone echoes logged</span></div><div><strong>148 × 148</strong><span>cubes of surviving city</span></div></div>
+      </section>
+
+      <aside class="right-column">
+        <section class="panel plot-inspector" aria-labelledby="plotTitle">
+          <div class="panel-kicker"><span>PLOT DOSSIER</span><span id="plotBadge" class="tiny-tag">PUBLIC</span></div>
+          <h2 id="plotTitle">Heart plaza</h2><p id="plotDescription">The four heart plots became a public square. Nobody claims the plaza or its streets.</p>
+          <dl class="plot-facts"><div><dt>Footprint</dt><dd id="plotFootprint">36 × 36 cubes</dd></div><div><dt>Opening scene</dt><dd id="plotShow">Paving + helipad</dd></div><div><dt>Owner</dt><dd id="plotOwner">Public district</dd></div><div><dt>Build limit</dt><dd id="plotHeight">No plot building</dd></div><div><dt>Builders</dt><dd id="plotBuilders">—</dd></div></dl>
+          <button id="pinPlotButton" type="button" disabled>Pin a plot to your journal</button><p class="muted compact" id="plotPinNote">Select a plot on the map or in the directory below.</p>
+        </section>
+        <section class="panel release-panel" aria-labelledby="releaseTitle">
+          <div class="panel-kicker"><span>LAND RELEASE</span><span class="tiny-tag">ADR-033</span></div><h2 id="releaseTitle">A place to build.</h2>
+          <div class="land-number">60<span>claimable plots / district</span></div>
+          <p>Each plot is 16 × 16 cubes, with a ceiling of Y 32. Streets, sidewalks, the plaza and helipad stay public.</p>
+          <div class="release-state"><span class="small-dot"></span><strong id="claimStatus">Server claims: not connected</strong></div><p class="compact muted" id="claimDetail">Local plots are preview geometry. Connect to an existing Parcels world for authoritative owners.</p>
+          <div class="release-state deferred"><span class="small-dot"></span><strong>Plot NFT mint: not implemented</strong></div><p class="compact muted">The current deed voucher route covers islands. This visitor expedition neither claims nor mints land. No plot NFT release date is announced here.</p>
+          <label for="worldSelect" class="world-label">Mounted Parcels district<select id="worldSelect"><option value="">Local visitor draft</option></select></label><button type="button" id="refreshWorldsButton">Refresh server districts</button>
+          <a class="server-link" id="manageLandLink" href="realm.html">Open server ownership controls ↗</a>
+        </section>
+      </aside>
+    </div>
+
+    <section class="directory panel" aria-labelledby="directoryTitle"><div class="directory-heading"><div><p class="eyebrow">THE DISTRICT DIRECTORY</p><h2 id="directoryTitle">Find your corner of the fragment.</h2></div><div class="directory-controls"><label for="plotFilter">Show<select id="plotFilter"><option value="all">Every plot</option><option value="pinned">Pinned locally</option><option value="visited">Observed locally</option><option value="LAWN">Lawn</option><option value="GROVE">Grove</option><option value="PAVILION">Pavilion</option><option value="TOWER">Tower</option><option value="SCULPTURE">Sculpture</option><option value="POND">Pond</option></select></label><span id="directoryCount">60 plots</span></div></div><div class="plot-directory" id="plotDirectory"></div></section>
+    <section class="travel-strip panel"><div><p class="eyebrow">BEYOND THE RAINBOW</p><h2>The sky is a road, too.</h2><p>Parcels has a helicopter, <strong>heli-0</strong>. Sky gates stand above the building ceiling. The map shows a visitor illustration; live flight and gate travel use the server realm.</p></div><div class="travel-status"><strong id="helicopterStatus">Helicopter status unavailable</strong><p id="gateStatus">No live gate routes loaded.</p><a id="travelLink" href="realm.html">Visit the server flight deck ↗</a></div></section>
+  </main>
+  <footer><span>DAEDALUS / PARCELS EXPEDITION</span><span>Local visitor story · Server ownership stays authoritative</span><a href="metaverse.html">Explore the realms ↗</a></footer>
+</body>
+</html>

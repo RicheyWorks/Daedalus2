@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-14",
+  "title": "Daedalus realm release preparation",
+  "summary": "One shattered planet, distinct realm games, original stories and a shared land identity. This catalog records sources and next work; it offers no mint or sale.",
+  "outlinePath": "docs/BUCKWILD-REALM-OUTLINE.md",
+  "identityPolicy": "Record IDs are browser directory labels, not production world allocation, deed ownership or a newly registered realm. Use the authenticated current provider directory and land registry.",
+  "evidencePolicy": {
+    "testsRun": false,
+    "buildsRun": false,
+    "editorCallsMade": false,
+    "chainTransactionsSent": false,
+    "statusMeaning": {
+      "LIVE": "Documented playable Unreal system; not freshly verified by this crew.",
+      "SERVER": "Existing generator/provider source; native/public-play status is pending or unverified.",
+      "NAMED": "Named design; complete generator/renderer not established.",
+      "DISTRICT": "Existing realm district whose runtime integration is pending.",
+      "PROPOSED": "Provisional design/source, without live canonical allocation."
+    },
+    "newBrowserPages": "Shattered Planet Sky Expedition, Gallery City, Parcels, Portal Expedition and the metaverse hub are new source previews; running gameplay has not been checked.",
+    "historicalEvidence": "Older ADR proof and current team messages are attributed records, not a new successful run."
+  },
+  "canonicalLandDesign": {
+    "identity": "(realm, number), number 0..9999",
+    "landsPerRealmDesignTarget": 10000,
+    "source": "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/adr/ADR-065-ten-thousand-lands-per-realm.md",
+    "sourceStatus": "PROPOSED; records the owner's ten-thousand-per-realm goal.",
+    "layout": "Spiral numbering, separate land-to-cell mapping, estates and tugging, while preserving the starter lane.",
+    "releaseStatus": "No generated-supply, sale-availability or on-chain allocation claim.",
+    "bundleStatus": "Portal egg, avatars/creatures, rarity and independent shiny are recorded design. Actual mint randomness, odds, lifecycle, values and reward formulas remain owner work."
+  },
+  "sharedLandBlockers": [
+    "Canonical realm/number land registry and its deployment must be reconciled with legacy island lane slots.",
+    "Legacy RealmIslands Deed has no realm/world field and one global configured contract; wider realm identity binding is pending.",
+    "Current chain ownership transfer reconciliation and durable metadata publication are not verified.",
+    "No contract deployment, holder allocation, mint eligibility, sale price or launch date was observed in this audit."
+  ],
+  "engineering": {
+    "crewLead": "buckwild-sol",
+    "reviewPartner": "pootscoot / pootscoot-coordination",
+    "pipelineReplyEvidence": "C:/Users/730ri/projects/bot-team/link/log.jsonl messages 30754, 30755, 30757",
+    "architectureBoard": "C:/Users/730ri/projects/bot-team/BOARD/ARCHITECTURE.md",
+    "nativeQueue": "C:/Users/730ri/projects/bot-team/BOARD/UNREAL-QUEUE.md",
+    "protocol": "Claim exact owned paths; preserve prior edits; hand off head, files, routes, schema and source limits; native/editor acceptance is separate.",
+    "deployment": "The present legacy chain pipeline supports guarded Sepolia deployment and refuses mainnet. This source sprint performs no deployment.",
+    "productionStages": [
+      "source-defined",
+      "generated-instance",
+      "exported",
+      "native-imported",
+      "native-saved",
+      "world-placed",
+      "public-playable",
+      "deed-deployed-and-reconciled"
+    ]
+  },
+  "realms": [
+    {
+      "id": "shattered-planet",
+      "name": "The Shattered Planet: Sky Islands and Lands",
+      "status": "LIVE",
+      "owner": "realm_audit; native/runtime owners retained",
+      "story": "Arks settle fragments of the old planet. Restore life, gather resources, repair the dock and keep a route between surviving lands.",
+      "entryUrl": "/sky-expedition.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/REALMS.md",
+        "docs/STORY.md",
+        "docs/ECONOMY.md",
+        "docs/adr/ADR-027-island-deeds.md",
+        "docs/adr/ADR-028-wallet-sign-in-and-deeds.md",
+        "daedalus-core/src/main/java/com/daedalus/world/island/IslandGenerator.java",
+        "daedalus-server/src/main/java/com/daedalus/server/controller/WalletController.java",
+        "chain/contracts/RealmIslands.sol",
+        "daedalus-server/src/main/resources/static/sky-expedition.js",
+        "docs/realms/SkyExpedition.md"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Existing island claim and seed/radius ERC-721 voucher source; canonical WORLD-ZERO/number grid design needs registry reconciliation.",
+        "blockers": [
+          "Authoritative allocation between production lands, starter lane and canonical numbers is pending.",
+          "The Reaction/Diffusion/Song token relationship remains an open story draft question.",
+          "Confirmed chain transfers do not yet have observed claim/permission reconciliation.",
+          "Current deployed contract, pinned metadata and mint availability were not checked."
+        ]
+      },
+      "nextSteps": [
+        "Hand off the written /sky-expedition.html visitor source and truthful release catalog; reconcile exact land identity with Pootscoot.",
+        "Bind sustainable gathering, crafting, water, livestock and ark repairs through existing inventory/save owners.",
+        "Finish one coherent spawn-to-mine-to-dock route, ruins objective and distinctive rainbow/gate return.",
+        "Integrate existing streaming/LOD changes through the native owner and report actual saved/runtime evidence.",
+        "Prepare canonical metadata and owner launch packet after land/chain dependencies are resolved."
+      ],
+      "sessionRealm": "WORLD-ZERO",
+      "existingWorldId": "world-zero",
+      "previewOnly": true,
+      "existingEntry": "/realm.html?world=world-zero"
+    },
+    {
+      "id": "portal",
+      "name": "The Portal Realm",
+      "status": "LIVE",
+      "owner": "portal_coder; native realm and controller-profile owners retained",
+      "story": "Past a portal the travellers become an original 8-bit party. Town clues and bronze, silver and star keys lead through caves to the shard tyrant and home.",
+      "entryUrl": "/portal-expedition.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/adr/ADR-052-portal-realm.md",
+        "daedalus-core/src/main/java/com/daedalus/world/retro/RetroRealmGenerator.java",
+        "daedalus-core/src/main/java/com/daedalus/world/retro/RetroCodec.java",
+        "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmCore.h",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/PORTAL-BUILDOUT.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/production/DRR-EGG-LAND-PARITY.md"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Canonical PORTAL/number design; generated DRR land annotations and egg source are separate from authenticated deed authority.",
+        "blockers": [
+          "The new expedition browser page is source-only and unvalidated.",
+          "DRR fixture HERO/OSTRA land labels are demo data, not live ownership.",
+          "Registry overlay/cache invalidation, deed-bound saves and egg lifecycle/ownership need authority bindings.",
+          "A portal seed is an instance; it does not allocate another canonical realm or mint a new deed."
+        ]
+      },
+      "nextSteps": [
+        "Use existing DRR 1 map/key/encounter/shop rules in the browser expedition.",
+        "Integrate actual party identity, realm-scoped saves and the existing controller-profile source.",
+        "Connect real jukebox cue endpoint and original sprites/art through the current owners.",
+        "Bind canonical PORTAL land and egg identity without duplicating a token when hatching.",
+        "Finish a cave/key/guardian/return loop before declaring gameplay accepted."
+      ],
+      "sessionRealm": "PORTAL",
+      "instanceName": "SHARDLANDS",
+      "previewOnly": true,
+      "existingEntry": "Unreal PORTAL cube or EnterRealm(seed)"
+    },
+    {
+      "id": "parcels",
+      "name": "Parcels",
+      "status": "SERVER",
+      "owner": "parcels_coder; existing Java/native owners retained",
+      "story": "A patchwork settlement preserves growing and trade. Learn its plot boundaries, help useful neighbors and find the helicopter route beyond its rainbow.",
+      "entryUrl": "/parcels-realm.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/adr/ADR-033-parcels-world.md",
+        "daedalus-core/src/main/java/com/daedalus/world/district/DistrictOps.java",
+        "daedalus-server/src/main/java/com/daedalus/server/controller/WorldController.java",
+        "daedalus-server/src/main/java/com/daedalus/server/service/WorldPackageService.java",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/REALM-CASTS.md"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Current server plots have claim/build bounds; canonical PARCELS/number land and plot deeds require realm-aware identity.",
+        "blockers": [
+          "The generator's sixty claimable plots are not a sale-supply announcement.",
+          "Existing island vouchers read island records rather than defining plot deeds.",
+          "Smooth native rendering, height-aware deed metadata and chain-following owners remain pending.",
+          "New browser visitor page has no fresh runtime verification."
+        ]
+      },
+      "nextSteps": [
+        "Discover an actual mounted PARCELS world and read its current plots.",
+        "Finish a plaza-to-plot-to-useful-scene visitor flow with reserved public areas.",
+        "Keep authenticated ownership/building authority in the existing server.",
+        "Integrate helicopter/rainbow/native rendering through World Packages and the current owner.",
+        "Prepare plot bounds/metadata/vouchers and transfer reconciliation under the canonical land model."
+      ],
+      "sessionRealm": "PARCELS",
+      "previewOnly": true,
+      "existingEntry": "/realm.html; select an actual mounted PARCELS world"
+    },
+    {
+      "id": "bricks",
+      "name": "Bricks",
+      "status": "SERVER",
+      "owner": "Existing codex-buckwild-bricks Stud Relay crew",
+      "story": "A fragment kept the old world's knowledge of building. Cross the studded course, recover checkpoints and assemble a useful way onward.",
+      "entryUrl": "/realm.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/adr/ADR-034-bricks-world.md",
+        "daedalus-core/src/main/java/com/daedalus/world/bricks/BricksOps.java",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/REALM-CASTS.md",
+        "C:/Users/730ri/projects/bot-team/link/log.jsonl messages 30707, 30738"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Canonical BRICKS/number baseplate land design; realm-specific deed implementation and reserved spawn/runway remain to be defined.",
+        "blockers": [
+          "Stud Relay draft PR148/head 3e08fcf8 is reported source delivery, not integrated native gameplay.",
+          "Server-authoritative presence/race timing and safe creator hazard rules are held.",
+          "Native studs/avatar/plane and source-to-runtime acceptance remain unverified.",
+          "No Bricks-specific deployed land contract or mint availability was established."
+        ]
+      },
+      "nextSteps": [
+        "Preserve and integrate the existing worker's exact Stud Relay source.",
+        "Finish checkpoint/hazard/trophy/return with actual identity and durable progression.",
+        "Ship original studded art and plane through the existing import owner.",
+        "Use the realm rainbow and paired gate for travel.",
+        "Define land/public-area bounds and deed metadata before release."
+      ],
+      "sessionRealm": "BRICKS",
+      "previewOnly": false,
+      "existingEntry": "Select an actual mounted BRICKS world."
+    },
+    {
+      "id": "gallery-city",
+      "name": "Gallery City",
+      "status": "SERVER",
+      "owner": "buckwild-sol; existing native owners retained",
+      "story": "A city preserves color and light. Curate the old world's maze art, recover useful clues and turn a picture's seed into a route through its ruins.",
+      "entryUrl": "/gallery-city.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/adr/ADR-035-gallery-city.md",
+        "daedalus-core/src/main/java/com/daedalus/world/gallery/GalleryOps.java",
+        "daedalus-server/src/main/java/com/daedalus/server/controller/WorldController.java",
+        "daedalus-server/src/main/java/com/daedalus/server/service/WorldPackageService.java",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/REALM-CASTS.md"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Server addressed parcels and frame content; canonical GALLERY-CITY/number land identity is separate from artwork provenance.",
+        "blockers": [
+          "The generator's sixty-eight parcels are not an NFT sale-supply announcement.",
+          "Frame-to-walkable-maze integration is held in the current ADR.",
+          "Plot vouchers/metadata and confirmed owner transfer following remain pending.",
+          "The new visitor/gallery and hub are source previews without fresh runtime or native proof."
+        ]
+      },
+      "nextSteps": [
+        "Deliver the original curatorial city and common /metaverse.html directory.",
+        "Read addressed parcels and gallery works from an actual mounted GALLERY provider.",
+        "Keep claim authority and public Origin plaza rules on the existing server.",
+        "Connect a frame's seed to an existing maze with an explicit return contract.",
+        "Integrate drone/rainbow art and style-aware deed metadata through current owners."
+      ],
+      "sessionRealm": "GALLERY-CITY",
+      "previewOnly": true,
+      "existingEntry": "/realm.html; select an actual mounted GALLERY world"
+    },
+    {
+      "id": "orrery-reach",
+      "name": "The Orrery Reach",
+      "status": "LIVE",
+      "owner": "Claude/unreal-team; shared livestock by youtube-master",
+      "story": "Keepers of the surviving observatory read starbloom hours, recover scattered charts and repair the telescope that points toward a future moon.",
+      "entryUrl": "/reach.html",
+      "entryKind": "existing-entry-or-source-preview",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/realms/OrreryReach.md",
+        "docs/adr/ADR-057-orrery-reach.md",
+        "docs/adr/ADR-058-one-isle-core.md",
+        "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOrreryCore.h",
+        "daedalus-core/src/main/java/com/daedalus/world/island/VoxelIsle.java",
+        "daedalus-server/src/main/resources/static/reach.html"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Authored voxel isles/sublevels need explicit allocated land-to-deed mapping; a procedural isle is not automatically a lane-slot NFT.",
+        "blockers": [
+          "The web entry is a terrain view, not proof of every native logbook interaction.",
+          "Shared bee/livestock production and durable logbook/save binding remain integration work.",
+          "Vault/telescope/new-moon finale is tied to pending Phase 2 scope.",
+          "Current allocated/deployed isle deeds and live owner following were not inspected."
+        ]
+      },
+      "nextSteps": [
+        "Preserve authored isles/Orr assets and ground-fit props after shared shape-core changes.",
+        "Bind real harvest hours, clean-water debit, teas/brews and durable charts/logbook.",
+        "Integrate the shared livestock/crop loop and real jukebox/dialogue endpoint.",
+        "Complete puzzles and explicitly mark the moon interaction as a Phase 2 hook.",
+        "Map authored isles to authoritative land before preparing deeds."
+      ],
+      "previewOnly": false,
+      "existingEntry": "/reach.html plus existing native Orrery actors"
+    },
+    {
+      "id": "labyrinth",
+      "name": "The Labyrinth",
+      "status": "NAMED",
+      "owner": "Existing buckwild-labyrinth / codex-buckwild-labyrinth route crew",
+      "story": "The Broken Survey teaches ways and paths: deliberate chalk marks, trustworthy helpers and repaired records guide a lost survey party home through old stone ruins.",
+      "entryUrl": null,
+      "entryKind": "no-browser-entry-verified",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/adr/ADR-029-the-daedalus-metaverse.md",
+        "daedalus-core/src/main/java/com/daedalus/world/WorldStyle.java",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/LABYRINTH-BUILDOUT.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/realms/REALM-CASTS.md",
+        "C:/Users/730ri/projects/bot-team/link/log.jsonl messages 30705, 30738"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Canonical LABYRINTH/number maze-block design or explicitly deed-attached dungeon; exact allocation and mint model remain owner work.",
+        "blockers": [
+          "This checkout's LABYRINTH generator ready flag is false.",
+          "Existing route/native source 6023649e belongs to another worker and is reported unvalidated.",
+          "Native art/navigation/route bindings and durable authoritative gameplay remain pending.",
+          "Chalk snapshots, art-kit exports and generic maze APIs are not land ownership evidence."
+        ]
+      },
+      "nextSteps": [
+        "Preserve the existing route worker's Java/native source and handoff.",
+        "Finish the authored Broken Survey cast and friendly-plant boundaries.",
+        "Integrate a generator/renderer through existing WorldHub and native owners.",
+        "Bind authoritative identity/revision/chalk/lesson snapshots and one safe dungeon loop.",
+        "Allocate maze land and supply canonical metadata before a release."
+      ],
+      "sessionRealm": "LABYRINTH",
+      "previewOnly": false
+    },
+    {
+      "id": "ocean",
+      "name": "Ocean",
+      "status": "SERVER",
+      "owner": "Existing team-codex/Pootscoot Ocean host and travel owners",
+      "story": "The surviving seas and harbors keep another route between fragments. Board a real vessel, explore a seeded sector and return safely with the same passenger identity.",
+      "entryUrl": null,
+      "entryKind": "no-browser-entry-verified",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/production/REALM-DIRECTORY.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/production/OCEAN-HOST-API.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/production/OCEAN-CHUNK-PERSISTENCE.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/docs/production/OCEAN-DOCK-TRAVEL-CONTRACT.md",
+        "C:/Users/730ri/.codex/worktrees/island-mesh-pool/Daedalus2/daedalus-server/src/main/java/com/daedalus/server/service/RealmDirectoryService.java"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Canonical OCEAN/number water/harbor land allocation is separate from the optional read-only terrain provider.",
+        "blockers": [
+          "Ocean appears only when its opt-in provider is actually configured.",
+          "Authenticated OCEAN_V1 chunk routes do not grant block edits, travel or land ownership.",
+          "Current per-player realm transfer and public native hosting were not checked.",
+          "Harbor/native proof records are historical; no current NFT deployment was observed."
+        ]
+      },
+      "nextSteps": [
+        "Preserve the optional provider and fetch its authenticated manifest bounds.",
+        "Use existing immutable persistence, bounded chunk windows and client cancellation.",
+        "Complete dock boarding, vessel passenger session, remote exit and safe per-player return.",
+        "Ground-fit existing harbor/vessel art and bind finite crafting resources.",
+        "Define water/harbor allocation and common travel zones before mint preparation."
+      ],
+      "sessionRealm": "OCEAN",
+      "providerProtocol": "OCEAN_V1",
+      "sourceLocation": "Newer source checkout; not assumed installed here.",
+      "previewOnly": false
+    },
+    {
+      "id": "space-phase-2",
+      "name": "Space: Phase 2",
+      "status": "NAMED",
+      "owner": "Future owner; claim on the existing hub",
+      "story": "The repaired telescope finds a moon beyond the broken planet. The first journey expands the impact story into visitable celestial bodies.",
+      "entryUrl": null,
+      "entryKind": "no-browser-entry-verified",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/STORY.md",
+        "docs/REALMS.md",
+        "docs/realms/OrreryReach.md"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Future bounded body/orbital land design; no live allocation, token namespace or deployed sale is established.",
+        "blockers": [
+          "Space is named future scope, not implemented public travel.",
+          "One body's movement/environment/vehicle and persistent return contract must be defined.",
+          "Body coordinates, common arrival land and canonical identity remain unallocated.",
+          "No planets/Earth supply, price or launch date is announced by this catalog."
+        ]
+      },
+      "nextSteps": [
+        "Claim one original moon vertical slice and reuse existing world/package/streaming systems.",
+        "Bind the first journey to the Orrery telescope and actual travel authority.",
+        "Implement one bounded arrival/explore/objective/return loop.",
+        "Use existing resource/save ownership for life-support and objectives.",
+        "Allocate body land and metadata before any release announcement."
+      ],
+      "previewOnly": false
+    },
+    {
+      "id": "sol-reach",
+      "name": "Sol Reach: Portal district",
+      "status": "DISTRICT",
+      "owner": "Historical team-codex; Pootscoot and shared homestead owners",
+      "story": "An orchard and old waterworks survived the impact. Filter water, care for the farm, brew an ordered herb ring and earn the way into a seeded Portal adventure.",
+      "entryUrl": null,
+      "entryKind": "no-browser-entry-verified",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "docs/realms/SolReach.md",
+        "docs/realms/SolReachRuntime.md",
+        "docs/mechanics/RingInfusion.md",
+        "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSolReachJournal.h",
+        "tools/islands/sol/sol_rules.py"
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Existing host fragment/deed journal binding; no separate realm collection or free inventory is implied.",
+        "blockers": [
+          "Recorded Norton native execution hold needs owner detection/path disposition.",
+          "Journal UHT/native integration and inventory/clock/scene wiring are documented pending.",
+          "Queued art/placement plans do not establish a current native import or saved-play result.",
+          "DeedJournalKey must come from authenticated deed authority."
+        ]
+      },
+      "nextSteps": [
+        "Preserve existing district ownership/layout and resolve the recorded execution hold.",
+        "Wire shared homestead transactions into ordered Ring Infusion and journal memory.",
+        "Bind the single sky clock, proximity clue and keeper destinations.",
+        "Use the current native owner for accepted asset placement and scoped saves.",
+        "Finish real portal entry/return and durable owner-only discoveries."
+      ],
+      "kind": "district",
+      "parentRealm": "portal",
+      "previewOnly": false
+    },
+    {
+      "id": "lantern-reach",
+      "name": "Lantern Reach: proposed exploration realm",
+      "status": "PROPOSED",
+      "owner": "Existing codex-buckwild-n64 crew",
+      "story": "An original compact hub opens visual portals into distinct small worlds, where movement routes, secrets and collectible objectives unlock new exploration.",
+      "entryUrl": null,
+      "entryKind": "no-browser-entry-verified",
+      "verification": "Source inspection only; no tests, build, fresh runtime, import or chain validation.",
+      "sourceEvidence": [
+        "C:/Users/730ri/projects/bot-team/link/log.jsonl messages 30729, 30748",
+        "Owner-reported draft PR149, source e809a729; four exploration Java files plus LanternReachExploration.md in a separate checkout."
+      ],
+      "land": {
+        "stage": "RELEASE_PREPARATION",
+        "model": "Provisional design ID only; host/world allocation and deed identity must be accepted by the existing registry owner.",
+        "blockers": [
+          "Published pure-source definition/progression is reported complete and unvalidated.",
+          "Host identity, durable binding and canonical live registration are pending.",
+          "Terrain/art/collision/movement and actual saved gameplay remain unfinished.",
+          "No provisional identifier confers land or NFT ownership."
+        ]
+      },
+      "nextSteps": [
+        "Have the current host owner allocate an accepted identity.",
+        "Integrate immutable snapshots/replay/CAS with existing durable authority.",
+        "Create original modular hub/world terrain and readable movement/secret routes.",
+        "Bind actual collision, objectives and safe portal returns.",
+        "Prepare land metadata only after allocation and terrain identity are real."
+      ],
+      "kind": "proposal",
+      "previewOnly": false
+    }
+  ]
+}

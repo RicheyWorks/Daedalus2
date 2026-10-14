@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "sprint": "buckwild-realms-20261014",
+  "startedAt": "2026-10-14T19:11:45Z",
+  "startBasis": "First observed UTC clock during this crew audit. Earlier conversation time is excluded.",
+  "baseline": "All listed delivery files are newly authored in this sprint; pre-existing user changes are excluded.",
+  "members": [
+    {
+      "member": "buckwild-sol",
+      "realm": "Gallery City",
+      "files": [
+        "daedalus-server/src/main/resources/static/gallery-city.html",
+        "daedalus-server/src/main/resources/static/gallery-city.css",
+        "daedalus-server/src/main/resources/static/gallery-city.js",
+        "daedalus-server/src/main/resources/static/gallery-city-core.js",
+        "daedalus-server/src/main/resources/static/metaverse.html",
+        "daedalus-server/src/main/resources/static/metaverse.css",
+        "daedalus-server/src/main/resources/static/metaverse.js",
+        "tools/crew/sprint_receipt.py",
+        "tools/crew/buckwild-sprint.json",
+        "docs/realms/GalleryCityExpedition.md",
+        "docs/production/BUCKWILD-SOURCE-HANDOFF.md"
+      ]
+    },
+    {
+      "member": "parcels_coder",
+      "realm": "Parcels",
+      "files": [
+        "daedalus-server/src/main/resources/static/parcels-realm.html",
+        "daedalus-server/src/main/resources/static/parcels-realm.css",
+        "daedalus-server/src/main/resources/static/parcels-realm.js",
+        "docs/realms/ParcelsExpedition.md"
+      ]
+    },
+    {
+      "member": "portal_coder",
+      "realm": "Portal Realm",
+      "files": [
+        "daedalus-server/src/main/resources/static/portal-expedition.html",
+        "daedalus-server/src/main/resources/static/portal-expedition.css",
+        "daedalus-server/src/main/resources/static/portal-expedition.js",
+        "docs/realms/PortalExpedition.md"
+      ]
+    },
+    {
+      "member": "realm_audit",
+      "realm": "Shattered Planet",
+      "files": [
+        "daedalus-server/src/main/resources/static/sky-expedition.html",
+        "daedalus-server/src/main/resources/static/sky-expedition.css",
+        "daedalus-server/src/main/resources/static/sky-expedition.js",
+        "daedalus-server/src/main/resources/static/realm-release-catalog.json",
+        "docs/realms/SkyExpedition.md",
+        "docs/BUCKWILD-REALM-OUTLINE.md"
+      ]
+    }
+  ]
+}

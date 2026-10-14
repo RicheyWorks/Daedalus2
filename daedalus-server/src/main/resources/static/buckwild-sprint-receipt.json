@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "sprint": "buckwild-realms-20261014",
+  "startedAt": "2026-10-14T19:11:45+00:00",
+  "measuredAt": "2026-10-14T19:30:45.718036+00:00",
+  "elapsedMinutes": 19.012,
+  "measurementBasis": "First observed UTC clock during this crew audit. Earlier conversation time is excluded.",
+  "baseline": "All listed delivery files are newly authored in this sprint; pre-existing user changes are excluded.",
+  "lineDefinition": "Literal nonblank source-file lines, including markup and comments; data/docs separate.",
+  "paceMeaning": "Observed saved-source output divided by crew elapsed wall time; extrapolated, not sustained or quality evidence.",
+  "testsRun": false,
+  "buildsRun": false,
+  "runtimeValidated": false,
+  "members": [
+    {
+      "member": "buckwild-sol",
+      "realm": "Gallery City",
+      "sourceFiles": 8,
+      "sourceBytes": 63386,
+      "sourcePhysicalLines": 722,
+      "sourceNonblankLines": 690,
+      "dataFiles": 1,
+      "dataBytes": 2320,
+      "dataPhysicalLines": 58,
+      "dataNonblankLines": 58,
+      "documentationFiles": 2,
+      "documentationBytes": 7957,
+      "documentationPhysicalLines": 114,
+      "documentationNonblankLines": 88,
+      "files": [
+        {
+          "path": "daedalus-server/src/main/resources/static/gallery-city.html",
+          "category": "source",
+          "bytes": 3416,
+          "physicalLines": 36,
+          "nonblankLines": 36,
+          "sha256": "114db6afda4418d9d37fccf5c1dafc4230be6327e7ba5212a7b6c7e7a774a394"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/gallery-city.css",
+          "category": "source",
+          "bytes": 5741,
+          "physicalLines": 6,
+          "nonblankLines": 6,
+          "sha256": "bfd9012a909821fac60175f4b64aa5e73d0e410f8f41383e72b4a81c93e29493"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/gallery-city.js",
+          "category": "source",
+          "bytes": 20615,
+          "physicalLines": 299,
+          "nonblankLines": 290,
+          "sha256": "46bd5341647af861cf50e2ec8c7c4292a0a2868d1c877a5b6de687d0ccc6f32b"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/gallery-city-core.js",
+          "category": "source",
+          "bytes": 9982,
+          "physicalLines": 168,
+          "nonblankLines": 157,
+          "sha256": "6be2617a3a703236036be426c67bfe1ee36ade5b9490ef552e13ef90914b106f"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/metaverse.html",
+          "category": "source",
+          "bytes": 3906,
+          "physicalLines": 16,
+          "nonblankLines": 16,
+          "sha256": "ee6a51c34734b7813aeec9ca09824ce0363eda77208d585092d52871683b11e0"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/metaverse.css",
+          "category": "source",
+          "bytes": 7061,
+          "physicalLines": 6,
+          "nonblankLines": 6,
+          "sha256": "354a71887db3c546a5cb8ac908f21e75d2d6c68af2ba87f0ddc8528766d813e6"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/metaverse.js",
+          "category": "source",
+          "bytes": 7560,
+          "physicalLines": 98,
+          "nonblankLines": 98,
+          "sha256": "60b3ac95ca9f12e5586f30c35880c56517453b47765983c7453101580abd0441"
+        },
+        {
+          "path": "tools/crew/sprint_receipt.py",
+          "category": "source",
+          "bytes": 5105,
+          "physicalLines": 93,
+          "nonblankLines": 81,
+          "sha256": "2c74bcf5d4910021e30023def839d45f74bf804e939ffdbd777f3a55e40df31a"
+        },
+        {
+          "path": "tools/crew/buckwild-sprint.json",
+          "category": "data",
+          "bytes": 2320,
+          "physicalLines": 58,
+          "nonblankLines": 58,
+          "sha256": "203829b4b8a8e5c017036df249e1d613c4aa76d3e4df6ea983f55aeda7b177be"
+        },
+        {
+          "path": "docs/realms/GalleryCityExpedition.md",
+          "category": "documentation",
+          "bytes": 3511,
+          "physicalLines": 47,
+          "nonblankLines": 37,
+          "sha256": "1c7199d1889ba0f28f6fd4b73cc4340ce609338d777c80d4ee9fa77b78611f1d"
+        },
+        {
+          "path": "docs/production/BUCKWILD-SOURCE-HANDOFF.md",
+          "category": "documentation",
+          "bytes": 4446,
+          "physicalLines": 67,
+          "nonblankLines": 51,
+          "sha256": "596d3047365bc0277aac09d36739b92c100a49be97f710250e9d37464c677c13"
+        }
+      ],
+      "sourceNonblankLinesPerHour": 2177.58
+    },
+    {
+      "member": "parcels_coder",
+      "realm": "Parcels",
+      "sourceFiles": 3,
+      "sourceBytes": 66664,
+      "sourcePhysicalLines": 656,
+      "sourceNonblankLines": 646,
+      "dataFiles": 0,
+      "dataBytes": 0,
+      "dataPhysicalLines": 0,
+      "dataNonblankLines": 0,
+      "documentationFiles": 1,
+      "documentationBytes": 4670,
+      "documentationPhysicalLines": 32,
+      "documentationNonblankLines": 22,
+      "files": [
+        {
+          "path": "daedalus-server/src/main/resources/static/parcels-realm.html",
+          "category": "source",
+          "bytes": 9430,
+          "physicalLines": 75,
+          "nonblankLines": 71,
+          "sha256": "d8fa71da841091d8f31d53deca6221b8abc57401f80c4d1840466d6ed32c5560"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/parcels-realm.css",
+          "category": "source",
+          "bytes": 14504,
+          "physicalLines": 1,
+          "nonblankLines": 1,
+          "sha256": "1ef8b8c692f4c332dc37179ff268dfd8f6c57abea80295961d3236d0049b334b"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/parcels-realm.js",
+          "category": "source",
+          "bytes": 42730,
+          "physicalLines": 580,
+          "nonblankLines": 574,
+          "sha256": "0d10f753a628d3507d8a77997859b89a3203e660375b83d369b70e05752400cf"
+        },
+        {
+          "path": "docs/realms/ParcelsExpedition.md",
+          "category": "documentation",
+          "bytes": 4670,
+          "physicalLines": 32,
+          "nonblankLines": 22,
+          "sha256": "6bb5a891d63f9a0558c4aedc53bde791eb9fda091dcd83d51bd9af814ac21079"
+        }
+      ],
+      "sourceNonblankLinesPerHour": 2038.72
+    },
+    {
+      "member": "portal_coder",
+      "realm": "Portal Realm",
+      "sourceFiles": 3,
+      "sourceBytes": 106799,
+      "sourcePhysicalLines": 824,
+      "sourceNonblankLines": 818,
+      "dataFiles": 0,
+      "dataBytes": 0,
+      "dataPhysicalLines": 0,
+      "dataNonblankLines": 0,
+      "documentationFiles": 1,
+      "documentationBytes": 10106,
+      "documentationPhysicalLines": 115,
+      "documentationNonblankLines": 93,
+      "files": [
+        {
+          "path": "daedalus-server/src/main/resources/static/portal-expedition.html",
+          "category": "source",
+          "bytes": 7261,
+          "physicalLines": 52,
+          "nonblankLines": 52,
+          "sha256": "218c413be7ff0cb98b6a3a95d34d915599764c1ba3dcbf6a6c9faa284e43f293"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/portal-expedition.css",
+          "category": "source",
+          "bytes": 11392,
+          "physicalLines": 7,
+          "nonblankLines": 7,
+          "sha256": "192aef95f131793230a03aa9da14b9d4949a0f3fec69b12f3b7f0b694e2c167b"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/portal-expedition.js",
+          "category": "source",
+          "bytes": 88146,
+          "physicalLines": 765,
+          "nonblankLines": 759,
+          "sha256": "646d49da1557c593d26e15295dd6227f6c2590606ae79d84f7a38816e79dcde6"
+        },
+        {
+          "path": "docs/realms/PortalExpedition.md",
+          "category": "documentation",
+          "bytes": 10106,
+          "physicalLines": 115,
+          "nonblankLines": 93,
+          "sha256": "66ff00919d51858d89ec176a26287417143749b0da657bbe6e7de19747bf660c"
+        }
+      ],
+      "sourceNonblankLinesPerHour": 2581.53
+    },
+    {
+      "member": "realm_audit",
+      "realm": "Shattered Planet",
+      "sourceFiles": 3,
+      "sourceBytes": 46370,
+      "sourcePhysicalLines": 330,
+      "sourceNonblankLines": 328,
+      "dataFiles": 1,
+      "dataBytes": 27131,
+      "dataPhysicalLines": 465,
+      "dataNonblankLines": 465,
+      "documentationFiles": 2,
+      "documentationBytes": 37970,
+      "documentationPhysicalLines": 264,
+      "documentationNonblankLines": 195,
+      "files": [
+        {
+          "path": "daedalus-server/src/main/resources/static/sky-expedition.html",
+          "category": "source",
+          "bytes": 5157,
+          "physicalLines": 59,
+          "nonblankLines": 59,
+          "sha256": "cd12fb404e547e21e5942404f30f682c466a67ed6573ed1e55239c13c46aa221"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/sky-expedition.css",
+          "category": "source",
+          "bytes": 8705,
+          "physicalLines": 1,
+          "nonblankLines": 1,
+          "sha256": "2ba57530ac154a1bca1c08ca1f52156366b0f394215aa2bb06069e5f4257f8a1"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/sky-expedition.js",
+          "category": "source",
+          "bytes": 32508,
+          "physicalLines": 270,
+          "nonblankLines": 268,
+          "sha256": "c9398b897d9304cf9e133141f7c496227a1bc6d9ec518f29bfbc8ae454850d73"
+        },
+        {
+          "path": "daedalus-server/src/main/resources/static/realm-release-catalog.json",
+          "category": "data",
+          "bytes": 27131,
+          "physicalLines": 465,
+          "nonblankLines": 465,
+          "sha256": "fd0d12af3ff3de029b46672449a60f48fe574bbe26587246402615f7b371f514"
+        },
+        {
+          "path": "docs/realms/SkyExpedition.md",
+          "category": "documentation",
+          "bytes": 4442,
+          "physicalLines": 66,
+          "nonblankLines": 52,
+          "sha256": "fa0f296268929792a0643ab3b44445eab1c2642969f5fc856b2b3013c6676409"
+        },
+        {
+          "path": "docs/BUCKWILD-REALM-OUTLINE.md",
+          "category": "documentation",
+          "bytes": 33528,
+          "physicalLines": 198,
+          "nonblankLines": 143,
+          "sha256": "c88819c123dee6646bfeacc756ad7de05c5f90517ad0b8ec837cc72e467e6d30"
+        }
+      ],
+      "sourceNonblankLinesPerHour": 1035.14
+    }
+  ],
+  "totals": {
+    "sourceFiles": 17,
+    "sourceBytes": 283219,
+    "sourcePhysicalLines": 2532,
+    "sourceNonblankLines": 2482,
+    "dataFiles": 2,
+    "dataBytes": 29451,
+    "dataPhysicalLines": 523,
+    "dataNonblankLines": 523,
+    "documentationFiles": 6,
+    "documentationBytes": 60703,
+    "documentationPhysicalLines": 525,
+    "documentationNonblankLines": 398,
+    "sourceNonblankLinesPerHour": 7832.96
+  },
+  "missingFiles": []
+}

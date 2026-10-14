@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101327">
+  <title>Portal Expedition · Daedalus</title>
+  <link rel="stylesheet" href="/portal-expedition.css">
+  <script defer src="/portal-expedition.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/metaverse.html">D<span>Æ</span>DALUS <small>THE SHATTERED PLANET</small></a>
+    <nav aria-label="Realm navigation"><a href="/realm.html">Sky islands</a><a href="/reach.html">Orrery Reach</a><span class="current">Portal Realm</span></nav>
+    <span class="edition">EXPEDITION 02 / 8-BIT</span>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">A world on the other side of a cube</p><h1 id="page-title">Small pixels.<br><em>Unbroken courage.</em></h1><p class="lede">The meteor shattered a planet. Its people kept the roads, the stories and one impossible promise: find the star key, and bring the light home.</p></div>
+      <form id="seed-form" class="seed-card">
+        <label for="seed">YOUR PORTAL SEED</label><div class="seed-row"><input id="seed" name="seed" type="text" inputmode="numeric" value="7" autocomplete="off" maxlength="20" aria-describedby="seed-help"><button id="enter" class="primary" type="submit">Enter realm ↗</button></div>
+        <p id="seed-help">The same seed opens the same field, towns, castle and three cave floors.</p>
+        <div class="connection"><span id="source-dot" class="dot"></span><span id="source-status" role="status">Reading the portal…</span></div>
+        <button id="demo" type="button" hidden>Open shipped seed 7 · offline visitor expedition</button>
+      </form>
+    </section>
+    <div class="boundary"><span>READ-ONLY REALM DATA / LOCAL ADVENTURE</span><p>Your journal, gold and battles stay in this browser. They grant no deed, NFT, land claim or world edit.</p></div>
+    <section class="expedition" aria-label="Expedition console">
+      <div class="game-column">
+        <div class="screen-bar"><div><span class="eyebrow" id="map-type">FIELD SURVEY</span><h2 id="map-name">Beyond the portal</h2></div><div class="screen-data"><span id="coord">— / —</span><span id="cue">CUE · FIELD</span></div></div>
+        <div class="screen-wrap"><canvas id="screen" width="496" height="368" tabindex="0" aria-label="Portal expedition map. Arrow keys or WASD move. E or Space interacts. Click a visible tile to walk there."></canvas><div id="screen-empty">A realm is waiting.<br><small>Enter a seed to begin your expedition.</small></div><div class="screen-tag">HERO / SAGE / SCOUT</div></div>
+        <div class="under-screen"><span id="hint">Walk the seed. Listen to its people.</span><button id="interact" type="button" class="primary">Interact <kbd>E</kbd></button><button id="observe" type="button">Observe zone</button><button id="torch" type="button">Light torch</button></div>
+        <div class="party-strip"><div><span>PARTY HEALTH</span><strong id="hp">—</strong><meter id="health" min="0" max="100" value="100">100%</meter></div><div><span>FOCUS</span><strong id="mp">—</strong></div><div><span>LOCAL GOLD</span><strong id="gold">—</strong></div><div><span>RANK / STEPS</span><strong id="rank">—</strong></div></div>
+        <div class="console-grid">
+          <section class="panel interaction" aria-labelledby="detail-heading"><div class="panel-heading"><span class="eyebrow">NEARBY / ACTION</span><h3 id="detail-heading">A crew of three</h3></div><div id="detail"><p>You became pixels at the portal. The seed still remembers every road.</p></div><div id="actions" class="action-list"></div></section>
+          <section class="panel" aria-labelledby="bag-title"><div class="panel-heading"><span class="eyebrow">SUPPLIES</span><h3 id="bag-title">The shared bag</h3></div><div id="bag" class="bag-list"><p class="muted">Your expedition kit appears here.</p></div></section>
+        </div>
+        <section class="panel log-panel" aria-labelledby="log-title"><div class="panel-heading"><span class="eyebrow">TRANSMISSIONS</span><h3 id="log-title">The road remembers</h3></div><ol id="log" class="log" aria-live="polite" aria-relevant="additions"></ol></section>
+      </div>
+      <aside class="sidebar">
+        <section class="panel atlas"><div class="panel-heading"><span class="eyebrow">SEED ATLAS</span><h3>The fragment beneath your feet</h3></div><canvas id="atlas" width="256" height="256" aria-label="Overview of the current map; click to mark a walking route."></canvas><div class="atlas-tools"><label><input id="zones" type="checkbox"> Danger zones</label><label><input id="fog" type="checkbox" checked> Discovery fog</label></div><p id="discovery" class="muted">No survey yet.</p><div id="waypoints" class="waypoints"></div><div class="legend"><span><i class="legend-portal"></i>Portal</span><span><i class="legend-town"></i>Town</span><span><i class="legend-castle"></i>Castle</span><span><i class="legend-cave"></i>Cave</span></div></section>
+        <section class="panel journal" aria-labelledby="journal-title"><div class="panel-heading"><span class="eyebrow">KEEPER'S JOURNAL</span><h3 id="journal-title">Bring the light home</h3></div><progress id="quest-progress" value="0" max="9">0 of 9</progress><p id="quest-count" class="muted">Nine chapters. One broken world.</p><ol id="quests"></ol></section>
+        <section class="panel fieldnotes" aria-labelledby="field-title"><div class="panel-heading"><span class="eyebrow">FIELD NOTES</span><h3 id="field-title">Listen before you leap</h3></div><div id="zone-detail"><p class="muted">Zone tables come from the realm seed.</p></div></section>
+        <section class="panel saved"><div class="panel-heading"><span class="eyebrow">EXPEDITION RECORD</span><h3>Keep your journey</h3></div><p id="save-status" role="status">Autosaves locally as you walk.</p><div class="action-list"><button id="export" type="button">Export journal ↓</button><button id="return" type="button">Use wings / return</button><button id="reset" type="button">New expedition</button></div><p class="fine">Portal Realm land releases require an approved ownership and mint pipeline. This visitor expedition is a view of seeded game data.</p></section>
+      </aside>
+    </section>
+    <section class="touch-controls" aria-label="Touch movement"><button type="button" data-move="0,-1" aria-label="Move north">↑</button><div><button type="button" data-move="-1,0" aria-label="Move west">←</button><button type="button" id="touch-act">Act</button><button type="button" data-move="1,0" aria-label="Move east">→</button></div><button type="button" data-move="0,1" aria-label="Move south">↓</button></section>
+    <footer><p>Original worlds, original stories. Generated with the Daedalus maze engines.</p><p><kbd>WASD</kbd> / arrows · walk &nbsp; <kbd>E</kbd> / Space · interact &nbsp; <kbd>Esc</kbd> · stop route &nbsp; Click / tap · plot a route</p><p>Browser expedition rules are a small local adventure; the native Portal Realm runs the full party combat and jukebox.</p></footer>
+  </main>
+</body>
+</html>

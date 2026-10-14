@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111a27"><title>Gallery City · Daedalus</title>
+  <link rel="stylesheet" href="/gallery-city.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/metaverse.html">DAEDALUS <span>/ GALLERY CITY</span></a>
+    <div class="controls"><label>World <select id="world"><option value="">Visitor draft</option></select></label>
+    <label>Seed <input id="seed" value="7" maxlength="19" inputmode="numeric"></label><button id="load">Enter city</button></div>
+  </header>
+  <main>
+    <section class="viewport" aria-label="Gallery City exploration">
+      <canvas id="city" tabindex="0" aria-label="City map. Move with WASD or arrow keys. Tap a destination to walk. Press E to inspect."></canvas>
+      <div class="scene-title"><p class="eyebrow">A FRAGMENT THAT REMEMBERS</p><h1>Gallery City</h1>
+        <p>Follow the streets. Gather the echoes.<br>Bring the old world's memories home.</p></div>
+      <div class="scene-status"><span id="connection">Preparing visitor map…</span><span id="location">Origin plaza</span></div>
+      <div class="compass" aria-hidden="true">N ↑</div>
+      <div class="map-tools"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="follow">Follow explorer</button><button id="overview">City view</button></div>
+      <div class="touch-pad" aria-label="Movement"><button data-move="north" aria-label="Move north">↑</button><div><button data-move="west" aria-label="Move west">←</button><button id="inspect">Inspect</button><button data-move="east" aria-label="Move east">→</button></div><button data-move="south" aria-label="Move south">↓</button></div>
+      <p class="scene-hint">WASD / arrows to walk · tap to route · E to inspect · wheel to zoom</p>
+      <div id="toast" role="status" aria-live="polite"></div>
+    </section>
+    <aside>
+      <section class="intro"><span class="tag">EXPLORER'S JOURNAL</span><h2>The memory mosaic</h2><p>The Shattering scattered more than stone. A city of maze art keeps the paths of the planet that was.</p><p class="local-note">This visitor journal saves on your device.</p><div class="progress"><span id="progress-fill"></span></div><p id="progress-label"></p></section>
+      <section id="quests" aria-label="Expedition objectives"></section>
+      <section class="inspector"><span class="tag">NEARBY PARCEL</span><h2 id="parcel-title">Explore the city</h2><p id="parcel-detail">Walk to a parcel edge and inspect its address. Every parcel belongs to the shared world.</p><div id="parcel-facts"></div><div id="artwork"></div><button id="view-art" hidden>Study artwork</button></section>
+      <section class="land"><span class="tag">LAND & DEEDS</span><h2>Build a place that lasts</h2><p id="land-summary">Parcel ownership comes from the realm server. Plot NFT minting is awaiting the plot deed integration.</p><a href="/metaverse.html#releases">View realm release plan →</a></section>
+      <footer><a href="/realm.html">Enter the voxel realm</a><button id="reset">Reset visitor journal</button><p id="save-status">Device save ready.</p></footer>
+    </aside>
+  </main>
+  <script type="module" src="/gallery-city.js"></script>
+</body>
+</html>

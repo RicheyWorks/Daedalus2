@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071e2d">
+  <title>The Arkkeeper's Atlas · Daedalus</title>
+  <link rel="stylesheet" href="/sky-expedition.css">
+  <script src="/sky-expedition.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/metaverse.html"><span class="brand-mark" aria-hidden="true">✦</span> DAEDALUS <small>THE SHATTERED PLANET</small></a>
+    <nav aria-label="Realm navigation"><a href="/metaverse.html">All realms</a><a href="/realm.html?world=world-zero">Existing world</a></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">AN ARKKEEPER'S EXPEDITION</p><h1>A world broken.<br><em>A route worth keeping.</em></h1><p class="lede">The impact scattered the old planet. Its arks carry what survived. Chart a passage between floating fragments and listen for the Heartstone beneath the roots.</p></div>
+      <aside class="dispatch"><span class="stamp">FIELD DISPATCH 01</span><p>“A single founder seldom makes a home. Carry a lineage, not just a passenger.”</p><small>Local expedition fiction · no live ecology changes</small></aside>
+    </section>
+    <section class="toolbar" aria-label="Atlas source">
+      <div class="mode" id="mode-badge">LOCAL VISITOR DRAFT</div>
+      <label>Mounted sky world<select id="world-select" aria-label="Mounted sky world"><option value="">Discovering worlds…</option></select></label>
+      <button id="refresh" type="button">Read server atlas</button>
+      <form id="draft-form"><label>Draft seed<input id="draft-seed" value="arkkeeper-7" maxlength="64" autocomplete="off"></label><button type="submit">Grow draft</button></form>
+    </section>
+    <p class="source-note" id="source-note" role="status">Opening a seeded visitor draft while existing world data is discovered.</p>
+    <section class="workspace">
+      <div class="atlas-shell">
+        <div class="atlas-heading"><div><span class="eyebrow">THE FRAGMENT CHART</span><h2 id="atlas-title">The Arkkeeper's Atlas</h2></div><span class="map-key"><i></i> Current berth <b></b> Planned passage</span></div>
+        <canvas id="atlas" aria-label="Floating fragment map; use the island list to select an island"></canvas>
+        <div class="chart-footer"><span id="position-label">Visitor ark at the first fragment</span><span>Click a fragment · choose a passage · keep supplies</span></div>
+        <div class="island-list" id="island-list" role="group" aria-label="Choose a fragment"></div>
+      </div>
+      <aside class="field-panel">
+        <p class="eyebrow">FRAGMENT DOSSIER</p><h2 id="island-title">Choose a fragment</h2><p id="island-description"></p>
+        <dl id="traits" class="traits"></dl>
+        <p class="claim-note" id="claim-note"></p>
+        <div class="actions"><button id="plan" class="primary" type="button">Plan passage</button><button id="sail" type="button" disabled>Sail visitor ark</button></div>
+        <p class="route-note" id="route-note">Your visitor ark is a device-local story marker.</p>
+        <a id="live-island-link" class="text-link" hidden>Open existing island →</a>
+        <div class="divider"></div>
+        <p class="eyebrow">EXPEDITION SATCHEL · THIS DEVICE</p>
+        <div class="supplies" id="supplies"></div>
+        <div class="actions compact"><button id="restock" type="button">Prepare camp supplies</button><button id="survey" type="button">Survey fragment</button><button id="rest" type="button">Rest at camp</button></div>
+        <p class="fineprint">Finite visitor supplies and discoveries stay on this device. They do not credit server inventory, alter wildlife, assign land or redeem NFTs.</p>
+      </aside>
+    </section>
+    <section class="lower-grid">
+      <article class="logbook"><div class="section-head"><div><p class="eyebrow">THE KEEPER'S FIRST CHAPTER</p><h2>The Thread of Living Lands</h2></div><span id="quest-count">0 / 3</span></div><ol id="objectives"></ol><p id="quest-note">These are local visitor objectives, independent of live game progression.</p></article>
+      <article class="logbook"><div class="section-head"><div><p class="eyebrow">PAST THE RAINBOW</p><h2>Known sky gates</h2></div><span class="subtle">Server routes</span></div><div id="gates"></div></article>
+      <article class="journal logbook"><div class="section-head"><div><p class="eyebrow">DOCKSIDE JOURNAL</p><h2>Your expedition, remembered</h2></div><button id="new-journal" type="button">Restart local journal</button></div><ol id="journal"></ol><p id="save-status" class="fineprint">Saved separately for each source, world and seed.</p></article>
+    </section>
+    <section class="fleet"><div><p class="eyebrow">THE ARKS CARRY WHAT IS LEFT</p><h2>Observed fleet</h2></div><div id="fleet"></div></section>
+    <footer><span>Original arkkeeper chapter · Shattered Planet source preview</span><a href="/realm-release-catalog.json">Land release preparation →</a></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
