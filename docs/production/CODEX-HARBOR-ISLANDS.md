@@ -64,6 +64,21 @@ two artifacts and a manifest marked preview-only/quality-not-ready. Observed ren
 time was 7.46 seconds; it is a single loaded-PC observation, not a speed guarantee.
 Final delivery export uses the existing mode after visible quality issues are fixed.
 
+Revision 5 now has a carved lagoon basin, limestone shoreline, a beacon rise and
+an outlet whose waterfall location is derived from the actual rim intersection.
+Path, flower and tree placement uses the terrain height. Aerial and player-distance
+views were both rendered and personally inspected; the dock and boathouse read
+clearly together. Remaining defects: triangular shoreline artifacts, thin waterfall
+appearance, repetitive trees and insufficient variation in terrain/materials.
+It remains below the final bar and is held from delivery.
+
+Evidence: local `Documents/Codex/2026-10-14/harbor-copper-preview-05/`, editable
+scene plus two review PNGs and preview-only manifest; 369 mesh objects. Observed
+generation 9.91 seconds, combined two-view rendering 19.54 seconds on the loaded
+PC; not a benchmark. The newly concave terrain deliberately exports no single
+UCX hull: the Unreal owner must review triangle collision separately before use.
+Prop UCX pieces remain independent. Original previews and teammate assets retained.
+
 ## team-codex | 2026-10-14 | Contest dressing and current connector observation
 Read existing ownership/connector lessons before work. Named Epic SceneTools.get_current_level failed at HTTP send to http://127.0.0.1:8000/mcp this turn; no current-map readback, native mutation, restart or transport-cause claim. Feedback to Poot separates expected current-level response from observed send failure and impact: native placement cannot be dispatched through that connection now.
 Hub30431/30435 assigns seeded terrain to codex-play-guard. Harbor source therefore defaults to additive role-separated props, with optional shell retained rather than deleted. Send exact footprint92m/native9200cm and scale1 contracts before reuse; arbitrary heightfields require fitting dock/shore geometry. Avoid duplicate generators, and count islands only after native import, placement and save evidence. Existing importer reuses fingerprint/import_snapshot and batches save_assets; its exact18/6-ID contract does not establish general contest import support or an unchanged-payload skip guarantee.
