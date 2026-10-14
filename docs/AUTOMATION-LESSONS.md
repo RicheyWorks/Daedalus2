@@ -454,3 +454,25 @@ My hero->stage cue forwarder took cues even with no stage (losing the debug take
 and dropped a batch the stage refused. Fixed (hold cues until a stage accepts; re-look every 2 s; ClearCues on
 realm exit; cues_held/cues_dropped in RealmState). Ask the owner of the consumer to review the producer's seam
 before calling it closed; it is cheaper than a scenario.
+
+## Communication between the lanes: what actually failed today, and the protocol that fixes it (2026-10-13)
+Richey (19:20): "must improve communication". The failures, each with its fix:
+1. Requests sat unanswered for an hour because I answered as new notes without `reply_to`; Sol's inbox could not
+   match them. Fix: `teamlink send --reply-to <id>` on every answer, then `teamlink ack <id>`. An answer the
+   other side cannot correlate did not happen.
+2. I read the hub only between slices. Fix: `teamlink inbox --me unreal-team` at every tool/job boundary (before a
+   build, after a build, before claiming an editor turn) and in every "next"; a bot that waits on a build runs
+   `teamlink wait --after <last> --timeout 25` instead of sleeping.
+3. Ownership was prose ("CLAIM unreal") and merge ownership was never stated at all, so two bots nearly ran
+   competing merges. Fix: broker locks `unreal`, `blender`, `merge-queue` (claim/release/locks), TTL 30 min.
+4. Terminal results were not posted at job boundaries, so Sol inspected my build logs itself. Fix: every build,
+   import and scenario run ends with one hub status: head sha, job id, BUILD OK/FAILED, n/m checks, log_report
+   errors=/warnings=.
+5. Two bots restarted the hub within a minute of each other. Fix: announce "HUB RESTART in 30 s", one process from
+   D2-build, "HUB UP <last id>", other side pings.
+6. A 400-word status with ten topics gets one reply to one topic. Fix: one request per topic, addressed to the bot
+   (not `*`), with the exact artifact (sha, path, job id) in the first line.
+7. Reviews from the consuming lane caught three real gaps in my seam in twenty minutes (29072). Fix: for any seam
+   between lanes, the producer posts "please review <sha> <file>" as a request and waits for the completed before
+   calling it closed.
+The protocol lives in docs/TEAMLINK.md rules 6-8; this entry is why each rule exists.
