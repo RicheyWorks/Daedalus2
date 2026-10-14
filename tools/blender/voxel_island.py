@@ -93,6 +93,14 @@ def plan(seed, size=46, thick=22):
     hcx, hcy = int(size * 0.35 * math.cos(hang)), int(size * 0.35 * math.sin(hang))
     hr = size * 0.55
 
+    salt = rng.randint(0, 1 << 20)
+
+    def patch(x, y, z, p=0.7, b=4):
+        """Colour noise in b-voxel patches instead of per voxel: the texture reads the same from the air and the
+        greedy mesher can merge faces (per-voxel noise left 27k quads of 40k)."""
+        h = ((x // b) * 73856093 ^ (y // b) * 19349663 ^ (z // b) * 83492791 ^ salt) & 0xFFFF
+        return h < p * 0xFFFF
+
     def hill(x, y):
         d = math.hypot(x - hcx, y - hcy)
         return int(round(4.0 * max(0.0, 1.0 - (d / hr) ** 2))) if d < hr else 0
@@ -109,16 +117,17 @@ def plan(seed, size=46, thick=22):
         if in_notch:
             ztop = -2
         for z in range(0, ztop):      # fill the hill down to the plateau
-            vox["island"].append((x, y, z, "dirt" if rng.random() < 0.7 else "dirt2"))
-        colour = "sand" if rim else ("grass" if rng.random() < 0.7 else "grass2")
+            vox["island"].append((x, y, z, "dirt" if patch(x, y, z) else "dirt2"))
+        colour = "sand" if rim else ("grass" if patch(x, y, ztop) else "grass2")
         if in_pond or in_notch:
             colour = "dirt2"
         vox["island"].append((x, y, ztop, colour))
         for z in range(ztop - 1, ztop - 4, -1):
-            vox["island"].append((x, y, z, "dirt" if rng.random() < 0.7 else "dirt2"))
-        depth = int(thick * (1.0 - (r / max(radius(math.atan2(y + 0.5, x + 0.5)), 1.0)) ** 1.6) + rng.randint(-2, 2))
+            vox["island"].append((x, y, z, "dirt" if patch(x, y, z) else "dirt2"))
+        jag = (((x // 3) * 2654435761 ^ (y // 3) * 40503 ^ salt) & 7) // 2 - 1      # -1..2 per 3x3 patch, not per column
+        depth = int(thick * (1.0 - (r / max(radius(math.atan2(y + 0.5, x + 0.5)), 1.0)) ** 1.6) + jag)
         for z in range(ztop - 4, ztop - 4 - max(depth, 1), -1):
-            vox["island"].append((x, y, z, "rock" if rng.random() < 0.6 else "rock2"))
+            vox["island"].append((x, y, z, "rock" if patch(x, y, z, 0.6) else "rock2"))
     # 3. water: pond surface and the waterfall sheet
     for (x, y) in pond:
         vox["water"].append((x, y, -1, "water"))
@@ -273,37 +282,78 @@ def stats(vox):
 
 # ---- Blender side ---------------------------------------------------------------------------------------------
 
+def greedy_quads(voxels):
+    """Merge coplanar same-colour outer faces into rectangles (greedy meshing). Returns
+    [(axis, sign, slice, u0, v0, w, h, colour)]: axis 0/1/2 is the face normal, sign +1/-1, slice the plane
+    coordinate; (u, v) are the two other axes in order. 5-10x fewer faces than one quad per voxel face, which is
+    what Unreal's import time and memory scale with (10:51: a loaded world of 126 islands was 15 GB)."""
+    occupied = {(x, y, z): c for x, y, z, c in voxels}
+    out = []
+    for axis in (0, 1, 2):
+        ua, va = [a for a in (0, 1, 2) if a != axis]
+        for sign in (1, -1):
+            slices = {}
+            for p, c in occupied.items():
+                n = list(p)
+                n[axis] += sign
+                if tuple(n) in occupied:
+                    continue
+                slices.setdefault(p[axis], {})[(p[ua], p[va])] = c
+            for sl, mask in slices.items():
+                done = set()
+                for (u, v) in sorted(mask):
+                    if (u, v) in done:
+                        continue
+                    c = mask[(u, v)]
+                    w = 1
+                    while (u + w, v) in mask and (u + w, v) not in done and mask[(u + w, v)] == c:
+                        w += 1
+                    h = 1
+                    while all((u + i, v + h) in mask and (u + i, v + h) not in done and mask[(u + i, v + h)] == c for i in range(w)):
+                        h += 1
+                    for i in range(w):
+                        for j in range(h):
+                            done.add((u + i, v + j))
+                    out.append((axis, sign, sl, u, v, w, h, c))
+    return out
+
+
 def _mesh_from_voxels(name, voxels, scale=100.0, pal=PAL):
-    """One mesh: a unit cube per voxel (only outer faces), vertex colours from the palette. scale: cm per voxel."""
-    occupied = {(x, y, z) for x, y, z, _ in voxels}
-    colour = {(x, y, z): c for x, y, z, c in voxels}
+    """One mesh from greedy-merged rectangles, vertex colours from the palette. scale: cm per voxel."""
     bm = bmesh.new()
     layer = bm.loops.layers.color.new("Col")
-    faces = [((1, 0, 0), ((1, 0, 0), (1, 1, 0), (1, 1, 1), (1, 0, 1))), ((-1, 0, 0), ((0, 0, 0), (0, 0, 1), (0, 1, 1), (0, 1, 0))),
-             ((0, 1, 0), ((0, 1, 0), (0, 1, 1), (1, 1, 1), (1, 1, 0))), ((0, -1, 0), ((0, 0, 0), (1, 0, 0), (1, 0, 1), (0, 0, 1))),
-             ((0, 0, 1), ((0, 0, 1), (1, 0, 1), (1, 1, 1), (0, 1, 1))), ((0, 0, -1), ((0, 0, 0), (0, 1, 0), (1, 1, 0), (1, 0, 0)))]
     cache = {}
-    for (x, y, z) in occupied:
+
+    def vert(p):
+        v = cache.get(p)
+        if v is None:
+            v = bm.verts.new((p[0] * scale, p[1] * scale, p[2] * scale))
+            cache[p] = v
+        return v
+
+    for axis, sign, sl, u0, v0, w, h, c in greedy_quads(voxels):
+        ua, va = [a for a in (0, 1, 2) if a != axis]
         # FBX carries vertex colours raw and Unreal reads them as sRGB bytes, so encode the linear palette to sRGB
         # here (the GLB exporter did this itself; FBX-imported islands came out washed-out beige).
-        col = tuple(c ** (1.0 / 2.2) for c in pal[colour[(x, y, z)]]) + (1.0,)
-        for (nx, ny, nz), quad in faces:
-            if (x + nx, y + ny, z + nz) in occupied:
-                continue
-            verts = []
-            for (qx, qy, qz) in quad:
-                key = (x + qx, y + qy, z + qz)
-                v = cache.get(key)
-                if v is None:
-                    v = bm.verts.new(((x + qx) * scale, (y + qy) * scale, (z + qz) * scale))
-                    cache[key] = v
-                verts.append(v)
-            try:
-                f = bm.faces.new(verts)
-            except ValueError:
-                continue
-            for loop in f.loops:
-                loop[layer] = col
+        col = tuple(q ** (1.0 / 2.2) for q in pal[c]) + (1.0,)
+        plane = sl + (1 if sign > 0 else 0)
+        corners = []
+        for (du, dv) in ((0, 0), (w, 0), (w, h), (0, h)):
+            p = [0, 0, 0]
+            p[axis] = plane
+            p[ua] = u0 + du
+            p[va] = v0 + dv
+            corners.append(tuple(p))
+        # winding: outward normal. For axis order (ua, va) the loop (0,0)->(w,0)->(w,h)->(0,h) faces +axis when
+        # (ua, va, axis) is a right-handed triple, i.e. axis 1 (ua=0, va=2) is the odd one out.
+        if (sign > 0) == (axis == 1):
+            corners.reverse()
+        try:
+            f = bm.faces.new([vert(p) for p in corners])
+        except ValueError:
+            continue
+        for loop in f.loops:
+            loop[layer] = col
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
     bm.free()
@@ -370,13 +420,13 @@ def build(seed, out, size=46, thick=22, keep=False):
     return {"seed": seed, "out": out, "voxels": stats(vox)}
 
 
-def build_many(seeds, out_dir, size=46, thick=22):
+def build_many(seeds, out_dir, size=46, thick=22, force=False):
     """Contest batches (Richey 09:36 "chunks of 10 then scale up"): one GLB per seed into out_dir. Returns
     {seed: stats}; a seed whose GLB already exists is skipped so a re-run only fills gaps."""
     done = {}
     for seed in seeds:
         out = os.path.join(out_dir, "Island_C%d.glb" % seed)
-        if os.path.exists(out):
+        if os.path.exists(out[:-4] + ".fbx") and not force:
             done[seed] = "exists"
             continue
         done[seed] = build(seed, out, size=size, thick=thick)
