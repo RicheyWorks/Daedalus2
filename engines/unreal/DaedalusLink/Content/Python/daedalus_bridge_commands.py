@@ -109,6 +109,13 @@ def _register(bridge):
         daedalus_control.register(bridge)
     except Exception as e:  # console, input, goto, look, state, automation, log_report
         unreal.log_warning("Daedalus: control commands not loaded: %r" % (e,))
+    try:
+        import daedalus_land_sync
+        bridge.register("daedalus.land_sync", lambda p: daedalus_land_sync.sync(str(p.get("realm", "WORLD-ZERO")), p.get("districts"), bool(p.get("apply", False))),
+                        "Reconcile the editor's lands with the server's land registry (apply=false: report only)",
+                        {"realm": "str (default WORLD-ZERO)", "districts": "[int] (default the hub districts)", "apply": "bool (default false)"})
+    except Exception as e:
+        unreal.log_warning("Daedalus: land sync not loaded: %r" % (e,))
 
 
 _state = {"handle": None, "ticks": 0}

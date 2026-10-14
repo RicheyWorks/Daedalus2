@@ -45,6 +45,15 @@ jobs:
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
+      - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
+        run: |
+          for t in land_grid_test land_registry_test realm_session_test; do
+            g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public $t.cpp -o $t && ./$t | tail -1
+          done
+          cd ../DaedalusLink/Content/Python
+          for t in test_daedalus_land_grid test_daedalus_layout test_daedalus_plots test_daedalus_realm_ground test_daedalus_land_sync; do
+            python3 $t.py | tail -1
+          done
       - name: the Claude Unreal connector, end to end against a stand-in editor
         run: |
           C=../../../connectors/claude-unreal-connector
