@@ -765,3 +765,12 @@ main, -Stop, -Start, "HUB UP <head> last id <n>", then `teamlink doctor --me unr
 pid 18264 up 5 s, locks (blender: Sol's World Zero exports; unreal: my materials job), inbox. Lock claims survived
 the restart because they are log lines. Rule: `doctor` is the first command of every turn from now on; it is the
 one-screen picture the protocol promised (research item 13 closed).
+
+## The bridge's own 30-minute clock cut a 75-minute job; the editor kept running it (2026-10-13, 23:25)
+`wire.call(timeout=7200)` only set the socket wait; the bridge answers "the editor did not run the command in
+time" after its own `bridge_timeout` (default 1800 s) while the generator keeps stepping. The host script took
+the error as the job's end, pc-job printed DONE 0 (exit code bug, Sol's Wait fix), and night_run started the
+build, which closed the editor mid-reparent (5,940 of 11,000; ledger intact, resumable). Fixes: wire.call now
+sends `bridge_timeout = timeout` (b…); a job's end is the ledger/result, not a reply. Open for Poot's bridge
+lifecycle slice: when the client has given up, the bridge should close the generator (or keep the result for
+`job_result`) rather than run on headless.
