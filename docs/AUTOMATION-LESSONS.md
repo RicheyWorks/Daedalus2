@@ -996,3 +996,50 @@ Rules:
    `teamlink doctor`'s output. Sent to Poot as part of H8.
 4. 2Hot2Trot's play-guard stops PIE after 8 min when imports are queued; scenarios must fit that budget — at 46 fps
    the tour does. Frame-driven scenarios should also log fps in their receipt so a slow run is explained by its own data.
+
+## 2026-10-14 02:25 — the connector after 80 minutes: what it changed, what the harness updates did, what is still rough
+
+Richey: "add to lessons learned what you have learned about using the new connector so far and the harness
+updates and what could be better with the harness."
+
+What the connector is good for (measured tonight):
+- Reading back state instead of trusting a command: ConfigSettings GetSectionPropertyValues showed the editor
+  throttle was still on after our console `set`; SetSectionProperties flipped it live (3 -> 46 fps). The whole
+  night's "slow Play" was this one setting.
+- Scene queries by tag/class/bounds (find_actors) in 0.4 s vs a 23k-actor Python walk; camera placement
+  (SetCameraTransform) + our bridge screenshot = a proof frame in two calls; IsPIERunning/StartPIE/StopPIE.
+- Every tool carries a schema (describe_toolset): zero AttributeErrors since 01:07, against five the night before.
+What it is not for: bulk mutation (49k islands laid and dressed through budgeted daedalus.steps at ~1 s per 100
+instances), builds, or anything under the hub lock. It also bypasses the lock entirely — rule H6 stands.
+
+Harness updates that landed and what they bought:
+- H1 (Sol PR138, merged cf7fce8): bounded transport in the stdio proxy, exact byte counts on failure
+  ("received=3,010,190 expected=3,064,801"), native capture as an MCP image block. Direct 2.8 MB captures now
+  pass; the desktop-proxy path still trips Epic's ~5 s write-idle close near 3 MB — server-side, Poot has it.
+- H4 (codex helper): setup-owner column per connector step in the BOARD registry. Would have saved the 25
+  refusal minutes at 00:36.
+- Doctor/hub discipline from last night held: every block, pause and handback tonight was a hub message with a
+  reply_to within a minute; Poot's install block was routed round in 6 minutes by merging the reviewed PR instead
+  of copying files.
+- Our own: run_scenarios waits 900 s (was 180: the tour was abandoned mid-flight), scenario waits in game
+  seconds not frames (46 fps broke every 30 fps assumption: portal cooldowns, mount climbs), fps_probe (frame
+  TIME, the diagnostic that found the throttle), perf_steps (cull + shadows), fill_holes_steps (trace a cell,
+  block what is empty — 673 holes round the World Zero hub), island_plan (unique islands from the deed hash).
+
+What could be better (the next asks, in order):
+1. The 8-minute play-guard (2Hot2Trot) and the import queue need a lease, not a kill: a scenario that holds the
+   `unreal` lock should get to finish; the guard should post "stopping in 60 s" to the hub first. Owner: Buffffff/Poot.
+2. Editor start must apply the throttle-off config, start the MCP server and print both in `teamlink doctor`
+   (H2/H3). Until then every rebuild silently regresses to 3 fps and no connector.
+3. Captures via the desktop proxy: either Epic's write-idle timeout patched, or a lower-res capture tool; today the
+   workaround is the bridge screenshot (1.5 MB in 2 s) and capture.py to disk.
+4. `pc-job.ps1` tail through the device bridge caps at 60 s; long jobs need a "last N lines + state" command that
+   returns instantly (it mostly does) and never a Sleep inside the bridge call (the bridge, not the job, times out).
+5. The desktop app's local-server config is a file my reviewer refuses to write without an in-turn "do it"; the
+   registry's setup-owner column should say "Richey (one line) or Poot" for that step so nobody retries it.
+6. Autosave collides with our proven saves (ok=False at 02:20 while "Auto-saving out of date packages" ran):
+   save_world should wait for the autosave to finish (poll the editor_windows list for the progress dialog) and
+   retry once instead of raising.
+7. PowerShell quoting through the bridge eats Python one-liners (three times tonight): anything over one line is a
+   repo script run by path, never an inline `python -c`.
+8. Game-time waits everywhere in daedalus_play (a sweep for `_frames(` used as a clock), and fps in every receipt.
