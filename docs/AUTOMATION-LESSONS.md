@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Cast binding evidence (2026-10-13)
+Talker Rebind returns script-binding success even when no skeletal art was found. Audit the native candidate order and actual Figure mesh instead. The first nonempty alias folder wins; material-only folders can shadow a later valid mesh. Keep missing art, available-but-unbound and failed observations separate. Loaded-world dumps cannot prove all realms or rendered/animated behavior.
+
