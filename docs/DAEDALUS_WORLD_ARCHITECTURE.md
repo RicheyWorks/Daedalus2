@@ -643,4 +643,14 @@ starfish). Add a species = one dict entry (`ANIMALS/BIRDS/BEES/FISH/ZOMBIES`) or
 Exports: `export_creatures.py OUT [family|species…] [--sheet] [--force]`; ~0.4 s per creature once each
 creature's objects/actions are freed after export (left in the scene, Blender's exporters slow to 10 s each).
 Where they live comes from the ecology (habitat by seral stage/water/biome), the chemistry (livestock, fish) and
-the ledger events (zombie waves: 5 escalating waves vs defence, `ZOMBIE_WAVE`).
+the ledger events (zombie waves: 5 escalating waves vs defence, `ZOMBIE_WAVE`). 15:05: `_insect` (19: fliers hover
+like bees, crawlers walk; worms/snails/centipedes on body+tail bones) and 16 burrowers in `ANIMALS` → **206**.
+
+### 14.6 Dresser props (`tools/blender/voxel_flora.py`)
+Static props named for ADR-054's library lookup so `Dress()` picks them up with no code change:
+`Prop_Tree_<Species>_<Stage>` (21 species × Sapling/Young/Mature/Ancient, shapes round/column/pine/willow/palm/
+umbrella/dead/bamboo/cactus, 50 cm voxels), `Prop_Plant_*` (33: ferns, grasses, reeds, lily pads, mosses, vines,
+mushrooms incl. glowing, wildflowers, crops wheat/corn/carrot/cabbage/beet/pumpkin, the six herbs, 10 cm),
+`Prop_Shrub_*` (12), `Prop_Cloud_*` (18 types and colours: cumulus, stratus, wisp, storm, thunder with a bolt,
+sunset pink/orange, dawn violet, gold, blood red, fog bank, snow, ash, aurora ribbon, rainbow arc, rain; 1 m).
+Bottom-centre pivot; `export_flora.py OUT [family…]` writes FBX + json and one contact sheet per family.
