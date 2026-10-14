@@ -1,0 +1,149 @@
+{
+  "utc": "2026-10-14T10:42:15.755366+00:00",
+  "beforeMapSha256": "fd7de1a77f7148ff14f96f657a54ed07dcc808d64ca3b6e9f53fc360add8d932",
+  "rows": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+      },
+      "component": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241.StaticMeshComponent0"
+      },
+      "before": {
+        "staticMesh": {
+          "refPath": "/Engine/BasicShapes/Cube.Cube"
+        },
+        "overrideMaterials": []
+      },
+      "transform": {
+        "location": {
+          "x": 40450,
+          "y": -9500,
+          "z": 4620
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 92,
+          "y": 92,
+          "z": 12
+        }
+      },
+      "tags": [
+        "Land",
+        "Realm:WORLD-ZERO",
+        "Deed:1",
+        "District:55"
+      ],
+      "override": [
+        {
+          "refPath": "/Game/Claude/Materials/MI_Orr_Grass.MI_Orr_Grass"
+        }
+      ],
+      "setResult": true,
+      "after": {
+        "staticMesh": {
+          "refPath": "/Engine/BasicShapes/Cube.Cube"
+        },
+        "overrideMaterials": [
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Grass.MI_Orr_Grass"
+          }
+        ]
+      },
+      "reconciled": {
+        "staticMesh": {
+          "refPath": "/Engine/BasicShapes/Cube.Cube"
+        },
+        "overrideMaterials": [
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Grass.MI_Orr_Grass"
+          }
+        ]
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3852"
+      },
+      "component": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3852.StaticMeshComponent0"
+      },
+      "before": {
+        "staticMesh": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_01.Island_Frag_01"
+        },
+        "overrideMaterials": []
+      },
+      "transform": {
+        "location": {
+          "x": 40450,
+          "y": -9500,
+          "z": 4022
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "tags": [],
+      "override": [
+        {
+          "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+        },
+        {
+          "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+        },
+        {
+          "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+        }
+      ],
+      "setResult": true,
+      "after": {
+        "staticMesh": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_01.Island_Frag_01"
+        },
+        "overrideMaterials": [
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          },
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          },
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          }
+        ]
+      },
+      "reconciled": {
+        "staticMesh": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_01.Island_Frag_01"
+        },
+        "overrideMaterials": [
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          },
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          },
+          {
+            "refPath": "/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "saved",
+  "reconciledSaveResult": true,
+  "afterMapSha256": "9f5404f9533f7ccae437f2e5c92adeeeab05bd1d971b5fda84935393d96b9156",
+  "savedUtc": "2026-10-14T10:42:37.711154+00:00"
+}

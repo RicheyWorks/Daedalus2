@@ -1,0 +1,337 @@
+[
+  {
+    "asset": "Island_Frag_01",
+    "startedUtc": "2026-10-14T10:21:40.142744+00:00",
+    "bounds": {
+      "min": {
+        "x": -4600,
+        "y": -4600,
+        "z": -800
+      },
+      "max": {
+        "x": 4600,
+        "y": 4600,
+        "z": 0
+      },
+      "isValid": true
+    },
+    "convexHulls": 1,
+    "hullVertexCounts": [
+      45
+    ],
+    "customCollision": true,
+    "materials": [
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_weathered_slate.Island_weathered_slate"
+        },
+        "materialSlotName": "Island weathered slate",
+        "importedMaterialSlotName": "Island weathered slate",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9199.8330078125,
+            17569.029296875,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_dark_basalt.Island_dark_basalt"
+        },
+        "materialSlotName": "Island dark basalt",
+        "importedMaterialSlotName": "Island dark basalt",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9284.75390625,
+            17369.595703125,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_exposed_facets.Island_exposed_facets"
+        },
+        "materialSlotName": "Island exposed facets",
+        "importedMaterialSlotName": "Island exposed facets",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9816.4462890625,
+            18357.70703125,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      }
+    ],
+    "status": "verified",
+    "elapsedSeconds": 0.078
+  },
+  {
+    "asset": "Island_Frag_02",
+    "startedUtc": "2026-10-14T10:21:40.224239+00:00",
+    "importResult": [
+      {
+        "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_02.Island_Frag_02"
+      }
+    ],
+    "bounds": {
+      "min": {
+        "x": -4600,
+        "y": -4600,
+        "z": -909.0908813476562
+      },
+      "max": {
+        "x": 4600,
+        "y": 4600,
+        "z": 0
+      },
+      "isValid": true
+    },
+    "convexHulls": 1,
+    "hullVertexCounts": [
+      51
+    ],
+    "customCollision": true,
+    "materials": [
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_weathered_slate.Island_weathered_slate"
+        },
+        "materialSlotName": "Island weathered slate",
+        "importedMaterialSlotName": "Island weathered slate",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9200.5517578125,
+            17437.208984375,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_dark_basalt.Island_dark_basalt"
+        },
+        "materialSlotName": "Island dark basalt",
+        "importedMaterialSlotName": "Island dark basalt",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9282.9619140625,
+            17098.8515625,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_exposed_facets.Island_exposed_facets"
+        },
+        "materialSlotName": "Island exposed facets",
+        "importedMaterialSlotName": "Island exposed facets",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9953.65234375,
+            18356.43359375,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      }
+    ],
+    "status": "verified",
+    "elapsedSeconds": 0.297
+  },
+  {
+    "asset": "Island_Frag_03",
+    "startedUtc": "2026-10-14T10:21:40.520475+00:00",
+    "importResult": [
+      {
+        "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_03.Island_Frag_03"
+      }
+    ],
+    "bounds": {
+      "min": {
+        "x": -4600,
+        "y": -4600,
+        "z": -1018.1818237304688
+      },
+      "max": {
+        "x": 4600,
+        "y": 4600,
+        "z": 0
+      },
+      "isValid": true
+    },
+    "convexHulls": 1,
+    "hullVertexCounts": [
+      46
+    ],
+    "customCollision": true,
+    "materials": [
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_weathered_slate.Island_weathered_slate"
+        },
+        "materialSlotName": "Island weathered slate",
+        "importedMaterialSlotName": "Island weathered slate",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9200.55078125,
+            17438.349609375,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_dark_basalt.Island_dark_basalt"
+        },
+        "materialSlotName": "Island dark basalt",
+        "importedMaterialSlotName": "Island dark basalt",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9315.525390625,
+            17035.89453125,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_exposed_facets.Island_exposed_facets"
+        },
+        "materialSlotName": "Island exposed facets",
+        "importedMaterialSlotName": "Island exposed facets",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            10593.5732421875,
+            19384.94140625,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      }
+    ],
+    "status": "verified",
+    "elapsedSeconds": 0.235
+  },
+  {
+    "asset": "Island_Frag_04",
+    "startedUtc": "2026-10-14T10:21:40.754786+00:00",
+    "importResult": [
+      {
+        "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_Frag_04.Island_Frag_04"
+      }
+    ],
+    "bounds": {
+      "min": {
+        "x": -4600,
+        "y": -4600,
+        "z": -1127.272705078125
+      },
+      "max": {
+        "x": 4600,
+        "y": 4600,
+        "z": 0
+      },
+      "isValid": true
+    },
+    "convexHulls": 1,
+    "hullVertexCounts": [
+      46
+    ],
+    "customCollision": true,
+    "materials": [
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_weathered_slate.Island_weathered_slate"
+        },
+        "materialSlotName": "Island weathered slate",
+        "importedMaterialSlotName": "Island weathered slate",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9199.06640625,
+            17292.490234375,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_dark_basalt.Island_dark_basalt"
+        },
+        "materialSlotName": "Island dark basalt",
+        "importedMaterialSlotName": "Island dark basalt",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            9347.005859375,
+            16839.873046875,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      },
+      {
+        "materialInterface": {
+          "refPath": "/Game/Daedalus/Art/Islands/NativePool/Island_exposed_facets.Island_exposed_facets"
+        },
+        "materialSlotName": "Island exposed facets",
+        "importedMaterialSlotName": "Island exposed facets",
+        "uVChannelData": {
+          "bInitialized": true,
+          "bOverrideDensities": false,
+          "localUVDensities": [
+            10401.6015625,
+            18768.046875,
+            0,
+            0
+          ]
+        },
+        "overlayMaterialInterface": "None"
+      }
+    ],
+    "status": "verified",
+    "elapsedSeconds": 0.25
+  }
+]

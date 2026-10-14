@@ -1,0 +1,18 @@
+{
+  "utcStart": "2026-10-14T11:12:55.079768+00:00",
+  "utcEnd": "2026-10-14T11:12:55.561264+00:00",
+  "elapsedSeconds": 0.484,
+  "args": [
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\project-inventory\\rock-pilot-ground-shader.png",
+    "40450",
+    "-20000",
+    "9500",
+    "-25",
+    "90"
+  ],
+  "result": 0,
+  "clientSha256": "5cf914807719b62045daf01fa2e3a844dcc9af21320756218f706f621a9e8762",
+  "replayed": false,
+  "pngBytes": 4190608,
+  "imageSha256": "8f36c91c4df58040e5dee4071d07502850bc1d31498e34f257b44f406d9e2fb4"
+}

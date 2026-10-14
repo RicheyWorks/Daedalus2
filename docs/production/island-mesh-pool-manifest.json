@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "Island_Frag_01",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_01.glb",
+      "sha256": "6daa8c9b934970fff68d1029811b60d4c580a1bf2289faaa2c78fa508b59180c",
+      "fbx": "Island_Frag_01.fbx",
+      "fbx_sha256": "01822738be995238e9a68fd689e494c6c604eb65ba09632141670ef897e3ab1d",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 8.0,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_01_00",
+      "collision_file": "Island_Frag_01.collision.json",
+      "collision_triangles": 86,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        800.0
+      ]
+    },
+    {
+      "id": "Island_Frag_02",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_02.glb",
+      "sha256": "26ce97b3d311613593778ca898fcc843dcb1394195716db60b55c249deeb66c6",
+      "fbx": "Island_Frag_02.fbx",
+      "fbx_sha256": "c10ac707eb77b46667b9e3a3eed8853eedf403d30f06fc4db03c59cc4ebe0652",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 9.09090909090909,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_02_00",
+      "collision_file": "Island_Frag_02.collision.json",
+      "collision_triangles": 98,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        909.090909090909
+      ]
+    },
+    {
+      "id": "Island_Frag_03",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_03.glb",
+      "sha256": "3bae7d715bd0badc0794240324c6089db69a5a01b5a5d7fbc2cc5b11c8e4306c",
+      "fbx": "Island_Frag_03.fbx",
+      "fbx_sha256": "0ed1d71408d148c2b538144e27fdcad0e8c650e7cae73da39a0fcc594b76d0ea",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 10.181818181818182,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_03_00",
+      "collision_file": "Island_Frag_03.collision.json",
+      "collision_triangles": 88,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1018.1818181818181
+      ]
+    },
+    {
+      "id": "Island_Frag_04",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_04.glb",
+      "sha256": "4a3617f4497f6d850f84dfc785cbb2b69bec1176a7b376d2ba710bb433d12ca3",
+      "fbx": "Island_Frag_04.fbx",
+      "fbx_sha256": "8c9c0278bed57b53c9f8d0780ceda7d2da6b5790ff86e46b72f58a449be9f500",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 11.272727272727273,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_04_00",
+      "collision_file": "Island_Frag_04.collision.json",
+      "collision_triangles": 88,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1127.2727272727273
+      ]
+    },
+    {
+      "id": "Island_Frag_05",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_05.glb",
+      "sha256": "4662785952a9e9906dc1f32a61a242af300a2f06cce1d34c52aec879380eb6a1",
+      "fbx": "Island_Frag_05.fbx",
+      "fbx_sha256": "a1b102fe6e22290725f0d4483691238cda38d2c025c9f8d751d4bb39130c3f32",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 12.363636363636363,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_05_00",
+      "collision_file": "Island_Frag_05.collision.json",
+      "collision_triangles": 94,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1236.3636363636363
+      ]
+    },
+    {
+      "id": "Island_Frag_06",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_06.glb",
+      "sha256": "95303dbed18a9026109918fab6efc476f4e6c2037c1239d7c0d8f4752f0729bd",
+      "fbx": "Island_Frag_06.fbx",
+      "fbx_sha256": "3964fa4dfae9ce79e9552f0633be307c594965a394a1d803236f0043fe412509",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 13.454545454545453,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_06_00",
+      "collision_file": "Island_Frag_06.collision.json",
+      "collision_triangles": 90,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1345.4545454545453
+      ]
+    },
+    {
+      "id": "Island_Frag_07",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_07.glb",
+      "sha256": "fd300cc0dd5917a82231e95c8441f0b3006e70d5dc149cbbe6abf801436ca22c",
+      "fbx": "Island_Frag_07.fbx",
+      "fbx_sha256": "88ecad7a7da6e6a51cbe7e54015446fce8c6c67fd582bd7cc2fee549fab62998",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 14.545454545454547,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_07_00",
+      "collision_file": "Island_Frag_07.collision.json",
+      "collision_triangles": 96,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1454.5454545454547
+      ]
+    },
+    {
+      "id": "Island_Frag_08",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_08.glb",
+      "sha256": "8ed62cfce8964649a523ee29b58d9d665ba55bfd4392d550e4fc57a88ce0e95f",
+      "fbx": "Island_Frag_08.fbx",
+      "fbx_sha256": "9efdd6ca8ab0c4d0109c2553c6d6ff6e539c33e0378a6a45f1c1321955d2049b",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 15.636363636363637,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_08_00",
+      "collision_file": "Island_Frag_08.collision.json",
+      "collision_triangles": 98,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1563.6363636363637
+      ]
+    },
+    {
+      "id": "Island_Frag_09",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_09.glb",
+      "sha256": "89e2d9f93b2ee9ce8e4264601ea15ca2e41703c6ef4bc26aba8d6a943748c503",
+      "fbx": "Island_Frag_09.fbx",
+      "fbx_sha256": "911b2111066385358b90c10d654769295e54aa54490066e4c39a7c2dd2b42819",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 16.727272727272727,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_09_00",
+      "collision_file": "Island_Frag_09.collision.json",
+      "collision_triangles": 98,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1672.7272727272727
+      ]
+    },
+    {
+      "id": "Island_Frag_10",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_10.glb",
+      "sha256": "0257ae6e4c56d0e9fd05e95491400a33403c8e060ac10074a1a2b5fa30c27b2c",
+      "fbx": "Island_Frag_10.fbx",
+      "fbx_sha256": "08a3721898f8235100a5a05cdcdc87168b1a5d43f5880269c9f5ccabd4f578da",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 17.81818181818182,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_10_00",
+      "collision_file": "Island_Frag_10.collision.json",
+      "collision_triangles": 102,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1781.818181818182
+      ]
+    },
+    {
+      "id": "Island_Frag_11",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_11.glb",
+      "sha256": "0b9abc6c551b257eaecec9e63913d621f3aecaaa699ed3275b2f147e99bc85f8",
+      "fbx": "Island_Frag_11.fbx",
+      "fbx_sha256": "15a3f71272d27d0ff39835fdf9dfc14f936b5afb421f4aad289a68068a7ae1e5",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 18.909090909090907,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_11_00",
+      "collision_file": "Island_Frag_11.collision.json",
+      "collision_triangles": 84,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        1890.9090909090905
+      ]
+    },
+    {
+      "id": "Island_Frag_12",
+      "kind": "asteroid-fragment",
+      "file": "Island_Frag_12.glb",
+      "sha256": "8e1944d7f5eae9ecfe520e47abbcdd1cf53c19d64a042723d7010e72ad926adf",
+      "fbx": "Island_Frag_12.fbx",
+      "fbx_sha256": "31615d04080a439b770adc47be820a605999492d18b3d3841205c71f86760744",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 20.0,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Frag_12_00",
+      "collision_file": "Island_Frag_12.collision.json",
+      "collision_triangles": 96,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        2000.0
+      ]
+    },
+    {
+      "id": "Island_Pad_01",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_01.glb",
+      "sha256": "9f2537b1f980c8fa8abcdcbac4c2a8e46db0d2344dedf59daf7fbb6d2c149dc6",
+      "fbx": "Island_Pad_01.fbx",
+      "fbx_sha256": "bd2da714325159cd81d1c9c4f8d5a3f8a7a01f41b5a260bef9d652353d4e99db",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 1.0,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_01_00",
+      "collision_file": "Island_Pad_01.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        100.0
+      ]
+    },
+    {
+      "id": "Island_Pad_02",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_02.glb",
+      "sha256": "71444b22d3190178cb474cd86ad6901078677c0cfdfe5bb75e05d68905de9ce9",
+      "fbx": "Island_Pad_02.fbx",
+      "fbx_sha256": "a34019b7d688abf47cda8d8a96eebe4f831557af4dd3ae8bba8b17881e99fa22",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 1.4,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_02_00",
+      "collision_file": "Island_Pad_02.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        140.0
+      ]
+    },
+    {
+      "id": "Island_Pad_03",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_03.glb",
+      "sha256": "8057fe826ba649df0891f7cd6c6f4cd4116c11e4214400e0920bb699575fb098",
+      "fbx": "Island_Pad_03.fbx",
+      "fbx_sha256": "d863d9a7abee01f10b6f42d048939e2b6318f85f57c4a25d78ee319ea4b39119",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 1.8,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_03_00",
+      "collision_file": "Island_Pad_03.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        180.0
+      ]
+    },
+    {
+      "id": "Island_Pad_04",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_04.glb",
+      "sha256": "e0f2bd396302be303ad902ffc38d36899a33075091a7b66f062e982e3191b6b2",
+      "fbx": "Island_Pad_04.fbx",
+      "fbx_sha256": "e1c1da0cdebb76a3998c648303c4ea039de16c93e507e9dd8dd71b8ada89cdce",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 2.2,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_04_00",
+      "collision_file": "Island_Pad_04.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        220.00000000000003
+      ]
+    },
+    {
+      "id": "Island_Pad_05",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_05.glb",
+      "sha256": "12fabe45ff0b86aa5dcc5a855e58c42fc4f0c3df034b8e06c7e4a11cd2800811",
+      "fbx": "Island_Pad_05.fbx",
+      "fbx_sha256": "b6fe72d312f4e33baba8ffd87b52b918f1a46008f928d1f65e9b8030ef85ded6",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 2.6,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_05_00",
+      "collision_file": "Island_Pad_05.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        260.0
+      ]
+    },
+    {
+      "id": "Island_Pad_06",
+      "kind": "terrace-pad",
+      "file": "Island_Pad_06.glb",
+      "sha256": "3bd32ecf237635d5205d9a1bb18ec4b3f758d02922b7801da8d7abf614477427",
+      "fbx": "Island_Pad_06.fbx",
+      "fbx_sha256": "b2ef37d72766939ef5e3060778d4d3eb960a471ea8af6ec0f5cfe3677789b6f9",
+      "footprint_metres": [
+        92,
+        92
+      ],
+      "thickness_metres": 3.0,
+      "origin": "top centre Z=0",
+      "triangles": 144,
+      "collision": "UCX_Island_Pad_06_00",
+      "collision_file": "Island_Pad_06.collision.json",
+      "collision_triangles": 140,
+      "status": "exported; native import/collision/walk proof pending",
+      "expected_native_bounds_cm": [
+        9200,
+        9200,
+        300.0
+      ]
+    }
+  ],
+  "native_verified": false
+}

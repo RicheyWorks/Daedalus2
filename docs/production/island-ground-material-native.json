@@ -1,0 +1,1139 @@
+{
+  "utc": "2026-10-14T11:05:13.592197+00:00",
+  "asset": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1",
+  "calls": [
+    {
+      "toolset": "EditorToolset.EditorAppToolset",
+      "tool": "IsPIERunning",
+      "arguments": {},
+      "result": false
+    },
+    {
+      "toolset": "editor_toolset.toolsets.scene.SceneTools",
+      "tool": "get_current_level",
+      "arguments": {},
+      "result": "/Game/Daedalus/DaedalusWorld"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "create_material",
+      "arguments": {
+        "folder_path": "/Game/Daedalus/Art/Islands/PilotMaterials",
+        "asset_name": "M_WZ_GroveGround_v1"
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionWorldPosition"
+        },
+        "x": -900,
+        "y": 0
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionNoise"
+        },
+        "x": -650,
+        "y": 0
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "list_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": "{\"worldPositionOriginType\":{\"type\":\"string\",\"title\":\"EPositionOrigin\",\"enum\":[\"Absolute\",\"CameraRelative\"],\"description\":\"Defines the reference space for the Position input.\"},\"scale\":{\"type\":\"number\",\"description\":\"can also be done with a multiply on the Position\"},\"quality\":{\"type\":\"integer\",\"description\":\"Lower numbers are faster and lower quality, higher numbers are slower and higher quality\"},\"noiseFunction\":{\"type\":\"string\",\"title\":\"ENoiseFunction\",\"enum\":[\"NOISEFUNCTION_SimplexTex\",\"NOISEFUNCTION_GradientTex\",\"NOISEFUNCTION_GradientTex3D\",\"NOISEFUNCTION_GradientALU\",\"NOISEFUNCTION_ValueALU\",\"NOISEFUNCTION_VoronoiALU\"],\"description\":\"Noise function, affects performance and look\"},\"bTurbulence\":{\"type\":\"boolean\",\"description\":\"How multiple frequencies are getting combined\"},\"levels\":{\"type\":\"integer\",\"description\":\"1 = fast but little detail, .. larger numbers cost more performance\"},\"outputMin\":{\"type\":\"number\"},\"outputMax\":{\"type\":\"number\"},\"levelScale\":{\"type\":\"number\",\"description\":\"usually 2 but higher values allow efficient use of few levels\"},\"bTiling\":{\"type\":\"boolean\",\"description\":\"Whether to use tiling noise pattern, useful for baking to seam-free repeating textures\"},\"repeatSize\":{\"type\":\"integer\",\"description\":\"How many units in each tile (if Tiling is on)\"},\"materialExpressionEditorX\":{\"type\":\"integer\"},\"materialExpressionEditorY\":{\"type\":\"integer\"},\"desc\":{\"type\":\"string\",\"description\":\"A description that level designers can add (shows in the material editor UI).\"}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "set_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "values": "{\"scale\": 0.003, \"quality\": 1, \"levels\": 2, \"outputMin\": 0, \"outputMax\": 1}"
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "properties": [
+          "scale",
+          "quality",
+          "levels",
+          "outputMin",
+          "outputMax"
+        ]
+      },
+      "result": "{\"scale\":0.0030000000260770321,\"quality\":1,\"levels\":2,\"outputMin\":0,\"outputMax\":1}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionVectorParameter"
+        },
+        "x": -650,
+        "y": 200
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "list_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        }
+      },
+      "result": "{\"defaultValue\":{\"type\":\"object\",\"title\":\"LinearColor\",\"properties\":{\"r\":{\"type\":\"number\",\"minimum\":0},\"g\":{\"type\":\"number\",\"minimum\":0},\"b\":{\"type\":\"number\",\"minimum\":0},\"a\":{\"type\":\"number\",\"minimum\":0}},\"required\":[\"r\",\"g\",\"b\",\"a\"]},\"bUseCustomPrimitiveData\":{\"type\":\"boolean\"},\"primitiveDataIndex\":{\"type\":\"integer\",\"minimum\":0},\"channelNames\":{\"title\":\"ParameterChannelNames\",\"type\":\"object\",\"properties\":{\"r\":{\"type\":\"string\"},\"g\":{\"type\":\"string\"},\"b\":{\"type\":\"string\"},\"a\":{\"type\":\"string\"}},\"required\":[\"r\",\"g\",\"b\",\"a\"]},\"parameterName\":{\"type\":\"string\",\"description\":\"The name of the parameter\"},\"group\":{\"type\":\"string\",\"description\":\"The name of the parameter Group to display in MaterialInstance Editor. Default is None group\"},\"sortPriority\":{\"type\":\"integer\",\"description\":\"Controls where the this parameter is displayed in a material instance parameter list.  The lower the number the higher up in the parameter list.\"},\"materialExpressionEditorX\":{\"type\":\"integer\"},\"materialExpressionEditorY\":{\"type\":\"integer\"},\"desc\":{\"type\":\"string\",\"description\":\"A description that level designers can add (shows in the material editor UI).\"}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "set_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        },
+        "values": "{\"parameterName\": \"ForestColor\", \"defaultValue\": {\"r\": 0.035, \"g\": 0.12, \"b\": 0.045, \"a\": 1}}"
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"ForestColor\",\"defaultValue\":{\"r\":0.035000000149011612,\"g\":0.11999999731779099,\"b\":0.045000001788139343,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionVectorParameter"
+        },
+        "x": -650,
+        "y": 400
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "list_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        }
+      },
+      "result": "{\"defaultValue\":{\"type\":\"object\",\"title\":\"LinearColor\",\"properties\":{\"r\":{\"type\":\"number\",\"minimum\":0},\"g\":{\"type\":\"number\",\"minimum\":0},\"b\":{\"type\":\"number\",\"minimum\":0},\"a\":{\"type\":\"number\",\"minimum\":0}},\"required\":[\"r\",\"g\",\"b\",\"a\"]},\"bUseCustomPrimitiveData\":{\"type\":\"boolean\"},\"primitiveDataIndex\":{\"type\":\"integer\",\"minimum\":0},\"channelNames\":{\"title\":\"ParameterChannelNames\",\"type\":\"object\",\"properties\":{\"r\":{\"type\":\"string\"},\"g\":{\"type\":\"string\"},\"b\":{\"type\":\"string\"},\"a\":{\"type\":\"string\"}},\"required\":[\"r\",\"g\",\"b\",\"a\"]},\"parameterName\":{\"type\":\"string\",\"description\":\"The name of the parameter\"},\"group\":{\"type\":\"string\",\"description\":\"The name of the parameter Group to display in MaterialInstance Editor. Default is None group\"},\"sortPriority\":{\"type\":\"integer\",\"description\":\"Controls where the this parameter is displayed in a material instance parameter list.  The lower the number the higher up in the parameter list.\"},\"materialExpressionEditorX\":{\"type\":\"integer\"},\"materialExpressionEditorY\":{\"type\":\"integer\"},\"desc\":{\"type\":\"string\",\"description\":\"A description that level designers can add (shows in the material editor UI).\"}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "set_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        },
+        "values": "{\"parameterName\": \"MossColor\", \"defaultValue\": {\"r\": 0.18, \"g\": 0.28, \"b\": 0.075, \"a\": 1}}"
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"MossColor\",\"defaultValue\":{\"r\":0.18000000715255737,\"g\":0.2800000011920929,\"b\":0.075000002980232239,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionLinearInterpolate"
+        },
+        "x": -300,
+        "y": 150
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "add_expression",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression_class": {
+          "refPath": "/Script/Engine.MaterialExpressionScalarParameter"
+        },
+        "x": -300,
+        "y": 450
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "list_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        }
+      },
+      "result": "{\"defaultValue\":{\"type\":\"number\",\"description\":\"The default parameter value.\"},\"controlType\":{\"type\":\"string\",\"title\":\"EMaterialScalarParameterControlType\",\"enum\":[\"Numeric\",\"Enumeration\",\"EnumerationIndex\"],\"description\":\"UI control type used for setting values in the material instance editor.\"},\"sliderMin\":{\"type\":\"number\",\"description\":\"Sets the lower bound for this parameter in the material instance editor.\"},\"sliderMax\":{\"type\":\"number\",\"description\":\"Sets the upper bound for this parameter in the material instance editor.\\nThe bounds will be disabled if SliderMax <= SliderMin.\"},\"enumeration\":{\"type\":\"object\",\"title\":\"/Script/CoreUObject.Object\",\"description\":\"Enumeration object to use in the material instance editor.\",\"properties\":{\"refPath\":{\"type\":\"string\",\"description\":\"The reference stored as a soft path string.\"}},\"required\":[\"refPath\"]},\"enumerationIndex\":{\"type\":\"integer\",\"description\":\"Index of the enumeration to use from the material instance Enumeration Objects.\",\"minimum\":0},\"bUseCustomPrimitiveData\":{\"type\":\"boolean\",\"description\":\"True if this parameter value provided by custom data on the primitive.\"},\"primitiveDataIndex\":{\"type\":\"integer\",\"description\":\"The slot index for custom primitive data.\",\"minimum\":0},\"parameterName\":{\"type\":\"string\",\"description\":\"The name of the parameter\"},\"group\":{\"type\":\"string\",\"description\":\"The name of the parameter Group to display in MaterialInstance Editor. Default is None group\"},\"sortPriority\":{\"type\":\"integer\",\"description\":\"Controls where the this parameter is displayed in a material instance parameter list.  The lower the number the higher up in the parameter list.\"},\"materialExpressionEditorX\":{\"type\":\"integer\"},\"materialExpressionEditorY\":{\"type\":\"integer\"},\"desc\":{\"type\":\"string\",\"description\":\"A description that level designers can add (shows in the material editor UI).\"}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "set_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "values": "{\"parameterName\": \"Roughness\", \"defaultValue\": 0.92}"
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"Roughness\",\"defaultValue\":0.92000001668930054}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": [
+        "World Position",
+        "FilterWidth"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+        }
+      },
+      "result": [
+        "XYZ",
+        "XY",
+        "Z"
+      ]
+    },
+    {
+      "toolset": "EditorToolset.EditorAppToolset",
+      "tool": "IsPIERunning",
+      "arguments": {},
+      "result": false
+    },
+    {
+      "toolset": "editor_toolset.toolsets.scene.SceneTools",
+      "tool": "get_current_level",
+      "arguments": {},
+      "result": "/Game/Daedalus/DaedalusWorld"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "properties": [
+          "scale",
+          "quality",
+          "levels",
+          "outputMin",
+          "outputMax"
+        ]
+      },
+      "result": "{\"scale\":0.0030000000260770321,\"quality\":1,\"levels\":2,\"outputMin\":0,\"outputMax\":1}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"ForestColor\",\"defaultValue\":{\"r\":0.035000000149011612,\"g\":0.11999999731779099,\"b\":0.045000001788139343,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"MossColor\",\"defaultValue\":{\"r\":0.18000000715255737,\"g\":0.2800000011920929,\"b\":0.075000002980232239,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"Roughness\",\"defaultValue\":0.92000001668930054}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": [
+        "World Position",
+        "FilterWidth"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+        }
+      },
+      "result": [
+        "XYZ",
+        "XY",
+        "Z"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_expressions",
+      "arguments": {
+        "from_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+        },
+        "from_output_name": "XYZ",
+        "to_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "to_input_name": "World Position"
+      },
+      "result": null
+    },
+    {
+      "toolset": "EditorToolset.EditorAppToolset",
+      "tool": "IsPIERunning",
+      "arguments": {},
+      "result": false
+    },
+    {
+      "toolset": "editor_toolset.toolsets.scene.SceneTools",
+      "tool": "get_current_level",
+      "arguments": {},
+      "result": "/Game/Daedalus/DaedalusWorld"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "properties": [
+          "scale",
+          "quality",
+          "levels",
+          "outputMin",
+          "outputMax"
+        ]
+      },
+      "result": "{\"scale\":0.0030000000260770321,\"quality\":1,\"levels\":2,\"outputMin\":0,\"outputMax\":1}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"ForestColor\",\"defaultValue\":{\"r\":0.035000000149011612,\"g\":0.11999999731779099,\"b\":0.045000001788139343,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"MossColor\",\"defaultValue\":{\"r\":0.18000000715255737,\"g\":0.2800000011920929,\"b\":0.075000002980232239,\"a\":1}}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "properties": [
+          "parameterName",
+          "defaultValue"
+        ]
+      },
+      "result": "{\"parameterName\":\"Roughness\",\"defaultValue\":0.92000001668930054}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": [
+        "World Position",
+        "FilterWidth"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+        }
+      },
+      "result": [
+        "XYZ",
+        "XY",
+        "Z"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "XYZ",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionWorldPosition_0"
+          },
+          "input_name": "World Position"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "FilterWidth"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        "A",
+        "B",
+        "Alpha"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        }
+      },
+      "result": [
+        "RGB",
+        "R",
+        "G",
+        "B",
+        "A",
+        "RGBA"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "A"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_expressions",
+      "arguments": {
+        "from_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+        },
+        "from_output_name": "RGB",
+        "to_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        },
+        "to_input_name": "A"
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+          },
+          "input_name": "A"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        "A",
+        "B",
+        "Alpha"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        }
+      },
+      "result": [
+        "RGB",
+        "R",
+        "G",
+        "B",
+        "A",
+        "RGBA"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+          },
+          "input_name": "A"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_expressions",
+      "arguments": {
+        "from_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+        },
+        "from_output_name": "RGB",
+        "to_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        },
+        "to_input_name": "B"
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+          },
+          "input_name": "A"
+        },
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+          },
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_input_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        "A",
+        "B",
+        "Alpha"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        }
+      },
+      "result": [
+        ""
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+          },
+          "input_name": "A"
+        },
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+          },
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": "None",
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_expressions",
+      "arguments": {
+        "from_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+        },
+        "from_output_name": "",
+        "to_expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        },
+        "to_input_name": "Alpha"
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_inputs",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_0"
+          },
+          "input_name": "A"
+        },
+        {
+          "output_name": "RGB",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionVectorParameter_1"
+          },
+          "input_name": "B"
+        },
+        {
+          "output_name": "",
+          "expression": {
+            "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionNoise_0"
+          },
+          "input_name": "Alpha"
+        }
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        }
+      },
+      "result": [
+        ""
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_to_output",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        },
+        "output_name": "",
+        "material_property": "MP_BaseColor"
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_property_input",
+      "arguments": {
+        "material": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "material_property": "MP_BaseColor"
+      },
+      "result": {
+        "output_name": "",
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionLinearInterpolate_0"
+        },
+        "input_name": ""
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_expression_output_names",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        }
+      },
+      "result": [
+        ""
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "connect_to_output",
+      "arguments": {
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "output_name": "",
+        "material_property": "MP_Roughness"
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "get_property_input",
+      "arguments": {
+        "material": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        },
+        "material_property": "MP_Roughness"
+      },
+      "result": {
+        "output_name": "",
+        "expression": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1:MaterialExpressionScalarParameter_0"
+        },
+        "input_name": ""
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "layout_expressions",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        }
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.material.MaterialTools",
+      "tool": "recompile",
+      "arguments": {
+        "material_or_function": {
+          "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+        }
+      },
+      "result": null
+    },
+    {
+      "toolset": "editor_toolset.toolsets.asset.AssetTools",
+      "tool": "save_assets",
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1"
+        ]
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.actor.ActorTools",
+      "tool": "get_actor_transform",
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+        }
+      },
+      "result": {
+        "location": {
+          "x": 40450,
+          "y": -9500,
+          "z": 4620
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 92,
+          "y": 92,
+          "z": 12
+        }
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.actor.ActorTools",
+      "tool": "get_tags",
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+        }
+      },
+      "result": [
+        "Land",
+        "Realm:WORLD-ZERO",
+        "Deed:1",
+        "District:55"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241.StaticMeshComponent0"
+        },
+        "properties": [
+          "staticMesh",
+          "overrideMaterials"
+        ]
+      },
+      "result": "{\"staticMesh\":{\"refPath\":\"/Engine/BasicShapes/Cube.Cube\"},\"overrideMaterials\":[{\"refPath\":\"/Game/Claude/Materials/MI_Orr_Grass.MI_Orr_Grass\"}]}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "set_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241.StaticMeshComponent0"
+        },
+        "values": "{\"overrideMaterials\": [{\"refPath\": \"/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1\"}]}"
+      },
+      "result": true
+    },
+    {
+      "toolset": "editor_toolset.toolsets.object.ObjectTools",
+      "tool": "get_properties",
+      "arguments": {
+        "instance": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241.StaticMeshComponent0"
+        },
+        "properties": [
+          "staticMesh",
+          "overrideMaterials"
+        ]
+      },
+      "result": "{\"staticMesh\":{\"refPath\":\"/Engine/BasicShapes/Cube.Cube\"},\"overrideMaterials\":[{\"refPath\":\"/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1\"}]}"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.actor.ActorTools",
+      "tool": "get_actor_transform",
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+        }
+      },
+      "result": {
+        "location": {
+          "x": 40450,
+          "y": -9500,
+          "z": 4620
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 92,
+          "y": 92,
+          "z": 12
+        }
+      }
+    },
+    {
+      "toolset": "editor_toolset.toolsets.actor.ActorTools",
+      "tool": "get_tags",
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+        }
+      },
+      "result": [
+        "Land",
+        "Realm:WORLD-ZERO",
+        "Deed:1",
+        "District:55"
+      ]
+    },
+    {
+      "toolset": "editor_toolset.toolsets.asset.AssetTools",
+      "tool": "save_assets",
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "result": true
+    }
+  ],
+  "status": "material-and-pilot-saved",
+  "pending": null,
+  "nodeReadbacks": [
+    "{\"scale\":0.0030000000260770321,\"quality\":1,\"levels\":2,\"outputMin\":0,\"outputMax\":1}",
+    "{\"parameterName\":\"ForestColor\",\"defaultValue\":{\"r\":0.035000000149011612,\"g\":0.11999999731779099,\"b\":0.045000001788139343,\"a\":1}}",
+    "{\"parameterName\":\"MossColor\",\"defaultValue\":{\"r\":0.18000000715255737,\"g\":0.2800000011920929,\"b\":0.075000002980232239,\"a\":1}}",
+    "{\"parameterName\":\"Roughness\",\"defaultValue\":0.92000001668930054}"
+  ],
+  "resumedUtc": "2026-10-14T11:10:00.109728+00:00",
+  "savedMaterial": true,
+  "floorBefore": {
+    "staticMesh": {
+      "refPath": "/Engine/BasicShapes/Cube.Cube"
+    },
+    "overrideMaterials": [
+      {
+        "refPath": "/Game/Claude/Materials/MI_Orr_Grass.MI_Orr_Grass"
+      }
+    ]
+  },
+  "mapBeforeSha256": "7eee7d7ea63d701ba62f90fc7206ab3390fd441e26e93deb27f56b62cc761514",
+  "floorAfter": {
+    "staticMesh": {
+      "refPath": "/Engine/BasicShapes/Cube.Cube"
+    },
+    "overrideMaterials": [
+      {
+        "refPath": "/Game/Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1"
+      }
+    ]
+  },
+  "savedMap": true,
+  "mapAfterSha256": "07bf2119c57fbe07231e0c344acd2524828cdd2e02b7a76a01862e8d3a1931f6"
+}

@@ -1,0 +1,52 @@
+{
+  "observedUtc": "2026-10-14T10:38:29.245006+00:00",
+  "successes": [
+    {
+      "file": "rock-pilot-close.png",
+      "sha256": "b72741e70644800d84be16609d1a4961c8d4530b47310ff87ad7c983921293c7",
+      "bytes": 2462189,
+      "camera_x_y_z_pitch_yaw": [
+        40450,
+        -15800,
+        3400,
+        2,
+        90
+      ],
+      "native_tool": "EditorToolset.EditorAppToolset.CaptureViewport",
+      "client": "existing tools/unreal_mcp/capture.py -> client.py -> transport.py",
+      "review": "close: dark/too close for whole-island quality; oblique: original primitive floors/decor preserved, underside not visible"
+    },
+    {
+      "file": "rock-pilot-oblique.png",
+      "sha256": "750f21d8945ceb6f90b7a9def6530184cfc0b6dc93f728807c503653f7743703",
+      "bytes": 4117455,
+      "camera_x_y_z_pitch_yaw": [
+        40450,
+        -20000,
+        9500,
+        -25,
+        90
+      ],
+      "native_tool": "EditorToolset.EditorAppToolset.CaptureViewport",
+      "client": "existing tools/unreal_mcp/capture.py -> client.py -> transport.py",
+      "review": "close: dark/too close for whole-island quality; oblique: original primitive floors/decor preserved, underside not visible"
+    }
+  ],
+  "failures": [
+    {
+      "view": "original side",
+      "received": 3470375,
+      "expected": 3512149,
+      "error": "response_body ConnectionResetError WinError10054"
+    },
+    {
+      "view": "diagonal side",
+      "received": 2946200,
+      "expected": 3008399,
+      "error": "response_body ConnectionResetError WinError10054"
+    }
+  ],
+  "conclusion": "No fixed payload cutoff established: larger successful image disproves that claim. Failure cause not proven; no automatic replay, settings changes, or restarts.",
+  "qualityAccepted": false,
+  "walkingProven": false
+}
