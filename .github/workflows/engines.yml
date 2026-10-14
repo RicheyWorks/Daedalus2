@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -45,6 +45,8 @@ jobs:
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
+      - name: pinned snapshot binary and concurrent-edit regressions
+        run: python3 ../../../tools/unreal/test_full_plugin_host.py
       - name: production component and widget Unreal source preflight
         run: |
           S=../DaedalusLink/Source/DaedalusLink
