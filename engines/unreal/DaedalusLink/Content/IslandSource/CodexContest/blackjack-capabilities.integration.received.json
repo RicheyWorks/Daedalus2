@@ -1,0 +1,147 @@
+{
+  "manifest_version": 1,
+  "kind": "source-integration-handoff",
+  "executable": false,
+  "status": "UNVERIFIED_SOURCE_ONLY",
+  "source_owner": "pootscoot-desktop-games",
+  "operator": "codex-play-guard",
+  "claim_message": 30968,
+  "source": {
+    "repository": "RicheyWorks/Daedalus2",
+    "branch": "codex/blackjack-capability-binding-20261014",
+    "code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
+    "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
+    "files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+        "sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+        "sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
+        "sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
+        "sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7"
+      }
+    ]
+  },
+  "companion": {
+    "repository": "RicheyWorks/BlackJackPro",
+    "pr": 62,
+    "pr_status": "draft",
+    "source_commit": "8a4dccfbc359be628b5766ea1b7082410baefe1c",
+    "unchanged_core": "1ec1801ac635e62945072974cbe8c78398a17849",
+    "entry": "com.richeyworks.blackjack.arcade.BridgeMain",
+    "contract": "docs/BLACKJACK-ARCADE-BRIDGE.md",
+    "activation": "not performed; approved companion adoption/runtime/provider required",
+    "origin_format": "http://127.0.0.1:<approved-port>",
+    "credentials": "private transient masked input or existing provider; no values in this packet",
+    "identity_limit": "shared local bearer; no multiuser account, inventory or entitlement authority"
+  },
+  "registration": {
+    "module": "DaedalusLink",
+    "module_type": "Runtime",
+    "uclass": "/Script/DaedalusLink.DaedalusJavaArcade",
+    "interaction": "ADaedalusHero::Interact -> ADaedalusUsable::Nearest -> ADaedalusJavaArcade::Use",
+    "ui": "SDaedalusJavaArcade",
+    "mode": "standalone local-player only; network worlds refused"
+  },
+  "placement": {
+    "map": "/Game/Daedalus/DaedalusWorld",
+    "actor_label": "Arcade_Blackjack_Capabilities_20261014",
+    "game": "Blackjack",
+    "cabinet_id": "retain existing/generated unique GUID; never use bearer/session/account identity",
+    "transform_cm": null,
+    "transform_status": "sole operator selects approved vacant staging location; no coordinates or deed ownership allocated by source lane",
+    "mesh": "existing actor default cabinet placeholder; no new art",
+    "existing_actor_policy": "reuse only an explicitly assigned Blackjack cabinet, otherwise operator owns one new staged actor",
+    "placed": false,
+    "saved": false
+  },
+  "bindings": {
+    "rules": [
+      "dealerHitsSoft17",
+      "lateSurrender",
+      "offerInsurance",
+      "doubleAfterSplit",
+      "splitAcesOneCard"
+    ],
+    "rule_method": "SetBlackjackRule",
+    "decks": [
+      1,
+      2,
+      4,
+      6,
+      8
+    ],
+    "deck_method": "SetBlackjackDecks",
+    "max_hands": [
+      2,
+      3,
+      4
+    ],
+    "max_hands_method": "SetBlackjackSplitLimit",
+    "reset_method": "SubmitBlackjackAction(newSession)",
+    "reset_semantics": "Java resets same table stats and simulated bankroll to1000 and reshuffles; source command, no native award",
+    "snapshot_method": "ApplyBlackjack",
+    "snapshot_fields": [
+      "rules",
+      "stats",
+      "shoe safe counts only",
+      "insuranceBet",
+      "lastOutcomes",
+      "lastNet",
+      "lastInsurance",
+      "lastInsuranceReturn",
+      "playerHand flags",
+      "dealer derived fields only when revealed"
+    ],
+    "commit": "all newly required fields validate before atomic View/Blackjack commit",
+    "gates": "existing Java legalActions plus Guard.CanMutate, revision, one operation in flight; no optimistic metadata update or automatic mutation replay"
+  },
+  "stages": {
+    "source": "implemented; read-only review; unverified",
+    "code_committed": true,
+    "connected": false,
+    "native_built": false,
+    "native_loaded": false,
+    "world_placed": false,
+    "world_saved": false,
+    "end_to_end": false
+  },
+  "pending_operator_steps": [
+    "Read and source-review the exact code commit/file hashes; preserve PR139 Minesweeper and other owners.",
+    "After separately authorized adoption/build/load, confirm installed module contains this exact source revision. Current tests/builds/CI remain deferred.",
+    "Select or stage the one approved Blackjack actor with Game=Blackjack and generated unique CabinetId. Preserve other actors/deeds/materials and record actual transform/map save only if authorized.",
+    "Against an explicitly approved disposable Java companion, normal local Hero Use must open this overlay; root starts no service and provides no credentials.",
+    "After Java session creation, compare rules, long-string totals, safe shoe counts, flags and outcomes with the same accepted revision. Rule/deck/maxhand controls change only after accepted replies.",
+    "During a live hand, unknown mutation or disconnect, verify settings/reset remain gated by Java/legal guard and no command replays; refresh/reconciliation is explicit.",
+    "Confirm insurance/even-money wording follows visible natural flag, reset uses source newSession, dealer hole/derived live totals/future-shoe order stay absent, and closing restores local input.",
+    "Return actual native receipt with exact source/binary hash, companion pin, actor identity, map transform/save and redacted observations; no native/E2E completion assumed."
+  ],
+  "remaining_original_features": [
+    "facade health/reopen binding",
+    "per-player provider/authorization",
+    "21+3",
+    "strategy/HiLo",
+    "durable saves/sealed round resume",
+    "persistent preferences",
+    "achievements",
+    "themes/casts/chatter",
+    "audio",
+    "plugins",
+    "keyboard/accessibility/mobile/optional Steam"
+  ],
+  "restrictions": [
+    "No editor operation by source lane",
+    "No current dedicated tests/builds/CI or E2E execution",
+    "No production traffic, account provisioning, paid services or real credentials",
+    "No financial deployment, wallet, entitlement, inventory grants or fabricated rewards",
+    "No Minesweeper/PR139 files or shared HTTP transport changes"
+  ]
+}

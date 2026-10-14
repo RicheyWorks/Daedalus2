@@ -1,0 +1,149 @@
+{
+  "artifacts": [
+    {
+      "dimensions_metres": [
+        2.1149407625198364,
+        1.9026980996131897,
+        2.6355151534080505
+      ],
+      "fbx": {
+        "bytes": 67516,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx",
+        "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93"
+      },
+      "material_slots": [
+        "SW_Life_Ice",
+        "SW_Life_Turquoise",
+        "SW_Life_Petrol",
+        "SW_Life_Coral",
+        "SW_Life_Gold"
+      ],
+      "name": "CodexAetherflow_ribbon_reeds_617024",
+      "receipt": {
+        "bytes": 64829,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.receipt.json",
+        "sha256": "d1e087f4af275cb33bec9d3d2606786002460666de756f5c064634b61003e7dd"
+      },
+      "triangles": 2152
+    },
+    {
+      "dimensions_metres": [
+        1.1582167744636536,
+        0.9362468719482422,
+        0.8904604911804199
+      ],
+      "fbx": {
+        "bytes": 63068,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx",
+        "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143"
+      },
+      "material_slots": [
+        "SW_Life_Gold",
+        "SW_Life_Turquoise",
+        "SW_Life_Petrol",
+        "SW_Life_Coral",
+        "SW_Life_Ice"
+      ],
+      "name": "CodexAetherflow_star_lilies_617024",
+      "receipt": {
+        "bytes": 66761,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.receipt.json",
+        "sha256": "b50bbe48806cf3bac402608468e4f60d1ae01e2d20a242819e5829a78b56e532"
+      },
+      "triangles": 1940
+    },
+    {
+      "dimensions_metres": [
+        1.660338819026947,
+        1.2629642486572266,
+        3.070986896753311
+      ],
+      "fbx": {
+        "bytes": 85420,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx",
+        "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa"
+      },
+      "material_slots": [
+        "SW_Life_Gold",
+        "SW_Life_Turquoise",
+        "SW_Life_Petrol",
+        "SW_Life_Ice"
+      ],
+      "name": "CodexAetherflow_glasskelp_617024",
+      "receipt": {
+        "bytes": 94896,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.receipt.json",
+        "sha256": "4f31481d0e08b971ece6b8b7f0ddd768dbfb5bf14d1a32d3c01aa188891206b6"
+      },
+      "triangles": 3072
+    }
+  ],
+  "converter_source": {
+    "bytes": 25389,
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\blender\\codex_aetherflow_dropin.py",
+    "sha256": "ded6935af700e6d95147c96962ac3fb0798ef6a0d1a4e13e3435e19ca7733b8a"
+  },
+  "native_imported": false,
+  "native_saved": false,
+  "original_payloads_unchanged": true,
+  "renders_run": false,
+  "schema": "daedalus.codex-aetherflow-dropin-batch.v1",
+  "seed": 617024,
+  "source_author": "SolUltra",
+  "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+  "source_owner_handle": "buckwild-sol",
+  "source_witnesses": {
+    "../Aetherflow_Package_Receipt.json": {
+      "bytes": 9940,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\Aetherflow_Package_Receipt.json",
+      "sha256": "47da61d38deccaf8ed84e1f077d11b131b6730426372b7e7629cd0a8672390c4"
+    },
+    "Aetherflow_Aquatic_Life.png": {
+      "bytes": 1670458,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Aquatic_Life.png",
+      "sha256": "1400c668cb065316a58ac7c91f9a5249297f3104802483c6f800654b1128551c"
+    },
+    "Aetherflow_Nursery_detail.png": {
+      "bytes": 1907798,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Nursery_detail.png",
+      "sha256": "437ad2d53b6932bc4ed6ff42d75ee4bd51bb4e6f33fd7fdb49a1b776fec2c052"
+    },
+    "Aetherflow_Reach_day.png": {
+      "bytes": 2022426,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Reach_day.png",
+      "sha256": "c29db29874d275b4b717665fe8fc13164cbb3f3d2d8779eff9774e1f266f4d8d"
+    },
+    "Aetherflow_Reach_dusk.png": {
+      "bytes": 1955744,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Reach_dusk.png",
+      "sha256": "c93623e93a9eca107bfcfbe75a1b28f6f84e302edc7c012f4ddc5f18d865d1dc"
+    },
+    "Aetherflow_Willowdrift_player.png": {
+      "bytes": 1568013,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Willowdrift_player.png",
+      "sha256": "b535bf1366c795a5534cf740b019fa213808d0b5cc4e882e3e1ad82f95aba411"
+    },
+    "Delivery_Receipt.json": {
+      "bytes": 12741,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Delivery_Receipt.json",
+      "sha256": "13ca2e81f94a28228ee430146ddd54dd70bae9797c9f584b28024c5ad15ba142"
+    },
+    "modules/Life_glasskelp.glb": {
+      "bytes": 91780,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_glasskelp.glb",
+      "sha256": "97b6af850c377fb6b76b1499b6ceecd1091cd9244f03f7141242c4699ea6bf86"
+    },
+    "modules/Life_ribbon_reeds.glb": {
+      "bytes": 62472,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_ribbon_reeds.glb",
+      "sha256": "3124f31b2889f9610b79cdd582a03fdc40a13fc919ebcfb70d2065a966fa0695"
+    },
+    "modules/Life_star_lilies.glb": {
+      "bytes": 62204,
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_star_lilies.glb",
+      "sha256": "0cfa8be1dc9fc71f9efce89601b3d7e6a4286735bea55532f4fec24c23ffa209"
+    }
+  },
+  "stage": "three_retained_fbx_exported",
+  "tests_run": false
+}

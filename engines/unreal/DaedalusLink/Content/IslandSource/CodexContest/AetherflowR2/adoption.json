@@ -1,0 +1,106 @@
+{
+  "stage": "production_saved_and_unchanged_reused",
+  "reviewed_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "runtime_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "loaded": [
+    {
+      "name": "daedalus_ingestion_receipts",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py",
+      "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+    },
+    {
+      "name": "daedalus_codex_ingestion",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py",
+      "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+    }
+  ],
+  "candidate": "Aetherflow_three_plants",
+  "prepared_manifest_sha256": "493b44d5ca482e454e2312d3c2c7e44d776913d04b40fae5d9a17df69ab332d0",
+  "deadline_epoch": 1792017728.2662475,
+  "editor_preflight": {
+    "server": {
+      "protocolVersion": "2025-11-25",
+      "capabilities": {
+        "resources": {},
+        "tools": {
+          "listChanged": true
+        }
+      },
+      "serverInfo": {
+        "name": "",
+        "title": "",
+        "version": ""
+      }
+    },
+    "pie_running": false,
+    "current_map": "/Game/Daedalus/DaedalusWorld"
+  },
+  "passes": [
+    {
+      "phase": "production_import",
+      "elapsed_s": 1.095737,
+      "results": [
+        {
+          "name": "CodexAetherflow_ribbon_reeds_617024",
+          "state": "saved",
+          "unchanged_skipped": false,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\d8c672752101e94807fc2be5.json",
+          "assets": {
+            "CodexAetherflow_ribbon_reeds_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024"
+          }
+        },
+        {
+          "name": "CodexAetherflow_star_lilies_617024",
+          "state": "saved",
+          "unchanged_skipped": false,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\cd8a88ba64e2e4c0da04c799.json",
+          "assets": {
+            "CodexAetherflow_star_lilies_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024"
+          }
+        },
+        {
+          "name": "CodexAetherflow_glasskelp_617024",
+          "state": "saved",
+          "unchanged_skipped": false,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\645581c6f428658f3d6433e7.json",
+          "assets": {
+            "CodexAetherflow_glasskelp_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "identical_input_reuse",
+      "elapsed_s": 0.462106,
+      "results": [
+        {
+          "name": "CodexAetherflow_ribbon_reeds_617024",
+          "state": "saved",
+          "unchanged_skipped": true,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\d8c672752101e94807fc2be5.json",
+          "assets": {
+            "CodexAetherflow_ribbon_reeds_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024"
+          }
+        },
+        {
+          "name": "CodexAetherflow_star_lilies_617024",
+          "state": "saved",
+          "unchanged_skipped": true,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\cd8a88ba64e2e4c0da04c799.json",
+          "assets": {
+            "CodexAetherflow_star_lilies_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024"
+          }
+        },
+        {
+          "name": "CodexAetherflow_glasskelp_617024",
+          "state": "saved",
+          "unchanged_skipped": true,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\645581c6f428658f3d6433e7.json",
+          "assets": {
+            "CodexAetherflow_glasskelp_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -125,6 +125,17 @@ def execute_plan(plan, journal_path, timeout=120):
     before selecting a new journal. No actor is removed or moved to resolve it.
     """
     journal_path = Path(journal_path).resolve()
+    overrides = plan.get("component_overrides")
+    if overrides is not None:
+        labels = {entry["label"] for entry in plan["entries"]}
+        if not isinstance(overrides, dict) or set(overrides) != labels:
+            raise ValueError("component overrides must cover the exact additive actor set")
+        allowed_slots = {"SW_Life_" + key for key in ("Gold", "Turquoise", "Petrol", "Coral", "Ice")}
+        for slots in overrides.values():
+            if not isinstance(slots, dict) or not slots or not set(slots).issubset(allowed_slots):
+                raise ValueError("require the bounded Aetherflow source material slots")
+            if any(not isinstance(path, str) or not package(path).startswith(DEST + "/Aetherflow/Palette/") for path in slots.values()):
+                raise ValueError("component overrides leave the saved owned Aetherflow palette")
     if journal_path in (Path(plan["manifest"]), Path(plan["saved_receipt"]), Path(plan["map_file"])):
         raise ValueError("assembly journal must not overwrite an input")
     previous = None
@@ -216,6 +227,60 @@ def execute_plan(plan, journal_path, timeout=120):
             _write(journal_path, report)
         report["assembly_s"] = round(time.perf_counter() - started, 6)
         require_map()
+        if overrides is not None:
+            # Assign saved material assets before the one final map save. This
+            # preserves imported mesh bytes and the source material-slot names.
+            from asset_pipeline import wire
+            code = '''import unreal
+rows=ROWS
+overrides=OVERRIDES
+result=[]
+actors={a.get_path_name():a for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors() if a.get_actor_label() in {row['label'] for row in rows}}
+for row in rows:
+    actor=actors.get(row['actor']['refPath'])
+    if actor is None or actor.get_actor_label()!=row['label']:raise RuntimeError('new palette actor identity changed')
+    component=actor.get_component_by_class(unreal.StaticMeshComponent)
+    mesh=component.get_editor_property('static_mesh') if component else None
+    if mesh is None or mesh.get_path_name()!=row['mesh_path']:raise RuntimeError('new palette actor mesh changed')
+    slots=[str(slot.material_slot_name) for slot in mesh.get_editor_property('static_materials')]
+    expected=overrides[row['label']]
+    if len(slots)!=len(expected) or set(slots)!=set(expected):raise RuntimeError('native source material slots differ')
+    materials=[unreal.EditorAssetLibrary.load_asset(expected[slot]) for slot in slots]
+    if any(not isinstance(value,unreal.MaterialInterface) for value in materials):raise RuntimeError('saved source palette material missing')
+    actor.modify();component.modify()
+    for i,material in enumerate(materials):component.set_material(i,material)
+    actual=[component.get_material(i).get_path_name() for i in range(len(slots))]
+    if actual!=[expected[slot] for slot in slots]:raise RuntimeError('component material readback differs')
+    result.append({'label':row['label'],'slots':slots,'materials':actual})
+'''.replace("ROWS", repr(report["actors"]), 1).replace("OVERRIDES", repr(overrides), 1)
+            action = {"toolset": "asset_pipeline.wire", "tool": "execute_python component overrides",
+                      "code_sha256": hashlib.sha256(code.encode()).hexdigest(), "state": "pending"}
+            report["native_mutations"].append(action)
+            report["stage"] = "native_mutation_pending"
+            _write(journal_path, report)
+            started = time.perf_counter()
+            try:
+                reply = wire.call(wire.UNREAL, "execute_python", code=code, unattended=False, timeout=90, side="Unreal")
+            except Exception as error:
+                action.update(state="uncertain", error=str(error))
+                report["stage"] = "native_outcome_uncertain"
+                _write(journal_path, report)
+                raise
+            action.update(state="responded", result=reply)
+            report["stage"] = "native_response_received"
+            _write(journal_path, report)
+            applied = reply.get("result")
+            if reply.get("error") or not isinstance(applied, list) or len(applied) != len(report["actors"]) or {row.get("label") for row in applied} != set(overrides):
+                raise RuntimeError("inspect the retained component-override reply before replay")
+            for row in applied:
+                slots = row.get("slots", [])
+                if (len(slots) != len(overrides[row["label"]]) or set(slots) != set(overrides[row["label"]]) or
+                    row.get("materials") != [overrides[row["label"]].get(slot) for slot in slots]):
+                    raise RuntimeError("component-override response differs from its source palette")
+            report["applied_component_overrides"] = applied
+            report["component_override_s"] = round(time.perf_counter() - started, 6)
+            _write(journal_path, report)
+            require_map()
         # This is the sole save operation. Meshes and materials were saved by
         # the import receipt and are never included in this map-only request.
         started = time.perf_counter()

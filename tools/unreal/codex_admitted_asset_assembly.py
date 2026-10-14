@@ -24,6 +24,11 @@ RETAINED_ISLANDS = {
 POWER_NAME = "CodexSalvage_PowerUnit_86100"
 POWER_CONFIG_SHA256 = "0b66a3639f80f8addf477b109710bb065d2993ce4061111bb5653c892a3eefa9"
 POWER_ROLES = ("battery", "gearbox", "rotor", "shaft", "support")
+AETHERFLOW_CONFIGS = {
+    "CodexAetherflow_ribbon_reeds_617024": "55372051791b453cd13729bd9013a266048a46e06e15a81e894d4442af5dac32",
+    "CodexAetherflow_star_lilies_617024": "cc0855e7b08d8fa634a9d60bc948541ed0935dcd6d8d9027c6f3a3ff16118c04",
+    "CodexAetherflow_glasskelp_617024": "18cb62de2d99e0754c14ae0f1e71e20c1be952829fdccf5b831826134ae9d84b",
+}
 
 
 def _power_contract(settings, manifest):
@@ -49,6 +54,18 @@ def _power_contract(settings, manifest):
 def _retained_contract(settings, manifest):
     """Select a fixed name/seed/role contract, never an arbitrary mesh count."""
     name = settings.get("name")
+    if isinstance(name, str) and name in AETHERFLOW_CONFIGS:
+        if type(settings.get("seed")) is not int or settings["seed"] != 617024 or settings.get("config_sha256") != AETHERFLOW_CONFIGS[name]:
+            raise ValueError("Aetherflow source identity/config differs from the retained conversion")
+        if "kind" in settings and settings["kind"] != "module":
+            raise ValueError("retained Aetherflow plants must be module-kind")
+        if "preset" in settings and settings["preset"] != "codex_prepared_existing_options_v1":
+            raise ValueError("Aetherflow importer preset differs")
+        for container in (settings, manifest):
+            if "config" in container:
+                digest = hashlib.sha256(json.dumps(container["config"], sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+                if digest != AETHERFLOW_CONFIGS[name]:raise ValueError("exposed Aetherflow config hash differs")
+        return {name}
     if name == POWER_NAME:
         return _power_contract(settings, manifest)
     if name not in RETAINED_ISLANDS:
@@ -101,8 +118,9 @@ def plan_admitted(receipt_path, placement_cm, map_path, map_file):
         raise ValueError("receipt destination is not the exact owned Ingestion/key24 revision")
     native = receipt.get("native_result", {})
     name = settings.get("name")
-    kind = "module" if name == POWER_NAME else "island"
-    if settings.get("kind") != kind or native.get("kind") != kind or not isinstance(name, str) or (name != POWER_NAME and re.fullmatch("CodexIsland_[A-Za-z0-9_]+", name) is None):
+    retained_module = name == POWER_NAME or isinstance(name, str) and name in AETHERFLOW_CONFIGS
+    kind = "module" if retained_module else "island"
+    if settings.get("kind") != kind or native.get("kind") != kind or not isinstance(name, str) or (not retained_module and re.fullmatch("CodexIsland_[A-Za-z0-9_]+", name) is None):
         raise ValueError("require an exact owned island-kind receipt or the retained module-kind PowerUnit")
     if receipt.get("name") != name or native.get("name") != name or native.get("destination") != destination or native.get("stage") != "assets_saved_held_from_world":
         raise ValueError("native saved identity differs from its admission settings")

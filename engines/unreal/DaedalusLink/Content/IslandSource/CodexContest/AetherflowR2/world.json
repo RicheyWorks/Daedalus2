@@ -1,0 +1,585 @@
+{
+  "actors": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981"
+      },
+      "group": "CodexAetherflow_ribbon_reeds_617024",
+      "label": "CodexAetherflow_ribbon_reeds_617024",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024",
+      "transform": {
+        "location": {
+          "x": -371550,
+          "y": 350700,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982"
+      },
+      "group": "CodexAetherflow_star_lilies_617024",
+      "label": "CodexAetherflow_star_lilies_617024",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024",
+      "transform": {
+        "location": {
+          "x": -371050,
+          "y": 350100,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "assembly_s": 0.478248,
+  "created_actors": 2,
+  "folder": "CodexContest/Staging",
+  "map_before": {
+    "bytes": 209300262,
+    "sha256": "a32fd910fb3a29ce89b09590cdfd8fa18ab4cc91d08a31b06538cd7280f1db18"
+  },
+  "native_mutations": [
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024",
+        "name": "CodexAetherflow_ribbon_reeds_617024",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -371550,
+            "y": 350700,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024",
+        "name": "CodexAetherflow_star_lilies_617024",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -371050,
+            "y": 350100,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "code_sha256": "cafa05edc07c29e6288f3bb6b79c7408ee29d086ebfc4b1a7e9620dfe38daca5",
+      "result": {
+        "result": [
+          {
+            "label": "CodexAetherflow_ribbon_reeds_617024",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+            ],
+            "slots": [
+              "SW_Life_Ice",
+              "SW_Life_Turquoise",
+              "SW_Life_Petrol",
+              "SW_Life_Coral",
+              "SW_Life_Gold"
+            ]
+          },
+          {
+            "label": "CodexAetherflow_star_lilies_617024",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+            ],
+            "slots": [
+              "SW_Life_Gold",
+              "SW_Life_Turquoise",
+              "SW_Life_Petrol",
+              "SW_Life_Coral",
+              "SW_Life_Ice"
+            ]
+          }
+        ],
+        "stdout": "",
+        "unattended": false
+      },
+      "state": "responded",
+      "tool": "execute_python component overrides",
+      "toolset": "asset_pipeline.wire"
+    },
+    {
+      "toolset": "editor_toolset.toolsets.asset.AssetTools",
+      "tool": "save_assets",
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "state": "responded",
+      "result": true
+    }
+  ],
+  "ownership_tags_added": false,
+  "plan": {
+    "component_overrides": {
+      "CodexAetherflow_ribbon_reeds_617024": {
+        "SW_Life_Coral": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+        "SW_Life_Gold": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+        "SW_Life_Ice": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+        "SW_Life_Petrol": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+        "SW_Life_Turquoise": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc"
+      },
+      "CodexAetherflow_star_lilies_617024": {
+        "SW_Life_Coral": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+        "SW_Life_Gold": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+        "SW_Life_Ice": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+        "SW_Life_Petrol": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+        "SW_Life_Turquoise": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc"
+      }
+    },
+    "entries": [
+      {
+        "group": "CodexAetherflow_ribbon_reeds_617024",
+        "label": "CodexAetherflow_ribbon_reeds_617024",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024",
+        "transform": {
+          "location": {
+            "x": -371550,
+            "y": 350700,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexAetherflow_star_lilies_617024",
+        "label": "CodexAetherflow_star_lilies_617024",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024",
+        "transform": {
+          "location": {
+            "x": -371050,
+            "y": 350100,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "held_from_world": {
+      "CodexAetherflow_glasskelp_617024": "intentionally submerged; retained asset-only pending native transparent water"
+    },
+    "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\codex-aetherflow.delivery.json",
+    "manifest_fingerprint": {
+      "bytes": 36483,
+      "sha256": "493b44d5ca482e454e2312d3c2c7e44d776913d04b40fae5d9a17df69ab332d0"
+    },
+    "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "map_package": "/Game/Daedalus/DaedalusWorld",
+    "native_output_fingerprints": {
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024": {
+        "bytes": 152371,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\645581c6f428658f3d6433e7\\CodexAetherflow_glasskelp_617024.uasset",
+        "sha256": "ccb3309bfd1c9e3eeadc536d00b96ebca8f4863f8d84df0b7cfce91913ea1bef"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024": {
+        "bytes": 129951,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\cd8a88ba64e2e4c0da04c799\\CodexAetherflow_star_lilies_617024.uasset",
+        "sha256": "1d3372fd95e1dd043ca56ca1fcefb94e6ce03984b3bd30c1f22bc14c0ace381a"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024": {
+        "bytes": 135508,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\d8c672752101e94807fc2be5\\CodexAetherflow_ribbon_reeds_617024.uasset",
+        "sha256": "56b22fe1e80beca9d993ffd37ecfd5fe6b8390b8289f8e9c496596854ba4e9f7"
+      }
+    },
+    "placements_cm": {
+      "CodexAetherflow_ribbon_reeds_617024": [
+        -371550,
+        350700,
+        18215.324
+      ],
+      "CodexAetherflow_star_lilies_617024": [
+        -371050,
+        350100,
+        18215.324
+      ]
+    },
+    "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\native-saved.json",
+    "saved_receipt_fingerprint": {
+      "bytes": 2186,
+      "sha256": "74d6332328ab1df0b81503279c7527e2ed868662300b7537ffe323ea36b4c6c2"
+    },
+    "schema": "daedalus.codex-aetherflow-assembly.v1",
+    "source_admissions": {
+      "CodexAetherflow_glasskelp_617024": {
+        "canonical_plan": {
+          "config_sha256": "18cb62de2d99e0754c14ae0f1e71e20c1be952829fdccf5b831826134ae9d84b",
+          "entries": [
+            {
+              "group": "CodexAetherflow_glasskelp_617024",
+              "label": "CodexAetherflow_glasskelp_617024",
+              "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024",
+              "transform": {
+                "location": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "rotation": {
+                  "pitch": 0,
+                  "roll": 0,
+                  "yaw": 0
+                },
+                "scale": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                }
+              }
+            }
+          ],
+          "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\645581c6f428658f3d6433e7.json",
+          "manifest_embedded": true,
+          "manifest_fingerprint": {
+            "bytes": 8860,
+            "sha256": "58764a56fbdccf27306ab36de6fc159fc5a41f69ea2abcc6c4b6cf3b52be6379"
+          },
+          "manifest_key": "645581c6f428658f3d6433e78fcff0ea4a81fbea86237ef699bf8439db28c171",
+          "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+          "map_package": "/Game/Daedalus/DaedalusWorld",
+          "native_output_fingerprints": {
+            "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024": {
+              "bytes": 152371,
+              "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\645581c6f428658f3d6433e7\\CodexAetherflow_glasskelp_617024.uasset",
+              "sha256": "ccb3309bfd1c9e3eeadc536d00b96ebca8f4863f8d84df0b7cfce91913ea1bef"
+            }
+          },
+          "placements_cm": {
+            "CodexAetherflow_glasskelp_617024": [
+              0,
+              0,
+              0
+            ]
+          },
+          "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\645581c6f428658f3d6433e7.json",
+          "saved_receipt_fingerprint": {
+            "bytes": 8860,
+            "sha256": "58764a56fbdccf27306ab36de6fc159fc5a41f69ea2abcc6c4b6cf3b52be6379"
+          },
+          "schema": "daedalus.codex-admitted-assembly.v1",
+          "seed": 617024,
+          "source_fingerprint": {
+            "bytes": 85420,
+            "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa"
+          },
+          "validated_saved_meshes": 1
+        },
+        "fingerprint": {
+          "bytes": 8860,
+          "sha256": "58764a56fbdccf27306ab36de6fc159fc5a41f69ea2abcc6c4b6cf3b52be6379"
+        },
+        "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\645581c6f428658f3d6433e7.json"
+      },
+      "CodexAetherflow_ribbon_reeds_617024": {
+        "canonical_plan": {
+          "config_sha256": "55372051791b453cd13729bd9013a266048a46e06e15a81e894d4442af5dac32",
+          "entries": [
+            {
+              "group": "CodexAetherflow_ribbon_reeds_617024",
+              "label": "CodexAetherflow_ribbon_reeds_617024",
+              "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024",
+              "transform": {
+                "location": {
+                  "x": -371550,
+                  "y": 350700,
+                  "z": 18215.324
+                },
+                "rotation": {
+                  "pitch": 0,
+                  "roll": 0,
+                  "yaw": 0
+                },
+                "scale": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                }
+              }
+            }
+          ],
+          "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\d8c672752101e94807fc2be5.json",
+          "manifest_embedded": true,
+          "manifest_fingerprint": {
+            "bytes": 9035,
+            "sha256": "253217d38f1f8a522185fe9c5a613c34e5aec514293bc7d29063e136555167c3"
+          },
+          "manifest_key": "d8c672752101e94807fc2be598c30552e2abddd67c651b201abc5566d2dd4bbb",
+          "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+          "map_package": "/Game/Daedalus/DaedalusWorld",
+          "native_output_fingerprints": {
+            "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024": {
+              "bytes": 135508,
+              "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\d8c672752101e94807fc2be5\\CodexAetherflow_ribbon_reeds_617024.uasset",
+              "sha256": "56b22fe1e80beca9d993ffd37ecfd5fe6b8390b8289f8e9c496596854ba4e9f7"
+            }
+          },
+          "placements_cm": {
+            "CodexAetherflow_ribbon_reeds_617024": [
+              -371550,
+              350700,
+              18215.324
+            ]
+          },
+          "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\d8c672752101e94807fc2be5.json",
+          "saved_receipt_fingerprint": {
+            "bytes": 9035,
+            "sha256": "253217d38f1f8a522185fe9c5a613c34e5aec514293bc7d29063e136555167c3"
+          },
+          "schema": "daedalus.codex-admitted-assembly.v1",
+          "seed": 617024,
+          "source_fingerprint": {
+            "bytes": 67516,
+            "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93"
+          },
+          "validated_saved_meshes": 1
+        },
+        "fingerprint": {
+          "bytes": 9035,
+          "sha256": "253217d38f1f8a522185fe9c5a613c34e5aec514293bc7d29063e136555167c3"
+        },
+        "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\d8c672752101e94807fc2be5.json"
+      },
+      "CodexAetherflow_star_lilies_617024": {
+        "canonical_plan": {
+          "config_sha256": "cc0855e7b08d8fa634a9d60bc948541ed0935dcd6d8d9027c6f3a3ff16118c04",
+          "entries": [
+            {
+              "group": "CodexAetherflow_star_lilies_617024",
+              "label": "CodexAetherflow_star_lilies_617024",
+              "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024",
+              "transform": {
+                "location": {
+                  "x": -371050,
+                  "y": 350100,
+                  "z": 18215.324
+                },
+                "rotation": {
+                  "pitch": 0,
+                  "roll": 0,
+                  "yaw": 0
+                },
+                "scale": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                }
+              }
+            }
+          ],
+          "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\cd8a88ba64e2e4c0da04c799.json",
+          "manifest_embedded": true,
+          "manifest_fingerprint": {
+            "bytes": 9019,
+            "sha256": "101c048a6690da0c7daee1b098f9b34fdc41ba946b253f11726b91d8b3819d5a"
+          },
+          "manifest_key": "cd8a88ba64e2e4c0da04c7995457e34536aaddb9ee8f449191f85bf0cc6c8bad",
+          "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+          "map_package": "/Game/Daedalus/DaedalusWorld",
+          "native_output_fingerprints": {
+            "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024": {
+              "bytes": 129951,
+              "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\cd8a88ba64e2e4c0da04c799\\CodexAetherflow_star_lilies_617024.uasset",
+              "sha256": "1d3372fd95e1dd043ca56ca1fcefb94e6ce03984b3bd30c1f22bc14c0ace381a"
+            }
+          },
+          "placements_cm": {
+            "CodexAetherflow_star_lilies_617024": [
+              -371050,
+              350100,
+              18215.324
+            ]
+          },
+          "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\cd8a88ba64e2e4c0da04c799.json",
+          "saved_receipt_fingerprint": {
+            "bytes": 9019,
+            "sha256": "101c048a6690da0c7daee1b098f9b34fdc41ba946b253f11726b91d8b3819d5a"
+          },
+          "schema": "daedalus.codex-admitted-assembly.v1",
+          "seed": 617024,
+          "source_fingerprint": {
+            "bytes": 63068,
+            "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143"
+          },
+          "validated_saved_meshes": 1
+        },
+        "fingerprint": {
+          "bytes": 9019,
+          "sha256": "101c048a6690da0c7daee1b098f9b34fdc41ba946b253f11726b91d8b3819d5a"
+        },
+        "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\cd8a88ba64e2e4c0da04c799.json"
+      }
+    }
+  },
+  "reused_actors": 0,
+  "save_return": true,
+  "saved_unreal": true,
+  "stage": "placed_and_saved",
+  "staging_only": true,
+  "reconciled_from": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\world.first-response-shape.json",
+    "fingerprint": {
+      "sha256": "7baf954546d399d3aa263e528830c2f6f235abc1106104546aa8efbedb1d682f",
+      "bytes": 23868
+    },
+    "error": "Unreal: Aetherflow component overrides returned list [{'label': 'CodexAetherflow_ribbon_reeds_617024', 'slots': ['SW_Life_Ice', 'SW_L, expected a JSON object (is the editor in Play, or did the script stop before setting result?)"
+  },
+  "reconciliation_readback": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\reconciliation-before-first-save-1792017789795428800.json",
+    "fingerprint": {
+      "sha256": "582965aeb0dd888063ab78619053555316599aa13fb31e8b905c5419f0a8eeea",
+      "bytes": 173959
+    }
+  },
+  "applied_component_overrides": [
+    {
+      "label": "CodexAetherflow_ribbon_reeds_617024",
+      "materials": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+      ],
+      "slots": [
+        "SW_Life_Ice",
+        "SW_Life_Turquoise",
+        "SW_Life_Petrol",
+        "SW_Life_Coral",
+        "SW_Life_Gold"
+      ]
+    },
+    {
+      "label": "CodexAetherflow_star_lilies_617024",
+      "materials": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+        "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+      ],
+      "slots": [
+        "SW_Life_Gold",
+        "SW_Life_Turquoise",
+        "SW_Life_Petrol",
+        "SW_Life_Coral",
+        "SW_Life_Ice"
+      ]
+    }
+  ],
+  "component_override_s": "not_retained_before_parser_failure",
+  "map_save_s": 20.560135,
+  "map_after": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  }
+}

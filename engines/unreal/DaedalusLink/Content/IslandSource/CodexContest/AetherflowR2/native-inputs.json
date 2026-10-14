@@ -1,0 +1,455 @@
+{
+  "schema": "daedalus.codex-aetherflow-native-inputs.v1",
+  "stage": "three_source_dropins_prepared",
+  "prepared_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\codex-aetherflow.delivery.json",
+  "prepared_manifest_fingerprint": {
+    "sha256": "493b44d5ca482e454e2312d3c2c7e44d776913d04b40fae5d9a17df69ab332d0",
+    "bytes": 36483
+  },
+  "candidates": {
+    "CodexAetherflow_ribbon_reeds_617024": {
+      "config": {
+        "version": 1,
+        "seed": 617024,
+        "plant": "ribbon_reeds",
+        "source_author": "SolUltra",
+        "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+        "source_glb": {
+          "sha256": "3124f31b2889f9610b79cdd582a03fdc40a13fc919ebcfb70d2065a966fa0695",
+          "bytes": 62472
+        },
+        "converter": {
+          "sha256": "ded6935af700e6d95147c96962ac3fb0798ef6a0d1a4e13e3435e19ca7733b8a",
+          "bytes": 25389
+        },
+        "waterline_local_z": 0.0,
+        "materials_linear_gltf": [
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Ice",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.7200000286102295,
+                0.9399999976158142,
+                0.8799999952316284,
+                1
+              ],
+              "metallicFactor": 0.05000000074505806,
+              "roughnessFactor": 0.2199999988079071
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Turquoise",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.04500000178813934,
+                0.5799999833106995,
+                0.5600000023841858,
+                1
+              ],
+              "metallicFactor": 0.10000000149011612,
+              "roughnessFactor": 0.30000001192092896
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Petrol",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.017999999225139618,
+                0.14000000059604645,
+                0.18000000715255737,
+                1
+              ],
+              "metallicFactor": 0.18000000715255737,
+              "roughnessFactor": 0.3499999940395355
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Coral",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.9599999785423279,
+                0.23000000417232513,
+                0.2800000011920929,
+                1
+              ],
+              "metallicFactor": 0.03999999910593033,
+              "roughnessFactor": 0.36000001430511475
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Gold",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                1,
+                0.5600000023841858,
+                0.11999999731779099,
+                1
+              ],
+              "metallicFactor": 0.2800000011920929,
+              "roughnessFactor": 0.28999999165534973
+            }
+          }
+        ]
+      },
+      "config_sha256": "55372051791b453cd13729bd9013a266048a46e06e15a81e894d4442af5dac32",
+      "source_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.receipt.json",
+      "source_receipt_fingerprint": {
+        "sha256": "d1e087f4af275cb33bec9d3d2606786002460666de756f5c064634b61003e7dd",
+        "bytes": 64829
+      },
+      "entry": {
+        "name": "CodexAetherflow_ribbon_reeds_617024",
+        "kind": "module",
+        "stage": "exported",
+        "seed": 617024,
+        "config_sha256": "55372051791b453cd13729bd9013a266048a46e06e15a81e894d4442af5dac32",
+        "fbx": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx",
+          "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93",
+          "bytes": 67516
+        },
+        "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/680b2c0908cc2ec2",
+        "objects": [
+          {
+            "name": "CodexAetherflow_ribbon_reeds_617024",
+            "dims": [
+              2.1149407625198364,
+              1.9026980996131897,
+              2.6355151534080505
+            ],
+            "triangles": 2152,
+            "materials": [
+              "SW_Life_Ice",
+              "SW_Life_Turquoise",
+              "SW_Life_Petrol",
+              "SW_Life_Coral",
+              "SW_Life_Gold"
+            ]
+          }
+        ],
+        "world_placement": "held pending fresh native bounds/pond-footing readback"
+      }
+    },
+    "CodexAetherflow_star_lilies_617024": {
+      "config": {
+        "version": 1,
+        "seed": 617024,
+        "plant": "star_lilies",
+        "source_author": "SolUltra",
+        "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+        "source_glb": {
+          "sha256": "0cfa8be1dc9fc71f9efce89601b3d7e6a4286735bea55532f4fec24c23ffa209",
+          "bytes": 62204
+        },
+        "converter": {
+          "sha256": "ded6935af700e6d95147c96962ac3fb0798ef6a0d1a4e13e3435e19ca7733b8a",
+          "bytes": 25389
+        },
+        "waterline_local_z": 0.0,
+        "materials_linear_gltf": [
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Gold",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                1,
+                0.5600000023841858,
+                0.11999999731779099,
+                1
+              ],
+              "metallicFactor": 0.2800000011920929,
+              "roughnessFactor": 0.28999999165534973
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Turquoise",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.04500000178813934,
+                0.5799999833106995,
+                0.5600000023841858,
+                1
+              ],
+              "metallicFactor": 0.10000000149011612,
+              "roughnessFactor": 0.30000001192092896
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Petrol",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.017999999225139618,
+                0.14000000059604645,
+                0.18000000715255737,
+                1
+              ],
+              "metallicFactor": 0.18000000715255737,
+              "roughnessFactor": 0.3499999940395355
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Coral",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.9599999785423279,
+                0.23000000417232513,
+                0.2800000011920929,
+                1
+              ],
+              "metallicFactor": 0.03999999910593033,
+              "roughnessFactor": 0.36000001430511475
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Ice",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.7200000286102295,
+                0.9399999976158142,
+                0.8799999952316284,
+                1
+              ],
+              "metallicFactor": 0.05000000074505806,
+              "roughnessFactor": 0.2199999988079071
+            }
+          }
+        ]
+      },
+      "config_sha256": "cc0855e7b08d8fa634a9d60bc948541ed0935dcd6d8d9027c6f3a3ff16118c04",
+      "source_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.receipt.json",
+      "source_receipt_fingerprint": {
+        "sha256": "b50bbe48806cf3bac402608468e4f60d1ae01e2d20a242819e5829a78b56e532",
+        "bytes": 66761
+      },
+      "entry": {
+        "name": "CodexAetherflow_star_lilies_617024",
+        "kind": "module",
+        "stage": "exported",
+        "seed": 617024,
+        "config_sha256": "cc0855e7b08d8fa634a9d60bc948541ed0935dcd6d8d9027c6f3a3ff16118c04",
+        "fbx": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx",
+          "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143",
+          "bytes": 63068
+        },
+        "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/4ea954ef822890c4",
+        "objects": [
+          {
+            "name": "CodexAetherflow_star_lilies_617024",
+            "dims": [
+              1.1582167744636536,
+              0.9362468719482422,
+              0.8904604911804199
+            ],
+            "triangles": 1940,
+            "materials": [
+              "SW_Life_Gold",
+              "SW_Life_Turquoise",
+              "SW_Life_Petrol",
+              "SW_Life_Coral",
+              "SW_Life_Ice"
+            ]
+          }
+        ],
+        "world_placement": "held pending fresh native bounds/pond-footing readback"
+      }
+    },
+    "CodexAetherflow_glasskelp_617024": {
+      "config": {
+        "version": 1,
+        "seed": 617024,
+        "plant": "glasskelp",
+        "source_author": "SolUltra",
+        "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+        "source_glb": {
+          "sha256": "97b6af850c377fb6b76b1499b6ceecd1091cd9244f03f7141242c4699ea6bf86",
+          "bytes": 91780
+        },
+        "converter": {
+          "sha256": "ded6935af700e6d95147c96962ac3fb0798ef6a0d1a4e13e3435e19ca7733b8a",
+          "bytes": 25389
+        },
+        "waterline_local_z": 0.0,
+        "materials_linear_gltf": [
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Gold",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                1,
+                0.5600000023841858,
+                0.11999999731779099,
+                1
+              ],
+              "metallicFactor": 0.2800000011920929,
+              "roughnessFactor": 0.28999999165534973
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Turquoise",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.04500000178813934,
+                0.5799999833106995,
+                0.5600000023841858,
+                1
+              ],
+              "metallicFactor": 0.10000000149011612,
+              "roughnessFactor": 0.30000001192092896
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Petrol",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.017999999225139618,
+                0.14000000059604645,
+                0.18000000715255737,
+                1
+              ],
+              "metallicFactor": 0.18000000715255737,
+              "roughnessFactor": 0.3499999940395355
+            }
+          },
+          {
+            "doubleSided": true,
+            "extensions": {
+              "KHR_materials_clearcoat": {
+                "clearcoatFactor": 0.25
+              }
+            },
+            "name": "SW_Life_Ice",
+            "pbrMetallicRoughness": {
+              "baseColorFactor": [
+                0.7200000286102295,
+                0.9399999976158142,
+                0.8799999952316284,
+                1
+              ],
+              "metallicFactor": 0.05000000074505806,
+              "roughnessFactor": 0.2199999988079071
+            }
+          }
+        ]
+      },
+      "config_sha256": "18cb62de2d99e0754c14ae0f1e71e20c1be952829fdccf5b831826134ae9d84b",
+      "source_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.receipt.json",
+      "source_receipt_fingerprint": {
+        "sha256": "4f31481d0e08b971ece6b8b7f0ddd768dbfb5bf14d1a32d3c01aa188891206b6",
+        "bytes": 94896
+      },
+      "entry": {
+        "name": "CodexAetherflow_glasskelp_617024",
+        "kind": "module",
+        "stage": "exported",
+        "seed": 617024,
+        "config_sha256": "18cb62de2d99e0754c14ae0f1e71e20c1be952829fdccf5b831826134ae9d84b",
+        "fbx": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx",
+          "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa",
+          "bytes": 85420
+        },
+        "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/79afd47af8db96fb",
+        "objects": [
+          {
+            "name": "CodexAetherflow_glasskelp_617024",
+            "dims": [
+              1.660338819026947,
+              1.2629642486572266,
+              3.070986896753311
+            ],
+            "triangles": 3072,
+            "materials": [
+              "SW_Life_Gold",
+              "SW_Life_Turquoise",
+              "SW_Life_Petrol",
+              "SW_Life_Ice"
+            ]
+          }
+        ],
+        "world_placement": "held pending fresh native bounds/pond-footing readback"
+      }
+    }
+  },
+  "source_batch": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\Aetherflow_Dropin_Receipt.json",
+  "source_batch_fingerprint": {
+    "sha256": "e6067421d41adc3f1088f8fd5d0382359a27fc3ea2643c3376175c7810257804",
+    "bytes": 6677
+  }
+}

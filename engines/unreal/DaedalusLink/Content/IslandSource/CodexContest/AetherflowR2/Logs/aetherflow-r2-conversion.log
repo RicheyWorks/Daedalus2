@@ -1,0 +1,184 @@
+15:29:54 | INFO: Data are loaded, start creating Blender stuff
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_10
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_11
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_14
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_15
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_18
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_19
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_22
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_23
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_26
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_27
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_30
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_31
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_34
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_35
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_38
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_39
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_42
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_43
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_09
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_13
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_17
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_21
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_25
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_29
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_33
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_37
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_41
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_01
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_02
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_03
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_04
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_05
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_06
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_07
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_08
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_12
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_16
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_20
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_24
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_28
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_32
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_36
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_40
+15:29:54 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_44
+15:29:54 | INFO: glTF import finished in 0.03s
+
+FBX export starting... 'C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx'
+export finished in 0.0075 sec.
+{"dimensions_metres": [2.1149407625198364, 1.9026980996131897, 2.6355151534080505], "fbx": {"fingerprint": {"bytes": 67516, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx", "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93"}, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx"}, "material_slots": ["SW_Life_Ice", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Coral", "SW_Life_Gold"], "name": "CodexAetherflow_ribbon_reeds_617024", "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.receipt.json", "stage": "retained_fbx_exported", "triangles": 2152}
+15:29:55 | INFO: Data are loaded, start creating Blender stuff
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_FlowerHeart_46
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_FlowerStem_29
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_LilyPad_08
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_LilyPad_15
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_LilyPad_22
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_09
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_10
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_11
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_12
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_13
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_14
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_16
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_17
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_18
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_19
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_20
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_21
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_23
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_24
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_25
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_26
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_27
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_PadVein_28
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_01
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_02
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_03
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_04
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_05
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_06
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_RootFilament_07
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_30
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_31
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_32
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_33
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_34
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_35
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_36
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_37
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_38
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_39
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_40
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_41
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_42
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_43
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_44
+15:29:55 | INFO: Blender create Mesh node SW_star_lilies_StarPetal_45
+15:29:55 | INFO: glTF import finished in 0.03s
+
+FBX export starting... 'C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx'
+export finished in 0.0070 sec.
+{"dimensions_metres": [1.1582167744636536, 0.9362468719482422, 0.8904604911804199], "fbx": {"fingerprint": {"bytes": 63068, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx", "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143"}, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx"}, "material_slots": ["SW_Life_Gold", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Coral", "SW_Life_Ice"], "name": "CodexAetherflow_star_lilies_617024", "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.receipt.json", "stage": "retained_fbx_exported", "triangles": 1940}
+15:29:55 | INFO: Data are loaded, start creating Blender stuff
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_01
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_13
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_25
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_37
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_49
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_FloatLeaf_61
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_02
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_14
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_26
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_38
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_50
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_HangingStem_62
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_03
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_04
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_05
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_06
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_07
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_08
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_09
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_10
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_11
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_12
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_15
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_16
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_17
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_18
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_19
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_20
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_21
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_22
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_23
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_24
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_27
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_28
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_29
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_30
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_31
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_32
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_33
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_34
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_35
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_36
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_39
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_40
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_41
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_42
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_43
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_44
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_45
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_46
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_47
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_48
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_51
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_52
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_53
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_54
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_55
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_56
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_57
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_58
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_59
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_60
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_63
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_64
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_65
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_66
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_67
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_68
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_69
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_70
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_71
+15:29:55 | INFO: Blender create Mesh node SW_glasskelp_KelpFrond_72
+15:29:55 | INFO: glTF import finished in 0.04s
+
+FBX export starting... 'C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx'
+export finished in 0.0060 sec.
+{"dimensions_metres": [1.660338819026947, 1.2629642486572266, 3.070986896753311], "fbx": {"fingerprint": {"bytes": 85420, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx", "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa"}, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx"}, "material_slots": ["SW_Life_Gold", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Ice"], "name": "CodexAetherflow_glasskelp_617024", "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.receipt.json", "stage": "retained_fbx_exported", "triangles": 3072}
+{"artifacts": [{"dimensions_metres": [2.1149407625198364, 1.9026980996131897, 2.6355151534080505], "fbx": {"bytes": 67516, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx", "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93"}, "material_slots": ["SW_Life_Ice", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Coral", "SW_Life_Gold"], "name": "CodexAetherflow_ribbon_reeds_617024", "receipt": {"bytes": 64829, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.receipt.json", "sha256": "d1e087f4af275cb33bec9d3d2606786002460666de756f5c064634b61003e7dd"}, "triangles": 2152}, {"dimensions_metres": [1.1582167744636536, 0.9362468719482422, 0.8904604911804199], "fbx": {"bytes": 63068, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx", "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143"}, "material_slots": ["SW_Life_Gold", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Coral", "SW_Life_Ice"], "name": "CodexAetherflow_star_lilies_617024", "receipt": {"bytes": 66761, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.receipt.json", "sha256": "b50bbe48806cf3bac402608468e4f60d1ae01e2d20a242819e5829a78b56e532"}, "triangles": 1940}, {"dimensions_metres": [1.660338819026947, 1.2629642486572266, 3.070986896753311], "fbx": {"bytes": 85420, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx", "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa"}, "material_slots": ["SW_Life_Gold", "SW_Life_Turquoise", "SW_Life_Petrol", "SW_Life_Ice"], "name": "CodexAetherflow_glasskelp_617024", "receipt": {"bytes": 94896, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.receipt.json", "sha256": "4f31481d0e08b971ece6b8b7f0ddd768dbfb5bf14d1a32d3c01aa188891206b6"}, "triangles": 3072}], "converter_source": {"bytes": 25389, "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\blender\\codex_aetherflow_dropin.py", "sha256": "ded6935af700e6d95147c96962ac3fb0798ef6a0d1a4e13e3435e19ca7733b8a"}, "native_imported": false, "native_saved": false, "original_payloads_unchanged": true, "renders_run": false, "schema": "daedalus.codex-aetherflow-dropin-batch.v1", "seed": 617024, "source_author": "SolUltra", "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193", "source_owner_handle": "buckwild-sol", "source_witnesses": {"../Aetherflow_Package_Receipt.json": {"bytes": 9940, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\Aetherflow_Package_Receipt.json", "sha256": "47da61d38deccaf8ed84e1f077d11b131b6730426372b7e7629cd0a8672390c4"}, "Aetherflow_Aquatic_Life.png": {"bytes": 1670458, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Aquatic_Life.png", "sha256": "1400c668cb065316a58ac7c91f9a5249297f3104802483c6f800654b1128551c"}, "Aetherflow_Nursery_detail.png": {"bytes": 1907798, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Nursery_detail.png", "sha256": "437ad2d53b6932bc4ed6ff42d75ee4bd51bb4e6f33fd7fdb49a1b776fec2c052"}, "Aetherflow_Reach_day.png": {"bytes": 2022426, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Reach_day.png", "sha256": "c29db29874d275b4b717665fe8fc13164cbb3f3d2d8779eff9774e1f266f4d8d"}, "Aetherflow_Reach_dusk.png": {"bytes": 1955744, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Reach_dusk.png", "sha256": "c93623e93a9eca107bfcfbe75a1b28f6f84e302edc7c012f4ddc5f18d865d1dc"}, "Aetherflow_Willowdrift_player.png": {"bytes": 1568013, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Aetherflow_Willowdrift_player.png", "sha256": "b535bf1366c795a5534cf740b019fa213808d0b5cc4e882e3e1ad82f95aba411"}, "Delivery_Receipt.json": {"bytes": 12741, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Delivery_Receipt.json", "sha256": "13ca2e81f94a28228ee430146ddd54dd70bae9797c9f584b28024c5ad15ba142"}, "modules/Life_glasskelp.glb": {"bytes": 91780, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_glasskelp.glb", "sha256": "97b6af850c377fb6b76b1499b6ceecd1091cd9244f03f7141242c4699ea6bf86"}, "modules/Life_ribbon_reeds.glb": {"bytes": 62472, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_ribbon_reeds.glb", "sha256": "3124f31b2889f9610b79cdd582a03fdc40a13fc919ebcfb70d2065a966fa0695"}, "modules/Life_star_lilies.glb": {"bytes": 62204, "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_star_lilies.glb", "sha256": "0cfa8be1dc9fc71f9efce89601b3d7e6a4286735bea55532f4fec24c23ffa209"}}, "stage": "three_retained_fbx_exported", "tests_run": false}
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+
+Blender quit

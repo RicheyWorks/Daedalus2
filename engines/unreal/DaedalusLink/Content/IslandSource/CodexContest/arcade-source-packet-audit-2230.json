@@ -1,0 +1,125 @@
+{
+  "schema": "daedalus.arcade-source-packet-audit.v1",
+  "audited_at_utc": "2026-10-14T22:29:27.1986336Z",
+  "operator": "codex-play-guard",
+  "auditor": "variant_visual_audit",
+  "stage": "received_manifest_and_pinned_source_bytes_verified; adoption_build_load_placement_runtime_pending",
+  "executable": false,
+  "authority_to_build_load_or_run": false,
+  "received_manifest": {
+    "path": "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/blackjack-capabilities.integration.received.json",
+    "bytes": 6581,
+    "sha256": "8ec9fa68d2384ff60346642072b7bd79fc6b73d4364a937dd926646b2b838975",
+    "expected_fingerprint_matches": true,
+    "status": "UNVERIFIED_SOURCE_ONLY",
+    "source_owner": "pootscoot-desktop-games",
+    "claim_message": 30968,
+    "parent_supplied_owner_hub_message": 31014,
+    "owner_hub_message_verification": "Reference supplied by parent; no hub call made by this audit."
+  },
+  "source": {
+    "repository": "RicheyWorks/Daedalus2",
+    "branch": "codex/blackjack-capability-binding-20261014",
+    "manifest_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
+    "pr": {
+      "number": 152,
+      "url": "https://github.com/RicheyWorks/Daedalus2/pull/152",
+      "state": "open",
+      "draft": true,
+      "observed_head": "89ece41824b9132403ac0bfffae15343b08b13f8"
+    },
+    "verification_method": "Read-only gh api contents requests at the exact manifest code commit; base64 decoded raw GitHub file bytes hashed with SHA256. No checkout, adoption, build or load.",
+    "runtime_files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+        "git_blob_sha": "a55185d16042c58c5ea13d06155052b30dbbc88a",
+        "github_blob_bytes": 17430,
+        "manifest_sha256": "e6909e41c3bf03659ed9b1529e1b9438019b9d9e2126c2f5901f4527102c81ef",
+        "github_raw_sha256": "e6909e41c3bf03659ed9b1529e1b9438019b9d9e2126c2f5901f4527102c81ef",
+        "raw_bytes_match": true,
+        "github_raw_has_crlf": false
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+        "git_blob_sha": "98823a4cd6413ca28cdd2dee08f006034dc0fea3",
+        "github_blob_bytes": 67289,
+        "manifest_sha256": "4192b92801953c788b1d690a4f786ade134436199666968785ad29f01b2ff900",
+        "github_raw_sha256": "4192b92801953c788b1d690a4f786ade134436199666968785ad29f01b2ff900",
+        "raw_bytes_match": true,
+        "github_raw_has_crlf": false
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
+        "git_blob_sha": "fc764daacacd98426b00b09f3d6ef6111bf30d97",
+        "github_blob_bytes": 1642,
+        "manifest_sha256": "75d7d73c97dbe3edd550ea51c86e8a15c6331783a5c6c4c78f4f5d24b3f02eeb",
+        "github_raw_sha256": "75d7d73c97dbe3edd550ea51c86e8a15c6331783a5c6c4c78f4f5d24b3f02eeb",
+        "raw_bytes_match": true,
+        "github_raw_has_crlf": false
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
+        "git_blob_sha": "708497395f562196ef9d1c027f5eaf28fcaeb0bc",
+        "github_blob_bytes": 23412,
+        "manifest_sha256": "cb2c4db04ff4e9c76ca42067b08bd8fe14a873a4a3afc8c1a2b9eef6716fc0f7",
+        "github_raw_sha256": "cb2c4db04ff4e9c76ca42067b08bd8fe14a873a4a3afc8c1a2b9eef6716fc0f7",
+        "raw_bytes_match": true,
+        "github_raw_has_crlf": false
+      }
+    ],
+    "raw_runtime_pin_matches": 4,
+    "line_ending_qualification": "All four raw GitHub LF file byte hashes match their manifest SHA256 values exactly. No line-ending normalization was used to establish a match. Hypothetical CRLF expansion did not match any manifest pin. Local checkout or installed runtime bytes were not inspected.",
+    "pr_head_relation": {
+      "method": "Read-only GitHub compare endpoint, manifest code commit to observed PR head.",
+      "status": "ahead",
+      "ahead_by": 1,
+      "behind_by": 0,
+      "total_commits": 1,
+      "changed_paths": [
+        "docs/java-arcade/blackjack-capabilities.integration.json",
+        "docs/java-arcade/capability-coverage.md"
+      ],
+      "runtime_paths_changed": false
+    }
+  },
+  "registration_and_hero_use": {
+    "verification": "Declarations copied from the fingerprinted manifest, not native registration or interaction readback.",
+    "module": "DaedalusLink",
+    "module_type": "Runtime",
+    "uclass": "/Script/DaedalusLink.DaedalusJavaArcade",
+    "hero_use": "ADaedalusHero::Interact -> ADaedalusUsable::Nearest -> ADaedalusJavaArcade::Use",
+    "ui": "SDaedalusJavaArcade",
+    "mode": "standalone local-player only; network worlds refused"
+  },
+  "placement": {
+    "verification": "Manifest metadata only; no editor lookup, allocation, placement or save by this audit.",
+    "map": "/Game/Daedalus/DaedalusWorld",
+    "actor_label": "Arcade_Blackjack_Capabilities_20261014",
+    "game": "Blackjack",
+    "cabinet_id": "retain existing/generated unique GUID; never use bearer/session/account identity",
+    "transform_cm": null,
+    "transform_status": "sole operator selects approved vacant staging location; no coordinates or deed ownership allocated by source lane",
+    "mesh": "existing actor default cabinet placeholder; no new art",
+    "existing_actor_policy": "reuse only an explicitly assigned Blackjack cabinet, otherwise operator owns one new staged actor",
+    "placed": false,
+    "saved": false
+  },
+  "pending_stages": {
+    "source_adopted": false,
+    "native_built": false,
+    "native_loaded": false,
+    "companion_started": false,
+    "connected": false,
+    "world_placed": false,
+    "world_saved": false,
+    "hero_use_verified": false,
+    "runtime_verified": false,
+    "end_to_end": false
+  },
+  "limits": [
+    "Source identity evidence only; no broad code review or claim of correct runtime behavior.",
+    "No checkout, adoption, tests, build, load, companion start, Play or native/editor call.",
+    "No credentials, accounts, runtime services or other files changed.",
+    "This packet grants no build, load, editor, placement or runtime authority."
+  ]
+}

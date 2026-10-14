@@ -1,0 +1,9 @@
+{
+  "stdout": "",
+  "result": {
+    "make_attributes": true,
+    "inputs_documentation": "X.get_material_expression_input_names(material_expression) -> Array[str]\r\nGet the array of input pin names for a material expression\r\n\r\nArgs:\r\n    material_expression (MaterialExpression): \r\n\r\nReturns:\r\n    Array[str]:",
+    "connect_documentation": "X.connect_material_expressions(from_expression, from_output_name, to_expression, to_input_name) -> bool\r\nCreate connection between two material expressions\r\n\r\nArgs:\r\n    from_expression (MaterialExpression): Expression to make connection from\r\n    from_output_name (str): Name of output of FromExpression to make connection from. Leave empty to use first output.\r\n    to_expression (MaterialExpression): Expression to make connection to\r\n    to_input_name (str): Name of input of ToExpression to make connection to. Leave empty to use first input.\r\n\r\nReturns:\r\n    bool:"
+  },
+  "unattended": false
+}

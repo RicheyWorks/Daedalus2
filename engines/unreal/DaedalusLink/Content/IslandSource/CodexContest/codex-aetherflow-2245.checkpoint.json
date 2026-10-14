@@ -1,0 +1,319 @@
+{
+  "schema": "daedalus.codex-aetherflow-production-checkpoint.v1",
+  "created_utc": "2026-10-14T22:46:47.951916+00:00",
+  "stage": "three_meshes_saved_two_plants_placed_palette_bound_readback_complete",
+  "source_author": "SolUltra",
+  "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+  "seed": 617024,
+  "source_conversion": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\Aetherflow_Dropin_Receipt.json",
+    "bytes": 6677,
+    "sha256": "e6067421d41adc3f1088f8fd5d0382359a27fc3ea2643c3376175c7810257804"
+  },
+  "source_exports": [
+    {
+      "name": "CodexAetherflow_ribbon_reeds_617024",
+      "receipt": {
+        "bytes": 64829,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.receipt.json",
+        "sha256": "d1e087f4af275cb33bec9d3d2606786002460666de756f5c064634b61003e7dd"
+      },
+      "fbx": {
+        "bytes": 67516,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_ribbon_reeds_617024.fbx",
+        "sha256": "680b2c0908cc2ec21c51d1c6695464fcc3ad54494e819519dd62c6b406474a93"
+      }
+    },
+    {
+      "name": "CodexAetherflow_star_lilies_617024",
+      "receipt": {
+        "bytes": 66761,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.receipt.json",
+        "sha256": "b50bbe48806cf3bac402608468e4f60d1ae01e2d20a242819e5829a78b56e532"
+      },
+      "fbx": {
+        "bytes": 63068,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_star_lilies_617024.fbx",
+        "sha256": "4ea954ef822890c44bc6471d15b8b71ae287d7344bfc85bd6576c7749bc8b143"
+      }
+    },
+    {
+      "name": "CodexAetherflow_glasskelp_617024",
+      "receipt": {
+        "bytes": 94896,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.receipt.json",
+        "sha256": "4f31481d0e08b971ece6b8b7f0ddd768dbfb5bf14d1a32d3c01aa188891206b6"
+      },
+      "fbx": {
+        "bytes": 85420,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\CodexAetherflow_glasskelp_617024.fbx",
+        "sha256": "79afd47af8db96fbca56584d5840b0b34f9d989526ea17d78dde8c6f02239baa"
+      }
+    }
+  ],
+  "native_asset_paths": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024",
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024",
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024"
+  ],
+  "native_admissions": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\d8c672752101e94807fc2be5.json",
+      "bytes": 9035,
+      "sha256": "253217d38f1f8a522185fe9c5a613c34e5aec514293bc7d29063e136555167c3"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\cd8a88ba64e2e4c0da04c799.json",
+      "bytes": 9019,
+      "sha256": "101c048a6690da0c7daee1b098f9b34fdc41ba946b253f11726b91d8b3819d5a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\645581c6f428658f3d6433e7.json",
+      "bytes": 8860,
+      "sha256": "58764a56fbdccf27306ab36de6fc159fc5a41f69ea2abcc6c4b6cf3b52be6379"
+    }
+  ],
+  "observed_native_options": {
+    "CodexAetherflow_ribbon_reeds_617024": [
+      {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    ],
+    "CodexAetherflow_star_lilies_617024": [
+      {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    ],
+    "CodexAetherflow_glasskelp_617024": [
+      {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    ]
+  },
+  "placements_cm": {
+    "CodexAetherflow_ribbon_reeds_617024": [
+      -371550,
+      350700,
+      18215.324
+    ],
+    "CodexAetherflow_star_lilies_617024": [
+      -371050,
+      350100,
+      18215.324
+    ]
+  },
+  "native_actor_paths": [
+    "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981",
+    "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982"
+  ],
+  "held_from_world": {
+    "CodexAetherflow_glasskelp_617024": "intentionally submerged; retained asset-only pending native transparent water"
+  },
+  "world_journal": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\world.json",
+    "bytes": 27248,
+    "sha256": "d12216ee3adddc93ae6bf7cbc75fb7d121dd3e206d14b5a4361ee1a08a1a68e8"
+  },
+  "retained_known_response_shape_failure": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\world.first-response-shape.json",
+    "fingerprint": {
+      "sha256": "7baf954546d399d3aa263e528830c2f6f235abc1106104546aa8efbedb1d682f",
+      "bytes": 23868
+    },
+    "error": "Unreal: Aetherflow component overrides returned list [{'label': 'CodexAetherflow_ribbon_reeds_617024', 'slots': ['SW_Life_Ice', 'SW_L, expected a JSON object (is the editor in Play, or did the script stop before setting result?)"
+  },
+  "pre_first_save_readback": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\reconciliation-before-first-save-1792017789795428800.json",
+    "fingerprint": {
+      "sha256": "582965aeb0dd888063ab78619053555316599aa13fb31e8b905c5419f0a8eeea",
+      "bytes": 173959
+    }
+  },
+  "map_save_return": true,
+  "saved_map": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "map_package": "/Game/Daedalus/DaedalusWorld",
+  "new_saved_meshes": 3,
+  "new_staging_actors": 2,
+  "total_staging_actors": 89,
+  "total_saved_static_mesh_files": 85,
+  "island_instances": 6,
+  "prior87_actor_state_unchanged": true,
+  "protected_disk_files_unchanged": true,
+  "native_readback": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-aetherflow-final.native.json",
+    "bytes": 7855220,
+    "sha256": "35cc4ddb078a20b67503e164521f3bec70f54ee5fc23b71975796e569f1de1e9"
+  },
+  "native_issues": [],
+  "dirty_map_packages": [],
+  "dirty_content_packages": [],
+  "pie_running": false,
+  "final_bridge_snapshot": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-aetherflow-bridge-final.json",
+    "bytes": 2191,
+    "sha256": "b984d694cda0b785a440318621d4ea3328ad50751ee6551704592d4a7c3a0c5c"
+  },
+  "measured_seconds": {
+    "import_pass": 1.095737,
+    "unchanged_reuse_pass": 0.462106,
+    "material_creation_recompile_save_combined": 56.6,
+    "map_save": 20.560135,
+    "component_binding": "not_retained_before_parser_failure"
+  },
+  "native_views_personally_inspected": [
+    {
+      "island": "CodexAetherflow_ribbon_reeds_617024",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_ribbon_reeds_617024.aetherflow-reeds-2245-overview.png",
+      "camera": {
+        "location": {
+          "x": -371150,
+          "y": 351250,
+          "z": 18515.324
+        },
+        "rotation": {
+          "pitch": -17.926105543759885,
+          "yaw": -126.02737338510353,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "161b382651d0062cd55f56ba420332a3e0176aa19c0e0ccc6bdf8cbf32c59e7e",
+      "bytes": 1251489,
+      "when_utc": "2026-10-14T22:43:44.342676+00:00"
+    },
+    {
+      "island": "CodexAetherflow_ribbon_reeds_617024",
+      "view": "detail",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_ribbon_reeds_617024.aetherflow-reeds-2245-detail.png",
+      "camera": {
+        "location": {
+          "x": -371370,
+          "y": 350950,
+          "z": 18355.324
+        },
+        "rotation": {
+          "pitch": -9.219104966739222,
+          "yaw": -125.7538872544367,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "a0f015f26807e96904f37584172690e37b59c0d25de28c017022cccfbbabaf0e",
+      "bytes": 1208475,
+      "when_utc": "2026-10-14T22:43:44.806997+00:00"
+    },
+    {
+      "island": "CodexAetherflow_star_lilies_617024",
+      "view": "detail",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_star_lilies_617024.aetherflow-lilies-2245-detail.png",
+      "camera": {
+        "location": {
+          "x": -370850,
+          "y": 350350,
+          "z": 18385.324
+        },
+        "rotation": {
+          "pitch": -25.833418638451214,
+          "yaw": -128.6598082540901,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "8949b65f26512f191f1922a42ffbd3c83c19baea6fab595ced91c3a3b80837cc",
+      "bytes": 1154027,
+      "when_utc": "2026-10-14T22:44:09.979607+00:00"
+    },
+    {
+      "island": "CodexAetherflow_star_lilies_617024",
+      "view": "pond_context",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_star_lilies_617024.aetherflow-lilies-2245-pond_context.png",
+      "camera": {
+        "location": {
+          "x": -370400,
+          "y": 350850,
+          "z": 18715.324
+        },
+        "rotation": {
+          "pitch": -26.28314469513713,
+          "yaw": -147.09475707701216,
+          "roll": 8.868211352184005e-16
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "e2c3fc87abfc26dcb665556d36cdf3023951bc9cbe8ae6d032911c0fa58a51d8",
+      "bytes": 1242518,
+      "when_utc": "2026-10-14T22:44:10.463340+00:00"
+    }
+  ],
+  "visible_limits": [
+    "first reeds overview occluded by existing tree; detail has foreground bank",
+    "opaque existing pond",
+    "simple older props"
+  ],
+  "remaining_aetherflow_source_audit": {
+    "remaining_glbs": 10,
+    "all_hashes_match_original_receipt": true,
+    "five_source_views_inspected": true,
+    "three_fish": "contain transform animations and additional Ink material; static plant route does not preserve this contract",
+    "seven_water_modules": "transformed hierarchies, UVs and transmission/IOR beyond opaque plant profile",
+    "next_source_adaptation_target": {
+      "name": "SW_willowdrift.glb",
+      "bytes": 129112,
+      "sha256": "3e49d528be1c156a6de022cd5f38979704f0f52aeda99f18a961999093c3bcf0",
+      "meshes": 15,
+      "triangles": 4932,
+      "status": "source-reviewed; native material/hierarchy adaptation pending"
+    }
+  },
+  "arcade_source_packet": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\arcade-source-packet-audit-2230.json",
+    "bytes": 6146,
+    "sha256": "1d7fcbb7ce54a23180f972af3f33282cff4cb0ebf2c10daa895e93072f64247e"
+  },
+  "limits": {
+    "collision_navigation_swimming_ecology_motion_bar": "unverified",
+    "tests_build_gameplay": "deferred_by_user",
+    "background_compilation": "not_queried",
+    "epic_mcp_other_sessions": "not_queried",
+    "native_adoption_arcade": "pending_source_only"
+  },
+  "editor_role": "Codex remains user-designated sole operator; saved/open/idle at checkpoint; no transfer"
+}

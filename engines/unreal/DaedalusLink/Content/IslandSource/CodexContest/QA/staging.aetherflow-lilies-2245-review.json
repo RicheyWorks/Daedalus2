@@ -1,0 +1,59 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+  "views": [
+    {
+      "island": "CodexAetherflow_star_lilies_617024",
+      "view": "detail",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_star_lilies_617024.aetherflow-lilies-2245-detail.png",
+      "camera": {
+        "location": {
+          "x": -370850,
+          "y": 350350,
+          "z": 18385.324
+        },
+        "rotation": {
+          "pitch": -25.833418638451214,
+          "yaw": -128.6598082540901,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "8949b65f26512f191f1922a42ffbd3c83c19baea6fab595ced91c3a3b80837cc",
+      "bytes": 1154027,
+      "when_utc": "2026-10-14T22:44:09.979607+00:00"
+    },
+    {
+      "island": "CodexAetherflow_star_lilies_617024",
+      "view": "pond_context",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_star_lilies_617024.aetherflow-lilies-2245-pond_context.png",
+      "camera": {
+        "location": {
+          "x": -370400,
+          "y": 350850,
+          "z": 18715.324
+        },
+        "rotation": {
+          "pitch": -26.28314469513713,
+          "yaw": -147.09475707701216,
+          "roll": 8.868211352184005e-16
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "e2c3fc87abfc26dcb665556d36cdf3023951bc9cbe8ae6d032911c0fa58a51d8",
+      "bytes": 1242518,
+      "when_utc": "2026-10-14T22:44:10.463340+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\lilies.native-views.json",
+  "projection": "existing native viewport projection/FOV unchanged"
+}

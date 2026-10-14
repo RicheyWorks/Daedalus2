@@ -1,0 +1,6 @@
+{
+  "completed": [],
+  "error": "merge exceeded position/normal preservation tolerance",
+  "original_payloads_unchanged": true,
+  "stage": "conversion_failed"
+}

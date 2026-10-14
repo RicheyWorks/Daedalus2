@@ -1,0 +1,63 @@
+15:27:01 | INFO: Data are loaded, start creating Blender stuff
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_10
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_11
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_14
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_15
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_18
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_19
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_22
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_23
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_26
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_27
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_30
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_31
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_34
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_35
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_38
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_39
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_42
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedRibbon_43
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_09
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_13
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_17
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_21
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_25
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_29
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_33
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_37
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_ReedStem_41
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_01
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_02
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_03
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_04
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_05
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_06
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_07
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_RootFilament_08
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_12
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_16
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_20
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_24
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_28
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_32
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_36
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_40
+15:27:01 | INFO: Blender create Mesh node SW_ribbon_reeds_SeedLantern_44
+15:27:01 | INFO: glTF import finished in 0.03s
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+Traceback (most recent call last):
+  File "C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\tools\blender\codex_aetherflow_dropin.py", line 384, in <module>
+    main()
+  File "C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\tools\blender\codex_aetherflow_dropin.py", line 360, in main
+    results.append(_convert(bpy, source, output, kind, witnesses))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\tools\blender\codex_aetherflow_dropin.py", line 277, in _convert
+    preservation = _compare(before, after)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\tools\blender\codex_aetherflow_dropin.py", line 205, in _compare
+    raise ValueError("merge exceeded position/normal preservation tolerance")
+ValueError: merge exceeded position/normal preservation tolerance
+
+Error: script failed, file: 'tools/blender/codex_aetherflow_dropin.py', exiting.
+
+Blender quit

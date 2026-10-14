@@ -1,0 +1,59 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+  "views": [
+    {
+      "island": "CodexAetherflow_ribbon_reeds_617024",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_ribbon_reeds_617024.aetherflow-reeds-2245-overview.png",
+      "camera": {
+        "location": {
+          "x": -371150,
+          "y": 351250,
+          "z": 18515.324
+        },
+        "rotation": {
+          "pitch": -17.926105543759885,
+          "yaw": -126.02737338510353,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "161b382651d0062cd55f56ba420332a3e0176aa19c0e0ccc6bdf8cbf32c59e7e",
+      "bytes": 1251489,
+      "when_utc": "2026-10-14T22:43:44.342676+00:00"
+    },
+    {
+      "island": "CodexAetherflow_ribbon_reeds_617024",
+      "view": "detail",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexAetherflow_ribbon_reeds_617024.aetherflow-reeds-2245-detail.png",
+      "camera": {
+        "location": {
+          "x": -371370,
+          "y": 350950,
+          "z": 18355.324
+        },
+        "rotation": {
+          "pitch": -9.219104966739222,
+          "yaw": -125.7538872544367,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "a0f015f26807e96904f37584172690e37b59c0d25de28c017022cccfbbabaf0e",
+      "bytes": 1208475,
+      "when_utc": "2026-10-14T22:43:44.806997+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\reeds.native-views.json",
+  "projection": "existing native viewport projection/FOV unchanged"
+}

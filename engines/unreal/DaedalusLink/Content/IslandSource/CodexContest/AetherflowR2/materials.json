@@ -1,0 +1,284 @@
+{
+  "stage": "owned_materials_saved",
+  "source_settings": {
+    "Ice": {
+      "linear_rgb": [
+        0.7200000286102295,
+        0.9399999976158142,
+        0.8799999952316284
+      ],
+      "metallic": 0.05000000074505806,
+      "roughness": 0.2199999988079071,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    "Turquoise": {
+      "linear_rgb": [
+        0.04500000178813934,
+        0.5799999833106995,
+        0.5600000023841858
+      ],
+      "metallic": 0.10000000149011612,
+      "roughness": 0.30000001192092896,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    "Petrol": {
+      "linear_rgb": [
+        0.017999999225139618,
+        0.14000000059604645,
+        0.18000000715255737
+      ],
+      "metallic": 0.18000000715255737,
+      "roughness": 0.3499999940395355,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    "Coral": {
+      "linear_rgb": [
+        0.9599999785423279,
+        0.23000000417232513,
+        0.2800000011920929
+      ],
+      "metallic": 0.03999999910593033,
+      "roughness": 0.36000001430511475,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    "Gold": {
+      "linear_rgb": [
+        1,
+        0.5600000023841858,
+        0.11999999731779099
+      ],
+      "metallic": 0.2800000011920929,
+      "roughness": 0.28999999165534973,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    }
+  },
+  "map_before": {
+    "sha256": "a32fd910fb3a29ce89b09590cdfd8fa18ab4cc91d08a31b06538cd7280f1db18",
+    "bytes": 209300262
+  },
+  "source_sha256": "68cde2f5fd05509d0c0fc6d37d315847da13c331ee23e7a22a49824288ccc661",
+  "palette_profile": "aetherflow_linear_pbr_v1",
+  "palette_mutations": [
+    {
+      "action": "create_base",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/M_Aetherflow_Clearcoat_v1",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/M_Aetherflow_Clearcoat_v1.M_Aetherflow_Clearcoat_v1"
+    },
+    {
+      "action": "complete_inspected_empty_base",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/M_Aetherflow_Clearcoat_v1",
+      "state": "responded",
+      "expressions": 6,
+      "material_attributes_inputs": {
+        "basecolor": "BaseColor",
+        "roughness": "Roughness",
+        "metallic": "Metallic",
+        "clearcoat": "ClearCoat",
+        "clearcoatroughness": "ClearCoatRoughness"
+      }
+    },
+    {
+      "action": "save_base",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/M_Aetherflow_Clearcoat_v1",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\M_Aetherflow_Clearcoat_v1.uasset",
+        "bytes": 12725,
+        "sha256": "ed886e82e7db86e7cb8ae76017737123d8a111292e21650e950037ba707f3a2b"
+      },
+      "two_sided": true,
+      "use_material_attributes": true,
+      "shading_model": "<MaterialShadingModel.MSM_CLEAR_COAT: 4>"
+    },
+    {
+      "action": "create_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1"
+    },
+    {
+      "action": "save_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\MI_Aetherflow_SW_Life_Coral_8615d50f95b1.uasset",
+        "bytes": 10357,
+        "sha256": "46455d3326536af55e4f8a6b668b2d058ac336b48282d13b1881281d22bfb2d6"
+      },
+      "linear_rgb": [
+        0.9599999785423279,
+        0.23000000417232513,
+        0.2800000011920929
+      ],
+      "roughness": 0.36000001430511475,
+      "metallic": 0.03999999910593033,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    {
+      "action": "create_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+    },
+    {
+      "action": "save_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\MI_Aetherflow_SW_Life_Gold_83df028d72b3.uasset",
+        "bytes": 10638,
+        "sha256": "5094059b2fb6224007ae365f89e84b78e6f4c4edcb1adbd8926e8a6cb7ee04e4"
+      },
+      "linear_rgb": [
+        1.0,
+        0.5600000023841858,
+        0.11999999731779099
+      ],
+      "roughness": 0.28999999165534973,
+      "metallic": 0.2800000011920929,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    {
+      "action": "create_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+    },
+    {
+      "action": "save_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\MI_Aetherflow_SW_Life_Ice_38a60de46f0b.uasset",
+        "bytes": 10342,
+        "sha256": "e3a448e4113aeafa29f76278cdd1234f02f3ef23b867ce4baec84718cc668195"
+      },
+      "linear_rgb": [
+        0.7200000286102295,
+        0.9399999976158142,
+        0.8799999952316284
+      ],
+      "roughness": 0.2199999988079071,
+      "metallic": 0.05000000074505806,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    {
+      "action": "create_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb"
+    },
+    {
+      "action": "save_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\MI_Aetherflow_SW_Life_Petrol_dac6745110eb.uasset",
+        "bytes": 10430,
+        "sha256": "55ea5ade0aedfce525cec5251bfac2d3aa89d9ab88111b631145c6545daf7aed"
+      },
+      "linear_rgb": [
+        0.017999999225139618,
+        0.14000000059604645,
+        0.18000000715255737
+      ],
+      "roughness": 0.3499999940395355,
+      "metallic": 0.18000000715255737,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    },
+    {
+      "action": "create_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+      "state": "responded",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc"
+    },
+    {
+      "action": "save_instance",
+      "target": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+      "state": "responded",
+      "save_return": true,
+      "unchanged_skipped": false,
+      "disk": {
+        "path": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Aetherflow\\Palette\\MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.uasset",
+        "bytes": 10738,
+        "sha256": "3eca9bbdb6c0d033af4b65a98a47281ccc332e18eb05fd3d6a6ae26292540a03"
+      },
+      "linear_rgb": [
+        0.04500000178813934,
+        0.5799999833106995,
+        0.5600000023841858
+      ],
+      "roughness": 0.30000001192092896,
+      "metallic": 0.10000000149011612,
+      "clearcoat": 0.25,
+      "clearcoat_roughness": 0.0
+    }
+  ],
+  "reply": {
+    "steps": 5,
+    "yielded": [
+      "Coral",
+      "Gold",
+      "Ice",
+      "Petrol",
+      "Turquoise"
+    ],
+    "result": {
+      "SW_Life_Coral": {
+        "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1"
+      },
+      "SW_Life_Gold": {
+        "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+      },
+      "SW_Life_Ice": {
+        "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+      },
+      "SW_Life_Petrol": {
+        "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb"
+      },
+      "SW_Life_Turquoise": {
+        "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc"
+      }
+    },
+    "error": null,
+    "seconds": 56.6
+  },
+  "materials": {
+    "SW_Life_Coral": {
+      "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1"
+    },
+    "SW_Life_Gold": {
+      "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+    },
+    "SW_Life_Ice": {
+      "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+    },
+    "SW_Life_Petrol": {
+      "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb"
+    },
+    "SW_Life_Turquoise": {
+      "refPath": "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc"
+    }
+  },
+  "map_unchanged": true
+}

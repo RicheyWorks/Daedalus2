@@ -1,0 +1,42 @@
+{
+  "stage": "three_assets_saved",
+  "receipts": [
+    {
+      "name": "CodexAetherflow_ribbon_reeds_617024",
+      "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\d8c672752101e94807fc2be5.json",
+      "fingerprint": {
+        "sha256": "253217d38f1f8a522185fe9c5a613c34e5aec514293bc7d29063e136555167c3",
+        "bytes": 9035
+      },
+      "assets": {
+        "CodexAetherflow_ribbon_reeds_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024"
+      }
+    },
+    {
+      "name": "CodexAetherflow_star_lilies_617024",
+      "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\cd8a88ba64e2e4c0da04c799.json",
+      "fingerprint": {
+        "sha256": "101c048a6690da0c7daee1b098f9b34fdc41ba946b253f11726b91d8b3819d5a",
+        "bytes": 9019
+      },
+      "assets": {
+        "CodexAetherflow_star_lilies_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024"
+      }
+    },
+    {
+      "name": "CodexAetherflow_glasskelp_617024",
+      "receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AetherflowR2\\NativeReceipts\\645581c6f428658f3d6433e7.json",
+      "fingerprint": {
+        "sha256": "58764a56fbdccf27306ab36de6fc159fc5a41f69ea2abcc6c4b6cf3b52be6379",
+        "bytes": 8860
+      },
+      "assets": {
+        "CodexAetherflow_glasskelp_617024": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/645581c6f428658f3d6433e7/CodexAetherflow_glasskelp_617024.CodexAetherflow_glasskelp_617024"
+      }
+    }
+  ],
+  "map_after": {
+    "sha256": "a32fd910fb3a29ce89b09590cdfd8fa18ab4cc91d08a31b06538cd7280f1db18",
+    "bytes": 209300262
+  }
+}
