@@ -130,6 +130,8 @@ def steps(realm, districts_only=True):
         if level is not None:
             daedalus_plots.save_packages_proven([level.get_outermost()])
         yield "%s: moved %d (roots %d) -> %s" % (realm, len(batch), int(n), pkg.split("/")[-1])
+        if moved_total and (moved_total // max(len(batch), 1)) % 25 == 0:
+            daedalus_plots.save_world()   # 08:58: a crash mid-realm then loses at most 25 districts of registration
     daedalus_plots.save_world()
     daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
     yield "islands.json updated"

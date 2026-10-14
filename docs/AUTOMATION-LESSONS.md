@@ -1197,3 +1197,23 @@ P4. The 60 s bridge cap makes every long job a tail-polling loop; PR141's job_st
 P5. CI on main cancels itself on every push (five pushes in ten minutes this morning); a merge queue or a
     "run on the newest head only, don't cancel the reactor/examples jobs" rule.
 What works and should not change: the hub protocol, budgeted steps, proven saves, the doctor read-back, pc-jobs.
+
+## 2026-10-14 08:58 — two GPU-driver crashes in 11 minutes: what they were and the rule that follows
+
+08:41:31 and 08:52 local: DXGI_ERROR_DRIVER_INTERNAL_ERROR / DEVICE_REMOVED (DRED: no page fault, VRAM 4.5 of
+23 GB), both while district streaming was saving sublevels with system RAM at 96-97% and the editor at 11-12.5 GB.
+The driver, not the engine, gave up; the common factor is the box out of RAM. The team's crashguard relaunched the
+editor the second time (good); Crash Reporter windows were closed by me (the dialog table says: alarm, close, log).
+
+What survived: every sublevel save is atomic and the persistent level is saved only at the end of a realm, so a
+crash mid-realm leaves either (a) sublevels registered + duplicate actors in the persistent level (Gallery: 224
+removed by reconcile_steps) or (b) orphan .umap files and an untouched persistent level (Parcels: 79 orphans, no
+data loss). Both are recoverable without a human. Labyrinth and Gallery are fully streamed; Parcels, Bricks and
+World Zero are not.
+
+Rules:
+1. No sublevel-save batches, Play, or rebuilds above 90% system RAM (vitals --alarm 90 gates every job).
+2. The editor's own footprint is the lever: unloading far sublevels in the editor, Zen/shader worker limits and
+   the transaction buffer are Poot's investigation; until then, big saves run with the viewport not realtime.
+3. Streaming jobs save the persistent level every 25 districts, not only at the end (smaller loss window).
+4. reconcile_steps after any crash before any new move.
