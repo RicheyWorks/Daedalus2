@@ -138,7 +138,19 @@ Dataprep already ships LOD, collision, material substitution, mesh consolidation
 4. Apply the portable receipt primitive to the existing Codex delivery owner module through its established artifact/material contract. Do not apply Claude's vertex-color material, scale0.01 or deed clearing to harbor, skeletal-worker or palette-slot assets.
 5. Later, inspect programmatic execution constraints and consolidate registered calls; reuse shared geometry and existing Dataprep/Interchange tests where compatible. Async, new formats, worker parallelism and new add-ons are separate owner-controlled changes.
 
-Deployment is **not complete**. Claude hub30626 offered a future20-minute fresh-editor window restricted to `/Game/Daedalus/Art/Islands/CodexContest`, asset saves only, noPIE/world-map saves, with actual `UNREAL WINDOW OPEN` required. That does not authorize running this ClaudeIslands wrapper in Claude's namespace. No accepted load/use window for this wrapper has been received. Source work continues independently; the Codex delivery owner can use its separate accepted window for existing prepared content.
+Deployment is **not complete**. Claude hub30667 actually opened the asset-only CodexContest window until18:44UTC/11:44Pacific; builder30669 claimed it for the existing24-asset batch. NoPIE/world-map saves, other namespaces or competing caller are authorized there. Claude explicitly deferred loading this ClaudeIslands wrapper until it has run elsewhere. This namespace/first-use condition is the current deployment blocker, not a missing code artifact. No accepted load/use window for this wrapper has been received. Source work continues independently; the Codex delivery owner uses its separate accepted window for prepared content.
+
+### Deployment handoff for the accepted owner
+
+The first source milestone is frozen in draftPR146; initial code was published at6537927f and final code atd3b7ce14. The three Python files above are the complete runtime slice. These instructions are a handoff, **not executed deployment**.
+
+1. Between completed owner jobs, identify the active import module's `__file__` and approved plugin/script path. The on-disk project has `P/Plugins/DaedalusLink`; do not assume a Git checkout is already the live Python source. Record the reviewed Git head and retain the previous importer file through the owner's existing backup flow.
+2. Stage only `daedalus_ingestion_receipts.py`, `daedalus_claude_ingestion.py` and the reviewed `daedalus_claude_islands.py` seam together in that approved Python source path. No engine binary, config, plugin enablement, DDC change or editor restart is required by this slice. Copying files alone does not mean they were loaded.
+3. The owner loads/reloads the receipt module, existing importer and new wrapper between jobs, then records actual module paths. The wrapper itself checks the snapshot/callback signature and hashes loaded code before mutation. Keep all legacy imports quiescent; its batch lock cannot coordinate an unmodified legacy caller.
+4. Select one agreed existing FBX seed or up to three, in the **ClaudeIslands** namespace, and call the example entry point. Preserve per-item receipt paths, native API/preset/pipeline observations and exact saved asset paths. This is an owner-authorized production import, not permission to start the deferred test/benchmark suite or save a world map.
+5. If the receipt is `uncertain`, an output is dirty, a lock exists or save proof is missing, stop and inspect that specific outcome. Do not erase receipts, silently unlock based on PID expiry or set retry flags blindly. Release the agreed window explicitly when done.
+
+Rollback, if needed, uses the owner's retained importer source and a between-job reload. Preserve receipt/snapshot evidence; reverting Python does not undo imported assets. The current CodexContest window does not satisfy step4, and no Root deployment was attempted.
 
 ## Deferred validation checklist
 
