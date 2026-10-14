@@ -893,3 +893,7 @@ Validate plugin/dependency arrays with explicit booleans and unique names. Parse
 ### Structured MCP diagnostic failures (2026-10-14)
 Preflight CLI emits JSON for unreadable/invalid project orINI data with available:false and agreement:null, preserving unknownserverreadiness. Descriptorunavailability also leaves agreementunknown. Readable mismatches identify plugin enable andlistener reasons. Missingfiles are not missingservers, and configurationdiagnostics neverperform editor/setup actions.
 
+
+### Reuse the owner's MCP initialization client (2026-10-14)
+Preflight --probe is opt-in and reuses tools/unreal_mcp/client.py for initialize/initialized only; default stays file-only. Actualloopback server returned protocol2025-11-25, capabilities andsessionheader; its serverInfo name/version are empty, so report metadata incomplete separately rather than reject a working session. Ready means initialization evidence, not native-tool/editor health. No startup or toolcall performed.
+

@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import sys
 
 DESCRIPTORS={
     'ModelContextProtocol':'Experimental/ModelContextProtocol/ModelContextProtocol.uplugin',
@@ -48,6 +49,27 @@ def listener_fields(line):
         if key in fields:return None
         fields[key]=value.strip('"')
     return fields
+
+
+def probe_initialization(timeout=5):
+    # Reuse the owner's client. No tools/list, tools/call or startup console command.
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+    from unreal_mcp.client import Mcp,URL
+    try:
+        client=Mcp(timeout=timeout)
+        server=client.server
+        valid=(isinstance(server,dict) and isinstance(server.get('protocolVersion'),str) and
+               bool(server['protocolVersion']) and isinstance(server.get('capabilities'),dict) and
+               isinstance(server.get('serverInfo'),dict) and isinstance(server['serverInfo'].get('name'),str) and
+               isinstance(client.sid,str) and bool(client.sid))
+        if not valid:raise ValueError('Initialization response/session evidence incomplete')
+        return {'initialization_observed':True,'url':URL,'protocol_version':server['protocolVersion'],
+                'server_name':server['serverInfo']['name'],'session_id_observed':True,
+                'server_metadata_complete':bool(server['serverInfo']['name'] and server['serverInfo'].get('version')),
+                'native_tools_called':False,'server_ready':True}
+    except Exception as error:
+        return {'initialization_observed':False,'url':URL,'server_ready':None,
+                'error':{'type':type(error).__name__,'message':str(error)[-1000:]},'native_tools_called':False}
 
 
 def inspect(project,engine):
@@ -111,6 +133,7 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--project',required=True,type=Path)
     parser.add_argument('--engine',required=True,type=Path)
+    parser.add_argument('--probe',action='store_true',help='opt-in loopback MCP initialize through the existing client; no native tools')
     args=parser.parse_args(argv)
     try:
         result=inspect(args.project,args.engine)
@@ -121,8 +144,11 @@ def main(argv=None):
                            'type':type(error).__name__,'message':str(error)[-2000:]}],
                 'server_ready':None,'editor_queried':False,'mutation':False,
                 'scope':'Unavailable file evidence; no inference about the running editor or MCP server'}
+    if args.probe:
+        result['probe']=probe_initialization()
+        result['server_ready']=result['probe']['server_ready']
     print(json.dumps(result,indent=2))
-    return 0 if result['configuration_matches_request'] else 2
+    return 0 if result['configuration_matches_request'] and (not args.probe or result['server_ready'] is True) else 2
 
 
 if __name__=='__main__':raise SystemExit(main())
