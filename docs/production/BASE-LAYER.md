@@ -119,7 +119,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | DRR maps; `land <n> <map> <x> <y> <w> <h> <owner>` rows (realm-7: lands 0/1/2) |
 | 2 | Terrain host | **done** | Fable | DRR tile maps |
-| 3 | Lands | **partial** | Fable | 3 lands in realm-7; the rest of the maps need `land` rows |
+| 3 | Lands | **done** | Fable | 34 four-by-four plots on the FIELD (every open block, nearest the hero's plot first) by `tools/realm/portal_lands.py`, idempotent, checked in CI; towns/caves are not plots |
 | 4 | Mint row | **partial** | Sol/Fable | PORT12 Java egg + DRR parity tested; ownership authority pending; DRAGON_EGG→DRAKE done in core |
 | 5 | Cast | **done** | Fable | 12 town NPCs (PORT03), queen, inn, shops in DRR |
 | 6 | Creatures | **done** | Fable | 15 RetroMonster keys, shiny, 77 character exports validated |
