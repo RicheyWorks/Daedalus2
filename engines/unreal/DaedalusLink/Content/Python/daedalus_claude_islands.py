@@ -72,12 +72,18 @@ def import_island(seed, force=False):
     return out
 
 
-def clear_cell(cx, cy, r=CLEAR_R):
-    """Remove every ISM instance of the old deed (fragment, ground plate, detail props) within r of the centre."""
+def clear_cell(cx, cy, r=CLEAR_R, district=None):
+    """Remove every ISM instance of the old deed (fragment, ground plate, detail props) within r of the centre.
+    With `district`, only that district's actors (Lands_/Detail_/Decor_ *_D<dd>*) are scanned: walking every
+    instance of all 500 districts cost ~10 s per deed."""
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    tag = "_D%02d" % district if district is not None else None
     n = 0
     for a in sub.get_all_level_actors():
-        if a.get_actor_label().startswith("ClaudeIsland_"):
+        lab = a.get_actor_label()
+        if lab.startswith("ClaudeIsland_"):
+            continue
+        if tag and not (tag in lab and ("_" + tag.strip("_") + "_") in lab + "_"):
             continue
         for c in a.get_components_by_class(unreal.InstancedStaticMeshComponent):
             rm = []
@@ -92,13 +98,13 @@ def clear_cell(cx, cy, r=CLEAR_R):
     return n
 
 
-def place(seed, cx, cy, top, assets=None):
+def place(seed, cx, cy, top, assets=None, district=None):
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     assets = assets or import_island(seed)
     for a in sub.get_all_level_actors():
         if a.get_actor_label().startswith("ClaudeIsland_%d_" % seed):
             sub.destroy_actor(a)
-    cleared = clear_cell(cx, cy)
+    cleared = clear_cell(cx, cy, district=district)
     loc = unreal.Vector(cx, cy, top)
     for l, p in assets.items():
         a = sub.spawn_actor_from_class(unreal.StaticMeshActor, loc, unreal.Rotator(0.0, 0.0, 0.0))
@@ -129,7 +135,7 @@ def place_batch(seeds, realm="WORLD-ZERO"):
         if not os.path.exists(os.path.join(GLB_DIR, "Island_C%d.glb" % seed)):
             out.append({"seed": seed, "error": "no glb"})
             continue
-        r = place(seed, row["x_cm"], row["y_cm"], row["top_cm"])
+        r = place(seed, row["x_cm"], row["y_cm"], row["top_cm"], district=row.get("district"))
         r["deed"] = seed
         out.append(r)
     return out
