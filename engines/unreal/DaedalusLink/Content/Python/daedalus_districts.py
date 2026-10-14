@@ -777,12 +777,12 @@ SPECIES = {   # species -> (asset-name regex, scale range, how many per island p
     "mushroom": ("Prop_Dress_PYT_Mushroom_V", (0.8, 1.6)),
     "crystal": ("Prop_OR_Crystal_", (0.7, 1.5)),
 }
-COUNTS = {   # biome -> {species: (min, max)}
-    "meadow":   {"grass": (10, 18), "flower": (6, 12), "bush": (2, 4), "tree": (1, 3), "boulder": (0, 2)},
-    "forest":   {"tree": (5, 9), "fern": (4, 8), "bush": (2, 5), "grass": (4, 8), "boulder": (1, 2)},
-    "rocky":    {"boulder": (4, 7), "grass": (3, 6), "bush": (1, 3), "tree": (0, 2), "crystal": (0, 2)},
-    "crystal":  {"crystal": (4, 8), "boulder": (2, 4), "grass": (2, 5), "tree": (0, 1)},
-    "mushroom": {"mushroom": (5, 10), "fern": (3, 6), "tree": (2, 4), "boulder": (0, 2), "grass": (2, 4)},
+COUNTS = {   # biome -> {species: (min, max)}; 09:18: small species tripled so an island reads from the air
+    "meadow":   {"grass": (30, 50), "flower": (18, 30), "bush": (4, 8), "tree": (2, 4), "boulder": (1, 3)},
+    "forest":   {"tree": (7, 12), "fern": (12, 20), "bush": (5, 9), "grass": (10, 18), "boulder": (1, 3)},
+    "rocky":    {"boulder": (8, 14), "grass": (8, 14), "bush": (2, 5), "tree": (1, 3), "crystal": (1, 3)},
+    "crystal":  {"crystal": (8, 14), "boulder": (4, 7), "grass": (6, 12), "tree": (0, 2)},
+    "mushroom": {"mushroom": (12, 22), "fern": (8, 14), "tree": (3, 5), "boulder": (1, 3), "grass": (6, 10)},
 }
 
 

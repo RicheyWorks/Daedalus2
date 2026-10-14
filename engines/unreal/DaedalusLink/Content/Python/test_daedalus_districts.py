@@ -53,8 +53,8 @@ check("mesh pool: World Zero districts use all 12 fragments, realms use all 6 pa
       and abs(D.pool_variant("WORLD-ZERO", 0)[1] - D.FRAG_THICK_M[3]) < 1e-9 and D.pool_variant("WORLD-ZERO", 5) == D.pool_variant("WORLD-ZERO", 5))
 pools = {s: list(range(6)) for s in D.SPECIES}
 plan = D.detail_plan(4242, 0.0, 0.0, 5220.0, 30.0, "WORLD-ZERO", pools)
-check("detail: an island gets 15..45 props of its biome, all on a ring 8..38 m from its centre, deterministically",
-      15 <= len(plan) <= 45 and all(800.0 <= (p[2] ** 2 + p[3] ** 2) ** 0.5 <= 3801.0 and p[4] == 5220.0 and 0.6 <= p[6] <= 1.7 for p in plan)
+check("detail: an island gets 25..110 props of its biome, all on a ring 8..38 m from its centre, deterministically",
+      25 <= len(plan) <= 110 and all(800.0 <= (p[2] ** 2 + p[3] ** 2) ** 0.5 <= 3801.0 and p[4] == 5220.0 and 0.6 <= p[6] <= 1.7 for p in plan)
       and plan == D.detail_plan(4242, 0.0, 0.0, 5220.0, 30.0, "WORLD-ZERO", pools) and {D.biome_of(n) for n in range(300)} == set(D.BIOMES), len(plan))
 check("detail: species follow the biome table", all(p[0] in D.COUNTS[D.biome_of(4242)] for p in plan))
 print("%d/%d" % (ok, total))
