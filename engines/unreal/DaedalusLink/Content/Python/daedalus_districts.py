@@ -104,9 +104,11 @@ def plan(realm):
             "exists": {p: (p in have) for p in sorted(moves)}}
 
 
-def steps(realm):
+def steps(realm, districts_only=True):
     """One district per editor tick: create the sublevel, move its actors, save the sublevel; finally save the
-    persistent level and list the sublevels for the streamer. Yields a line per district."""
+    persistent level and list the sublevels for the streamer. Yields a line per district. districts_only (08:38):
+    the hub's markers/portals/cast stay in the persistent level so LandAt and the portals always find them;
+    only District:<d>-tagged actors (Lands_, Decor_, Land_ plots) stream."""
     import unreal
     import daedalus_plots
     import daedalus_islands
@@ -114,6 +116,8 @@ def steps(realm):
     actors = {a.get_actor_label(): a for a in _actors(realm)}
     rows = [(l, a.tags, str(a.get_level().get_outermost().get_name())) for l, a in actors.items()]
     moves, skipped = group(realm, rows)
+    if districts_only:
+        moves = {p: v for p, v in moves.items() if p.rsplit("/", 1)[-1].startswith("D")}
     moved_total = 0
     for pkg in sorted(moves):
         sl = _sublevel(world, pkg)
