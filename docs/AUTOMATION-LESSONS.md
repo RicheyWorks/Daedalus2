@@ -546,3 +546,7 @@ Win32_Process.Create refused the launch. Append a GUID and require return value 
 a nonzero PID; propagate CIM transport errors. A native Windows fixture freezes the clock,
 captures two launches and three refusal cases without executing either build command.
 This protects log identity and truthful launch reporting; it does not prove build completion.
+
+Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
+abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
+the blocked-receipt regression now runs with strict warnings to cover that exact failure.

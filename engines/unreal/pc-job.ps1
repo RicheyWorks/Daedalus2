@@ -59,7 +59,7 @@ if ($Start) {
     try {
         Set-Content -LiteralPath (Join-Path $Jobs "$Id.started") -Value "pid=$($r.ProcessId)" -Encoding ASCII -ErrorAction Stop
     } catch {
-        Write-Warning "Accepted $Id pid=$($r.ProcessId), but launch receipt could not be saved. Do not restart; use -Wait -Id $Id."
+        Write-Warning "Accepted $Id pid=$($r.ProcessId), but launch receipt could not be saved. Do not restart; use -Wait -Id $Id." -WarningAction Continue
     }
     "started $Id pid=$($r.ProcessId)"
     exit 0
