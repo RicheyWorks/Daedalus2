@@ -39,3 +39,8 @@
 - A fully cleared chunk needs an explicit saved empty record. Treating no blocks as no record regenerates mined terrain on restart.
 - An in-process overlapping-lock test is insufficient to prove OS writer exclusion. The separate-JVM probe verifies edits, empty records, competing writer refusal and reopen after release.
 - Workbook recalculation may normalize a blank cached formula value from null to an empty string. Preserve formula text exactly and compare those two blank representations equivalently; do not relax comparisons of numbers or statuses.
+
+### Ocean resident window
+- Bound resident chunks and per-call warmup separately. A cache count bound does not establish a process-RAM, disk, frame-time or multiplayer-capacity budget.
+- Save a candidate edit before publishing it in cache; on failed disk I/O retain the original cached state. Load before evicting so a corrupt destination does not discard useful data.
+- A write-through cache has no unsaved dirty eviction queue. Keep snapshots independent and prohibit bypass writes while its store owns the directory.
