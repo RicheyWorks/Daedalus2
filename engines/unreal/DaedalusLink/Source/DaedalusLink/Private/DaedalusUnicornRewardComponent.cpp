@@ -12,7 +12,7 @@ UDaedalusUnicornRewardComponent::UDaedalusUnicornRewardComponent()
 
 bool UDaedalusUnicornRewardComponent::HasGameAuthority() const
 {
-    return GetOwner() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
+    return IsValid(GetOwner()) && !GetOwner()->IsActorBeingDestroyed() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
 }
 
 bool UDaedalusUnicornRewardComponent::CanRecord() const

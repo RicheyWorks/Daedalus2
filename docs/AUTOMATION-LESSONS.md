@@ -933,3 +933,7 @@ Core/authorityquery exposes alreadyrecordedbull IDs withoutmutation. Sea produce
 ### Verify pack membership at encounter time (2026-10-14)
 Legendarypack producer revalidates12distinct liveauthority actors with explicitfemale-unicorn tags inthesameworld, andplayeroverlap inownerzone. Pendingplayer-recordready callbacks recheckmembership/overlap; exit/EndPlay unsubscribe, reentrancyguardprotectscredit. Tagsarehost authoredmetadata, notmesh inference. Spawnrarity/generation/storage andUHT/runtime stillpending; no editorcalls.
 
+
+### Stop unnecessary quest retry work and prune dead subscribers (2026-10-14)
+Extrauncreditedbulls stopretrying onceplayerhas tencredits; restoredalreadycountedbulls stillsettle. Packpendingplayers leavingzone ordeadweakreferences arepruned onreadiness callbacks. Reward/eventauthority checks rejectdestroyingowners. Repositorysourcepreflight0errors; thisdoesnot replaceUHT/Unrealbuild orliveacceptance.
+

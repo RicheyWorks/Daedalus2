@@ -8,7 +8,7 @@
 UDaedalusUnicornPackEventComponent::UDaedalusUnicornPackEventComponent() { PrimaryComponentTick.bCanEverTick = false; }
 bool UDaedalusUnicornPackEventComponent::Authority() const
 {
-    return GetOwner() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
+    return IsValid(GetOwner()) && !GetOwner()->IsActorBeingDestroyed() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
 }
 bool UDaedalusUnicornPackEventComponent::MembershipValid() const
 {
@@ -76,7 +76,15 @@ void UDaedalusUnicornPackEventComponent::OnPlayerReady(bool Ready, bool, int64)
     if (!Ready || bRecordingEncounter) return;
     const auto Waiting = PendingPlayers.Array();
     for (const auto& Weak : Waiting)
-        if (auto* Player = Weak.Get()) TryRecordEncounter(Player->GetOwner());
+    {
+        if (auto* Player = Weak.Get())
+        {
+            UPrimitiveComponent* Zone = EncounterZone.Get();
+            if (!Zone || !IsValid(Player->GetOwner()) || !Zone->IsOverlappingActor(Player->GetOwner())) ForgetPlayer(Player);
+            else TryRecordEncounter(Player->GetOwner());
+        }
+        else PendingPlayers.Remove(Weak);
+    }
 }
 void UDaedalusUnicornPackEventComponent::EndPlay(const EEndPlayReason::Type Reason)
 {

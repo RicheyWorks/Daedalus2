@@ -8,7 +8,7 @@
 UDaedalusBullSeaEventComponent::UDaedalusBullSeaEventComponent() { PrimaryComponentTick.bCanEverTick = false; }
 bool UDaedalusBullSeaEventComponent::Authority() const
 {
-    return GetOwner() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
+    return IsValid(GetOwner()) && !GetOwner()->IsActorBeingDestroyed() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
 }
 void UDaedalusBullSeaEventComponent::BeginPlay()
 {
@@ -50,7 +50,13 @@ bool UDaedalusBullSeaEventComponent::RetryPendingArrival()
         Sea->GetWorld() != GetWorld() || !Sea->ActorHasTag(TEXT("DaedalusSeaArrival")) ||
         !Sea->EncompassesPoint(GetOwner()->GetActorLocation())) return false;
     TGuardValue<bool> Guard(bRecordingArrival, true);
-    bArrivalRecorded = Player->HasRecordedBull(BullId) || Player->RecordBullAtSea(BullId, true, true);
+    const bool AlreadyRecorded = Player->HasRecordedBull(BullId);
+    if (!AlreadyRecorded && Player->bRecordReady && Player->BullsAtSea >= 10)
+    {
+        ClearPendingArrival(); // Extra bulls cannot advance this player's completed bull condition.
+        return false;
+    }
+    bArrivalRecorded = AlreadyRecorded || Player->RecordBullAtSea(BullId, true, true);
     if (bArrivalRecorded) ClearPendingArrival();
     return bArrivalRecorded;
 }
