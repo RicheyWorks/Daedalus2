@@ -146,7 +146,7 @@ def ground_label(realm, d):
     return "Ground_%s_D%02d" % (realm.replace("-", ""), d)
 
 
-def lay_ground(realm, d, sub=None, cube=None):
+def lay_ground(realm, d, sub=None, cube=None, labels=None):
     """One ground slab under a whole district (Richey 23:53: "fix all the falling through the floor stuff. add
     ground"): 2.56 km square, 4 m thick, its top 1 m under the plots' tops, so the 164 m gaps between 92 m plots
     are floor, not sky. Idempotent by label. Returns the actor or None when it exists."""
@@ -157,7 +157,7 @@ def lay_ground(realm, d, sub=None, cube=None):
     sub = sub or unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     cube = cube or unreal.load_asset(P.CUBE)
     label = ground_label(realm, d)
-    if label in P._labels_cache(sub):
+    if label in (labels if labels is not None else P._labels_cache(sub)):
         return None
     origin = R.ORIGINS[realm]
     # the district's centre: cells 10*(d%10)..+9 east, 10*(d//10)..+9 north, cell centres at (x-HUB)*pitch
@@ -196,7 +196,7 @@ def lay_ground_steps(realm, districts):
     return {"realm": realm, "ground": made}
 
 
-def lay_district_steps(realm, districts, taken=frozenset(), save_every=10):
+def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, sublevels=False):
     """Lay EVERY free cell of each district as ONE instanced-mesh actor (Lands_<Realm>_D<dd>: 100 plot instances
     of the cube, tagged District:<d>, instance i = district_cells(d)[i]) plus the district's ground slab, straight
     into the district's streamed sublevel; sublevels are saved every `save_every` districts. 23:56 Richey: "I need
@@ -216,16 +216,15 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10):
     pre = P._prefix(realm)
     total = 0
     pending = []
-    for d in districts:
-        pkg = "%s/%s/D%02d" % (ROOT, realm_dir(realm), d)
-        sl = _sublevel(world, pkg)
+    labels = P._labels_cache(sub)   # scanned ONCE (00:05: a scan per district plus a sublevel create + move per
+    for d in districts:             # district made each step ~60 s; one instanced actor in the persistent level is ~0.1 s)
         made = []
-        g = lay_ground(realm, d, sub=sub, cube=cube)
+        g = lay_ground(realm, d, sub=sub, cube=cube, labels=labels)
         if g is not None:
             made.append(g)
         label = "Lands_%s_D%02d" % (realm.replace("-", ""), d)
         n_inst = 0
-        if label not in have:
+        if label not in labels:
             cells = [n for n in district_cells(d) if n not in taken and ("%s%d" % (pre, n)) not in have]
             if cells:
                 a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(origin[0], origin[1], ground))
@@ -246,7 +245,8 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10):
                 a.tags = [unreal.Name("Lands"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d), unreal.Name("Cells:%s" % ",".join(str(c) for c in cells))]
                 made.append(a)
                 n_inst = len(cells)
-        if made:
+        if made and sublevels:   # streaming comes later, district by district, once the map is down
+            sl = _sublevel(world, "%s/%s/D%02d" % (ROOT, realm_dir(realm), d))
             unreal.EditorLevelUtils.move_actors_to_level(made, sl, False, False)
             lv = sl.get_loaded_level()
             if lv is not None:
@@ -259,9 +259,10 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10):
     if pending:
         P.save_packages_proven(pending)
     P.save_world()
-    import daedalus_islands
-    daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
-    yield "islands.json updated"
+    if sublevels:
+        import daedalus_islands
+        daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
+        yield "islands.json updated"
     return {"realm": realm, "districts": len(list(districts)), "plots": total}
 
 
