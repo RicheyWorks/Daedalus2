@@ -37,6 +37,7 @@ def talker_asset_id(cast, who):
     cast is the .dcs name (gallery-city, parcels, bricks, labyrinth)."""
     realm = {"gallery-city": "Gallery", "parcels": "Parcels", "bricks": "Brick", "labyrinth": "Labyrinth",
              "world-zero": "Zero", "ocean": "Ocean"}.get(cast.lower(), cast.split("-")[0].capitalize())
+    # Sol's exports also use Mob_Bricks_ and Mob_Lab_; ADaedalusTalker::ArtIds() tries those after the canonical id.
     words = [w for w in "".join(c if c.isalnum() else " " for c in who).split() if w]
     return "Mob_%s_%s" % (realm, "".join(w[:1].upper() + w[1:] for w in words))
 

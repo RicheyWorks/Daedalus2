@@ -61,11 +61,17 @@ bool ADaedalusTalker::Rebind()
 	if (Label) Label->SetText(FText::FromString(Who));
 	// Sol's rigged export under /Game/Daedalus/Art/Cast/<Id>/: the skeletal mesh and its clips (daedalus_import_cast.py).
 	bHasArt = false;
-	const FString Id = ArtId();
-	const FString Folder = TEXT("/Game/Daedalus/Art/Cast/") + Id;
+	// Sol's exports spell the realm more than one way (Mob_Brick_ / Mob_Bricks_, Mob_Labyrinth_ / Mob_Lab_): try each.
 	FAssetRegistryModule& Reg = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 	TArray<FAssetData> Found;
-	Reg.Get().GetAssetsByPath(FName(*Folder), Found, true);
+	FString Id;
+	for (const FString& Candidate : ArtIds())
+	{
+		Reg.Get().GetAssetsByPath(FName(*(TEXT("/Game/Daedalus/Art/Cast/") + Candidate)), Found, true);
+		Id = Candidate;
+		if (Found.Num()) break;
+	}
+	ArtFound = Id;
 	USkeletalMesh* Mesh = nullptr;
 	UAnimSequence* Idle = nullptr;
 	UAnimSequence* AnyClip = nullptr;
@@ -103,19 +109,35 @@ void ADaedalusTalker::EndPlay(const EEndPlayReason::Type Reason)
 	Super::EndPlay(Reason);
 }
 
-FString ADaedalusTalker::ArtId() const
+TArray<FString> ADaedalusTalker::ArtIds() const
 {
 	// Mob_<Realm>_<WhoPascal>: Sol's convention (Mob_Gallery_CuratorVell); daedalus_import_cast.talker_asset_id is the twin.
-	static const TMap<FString, FString> Realms = {{TEXT("gallery-city"), TEXT("Gallery")}, {TEXT("parcels"), TEXT("Parcels")}, {TEXT("bricks"), TEXT("Brick")},
-		{TEXT("labyrinth"), TEXT("Labyrinth")}, {TEXT("world-zero"), TEXT("Zero")}, {TEXT("ocean"), TEXT("Ocean")}};
-	const FString* R = Realms.Find(Cast.ToLower());
-	FString Realm = R ? *R : Cast.Left(Cast.Find(TEXT("-")) > 0 ? Cast.Find(TEXT("-")) : Cast.Len());
-	if (!R && Realm.Len()) Realm = Realm.Left(1).ToUpper() + Realm.Mid(1).ToLower();
+	// Each realm lists every spelling Sol's exports have used, canonical first.
+	static const TMap<FString, TArray<FString>> Realms = {{TEXT("gallery-city"), {TEXT("Gallery")}}, {TEXT("parcels"), {TEXT("Parcels")}},
+		{TEXT("bricks"), {TEXT("Brick"), TEXT("Bricks")}}, {TEXT("labyrinth"), {TEXT("Labyrinth"), TEXT("Lab")}}, {TEXT("world-zero"), {TEXT("Zero")}}, {TEXT("ocean"), {TEXT("Ocean")}}};
+	const TArray<FString>* R = Realms.Find(Cast.ToLower());
+	TArray<FString> Spellings;
+	if (R) Spellings = *R;
+	else
+	{
+		FString Realm = Cast.Left(Cast.Find(TEXT("-")) > 0 ? Cast.Find(TEXT("-")) : Cast.Len());
+		if (Realm.Len()) Realm = Realm.Left(1).ToUpper() + Realm.Mid(1).ToLower();
+		Spellings.Add(Realm);
+	}
 	FString Pascal, Word;
 	auto Flush = [&]() { if (Word.Len()) { Pascal += Word.Left(1).ToUpper() + Word.Mid(1); Word.Empty(); } };
 	for (const TCHAR C : Who) { if (FChar::IsAlnum(C)) Word.AppendChar(C); else Flush(); }
 	Flush();
-	return FString::Printf(TEXT("Mob_%s_%s"), *Realm, *Pascal);
+	TArray<FString> Out;
+	for (const FString& Realm : Spellings) Out.Add(FString::Printf(TEXT("Mob_%s_%s"), *Realm, *Pascal));
+	return Out;
+}
+
+FString ADaedalusTalker::ArtId() const
+{
+	if (bHasArt && ArtFound.Len()) return ArtFound;
+	const TArray<FString> Ids = ArtIds();
+	return Ids.Num() ? Ids[0] : FString();
 }
 
 FString ADaedalusTalker::Prompt(const ADaedalusHero* Hero) const

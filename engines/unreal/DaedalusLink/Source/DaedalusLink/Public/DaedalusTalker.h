@@ -38,6 +38,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<USkeletalMeshComponent> Figure;
 	/** The asset id this talker looks for (Mob_<Realm>_<WhoPascal>) and whether it found it. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") FString ArtId() const;
+	/** Every asset id this role's art may be exported under (canonical first; Sol's Brick/Bricks, Labyrinth/Lab spellings). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") TArray<FString> ArtIds() const;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") FString ArtFound;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") bool bHasArt = false;
 
 	virtual FString Prompt(const ADaedalusHero* Hero) const override;
