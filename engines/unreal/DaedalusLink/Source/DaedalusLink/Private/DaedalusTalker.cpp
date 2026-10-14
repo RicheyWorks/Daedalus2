@@ -2,7 +2,11 @@
 
 #include "DaedalusTalker.h"
 
+#include "Animation/AnimSequence.h"
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
 #include "Components/TextRenderComponent.h"
 #include "DaedalusHero.h"
 #include "DaedalusLinkModule.h"
@@ -26,6 +30,12 @@ ADaedalusTalker::ADaedalusTalker()
 	Label->SetTextRenderColor(FColor(235, 225, 200));
 	Label->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 	Label->SetRelativeScale3D(FVector(1.f / 0.6f, 1.f / 0.6f, 1.f / 1.8f));   // undo the body's stretch
+	Figure = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Figure"));
+	Figure->SetupAttachment(Body);
+	Figure->SetRelativeScale3D(FVector(1.f / 0.6f, 1.f / 0.6f, 1.f / 1.8f));
+	Figure->SetRelativeLocation(FVector(0.f, 0.f, -50.f));   // feet on the ground: the body cube is 100 cm, scaled x1.8
+	Figure->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Figure->SetVisibility(false);
 	Tags.Add(TEXT("DaedalusTalker"));
 }
 
@@ -49,10 +59,35 @@ bool ADaedalusTalker::Rebind()
 	Talk.Bind(S);
 	if (!Progress.IsEmpty()) Talk.Restore(TCHAR_TO_UTF8(*Progress));
 	if (Label) Label->SetText(FText::FromString(Who));
-	// Sol's export, when it shipped: Mob_<Cast>_<Who> with spaces and dashes as underscores.
-	FString Asset = FString::Printf(TEXT("Mob_%s_%s"), *Cast, *Who);
-	Asset.ReplaceInline(TEXT(" "), TEXT("_")); Asset.ReplaceInline(TEXT("-"), TEXT("_"));
-	if (SetArt(TEXT("Mobs"), Asset, 1.f)) Label->SetRelativeScale3D(FVector(1.f));
+	// Sol's rigged export under /Game/Daedalus/Art/Cast/<Id>/: the skeletal mesh and its clips (daedalus_import_cast.py).
+	bHasArt = false;
+	const FString Id = ArtId();
+	const FString Folder = TEXT("/Game/Daedalus/Art/Cast/") + Id;
+	FAssetRegistryModule& Reg = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	TArray<FAssetData> Found;
+	Reg.Get().GetAssetsByPath(FName(*Folder), Found, true);
+	USkeletalMesh* Mesh = nullptr;
+	UAnimSequence* Idle = nullptr;
+	UAnimSequence* AnyClip = nullptr;
+	for (const FAssetData& D : Found)
+	{
+		if (D.AssetClassPath.GetAssetName() == USkeletalMesh::StaticClass()->GetFName() && !Mesh) Mesh = ::Cast<USkeletalMesh>(D.GetAsset());
+		if (D.AssetClassPath.GetAssetName() == UAnimSequence::StaticClass()->GetFName())
+		{
+			UAnimSequence* A = ::Cast<UAnimSequence>(D.GetAsset());
+			if (!AnyClip) AnyClip = A;
+			if (D.AssetName.ToString().Contains(TEXT("Idle"))) Idle = A;
+		}
+	}
+	if (Mesh && Figure)
+	{
+		Figure->SetSkeletalMesh(Mesh);
+		Figure->SetVisibility(true);
+		if (UAnimSequence* Clip = Idle ? Idle : AnyClip) { Figure->SetAnimationMode(EAnimationMode::AnimationSingleNode); Figure->PlayAnimation(Clip, true); }
+		Body->SetVisibility(false);            // the block was the placeholder; collision stays on the body
+		Label->SetRelativeLocation(FVector(0.f, 0.f, 130.f));
+		bHasArt = true;
+	}
 	return true;
 }
 
@@ -68,6 +103,21 @@ void ADaedalusTalker::EndPlay(const EEndPlayReason::Type Reason)
 	Super::EndPlay(Reason);
 }
 
+FString ADaedalusTalker::ArtId() const
+{
+	// Mob_<Realm>_<WhoPascal>: Sol's convention (Mob_Gallery_CuratorVell); daedalus_import_cast.talker_asset_id is the twin.
+	static const TMap<FString, FString> Realms = {{TEXT("gallery-city"), TEXT("Gallery")}, {TEXT("parcels"), TEXT("Parcels")}, {TEXT("bricks"), TEXT("Brick")},
+		{TEXT("labyrinth"), TEXT("Labyrinth")}, {TEXT("world-zero"), TEXT("Zero")}, {TEXT("ocean"), TEXT("Ocean")}};
+	const FString* R = Realms.Find(Cast.ToLower());
+	FString Realm = R ? *R : Cast.Left(Cast.Find(TEXT("-")) > 0 ? Cast.Find(TEXT("-")) : Cast.Len());
+	if (!R && Realm.Len()) Realm = Realm.Left(1).ToUpper() + Realm.Mid(1).ToLower();
+	FString Pascal, Word;
+	auto Flush = [&]() { if (Word.Len()) { Pascal += Word.Left(1).ToUpper() + Word.Mid(1); Word.Empty(); } };
+	for (const TCHAR C : Who) { if (FChar::IsAlnum(C)) Word.AppendChar(C); else Flush(); }
+	Flush();
+	return FString::Printf(TEXT("Mob_%s_%s"), *Realm, *Pascal);
+}
+
 FString ADaedalusTalker::Prompt(const ADaedalusHero* Hero) const
 {
 	return TEXT("Talk to ") + Who;
@@ -77,7 +127,7 @@ FString ADaedalusTalker::State() const
 {
 	FString Flags;
 	for (const std::string& F : Talk.Flags()) { if (!Flags.IsEmpty()) Flags += TEXT(","); Flags += UTF8_TO_TCHAR(F.c_str()); }
-	return FString::Printf(TEXT("who=%s bound=%d where=%s flags=%s talks=%d asking=%d given=%s"), *Who, Talk.Bound() ? 1 : 0, UTF8_TO_TCHAR(Talk.Where().c_str()), *Flags, Talks, bAsking ? 1 : 0, *Given);
+	return FString::Printf(TEXT("who=%s bound=%d where=%s flags=%s talks=%d asking=%d given=%s art=%s:%d"), *Who, Talk.Bound() ? 1 : 0, UTF8_TO_TCHAR(Talk.Where().c_str()), *Flags, Talks, bAsking ? 1 : 0, *Given, *ArtId(), bHasArt ? 1 : 0);
 }
 
 bool ADaedalusTalker::Use(ADaedalusHero* Hero)

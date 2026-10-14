@@ -195,6 +195,39 @@ class HandoffTest(unittest.TestCase):
         self.assertEqual(messages[0]['type'], 'request')
         self.assertLess(elapsed, 1)
 
+    def test_batch_responses_correlate_and_retry_after_partial_delivery(self):
+        ids = [self.put('first'), self.put('second')]
+        live.collect(self.state, self.b)
+        with live.locked_state(self.path, 'b', 0) as state:
+            state.update(self.state)
+        args = ['--me','b','--state',str(self.path),'--port',str(self.server.server_port),
+                'respond','--id',str(ids[0]),'--id',str(ids[1]),'--id',str(ids[0]),
+                '--status','accepted','--text','owning both; building now']
+        original = live.deliver
+        def fail_second(link, envelope):
+            if envelope['reply_to'] == str(ids[1]):
+                raise ConnectionError('simulated interruption')
+            return original(link, envelope)
+        with patch.object(live, 'deliver', side_effect=fail_second):
+            with self.assertRaises(ConnectionError):
+                live.main(args)
+        with contextlib.redirect_stdout(io.StringIO()):
+            live.main(args)
+            live.main(args)
+        responses = [m for m in self.broker.messages if m['type']=='request.accepted']
+        self.assertEqual([m['reply_to'] for m in responses], ids)
+        self.assertEqual(len(responses), 2)
+
+    def test_batch_invalid_id_sends_nothing(self):
+        mid = self.put(); live.collect(self.state, self.b)
+        with live.locked_state(self.path, 'b', 0) as state:
+            state.update(self.state)
+        with self.assertRaises(ValueError):
+            live.main(['--me','b','--state',str(self.path),'--port',str(self.server.server_port),
+                       'respond','--id',str(mid),'--id','999999',
+                       '--status','accepted','--text','building'])
+        self.assertFalse(any(m['type']=='request.accepted' for m in self.broker.messages))
+
     def test_cli_request_poll_and_response_work_with_real_state_files(self):
         def run(me, path, *args):
             with contextlib.redirect_stdout(io.StringIO()) as output:

@@ -188,7 +188,8 @@ def main(argv=None):
     send = sub.add_parser('request'); send.add_argument('--to', required=True)
     send.add_argument('--key', required=True); send.add_argument('--text', required=True)
     send.add_argument('--ack-within', type=int, default=30)
-    reply = sub.add_parser('respond'); reply.add_argument('--id', type=int, required=True)
+    reply = sub.add_parser('respond'); reply.add_argument('--id', type=int, required=True, action='append',
+        help='Request ID; repeat to send a separately correlated response for each request')
     reply.add_argument('--status', choices=STATES, required=True); reply.add_argument('--text', required=True)
     sub.add_parser('status')
     receipt = sub.add_parser('ack'); receipt.add_argument('--id', type=int, required=True)
@@ -202,14 +203,18 @@ def main(argv=None):
             request(state, link, a.key, a.to, a.text, a.ack_within)
     elif a.command == 'respond':
         with locked_state(a.state, a.me, a.start_after) as state:
-            prepare_response(state, link, a.id, a.status, a.text)
+            # Validate the entire batch and persist every UUID before sending anything.
+            # A retry after partial delivery reuses each envelope independently.
+            for mid in dict.fromkeys(a.id):
+                prepare_response(state, link, mid, a.status, a.text)
     if a.command == 'poll' and not 0 <= a.wait <= 55:
         p.error('--wait must be between 0 and 55 seconds')
     with locked_state(a.state, a.me, a.start_after) as state:
         if a.command == 'request':
             send_request(state['outgoing'][a.key], link)
         elif a.command == 'respond':
-            respond(state, link, a.id, a.status, a.text)
+            for mid in dict.fromkeys(a.id):
+                respond(state, link, mid, a.status, a.text)
         elif a.command == 'poll':
             collect(state, link)
         elif a.command == 'replay':

@@ -82,3 +82,9 @@
 - UE GetURL retains the request URL after redirects. Verify GetEffectiveURL with case-sensitive resource-path matching and test actual transport against direct, path, port and path-case endpoints.
 - A refused redirected payload does not prove that transport withheld credentials. Record observed forwarding separately and retain the production transport gate.
 - Even private Unreal startup invokes Build.bat platform validation. Serialize private probes and compilation with the compute lease; a startup waiting on another build is not a failed HTTP scenario or a reason to restart a live build.
+
+### Live team handoff recovery (2026-10-13)
+- An acceptance mentioning two request IDs in prose left both tracked requests overdue because reply_to was null. Send one correlated event per request; the batch respond command makes that one explicit agent action without inferring acceptance from text.
+- Check the actual listener and health endpoint when delivery fails. Port 9890 had no listener during this check. Restarting the existing deployed broker against its original log restored last ID 28979; retrying the saved request envelope delivered ID 28980. No history reset or alternate broker was needed.
+- Preserve request UUIDs before network calls. A response batch can be interrupted after its first delivery; tests must prove replay creates exactly one event per request and invalid batch members prevent any send.
+- Durable receipt is not live agent participation. Poll during active tool/job loops, report authoritative terminal job results promptly, and keep agent acceptance separate from transport recovery. Claude's correlated rollout acceptance remains outstanding at this checkpoint.

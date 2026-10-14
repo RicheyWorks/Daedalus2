@@ -8,6 +8,7 @@
 #include "DaedalusTalker.generated.h"
 
 class UTextRenderComponent;
+class USkeletalMeshComponent;
 class ADaedalusHero;
 
 /**
@@ -15,7 +16,8 @@ class ADaedalusHero;
  * Gallery Guard... Interact talks; the lines go through the hero's dialogue box (SDaedalusDialogue) in the realm's
  * theme; an 'ask' comes back as the hero's choice and the script branches. Flags a script sets are kept on the
  * actor (Progress) and, for realm-wide flags, copied to every talker of the cast on the next talk.
- * Art: Mob_<Cast>_<Who> when Sol's export shipped; a placeholder block with a name label until then.
+ * Art: Sol's rigged export Mob_<Realm>_<WhoPascal> (Mob_Gallery_CuratorVell) imported by daedalus_import_cast.py to
+ * /Game/Daedalus/Art/Cast/<Id>/: a skeletal mesh wearing its Idle clip; a placeholder block with a name label until then.
  */
 UCLASS()
 class DAEDALUSLINK_API ADaedalusTalker : public ADaedalusUsable
@@ -33,6 +35,10 @@ public:
 	/** Item ids this talker handed over (a 'give' line), for the harness. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") FString Given;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UTextRenderComponent> Label;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<USkeletalMeshComponent> Figure;
+	/** The asset id this talker looks for (Mob_<Realm>_<WhoPascal>) and whether it found it. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Cast") FString ArtId() const;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Cast") bool bHasArt = false;
 
 	virtual FString Prompt(const ADaedalusHero* Hero) const override;
 	virtual bool Use(ADaedalusHero* Hero) override;
