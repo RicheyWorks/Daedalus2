@@ -529,3 +529,16 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+
+## Accepted jobs must retain their identity when a receipt fails (2026-10-13, Codex)
+Once Win32_Process.Create accepts a child, a later .started write failure is not a launch failure.
+Report the accepted job ID and PID, warn against restarting, and use explicit -Wait -Id.
+A native Windows regression blocks the receipt with a directory, executes the captured child
+command once, and verifies that the same ID returns its actual exit code 23. CIM is a stand-in;
+this verifies launcher behavior without touching Unreal. PowerShell wraps warning lines, so
+assert warning text after whitespace normalization rather than assuming one output line.
+
+Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
+abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
+the blocked-receipt regression now runs with strict warnings to cover that exact failure.
