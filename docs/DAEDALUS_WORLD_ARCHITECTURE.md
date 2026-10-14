@@ -524,3 +524,25 @@ When Slice 1 is green, Phase 2 is a file-backed `WorldStore` with an explicit re
 6. **Smallest path to World Zero.** Slice 1 primitives → file persistence → `/api/v1/world` → STOMP → one door → registry → `UNACCOUNTED = 0`.
 7. **Serious problems.** No voxels; no durable store; plugin SPI is not capabilities; explore is not a voxel engine. All are expected. Dual spatial models are the design, not a defect.
 8. **Exact first slice.** The file list in §11. Stop after those types and tests are proven. Do not restructure the reactor.
+
+---
+
+## 13. The economy and life layer (2026-10-14, ADR-066) — islands → items → mechanics → story
+
+Added on Richey's direction (13:25–14:18): every island must be *made of* something and *for* something, and the
+loop between items, mechanics and the realm storyline must be tracked and iterated.
+
+| Layer | What it is | Source of truth | Status |
+|---|---|---|---|
+| **Seeded chemistry** | `profile(seed, realm)`: geology grade (COMMON/RICH/LEGENDARY), ores + Heartstone, spring purity, fish, soil fertility + crops, orchard species with the fruit's uses, RingInfusion herb set, livestock yields, power source, power-unit parts, four goods FOOD/ENERGY/ORE/CRYSTAL with surplus and need. **Every realm has its own table** (`REALMS`). | `tools/blender/island_chemistry.py`; Chemistry sheet in `docs/production/Realm-production-2026-10-13.xlsx`; manifest next to every exported island | pure Python, in use by the generators |
+| **Ecology** | seral stage per tile, biodiversity index, season (succession, grazing, burning, seeding by ark) | `engines/unreal/pcg-ecology/` (Pythagoras/Team Grok), `daedalus-core` Biogeography | rules + tests; UE hook pending |
+| **Colony Ledger (M.U.L.E., advanced)** | plots = deeds; workers (pack mule / Codex PowerUnit) outfitted per good family by consuming parts; production = chemistry × ecology with the energy tax and adjacency bonus; market day double auction per item with shop/inn floors; sales fly as ark cargo; round events (meteor, blight, raiders → salvage hulk, wampus, festival); colony wealth score advances the realm story | `tools/economy/colony_ledger.py` (+10 tests), `docs/adr/ADR-066-colony-ledger.md` | core tested; server rounds/persistence/UI held |
+| **Day book (Animal Crossing)** | daily finds — fish by season/hour, bugs by seral stage, fossils/starmetal shards, ripe fruit; museum collection with first-of-kind bonus; charm; news-board requests from the realm's cast (`data/art/<realm>/population-plan.json`: kings, unicorn guides, bakers…) that pay in what the island cannot make; quest-giver roles surface their quests (PORT09 quest core) | `colony_ledger.day_book/requests/fishing` | core tested; NPC binding pending |
+| **Scavenge + defend (Arc Raiders)** | hulks and rich lands are loot sites; loot flies home as interceptable cargo; fences/lanterns/watchtowers/patrols/traps raise defence; caught raiders lose cargo | `colony_ledger.raid/defend` | core tested; native boarding/combat pending |
+| **Water that floats in the sky** | lakes, streams, waterfalls, sky rivers arcing between islands and through clouds, floating ocean basins; fishing spots on all of them; **sky-sea boats** float on that water but cannot fly — the sky-river network is its own travel graph; water sockets in the Super Island standard open sea lanes when plots are tugged together | `hero_island.py`, `island_cluster._sky_river`, `voxel_super_island.py`, `colony_ledger.water_network` | Blender exported; Unreal water material + vessel physics pending (OCE01/OCE10) |
+| **Islands as members of Super Islands** | 256 m pitch, 240 m envelope, sockets at ±120 m, 10 m deck, 16 m bridges (Ultra's Lumenwake standard); each member keeps seed, deed, chemistry | `voxel_super_island.py`, Ultra's `super_island_layout.py` | Blender exported; placement/tug authority ADR-065 |
+| **Tracking** | Mechanics sheet rows WZ01–WZ17 + "Team Claude 2026-10-14" sheet; `docs/mechanics/MECHANICS-REGISTRY.md` says where every mechanic lives so teams build on each other instead of overlapping | the xlsx + the registry | live |
+
+**The loop.** A realm's story names a need → a Mechanics row → a Chemistry row → the seed rolls it → the island
+carries it with a reason → the day book, the market and the raids make it worth collecting → the story gains the
+scene → repeat. Richer colony → richer story → more items.
