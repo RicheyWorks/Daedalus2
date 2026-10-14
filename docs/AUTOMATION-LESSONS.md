@@ -832,3 +832,30 @@ a cast in one steps() call. What was slow, and the fix in code:
    a new realm = ORIGINS line + .dcs + .dic + three GLB folders + one mount row + bestiary rows, then
    `finish_islands.py`. Next speed-up: a single `realm.yaml` per realm that generates all of those, so adding a
    realm is one file and one job.
+
+## What slowed the island build tonight, what fixed it, and how to build the metaverse faster (2026-10-14, 00:08)
+Richey: "when you built the first ten islands it was bam... I need you to be fast like you were."
+The first ten were 14 whole levels moved by one offset each: one operation per island. The far rings were
+being built the opposite way: 100 plot actors + 100 signs + a sublevel create + a move + a save PER DISTRICT, and
+the editor, in the background, ticked once every ~12 s (CPU throttle) and then once a MINUTE as the sublevel
+count grew (each create/move refreshes the whole level list). 384 districts at that rate is a night, not a minute.
+Fixes, in order of effect:
+1. One actor per district: an InstancedStaticMeshComponent with 100 plot instances, no signs
+   (`Lands_<R>_D<dd>`, tag `Cells:`). 38,400 plots became 384 actors. Same for ground: one 2.56 km slab per
+   district. (daedalus_districts.lay_district_steps)
+2. No sublevel per district yet: lay into the persistent level, stream later (`sublevels=True` path kept). A
+   level create + actor move per step was the minute.
+3. Scan once: the label set is read once per run, not per district (12k actors per scan).
+4. Budgeted stepping: `daedalus.steps` runs items back to back for `budget_ms` (250) per tick, then yields; a
+   throttled editor's slow tick no longer multiplies into the job.
+5. The editor's background throttle (`bThrottleCPUWhenNotForeground`) is turned off by full_speed(); it must be
+   on from init_unreal, not only when a scenario starts.
+How to build the whole metaverse at that speed:
+- Decide the unit of work before writing the loop: islands move as levels, lands lay as instances, casts import
+  one GLB per tick, materials reparent 25 per tick. The unit is whatever the engine handles as ONE operation.
+- Never put per-item editor bookkeeping (scans, saves, level ops) inside the item loop; do them once per run or
+  per N.
+- Measure the first two items, extrapolate, and change shape if the total is more than a few minutes. Tonight
+  the 6.5 s/district number was visible after 20 s; the 60 s/district one after a minute. Stop then, not later.
+- Polish (signs, sublevels, streaming, per-plot actors for the registry) is a second pass over data that exists.
+- Keep the host script the driver and the editor dumb: a generator per realm, one bridge call, numbers posted.
