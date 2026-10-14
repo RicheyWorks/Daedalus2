@@ -105,8 +105,10 @@ def collect(state, link):
     if page is None:
         raise ConnectionError('Hub unavailable; cursor and inbox preserved')
     for message in page['messages']:
-        relevant = message['from'] != link.me and (message['to'] == link.me or
-                    message['to'] == '*' and message.get('topic') == 'plan')
+        # Topics describe work; they must not silently discard another team's ping.
+        # Broker housekeeping is available in the hub log, not the decision inbox.
+        broadcast = message['to'] == '*' and message['type'] not in ('lock', 'unlock', 'bot.register')
+        relevant = message['from'] != link.me and (message['to'] == link.me or broadcast)
         if relevant:
             reply = message.get('reply_to')
             for item in state['outgoing'].values():
@@ -192,6 +194,8 @@ def main(argv=None):
         help='Request ID; repeat to send a separately correlated response for each request')
     reply.add_argument('--status', choices=STATES, required=True); reply.add_argument('--text', required=True)
     sub.add_parser('status')
+    read = sub.add_parser('read', help='Read a full retained message without acknowledging it')
+    read.add_argument('--id', type=int, required=True)
     receipt = sub.add_parser('ack'); receipt.add_argument('--id', type=int, required=True)
     replay = sub.add_parser('replay'); replay.add_argument('--after', type=int, required=True)
     sub.add_parser('archive-completed')
@@ -231,9 +235,15 @@ def main(argv=None):
         elif a.command == 'archive-completed':
             for name in ('pending', 'outgoing'):
                 state[name] = {key: item for key, item in state[name].items() if item['state'] not in ('completed', 'handled')}
-        result = summary(state)
+        if a.command == 'read':
+            item = state['pending'].get(str(a.id))
+            if not item:
+                raise ValueError('Message is not retained; poll or explicitly replay its history first')
+            result = item
+        else:
+            result = summary(state)
     if a.command == 'poll' and a.wait and not result['queued_count']:
-        link.wait(result['cursor'], a.wait, topics=['plan'])
+        link.wait(result['cursor'], a.wait)
         with locked_state(a.state, a.me) as state:
             collect(state, link); result = summary(state)
     # ASCII JSON also works when Windows launches Python with a non-UTF-8 pipe encoding.
