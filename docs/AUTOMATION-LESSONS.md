@@ -781,3 +781,11 @@ exact actor/component paths and numeric values; it separates mismatch, unavailab
 Nullable is not missing. Reported match must agree with requested predicates and observed values.
 Paged observations remain non-atomic/loaded-only even with stable context. Never promote an empty
 check list, missing count, stale epoch or status:ok envelope to a successful scene verification.
+
+
+## Batch resume must distinguish completed work from a lost import reply (2026-10-13, Codex)
+An operator batch journal binds input spec/source root, locks one writer and persists every dispatch.
+Completed assets skip; only explicitly non-dispatched/preparation states can rerun. Unknown or
+reply-received-without-final-verification holds for reconciliation. Observe the existing Unreal
+lease before each asset, stop after dispatch failure and route rigs away from static imports.
+This executor reuses the pipeline and does not introduce another art board or remote queue.
