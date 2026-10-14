@@ -268,25 +268,77 @@ def _h(n, salt=0):
     return (((n + 7919 * salt) * 2654435761) % 1000003) / 1000003.0
 
 
-def dress_plan(cells, xy, realm, ground_z):
-    """Pure: the finished look of a district's islands. Returns (plot transforms, rubble transforms, decor spots)
-    as plain tuples (x, y, z, yaw, sx, sy, sz). World Zero's islands are asteroid fragments: each floats at its own
-    height (+-40 m round the hub plane), is 8..20 m thick and carries a rock underside; a realm's plots stand on
-    Poot's terrain so they keep the plane and only vary thickness. Every fourth island gets a decor spot at its
-    centre (a kit prop)."""
+def island_plan(n, x, y, top, thick, realm):
+    """Pure: ONE island's unique shape from its deed number (Richey 02:20: "build every island, use an algorithm to
+    make each unique"). Returns extra block transforms (x, y, z, yaw, sx, sy, sz) in metres-scale cube units:
+    0..2 terraces stacked on the slab (each smaller, 3..8 m tall, offset so it stays on the slab) and 0..3
+    satellite rocks beside it inside the cell (10..25 m, World Zero's drift a little below the slab, a realm's sit
+    on the ground). The slab itself (one Plots instance per cell) keeps the deed addressable."""
     import daedalus_plots as P
-    plots, rubble, decor = [], [], []
+    out = []
+    terraces = int(_h(n, 10) * 3)            # 0, 1, 2
+    size, z = P.LAND_M, top
+    for k in range(terraces):
+        f = 0.35 + 0.3 * _h(n, 11 + k)       # footprint fraction of the level below
+        w, d = size * f, size * f * (0.7 + 0.6 * _h(n, 14 + k))
+        h = 3.0 + 5.0 * _h(n, 17 + k)
+        ox = (_h(n, 20 + k) - 0.5) * (size - w) * 100.0
+        oy = (_h(n, 23 + k) - 0.5) * (size - d) * 100.0
+        out.append((x + ox, y + oy, z + h * 50.0, 0.0, w, d, h))
+        size, z = min(w, d), z + h * 100.0
+    sats = int(_h(n, 26) * 4)                # 0..3
+    for k in range(sats):
+        r = 10.0 + 15.0 * _h(n, 27 + k)
+        ang = _h(n, 30 + k) * 6.283185
+        dist = (P.LAND_M / 2.0 + r / 2.0 + 15.0 + 40.0 * _h(n, 33 + k)) * 100.0
+        import math
+        sx, sy = x + math.cos(ang) * dist, y + math.sin(ang) * dist
+        if realm == "WORLD-ZERO":
+            sz = top - (5.0 + 25.0 * _h(n, 36 + k)) * 100.0
+            out.append((sx, sy, sz, _h(n, 39 + k) * 90.0, r, r * (0.6 + 0.8 * _h(n, 42 + k)), r * (0.5 + 0.5 * _h(n, 45 + k))))
+        else:
+            hh = r * (0.3 + 0.4 * _h(n, 45 + k))
+            out.append((sx, sy, top - 100.0 + hh * 50.0, _h(n, 39 + k) * 90.0, r, r * (0.6 + 0.8 * _h(n, 42 + k)), hh))
+    return out
+
+
+def dress_plan(cells, xy, realm, ground_z):
+    """Pure: the finished look of a district's islands. Returns (plot transforms, extra transforms, decor spots) as
+    plain tuples (x, y, z, yaw, sx, sy, sz). World Zero's islands are asteroid fragments: each floats at its own
+    height (+-40 m round the hub plane), is 8..20 m thick and carries a rock underside; a realm's plots stand on
+    solid ground so they keep the plane and only vary thickness. Every island is unique (island_plan: terraces and
+    satellite rocks from its deed number). Every fourth island gets a decor spot at its centre (a kit prop)."""
+    import daedalus_plots as P
+    plots, extras, decor = [], [], []
     for n, (x, y) in zip(cells, xy):
         thick = 8.0 + 12.0 * _h(n, 1)
         dz = (_h(n, 2) - 0.5) * 8000.0 if realm == "WORLD-ZERO" else 0.0
         top = ground_z + dz
-        plots.append((x, y, top - thick * 50.0, 0.0, P.LAND_M, P.LAND_M, thick))
+        yaw = _h(n, 0) * 360.0 if realm == "WORLD-ZERO" else 0.0   # a fragment turns as it drifts; a city plot stays square
+        plots.append((x, y, top - thick * 50.0, yaw, P.LAND_M, P.LAND_M, thick))
         if realm == "WORLD-ZERO":
             s = P.LAND_M * (0.45 + 0.25 * _h(n, 3))
-            rubble.append((x + (_h(n, 4) - 0.5) * 1200.0, y + (_h(n, 5) - 0.5) * 1200.0, top - thick * 100.0 - s * 40.0, _h(n, 6) * 90.0, s, s * (0.7 + 0.5 * _h(n, 7)), s * 0.8))
+            extras.append((x + (_h(n, 4) - 0.5) * 1200.0, y + (_h(n, 5) - 0.5) * 1200.0, top - thick * 100.0 - s * 40.0, _h(n, 6) * 90.0, s, s * (0.7 + 0.5 * _h(n, 7)), s * 0.8))
+        extras.extend(island_plan(n, x, y, top, thick, realm))
         if int(_h(n, 8) * 4) == 0:
             decor.append((n, x, y, top, _h(n, 9) * 360.0))
-    return plots, rubble, decor
+    return plots, extras, decor
+
+
+def district_ground(realm, d):
+    """The solid ground slab under a realm district (none for World Zero): one (x, y, z, yaw, sx, sy, sz)."""
+    import daedalus_land_grid as G
+    import daedalus_realm_ground as R
+    if realm == "WORLD-ZERO":
+        return []
+    cells = district_cells(d)
+    cx = sum(G.cell(c)[0] for c in cells) / float(len(cells))
+    cy = sum(G.cell(c)[1] for c in cells) / float(len(cells))
+    origin = R.ORIGINS[realm]
+    x = origin[0] + (cx - G.HUB) * G.PITCH_M * 100.0
+    y = origin[1] + (cy - G.HUB) * G.PITCH_M * 100.0
+    top = R.GROUND_Z - 100.0
+    return [(x, y, top - GROUND_THICK_M * 50.0, 0.0, GROUND_M, GROUND_M, GROUND_THICK_M)]
 
 
 def dress_islands_steps(realms, decor_per_district=3):
@@ -332,12 +384,18 @@ def dress_islands_steps(realms, decor_per_district=3):
                     z0 = loc.z + t.scale3d.z * 50.0    # the top of the slab
             if not cells:
                 continue
-            ground_z = R.GROUND_Z if realm != "WORLD-ZERO" else z0
-            plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)
+            if realm == "WORLD-ZERO":
+                ground_z = P._editor_inputs()[3]   # the hub plane from the PlayerStart (02:03: reading it off the first instance drifted on every re-dress)
+            else:
+                ground_z = R.GROUND_Z
+            plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)   # rubble = extras (terraces, rocks, undersides)
             a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
-            if realm == "WORLD-ZERO":   # a realm district's Ground holds its solid slab (ground_steps): leave it
-                a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in rubble])
             d = int(label.rsplit("D", 1)[1])
+            ground = a.get_editor_property("ground")
+            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in district_ground(realm, d) + rubble])
+            if realm != "WORLD-ZERO":
+                ground.set_cull_distances(0, 0)   # the ground slab must never cull
+            ground.set_cast_shadow(False)
             for k, mesh in enumerate(meshes):
                 spots = [s for j, s in enumerate(decor) if j % len(meshes) == k]
                 if not spots:
