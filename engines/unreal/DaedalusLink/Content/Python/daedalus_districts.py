@@ -227,25 +227,20 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, suble
         if label not in labels:
             cells = [n for n in district_cells(d) if n not in taken and ("%s%d" % (pre, n)) not in have]
             if cells:
-                a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(origin[0], origin[1], ground))
-                a.static_mesh_component.set_visibility(False)   # the root is an empty anchor; the plots are instances
-                # AddComponentByClass registers and attaches (UE Python has no register_component); the instances
-                # are world-space transforms, so the anchor's own location does not matter.
-                ism = a.add_component_by_class(unreal.InstancedStaticMeshComponent, False, unreal.Transform(), False)
-                ism.set_static_mesh(cube)
-                ism.set_mobility(unreal.ComponentMobility.STATIC)
-                a.finish_adding_component(ism)
+                # ADaedalusLandDistrict (C++): one actor, the plots as instances of its Plots component
+                a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(origin[0], origin[1], ground))
                 ts = []
                 for n in cells:
                     x, y = G.cell(n)
                     ts.append(unreal.Transform(unreal.Vector(origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground - P.SLAB_M * 50.0),
                                                unreal.Rotator(0.0, 0.0, 0.0), unreal.Vector(P.LAND_M, P.LAND_M, P.SLAB_M)))
-                ism.add_instances(ts, False, True)
+                a.set_editor_property("realm", realm)
+                a.set_editor_property("district", d)
+                n_inst = a.lay_plots(cells, ts)
                 a.set_actor_label(label)
-                a.set_folder_path("Realms/%s/Lands" % realm)
-                a.tags = [unreal.Name("Lands"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d), unreal.Name("Cells:%s" % ",".join(str(c) for c in cells))]
+                a.set_folder_path("Realms/%s/Lands" % realm if realm != "WORLD-ZERO" else "Lands")
+                a.tags = [unreal.Name("Lands"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
                 made.append(a)
-                n_inst = len(cells)
         if made and sublevels:   # streaming comes later, district by district, once the map is down
             sl = _sublevel(world, "%s/%s/D%02d" % (ROOT, realm_dir(realm), d))
             unreal.EditorLevelUtils.move_actors_to_level(made, sl, False, False)
