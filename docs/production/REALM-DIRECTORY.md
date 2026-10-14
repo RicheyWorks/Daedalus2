@@ -11,8 +11,10 @@ The schema is version 1. `chunkSize` is 16 and `coordinates` is
 
 | Field | Meaning |
 | --- | --- |
-| `id` | Canonical realm identity, unique across providers |
+| `id` | Storage world identity, unique across providers |
 | `title` | Existing world title, or Ocean |
+| `realm` | Optional canonical native session ID, such as `GALLERY-CITY` |
+| `catalog` | Optional DIC/DCS file stem, such as `gallery-city` |
 | `protocol` | `WORLD_V1` or `OCEAN_V1` |
 | `manifestPath` | Same-origin manifest route |
 | `chunkPathTemplate` | Same-origin block DTO route with `{x}`, `{y}`, `{z}` chunk coordinates |
@@ -24,6 +26,21 @@ For a mounted world `gallery`, the manifest is `/api/v1/world/gallery` and the
 chunk template is `/api/v1/world/gallery/chunk/blocks?x={x}&y={y}&z={z}`.
 Both providers use the existing ChunkBlocksResponse payload and palette.
 
+Known storage IDs map only when their WorldStyle matches: `world-zero` maps to
+`WORLD-ZERO`/`world-zero`; `gallery` or `gallery-city` to
+`GALLERY-CITY`/`gallery-city`; `parcels`, `bricks` and `labyrinth` to their uppercase
+session IDs and lowercase file stems. Ocean maps to `OCEAN`/`ocean`, matching
+DaedalusRealmSessionCore. Unknown custom worlds and aliases with a different
+style leave both optional fields unset. A catalog stem identifies content; it
+does not assert that the catalog is installed. In particular the current server
+loads five shipped catalogs, and the Ocean content catalog remains separate work.
+`PORTAL` has no chunk provider entry.
+
+The native client matches the session Current() to `realm`, not to storage `id`.
+Two mounted aliases claiming the same canonical session (for example both
+`gallery` and `gallery-city`) make discovery refuse rather than choosing a first
+match. No custom world is silently reassigned to a game's canonical session.
+
 Clients substitute integer chunk coordinates before resolving a template against
 the configured server origin. Fetch that entry's manifest and obey its bounds;
 do not send Ocean requests to WorldHub's WorldService routes. Discovery and Ocean
@@ -32,7 +49,7 @@ requests share the existing per-subject `oceanChunks` quota, so cache directory
 metadata instead of requesting it for every chunk.
 
 If a mounted WorldHub world already uses `ocean` while the Ocean provider is
-enabled, discovery returns 503 with a generic reason. It never shadows an entry
+enabled, or canonical session IDs collide, discovery returns 503 with a generic reason. It never shadows an entry
 or moves/deletes existing data. Resolve the configuration conflict explicitly.
 The response contains no storage paths, seed, token, external server URL or
 private configuration. Disabled Ocean does not appear.

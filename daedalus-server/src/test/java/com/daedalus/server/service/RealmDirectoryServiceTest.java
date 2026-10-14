@@ -26,6 +26,8 @@ class RealmDirectoryServiceTest {
         assertThat(directory.realms()).extracting(RealmDirectoryService.Realm::id).containsExactly("world-zero", "gallery");
         assertThat(directory.realms().get(1).chunkPathTemplate()).isEqualTo("/api/v1/world/gallery/chunk/blocks?x={x}&y={y}&z={z}");
         assertThat(directory.realms().get(1).blockEditsSupported()).isTrue();
+        assertThat(directory.realms().get(1).realm()).isEqualTo("GALLERY-CITY");
+        assertThat(directory.realms().get(1).catalog()).isEqualTo("gallery-city");
         assertThatThrownBy(() -> directory.realms().clear()).isInstanceOf(UnsupportedOperationException.class);
         verify(hub).worlds();verifyNoMoreInteractions(hub);
     }
@@ -41,6 +43,8 @@ class RealmDirectoryServiceTest {
             assertThat(entry.manifestPath()).isEqualTo("/api/v1/ocean/v1");
             assertThat(entry.chunkPathTemplate()).isEqualTo("/api/v1/ocean/v1/chunk?x={x}&y={y}&z={z}");
             assertThat(entry.blockEditsSupported()).isFalse();
+            assertThat(entry.realm()).isEqualTo("OCEAN");
+            assertThat(entry.catalog()).isEqualTo("ocean");
             try (var files = Files.list(tmp)) { assertThat(files.noneMatch(path -> path.toString().endsWith(".daew"))).isTrue(); }
             verify(hub).worlds();verifyNoMoreInteractions(hub);
         }
@@ -54,5 +58,38 @@ class RealmDirectoryServiceTest {
             var directory = new RealmDirectoryService(hub, factory.getBeanProvider(OceanHostService.class));
             assertThatThrownBy(directory::directory).isInstanceOf(IllegalStateException.class).hasMessage("Duplicate realm id");
         }
+    }
+
+    @Test void canonicalSessionsAndCatalogsFollowTheShippedNativeSessionContract() {
+        WorldHub hub=mock(WorldHub.class);
+        when(hub.worlds()).thenReturn(List.of(
+                new WorldHub.WorldEntry("world-zero",WorldStyle.SKY_ISLANDS,1,"Home"),
+                new WorldHub.WorldEntry("gallery-city",WorldStyle.GALLERY,1,"Art"),
+                new WorldHub.WorldEntry("parcels",WorldStyle.PARCELS,1,"Plots"),
+                new WorldHub.WorldEntry("bricks",WorldStyle.BRICKS,1,"Bricks"),
+                new WorldHub.WorldEntry("labyrinth",WorldStyle.LABYRINTH,1,"Maze")));
+        var result=new RealmDirectoryService(hub,new StaticListableBeanFactory().getBeanProvider(OceanHostService.class)).directory();
+        assertThat(result.realms()).extracting(RealmDirectoryService.Realm::realm)
+                .containsExactly("WORLD-ZERO","GALLERY-CITY","PARCELS","BRICKS","LABYRINTH");
+        assertThat(result.realms()).extracting(RealmDirectoryService.Realm::catalog)
+                .containsExactly("world-zero","gallery-city","parcels","bricks","labyrinth");
+    }
+
+    @Test void customWorldsAndWrongStyleAliasesDoNotPretendToBeCanonicalSessions() {
+        WorldHub hub=mock(WorldHub.class);
+        when(hub.worlds()).thenReturn(List.of(
+                new WorldHub.WorldEntry("gallery-a",WorldStyle.GALLERY,1,"Custom"),
+                new WorldHub.WorldEntry("gallery",WorldStyle.SKY_ISLANDS,1,"Different game")));
+        var result=new RealmDirectoryService(hub,new StaticListableBeanFactory().getBeanProvider(OceanHostService.class)).directory();
+        assertThat(result.realms()).allSatisfy(entry->{assertThat(entry.realm()).isNull();assertThat(entry.catalog()).isNull();});
+    }
+
+    @Test void duplicateCanonicalAliasesRefuseInsteadOfRoutingAPlayerToTheFirstMatch() {
+        WorldHub hub=mock(WorldHub.class);
+        when(hub.worlds()).thenReturn(List.of(
+                new WorldHub.WorldEntry("gallery",WorldStyle.GALLERY,1,"One"),
+                new WorldHub.WorldEntry("gallery-city",WorldStyle.GALLERY,2,"Two")));
+        var directory=new RealmDirectoryService(hub,new StaticListableBeanFactory().getBeanProvider(OceanHostService.class));
+        assertThatThrownBy(directory::directory).isInstanceOf(IllegalStateException.class).hasMessage("Duplicate session realm");
     }
 }

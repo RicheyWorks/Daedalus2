@@ -94,3 +94,4 @@
 - Refuse duplicate canonical realm IDs instead of selecting whichever provider was listed last. Keep protocol and write capability explicit; a supported operation still requires the caller's permissions.
 - A metadata request must not generate chunks or mutate the world registry. Test that invariant before following a discovered route in a real authenticated HTTP test.
 - Add new endpoints to the production matcher, independent authentication table and published README together. A passing default authentication rule alone does not document the intended decision.
+- Storage world IDs, native session IDs and catalog stems are distinct. Publish optional canonical bindings server-side, require matching shipped aliases/styles, leave custom worlds unbound, and refuse duplicate session claims. Do not infer a player's game from a storage style or promise that a referenced catalog is installed.

@@ -37,6 +37,9 @@ class OceanHostHttpRestartTest {
                 var oceanEntry=directory.path("realms").get(1);
                 assertThat(oceanEntry.path("id").asText()).isEqualTo("ocean");
                 assertThat(oceanEntry.path("protocol").asText()).isEqualTo("OCEAN_V1");
+                assertThat(oceanEntry.path("realm").asText()).isEqualTo("OCEAN");
+                assertThat(oceanEntry.path("catalog").asText()).isEqualTo("ocean");
+                assertThat(directory.path("realms").get(0).path("realm").asText()).isEqualTo("WORLD-ZERO");
                 assertThat(oceanEntry.path("blockEditsSupported").asBoolean()).isFalse();
                 String chunkPath=oceanEntry.path("chunkPathTemplate").asText()
                         .replace("{x}","0").replace("{y}","-1").replace("{z}","0");

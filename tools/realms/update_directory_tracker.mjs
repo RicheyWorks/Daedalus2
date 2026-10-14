@@ -7,13 +7,14 @@ const wb=await SpreadsheetFile.importXlsx(await FileBlob.load(repo+'/docs/produc
 const norm=v=>JSON.stringify(v.map(r=>r.map(c=>c===null?'':c)));
 const prior=[['Assets','A1:Q348'],['Production','A1:H24'],['Mechanics','A1:E53'],['Unreal verification','A8:H39']].map(([s,r])=>[s,r,norm(wb.worksheets.getItem(s).getRange(r).values),JSON.stringify(wb.worksheets.getItem(s).getRange(r).formulas)]);
 const runs=wb.worksheets.getItem('Unreal verification'),mechanics=wb.worksheets.getItem('Mechanics');
-if(runs.getRange('A40').values[0][0]||mechanics.getRange('A54').values[0][0])throw Error('Expected unused rows');
+if(runs.getRange('A40').values[0][0]&&runs.getRange('A40').values[0][0]!=='REALM-DIR')throw Error('Unexpected verification row');
+if(mechanics.getRange('A54').values[0][0]&&mechanics.getRange('A54').values[0][0]!=='SYS01')throw Error('Unexpected mechanic row');
 runs.getRange('A2').values=[['Runtime verification runs']];
 runs.getRange('A40:H40').copyFrom(runs.getRange('A39:H39'),'all');runs.getRange('A40:H40').format.rowHeight=96;
 runs.getRange('A40:H40').values=[['REALM-DIR','Authenticated provider discovery and advertised Ocean read','WorldHub + Ocean','Verified',proof.verify.seconds,`Full server reactor verify. ${proof.verify.test_summary_counts[0]} core / ${proof.verify.test_summary_counts.at(-1)} server tests.`,'realm-directory-proof.json',`${proof.focused.test_summary_counts[0]} focused checks also pass in ${proof.focused.seconds}s. No travel, Unreal loading or hosting claim.`]];
 runs.getRange('B5').formulas=[['=COUNTIF(D8:D40,"Verified")']];runs.getRange('E5').formulas=[['=COUNTIF(D8:D40,"Pending")']];
 mechanics.getRange('A54:E54').copyFrom(mechanics.getRange('A53:E53'),'all');mechanics.getRange('A54:E54').format.rowHeight=96;
-mechanics.getRange('A54:E54').values=[['SYS01','Clients discover each realm data provider','Canonical identity, protocol and same-origin routes without duplicating terrain','Production JWT HTTP discovery to Ocean chunk read verified','Player transfer, district routing, Unreal subscription and hosting still pending.']];
+mechanics.getRange('A54:E54').values=[['SYS01','Clients discover each realm data provider','Storage IDs, canonical session/catalog bindings and same-origin routes without duplicating terrain','Production JWT HTTP discovery to Ocean chunk read verified','Player transfer, district routing, Unreal subscription and hosting still pending.']];
 wb.recalculate();if(runs.getRange('B5').values[0][0]!==28||runs.getRange('E5').values[0][0]!==5)throw Error('Summary mismatch');
 runs.getRange('D40').values=[['Pending']];wb.recalculate();if(runs.getRange('B5').values[0][0]!==27||runs.getRange('E5').values[0][0]!==6)throw Error('Counter dependency mismatch');
 runs.getRange('D40').values=[['Verified']];wb.recalculate();
