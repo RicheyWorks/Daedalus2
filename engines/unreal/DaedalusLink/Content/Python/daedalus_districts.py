@@ -726,6 +726,38 @@ def mesh_pool_steps(realms):
     return done
 
 
+def reconcile_steps(realm):
+    """After a crash mid-stream (08:41: GPU crash during Gallery): actors saved into D<dd> sublevels still exist in
+    the persistent level (its removal was never saved). Keep the sublevel copy, destroy the persistent duplicate,
+    save the persistent level. One district package per tick."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    tag = "Realm:%s" % realm
+    persistent = str(_world().get_outermost().get_name())
+    by_label = {}
+    for a in sub.get_all_level_actors():
+        if not any(str(t) == tag for t in a.tags):
+            continue
+        by_label.setdefault(a.get_actor_label(), []).append(a)
+    dup = {l: v for l, v in by_label.items() if len(v) > 1}
+    gone = 0
+    pkgs = sorted({str(a.get_level().get_outermost().get_name()) for v in dup.values() for a in v if str(a.get_level().get_outermost().get_name()) != persistent})
+    for pkg in pkgs:
+        n = 0
+        for l, v in dup.items():
+            levels = {str(a.get_level().get_outermost().get_name()) for a in v}
+            if pkg in levels:
+                for a in v:
+                    if str(a.get_level().get_outermost().get_name()) == persistent:
+                        sub.destroy_actor(a)
+                        gone += 1
+                        n += 1
+        yield "%s %s: %d persistent duplicates removed" % (realm, pkg.rsplit("/", 1)[-1], n)
+    P.save_world()
+    return {"realm": realm, "duplicate_labels": len(dup), "removed": gone, "packages": len(pkgs)}
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 
