@@ -1,7 +1,9 @@
 #include "DaedalusShardsteadSaveCore.h"
 #include <iostream>
+#include <fstream>
+#include <iterator>
 using namespace daedalus::shardstead;
-int main(){
+int main(int Argc,char** Argv){
     Ledger L(730);Command C;C.Player="crew";
     if(L.Prepare("join",0,C)!=PrepareResult::Prepared||!L.ConfirmPersisted("join",1))return 1;
     C.Op=Operation::Claim;C.Island=17;C.Permission=true;
@@ -22,6 +24,16 @@ int main(){
     auto Bad=Bytes;Bad[0]^=1;if(DecodeLedgerSave(Bad,Decoded))return 10;
     auto Forged=Saved;Forged.EconomyState.Crews.at("crew").Cargo[2]++;
     auto Before=Bytes;if(EncodeLedgerSave(Forged,Bytes)||Bytes!=Before)return 11;
+    if(Argc==3){
+        if(std::string(Argv[1])=="--write"){
+            std::ofstream File(Argv[2],std::ios::binary);File.write(reinterpret_cast<const char*>(Bytes.data()),static_cast<std::streamsize>(Bytes.size()));
+            if(!File)return 12;
+        }else if(std::string(Argv[1])=="--read"){
+            std::ifstream File(Argv[2],std::ios::binary);if(!File)return 13;
+            std::vector<std::uint8_t> Returned((std::istreambuf_iterator<char>(File)),std::istreambuf_iterator<char>());
+            if(Returned!=Bytes||!DecodeLedgerSave(Returned,Decoded)||!SameState(Saved.EconomyState,Decoded.EconomyState))return 14;
+        }else return 15;
+    }else if(Argc!=1)return 16;
     std::cout<<"PASS ledger roundtrip, idempotent restored receipt, every truncation, trailing bytes and forged balances\n";
     return 0;
 }

@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-14T13:40:49.792418+00:00",
+  "baseHead": "4ce7e21bc28f75946476b9cab11d11186485f507",
+  "sourceFileHashes": {
+    "engines/unreal/core-test/shardstead_save_test.cpp": "33170ad54674475efcbf40c882963d717f7bc2b98bbadaccdddf2e3a534f2139",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusShardsteadSaveCore.h": "89f22a34c4b8f57b0f105d66bb407a7d77471338d648e3537e91bc7a76e0b032",
+    "daedalus-core/src/main/java/com/daedalus/world/persistence/RealmRecordStore.java": "4006dec7f764598e7bad274b746e029cdc70f843b995dc9305d2c2b472b8efa0",
+    "tools/unreal/ShardsteadRecordProbe.java": "efcd9e3d82dd53306bf8fa22928a5c8bc5449d4b76a393de53eef2cb42215539"
+  },
+  "bytes": 570,
+  "sha256": "fdd4f10d3816b933f8cf2c70294ee7047516386842a647bfcc056f77606bb422",
+  "nativeEncode": true,
+  "javaStoreWriteReplayConflict": true,
+  "closedAndReopened": true,
+  "nativeReturnedDecode": true,
+  "outerStoreRevision": 1,
+  "domainLedgerRevision": 4,
+  "scope": "Disposable local native-to-Java-store-to-native roundtrip; not HTTP, authenticated live integration, canonical inventory transaction or gameplay"
+}
