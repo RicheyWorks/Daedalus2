@@ -917,3 +917,7 @@ Owner-only unicornrecord readiness/pending/revision fields have a deduplicatedre
 ### Keep reward identities canonical and portable (2026-10-14)
 Unicorncore rejects ASCIIspace/control/DEL IDs, includingembeddedNUL, before counting/restoringentities. Bothcondition orders remainvalid. NativeMSVC noexceptions/W4/WX nowpasses39checks; existingproductionCI includesgcc/clangsanitizers andMSVC plusnoexceptionvariants. RemoteCI/UHT/in-worldcomponent acceptance notyetobserved.
 
+
+### Keep sea-arrival credit in authority-side world events (2026-10-14)
+BullSeaEventComponent bindsstablebull identity/creditedplayer throughhost only, captures taggedATriggerVolume overlap andchecksphysicalcontainment beforequestcredit. Pendingarrival retries whenplayerrecord becomesready, stillrequiringbull insea. Itdoesnot providebull movement, livefire tracking, durableworldevent replay or authoredseavolumes; UHT/runtime pending. No clientRPC/editorcalls.
+
