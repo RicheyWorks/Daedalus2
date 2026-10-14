@@ -42,7 +42,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
 | 10 | Docks / gates | **partial** | Fable | rainbow gates to 4 realms (ADR-053) as TargetPoints; HasDocks=true in Session table, no dock actors placed |
-| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumer `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
+| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
 ## GALLERY-CITY (catalog `gallery-city`, theme `gallery`, mount drone)
