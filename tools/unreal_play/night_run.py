@@ -15,6 +15,8 @@ Stops at the first failed step and says which. Everything it runs is idempotent,
 """
 import json
 import os
+from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -46,13 +48,35 @@ def hub(kind, text, topic="night-run"):
         return "hub: %s" % e
 
 
+def jobs_directory():
+    base = os.environ.get('LOCALAPPDATA')
+    if not base:
+        raise RuntimeError('LOCALAPPDATA unavailable; cannot identify local job markers')
+    return Path(base)/'Daedalus'/'jobs'
+
+
+def wait_terminal(job_id, max_s=7200, directory=None):
+    if not re.fullmatch(r'(?:job|build)-[A-Za-z0-9-]+', job_id):
+        raise ValueError('Unsafe job ID')
+    marker = (directory or jobs_directory())/(job_id+'.exit')
+    deadline = time.monotonic()+max_s
+    while True:
+        try:
+            value = marker.read_text(encoding='utf-8-sig').strip()
+        except FileNotFoundError:
+            value = None
+        if value is not None:
+            match = re.fullmatch(r'done (-?\d+)', value, flags=re.IGNORECASE)
+            if not match:
+                raise RuntimeError('Invalid terminal marker for '+job_id)
+            return int(match.group(1))
+        if time.monotonic() >= deadline:
+            raise TimeoutError('Job still lacks terminal marker: '+job_id)
+        time.sleep(min(3, max(0, deadline-time.monotonic())))
+
+
 def wait_job(job_id, max_s=7200):
-    t0 = time.time()
-    while time.time() - t0 < max_s:
-        out = ps(r".\engines\unreal\pc-job.ps1 -Wait -Id %s -Seconds 50 -Lines 2" % job_id, 120)
-        if "DONE" in out or "FAIL" in out:
-            return out.strip()[-300:]
-    return "timeout"
+    return 'DONE %d' % wait_terminal(job_id, max_s)
 
 
 def bridge_up(max_s=600):
@@ -101,25 +125,35 @@ def main(argv):
 
     if after:
         say("waiting for job %s" % after)
-        out = wait_job(after)
+        try:
+            out = wait_job(after)
+        except (OSError, ValueError, RuntimeError, TimeoutError) as exc:
+            hub('status', 'NIGHT RUN stopped observing %s: %s; no build or restart' % (after, exc))
+            return 1
         say("job %s: %s" % (after, out.splitlines()[0] if out else out))
-        if "DONE 0" not in out:
+        if out != "DONE 0":
             hub("status", "NIGHT RUN stopped: job %s ended '%s'" % (after, out[:120]))
             return 1
 
     if build:
         say("building")
+        directory = jobs_directory()
+        previous = {path.stem for path in directory.glob('build-*')}
         out = ps(r".\engines\unreal\unreal-job.ps1 -Start -Fast", 120)
-        job = out.strip().splitlines()[-1] if out.strip() else "?"
+        launch = re.findall(r'^started (build-[A-Za-z0-9-]+) pid=([1-9]\d*)\s*$', out, re.MULTILINE)
+        if len(launch) != 1 or launch[0][0] in previous:
+            hub('status', 'NIGHT RUN stopped: missing, ambiguous or reused build job identity')
+            return 1
+        job = launch[0][0]
         say(job)
-        t0 = time.time()
-        res = ""
-        while time.time() - t0 < 1800:
-            res = ps(r".\engines\unreal\unreal-job.ps1 -Wait", 120)
-            if "BUILD OK" in res or "BUILD FAILED" in res:
-                break
-        if "BUILD OK" not in res:
-            hub("status", "NIGHT RUN stopped: build on %s failed: %s" % (sha, res.strip()[-300:]))
+        try:
+            code = wait_terminal(job, 1800, directory)
+        except (OSError, RuntimeError, TimeoutError) as exc:
+            hub('status', 'NIGHT RUN stopped observing %s: %s; no restart' % (job, exc))
+            return 1
+        res = ps(r".\engines\unreal\unreal-job.ps1 -Wait -Id %s -Seconds 0" % job, 120)
+        if code != 0 or not re.search(r'^BUILD OK '+re.escape(job)+r'\s*$', res, re.MULTILINE):
+            hub("status", "NIGHT RUN stopped: build %s code=%d: %s" % (job, code, res.strip()[-300:]))
             print(res[-2000:])
             return 1
         say("build ok")

@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Night-run job identity (2026-10-13)
+Never wait on latest build after launching a specific job: it can return the prior job's green log before the new log exists. Require one explicit launch ID, refuse reused IDs, await that ID's terminal marker, validate its exit code, then query Wait with the same ID. Log words DONE/FAIL are not terminal markers. Observation expiry stops this orchestration without restarting the editor or job. Existing PR89/104 still provide truthful atomic marker writers; keyed consumption does not repair an old writer.
+
