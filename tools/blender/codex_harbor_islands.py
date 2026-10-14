@@ -6,7 +6,7 @@ Exports separated role meshes in GLB, editable .blend and placement/provenance m
 Collision and gameplay are deliberately separate Unreal integration steps.
 """
 from pathlib import Path
-import sys, math, random, json, hashlib, argparse
+import sys, math, random, json, hashlib, argparse, time
 
 parser = argparse.ArgumentParser()
 parser.add_argument('output')
@@ -130,8 +130,57 @@ def foliage(seed, pink):
         ball((x, y, .55), (.22, .22, .13), blossom if i%2 else lamp)
 
 
+def export_role_meshes(name, objects):
+    """One origin-centred FBX per role; reuse native StaticMesh import path.
+
+    Join temporary copies, preserving the editable scene's individual props.
+    No generated hulls: collision must be supplied by the receiving owner.
+    """
+    role_records = []
+    for role in sorted({obj['harbor_role'] for obj in objects}):
+        copies = []
+        try:
+            bpy.ops.object.select_all(action='DESELECT')
+            for source in objects:
+                if source['harbor_role'] != role:
+                    continue
+                clone = source.copy(); clone.data = source.data.copy()
+                bpy.context.collection.objects.link(clone)
+                clone.select_set(True); copies.append(clone)
+            bpy.context.view_layer.objects.active = copies[0]
+            bpy.ops.object.join()
+            mesh = bpy.context.object
+            mesh.name = name + '_' + role
+            bpy.context.scene.cursor.location = (0, 0, 0)
+            bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+            bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+            mesh.data.calc_loop_triangles()
+            fbx = OUT/(mesh.name+'.fbx')
+            started = time.perf_counter()
+            bpy.ops.export_scene.fbx(filepath=str(fbx), use_selection=True,
+                object_types={'MESH'}, add_leaf_bones=False, bake_anim=False,
+                apply_unit_scale=True, axis_forward='-Y', axis_up='Z')
+            elapsed = time.perf_counter()-started
+            role_records.append({'id': mesh.name, 'role': role, 'fbx': fbx.name,
+                'sha256': hashlib.sha256(fbx.read_bytes()).hexdigest(),
+                'bytes': fbx.stat().st_size, 'triangles': len(mesh.data.loop_triangles),
+                'export_seconds': elapsed, 'source_objects': sum(o['harbor_role']==role for o in objects),
+                'collision': 'not authored', 'pivot': 'common island centre Z=0',
+                'suggested_blocking': role in {'Terrain', 'Dock', 'Beacon', 'Boathouse', 'CaveArch'}})
+        finally:
+            # Only remove temporary export copies still registered after join.
+            for clone in copies:
+                try:
+                    if clone.name in bpy.data.objects:
+                        bpy.data.objects.remove(clone, do_unlink=True)
+                except ReferenceError:
+                    pass
+    return role_records
+
+
 records = []
 for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove']):
+    generation_started = time.perf_counter()
     bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
     parts = []
     if args.with_terrain:
@@ -146,14 +195,20 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     group('Waterfall', lambda: box((3, -43, -9), (2.5, .25, 18), water))
     name = 'CodexHarbor_' + title
     objects = [o for o in bpy.context.scene.objects if o.type == 'MESH']
+    generation_seconds = time.perf_counter()-generation_started
+    role_exports = export_role_meshes(name, objects)
     bpy.ops.object.select_all(action='DESELECT')
     for obj in objects: obj.select_set(True)
     glb = OUT/(name+'.glb')
+    export_started = time.perf_counter()
     bpy.ops.export_scene.gltf(filepath=str(glb), export_format='GLB', use_selection=True, export_animations=False)
+    glb_seconds = time.perf_counter()-export_started
     bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(name+'.blend')))
     records.append({'id': name, 'file': glb.name, 'sha256': hashlib.sha256(glb.read_bytes()).hexdigest(),
                     'seed': 8401+index, 'foliage_seed': 950+index,
                     'includes_terrain': args.with_terrain, 'target_footprint_metres': [92, 92],
+                    'generation_seconds': generation_seconds, 'glb_export_seconds': glb_seconds,
+                    'role_exports': role_exports,
                     'origin': 'receiving terrain ground centre Z=0',
                     'objects': len(objects), 'roles': sorted({o['harbor_role'] for o in objects}),
                     'stage': 'Blender export; Unreal placement, collision and gameplay pending'})

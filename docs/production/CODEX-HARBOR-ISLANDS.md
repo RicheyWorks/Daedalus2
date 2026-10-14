@@ -14,6 +14,14 @@ remain separate for Unreal material, collision and replacement work. The source
 creates GLB, editable Blender files and hash manifests. No export or native import
 is claimed until those actions are actually performed.
 
+It also exports one FBX StaticMesh per role using temporary joined copies with a
+common origin. This connects dressing to the existing FBX import format while
+retaining separate editable props in the Blender scene. Manifest records contain
+actual export elapsed seconds, bytes and hashes only after execution. FBX files
+have no UCX hulls; the native owner must configure role-appropriate collision.
+Use scale1 after the metre-to-centimetre import, retain the common local pivot,
+and add a parent island transform to place each role together.
+
 Integration: dress the seeded terrain on available Codex deeds without replacing current islands.
 Fit water to the actual shore and dock posts to receiving terrain; these local transforms
 are starting placements, not a guarantee against intersections on arbitrary heightfields.
