@@ -15,6 +15,12 @@ int main(){
     R.RevisionHeader="9007199254740993";R.BodySHA256=std::string(64,'b');
     if(ConfirmWrite(true,200,E,R,Out))return 5;
     R.BodySHA256=Digest;R.Key="another-ledger";if(ConfirmWrite(true,200,E,R,Out))return 6;
+    const std::string Json="{\"result\":\"UPDATED\",\"realm\":\"WORLD-ZERO\",\"key\":\"ledger\",\"revision\":9007199254740993,\"sha256\":\""+Digest+"\"}";
+    if(!ParseWriteReply(Json,"9007199254740993",Digest,R)||!ConfirmWrite(true,200,E,R,Out))return 7;
+    auto Duplicate=Json;Duplicate.insert(1,"\"key\":\"other\",");if(ParseWriteReply(Duplicate,"9007199254740993",Digest,R))return 8;
+    if(ParseWriteReply(Json+"x","9007199254740993",Digest,R)||ParseWriteReply(Json,"9007199254740994",Digest,R))return 9;
+    auto Fraction=Json;auto At=Fraction.find("9007199254740993");Fraction.replace(At,16,"9007199254740993.0");
+    if(ParseWriteReply(Fraction,"9007199254740993",Digest,R))return 10;
     std::cout<<"PASS exact 64-bit revision, replay, conflict/unknown, hash and identity receipt checks\n";
     return 0;
 }
