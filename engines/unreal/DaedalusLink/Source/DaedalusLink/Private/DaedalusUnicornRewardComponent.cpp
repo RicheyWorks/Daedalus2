@@ -49,6 +49,34 @@ void UDaedalusUnicornRewardComponent::Synchronize()
     OnRep_Progress();
 }
 
+bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
+{
+    if (!CanRecord() || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
+        Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
+    DaedalusUnicornReward::Snapshot state;
+    for (const auto& Id : Record.BullIds) state.BullIds.emplace_back(TCHAR_TO_UTF8(*Id));
+    state.PackId = TCHAR_TO_UTF8(*Record.PackId);
+    state.Claimed = Record.bClaimed;
+    if (!Gate.Restore(state)) return false;
+    CommittedGrantReceiptId = Record.GrantReceiptId;
+    bHostRecordRestored = true;
+    Synchronize();
+    return true;
+}
+
+FDaedalusUnicornRewardRecord UDaedalusUnicornRewardComponent::ExportHostRecord() const
+{
+    FDaedalusUnicornRewardRecord out;
+    if (!CanRecord()) return out;
+    const auto state = Gate.Export();
+    for (const auto& Id : state.BullIds) out.BullIds.Add(UTF8_TO_TCHAR(Id.c_str()));
+    out.PackId = UTF8_TO_TCHAR(state.PackId.c_str());
+    out.bClaimed = state.Claimed;
+    out.GrantReceiptId = CommittedGrantReceiptId;
+    out.bAvailable = true;
+    return out;
+}
+
 void UDaedalusUnicornRewardComponent::OnRep_Progress()
 {
     if (LastBroadcastBulls == BullsAtSea && bLastBroadcastEligible == bEligible && bLastBroadcastClaimed == bClaimed) return;

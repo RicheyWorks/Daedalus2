@@ -7,6 +7,18 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusUnicornRewardProgress, int32, BullsAtSea, bool, Eligible, bool, Claimed);
 
+USTRUCT(BlueprintType)
+struct FDaedalusUnicornRewardRecord
+{
+    GENERATED_BODY()
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") int32 Version = 1;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") TArray<FString> BullIds;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PackId;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") bool bClaimed = false;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString GrantReceiptId;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Unicorn") bool bAvailable = false;
+};
+
 /** Per-player progress adapter. Server world-event producers supply verified identities.
  * No client RPC, inventory mutation, wallet access or durable reward transaction is implemented here. */
 UCLASS(ClassGroup=(Daedalus), meta=(BlueprintSpawnableComponent))
@@ -24,6 +36,10 @@ public:
     /** Call only AFTER the host committed its idempotent durable reward transaction. */
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool ConfirmPersistedReward(const FString& GrantReceiptId);
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    bool RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record);
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    FDaedalusUnicornRewardRecord ExportHostRecord() const;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_Progress, Category="Daedalus|Unicorn")
     int32 BullsAtSea = 0;
@@ -44,4 +60,5 @@ private:
     int32 LastBroadcastBulls = -1;
     bool bLastBroadcastEligible = false;
     bool bLastBroadcastClaimed = false;
+    bool bHostRecordRestored = false;
 };

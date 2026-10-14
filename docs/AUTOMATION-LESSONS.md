@@ -889,3 +889,7 @@ Unicornlegendary eligibility reusesPortalQuestProgress butcounts ten distinctbur
 ### Keep quest eligibility separate from durable grants (2026-10-14)
 Unicornrewardcomponent accepts onlyauthority/gameworld events, exposesowner-only replicatedprogress anddeduplicatedUI notifications, andhasnoclientRPC. ConfirmPersistedReward acknowledges an alreadycommitted hostgrant, retrying the same receiptid safely; it doesnot awarditems. Componentstate stillneeds durable restore and actualbull/pack eventproducer bindings. Nativecompile/in-world acceptance remainpending.
 
+
+### Restore quest identity state before accepting fresh events (2026-10-14)
+Unicorngate exports canonicalsortedbull IDs/pack/claimed snapshot. Restore validatesversion,limits,uniqueIDs andclaimedeligibility into acandidate before replacing a pristinegate. Authoritycomponent refuses active/repeatedrestore and claimed/grantreceipt contradictions. Hostmust bind recordto authenticatedplayer andpersist it; these hooks are not a storagebackend or durable awardtransaction. Nativecompile/runtime pending.
+

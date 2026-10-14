@@ -1,12 +1,20 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusPortalQuestCore.h"
+#include <algorithm>
 
 // Per-player eligibility only. The host supplies verified world events and must
 // persist/award a reward atomically. No wallet, inventory or client trust here.
 namespace DaedalusUnicornReward
 {
 enum class Outcome { Ignored, Duplicate, Progressed, Eligible };
+struct Snapshot
+{
+    unsigned Version = 1;
+    std::vector<std::string> BullIds;
+    std::string PackId;
+    bool Claimed = false;
+};
 
 class Gate
 {
@@ -45,6 +53,35 @@ public:
     const std::string& EncounterId() const { return PackId; }
     bool Eligible() const { return Quest.Complete(); }
     bool RewardClaimed() const { return Claimed; }
+    bool Pristine() const { return Bulls.empty() && PackId.empty() && !Claimed; }
+
+    Snapshot Export() const
+    {
+        Snapshot out;
+        out.BullIds.assign(Bulls.begin(), Bulls.end());
+        std::sort(out.BullIds.begin(), out.BullIds.end());
+        out.PackId = PackId;
+        out.Claimed = Claimed;
+        return out;
+    }
+
+    // Restore only into a fresh per-player gate. Build a candidate first so an
+    // invalid host record never partially changes active state.
+    bool Restore(const Snapshot& state)
+    {
+        if (!Pristine() || state.Version != 1 || state.BullIds.size() > RequiredBulls ||
+            (!state.PackId.empty() && !Identity(state.PackId))) return false;
+        Gate candidate;
+        for (const auto& bull : state.BullIds)
+        {
+            const auto result = candidate.RecordBullAtSea(bull, true, true);
+            if (result != Outcome::Progressed && result != Outcome::Eligible) return false;
+        }
+        if (!state.PackId.empty()) candidate.RecordPackEncounter(state.PackId, LegendaryPackSize, true);
+        if (state.Claimed && !candidate.ClaimReward()) return false;
+        *this = std::move(candidate);
+        return true;
+    }
 
     // One-shot signal for a host transaction, NOT an award implementation.
     // The host must persist this state with its reward grant before acknowledging.
