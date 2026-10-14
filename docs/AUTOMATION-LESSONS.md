@@ -529,3 +529,11 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+
+## Import editor layouts through the authoritative core, not a second grid validator (2026-10-13, Codex)
+Python normalizes tuples/provenance; Java RealmLayout validates districts/footprints/hub occupancy
+and RealmLayoutStore publishes snapshots. Keep identity-derived dev seeds explicit and stable,
+never treat them as mint randomness or overwrite existing terrain seed records. Publish an entire
+new candidate bundle, reload each file and record hashes. Editor capture counts are authoritative:
+WorldZero has8 multi-cell estates, not the prose estimate13. Live consumer integration remains separate.
