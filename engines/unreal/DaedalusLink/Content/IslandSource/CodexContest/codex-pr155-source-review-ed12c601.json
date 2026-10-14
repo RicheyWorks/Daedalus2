@@ -1,0 +1,33 @@
+{
+  "schema": "daedalus.reviewed-delivery-extension-compatibility.v1",
+  "stage": "source_compatible_with_completed_reuse_preflight_issue",
+  "pull_request": "https://github.com/RicheyWorks/Daedalus2/pull/155",
+  "head": "ed12c601f077791ad6ceff5b72c9179ea88b03ae",
+  "base": "0075e19f32fdc04c967653d0f2f6c9e23232a013",
+  "independent_source_reviewers": 2,
+  "source_pins_utf8_lf": {
+    "tools/unreal/codex_admitted_palette_assembly.py": {"bytes":16044,"sha256":"d50cb5958b7693bc87df17655b95c7b8572c4445c6ae0fb279d4f4270610f10d"},
+    "tools/unreal/codex_saved_asset_assembly.py": {"bytes":20380,"sha256":"d7bf218b11dead1375934aa1d38c81ca81ffd4484d8d9a5fd7c968733ccd9bea"}
+  },
+  "compatibility": {
+    "current_executor_matches_pr_base": true,
+    "aetherflow_list_result_handling_and_fallback_preserved": true,
+    "palette_names_and_hash_rules_match_current_helper": true,
+    "supported_retained_contracts": ["HeroR3","HeroR4","GardenGateR1","PowerUnit"],
+    "entry": "prepare_palette(plan,source_receipt,new_palette_journal,timeout=180) -> execute_plan(prepared_plan,new_world_journal)",
+    "journal_rule": "Use fresh separate palette/assembly journals; existing material assets may reuse; old component_palette_saved journal is not palette_saved"
+  },
+  "finding": {
+    "file": "tools/unreal/codex_admitted_palette_assembly.py",
+    "reuse_return_lines": [144,150],
+    "live_preflight_lines": [158,170],
+    "observation": "Completed palette journal returns before live PIE/map/bridge-idle/dirty preflight. Executor require_map checks map only before its spawn/folder/save path.",
+    "risk_not_observed_failure": "Unchanged disk witnesses cannot exclude unrelated unsaved in-memory edits or current PIE/job activity on completed-journal reuse.",
+    "requested_owner_fix": "Move common live preflight before completed-journal reuse return or enforce an equivalent common guard immediately before first executor mutation",
+    "reported_via_hub": [31154,31155]
+  },
+  "adoption": {"source_copied":false,"module_loaded":false,"production_run":false,"tests":false,"status":"pending owner correction and next suitable normal delivery"},
+  "unaffected_work": "Completed Aetherflow already has one confirmed final map save; other compatible ingestion is not blocked by this source finding",
+  "next_packet_limits": "Current reviewed retained voxel packets are already placed; do not replay to benchmark. Rack unit/vertex-colour input and remaining Aetherflow fish/water are outside this exact voxel contract.",
+  "rollback": "No adopted source to roll back; preserve current pushed executor and completed native receipts"
+}

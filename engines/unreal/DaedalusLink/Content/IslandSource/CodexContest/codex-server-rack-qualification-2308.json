@@ -1,0 +1,51 @@
+{
+  "schema": "daedalus.existing-static-candidate-qualification.v1",
+  "stage": "source_and_binary_inspected_not_queued",
+  "audit_provenance": "Independent read-only source/binary inspection by variant_visual_audit; no Blender/native process,tests or source mutation",
+  "source": {
+    "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-sims/Prop_Sims_Server_Rack.fbx",
+    "bytes": 16428,
+    "sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1",
+    "sidecar_bytes": 170,
+    "sidecar_sha256": "ea62d4112752108f28b1935584f8581bbfd55e253a3ba7858b2215f5062b29c8",
+    "reported_owner_team": "Claude",
+    "fbx_author_and_revision": "blank",
+    "fbx_creator": "Blender4.3.1",
+    "immutable_export_source_commit": "not bound in payload or sidecar"
+  },
+  "actual_binary_observations": {
+    "fbx_version": 7400,
+    "geometry_objects": 1,
+    "model_objects": 1,
+    "material_objects": 1,
+    "vertices": 116,
+    "quads": 87,
+    "triangles_when_quads_split": 174,
+    "raw_geometry_bounds": {"min": [-30,-20,0], "max": [30,30,180]},
+    "unit_scale_factor": 100.0,
+    "original_unit_scale_factor": 100.0,
+    "model_z_rotation_degrees_approximate": 180,
+    "local_and_geometric_scale": [1,1,1],
+    "translation_pivot_offsets": "zero/default",
+    "raw_full_bounds_bottom_centre": [0,5,0],
+    "material": "VoxelVertexColour; Phong; emissive factor0",
+    "vertex_colours": {"name":"Col","mapping":"ByPolygonVertex","reference":"IndexToDirect","rgba_entries":4,"indices":348},
+    "normals": true,
+    "uv_textures_deformers_animation_authored_collision": "none observed"
+  },
+  "sidecar_and_source_intent": {
+    "voxel_count": 477,
+    "voxel_cm": 10,
+    "pivot": "bottom-centre",
+    "app_label": "LoadBalancerPro",
+    "limits": "App label is metadata,not runtime functionality; regenerated Workbench sheet is not FBX visual/native acceptance"
+  },
+  "native": {"submitted":false,"saved_assets":0,"world_actors":0,"measured_native_bounds":null,"runtime_acceptance":"unverified"},
+  "pending_actions": [
+    "Establish explicit unit compensation from raw FBXUnitScaleFactor100 and intended centimetre recipe; raw60x50x180 extents are not established native centimetres",
+    "Preserve four source vertex colours through a verified actual import/material route; one opaque component colour cannot represent them",
+    "Bind a reviewed owned destination/admission/source contract and inspect the actual payload appearance before normal delivery",
+    "For a qualifying normal import,read native bounds/materials/output paths and confirm asset save/file bytes; do not infer app integration"
+  ],
+  "decision": "pending compatibility work,not denied or an uncertain dispatched mutation; no extra Claude ACK or permission gate"
+}
