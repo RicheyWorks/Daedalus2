@@ -1,0 +1,37 @@
+name: Listener ownership
+
+on:
+  pull_request:
+    paths:
+      - 'connectors/claude-unreal-connector/plugin/**'
+      - 'connectors/claude-unreal-connector/tests/**'
+      - '.github/workflows/listener-ownership.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'connectors/claude-unreal-connector/plugin/**'
+      - 'connectors/claude-unreal-connector/tests/**'
+      - '.github/workflows/listener-ownership.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  socket-policy:
+    name: Listener policy (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Mock policy order and standalone ephemeral sockets
+        run: python connectors/claude-unreal-connector/tests/listener_ownership_test.py
+      - name: Existing lifecycle regressions
+        run: python connectors/claude-unreal-connector/tests/bridge_lifecycle_test.py
+      - name: Compile plugin Python
+        run: python -m compileall -q connectors/claude-unreal-connector/plugin/ClaudeUnrealBridge/Content/Python

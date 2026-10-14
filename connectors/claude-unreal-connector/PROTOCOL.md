@@ -23,6 +23,11 @@ Editor. Any program can drive it; MCP is not required.
 `params.bridge_timeout` (seconds, default 1800) caps how long the bridge waits for the editor to run the
 command.
 
+Listener setup uses exclusive address ownership on Windows and normal address
+reuse on POSIX. A startup conflict fails instead of replacing an existing
+listener. Closing the listener alone does not guarantee immediate Windows rebind
+while accepted connections remain active; see [listener ownership](docs/LISTENER-OWNERSHIP.md).
+
 ## Commands
 
 `list_commands` returns every command with its description and parameters, including commands a project
