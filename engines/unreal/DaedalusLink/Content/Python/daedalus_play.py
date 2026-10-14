@@ -1486,7 +1486,118 @@ def scenario_bestiary(p):
     return {"checks": checks}
 
 
+TOUR_REALMS = ("WORLD-ZERO", "GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH")
+TOUR_STOPS = ("Mount", "Dock", "SubDock", "Gate", "Spawn")
+
+
+def _tour_stops(realm):
+    """[(name, actor)] the airship must dock at in this realm: the realm's markers (Dock_<realm> etc.), or for World
+    Zero its portals (Portal_WORLD-ZERO_<Dock|SubDock|East...>) since the hub has no TargetPoint markers."""
+    out = []
+    if realm == "WORLD-ZERO":
+        for a in _all(unreal.DaedalusRealmPortal):
+            l = a.get_actor_label()
+            if l.startswith("Portal_WORLD-ZERO_"):
+                out.append((l.split("_", 2)[2], a))
+    else:
+        want = {"%s_%s" % (s, realm): s for s in TOUR_STOPS}
+        for a in _all(unreal.TargetPoint):
+            l = a.get_actor_label()
+            if l in want:
+                out.append((want[l], a))
+    out.sort(key=lambda t: t[0])
+    return out
+
+
+def _fly_to(g, pc, at, max_frames=9000, arrive_cm=1200.0):
+    """Steer the mounted vehicle at a world point (flat), boosting, until within arrive_cm or max_frames. Yields.
+    Returns (frames, final flat distance)."""
+    n = 0
+    while n < max_frames:
+        here = g.get_actor_location()
+        dx, dy = at.x - here.x, at.y - here.y
+        d = math.hypot(dx, dy)
+        if d < arrive_cm:
+            break
+        pc.set_control_rotation(unreal.Rotator(0.0, math.degrees(math.atan2(dy, dx)), 0.0))
+        g.drive(1.0, 0.0, d > 3000.0)
+        n += 1
+        yield
+    g.drive(0.0, 0.0, False)
+    here = g.get_actor_location()
+    return n, math.hypot(at.x - here.x, at.y - here.y)
+
+
+def scenario_airship(p):
+    """The airship tour (Richey 2026-10-13 23:57: "once all the islands are done we must prove our flying air ship
+    can fly and dock everywhere and explore the whole map"): in every realm the hero calls the realm's mount, gets
+    on, climbs, flies to each marker (Mount pad, Dock, SubDock, Gate, Spawn) and settles onto it; in World Zero it
+    also flies one long leg out over the islands to district 33's centre and back. Portals are switched off for the
+    tour so a landing at a dock does not teleport the ship mid-flight. The receipt lists every landing with its
+    distance, height over ground and frames flown."""
+    import daedalus_land_grid as G
+    import daedalus_districts as D
+    h = hero()
+    pc = controller()
+    checks, landings = [], []
+    portals = _all(unreal.DaedalusRealmPortal)
+    for a in portals:
+        a.set_actor_enable_collision(False)
+    try:
+        for realm in TOUR_REALMS:
+            if h.realm_now() != realm:
+                r = h.switch_realm(realm.lower(), "gate", "")
+                yield from _frames(4)
+                checks.append(_check("%s: the hero arrives for the tour" % realm, h.realm_now() == realm, r))
+                if h.realm_now() != realm:
+                    continue
+            stops = _tour_stops(realm)
+            checks.append(_check("%s: tour stops are laid (%d)" % (realm, len(stops)), len(stops) >= 2, ", ".join(s for s, _ in stops)))
+            for b in ghosts():
+                b.destroy_actor()
+            g = h.spawn_vehicle()
+            yield from _frames(2)
+            if not g:
+                checks.append(_check("%s: the mount answers the call" % realm, False, "no vehicle"))
+                continue
+            on = h.interact()
+            yield from _frames(2)
+            st = g.mount_state()
+            checks.append(_check("%s: the hero is aboard %s" % (realm, st.split(" ")[0]), pc.get_controlled_pawn() == g, st))
+            g.lift(2500.0)
+            yield from _frames(30)
+            legs = [(name, a.get_actor_location()) for name, a in stops]
+            if realm == "WORLD-ZERO":
+                hub_cm = __import__("daedalus_realm_ground").ORIGINS["WORLD-ZERO"]
+                cx, cy = G.cell(D.district_cells(33)[55])
+                far = unreal.Vector(hub_cm[0] + (cx - G.HUB) * G.PITCH_M * 100.0, hub_cm[1] + (cy - G.HUB) * G.PITCH_M * 100.0, 0.0)
+                legs.append(("District_33", far))
+                legs.append(("Spawn", stops[0][1].get_actor_location() if stops else g.get_actor_location()))
+            for name, at in legs:
+                z0 = g.get_actor_location().z
+                frames, d = yield from _fly_to(g, pc, at)
+                g.lift(0.0)   # settle onto the pad
+                yield from _frames(40)
+                st = g.mount_state()
+                grounded = "grounded=1" in st
+                here = g.get_actor_location()
+                landings.append({"realm": realm, "stop": name, "dist_cm": round(d), "frames": frames, "z": round(here.z), "grounded": grounded})
+                checks.append(_check("%s: docked at %s" % (realm, name), d < 1500.0 and grounded, "d=%.0f frames=%d %s" % (d, frames, st)))
+                g.lift(2500.0)
+                yield from _frames(20)
+            g.dismount()
+            yield from _frames(2)
+            g.destroy_actor()
+    finally:
+        for a in portals:
+            a.set_actor_enable_collision(True)
+    docked = sum(1 for l in landings if l["dist_cm"] < 1500 and l["grounded"])
+    checks.append(_check("the airship docked everywhere: %d/%d landings" % (docked, len(landings)), landings and docked == len(landings), str(landings)[:900]))
+    return {"checks": checks, "landings": landings}
+
+
 SCENARIOS = {
+    "airship": scenario_airship,
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
     "ghost": scenario_ghost,
