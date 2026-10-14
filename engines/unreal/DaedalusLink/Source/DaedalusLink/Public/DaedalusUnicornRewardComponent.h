@@ -6,6 +6,7 @@
 #include "DaedalusUnicornRewardComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusUnicornRewardProgress, int32, BullsAtSea, bool, Eligible, bool, Claimed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusUnicornRecordDirty, int64, Revision);
 
 USTRUCT(BlueprintType)
 struct DAEDALUSLINK_API FDaedalusUnicornRewardRecord
@@ -13,6 +14,7 @@ struct DAEDALUSLINK_API FDaedalusUnicornRewardRecord
     GENERATED_BODY()
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") int32 Version = 1;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PlayerKey;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") int64 Revision = 0;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") TArray<FString> BullIds;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PackId;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") bool bClaimed = false;
@@ -47,6 +49,8 @@ public:
     bool RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record);
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     FDaedalusUnicornRewardRecord ExportHostRecord() const;
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    bool ConfirmProgressPersisted(const FString& ExpectedPlayerKey, int64 ExpectedRevision);
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_Progress, Category="Daedalus|Unicorn")
     int32 BullsAtSea = 0;
@@ -58,11 +62,15 @@ public:
     FString CommittedGrantReceiptId;
     UPROPERTY(BlueprintAssignable, Category="Daedalus|Unicorn")
     FDaedalusUnicornRewardProgress OnProgress;
+    UPROPERTY(BlueprintAssignable, Category="Daedalus|Unicorn") FDaedalusUnicornRecordDirty OnRecordDirty;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Unicorn") int64 RecordRevision = 0;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Unicorn") bool bPersistencePending = false;
 
 private:
     bool HasGameAuthority() const;
     bool CanRecord() const;
     void Synchronize();
+    void MarkRecordDirty();
     UFUNCTION() void OnRep_Progress();
     DaedalusUnicornReward::Gate Gate;
     int32 LastBroadcastBulls = -1;

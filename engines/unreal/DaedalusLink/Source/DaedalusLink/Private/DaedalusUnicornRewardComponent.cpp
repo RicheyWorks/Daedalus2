@@ -36,33 +36,36 @@ bool UDaedalusUnicornRewardComponent::InitializeNewHostRecord(const FString& Exp
     if (bHostRecordRestored) return false;
     if (!Gate.Pristine()) return false;
     bHostRecordRestored = true;
-    Synchronize();
+    MarkRecordDirty();
     return true;
 }
 
 bool UDaedalusUnicornRewardComponent::RecordBullAtSea(const FString& BullId, bool WasBurning, bool SeaArrivalVerified)
 {
-    if (!CanRecord()) return false;
+    if (!CanRecord() || RecordRevision == MAX_int64) return false;
     const auto Result = Gate.RecordBullAtSea(TCHAR_TO_UTF8(*BullId), WasBurning, SeaArrivalVerified);
-    Synchronize();
-    return Result == DaedalusUnicornReward::Outcome::Progressed || Result == DaedalusUnicornReward::Outcome::Eligible;
+    const bool Accepted = Result == DaedalusUnicornReward::Outcome::Progressed || Result == DaedalusUnicornReward::Outcome::Eligible;
+    if (Accepted) MarkRecordDirty();
+    return Accepted;
 }
 
 bool UDaedalusUnicornRewardComponent::RecordPackEncounter(const FString& PackId, int32 Members, bool EncounterVerified)
 {
-    if (!CanRecord() || Members != static_cast<int32>(DaedalusUnicornReward::Gate::LegendaryPackSize)) return false;
+    if (!CanRecord() || RecordRevision == MAX_int64 || Members != static_cast<int32>(DaedalusUnicornReward::Gate::LegendaryPackSize)) return false;
     const auto Result = Gate.RecordPackEncounter(TCHAR_TO_UTF8(*PackId), static_cast<unsigned>(Members), EncounterVerified);
-    Synchronize();
-    return Result == DaedalusUnicornReward::Outcome::Progressed || Result == DaedalusUnicornReward::Outcome::Eligible;
+    const bool Accepted = Result == DaedalusUnicornReward::Outcome::Progressed || Result == DaedalusUnicornReward::Outcome::Eligible;
+    if (Accepted) MarkRecordDirty();
+    return Accepted;
 }
 
 bool UDaedalusUnicornRewardComponent::ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId)
 {
     if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || GrantReceiptId.IsEmpty() || GrantReceiptId.Len() > 128) return false;
     if (Gate.RewardClaimed()) return CommittedGrantReceiptId == GrantReceiptId;
+    if (RecordRevision == MAX_int64) return false;
     if (!Gate.ClaimReward()) return false;
     CommittedGrantReceiptId = GrantReceiptId;
-    Synchronize();
+    MarkRecordDirty();
     return true;
 }
 
@@ -77,7 +80,7 @@ void UDaedalusUnicornRewardComponent::Synchronize()
 bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
 {
     if (!HasGameAuthority() || HostPlayerKey.IsEmpty() || !Record.bAvailable || Record.PlayerKey != HostPlayerKey || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
-        Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
+        Record.Revision < 0 || Record.Revision == MAX_int64 || Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
     DaedalusUnicornReward::Snapshot state;
     for (const auto& Id : Record.BullIds) state.BullIds.emplace_back(TCHAR_TO_UTF8(*Id));
     state.PackId = TCHAR_TO_UTF8(*Record.PackId);
@@ -85,6 +88,8 @@ bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRe
     if (!Gate.Restore(state)) return false;
     CommittedGrantReceiptId = Record.GrantReceiptId;
     bHostRecordRestored = true;
+    RecordRevision = Record.Revision;
+    bPersistencePending = false;
     Synchronize();
     return true;
 }
@@ -94,6 +99,7 @@ FDaedalusUnicornRewardRecord UDaedalusUnicornRewardComponent::ExportHostRecord()
     FDaedalusUnicornRewardRecord out;
     if (!CanRecord()) return out;
     out.PlayerKey = HostPlayerKey;
+    out.Revision = RecordRevision;
     const auto state = Gate.Export();
     for (const auto& Id : state.BullIds) out.BullIds.Add(UTF8_TO_TCHAR(Id.c_str()));
     out.PackId = UTF8_TO_TCHAR(state.PackId.c_str());
@@ -112,6 +118,21 @@ void UDaedalusUnicornRewardComponent::OnRep_Progress()
     OnProgress.Broadcast(BullsAtSea, bEligible, bClaimed);
 }
 
+void UDaedalusUnicornRewardComponent::MarkRecordDirty()
+{
+    ++RecordRevision;
+    bPersistencePending = true;
+    Synchronize();
+    OnRecordDirty.Broadcast(RecordRevision);
+}
+
+bool UDaedalusUnicornRewardComponent::ConfirmProgressPersisted(const FString& ExpectedPlayerKey, int64 ExpectedRevision)
+{
+    if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || ExpectedRevision != RecordRevision) return false;
+    bPersistencePending = false;
+    return true;
+}
+
 void UDaedalusUnicornRewardComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -119,4 +140,6 @@ void UDaedalusUnicornRewardComponent::GetLifetimeReplicatedProps(TArray<FLifetim
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, bEligible, COND_OwnerOnly);
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, bClaimed, COND_OwnerOnly);
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, CommittedGrantReceiptId, COND_OwnerOnly);
+    DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, RecordRevision, COND_OwnerOnly);
+    DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, bPersistencePending, COND_OwnerOnly);
 }

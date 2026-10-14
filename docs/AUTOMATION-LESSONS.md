@@ -901,3 +901,7 @@ Unicorncomponent requires a one-time authenticatedhost PlayerKey before acceptin
 ### Gate events until host persistence lookup finishes (2026-10-14)
 Binding a playerkey mustnot open eventrecording before savedstate isloaded. Unicorncomponent nowrequires successfulavailable-record restore or explicitInitializeNewHostRecord afterhost confirmedabsence; unavailable/defaultrecords refuse. NativeMSVC core compiledC++17 with exceptionsdisabled/W4/WX andpassed35identity/order/claim/restorechecks. This doesnot proveUHT/UEcomponent or in-worldeventwiring.
 
+
+### Reject stale quest persistence callbacks (2026-10-14)
+Unicornhostrecords carry monotonicrevision; acceptedstatechanges markpersistencepending andnotify OnRecordDirty afterprogresssynchronizes. ConfirmProgressPersisted requires exactplayer/currentrevision sooldercallback cannotclearnewerdirty state. Loadedrecords retainrevision and startclean. This is an acknowledgmenthook, notstorage oratomicgrantimplementation; UHT/runtime pending.
+
