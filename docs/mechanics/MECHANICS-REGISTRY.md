@@ -91,3 +91,19 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
 - `voxel_dragons.py`: 504 flying dragons (12 elements × 6 forms × 7 variants), rigged, hover/cruise/dive/breath
   clips. Element ↔ realm chemistry; dragons are raid sources, mounts when tamed, and the fairy form hatches from
   dragon eggs. Row WZ27. Architecture §14.11. Owner: Team Claude; extend the element/form tables, don't fork.
+
+## Reconciled from Ultra (buckwild-sol) owner-direction records — 17:00
+- **Living Island Defense** (`docs/mechanics/LIVING-ISLAND-DEFENSE.md`, `data/defense/living-island-defense-plan.json`,
+  Ultra branch `codex/living-island-defense`): the whole ecology fights zombie waves (carnivorous plants intercept,
+  bees warn/harass, trees barrier, animals guard/scout, aquatic life in connected water). Bodies: our `voxel_creatures`
+  (206 + 504 dragons) and `voxel_flora`; deployable units are ledger identities, not the drawn bodies.
+  **Seam closed**: `Ledger(tactical=True)` makes `zombie_wave` stage a `pending_wave` instead of settling FOOD loss +
+  `zombie_drop`; the tactical resolver calls `settle_wave(held)` once (test `TacticalWave`). Row WZ14 (zombie waves)
+  now has two branches: managed (default) and tactical (Ultra's resolver).
+- **All-life progression & minigames** (`docs/mechanics/LIFE-PROGRESSION-AND-MINIGAMES.md`,
+  `data/progression/life-progression-plan.json`, branch `codex/life-progression`): maturity / earned levels /
+  evolved forms / inherited genome. Our hooks: `voxel_flora` tree STAGES (Sapling→Ancient) are the maturity track for
+  plants; `voxel_eggs` hatch pools + `voxel_creatures` families are the breeding/genome inputs; dragon `spec()` fields
+  (element, form, variant) are the evolved-form axes. No XP curve chosen here (owner tuning stays null).
+- **Sky seed Farm** (Ultra, `tools/economy/island_farm.py`, `docs/mechanics/ISLAND-FARMING.md`): sits over the pinned
+  Colony Ledger with managed FOOD suppression; no overlap with ledger core — ACKed on the hub.

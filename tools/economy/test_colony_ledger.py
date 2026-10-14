@@ -118,5 +118,23 @@ class LedgerTests(unittest.TestCase):
         self.assertGreater(s["richey"], s["sol"])
 
 
+class TacticalWave(unittest.TestCase):
+    def test_tactical_wave_settles_once(self):
+        L = Ledger("WORLD-ZERO", seed=4, tactical=True)
+        L.claim("ann", 1)
+        p = L.plots[1]
+        p.store["grain"] = 100.0
+        L.rng.choice = lambda seq: "zombie_wave" if "zombie_wave" in seq else seq[0]
+        kind, detail = L.event(1)
+        self.assertEqual(kind, "zombie_wave")
+        self.assertTrue(L.pending_wave and p.store["grain"] == 100.0, detail)     # nothing settled yet
+        held = L.pending_wave["size"]                                               # the ecology held every zombie
+        L.settle_wave(held)
+        self.assertEqual(p.store["grain"], 100.0)
+        self.assertEqual(p.store.get("zombie_drop"), float(held))
+        self.assertIsNone(L.pending_wave)
+        self.assertEqual(L.settle_wave(3), "no wave pending")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -117,8 +117,10 @@ class Plot:
 
 
 class Ledger:
-    def __init__(self, realm="WORLD-ZERO", seed=1):
+    def __init__(self, realm="WORLD-ZERO", seed=1, tactical=False):
         self.realm = realm.upper()
+        self.tactical = tactical     # True: a Living-Island-Defense resolver settles zombie waves via settle_wave()
+        self.pending_wave = None
         self.rng = random.Random(seed * 7 + 3)
         self.plots = {}              # deed -> Plot
         self.prices = {it: FLOOR[family_of(it)] * 1.5 for it in catalog(self.realm)}
@@ -295,13 +297,14 @@ class Ledger:
         elif kind == "zombie_wave":
             wave = 1 + len([e for e in self.log if e[0] == "event" and e[2] == "zombie_wave"]) % 5
             size = 4 * wave + int(self.rng.random() * 4)
-            losses = max(0.0, size - 2.0 * p.defence)       # fences, towers, patrols and traps hold the line
-            for it in list(p.store):
-                if family_of(it) == "FOOD":
-                    p.store[it] *= max(0.0, 1.0 - 0.05 * losses)
-            p.hulks_after = None
-            detail = "wave %d: %d of %s hit deed %d; defence %d held %d" % (wave, size, "/".join(ZOMBIE_WAVE[wave]), deed, p.defence, min(size, 2 * p.defence))
-            p.add("zombie_drop", float(min(size, 2 * p.defence)))     # fallen zombies drop salvage the smith can use
+            self.pending_wave = {"deed": deed, "wave": wave, "size": size, "types": ZOMBIE_WAVE[wave]}
+            if self.tactical:
+                # Living Island Defense (Ultra, docs/mechanics/LIVING-ISLAND-DEFENSE.md): a tactical resolver fights the
+                # wave with the island's ecology and calls settle_wave(held) itself — no managed loss/drop here, so the
+                # outcome settles exactly once.
+                detail = "wave %d: %d of %s approach deed %d — tactical defence pending" % (wave, size, "/".join(ZOMBIE_WAVE[wave]), deed)
+            else:
+                detail = self.settle_wave(min(size, 2 * p.defence))    # managed branch: fences/towers/patrols/traps
         elif kind == "festival":
             fam = self.rng.choice(FAMILIES)
             for it in self.prices:
@@ -310,6 +313,22 @@ class Ledger:
             detail = "festival doubles demand for %s" % fam
         self.log.append(("event", round_no, kind, detail))
         return (kind, detail)
+
+    def settle_wave(self, held):
+        """Settle the pending zombie wave once: `held` zombies fell (fences, patrols, carnivorous plants, bees,
+        dragons… whoever fought), the rest get at the FOOD stores; the fallen drop salvage. Returns the log detail."""
+        w = self.pending_wave
+        if not w:
+            return "no wave pending"
+        p = self.plots[w["deed"]]
+        held = int(max(0, min(w["size"], held)))
+        losses = float(w["size"] - held)
+        for it in list(p.store):
+            if family_of(it) == "FOOD":
+                p.store[it] *= max(0.0, 1.0 - 0.05 * losses)
+        p.add("zombie_drop", float(held))
+        self.pending_wave = None
+        return "wave %d: %d of %s hit deed %d; %d held, %d got through" % (w["wave"], w["size"], "/".join(w["types"]), w["deed"], held, int(losses))
 
     # ---- Animal Crossing: the day book ------------------------------------------------------------------------
     def day_book(self, deed, day, hour, ecology=None):
