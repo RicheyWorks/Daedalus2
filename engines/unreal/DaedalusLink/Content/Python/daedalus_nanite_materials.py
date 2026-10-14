@@ -106,10 +106,12 @@ def steps(chunk=25, save_every=150, limit=None):
     book = _ledger()
     moved = 0
     pending_pkgs = []
-    while True:
-        todo = _engine_bound()[:int(chunk)]
-        if not todo or (limit is not None and moved >= limit):
-            break
+    queue = _engine_bound()            # scanned ONCE: rescanning 13k assets per chunk cost 10 s a chunk (22:50)
+    if limit is not None:
+        queue = queue[:int(limit)]
+    total = len(queue)
+    while queue:
+        todo, queue = queue[:int(chunk)], queue[int(chunk):]
         pairs = []
         for a in todo:
             mi = a.get_asset()
@@ -126,7 +128,7 @@ def steps(chunk=25, save_every=150, limit=None):
         if len(pending_pkgs) >= save_every:
             unreal.EditorLoadingAndSavingUtils.save_packages(pending_pkgs, only_dirty=True)
             pending_pkgs = []
-        yield "moved=%d left=%d" % (moved, len(_engine_bound()))
+        yield "moved=%d of %d" % (moved, total)
     if pending_pkgs:
         unreal.EditorLoadingAndSavingUtils.save_packages(pending_pkgs, only_dirty=True)
         yield "saved tail"
