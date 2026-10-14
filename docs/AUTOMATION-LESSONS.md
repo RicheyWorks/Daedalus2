@@ -558,3 +558,12 @@ same-directory .tmp rename. Native fixtures cover failures without launching any
 Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
 abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
 the blocked-receipt regression now runs with strict warnings to cover that exact failure.
+
+
+## Cover preparation failures before the build attempt loop (2026-10-13, Codex)
+A catch around setup-unreal alone misses config/preflight preparation exceptions, leaving
+pollers with no terminal marker. Wrap the complete Run preparation/body, default to failure,
+publish completion after exceptions, and return its code. Stop on failed git pull before
+config changes/build; do not perform an unchecked second pull immediately before setup.
+Copied-harness fixtures stub git and obstruct Config: both publish done1 without entering
+setup. A wrapper must explicitly exit LASTEXITCODE to preserve a nested PowerShell script's code.

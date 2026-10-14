@@ -12,7 +12,7 @@ on:
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match approved cabinet and harness dependency stacks as well as main.
-    branches: [ main, codex/realm-production-queue, codex/pc-job-exit-status, codex/pc-job-launch-receipt, codex/unreal-build-launch-identity ]
+    branches: [ main, codex/realm-production-queue, codex/pc-job-exit-status, codex/pc-job-launch-receipt, codex/unreal-build-launch-identity, codex/unreal-build-wait-status ]
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
