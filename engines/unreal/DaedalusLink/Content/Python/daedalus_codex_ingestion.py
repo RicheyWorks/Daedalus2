@@ -24,6 +24,20 @@ OWNED_ROOT = "/Game/Daedalus/Art/Islands/CodexContest"
 MAX_BATCH = 3
 
 
+def _require_manifest(expected, observed, stage):
+    if expected == observed:
+        return
+    changes = []
+    def compare(left, right, path):
+        if isinstance(left, dict) and isinstance(right, dict):
+            for key in sorted(set(left) | set(right)):
+                compare(left.get(key), right.get(key), path + "/" + key)
+        elif left != right and len(changes) < 32:
+            changes.append({"field": path, "expected": left, "observed": right})
+    compare(expected, observed, "")
+    raise RuntimeError(stage + "; manifest changes=" + json.dumps(changes, sort_keys=True))
+
+
 def _load_importer(path, expected_sha256):
     path = Path(path).resolve()
     if path.name != "daedalus_codex_prepared_assets.py" or not re.fullmatch("[0-9a-f]{64}", expected_sha256):
@@ -157,8 +171,8 @@ def import_steps(manifest_path, asset_names, importer_file, expected_importer_sh
             if deadline_epoch is not None and time.time() >= deadline_epoch - 90:
                 return {"state": "window_paused", "remaining_from": name}
             entry, manifest = by_name[name], manifests[name]
-            if _manifest(entry, source_manifest, native, namespace, dependencies) != manifest:
-                raise RuntimeError("admitted source/settings/dependencies changed between editor ticks; no item started")
+            _require_manifest(manifest, _manifest(entry, source_manifest, native, namespace, dependencies),
+                              "admitted source/settings/dependencies changed between editor ticks; no item started")
             key = receipts.manifest_key(manifest)
             destination = namespace + "/" + key[:24]
             receipt_path = root / "receipts" / (key[:24] + ".json")
@@ -178,8 +192,8 @@ def import_steps(manifest_path, asset_names, importer_file, expected_importer_sh
                     and receipts.fingerprint(_file(path)) == witness)):
                 if not _verify_saved(native, entry, previous, dirty, destination):
                     raise RuntimeError("saved metadata/material/geometry changed; no automatic overwrite")
-                if _manifest(entry, source_manifest, native, namespace, dependencies) != manifest:
-                    raise RuntimeError("source/dependencies changed while verifying an unchanged skip")
+                _require_manifest(manifest, _manifest(entry, source_manifest, native, namespace, dependencies),
+                                  "source/dependencies changed while verifying an unchanged skip")
                 yield {"name": name, "state": "saved", "unchanged_skipped": True,
                        "receipt": str(receipt_path), "assets": previous["assets"]}
                 continue
