@@ -62,3 +62,12 @@
 - Mesh chunks in local coordinates and use double component offsets. This preserves local geometry at distant plots and avoids global signed mesher boundary arithmetic.
 - Empty data still has a revision. Persist the explicit empty chunk rather than dropping it from the snapshot, or a restarted server can send an older revision that native stale-update guards refuse. Store replacements now reject older or same-revision conflicting payloads.
 - Verify the boundary with a separate Java writer, packaged server reader and native scene consumer. The private fixture proves a persisted clear removes old geometry; NullRHI geometry/collision flags are distinct from rendered appearance and physical walking acceptance.
+
+### Ocean art and rendered inspection
+- Use explicit UTF-8 and LF for generated cross-language tables. Windows default encoding changed a source hash even when palette semantics stayed the same.
+- Unreal single-input material nodes can expose an unnamed pin. Check every material connection and compilation result rather than treating a saved asset as a compiled material.
+- Rescan the plugin asset registry before repeat commandlet imports. Mark lights and inspection backdrop components movable before changing their transform or mesh.
+- Hide the default spectator pawn when capturing through a staged camera; otherwise its sphere can obscure the artwork.
+- Inclusive voxel coordinates describe occupied cells: x=-6..6 spans 13 metres and has centre x=0.5. Fit decorative meshes to those physical extents without silently changing collision.
+- Blender tessellation indices can vary between equivalent exports. Freeze accepted GLB bytes when adding unrelated assets and record their source hashes instead of claiming byte-identical regeneration.
+- A rendered inspection proves appearance in that private scene. It does not establish controls, collision fitting, cross-realm loading, cooking or shared-world acceptance.
