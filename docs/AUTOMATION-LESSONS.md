@@ -912,3 +912,42 @@ Rules that follow:
    proof path first so the receipt is ready the moment someone else flips the switch.
 6. Lesson for the harness: write a "setup owner" column into the connector registry row — which bot's client can
    legally perform each setup step — so the first request goes to the right bot instead of discovering it by refusal.
+
+## 2026-10-14 01:10 — first hour with the Epic Unreal MCP connector: what it changed and what the harness needs next
+
+Richey: "poot's job is to work on the harness... we need data and ideas how to upgrade for your needs." This entry
+is the data; the requests go to Poot on the hub (topic harness-needs) and are repeated here so they are not lost.
+
+Measured in the first hour (01:07-01:10):
+- Native tool list: 3 meta-tools, 25 toolsets, ~400 tools; every tool carries an input schema, so the API-guessing
+  that cost five AttributeErrors last night is gone — read describe_toolset, call once.
+- find_actors(name, tag) returned all 100 World Zero district actors in 0.4 s; the same scan through the Python
+  bridge is a full get_all_level_actors walk (~23k actors, ~0.6 s) plus our own filtering.
+- SetCameraTransform + bridge viewport_screenshot: a 12 km top-down proof of the 10k island grid in two calls.
+- CaptureViewport (the annotated one: grid + actor labels) returned a PNG the stdio proxy could not pass — the
+  editor closed the connection (WinError 10054). The editor itself was fine. Large replies are the proxy's limit.
+- Transport chain is Claude → desktop app → tools/unreal_mcp/stdio_proxy.py → 127.0.0.1:8000. Adding the server
+  took one config line plus an app restart; the app only speaks stdio to local servers.
+- The connector does not replace: budgeted daedalus.steps for bulk laying (9,002 plots in 119 s), the pc-job runner
+  for builds, or the hub lock. It replaces: scene queries, camera, PIE start/stop, asset inspection, automation
+  tests, logs/cvars, Sequencer.
+
+Harness requests to Poot (owner of the harness), in priority order:
+H1. Proxy response size: stream or chunk large tool replies (CaptureViewport PNG ~1 MB base64). Options: raise the
+    HTTP read/response limits on both sides, or have the proxy write the image to %TEMP% and return a path — the
+    bridge's viewport_screenshot already does this and it works.
+H2. One bridge command "daedalus.mcp_status": server listening? session id? toolset count? last call time — so the
+    doctor prints MCP READY/DOWN beside the bridge line and no one has to probe port 8000 by hand again.
+H3. Auto-start policy: bAutoStartServer stays off (Poot's choice, agreed) — then unreal-job.ps1 must run
+    ModelContextProtocol.StartServer after every editor relaunch, else each rebuild silently loses the connector.
+H4. A setup-owner column in the ARCHITECTURE.md registry row per connector step (enable plugin / start server /
+    client config / verify): which bot's client is allowed to do it. Would have saved 25 minutes tonight.
+H5. PIE through the connector: StartPIE(bSimulate, playMode, startTransform, warmupSeconds) completes after
+    BeginPlay — our daedalus_play scenarios should be callable from a native tool so the harness can run them
+    without the bridge's 60 s execute_python cutoff. Ask: expose "daedalus.play_scenario <name>" as a registered
+    toolset function (C++ UToolset) or as an AutomationTest so AutomationTestToolset can run and report them.
+H6. Lock awareness: the connector bypasses the hub lock (any client can mutate). Rule for all bots: mutating calls
+    (add_to_scene, remove_from_scene, set_properties, save) only while holding `unreal`; read-only calls any time.
+    Poot: add this to the pinned POD checklist.
+H7. Data the harness should record per connector call for tuning: tool name, ms, reply bytes, error. A line per
+    call in link/mcp-calls.jsonl from the proxy is a 10-line change and gives us the throughput numbers to argue from.
