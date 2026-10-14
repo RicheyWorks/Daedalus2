@@ -21,14 +21,26 @@ enum class Result { Ignored, Duplicate, Progressed, Completed, CapacityReached }
 class Progress
 {
 public:
+    // Exceptions are off in Unreal game targets (preflight P8): a bad step list leaves the quest empty and
+    // Valid() false, and Why() says what was wrong.
     explicit Progress(std::vector<Step> steps) : Steps(std::move(steps))
     {
         if (Steps.empty() || Steps.size() > 32)
-            throw std::invalid_argument("Quest needs one to thirty-two steps");
+        {
+            Invalid = "Quest needs one to thirty-two steps";
+            Steps.clear();
+            return;
+        }
         for (const auto& s : Steps)
             if (s.Type.empty() || s.Target.empty() || s.Required == 0)
-                throw std::invalid_argument("Quest step needs type, target and positive count");
+            {
+                Invalid = "Quest step needs type, target and positive count";
+                Steps.clear();
+                return;
+            }
     }
+    bool Valid() const { return Invalid.empty(); }
+    const std::string& Why() const { return Invalid; }
 
     Result Apply(const std::string& eventId, const std::string& type,
                  const std::string& target, unsigned amount = 1)
@@ -59,6 +71,7 @@ public:
     }
 private:
     std::vector<Step> Steps;
+    std::string Invalid;
     std::unordered_set<std::string> Seen;
     std::size_t Current = 0;
     unsigned Count = 0;

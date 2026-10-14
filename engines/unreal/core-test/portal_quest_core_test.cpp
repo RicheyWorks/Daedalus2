@@ -30,7 +30,7 @@ int main()
     CHECK(bounded.StepCount() == 512 && !bounded.Complete());
     CHECK(bounded.Apply("0", "collect", "supplies") == Result::Duplicate);
     bool rejected=false;
-    try { Progress invalid({}); } catch (const std::invalid_argument&) { rejected=true; }
+    { Progress invalid({}); rejected = !invalid.Valid() && !invalid.Why().empty(); }
     CHECK(rejected);
     std::cout << "PORTAL_QUEST_PASS " << checks << " checks\n";
 }
