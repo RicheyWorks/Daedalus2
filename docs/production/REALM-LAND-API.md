@@ -56,6 +56,20 @@ Use revision to replace a cached district consistently; do not combine districts
 revisions into an authoritative allocation view. The API does not yet provide streaming push,
 editor import, a wallet ownership check, mint bundles or a distributed authority service.
 
+## Validation, 2026-10-13
+
+Full server reactor verify passes in 170 seconds: 731 core, 26 plugin API, 8 wallet, 33 plugin
+runtime and 805 server tests; coverage and SpotBugs checks pass. Six new API tests cover
+district partitioning, exact int64 seed strings, disabled/missing/corrupt stores, identity checks,
+and actual loopback production-JWT HTTP across a full server restart. HTTP assertions include
+an estate move with unchanged identity, per-subject quota isolation, 401/400/404/429/503 responses
+and corrupt-file error redaction. This is local API evidence; shared Unreal consumption and
+production deployment are not established. `realm-land-api-proof.json` records source/log hashes.
+
+The workbook adds LAND-GRID, LAND-STORE and LAND-API scoped rows and SYS02–SYS04 mechanics,
+preserving the earlier asset/production records. Its 31 verified rows and five pending checks
+are verification scopes, not 31 shipped realms or a complete project acceptance count.
+
 ## Integration lesson
 
 A JSON number cannot safely carry every procedural int64 seed through Unreal's double-backed

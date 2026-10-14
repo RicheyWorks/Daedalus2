@@ -1,0 +1,28 @@
+{
+  "source_head": "28118e8bcfe0d01464345446ddd88d67d7c9f966",
+  "source_sha256": {
+    "daedalus-server/src/main/java/com/daedalus/server/controller/RealmLandController.java": "f7f9d9f2952576ddf2e3ad4454d5480f4ef1c179828ad64bb8e2c89e276b20ac",
+    "daedalus-server/src/main/java/com/daedalus/server/service/RealmLandService.java": "4bd9970bbe201dcdb39206a434511627368f0af6aa74f108a4df51cae4533f14",
+    "daedalus-server/src/main/java/com/daedalus/server/config/ProdSecurityConfig.java": "fc6e0521a548a7687ae3f00c587497afd9bf017fa5ffc6225858f453912348cc",
+    "daedalus-server/src/test/java/com/daedalus/server/controller/RealmLandControllerTest.java": "c07a648efaed1018ce38759ca3e7c3e21293f6f8ee2180c14186232b939f79da",
+    "daedalus-server/src/test/java/com/daedalus/server/service/RealmLandServiceTest.java": "90741ac72a37138f19a79ab5e516721a34be4c943bf36812adb79c4d78372a38",
+    "daedalus-server/src/test/java/com/daedalus/server/service/RealmLandHttpRestartTest.java": "1cb7bad39bc512b7678f85a80e7fe60a77dcbc9f86496930417813849ac3d95b",
+    "daedalus-server/src/test/java/com/daedalus/server/config/ProdAuthPostureTest.java": "459b08614030d205440a6e76c67efe8f027d47437fc722d39c3c409f9ea359ce",
+    "daedalus-server/src/main/resources/application.yml": "b5a7089047c53b364ee0aa3ab909e33737cc8ad04307b21bb9205c857dbebaf7"
+  },
+  "scope": "Single-server JWT district reads, restart, stable identity after move, quotas and corrupt-file refusal. No Unreal import, ownership, mint or deployment proof.",
+  "verify": {
+    "seconds": 170.0,
+    "test_summary_counts": [
+      731,
+      26,
+      8,
+      33,
+      805
+    ],
+    "log_sha256": "5fbc05de5a04436525ba2b702f77790dbf0b001e069fa40cb1bf0dc81d16ad61"
+  },
+  "http_restart_report_sha256": "009a74ba6fdd52409f55028b461b3ee47378d6ba3f555425cc456a87d96eb4bc",
+  "district_row_bound": 100,
+  "seed_encoding": "signed decimal int64 string"
+}
