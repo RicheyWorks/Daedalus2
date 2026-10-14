@@ -132,8 +132,12 @@ def main(argv):
         return 1
     say("bridge up: " + hot_copy())
 
-    # lay what is new
+    # lay what is new: first any cast folders waiting for import (one GLB per tick), then the cast, portals, districts
     lay = []
+    for folder in [a for a in argv[argv.index("--import") + 1:] if "--import" in argv and not a.startswith("--")][:8]:
+        out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
+        last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
+        lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
     r = steps("__import__('daedalus_realm_ground').lay_cast_steps(['WORLD-ZERO'] + %r)" % realms, "lay_cast")
     lay.append("cast: %s %s" % (r.get("result"), (r.get("error") or "")[-200:]))
     r = steps("__import__('daedalus_realm_ground').lay_portals_steps(['WORLD-ZERO'] + %r)" % realms, "lay_portals")
