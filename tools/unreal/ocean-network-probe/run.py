@@ -7,7 +7,7 @@ import socket
 import subprocess
 import time
 
-def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=False, dock=False, roundtrip=False, exit_key=False):
+def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=False, dock=False, roundtrip=False, exit_key=False, hull_profile=False):
     mode='submarine' if dive else 'boat'
     output.mkdir(parents=True,exist_ok=True)
     server_log=output/(mode+'-server.log');client_log=output/(mode+'-client.log')
@@ -23,6 +23,7 @@ def run(engine, project, output, dive, non_owner=False, keyboard=False, gamepad=
     if dock: common.append('-ProbeDock')
     if roundtrip: common.append('-ProbeRoundTrip')
     if exit_key: common.append('-ProbeExitKey')
+    if hull_profile: common.append('-ProbeHullProfile')
     if dock: common.append('-ExecCmds=daedalus.Server http://127.0.0.1:9')
     flags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess,'CREATE_NO_WINDOW') else 0
     children=[];started=time.monotonic()
@@ -87,6 +88,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('engine',type=Path)
     parser.add_argument('project',type=Path);parser.add_argument('output',type=Path)
     parser.add_argument('--non-owner',action='store_true')
+    parser.add_argument('--hull-profile',action='store_true')
     inputs=parser.add_mutually_exclusive_group()
     inputs.add_argument('--keyboard',action='store_true');inputs.add_argument('--gamepad',action='store_true')
     inputs.add_argument('--dock',action='store_true')
@@ -95,7 +97,8 @@ if __name__=='__main__':
     if args.exit_key: args.roundtrip=True
     if args.roundtrip: args.dock=True
     if args.dock and args.non_owner: parser.error('Dock probe currently supports one owner client')
-    results=[run(args.engine,args.project,args.output,dive,args.non_owner,args.keyboard,args.gamepad,args.dock,args.roundtrip,args.exit_key) for dive in [False,True]]
+    if args.hull_profile and args.dock: parser.error('Hull-profile probe uses direct vessel possession')
+    results=[run(args.engine,args.project,args.output,dive,args.non_owner,args.keyboard,args.gamepad,args.dock,args.roundtrip,args.exit_key,args.hull_profile) for dive in [False,True]]
     for row in results:
         row['server_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-server.log')).read_bytes()).hexdigest()
         row['client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-client.log')).read_bytes()).hexdigest()
@@ -104,6 +107,11 @@ if __name__=='__main__':
         row['remote_dock_boarding_verified']=args.dock
         row['remote_dock_roundtrip_verified']=args.roundtrip
         row['exit_key_dispatch_verified']=args.exit_key
+        if args.hull_profile:
+            text=(args.output/(row['mode']+'-client.log')).read_text(errors='replace')
+            assert 'OCEAN_HULL_REPLICATED' in text and 'client_resize_refused=1' in text
+            assert 'OCEAN_CLIENT_HULL_MUTATION' not in text
+            row['hull_profile_replication_verified']=True
         if args.non_owner:
             row['non_owner_refused']=True
             row['foreign_client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-foreign-client.log')).read_bytes()).hexdigest()

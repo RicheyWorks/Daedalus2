@@ -11,6 +11,13 @@ use a full-plugin host from full_plugin_host.py rather than minimal source stubs
 The runner checks the original production manifest after testing and records the
 two declared fixture additions separately.
 
+Use `--hull-profile` for the original harbor body profiles: skiff half extents
+235/95/65 cm and submarine 280/115/90 cm. The server configures each unoccupied
+vessel before possession. The remote client waits for both the replicated value
+and actual box extent, then verifies that a local resize is refused. This mode
+does not combine with `--dock`; it proves replicated hull configuration plus
+remote helm movement, not dock travel or rendered mesh alignment.
+
 Run the bundled Python runner with UnrealEditor-Cmd.exe, the scratch .uproject
 and a fresh output directory as its three positional arguments. It starts a
 127.0.0.1-bound server on an available UDP port, waits for its listener, then
