@@ -1162,6 +1162,9 @@ def scenario_realm_switch(p):
     before = int(_kv(start).get("switches", "0")) if "switches=" in start else 0   # the session persists across runs
     g = h.switch_realm("gallery-city", "gate", "")
     cat_after_gate = h.inventory_catalog_name()
+    landed = str(h.get_editor_property("landed_at"))
+    gate = next((a for a in unreal.GameplayStatics.get_all_actors_of_class(world(), unreal.TargetPoint) if a.get_actor_label() == "Gate_GALLERY-CITY"), None)
+    near_gate = gate is not None and (h.get_actor_location() - gate.get_actor_location()).length() < 600.0
     bad = h.switch_realm("parcels", "gate", "")
     po = h.switch_realm("portal", "portal", "")
     yield from _frames(3)
@@ -1188,6 +1191,7 @@ def scenario_realm_switch(p):
         saved = "no file: %s" % e
     return {"checks": [
         _check("a gate reaches Gallery City and its catalog follows", g.startswith("ok WORLD-ZERO -> GALLERY-CITY") and cat_after_gate == "gallery-city", g + " " + cat_after_gate),
+        _check("the hero lands at the realm's gate marker (daedalus_realm_ground)", landed == "Gate_GALLERY-CITY" and near_gate, "landed=%s near=%s" % (landed, near_gate)),
         _check("a gate between two realms is refused", bad.startswith("refused"), bad),
         _check("the portal opens the 8-bit realm", po.startswith("ok GALLERY-CITY -> PORTAL") and in_portal, po),
         _check("and leads back where you came from", back.startswith("ok PORTAL -> GALLERY-CITY") and out, back),

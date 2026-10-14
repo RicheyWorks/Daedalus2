@@ -197,6 +197,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") FString Inject(const FString& Action, FVector Value, float Seconds);
 	/** Put the hero at a world point (feet on the ground when Snap), facing Yaw. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") bool Teleport(FVector Where, float Yaw, bool bSnap);
+	/** Where the last realm switch put the hero (a marker's label), empty when the realm has no markers. */
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realm") FString LandedAt;
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString LandAt(const FString& Realm, const FString& Hint);
 	/** Point the camera: yaw/pitch in degrees (the control rotation). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") void Look(float Yaw, float Pitch);
 	/** One line of everything a tester wants: position, yaw, health/shield, weapon, realm, speed, what is open. */

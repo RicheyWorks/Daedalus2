@@ -2168,7 +2168,7 @@ FString ADaedalusHero::RealmNow() const
 
 FString ADaedalusHero::RealmSessionState() const
 {
-	return RealmSession.IsValid() ? FString(UTF8_TO_TCHAR(RealmSession->Session.Describe().c_str())) : TEXT("realm=") + RealmNow() + TEXT(" (not started)");
+	return (RealmSession.IsValid() ? FString(UTF8_TO_TCHAR(RealmSession->Session.Describe().c_str())) : TEXT("realm=") + RealmNow() + TEXT(" (not started)")) + TEXT(" landed=") + (LandedAt.IsEmpty() ? TEXT("-") : LandedAt);
 }
 
 FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, const FString& Detail)
@@ -2191,9 +2191,32 @@ FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, co
 	OnRealmChange.Broadcast(From, Dest, ViaStr, Hint);
 	// Enter: the 8-bit realm opens over the world; the Ocean and the gated realms are their hosts' to stream.
 	if (Dest == TEXT("PORTAL")) EnterRealm(static_cast<int64>(GetTypeHash(From)) % 1000000);
+	else LandedAt = LandAt(Dest, Hint);
 	SaveProgress();
 	UE_LOG(LogDaedalus, Log, TEXT("Realm %s -> %s by %s at %s"), *From, *Dest, *ViaStr, *Hint);
 	return FString::Printf(TEXT("ok %s -> %s via=%s hint=%s"), *From, *Dest, *ViaStr, *Hint);
+}
+
+/** Stand at the realm's marker for the hint (daedalus_realm_ground lays Spawn/Gate/Dock/SubDock/Mount_<REALM> as
+ *  TargetPoints tagged "Realm:<REALM>" + the marker name): gate:* -> Gate, dock:*/shore -> Dock, else Spawn. A realm
+ *  without markers (World Zero's gates are its own TargetPoints) leaves the hero where it stands. */
+FString ADaedalusHero::LandAt(const FString& Realm, const FString& Hint)
+{
+	UWorld* W = GetWorld();
+	if (!W) return TEXT("");
+	const FName Want = Hint.StartsWith(TEXT("gate")) ? FName("Gate") : (Hint.StartsWith(TEXT("dock")) || Hint == TEXT("shore")) ? FName("Dock") : FName("Spawn");
+	const FName RealmTag(*(TEXT("Realm:") + Realm));
+	AActor* Fallback = nullptr;
+	for (TActorIterator<AActor> It(W); It; ++It)
+	{
+		if (!It->ActorHasTag(RealmTag)) continue;
+		if (It->ActorHasTag(Want)) { Fallback = *It; break; }
+		if (!Fallback && It->ActorHasTag(FName("Spawn"))) Fallback = *It;
+	}
+	if (!Fallback) return TEXT("");
+	const FVector At = Fallback->GetActorLocation();
+	Teleport(At, Fallback->GetActorRotation().Yaw, true);
+	return Fallback->GetActorNameOrLabel();
 }
 
 FString ADaedalusHero::MenuInput(const FString& Command)
