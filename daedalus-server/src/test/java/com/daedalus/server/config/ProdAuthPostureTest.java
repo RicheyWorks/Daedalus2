@@ -102,6 +102,8 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/ocean/v1", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/realms", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/ocean/v1/chunk", Posture.AUTHENTICATED);
+        EXPECTED.put("GET /api/v1/host/realm-records/" + ID + "/" + ID, Posture.AUTHENTICATED);
+        EXPECTED.put("PUT /api/v1/host/realm-records/" + ID + "/" + ID, Posture.AUTHENTICATED);
         // --- deliberately public ---
         EXPECTED.put("POST /api/v1/auth/login", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/auth/wallet/config", Posture.PUBLIC);

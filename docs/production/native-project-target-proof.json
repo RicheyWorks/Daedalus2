@@ -1,0 +1,33 @@
+{
+  "utc": "2026-10-14T14:59:45.675417+00:00",
+  "pluginHead": "b1a33bcf05daf8a4151c4aec9219c3d5d59f8cae",
+  "pluginFiles": 198,
+  "generatedHostFiles": {
+    "Source/HostProject.Target.cs": "c66ca9c8da334c558d752db4a57b0a8571ea702a97d3bf44c0092490945b88a2",
+    "Source/HostProjectEditor.Target.cs": "8b258a08f5df1554fc2331a69bf2670a8f4bf253e3e344421e72d856efc82308",
+    "Source/HostProject/HostProject.Build.cs": "d6ffd123de8731cdf0215df94ab88e4700bf1791fff92dad06be79671cce29d1",
+    "Source/HostProject/HostProject.cpp": "d705be8c84f82528d47889759ab7151903eca50180a7c4abef8b5fb70798457e"
+  },
+  "helperSHA256": "292e443ac89931ec01124cc5084c1e2ce4d30ab61afca2a75ebf443ac137dfb8",
+  "target": "HostProjectEditor Win64 Development",
+  "exitCode": 0,
+  "actions": 66,
+  "seconds": 296.3,
+  "allInputHashesRechecked": true,
+  "artifacts": {
+    "Binaries/Win64/HostProjectEditor.target": {
+      "bytes": 945746,
+      "sha256": "263e1a4b1bda0913150823133956c1d3a61259c67d778c18c3a7fe2875d831d1"
+    },
+    "Binaries/Win64/UnrealEditor-HostProject.dll": {
+      "bytes": 50688,
+      "sha256": "88efdb8bc70c63b6dadead565c664a73c4679e9104bbeeed4e9ebe54eb10ec11"
+    },
+    "Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.dll": {
+      "bytes": 8273920,
+      "sha256": "45421a6527c4d3591c2acbfd91aaac2ceafe0b9abee721f82bee4f0374d43e0d"
+    }
+  },
+  "gameTargetBuilt": false,
+  "scope": "Full isolated editor project compile/link with explicit project receipt and current production code; no install/runtime/cook/Game-target proof"
+}

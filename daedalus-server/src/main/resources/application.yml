@@ -184,6 +184,11 @@ daedalus:
   session:
     max-sessions: ${DAEDALUS_SESSION_MAX:10000}
     idle-ttl: ${DAEDALUS_SESSION_IDLE_TTL:2h}
+  # Opt-in opaque native snapshots. Trusted host subjects only; never player inventory authority.
+  realm-record:
+    enabled: ${DAEDALUS_REALM_RECORD_ENABLED:false}
+    directory: ${DAEDALUS_REALM_RECORD_DIRECTORY:}
+    host-subjects: ${DAEDALUS_REALM_RECORD_HOST_SUBJECTS:}
   # ----- Leaderboard -----
   # Entries retained per board (global, per-generator, per-maze, per-stage). Applies to both
   # backends: the in-memory one trims on write, and the Redis one trims the sorted set.
@@ -275,6 +280,11 @@ resilience4j:
       oceanChunks:
         limit-for-period: 32          # bounded sector streaming; separate from maze-generation quota
         limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
+      realmRecords:
+        limit-for-period: ${DAEDALUS_REALM_RECORD_LIMIT:30}
+        limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: false
       mazeGenerate:

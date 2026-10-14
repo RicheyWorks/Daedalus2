@@ -524,3 +524,7 @@ When Slice 1 is green, Phase 2 is a file-backed `WorldStore` with an explicit re
 6. **Smallest path to World Zero.** Slice 1 primitives → file persistence → `/api/v1/world` → STOMP → one door → registry → `UNACCOUNTED = 0`.
 7. **Serious problems.** No voxels; no durable store; plugin SPI is not capabilities; explore is not a voxel engine. All are expected. Dual spatial models are the design, not a defect.
 8. **Exact first slice.** The file list in §11. Stop after those types and tests are proven. Do not restructure the reactor.
+
+## 2026-10-14: Shardstead, Hushveil and Hearthwake
+
+The original island production, exploration, relic/tree quests, good-aligned unicorn scenarios, new spooky escape realm, and new family-survival metaverse realm are specified in [Island and new realm architecture](production/ISLAND-AND-NEW-REALMS.md). team-codex owns this additive slice; Unreal acceptance is requested from unreal-team. New realm registration/origins are pending team allocation. Existing realm art and systems remain.

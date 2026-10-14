@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-14T15:22:11.029146+00:00",
+  "basePluginHead": "b1a33bcf05daf8a4151c4aec9219c3d5d59f8cae",
+  "basePluginFiles": 198,
+  "overlays": {
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusShardsteadComponent.cpp": "706f59337c234de49037154927f6f21d3addbab92e32b34317bf6289a952c38b",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusShardsteadComponent.h": "bb41e84505109f7b75f25f547918103feffd045bb22ed42ca99dff18a7bc8f0a"
+  },
+  "allPluginInputHashesRechecked": true,
+  "target": "HostProjectEditor Win64 Development",
+  "actions": 6,
+  "seconds": 29.33,
+  "exitCode": 0,
+  "artifact": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\shardstead-project-target-b1a33bcf\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+    "bytes": 8280576,
+    "sha256": "396365ec0e934002b094745935a1f731cbc8029e222d21996c26a4c7175e49be"
+  },
+  "scope": "Isolated native reflection/compile/link only; no installed component, timer runtime or storage/gameplay proof"
+}

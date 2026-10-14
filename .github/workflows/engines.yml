@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -45,6 +45,18 @@ jobs:
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
+      - name: pinned snapshot binary and concurrent-edit regressions
+        run: python3 ../../../tools/unreal/test_full_plugin_host.py
+      - name: production component and widget Unreal source preflight
+        run: |
+          S=../DaedalusLink/Source/DaedalusLink
+          python3 ../../../tools/unreal_preflight/preflight.py "$S/Public/DaedalusShardsteadComponent.h" "$S/Private/DaedalusShardsteadComponent.cpp" "$S/Private/SDaedalusShardstead.h" "$S/Private/SDaedalusShardstead.cpp"
+      - name: production forecast matches actual cycle without state mutation
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_forecast_test.cpp -o shardstead_forecast_test && ./shardstead_forecast_test
+      - name: ledger save roundtrip and malformed payload rejection
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_save_test.cpp -o shardstead_save_test && ./shardstead_save_test
+      - name: exact native storage revision and commit receipt checks
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public record_receipt_test.cpp -o record_receipt_test && ./record_receipt_test
       - name: runtime data verifier refuses incomplete staging evidence
         run: python3 ../../../tools/unreal/test_runtime_data.py
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins

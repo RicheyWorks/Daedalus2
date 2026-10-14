@@ -1,0 +1,85 @@
+{
+  "assets": [
+    {
+      "id": "Twaker_Prospector",
+      "role": "prospector",
+      "file": "Twaker_Prospector.glb",
+      "triangles": 1098,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 217,
+      "sha256": "4ec4ea032cb4389b36ab5d5433cde358798be86f5c5bc9f875df7f21118e3f62",
+      "realm": "Island",
+      "activity": "Shardstead"
+    },
+    {
+      "id": "Twaker_Cachekeeper",
+      "role": "crystal cache keeper",
+      "file": "Twaker_Cachekeeper.glb",
+      "triangles": 1098,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 217,
+      "sha256": "612e9b9dd3b9a96547aca5860bf81acb9a1259e184a3b58e31ee9ab2267fa9ab",
+      "realm": "Island",
+      "activity": "Shardstead"
+    },
+    {
+      "id": "Twaker_Trader",
+      "role": "barter merchant",
+      "file": "Twaker_Trader.glb",
+      "triangles": 1244,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 216,
+      "sha256": "31e4722efaeab913ceafb7266e4eda53cd1a20e3618644fd26d494434904e4d0",
+      "realm": "Island",
+      "activity": "Shardstead"
+    },
+    {
+      "id": "Shardstead_Farmer",
+      "role": "food producer",
+      "file": "Shardstead_Farmer.glb",
+      "triangles": 1088,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 216,
+      "sha256": "38665903d171537222dc489ef3929ffb97cc5e90f18b1df28a3d42784f2795cd",
+      "realm": "Island",
+      "activity": "Shardstead"
+    },
+    {
+      "id": "Shardstead_Energywright",
+      "role": "energy producer",
+      "file": "Shardstead_Energywright.glb",
+      "triangles": 1200,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 215,
+      "sha256": "04ddad8286448196df3babe52ddec414f6b10f931ac066a00a5f693b815b36a0",
+      "realm": "Island",
+      "activity": "Shardstead"
+    },
+    {
+      "id": "Shardstead_Rescuer",
+      "role": "unicorn rescue guide",
+      "file": "Shardstead_Rescuer.glb",
+      "triangles": 1288,
+      "bones": 14,
+      "rig": "shared-humanoid-14",
+      "radius_cm": 216,
+      "sha256": "005bb36a263f9f653b2d96c3a411c4bcd0e9b8b612c7670f5677d4190a6be50f",
+      "realm": "Island",
+      "activity": "Shardstead"
+    }
+  ],
+  "clips": [
+    "Idle",
+    "Walk",
+    "Attack",
+    "Hurt"
+  ],
+  "status": "art prototype; native integration pending",
+  "realm": "Island",
+  "activity": "Shardstead"
+}

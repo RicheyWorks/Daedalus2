@@ -299,3 +299,55 @@ Last consolidated: 2026-08-17
 | WeightedMazeGrid + weighted routing | Done — see `daedalus-core/src/test/java/com/daedalus/engine/WeightedMazeGridTest.java` and `WeightedRoutingTest.java`. |
 | LoadBalancer integration / "Daedalus as a Service" / topology generator | Captured in `Vision/02-LoadBalancer-Integration-Guide.md` and `Audit/DAEDALUS_ENGINE_AUDIT_FEEDBACK_RECOMMENDATIONS.md` §3. |
 | Algorithm comparison video / GIF, regenerate portfolio ZIP | One-time deliverables, not tracked. |
+
+## Shardstead / Hushveil / Hearthwake implementation backlog (2026-10-14)
+
+Architecture: docs/production/ISLAND-AND-NEW-REALMS.md. Source first slice is not a deployed realm.
+
+- [x] Minesweeper rules, renderer and existing native arcade registry/factory entry.
+- [x] Shardstead portable survey/claim/worker/cycle/mining/barter/piracy core.
+- [x] Original tree/Twaker/unicorn ordered mission definitions.
+- [x] Six actual rigged worker GLBs, editable blend and hash manifest via shared builder.
+- [x] Hearthwake portable family ration/health/morale/repair daily core.
+- [ ] Claude native build and visible Minesweeper cabinet acceptance.
+- [ ] Claude worker import and cast binding with in-game evidence.
+- [ ] Host adapters for proximity/land permission, player identity, worker spawning and resource catalog IDs.
+- [ ] Durable claim/cycle/production/trade transaction ledger and snapshot restore; no duplicate client grant path.
+- [ ] Production tab using existing realm theme and inventory shell.
+- [ ] Renewable food/energy ecology, worker maintenance and fair shortages; supply-demand market with escrow and bounded prices.
+- [ ] Voxel extraction/deposit depletion and original recipes reuse existing persistence; cave support/water-table outcomes.
+- [ ] Tree dialogue, item/tide/map gates and safe relic routes; per-player persisted mission progress.
+- [ ] Twaker crystal gathering AI, cave chest deposits, negotiation and guarded cache permissions.
+- [ ] Unicorn rescues/convoys/medicine missions and existing authoritative reward gate binding.
+- [ ] Hushveil directory/origin registration; sound propagation, pursuer state machine, observed hiding, puzzle-solvability generator.
+- [ ] Hushveil modular haunted lodge, hiding furniture, original pursuer rigs and accessible sound/scare settings.
+- [ ] Hearthwake directory/origin registration; storm preparation, original household rigs, modular refuge and interactive ration table.
+- [ ] Hearthwake household persistence, opt-in/pauseable days, expedition lifecycle, cooperative supply trades and survival journal tab.
+- [ ] Dedicated Mine/Trade/Repair character clips; art review/contact sheet; add approved assets to existing workbook.
+- [ ] Exact-head native/runtime evidence, asset registry and storyline/mechanics review before declaring complete.
+- [x] Hushveil portable sound/investigation/search/chase and observed-hiding rules; actor navigation remains pending.
+
+### Hearthwake ecosystem/refinement and supply UI
+
+- [x] Validated Shardstead snapshots and prepare/persist/confirm request ledger source.
+- [x] Renewable food/energy loop and finite mineral-only extraction source.
+- [x] Production-page Slate cards, localized amounts, forecasts, shortage/missing states and claim table source.
+- [x] Canonical Java ArkRescue transfer planning across existing species/community/hold guilds.
+- [x] Three additional good unicorn ark/ecosystem rescue mission definitions.
+- [x] Daily host rescue-chance policy and actual-arrival confirmation source.
+- [x] No-rescue Longest Lived and distinct-life Most Saved ranking cores with restore seams.
+- [ ] Persist rescue source/hold/destination/quest receipts atomically; bind existing ArkFleet voyage events and protected passengers.
+- [ ] Stable rescued-life identities, anti-farming mission provenance and biodiversity/habitat validation.
+- [ ] Prepared marine tanks, flora/fungi banks, predator separation and sanctuary restoration Blender modules.
+- [ ] Mount Production page in existing themed tab shell; owner-scoped replicated DTOs; revision-cached forecast.
+- [ ] Hearthwake rescue toggle disclosure, daily chance display and public leaderboards wired to authenticated host persistence.
+
+### Local save pipeline
+
+- [x] Native refuge run/household binary codec with validated decode.
+- [x] Checksummed local RealmRecordStore with directory ownership lock, atomic replace and revision CAS.
+- [x] Explicitly enabled host-only GET/PUT transport using existing signed-JWT subject allowlist.
+- [x] Native payload persisted and reopened by Java in a disposable proof directory.
+- [ ] Native authenticated binary HTTP adapter; timeout reconciliation and response identity/hash binding.
+- [ ] Bundle full ecosystem, life manifest, run/household and both boards in one authoritative storage transaction.
+- [ ] Managed database adapter and multi-server transaction/CAS verification before production deployment.

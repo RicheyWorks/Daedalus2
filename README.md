@@ -313,6 +313,8 @@ public consumers).
 | `GET` | `/api/v1/ocean/v1` | required | Opt-in Ocean sector manifest; authenticated in every profile, disabled by default |
 | `GET` | `/api/v1/realms` | required | Provider-aware realm directory, including Ocean only when enabled; same-origin read routes and block-edit capability |
 | `GET` | `/api/v1/ocean/v1/chunk?x=&y=&z=` | required | Persisted Ocean chunk using the existing block DTO; bounded sector and per-key rate limit, no HTTP edits |
+| `GET` | `/api/v1/host/realm-records/{realm}/{key}` | required | Opt-in snapshot read; configured trusted host subjects only, exact revision/hash headers |
+| `PUT` | `/api/v1/host/realm-records/{realm}/{key}` | required | Opt-in binary snapshot CAS; configured host subjects only, per-key limit, unknown writes require reconciliation |
 | `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
 | `POST` | `/api/v1/tactics/decide` | required | Unreal's squad round trip: `{roster: DTR 1, events: DTE 1}` in, `{result: APPLY/REPEAT/STALE, spec: DTO 1}` out, fenced per session and squad (ADR-060) |
 | `POST` | `/api/v1/kennel/brew` | required | Configured engine host calculates a deterministic TONIC 1 from herbs/coat/drinker/stage/charm/seed; no inventory mutation. [Contract and fixtures](docs/contracts/tonic-v1/README.md). |

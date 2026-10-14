@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-14T15:07:20.851842+00:00",
+  "pluginHead": "b1a33bcf05daf8a4151c4aec9219c3d5d59f8cae",
+  "pluginFiles": 198,
+  "generatedHostFiles": {
+    "Source/HostProject.Target.cs": "c66ca9c8da334c558d752db4a57b0a8571ea702a97d3bf44c0092490945b88a2",
+    "Source/HostProjectEditor.Target.cs": "8b258a08f5df1554fc2331a69bf2670a8f4bf253e3e344421e72d856efc82308",
+    "Source/HostProject/HostProject.Build.cs": "d6ffd123de8731cdf0215df94ab88e4700bf1791fff92dad06be79671cce29d1",
+    "Source/HostProject/HostProject.cpp": "d705be8c84f82528d47889759ab7151903eca50180a7c4abef8b5fb70798457e"
+  },
+  "target": "HostProject Win64 Shipping",
+  "exitCode": 0,
+  "actions": 67,
+  "seconds": 280.81,
+  "allInputHashesRechecked": true,
+  "artifacts": {
+    "Binaries/Win64/HostProject-Win64-Shipping.exe": {
+      "bytes": 168135168,
+      "sha256": "01c27df89ed213dc06b6092721f6f6daa92c113e8330ffbd93ae178c724b4013"
+    },
+    "Binaries/Win64/HostProject-Win64-Shipping.target": {
+      "bytes": 112031,
+      "sha256": "9f63dafd8cbb44bb490b52bff1202d8506d0b411c115323d4655a2988807b64b"
+    }
+  },
+  "scope": "Actual isolated project Shipping compile/link and receipt, not generic metadata-only build; no cook, staged payload, install or runtime proof"
+}

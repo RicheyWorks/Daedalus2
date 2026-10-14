@@ -1,0 +1,111 @@
+{
+  "source_commit": "2cfb952d7c76db5be1921bb36276823a6202ae4b",
+  "assets": [
+    {
+      "file": "Shardstead_Energywright.glb",
+      "sha256": "4139053817eac336793a0398df14eab73e851ea1765815eaf27b9eeaabb15092",
+      "bytes": 223648,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    },
+    {
+      "file": "Shardstead_Farmer.glb",
+      "sha256": "6bde9f3f290ec637ee1ec2b9ea0dc94b992f9e5a0ea56ea8fec9544ab1ce1e5b",
+      "bytes": 211088,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    },
+    {
+      "file": "Shardstead_Rescuer.glb",
+      "sha256": "52556cf565eb55cc0f0e59ee8056ad53821f9b0059016d05a219b40c895ded63",
+      "bytes": 231644,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    },
+    {
+      "file": "Twaker_Cachekeeper.glb",
+      "sha256": "1e07abc75369b8c94f3b7db0ff3453daaa9c19900e5f537436aba0dc3f88f239",
+      "bytes": 212428,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    },
+    {
+      "file": "Twaker_Prospector.glb",
+      "sha256": "0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14",
+      "bytes": 212424,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    },
+    {
+      "file": "Twaker_Trader.glb",
+      "sha256": "2e7916ae930dbdfacde98ec1ea4b2f6e1156c73c2ab73c277dcda9933701a20f",
+      "bytes": 224496,
+      "clips": [
+        "Attack",
+        "Hurt",
+        "Idle",
+        "Mine",
+        "Repair",
+        "Trade",
+        "Walk"
+      ],
+      "skin_joints": [
+        14
+      ]
+    }
+  ],
+  "new_activity_clips": 18,
+  "native_imported": false,
+  "quality_ready": false,
+  "evidence": "Actual Blender4.3 export plus GLB JSON readback; motion/appearance/native acceptance pending"
+}
