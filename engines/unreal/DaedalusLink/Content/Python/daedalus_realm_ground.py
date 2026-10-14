@@ -241,7 +241,7 @@ def lay(realm, rings=6):
     return {"realm": realm, "origin": origin, "made": made, "lands": {k: lands[k] for k in ("free_cells", "made", "skipped")}}
 
 
-CASTS = {"GALLERY-CITY": "gallery-city", "PARCELS": "parcels", "BRICKS": "bricks", "LABYRINTH": "labyrinth"}
+CASTS = {"GALLERY-CITY": "gallery-city", "PARCELS": "parcels", "BRICKS": "bricks", "LABYRINTH": "labyrinth", "WORLD-ZERO": "world-zero"}
 CAST_RADIUS_CM = 6000.0
 
 
@@ -272,12 +272,16 @@ def lay_cast(realm):
     catalog = CASTS[realm]
     with open(_dcs_path(catalog), encoding="utf-8") as f:
         roles = cast_roles(f.read())
-    origin = ORIGINS[realm]
-    centre = markers(origin)["Spawn"]
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     have = _labels()
+    if realm == "WORLD-ZERO":   # the hub has no Spawn marker: the cross-realm NPCs ring the PlayerStart
+        ps = next((a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"), None)
+        l = ps.get_actor_location() if ps else unreal.Vector(ORIGINS[realm][0], ORIGINS[realm][1], GROUND_Z + 100.0)
+        centre = (l.x, l.y, l.z - 100.0, 0.0)
+    else:
+        centre = markers(ORIGINS[realm])["Spawn"]
     made, bound, unbound = 0, [], []
-    for who, (x, y, z, yaw) in zip(roles, cast_ring(len(roles), centre)):
+    for who, (x, y, z, yaw) in zip(roles, cast_ring(len(roles), centre, ground=centre[2], radius=CAST_RADIUS_CM if realm != "WORLD-ZERO" else 2500.0)):
         label = "Talker_%s_%s" % (realm, "".join(w[:1].upper() + w[1:] for w in "".join(c if c.isalnum() else " " for c in who).split()))
         if label in have:
             t = have[label]

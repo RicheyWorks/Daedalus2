@@ -36,13 +36,13 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 2 | Terrain host | **done** | Fable | DaedalusWorld persistent level, 1863 static meshes, PCG |
 | 3 | Lands laid down | **partial** | Fable | 14 team islands on estates deeds 9..59 (dab971586, 7552 actors, undo table saved). Missing: plot markers for the rest of ring 1..N |
 | 4 | Mint row | **missing** | Sol | contract signs `to,slot,seed,radius,deadline` only, 64 slots, no realm/estate/egg fields (29124). Needs realm-aware mint design |
-| 5 | Cast | **partial** | Fable/Sol | Keeper Ostra speaks via dialogue; no `world-zero.dcs` (cross-realm NPCs in REALM-CASTS §165 unbound) |
+| 5 | Cast | **partial** | Fable/Sol | `world-zero.dcs`: the six cross-realm NPCs (Ferryman Bram, Rainbow Painter, Merchant Zee with stock by realm visited, Heartstone Seeker Captain, Courier of Worlds, Tugboat Balloonist); lay_cast rings them round the PlayerStart; art: Sol to export Mob_Zero_* (6) |
 | 6 | Creatures | **partial** | Fable | Encounters spawn foes (AlwaysSpawn); 10 enemy candidates validated of 500 |
 | 7 | Items | **done** | Fable | `world-zero.dic` 14 items |
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
 | 10 | Docks / gates | **partial** | Fable | rainbow gates to 4 realms (ADR-053) as TargetPoints; HasDocks=true in Session table, no dock actors placed |
-| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumer `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
+| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
 ## GALLERY-CITY (catalog `gallery-city`, theme `gallery`, mount drone)
@@ -57,7 +57,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 19 creature/mount/pet visuals validated (GAL01); not spawned |
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
-| 9 | Mounts | **missing** | Sol/Fable | drone art validated, no possession |
+| 9 | Mounts | **partial** | Fable | `DaedalusMountCore` profile (gallery drone, ceiling 120 m); the called vehicle wears Mob_Gallery_GalleryDrone and flies (Ghost::Wear/Lift); `mounts` scenario; build pending |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | PR80 row |
 | 12 | Play proof | **partial** | Fable | cast 8/8 (talk), no walk-the-realm scenario |
@@ -74,7 +74,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 32 role models validated (PAR01) |
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
-| 9 | Mounts | **missing** | Sol/Fable | helicopter + helipad art only |
+| 9 | Mounts | **partial** | Fable | profile parcel helicopter (ceiling 200 m), wears Mob_Parcels_ParcelHelicopter |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
@@ -91,7 +91,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 32 role models (BRK01) |
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
-| 9 | Mounts | **missing** | Sol/Fable | plane, hover cart (BRK03) art only |
+| 9 | Mounts | **partial** | Fable | profile brick plane (fastest, ceiling 240 m), wears Mob_Bricks_BrickPlane; hover cart later |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
@@ -108,7 +108,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | plants LAB10 policy tested |
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
-| 9 | Mounts | **missing** | Sol/Fable | sky-strider (LAB05) |
+| 9 | Mounts | **partial** | Fable | profile sky-strider (ceiling 60 m), wears Mob_Lab_SkyStrider |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
@@ -180,7 +180,8 @@ warning (Prop_Gallery_Ramp degenerate tangents, Sol's export).
 1. ~~World Zero plot markers~~ done; ~~Gallery/Parcels/Bricks/Labyrinth hub + kit + lands~~ done (table above).
 1b. Hero `SwitchRealm` lands at `Gate_<Realm>`/`Spawn_<Realm>`; WorldActor streams by realm origin. Fable.
 2. Realm-aware mint design + `/api/v1/lands?realm=` endpoint. Sol. Fable consumes it in WorldActor.
-3. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
+3. District sublevels: `daedalus_districts.steps(realm)` moves each realm's lands into `Realms/<R>/D<dd>` Dynamic sublevels and the hub kit into `<R>_Hub`, listed in islands.json for UDaedalusStreamer — the prerequisite for rings 7..49. Fable (tool on main, editor turn pending).
+3b. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
 4. Import Parcels/Bricks/Labyrinth casts (tool exists: `tools/unreal_play/import_cast.py`). Fable.
 5. Repeat 3 for Parcels, Bricks, Labyrinth. Mounts after ground.
 6. `ocean.dic` + Ocean role target. Fable / Sol.

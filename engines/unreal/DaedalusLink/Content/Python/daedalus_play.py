@@ -1316,6 +1316,76 @@ def scenario_realm_ground(p):
     return {"checks": checks}
 
 
+def scenario_realm_host(p):
+    """The world actor follows the hero through the server's realm directory (DaedalusRealmDirectoryCore): after a
+    gate to Gallery City, the actor hosts the world the directory names for GALLERY-CITY. When the server has no
+    directory yet (old build), the checks say so instead of failing on a missing host."""
+    h = hero()
+    w = world()
+    wa = next(iter(unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusWorldActor)), None)
+    if not wa:
+        return {"checks": [_check("a DaedalusWorldActor is in the world", False, "none")]}
+    wa.load_directory()
+    for _ in range(90):
+        yield
+        if not wa.directory_state().startswith("directory=none why=not loaded"):
+            break
+    state = wa.directory_state()
+    served = state.startswith("directory=ok")
+    hosted = "GALLERY-CITY=" in state
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    before = str(wa.get_editor_property("world_id"))
+    r = h.switch_realm("gallery-city", "gate", "")
+    yield from _frames(5)
+    after = str(wa.get_editor_property("world_id"))
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(5)
+    home = str(wa.get_editor_property("world_id"))
+    return {"checks": [
+        _check("the directory was fetched (or the server said why not)", served or state.startswith("directory=none why=http"), state),
+        _check("the directory binds the five realms and the Ocean" if served else "no directory on this server build (skip)", (not served) or "unhosted=-" in state, state),
+        _check("the gate made the world actor host Gallery City's world" if hosted else "no Gallery host listed (skip)", (not hosted) or (r.startswith("ok") and after != before and after == wa.world_id_for_realm("GALLERY-CITY")), "%s -> %s (%s)" % (before, after, r)),
+        _check("home by gate returns the actor to World Zero's world" if hosted else "home by gate (skip host check)", (not hosted) or home == before, home),
+    ]}
+
+
+def scenario_mounts(p):
+    """Mounts per realm (BASE-LAYER row 9, DaedalusMountCore): in each 3D realm the called vehicle wears that
+    realm's mount art (drone, helicopter, plane, sky-strider), flies to a lifted height within its ceiling, and
+    World Zero still gives the hover bike."""
+    h = hero()
+    checks = []
+    want = {"GALLERY-CITY": "Mob_Gallery_GalleryDrone", "PARCELS": "Mob_Parcels_ParcelHelicopter", "BRICKS": "Mob_Bricks_BrickPlane", "LABYRINTH": "Mob_Lab_SkyStrider"}
+    for realm, art in want.items():
+        if h.realm_now() != "WORLD-ZERO":
+            h.switch_realm("world-zero", "gate", "")
+            yield from _frames(2)
+        h.switch_realm(realm.lower(), "gate", "")
+        yield from _frames(3)
+        g = h.spawn_vehicle()
+        yield from _frames(2)
+        st = g.mount_state() if g else "no vehicle"
+        checks.append(_check("%s: the vehicle wears %s" % (realm, art), g is not None and ("art=%s:1" % art) in st, st))
+        if g:
+            z0 = g.get_actor_location().z
+            g.lift(3000.0)
+            yield from _frames(45)
+            z1 = g.get_actor_location().z
+            st2 = g.mount_state()
+            checks.append(_check("%s: it climbs when lifted, within its ceiling" % realm, z1 - z0 > 800.0 and "wanted=3000" in st2, "dz=%.0f %s" % (z1 - z0, st2)))
+            g.destroy_actor()
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(3)
+    g = h.spawn_vehicle()
+    st = g.mount_state() if g else "no vehicle"
+    checks.append(_check("World Zero: the hover bike, ground-hugging", g is not None and "mount=hover bike" in st and "ceiling=0" in st, st))
+    if g:
+        g.destroy_actor()
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1338,6 +1408,8 @@ SCENARIOS = {
     "cast": scenario_cast,
     "realm_switch": scenario_realm_switch,
     "realm_ground": scenario_realm_ground,
+    "realm_host": scenario_realm_host,
+    "mounts": scenario_mounts,
     "control": scenario_control,
     "stage": scenario_stage,
 }

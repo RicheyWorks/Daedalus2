@@ -264,6 +264,13 @@ class Broker:
         with self.cond:
             return [m for m in self._for(me, 0) if m["type"] != "ack" and (me, m["id"]) not in self.acked]
 
+    def pending_summary(self, me):
+        """Same delivery set as pending(), without serializing message bodies."""
+        with self.cond:
+            ids = [m["id"] for m in self._for(me, 0)
+                   if m["type"] != "ack" and (me, m["id"]) not in self.acked]
+            return {"count": len(ids), "ids": ids[-10:], "omitted": max(0, len(ids)-10)}
+
     def heartbeat(self, me, status=""):
         with self.cond:
             self.seen[me] = (self.clock(), status or self.seen.get(me, (0, ""))[1])
@@ -421,6 +428,8 @@ def make_handler(broker):
                     topics = [t for t in q.get("topics", "").split(",") if t] or None
                     got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)), topics)
                     return self._out(200, {"messages": got, "last": last})
+                if path == "/pending-summary":
+                    return self._out(200, broker.pending_summary(q["me"]))
                 if path == "/pending":
                     return self._out(200, {"messages": broker.pending(q["me"])})
                 if path == "/inbox":
@@ -432,7 +441,8 @@ def make_handler(broker):
                 if path == "/log":
                     return self._out(200, {"messages": broker.log(int(q.get("after", 0)), int(q.get("limit", 200)))})
                 if path == "/health":
-                    return self._out(200, {"ok": True, "last": broker.last,
+                    return self._out(200, {"ok": True, "last": broker.last, "pid": os.getpid(),
+                                           "uptime_s": round(max(0, time.time() - broker.since), 3),
                                            "since": datetime.datetime.fromtimestamp(broker.since).isoformat(timespec="seconds")})
                 return self._out(404, {"error": "no such path", "paths": ["/send", "/wait", "/ack", "/pending", "/inbox",
                                                                           "/lock", "/unlock", "/locks",
@@ -671,6 +681,40 @@ class Link:
     def presence(self):
         return self._call("GET", "/presence") or {}
 
+    def doctor(self):
+        """Read-only diagnostics; missing endpoint data is unknown, never empty-success."""
+        health = self._call("GET", "/health")
+        locks = self._call("GET", "/locks")
+        inbox = self._call("GET", "/inbox?" + urllib.parse.urlencode({"me": self.me}))
+        pending = self._call("GET", "/pending-summary?" + urllib.parse.urlencode({"me": self.me}))
+        unavailable = []
+        for name, value in (("health", health), ("locks", locks), ("inbox", inbox), ("pending", pending)):
+            if not isinstance(value, dict):
+                unavailable.append(name)
+        if isinstance(inbox, dict) and not isinstance(inbox.get("messages"), list):
+            unavailable.append("inbox")
+        if isinstance(pending, dict) and (not isinstance(pending.get("count"), int) or
+                                         not isinstance(pending.get("ids"), list) or
+                                         not isinstance(pending.get("omitted"), int)):
+            unavailable.append("pending")
+        broker_up = isinstance(health, dict) and health.get("ok") is True
+        if not broker_up and "health" not in unavailable:
+            unavailable.append("health")
+        def summary(value, name):
+            if name in unavailable:
+                return None
+            rows = value["messages"]
+            return {"count": len(rows), "ids": [m.get("id") for m in rows[-10:]], "omitted": max(0, len(rows)-10)}
+        return {"ok": broker_up and not unavailable, "broker_up": broker_up, "me": self.me,
+                "last_id": health.get("last") if isinstance(health, dict) else None,
+                "broker_pid": health.get("pid") if isinstance(health, dict) else None,
+                "broker_uptime_s": health.get("uptime_s") if isinstance(health, dict) else None,
+                "broker_since": health.get("since") if isinstance(health, dict) else None,
+                "locks": locks if "locks" not in unavailable else None,
+                "unacked_inbox": summary(inbox, "inbox"),
+                "pending_delivery": pending if "pending" not in unavailable else None, "unavailable": unavailable,
+                "meaning": "Read-only snapshot; delivery is not acceptance. Missing broker PID/uptime may mean an older broker."}
+
     def health(self):
         return self._call("GET", "/health")
 
@@ -685,7 +729,7 @@ def main(argv=None):
     s.add_argument("--port", type=int, default=PORT)
     s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
                    help="where to write {url} for clients to find the broker ('' for none)")
-    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack"):
+    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack", "doctor"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
         p.add_argument("--port", type=int, default=PORT)
@@ -718,6 +762,10 @@ def main(argv=None):
         serve(a.folder, a.port, bus_json=a.bus_json or None)
         return 0
     link = Link(a.me, a.port)
+    if a.cmd == "doctor":
+        out = link.doctor()
+        print(json.dumps(out, ensure_ascii=False, indent=1))
+        return 0 if out["ok"] else 2
     if a.cmd == "send":
         body = json.loads(a.body)
         if a.asset:

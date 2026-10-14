@@ -1,0 +1,136 @@
+DCS 1
+cast WORLD-ZERO
+# World Zero, the hub: the cross-realm NPCs (REALM-CASTS.md, build order 1). They stand by the rainbow gates and
+# travel them; what they say depends on where the hero has been (shared flags: visited_* set by the realm casts).
+
+who Gate Ferryman Bram
+voice 3 0.95
+step start
+if rode_all -> veteran
+if rode -> again
+say Four rainbows, four realms, one ferry. I ride with anyone who steps through.
+say Gallery City to the east, the Parcels west, Bricks north, the Labyrinth south. The eighth bit is a cube away.
+ask Which way, traveller? | East, the galleries=east | West, the farms=west | North or south=more | None yet=stay
+step more
+ask North or south? | North, the bricks=north | South, the maze=south | Neither=stay
+step east
+set rode
+say Mind the paint. It's still wet in places and the murals talk back.
+end
+step west
+set rode
+say Fences, fields and a postmaster who never sleeps. Stamp what he hands you.
+end
+step north
+set rode
+say Everything up there snaps together. So do the people, mostly.
+end
+step south
+set rode
+say Chalk your route. The maze folds when you stop looking at it.
+end
+step stay
+say The gates keep. So do I.
+end
+step again
+ask Back for another rainbow? | Yes=start | Just talking=chat
+step chat
+say I've ridden every gate a thousand times and never seen the same sky twice.
+end
+step veteran
+say You've ridden them all. Some day you'll tell me which realm is home.
+end
+
+who Rainbow Painter
+voice 5 1.05
+step start
+if gate_east_painted -> painted
+say The east rainbow's faded to three bands. A gate needs seven or it drops you short.
+ask Fetch me four pots of pigment from the galleries? | I'll find them=accept | Not now=later
+step accept
+set quest_paint_east
+say Any colour the curators spare. Ask for Pigment Crates. I'll mix the rest.
+end
+step later
+say Three bands will hold a week. Maybe two.
+end
+step painted
+say Seven bands. Look at it. That's the way a gate should pour.
+end
+
+who Wandering Merchant Zee
+voice 1 1.0
+step start
+if visited_labyrinth -> lab_stock
+if visited_bricks -> brick_stock
+if visited_parcels -> parcel_stock
+if visited_gallery -> gallery_stock
+say Zee's cart. Stock follows the roads I've walked, and I walk where you walk.
+say Come back once you've been somewhere; I'll have what that somewhere sells.
+end
+step gallery_stock
+say Fresh from the galleries: brushes, varnish, a frame plate or two.
+give ZEE_BRUSH 1
+end
+step parcel_stock
+say Farm goods today. Honey, seed, a stamp hammer I didn't ask how they got.
+give ZEE_HONEY 1
+end
+step brick_stock
+say Studs and plates, sorted by colour. The kids' club sorted them. Twice.
+give ZEE_STUD 2
+end
+step lab_stock
+say Chalk. Thread. A compass that only points at exits. Bargains, all.
+give ZEE_CHALK 1
+end
+
+who Heartstone Seeker Captain
+voice 4 0.9
+step start
+if heartstone_race -> racing
+say Four of us, four realms, four Heartstones. We're ahead of you in all of them.
+ask Race us? | You're on=race | I don't race=decline
+step race
+set heartstone_race
+say First to all four. No gates skipped, no stones shared. See you in the galleries.
+end
+step decline
+say Then stay out of our way at the gates.
+end
+step racing
+say We have two. You?
+end
+
+who Courier of Worlds
+voice 2 1.0
+step start
+say I carry what you can't: anything, any realm, any gate. Fee's a cube per crossing.
+ask Send something? | Send an item east=send | Collect=collect | Nothing today=no
+step send
+say Hand it over and name the realm. It'll be waiting at that realm's notice board.
+end
+step collect
+say Nothing's come for you yet. The boards would have told me.
+end
+step no
+say The gates are open all night. So am I.
+end
+
+who Tugboat Balloonist
+voice 6 1.1
+step start
+if island_towed -> towed
+say Islands don't move themselves. Mine does, with a balloon and a very long rope.
+say Own a plot you'd rather have nearer the hub? I tow. Lower numbers are dearer, mind.
+ask Hire the tug? | Tow my island=hire | Just asking=ask
+step hire
+set tow_requested
+say Mark the deed you want it moved beside. Give me a day and a fair wind.
+end
+step ask
+say Fourteen islands moved last night. Not one of them noticed.
+end
+step towed
+say Settled in? Good. The rope's coiled for the next one.
+end
