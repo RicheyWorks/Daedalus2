@@ -921,3 +921,7 @@ Unicorncore rejects ASCIIspace/control/DEL IDs, includingembeddedNUL, before cou
 ### Keep sea-arrival credit in authority-side world events (2026-10-14)
 BullSeaEventComponent bindsstablebull identity/creditedplayer throughhost only, captures taggedATriggerVolume overlap andchecksphysicalcontainment beforequestcredit. Pendingarrival retries whenplayerrecord becomesready, stillrequiringbull insea. Itdoesnot providebull movement, livefire tracking, durableworldevent replay or authoredseavolumes; UHT/runtime pending. No clientRPC/editorcalls.
 
+
+### Bound sea-arrival callbacks to current overlap and actor lifetime (2026-10-14)
+Bullproducer guardsreentrant record callbacks, retries at4Hz onlywhile stilloverlapping pendingsea, andclears timer/delegates onexit/EndPlay. Hostfire updates canextinguish eligibility beforecredit. Rootinside-volume validation remainsrequired; no tickingactorloop. Sourceonly/UHT-runtime pending; authoredvolumes,movement anddurableeventreplay remainunfinished.
+
