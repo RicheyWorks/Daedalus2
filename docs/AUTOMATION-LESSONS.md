@@ -839,3 +839,7 @@ Terminal aggregate counts can cover the wrong identities. Return every planned a
 ### Durable cast-import handoffs (2026-10-14)
 Use a new --report path to retain planned hashes, partial terminal rows, counts and command outcome before/after bridge dispatch. Night-run allocates unique per-folder receipt paths and links them from checkpoints/final reports. Unknown outcomes remain reconciliation-required, never an automatic resume ticket. No wire request ID is invented when the installed wire lacks one; single-call stdout status is labelled weaker evidence. Explicit report paths have no cross-process writer lock; use distinct paths.
 
+
+### Read-only night handoff summaries (2026-10-14)
+Use handoff_status.py --receipt PATH --jobs-root JOBS to inspect recorded stage/job identity and linked cast receipts. Validate identity/count consistency and contain child references under the jobs root. Missing/invalid receipts remain unresolved; do not infer success from their absence. The summary never queries current engine state or grants replay permission, even when stored outcomes say passed.
+
