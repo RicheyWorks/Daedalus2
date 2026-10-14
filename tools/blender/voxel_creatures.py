@@ -109,8 +109,10 @@ def _bird(feather, belly, size=1.0, beak_len=2, crest=None, legs_h=3, tail_len=3
         box(out, bone, sx, 0, 0, 1, 1, legs_h, "beak")
         box(out, bone, sx - 1, 0, 0, 3, 2, 1, "beak")
     for sgn, bone in ((1, "wing.L"), (-1, "wing.R")):
-        x0 = W // 2 if sgn > 0 else -W // 2 - wing_len
-        box(out, bone, x0, -D // 2 + 1, legs_h + H - 2, wing_len, D - 2, 1, feather)
+        # folded along the flank at rest (2 wide, the body's length); the Walk/fly clip rotates them out
+        x0 = W // 2 if sgn > 0 else -W // 2 - 2
+        box(out, bone, x0, -D // 2, legs_h + H - 3, 2, D - 1, 2, feather)
+        box(out, bone, x0, -D // 2 - wing_len // 2, legs_h + H - 3, 2, wing_len // 2, 1, feather)   # primaries trail back
     return out
 
 
@@ -132,6 +134,25 @@ def _bee(size=1.0, stripes=True, body=("bee_y", "bee_k")):
     for sx, bone in ((-2, "leg.L"), (2, "leg.R")):
         for y in (-1, 0, 1):
             box(out, bone, sx, y, 0, 1, 1, 2, "bee_k")
+    return out
+
+
+def _fish(body, fin, size=1.0, long=False):
+    """Fish for the lakes, sky rivers and basins (chemistry water.fish): tail = tail bone (wags), fins = wings."""
+    s = size
+    out = {}
+    D = max(5, int((10 if long else 7) * s))
+    H = max(2, int(3 * s))
+    for y in range(-D // 2, D // 2):
+        h = H if abs(y) < D // 3 else max(1, H - 1)
+        box(out, "body", -1, y, 3, 2, 1, h, body if (y + D // 2) % 3 else fin)
+    box(out, "head", -1, D // 2, 3, 2, 2, H, body)
+    box(out, "head", 0, D // 2 + 1, 4, 1, 1, 1, "eye")
+    box(out, "head", -1, D // 2 + 1, 4, 1, 1, 1, "eye")
+    box(out, "tail", -1, -D // 2 - 2, 2, 2, 2, H + 2, fin)
+    box(out, "wing.L", 1, -1, 3, 2, 2, 1, fin)
+    box(out, "wing.R", -3, -1, 3, 2, 2, 1, fin)
+    box(out, "body", -1, -1, 3 + H, 2, 3, 1, fin)        # dorsal fin
     return out
 
 
@@ -199,6 +220,17 @@ ANIMALS = {
     "mule": dict(fur="fur_b", size=1.3, ears="long", tail="long", mane="fur_k"), "lizard": dict(fur="scale", size=0.45, tail="long", ears=None, snout=3),
     "raccoon": dict(fur="fur_g", belly="fur_w", tail="bushy", spots="fur_k", size=0.7), "otter": dict(fur="fur_b", belly="fur_y", size=0.7, tail="long"),
     "badger": dict(fur="fur_k", belly="fur_w", size=0.8, spots="fur_w"), "boar": dict(fur="fur_k", size=1.1, snout=3, horns="tooth"),
+    "llama": dict(fur="fur_w", size=1.2, ears="up", tail="short", mane="fur_w"), "yak": dict(fur="fur_b", size=1.5, horns="horn", mane="fur_k"),
+    "moose": dict(fur="fur_b", size=1.6, horns="antler", snout=3), "bison": dict(fur="fur_b", size=1.5, mane="fur_k", horns="horn"),
+    "reindeer": dict(fur="fur_g", belly="fur_w", size=1.2, horns="antler"), "camel": dict(fur="fur_y", size=1.4, ears="up", tail="long"),
+    "panda": dict(fur="fur_w", spots="fur_k", size=1.1, ears="up"), "koala": dict(fur="fur_g", size=0.6, ears="up", tail=None),
+    "beaver": dict(fur="fur_b", size=0.7, tail="short", snout=2), "skunk": dict(fur="fur_k", spots="fur_w", size=0.6, tail="bushy"),
+    "porcupine": dict(fur="fur_b", spots="fur_y", size=0.6), "armadillo": dict(fur="shell", belly="belly", size=0.6, tail="long"),
+    "capybara": dict(fur="fur_b", size=1.0, ears="down", tail=None), "ferret": dict(fur="fur_y", size=0.4, tail="long"),
+    "piglet": dict(fur="fur_p", size=0.5, snout=2, tail="long"), "lamb": dict(fur="wool", belly="fur_k", size=0.5),
+    "calf": dict(fur="fur_w", spots="fur_k", size=0.7, ears="down"), "kid_goat": dict(fur="fur_g", size=0.5, tail="short"),
+    "puppy": dict(fur="fur_b", belly="fur_w", size=0.5, tail="bushy", ears="down"), "kitten": dict(fur="fur_g", size=0.45, tail="long"),
+    "tortoise": dict(fur="shell2", belly="belly", size=0.9, tail="short", ears=None), "salamander": dict(fur="fur_o", spots="fur_k", size=0.4, tail="long", ears=None),
 }
 BIRDS = {
     "robin": dict(feather="feather_br", belly="feather_r", size=0.6), "jay": dict(feather="feather_b", belly="feather_w", crest="feather_b", size=0.7),
@@ -214,8 +246,12 @@ BIRDS = {
 BEES = {"honeybee": dict(size=1.0), "bumblebee": dict(size=1.4), "hornet": dict(size=1.3, body=("bee_y", "fur_b")), "queen_bee": dict(size=1.8),
         "sweat_bee": dict(size=0.7, body=("feather_g", "bee_k")), "mason_bee": dict(size=0.9, body=("feather_b", "bee_k")), "wasp": dict(size=1.1, body=("bee_y", "bee_k")),
         "carpenter_bee": dict(size=1.3, stripes=False, body=("bee_k", "bee_k")), "stingless_bee": dict(size=0.6, body=("fur_b", "bee_k"))}
+FISH = {"rillperch": dict(body="feather_g", fin="feather_y", size=0.8), "glassfin": dict(body="wing_c", fin="feather_b", size=0.7),
+        "skytrout": dict(body="feather_b", fin="feather_w", size=1.0), "ember_koi": dict(body="feather_r", fin="feather_y", size=1.1),
+        "rainbow_eel": dict(body="blossom", fin="feather_b", size=0.8, long=True), "basin_ray": dict(body="fur_g", fin="fur_k", size=1.3),
+        "lantern_carp": dict(body="feather_y", fin="feather_r", size=1.0), "stream_minnow": dict(body="fur_g", fin="feather_w", size=0.4)}
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
-SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS}
+SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH)}
 
 
 def plan(species):
@@ -227,6 +263,8 @@ def plan(species):
         return _bee(**BEES[species])
     if species in PLANTS:
         return _plant(species)
+    if species in FISH:
+        return _fish(**FISH[species])
     raise KeyError(species)
 
 
@@ -337,6 +375,10 @@ def build(species, out_dir, scale=10.0):
                 else:
                     rig.pose.bones["head"].rotation_euler.x = 0.08 * math.sin(ph)
                     rig.pose.bones["tail"].rotation_euler.z = 0.3 * math.sin(ph * 2)
+            elif clip == "Walk" and fam == "fish":
+                rig.pose.bones["tail"].rotation_euler.z = 0.5 * math.sin(ph * 2)
+                rig.pose.bones["body"].rotation_euler.z = 0.1 * math.sin(ph * 2)
+                rig.pose.bones["body"].location.z = 0.3 * k + 0.03 * k * math.sin(ph)
             elif clip == "Walk":
                 for side, sgn in (("L", 1), ("R", -1)):
                     rig.pose.bones["leg." + side].rotation_euler.x = 0.45 * math.sin(ph) * sgn
