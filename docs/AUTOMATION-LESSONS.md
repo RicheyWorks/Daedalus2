@@ -1203,3 +1203,6 @@ Snapshot regression follow-up: actual fresh Git repos verify binary/NUL/newline 
 
 ## Warn from forecast without misreporting current stock (2026-10-14)
 Production UI warns EMPTY NEXT CYCLE when valid food/energy stock plus negative net reaches zero, while displaying actual current units and numeric net. Existing zero-stock shortage remains separate; unavailable forecasts do not become predictions. Use64bit addition for display comparison and wrap status text instead of shrinking it. Source preflight passes, no native visual proof claimed.
+
+## Generate explicit project targets for isolated Unreal builds (2026-10-14)
+Host snapshot helper now emits a minimal primary game module with DaedalusLink dependency and named HostProject/HostProjectEditor targets; hashes of generated host scaffolding are separate from pinned plugininputs. Actual HostProjectEditor build of b1a33bcf completed66actions296.30s, bothDLLs linked and receipt verified under temporary project Binaries/Win64, all198plugin+4scaffold inputs rehashed. This covers current readback/header/UI source; no liveinstall/cook/runtime or Game-target build proof. Explicit target names reduce ambiguity with generic engine targets/metadata-only successes. Existing three real-Git snapshot tests stillpass.

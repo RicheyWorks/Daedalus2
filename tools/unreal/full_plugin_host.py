@@ -56,10 +56,22 @@ def snapshot(repo, destination):
         assert hashlib.sha256(target.read_bytes()).hexdigest()==digest
         inputs[name]=digest
     project=destination/'HostProject.uproject'
-    project.write_text(json.dumps({'FileVersion':3,'Plugins':[{'Name':'DaedalusLink','Enabled':True}]},indent=2))
+    project.write_text(json.dumps({'FileVersion':3,'Modules':[{'Name':'HostProject','Type':'Runtime','LoadingPhase':'Default'}],
+                                  'Plugins':[{'Name':'DaedalusLink','Enabled':True}]},indent=2))
+    scaffold={
+        'Source/HostProject.Target.cs':'using UnrealBuildTool; public class HostProjectTarget:TargetRules { public HostProjectTarget(TargetInfo Target):base(Target) { Type=TargetType.Game; DefaultBuildSettings=BuildSettingsVersion.Latest; IncludeOrderVersion=EngineIncludeOrderVersion.Latest; ExtraModuleNames.Add("HostProject"); } }\n',
+        'Source/HostProjectEditor.Target.cs':'using UnrealBuildTool; public class HostProjectEditorTarget:TargetRules { public HostProjectEditorTarget(TargetInfo Target):base(Target) { Type=TargetType.Editor; DefaultBuildSettings=BuildSettingsVersion.Latest; IncludeOrderVersion=EngineIncludeOrderVersion.Latest; ExtraModuleNames.Add("HostProject"); } }\n',
+        'Source/HostProject/HostProject.Build.cs':'using UnrealBuildTool; public class HostProject:ModuleRules { public HostProject(ReadOnlyTargetRules Target):base(Target) { PCHUsage=PCHUsageMode.UseExplicitOrSharedPCHs; PublicDependencyModuleNames.AddRange(new string[]{"Core","CoreUObject","Engine","DaedalusLink"}); } }\n',
+        'Source/HostProject/HostProject.cpp':'#include "Modules/ModuleManager.h"\nIMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl,HostProject,"HostProject");\n'
+    }
+    generated={}
+    for relative,text in scaffold.items():
+        target=destination/relative;target.parent.mkdir(parents=True,exist_ok=True)
+        raw=text.encode('utf-8');target.write_bytes(raw);generated[relative]=hashlib.sha256(raw).hexdigest()
     (destination/'source-manifest.json').write_text(json.dumps({'source_head':sha,'files':inputs,
-        'tracked_file_count':len(inputs),'overlays':[]},indent=2))
-    print(json.dumps({'project':str(project),'source_head':sha,'files':len(inputs)}))
+        'tracked_file_count':len(inputs),'overlays':[],'generated_host_files':generated},indent=2))
+    print(json.dumps({'project':str(project),'source_head':sha,'files':len(inputs),
+                      'editor_target':'HostProjectEditor','game_target':'HostProject'}))
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('repo',type=Path);parser.add_argument('destination',type=Path)
