@@ -17,7 +17,7 @@ bool UDaedalusUnicornRewardComponent::HasGameAuthority() const
 
 bool UDaedalusUnicornRewardComponent::CanRecord() const
 {
-    return HasGameAuthority() && !HostPlayerKey.IsEmpty();
+    return HasGameAuthority() && !HostPlayerKey.IsEmpty() && bHostRecordRestored;
 }
 
 bool UDaedalusUnicornRewardComponent::BindHostPlayer(const FString& PlayerKey)
@@ -27,6 +27,16 @@ bool UDaedalusUnicornRewardComponent::BindHostPlayer(const FString& PlayerKey)
     if (!HostPlayerKey.IsEmpty()) return HostPlayerKey == PlayerKey;
     if (!Gate.Pristine() || bHostRecordRestored) return false;
     HostPlayerKey = PlayerKey;
+    return true;
+}
+
+bool UDaedalusUnicornRewardComponent::InitializeNewHostRecord(const FString& ExpectedPlayerKey)
+{
+    if (!HasGameAuthority() || HostPlayerKey.IsEmpty() || ExpectedPlayerKey != HostPlayerKey) return false;
+    if (bHostRecordRestored) return false;
+    if (!Gate.Pristine()) return false;
+    bHostRecordRestored = true;
+    Synchronize();
     return true;
 }
 
@@ -66,7 +76,7 @@ void UDaedalusUnicornRewardComponent::Synchronize()
 
 bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
 {
-    if (!CanRecord() || Record.PlayerKey != HostPlayerKey || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
+    if (!HasGameAuthority() || HostPlayerKey.IsEmpty() || !Record.bAvailable || Record.PlayerKey != HostPlayerKey || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
         Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
     DaedalusUnicornReward::Snapshot state;
     for (const auto& Id : Record.BullIds) state.BullIds.emplace_back(TCHAR_TO_UTF8(*Id));

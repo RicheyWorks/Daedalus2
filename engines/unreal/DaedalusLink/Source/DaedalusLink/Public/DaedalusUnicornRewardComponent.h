@@ -17,7 +17,7 @@ struct DAEDALUSLINK_API FDaedalusUnicornRewardRecord
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PackId;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") bool bClaimed = false;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString GrantReceiptId;
-    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Unicorn") bool bAvailable = false;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") bool bAvailable = false;
 };
 
 /** Per-player progress adapter. Server world-event producers supply verified identities.
@@ -32,6 +32,9 @@ public:
     /** Bind once to the authenticated host player key before events or restore. */
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool BindHostPlayer(const FString& PlayerKey);
+    /** Only after the host's durable lookup confirmed no existing record. */
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    bool InitializeNewHostRecord(const FString& ExpectedPlayerKey);
 
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RecordBullAtSea(const FString& BullId, bool WasBurning, bool SeaArrivalVerified);

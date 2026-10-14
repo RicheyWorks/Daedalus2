@@ -897,3 +897,7 @@ Unicorngate exports canonicalsortedbull IDs/pack/claimed snapshot. Restore valid
 ### Bind per-player reward records before restore or confirmation (2026-10-14)
 Unicorncomponent requires a one-time authenticatedhost PlayerKey before acceptingevents. Export includeskey; restore and persistedgrantconfirmation refuse mismatchedplayers. Same-key bind isidempotent, rebindingrefused. The adapter doesnot authenticatekeys itself: hostidentity/service mustsupply them, anddurablestorage/grant/eventbinding remainpending. Nativecompile stillpending.
 
+
+### Gate events until host persistence lookup finishes (2026-10-14)
+Binding a playerkey mustnot open eventrecording before savedstate isloaded. Unicorncomponent nowrequires successfulavailable-record restore or explicitInitializeNewHostRecord afterhost confirmedabsence; unavailable/defaultrecords refuse. NativeMSVC core compiledC++17 with exceptionsdisabled/W4/WX andpassed35identity/order/claim/restorechecks. This doesnot proveUHT/UEcomponent or in-worldeventwiring.
+
