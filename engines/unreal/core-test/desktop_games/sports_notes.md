@@ -1,5 +1,40 @@
 # Desktop sports ports
 
+## Native polish cycle 3: Football — source only, 2026-10-14
+
+Claims hub 31211/31212 cover `FootballGame` only and the existing canonical
+docs/install packet. Shared `sports_detail` helpers and all `DodgeBallGame` bytes
+remain unchanged. The original Football SHA256 below was read and verified.
+
+Football now reports each goal's scorer for 90 cosmetic live steps and each
+accepted/cooldown-rejected kick press for 12. Counters include the event step plus
+89/11 subsequent live steps respectively; result screens freeze them, and Reset/fresh match clears
+them. Scorer/goal highlights, a kick ring, actual ready/cooldown labels,
+DEFEND/ATTACK labels and mapped fresh controls explain the original rules.
+Goal reset clears stale kick feedback but retains the existing player cooldown.
+No countdown or cue blocks simulation: immediate goal/position reset, floating
+90-second clock, strict scoring/contact geometry and original physics remain.
+Kick acceptance precedes movement/decrement and normally displays cooldown 11
+on its first frame. Later contact can overwrite its velocity; the receipt does
+not promise ball trajectory. Remote kicks remain legal.
+
+Direct core Pad flags now OR into human keyboard flags locally, matching existing
+Slate behavior. Right/down precedence, unnormalized diagonals, per-axis deadzone
+and stick override remain. This is a native input enhancement; the original has
+no hat input. CPU pursuit and shared/Dodge input logic remain unchanged. Fresh
+Fire/Action after title/result resets and immediately advances play without a
+same-step kick; host R/Restart returns to title via the existing Reset.
+
+**Uncompiled/untested.** No tests, builds, CI, game/oracle execution, editor or
+Play occurred in this pass. Historical receipts below apply to their baseline.
+Later validation must check 90/12-step cue expiry/freeze/reset, ignored/accepted
+presses at cooldown 1/0, goal with a live cooldown, final-step goals and each
+win/loss/draw, held buttons versus fresh edges, Pad/right-down/stick precedence,
+physics/clock equivalence without Pad, frame bounds and actual readability.
+The existing [DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md)
+and `docs/desktop-games-polish-install.json` hold the coverage and exact source
+installation/deferred-validation record. No characters/assets/audio were added.
+
 Both cores implement the shared `daedalus::desktop::Game` interface in
 `DesktopGames/DaedalusDesktopSportsCore.h`: `FootballGame` and `DodgeBallGame`.
 Original Desktop files are unchanged. The latest source revision is the baseline.
@@ -12,7 +47,10 @@ Original Desktop files are unchanged. The latest source revision is the baseline
 The older Dodge Ball file is `super_dodge_ball.py` (2026-05-01 02:57:36 UTC).
 Its features are not substituted for the later fixed revision.
 
-## Source behavior preserved
+## Historical baseline source behavior preserved
+
+The original-source facts below remain applicable; newer feedback/direct Pad
+changes are identified above and are outside the old validation receipts.
 
 Football keeps the 800x600 field; blue human and red CPU; 90-second match;
 human speed 3.5; CPU speed 2.8 times 0.9 pursuit; unnormalized diagonal movement;
@@ -66,7 +104,7 @@ bracket, multiplayer or persistent leaderboard feature.
   copied. The source's Nintendo-style descriptor is a reference, not proof
   that any brand/character/license rights transfer to Daedalus.
 
-## Native evidence
+## Historical baseline native evidence
 
 MSVC 2022, C++17, `/W4 /WX /permissive-`: **283,709 checks pass**.
 There are **299 executed-Python source cases** in `sports_parity.txt`: movement,
@@ -110,7 +148,8 @@ python sports_source_oracle.py --desktop 'C:\Users\730ri\OneDrive\Desktop' --out
   **Do not overwrite original `AxisX/AxisY` with pad values:** charge reads
   original stick Y or keyboard Up, so D-pad Up alone never charges and D-pad
   Right plus stick Up moves right while charging. Country selection accepts
-  keyboard and D-pad Up/Down edges. Football has no source hat input.
+  keyboard and D-pad Up/Down edges. Football has no source hat input; cycle 3
+  now mirrors the existing host merge for direct native Pad flags as described above.
 - `FirePressed` = source kick/throw keydown. `Fire` = held throw/catch for Dodge
   Ball. `ActionPressed` = confirm/continue/restart. `Jump`/`JumpPressed` = source
   Shift/B jump. Dodge country selection uses Up/Down edges, while title can also

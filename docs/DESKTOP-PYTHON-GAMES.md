@@ -1,5 +1,60 @@
 # Desktop Python games into Daedalus
 
+## Native polish cycle 3: Football — source only, 2026-10-14
+
+Exact continuation claims: hub 31211/31212. Only `FootballGame` in
+`DesktopGames/DaedalusDesktopSportsCore.h` changes, plus these existing canonical
+notes and the install packet. The pinned original `football_pygame_ce.py` SHA256
+`7b013f8151aa1c815ba0947c2d5d39cf559467106cde60aacca29df936ca3ebe` was read and
+verified unchanged. The shared sports helpers and entire Dodge Ball game remain
+unchanged, as do the prior Dungeon/Pong/Pac-Man/Shadow Ninja passes and other
+owners' actor/registry/Slate, Minesweeper and Java files.
+
+Before: a goal resets positions immediately with no scorer receipt, kick presses
+have no acceptance/cooldown cue, and direct core Pad fields are ignored unless a
+host first merges them. After: a 90-step goal receipt highlights the scored goal
+and names the scorer while play continues. A 12-step accepted/ignored kick receipt
+and player ring complement the actual cooldown/ready label. DEFEND/ATTACK goal
+labels, mapped controls, any-distance kick explanation, a darker score strip and
+distinct result/fresh replay instructions improve the existing presentation.
+
+These counters are **cosmetic only**. A goal includes its event frame plus 89
+subsequent live frames; a kick receipt includes its event frame plus 11. Each
+freezes at a terminal result and clears on Reset/fresh match. No
+kickoff hold, blocked movement or extra match time is added. Goals still reset
+ball/positions immediately, retain player cooldowns and consume that frame's
+time. Goal reset clears a stale kick receipt, not its gameplay cooldown.
+The confirming Fire/Action starts/replays without kicking on the same step.
+Kick still happens before movement/cooldown decrement, so an accepted press sets
+12 then normally displays 11 that frame. Contact deflection can overwrite the
+same step's kick velocity; an accepted receipt promises neither trajectory nor
+possession. Source remote kicks, CPU pursuit, strict goal/deflection boundaries,
+speeds/friction/bounces and floating 90-second clock are retained, including its
+possible extra final step and truncated 89-second initial HUD reading.
+
+Direct Pad directions now OR locally into the human's keyboard flags, matching
+the existing Slate merge. Right/down precedence, unnormalized diagonals and stick
+override beyond 0.2 on either axis remain. This direct Pad support is a native
+adapter enhancement; the Python source has no hat input. Shared sports helpers,
+Dodge Ball's independent hat semantics and all host mappings remain unchanged.
+Fresh Fire/Action after the result starts play immediately; host R/Restart uses
+the existing Reset and returns Football to its title.
+
+`CreateGame("football")`, `Driver::Advance/Refresh/GetStatus`, Arcade
+`GetArcadeFrame/GetState` and Slate `OnPaint/StatusText/PushInput/Restart` already
+carry this pass. No replacement adapter or service is required. Read-only source
+review and source pin/whitespace inspection are the current evidence;
+**compilation, tests, CI, native connection, controller, Play and game-feel
+validation remain deferred/unverified**. Historical sports parity/build receipts
+below do not validate this revision. Exact hashes, installation settings and
+deferred boundary/visual observations are in
+[the existing source packet](desktop-games-polish-install.json).
+
+No player mesh, Blender asset, audio, profile save, multiplayer, reward or new game
+ID is introduced. The bounded pass does not complete full original-app E2E
+coverage. Contra is next queued and requires an exact claim/source trace before
+editing. Only `codex-play-guard` operates Unreal after separately authorized work.
+
 ## Native polish cycle 2 — source only, 2026-10-14
 
 Continuation claims: hub 31185/31186; scope/PR139 acknowledgment 31193. This pass
@@ -58,7 +113,7 @@ The paths below are relative to
 `Driver::Advance` calls bounded fixed `Step` updates and refreshes `Render`,
 `Private/DaedalusDesktopArcade.cpp::GetState` exposes `Status`, and
 `Private/SDaedalusDesktopArcade.cpp` paints frame commands and routes input/restart.
-No new adapter is proposed or required for these four feedback passes.
+No new adapter is proposed or required for these five feedback passes.
 
 | Implemented feature | Exact core interface/source path | Existing Daedalus UI/service binding | Missing code or scope | End-to-end evidence |
 |---|---|---|---|---|
@@ -66,6 +121,7 @@ No new adapter is proposed or required for these four feedback passes.
 | Pong point preparation, early serve, rally/contact cues | `Public/DesktopGames/DaedalusDesktopPongCore.h::PongGame::Step/Render/GetStatus` | Catalog `pong`; existing digital/analog/hat actions and frame | No match-win rule or persistence added | Source written/reviewed; timing/controller/native rendering pending |
 | Pac-Man lethal respawn guard, dot/power counts, fresh retry | `Public/DesktopGames/DaedalusDesktopMazeCore.h::PacmanGame::Step/Render/GetStatus/RespawnFramesRemaining` | Catalog `pacman`; existing merged hat/stick input, terminal press edges and host R/Restart | No profile/save/inventory backend for this source game; no new adapter | Source written; exact 90/91 boundary, fright capture, reset/terminal and native play pending |
 | Shadow Ninja periodic strike/readiness feedback | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange`; `ShadowNinjaGame::Step/Render/GetStatus` | Catalog `shadow_ninja`; existing separate hat/axes and sword/star/spin edges; host R/Restart | No character mesh/audio/progression invented; source level remains 1 | Source written; timer/range/invincibility receipt boundaries and native readability pending |
+| Football scorer/kick receipts, ready/cooldown and direct Pad control | `Public/DesktopGames/DaedalusDesktopSportsCore.h::FootballGame::MovePlayer/Step/Render/GetStatus/IsKickReady` | Catalog `football`; existing merged hat/axes, Fire/Action edges, Frame/Note and host R/Restart | No new physics, timed kickoff pause, possession, save/network/reward or service added | Cycle 3 source written; cue lifetimes, Pad precedence, goal/cooldown/clock/result and native readability pending |
 
 Later authorized validation must distinguish source, committed, connected, native
 and accepted stages. Exact commit/blobs/SHA256 and pending operator observations
@@ -158,8 +214,8 @@ game or an endless documentation pass. Native gameplay proof is a separate stage
 | 2 Pong | Serve/rally/contact feedback, above | Endless source scores, speeds/collision, immediate opening | Source written; timing, controller and rendering Play pending |
 | 3 Pac-Man | 90-step lethal respawn guard, remaining-dot/power feedback, fresh retry | Map, speeds, ghosts, scores and win rules; guard explicitly new native rule | Cycle 2 source written; 90/91 boundary, reset, captures and Play pending |
 | 4 Shadow Ninja | Telegraph existing boss attack; jump/spin/attack readiness and pulse receipt | Existing attack timing/damage and platform movement | Cycle 2 source written; timer/range boundaries and native readability pending |
-| 5 Football | Short goal/kickoff transition and kick feedback | Remote-kick source quirk, 90-second match | Next queued game; exact source/claim required before edits |
-| 6 Contra | Stage distance/checkpoint and pickup readiness cues | Source distance victory, held-jump behavior, cheat distinctions | Queued; title bonus binding remains a separate gap |
+| 5 Football | Live scorer/kick receipts, actual readiness, direct Pad and result/replay cues | Immediate source resets, remote kicks, cooldown, physics and floating 90-second match | Cycle 3 source written; cue/Pad/clock/result boundaries and native Play pending |
+| 6 Contra | Stage distance/checkpoint and pickup readiness cues | Source distance victory, held-jump behavior, cheat distinctions | Next queued game; title bonus binding remains a separate gap; exact claim required |
 | 7 Dodge Ball | Tournament/round summary, throw/catch/charge readiness | Simultaneous trio control and existing held rethrow | Queued; no new bracket/persistence claim |
 | 8 Asteroids | Wave-ready/protection countdown and local run feedback | Wrap/inertia, progressive rock counts and lives | Queued; no ship physics replacement |
 | 9 Sega Shooter | Boss entry/pickup/terminal cues | Source powers/boss victory; unused timers are not enemy bullets | Queued; no invented shooting feature |

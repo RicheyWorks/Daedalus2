@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
   "status": "UNCOMPILED_UNTESTED_SOURCE",
@@ -10,12 +10,14 @@
     31122,
     31185,
     31186,
-    31193
+    31193,
+    31211,
+    31212
   ],
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "d98c6b780af6a13857f1aa395a56b85cf7938cd2",
+    "code_commit": "a05bcf88de8477aeca8ecbbd05510ba2da4cb6df",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
@@ -32,20 +34,47 @@
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
         "git_blob": "2bd4d68f76848cdae7605ce06139039ffcb84e0f",
         "sha256": "E4A09BAB5E1F721C9E797005AC0527793DB689D048B09BDE4FCEEB189092B5D1"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+        "git_blob": "461d6dd20a0d16ee47507039b083f243af560258",
+        "sha256": "5E93004382E96BBF0C69A6B8568DB33E87CC92EB90401BD60C3F028FC21017F5"
       }
     ],
     "peer_sections_preserved": [
       "DungeonGame cycle1",
       "PongCore cycle1",
+      "PacmanGame cycle2",
+      "ShadowNinjaGame and NinjaBoss cycle2",
       "ZeldaGame",
       "ContraGame",
-      "NinjaPlayer",
-      "NinjaAttack",
-      "NinjaEnemy"
+      "NinjaPlayer/NinjaAttack/NinjaEnemy",
+      "sports_detail shared helpers",
+      "DodgeBallGame exact bytes"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "a388169b8b784b08021df7d9bd87ce7cadd571c0",
-    "prior_runtime_commit": "114e4e71d40d159fdfd5068639b39428415cce84"
+    "prior_checkpoint_commit": "6a7052c7bb3dd5eff20e1317664c1c8bb476cc21",
+    "prior_runtime_commit": "d98c6b780af6a13857f1aa395a56b85cf7938cd2",
+    "preserved_checkpoints": [
+      {
+        "cycle": 1,
+        "head": "a388169b8b784b08021df7d9bd87ce7cadd571c0",
+        "code_commit": "114e4e71d40d159fdfd5068639b39428415cce84",
+        "games": [
+          "dungeon",
+          "pong"
+        ]
+      },
+      {
+        "cycle": 2,
+        "head": "6a7052c7bb3dd5eff20e1317664c1c8bb476cc21",
+        "code_commit": "d98c6b780af6a13857f1aa395a56b85cf7938cd2",
+        "games": [
+          "pacman",
+          "shadow_ninja"
+        ]
+      }
+    ]
   },
   "registration": {
     "module": "DaedalusLink",
@@ -55,7 +84,8 @@
       "dungeon",
       "pong",
       "pacman",
-      "shadow_ninja"
+      "shadow_ninja",
+      "football"
     ],
     "registry_actor_slate_changed": false,
     "pr139_minesweeper_changed": false,
@@ -235,6 +265,60 @@
         "durable profile/run save",
         "native acceptance"
       ]
+    },
+    {
+      "id": "football",
+      "InitialGameId": "football",
+      "InitialSeed": 730,
+      "seed_policy": "Football Reset accepts the shared seed but has no RNG; the seed does not alter source rules.",
+      "original_source": "C:/Users/730ri/OneDrive/Desktop/football_pygame_ce.py",
+      "original_sha256": "7b013f8151aa1c815ba0947c2d5d39cf559467106cde60aacca29df936ca3ebe",
+      "gameplay_rule_changes": false,
+      "direct_input_extension": "OR Pad directions into human keyboard flags locally, matching existing Slate; right/down win, then source stick override wins; original Python had no hat input.",
+      "goal_receipt_frames": 90,
+      "kick_receipt_frames": 12,
+      "cue_policy": "Cosmetic only: event frame plus89/11 subsequent live frames; terminal result freezes counters; Reset/fresh match clears. No simulation or clock hold.",
+      "goal_policy": "Source strict goals after ball update/contact; increment once, immediately reset ball and both player positions, retain both cooldowns, and decrement the clock on that same step. Goal clears stale kick receipt only.",
+      "kick_policy": "Fresh FirePressed before movement; accept only at cooldown0, set12 then same-step movement decrements to11; any-distance kick remains; later contact may overwrite velocity. Receipt reports acceptance, not trajectory/possession.",
+      "start_replay": "Fresh FirePressed/ActionPressed from title/result resets then advances play without kicking on that confirm. Existing host R/Restart uses Reset and returns to title.",
+      "clock": "Original double90 minus1/60 per live step, clamped0 on completion; possible extra final step and truncated89 at immediate kickoff retained.",
+      "original_rules_preserved": [
+        "800x600 field and source bounds",
+        "human3.5 and CPU2.8x0.9 pursuit",
+        "right/down precedence and unnormalized diagonals",
+        "per-axis0.15 deadzone then >0.2 stick override",
+        "kick8/contact6/cooldown12",
+        "friction0.96/restitution0.8",
+        "strict goal x50/750 and y220/380",
+        "immediate goal reset retaining cooldowns",
+        "float90sec and win/loss/draw",
+        "fresh replay and held-no-autokick"
+      ],
+      "feedback": [
+        "scorer banner and scored-goal highlight with live play",
+        "accepted/cooldown-ignored kick text and ring",
+        "actual Kick READY/wait counter",
+        "DEFEND/ATTACK goal labels",
+        "darker score strip and mapped controls",
+        "fresh result/replay distinction"
+      ],
+      "interfaces": [
+        "FootballGame::MovePlayer/Step/Render/GetStatus",
+        "FootballGame::IsKickReady",
+        "FootballGame::GoalReceiptFramesRemaining/KickReceiptFramesRemaining/GetLastScorer/GetLastKickReceipt"
+      ],
+      "existing_ui_binding": "CreateGame football -> Driver Advance/Refresh/GetStatus -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no owner adapter edits",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "inventory_or_server_rewards": false,
+      "missing_scope": [
+        "new cue/Pad/clock boundary validation",
+        "native controller and HUD/game feel acceptance",
+        "character assets/audio",
+        "profile/save/network features not invented"
+      ]
     }
   ],
   "presentation": {
@@ -259,6 +343,13 @@
       "current reach label and outline",
       "action readiness words",
       "pulse fired receipt"
+    ],
+    "football_noncolour_cues": [
+      "DEFEND/ATTACK words",
+      "named scorer banner",
+      "Kick READY/wait steps",
+      "accepted/ignored press receipt",
+      "mapped controls and result/replay instruction"
     ]
   },
   "placement": {
@@ -273,7 +364,7 @@
     "saved": false
   },
   "stages": {
-    "source": "Four bounded native source passes implemented and independently read-only reviewed; source facts only",
+    "source": "Five bounded native source passes implemented and independently read-only reviewed; source facts only",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -293,7 +384,10 @@
     "Pong: scored point, live bounded paddles during 45-step preparation, fresh early serve, original velocities/scores and rally/contact cues.",
     "Pac-Man: nonterminal death sets90, exactly90 subsequent live steps protect lethal collisions, step91 vulnerable; frightened captures remain active; verify Reset, terminal freeze and last-dot/lethal ordering.",
     "Shadow Ninja: timer13/12/1/50, moving boss, strict absX300/absY100 boundaries, invincibility0/1; receipt appears for hit/miss/protected pulse and never extends damage; ordinary contact/enemies remain independent.",
-    "Check all four frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review supplies no current play evidence.",
+    "Football: observe fresh kickoff/replay confirm without a same-step kick, source immediate movement and truncated89 HUD; hold Fire does not auto-kick; host R returns to title.",
+    "Football: goal cue90 frames event+89, kick receipt12 event+11, terminal freeze/reset clears; accepted/ignored at cooldown0/1, same-step accepted display11, remote/overlap kicks and later deflection; goal reset retains cooldown and live clock.",
+    "Football: compare no-Pad physics/clock/state against prior source; direct Pad opposing directions retain right/down precedence and analog override. Check strict goal boundaries, last-step scoring and win/loss/draw.",
+    "Check all five frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review supplies no current play evidence.",
     "Return exact source/binary/map/actor/input/transform/save and redacted play observations only after authorized execution."
   ],
   "backlog_order": [
@@ -301,8 +395,8 @@
     "pong source-pass1",
     "pacman source-pass2",
     "shadow_ninja source-pass2",
-    "football next",
-    "contra",
+    "football source-pass3",
+    "contra next",
     "dodge_ball",
     "asteroids",
     "sega_shooter",
