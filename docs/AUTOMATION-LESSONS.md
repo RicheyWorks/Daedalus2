@@ -592,6 +592,16 @@ Evidence for the current byte guard: PR108, six seam regressions plus GLB10/10 a
 independent Windows/Linux workflow run38516094496 passed atdcdd88d22ce6770eb0ec36ae4b2a594e3785183a.
 These results cover the import seam, not full Blender/Unreal gameplay or the proposed durable job system.
 
+
+## Keep import snapshots alive after timeouts (2026-10-13, Codex)
+A pre-dispatch hash check alone cannot stop Blender from overwriting the shared source during
+Unreal import. Copy into a unique import-snapshots directory, verify copied bytes, pass that path,
+and validate identity again in the importer before its first Unreal API call. Retain snapshots
+on timeout because accepted work may still read them. Cleanup requires confirmed job quiescence;
+there is no automatic time-based deletion here. This isolates normal producers, not hostile writes
+between importer validation and file open. Nine offline seam tests cover replacement, corruption
+and timeout retention; live Interchange integration remains the editor owner's acceptance step.
+
 ## GPU crash 22:19: twenty-two imports in one bridge call starved the GPU watchdog (2026-10-13)
 `lay_creatures("LABYRINTH", folder)` imported 22 rigged GLBs inside ONE execute_python call. The log shows the
 frame counter stuck at [0] for the whole call; at the second file Aftermath timed out, DRED had no breadcrumb,

@@ -4,6 +4,7 @@ import hashlib
 import importlib
 from pathlib import Path
 import sys
+import json
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -16,6 +17,9 @@ class IdentityTest(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.path = Path(self.temp.name) / "asset.glb"
         self.path.write_bytes(b"fixture bytes A")
+        self.snapshot_root = patch.object(ship.tempfile, "gettempdir", return_value=self.temp.name)
+        self.snapshot_root.start()
+        self.addCleanup(self.snapshot_root.stop)
 
     def report(self):
         with patch.object(ship.glb, "summarize", return_value={"fixture": True}):
@@ -28,6 +32,35 @@ class IdentityTest(unittest.TestCase):
             self.assertTrue(ship.land(report)["ok"])
             call.assert_called_once()
         self.assertEqual(report["artifact_binding"], "export-sha256")
+
+    def test_original_replaced_after_dispatch_snapshot_survives(self):
+        report = self.report()
+        def consume(*args, **kwargs):
+            self.path.write_bytes(b"fixture bytes B")
+            self.assertNotEqual(report["import_path"], str(self.path))
+            self.assertEqual(Path(report["import_path"]).read_bytes(), b"fixture bytes A")
+            self.assertEqual(ship.fingerprint(report["import_path"]), report["artifact"])
+            return {"result": {}}
+        with patch.object(ship.wire, "call", side_effect=consume), patch.object(ship, "judge", return_value=[{"ok": True}]):
+            ship.land(report)
+
+    def test_timeout_preserves_dispatched_snapshot(self):
+        report = self.report()
+        with patch.object(ship.wire, "call", side_effect=TimeoutError("still running")):
+            with self.assertRaises(TimeoutError): ship.land(report)
+        self.assertTrue(Path(report["import_path"]).exists())
+
+    def test_importer_rejects_corrupted_snapshot_before_unreal_api(self):
+        from asset_pipeline import sides
+        import types
+        path = self.path
+        artifact = ship.fingerprint(path)
+        path.write_bytes(b"fixture bytes B")
+        code = sides.script(sides.UNREAL_IMPORT, path=str(path), artifact=artifact, dest="/Game/Test")
+        # Empty Unreal stub: reaching an import API would fail this test differently.
+        with patch.dict(sys.modules, {"unreal": types.ModuleType("unreal")}):
+            with self.assertRaisesRegex(ValueError, "identity mismatch"):
+                exec(code, {})
 
     def test_same_size_changed_bytes_refused(self):
         report = self.report()

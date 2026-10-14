@@ -17,6 +17,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import sys
 import tempfile
 import time
@@ -153,6 +154,18 @@ def prebuilt(name, glb_path, sent):
     return report
 
 
+def import_snapshot(path, expected):
+    """Keep a private copy alive even when a bridge timeout leaves work running."""
+    root = os.path.join(tempfile.gettempdir(), "daedalus-pipeline", "import-snapshots")
+    os.makedirs(root, exist_ok=True)
+    folder = tempfile.mkdtemp(prefix=expected["sha256"][:16] + "-", dir=root)
+    snapshot = os.path.join(folder, os.path.basename(path))
+    shutil.copyfile(path, snapshot)
+    if fingerprint(snapshot) != expected:
+        raise ValueError("asset changed while creating import snapshot; re-export before import")
+    return snapshot
+
+
 def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT):
     """The Unreal half: import the exported file, then judge all three sides."""
     expected = report.get("artifact")
@@ -165,11 +178,14 @@ def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, ti
         report["artifact_binding"] = "legacy-structure-only"
     else:
         report["artifact_binding"] = "export-sha256"
+    snapshot = import_snapshot(report["path"], current)
+    report["import_artifact"] = current
+    report["import_path"] = snapshot
     report["dest"] = dest + "/" + report["name"]
     t = time.time()
     made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
                      bridge_timeout=timeout,
-                     code=sides.script(sides.UNREAL_IMPORT, path=report["path"], dest=report["dest"], save=save))
+                     code=sides.script(sides.UNREAL_IMPORT, path=snapshot, artifact=current, dest=report["dest"], save=save))
     made = wire.obj(made, "Unreal", "the import")
     checks = judge(report["blender"], report["file"], made)
     report.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, imported_s=round(time.time() - t, 2),
