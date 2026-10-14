@@ -36,6 +36,18 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  # Optional persisted sea sector. Directory and seed are required only when enabled.
+  ocean:
+    enabled: ${DAEDALUS_OCEAN_ENABLED:false}
+    directory: ${DAEDALUS_OCEAN_DIRECTORY}
+    seed: ${DAEDALUS_OCEAN_SEED}
+    capacity: ${DAEDALUS_OCEAN_CAPACITY:128}
+    min-x: ${DAEDALUS_OCEAN_MIN_X:-2}
+    max-x: ${DAEDALUS_OCEAN_MAX_X:1}
+    min-y: ${DAEDALUS_OCEAN_MIN_Y:-3}
+    max-y: ${DAEDALUS_OCEAN_MAX_Y:0}
+    min-z: ${DAEDALUS_OCEAN_MIN_Z:-2}
+    max-z: ${DAEDALUS_OCEAN_MAX_Z:1}
   audio:
     host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
   kennel:
@@ -258,6 +270,11 @@ resilience4j:
       presence:
         limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
         limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      oceanChunks:
+        limit-for-period: 32          # bounded sector streaming; separate from maze-generation quota
+        limit-refresh-period: 1s
         timeout-duration: 0
         register-health-indicator: false
       mazeGenerate:

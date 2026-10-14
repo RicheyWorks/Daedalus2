@@ -209,4 +209,30 @@ Keep design/calculation independent of remote music fetches, retain the prior va
 failure, and do not restart an unchanged track at every refresh. Parameter fixtures prove
 cross-language inputs, not audible playback; native playback needs its own live verification.
 
+### Verify checkout before every Git mutation
+
+Always set an explicit working directory on Git mutations, then verify the branch
+and HEAD match the intended isolated checkout. A missing working directory created
+an unused branch in the shared checkout during Brick art delivery. Recovery checked
+that the original branch and commit matched and compared every dirty-file status
+before and after restoring the branch. No file resets or stashes were needed.
+Verify the pushed commit and PR base too; a successful push alone does not prove
+that the intended change was published.
+
+### Initialize Unreal test worlds before testing RPC wrappers
+
+Creating a UWorld is insufficient to dispatch actor RPCs in an automation test.
+UE 5.8 AActor::ProcessEvent gates dispatch on AreActorsInitialized unless editor
+script execution is explicitly allowed. InitializeActorsForPlay and assert that
+state before exercising the real wrapper. A direct implementation call can help
+diagnose movement logic but cannot substitute for dispatch verification. Neither
+standalone dispatch nor a direct handler proves client/server network delivery.
+
+### C++ prefixes do not make Unreal reflection names unique
+
+ADaedalusOceanDock and FDaedalusOceanDock collided in UHT even though their C++
+names differ. Unreal removes type prefixes when deriving reflected names. Name
+new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
+established data APIs. A full reflection build caught this before publication.
+
 

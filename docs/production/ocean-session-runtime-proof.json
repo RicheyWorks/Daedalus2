@@ -1,0 +1,59 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "BLACKBEARD",
+			"instance": "2EE1C828436A70953B23A39ED069F446",
+			"instanceName": "BLACKBEARD-23504",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (26H2) [10.0.26300.9550] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 4090",
+			"cPUModel": "AMD Ryzen 9 7900X 12-Core Processor            ",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.10.13-23.04.14",
+	"succeeded": 2,
+	"succeededWithWarnings": 0,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.024908002465963364,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "HeroDockInteraction",
+			"fullTestPath": "Daedalus.Ocean.HeroDockInteraction",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"2EE1C828436A70953B23A39ED069F446"
+			],
+			"duration": 0.011285502463579178,
+			"dateTime": "2026.10.13-23.04.14",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "HostEligibility",
+			"fullTestPath": "Daedalus.Ocean.HostEligibility",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"2EE1C828436A70953B23A39ED069F446"
+			],
+			"duration": 0.013622500002384186,
+			"dateTime": "2026.10.13-23.04.14",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

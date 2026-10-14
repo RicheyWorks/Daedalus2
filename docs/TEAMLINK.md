@@ -49,6 +49,35 @@ use `ping-<user>`.
 5. **Send**: `POST /send {"from": "blender-team", "to": "unreal-team", "type": "asset.ready", "body": {"asset":
    "Tool_Axe"}}`. You get back `{"id": n}`.
 
+## Turns and answers (2026-10-13, Richmond: "I need you two talking in real time")
+
+Editor turns and the merge queue are **locks on the broker**, not prose. A claim is refused with who holds it; a
+holder that goes quiet loses the claim after its TTL (30 min default); claims are log lines, so they survive a
+restart. Unanswered requests to you are your **inbox**.
+
+```
+python -m asset_pipeline.teamlink claim unreal --me unreal-team --note "build 56ce68bbc"     exit 0 claimed, 3 refused (and a note is posted)
+python -m asset_pipeline.teamlink claim merge-queue --me team-codex --note "57-72"
+python -m asset_pipeline.teamlink release unreal --me unreal-team                            --force takes it from a quiet holder
+python -m asset_pipeline.teamlink locks                                                       who has what, for how long
+python -m asset_pipeline.teamlink inbox --me unreal-team                                      requests/pings to me that I have not acked, oldest first, with age
+python -m asset_pipeline.teamlink ack 28937 --me unreal-team                                  I handled it: it leaves my inbox, the sender gets a receipt
+python -m asset_pipeline.teamlink watch --me team-codex --minutes 60                          a terminal: one line per message as it arrives
+```
+
+6. **Claim before you touch a shared editor** (`unreal`, `blender`) or the merge queue (`merge-queue`); release
+   when done. `CLAIM`/`RELEASE` in a status text no longer counts.
+7. **Ask with `type: request`** addressed to the bot (not `*`) when you need an answer; the other side sees it
+   in `inbox` until it acks. Answer with `reply_to` set and ack it. Check your inbox at the start and end of every
+   slice and whenever you are waiting on a build.
+8. HTTP: `POST /lock {me, name, note?, ttl?}` (409 + the holder when refused), `POST /unlock {me, name, force?}`,
+   `GET /locks`, `GET /inbox?me=`.
+
+For a durable agent inbox, safe retries and explicit task acceptance, use
+[`asset_pipeline.live_handoff`](TEAM-HANDOFF-LOOP.md). Poll at tool/job boundaries and during build waits.
+Its `accepted`, `blocked` and `completed` replies are distinct from the broker's receipt ACK. It works on
+the existing broker endpoints; a terminal watcher alone does not make an idle agent respond.
+
 ## Message types
 
 | type | from → to | body | what happens |
@@ -76,7 +105,8 @@ python -m asset_pipeline.teamlink ping --me blender-team --to unreal-team
 ```
 
 From Python, use `asset_pipeline.teamlink.Link("blender-team")`. It has `.send`, `.wait`, `.ack`, `.heartbeat`,
-`.pending` and `.presence`, and it never raises when the broker is down; `.up` turns False instead.
+`.pending`, `.inbox`, `.lock`, `.unlock`, `.locks` and `.presence`, and it never raises when the broker is down;
+`.up` turns False instead.
 
 ## Keeping it running
 

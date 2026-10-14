@@ -146,6 +146,37 @@ check("files: the finished line arrives after a restart, without repeating the f
 check("files: an ack line is a receipt", ("pootscoot", mid) in b.acked)
 err = [m for m in b.wait("pootscoot", 0, 0)[0] if m["type"] == "error"]
 check("files: a bad line gets an error message back, the bridge keeps going", err and err[0]["body"]["line"] == "not json", err)
+
+# 1b. Locks (editor turns, the merge queue) and the inbox (2026-10-13: "I need you two talking in real time").
+clk = {"t": 1760100000.0}
+lb = teamlink.Broker(tempfile.mkdtemp(prefix="link-"), clock=lambda: clk["t"])
+ok, st = lb.lock("unreal-team", "unreal", "build 56ce68bbc")
+check("locks: a free lock is claimed", ok and st["holder"] == "unreal-team" and st["name"] == "unreal", st)
+ok2, st2 = lb.lock("team-codex", "UNREAL", "terrain compile")
+check("locks: another bot is refused and told who has it", not ok2 and st2["holder"] == "unreal-team" and st2["note"] == "build 56ce68bbc", st2)
+ok3, _ = lb.lock("unreal-team", "unreal", "still building")
+check("locks: re-claiming your own lock refreshes it", ok3 and lb.lock_table()["unreal"]["note"] == "still building")
+check("locks: a different lock is independent", lb.lock("team-codex", "blender")[0] and len(lb.lock_table()) == 2)
+ok4, st4 = lb.unlock("team-codex", "unreal")
+check("locks: you can't release another's lock", not ok4 and st4["holder"] == "unreal-team")
+check("locks: the holder releases it", lb.unlock("unreal-team", "unreal")[0] and "unreal" not in lb.lock_table())
+check("locks: releasing a free lock is fine", lb.unlock("unreal-team", "unreal")[0])
+lb.lock("unreal-team", "unreal", "then I went quiet", ttl=600)
+clk["t"] += 601
+check("locks: a quiet holder's claim expires and the next bot gets it", "unreal" not in lb.lock_table() and lb.lock("team-codex", "unreal", "my turn")[0])
+check("locks: force takes a lock from a quiet holder", lb.unlock("unreal-team", "unreal", force=True)[0] and "unreal" not in lb.lock_table())
+lb.lock("team-codex", "merge-queue", "57-72")
+lb2 = teamlink.Broker(lb.folder, clock=lambda: clk["t"])
+check("locks: claims survive a broker restart (they're log lines)", lb2.lock_table().get("merge-queue", {}).get("holder") == "team-codex" and "blender" in lb2.lock_table())
+r1 = lb.send("team-codex", "unreal-team", "request", {"text": "confirm Via strings"})
+lb.send("team-codex", "unreal-team", "note", {"text": "fyi only"})
+lb.send("team-codex", "*", "request", {"text": "anyone?"})
+clk["t"] += 90
+inbox = lb.inbox("unreal-team")
+check("inbox: only unanswered requests addressed to me, with their age", len(inbox) == 1 and inbox[0]["id"] == r1 and inbox[0]["age_s"] >= 90, inbox)
+lb.ack("unreal-team", r1)
+check("inbox: an ack clears it", lb.inbox("unreal-team") == [])
+shutil.rmtree(lb.folder)
 shutil.rmtree(d)
 
 # 2. Over HTTP, the way both teams use it.

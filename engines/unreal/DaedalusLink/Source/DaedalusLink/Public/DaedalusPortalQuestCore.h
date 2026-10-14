@@ -1,6 +1,5 @@
 #pragma once
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -21,19 +20,31 @@ enum class Result { Ignored, Duplicate, Progressed, Completed, CapacityReached }
 class Progress
 {
 public:
+    // Exceptions are off in Unreal game targets (preflight P8): a bad step list leaves the quest empty and
+    // Valid() false, and Why() says what was wrong.
     explicit Progress(std::vector<Step> steps) : Steps(std::move(steps))
     {
         if (Steps.empty() || Steps.size() > 32)
-            throw std::invalid_argument("Quest needs one to thirty-two steps");
+        {
+            Invalid = "Quest needs one to thirty-two steps";
+            Steps.clear();
+            return;
+        }
         for (const auto& s : Steps)
             if (s.Type.empty() || s.Target.empty() || s.Required == 0)
-                throw std::invalid_argument("Quest step needs type, target and positive count");
+            {
+                Invalid = "Quest step needs type, target and positive count";
+                Steps.clear();
+                return;
+            }
     }
+    bool Valid() const { return Invalid.empty(); }
+    const std::string& Why() const { return Invalid; }
 
     Result Apply(const std::string& eventId, const std::string& type,
                  const std::string& target, unsigned amount = 1)
     {
-        if (eventId.empty() || eventId.size() > 128 || amount == 0)
+        if (!Valid() || eventId.empty() || eventId.size() > 128 || amount == 0)
             return Result::Ignored;
         if (Seen.count(eventId)) return Result::Duplicate;
         if (Complete()) return Result::Ignored;
@@ -48,7 +59,7 @@ public:
         return Complete() ? Result::Completed : Result::Progressed;
     }
 
-    bool Complete() const { return Current == Steps.size(); }
+    bool Complete() const { return Valid() && Current == Steps.size(); }
     std::size_t StepIndex() const { return Current; }
     unsigned StepCount() const { return Count; }
     bool ClaimReward()
@@ -59,6 +70,7 @@ public:
     }
 private:
     std::vector<Step> Steps;
+    std::string Invalid;
     std::unordered_set<std::string> Seen;
     std::size_t Current = 0;
     unsigned Count = 0;

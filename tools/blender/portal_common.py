@@ -44,7 +44,7 @@ def export_character(mesh,rig,role,rig_name,extra=None):
     tri=sum(len(p.vertices)-2 for p in mesh.data.polygons);radius=math.ceil(max(Vector(c).length for c in mesh.bound_box)*100)
     return dict(id=mesh.name,role=role,file=path.name,triangles=tri,bones=len(rig.data.bones),rig=rig_name,radius_cm=radius,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),**(extra or {}))
 
-def finish_scene(records,columns,spacing,filename,clips):
+def finish_scene(records,columns,spacing,filename,clips,render=True):
     rows=math.ceil(len(records)/columns);cx=(columns-1)*spacing/2;cy=(rows-1)*spacing/2
     bpy.ops.mesh.primitive_plane_add(size=250,location=(0,0,-.001));bpy.context.object.data.materials.append(ink)
     bpy.ops.object.camera_add(location=(cx+12,cy-18,22));c=bpy.context.object;c.rotation_euler=(Vector((cx,cy,.8))-c.location).to_track_quat('-Z','Y').to_euler();c.data.type='ORTHO';c.data.ortho_scale=max(columns*spacing,rows*spacing)*1.5+3;bpy.context.scene.camera=c
@@ -53,7 +53,8 @@ def finish_scene(records,columns,spacing,filename,clips):
     for loc in [(cx-3,cy-8,15),(cx+8,cy+8,16)]:
         bpy.ops.object.light_add(type='AREA',location=loc);l=bpy.context.object;l.data.energy=5500;l.data.size=12;l.rotation_euler=(Vector((cx,cy,0))-l.location).to_track_quat('-Z','Y').to_euler()
     s=bpy.context.scene;s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.render.threads_mode='FIXED';s.render.threads=4;s.render.fps=24;s.render.resolution_x=1900;s.render.resolution_y=1500;s.render.resolution_percentage=100;s.world.color=(.18,.18,.18);s.render.filepath=str(OUT/'contact-sheet.png')
-    bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(filename+'.blend')));bpy.ops.render.render(write_still=True)
+    bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(filename+'.blend')))
+    if render:bpy.ops.render.render(write_still=True)
     (OUT/'manifest.json').write_text(json.dumps({'assets':records,'clips':clips,'status':'art prototype; native integration pending','realm':'Portal'},indent=2))
     (OUT/'portal.bba').write_text('BBA 1\n'+''.join(f"asset {r['id']} lod0 {r['triangles']} lod1 - radius {r['radius_cm']} switch {max(500,20*r['radius_cm'])}\n" for r in records))
 

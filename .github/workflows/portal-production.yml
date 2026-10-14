@@ -9,6 +9,16 @@ on:
       - 'engines/unreal/**/DaedalusPortalQuestCore.h'
       - 'engines/unreal/**/DaedalusExplorationTerrainCore.h'
       - 'engines/unreal/**/DaedalusOceanTravelCore.h'
+      - 'engines/unreal/**/DaedalusOceanTravelComponent.*'
+      - 'engines/unreal/**/DaedalusOceanTravelTest.cpp'
+      - 'engines/unreal/**/DaedalusOceanDock*'
+      - 'engines/unreal/**/DaedalusOceanInteractor.*'
+      - 'engines/unreal/**/DaedalusOceanHostClient.*'
+      - 'engines/unreal/**/DaedalusOceanClientTest.cpp'
+      - 'engines/unreal/**/DaedalusOceanSectorView.*'
+      - 'engines/unreal/**/DaedalusOceanViewTest.cpp'
+      - 'engines/unreal/**/DaedalusOceanPalette.inl'
+      - 'tools/unreal/ocean-http-probe/**'
       - 'engines/unreal/core-test/*quest_core_test.cpp'
       - 'engines/unreal/core-test/*terrain_core_test.cpp'
       - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
@@ -25,6 +35,11 @@ on:
       - 'tools/blender/portal_hero*.py'
       - 'tools/blender/portal_common.py'
       - 'tools/blender/gallery_*.py'
+      - 'tools/blender/parcels_*.py'
+      - 'tools/blender/brick_*.py'
+      - 'tools/blender/realm_humanoid.py'
+      - 'tools/blender/realm_creature.py'
+      - 'tools/blender/cast_binding_map.py'
       - 'daedalus-core/src/**/retro/Retro*.java'
   workflow_dispatch:
 permissions:
@@ -66,6 +81,10 @@ jobs:
             "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer "engines/unreal/core-test/${core}_core_test.cpp" -o "$RUNNER_TEMP/$core"
             "$RUNNER_TEMP/$core"
           done
+      - name: Quest core with Unreal game exceptions disabled
+        run: |
+          "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fno-exceptions -fsanitize=address,undefined engines/unreal/core-test/portal_quest_core_test.cpp -o "$RUNNER_TEMP/quest-no-exceptions"
+          "$RUNNER_TEMP/quest-no-exceptions"
       - name: Population and honest queue status
         run: |
           python3 -m unittest discover -s tools/blender -p test_portal_population.py
@@ -73,6 +92,12 @@ jobs:
           python3 -m py_compile tools/blender/portal_hero_polish.py tools/blender/portal_hero_lods.py tools/blender/portal_common.py
           python3 -m py_compile tools/blender/gallery_cast.py tools/blender/gallery_creatures.py
           python3 -m py_compile tools/blender/gallery_environment.py tools/blender/validate_static_kit.py tools/blender/validate_gallery_package.py
+          python3 -m py_compile tools/blender/parcels_cast.py tools/blender/realm_humanoid.py tools/blender/cast_binding_map.py
+          python3 -m py_compile tools/blender/parcels_creatures.py tools/blender/realm_creature.py
+          python3 -m py_compile tools/blender/parcels_environment.py tools/blender/validate_parcels_package.py
+          python3 -m py_compile tools/blender/brick_cast.py tools/blender/brick_creatures.py
+          python3 -m py_compile tools/blender/brick_environment.py tools/blender/validate_brick_package.py
+          python3 -m py_compile tools/unreal/ocean-http-probe/run.py
   windows:
     runs-on: windows-latest
     steps:
@@ -87,3 +112,10 @@ jobs:
             & "$env:RUNNER_TEMP/$core.exe"
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
+      - name: Quest core with Unreal game exceptions disabled
+        shell: pwsh
+        run: |
+          cl /nologo /EHs-c- /D_HAS_EXCEPTIONS=0 /std:c++17 /W4 /WX engines/unreal/core-test/portal_quest_core_test.cpp "/Fe:$env:RUNNER_TEMP/quest-no-exceptions.exe" "/Fo:$env:RUNNER_TEMP/quest-no-exceptions.obj"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & "$env:RUNNER_TEMP/quest-no-exceptions.exe"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -1149,6 +1149,7 @@ def scenario_cast(p):
         _check("the third talk starts at 'waiting' and 'I have it' finishes the quest", "heartstone_done" in s3 and any("Any word" in l or "page=" in l for l in third), s3),
         _check("the Choir hears the realm-wide flag and sings", "heartstone_done" in s4 and used4, s4),
         _check("the Curator's Frame Plate landed in the satchel", "given=FRAME_PLATE" in s3 and dict(h.get_editor_property("satchel")).get("FRAME_PLATE", 0) >= 1, s3),
+        _check("the talkers wear Sol's imported cast (Mob_Gallery_<Who>)", "art=Mob_Gallery_CuratorVell:1" in s3 and "art=Mob_Gallery_EchoChoir:1" in s4, s3 + " | " + s4),
     ]}
 
 
@@ -1158,6 +1159,7 @@ def scenario_realm_switch(p):
     where it is; the inventory catalog follows the realm; the session is in the hero's progress file."""
     h = hero()
     start = h.realm_session_state()
+    before = int(_kv(start).get("switches", "0")) if "switches=" in start else 0   # the session persists across runs
     g = h.switch_realm("gallery-city", "gate", "")
     cat_after_gate = h.inventory_catalog_name()
     bad = h.switch_realm("parcels", "gate", "")
@@ -1192,7 +1194,7 @@ def scenario_realm_switch(p):
         _check("a boat at a dock enters the Ocean", dock.startswith("ok GALLERY-CITY -> OCEAN"), dock),
         _check("a boat cannot land at another realm's dock", wrong.startswith("refused"), wrong),
         _check("a shore landing returns to the departure", shore.startswith("ok OCEAN -> GALLERY-CITY"), shore),
-        _check("home by gate, six switches counted", home.startswith("ok GALLERY-CITY -> WORLD-ZERO") and "switches=6" in state, state),
+        _check("home by gate, six more switches counted", home.startswith("ok GALLERY-CITY -> WORLD-ZERO") and int(_kv(state).get("switches", "0")) - before == 6, state + " before=%d" % before),
         _check("the session is saved with the hero's progress", saved.startswith("WORLD-ZERO"), saved),
     ]}
 

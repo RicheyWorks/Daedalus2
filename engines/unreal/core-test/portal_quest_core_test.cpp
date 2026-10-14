@@ -29,8 +29,27 @@ int main()
     CHECK(bounded.Apply("overflow", "collect", "supplies") == Result::CapacityReached);
     CHECK(bounded.StepCount() == 512 && !bounded.Complete());
     CHECK(bounded.Apply("0", "collect", "supplies") == Result::Duplicate);
-    bool rejected=false;
-    try { Progress invalid({}); } catch (const std::invalid_argument&) { rejected=true; }
-    CHECK(rejected);
+    const std::vector<std::vector<Step>> invalidConfigs = {
+        {}, {{"", "king", 1}}, {{"talk", "", 1}}, {{"talk", "king", 0}},
+        std::vector<Step>(33, Step{"talk", "king", 1}),
+        {{"talk", "king", 1}, {"rescue", "traveller", 0}}
+    };
+    for (const auto& config : invalidConfigs)
+    {
+        Progress invalid(config);
+        CHECK(!invalid.Valid() && !invalid.Why().empty());
+        CHECK(!invalid.Complete());
+        CHECK(!invalid.ClaimReward());
+        CHECK(invalid.Apply("invalid-event", "talk", "king") == Result::Ignored);
+        CHECK(invalid.StepIndex() == 0 && invalid.StepCount() == 0);
+        CHECK(!invalid.Complete() && !invalid.ClaimReward());
+    }
+    Progress maximum(std::vector<Step>(32, Step{"talk", "king", 1}));
+    CHECK(maximum.Valid() && maximum.Why().empty());
+    for (unsigned i=0; i<32; ++i)
+        CHECK(maximum.Apply(std::to_string(i), "talk", "king") ==
+              (i == 31 ? Result::Completed : Result::Progressed));
+    CHECK(maximum.Complete() && maximum.ClaimReward());
+    CHECK(!maximum.ClaimReward());
     std::cout << "PORTAL_QUEST_PASS " << checks << " checks\n";
 }

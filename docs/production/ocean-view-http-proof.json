@@ -1,0 +1,33 @@
+{
+  "packaged_server_to_native_client": true,
+  "native_procedural_geometry": true,
+  "water_collision_disabled": true,
+  "cleared_revision_and_mesh_removal": true,
+  "water_payload": true,
+  "bounds404": true,
+  "jwt401": true,
+  "cancelled_reply_ignored": true,
+  "reconnect": true,
+  "token_not_in_logs": true,
+  "elapsed_seconds": 20.766,
+  "scope": "Java server startup plus native engine startup and HTTP scenario",
+  "jar_sha256": "ae602524aef599a308746aecc93211619188fa34422fcb9dec5d763ec42c18f2",
+  "rendered_gameplay_verified": false,
+  "tls_redirect_policy_verified": false,
+  "realm_transfer_verified": false,
+  "source_head": "714725c6a6e6b56de9d66dfa760e9d1ad3321414",
+  "production_inputs": 135,
+  "fixture_additions": [
+    "Public/OceanHttpProbe.h",
+    "Private/OceanHttpProbe.cpp"
+  ],
+  "owned_children_stopped": true,
+  "log_sha256": {
+    "native-stdout.log": "ae343f0c0ef19cd1be11c7f352aa2745ecacfa9651f90cf8b403bb3362bdb596",
+    "native.log": "7cf66d8df5e2a07687eef558e109bcc009a680a4e972c5b6c33b4a9a32b18637",
+    "server.log": "7c701b0e62d21d43e7fa0c67c543d949bc5d13f79dc40cdf0923617acd2a385d"
+  },
+  "java_source_head": "62be988b",
+  "core_tests": 719,
+  "core_seconds": 36.809
+}
