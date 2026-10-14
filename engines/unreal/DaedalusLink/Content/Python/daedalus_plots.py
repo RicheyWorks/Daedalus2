@@ -96,7 +96,12 @@ def save_world():
     t0 = time.time()
     ok = unreal.EditorLoadingAndSavingUtils.save_packages([pk], only_dirty=False)
     if not ok or not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
-        raise RuntimeError("the persistent level was not written: ok=%s %s" % (ok, fn))
+        # 02:20: ok=False while the editor's own autosave ("Auto-saving out of date packages") was running; one retry
+        time.sleep(8.0)
+        t0 = time.time()
+        ok = unreal.EditorLoadingAndSavingUtils.save_packages([pk], only_dirty=False)
+        if not ok or not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+            raise RuntimeError("the persistent level was not written (twice; autosave running?): ok=%s %s" % (ok, fn))
     return round(time.time() - t0, 1)
 
 def _editor_inputs():
