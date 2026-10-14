@@ -1097,3 +1097,35 @@ Engine facts, each paid for once:
 12. A background editor (not the active window) is the normal state under bot control; every setting that assumes
     a human in front of it (throttle, Slate throttling, notifications, prompts) must be off, and the doctor must
     say so at every start.
+
+## 2026-10-14 03:05 — end-of-session handoff (Richey back ~05:00): harness — what works, what to improve
+
+Working well tonight (keep):
+- The hub as the only channel: 60+ messages, every block/pause/handback a reply_to within a minute; Poot's
+  install block routed round in 6 min via a merged PR; no user-mediated relay after 01:00.
+- Budgeted daedalus.steps for bulk work (49k plots laid + dressed twice, 673 holes, 1,402 extras: all under 4 min
+  per pass) and pc-job for anything longer than a bridge call.
+- Proven saves (mtime) with one autosave retry; labels as idempotency keys; the ledger as the mint's contract.
+- Connector for looking and checking: tag queries, camera + screenshot, settings read-back, PIE state; and for
+  the two real fixes of the night (throttle 3->46 fps, import modal off).
+- Receipts with fps/frames/seconds; run_scenarios waits 900 s; game-time waits.
+
+Improve (Poot's list, ordered; items 1-10 already on the hub, 11-13 new tonight):
+1. play-guard lease + 60 s hub warning + refuse Play above 90% RAM (vitals.py) instead of killing mid-run.
+2. editor start = StartServer + doctor.py --fix + MCP READY line in teamlink doctor (H2/H3).
+3. desktop-proxy captures near 3 MB (Epic 5 s write-idle close) — server patch or low-res capture.
+4. bridge calls cap at 60 s: job tails must return instantly (job_status.py, play-guard helper owns it).
+5. setup-owner column: done (H4); keep it current when a new connector lands.
+6. save_world autosave retry: done. 7. no inline python through the bridge: rule, in lessons.
+8. fps in receipts: done. 9. modal guard with a dialog table (bridge). 10. unreal-job -Open runs doctor --fix.
+11. stdio proxy must re-initialize on "Unknown session id" after an editor restart (fixed on main 99cc50a; the
+    app only loads it on its next launch — Richey restarts the app once in the morning).
+12. vitals --watch 60 as a standing job; editor_mb + ram_pct in the doctor; the structural fix is district
+    streaming (ADR-063) so PIE does not copy 24k actors.
+13. The hole-fill probe must use the plane, not the first hit, and dedupe against instanced cells before the
+    ledger (34 duplicate deeds reached Sol's check tonight; fixed, ledger 9,979 unique).
+
+State at handoff: all five realms laid, dressed (unique per deed), hub floors solid, portal bounce fixed and
+proven (portals 5/5, realm_switch 10/10, mounts 9/9, realm_ground 17/17), ledger exported (49,943 lands), editor
+up on a9c56af with MCP on, doctor green, RAM 87%. Not done: district streaming, airship tour receipt, material
+reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER rows 2/12 per realm.
