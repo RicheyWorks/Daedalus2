@@ -126,7 +126,7 @@ public final class LabyrinthRouteSession {
                 if (trail.marks().contains(point)) return decision(Result.ALREADY_MARKED, false);
                 if (trail.marks().size() == capacity) return decision(Result.TRAIL_FULL, false);
                 if (trail.charges() == 0) return decision(Result.OUT_OF_CHALK, false);
-                if (events.size() == LabyrinthRouteSnapshot.MAX_EVENTS) return decision(Result.REPLAY_CAPACITY, false);
+                if (!hasRouteEventSpace(!learnedTurns.contains(point))) return decision(Result.REPLAY_CAPACITY, false);
                 if (trail.mark(point) != ChalkTrail.Result.ADDED) {
                     throw new IllegalStateException("route and chalk state disagree");
                 }
@@ -136,7 +136,7 @@ public final class LabyrinthRouteSession {
             }
             case ERASE -> {
                 if (!trail.marks().contains(point)) return decision(Result.NOT_MARKED, false);
-                if (events.size() == LabyrinthRouteSnapshot.MAX_EVENTS) return decision(Result.REPLAY_CAPACITY, false);
+                if (!hasRouteEventSpace(false)) return decision(Result.REPLAY_CAPACITY, false);
                 trail.erase(point);
                 outcome = Result.ERASED;
             }
@@ -158,6 +158,13 @@ public final class LabyrinthRouteSession {
 
     private Decision decision(Result result, boolean changed) {
         return new Decision(result, changed, view());
+    }
+
+    /** Optional exploration/erosion cannot consume slots needed to finish the lesson. */
+    private boolean hasRouteEventSpace(boolean earnsTurn) {
+        int remainingLessonEvents = returned ? 0 : REQUIRED_TURNS - learnedTurns.size() + 1;
+        if (!returned && learnedTurns.size() < REQUIRED_TURNS && earnsTurn) remainingLessonEvents--;
+        return events.size() + 1 + remainingLessonEvents <= LabyrinthRouteSnapshot.MAX_EVENTS;
     }
 
     public synchronized View view() {
