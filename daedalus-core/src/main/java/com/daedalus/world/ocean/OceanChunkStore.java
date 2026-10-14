@@ -125,7 +125,8 @@ public final class OceanChunkStore implements AutoCloseable {
             return;
         }
         try (var files = Files.list(directory)) {
-            if (files.anyMatch(path -> !path.getFileName().toString().equals("store.lock"))) {
+            Path ownershipFile = directory.resolve("store.lock");
+            if (files.anyMatch(path -> !path.equals(ownershipFile))) {
                 throw new IOException("Refusing to adopt Ocean data without metadata");
             }
         }
