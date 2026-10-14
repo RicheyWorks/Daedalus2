@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Explicit plugin recovery (2026-10-13)
+Keep an operator-approved binary checkpoint before replacing a good plugin. Restore DLLs together with their UnrealEditor.modules and sibling binaries, with hash and engine-association checks. Prepare before swapping, preserve the replaced directory, and refuse active editor/build tools. Recovery is not a build/restart operation or proof of runtime health. Native filesystem fixture restored0.075s; actual plugin60s target remains unproven.
+
