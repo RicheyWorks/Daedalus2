@@ -19,12 +19,19 @@ void SDaedalusShardstead::Construct(const FArguments& Args){
     ChildSlot[SNew(SScrollBox)+SScrollBox::Slot()[SAssignNew(Body,SVerticalBox)]];Rebuild();
 }
 void SDaedalusShardstead::Refresh(const FDaedalusIslandStats& In,const TArray<FDaedalusIslandClaimRow>& Rows){
-    Stats=In;Claims=Rows;Rebuild();
+    Stats=In;
+    // A partial DTO is unknown, not a zero balance. Never present stale claims
+    // beside an unavailable crew record after a disconnect or realm switch.
+    Stats.Available=In.Available&&In.Cargo.Num()==6;
+    for(int32 Quantity:In.Cargo)if(Quantity<0)Stats.Available=false;
+    if(Stats.Available)Claims=Rows;else Claims.Reset();
+    if(Stats.ProjectedNet.Num()!=6)Stats.ProjectedNet.Reset();
+    Rebuild();
 }
 TSharedRef<SWidget> SDaedalusShardstead::Card(int32 Resource) const {
     const auto& Theme=daedalus::inv::ThemeNamed(TCHAR_TO_UTF8(*ThemeName));
     int32 Quantity=Stats.Cargo.IsValidIndex(Resource)?Stats.Cargo[Resource]:0;
-    bool Forecast=Stats.ProjectedNet.IsValidIndex(Resource);int32 Net=Forecast?Stats.ProjectedNet[Resource]:0;
+    bool Forecast=Stats.Available&&Stats.ProjectedNet.IsValidIndex(Resource);int32 Net=Forecast?Stats.ProjectedNet[Resource]:0;
     bool Shortage=Stats.Available&&Resource<2&&Quantity==0;
     FString Rate=Forecast?FString::Printf(TEXT("%s%s next cycle"),Net>0?TEXT("+"):TEXT(""),*FText::AsNumber(Net).ToString()):TEXT("Forecast unavailable");
     return SNew(SBorder).BorderImage(Brush()).BorderBackgroundColor(Tint(Theme.Panel)).Padding(18)
@@ -45,7 +52,7 @@ void SDaedalusShardstead::Rebuild(){
         for(int32 Col=0;Col<3;++Col)Cards->AddSlot().FillWidth(1).Padding(6)[Card(Row*3+Col)];
         Body->AddSlot().AutoHeight().Padding(6)[Cards];}
     Body->AddSlot().AutoHeight().Padding(12,18,12,8)[SNew(STextBlock).Text(FText::FromString(TEXT("ISLAND CLAIMS  —  Worker / task / deposit"))).Font(Font(19,true)).ColorAndOpacity(Tint(Theme.Text))];
-    if(Claims.IsEmpty())Body->AddSlot().AutoHeight().Padding(12)[SNew(STextBlock).Text(FText::FromString(TEXT("Talk to a Twaker, survey an island, then stake a permitted claim."))).Font(Font(15)).AutoWrapText(true).ColorAndOpacity(Tint(Theme.Dim))];
+    if(Claims.IsEmpty())Body->AddSlot().AutoHeight().Padding(12)[SNew(STextBlock).Text(FText::FromString(Stats.Available?TEXT("Talk to a Twaker, survey an island, then stake a permitted claim."):TEXT("Claim records unavailable — waiting for the host."))).Font(Font(15)).AutoWrapText(true).ColorAndOpacity(Tint(Theme.Dim))];
     for(const auto& Row:Claims){int32 K=static_cast<int32>(Row.Task);if(K<0||K>=6)continue;
         FString Deposit=K<2?TEXT("Renewable habitat"):FString::Printf(TEXT("%s left"),*FText::AsNumber(Row.Remaining).ToString());
         FString Worker=Row.Working?Row.WorkerId:TEXT("Unassigned");
