@@ -16,12 +16,13 @@ seed = int(argv[0]) if argv else 39
 here = os.path.dirname(os.path.abspath(__file__))
 out_dir = argv[1] if len(argv) > 1 else os.path.join(os.path.dirname(os.path.dirname(here)), "engines", "unreal", "art", "claude-islands")
 realm = argv[2] if len(argv) > 2 else "WORLD-ZERO"
+kind = argv[3] if len(argv) > 3 else "meadow"
 sys.path.insert(0, here)
 import hero_island as H  # noqa: E402
 
 t = time.time()
-out = os.path.join(out_dir, "Island_H%d.fbx" % seed)
-r = H.build(seed, out, keep=True, realm=realm)
+out = os.path.join(out_dir, ("Island_H%d.fbx" % seed) if kind == "meadow" else ("Island_H%d_%s.fbx" % (seed, kind)))
+r = H.build(seed, out, keep=True, realm=realm, kind=kind)
 print("BUILT %s in %.1fs voxels=%s" % (out, time.time() - t, r["voxels"]), flush=True)
 
 # --- preview renders: Workbench, flat vertex colours, two aerial cameras ------------------------------------------
@@ -53,7 +54,7 @@ for i, (dist, yaw_deg, pitch_deg, name) in enumerate(((22000, 35, 32, "a"), (260
     yaw, pitch = math.radians(yaw_deg), math.radians(pitch_deg)
     cam.location = (dist * math.cos(yaw) * math.cos(pitch), dist * math.sin(yaw) * math.cos(pitch), dist * math.sin(pitch) - 1500)
     cam.rotation_euler = (math.radians(90 - pitch_deg), 0.0, yaw + math.radians(90))
-    scene.render.filepath = os.path.join(out_dir, "Island_H%d_%s.png" % (seed, name))
+    scene.render.filepath = out[:-4] + "_%s.png" % name
     bpy.ops.render.render(write_still=True)
     print("RENDERED " + scene.render.filepath, flush=True)
 print("DONE %.1fs" % (time.time() - t), flush=True)

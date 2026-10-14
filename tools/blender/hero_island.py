@@ -99,12 +99,55 @@ def _sphere(vox, layer, cx, cy, cz, rad, pick):
                     vox[layer].append((cx + dx, cy + dy, cz + dz, pick()))
 
 
+# ---- island types (Richey 13:25 "five more islands of different types") -------------------------------------
+# each type is a palette remap + a few structural switches read inside plan()
+KINDS = {
+    "meadow": {},
+    "volcano": {"pal": {"grass": (0.26, 0.22, 0.22), "grass2": (0.33, 0.27, 0.25), "dirt": (0.18, 0.13, 0.12), "dirt2": (0.26, 0.17, 0.14),
+                        "rock": (0.16, 0.14, 0.16), "rock2": (0.24, 0.20, 0.22), "sand": (0.32, 0.28, 0.26), "water": (1.00, 0.45, 0.10),
+                        "sea": (1.00, 0.40, 0.08), "sea2": (1.00, 0.62, 0.18), "deepwater": (0.85, 0.25, 0.05), "foam": (1.00, 0.85, 0.35),
+                        "leaf": (0.30, 0.28, 0.22), "leaf2": (0.42, 0.36, 0.24), "leaf3": (0.22, 0.20, 0.18), "blossom": (0.95, 0.35, 0.10),
+                        "blossom2": (1.00, 0.60, 0.15), "cloud": (0.45, 0.42, 0.45), "roof": (0.28, 0.24, 0.26), "wall": (0.40, 0.36, 0.36)},
+                "tree": "dead", "lake": "lava", "extra": "obsidian_spires"},
+    "frost": {"pal": {"grass": (0.93, 0.95, 0.98), "grass2": (0.86, 0.90, 0.95), "dirt": (0.55, 0.58, 0.65), "dirt2": (0.62, 0.66, 0.72),
+                      "sand": (0.82, 0.86, 0.92), "water": (0.72, 0.88, 0.98), "sea": (0.60, 0.80, 0.95), "sea2": (0.80, 0.92, 1.00),
+                      "leaf": (0.18, 0.40, 0.30), "leaf2": (0.80, 0.88, 0.92), "leaf3": (0.14, 0.33, 0.26), "blossom": (0.90, 0.92, 0.96),
+                      "blossom2": (0.72, 0.82, 0.92), "roof": (0.30, 0.36, 0.52), "thatch": (0.90, 0.92, 0.96)},
+              "tree": "pine", "lake": "ice", "extra": "hot_spring"},
+    "mesa": {"pal": {"grass": (0.80, 0.62, 0.35), "grass2": (0.86, 0.70, 0.40), "dirt": (0.72, 0.40, 0.22), "dirt2": (0.80, 0.48, 0.26),
+                     "rock": (0.62, 0.32, 0.20), "rock2": (0.70, 0.40, 0.24), "sand": (0.92, 0.82, 0.58), "leaf": (0.30, 0.55, 0.25),
+                     "leaf2": (0.40, 0.62, 0.28), "leaf3": (0.25, 0.48, 0.22), "blossom": (0.95, 0.45, 0.55), "blossom2": (0.98, 0.65, 0.30),
+                     "roof": (0.75, 0.55, 0.35), "wall": (0.90, 0.80, 0.60)},
+             "tree": "palm", "lake": "oasis", "extra": "cacti"},
+    "mire": {"pal": {"grass": (0.25, 0.38, 0.18), "grass2": (0.32, 0.45, 0.20), "dirt": (0.25, 0.20, 0.12), "dirt2": (0.32, 0.26, 0.14),
+                     "water": (0.25, 0.42, 0.32), "sea": (0.22, 0.40, 0.30), "sea2": (0.30, 0.50, 0.36), "deepwater": (0.15, 0.30, 0.22),
+                     "leaf": (0.18, 0.42, 0.16), "leaf2": (0.26, 0.52, 0.18), "leaf3": (0.14, 0.34, 0.14), "cloud": (0.78, 0.80, 0.76),
+                     "sand": (0.45, 0.42, 0.28), "roof": (0.35, 0.40, 0.25), "wall": (0.50, 0.45, 0.32)},
+             "tree": "mangrove", "lake": "bog", "extra": "lilies"},
+    "crystal": {"pal": {"grass": (0.55, 0.45, 0.75), "grass2": (0.62, 0.52, 0.82), "dirt": (0.30, 0.22, 0.40), "dirt2": (0.38, 0.28, 0.48),
+                        "rock": (0.28, 0.24, 0.40), "rock2": (0.36, 0.30, 0.50), "sand": (0.80, 0.75, 0.92), "water": (0.55, 0.85, 1.00),
+                        "sea": (0.45, 0.80, 1.00), "sea2": (0.70, 0.92, 1.00), "leaf": (0.70, 0.55, 0.95), "leaf2": (0.85, 0.70, 1.00),
+                        "leaf3": (0.55, 0.40, 0.85), "blossom": (0.55, 0.95, 0.95), "blossom2": (0.80, 1.00, 1.00), "cloud": (0.90, 0.88, 1.00),
+                        "roof": (0.45, 0.30, 0.70), "wall": (0.85, 0.82, 0.95)},
+                "tree": "round", "lake": "glow", "extra": "spires"},
+}
+KIND_NAMES = tuple(KINDS)
+
+
+def palette_for(kind):
+    pal = dict(PAL)
+    pal.update(KINDS.get(kind, {}).get("pal", {}))
+    return pal
+
+
 FRUIT = {"apple": (0.90, 0.20, 0.20), "cherry": (0.75, 0.10, 0.25), "plum": (0.45, 0.20, 0.55), "orange": (1.00, 0.60, 0.15),
          "pear": (0.75, 0.85, 0.35), "lemon": (0.98, 0.92, 0.30)}
 PAL.update({"fruit_" + k: v for k, v in FRUIT.items()})
 
 
-def plan(seed=1, realm="WORLD-ZERO"):
+def plan(seed=1, realm="WORLD-ZERO", kind="meadow"):
+    K = KINDS.get(kind, KINDS["meadow"])
+    tree_shape = K.get("tree", "round")
     rng = random.Random(seed * 7919 + 11)
     salt = rng.randint(0, 1 << 20)
     vox = {k: [] for k in LAYERS}
@@ -314,9 +357,35 @@ def plan(seed=1, realm="WORLD-ZERO"):
         picks = ("leaf", "leaf2", "leaf3") if kind == "leaf" else ("blossom", "blossom2", "blossom")
         pick = lambda: picks[int(rng.random() * 3)]
         r = rng.randint(3, 4)
-        _sphere(vox, "trees", x, y, base + hgt + 1, r, pick)
-        _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + rng.randint(0, 2), r - 1, pick)
-        _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + 3, r - 1, pick)
+        shape = "round" if kind == "blossom" else tree_shape
+        if shape == "round":
+            _sphere(vox, "trees", x, y, base + hgt + 1, r, pick)
+            _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + rng.randint(0, 2), r - 1, pick)
+            _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + 3, r - 1, pick)
+        elif shape == "pine":
+            for i, rr in enumerate((5, 4, 4, 3, 3, 2, 2, 1, 1, 0)):
+                z = base + hgt - 5 + i
+                for dx in range(-rr, rr + 1):
+                    for dy in range(-rr, rr + 1):
+                        if abs(dx) + abs(dy) <= rr:
+                            vox["trees"].append((x + dx, y + dy, z, pick()))
+        elif shape == "palm":
+            for ddx, ddy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                for i in range(1, 8):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, base + hgt + (2 if i < 3 else 1) - (i // 3), pick()))
+                    if i > 2:
+                        vox["trees"].append((x + ddx * i, y + ddy * i, base + hgt + 1 - (i // 3), pick()))
+        elif shape == "mangrove":
+            for ddx, ddy in ((2, 0), (-2, 1), (1, -2), (-1, -1), (0, 2)):      # stilt roots
+                for z in range(base + 1, base + 4):
+                    vox["trees"].append((x + ddx * (base + 4 - z) // 2, y + ddy * (base + 4 - z) // 2, z, "trunk"))
+            _sphere(vox, "trees", x, y, base + hgt + 1, r + 1, pick)
+            _sphere(vox, "trees", x + 3, y - 2, base + hgt - 1, r - 1, pick)
+        else:   # dead: bare forked branches, a few embers
+            for ddx, ddy in ((1, 0), (-1, 1), (0, -1), (1, 1)):
+                for i in range(1, 5):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, base + hgt - 3 + i, "trunk"))
+                vox["trees"].append((x + ddx * 4, y + ddy * 4, base + hgt + 2, "blossom"))
         if fruit:                              # fruit hangs on the canopy's underside and sides
             for _ in range(10):
                 fx_, fy_, fz_ = x + rng.randint(-r, r), y + rng.randint(-r, r), base + hgt + rng.randint(-1, 2)
@@ -381,6 +450,55 @@ def plan(seed=1, realm="WORLD-ZERO"):
                 for ddy in range(0, rng.randint(1, 3)):
                     for ddz in range(1, rng.randint(2, 4)):
                         vox["props"].append((x + ddx, y + ddy, b + ddz, "stone" if rng.random() < 0.5 else "moss"))
+    # ---- type extras ----------------------------------------------------------------------------------------
+    extra = K.get("extra")
+    if K.get("lake") == "ice":
+        vox["water"] = [(x, y, z, ("clearbell" if c in ("water", "sea2") else c)) for x, y, z, c in vox["water"]]
+    for _ in range({"obsidian_spires": 7, "cacti": 16, "lilies": 40, "spires": 10, "hot_spring": 1}.get(extra, 0)):
+        x, y = rng.randint(-size, size), rng.randint(-size, size)
+        if extra == "lilies":
+            lx_, ly_ = hx + rng.randint(-10, 10), hy + rng.randint(-10, 10)
+            if (lx_, ly_) in lake:
+                vox["props"].append((lx_, ly_, lake_z + 1, "stridefern"))
+                if rng.random() < 0.3:
+                    vox["props"].append((lx_, ly_, lake_z + 2, "flower_p"))
+            continue
+        if not free(top, x, y, 2):
+            continue
+        b = hill(x, y)
+        if extra == "obsidian_spires":
+            hgt_ = rng.randint(5, 11)
+            for z in range(b + 1, b + hgt_):
+                rr = 2 if z < b + 3 else (1 if z < b + hgt_ - 2 else 0)
+                for dx in range(-rr, rr + 1):
+                    for dy in range(-rr, rr + 1):
+                        vox["props"].append((x + dx, y + dy, z, "coal" if (dx + dy + z) % 3 else "forge"))
+        elif extra == "cacti":
+            hgt_ = rng.randint(3, 6)
+            for z in range(b + 1, b + hgt_ + 1):
+                vox["props"].append((x, y, z, "stridefern"))
+            for ddx in (-1, 1):
+                for z in range(b + 2, b + 4):
+                    vox["props"].append((x + ddx, y, z, "stridefern"))
+                vox["props"].append((x + ddx, y, b + 4, "stridefern"))
+            vox["props"].append((x, y, b + hgt_ + 1, "flower_p"))
+        elif extra == "spires":
+            hgt_ = rng.randint(8, 16)
+            c = rng.choice(("crystal", "crystal2", "starmetal"))
+            for z in range(b + 1, b + hgt_):
+                rr = 2 if z < b + hgt_ // 2 else 1
+                for dx in range(-rr, rr + 1):
+                    for dy in range(-rr, rr + 1):
+                        if abs(dx) + abs(dy) <= rr:
+                            vox["crystals"].append((x + dx, y + dy, z, c))
+        elif extra == "hot_spring":
+            for dx in range(-3, 4):
+                for dy in range(-3, 4):
+                    if dx * dx + dy * dy <= 9:
+                        vox["island"].append((x + dx, y + dy, b, "stone"))
+                        vox["water"].append((x + dx, y + dy, b, "sea2"))
+            for i in range(1, 7):
+                _sphere(vox, "props", x + rng.randint(-1, 1), y + rng.randint(-1, 1), b + 2 + i * 2, 1, lambda: "smoke2")
     # ---- ADR-050: the Heartstone core, ore veins on the cliff and in a cave, a meteor crater (LEGENDARY land) --
     for dx in range(-4, 5):
         for dy in range(-4, 5):
@@ -600,13 +718,14 @@ def plan(seed=1, realm="WORLD-ZERO"):
     return vox
 
 
-def build(seed, out, keep=False, realm="WORLD-ZERO"):
+def build(seed, out, keep=False, realm="WORLD-ZERO", kind="meadow"):
     """Blender: mesh and export the hero island as FBX (body + water + clouds + UCX boxes) + chemistry manifest."""
     import bpy
-    vox = plan(seed, realm)
+    vox = plan(seed, realm, kind)
+    pal = palette_for(kind)
     with open(out[:-4] + ".chemistry.json", "w", encoding="utf-8") as f:
         f.write(CH.manifest(seed, realm))
-    name = "Island_H%d" % seed
+    name = "Island_H%d" % seed if kind == "meadow" else "Island_H%d_%s" % (seed, kind)
     for ob in list(bpy.data.objects):
         if ob.name.startswith(name) or ob.name.startswith("UCX_" + name):
             bpy.data.objects.remove(ob, do_unlink=True)
@@ -614,7 +733,7 @@ def build(seed, out, keep=False, realm="WORLD-ZERO"):
     for layer, members in GROUPS.items():
         voxels = [v for m in members for v in vox.get(m, [])]
         if voxels:
-            objs.append(V._mesh_from_voxels("%s_%s" % (name, layer), voxels, pal=PAL))
+            objs.append(V._mesh_from_voxels("%s_%s" % (name, layer), voxels, pal=pal))
     hulls = V._ucx_boxes(name, vox["island"], depth=6)
     for ob in bpy.data.objects:
         ob.select_set(ob in objs or ob in hulls)
