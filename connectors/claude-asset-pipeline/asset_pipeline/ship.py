@@ -166,7 +166,7 @@ def import_snapshot(path, expected):
     return snapshot
 
 
-def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT):
+def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT, checkpoint=None):
     """The Unreal half: import the exported file, then judge all three sides."""
     expected = report.get("artifact")
     current = fingerprint(report["path"])
@@ -184,7 +184,13 @@ def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, ti
     report["dest"] = dest + "/" + report["name"]
     t = time.time()
     report["import_state"] = "outcome-unknown"
-    made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
+    report["transport"] = {}
+    def progress(receipt):
+        report["import_state"] = receipt["state"]
+        if checkpoint is not None:
+            checkpoint(report)
+    made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal",
+                     receipt=report["transport"], on_progress=progress, unattended=False,
                      bridge_timeout=timeout,
                      code=sides.script(sides.UNREAL_IMPORT, path=snapshot, artifact=current, dest=report["dest"], save=save))
     report["import_state"] = "reply-received"
@@ -231,11 +237,17 @@ def main(argv=None):
     ap.add_argument("--unreal-port", type=int, default=wire.UNREAL[1])
     a = ap.parse_args(argv)
     r = {"name": a.name, "phase": "export", "ok": False}
+    def checkpoint(report):
+        if a.report:
+            write_report(a.report, report)
     try:
+        checkpoint(r)
         r = export(a.name, [o for o in a.objects.split(",") if o], a.folder,
                    (wire.BLENDER[0], a.blender_port))
+        r["phase"] = "exported"
+        checkpoint(r)
         r["phase"] = "import"
-        land(r, a.dest, not a.no_save, (wire.UNREAL[0], a.unreal_port))
+        land(r, a.dest, not a.no_save, (wire.UNREAL[0], a.unreal_port), checkpoint=checkpoint)
         r["phase"] = "verified"
     except (wire.BridgeError, OSError, ValueError) as e:
         r.update(ok=False, error={"type": type(e).__name__, "message": str(e)},
