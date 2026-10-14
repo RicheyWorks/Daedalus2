@@ -42,3 +42,7 @@ lease; the lease guard is required before mutation.
 
 The existing Unreal lease is observed again after artifact preparation and TCP connection, immediately before any request bytes are sent. A refused final gate publishes not-dispatched and closes that connection. It does not acquire or renew a lease. Broker observation cannot atomically fence engine execution; other teams must still respect the lease handoff.
 
+
+## Read-only handoff inspection
+Use --status --spec batch.json --journal run.json to list every asset's journal state, explicit-run eligibility, reconciliation requirement, transport request ID, destination and retained snapshot identity. Add --check-retained to hash retained snapshot files. No bridge query, journal publication, lock file, replay or cleanup occurs. Exit2 indicates unresolved dispatch states. A matching file hash proves retained bytes only, not current imported assets or native quiescence; terminal records remain labelled journal evidence.
+

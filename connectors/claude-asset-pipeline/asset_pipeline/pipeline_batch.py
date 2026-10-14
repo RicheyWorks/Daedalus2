@@ -137,7 +137,7 @@ class BatchJournal:
         self.path=path
         if path.exists():
             self.value=read_json(path)
-            need(isinstance(self.value,dict) and self.value.get('schema_version')==1,'unsupported journal')
+            need(isinstance(self.value,dict) and type(self.value.get('schema_version')) is int and self.value['schema_version']==1,'unsupported journal')
             need(self.value.get('spec_sha256')==spec['spec_sha256'] and self.value.get('source_root')==spec['source_root'],'spec/root changed; never resume under different input')
             need(isinstance(self.value.get('records'),dict),'journal records missing')
             allowed={a['name'] for a in spec['assets']}
@@ -182,6 +182,40 @@ class BatchJournal:
         for record in self.value['records'].values():
             state=record.get('state','unknown');counts[state]=counts.get(state,0)+1
         return {'run_id':self.value['run_id'],'spec_sha256':self.value['spec_sha256'],'counts':counts,'journal':str(self.path)}
+
+    def inspect(self,spec,check_retained=False):
+        """Return bounded reconciliation evidence without publishing or making bridge calls."""
+        rows=[]
+        for asset in spec['assets']:
+            record=self.get(asset['name']) or {}
+            state=record.get('state','not-started')
+            report=record.get('report') or {}
+            need(isinstance(report,dict),'invalid retained report')
+            transport=report.get('transport') or {}
+            need(isinstance(transport,dict),'invalid retained transport evidence')
+            binding=report.get('import_artifact')
+            row={'name':asset['name'],'state':state,'attempts':record.get('attempts',0),
+                 'action':'skip-recorded-terminal' if state in TERMINAL else
+                          'reconcile-before-mutation' if state in REPLAY_UNSAFE else 'eligible-for-explicit-run',
+                 'destination':asset['dest']+'/'+asset['name'],
+                 'request_id':transport.get('request_id'),'command':transport.get('command'),
+                 'transport_state':transport.get('state'),'import_path':report.get('import_path'),
+                 'import_artifact':copy.deepcopy(binding),
+                 'started_at':record.get('started_at'),'updated_at':record.get('updated_at')}
+            if check_retained and row['import_path']:
+                need(isinstance(row['import_path'],str),'retained snapshot path must be a string')
+                try:
+                    actual=pipeline.fingerprint(row['import_path'])
+                    row['retained_file']={'available':True,'artifact':actual,
+                                          'matches_recorded_identity':binding is not None and actual==binding}
+                except OSError as error:
+                    row['retained_file']={'available':False,'error_type':type(error).__name__}
+            rows.append(row)
+        result=self.summary()
+        result.update(assets=rows,mutation=False,bridge_queried=False,
+                      reconciliation_required=sum(row['state'] in REPLAY_UNSAFE for row in rows),
+                      scope='Journal evidence only; terminal records and file hashes do not prove current editor state.')
+        return result
 
 
 class BatchExecutor:
@@ -242,12 +276,22 @@ def main(argv=None):
     ap.add_argument('--journal',type=Path)
     ap.add_argument('--me',help='existing Unreal lease holder, required for execution')
     ap.add_argument('--hub-port',type=int,default=teamlink.PORT)
-    ap.add_argument('--run',action='store_true',help='explicitly execute imports; default is file-only planning')
+    mode=ap.add_mutually_exclusive_group()
+    mode.add_argument('--run',action='store_true',help='explicitly execute imports; default is file-only planning')
+    mode.add_argument('--status',action='store_true',help='read existing journal reconciliation evidence; no editor or writes')
+    ap.add_argument('--check-retained',action='store_true',help='with --status, hash retained snapshots without changing them')
     ap.add_argument('--limit',type=int,default=MAX_ASSETS)
     ap.add_argument('--unreal-port',type=int,default=wire.UNREAL[1])
     ap.add_argument('--timeout',type=float,default=300)
     a=ap.parse_args(argv)
     spec=load_spec(a.spec,a.source_root)
+    need(not a.check_retained or a.status,'--check-retained requires --status')
+    if a.status:
+        need(a.journal is not None and a.journal.is_file(),'--status requires an existing --journal')
+        journal=BatchJournal(a.journal,spec)
+        result=journal.inspect(spec,a.check_retained)
+        print(json.dumps(result,indent=2))
+        return 2 if result['reconciliation_required'] else 0
     if not a.run:
         # No journal is created and no bridge is queried in planning mode.
         executor=BatchExecutor(spec,None)

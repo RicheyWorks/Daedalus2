@@ -796,3 +796,7 @@ An exception string can legitimately be empty. Accept empty diagnostic text whil
 ### Lease observation at dispatch (2026-10-14)
 Preparation can outlive an initially valid lease. Reobserve the existing owner/window after preparation, before request bytes are sent. A failed final gate is genuinely not-dispatched, unlike a send/response failure. Preserve both lease observations; never silently acquire or renew. This is a host guard, not an engine-side atomic fencing guarantee.
 
+
+### Inspect interrupted batches without replay (2026-10-14)
+Expose request IDs, retained snapshot identities and replay eligibility as a read-only journal view. Hash checks can identify snapshot drift but cannot settle an unknown native outcome. Keep inspection independent of lease mutation and journal writes so another team can understand a handoff before taking an editor turn.
+
