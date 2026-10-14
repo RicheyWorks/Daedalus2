@@ -1,9 +1,17 @@
 # SPDX-License-Identifier: MIT
 import unittest
-from night_run import assess_run, require_stage
+import tempfile
+from night_run import assess_run, require_stage, parse_options
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_import_folders_do_not_consume_following_option_values(self):
+        with tempfile.TemporaryDirectory() as folder:
+            options=parse_options(['--import',folder,'--realms','PARCELS','--no-build'])
+            self.assertEqual(options.imports,[folder])
+            self.assertEqual(options.realms,['PARCELS'])
+            self.assertTrue(options.no_build)
+
     def test_stage_requires_explicit_successful_terminal_result(self):
         for reply in (None,{}, {'result':{'realm':'WORLD-ZERO'}},
                       {'error':'','result':{'realm':'WORLD-ZERO'}}, {'error':None,'result':{}}):

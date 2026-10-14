@@ -9,7 +9,9 @@ died. One GLB per call lets the editor tick, render and answer the watchdog betw
 --place REALM then stands the imported creatures in the realm's outer ring (daedalus_realm_ground.place_creatures),
 also one bridge call. Idempotent (SHA stamp per asset). Lives in the repo (ADR-045).
 """
+import argparse
 import os
+import re
 import sys
 import time
 
@@ -27,13 +29,17 @@ def call(code, timeout=120):
 
 
 def main(argv):
-    args = [a for a in argv if not a.startswith("--")]
-    if not args:
-        print("usage: import_cast.py <folder with Mob_*.glb> [--root <content path>] [--place REALM]")
-        return 2
-    folder = args[0]
-    root = argv[argv.index("--root") + 1] if "--root" in argv else IC.CAST_ROOT
-    place = argv[argv.index("--place") + 1] if "--place" in argv else ""
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('folder')
+    parser.add_argument('--root',default=IC.CAST_ROOT)
+    parser.add_argument('--place',default='')
+    parser.add_argument('--one-per-call',action='store_true')
+    args=parser.parse_args(argv)
+    folder,root,place=args.folder,args.root,args.place
+    if not os.path.isdir(folder):parser.error('import folder does not exist')
+    if not re.fullmatch(r'/Game(?:/[A-Za-z0-9_]+)+',root):parser.error('root must be a safe /Game content path')
+    if place and place not in ('GALLERY-CITY','PARCELS','BRICKS','LABYRINTH'):
+        parser.error('unsupported creature-placement realm')
     plan = IC.plan(folder)
     print("%d GLBs in %s -> %s" % (len(plan), folder, root), flush=True)
     if not plan:
@@ -44,7 +50,7 @@ def main(argv):
         print('import: setup failed; no import dispatched\nERR '+str(setup_error)[-600:],flush=True)
         return 2
     counts = {"imported": 0, "skipped": 0, "failed": 0}
-    if "--one-per-call" in argv:   # the slow, safe fallback: one bridge round trip per file
+    if args.one_per_call:   # the slow, safe fallback: one bridge round trip per file
         for i, (aid, glb, sha) in enumerate(plan, 1):
             t0 = time.time()
             code = ("import daedalus_import_cast as C\n"

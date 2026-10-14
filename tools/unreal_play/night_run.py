@@ -13,6 +13,7 @@ Runs, in order, with every step's result on the hub and in the job log:
   7. one hub status with sha, n/m, errors=/warnings=.
 Stops at the first failed step and says which. Everything it runs is idempotent, so a rerun resumes.
 """
+import argparse
 import json
 import os
 import re
@@ -128,10 +129,32 @@ def assess_run(text, returncode, report):
             'editor_warnings': report['warnings'] if log_valid else None}
 
 
+def parse_options(argv):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--after-job',default='')
+    parser.add_argument('--no-build',action='store_true')
+    parser.add_argument('--realms',default='GALLERY-CITY,PARCELS,BRICKS,LABYRINTH')
+    parser.add_argument('--import',dest='imports',nargs='+',action='append',default=[])
+    args=parser.parse_args(argv)
+    args.realms=args.realms.split(',')
+    allowed={'GALLERY-CITY','PARCELS','BRICKS','LABYRINTH'}
+    if not args.realms or len(set(args.realms))!=len(args.realms) or not set(args.realms)<=allowed:
+        parser.error('--realms requires unique supported district realms')
+    if args.after_job and not re.fullmatch(r'job-[A-Za-z0-9-]+',args.after_job):
+        parser.error('invalid dependency job ID')
+    args.imports=[folder for group in args.imports for folder in group]
+    if len(args.imports)>8 or len(set(os.path.normcase(os.path.abspath(p)) for p in args.imports))!=len(args.imports):
+        parser.error('at most8 distinct import folders allowed; none are silently dropped')
+    if any(not os.path.isdir(folder) for folder in args.imports):
+        parser.error('every import folder must exist before any build is started')
+    return args
+
+
 def main(argv):
-    after = argv[argv.index("--after-job") + 1] if "--after-job" in argv else ""
-    build = "--no-build" not in argv
-    realms = (argv[argv.index("--realms") + 1] if "--realms" in argv else "GALLERY-CITY,PARCELS,BRICKS,LABYRINTH").split(",")
+    options=parse_options(argv)
+    after=options.after_job
+    build=not options.no_build
+    realms=options.realms
     sha = ps("git rev-parse --short HEAD", 30).strip()
     hub("status", "NIGHT RUN start on %s: after=%s build=%s realms=%s" % (sha, after or "-", build, ",".join(realms)))
 
@@ -170,7 +193,7 @@ def main(argv):
 
     # lay what is new: first any cast folders waiting for import (one GLB per tick), then the cast, portals, districts
     lay = []
-    folders = [a for a in argv[argv.index("--import") + 1:] if not a.startswith("--")][:8] if "--import" in argv else []
+    folders = options.imports
     for folder in folders:
         out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]

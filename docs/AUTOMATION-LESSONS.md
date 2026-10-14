@@ -813,3 +813,7 @@ No FAIL text is not success: crashed/interrupted suites may never print TOTAL. R
 ### Terminal import and layout outcomes (2026-10-14)
 The steps bridge retains only its last200 yields. Never use that log tail as an import census. Return terminal counts from the generator and require exact planned coverage, nonnegative integer counts and no terminal error. Empty plans and missing terminal counts cannot succeed. Night-run stage errors or missing results stop before later layout mutations/Play. Cast Rebind counts prove script binding only, not skeletal art; art audit remains126.
 
+
+### Parse production CLI options before launching (2026-10-14)
+Collecting every non-flag string after --import also collected later option values as directories. Use argparse option boundaries and validate all folders, distinct realms, job IDs and import limits before a build/editor call. Reject oversized batches instead of silently slicing them. Validate import content roots before embedding them into editor code.
+
