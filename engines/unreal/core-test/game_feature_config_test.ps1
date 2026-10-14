@@ -95,7 +95,7 @@ foreach ($format in $formats) {
         [byte[]]$repaired = [IO.File]::ReadAllBytes($path)
         $repairedText = $codec.GetString($repaired, $preamble.Length, $repaired.Length - $preamble.Length)
         if (-not $repairedText.StartsWith($original + "`n") -or
-            -not $repairedText.Contains("`n+PrimaryAssetTypesToScan=") -or
+            -not $repairedText.Contains("[/Script/Engine.AssetManagerSettings]`n+PrimaryAssetTypesToScan=") -or
             -not $repairedText.EndsWith('CookRule=AlwaysCook))')) {
             throw ($format.Name + " EOF text, separation or final newline changed")
         }
