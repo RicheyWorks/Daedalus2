@@ -44,13 +44,15 @@ TSharedRef<SWidget> SDaedalusShardstead::Card(int32 Resource) const {
     int32 Quantity=Stats.Cargo.IsValidIndex(Resource)?Stats.Cargo[Resource]:0;
     bool Forecast=Stats.Available&&Stats.ProjectedNet.IsValidIndex(Resource);int32 Net=Forecast?Stats.ProjectedNet[Resource]:0;
     bool Shortage=Stats.Available&&Resource<2&&Quantity==0;
+    bool NextShortage=Stats.Available&&Resource<2&&!Shortage&&Forecast&&Net<0&&static_cast<int64>(Quantity)+Net<=0;
     FString Rate=Forecast?FString::Printf(TEXT("%s%s next cycle"),Net>0?TEXT("+"):TEXT(""),*FText::AsNumber(Net).ToString()):TEXT("Forecast unavailable");
+    FString SupplyStatus=Shortage?TEXT("SHORTAGE — assign a producer"):NextShortage?FString::Printf(TEXT("EMPTY NEXT CYCLE  /  %s"),*Rate):Rate;
     return SNew(SBorder).BorderImage(Brush()).BorderBackgroundColor(Tint(Theme.Panel)).Padding(18)
     [SNew(SVerticalBox)
         +SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(FText::FromString(Groups[Resource])).Font(Font(11,true)).ColorAndOpacity(Tint(Theme.Dim))]
         +SVerticalBox::Slot().AutoHeight().Padding(0,6)[SNew(STextBlock).Text(FText::FromString(Names[Resource])).Font(Font(21,true)).ColorAndOpacity(Tint(Theme.Text))]
         +SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(Stats.Available?FText::AsNumber(Quantity):FText::FromString(TEXT("--"))).Font(Font(38,true)).ColorAndOpacity(Tint(Shortage?Theme.Hot:Theme.Focus))]
-        +SVerticalBox::Slot().AutoHeight().Padding(0,6)[SNew(STextBlock).Text(FText::FromString(Shortage?TEXT("SHORTAGE — assign a producer"):Rate)).Font(Font(13)).ColorAndOpacity(Tint(Shortage?Theme.Hot:Theme.Dim))]
+        +SVerticalBox::Slot().AutoHeight().Padding(0,6)[SNew(STextBlock).Text(FText::FromString(SupplyStatus)).Font(Font(13)).AutoWrapText(true).ColorAndOpacity(Tint(Shortage||NextShortage?Theme.Hot:Theme.Dim))]
     ];
 }
 void SDaedalusShardstead::Rebuild(){
