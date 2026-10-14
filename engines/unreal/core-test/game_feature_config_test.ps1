@@ -67,7 +67,8 @@ foreach ($format in $formats) {
         if ($actual[$i] -ne $preamble[$i]) { throw ($format.Name + " BOM changed") }
     }
     $decoded = $codec.GetString($actual, $preamble.Length, $actual.Length - $preamble.Length)
-    if (-not $decoded.StartsWith($beforeRule) -or -not $decoded.EndsWith($afterRule)) {
+    if (-not $decoded.StartsWith($beforeRule) -or -not $decoded.EndsWith($afterRule) -or
+        -not [regex]::IsMatch($decoded, '[\r\n]' + [regex]::Escape($afterRule) + '$')) {
         throw ($format.Name + " custom text or line endings changed")
     }
     if ([regex]::Matches($decoded, '^\+PrimaryAssetTypesToScan=.*GameFeatureData', 'Multiline').Count -ne 1) {
