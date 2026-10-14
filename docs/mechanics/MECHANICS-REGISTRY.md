@@ -76,3 +76,13 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
 - 14:45: 171 species (+24 zombies for the wave apocalypse — ledger event `zombie_wave`, 5 escalating waves vs
   defence, fallen zombies drop salvage — +10 dinosaurs incl. pterodactyl/quetzal, +19 sea creatures, +46 animals:
   cats, monkeys, snakes, extinct animals). Rows WZ19–WZ20.
+
+## Eggs, house/grave/sports, Sims realm — 16:10
+- `voxel_eggs.py`: 49 egg types × Intact/Cracked/Hatching + Shiny = 196 props with rarity odds and a hatch pool per
+  creature family; hatching minigame = PORT06 egg stages. Eggs enter the ledger as scavenge/fishing/festival finds.
+  Row WZ24. Architecture §14.8.
+- `voxel_props.py`: 69 house, 29 grave (zombie-wave dressing + spawn markers), 52 sports props; throwables flagged
+  for catch/dodgeball/baseball/basketball/football minigames. Row WZ25. §14.9.
+- `voxel_sims.py`: Sims/practical realm — 26-piece build kit, 18 practical machines mapped to PRACTICAL-APPS.md
+  tools, 21 appliances (needs loop), `House_Sims_Starter` furnished house in six part meshes. Row WZ26. §14.10.
+- Rule kept: nobody else owns eggs/hatching, house props, or the Sims kit — extend these files, don't fork them.
