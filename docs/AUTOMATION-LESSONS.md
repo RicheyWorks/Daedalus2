@@ -828,4 +828,6 @@ Reuse the pipeline's fsync-and-replace report writer for night receipts. Archive
 
 ### Partial night-run handoffs (2026-10-14)
 Checkpoint the current orchestration stage before each major operation. Early exits and exceptions must retain completed layout notes and publish a partial failed/unverified receipt, rather than leaving the previous successful latest report in place. A stopped orchestration receipt is not native quiescence or cancellation evidence. Process death can leave a running checkpoint; do not replay solely because it is old.
+### Night-run job identity (2026-10-13)
+Never wait on latest build after launching a specific job: it can return the prior job's green log before the new log exists. Require one explicit launch ID, refuse reused IDs, await that ID's terminal marker, validate its exit code, then query Wait with the same ID. Log words DONE/FAIL are not terminal markers. Observation expiry stops this orchestration without restarting the editor or job. Existing PR89/104 still provide truthful atomic marker writers; keyed consumption does not repair an old writer.
 
