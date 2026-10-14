@@ -66,19 +66,30 @@ def status():
 
 
 def run(batch=200):
+    """Move up to `batch` instances. The ledger (the way back) is written once before the batch's changes and once
+    after: writing it after every asset made a 10,000-entry JSON rewrite per move (about a second each, 2026-10-13)."""
     book = _ledger()
     todo = _engine_bound()[:int(batch)]
-    moved = 0
+    pending = []
     for a in todo:
         mi = a.get_asset()
         old = mi.get_editor_property("parent")
         if old is None:
             continue
         book[mi.get_path_name()] = old.get_path_name()
-        _write(book)                     # the way back is on disk before anything changes
-        unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
-        EAL.save_loaded_asset(mi, only_if_is_dirty=False)
-        moved += 1
+        pending.append((mi, old))
+    _write(book)                         # every old parent is on disk before anything changes
+    moved = 0
+    with unreal.ScopedSlowTask(len(pending), "Daedalus: materials onto the project base") as task:
+        task.make_dialog(True)
+        for mi, old in pending:
+            if task.should_cancel():
+                break
+            task.enter_progress_frame(1)
+            unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
+            moved += 1
+    for mi, _ in pending[:moved]:
+        EAL.save_loaded_asset(mi, only_if_is_dirty=True)
     out = status()
     out["moved_now"] = moved
     return out
