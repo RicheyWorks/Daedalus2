@@ -132,28 +132,8 @@ def validate_palette_plan(plan, assembly_journal=None):
             raise ValueError("saved palette bytes changed before placement")
 
 
-def prepare_palette(plan, source_receipt, journal_path, timeout=180):
-    """Prepare assets without actors or map saves; reuse only a completed journal."""
-    journal = Path(journal_path).resolve()
-    source_receipt = Path(source_receipt).resolve()
-    if journal in _protected_inputs(plan, source_receipt):
-        raise ValueError("palette journal must not overwrite an input")
-    if not journal.parent.is_dir():
-        raise ValueError("palette journal directory must already exist")
-    source_fp, settings, slots = _source(plan, source_receipt)
-    if journal.exists():
-        record, _ = _read(journal)
-        if record.get("stage") != "palette_saved" or record.get("assembly_plan") != plan or record.get("source_receipt") != str(source_receipt):
-            raise RuntimeError("unfinished or different palette journal requires inspection; no replay")
-        prepared = _attach(record, journal)
-        validate_palette_plan(prepared)
-        return prepared
-    record = {"stage": "preflight", "assembly_plan": plan, "source_receipt": str(source_receipt),
-              "source_fingerprint": source_fp, "settings": settings, "slots": slots,
-              "helper_fingerprint": fingerprint(HELPER),
-              "surface_profile_fingerprint": fingerprint(ROOT / "tools/blender/codex_contest_island.py"),
-              "native_mutations": [], "timings_s": {}, "map_saves": 0}
-    _write(journal, record)
+def _live_preflight(plan, timeout):
+    """Read current editor state and exact mesh slots without writing journals."""
     mcp = Mcp(timeout=timeout)
     if mcp.call("EditorToolset.EditorAppToolset", "IsPIERunning") or package(mcp.call(SCENE, "get_current_level")) != plan["map_package"]:
         raise RuntimeError("require stopped PIE and the exact agreed map")
@@ -176,12 +156,47 @@ for row in rows:
 '''.replace("ROWS", repr(plan["entries"]), 1).replace("OWN_LABEL", repr(read_label), 1)
     started = time.perf_counter()
     reply = wire.call(wire.UNREAL, "execute_python", code=code, label=read_label, unattended=False, timeout=30, side="Unreal")
-    record["slot_readback_reply"] = reply
-    record["timings_s"]["slot_readback"] = round(time.perf_counter() - started, 6)
-    _write(journal, record)
+    return reply, round(time.perf_counter() - started, 6)
+
+
+def _require_native_slots(reply, slots):
     actual = _result(reply)
     if not isinstance(actual, dict) or set(actual) != set(slots) or any(len(actual[label]) != len(expected) or set(actual[label]) != set(expected) for label, expected in slots.items()):
         raise RuntimeError("saved native material slots differ from the exported source")
+
+
+def prepare_palette(plan, source_receipt, journal_path, timeout=180):
+    """Prepare assets without actors or map saves; reuse only a completed journal."""
+    journal = Path(journal_path).resolve()
+    source_receipt = Path(source_receipt).resolve()
+    if journal in _protected_inputs(plan, source_receipt):
+        raise ValueError("palette journal must not overwrite an input")
+    if not journal.parent.is_dir():
+        raise ValueError("palette journal directory must already exist")
+    source_fp, settings, slots = _source(plan, source_receipt)
+    if journal.exists():
+        record, _ = _read(journal)
+        if record.get("stage") != "palette_saved" or record.get("assembly_plan") != plan or record.get("source_receipt") != str(source_receipt):
+            raise RuntimeError("unfinished or different palette journal requires inspection; no replay")
+        prepared = _attach(record, journal)
+        validate_palette_plan(prepared)
+        # Saved disk witnesses cannot establish current PIE/dirty/job state.
+        # Recheck live state without changing this completed journal or its key.
+        reply, _ = _live_preflight(plan, timeout)
+        _require_native_slots(reply, slots)
+        validate_palette_plan(prepared)
+        return prepared
+    record = {"stage": "preflight", "assembly_plan": plan, "source_receipt": str(source_receipt),
+              "source_fingerprint": source_fp, "settings": settings, "slots": slots,
+              "helper_fingerprint": fingerprint(HELPER),
+              "surface_profile_fingerprint": fingerprint(ROOT / "tools/blender/codex_contest_island.py"),
+              "native_mutations": [], "timings_s": {}, "map_saves": 0}
+    _write(journal, record)
+    reply, elapsed = _live_preflight(plan, timeout)
+    record["slot_readback_reply"] = reply
+    record["timings_s"]["slot_readback"] = elapsed
+    _write(journal, record)
+    _require_native_slots(reply, slots)
     record["stage"] = "palette_mutation_pending"
     palette_label = "Codex admitted palette before placement " + uuid.uuid4().hex
     record["native_palette_label"] = palette_label
