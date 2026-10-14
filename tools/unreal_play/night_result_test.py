@@ -10,6 +10,17 @@ from night_run import assess_run, require_stage, parse_options
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_host_timing_keeps_repeated_district_intervals_distinct(self):
+        with tempfile.TemporaryDirectory() as folder:
+            progress={'_checkpoint_path':str(Path(folder)/'progress.json'),'_started_monotonic':10}
+            with patch.object(night_run.time,'monotonic',side_effect=[10,13,17]):
+                night_run.checkpoint_run(progress,'districts',district_realm='PARCELS')
+                night_run.checkpoint_run(progress,'districts',district_realm='BRICKS')
+                timing=night_run.timing_snapshot(progress)
+            self.assertEqual(timing['elapsed_seconds'],7)
+            self.assertEqual([row['seconds'] for row in timing['stage_intervals']],[3,4])
+            self.assertEqual([row['district_realm'] for row in timing['stage_intervals']],['PARCELS','BRICKS'])
+
     def test_checkpoint_preserves_phase_and_excludes_internal_fields(self):
         with tempfile.TemporaryDirectory() as folder:
             target=Path(folder)/'checkpoint.json'

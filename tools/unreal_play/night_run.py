@@ -187,8 +187,28 @@ def publish_receipt(receipt,out_dir,latest_path):
 
 
 def checkpoint_run(progress,phase,**values):
+    now=time.monotonic()
+    started=progress.setdefault('_started_monotonic',now)
+    intervals=progress.setdefault('stage_intervals',[])
+    if '_phase_started' in progress:
+        intervals.append(dict(progress.get('_phase_context',{}),phase=progress.get('phase'),
+                              seconds=round(max(0,now-progress['_phase_started']),6)))
+    progress['_phase_started']=now
+    progress['_phase_context']={key:value for key,value in values.items()
+                                if key in ('district_realm','import_folder','build_job','build_pid','dependency_job')}
+    progress['elapsed_seconds']=round(max(0,now-started),6)
     progress.update(values,phase=phase,updated=time.strftime('%Y-%m-%dT%H:%M:%S'))
     write_report(progress['_checkpoint_path'],{key:value for key,value in progress.items() if not key.startswith('_')})
+
+
+def timing_snapshot(progress):
+    now=time.monotonic()
+    intervals=list(progress.get('stage_intervals',[]))
+    if '_phase_started' in progress:
+        intervals.append(dict(progress.get('_phase_context',{}),phase=progress.get('phase'),
+                              seconds=round(max(0,now-progress['_phase_started']),6)))
+    return {'elapsed_seconds':round(max(0,now-progress.get('_started_monotonic',now)),6),
+            'stage_intervals':intervals,'timing_scope':'Host stage intervals including observation/waits; not native CPU/GPU profiling'}
 
 
 def parse_options(argv):
@@ -361,6 +381,7 @@ def run_options(options,progress):
     receipt['import_receipts']=progress.get('import_receipts',[])
     receipt['import_expected_plans']=progress.get('import_expected_plans',[])
     receipt['checkpoint_run_id']=progress['run_id']
+    receipt.update(timing_snapshot(progress))
     receipt.update(run_id=progress['run_id'],started_when=progress['when'],phase='completed',
                    progress_receipt=progress['_checkpoint_path'],realms=options.realms,
                    build_job=progress.get('build_job'),build_pid=progress.get('build_pid'),
@@ -379,6 +400,7 @@ def run_options(options,progress):
 
 
 def main(argv):
+    started=time.monotonic()
     options=parse_options(argv)
     run_id=uuid.uuid4().hex
     out_dir=os.path.join(os.environ.get('LOCALAPPDATA',REPO),'Daedalus','jobs')
@@ -386,6 +408,7 @@ def main(argv):
               'build':not options.no_build,'realms':options.realms,'laid':[],'scenarios':{},
               'total':'TOTAL ?','log_report':'unavailable','fails':[],'interrupted':[],
               'outcome':{'status':'running','passed':False},
+              '_started_monotonic':started,
               '_checkpoint_path':os.path.join(out_dir,'night-progress-'+run_id+'.json')}
     try:
         checkpoint_run(progress,'starting')

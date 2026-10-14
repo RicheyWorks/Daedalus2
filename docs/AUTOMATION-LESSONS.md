@@ -855,3 +855,7 @@ Night-run keeps the file-only preflight result and passes it as --expected-plan 
 ### Keep run identity through handoff publication (2026-10-14)
 A run ID identifies the orchestration; an archive ID identifies a published snapshot. Preserve the run ID from stage checkpoints into final receipts, while allocating unique archive IDs so multiple publications cannot overwrite history. Final reports must retain build/dependency job identity, progress path and every pinned import-plan path, not just the final scenario totals.
 
+
+### Time repeatable host stages (2026-10-14)
+Use monotonic elapsed time for night-run totals and each stage interval. Preserve repeated district/import stages separately with their own context so aggregate labels do not hide slow regions. Receipts and read-only handoff summaries carry these intervals for speed comparisons. Timing includes host setup, waits and observation; it is not native CPU/GPU profiling, and a faster failed run is not equivalent completion.
+

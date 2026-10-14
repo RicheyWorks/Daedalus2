@@ -78,6 +78,7 @@ def summarize(path,jobs_root):
             'recorded_status':status,'phase':value.get('stopped_phase',value.get('phase')),
             'sha':value.get('sha'),'build_job':value.get('build_job'),'build_pid':value.get('build_pid'),
             'reported_total':value.get('total'),'imports':imports,
+            'elapsed_seconds':value.get('elapsed_seconds'),'stage_intervals':value.get('stage_intervals',[]),
             'reconciliation_required':status!='passed' or any(row['reconciliation_required'] for row in imports),
             'scope':'Saved receipt evidence only; no current engine state or replay authorization',
             'mutation':False,'editor_queried':False}
