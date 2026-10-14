@@ -1043,3 +1043,5 @@ What could be better (the next asks, in order):
 7. PowerShell quoting through the bridge eats Python one-liners (three times tonight): anything over one line is a
    repo script run by path, never an inline `python -c`.
 8. Game-time waits everywhere in daedalus_play (a sweep for `_frames(` used as a clock), and fps in every receipt.
+
+2026-10-14 island pool: for a top-centred 92 m replacement mesh, normalize old 100 cm Engine Cube instance scales. Bounds and collision must be proven after import, not inferred from export. Supply genuine convex UCX through FBX or an explicit collision sidecar; GLB naming alone does not establish collision. Default Blender camera far clipping can hide rows in a world-scale contact sheet; set it above the arrangement's distance. Exported mesh hashes stayed unchanged while correcting the review camera.
