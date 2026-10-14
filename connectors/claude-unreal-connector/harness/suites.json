@@ -3,6 +3,8 @@
   "suites": [
     {"name": "e2e", "cmd": ["-m", "harness.e2e"], "floor": 23, "what": "the MCP extension over stdio, end to end, against the stand-in editor"},
     {"name": "contract", "cmd": ["-m", "harness.contract"], "floor": 14, "what": "risk ladder, policy refusals, request_id replay"},
-    {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"}
+    {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"},
+    {"name": "remote-unknown", "cmd": ["tests/remote_outcome_unknown_test.py"], "floor": 20, "what": "remote dispatch ambiguity, no local replay, retained uncertainty and setup cleanup"},
+    {"name": "remote-unknown-mutants", "cmd": ["tests/remote_outcome_unknown_mutation_test.py"], "floor": 5, "what": "healthy baseline and assertion-only rejection of five remote outcome regressions"}
   ]
 }
