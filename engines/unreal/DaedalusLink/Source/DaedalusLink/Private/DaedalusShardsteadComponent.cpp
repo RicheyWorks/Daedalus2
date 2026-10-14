@@ -30,12 +30,19 @@ FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& P
     FDaedalusIslandStats Out;if(!Ready||!Host())return Out;
     const auto* Crew=Rules.Stats(Key(PlayerKey));if(!Crew)return Out;
     Out.Available=true;Out.Friendship=Crew->Friendship;Out.Infamy=Crew->Infamy;
-    for(int Value:Crew->Cargo)Out.Cargo.Add(Value);return Out;
+    for(int Value:Crew->Cargo)Out.Cargo.Add(Value);
+    Out.Cycle=Rules.Cycle()>static_cast<std::uint64_t>(MAX_int64)?MAX_int64:static_cast<int64>(Rules.Cycle());
+    auto Forecast=Rules;
+    if(Rules.Cycle()!=UINT64_MAX&&Forecast.Produce(Rules.Cycle()+1)){
+        const auto* Next=Forecast.Stats(Key(PlayerKey));
+        for(unsigned K=0;K<daedalus::shardstead::Slot(daedalus::shardstead::Resource::Count);++K)Out.ProjectedNet.Add(Next->Cargo[K]-Crew->Cargo[K]);
+    }
+    return Out;
 }
 TArray<FDaedalusIslandClaimRow> UDaedalusShardsteadComponent::GetClaimRows(const FString& PlayerKey) const {
     TArray<FDaedalusIslandClaimRow> Out;if(!Ready||!Host())return Out;
     for(const auto& Row:Rules.Tab(Key(PlayerKey))){FDaedalusIslandClaimRow Item;
         Item.Island=static_cast<int32>(Row.Island);Item.Task=static_cast<EDaedalusIslandResource>(Row.Task);
-        Item.Remaining=Row.Remaining;Item.Working=Row.Working;Out.Add(Item);}
+        Item.Remaining=Row.Remaining;Item.Working=Row.Working;Item.WorkerId=UTF8_TO_TCHAR(Row.Worker.c_str());Out.Add(Item);}
     return Out;
 }

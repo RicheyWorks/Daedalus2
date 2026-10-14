@@ -326,3 +326,18 @@ Architecture: docs/production/ISLAND-AND-NEW-REALMS.md. Source first slice is no
 - [ ] Dedicated Mine/Trade/Repair character clips; art review/contact sheet; add approved assets to existing workbook.
 - [ ] Exact-head native/runtime evidence, asset registry and storyline/mechanics review before declaring complete.
 - [x] Hushveil portable sound/investigation/search/chase and observed-hiding rules; actor navigation remains pending.
+
+### Hearthwake ecosystem/refinement and supply UI
+
+- [x] Validated Shardstead snapshots and prepare/persist/confirm request ledger source.
+- [x] Renewable food/energy loop and finite mineral-only extraction source.
+- [x] Production-page Slate cards, localized amounts, forecasts, shortage/missing states and claim table source.
+- [x] Canonical Java ArkRescue transfer planning across existing species/community/hold guilds.
+- [x] Three additional good unicorn ark/ecosystem rescue mission definitions.
+- [x] Daily host rescue-chance policy and actual-arrival confirmation source.
+- [x] No-rescue Longest Lived and distinct-life Most Saved ranking cores with restore seams.
+- [ ] Persist rescue source/hold/destination/quest receipts atomically; bind existing ArkFleet voyage events and protected passengers.
+- [ ] Stable rescued-life identities, anti-farming mission provenance and biodiversity/habitat validation.
+- [ ] Prepared marine tanks, flora/fungi banks, predator separation and sanctuary restoration Blender modules.
+- [ ] Mount Production page in existing themed tab shell; owner-scoped replicated DTOs; revision-cached forecast.
+- [ ] Hearthwake rescue toggle disclosure, daily chance display and public leaderboards wired to authenticated host persistence.

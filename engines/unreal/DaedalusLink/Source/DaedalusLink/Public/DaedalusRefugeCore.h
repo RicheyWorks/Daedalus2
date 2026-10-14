@@ -8,12 +8,14 @@ namespace daedalus { namespace refuge {
 struct Resident {int Health=100,Hunger=0,Thirst=0,Morale=70;bool Alive=true;};
 struct Supplies {int Food=16,Water=20,Medicine=3,RepairParts=4;};
 struct Decision {std::array<bool,4> Feed{{false,false,false,false}},Water{{false,false,false,false}},Treat{{false,false,false,false}};bool Repair=false;};
+struct ShelterSnapshot {unsigned Version=1,Day=0;std::array<Resident,4> Residents;Supplies Stock;int Integrity=80;};
 struct DayReport {unsigned Day=0;int Alive=4;bool Finished=false;};
 class Shelter {
     std::array<Resident,4> Family;
     Supplies Store;
     unsigned Day=0;
     int Integrity=80;
+    bool Used=false;
 public:
     const std::array<Resident,4>& Residents() const {return Family;}
     Supplies Stock() const {return Store;}
@@ -28,7 +30,7 @@ public:
         if(Food>Store.Food||Water>Store.Water||Medicine>Store.Medicine||(D.Repair&&Store.RepairParts<1))return false;
         Store.Food-=Food;Store.Water-=Water;Store.Medicine-=Medicine;
         if(D.Repair){--Store.RepairParts;Integrity=std::min(100,Integrity+15);}
-        ++Day;Integrity=std::max(0,Integrity-(Day%7==0?8:1));
+        Used=true;++Day;Integrity=std::max(0,Integrity-(Day%7==0?8:1));
         for(unsigned I=0;I<Family.size();++I){auto& R=Family[I];if(!R.Alive)continue;
             R.Hunger=D.Feed[I]?std::max(0,R.Hunger-30):std::min(100,R.Hunger+12);
             R.Thirst=D.Water[I]?std::max(0,R.Thirst-45):std::min(100,R.Thirst+22);
@@ -40,12 +42,22 @@ public:
         int Alive=0;for(const auto& R:Family)Alive+=R.Alive?1:0;
         Report={Day,Alive,Alive==0};return true;
     }
+    ShelterSnapshot Export() const{return {1,Day,Family,Store,Integrity};}
+    bool Restore(const ShelterSnapshot& Saved){
+        if(Used||Saved.Version!=1||Saved.Day>36500||Saved.Integrity<0||Saved.Integrity>100)return false;
+        const int Stock[]={Saved.Stock.Food,Saved.Stock.Water,Saved.Stock.Medicine,Saved.Stock.RepairParts};
+        for(int V:Stock)if(V<0||V>100000)return false;
+        for(const auto& R:Saved.Residents){
+            if(R.Health<0||R.Health>100||R.Hunger<0||R.Hunger>100||R.Thirst<0||R.Thirst>100||R.Morale<0||R.Morale>100||R.Alive!=(R.Health>0))return false;
+        }
+        Family=Saved.Residents;Store=Saved.Stock;Day=Saved.Day;Integrity=Saved.Integrity;Used=true;return true;
+    }
     // Expedition/trade grants must be validated and deduplicated in the host ledger before invocation.
     bool Receive(const Supplies& S) {
         const int In[]={S.Food,S.Water,S.Medicine,S.RepairParts};
         const int Old[]={Store.Food,Store.Water,Store.Medicine,Store.RepairParts};
         for(int I=0;I<4;++I)if(In[I]<0||In[I]>100000-Old[I])return false;
-        Store.Food+=S.Food;Store.Water+=S.Water;Store.Medicine+=S.Medicine;Store.RepairParts+=S.RepairParts;return true;
+        Used=true;Store.Food+=S.Food;Store.Water+=S.Water;Store.Medicine+=S.Medicine;Store.RepairParts+=S.RepairParts;return true;
     }
 };
 }}

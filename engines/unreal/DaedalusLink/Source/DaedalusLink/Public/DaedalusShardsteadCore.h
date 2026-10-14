@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include <array>
+#include <utility>
 #include <vector>
 #include <cstdint>
 #include <string>
@@ -22,7 +23,19 @@ inline Stock Survey(std::uint64_t Seed,std::uint32_t Island) {
 }
 struct Crew {Stock Cargo{{12,12,0,0,0,0}};int Friendship=0,Infamy=0;};
 struct Plot {std::string Owner,Worker;Resource Task=Resource::Stone;Stock Remaining{};bool Assigned=false;};
-struct TabRow {std::uint32_t Island;Resource Task;int Remaining;bool Working;};
+struct Snapshot {
+    unsigned Version=1;std::uint64_t Seed=0,Cycle=0;
+    std::map<std::string,Crew> Crews;std::map<std::uint32_t,Plot> Plots;
+};
+inline bool SameState(const Snapshot& A,const Snapshot& B){
+    if(A.Version!=B.Version||A.Seed!=B.Seed||A.Cycle!=B.Cycle||A.Crews.size()!=B.Crews.size()||A.Plots.size()!=B.Plots.size())return false;
+    for(const auto& Pair:A.Crews){auto I=B.Crews.find(Pair.first);if(I==B.Crews.end()||Pair.second.Cargo!=I->second.Cargo||Pair.second.Friendship!=I->second.Friendship||Pair.second.Infamy!=I->second.Infamy)return false;}
+    for(const auto& Pair:A.Plots){auto I=B.Plots.find(Pair.first);if(I==B.Plots.end())return false;
+        const auto& X=Pair.second;const auto& Y=I->second;
+        if(X.Owner!=Y.Owner||X.Worker!=Y.Worker||X.Task!=Y.Task||X.Remaining!=Y.Remaining||X.Assigned!=Y.Assigned)return false;}
+    return true;
+}
+struct TabRow {std::uint32_t Island;Resource Task;int Remaining;bool Working;std::string Worker;};
 // Not an NFT ownership service. Host must authorize proximity, realm access and land rights.
 class Economy {
     std::uint64_t Seed,LastCycle=0;
@@ -36,7 +49,7 @@ public:
     bool Join(const std::string& Player){return Identity(Player)&&Crews.size()<256&&Crews.emplace(Player,Crew{}).second;}
     const Crew* Stats(const std::string& Player) const {auto I=Crews.find(Player);return I==Crews.end()?nullptr:&I->second;}
     bool Claim(const std::string& Player,std::uint32_t Island,bool HostLandPermission) {
-        if(!HostLandPermission||!Stats(Player)||Plots.size()>=10000||Plots.count(Island))return false;
+        if(!HostLandPermission||!Stats(Player)||Island>=10000||Plots.size()>=10000||Plots.count(Island))return false;
         Plot P;P.Owner=Player;P.Remaining=Survey(Seed,Island);Plots.emplace(Island,P);return true;
     }
     bool Assign(const std::string& Player,std::uint32_t Island,const std::string& Worker,Resource Task) {
@@ -49,20 +62,25 @@ public:
     }
     // Monotonic host cycles; no offline catch-up or client timestamp authority.
     bool Produce(std::uint64_t Cycle) {
-        if(Cycle==0||Cycle!=LastCycle+1)return false;
-        // Energy production runs first, preventing map-order starvation.
-        for(int Pass=0;Pass<2;++Pass)for(auto& Pair:Plots){
-            auto& P=Pair.second;if(!P.Assigned||((P.Task==Resource::Energy)!=(Pass==0)))continue;
+        if(LastCycle==UINT64_MAX||Cycle==0||Cycle!=LastCycle+1)return false;
+        // Renewable food first, then energy, then finite mineral extraction.
+        // A hungry farmer can grow one emergency ration without inputs.
+        for(int Pass=0;Pass<3;++Pass)for(auto& Pair:Plots){
+            auto& P=Pair.second;int Job=P.Task==Resource::Food?0:P.Task==Resource::Energy?1:2;
+            if(!P.Assigned||Job!=Pass)continue;
             auto& C=Crews.find(P.Owner)->second;unsigned K=Slot(P.Task);
-            int Yield=std::min(3,P.Remaining[K]);Yield=std::min(Yield,MaxStock-C.Cargo[K]);
-            if(Yield<=0||C.Cargo[0]<1||(P.Task!=Resource::Energy&&C.Cargo[1]<1))continue;
-            --C.Cargo[0];if(P.Task!=Resource::Energy)--C.Cargo[1];
-            C.Cargo[K]+=Yield;P.Remaining[K]-=Yield;
+            int Yield=Job<2?1+P.Remaining[K]/100:std::min(3,P.Remaining[K]);
+            if(Job==0 && C.Cargo[0]==0)Yield=1;
+            if(Job!=0 && C.Cargo[0]<1)continue;
+            if(Job==2 && C.Cargo[1]<1)continue;
+            Yield=std::min(Yield,MaxStock-C.Cargo[K]);if(Yield<=0)continue;
+            if(Job!=0)--C.Cargo[0];if(Job==2)--C.Cargo[1];
+            C.Cargo[K]+=Yield;if(Job==2)P.Remaining[K]-=Yield;
         }
         LastCycle=Cycle;return true;
     }
     bool Mine(const std::string& Player,std::uint32_t Island,Resource R,int Quantity,bool HostAtDeposit) {
-        auto I=Plots.find(Island);if(!HostAtDeposit||I==Plots.end()||I->second.Owner!=Player||!Valid(R)||Quantity<=0||Quantity>25)return false;
+        auto I=Plots.find(Island);if(!HostAtDeposit||I==Plots.end()||I->second.Owner!=Player||!Valid(R)||Slot(R)<Slot(Resource::Iron)||Quantity<=0||Quantity>25)return false;
         auto& C=Crews.find(Player)->second;unsigned K=Slot(R);
         if(I->second.Remaining[K]<Quantity||C.Cargo[K]>MaxStock-Quantity)return false;
         C.Cargo[K]+=Quantity;I->second.Remaining[K]-=Quantity;return true;
@@ -84,9 +102,26 @@ public:
         if(B.Cargo[K]<Quantity||A.Cargo[K]>MaxStock-Quantity)return false;
         B.Cargo[K]-=Quantity;A.Cargo[K]+=Quantity;A.Infamy=std::min(100,A.Infamy+5);return true;
     }
+    std::uint64_t Cycle() const{return LastCycle;}
+    Snapshot Export() const{return {1,Seed,LastCycle,Crews,Plots};}
+    // Validate a complete candidate before assigning; reject partial/cross-realm restores.
+    bool Restore(const Snapshot& Saved) {
+        if(!Crews.empty()||!Plots.empty()||LastCycle!=0||Saved.Version!=1||Saved.Seed!=Seed||Saved.Crews.size()>256||Saved.Plots.size()>10000)return false;
+        std::set<std::string> LoadedWorkers;
+        for(const auto& Pair:Saved.Crews){const auto& C=Pair.second;
+            if(!Identity(Pair.first)||!Amounts(C.Cargo)||C.Friendship<0||C.Friendship>100||C.Infamy<0||C.Infamy>100)return false;}
+        for(const auto& Pair:Saved.Plots){const auto& P=Pair.second;
+            if(Pair.first>=10000||!Saved.Crews.count(P.Owner)||!Valid(P.Task)||!Amounts(P.Remaining))return false;
+            Stock Initial=Survey(Seed,Pair.first);
+            for(unsigned K=0;K<Slot(Resource::Count);++K)if(P.Remaining[K]>Initial[K]||(K<2&&P.Remaining[K]!=Initial[K]))return false;
+            if(P.Assigned){if(!Identity(P.Worker)||!LoadedWorkers.insert(P.Worker).second)return false;}
+            else if(!P.Worker.empty())return false;
+        }
+        Crews=Saved.Crews;Plots=Saved.Plots;Workers=std::move(LoadedWorkers);LastCycle=Saved.Cycle;return true;
+    }
     std::vector<TabRow> Tab(const std::string& Player) const {
         std::vector<TabRow> Rows;for(const auto& Pair:Plots)if(Pair.second.Owner==Player)
-            Rows.push_back({Pair.first,Pair.second.Task,Pair.second.Remaining[Slot(Pair.second.Task)],Pair.second.Assigned});
+            Rows.push_back({Pair.first,Pair.second.Task,Pair.second.Remaining[Slot(Pair.second.Task)],Pair.second.Assigned,Pair.second.Worker});
         return Rows;
     }
 };

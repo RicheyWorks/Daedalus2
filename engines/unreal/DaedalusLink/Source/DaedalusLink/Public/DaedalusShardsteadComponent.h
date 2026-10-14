@@ -15,6 +15,8 @@ struct DAEDALUSLINK_API FDaedalusIslandStats {
     GENERATED_BODY()
     UPROPERTY(BlueprintReadOnly) bool Available=false;
     UPROPERTY(BlueprintReadOnly) TArray<int32> Cargo;
+    UPROPERTY(BlueprintReadOnly) TArray<int32> ProjectedNet;
+    UPROPERTY(BlueprintReadOnly) int64 Cycle=0;
     UPROPERTY(BlueprintReadOnly) int32 Friendship=0;
     UPROPERTY(BlueprintReadOnly) int32 Infamy=0;
 };
@@ -25,6 +27,7 @@ struct DAEDALUSLINK_API FDaedalusIslandClaimRow {
     UPROPERTY(BlueprintReadOnly) EDaedalusIslandResource Task=EDaedalusIslandResource::Stone;
     UPROPERTY(BlueprintReadOnly) int32 Remaining=0;
     UPROPERTY(BlueprintReadOnly) bool Working=false;
+    UPROPERTY(BlueprintReadOnly) FString WorkerId;
 };
 /** One host-side realm manager. No tick or client RPC; durable ledger must wrap mutations before public use. */
 UCLASS(ClassGroup=(Daedalus),meta=(BlueprintSpawnableComponent))
