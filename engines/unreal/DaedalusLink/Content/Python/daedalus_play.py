@@ -1560,7 +1560,7 @@ def scenario_airship(p):
             if not g:
                 checks.append(_check("%s: the mount answers the call" % realm, False, "no vehicle"))
                 continue
-            on = h.interact()
+            on = g.mount(h)   # not h.interact(): at a gate the nearest interactable can be an arcade cabinet (01:36, Pong)
             yield from _frames(2)
             st = g.mount_state()
             checks.append(_check("%s: the hero is aboard %s" % (realm, st.split(" ")[0]), pc.get_controlled_pawn() == g, st))
