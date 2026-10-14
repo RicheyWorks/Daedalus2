@@ -654,3 +654,12 @@ report null; do not guess from a stale PID file. A live check exposed large lega
 history, so summaries retain full counts but only the last10 IDs and an omitted count. Message
 bodies are excluded. Never ACK historical messages or restart a broker just to make doctor green.
 New broker PID/uptime fields require reviewed restart; the client works with older brokers.
+
+
+## Bound broker responses before transport, not only the display (2026-10-13, Codex)
+Doctor's compact display still fetched full pending bodies and timed out on live history.
+GET /pending-summary now returns full count plus at most10 IDs with omitted count; it uses
+exactly pending()'s delivery filter and writes no state. The doctor calls this bounded endpoint.
+The earlier pending_outgoing label was inaccurate: pending() includes deliveries to this bot,
+including broadcasts; the field is now pending_delivery. Older brokers return unavailable
+until reviewed deployment; do not silently fall back to downloading the oversized history.
