@@ -9,6 +9,8 @@ int main()
     Gate gate;
     CHECK(gate.RecordBullAtSea("bull", false, true) == Outcome::Ignored);
     CHECK(gate.RecordBullAtSea("bull", true, false) == Outcome::Ignored);
+    CHECK(gate.RecordBullAtSea(" ", true, true) == Outcome::Ignored);
+    CHECK(gate.RecordBullAtSea(std::string("a\0b", 3), true, true) == Outcome::Ignored);
     CHECK(gate.RecordPackEncounter("pack", 8, true) == Outcome::Ignored);
     CHECK(gate.RecordPackEncounter("pack", 12, true) == Outcome::Progressed);
     CHECK(!gate.ClaimReward());
@@ -31,6 +33,10 @@ int main()
     invalid.BullIds.push_back("overflow");
     Gate fresh;
     CHECK(!fresh.Restore(invalid) && fresh.Pristine());
+    Gate reverse;
+    for (unsigned i = 0; i < 10; ++i) reverse.RecordBullAtSea(std::to_string(i), true, true);
+    CHECK(!reverse.Eligible());
+    CHECK(reverse.RecordPackEncounter("later", 12, true) == Outcome::Eligible);
     invalid = saved; invalid.BullIds[1] = invalid.BullIds[0];
     CHECK(!fresh.Restore(invalid) && fresh.Pristine());
     invalid = saved; invalid.PackId.clear();

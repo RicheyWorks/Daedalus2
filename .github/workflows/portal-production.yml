@@ -77,7 +77,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for core in portal_quest exploration_terrain ocean_travel; do
+          for core in portal_quest exploration_terrain ocean_travel unicorn_reward; do
             "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer "engines/unreal/core-test/${core}_core_test.cpp" -o "$RUNNER_TEMP/$core"
             "$RUNNER_TEMP/$core"
           done
@@ -85,6 +85,8 @@ jobs:
         run: |
           "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fno-exceptions -fsanitize=address,undefined engines/unreal/core-test/portal_quest_core_test.cpp -o "$RUNNER_TEMP/quest-no-exceptions"
           "$RUNNER_TEMP/quest-no-exceptions"
+          "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fno-exceptions -fsanitize=address,undefined engines/unreal/core-test/unicorn_reward_core_test.cpp -o "$RUNNER_TEMP/unicorn-no-exceptions"
+          "$RUNNER_TEMP/unicorn-no-exceptions"
       - name: Population and honest queue status
         run: |
           python3 -m unittest discover -s tools/blender -p test_portal_population.py
@@ -107,7 +109,7 @@ jobs:
       - name: Compile and run portable cores
         shell: pwsh
         run: |
-          foreach ($core in @('portal_quest', 'exploration_terrain', 'ocean_travel')) {
+          foreach ($core in @('portal_quest', 'exploration_terrain', 'ocean_travel', 'unicorn_reward')) {
             cl /nologo /EHsc /std:c++17 /W4 /WX "engines/unreal/core-test/${core}_core_test.cpp" "/Fe:$env:RUNNER_TEMP/$core.exe" "/Fo:$env:RUNNER_TEMP/$core.obj"
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             & "$env:RUNNER_TEMP/$core.exe"
@@ -119,4 +121,8 @@ jobs:
           cl /nologo /EHs-c- /D_HAS_EXCEPTIONS=0 /std:c++17 /W4 /WX engines/unreal/core-test/portal_quest_core_test.cpp "/Fe:$env:RUNNER_TEMP/quest-no-exceptions.exe" "/Fo:$env:RUNNER_TEMP/quest-no-exceptions.obj"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & "$env:RUNNER_TEMP/quest-no-exceptions.exe"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cl /nologo /EHs-c- /D_HAS_EXCEPTIONS=0 /std:c++17 /W4 /WX engines/unreal/core-test/unicorn_reward_core_test.cpp "/Fe:$env:RUNNER_TEMP/unicorn-no-exceptions.exe" "/Fo:$env:RUNNER_TEMP/unicorn-no-exceptions.obj"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & "$env:RUNNER_TEMP/unicorn-no-exceptions.exe"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

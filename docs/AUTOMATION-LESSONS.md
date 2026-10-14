@@ -913,3 +913,7 @@ PrepareGrantRecord isread-only and requires eligible,unclaimed,currentprogress a
 ### Expose pending persistence without conflating quest progress (2026-10-14)
 Owner-only unicornrecord readiness/pending/revision fields have a deduplicatedrecordstatus delegate separatefrombull/eligible/claimed UI. Hostrestore/new-recordinit markready; exactpersistenceack clears pending. These are recordworkflow signals, not serverhealth oritemawardproof. Claude29771 PIEtour owns liveeditor; allchanges sourceonly andUHT/runtime stillpending.
 
+
+### Keep reward identities canonical and portable (2026-10-14)
+Unicorncore rejects ASCIIspace/control/DEL IDs, includingembeddedNUL, before counting/restoringentities. Bothcondition orders remainvalid. NativeMSVC noexceptions/W4/WX nowpasses39checks; existingproductionCI includesgcc/clangsanitizers andMSVC plusnoexceptionvariants. RemoteCI/UHT/in-worldcomponent acceptance notyetobserved.
+

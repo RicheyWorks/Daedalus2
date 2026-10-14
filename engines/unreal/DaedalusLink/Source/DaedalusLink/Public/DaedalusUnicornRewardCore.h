@@ -93,7 +93,11 @@ public:
     }
 
 private:
-    static bool Identity(const std::string& id) { return !id.empty() && id.size() <= 100; }
+    static bool Identity(const std::string& id)
+    {
+        return !id.empty() && id.size() <= 100 &&
+            std::all_of(id.begin(), id.end(), [](unsigned char c) { return c >= 33 && c != 127; });
+    }
     void FinishEncounter()
     {
         // Conditions can arrive in either order. The underlying ordered quest
