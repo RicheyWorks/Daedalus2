@@ -654,3 +654,11 @@ mushrooms incl. glowing, wildflowers, crops wheat/corn/carrot/cabbage/beet/pumpk
 `Prop_Shrub_*` (12), `Prop_Cloud_*` (18 types and colours: cumulus, stratus, wisp, storm, thunder with a bolt,
 sunset pink/orange, dawn violet, gold, blood red, fog bank, snow, ash, aurora ribbon, rainbow arc, rain; 1 m).
 Bottom-centre pivot; `export_flora.py OUT [family…]` writes FBX + json and one contact sheet per family.
+
+### 14.7 Farm kit (`tools/blender/voxel_farm.py`)
+`Prop_Machine_*` (21: tractors in four liveries, plough, seeder, harrow, harvester, hay baler, sprayer, mower,
+wagons, wheelbarrow, milk cart, horse cart, pumps, sprinkler, irrigation pipe, windpump, tank; 25 cm voxels;
+**wheels are a separate `_Wheels` mesh** so Unreal can spin them), `Prop_Farm_*` buildings (16) and tools/fixtures
+(27, 10 cm), `Prop_Crop_*` (35: trellises with fruit, root crops with the root below ground, greens, berry/melon
+patches, grains/paddy/cane/cotton rows, orchard rows). `export_farm.py OUT [family…]`. In the ledger a machine
+is an outfitted FOOD worker (`PART_COST["FOOD"]`), crops are the chemistry's `soil.crops`.
