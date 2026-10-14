@@ -43,6 +43,7 @@
 #include "SDaedalusFieldMenu.h"
 #include "SDaedalusInventory.h"
 #include "SDaedalusDialogue.h"
+#include "DaedalusRealmSessionCore.h"
 #include "SDaedalusHud.h"
 #include "SDaedalusRealm.h"
 #include "Containers/Ticker.h"
@@ -65,6 +66,21 @@ static TAutoConsoleVariable<float> CVarLookAccel(TEXT("daedalus.LookAccel"), 3.f
 static TAutoConsoleVariable<float> CVarDeadzone(TEXT("daedalus.Deadzone"), 0.15f, TEXT("Stick deadzone used before settings load."));
 static TAutoConsoleVariable<int32> CVarRumble(TEXT("daedalus.Rumble"), 1, TEXT("0 turns controller rumble off."));
 static TAutoConsoleVariable<float> CVarRumbleScale(TEXT("daedalus.RumbleScale"), 1.f, TEXT("Rumble strength, 0-1."));
+// -------------------------------------------------------------------------------------------- the realm session
+
+struct FDaedalusRealmSessionHolder { daedalus::session::Session Session; };
+
+static daedalus::session::Session& SessionOf(TSharedPtr<FDaedalusRealmSessionHolder>& Holder, const FString& Saved)
+{
+	if (!Holder.IsValid())
+	{
+		Holder = MakeShared<FDaedalusRealmSessionHolder>();
+		if (!Saved.IsEmpty()) Holder->Session.Restore(TCHAR_TO_UTF8(*Saved));
+	}
+	return Holder->Session;
+}
+
+
 static TAutoConsoleVariable<FString> CVarServer(TEXT("daedalus.Server"), TEXT("http://localhost:8088"), TEXT("The Daedalus server (foe rules)."));
 
 namespace
@@ -1188,6 +1204,15 @@ FString ADaedalusHero::RealmSavePath()
 void ADaedalusHero::EnterRealm(int64 Seed)
 {
 	if (RealmView.IsValid() || Menu.IsValid() || Field.IsValid()) return;
+	{
+		// The session (hub 28885): a portal cube is a Via::Portal switch into PORTAL from wherever you stood.
+		daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
+		if (S.Current() != "PORTAL")
+		{
+			const daedalus::session::Change C = S.Go("PORTAL", daedalus::session::Via::Portal);
+			if (C.Ok) { S.Apply(C); OnRealmChange.Broadcast(UTF8_TO_TCHAR(C.From.c_str()), TEXT("PORTAL"), TEXT("PORTAL"), TEXT("spawn")); }
+		}
+	}
 	RealmView = SNew(SDaedalusRealm).OnExit(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::RealmWantsOut));
 	ShowOverlay(RealmView.ToSharedRef(), RealmView.ToSharedRef(), RealmHost);
 	RealmSource = TEXT("loading");
@@ -1263,6 +1288,15 @@ void ADaedalusHero::ExitRealm()
 	if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
 	HideOverlay(RealmHost);
 	RealmView.Reset();
+	{
+		daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
+		if (S.Current() == "PORTAL" && !S.PortalFrom().empty())
+		{
+			const daedalus::session::Change C = S.Go(S.PortalFrom(), daedalus::session::Via::Portal);
+			if (C.Ok) { S.Apply(C); OnRealmChange.Broadcast(TEXT("PORTAL"), UTF8_TO_TCHAR(C.To.c_str()), TEXT("PORTAL"), TEXT("portal")); }
+		}
+	}
+	SaveProgress();
 }
 
 bool ADaedalusHero::IsRealmOpen() const
@@ -1624,6 +1658,7 @@ void ADaedalusHero::LoadProgress()
 		ArmorTier = Root->GetIntegerField(TEXT("armor_tier"));
 		ShieldCores = Root->GetIntegerField(TEXT("shield_cores"));
 		Exp = Root->GetIntegerField(TEXT("exp"));
+		Root->TryGetStringField(TEXT("realm_session"), RealmSessionLine);
 	}
 	ApplyArmor();
 	Shield = MaxShield;
@@ -1631,7 +1666,8 @@ void ADaedalusHero::LoadProgress()
 
 void ADaedalusHero::SaveProgress() const
 {
-	const FString Text = FString::Printf(TEXT("{\n  \"armor_tier\": %d,\n  \"shield_cores\": %d,\n  \"exp\": %d\n}\n"), ArmorTier, ShieldCores, Exp);
+	const FString Session = RealmSession.IsValid() ? FString(UTF8_TO_TCHAR(RealmSession->Session.Save().c_str())) : RealmSessionLine;
+	const FString Text = FString::Printf(TEXT("{\n  \"armor_tier\": %d,\n  \"shield_cores\": %d,\n  \"exp\": %d,\n  \"realm_session\": \"%s\"\n}\n"), ArmorTier, ShieldCores, Exp, *Session);
 	FFileHelper::SaveStringToFile(Text, *ProgressPath());
 }
 
@@ -2008,6 +2044,41 @@ FString ADaedalusHero::DialogueInput(const FString& Command)
 	const int32 Blips = DialogueSfx.FilterByPredicate([](const FString& S) { return S.StartsWith(TEXT("BLIP")); }).Num();
 	if (!Dialogue.IsValid()) return TEXT("closed last=") + LastDialogue;
 	return FString::Printf(TEXT("%s blips=%d last=%s"), *Out, Blips, *LastDialogue);
+}
+
+FString ADaedalusHero::RealmNow() const
+{
+	return RealmSession.IsValid() ? FString(UTF8_TO_TCHAR(RealmSession->Session.Current().c_str())) : (RealmSessionLine.IsEmpty() ? TEXT("WORLD-ZERO") : RealmSessionLine.Left(RealmSessionLine.Find(TEXT(" "))));
+}
+
+FString ADaedalusHero::RealmSessionState() const
+{
+	return RealmSession.IsValid() ? FString(UTF8_TO_TCHAR(RealmSession->Session.Describe().c_str())) : TEXT("realm=") + RealmNow() + TEXT(" (not started)");
+}
+
+FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, const FString& Detail)
+{
+	using namespace daedalus::session;
+	daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
+	const FString V = ViaWord.ToLower();
+	const Via How = V == TEXT("portal") ? Via::Portal : V == TEXT("dock") ? Via::Dock : V == TEXT("shore") ? Via::Shore : Via::Gate;
+	if (V != TEXT("gate") && V != TEXT("portal") && V != TEXT("dock") && V != TEXT("shore")) return TEXT("refused: via is gate, portal, dock or shore");
+	const Change C = S.Go(TCHAR_TO_UTF8(*To.ToUpper()), How, TCHAR_TO_UTF8(*Detail));
+	if (!C.Ok) return TEXT("refused: ") + FString(UTF8_TO_TCHAR(C.Why.c_str()));
+	if (Menu.IsValid() || Field.IsValid() || Inventory.IsValid() || Dialogue.IsValid()) return TEXT("refused: close the menu first");
+	const FString From = UTF8_TO_TCHAR(C.From.c_str()), Dest = UTF8_TO_TCHAR(C.To.c_str()), Hint = UTF8_TO_TCHAR(C.Hint.c_str());
+	// Leave: the 8-bit realm saves and closes itself; a 3D realm's host hears OnRealmChange.
+	if (From == TEXT("PORTAL") && RealmView.IsValid()) ExitRealm();   // ExitRealm applies the way back itself
+	if (S.Current() != C.To) S.Apply(C);
+	// The realm's own catalog and theme: the inventory and the dialogue box follow (empty = by the map's name).
+	InventoryRealm = UTF8_TO_TCHAR(C.Catalog.c_str());
+	const FString ViaStr = UTF8_TO_TCHAR(ViaName(How));
+	OnRealmChange.Broadcast(From, Dest, ViaStr, Hint);
+	// Enter: the 8-bit realm opens over the world; the Ocean and the gated realms are their hosts' to stream.
+	if (Dest == TEXT("PORTAL")) EnterRealm(static_cast<int64>(GetTypeHash(From)) % 1000000);
+	SaveProgress();
+	UE_LOG(LogDaedalus, Log, TEXT("Realm %s -> %s by %s at %s"), *From, *Dest, *ViaStr, *Hint);
+	return FString::Printf(TEXT("ok %s -> %s via=%s hint=%s"), *From, *Dest, *ViaStr, *Hint);
 }
 
 FString ADaedalusHero::MenuInput(const FString& Command)
