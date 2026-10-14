@@ -173,6 +173,8 @@ def _hub():
     for a in sub.get_all_level_actors():
         if a.get_level().get_outer().get_name() not in SKIP_LEVELS:
             continue
+        if a.get_actor_label().startswith("Land_"):     # the plots laid down by daedalus_plots are not the hub
+            continue
         o, e = a.get_actor_bounds(False)
         if e.x == 0 and e.y == 0:
             o, e = a.get_actor_location(), type(o)(0, 0, 0)
