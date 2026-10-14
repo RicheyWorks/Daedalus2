@@ -51,8 +51,18 @@ Actual Blender review on 14 October: Copper Beacon exported and two rendered
 revisions were visually inspected. It remains a prototype below the Adopt Me bar.
 Latest source raises the T-dock landing 12 cm to remove overlapping coplanar deck
 surfaces and reserves crown clearance around the boathouse and dry-docked boat.
-These corrections have not yet been re-exported or visually verified. The source
+These corrections were subsequently viewed in preview revision 3: the dock surface
+artifacts and cottage/crown overlap are resolved in that review image. Overall
+terrain and water finish remain below the quality bar; no new delivery export or
+native placement is claimed. The source
 lane does not own the separately claimed sky-harbor machinery modules.
+
+Use `--preview-only --render --preset CopperBeacon --with-terrain` for composition
+iterations. This saves an editable scene and a consistent CPU-rendered review image,
+without generating FBX/GLB or UCX. The actual revision-3 folder contains only those
+two artifacts and a manifest marked preview-only/quality-not-ready. Observed render
+time was 7.46 seconds; it is a single loaded-PC observation, not a speed guarantee.
+Final delivery export uses the existing mode after visible quality issues are fixed.
 
 ## team-codex | 2026-10-14 | Contest dressing and current connector observation
 Read existing ownership/connector lessons before work. Named Epic SceneTools.get_current_level failed at HTTP send to http://127.0.0.1:8000/mcp this turn; no current-map readback, native mutation, restart or transport-cause claim. Feedback to Poot separates expected current-level response from observed send failure and impact: native placement cannot be dispatched through that connection now.

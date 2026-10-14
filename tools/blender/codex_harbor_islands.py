@@ -15,6 +15,10 @@ parser.add_argument('--with-terrain', action='store_true',
                     help='Optional original shell; default exports additive dressing only')
 parser.add_argument('--preset', choices=['all', 'CopperBeacon', 'BlossomHarbor', 'StormwatchCove'],
                     default='all', help='Export one complete kit in a bounded shared-tool turn')
+parser.add_argument('--preview-only', action='store_true',
+                    help='Save editable scene without delivery FBX/GLB or collision generation')
+parser.add_argument('--render', action='store_true',
+                    help='Render a consistent review camera using four CPU threads')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 OUT = Path(args.output)
 if OUT.exists() and any(OUT.iterdir()):
@@ -226,6 +230,23 @@ def export_role_meshes(name, objects):
     return role_records
 
 
+def review_scene(name):
+    bpy.ops.object.camera_add(location=(110, -150, 100))
+    camera = bpy.context.object
+    camera.rotation_euler = (Vector((0, -3, -4))-camera.location).to_track_quat('-Z', 'Y').to_euler()
+    camera.data.type = 'ORTHO'; camera.data.ortho_scale = 120
+    scene = bpy.context.scene; scene.camera = camera
+    bpy.ops.object.light_add(type='SUN')
+    bpy.context.object.rotation_euler = (.5, -.4, -.6)
+    bpy.context.object.data.energy = 3
+    scene.world.color = (.17, .20, .26)
+    scene.render.engine = 'CYCLES'; scene.cycles.device = 'CPU'; scene.cycles.samples = 24
+    scene.render.threads_mode = 'FIXED'; scene.render.threads = 4
+    scene.render.resolution_x = 1000; scene.render.resolution_y = 1000
+    scene.render.resolution_percentage = 100
+    scene.render.filepath = str(OUT/(name+'.review.png'))
+
+
 records = []
 for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove']):
     if args.preset not in {'all', title}:
@@ -247,26 +268,38 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     name = 'CodexHarbor_' + title
     objects = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     generation_seconds = time.perf_counter()-generation_started
-    role_exports = export_role_meshes(name, objects)
+    role_exports = [] if args.preview_only else export_role_meshes(name, objects)
     bpy.ops.object.select_all(action='DESELECT')
     for obj in objects: obj.select_set(True)
-    glb = OUT/(name+'.glb')
+    glb = None if args.preview_only else OUT/(name+'.glb')
     export_started = time.perf_counter()
-    bpy.ops.export_scene.gltf(filepath=str(glb), export_format='GLB', use_selection=True, export_animations=False)
-    glb_seconds = time.perf_counter()-export_started
+    if glb:
+        bpy.ops.export_scene.gltf(filepath=str(glb), export_format='GLB', use_selection=True, export_animations=False)
+    glb_seconds = None if args.preview_only else time.perf_counter()-export_started
+    review_scene(name)
     bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(name+'.blend')))
-    records.append({'id': name, 'file': glb.name, 'sha256': hashlib.sha256(glb.read_bytes()).hexdigest(),
+    render_seconds = None
+    if args.render:
+        render_started = time.perf_counter()
+        bpy.ops.render.render(write_still=True)
+        render_seconds = time.perf_counter()-render_started
+    records.append({'id': name, 'file': glb.name if glb else None,
+                    'sha256': hashlib.sha256(glb.read_bytes()).hexdigest() if glb else None,
                     'seed': 8401+index, 'foliage_seed': 950+index,
                     'includes_terrain': args.with_terrain, 'target_footprint_metres': [92, 92],
                     'generation_seconds': generation_seconds, 'glb_export_seconds': glb_seconds,
+                    'preview_only': args.preview_only, 'render_seconds': render_seconds,
+                    'review_image': name+'.review.png' if args.render else None,
+                    'quality_ready': False,
                     'role_exports': role_exports,
                     'origin': 'receiving terrain ground centre Z=0',
                     'objects': len(objects), 'roles': sorted({o['harbor_role'] for o in objects}),
-                    'stage': 'Blender export; Unreal placement, collision and gameplay pending'})
+                    'stage': 'Blender preview; no delivery exports' if args.preview_only else
+                             'Blender export; visual review and Unreal acceptance pending'})
     (OUT/'harbor-manifest.json').write_text(json.dumps({'schemaVersion': 1, 'assets': records,
         'native_verified': False, 'author': 'team-codex',
         'source_files': {filename: hashlib.sha256(Path(__file__).with_name(filename).read_bytes()).hexdigest()
                          for filename in ['codex_harbor_islands.py', 'portal_common.py', 'labyrinth_cast.py']},
         'placement_contract': 'Metres +Z up; role objects retain local positions; fit to receiving terrain',
         'collision_contract': 'FBX blocking roles have per-solid UCX; GLB render only; foliage/water nonblocking; native verification pending'}, indent=2)+'\n')
-    print('HARBOR_EXPORTED '+name, flush=True)
+    print(('HARBOR_PREVIEW_READY ' if args.preview_only else 'HARBOR_EXPORTED ')+name, flush=True)
