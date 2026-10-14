@@ -1,0 +1,13 @@
+{
+  "scope": "Java/native grid addressing and estate-number parity; no ownership or live-world proof",
+  "native_header_sha256": "1483e59d9fe35cf706391d1c826d46480ec15b37349b94140726ad758db31c3e",
+  "canonical_output_sha256_lf": "182c90b14151708051576a1bb57feedb3442c7fbc4e12e8317bd244ee2aaee21",
+  "cell_rows": 10000,
+  "estate_rows": 40000,
+  "native_compiler": "MSVC C++17 /W4 /O2",
+  "focused_tests": 4,
+  "core_tests": 723,
+  "verify_seconds": 46.197,
+  "coverage_passed": true,
+  "spotbugs_findings": 0
+}

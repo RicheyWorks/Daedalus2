@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", "daedalus-core/src/**/com/daedalus/world/land/**", "docs/production/land-grid-parity-proof.json", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", "daedalus-core/src/**/com/daedalus/world/land/**", "docs/production/land-grid-parity-proof.json", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -36,6 +36,15 @@ jobs:
         run: g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
       - name: clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: realm land grid Java-native-Python parity (gcc and clang)
+        run: |
+          for compiler in g++ clang++; do
+            "$compiler" -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public land_grid_test.cpp -o land_grid_test
+            ./land_grid_test
+            "$compiler" -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public land_grid_parity.cpp -o land_grid_parity
+            ./land_grid_parity > land-grid-rows.txt
+            python3 check_land_grid_parity.py land-grid-rows.txt
+          done
       - name: battlefield ecology DBE 1 reader (ADR-061)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public ecology_core_test.cpp -o ecology_core_test && ./ecology_core_test
       - name: import script compiles and refuses a non-package
