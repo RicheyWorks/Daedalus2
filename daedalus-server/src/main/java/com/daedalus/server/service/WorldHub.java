@@ -118,6 +118,8 @@ public class WorldHub {
                 world.raiseBricks(id, seed);
             } else if (style == WorldStyle.GALLERY) {
                 world.raiseGallery(id, seed);
+            } else if (style == WorldStyle.LABYRINTH) {
+                world.raiseLabyrinth(id, seed);
             }
             entries.put(id, entry);
             persist();

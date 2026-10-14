@@ -529,3 +529,11 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+## Terrain readiness does not prove a vehicle exists (2026-10-13)
+The Labyrinth starter host reused the existing maze generator, atomic stamp operation and GLB renderer.
+The full reactor caught a hidden coupling: GateOpsTest required every terrain-ready style to have a ready
+flying mount. Labyrinth now has real walkable terrain, while SKY_STRIDER still has no flight implementation.
+Keep those capability flags independent and assert that the unfinished mount remains unavailable; do not
+flip the mount flag to satisfy a test. Deliver the physical GLB, hash and feet anchors to the sole Unreal
+operator, then track collision and visible walkthrough as separate acceptance work.

@@ -81,7 +81,26 @@ class WorldsControllerTest {
         List<String> styles = new ArrayList<>();
         r.get("styles").forEach(s -> styles.add(s.get("style").asText() + ":" + s.get("ready").asBoolean()));
         assertThat(styles).containsExactly("SKY_ISLANDS:true", "PARCELS:true", "BRICKS:true", "GALLERY:true",
-                "LABYRINTH:false");
+                "LABYRINTH:true");
+    }
+
+    @Test
+    void labyrinthIsARealPersistentVolumeThroughTheExistingApi() throws Exception {
+        assertThat(create("labyrinth", "LABYRINTH", 42, "The Labyrinth").get("result").asText())
+                .isEqualTo("CREATED");
+        assertThat(body(mvc.perform(get("/api/v1/world/labyrinth/block")
+                .param("x", "-90").param("y", "0").param("z", "-93"))).get("type").asText())
+                .isEqualTo("STONE");
+        assertThat(body(mvc.perform(get("/api/v1/world/labyrinth/block")
+                .param("x", "-90").param("y", "1").param("z", "-93"))).get("type").asText())
+                .isEqualTo("AIR");
+        assertThat(body(mvc.perform(get("/api/v1/world/world-zero/block")
+                .param("x", "-90").param("y", "0").param("z", "-93"))).get("type").asText())
+                .isEqualTo("AIR");
+        mvc = boot();
+        assertThat(body(mvc.perform(get("/api/v1/world/labyrinth/block")
+                .param("x", "-90").param("y", "0").param("z", "-93"))).get("type").asText())
+                .isEqualTo("STONE");
     }
 
     @Test
@@ -155,7 +174,6 @@ class WorldsControllerTest {
         assertThat(create("No Caps", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
         assertThat(create("ab", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
         assertThat(create("-dash", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
-        assertThat(create("maze-world", "LABYRINTH", 2, "Mazes").get("result").asText()).isEqualTo("STYLE_NOT_READY");
         assertThat(create("nowhere", "HYPERSPACE", 2, "x").get("result").asText()).isEqualTo("BAD_STYLE");
         assertThat(create("too-long-name", "SKY_ISLANDS", 2, "x".repeat(49)).get("result").asText()).isEqualTo("BAD_TITLE");
         for (int i = 0; i < WorldHub.MAX_WORLDS - 2; i++) {

@@ -45,6 +45,7 @@ import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.bricks.BricksOps;
+import com.daedalus.world.labyrinth.LabyrinthTerrain;
 import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.ecology.Community;
 import com.daedalus.world.ecology.Diversity;
@@ -774,6 +775,23 @@ public class WorldService {
             events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
                     pad.x(), pad.y(), pad.z(), "GALLERY", BlockType.AIR.name(), revision));
             return new DistrictWrite("LAID", revision, plan.parcels().size());
+        }
+    }
+
+    /** Create the bounded starter labyrinth using the common persistent chunk volume. */
+    public DistrictWrite raiseLabyrinth(String id, long seed) {
+        World live = require(id);
+        if (live == null) return null;
+        if (style != WorldStyle.LABYRINTH) return new DistrictWrite("NOT_A_LABYRINTH", live.revision().value(), 0);
+        synchronized (lock) {
+            var result = LabyrinthTerrain.build(live, seed);
+            if (!result.ok()) return new DistrictWrite("ALREADY_LAID", live.revision().value(), 0);
+            persist();
+            var spawn = LabyrinthTerrain.spawn();
+            long revision = live.revision().value();
+            events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                    spawn.x(), spawn.y(), spawn.z(), "LABYRINTH", BlockType.AIR.name(), revision));
+            return new DistrictWrite("LAID", revision, 1);
         }
     }
 
