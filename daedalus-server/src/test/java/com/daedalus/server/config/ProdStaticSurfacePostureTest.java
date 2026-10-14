@@ -56,6 +56,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("prod")
 class ProdStaticSurfacePostureTest {
 
+    @org.springframework.test.context.DynamicPropertySource
+    static void isolateWorldStorage(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        com.daedalus.server.IsolatedWorldStorage.register(registry);
+    }
+
+
     private enum Posture { PUBLIC, REFUSED }
 
     /** Every non-API path with a decision recorded against it. */

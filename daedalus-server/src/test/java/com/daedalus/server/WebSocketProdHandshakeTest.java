@@ -45,6 +45,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("prod")
 class WebSocketProdHandshakeTest {
 
+    @org.springframework.test.context.DynamicPropertySource
+    static void isolateWorldStorage(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        com.daedalus.server.IsolatedWorldStorage.register(registry);
+    }
+
+
     private static final long TIMEOUT_S = 10;
 
     @LocalServerPort
