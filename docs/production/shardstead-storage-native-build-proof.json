@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-14T14:00:39.972470+00:00",
+  "sourceHead": "6706cd50385c76b2a3df38a4eea92512bd0a29d0",
+  "trackedPluginFiles": 198,
+  "sourceManifestSHA256": "a5edf54beb672a546e217812840dc1cc13d1d32d028d83ab450dbc7ee686b0b9",
+  "target": "UnrealEditor Win64 Development",
+  "exitCode": 0,
+  "actions": 61,
+  "seconds": 305.87,
+  "dllBytes": 8271872,
+  "dllSHA256": "eb536b29d96a87b1a9e268736497f304cecee6d5bd4311ded4c7e9cb50271291",
+  "allSnapshotHashesRechecked": true,
+  "scope": "Full isolated native compile/link including DRSH1 codec, receipt/parser/component consumer and existing systems; no installed/live HTTP/gameplay proof",
+  "installed": false,
+  "runtimeVerified": false
+}
