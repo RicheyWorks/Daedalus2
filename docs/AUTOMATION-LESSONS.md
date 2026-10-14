@@ -881,3 +881,7 @@ so a new connector is the first line of the next turn; (2) every connector we ow
 command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
 harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
 register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
+
+### Diagnose MCP configuration without replaying refused actions (2026-10-14)
+Use tools/unreal/mcp_preflight.py for file-only project/defaultINI/descriptor diagnosis. ToolsetRegistry can be enabled through the ModelContextProtocol descriptor dependency even without an explicit project entry. Configuration agreement is not loaded-module/server readiness: return server_ready:null and make no editor/socket/control calls. Actual project/UE5.8 configuration matched; no edits or restart/start performed.
+
