@@ -2,7 +2,55 @@
 
 Audit date: 2026-10-14. Owner: Poot (`pootscoot`), confirmed by coordinator hub30610. Scope: continuous Blender production and a concurrent, bounded upgrade around the existing importer. The later continuous-production direction in30639 supersedes the earlier backlog-only pause. Preserve the current importer owner, assets, namespaces and warm DDC.
 
-**Status: source implementation, unvalidated and not loaded.** No tests, benchmarks, builds, add-on installation, plugin changes, console-variable changes, editor restart, asset import or live deployment were performed by this lane. Native discovery used only `list_toolsets` and `describe_toolset`. Installed does not mean enabled; enabled does not prove an operation worked.
+**Current checkpoint, 2026-10-14 23:04 UTC:** the Codex PR146 adapter at `05fc3c2521c62e06de88bf85106eee0dd55086ab` has actual operator import/save and unchanged-reuse receipts. The new combined palette/placement runner at `ed12c601f077791ad6ceff5b72c9179ea88b03ae` is source only, manually reviewed and not adopted. Separate tests/builds/benchmarks remain deferred. Root has not operated Unreal, installed source, changed settings or interrupted the sole operator. The original audit and historical handoff snapshots below are retained; this current checkpoint supersedes their pending Codex-adoption statements. Claude-wrapper adoption remains unverified.
+
+## Measured production bottleneck and bounded fix
+
+User priority: remove avoidable delay in the existing Blender-to-Unreal delivery path while builders continue. `codex-play-guard` remains the only Unreal writer; screenshots are a separate bounded task. Source inspection used its clean production checkout at `0075e19f32fdc04c967653d0f2f6c9e23232a013` (PR147), not a replacement importer or a second editor.
+
+Evidence base: `engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/` in that checkout, absolute path `C:/Users/730ri/Documents/Codex/2026-10-14/task-2/contest-island-production/`. The guarded import receipts record PR146 `reviewed_head`, `runtime_head` and loaded file hashes. The native importer SHA256 remains `dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982`.
+
+| Actual production slice | Guarded import | Palette bridge elapsed | Placement | Placement map save | Later palette map save |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| HeroR4, 10 meshes | 10.198029 s | 93.7 s; 17 instances created / 7 reused | 2.763550 s | 24.459607 s | 24.212257 s |
+| GardenGateR1, 9 meshes | 10.071391 s | 85.7 s; 16 created / 6 reused | 2.618201 s | 24.627979 s | 24.246945 s |
+| PowerUnit, 5 reused meshes | No new mesh import | 0.1 s; 4 reused | 0.936072 s | 20.504441 s | 21.345374 s |
+| Aetherflow, 3 meshes / 2 actors | 1.095737 s | 56.6 s combined material creation/compilation/save checkpoint | 0.478248 s | 20.560135 s | Binding included in this save |
+
+Exact receipts: Hero/Garden `codex-hero-r4.adoption.json`, `codex-garden-gate-r1.adoption.json` and their corresponding `.world.json`/`.palette.json`; summary `codex-reviewed-2130.checkpoint.json`; PowerUnit `codex-power-unit-2205.world.json`/`.palette.json`; Aetherflow `AetherflowR2/adoption.json`, `AetherflowR2/world.json`, `codex-aetherflow-2245.checkpoint.json`. Palette elapsed includes creation, compilation and asset saves, whose individual contributions were not timed. Native mesh-import receipts under `C:/Unreal/DaedalusRealm/Saved/Daedalus/Ingestion/CodexContest/receipts/` are Hero `4baeb945202507ea41b225c2`, Garden `2383d5c07d1d765d74a847af` and Aetherflow `d8c672752101e94807fc2be5`, `cd8a88ba64e2e4c0da04c799`, `645581c6f428658f3d6433e7`.
+
+Fresh palette creation is the largest measured stage. The clearest redundant work is the **second full-map save**: Hero/Garden saved four times for 97.546788 s, of which the two later saves consumed 48.459202 s. Their two guarded imports totaled 20.269420 s. This is an observed avoidable-work baseline, **not a demonstrated speedup**. Palette reuse already works and must be retained. The map is approximately 209 MB in these receipts; that size and a large actor count do not establish a hardware ceiling.
+
+The existing [admitted palette assembly runner](https://github.com/RicheyWorks/Daedalus2/blob/ed12c601f077791ad6ceff5b72c9179ea88b03ae/tools/unreal/codex_admitted_palette_assembly.py) now prepares/reuses assets through the unchanged `daedalus_codex_staging_palette.palette_steps`, verifies source/config/FBX/mesh/material-slot and saved-output witnesses, then passes bounded component overrides to [the existing saved-asset executor](https://github.com/RicheyWorks/Daedalus2/blob/ed12c601f077791ad6ceff5b72c9179ea88b03ae/tools/unreal/codex_saved_asset_assembly.py). Binding occurs before its sole final map-only save. The first slice accepts one retained HeroR3/HeroR4/GardenGateR1/PowerUnit candidate, using the existing admission contracts. It does not replace the queue, importer, palette generator or legacy separate-palette fallback.
+
+The two journals remain distinct. A completed palette journal can be reused only with identical inputs and saved palette bytes. A pending, partial, malformed, changed or uncertain journal stops for native inspection; no response/parser failure triggers a mutation replay. The executor retains each native response before interpreting it, accepts the list-shaped component response, and preserves existing Aetherflow support. Its current PR147 base already removed the earlier dict-only `wire.obj` assumption; direct-list tolerance is additional compatibility, not a claim to have newly fixed that historical failure. New timing fields record local preflight, each mutation call, component binding, map save and total executor elapsed. Palette preparation records exact-slot readback and palette-asset call elapsed. No compilation-completion claim follows from save=true.
+
+Manual review caught an initial bridge guard rejecting its own generator request. Source `ed12c601` excludes only the exact type plus a unique per-call label, and still refuses other jobs/queued work, remote lock activity and dirty packages before palette mutation. Two independent source reviews examined actual recipes/bridge code; no tests, Python compilation or native calls were used for this review. Root leaves the active operator checkout and editor untouched.
+
+### Normal-use handoff and remaining evidence
+
+Ownership/adoption requests are hub31099 and31120; isolated source claim is31105. After its current screenshot task and safe production boundary, the sole operator selects the next exact reviewed retained voxel candidate/revision, uses this source checkout, and records the loaded head and actual new palette/assembly journals. An already placed packet must not be replayed merely to manufacture timing evidence. The next reviewed Server_Rack or transparent Aetherflow packet is outside this bounded voxel contract.
+
+Reproducible CLI shape (owner supplies exact admission/export paths and agreed centimetre coordinates; this example was **not executed**):
+
+```powershell
+python tools/unreal/codex_admitted_palette_assembly.py NATIVE_SAVED_RECEIPT.json `
+  --source-receipt EXPORTED_SOURCE_RECIPE.json --placement-cm X_CM Y_CM Z_CM `
+  --map /Game/Daedalus/DaedalusWorld --map-file C:/Unreal/DaedalusRealm/Content/Daedalus/DaedalusWorld.umap `
+  --palette-journal NEW_PALETTE_JOURNAL.json --journal NEW_ASSEMBLY_JOURNAL.json
+```
+
+The operator must retain the existing exclusive turn and check actual jobs before use. A known empty material stub still uses the existing inspected-repair route, not automatic repair here. Successful adoption requires palette saved-output proof, exact actor/mesh/transform/component readbacks, one map-save response, preserved imported meshes/shared material and clean packages. Saved staging is separate from visual, collision, gameplay and runtime acceptance.
+
+Missing measurements remain explicit:
+
+- Immutable queue snapshot `C:/Users/730ri/Documents/Codex/2026-10-14/task/island-import-manifest-20261014.json`, SHA256 `57285255cf168bd5e41eea1e77f94afe484ae8ead4d089ab78276e9efdd483f4`, was captured at 21:35:16.0999441 UTC. It precedes Hero admission by 415.615437 s and Garden by 521.497109 s; no enqueue timestamp proves those are pure queue waits. Hero saved assets to Garden admission leaves 96.181681 s unclassified.
+- Fresh palette compile/create/save subdivisions, background asset compilation and hardware saturation are unknown. Examined ingestion receipts explicitly say `background_compilation: not_queried`.
+- Aetherflow's response-shape failure was reconciled without replay. Its two recovery checkpoints leave a 40.594876 s unclassified gap; there is no complete retry-duration timer.
+- Native capture review files in `QA/staging.*-review.json` provide completion timestamps: Hero three-view completion span 0.988862 s, Garden four-view span 1.611487 s. Initial capture latency is absent. These are not bulk-delivery timings.
+- Full-world snapshots are 4.25–7.85 MB, but scan durations are unmeasured. Placement itself took under 3 s for Hero/Garden. Fewer scans, queue polling changes, importer hash reductions or a persistent drain need evidence before they displace this narrow save fix.
+
+Actionable next integration step: operator adoption during a real compatible delivery, returning new phase receipts and one-save count; then instrument fresh material creation/recompile/asset saves separately if it still dominates. Root has not demonstrated reduced wall time, throughput, visual approval or a hardware limit.
 
 ## Immediate result and source
 
