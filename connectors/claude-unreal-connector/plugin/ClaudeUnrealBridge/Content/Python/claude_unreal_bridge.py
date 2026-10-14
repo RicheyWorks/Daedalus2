@@ -303,17 +303,36 @@ def cmd_viewport_screenshot(p):
 
 
 def cmd_play(p):
+    # Observation starts simulation, avoiding automatic viewport possession.
+    # Gameplay tests needing a player must deliberately request mode=play.
+    mode = p.get('mode')
+    if 'simulate' in p:
+        if type(p['simulate']) is not bool:
+            raise ValueError('simulate must be boolean')
+        legacy = 'simulate' if p['simulate'] else 'play'
+        if mode is not None and mode != legacy:
+            raise ValueError('mode contradicts simulate')
+        mode = legacy
+    mode = 'simulate' if mode is None else mode
+    if mode not in ('simulate', 'play'):
+        raise ValueError('mode must be simulate or play')
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
-    if not _in_pie():
-        if p.get("simulate"):
+    already_running = _in_pie()
+    if not already_running:
+        if mode == 'simulate':
             les.editor_play_simulate()
         else:
-            start = getattr(les, "editor_request_begin_play", None) or les.editor_play_simulate
+            start = getattr(les, "editor_request_begin_play", None)
+            if start is None:
+                raise RuntimeError('Possessed Play unavailable; refusing silent Simulate fallback')
             start()
-    deadline = time.time() + 30
-    while not _in_pie() and time.time() < deadline:
+    deadline = time.monotonic() + 30
+    while not _in_pie() and time.monotonic() < deadline:
         yield
-    return {"playing": _in_pie()}
+    playing = _in_pie()
+    return {"playing": playing, 'requested_mode': mode,
+            'started': not already_running and playing, 'already_running': already_running,
+            'mode_observed': None, 'timed_out': not playing}
 
 
 def cmd_stop(_p):
@@ -443,7 +462,7 @@ DESCRIPTIONS = {
     "get_actor_info": "One actor by label or name: transform, bounds, components, meshes, materials",
     "execute_python": "Run Python on the game thread with `unreal` imported; returns stdout and `result`",
     "viewport_screenshot": "A PNG of the active level viewport (base64); params width, height",
-    "play": "Start Play In Editor (or Simulate) and wait until it runs; param simulate",
+    "play": "Start Simulate by default for observation; mode=play explicitly requests possessed Play. Existing sessions are preserved; no actual mode claim.",
     "stop": "Stop Play In Editor and wait until it ends",
     "save": "Save the current level and every changed asset",
     "output_log": "The last lines of the editor log; params lines, filter",
@@ -454,7 +473,7 @@ DESCRIPTIONS = {
 PARAMS = {
     "get_level_info": {"limit": "int", "folder": "str"}, "get_actor_info": {"name": "str (required)"},
     "execute_python": {"code": "str (required)"}, "viewport_screenshot": {"width": "int", "height": "int"},
-    "play": {"simulate": "bool"}, "output_log": {"lines": "int", "filter": "str"},
+    "play": {"mode": "simulate|play (default simulate)", "simulate": "bool (legacy explicit mode)"}, "output_log": {"lines": "int", "filter": "str"},
     "capture_view": {"width": "int", "height": "int"},
     "batch": {"commands": "list (required)", "transaction": "str", "keep_going": "bool"},
     "job_result": {"job_id": "str (required)"},

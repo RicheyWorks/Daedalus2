@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Observer sessions versus possessed Play (2026-10-13)
+Observation should request Simulate explicitly or by the bridge default. Gameplay requiring possession must name mode=play; silently substituting simulation hides missing player behavior. Preserve an already running session and keep requested mode separate from observed mode. Fake routing checks cannot prove native mouse/focus behavior; editor-owner acceptance remains necessary.
+
