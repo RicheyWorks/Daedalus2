@@ -610,3 +610,104 @@ phase, error, snapshot path/hash when prepared, and outcome-unknown after dispat
 is not cancellation or proof of import failure; inspect the original job before repeating.
 Export failures also produce a receipt but do not invent an import path. Eleven offline seam
 regressions pass. Bridge request replay/remote job reconciliation still require later work.
+
+## GPU crash 22:19: twenty-two imports in one bridge call starved the GPU watchdog (2026-10-13)
+`lay_creatures("LABYRINTH", folder)` imported 22 rigged GLBs inside ONE execute_python call. The log shows the
+frame counter stuck at [0] for the whole call; at the second file Aftermath timed out, DRED had no breadcrumb,
+`D3D12Util.TerminateOnGPUCrash`. Same family as the 19:14 crash (3.5 min of saves in one call): a bridge call
+that blocks the game thread for more than a few seconds is a crash waiting for the watchdog. Rules now in code:
+(1) `tools/unreal_play/import_cast.py` imports ONE GLB per bridge call (~2 s each) with a 0.5 s gap, then places
+in a second call; `lay_creatures` is retired and raises with the command to run instead; (2) any editor loop over
+N assets is driven from the host script, one bridge call per item or per ≤150 light items, never N heavy items
+in one call; (3) the map had been saved 33 s before the crash (save_world after each realm), so nothing was lost:
+save after every realm, not at the end.
+
+## A dead hub answers {"id": null} (2026-10-13, 22:46)
+The broker had died (nothing on 9890) and `teamlink send` printed `"id": null`, exit 0; a request to Sol never
+existed. Fix: the CLI exits 2 with "hub down: nothing was sent" when the broker returns no id. Rule: after any
+send, the id in the output is the receipt; `null` is not a receipt. The restart protocol held: one process from
+D2-build main, "HUB UP <last id>" announced, ping asked.
+
+## Open research: what still bites in Unreal and in the harness (2026-10-13, 22:40, Richey: "further research to get both better")
+Findings from today that are not closed, each with what to try next. Anyone picking one up posts the result on
+the hub and moves the entry to a dated lesson above.
+
+Unreal
+1. GPU watchdog kills the editor whenever a bridge call blocks the game thread for more than a few seconds
+   (19:14 saves, 22:19 imports). Research: a generator-based bridge command that yields between items (the bridge
+   already steps generators: cmd_capture_view yields), so one call can do N items with a frame between each; and
+   `r.GPUCrashDebugging`/`TdrDelay` only as a diagnostic, never as the fix.
+2. `save_dirty_packages` cleared dirty flags without writing a file. Research: whether it skipped because the
+   sublevels were "not checked out" under the Uncontrolled Changelist source-control mode (LogSourceControl lines
+   in the log suggest so) and whether `save_packages` bypasses that; if yes, every tool uses save_packages only.
+3. `viewport_screenshot` (HighResShot) timed out 4/5 times; `editor_windows` capture always worked. Research:
+   is HighResShot waiting for a focused viewport; would `cmd_capture_view` (SceneCapture2D) be the default.
+4. "The Editor is currently in a play mode" every ~15 s during Play from an unknown caller. Research: add the
+   Python stack (traceback.extract_stack) to any bridge command that touches EditorActorSubsystem while
+   is_in_play_in_editor, so the next occurrence names its caller.
+5. Interchange nests imports as <id>/<id>/SkeletalMeshes/<id>; our paths assumed <id>/<id>. Research: an
+   AssetImportTask option that flattens, or always resolve through the asset registry (done for the stamp).
+6. Material instances parented to /InterchangeAssets recompile at every launch (~300 warnings). Research: the
+   reparent in batches of 150 (tool exists) and whether import settings can parent to our master material.
+7. Realms share one persistent level (4 x 190 actors + 14 sublevels). Research: ADR-063 district streaming for
+   the realm folders before the 7..49 rings are laid; measure load time and RAM with `stat levels`.
+
+Harness
+8. A bot's private checkout on the editor's sys.path shadowed the live plugin. Research: an editor-side guard in
+   init_unreal.py that logs and strips any sys.path entry outside the plugin/engine, and prints every
+   daedalus_* module's __file__ in `daedalus.play_status`.
+9. The hub broker died silently (no process on 9890); sends returned id null. Research: a watchdog in
+   teamlink.ps1 (-Watch) that restarts the broker from D2-build main and announces HUB UP; a heartbeat line in
+   the log every 5 min so a gap is visible.
+10. The MCP powershell tool caps at 60 s, so Start-Sleep polls must stay under ~50 s; long jobs are pc-job only.
+    Research: a `pc-job.ps1 -Wait` that returns as soon as the log prints DONE or FAIL, not after N seconds.
+11. Tests that cannot fail: the hub-cell check compared numbers with tuples; "lowest deeds" used an `or` that was
+    always true. Research: a mutant run for the Python twins (flip one line, expect a FAIL), as the CSRBT kit does.
+12. Three export names differed from the DCS (Ghost/Courier, GlueWitch/AdhesiveAlchemist, Lab/Labyrinth).
+    Research: a manifest-vs-DCS parity check in CI (tools/realms) so a rename fails the PR, not the Talker.
+13. Hub protocol gaps: notes were invisible (fixed), reply_to missing (fixed), two bots nearly restarted the hub
+    (protocol). Research: one `teamlink doctor` command that prints lock table, unacked inbox, last id, broker
+    pid and age, so every bot starts a turn with the same one-screen picture.
+
+## Throughput: how to operate Unreal at high speed and use all of it (2026-10-13, 22:45, Richey: "speed up the ability to get great output from unreal... use the full capability... speed up the code writing to feed unreal")
+Measured tonight: 22 heavy imports through `daedalus.steps` = 1 round trip, 7.3 s, editor ticking between
+items (the same 22 as 22 separate calls took ~65 s, and as ONE blocking call killed the GPU). The rules that
+follow, each one a concrete change to make or keep:
+
+1. One round trip per job, one editor tick per item. `daedalus.steps` (generator command) is the shape for every
+   bulk operation: imports, spawns, saves, material fixes. Host scripts send the plan, the editor yields per item.
+   Never N calls, never one blocking call. Next: convert fix_materials and the plot/kit layers to steps().
+2. Idempotent by identity, proven by the file. Every actor has a label and tags; every asset a SHA stamp; every
+   save checks the .umap mtime. A re-run costs seconds and reports "0 made" — so we run tools freely and often.
+3. Hot-copy, reload, re-register; never restart the editor for Python. The bridge commands are re-registered by
+   `daedalus_bridge_commands.install()` after a reload (done live tonight). A C++ change is the only reason
+   for a 4-minute rebuild; batch C++ work so builds happen a few times a day, not per edit.
+4. Preflight before the PC build (0 errors in <1 s) — a 2-minute build failure for a comment typo (P9) is the
+   expensive mistake; add a rule for every build failure class we meet.
+5. Scenarios are the acceptance, not screenshots. A Play scenario walks all four realms in 40 s and gives n/m;
+   editor_windows gives the picture when one is wanted. Keep adding one check per feature, run the suite per
+   job end, post n/m to the hub.
+6. Use the engine's own batch machinery, not per-actor Python: ScopedSlowTask + save_packages for saves,
+   AssetImportTask lists for imports, EditorLevelUtils for sublevels, PCG for scatter, World Partition / level
+   streaming for districts (ADR-063). Python decides, the engine does the loop.
+7. Pure cores first, engine last. Every system today has a C++17 header + headless test (grid, registry,
+   session, cast, dialogue, inventory, stage): the design is proven in milliseconds before the editor is touched,
+   and the Python twin lets the editor-side tool be tested without Unreal. This is what makes code-writing fast:
+   the engine is only the last 10% of each slice.
+8. One persistent level per realm set, folders per realm, labels per thing: the editor layout is data we can
+   diff, dump (editor-lands JSON) and reconcile against the server. Keep it that way; sublevels come with
+   streaming, not before.
+9. Two bots, two lanes, one hub: producer posts the artefact (sha/file/job id), consumer reviews the seam, one
+   request per topic, reply_to + ack. Capacity doubles when neither waits on the other's editor turn: Sol builds
+   Blender/Java while I hold `unreal`, and the lock changes hands at job ends, not mid-job.
+10. Measure everything in the status line: items, seconds, errors=/warnings= from log_report, n/m. A number
+    that is not posted did not happen.
+
+## Material reparent, measured through steps() (2026-10-13, 22:55)
+Old shape: 150 per bridge call, ledger rewritten per move, prompting saves — crashed at 19:14. New shape: one
+`daedalus.steps` call, 25 reparents per editor tick, save every 150, queue scanned once. Measured: 500 in 219 s
+(2.3/s) with the editor ticking the whole time; the cost is `set_material_instance_parent` itself (a shader
+recompile each), not our loop — the rescan I removed was not the bottleneck (same rate before and after), which
+the numbers showed in two minutes. The full 10,431 run as one background job (~75 min) with the lock held and the
+hub told the end time. Rule: when a rate does not change after an "optimisation", the bottleneck was elsewhere;
+say so and stop optimising that part.
