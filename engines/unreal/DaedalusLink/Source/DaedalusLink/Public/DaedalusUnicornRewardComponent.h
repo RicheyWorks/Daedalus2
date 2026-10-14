@@ -44,7 +44,10 @@ public:
     bool RecordPackEncounter(const FString& PackId, int32 Members, bool EncounterVerified);
     /** Call only AFTER the host committed its idempotent durable reward transaction. */
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
-    bool ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId);
+    bool ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId, int64 CommittedRevision);
+    /** Produce a candidate claimed record for the host's atomic grant+record CAS transaction. No state mutation. */
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    FDaedalusUnicornRewardRecord PrepareGrantRecord(const FString& ExpectedPlayerKey, const FString& GrantReceiptId) const;
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record);
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
@@ -67,6 +70,7 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Unicorn") bool bPersistencePending = false;
 
 private:
+    static bool ValidHostIdentity(const FString& Value);
     bool HasGameAuthority() const;
     bool CanRecord() const;
     void Synchronize();

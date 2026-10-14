@@ -905,3 +905,7 @@ Binding a playerkey mustnot open eventrecording before savedstate isloaded. Unic
 ### Reject stale quest persistence callbacks (2026-10-14)
 Unicornhostrecords carry monotonicrevision; acceptedstatechanges markpersistencepending andnotify OnRecordDirty afterprogresssynchronizes. ConfirmProgressPersisted requires exactplayer/currentrevision sooldercallback cannotclearnewerdirty state. Loadedrecords retainrevision and startclean. This is an acknowledgmenthook, notstorage oratomicgrantimplementation; UHT/runtime pending.
 
+
+### Prepare reward records for one host transaction (2026-10-14)
+PrepareGrantRecord isread-only and requires eligible,unclaimed,currentprogress alreadydurablyacknowledged. It returnsclaimedcandidate atrevision+1 withplayer/receiptidentity. Hostmust atomicallygrantitems andCAS thatrecord againstpreviousrevision, thenConfirmPersistedReward exactplayer/receipt/committedrevision. Sameconfirmedreceipt retryidempotent, stale/dirty confirmationsrefused. No ledger oritemgrantimplementation yet; nativecomponent buildpending.
+

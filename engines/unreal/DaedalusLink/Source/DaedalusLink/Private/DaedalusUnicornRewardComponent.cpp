@@ -22,8 +22,7 @@ bool UDaedalusUnicornRewardComponent::CanRecord() const
 
 bool UDaedalusUnicornRewardComponent::BindHostPlayer(const FString& PlayerKey)
 {
-    if (!HasGameAuthority() || PlayerKey.IsEmpty() || PlayerKey.Len() > 128 || PlayerKey.TrimStartAndEnd() != PlayerKey) return false;
-    for (const TCHAR Character : PlayerKey) if (FChar::IsControl(Character)) return false;
+    if (!HasGameAuthority() || !ValidHostIdentity(PlayerKey)) return false;
     if (!HostPlayerKey.IsEmpty()) return HostPlayerKey == PlayerKey;
     if (!Gate.Pristine() || bHostRecordRestored) return false;
     HostPlayerKey = PlayerKey;
@@ -58,14 +57,35 @@ bool UDaedalusUnicornRewardComponent::RecordPackEncounter(const FString& PackId,
     return Accepted;
 }
 
-bool UDaedalusUnicornRewardComponent::ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId)
+bool UDaedalusUnicornRewardComponent::ValidHostIdentity(const FString& Value)
 {
-    if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || GrantReceiptId.IsEmpty() || GrantReceiptId.Len() > 128) return false;
-    if (Gate.RewardClaimed()) return CommittedGrantReceiptId == GrantReceiptId;
-    if (RecordRevision == MAX_int64) return false;
+    if (Value.IsEmpty() || Value.Len() > 128 || Value.TrimStartAndEnd() != Value) return false;
+    for (const TCHAR Character : Value) if (FChar::IsControl(Character)) return false;
+    return true;
+}
+
+FDaedalusUnicornRewardRecord UDaedalusUnicornRewardComponent::PrepareGrantRecord(const FString& ExpectedPlayerKey, const FString& GrantReceiptId) const
+{
+    if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || !ValidHostIdentity(GrantReceiptId) ||
+        !Gate.Eligible() || Gate.RewardClaimed() || bPersistencePending || RecordRevision >= MAX_int64 - 1)
+        return FDaedalusUnicornRewardRecord();
+    auto Record = ExportHostRecord();
+    Record.bClaimed = true;
+    Record.GrantReceiptId = GrantReceiptId;
+    Record.Revision = RecordRevision + 1;
+    return Record;
+}
+
+bool UDaedalusUnicornRewardComponent::ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId, int64 CommittedRevision)
+{
+    if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || !ValidHostIdentity(GrantReceiptId)) return false;
+    if (Gate.RewardClaimed()) return CommittedGrantReceiptId == GrantReceiptId && RecordRevision == CommittedRevision;
+    if (bPersistencePending || RecordRevision >= MAX_int64 - 1 || CommittedRevision != RecordRevision + 1) return false;
     if (!Gate.ClaimReward()) return false;
     CommittedGrantReceiptId = GrantReceiptId;
-    MarkRecordDirty();
+    RecordRevision = CommittedRevision;
+    bPersistencePending = false; // Host says this exact claimed record and grant committed together.
+    Synchronize();
     return true;
 }
 
@@ -80,7 +100,8 @@ void UDaedalusUnicornRewardComponent::Synchronize()
 bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
 {
     if (!HasGameAuthority() || HostPlayerKey.IsEmpty() || !Record.bAvailable || Record.PlayerKey != HostPlayerKey || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
-        Record.Revision < 0 || Record.Revision == MAX_int64 || Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
+        Record.Revision < 0 || Record.Revision == MAX_int64 ||
+        (!Record.GrantReceiptId.IsEmpty() && !ValidHostIdentity(Record.GrantReceiptId)) || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
     DaedalusUnicornReward::Snapshot state;
     for (const auto& Id : Record.BullIds) state.BullIds.emplace_back(TCHAR_TO_UTF8(*Id));
     state.PackId = TCHAR_TO_UTF8(*Record.PackId);
