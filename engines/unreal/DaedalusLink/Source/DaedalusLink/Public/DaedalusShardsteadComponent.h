@@ -2,6 +2,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "TimerManager.h"
 THIRD_PARTY_INCLUDES_START
 #include "DaedalusShardsteadSaveCore.h"
 #include "DaedalusRecordReceiptCore.h"
@@ -10,6 +11,8 @@ THIRD_PARTY_INCLUDES_END
 
 UENUM(BlueprintType)
 enum class EDaedalusIslandResource : uint8 { Food, Energy, Iron, Copper, Crystal, Stone };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusProductionCycleDue, int64, Cycle);
 
 USTRUCT(BlueprintType)
 struct DAEDALUSLINK_API FDaedalusIslandStats {
@@ -36,6 +39,10 @@ class DAEDALUSLINK_API UDaedalusShardsteadComponent : public UActorComponent {
     GENERATED_BODY()
 public:
     UDaedalusShardsteadComponent();
+    // Notification only: the host listener must prepare, persist and confirm production.
+    UPROPERTY(BlueprintAssignable,Category="Daedalus|Shardstead") FDaedalusProductionCycleDue OnCycleDue;
+    UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool StartCycleClockFromHost(float IntervalSeconds);
+    UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool StopCycleClockFromHost();
     UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool InitializeFromHost(int64 RealmSeed);
     UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool RegisterCrewFromHost(const FString& PlayerKey);
     UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool ClaimFromHost(const FString& PlayerKey,int32 Island,bool LandPermissionVerified);
@@ -63,6 +70,11 @@ public:
         const std::vector<std::uint8_t>& Returned,const std::string& RevisionHeader,
         const std::string& HashHeader,uint64& CommittedStoreRevision);
 private:
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
+    FTimerHandle CycleTimer;
+    void ClearCycleClock();
+    void NotifyCycleDue();
     bool Ready=false;
     int64 BoundSeed=0;
     daedalus::shardstead::Economy Rules{0};

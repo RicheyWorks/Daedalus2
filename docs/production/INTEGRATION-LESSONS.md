@@ -1,5 +1,9 @@
 # Integration lessons
 
+## Host production scheduling — 2026-10-14
+
+Use the installed engine's TimerManager API rather than a per-frame component tick for periodic production. UE 5.8 supports bMaxOncePerFrame in FTimerManagerTimerParameters: looping timers otherwise may fire repeatedly after a hitch. A cycle notification must read committed state, pause while a durable candidate is pending, and leave prepare/persist/confirm to the trusted host listener. Silence or timeout must never grant production or cancel a pending write. Clear timers on EndPlay and component destruction; refuse nonfinite/nonpositive rates and untrusted worlds. Repeated due notifications may request the same uncommitted cycle so a declined request can retry later. Six-action isolated Editor compilation passed in 29.33 seconds; host/storage integration and gameplay acceptance remain open.
+
 * Extend a format in all producers and consumers together. Native EGG and land
   additions exposed missing Java item/model/codec support through strict parity.
   Keep demo ownership explicit and separate from authoritative live deeds.

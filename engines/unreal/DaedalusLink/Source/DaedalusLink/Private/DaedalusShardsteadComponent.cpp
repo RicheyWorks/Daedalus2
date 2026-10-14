@@ -3,6 +3,36 @@
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 UDaedalusShardsteadComponent::UDaedalusShardsteadComponent(){PrimaryComponentTick.bCanEverTick=false;}
+bool UDaedalusShardsteadComponent::StartCycleClockFromHost(float IntervalSeconds){
+    if(!Ready||!Host()||!FMath::IsFinite(IntervalSeconds)||IntervalSeconds<=0.f)return false;
+    FTimerManagerTimerParameters Parameters;
+    Parameters.bLoop=true;Parameters.bMaxOncePerFrame=true;
+    GetWorld()->GetTimerManager().SetTimer(CycleTimer,this,&UDaedalusShardsteadComponent::NotifyCycleDue,IntervalSeconds,Parameters);
+    return true;
+}
+bool UDaedalusShardsteadComponent::StopCycleClockFromHost(){
+    if(!Host())return false;
+    ClearCycleClock();return true;
+}
+void UDaedalusShardsteadComponent::ClearCycleClock(){
+    if(UWorld* World=GetWorld())World->GetTimerManager().ClearTimer(CycleTimer);
+    CycleTimer.Invalidate();
+}
+void UDaedalusShardsteadComponent::EndPlay(const EEndPlayReason::Type EndPlayReason){
+    ClearCycleClock();Super::EndPlay(EndPlayReason);
+}
+void UDaedalusShardsteadComponent::OnComponentDestroyed(bool bDestroyingHierarchy){
+    ClearCycleClock();Super::OnComponentDestroyed(bDestroyingHierarchy);
+}
+void UDaedalusShardsteadComponent::NotifyCycleDue(){
+    if(!Ready||!Host()){ClearCycleClock();return;}
+    if((Durable&&Durable->HasPending())||!OnCycleDue.IsBound())return;
+    const auto Cycle=ReadRules().Cycle();
+    if(Cycle>=static_cast<std::uint64_t>(MAX_int64)){ClearCycleClock();return;}
+    // Retry this same committed cycle on later intervals if the listener declines it.
+    // Never catch up a stalled ledger by granting several cycles in one frame.
+    OnCycleDue.Broadcast(static_cast<int64>(Cycle+1));
+}
 bool UDaedalusShardsteadComponent::Host() const {
     if(!IsInGameThread())return false;
     const AActor* Owner=GetOwner();const UWorld* World=GetWorld();
