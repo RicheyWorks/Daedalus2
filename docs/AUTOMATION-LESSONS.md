@@ -611,3 +611,11 @@ Harness
 13. Hub protocol gaps: notes were invisible (fixed), reply_to missing (fixed), two bots nearly restarted the hub
     (protocol). Research: one `teamlink doctor` command that prints lock table, unacked inbox, last id, broker
     pid and age, so every bot starts a turn with the same one-screen picture.
+
+
+## A cast filename rename may leave its imported object identity unchanged (2026-10-13, Codex)
+Role binding expected LostLetterGhost/GlueWitch, but exported GLB node/skin/rig names still used
+Courier/Alchemist. Create additive alias deliveries with exact metadata renames, verify original
+manifest hashes and prove all binary chunks plus unrelated JSON unchanged. Keep original art.
+The extra Bricks Builder is Hero builder, not an invented thirteenth NPC. Runtime binding still
+requires consumer acceptance; CPU file checks do not establish an imported or playable character.
