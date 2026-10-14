@@ -21,15 +21,18 @@ from asset_pipeline import wire  # noqa: E402
 EDITOR = r"C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe"
 UPROJECT = r"C:\Unreal\DaedalusRealm\DaedalusRealm.uproject"
 RECYCLE_EVERY = 24      # islands per editor session: the loaded world is ~12 GB and 25 islands take it to the commit limit
-COMMIT_MAX = 94.0       # vitals commit % above which the chunk waits for a recycle instead of importing
+COMMIT_MAX = 99.0       # commit % gate; a freshly loaded world already sits at ~97 % (limit 46 GB, auto pagefile), so
+                        # the gate only catches the last percent; RAM_MAX is the real guard
+RAM_MAX = 93.0
 
 
 def vitals():
+    """(ram %, commit %) from tools/pc/vitals.py."""
     try:
         out = subprocess.run([sys.executable, os.path.join(REPO, "tools", "pc", "vitals.py")], capture_output=True, text=True, timeout=60).stdout
-        return float(out.split("commit ")[1].split("%")[0])
+        return float(out.split(" ram ")[1].split("%")[0]), float(out.split("commit ")[1].split("%")[0])
     except Exception:
-        return 0.0
+        return 0.0, 0.0
 
 
 def save_level():
@@ -59,7 +62,7 @@ def recycle_editor():
             except Exception:
                 continue
     subprocess.run([sys.executable, os.path.join(REPO, "tools", "unreal_mcp", "doctor.py"), "--fix"], capture_output=True, text=True, timeout=120)
-    print("RECYCLE: editor back, commit %.0f%%" % vitals(), flush=True)
+    print("RECYCLE: editor back, ram/commit %s" % (vitals(),), flush=True)
 
 
 def main(argv):
@@ -71,7 +74,8 @@ def main(argv):
     since_recycle = 0
     for s in range(start, stop, chunk):
         seeds = list(range(s, min(s + chunk, stop)))
-        if since_recycle >= RECYCLE_EVERY or vitals() > COMMIT_MAX:
+        ram, commit = vitals()
+        if since_recycle >= RECYCLE_EVERY or ram > RAM_MAX or commit > COMMIT_MAX:
             recycle_editor()
             since_recycle = 0
         code = ("import importlib, daedalus_claude_islands as C\nimportlib.reload(C)\n"
