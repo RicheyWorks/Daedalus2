@@ -390,3 +390,11 @@ across runs. A scenario reads the starting state and checks the delta; it never 
 A 60 s tool wait timed out while a 5-scenario Play run kept going on the PC; the next call could not tell whether it
 had started. Pattern: write the script to %TEMP%, `Start-Process -WindowStyle Hidden python script -RedirectStandardOutput out`,
 return at once, then poll the out file. Before any re-run, check for the out file (a second run would double-act).
+
+## Norton kills a hidden python from TEMP: every PC job goes through pc-job.ps1 (2026-10-13)
+I detached a scenario run as `Start-Process -WindowStyle Hidden python $env:TEMP\run.py -RedirectStandardOutput`
+and Norton killed it silently (no process, empty output, no prompt because auto-protect was off). ADR-045 already
+knew the rules the build job follows: the script lives in the repo, the window is visible-minimized, it is started
+through WMI, output goes to %LOCALAPPDATA%\Daedalus\jobs through the shell, no -ExecutionPolicy. engines/unreal/pc-job.ps1
+is that pattern for anything that isn't a build (tools/unreal_play/run_scenarios.py, import_cast.py). Nothing of
+mine runs from %TEMP% again, and pc-job -Wait surfaces daedalus-norton.log alerts.
