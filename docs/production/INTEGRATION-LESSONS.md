@@ -50,3 +50,9 @@
 - Give sea chunk reads a distinct rate-limit bucket; sharing the maze-generation quota creates unrelated feature contention. Verify 429 and independent JWT-subject buckets over real production-profile HTTP.
 - Default-disabled configuration is separate from production authorization. Development permitAll does not supply a JWT decoder; fail closed and use the production resource-server setup for authenticated access.
 - Distinguish an opt-in sector endpoint from world registration and native realm loading. HTTP/restart proof does not establish a visible dock transition.
+
+### Native Ocean transport
+- Prove the real boundary: run the packaged production Java server against the native engine HTTP component, not only a JSON fixture or mocked transport. Record startup-inclusive timing separately from native test-body time.
+- Keep bearer tokens out of reflected/config/replicated properties, command arguments and logs. The private probe uses fresh short-lived credentials in child environments and checks logs before recording hashes.
+- A final response URL check does not prove safe redirect credential handling. Keep TLS/redirect policy and rendered travel as explicit open gates after successful loopback transport.
+- Bound streamed response bytes before accumulating them; validate exact chunk identity, canonical payload length and palette indices before publishing a result. Cancel and invalidate session generations on both destruction and EndPlay.
