@@ -15,6 +15,7 @@ Stops at the first failed step and says which. Everything it runs is idempotent,
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -92,6 +93,34 @@ def steps(expr, label, timeout=3600):
     return r
 
 
+def assess_run(text, returncode, report):
+    """A missing summary/log observation is unverified, never an empty successful run."""
+    totals = re.findall(r'^TOTAL (\d+)/(\d+)\s*$', text, re.MULTILINE)
+    counts = None
+    if len(totals) == 1:
+        passed, total = map(int, totals[0])
+        if 0 <= passed <= total and total > 0:
+            counts = {'passed': passed, 'total': total}
+    failures = [line.strip() for line in text.splitlines() if line.strip().startswith('FAIL')]
+    interrupted = [line.strip() for line in text.splitlines() if 'INTERRUPTED' in line]
+    log_valid = isinstance(report, dict) and all(type(report.get(key)) is int and report[key] >= 0
+                                               for key in ('errors', 'warnings'))
+    reasons = []
+    if returncode != 0: reasons.append('scenario-process-exit:'+str(returncode))
+    if failures: reasons.append('scenario-failures')
+    if interrupted: reasons.append('scenario-interrupted')
+    if counts and counts['passed'] != counts['total']: reasons.append('scenario-count-failed')
+    if log_valid and report['errors']: reasons.append('editor-errors')
+    known_failure = bool(reasons)
+    if counts is None: reasons.append('missing-or-invalid-total')
+    if not log_valid: reasons.append('log-report-unavailable-or-invalid')
+    status = 'failed' if known_failure else 'unverified' if reasons else 'passed'
+    return {'status': status, 'passed': status == 'passed', 'exit_code': 0 if status == 'passed' else 1 if known_failure else 2,
+            'scenario_returncode': returncode, 'counts': counts, 'reasons': reasons,
+            'editor_errors': report['errors'] if log_valid else None,
+            'editor_warnings': report['warnings'] if log_valid else None}
+
+
 def main(argv):
     after = argv[argv.index("--after-job") + 1] if "--after-job" in argv else ""
     build = "--no-build" not in argv
@@ -157,12 +186,14 @@ def main(argv):
     print(text[-6000:])
     total = next((l for l in reversed(text.splitlines()) if l.startswith("TOTAL")), "TOTAL ?")
     fails = [l.strip() for l in text.splitlines() if l.strip().startswith("FAIL")]
+    rep = None
     try:
         rep = wire.call(wire.UNREAL, "daedalus.log_report", all=False, timeout=60)
         ew = "errors=%s warnings=%s" % (rep.get("errors"), rep.get("warnings"))
     except Exception as e:
         ew = "log_report: %s" % e
-    hub("status", "NIGHT RUN end on %s: %s %s; fails: %s" % (sha, total, ew, "; ".join(fails)[:900] or "none"))
+    outcome = assess_run(text, out.returncode, rep)
+    hub("status", "NIGHT RUN end on %s: status=%s %s %s; fails: %s" % (sha, outcome['status'], total, ew, "; ".join(fails)[:900] or "none"))
     say("%s %s" % (total, ew))
     # J: a machine-readable receipt beside the job log (BASE-LAYER's "Laid down" table is regenerated from these)
     interrupted = [l.strip() for l in text.splitlines() if "INTERRUPTED" in l]
@@ -173,6 +204,7 @@ def main(argv):
             per[name] = l.split("passed=")[1].strip()
     receipt = {"when": time.strftime("%Y-%m-%dT%H:%M:%S"), "sha": sha, "build": build, "laid": lay, "scenarios": per,
                "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
+    receipt['outcome'] = outcome
     out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
     try:
         os.makedirs(out_dir, exist_ok=True)
@@ -184,7 +216,7 @@ def main(argv):
         say("receipt " + path)
     except OSError as e:
         say("receipt not written: %s" % e)
-    return 0
+    return outcome['exit_code']
 
 
 if __name__ == "__main__":

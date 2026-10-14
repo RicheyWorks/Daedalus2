@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Night-run result fidelity (2026-10-14)
+No FAIL text is not success: crashed/interrupted suites may never print TOTAL. Require exactly one positive consistent TOTAL, zero scenario process exit, no failure/interruption lines and a valid editor log report with zero errors. Keep failed versus unverified distinct in the receipt and propagate nonzero exit. Warnings remain reported rather than automatically fatal. This outcome covers scenario/log evidence, not the separate asset/layout acceptance gap.
+
