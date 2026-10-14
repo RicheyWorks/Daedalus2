@@ -38,8 +38,13 @@ def material():
     return unreal.EditorAssetLibrary.load_asset(MAT)
 
 
-def import_island(seed, force=False, save=False):
-    """Import Island_C<seed>.glb under ROOT/Island_C<seed>; returns {layer: mesh path}."""
+def import_island(seed, force=False, save=False, source_file=None, on_imported=None):
+    """Import FBX under ROOT/Island_C<seed>; optional receipt wrapper hooks.
+
+    source_file supplies a verified snapshot with the same basename. Existing
+    callers retain their original path and behavior; on_imported observes the
+    synchronous import before postprocessing, without claiming it was saved.
+    """
     name = "Island_C%d" % seed
     dest = "%s/%s" % (ROOT, name)
     # the interchange importer makes <destination_path>/<destination_name>/StaticMeshes/...
@@ -50,14 +55,16 @@ def import_island(seed, force=False, save=False):
             paths = cand
             break
     if force or not paths:
-        # FBX through the classic importer with Nanite OFF: the Interchange GLB path built Nanite for every island
-        # (10-19 s and ~250 MB of editor memory each). The FBX carries body + clouds + UCX hull (simple collision).
+        # Preserve the working FBX task options. Installed 5.8.3 routes these
+        # tasks through Interchange too; no backend/feature flag is changed here.
         t = unreal.AssetImportTask()
-        t.filename = os.path.join(GLB_DIR, name + ".fbx")
+        t.filename = source_file or os.path.join(GLB_DIR, name + ".fbx")
         t.destination_path = dest
         t.automated = True
         t.replace_existing = True
         t.save = False
+        if source_file is not None:
+            t.async_ = False       # Receipt wrapper observes completed synchronous imports.
         o = unreal.FbxImportUI()
         o.import_materials = False
         o.import_textures = False
@@ -72,6 +79,8 @@ def import_island(seed, force=False, save=False):
         t.options = o
         unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([t])
         made = [str(p) for p in t.imported_object_paths]
+        if on_imported is not None:
+            on_imported(made)
         paths = {}
         for p in made:
             tail = p.rsplit(".", 1)[-1]
