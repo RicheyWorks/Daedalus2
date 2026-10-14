@@ -68,3 +68,8 @@ fish/bugs/fossils/fruit finds, collection, charm, cast requests from `data/art/<
 kings, unicorn guides, bakers… and their quests, PORT09); **raid/defend** (Arc Raiders: hulks and rich lands,
 interceptable cargo, fences/towers/patrols/traps). Rows WZ10–WZ15; the Excel tracker has a "Team Claude
 2026-10-14" sheet listing every deliverable.
+
+## Characters — 14:35
+`tools/blender/voxel_creatures.py`: 64 rigged voxel species (animals, birds, bees, carnivorous plants) on the
+shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on an island comes from the ecology
+(seral stage, water, biome) and the chemistry (livestock list, fish); carnivorous plants tie to LAB10/LAB11.
