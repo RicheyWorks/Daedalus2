@@ -179,8 +179,8 @@ async function runTool(name, args) {
     const tb = reply && reply.traceback ? '\n\n' + reply.traceback : '';
     return { isError: true, content: [{ type: 'text', text: ((reply && reply.message) || 'Unreal reported an error') + tb }, ...note()] };
   }
-  const result = reply.result || {};
-  if (typeof result.image_png_base64 === 'string') {
+  const result = reply.result === undefined ? {} : reply.result;
+  if (result !== null && typeof result.image_png_base64 === 'string') {
     const { image_png_base64, ...meta } = result;
     return { content: [{ type: 'image', data: image_png_base64, mimeType: 'image/png' }, { type: 'text', text: JSON.stringify(meta, null, 2) }, ...note()] };
   }
