@@ -61,7 +61,7 @@ for n, t in sp.items():
     for c in cs:
         check("spiral: cell %s used once" % (c,), c not in allcells); allcells[c] = n
 hubc = L.hub_cells(30000, 30000)
-check("spiral: the hub island's cells are reserved", not (set(allcells) & hubc) and (G.HUB, G.HUB) in hubc)
+check("spiral: the hub island's cells are reserved", not ({G.cell(c) for c in allcells} & hubc) and (G.HUB, G.HUB) in hubc)
 check("spiral: a 780 m island takes a 4x4 estate", sp["Big"]["size"] == 4 and G.size_for(600, 780) == 4)
 check("spiral: small islands are single cells", all(sp[n]["size"] == 1 for n in names if max(dict((b[0], b[1:]) for b in boxes)[n]) < 17000))
 dists = [max(abs(t["to"][0] - hub[0]), abs(t["to"][1] - hub[1])) for t in sp.values()]

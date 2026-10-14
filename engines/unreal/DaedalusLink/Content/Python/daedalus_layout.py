@@ -97,7 +97,7 @@ def spiral_targets(boxes, hub_cm, hub_size_cm, pitch_m=None):
     import daedalus_land_grid as G
     pitch = pitch_m or G.PITCH_M
     sizes = {name: G.size_for(w / 100.0, d / 100.0, pitch) for name, w, d in boxes}
-    taken = hub_cells(hub_size_cm[0], hub_size_cm[1], pitch)
+    taken = frozenset(G.number(x, y) for x, y in hub_cells(hub_size_cm[0], hub_size_cm[1], pitch))   # place_estates takes numbers
     placed = G.place_estates(sizes, taken)
     out = {}
     for name, (x, y, s, deed) in placed.items():
