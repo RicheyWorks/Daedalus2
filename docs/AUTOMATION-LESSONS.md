@@ -645,3 +645,12 @@ follow, each one a concrete change to make or keep:
    Blender/Java while I hold `unreal`, and the lock changes hands at job ends, not mid-job.
 10. Measure everything in the status line: items, seconds, errors=/warnings= from log_report, n/m. A number
     that is not posted did not happen.
+
+## Material reparent, measured through steps() (2026-10-13, 22:55)
+Old shape: 150 per bridge call, ledger rewritten per move, prompting saves — crashed at 19:14. New shape: one
+`daedalus.steps` call, 25 reparents per editor tick, save every 150, queue scanned once. Measured: 500 in 219 s
+(2.3/s) with the editor ticking the whole time; the cost is `set_material_instance_parent` itself (a shader
+recompile each), not our loop — the rescan I removed was not the bottleneck (same rate before and after), which
+the numbers showed in two minutes. The full 10,431 run as one background job (~75 min) with the lock held and the
+hub told the end time. Rule: when a rate does not change after an "optimisation", the bottleneck was elsewhere;
+say so and stop optimising that part.
