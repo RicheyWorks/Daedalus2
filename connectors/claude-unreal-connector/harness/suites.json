@@ -4,6 +4,10 @@
     {"name": "e2e", "cmd": ["-m", "harness.e2e"], "floor": 23, "what": "the MCP extension over stdio, end to end, against the stand-in editor"},
     {"name": "contract", "cmd": ["-m", "harness.contract"], "floor": 14, "what": "risk ladder, policy refusals, request_id replay"},
     {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"},
-    {"name": "lifecycle", "cmd": ["tests/bridge_lifecycle_test.py"], "floor": 21, "what": "shutdown, cleanup failures, listener generations and interrupted replies without sockets"}
+    {"name": "lifecycle", "cmd": ["tests/bridge_lifecycle_test.py"], "floor": 21, "what": "shutdown, cleanup failures, listener generations and interrupted replies without sockets"},
+    {"name": "remote-unknown", "cmd": ["tests/remote_outcome_unknown_test.py"], "floor": 20, "what": "remote dispatch ambiguity, no local replay, retained uncertainty and setup cleanup"},
+    {"name": "remote-unknown-mutants", "cmd": ["tests/remote_outcome_unknown_mutation_test.py"], "floor": 5, "what": "healthy baseline and assertion-only rejection of five remote outcome regressions"},
+    {"name": "batch-ownership", "cmd": ["tests/bridge_batch_ownership_test.py"], "floor": 33, "what": "yielding batch isolation, known BUSY receipts and persistent failed-finalizer barriers"},
+    {"name": "batch-remote", "cmd": ["tests/bridge_batch_remote_test.py"], "floor": 15, "what": "batch admission against queued workers, terminal uncertainty and stop/start"}
   ]
 }

@@ -26,6 +26,7 @@ import base64
 import contextlib
 import io
 import json
+import math
 import os
 import queue
 import socket
@@ -47,6 +48,10 @@ _running = []          # generators in progress: (generator, request, reply box)
 _lifecycle_lock = threading.Lock()  # admission and shutdown; never held while running command code
 _server = {"sock": None, "thread": None, "port": None, "tick": None,
            "generation": None, "owner": None, "stopping": False}
+# Game-thread-owned admission state; stop/start is not evidence that remote work or a failed transaction ended.
+_batch_scope = {"owner": None, "unknown": None}
+_remote_workers = []
+_remote_barrier = {"unknown": False}
 
 
 # ---------------------------------------------------------------- helpers
@@ -157,6 +162,14 @@ RESULT_MARK = "__CLAUDE_UNREAL_RESULT__"
 _remote = {"rx": None, "node": None, "error": None}
 
 
+class RemoteExecutionUncertain(RuntimeError):
+    """The remote attempt may have applied effects; automatically replaying is unsafe."""
+    code = "REMOTE_EXECUTION_UNCERTAIN"
+    dispatched = True
+    effects = "unknown"
+    retryable = False
+
+
 def _wrap(code):
     """Claude's code, wrapped so its `result` variable comes back as one marked line of output."""
     return ("import json as _cj, unreal\n"
@@ -179,28 +192,36 @@ def _remote_node(want):
         _remote["error"] = "remote_execution.py not found (%s)" % e
         return None
     rx = rex.RemoteExecution()
-    rx.start()
-    # `want` (this project's folder) is read on the game thread by the caller: this runs on a background thread,
-    # where touching the unreal API raises "Attempted to access Unreal API from outside the main game thread".
-    deadline = time.time() + 3.0
-    node = None
-    while time.time() < deadline and node is None:
-        nodes = list(rx.remote_nodes)
-        for n in nodes:
-            root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
-            if root.rstrip("\\/") == want.rstrip("\\/"):
-                node = n.get("node_id")
-                break
-        if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
-            node = nodes[0].get("node_id")   # one editor answered: this one, even if it names its project differently
-        time.sleep(0.1)
-    if node is None:
-        rx.stop()
-        _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
-        return None
-    rx.open_command_connection(node)
-    _remote.update(rx=rx, node=node, error=None)
-    return rx, node
+    connected = False
+    try:
+        rx.start()
+        # `want` is captured on the game thread; this worker never reads the Unreal API.
+        deadline = time.time() + 3.0
+        node = None
+        while time.time() < deadline and node is None:
+            nodes = list(rx.remote_nodes)
+            for n in nodes:
+                root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
+                if root.rstrip("\\/") == want.rstrip("\\/"):
+                    node = n.get("node_id")
+                    break
+            if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
+                node = nodes[0].get("node_id")   # one editor answered, even if its project name differs
+            time.sleep(0.1)
+        if node is None:
+            _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
+            return None
+        rx.open_command_connection(node)
+        _remote.update(rx=rx, node=node, error=None)
+        connected = True
+        return rx, node
+    finally:
+        if not connected:
+            # A provisional client was never cached; close it even when start/open failed.
+            try:
+                rx.stop()
+            except Exception:
+                pass
 
 
 _remote_lock = threading.Lock()
@@ -213,10 +234,11 @@ def _run_remote(code, box, want):
     One Remote Execution command connection is shared by every client thread and Epic's client is not
     thread-safe: concurrent run_command calls swapped replies (the art queue got another bot's `true` and failed
     with "'bool' object is not subscriptable"). So calls are serialized, but the wait is bounded: a run_command
-    that never returned once held a plain lock and wedged every later call. On a 30 s wait the call runs
-    in-process instead, and any failure drops the connection so the next call reconnects. (2026-10-12)"""
-    got_lock = _remote_lock.acquire(timeout=30)
+    that never returned once held a plain lock and wedged every later call. Only failures before invoking
+    run_command can fall back directly; a lost reply after invocation leaves the effects unknown."""
+    got_lock = False
     try:
+        got_lock = _remote_lock.acquire(timeout=30)
         if not got_lock:
             box["fallback"] = "Remote Execution busy for more than 30 s"
             return
@@ -225,15 +247,22 @@ def _run_remote(code, box, want):
             box["fallback"] = _remote["error"]
             return
         rx, _node = got
-        box["reply"] = rx.run_command(_wrap(code), unattended=True)
+        wrapped = _wrap(code)
+        box["dispatch_attempted"] = True
+        box["reply"] = rx.run_command(wrapped, unattended=True)
     except Exception as e:
-        box["fallback"] = "Remote Execution failed: %s" % e
-        try:
-            if _remote["rx"] is not None:
-                _remote["rx"].stop()
-        except Exception:
-            pass
-        _remote.update(rx=None, node=None)
+        if box.get("dispatch_attempted"):
+            box["error"] = RemoteExecutionUncertain(
+                "Remote Execution outcome is unknown after %s: %s" % (type(e).__name__, e))
+        else:
+            box["fallback"] = "Remote Execution failed: %s" % e
+        if got_lock:
+            try:
+                if _remote["rx"] is not None:
+                    _remote["rx"].stop()
+            except Exception:
+                pass
+            _remote.update(rx=None, node=None)
     finally:
         if got_lock:
             _remote_lock.release()
@@ -260,14 +289,36 @@ def cmd_execute_python(p):
     code = p["code"]
     if not p.get("unattended", True):
         return _exec_here(code)
-    box = {"done": False, "reply": None, "fallback": None}
+    timeout = float(p.get("timeout", 600))
+    if not math.isfinite(timeout) or timeout < 0:
+        raise ValueError("timeout must be finite and nonnegative")
+    box = {"done": False, "reply": None, "fallback": None,
+           "dispatch_attempted": False, "error": None}
     want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
-    threading.Thread(target=_run_remote, args=(code, box, want), name="claude-unreal-remote", daemon=True).start()
-    deadline = time.time() + float(p.get("timeout", 600))
+    _refresh_remote_workers()
+    worker = threading.Thread(target=_run_remote, args=(code, box, want), name="claude-unreal-remote", daemon=True)
+    _remote_workers.append(box)  # Game-thread submission, before the worker can run or wait for its lock.
+    try:
+        worker.start()
+    except Exception:
+        _forget_remote_worker(box)
+        raise
+    except BaseException:
+        # A control interrupt can occur after native thread creation while start() waits for its receipt.
+        _remote_barrier["unknown"] = True
+        raise
+    deadline = time.time() + timeout
     while not box["done"]:
         if time.time() > deadline:
-            raise TimeoutError("the editor did not run the code within the timeout")
+            _remote_barrier["unknown"] = True
+            raise RemoteExecutionUncertain(
+                "Remote Execution worker is still outstanding after the timeout; execution effects are unknown")
         yield
+    _refresh_remote_workers()
+    if box["error"] is not None:
+        raise box["error"]
+    if box["dispatch_attempted"] and not _remote_reply_valid(box["reply"]):
+        raise RemoteExecutionUncertain("Remote Execution worker ended without a valid dispatched reply")
     if box["fallback"]:
         out = _exec_here(code)
         out["note"] = box["fallback"] + "; ran directly, so a modal dialog would block the editor"
@@ -381,6 +432,27 @@ def cmd_capture_view(p):
         actors.destroy_actor(cap)
 
 
+class _BatchTransaction:
+    """Preserve the native context contract, recording an unobserved enter/exit outcome."""
+    def __init__(self, description):
+        self.description = description
+
+    def __enter__(self):
+        try:
+            self.transaction = unreal.ScopedEditorTransaction(self.description)
+            return self.transaction.__enter__()
+        except BaseException:
+            _batch_scope["unknown"] = "batch transaction entry failed"
+            raise
+
+    def __exit__(self, *exc):
+        try:
+            return self.transaction.__exit__(*exc)
+        except BaseException:
+            _batch_scope["unknown"] = "batch transaction finalization failed"
+            raise
+
+
 def cmd_batch(p):
     """Run several commands in order as one editor transaction (one undo). Each item is {"type", "params"} and
     passes the same policy as a single call; the batch stops at the first error unless keep_going is true."""
@@ -395,7 +467,7 @@ def cmd_batch(p):
         if not POLICY.get(risk, False):
             raise PermissionError("%s in the batch is %s, which the policy does not allow" % (name, risk))
     results = []
-    with unreal.ScopedEditorTransaction(p.get("transaction", "Claude batch")):
+    with _BatchTransaction(p.get("transaction", "Claude batch")):
         for it in items:
             try:
                 out = COMMANDS[it["type"]](it.get("params") or {})
@@ -408,11 +480,21 @@ def cmd_batch(p):
                             except StopIteration as stop:
                                 out = stop.value
                                 break
+                            except BaseException:
+                                # next() also runs generator finalizers; a later close() may be a no-op.
+                                _batch_scope["unknown"] = "batch child advancement failed; cleanup state is unknown"
+                                raise
                             yield
                     finally:
-                        child.close()
+                        try:
+                            child.close()
+                        except BaseException:
+                            _batch_scope["unknown"] = "batch child finalization failed"
+                            raise
                 results.append({"type": it["type"], "status": "ok", "result": out})
             except Exception as e:
+                if _batch_scope["unknown"]:
+                    raise  # A failed finalizer is not an ordinary item failure or permission to keep going.
                 results.append({"type": it["type"], "status": "error", "message": "%s: %s" % (type(e).__name__, e)})
                 if not p.get("keep_going"):
                     break
@@ -540,15 +622,66 @@ def _remember(rid, reply):
 
 def _finish(box, reply):
     rid = box.get("request_id")
-    if rid is not None and reply.get("status") == "ok":
+    if rid is not None and (reply.get("status") == "ok" or
+                            reply.get("code") in (RemoteExecutionUncertain.code, "COMMAND_INTERRUPTED")):
+        # Bounded completed-result replay only; no durable or in-flight request binding.
         _remember(rid, dict(reply))
     box["reply"] = reply
     box["done"].set()
 
 
 def _error(req, e):
-    return {"id": req.get("id"), "status": "error", "message": "%s: %s" % (type(e).__name__, e),
-            "traceback": traceback.format_exc()[-6000:]}
+    reply = {"id": req.get("id"), "status": "error", "message": "%s: %s" % (type(e).__name__, e),
+             "traceback": traceback.format_exc()[-6000:]}
+    if isinstance(e, RemoteExecutionUncertain):
+        reply.update(code=e.code, dispatched=e.dispatched, effects=e.effects, retryable=e.retryable)
+    elif not isinstance(e, Exception):
+        reply.update(code="COMMAND_INTERRUPTED", dispatched=True, effects="unknown", retryable=False)
+    return reply
+
+
+def _forget_remote_worker(worker):
+    _remote_workers[:] = [other for other in _remote_workers if other is not worker]
+
+
+def _remote_reply_valid(reply):
+    return isinstance(reply, dict) and type(reply.get("success")) is bool
+
+
+def _refresh_remote_workers():
+    """Only the game thread owns this registry. Workers publish evidence through their boxes."""
+    for worker in list(_remote_workers):
+        if worker["done"]:
+            if worker.get("dispatch_attempted") and (worker.get("error") is not None or
+                                                     not _remote_reply_valid(worker.get("reply"))):
+                _remote_barrier["unknown"] = True
+            _forget_remote_worker(worker)
+
+
+def _batch_busy(req, risk):
+    if risk == "READ":
+        return None
+    reason = _batch_scope["unknown"]
+    if not reason and _batch_scope["owner"] is not None:
+        reason = "another batch owns the editor transaction"
+    if not reason and req.get("type") == "batch":
+        _refresh_remote_workers()
+        if _remote_barrier["unknown"]:
+            reason = "a prior remote outcome is unknown; owner reconciliation is required"
+        elif _remote_workers:
+            reason = "a prior remote worker is still outstanding"
+        elif any(box.get("risk", RISK_OF.get(other.get("type"), "MUTATE")) != "READ"
+                 for _gen, other, box in _running):
+            reason = "a prior non-READ command is still running"
+    if reason:
+        return {"id": req.get("id"), "status": "error", "code": "BUSY",
+                "dispatched": False, "effects": "none", "message": reason}
+    return None
+
+
+def _release_batch(box):
+    if _batch_scope["owner"] is box:
+        _batch_scope["owner"] = None
 
 
 def _start(req, box):
@@ -571,15 +704,27 @@ def _start(req, box):
                       "message": "%s is %s, which this bridge's policy does not allow (CLAUDE_UNREAL_ALLOW)"
                                  % (req.get("type"), risk)})
         return
+    busy = _batch_busy(req, risk)
+    if busy is not None:
+        _finish(box, busy)
+        return
+    box["risk"] = risk
+    if req.get("type") == "batch":
+        _batch_scope["owner"] = box  # Before function entry or the generator's first advancement.
     try:
         out = fn(req.get("params") or {})
         if isinstance(out, types.GeneratorType):
             _running.append((out, req, box))
             _step(out, req, box)
         else:
+            _release_batch(box)
             _finish(box, {"id": req.get("id"), "status": "ok", "result": out})
-    except Exception as e:
-        _finish(box, _error(req, e))
+    except BaseException as e:
+        _release_batch(box)
+        if not box["done"].is_set():  # _step may already have settled and re-raised a control interrupt.
+            _finish(box, _error(req, e))
+        if not isinstance(e, Exception):
+            raise
 
 
 def _step(gen, req, box):
@@ -587,10 +732,14 @@ def _step(gen, req, box):
         next(gen)
     except StopIteration as stop:
         _running.remove((gen, req, box))
+        _release_batch(box)
         _finish(box, {"id": req.get("id"), "status": "ok", "result": stop.value})
-    except Exception as e:
+    except BaseException as e:
         _running.remove((gen, req, box))
+        _release_batch(box)
         _finish(box, _error(req, e))
+        if not isinstance(e, Exception):
+            raise
 
 
 _pumping = []   # non-empty while pump() runs
@@ -607,6 +756,7 @@ def pump(_delta=0.0, max_jobs=8):
         return
     _pumping.append(True)
     try:
+        _refresh_remote_workers()
         for gen, req, box in list(_running):
             if _server["stopping"]:
                 break
@@ -794,9 +944,13 @@ def _stop_jobs():
             try:
                 gen.close()
             except BaseException as e:
+                if _batch_scope["owner"] is box:
+                    _batch_scope["unknown"] = "batch cleanup failed during bridge shutdown"
                 reply["cleanup_error"] = "%s: %s" % (type(e).__name__, e)
                 if not isinstance(e, Exception) and interrupt is None:
                     interrupt = e  # Preserve control interrupts, after settling every accepted job.
+            finally:
+                _release_batch(box)
             # A retry of an interrupted dispatched request must not silently repeat partial changes.
             _remember(box.get("request_id"), dict(reply))
             _finish(box, reply)
