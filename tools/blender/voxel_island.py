@@ -296,7 +296,7 @@ def build(seed, out, size=46, thick=22, keep=False):
     if body is not None:
         hull = body.copy()
         hull.data = body.data.copy()
-        hull.name = "UCX_%s_00" % name
+        hull.name = "UCX_%s_body_00" % name     # FBX collision prefix must match the mesh object name
         bpy.context.scene.collection.objects.link(hull)
         bpy.context.view_layer.objects.active = hull
         for ob in bpy.data.objects:
