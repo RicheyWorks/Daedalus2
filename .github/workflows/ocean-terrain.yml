@@ -32,8 +32,13 @@ jobs:
           java --class-path daedalus-core/target/classes tools/ocean/OceanBootstrap.java "$RUNNER_TEMP/ocean-first" 42013
           java -Duser.language=de -Duser.country=DE --class-path daedalus-core/target/classes tools/ocean/OceanBootstrap.java "$RUNNER_TEMP/ocean-second" 42013
           python -c "import json,os,pathlib; a=pathlib.Path(os.environ['RUNNER_TEMP'])/'ocean-first'; b=a.with_name('ocean-second'); p=json.loads((b/'ocean.json').read_text()); assert p['stored_chunks']==64 and p['server_registered'] is False and p['unreal_play_verified'] is False; assert all((a/n).read_bytes()==(b/n).read_bytes() for n in ['ocean.daew','ocean.glb'])"
+      - name: Chunk edits and empty records survive separate JVM restart and writer exclusion
+        shell: bash
+        run: python tools/ocean/check_store.py --java "$(command -v java)" --classpath daedalus-core/target/classes --probe tools/ocean/OceanStoreProbe.java --directory "$RUNNER_TEMP/ocean-store" --output "$RUNNER_TEMP/ocean-store-proof.json"
       - uses: actions/upload-artifact@v4
         with:
           name: ocean-sector-${{ matrix.os }}
-          path: ${{ runner.temp }}/ocean-second/
+          path: |
+            ${{ runner.temp }}/ocean-second/
+            ${{ runner.temp }}/ocean-store-proof.json
           retention-days: 14
