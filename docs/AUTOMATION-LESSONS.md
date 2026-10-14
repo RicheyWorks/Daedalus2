@@ -1187,3 +1187,5 @@ Worker generator appends Mine/Trade/Repair NLA tracks while retaining Idle/Walk/
 
 ## Reconcile unknown writes with actual read-back bytes (2026-10-14)
 Added owned receipt/component read-back path: compare actual pendingencoded bytes with returned record, exact capturedSHA and outerCAS revision, then confirm matched preparedrequest. A lostPUTreply can recover from a validGET without issuing a duplicate mutation. Missing/mismatched/stale outcomes remain pending; no timeout cancellation. Actual strictMSVC cases pass for matching and rejectchangedbytes/unavailabletransport/unrelatedrevision. No sharedtransport files changed or liveHTTP proof claimed.
+
+Record-header consumer: bound64lines/8192bytes, reset metadata at each HTTP response block, require final exact revision/hash and reject case-insensitive duplicate requiredheaders. Intermediate100Continue must not leave stale metadata. StrictMSVC tests cover interim/final blocks and duplicates. Transport still supplies independently verified status and pinned no-redirect identity; parsing headers is not proof of a request or permission.

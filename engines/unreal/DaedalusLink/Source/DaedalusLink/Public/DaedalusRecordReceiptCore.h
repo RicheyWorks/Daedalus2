@@ -22,6 +22,28 @@ inline bool Revision(const std::string& Text,std::uint64_t& Out){
     if(Parsed.ec!=std::errc()||Parsed.ptr!=Text.data()+Text.size()||Value>static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()))return false;
     Out=Value;return true;
 }
+inline bool ParseRecordHeaders(const std::vector<std::string>& Lines,std::string& RevisionHeader,std::string& HashHeader){
+    if(Lines.size()>64)return false;
+    std::size_t Bytes=0;bool StatusSeen=false;std::string NextRevision,NextHash;
+    for(const auto& Line:Lines){
+        if(Line.size()>8192-Bytes||Line.find_first_of("\r\n")!=std::string::npos)return false;
+        Bytes+=Line.size();
+        if(Line.compare(0,5,"HTTP/")==0){StatusSeen=true;NextRevision.clear();NextHash.clear();continue;}
+        if(!StatusSeen)return false;
+        auto Colon=Line.find(':');if(Colon==std::string::npos)continue;
+        auto Name=Line.substr(0,Colon);for(char& C:Name)if(C>='A'&&C<='Z')C=static_cast<char>(C-'A'+'a');
+        if(Name!="x-record-revision"&&Name!="x-payload-sha256")continue;
+        auto Value=Line.substr(Colon+1);auto First=Value.find_first_not_of(" \t");
+        if(First==std::string::npos)return false;
+        Value=Value.substr(First,Value.find_last_not_of(" \t")-First+1);
+        auto& Target=Name=="x-record-revision"?NextRevision:NextHash;
+        if(!Target.empty())return false;
+        Target=std::move(Value);
+    }
+    std::uint64_t Parsed=0;
+    if(!StatusSeen||!Revision(NextRevision,Parsed)||!Hash(NextHash))return false;
+    RevisionHeader=std::move(NextRevision);HashHeader=std::move(NextHash);return true;
+}
 inline bool ParseWriteReply(const std::string& Json,const std::string& RevisionHeader,const std::string& HashHeader,WriteReply& Out){
     // This endpoint's identifier/hash fields are ASCII and need no JSON escapes.
     // Restrict the reused reader's broader escape grammar at this DTO boundary.

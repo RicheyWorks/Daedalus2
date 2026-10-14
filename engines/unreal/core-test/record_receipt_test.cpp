@@ -27,6 +27,15 @@ int main(){
     if(ConfirmReadBack(true,200,E,Candidate,{1,2,4},"9007199254740993",Digest,Out)||Out!=7)return 12;
     if(ConfirmReadBack(false,200,E,Candidate,Candidate,"9007199254740993",Digest,Out)||Out!=7)return 13;
     if(ConfirmReadBack(true,200,E,Candidate,Candidate,"9007199254740994",Digest,Out)||Out!=7)return 14;
+    std::string HeaderRevision,HeaderHash;
+    std::vector<std::string> Headers{"HTTP/1.1 100 Continue","","HTTP/1.1 200 OK","X-Record-Revision: 9007199254740993","X-Payload-SHA256: "+Digest,""};
+    if(!ParseRecordHeaders(Headers,HeaderRevision,HeaderHash)||HeaderRevision!="9007199254740993"||HeaderHash!=Digest)return 15;
+    Headers.push_back("x-record-revision: 9007199254740993");
+    if(ParseRecordHeaders(Headers,HeaderRevision,HeaderHash))return 16;
+    Headers.pop_back();Headers.push_back("x-payload-sha256: "+Digest);
+    if(ParseRecordHeaders(Headers,HeaderRevision,HeaderHash))return 17;
+    Headers={"HTTP/1.1 200 OK","X-Record-Revision: 1","X-Payload-SHA256: "+Digest,"HTTP/1.1 200 OK"};
+    if(ParseRecordHeaders(Headers,HeaderRevision,HeaderHash))return 18;
     std::cout<<"PASS exact 64-bit revision, replay, conflict/unknown, hash and identity receipt checks\n";
     return 0;
 }
