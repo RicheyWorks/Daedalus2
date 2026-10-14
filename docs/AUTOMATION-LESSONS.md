@@ -901,3 +901,7 @@ Actioncatalog benchmarksummary groups returned/failed/unknown attempts separatel
 ### Make action coverage explicit (2026-10-14)
 Count actionswith noattempt, recordedreturns, failures andunknowns separately pertoolset/overall. Outcome categories overlap acrossattempts; recordedattemptcoverage percentage doesnotmean verifiedeffects. Keep effectsverified0/allEffectsVerifiedfalse without effectvalidators, includingemptycatalogs. This prevents a mixedreturned/unknown history lookingcomplete.
 
+
+### Preserve full action identity despite short-name calls (2026-10-14)
+Catalog IDs hash exacttoolset/fullname; schemahashes areseparate so changesstayvisible. Flag multiplefullnames mapping to oneclientshortname within a toolset ratherthan silently collapse/invoke them. Optionalattempt actionIDs mustmatch. This is metadataambiguity evidence, not a newadapter or runtimecall; Pootgenericadapter ownership remainsseparate.
+

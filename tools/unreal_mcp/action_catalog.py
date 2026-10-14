@@ -104,13 +104,24 @@ def catalog(capture):
             if not isinstance(prose,str):raise ValueError('Tool description text must be a string')
             required=schema.get('required',[]) if schema else []
             if not isinstance(required,list) or any(not isinstance(field,str) for field in required):raise ValueError('Required parameter list invalid')
-            row={'toolset':toolset,'name':name,'call_name':name.split('.')[-1],
+            action_id=hashlib.sha256(json.dumps([toolset,name],ensure_ascii=False,separators=(',',':')).encode('utf-8')).hexdigest()
+            schema_hash=hashlib.sha256(json.dumps(schema,sort_keys=True,ensure_ascii=False,allow_nan=False).encode('utf-8')).hexdigest() if schema is not None else None
+            row={'toolset':toolset,'name':name,'call_name':text(name.split('.')[-1],'short call name'),
+                 'action_id':action_id,'input_schema_sha256':schema_hash,
                  'description':prose,'input_schema':schema,'required_parameters':required,
                  'annotations':annotations,'read_only_hint':annotations.get('readOnlyHint'),
                  'execution_state':'not-executed','execution_evidence':None}
             rows.append(row)
             if len(rows)>50000:raise ValueError('Catalog exceeds50000 exposed actions')
+    short_names={}
+    for row in rows:short_names.setdefault((row['toolset'],row['call_name']),[]).append(row)
+    collisions=[]
+    for (toolset,short),group in sorted(short_names.items()):
+        ambiguous=len(group)>1
+        for row in group:row['client_short_name_ambiguous']=ambiguous
+        if ambiguous:collisions.append({'toolset':toolset,'call_name':short,'names':[row['name'] for row in group]})
     return {'schema_version':1,'exposed_actions':len(rows),'toolsets':len(sets),'per_toolset':counts,
+            'client_short_name_collisions':collisions,
             'actions':rows,'executed_actions':0,'mutation':False,'server_queried':False,
             'coverage':coverage_summary(rows),
             'scope':'Unique toolset/name pairs in saved descriptions; not every engine function, execution proof or risk approval'}
@@ -131,6 +142,8 @@ def attach_attempts(result,attempts,evidence_root):
         ids.add(aid)
         identity=(text(attempt.get('toolset'),'toolset'),text(attempt.get('name'),'name'))
         if identity not in index:raise ValueError('Attempt references undiscovered action')
+        if 'action_id' in attempt and attempt['action_id']!=index[identity]['action_id']:
+            raise ValueError('Attempt stable action ID differs')
         state=attempt.get('state')
         if state not in ('returned','failed','outcome-unknown'):raise ValueError('Unsupported attempt state')
         seconds=attempt.get('elapsed_seconds')
