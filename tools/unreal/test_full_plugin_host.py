@@ -59,5 +59,28 @@ class SnapshotTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             list(full_plugin_host.read_blobs(self.repo,[('missing','0'*40)]))
 
+    def test_verify_detects_plugin_scaffold_project_and_added_source(self):
+        host=self.base/'host';full_plugin_host.snapshot(self.repo,host)
+        self.assertTrue(full_plugin_host.verify(host)['verified'])
+        for relative in ('Plugins/DaedalusLink/binary.dat','Source/HostProject.Target.cs','HostProject.uproject'):
+            target=host/relative;original=target.read_bytes();target.write_bytes(original+b'changed')
+            with self.assertRaises(ValueError):full_plugin_host.verify(host)
+            target.write_bytes(original)
+        extra=host/'Plugins/DaedalusLink/Source/Extra.cpp';extra.parent.mkdir(parents=True);extra.write_text('extra')
+        with self.assertRaises(ValueError):full_plugin_host.verify(host)
+        extra.unlink()
+        output=host/'Plugins/DaedalusLink/Binaries/Win64/test.dll';output.parent.mkdir(parents=True);output.write_bytes(b'output')
+        self.assertTrue(full_plugin_host.verify(host)['verified'])
+
+    def test_verify_refuses_manifest_escape_and_overlay(self):
+        host=self.base/'host';full_plugin_host.snapshot(self.repo,host)
+        target=host/'source-manifest.json';manifest=json.loads(target.read_text())
+        manifest['generated_host_files']['../outside']=hashlib.sha256(b'').hexdigest()
+        target.write_text(json.dumps(manifest))
+        with self.assertRaises(ValueError):full_plugin_host.verify(host)
+        del manifest['generated_host_files']['../outside'];manifest['overlays']=['changed.cpp']
+        target.write_text(json.dumps(manifest))
+        with self.assertRaises(ValueError):full_plugin_host.verify(host)
+
 
 if __name__=='__main__':unittest.main()

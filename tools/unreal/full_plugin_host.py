@@ -5,6 +5,48 @@ import json
 from pathlib import Path
 import subprocess
 
+def verify(destination):
+    """Recheck a recorded host; never mutate it or accept unrecorded overlays."""
+    destination=destination.resolve()
+    manifest=json.loads((destination/'source-manifest.json').read_text())
+    if manifest.get('overlays')!=[]:
+        raise ValueError('Exact-source verification refuses overlays')
+    files=manifest['files']; generated=manifest['generated_host_files']
+    scaffold_names={'Source/HostProject.Target.cs','Source/HostProjectEditor.Target.cs',
+                    'Source/HostProject/HostProject.Build.cs','Source/HostProject/HostProject.cpp'}
+    if set(generated)!=scaffold_names:raise ValueError('Invalid host scaffold paths')
+    if not files or manifest['tracked_file_count']!=len(files):
+        raise ValueError('Invalid recorded file count')
+    expected={}
+    prefix='engines/unreal/DaedalusLink/'
+    for name,digest in files.items():
+        if not name.startswith(prefix): raise ValueError('Invalid plugin path')
+        expected['Plugins/DaedalusLink/'+name[len(prefix):]]=digest
+    expected.update(generated)
+    expected['HostProject.uproject']=manifest['project_sha256']
+    for name,digest in expected.items():
+        parts=name.split('/')
+        if any(x in ('','..','.') for x in parts) or '\\' in name or ':' in name:
+            raise ValueError('Unsafe manifest path')
+        path=destination.joinpath(*parts)
+        path.resolve().relative_to(destination)
+        if path.is_symlink() or any(parent.is_symlink() for parent in path.parents if parent!=destination and destination in parent.parents):
+            raise ValueError('Symlink input refused')
+        if not isinstance(digest,str) or len(digest)!=64 or any(c not in '0123456789abcdef' for c in digest):
+            raise ValueError('Invalid input digest')
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=digest:
+            raise ValueError('Missing or changed input: '+name)
+    # Build outputs are expected; additional source/content inputs are not.
+    for base in ('Plugins/DaedalusLink','Source'):
+        for path in (destination/base).rglob('*'):
+            relative=path.relative_to(destination).as_posix()
+            parts=path.relative_to(destination/base).parts
+            if any(x in ('Binaries','Intermediate','Saved','__pycache__') for x in parts):continue
+            if path.is_file() and relative not in expected:
+                raise ValueError('Unrecorded input: '+relative)
+    return {'source_head':manifest['source_head'],'plugin_files':len(files),
+            'generated_host_files':len(generated),'verified':True}
+
 def read_blobs(repo, entries):
     # Stream object records through one Git process; no whole-corpus buffer.
     with subprocess.Popen(['git','cat-file','--batch'],cwd=repo,
@@ -69,10 +111,18 @@ def snapshot(repo, destination):
         target=destination/relative;target.parent.mkdir(parents=True,exist_ok=True)
         raw=text.encode('utf-8');target.write_bytes(raw);generated[relative]=hashlib.sha256(raw).hexdigest()
     (destination/'source-manifest.json').write_text(json.dumps({'source_head':sha,'files':inputs,
-        'tracked_file_count':len(inputs),'overlays':[],'generated_host_files':generated},indent=2))
+        'tracked_file_count':len(inputs),'overlays':[],'generated_host_files':generated,
+        'project_sha256':hashlib.sha256(project.read_bytes()).hexdigest()},indent=2))
     print(json.dumps({'project':str(project),'source_head':sha,'files':len(inputs),
                       'editor_target':'HostProjectEditor','game_target':'HostProject'}))
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('repo',type=Path);parser.add_argument('destination',type=Path)
-    args=parser.parse_args();snapshot(args.repo,args.destination)
+    parser=argparse.ArgumentParser();parser.add_argument('repo',type=Path,nargs='?');parser.add_argument('destination',type=Path,nargs='?')
+    parser.add_argument('--verify',type=Path,metavar='HOST')
+    args=parser.parse_args()
+    if args.verify:
+        if args.repo or args.destination:parser.error('--verify takes no positional arguments')
+        print(json.dumps(verify(args.verify)))
+    else:
+        if not args.repo or not args.destination:parser.error('repo and fresh destination required')
+        snapshot(args.repo,args.destination)

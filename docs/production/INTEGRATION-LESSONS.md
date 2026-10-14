@@ -1,5 +1,11 @@
 # Integration lessons
 
+## Recheck isolated host inputs around builds — 2026-10-14
+
+The full_plugin_host helper now records the project descriptor digest and exposes `python tools/unreal/full_plugin_host.py --verify HOST`. Run it before dispatch and after a terminal build. It checks every recorded plugin input, the four fixed generated source/target files and the project descriptor, and refuses changed/missing inputs, extra source/content, unsafe paths and overlays. Build output folders are excluded explicitly. It verifies the recorded manifest, not a signed source attestation, a filesystem lock or protection against edits after the check. Older manifests without a descriptor digest require a fresh snapshot; do not invent a historical digest. The clock incremental build's two explicit overlays retain their separate proof and cannot pass this exact-source command.
+
+Five real-Git regression tests pass, including mutation of plugin/scaffold/project, added source, allowed build output and malformed manifest/overlay refusal. A fresh full 198-file plugin snapshot at 5dee33ee passed verification. Native SceneTools.get_current_level returned /Game/Daedalus/DaedalusWorld through the new Epic connector during this work. These are source-integrity and read-only connector results, not another native build or gameplay acceptance.
+
 ## Host production scheduling — 2026-10-14
 
 Use the installed engine's TimerManager API rather than a per-frame component tick for periodic production. UE 5.8 supports bMaxOncePerFrame in FTimerManagerTimerParameters: looping timers otherwise may fire repeatedly after a hitch. A cycle notification must read committed state, pause while a durable candidate is pending, and leave prepare/persist/confirm to the trusted host listener. Silence or timeout must never grant production or cancel a pending write. Clear timers on EndPlay and component destruction; refuse nonfinite/nonpositive rates and untrusted worlds. Repeated due notifications may request the same uncommitted cycle so a declined request can retry later. Six-action isolated Editor compilation passed in 29.33 seconds; host/storage integration and gameplay acceptance remain open.
