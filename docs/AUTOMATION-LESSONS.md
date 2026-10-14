@@ -398,3 +398,18 @@ knew the rules the build job follows: the script lives in the repo, the window i
 through WMI, output goes to %LOCALAPPDATA%\Daedalus\jobs through the shell, no -ExecutionPolicy. engines/unreal/pc-job.ps1
 is that pattern for anything that isn't a build (tools/unreal_play/run_scenarios.py, import_cast.py). Nothing of
 mine runs from %TEMP% again, and pc-job -Wait surfaces daedalus-norton.log alerts.
+
+## Read the editor log after every Play, not just the scenario checks (2026-10-13)
+Richey saw errors and warnings in the editor while the scenarios were green. One log read found four causes:
+(1) `LogUtils: Error: The Editor is currently in a play mode` x58: every bot's `unreal_status`/`get_level_info`
+poll during Play called EditorActorSubsystem, which the editor refuses in PIE. The bridge now lists the Play
+world's actors via GameplayStatics while Play runs (connector contract test proves no editor call in PIE).
+(2) `LogMaterial ... will recompile every editor launch until resaved` x340 + `missing usage flag
+InstancedStaticMeshes! Default Material will be used in game`: the Dresser's HISM pools use Prop materials that
+never had the flag, so a packaged game would draw them grey. the ADR-055 tool (daedalus_nanite_materials: reparent each instance onto the project's flagged base, undoable) already
+existed but had not been run to zero; tools/unreal_play/fix_materials.py drives it until left == 0. Check for an
+existing tool before writing a second one.
+(3) `AttachTo ... is not static, cannot attach` x4 per pool: the Dresser's root was Movable, its pools Static.
+(4) `FindTeleportSpot ... root component not being a collider` x28: foes spawned deferred with
+AdjustIfPossibleButAlwaysSpawn before their collider existed; FindSpot already traced the ground, so AlwaysSpawn.
+Rule: tools/unreal_play/editor_log_report.py after each Play run; its counts are part of the result line.

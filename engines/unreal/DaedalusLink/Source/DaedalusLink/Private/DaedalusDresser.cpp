@@ -62,6 +62,9 @@ ADaedalusDresser::ADaedalusDresser()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	// The pools are Static (they never move and Nanite/lighting want it); a Static child can't attach to a Movable
+	// root ("AttachTo ... is not static, cannot attach" x4 per pool, 2026-10-13), so the root is Static too.
+	RootComponent->SetMobility(EComponentMobility::Static);
 }
 
 void ADaedalusDresser::BeginPlay()

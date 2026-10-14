@@ -58,7 +58,23 @@ def _rot(r, nd=2):
 
 
 def _actors():
+    """Every actor of the open level. During Play the editor refuses EditorActorSubsystem (it logs
+    'The Editor is currently in a play mode' as an error on every status poll, 2026-10-13), so the Play world's
+    actors are listed through GameplayStatics instead; they are the live ones a bot wants anyway."""
+    if _in_pie():
+        ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
+        game = getattr(ues, "get_game_world", None)
+        world = game() if game else None
+        if world is not None:
+            return list(unreal.GameplayStatics.get_all_actors_of_class(world, unreal.Actor))
     return unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors()
+
+
+def _selected():
+    """Selected actors: none during Play (selection is an editor thing, and asking logs an error)."""
+    if _in_pie():
+        return []
+    return unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_selected_level_actors()
 
 
 def _find_actor(name):
@@ -113,8 +129,7 @@ def cmd_get_level_info(p):
                         "location": _vec(a.get_actor_location())})
     world = _world()
     return {"level": world.get_path_name() if world else None, "actors_total": total, "actors": out,
-            "selected": [a.get_actor_label() for a in
-                         unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_selected_level_actors()]}
+            "selected": [a.get_actor_label() for a in _selected()]}
 
 
 def cmd_get_actor_info(p):

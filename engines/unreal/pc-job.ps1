@@ -36,10 +36,12 @@ if ($Start) {
     $runner = if ($full -like "*.py") { "`"$py`"" } elseif ($full -like "*.ps1") { "powershell.exe -NoProfile -File" } else { throw "a .py or .ps1 script" }
     # cmd runs the script and writes the exit code last; the window is minimized and never hidden.
     # /S keeps the inner quotes intact; /c "..." with nested quotes otherwise loses the first and last one.
-    $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
+    # cmd creates the log itself: a log pre-created by PowerShell's Out-File swallowed everything cmd appended to it
+    # (every job read 'DONE 0' with no output; reproduced 2026-10-13), so nothing touches the log before cmd does.
+    $stamp = Get-Date -Format s
+    $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && (echo $stamp start $Script $ScriptArgs > `"$log`") && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
     $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
-    "$(Get-Date -Format s) start $Script $ScriptArgs" | Out-File -FilePath $log -Encoding utf8
     "started $Id pid=$($r.ProcessId)"
     exit
 }
