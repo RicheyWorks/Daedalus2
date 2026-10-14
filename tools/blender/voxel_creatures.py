@@ -361,6 +361,98 @@ def _sea(kind):
     return out
 
 
+def _insect(kind):
+    """Insects and the small ground life: 10 cm voxels, legs on the leg bones, wings on the wing bones."""
+    out = {}
+    if kind in ("butterfly", "moth", "dragonfly", "firefly", "ladybug", "beetle", "grasshopper", "cicada", "mosquito"):
+        body = {"butterfly": "bee_k", "moth": "fur_g", "dragonfly": "feather_b", "firefly": "bee_k", "ladybug": "feather_r", "beetle": "fur_k",
+                "grasshopper": "feather_g", "cicada": "fur_b", "mosquito": "fur_g"}[kind]
+        D = 6 if kind in ("dragonfly", "grasshopper") else 4
+        box(out, "body", -1, -D // 2, 2, 2, D, 2, body)
+        box(out, "head", -1, D // 2, 2, 2, 2, 2, body)
+        box(out, "head", -1, D // 2 + 1, 3, 1, 1, 1, "eye")
+        box(out, "head", 0, D // 2 + 1, 3, 1, 1, 1, "eye")
+        if kind in ("butterfly", "moth"):
+            wc = ("flower_p", "bee_y", "feather_b") if kind == "butterfly" else ("fur_g", "fur_b")
+            for sgn, bone in ((1, "wing.L"), (-1, "wing.R")):
+                x0 = 1 if sgn > 0 else -5
+                box(out, bone, x0, -1, 3, 4, 3, 1, wc[0])
+                box(out, bone, x0, -3, 3, 3, 2, 1, wc[1 % len(wc)])
+                box(out, bone, x0 + 1, 0, 3, 1, 1, 1, wc[-1])
+        elif kind == "dragonfly":
+            for sgn, bone in ((1, "wing.L"), (-1, "wing.R")):
+                x0 = 1 if sgn > 0 else -7
+                box(out, bone, x0, -1, 4, 6, 1, 1, "wing_c")
+                box(out, bone, x0, 1, 4, 6, 1, 1, "wing_c")
+        elif kind == "ladybug":
+            for (dx, dy) in ((0, 0), (-1, -1), (0, -2)):
+                box(out, "body", dx, dy, 4, 1, 1, 1, "fur_k")
+        elif kind == "firefly":
+            box(out, "tail", -1, -D // 2 - 1, 2, 2, 1, 2, "lantern")
+        elif kind == "grasshopper":
+            for sx, bone in ((-2, "leg.L"), (2, "leg.R")):
+                box(out, bone, sx, -2, 0, 1, 1, 4, body)
+        for sx, bone in ((-2, "leg.L"), (2, "leg.R")):
+            for y in (-1, 0, 1):
+                box(out, bone, sx, y, 0, 1, 1, 2, "bee_k")
+    elif kind in ("ant", "termite", "spider", "scorpion", "centipede", "earthworm", "snail", "slug", "woodlouse", "tick"):
+        body = {"ant": "fur_k", "termite": "skin", "spider": "fur_k", "scorpion": "fur_y", "centipede": "fur_r", "earthworm": "fur_p",
+                "snail": "fur_b", "slug": "fur_g", "woodlouse": "fur_g", "tick": "fur_r"}[kind]
+        if kind in ("ant", "termite"):
+            box(out, "body", -1, -2, 1, 2, 2, 2, body)
+            box(out, "tail", -1, -5, 1, 2, 3, 2, body)
+            box(out, "head", -1, 0, 1, 2, 2, 2, body)
+            box(out, "head", -1, 2, 2, 1, 1, 1, "eye")
+            for sx, bone in ((-2, "leg.L"), (2, "leg.R")):
+                for y in (-2, 0, 1):
+                    box(out, bone, sx, y, 0, 1, 1, 1, body)
+        elif kind == "spider":
+            box(out, "body", -2, -3, 1, 4, 3, 3, body)
+            box(out, "head", -1, 0, 1, 2, 2, 2, body)
+            for sx in (-1, 0):
+                box(out, "head", sx, 2, 2, 1, 1, 1, "flower_r")
+            for sx, bone in ((-4, "leg.L"), (3, "leg.R")):
+                for y in (-3, -2, -1, 0):
+                    box(out, bone, sx, y, 0, 2, 1, 1, body)
+                    box(out, bone, sx + (1 if sx < 0 else 0), y, 1, 1, 1, 2, body)
+        elif kind == "scorpion":
+            box(out, "body", -2, -3, 1, 4, 5, 2, body)
+            box(out, "head", -1, 2, 1, 2, 2, 2, body)
+            for z in range(1, 7):
+                box(out, "tail", 0, -4 - (z // 3), z, 1, 1, 1, body)
+            box(out, "tail", 0, -4, 7, 1, 1, 1, "sting")
+            box(out, "wing.L", 2, 2, 1, 2, 3, 1, body)
+            box(out, "wing.R", -4, 2, 1, 2, 3, 1, body)
+            for sx, bone in ((-3, "leg.L"), (2, "leg.R")):
+                for y in (-2, 0):
+                    box(out, bone, sx, y, 0, 1, 1, 1, body)
+        elif kind == "centipede":
+            for y in range(-6, 6):
+                box(out, "body" if y > -3 else "tail", -1, y, 0, 2, 1, 1, body if y % 2 else "fur_k")
+                box(out, "leg.L" if y % 2 else "leg.R", -2 if y % 2 else 1, y, 0, 1, 1, 1, body)
+            box(out, "head", -1, 6, 0, 2, 2, 1, "fur_k")
+        elif kind == "earthworm":
+            for y in range(-6, 6):
+                box(out, "body" if y > -3 else "tail", 0, y, 0 if abs(y) % 4 < 2 else 1, 1, 1, 1, body)
+            box(out, "head", 0, 6, 0, 1, 2, 1, "flower_p")
+        elif kind in ("snail", "slug"):
+            box(out, "body", -1, -2, 0, 2, 6, 1, body)
+            box(out, "head", -1, 4, 0, 2, 1, 2, body)
+            box(out, "head", -1, 4, 2, 1, 1, 1, "eye")
+            box(out, "head", 0, 4, 2, 1, 1, 1, "eye")
+            if kind == "snail":
+                for z in range(1, 4):
+                    r = 3 - abs(z - 2)
+                    box(out, "tail", -r + 1, -2 - r + 1, z, 2 * r - 1, 2 * r - 1, 1, "shell" if z % 2 else "shell2")
+        else:
+            box(out, "body", -1, -2, 0, 2, 4, 1, body)
+            box(out, "head", -1, 2, 0, 2, 1, 1, "fur_k")
+            for sx, bone in ((-2, "leg.L"), (2, "leg.R")):
+                for y in (-2, 0):
+                    box(out, bone, sx, y, 0, 1, 1, 1, body)
+    return out
+
+
 def _plant(kind):
     """Carnivorous plants: root at the soil, 'body' = stem, 'head' = the trap (Attack snaps it), wings = leaves."""
     out = {}
@@ -447,7 +539,16 @@ ANIMALS = {
     "dire_wolf": dict(fur="fur_k", belly="fur_g", size=1.3, tail="bushy"), "glyptodon": dict(fur="shell", belly="belly", size=1.4, tail="long", ears=None),
     "moa": dict(fur="fur_b", size=1.5, legs=2, snout=2, tail=None, ears=None), "thylacine": dict(fur="fur_y", spots="fur_k", size=0.9, tail="long"),
     "gorilla": dict(fur="fur_k", belly="fur_g", size=1.3, tail=None, ears="up"), "lemur": dict(fur="fur_g", belly="fur_w", size=0.5, tail="long", ears="up"),
-    "chimp": dict(fur="fur_k", belly="skin", size=0.8, tail=None, ears="up"), "sloth": dict(fur="fur_g", size=0.6, tail=None, ears="up"), "salamander": dict(fur="fur_o", spots="fur_k", size=0.4, tail="long", ears=None),
+    "chimp": dict(fur="fur_k", belly="skin", size=0.8, tail=None, ears="up"), "sloth": dict(fur="fur_g", size=0.6, tail=None, ears="up"),
+    # the ground life: burrowers (Richey 14:58 "animals that live in the ground")
+    "mole": dict(fur="fur_k", size=0.4, snout=2, tail="short", ears=None), "gopher": dict(fur="fur_b", size=0.45, tail="short", ears="up"),
+    "prairie_dog": dict(fur="fur_y", size=0.5, tail="short", ears="up"), "groundhog": dict(fur="fur_b", size=0.7, tail="short", ears="up"),
+    "meerkat": dict(fur="fur_y", belly="fur_w", size=0.5, tail="long", ears="up"), "vole": dict(fur="fur_g", size=0.3, tail="short", ears="up"),
+    "mole_rat": dict(fur="fur_p", size=0.35, snout=2, tail="long", ears=None), "chipmunk": dict(fur="fur_r", spots="fur_k", size=0.35, tail="bushy"),
+    "wombat": dict(fur="fur_b", size=0.8, tail=None, ears="up"), "aardvark": dict(fur="fur_g", size=0.9, snout=4, tail="long", ears="long"),
+    "pangolin": dict(fur="shell2", belly="belly", size=0.7, tail="long", ears=None), "echidna": dict(fur="fur_b", spots="fur_y", size=0.5, snout=3, ears=None, tail=None),
+    "burrowing_owl": dict(fur="fur_b", belly="fur_w", size=0.5, legs=2, snout=1, tail="short"), "gila_monster": dict(fur="fur_k", spots="fur_o", size=0.5, tail="long", ears=None),
+    "desert_tortoise": dict(fur="shell", belly="belly", size=0.6, tail="short", ears=None), "fennec_fox": dict(fur="fur_y", belly="fur_w", size=0.5, ears="long", tail="bushy"), "salamander": dict(fur="fur_o", spots="fur_k", size=0.4, tail="long", ears=None),
 }
 BIRDS = {
     "robin": dict(feather="feather_br", belly="feather_r", size=0.6), "jay": dict(feather="feather_b", belly="feather_w", crest="feather_b", size=0.7),
@@ -484,9 +585,11 @@ ZOMBIES = {
 DINOS = ("trex", "raptor", "allosaurus", "carnotaurus", "triceratops", "stegosaurus", "ankylosaurus", "brontosaurus", "pterodactyl", "quetzal")
 SEA = ("shark", "dolphin", "orca", "whale", "narwhal", "octopus", "squid", "jellyfish", "crab", "lobster", "sea_turtle", "seahorse", "manta", "eel",
        "clownfish", "pufferfish", "swordfish", "anglerfish", "starfish")
+INSECTS = ("butterfly", "moth", "dragonfly", "firefly", "ladybug", "beetle", "grasshopper", "cicada", "mosquito",
+           "ant", "termite", "spider", "scorpion", "centipede", "earthworm", "snail", "slug", "woodlouse", "tick")
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
 SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH),
-           "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA}
+           "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA, "insect": INSECTS}
 
 
 def plan(species):
@@ -506,6 +609,8 @@ def plan(species):
         return _dino(species)
     if species in SEA:
         return _sea(species)
+    if species in INSECTS:
+        return _insect(species)
     raise KeyError(species)
 
 
@@ -608,7 +713,7 @@ def build(species, out_dir, scale=10.0, keep=False):
                 p.rotation_euler = (0, 0, 0)
             rig.pose.bones["body"].location.z = 0.02 * k * math.sin(ph)
             if clip == "Idle":
-                if fam == "bee":
+                if fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.9 * math.sin(ph * 6) * (1 if side == "L" else -1)
                     rig.pose.bones["body"].location.z = 0.05 * k * math.sin(ph) + 0.3 * k
