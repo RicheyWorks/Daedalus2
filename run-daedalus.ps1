@@ -29,8 +29,9 @@ switch ($choice.ToLowerInvariant()) {
             $up = $false
         }
         if (-not $up) {
-            Write-Host "Starting the web server in a new window..."
-            Start-Process powershell -ArgumentList @(
+            Write-Host "Starting the web server in a minimized console (available on the taskbar)..."
+            # Keep the existing interactive server console accessible without covering the primary app.
+            Start-Process powershell -WindowStyle Minimized -ArgumentList @(
                 "-NoExit",
                 "-Command",
                 "Set-Location '$PSScriptRoot'; mvn -pl daedalus-server -am spring-boot:run"
