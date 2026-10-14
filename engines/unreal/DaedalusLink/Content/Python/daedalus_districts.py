@@ -653,7 +653,7 @@ def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
         a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(cx, cy, top))
         a.set_editor_property("realm", realm)
         a.set_editor_property("district", -2)
-        a.lay_ground([unreal.Transform(unreal.Vector(cx, cy, top - 2.0 - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(half * 2 / 100.0, half * 2 / 100.0, 4.0))])
+        a.lay_ground([unreal.Transform(unreal.Vector(cx, cy, top - 30.0 - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(half * 2 / 100.0, half * 2 / 100.0, 4.0))])   # 30 cm under: 2 cm z-fought with every floor on it (03:05 'screen glitching')
         a.get_editor_property("ground").set_cull_distances(0, 0)
         a.set_actor_label(label)
         a.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
