@@ -15,7 +15,15 @@ from asset_pipeline import wire  # noqa: E402
 
 
 def main(argv):
-    realm = argv[0] if argv else "LABYRINTH"
+    realms = (argv[0] if argv else "LABYRINTH").split(",")
+    for realm in realms:
+        rc = one(realm)
+        if rc:
+            return rc
+    return 0
+
+
+def one(realm):
     while wire.call(wire.UNREAL, "ping", timeout=10).get("playing"):
         time.sleep(5)
     t0 = time.time()
