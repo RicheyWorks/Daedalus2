@@ -1,0 +1,84 @@
+{
+  "utc": "2026-10-14T10:30:29.675173+00:00",
+  "originalActor": {
+    "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_1241"
+  },
+  "originalTransform": {
+    "location": {
+      "x": 40450,
+      "y": -9500,
+      "z": 4620
+    },
+    "rotation": {
+      "pitch": 0,
+      "yaw": 0,
+      "roll": 0
+    },
+    "scale": {
+      "x": 92,
+      "y": 92,
+      "z": 12
+    }
+  },
+  "originalTags": [
+    "Land",
+    "Realm:WORLD-ZERO",
+    "Deed:1",
+    "District:55"
+  ],
+  "label": "RockShell_WZ_Deed1",
+  "mapBeforeSha256": "61248c4587475c41a45fce5b3e8470c06b66ebb1df6e7c19e4f584159e494f9d",
+  "status": "saved",
+  "newActor": {
+    "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3852"
+  },
+  "reconcileUtc": "2026-10-14T10:31:13.851910+00:00",
+  "matches": [
+    {
+      "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3852"
+    }
+  ],
+  "newTransform": {
+    "location": {
+      "x": 40450,
+      "y": -9500,
+      "z": 4022
+    },
+    "rotation": {
+      "pitch": 0,
+      "yaw": 0,
+      "roll": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "afterOriginalTransform": {
+    "location": {
+      "x": 40450,
+      "y": -9500,
+      "z": 4620
+    },
+    "rotation": {
+      "pitch": 0,
+      "yaw": 0,
+      "roll": 0
+    },
+    "scale": {
+      "x": 92,
+      "y": 92,
+      "z": 12
+    }
+  },
+  "afterOriginalTags": [
+    "Land",
+    "Realm:WORLD-ZERO",
+    "Deed:1",
+    "District:55"
+  ],
+  "saveResult": true,
+  "mapAfterSha256": "fd7de1a77f7148ff14f96f657a54ed07dcc808d64ca3b6e9f53fc360add8d932",
+  "mapSavedUtc": "2026-10-14T10:30:50.449270+00:00"
+}
