@@ -47,7 +47,7 @@ jobs:
         run: python3 verify_judge_test.py
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
-          for t in land_grid_test land_registry_test realm_session_test; do
+          for t in land_grid_test land_registry_test realm_directory_test realm_session_test; do
             g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public $t.cpp -o $t && ./$t | tail -1
           done
           cd ../DaedalusLink/Content/Python
