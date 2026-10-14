@@ -38,6 +38,9 @@ exit $LASTEXITCODE
             # missing Config directory forces a preparation exception before build.
             for git_code in (23, 0):
                 with self.subTest(git_code=git_code):
+                    old_log = root / "data" / "Daedalus" / "jobs" / "build-prepare.log"
+                    if old_log.exists():
+                        old_log.unlink()
                     result = subprocess.run([PS, "-NoProfile", "-File", str(wrapper),
                                              str(harness), str(root), str(git_code)],
                                             capture_output=True, text=True, timeout=10)
