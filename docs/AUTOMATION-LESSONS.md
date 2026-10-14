@@ -843,3 +843,7 @@ Use a new --report path to retain planned hashes, partial terminal rows, counts 
 ### Read-only night handoff summaries (2026-10-14)
 Use handoff_status.py --receipt PATH --jobs-root JOBS to inspect recorded stage/job identity and linked cast receipts. Validate identity/count consistency and contain child references under the jobs root. Missing/invalid receipts remain unresolved; do not infer success from their absence. The summary never queries current engine state or grants replay permission, even when stored outcomes say passed.
 
+
+### Preflight rigged cast handoffs before editor time (2026-10-14)
+import_cast.py --plan validates uniqueIDs, SHA256 agreement, skinnedGLB document and namedclips without bridge calls; its successful output is machine-readableJSON. Night-run preflights all import folders before any build. Actual WorldZero6-file preflight passed. File structure/hashes do not prove native import, skeleton compatibility or rendered quality.
+

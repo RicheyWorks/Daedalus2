@@ -195,6 +195,12 @@ def parse_options(argv):
         parser.error('at most8 distinct import folders allowed; none are silently dropped')
     if any(not os.path.isdir(folder) for folder in args.imports):
         parser.error('every import folder must exist before any build is started')
+    if args.imports:
+        from import_cast import IC,preflight
+        for folder in args.imports:
+            try:preflight(IC.plan(folder),IC.CAST_ROOT)
+            except (OSError,ValueError,TypeError) as error:
+                parser.error('import preflight failed before build: '+str(error))
     return args
 
 

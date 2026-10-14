@@ -10,6 +10,7 @@ died. One GLB per call lets the editor tick, render and answer the watchdog betw
 also one bridge call. Idempotent (SHA stamp per asset). Lives in the repo (ADR-045).
 """
 import argparse
+import json
 import os
 import re
 import sys
@@ -19,7 +20,7 @@ from pathlib import Path
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "connectors", "claude-asset-pipeline"))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "engines", "unreal", "DaedalusLink", "Content", "Python"))
-from asset_pipeline import wire  # noqa: E402
+from asset_pipeline import wire,glb as GLB  # noqa: E402
 from asset_pipeline.ship import write_report  # noqa: E402
 import daedalus_import_cast as IC  # noqa: E402  (pure helpers: plan, sha)
 
@@ -78,6 +79,26 @@ def terminal_counts(reply,plan):
     return counts
 
 
+def preflight(plan,root):
+    if not 1<=len(plan)<=500 or len({row[0] for row in plan})!=len(plan):
+        raise ValueError('import requires1..500 unique assets')
+    rows=[]
+    for asset_id,path,digest in plan:
+        if not re.fullmatch(r'Mob_[A-Za-z0-9_]+',asset_id):raise ValueError('unsafe cast asset ID')
+        actual=IC.sha256(path)
+        if actual!=digest:raise ValueError('manifest/source SHA256 differs for '+asset_id)
+        document=GLB.read_json(path)
+        if not document.get('skins'):raise ValueError('cast importer requires a skinned GLB: '+asset_id)
+        clips=[row.get('name') for row in document.get('animations',[])]
+        if not all(isinstance(name,str) and name for name in clips):raise ValueError('unnamed animation clip: '+asset_id)
+        if IC.sha256(path)!=actual:raise ValueError('source changed during preflight: '+asset_id)
+        rows.append({'id':asset_id,'path':os.path.abspath(path),'sha256':actual,
+                     'bytes':os.path.getsize(path),'destination':root+'/'+asset_id,
+                     'skins':len(document['skins']),'clips':clips})
+    return {'schema_version':1,'assets':rows,'planned':len(rows),'editor_queried':False,'mutation':False,
+            'scope':'File hash and GLB document preflight; no native import or animation playback proof'}
+
+
 def main(argv):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('folder')
@@ -85,6 +106,7 @@ def main(argv):
     parser.add_argument('--place',default='')
     parser.add_argument('--one-per-call',action='store_true')
     parser.add_argument('--report',type=Path,help='new atomic import receipt; never used for automatic resume')
+    parser.add_argument('--plan',action='store_true',help='validate source files only; no bridge calls')
     args=parser.parse_args(argv)
     folder,root,place=args.folder,args.root,args.place
     if not os.path.isdir(folder):parser.error('import folder does not exist')
@@ -92,15 +114,18 @@ def main(argv):
     if place and place not in ('GALLERY-CITY','PARCELS','BRICKS','LABYRINTH'):
         parser.error('unsupported creature-placement realm')
     plan = IC.plan(folder)
-    print("%d GLBs in %s -> %s" % (len(plan), folder, root), flush=True)
     if not plan:
         print('import: no planned assets; refusing empty success', flush=True)
         return 2
-    if len(plan)>500 or len({row[0] for row in plan})!=len(plan):
-        parser.error('import requires at most500 unique assets')
-    for asset_id,glb,digest in plan:
-        if IC.sha256(glb)!=digest:
-            parser.error('manifest/source SHA256 differs for '+asset_id)
+    planned=preflight(plan,root)
+    if args.plan:
+        if args.report is not None:
+            if args.report.exists():parser.error('planning report exists; choose a new output')
+            args.report.parent.mkdir(parents=True,exist_ok=True)
+            write_report(str(args.report),planned)
+        print(json.dumps(planned,indent=2))
+        return 0
+    print("%d GLBs in %s -> %s" % (len(plan), folder, root), flush=True)
     receipt=CastReceipt(args.report,folder,root,plan)
     receipt.save('prepared',evidence_kind='single-call-stdout-status' if args.one_per_call else 'terminal-identity-rows')
     _, setup_error = call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n",30,receipt)

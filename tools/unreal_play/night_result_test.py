@@ -40,7 +40,8 @@ class OutcomeTest(unittest.TestCase):
 
     def test_import_folders_do_not_consume_following_option_values(self):
         with tempfile.TemporaryDirectory() as folder:
-            options=parse_options(['--import',folder,'--realms','PARCELS','--no-build'])
+            with patch('import_cast.preflight',return_value={}),patch('import_cast.IC.plan',return_value=[]):
+                options=parse_options(['--import',folder,'--realms','PARCELS','--no-build'])
             self.assertEqual(options.imports,[folder])
             self.assertEqual(options.realms,['PARCELS'])
             self.assertTrue(options.no_build)
