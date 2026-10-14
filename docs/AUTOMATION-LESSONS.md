@@ -859,3 +859,25 @@ How to build the whole metaverse at that speed:
   the 6.5 s/district number was visible after 20 s; the 60 s/district one after a minute. Stop then, not later.
 - Polish (signs, sublevels, streaming, per-plot actors for the registry) is a second pass over data that exists.
 - Keep the host script the driver and the editor dumb: a generator per realm, one bridge call, numbers posted.
+
+## Story first, then common sense, then the tool (2026-10-14, 00:17)
+Richey: "the island realm is floating... each island has no gaps, it has ground... the planet got hit with an
+asteroid and broke into 10k islands we sell as NFTs." I read "add ground" as a floor under the whole realm and
+laid 2.56 km slabs under districts. Wrong on two counts: the sky-islands realm is broken ground by design (the
+gaps are the story), and the four 3D realms already stand on Poot's terrain. What "ground" meant: every plot is
+a solid island you can stand on (now a 12 m slab, not a 2 m sheet). Rules: (1) check the request against the
+realm's story (ADR-065 "why", REALM-CASTS) before choosing the geometry; (2) when a realm already has a terrain
+host, no second floor; (3) a change that touches every realm gets one sentence back to Richey before the tool
+runs, not after. Removed the 20 slabs; plots thickened.
+
+## The harness should have discovered the new connector itself (2026-10-14, 00:18)
+Richey: "our harness should have found that connector in Unreal because the whole function of the connector is
+exploring an app's every function." A new connector appeared in the tool list tonight and nobody noticed: the
+turn began with an inbox read, not an inventory of capabilities. Rules: (1) `teamlink doctor` grows a
+"capabilities" section: the MCP servers and tool names present this session, diffed against the last turn's,
+so a new connector is the first line of the next turn; (2) every connector we own ships a `list_commands`
+(the Unreal bridge has one) and the doctor calls it, so a new command in an existing connector is also a diff;
+(3) a connector's job is to enumerate the app's functions: Unreal's bridge should expose the editor's own
+command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
+harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
+register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
