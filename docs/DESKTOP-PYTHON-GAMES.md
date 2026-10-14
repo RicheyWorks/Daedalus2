@@ -1,5 +1,15 @@
 # Desktop Python games into Daedalus
 
+Recovery update (2026-10-14): PR53 merged, then deleting its base branch
+automatically closed PR51 without merging it. The same PR51 is recovered against
+`main`, preserving delivered `9fbd450d895bab288401445d7c488a33bb59196c` and normally
+merging main snapshot `1ee121e0fd41302889f54bed0c3caaefacd92214` without conflicts.
+All eleven runtime files, 21 test/oracle files and original source/compile/repair
+evidence remain identical; see [stack recovery proof](desktop-games-stack-recovery.json).
+Fresh CI results belong to the final recovery head in the PR body. Earlier runs
+and composite DLL evidence retain their historical source pins; this recovery
+does not claim another Unreal build, editor load or in-world acceptance.
+
 The user-confirmed collection is on the assessed Windows redirected Desktop:
 `C:\Users\730ri\OneDrive\Desktop`. `PythonGames/main.py` is the Dungeon Prototype;
 21 loose scripts are beside the folder. **22 scripts represent 11 game families.**
