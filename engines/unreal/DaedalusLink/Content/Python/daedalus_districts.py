@@ -78,7 +78,7 @@ def _sublevel(world, pkg, create=True):
         return sl
     if not create:
         return None
-    sl = unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, pkg, False, False)
+    sl = unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, pkg, False)
     if sl is None:
         raise RuntimeError("could not create streaming level %s" % pkg)
     return sl
