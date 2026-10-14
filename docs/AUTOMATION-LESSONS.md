@@ -783,3 +783,25 @@ samples the player controller's keys/mouse every 5 frames during a scenario and 
 `interrupted` with the frame count; run_scenarios reruns an interrupted scenario once after 5 s and otherwise
 counts it as not run, never as failed. Rule: a Play result is only a result when `human_input_frames` is 0;
 if you want to watch, watch — the run will say it was watched and rerun itself.
+
+## Harness enhancements to code next (2026-10-13, 23:42, Richey: "add to lessons learned and ask codex team to code")
+Each is a finding from tonight with the code change that closes it and a proposed owner.
+A. (Sol) `pc-job.ps1`: the DONE code must be the script's real exit code. The materials job raised BridgeError
+   and still printed DONE 0, so night_run started a build over a running editor job. Also `-Wait` returns on the
+   DONE/FAIL marker, not after N seconds. (Sol's Wait fix in flight; add the exit-code assertion test.)
+B. (Poot) bridge lifecycle: when a client's bridge_timeout expires, close the generator or park its final result
+   under `job_result` for the request id; a job running headless after its caller left is how the editor got
+   closed mid-reparent.
+C. (Sol) `teamlink`: one reply per request id; a status/broadcast never earns `request.accepted`. Dedupe in the
+   client by (reply_to) so five identical replies cannot go out.
+D. (Sol) `unreal-job.ps1 -Rollback`: keep the previous green plugin DLL beside the new one and restore it with
+   one flag; a bad C++ change should cost 60 s, not a rebuild.
+E. (Fable, done) scenarios detect a person at the Play window and report `interrupted`; the runner reruns once.
+F. (Sol) `play` through the bridge should start PIE in a way that never captures the mouse (Simulate, or a
+   new-window PIE with `-game` and no focus), so a person looking on cannot steer the hero.
+G. (Fable, done) `wire.call` sends `bridge_timeout = timeout`.
+H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bindings.py` that lists every Talker
+   role with no art id under /Game/Daedalus/Art/Cast, from the asset-registry dump the night run writes.
+I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
+J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
+   beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
