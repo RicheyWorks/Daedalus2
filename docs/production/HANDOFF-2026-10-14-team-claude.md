@@ -76,3 +76,5 @@
   generic `export_catalog.py {eggs|props|sims} OUT [family…] [--force] [--no-sheet]`. Exports land in
   `engines/unreal/art/claude-eggs|claude-props|claude-sims` with `sheet-<family>.png`. Architecture §14.8–14.10,
   tracker rows WZ24–WZ26.
+- 16:45: `voxel_dragons.py` + `export_dragons.py` → `engines/unreal/art/claude-dragons/` (504 GLB/FBX/json,
+  `dragons.manifest.json`, `sheet-<element>.png`, `views/` for two quality-bar samples). Row WZ27, §14.11.

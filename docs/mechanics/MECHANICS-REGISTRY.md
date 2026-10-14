@@ -86,3 +86,8 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
 - `voxel_sims.py`: Sims/practical realm — 26-piece build kit, 18 practical machines mapped to PRACTICAL-APPS.md
   tools, 21 appliances (needs loop), `House_Sims_Starter` furnished house in six part meshes. Row WZ26. §14.10.
 - Rule kept: nobody else owns eggs/hatching, house props, or the Sims kit — extend these files, don't fork them.
+
+## Dragons — 16:45
+- `voxel_dragons.py`: 504 flying dragons (12 elements × 6 forms × 7 variants), rigged, hover/cruise/dive/breath
+  clips. Element ↔ realm chemistry; dragons are raid sources, mounts when tamed, and the fairy form hatches from
+  dragon eggs. Row WZ27. Architecture §14.11. Owner: Team Claude; extend the element/form tables, don't fork.

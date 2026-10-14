@@ -702,3 +702,19 @@ more house types (`_place(dst, voxels, dx, dy, dz, rot)` stamps any catalogue it
 A Sims-realm lot = one `Build_Sims_Floor_*` footprint on a PARCELS-realm plot; the machines are the practical
 layer (use the scanner → run the real app), the appliances are the needs loop (hunger/hygiene/energy/fun) that
 feeds the ledger's FOOD/ENERGY goods. Export: `export_catalog.py sims OUT [kit|machine|appliance|house]`.
+
+### 14.11 Flying dragons (`tools/blender/voxel_dragons.py`, 504 rigged)
+Species name `dragon_<element>_<form>_<nn>` → `Creature_Dragon<Element><Form><nn>.glb/.fbx/.json`. 12 elements
+(fire ice storm earth forest shadow light crystal ocean lava poison gold → scale/belly/breath/membrane/horn colours)
+× 6 forms (wyvern 2-leg big wings, classic 4-leg, serpent long body ribbon wings, drake stocky short wings, fairy
+small butterfly wings with eye-spots, elder huge double horns) × 7 variants. The variant seeds horns (straight/ram/
+crown/antler), tail tip (spade/fin/club/tuft), pattern (plain/stripes/spots/plates/gradient), size ±15 %, spines,
+beard, frill — `spec(name)` is deterministic, `dragons.manifest.json` lists every dragon's spec. Wings are built
+SPREAD (arm bar + finger bones + trailing membrane) because these fly; the shared 8-bone rig drives them via
+`wing.L/R`. Clips (voxel_creatures, family "dragon"): Idle = hover (body lifted 0.25 h, slow beats), Walk = cruise,
+Run = dive-speed (smooth keys, not stepped), Jump = launch, Attack = lunge, Action = breath (rear back, pour
+forward, wings flare). `voxel_creatures.EXTRA` is the registry other catalogues use to ride the same rig/export;
+`export_dragons.py OUT [element…]` writes everything plus `sheet-<element>.png` (42 per sheet).
+Chemistry hook: an element's dragons roost on matching realms/kinds (fire~volcano, ice~frost, crystal~crystal,
+ocean~mire, earth/forest~meadow/mesa, gold only on LEGENDARY-grade islands); in the ledger a dragon is a `raid`
+event source and a mount once tamed (egg type `Prop_Egg_Dragon_*` hatches the fairy form).
