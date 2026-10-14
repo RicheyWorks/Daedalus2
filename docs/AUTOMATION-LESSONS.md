@@ -529,3 +529,10 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+## Editor text-file loading does not prove cooked data is staged (2026-10-13)
+Hero/Talker loaded DIC, DCS and DRR from the plugin Content tree, but Build.cs declared none of those custom
+files as runtime dependencies. Add explicit UFS families and include optional existing DSP sprite packs.
+Evaluate the actual Shipping target rules in an isolated exact-head host with UBT JsonExport; compare every
+expected source hash to covered runtime declarations. Keep that evidence separate from an actual cook,
+staged archive and launch. Do not ship editor Python or developer saves to make a missing-data error disappear.
