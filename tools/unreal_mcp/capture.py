@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: MIT
-"""Capture the editor viewport through the Epic MCP server to a PNG on disk (the stdio proxy cannot carry the
-base64 reply; a file can).
+"""Capture the editor viewport through the Epic MCP server to a PNG on disk.
+
+Both this client and the stdio proxy require a complete native HTTP reply. Saving
+to disk does not bypass a native response-transfer reset. Failed calls are not replayed.
 
     python tools/unreal_mcp/capture.py out.png [x y z pitch yaw]
 """
@@ -9,8 +11,12 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from client import Mcp  # noqa: E402
+if __package__:
+    from .client import Mcp
+    from .transport import TransportFailure
+else:
+    from client import Mcp
+    from transport import TransportFailure
 
 
 def main(argv):
@@ -19,8 +25,12 @@ def main(argv):
     if len(argv) >= 6:
         x, y, z, pitch, yaw = (float(v) for v in argv[1:6])
         args["captureTransform"] = {"location": {"x": x, "y": y, "z": z}, "rotation": {"pitch": pitch, "yaw": yaw, "roll": 0}}
-    m = Mcp(timeout=120)
-    r = m.call("EditorToolset.EditorAppToolset", "CaptureViewport", **args)
+    try:
+        m = Mcp(timeout=120)
+        r = m.call("EditorToolset.EditorAppToolset", "CaptureViewport", **args)
+    except TransportFailure as error:
+        sys.stderr.write(json.dumps({"error": str(error), "data": error.data}) + "\n")
+        return 1
     img = r.get("image", {}) if isinstance(r, dict) else {}
     data = img.get("data", "")
     if not data:

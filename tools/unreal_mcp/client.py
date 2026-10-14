@@ -11,7 +11,10 @@ describe_toolset(toolset_name) / call_tool(toolset_name, tool_name=<short name>,
 """
 import json
 import sys
-import urllib.request
+if __package__:
+    from .transport import post_json
+else:
+    from transport import post_json
 
 URL = "http://127.0.0.1:8000/mcp"
 
@@ -29,14 +32,11 @@ class Mcp:
         return self._id
 
     def _post(self, body):
-        hdr = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
-        if self.sid:
-            hdr["Mcp-Session-Id"] = self.sid
-        req = urllib.request.Request(self.url, data=json.dumps(body).encode(), headers=hdr, method="POST")
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            self.sid = resp.headers.get("Mcp-Session-Id") or self.sid
-            raw = resp.read().decode()
-        return json.loads(raw) if raw.strip() else {}
+        session = {"id": self.sid}
+        try:
+            return post_json(self.url, body, session, timeout=self.timeout) or {}
+        finally:
+            self.sid = session["id"]
 
     def tools(self):
         return self._post({"jsonrpc": "2.0", "id": self._next(), "method": "tools/list", "params": {}})["result"]["tools"]
