@@ -825,3 +825,7 @@ A captured PowerShell error string is not a successful command result. Enable te
 ### Atomic night-run receipt publication (2026-10-14)
 Reuse the pipeline's fsync-and-replace report writer for night receipts. Archive under a unique run ID before updating latest, so runs finishing within one second cannot overwrite each other. Each file is atomically published; the archive/latest pair is not a transaction. Publication failure makes evidence incomplete and returns nonzero instead of a successful receipt claim.
 
+
+### Partial night-run handoffs (2026-10-14)
+Checkpoint the current orchestration stage before each major operation. Early exits and exceptions must retain completed layout notes and publish a partial failed/unverified receipt, rather than leaving the previous successful latest report in place. A stopped orchestration receipt is not native quiescence or cancellation evidence. Process death can leave a running checkpoint; do not replay solely because it is old.
+

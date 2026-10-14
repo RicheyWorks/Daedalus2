@@ -10,6 +10,16 @@ from night_run import assess_run, require_stage, parse_options
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_checkpoint_preserves_phase_and_excludes_internal_fields(self):
+        with tempfile.TemporaryDirectory() as folder:
+            target=Path(folder)/'checkpoint.json'
+            progress={'run_id':'fixture','laid':['cast complete'],'_checkpoint_path':str(target)}
+            night_run.checkpoint_run(progress,'districts',district_realm='PARCELS')
+            receipt=json.loads(target.read_text())
+            self.assertEqual(receipt['phase'],'districts')
+            self.assertEqual(receipt['laid'],['cast complete'])
+            self.assertNotIn('_checkpoint_path',receipt)
+
     def test_receipt_archives_do_not_collide_and_latest_matches(self):
         with tempfile.TemporaryDirectory() as folder:
             latest=Path(folder)/'latest.json'

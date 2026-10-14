@@ -149,6 +149,11 @@ def publish_receipt(receipt,out_dir,latest_path):
     return path
 
 
+def checkpoint_run(progress,phase,**values):
+    progress.update(values,phase=phase,updated=time.strftime('%Y-%m-%dT%H:%M:%S'))
+    write_report(progress['_checkpoint_path'],{key:value for key,value in progress.items() if not key.startswith('_')})
+
+
 def parse_options(argv):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--after-job',default='')
@@ -170,15 +175,16 @@ def parse_options(argv):
     return args
 
 
-def main(argv):
-    options=parse_options(argv)
+def run_options(options,progress):
     after=options.after_job
     build=not options.no_build
     realms=options.realms
     sha = ps("git rev-parse --short HEAD", 30).strip()
+    checkpoint_run(progress,'preflight',sha=sha)
     hub("status", "NIGHT RUN start on %s: after=%s build=%s realms=%s" % (sha, after or "-", build, ",".join(realms)))
 
     if after:
+        checkpoint_run(progress,'dependency',dependency_job=after)
         say("waiting for job %s" % after)
         out = wait_job(after)
         say("job %s: %s" % (after, out.splitlines()[0] if out else out))
@@ -187,6 +193,7 @@ def main(argv):
             return 1
 
     if build:
+        checkpoint_run(progress,'build')
         say("building")
         out = ps(r".\engines\unreal\unreal-job.ps1 -Start -Fast", 120)
         job = out.strip().splitlines()[-1] if out.strip() else "?"
@@ -205,11 +212,13 @@ def main(argv):
     sha = ps("git rev-parse --short HEAD", 30).strip()
 
     say("waiting for the bridge")
+    checkpoint_run(progress,'bridge-observation')
     st = bridge_up()
     if not st:
         hub("status", "NIGHT RUN stopped: bridge not up after the build")
         return 1
     try:
+        checkpoint_run(progress,'content-sync')
         say("bridge up: " + hot_copy())
     except Exception as error:
         hub('status','NIGHT RUN stopped during content copy/reload: %s; no layout or Play' % error)
@@ -217,8 +226,10 @@ def main(argv):
 
     # lay what is new: first any cast folders waiting for import (one GLB per tick), then the cast, portals, districts
     lay = []
+    progress['laid']=lay
     folders = options.imports
     for folder in folders:
+        checkpoint_run(progress,'import',import_folder=folder)
         out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
         lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
@@ -227,6 +238,7 @@ def main(argv):
             hub('status','NIGHT RUN stopped at import %s: code=%s; %s; no retry' % (folder,out.returncode,lay[-1]))
             return 1
     try:
+        checkpoint_run(progress,'cast')
         r = steps("__import__('daedalus_realm_ground').lay_cast_steps(['WORLD-ZERO'] + %r)" % realms, "lay_cast")
         result = require_stage(r,'cast')
         lay.append('cast: '+str(result))
@@ -236,9 +248,11 @@ def main(argv):
                type(row.get('roles')) is not int or row['roles'] <= 0 or
                type(row.get('bound')) is not int or row['bound'] != row['roles'] for row in result.values()):
             raise RuntimeError('cast contains unbound or unavailable script roles')
+        checkpoint_run(progress,'portals')
         r = steps("__import__('daedalus_realm_ground').lay_portals_steps(['WORLD-ZERO'] + %r)" % realms, "lay_portals")
         lay.append('portals: '+str(require_stage(r,'portals')))
         for realm in realms:
+            checkpoint_run(progress,'districts',district_realm=realm)
             r = steps("__import__('daedalus_districts').steps(%r)" % realm, "districts " + realm)
             lay.append('districts %s: %s' % (realm,require_stage(r,'districts '+realm)))
     except Exception as error:
@@ -249,6 +263,7 @@ def main(argv):
     hub("status", "NIGHT RUN laid on %s: %s" % (sha, " | ".join(lay)))
 
     say("play suite")
+    checkpoint_run(progress,'play-scenarios')
     out = subprocess.run([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "bestiary", "cast", "control"],
                          capture_output=True, text=True, timeout=1800, cwd=REPO)
     text = (out.stdout or "") + (out.stderr or "")
@@ -256,6 +271,7 @@ def main(argv):
     total = next((l for l in reversed(text.splitlines()) if l.startswith("TOTAL")), "TOTAL ?")
     fails = [l.strip() for l in text.splitlines() if l.strip().startswith("FAIL")]
     rep = None
+    checkpoint_run(progress,'log-report')
     try:
         rep = wire.call(wire.UNREAL, "daedalus.log_report", all=False, timeout=60)
         ew = "errors=%s warnings=%s" % (rep.get("errors"), rep.get("warnings"))
@@ -274,15 +290,47 @@ def main(argv):
     receipt = {"when": time.strftime("%Y-%m-%dT%H:%M:%S"), "sha": sha, "build": build, "laid": lay, "scenarios": per,
                "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
     receipt['outcome'] = outcome
+    receipt['checkpoint_run_id']=progress['run_id']
     out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
     try:
         path=publish_receipt(receipt,out_dir,os.path.join(REPO,'docs','production','night-run-latest.json'))
         say("receipt " + path)
+        checkpoint_run(progress,'completed',outcome=outcome,terminal_receipt=path,total=total)
+        progress['_terminal_published']=True
     except OSError as e:
         say("receipt not written: %s" % e)
         hub('status','NIGHT RUN receipt publication failed on %s: %s; result evidence incomplete' % (sha,e))
         return outcome['exit_code'] or 2
     return outcome['exit_code']
+
+
+def main(argv):
+    options=parse_options(argv)
+    run_id=uuid.uuid4().hex
+    out_dir=os.path.join(os.environ.get('LOCALAPPDATA',REPO),'Daedalus','jobs')
+    progress={'run_id':run_id,'when':time.strftime('%Y-%m-%dT%H:%M:%S'),'sha':None,
+              'build':not options.no_build,'realms':options.realms,'laid':[],'scenarios':{},
+              'total':'TOTAL ?','log_report':'unavailable','fails':[],'interrupted':[],
+              'outcome':{'status':'running','passed':False},
+              '_checkpoint_path':os.path.join(out_dir,'night-progress-'+run_id+'.json')}
+    try:
+        checkpoint_run(progress,'starting')
+        code=run_options(options,progress)
+    except Exception as error:
+        code=2
+        progress['stopped_error']={'type':type(error).__name__,'message':str(error)[-2000:]}
+        hub('status','NIGHT RUN stopped during %s: %s; no automatic restart' % (progress.get('phase'),error))
+    if not progress.get('_terminal_published'):
+        progress['stopped_phase']=progress.get('phase')
+        outcome={'status':'failed' if code==1 else 'unverified','passed':False,'exit_code':code or 2}
+        try:
+            checkpoint_run(progress,'stopped',outcome=outcome)
+            receipt={key:value for key,value in progress.items() if not key.startswith('_')}
+            publish_receipt(receipt,out_dir,os.path.join(REPO,'docs','production','night-run-latest.json'))
+        except OSError as error:
+            say('partial receipt unavailable: '+str(error))
+        return code or 2
+    return code
 
 
 if __name__ == "__main__":
