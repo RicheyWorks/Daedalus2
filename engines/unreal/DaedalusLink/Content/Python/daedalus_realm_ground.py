@@ -241,6 +241,59 @@ def lay(realm, rings=6):
     return {"realm": realm, "origin": origin, "made": made, "lands": {k: lands[k] for k in ("free_cells", "made", "skipped")}}
 
 
+CASTS = {"GALLERY-CITY": "gallery-city", "PARCELS": "parcels", "BRICKS": "bricks", "LABYRINTH": "labyrinth"}
+CAST_RADIUS_CM = 6000.0
+
+
+def cast_roles(dcs_text):
+    """The 'who' names of a .dcs, in script order."""
+    return [l[4:].strip() for l in dcs_text.splitlines() if l.startswith("who ")]
+
+
+def cast_ring(n, centre, ground=GROUND_Z, radius=CAST_RADIUS_CM):
+    """n points on a circle round the spawn, each facing the centre: (x, y, z, yaw)."""
+    import math
+    out = []
+    for i in range(n):
+        a = 2 * math.pi * i / max(n, 1)
+        x, y = centre[0] + radius * math.cos(a), centre[1] + radius * math.sin(a)
+        yaw = math.degrees(math.atan2(centre[1] - y, centre[0] - x))
+        out.append((x, y, ground, yaw))
+    return out
+
+
+def _dcs_path(catalog):
+    return os.path.join(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_plugins_dir()), "DaedalusLink", "Content", "Casts", catalog + ".dcs")
+
+
+def lay_cast(realm):
+    """One ADaedalusTalker per 'who' of the realm's .dcs, in a ring round the spawn marker, bound to its imported
+    art when the art is there (Rebind). Idempotent by label."""
+    catalog = CASTS[realm]
+    with open(_dcs_path(catalog), encoding="utf-8") as f:
+        roles = cast_roles(f.read())
+    origin = ORIGINS[realm]
+    centre = markers(origin)["Spawn"]
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    have = _labels()
+    made, bound, unbound = 0, [], []
+    for who, (x, y, z, yaw) in zip(roles, cast_ring(len(roles), centre)):
+        label = "Talker_%s_%s" % (realm, "".join(w[:1].upper() + w[1:] for w in "".join(c if c.isalnum() else " " for c in who).split()))
+        if label in have:
+            t = have[label]
+        else:
+            t = sub.spawn_actor_from_class(unreal.DaedalusTalker, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+            t.set_editor_property("cast", catalog)
+            t.set_editor_property("who", who)
+            t.set_actor_label(label)
+            t.set_folder_path("Realms/%s/Cast" % realm)
+            t.tags = [unreal.Name("Talker"), unreal.Name("Realm:%s" % realm)]
+            made += 1
+        (bound if t.rebind() else unbound).append(t.art_id())
+    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    return {"realm": realm, "roles": len(roles), "made": made, "bound": len(bound), "unbound": unbound}
+
+
 def report(realm):
     import daedalus_plots as P
     have = _labels()
@@ -248,4 +301,5 @@ def report(realm):
     mine = [l for l, a in have.items() if any(str(t) == tag for t in a.tags)]
     return {"realm": realm, "actors": len(mine), "hub": "Hub_%s" % realm in have,
             "markers": sorted(l for l in mine if l.endswith("_" + realm) and not l.startswith("Hub_")),
-            "kit": sum(1 for l in mine if l.startswith("Kit_")), "lands": P.report(realm)}
+            "kit": sum(1 for l in mine if l.startswith("Kit_")), "cast": sum(1 for l in mine if l.startswith("Talker_")),
+            "lands": P.report(realm)}
