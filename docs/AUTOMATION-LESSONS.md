@@ -477,6 +477,17 @@ Richey (19:20): "must improve communication". The failures, each with its fix:
    calling it closed.
 The protocol lives in docs/TEAMLINK.md rules 6-8; this entry is why each rule exists.
 
+## Agent-side broadcast filtering hid work updates (2026-10-13)
+The durable `live_handoff` client retained only broadcasts with topic `plan`, while advancing its
+cursor over other topics. Long polls used the same filter. A land-push or integration broadcast
+could exist in the broker log and never reach the agent decision inbox. Retain all work broadcasts,
+excluding broker lock/unlock/registration housekeeping, and wait without a topic restriction.
+The regression suite exercises real HTTP delivery, restart retention, and a non-plan broadcast
+waking a waiting client. Use `read --id <id>` for the full retained message; summary text is abbreviated.
+Reading never acknowledges or accepts work. Existing cursors need an explicit bounded replay to
+recover previously skipped broadcasts; upgrading the client does not recover them automatically.
+This fixes delivery, not model scheduling: an idle assistant still requires a host wake mechanism.
+
 ## UE Python has no World.is_game_world; "playing" is LevelEditorSubsystem.is_in_play_in_editor (2026-10-13)
 A scenario died on `AttributeError: 'World' object has no attribute 'is_game_world'`. The one reliable test is
 `unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()`; `UnrealEditorSubsystem.get_game_world()`
