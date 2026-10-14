@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-14T13:17:42.632409+00:00",
+  "sourceHead": "feb33ebcd51370eaf7b540f825ccdc02490df62a",
+  "sourceFiles": {
+    "Public/DaedalusShardsteadCore.h": "88ce40eeceab7ce112f2f871acdfc2b61541bb1d6b35f23f2a1b391eae324f8f",
+    "Public/DaedalusShardsteadLedger.h": "a9672878a50409a41f9f74ad9146eed14c8a2d4acf75a0132618726a43c602c8",
+    "Public/DaedalusShardsteadComponent.h": "ae7ae2197d6e17cc4b1fb4c4915cbf95e8f7e0cbfb17d690c577dfbc78fd4052",
+    "Public/DaedalusInventoryCore.h": "b0ff4bf115b3e9a43453451dfe765f0062f527a3e3a1f51a82619cfe8dc989ae",
+    "Private/DaedalusShardsteadComponent.cpp": "4d33e35422a8a96a6e9bbb10b69e1c7dfd65c7a6361d89012ab4483298e9ac3f",
+    "Private/SDaedalusShardstead.h": "8caba5dca3a0187c338213d46a587103cfcfd05605522546a5b701b1a72b8772",
+    "Private/SDaedalusShardstead.cpp": "6b53179814391f27c938a7a84dd16fedeb0d33b370faf2189fe627baa399f681"
+  },
+  "target": "UnrealEditor Win64 Development",
+  "engine": "UE5.8",
+  "exitCode": 0,
+  "actions": 9,
+  "seconds": 65.92,
+  "dllBytes": 279552,
+  "dllSHA256": "f3fa28cb095df58877e5e59bb4336713c536b3f2a04813508aeec95c05f0f2e2",
+  "generatedReflection": true,
+  "scope": "Isolated seven-file component/Slate/ledger module compile and link, not full plugin integration or gameplay",
+  "sharedInstallationChanged": false,
+  "runtimeProof": false
+}

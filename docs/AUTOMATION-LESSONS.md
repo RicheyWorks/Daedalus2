@@ -1146,3 +1146,6 @@ PR139 GCC CI rejected Minesweeper Step for misleading indentation: Repeat reset 
 
 ## Attach the existing ledger without exposing prepared balances (2026-10-14)
 The Unreal host component now supports the existing prepare/persist/confirm ledger as an explicit fresh-instance mode. Legacy prototype writes reject in that mode, and Production stats/claims use committed ledger state. Keep storage callbacks on the game thread; copy component-owned pending snapshots before async work. An unknown write outcome remains pending until storage reconciliation. Calling Confirm is trusted adapter input, not evidence of persistence; canonical inventory and native compile remain separate work.
+
+## Compile the actual component and Slate seam in isolation (2026-10-14)
+Exact feb33ebc seven-file production snapshot compiled and linked with UE5.8 UnrealEditor Win64 Development: nine actions, exit0,65.92seconds, generated component reflection,279552byte DLL. Source hashes rechecked against the snapshot. This caught the scope that portable C++ tests/preflight cannot prove without altering the live editor. Keep isolated-module proof separate from full-plugin integration, installed DLL and gameplay acceptance. Pending storage and inventory adapters still require implementation.
