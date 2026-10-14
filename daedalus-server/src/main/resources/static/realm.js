@@ -80,6 +80,7 @@ const state = {
   richness: new Map(),       // island slot → kinds living there (ADR-024)
   day: 0,                    // the ecology's latest day
   lifeSlot: null,            // the island whose Life panel is open
+  lifeCompareSlot: null,     // remembered comparison choice; fetched only on a click
   creatures: new Map(),      // island slot → { sig, group, list } of creature models (ADR-025)
   loading: 0,                // world loads in flight; creatures are not placed during one
   mode: "look",
@@ -1022,6 +1023,7 @@ async function loadLife() {
     `<span>${res.richness} kinds · ${Math.round(res.total)} individuals · H′ ${res.shannon.toFixed(2)} · ` +
     `evenness ${res.evenness.toFixed(2)}</span>`;
   host.appendChild(head);
+  appendLifeComparison(host, slot, seq);
   if (!res.species.length) {
     const p = document.createElement("div");
     p.className = "note";
@@ -1039,6 +1041,78 @@ async function loadLife() {
       `<i style="width:${pct}%;background:${GUILD_COLORS[sp.guild] || GUILD_COLORS.UNKNOWN}"></i>`;
     host.appendChild(row);
   }
+}
+function appendLifeComparison(host, slot, lifeRequest) {
+  const section = document.createElement("div");
+  section.className = "note";
+  const label = document.createElement("label");
+  label.textContent = "Compare life with ";
+  const target = document.createElement("select");
+  target.setAttribute("aria-label", "Island to compare life with");
+  const islands = state.islands.slice().sort((a, b) => a.slot - b.slot);
+  for (const isle of islands) {
+    const option = document.createElement("option");
+    option.value = isle.slot;
+    option.textContent = `Isle ${isle.slot}${isle.slot === slot ? " (this island)" : ""}`;
+    target.appendChild(option);
+  }
+  if (!islands.length) return;
+  const remembered = islands.find(i => i.slot === state.lifeCompareSlot);
+  const chosen = remembered || islands.find(i => i.slot !== slot) || islands[0];
+  target.value = chosen.slot;
+  state.lifeCompareSlot = chosen.slot;
+  label.appendChild(target);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "Compare";
+  const result = document.createElement("div");
+  result.setAttribute("aria-live", "polite");
+  let request = 0;
+  target.onchange = () => {
+    state.lifeCompareSlot = Number(target.value);
+    request++;
+    button.disabled = false;
+    result.textContent = "";
+  };
+  button.onclick = async () => {
+    const otherSlot = Number(target.value);
+    const comparisonRequest = ++request;
+    const current = () => comparisonRequest === request && lifeRequest === lifeSeq &&
+      state.lifeSlot === slot && Number(target.value) === otherSlot;
+    button.disabled = true;
+    result.textContent = "Comparing communities…";
+    try {
+      const res = await api(`${API}/islands/${slot}/ecology/compare?otherWorldId=${encodeURIComponent(WORLD)}&otherSlot=${otherSlot}`);
+      if (!current()) return;
+      const c = res.comparison;
+      result.textContent = "";
+      const days = document.createElement("div");
+      days.textContent = `Isle ${res.slot}: day ${res.day} · Isle ${res.otherSlot}: day ${res.otherDay}`;
+      const meaning = document.createElement("div");
+      meaning.textContent = "Jaccard and Sørensen compare kinds; Renkonen and Pianka compare abundance proportions. Bray–Curtis measures difference; Whittaker measures turnover.";
+      const measures = document.createElement("dl");
+      for (const [name, value] of [["Jaccard similarity", c.jaccard], ["Sørensen similarity", c.sorensen],
+        ["Bray–Curtis dissimilarity", c.brayCurtis], ["Renkonen overlap", c.renkonen],
+        ["Pianka overlap", c.pianka], ["Whittaker turnover", c.whittakerTurnover]]) {
+        const term = document.createElement("dt");
+        term.textContent = name;
+        const detail = document.createElement("dd");
+        detail.textContent = value.toFixed(4);
+        measures.append(term, detail);
+      }
+      const shared = document.createElement("div");
+      shared.textContent = `${c.sharedRichness} shared kinds · ${c.onlyFirst.length} only on Isle ${res.slot} · ${c.onlySecond.length} only on Isle ${res.otherSlot}`;
+      const empty = document.createElement("div");
+      empty.textContent = "Empty-community conventions: two empty islands have Jaccard, Sørensen and Renkonen 1, Bray–Curtis and turnover 0; Pianka is 0 if either island is empty.";
+      result.append(days, meaning, measures, shared, empty);
+    } catch (e) {
+      if (current()) result.textContent = `Could not compare life: ${e.message || String(e)}`;
+    } finally {
+      if (current()) button.disabled = false;
+    }
+  };
+  section.append(label, button, result);
+  host.appendChild(section);
 }
 function speciesName(key) {
   const sp = state.species.find(s => s.key === key);
