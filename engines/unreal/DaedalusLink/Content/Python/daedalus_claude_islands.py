@@ -37,7 +37,7 @@ def material():
     return unreal.EditorAssetLibrary.load_asset(MAT)
 
 
-def import_island(seed, force=False):
+def import_island(seed, force=False, save=False):
     """Import Island_C<seed>.glb under ROOT/Island_C<seed>; returns {layer: mesh path}."""
     name = "Island_C%d" % seed
     dest = "%s/%s" % (ROOT, name)
@@ -67,7 +67,8 @@ def import_island(seed, force=False):
             bs = sm.get_editor_property("body_setup")
             if bs is not None:
                 bs.set_editor_property("collision_trace_flag", unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)
-        unreal.EditorAssetLibrary.save_loaded_asset(sm)
+        if save:
+            unreal.EditorAssetLibrary.save_loaded_asset(sm)
         out[l] = p
     return out
 
@@ -123,7 +124,12 @@ def deeds(realm="WORLD-ZERO"):
         return {row["deed"]: row for row in json.load(f)["lands"]}
 
 
-def place_batch(seeds, realm="WORLD-ZERO"):
+def save_assets():
+    """One save of every dirty island asset (per-mesh saves made an import cost 18 s)."""
+    return unreal.EditorAssetLibrary.save_directory(ROOT, only_if_is_dirty=True, recursive=True)
+
+
+def place_batch(seeds, realm="WORLD-ZERO", save=True):
     """Seed n goes on deed n of the realm (one island per deed; the seed is the deed so re-runs are idempotent)."""
     rows = deeds(realm)
     out = []
@@ -138,6 +144,8 @@ def place_batch(seeds, realm="WORLD-ZERO"):
         r = place(seed, row["x_cm"], row["y_cm"], row["top_cm"], district=row.get("district"))
         r["deed"] = seed
         out.append(r)
+    if save:
+        save_assets()
     return out
 
 
