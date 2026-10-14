@@ -99,7 +99,7 @@ def plan(realm):
     rows = [(a.get_actor_label(), a.tags, str(a.get_level().get_outermost().get_name())) for a in _actors(realm)]
     moves, skipped = group(realm, rows)
     world = _world()
-    have = {str(sl.get_world_asset_package_name()) for sl in _streaming(world)}
+    have = {str(sl.get_world_asset_package_f_name()) for sl in _streaming(world)}
     return {"realm": realm, "moves": {p: len(v) for p, v in sorted(moves.items())}, "skipped": skipped,
             "exists": {p: (p in have) for p in sorted(moves)}}
 

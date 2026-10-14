@@ -60,7 +60,7 @@ def _rows(prefixes):
     world = unreal.EditorLevelLibrary.get_editor_world()
     rows, notes = [], []
     for sl in _streaming_levels(world):
-        pkg = str(sl.get_world_asset_package_name())
+        pkg = str(sl.get_world_asset_package_f_name())
         if not any(pkg.startswith(p) for p in prefixes):
             continue
         level = sl.get_loaded_level()
