@@ -103,6 +103,14 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(self.L.raid("sol", 300, 241, 1)[0], "LOOTED")
         self.assertNotIn(241, self.L.hulks)
 
+    def test_fishing_and_boats(self):
+        t = self.L.fishing(240, day=1, hour=18, season="summer")
+        self.assertEqual(set(t), set(self.L.FISHING_SPOTS))
+        self.assertIsNone(self.L.fishing(240, day=1, hour=13, season="summer")["lake"])    # nothing bites at noon
+        net = self.L.water_network()
+        self.assertIn(241, net[240])
+        self.assertNotIn(300, net[240])                        # a boat can't reach another district row; an ark can
+
     def test_score(self):
         self.L.plots[240].add("gold", 3)
         s = self.L.score()

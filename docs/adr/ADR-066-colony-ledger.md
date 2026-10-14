@@ -67,6 +67,16 @@ take the raider's cargo. Scavenged goods enter the same auction, so raiding is t
 it is per realm: the Labyrinth's raids are into the maze, Bricks' are into wreck fields, World Zero's are
 sky-hulk boardings by airship.
 
+**Fishing and sky-sea boats (Richey 14:17).** Every island fishes: the lake, the stream, the pier on the ocean
+basin and the sky river itself are fishing spots, each with its own fish list from the chemistry (`water.fish`),
+season and hour windows (day book). Rare catches go to the collection; the Fisher villager buys the rest. And the
+water that floats in the sky is **navigable**: a *sky-sea boat* floats on sky rivers, lakes and ocean basins but
+cannot fly — it must stay in the water, so the sky-river network (lake → sky river → lake → waterfall → basin) is a
+travel graph of its own, separate from arks and airships. A boat can only reach islands its water connects to,
+which is why water sockets matter in the Super Island standard, why a stream's outlet is a route and why towing
+plots together can open a new sea lane. Boat hulls come from the chemistry too (plank + iron, sails from wool);
+cargo on a boat is slower than an ark but cannot be intercepted from the air.
+
 ## Where it lives
 
 - `tools/economy/colony_ledger.py` — the pure core (production, outfitting, auction walk, events, score) with
@@ -74,7 +84,8 @@ sky-hulk boardings by airship.
 - Chemistry rows: `tools/blender/island_chemistry.py` `REALMS` + the Chemistry sheet; item catalog per realm is
   derived from them (`catalog(realm)`).
 - Mechanics sheet rows WZ10 (power unit), WZ11 (colony ledger), WZ12 (market day + ark cargo), WZ13 (events),
-  WZ14 (day book: finds, collection, villager requests, charm), WZ15 (scavenge sites, cargo interception, defence).
+  WZ14 (day book: finds, collection, villager requests, charm), WZ15 (scavenge sites, cargo interception, defence),
+  WZ16 (fishing spots per island and fish by water type/season/hour), WZ17 (sky-sea boats on the sky-river network).
 
 ## Held
 

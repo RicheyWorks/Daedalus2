@@ -321,6 +321,32 @@ class Ledger:
         p.charm += 0.1 * len(new)
         return {"finds": finds, "new_in_collection": new, "bonus": bonus, "requests": self.requests(deed, day)}
 
+    # ---- fishing spots and the sky-sea water network --------------------------------------------------------
+    FISHING_SPOTS = ("lake", "stream", "pier", "sky_river", "ocean_basin")
+
+    def fishing(self, deed, day, hour, season="summer"):
+        """What bites where: each spot has a subset of the island's fish; the sky river is where the rare one is."""
+        p = self.plots[deed]
+        fish = p.chem["water"]["fish"]
+        rng = random.Random(deed * 31 + day * 7 + hour)
+        table = {}
+        for spot in self.FISHING_SPOTS:
+            pool = [f for f in fish if season in FISH_SEASON[f]]
+            if spot == "sky_river":
+                pool = pool + ["rainbow_eel"] if 17 <= hour <= 21 else pool
+            if spot == "ocean_basin":
+                pool = pool + ["basin_ray"]
+            table[spot] = rng.choice(pool) if pool and (6 <= hour <= 10 or 17 <= hour <= 21) else None
+        return table
+
+    def water_network(self):
+        """Sky-sea boats: islands whose water connects (same district row = shared sky river / basin lane). A boat
+        can only sail between connected deeds; arks fly anywhere. Returns {deed: [reachable deeds]}."""
+        lanes = {}
+        for d in self.plots:
+            lanes[d] = sorted(e for e in self.plots if e != d and abs(e - d) < 100 and (e // 100) == (d // 100))
+        return lanes
+
     def requests(self, deed, day):
         """News-board requests from the realm's cast (population plan: kings, unicorn guides, bakers...): each asks
         for items from NPC_WANTS that this island's chemistry can grow or dig, and pays in an item the island
