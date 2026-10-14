@@ -43,7 +43,7 @@ class PcJobTest(unittest.TestCase):
         self.capture = self.root / "command.json"
         self.launch = self.root / "capture launch.ps1"
         self.launch.write_text(r'''
-param($Harness, $Capture, $LocalData, $ScriptPath, $EncodedArgs, [int]$CreateCode = 0, [uint32]$PidValue = 123, [switch]$ThrowCreate)
+param($Harness, $Capture, $LocalData, $ScriptPath, $EncodedArgs, [int]$CreateCode = 0, [uint32]$PidValue = 123, [switch]$ThrowCreate, [switch]$BlockReceipt)
 $ErrorActionPreference = "Stop"
 $env:LOCALAPPDATA = $LocalData
 function New-CimInstance {
@@ -55,6 +55,10 @@ function Invoke-CimMethod {
     [CmdletBinding()] param($ClassName, $MethodName, $Arguments)
     $Arguments | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $Capture -Encoding UTF8
     if ($ThrowCreate) { throw "synthetic CIM transport failure" }
+    if ($BlockReceipt) {
+        $receipt = [regex]::Match($Arguments.CommandLine, 'job-[0-9]{4}-[0-9]{6}-[a-f0-9]{32}').Value
+        New-Item -ItemType Directory -Path (Join-Path $LocalData "Daedalus\jobs\$receipt.started") | Out-Null
+    }
     return @{ ReturnValue = $CreateCode; ProcessId = $PidValue }
 }
 $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedArgs))
@@ -70,13 +74,15 @@ $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedA
             capture_output=True, text=True, env=env, timeout=20
         )
 
-    def start(self, raw_args='0 "argument with spaces !"', script=None, create_code=0, pid=123, throw=False):
+    def start(self, raw_args='0 "argument with spaces !"', script=None, create_code=0, pid=123, throw=False, block_receipt=False):
         args = [self.launch, "-Harness", self.harness, "-Capture", self.capture,
                 "-LocalData", self.local_data, "-ScriptPath", script or self.script.relative_to(self.repo),
                 "-EncodedArgs", base64.b64encode(raw_args.encode()).decode(),
                 "-CreateCode", create_code, "-PidValue", pid]
         if throw:
             args.append("-ThrowCreate")
+        if block_receipt:
+            args.append("-BlockReceipt")
         result = self.powershell(*args)
         command = json.loads(self.capture.read_text(encoding="utf-8-sig")) if self.capture.exists() else None
         return result, command
@@ -188,6 +194,20 @@ $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedA
                 self.assertNotEqual(result.returncode, 0)
                 self.assertNotIn("started job-", result.stdout)
                 self.assertFalse(list(self.jobs.glob("*.exit")))
+
+    def test_accepted_launch_survives_receipt_failure(self):
+        started, command = self.start('23 "accepted once"', block_receipt=True)
+        self.assertEqual(started.returncode, 0, started.stdout + started.stderr)
+        self.assertIn("Do not restart", " ".join(started.stdout.split()))
+        receipt = next(line for line in started.stdout.splitlines() if line.startswith("started job-"))
+        job_id = receipt.split()[1]
+        self.assertIn("pid=123", receipt)
+        self.assertTrue((self.jobs / (job_id + ".started")).is_dir())
+        marker = self.run_command(command)
+        self.assertEqual(marker.stem, job_id)
+        waited = self.wait(job_id)
+        self.assertEqual(waited.returncode, 23, waited.stdout + waited.stderr)
+        self.assertTrue(waited.stdout.startswith("DONE 23"))
 
     def test_unique_starts_do_not_reuse_a_marker(self):
         first, command = self.start()

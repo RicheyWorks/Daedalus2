@@ -54,9 +54,15 @@ if ($Start) {
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup } -ErrorAction Stop
     if ($r.ReturnValue -ne 0 -or -not $r.ProcessId) { throw "could not start $Id (Win32_Process.Create returned $($r.ReturnValue), pid=$($r.ProcessId))" }
     # Record the accepted launch without precreating cmd's output log.
-    Set-Content -LiteralPath (Join-Path $Jobs "$Id.started") -Value "pid=$($r.ProcessId)" -Encoding ASCII -ErrorAction Stop
+    # Create already accepted the child. A receipt failure must never invite a retry:
+    # return the accepted identity even if the optional disk receipt is unavailable.
+    try {
+        Set-Content -LiteralPath (Join-Path $Jobs "$Id.started") -Value "pid=$($r.ProcessId)" -Encoding ASCII -ErrorAction Stop
+    } catch {
+        Write-Warning "Accepted $Id pid=$($r.ProcessId), but launch receipt could not be saved. Do not restart; use -Wait -Id $Id."
+    }
     "started $Id pid=$($r.ProcessId)"
-    exit
+    exit 0
 }
 
 if (-not $Id) { $Id = Latest }
