@@ -14,6 +14,7 @@ Runs, in order, with every step's result on the hub and in the job log:
 Stops at the first failed step and preserves evidence. Reconcile unknown native outcomes before rerunning.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -32,6 +33,7 @@ from asset_pipeline.local_lock import exclusive_file,LocalOwnerBusy  # noqa: E40
 
 LIVE = r"C:\Unreal\DaedalusRealm\Plugins\DaedalusLink\Content"
 PS = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
+SCENARIOS=('realm_switch','realm_ground','realm_host','mounts','portals','bestiary','cast','control')
 
 
 def say(msg):
@@ -229,6 +231,7 @@ def parse_options(argv):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--after-job',default='')
     parser.add_argument('--no-build',action='store_true')
+    parser.add_argument('--plan',action='store_true',help='file-only validation and execution plan; no jobs, lock files or editor calls')
     parser.add_argument('--realms',default='GALLERY-CITY,PARCELS,BRICKS,LABYRINTH')
     parser.add_argument('--import',dest='imports',nargs='+',action='append',default=[])
     args=parser.parse_args(argv)
@@ -251,6 +254,23 @@ def parse_options(argv):
             except (OSError,ValueError,TypeError) as error:
                 parser.error('import preflight failed before build: '+str(error))
     return args
+
+
+def execution_plan(options):
+    stages=[]
+    if options.after_job:stages.append({'phase':'dependency','job':options.after_job})
+    if not options.no_build:stages.append({'phase':'build','fast':True})
+    stages.extend([{'phase':'bridge-observation'},{'phase':'content-sync'}])
+    for folder in options.imports:
+        stages.append({'phase':'import','folder':os.path.abspath(folder),
+                       'preflight':options.import_plans[os.path.abspath(folder)]})
+    stages.extend([{'phase':'cast','realms':['WORLD-ZERO']+options.realms},
+                   {'phase':'portals','realms':['WORLD-ZERO']+options.realms}])
+    stages.extend({'phase':'districts','realm':realm} for realm in options.realms)
+    stages.extend([{'phase':'play-scenarios','scenarios':list(SCENARIOS)},{'phase':'log-report'}])
+    return {'schema_version':1,'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            'stages':stages,'mutation':False,'editor_queried':False,'jobs_started':False,
+            'scope':'File-only proposed sequence; does not establish lease ownership or native readiness'}
 
 
 def run_options(options,progress):
@@ -366,7 +386,7 @@ def run_options(options,progress):
 
     say("play suite")
     checkpoint_run(progress,'play-scenarios')
-    out,timed_out = scenario_process([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "bestiary", "cast", "control"])
+    out,timed_out = scenario_process([sys.executable, os.path.join(HERE, "run_scenarios.py"), *SCENARIOS])
     text = (out.stdout or "") + (out.stderr or "")
     progress.update(scenario_output_tail=text[-6000:],scenario_process_timed_out=timed_out)
     print(text[-6000:])
@@ -417,9 +437,7 @@ def run_options(options,progress):
     return outcome['exit_code']
 
 
-def run_main(argv):
-    started=time.monotonic()
-    options=parse_options(argv)
+def run_main(options,started):
     run_id=uuid.uuid4().hex
     out_dir=os.path.join(os.environ.get('LOCALAPPDATA',REPO),'Daedalus','jobs')
     progress={'run_id':run_id,'when':time.strftime('%Y-%m-%dT%H:%M:%S'),'sha':None,
@@ -449,12 +467,15 @@ def run_main(argv):
 
 
 def main(argv):
-    if '--help' in argv or '-h' in argv:
-        parse_options(argv)
+    started=time.monotonic()
+    options=parse_options(argv)
+    if options.plan:
+        print(json.dumps(execution_plan(options),indent=2))
+        return 0
     lock=Path(os.environ.get('LOCALAPPDATA',REPO))/'Daedalus'/'jobs'/'night-run-owner.lock'
     try:
         with exclusive_file(lock):
-            return run_main(argv)
+            return run_main(options,started)
     except LocalOwnerBusy as error:
         say(str(error)+'; no job or editor call started')
         return 2

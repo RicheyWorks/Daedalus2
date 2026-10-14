@@ -871,3 +871,7 @@ TimeoutExpired can contain byte stdout/stderr even with text mode. Decode and re
 ### Exclude overlapping local night runners (2026-10-14)
 A process-held OS file lock covers local night-run orchestration, before commands start. A second runner refuses; a leftover file is not ownership. This prevents concurrent hosts using the shared jobs root, not other editor clients or native work continuing after timeout/death. Continue respecting the team editor lease and unresolved receipt reconciliation. Lock release is not engine quiescence.
 
+
+### Preview the full editor turn without executing (2026-10-14)
+night_run.py --plan validates CLI/import inputs and emits the proposed dependency/build/sync/import/layout/scenario/log sequence plus runner SHA256. It makes no lock file, job or editor call. The scenario list is shared with execution to avoid preview drift. This is a proposed sequence, not lease ownership, native readiness or acceptance evidence.
+
