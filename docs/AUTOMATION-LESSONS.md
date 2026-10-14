@@ -885,3 +885,7 @@ register_component, add_component_by_class, looping, is_game_world). Owner: Sol 
 ### Diagnose MCP configuration without replaying refused actions (2026-10-14)
 Use tools/unreal/mcp_preflight.py for file-only project/defaultINI/descriptor diagnosis. ToolsetRegistry can be enabled through the ModelContextProtocol descriptor dependency even without an explicit project entry. Configuration agreement is not loaded-module/server readiness: return server_ready:null and make no editor/socket/control calls. Actual project/UE5.8 configuration matched; no edits or restart/start performed.
 
+
+### Treat ambiguous MCP configuration as unverified (2026-10-14)
+Validate plugin/dependency arrays with explicit booleans and unique names. Parse listener fields uniquely; duplicate bind fields or array clear/remove edits must not yield confident loopback agreement. Bound JSON/INI reads and reject nonfinite JSON. Hash exactINI bytes. LatestPoot29673 ownerupdate supersedesolderpause; coordinate currentowner, never act from stalePID/pause snapshots. Actualconfig reread stillmatches; no serverreadyclaim orsetupaction.
+
