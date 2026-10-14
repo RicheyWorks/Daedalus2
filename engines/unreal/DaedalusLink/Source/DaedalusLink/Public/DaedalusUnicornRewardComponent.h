@@ -8,10 +8,11 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusUnicornRewardProgress, int32, BullsAtSea, bool, Eligible, bool, Claimed);
 
 USTRUCT(BlueprintType)
-struct FDaedalusUnicornRewardRecord
+struct DAEDALUSLINK_API FDaedalusUnicornRewardRecord
 {
     GENERATED_BODY()
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") int32 Version = 1;
+    UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PlayerKey;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") TArray<FString> BullIds;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") FString PackId;
     UPROPERTY(BlueprintReadWrite, Category="Daedalus|Unicorn") bool bClaimed = false;
@@ -28,6 +29,9 @@ class DAEDALUSLINK_API UDaedalusUnicornRewardComponent : public UActorComponent
 public:
     UDaedalusUnicornRewardComponent();
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    /** Bind once to the authenticated host player key before events or restore. */
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    bool BindHostPlayer(const FString& PlayerKey);
 
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RecordBullAtSea(const FString& BullId, bool WasBurning, bool SeaArrivalVerified);
@@ -35,7 +39,7 @@ public:
     bool RecordPackEncounter(const FString& PackId, int32 Members, bool EncounterVerified);
     /** Call only AFTER the host committed its idempotent durable reward transaction. */
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
-    bool ConfirmPersistedReward(const FString& GrantReceiptId);
+    bool ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId);
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record);
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
@@ -53,6 +57,7 @@ public:
     FDaedalusUnicornRewardProgress OnProgress;
 
 private:
+    bool HasGameAuthority() const;
     bool CanRecord() const;
     void Synchronize();
     UFUNCTION() void OnRep_Progress();
@@ -61,4 +66,5 @@ private:
     bool bLastBroadcastEligible = false;
     bool bLastBroadcastClaimed = false;
     bool bHostRecordRestored = false;
+    FString HostPlayerKey;
 };

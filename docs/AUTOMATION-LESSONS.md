@@ -893,3 +893,7 @@ Unicornrewardcomponent accepts onlyauthority/gameworld events, exposesowner-only
 ### Restore quest identity state before accepting fresh events (2026-10-14)
 Unicorngate exports canonicalsortedbull IDs/pack/claimed snapshot. Restore validatesversion,limits,uniqueIDs andclaimedeligibility into acandidate before replacing a pristinegate. Authoritycomponent refuses active/repeatedrestore and claimed/grantreceipt contradictions. Hostmust bind recordto authenticatedplayer andpersist it; these hooks are not a storagebackend or durable awardtransaction. Nativecompile/runtime pending.
 
+
+### Bind per-player reward records before restore or confirmation (2026-10-14)
+Unicorncomponent requires a one-time authenticatedhost PlayerKey before acceptingevents. Export includeskey; restore and persistedgrantconfirmation refuse mismatchedplayers. Same-key bind isidempotent, rebindingrefused. The adapter doesnot authenticatekeys itself: hostidentity/service mustsupply them, anddurablestorage/grant/eventbinding remainpending. Nativecompile stillpending.
+

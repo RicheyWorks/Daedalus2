@@ -10,9 +10,24 @@ UDaedalusUnicornRewardComponent::UDaedalusUnicornRewardComponent()
     SetIsReplicatedByDefault(true);
 }
 
-bool UDaedalusUnicornRewardComponent::CanRecord() const
+bool UDaedalusUnicornRewardComponent::HasGameAuthority() const
 {
     return GetOwner() && GetOwner()->HasAuthority() && GetWorld() && GetWorld()->IsGameWorld();
+}
+
+bool UDaedalusUnicornRewardComponent::CanRecord() const
+{
+    return HasGameAuthority() && !HostPlayerKey.IsEmpty();
+}
+
+bool UDaedalusUnicornRewardComponent::BindHostPlayer(const FString& PlayerKey)
+{
+    if (!HasGameAuthority() || PlayerKey.IsEmpty() || PlayerKey.Len() > 128 || PlayerKey.TrimStartAndEnd() != PlayerKey) return false;
+    for (const TCHAR Character : PlayerKey) if (FChar::IsControl(Character)) return false;
+    if (!HostPlayerKey.IsEmpty()) return HostPlayerKey == PlayerKey;
+    if (!Gate.Pristine() || bHostRecordRestored) return false;
+    HostPlayerKey = PlayerKey;
+    return true;
 }
 
 bool UDaedalusUnicornRewardComponent::RecordBullAtSea(const FString& BullId, bool WasBurning, bool SeaArrivalVerified)
@@ -31,9 +46,9 @@ bool UDaedalusUnicornRewardComponent::RecordPackEncounter(const FString& PackId,
     return Result == DaedalusUnicornReward::Outcome::Progressed || Result == DaedalusUnicornReward::Outcome::Eligible;
 }
 
-bool UDaedalusUnicornRewardComponent::ConfirmPersistedReward(const FString& GrantReceiptId)
+bool UDaedalusUnicornRewardComponent::ConfirmPersistedReward(const FString& ExpectedPlayerKey, const FString& GrantReceiptId)
 {
-    if (!CanRecord() || GrantReceiptId.IsEmpty() || GrantReceiptId.Len() > 128) return false;
+    if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || GrantReceiptId.IsEmpty() || GrantReceiptId.Len() > 128) return false;
     if (Gate.RewardClaimed()) return CommittedGrantReceiptId == GrantReceiptId;
     if (!Gate.ClaimReward()) return false;
     CommittedGrantReceiptId = GrantReceiptId;
@@ -51,7 +66,7 @@ void UDaedalusUnicornRewardComponent::Synchronize()
 
 bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
 {
-    if (!CanRecord() || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
+    if (!CanRecord() || Record.PlayerKey != HostPlayerKey || bHostRecordRestored || !Gate.Pristine() || Record.Version != 1 || Record.BullIds.Num() > 10 ||
         Record.GrantReceiptId.Len() > 128 || Record.bClaimed == Record.GrantReceiptId.IsEmpty()) return false;
     DaedalusUnicornReward::Snapshot state;
     for (const auto& Id : Record.BullIds) state.BullIds.emplace_back(TCHAR_TO_UTF8(*Id));
@@ -68,6 +83,7 @@ FDaedalusUnicornRewardRecord UDaedalusUnicornRewardComponent::ExportHostRecord()
 {
     FDaedalusUnicornRewardRecord out;
     if (!CanRecord()) return out;
+    out.PlayerKey = HostPlayerKey;
     const auto state = Gate.Export();
     for (const auto& Id : state.BullIds) out.BullIds.Add(UTF8_TO_TCHAR(Id.c_str()));
     out.PackId = UTF8_TO_TCHAR(state.PackId.c_str());
