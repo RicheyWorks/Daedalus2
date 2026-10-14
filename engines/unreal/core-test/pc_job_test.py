@@ -43,8 +43,9 @@ class PcJobTest(unittest.TestCase):
         self.capture = self.root / "command.json"
         self.launch = self.root / "capture launch.ps1"
         self.launch.write_text(r'''
-param($Harness, $Capture, $LocalData, $ScriptPath, $EncodedArgs, [int]$CreateCode = 0, [uint32]$PidValue = 123, [switch]$ThrowCreate, [switch]$BlockReceipt)
+param($Harness, $Capture, $LocalData, $ScriptPath, $EncodedArgs, [int]$CreateCode = 0, [uint32]$PidValue = 123, [switch]$ThrowCreate, [switch]$BlockReceipt, [switch]$StrictWarnings)
 $ErrorActionPreference = "Stop"
+if ($StrictWarnings) { $WarningPreference = "Stop" }
 $env:LOCALAPPDATA = $LocalData
 function New-CimInstance {
     [CmdletBinding()] param($ClassName, [switch]$ClientOnly, $Property)
@@ -74,7 +75,7 @@ $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedA
             capture_output=True, text=True, env=env, timeout=20
         )
 
-    def start(self, raw_args='0 "argument with spaces !"', script=None, create_code=0, pid=123, throw=False, block_receipt=False):
+    def start(self, raw_args='0 "argument with spaces !"', script=None, create_code=0, pid=123, throw=False, block_receipt=False, strict_warnings=False):
         args = [self.launch, "-Harness", self.harness, "-Capture", self.capture,
                 "-LocalData", self.local_data, "-ScriptPath", script or self.script.relative_to(self.repo),
                 "-EncodedArgs", base64.b64encode(raw_args.encode()).decode(),
@@ -83,6 +84,8 @@ $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedA
             args.append("-ThrowCreate")
         if block_receipt:
             args.append("-BlockReceipt")
+        if strict_warnings:
+            args.append("-StrictWarnings")
         result = self.powershell(*args)
         command = json.loads(self.capture.read_text(encoding="utf-8-sig")) if self.capture.exists() else None
         return result, command
@@ -196,7 +199,7 @@ $rawArgs = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($EncodedA
                 self.assertFalse(list(self.jobs.glob("*.exit")))
 
     def test_accepted_launch_survives_receipt_failure(self):
-        started, command = self.start('23 "accepted once"', block_receipt=True)
+        started, command = self.start('23 "accepted once"', block_receipt=True, strict_warnings=True)
         self.assertEqual(started.returncode, 0, started.stdout + started.stderr)
         self.assertIn("Do not restart", " ".join(started.stdout.split()))
         receipt = next(line for line in started.stdout.splitlines() if line.startswith("started job-"))

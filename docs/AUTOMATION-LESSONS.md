@@ -538,3 +538,7 @@ A native Windows regression blocks the receipt with a directory, executes the ca
 command once, and verifies that the same ID returns its actual exit code 23. CIM is a stand-in;
 this verifies launcher behavior without touching Unreal. PowerShell wraps warning lines, so
 assert warning text after whitespace normalization rather than assuming one output line.
+
+Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
+abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
+the blocked-receipt regression now runs with strict warnings to cover that exact failure.
