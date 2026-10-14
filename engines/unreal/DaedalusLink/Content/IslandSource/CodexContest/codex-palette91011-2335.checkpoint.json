@@ -1,0 +1,199 @@
+{
+  "schema": "daedalus.codex-palette91011-checkpoint.v1",
+  "stage": "ten_existing_meshes_saved_world_held",
+  "source_commit": "05736b02ccc4427b95350d5f1d608695aef23f74",
+  "source_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.receipt.json",
+  "source_receipt_fingerprint": {
+    "sha256": "9293da4acca8206b7a7777a035c103760127688fbf37bd2915c4ff0dc5cf65d2",
+    "bytes": 31824
+  },
+  "prepared_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\codex-palette-p91011.delivery.json",
+  "prepared_manifest_fingerprint": {
+    "sha256": "a205eb79672f672616e30a7482dfb078de162b1765740d3c21523151c516ff25",
+    "bytes": 36119
+  },
+  "native_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\20695ee29c31a3d4c630cdad.json",
+  "native_receipt_fingerprint": {
+    "sha256": "73dddbfc650516591c75ac868ca5c9e3fda4946b1d20264ae2e4342d2807b08b",
+    "bytes": 26727
+  },
+  "readback": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\readback.json",
+  "readback_fingerprint": {
+    "sha256": "0397eac1c2db963b6b8849e03fe768406befdf1ad0fd76bb6eba16e01dbdb86f",
+    "bytes": 189428
+  },
+  "actual_saves": [
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+      "save_return": true,
+      "save_s": 0.103394,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+      "save_return": true,
+      "save_s": 0.092472,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+      "save_return": true,
+      "save_s": 0.094857,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+      "save_return": true,
+      "save_s": 0.088812,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+      "save_return": true,
+      "save_s": 0.154189,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+      "save_return": true,
+      "save_s": 0.125749,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+      "save_return": true,
+      "save_s": 0.113478,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+      "save_return": true,
+      "save_s": 0.127312,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+      "save_return": true,
+      "save_s": 0.112055,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water",
+      "save_return": true,
+      "save_s": 0.12757,
+      "observed_import": {
+        "auto_generate_collision": "unavailable",
+        "build_nanite": "unavailable",
+        "combine_meshes": "unavailable",
+        "generate_lightmap_u_vs": "unavailable",
+        "import_data_class": "InterchangeAssetImportData",
+        "nanite_enabled": false,
+        "vertex_color_import_option": "unavailable"
+      }
+    }
+  ],
+  "source_geometry_seed": 84011,
+  "source_palette_seed": 91011,
+  "geometry_and_transforms_unchanged": true,
+  "measured_stages": [
+    {
+      "phase": "production_import",
+      "elapsed_s": 5.332106
+    },
+    {
+      "phase": "identical_input_reuse",
+      "elapsed_s": 0.055756
+    }
+  ],
+  "new_saved_mesh_files": 10,
+  "verified_saved_mesh_files": 95,
+  "measured_actor_rows": 89,
+  "world_placed": 0,
+  "map_unchanged": true,
+  "map_fingerprint": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "issues": [],
+  "native_palette_appearance": "unverified; importer-shared material unchanged; source-specific sRGB palette/surface recipe retained for future component overrides",
+  "collision_navigation_bar": "unverified; no authored UCX in this recolour export",
+  "pr155_review": {
+    "head": "98afbf8ba23c181d775035314ffabead74b4b58c",
+    "source_review": "completed reuse now shares live PIE/map/queue/dirty/slot checks and revalidates saved contract before returning; no journal write",
+    "native_loaded": false,
+    "production_adopted": false
+  },
+  "tests_build_play": "deferred by user; actual production import/readback only"
+}

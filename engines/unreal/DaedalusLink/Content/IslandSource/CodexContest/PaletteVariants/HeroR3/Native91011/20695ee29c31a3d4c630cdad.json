@@ -1,0 +1,523 @@
+{
+  "api": "native.import_all -> AssetImportTasks/FbxImportUI -> SaveLoadedAsset",
+  "assets": {
+    "CodexPalette_g84011_p91011_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+    "CodexPalette_g84011_p91011_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+    "CodexPalette_g84011_p91011_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+    "CodexPalette_g84011_p91011_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+    "CodexPalette_g84011_p91011_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+    "CodexPalette_g84011_p91011_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+    "CodexPalette_g84011_p91011_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+    "CodexPalette_g84011_p91011_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+    "CodexPalette_g84011_p91011_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+    "CodexPalette_g84011_p91011_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water"
+  },
+  "backend_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "backend_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "background_compilation": "not_queried",
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad",
+  "key": "20695ee29c31a3d4c630cdadcf4ef6198bbdb24b8296c8f6c293a03d4243397e",
+  "manifest": {
+    "backend": {
+      "api": "AssetTools.import_asset_tasks/AssetImportTask/FbxImportUI",
+      "fbx_cvar_readback": 1,
+      "loaded_code": {
+        "_observed_import": "167649bdc5402b5fd892f2bc3c970866e83b5b47da350a53fbd5de5e62fffed3",
+        "_tags": "783eb2319099196fd0abf9a664307e305732a57f6d724c2f94df96a97d512ecf",
+        "_verify": "c65eb78077c9b4e470cecb3642d9f57d8c9a0a58f742b3fe6a63c65fa28b5807",
+        "import_all": "3e1c93cbf9cdbb078d46216b44247fbd0f4073b8a9b4e0e1889d985f52a5641e"
+      },
+      "loaded_receipt_code": {
+        "daedalus_codex_ingestion._manifest": "de8064199eac48220444cf1d0e92438637e25d9db4a09c60d6c0c2109b001848",
+        "daedalus_codex_ingestion._require_manifest": "07d342a06de872850d79872fca1bce46c1da69d1c54f0a02c98780ead4271350",
+        "daedalus_codex_ingestion._verify_saved": "9674dd75359bb3805e6494f63b9a224ef7123ade20bfbbcfa99967d679b5e9a7",
+        "daedalus_codex_ingestion.import_steps": "430c645b0ec8cf33ef31b07cbaf3927ff756550d660f6a47d01c4f008849ceb6",
+        "daedalus_ingestion_receipts.loaded_code_fingerprint": "5893a6ca15a357520f97d6442478dcaa941d6230e2d500ce1dcae998c3fee683",
+        "daedalus_ingestion_receipts.manifest": "bb1350e5b3ebd57b891d84e939e8b3df80260181c55cae3127571ba5f5534fdc",
+        "daedalus_ingestion_receipts.may_skip": "519532bbba58cd3e24cd759493611ea2e10b7d0bdab1c77a99ae5e3e992e051b",
+        "daedalus_ingestion_receipts.require_retry_permission": "a0b4b632d781c6e3d4d99aedcf77fc782afd35527aeda0144b12902c625e1158",
+        "daedalus_ingestion_receipts.validate_receipt": "b36821d96d6c1d5db40a834ceca896bcf863f785789be1e6613749fc92b1aad9",
+        "daedalus_ingestion_receipts.verified_snapshot": "893ca5138f11f12339188b2700c04c0bfd657f6aedd4f1d2a0dae8b7f0ebb3b7",
+        "daedalus_ingestion_receipts.write_receipt": "c9502d92986551a21606bd19dd2ab5b2fc480ee94ad002e785b0a720d81a3249"
+      },
+      "selected_preset": "codex_prepared_existing_options_v1"
+    },
+    "dependencies": {
+      "C:\\Unreal\\DaedalusRealm\\Config\\DefaultEngine.ini": {
+        "bytes": 995,
+        "sha256": "32e7917b6cbdda424e49461222b03314714168a665360e3f838d0e788bb61b35"
+      },
+      "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\ClaudeIslands\\M_VoxelVertexColour.uasset": {
+        "bytes": 9801,
+        "sha256": "5da5a09f183424869300bac051e32da589328a63b28c2dbd8d61714faf3bbd58"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py": {
+        "bytes": 15632,
+        "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py": {
+        "bytes": 9627,
+        "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\codex-palette-p91011.delivery.json": {
+        "bytes": 36119,
+        "sha256": "a205eb79672f672616e30a7482dfb078de162b1765740d3c21523151c516ff25"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py": {
+        "bytes": 13679,
+        "sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982"
+      }
+    },
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+    "engine": "5.8.3-58210709+++UE5+Release-5.8",
+    "schema": "daedalus.ingestion-receipt.v1",
+    "settings": {
+      "config_sha256": "29684f704007f28b354c02df0f7a98822c4d13aae692a0e95a9c2d8817bf06cc",
+      "kind": "island",
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+      "name": "CodexPalette_g84011_p91011",
+      "namespace": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+      "objects": [
+        {
+          "dims": [
+            107.0,
+            80.0,
+            7.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexPalette_g84011_p91011_clouds",
+          "triangles": 1248
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_door",
+            "CodexVoxel_roof",
+            "CodexVoxel_wall",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexPalette_g84011_p91011_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            38.0,
+            37.0,
+            15.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexPalette_g84011_p91011_crystals",
+          "triangles": 420
+        },
+        {
+          "dims": [
+            78.0,
+            78.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexPalette_g84011_p91011_flowers",
+          "triangles": 600
+        },
+        {
+          "dims": [
+            92.0,
+            89.0,
+            43.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_grass",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexPalette_g84011_p91011_island",
+          "triangles": 82320
+        },
+        {
+          "dims": [
+            17.0,
+            14.0,
+            9.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexPalette_g84011_p91011_landmarks",
+          "triangles": 260
+        },
+        {
+          "dims": [
+            44.0,
+            19.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexPalette_g84011_p91011_rocks",
+          "triangles": 48
+        },
+        {
+          "dims": [
+            37.25,
+            18.25,
+            14.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_w",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexPalette_g84011_p91011_route_steps",
+          "triangles": 17448
+        },
+        {
+          "dims": [
+            74.0,
+            54.0,
+            15.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexPalette_g84011_p91011_trees",
+          "triangles": 2532
+        },
+        {
+          "dims": [
+            89.0,
+            87.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_foam",
+            "CodexVoxel_water"
+          ],
+          "name": "CodexPalette_g84011_p91011_water",
+          "triangles": 3956
+        }
+      ],
+      "placement": false,
+      "preset": "codex_prepared_existing_options_v1",
+      "requested_import_options": {
+        "auto_generate_collision": false,
+        "build_nanite": false,
+        "combine_meshes": false,
+        "generate_lightmap_u_vs": false,
+        "import_materials": false,
+        "import_textures": false,
+        "vertex_color_import_option": "REPLACE"
+      },
+      "seed": 84011,
+      "shared_material_policy": "read-only reuse"
+    },
+    "source": {
+      "bytes": 1581836,
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.fbx",
+      "sha256": "81f6e75d2995fe7a30b10319433de96ade41062157140149c5068aa21fe8678a"
+    }
+  },
+  "name": "CodexPalette_g84011_p91011",
+  "native_report": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\20695ee29c31a3d4c630cdad\\native.json",
+  "native_result": {
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad",
+    "elapsed_s": {
+      "import": 2.488564
+    },
+    "import_skipped": false,
+    "imported_object_paths": [
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water"
+    ],
+    "kind": "island",
+    "meshes": [
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+        "save_return": true,
+        "save_s": 0.103394,
+        "source_name": "CodexPalette_g84011_p91011_clouds"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+        "save_return": true,
+        "save_s": 0.092472,
+        "source_name": "CodexPalette_g84011_p91011_cottage"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+        "save_return": true,
+        "save_s": 0.094857,
+        "source_name": "CodexPalette_g84011_p91011_crystals"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+        "save_return": true,
+        "save_s": 0.088812,
+        "source_name": "CodexPalette_g84011_p91011_flowers"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+        "save_return": true,
+        "save_s": 0.154189,
+        "source_name": "CodexPalette_g84011_p91011_island"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+        "save_return": true,
+        "save_s": 0.125749,
+        "source_name": "CodexPalette_g84011_p91011_landmarks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+        "save_return": true,
+        "save_s": 0.113478,
+        "source_name": "CodexPalette_g84011_p91011_rocks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+        "save_return": true,
+        "save_s": 0.127312,
+        "source_name": "CodexPalette_g84011_p91011_route_steps"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+        "save_return": true,
+        "save_s": 0.112055,
+        "source_name": "CodexPalette_g84011_p91011_trees"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water",
+        "save_return": true,
+        "save_s": 0.12757,
+        "source_name": "CodexPalette_g84011_p91011_water"
+      }
+    ],
+    "name": "CodexPalette_g84011_p91011",
+    "stage": "assets_saved_held_from_world"
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds": {
+      "bytes": 91169,
+      "sha256": "4e474c93b88b27f3032fda874ade3c16c3f186f984f4d6b8ce2c3585151bb74c"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage": {
+      "bytes": 90918,
+      "sha256": "35119ae38aaa210d73cc09a3a23990350805238fe0b9d38ef903b5deb7039151"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals": {
+      "bytes": 80427,
+      "sha256": "b0f658db551913337c2fbbd3bdd2efd58ff1053c8e4324ec1f9645e4b74d46de"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers": {
+      "bytes": 83768,
+      "sha256": "853547129004932274095b1d42f37081a6fd3276e8f4a9966e1e108df9f09bc7"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island": {
+      "bytes": 1323440,
+      "sha256": "cfd50575e440e144e6b7a0cd2f3c9ef3be7bbc05004936074e5ac8821c93e25d"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks": {
+      "bytes": 79526,
+      "sha256": "bac9af575d547bef37b4a9577a4ff84e8aa4c6c5b1609c94e15cee9e4f2c3f81"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks": {
+      "bytes": 74485,
+      "sha256": "2e0ba0cb191aac15cd4d414b134b3560a1571fc36a914b8fd9c32903baa79d94"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps": {
+      "bytes": 290422,
+      "sha256": "0c1c279c8c1f9d606ac250f8dad654a1ae4872575b037897e3f5de9557468310"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees": {
+      "bytes": 117466,
+      "sha256": "2b72d6e4f1e3b3ee92b6c8160f52d5b8725acb75b691fd3514a78d2ad6696fec"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water": {
+      "bytes": 120082,
+      "sha256": "14c72a1ecdd9a612f2347e1a750ae181163c7e270bba92403ab88522849da011"
+    }
+  },
+  "save_call_completed": true,
+  "save_confirmed": true,
+  "saved_utc": "2026-10-14T23:26:27.025293+00:00",
+  "schema": "daedalus.ingestion-receipt.v1",
+  "snapshot": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\20695ee29c31a3d4c630cdad\\input\\CodexPalette_g84011_p91011.fbx",
+  "started_utc": "2026-10-14T23:26:22.092911+00:00",
+  "state": "saved",
+  "updated_utc": "2026-10-14T23:26:27.025293+00:00",
+  "world_placed": 0
+}

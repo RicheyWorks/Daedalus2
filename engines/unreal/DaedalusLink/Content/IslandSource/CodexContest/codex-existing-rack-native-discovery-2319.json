@@ -1,0 +1,18 @@
+{
+  "registry_rows_scanned": 45755,
+  "rack_matches": [],
+  "dirty": {
+    "maps": [],
+    "content": []
+  },
+  "world_mutated": false,
+  "bridge_running": [
+    {
+      "type": "execute_python",
+      "code_sha256": "34825b71b51b208f255cb742f0ea935c6f18475226ac4498813766ed1bd958a8"
+    }
+  ],
+  "queued": 0,
+  "unfinished_async_boxes": 0,
+  "read_code_sha256": "34825b71b51b208f255cb742f0ea935c6f18475226ac4498813766ed1bd958a8"
+}

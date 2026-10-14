@@ -1,0 +1,240 @@
+{
+  "schema": "daedalus.codex-palette-rack-checkpoint.v1",
+  "stage": "eleven_existing_meshes_saved_scene_preserved",
+  "new_saved_mesh_files": 11,
+  "verified_saved_mesh_files": 96,
+  "measured_actor_rows": 89,
+  "new_world_actors": 0,
+  "issues": [],
+  "map_unchanged": true,
+  "map_fingerprint": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "rack_native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "rack_save_return": true,
+  "rack_output_fingerprint": {
+    "sha256": "c3ba3e32de4560b338b3e12bda359005d5783640e9dd6338dea2892dcdc45335",
+    "bytes": 34914
+  },
+  "rack_actual_native_dimensions_cm": [
+    6000.00048828125,
+    5000.00048828125,
+    18000.0
+  ],
+  "rack_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+  "rack_required_future_actor_scale": [
+    0.01,
+    0.01,
+    0.01
+  ],
+  "rack_projected_dimensions_cm": [
+    60.000004882812505,
+    50.000004882812505,
+    180.0
+  ],
+  "rack_vertex_colours": {
+    "triangles": 174,
+    "unique_rgba": [
+      [
+        0.4235294,
+        0.4235294,
+        0.4470588,
+        1.0
+      ],
+      [
+        0.5803921,
+        0.9764705,
+        0.7294118,
+        1.0
+      ],
+      [
+        0.8784313,
+        0.8862745,
+        0.9019607,
+        1.0
+      ],
+      [
+        0.9999999,
+        0.8784313,
+        0.5803921,
+        1.0
+      ]
+    ],
+    "direct_rgba_bytes": [
+      [
+        108,
+        108,
+        114,
+        255
+      ],
+      [
+        148,
+        249,
+        186,
+        255
+      ],
+      [
+        224,
+        226,
+        230,
+        255
+      ],
+      [
+        255,
+        224,
+        148,
+        255
+      ]
+    ],
+    "linear_to_srgb_rgba_bytes": [
+      [
+        174,
+        174,
+        178,
+        255
+      ],
+      [
+        200,
+        252,
+        222,
+        255
+      ],
+      [
+        241,
+        242,
+        244,
+        255
+      ],
+      [
+        255,
+        241,
+        200,
+        255
+      ]
+    ],
+    "source_match": "direct_rgba_bytes",
+    "persistent_mesh_modified": false
+  },
+  "rack_simple_collision_count": 0,
+  "rack_nanite_enabled": false,
+  "rack_source_fbx": {
+    "sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1",
+    "bytes": 16428
+  },
+  "rack_history": "one actual import; asset-scale request and application returned without proving changed bounds, both stopped before save; original journals retained. Final versioned contract restores absolute build1 and records required actor.01; no repeated import, no geometry transform, firstsave true.",
+  "measured_stages": {
+    "palette_import_and_save_s": 5.332106,
+    "palette_identical_input_skip_s": 0.055756,
+    "rack_import_s": 0.128696,
+    "rack_first_existing_settings_apply_s": 0.000674,
+    "rack_restore_absolute_build1_apply_s": 0.000396,
+    "rack_first_asset_save_s": 0.077905
+  },
+  "pr155": {
+    "head": "98afbf8ba23c181d775035314ffabead74b4b58c",
+    "source_review": "no remaining completed-reuse preflight blocker",
+    "loaded": false,
+    "adopted": false,
+    "speedup_claim": false
+  },
+  "remaining_intake": [
+    {
+      "packet": "Aetherflow remaining10 source modules",
+      "state": "source-adaptation pending",
+      "blocker": "three animated fish need animation+Ink handling; seven water modules need retained node transforms,UVs,transmission/IOR; exact opaque three-plant contract incompatible",
+      "next_reviewed_source": "SW_willowdrift.glb"
+    },
+    {
+      "packet": "HeroR2, previews, earlier SkyHarbor variants",
+      "state": "retained superseded iterations",
+      "blocker": "HeroR2 known route-height refinement gap; Garden previewGLB-only or identical tofinal; all21correctedmodules delivered; avoid duplicate intake"
+    },
+    {
+      "packet": "new showcase builders",
+      "state": "new source-art work under other owners",
+      "blocker": "not a completed reviewed FBX/GLB/hash/review intake packet at this checkpoint"
+    },
+    {
+      "packet": "application source PRs152/154/156/157/158",
+      "state": "source-only handoff/deferred",
+      "blocker": "not an art FBX import queue; compile/load/services/placement/Play remain deferred"
+    }
+  ],
+  "world_holds": {
+    "palette91011": "no authored UCX/native appearance acceptance; source palette recipe retained",
+    "rack": "requires actor.01; do not use scale1 island helpers; no authored UCX,0simplecollision,appearance/appintegration unverified",
+    "glasskelp": "suitable submerged water presentation pending"
+  },
+  "evidence": {
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-palette91011-2335.checkpoint.json": {
+      "sha256": "b7754b1932ae458c93c43da05a5ede5b9c6e64f6735ebbd4db29e996f3bbcb84",
+      "bytes": 8983
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-server-rack-source-resolution-2330.json": {
+      "sha256": "d33658f4f45885b9cf95b8e2953735286d86072a98751624be8e5282d57b3219",
+      "bytes": 9755
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-palette-rack-bridge-final.json": {
+      "sha256": "11026b173ebdff5a0ad2bd24314baf7f427a45df491e1b42b84747fcd73bbbd2",
+      "bytes": 2191
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\readback.json": {
+      "sha256": "0b0c43ed9c9ec6e40a2ad82f66066fbafcde0ac01beb0b02c42ac4fe17015118",
+      "bytes": 177232
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\native.json": {
+      "sha256": "b48f746d366ed1f13282e52c8677689e47cca2fc17709ed6c724672db76c88b0",
+      "bytes": 1445
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\reply.json": {
+      "sha256": "c01e9afdc13ac70656691c6ba1301520d1346c0ee9ab6f0a923c32311ce6ed40",
+      "bytes": 786
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\finished-native.json": {
+      "sha256": "65a4018cea1fea33e4ea0dd47bb459b0930f85bfc409f7040bd15452049c401f",
+      "bytes": 2122
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\finish-reply.json": {
+      "sha256": "842c7da510a89e368d713da73bf57b205b21fef56fb6f7e8a665327eddb2e592",
+      "bytes": 804
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\pipeline-units-native.json": {
+      "sha256": "fea0423fa6cea02e0c57cde197d88e6217087cb2e63ea08bbbfd34a5fd9ad76b",
+      "bytes": 3311
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\pipeline-units-reply.json": {
+      "sha256": "83c688d475bf1b9c6e42595b12bca2fbc2f4593348a54d00fab934b9df4dad90",
+      "bytes": 3921
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\known-import-readback.json": {
+      "sha256": "3e7a82ed91c8c258f488d9aa95c5dc26cfaf69447c714b0f588cd17858bd1a1c",
+      "bytes": 3486
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\build-basis-readback.json": {
+      "sha256": "fb34151c67862b515850684804d84a6d97b5aaa003d0ac68de40adb08d0c3141",
+      "bytes": 1648
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\after-build-tick-readback.json": {
+      "sha256": "d2707b69ba4077be60e0fc036b27222af0100bf19ca004de765fe5deca01fe51",
+      "bytes": 777
+    }
+  },
+  "loaded_rack_sources": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack.py",
+      "fingerprint": {
+        "sha256": "d606b4cf46a44fef9f8a4b7029521658d53d7ac5a81d74a00bc1cf146c4388e2",
+        "bytes": 9220
+      }
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack_pipeline_units.py",
+      "fingerprint": {
+        "sha256": "091c9eaa0d83874ffd05e6a02b4a9ce95f587791023abf0616c1d7b33363b3cd",
+        "bytes": 6812
+      }
+    }
+  ],
+  "tests_build_play": "deferred by user; actual production operations/readbacks only"
+}

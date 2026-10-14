@@ -1,0 +1,7 @@
+{
+  "steps": 0,
+  "yielded": [],
+  "result": null,
+  "error": "Traceback (most recent call last):\n  File \"C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_bridge_commands.py\", line 149, in run_steps\n    v = next(gen)\n        ^^^^^^^^^\n  File \"<daedalus.steps:Codex retained ServerRack unit and vertex-colour import-save>\", line 9, in steps\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack.py\", line 109, in steps\n    raise RuntimeError('actual unit/pivot contract differs; inspect import, do not rescale twice')\nRuntimeError: actual unit/pivot contract differs; inspect import, do not rescale twice\n",
+  "seconds": 0.2
+}

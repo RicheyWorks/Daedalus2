@@ -1,0 +1,88 @@
+{
+  "stage": "production_saved_and_unchanged_reused",
+  "reviewed_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "runtime_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+  "loaded": [
+    {
+      "name": "daedalus_ingestion_receipts",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py",
+      "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+    },
+    {
+      "name": "daedalus_codex_ingestion",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py",
+      "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+    }
+  ],
+  "candidate": "CodexPalette_g84011_p91011",
+  "prepared_manifest_sha256": "a205eb79672f672616e30a7482dfb078de162b1765740d3c21523151c516ff25",
+  "deadline_epoch": 1792021281.904284,
+  "editor_preflight": {
+    "server": {
+      "protocolVersion": "2025-11-25",
+      "capabilities": {
+        "resources": {},
+        "tools": {
+          "listChanged": true
+        }
+      },
+      "serverInfo": {
+        "name": "",
+        "title": "",
+        "version": ""
+      }
+    },
+    "pie_running": false,
+    "current_map": "/Game/Daedalus/DaedalusWorld"
+  },
+  "passes": [
+    {
+      "phase": "production_import",
+      "elapsed_s": 5.332106,
+      "results": [
+        {
+          "name": "CodexPalette_g84011_p91011",
+          "state": "saved",
+          "unchanged_skipped": false,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\20695ee29c31a3d4c630cdad.json",
+          "assets": {
+            "CodexPalette_g84011_p91011_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+            "CodexPalette_g84011_p91011_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+            "CodexPalette_g84011_p91011_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+            "CodexPalette_g84011_p91011_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+            "CodexPalette_g84011_p91011_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+            "CodexPalette_g84011_p91011_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+            "CodexPalette_g84011_p91011_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+            "CodexPalette_g84011_p91011_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+            "CodexPalette_g84011_p91011_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+            "CodexPalette_g84011_p91011_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water"
+          }
+        }
+      ]
+    },
+    {
+      "phase": "identical_input_reuse",
+      "elapsed_s": 0.055756,
+      "results": [
+        {
+          "name": "CodexPalette_g84011_p91011",
+          "state": "saved",
+          "unchanged_skipped": true,
+          "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\20695ee29c31a3d4c630cdad.json",
+          "assets": {
+            "CodexPalette_g84011_p91011_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+            "CodexPalette_g84011_p91011_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+            "CodexPalette_g84011_p91011_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+            "CodexPalette_g84011_p91011_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+            "CodexPalette_g84011_p91011_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+            "CodexPalette_g84011_p91011_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+            "CodexPalette_g84011_p91011_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+            "CodexPalette_g84011_p91011_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+            "CodexPalette_g84011_p91011_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+            "CodexPalette_g84011_p91011_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water"
+          }
+        }
+      ]
+    }
+  ]
+}

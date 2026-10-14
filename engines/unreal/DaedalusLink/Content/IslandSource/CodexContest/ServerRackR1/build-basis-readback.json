@@ -1,0 +1,47 @@
+{
+  "world_mutated": false,
+  "build_basis": {
+    "False": {
+      "copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+      "lod_type": "<GeometryScriptLODType.MAX_AVAILABLE: 0>",
+      "bounds_cm": {
+        "min": [
+          -3000.000244140625,
+          -3000.000244140625,
+          0.0
+        ],
+        "max": [
+          3000.000244140625,
+          2000.000244140625,
+          18000.0
+        ]
+      }
+    },
+    "True": {
+      "copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+      "lod_type": "<GeometryScriptLODType.MAX_AVAILABLE: 0>",
+      "bounds_cm": {
+        "min": [
+          -30.000001907348633,
+          -30.000001907348633,
+          0.0
+        ],
+        "max": [
+          30.000001907348633,
+          20.000001907348633,
+          180.0
+        ]
+      }
+    }
+  },
+  "mesh_methods": {
+    "build_from_static_mesh_descriptions": "x.build_from_static_mesh_descriptions(static_mesh_descriptions, build_simple_collision=False, fast_build=True) -> None\r\nBuilds static mesh LODs from the array of StaticMeshDescriptions passed in\r\n\r\nArgs:\r\n    static_mesh_descriptions (Array[StaticMeshDescription]): \r\n    build_simple_collision (bool): \r\n    fast_build (bool):"
+  },
+  "lod_enum": {
+    "HI_RES_SOURCE_MODEL": "<GeometryScriptLODType.HI_RES_SOURCE_MODEL: 1>",
+    "MAX_AVAILABLE": "<GeometryScriptLODType.MAX_AVAILABLE: 0>",
+    "RENDER_DATA": "<GeometryScriptLODType.RENDER_DATA: 3>",
+    "SOURCE_MODEL": "<GeometryScriptLODType.SOURCE_MODEL: 2>"
+  },
+  "read_code_sha256": "9436298a10a8cf23418627ea20a3000eb7f43cacd2f88500cdef0ca7daec5361"
+}

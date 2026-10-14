@@ -1,0 +1,7 @@
+{
+  "steps": 0,
+  "yielded": [],
+  "result": null,
+  "error": "Traceback (most recent call last):\n  File \"C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_bridge_commands.py\", line 149, in run_steps\n    v = next(gen)\n        ^^^^^^^^^\n  File \"<daedalus.steps:Codex known ServerRack apply stored build settings and save>\", line 10, in steps\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack_finish.py\", line 53, in steps\n    raise RuntimeError('stored build-setting application did not establish unit contract; hold unsaved')\nRuntimeError: stored build-setting application did not establish unit contract; hold unsaved\n",
+  "seconds": 0.0
+}

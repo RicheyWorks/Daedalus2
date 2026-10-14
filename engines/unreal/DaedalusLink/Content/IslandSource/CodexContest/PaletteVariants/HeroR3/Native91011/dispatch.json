@@ -1,0 +1,35 @@
+{
+  "stage": "ten_meshes_saved_world_held",
+  "manifest_fingerprint": {
+    "sha256": "a205eb79672f672616e30a7482dfb078de162b1765740d3c21523151c516ff25",
+    "bytes": 36119
+  },
+  "baseline": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-aetherflow-final.native.json",
+  "baseline_fingerprint": {
+    "sha256": "35cc4ddb078a20b67503e164521f3bec70f54ee5fc23b71975796e569f1de1e9",
+    "bytes": 7855220
+  },
+  "deadline_epoch": 1792021281.904284,
+  "native_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\20695ee29c31a3d4c630cdad.json",
+  "native_receipt_fingerprint": {
+    "sha256": "73dddbfc650516591c75ac868ca5c9e3fda4946b1d20264ae2e4342d2807b08b",
+    "bytes": 26727
+  },
+  "assets": {
+    "CodexPalette_g84011_p91011_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_clouds.CodexPalette_g84011_p91011_clouds",
+    "CodexPalette_g84011_p91011_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_cottage.CodexPalette_g84011_p91011_cottage",
+    "CodexPalette_g84011_p91011_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_crystals.CodexPalette_g84011_p91011_crystals",
+    "CodexPalette_g84011_p91011_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_flowers.CodexPalette_g84011_p91011_flowers",
+    "CodexPalette_g84011_p91011_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_island.CodexPalette_g84011_p91011_island",
+    "CodexPalette_g84011_p91011_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_landmarks.CodexPalette_g84011_p91011_landmarks",
+    "CodexPalette_g84011_p91011_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_rocks.CodexPalette_g84011_p91011_rocks",
+    "CodexPalette_g84011_p91011_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_route_steps.CodexPalette_g84011_p91011_route_steps",
+    "CodexPalette_g84011_p91011_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_trees.CodexPalette_g84011_p91011_trees",
+    "CodexPalette_g84011_p91011_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/20695ee29c31a3d4c630cdad/CodexPalette_g84011_p91011_water.CodexPalette_g84011_p91011_water"
+  },
+  "map_unchanged": true,
+  "world_placed": 0,
+  "new_saved_mesh_files": 10,
+  "total_expected_saved_mesh_files": 95,
+  "total_expected_staging_actors": 89
+}

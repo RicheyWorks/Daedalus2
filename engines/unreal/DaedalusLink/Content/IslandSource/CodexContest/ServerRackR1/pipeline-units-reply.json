@@ -1,0 +1,170 @@
+{
+  "steps": 2,
+  "yielded": [
+    "absolute build_scale1 returned; no import or actor operation",
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack"
+  ],
+  "result": {
+    "stage": "asset_saved_world_held",
+    "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+    "prior_absolute_build_scale": [
+      0.01,
+      0.01,
+      0.01
+    ],
+    "required_future_actor_scale": [
+      0.01,
+      0.01,
+      0.01
+    ],
+    "world_placement": "held; incompatible with existing scale1 island placement helpers",
+    "import_repeated": false,
+    "geometry_transformed": false,
+    "world_placed": 0,
+    "save_return": true,
+    "apply_s": 0.000396,
+    "observed_build_scale3d": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "observed_generate_lightmap_u_vs": false,
+    "native_bounds_cm": {
+      "min": [
+        -3000.000244140625,
+        -3000.000244140625,
+        0.0
+      ],
+      "max": [
+        3000.000244140625,
+        2000.000244140625,
+        18000.0
+      ]
+    },
+    "native_dimensions_cm": [
+      6000.00048828125,
+      5000.00048828125,
+      18000.0
+    ],
+    "projected_dimensions_cm_at_required_actor_scale": [
+      60.000004882812505,
+      50.000004882812505,
+      180.0
+    ],
+    "native_source_bounds_with_build_scale": {
+      "min": [
+        -3000.000244140625,
+        -3000.000244140625,
+        0.0
+      ],
+      "max": [
+        3000.000244140625,
+        2000.000244140625,
+        18000.0
+      ]
+    },
+    "vertex_colours": {
+      "triangles": 174,
+      "unique_rgba": [
+        [
+          0.4235294,
+          0.4235294,
+          0.4470588,
+          1.0
+        ],
+        [
+          0.5803921,
+          0.9764705,
+          0.7294118,
+          1.0
+        ],
+        [
+          0.8784313,
+          0.8862745,
+          0.9019607,
+          1.0
+        ],
+        [
+          0.9999999,
+          0.8784313,
+          0.5803921,
+          1.0
+        ]
+      ],
+      "direct_rgba_bytes": [
+        [
+          108,
+          108,
+          114,
+          255
+        ],
+        [
+          148,
+          249,
+          186,
+          255
+        ],
+        [
+          224,
+          226,
+          230,
+          255
+        ],
+        [
+          255,
+          224,
+          148,
+          255
+        ]
+      ],
+      "linear_to_srgb_rgba_bytes": [
+        [
+          174,
+          174,
+          178,
+          255
+        ],
+        [
+          200,
+          252,
+          222,
+          255
+        ],
+        [
+          241,
+          242,
+          244,
+          255
+        ],
+        [
+          255,
+          241,
+          200,
+          255
+        ]
+      ],
+      "source_match": "direct_rgba_bytes",
+      "persistent_mesh_modified": false
+    },
+    "nanite_enabled": false,
+    "simple_collision_count": 0,
+    "metadata": {
+      "codex_owner": "codex-contest",
+      "codex_sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1",
+      "codex_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+      "codex_required_actor_scale": "0.01,0.01,0.01",
+      "codex_intended_dimensions_cm": "60,50,180",
+      "codex_author": "historical author unverified; current retained Claude recipe exactly matches",
+      "codex_world_placement": "held; scale1 island helper incompatible; appearance/collision/integration unverified"
+    },
+    "slots": [
+      {
+        "slot": "VoxelVertexColour",
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+      }
+    ],
+    "save_s": 0.077905
+  },
+  "error": null,
+  "seconds": 0.5
+}

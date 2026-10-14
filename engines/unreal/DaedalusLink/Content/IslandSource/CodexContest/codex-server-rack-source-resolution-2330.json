@@ -1,0 +1,160 @@
+{
+  "schema": "daedalus.server-rack-source-resolution.v1",
+  "recorded_utc": "2026-10-14T23:30:06.7406584Z",
+  "stage": "source_geometry_colour_and_intended_units_resolved; dedicated_asset_import_readback_pending",
+  "asset": "Prop_Sims_Server_Rack",
+  "scope": "Additive source/data resolution only. Historical qualification receipt and main importer adapter unchanged.",
+  "historical_author": null,
+  "historical_source_commit": null,
+  "provenance_qualification": "FBX Author and Revision metadata are empty. Its creator is Blender 4.3.1. Current source geometry and colour equality does not establish a historical author, commit or exact export invocation.",
+  "pins": {
+    "recipe": {
+      "path": "C:/Users/730ri/projects/D2-build/tools/blender/voxel_sims.py",
+      "bytes": 22686,
+      "sha256": "f034fcd1c780ed56396f10623a89bba2c3aa4b3aedba416cb14d3ff5dd021833",
+      "rack_recipe_lines": [191, 195],
+      "fbx_export_and_sidecar_lines": [420, 446]
+    },
+    "catalog_exporter": {
+      "path": "C:/Users/730ri/projects/D2-build/tools/blender/export_catalog.py",
+      "bytes": 4263,
+      "sha256": "2cfa50709ea899e923c64816f7ac17d5e63ce320c22e739b12dd8923044bcf08"
+    },
+    "mesher": {
+      "path": "C:/Users/730ri/projects/D2-build/tools/blender/voxel_island.py",
+      "bytes": 25198,
+      "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+    },
+    "box_and_inherited_palette_source": {
+      "path": "C:/Users/730ri/projects/D2-build/tools/blender/voxel_props.py",
+      "bytes": 37798,
+      "sha256": "f00a63c0f6bc8ac8065684ea62a2da75f73761df70311412fef23463919a7c98"
+    },
+    "fbx": {
+      "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-sims/Prop_Sims_Server_Rack.fbx",
+      "bytes": 16428,
+      "sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1"
+    },
+    "sidecar": {
+      "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-sims/Prop_Sims_Server_Rack.json",
+      "bytes": 170,
+      "sha256": "ea62d4112752108f28b1935584f8581bbfd55e253a3ba7858b2215f5062b29c8"
+    }
+  },
+  "sidecar_declarations": {
+    "family": "machine",
+    "voxel_cm": 10.0,
+    "parts": {"body": 477},
+    "pivot": "bottom-centre",
+    "app": "LoadBalancerPro",
+    "app_qualification": "Source association only; no runtime app binding was inspected or exercised."
+  },
+  "source_data_comparison": {
+    "method": "Ordinary Python -B loaded the installed Blender pure-Python FBX parser without importing bpy. Only the existing box function and Server_Rack branch were evaluated as restricted pure cell data. FBX quads were decomposed into oriented, colour-labelled 10-unit exterior grid faces and compared with every exposed source voxel face. No mesh, model, render or export was generated.",
+    "fbx_parser": "C:/Program Files/Blender Foundation/Blender 4.3/4.3/scripts/addons_core/io_scene_fbx/parse_fbx.py",
+    "source_cell_count": 477,
+    "unique_source_cell_count": 477,
+    "source_exposed_coloured_oriented_unit_faces": 516,
+    "fbx_decomposed_coloured_oriented_unit_faces": 516,
+    "source_faces_missing_from_fbx": 0,
+    "extra_fbx_faces": 0,
+    "non_flat_coloured_fbx_polygons": 0,
+    "non_10_unit_grid_fbx_polygons": 0,
+    "all_516_coloured_oriented_faces_equal": true,
+    "palette_encoding": "Current mesher uses q ** (1 / 2.2), then the Col byte layer quantizes to RGBA bytes. All four observed FBX colours match that current source encoding exactly.",
+    "all_four_rgba_colours_equal": true,
+    "colours": {
+      "plastic_k": {"source_cells": 432, "source_linear_rgb": [0.15, 0.15, 0.17], "expected_and_observed_fbx_rgba_bytes": [108, 108, 114, 255]},
+      "steel": {"source_cells": 36, "source_linear_rgb": [0.75, 0.77, 0.80], "expected_and_observed_fbx_rgba_bytes": [224, 226, 230, 255]},
+      "led": {"source_cells": 5, "source_linear_rgb": [0.30, 0.95, 0.50], "expected_and_observed_fbx_rgba_bytes": [148, 249, 186, 255]},
+      "flame": {"source_cells": 4, "source_linear_rgb": [1.00, 0.75, 0.30], "expected_and_observed_fbx_rgba_bytes": [255, 224, 148, 255]}
+    }
+  },
+  "measured_fbx_contract": {
+    "fbx_version": 7400,
+    "creator": "Blender (stable FBX IO) - 4.3.1 - 5.12.5",
+    "geometry_count": 1,
+    "model_count": 1,
+    "material_count": 1,
+    "vertices": 116,
+    "quads": 87,
+    "triangles_after_quad_triangulation": 174,
+    "raw_geometry_bounds": {"min": [-30, -20, 0], "max": [30, 30, 180], "extent": [60, 50, 180]},
+    "raw_geometry_bounds_units": "Raw FBX coordinate units; not observed native centimetres.",
+    "unit_scale_factor_cm_per_fbx_unit": 100.0,
+    "original_unit_scale_factor_cm_per_fbx_unit": 100.0,
+    "model_local_rotation_degrees": [0.0, 0.0, 180.00000500895632],
+    "model_local_translation_default": [0, 0, 0],
+    "model_local_scale_default": [1, 1, 1],
+    "rotation_and_scaling_pivot_defaults": [0, 0, 0],
+    "geometric_translation_and_rotation_defaults": [0, 0, 0],
+    "geometric_scale_default": [1, 1, 1],
+    "pivot_qualification": "Origin lies on the Z=0 bottom plane and centres the main cabinet body. The front-panel protrusions make the full raw bounding-box bottom centre [0,5,0]; the sidecar label is not an exact full-AABB-centre assertion.",
+    "normal_layer_present": true,
+    "vertex_colour_layer": {"name": "Col", "mapping": "ByPolygonVertex", "reference": "IndexToDirect", "unique_rgba_count": 4, "colour_index_count": 348},
+    "material": {"name": "VoxelVertexColour", "shading_model": "Phong", "mapping": "AllSame", "emissive_factor": 0.0},
+    "uv_layer_count": 0,
+    "texture_or_video_object_count": 0,
+    "animation_or_deformer_object_count": 0,
+    "authored_ucx_or_other_collision_geometry_count": 0
+  },
+  "units_resolution": {
+    "intended_physical_extent_cm": [60, 50, 180],
+    "evidence": "Exact source/FBX face equality at 10 raw units per voxel plus sidecar voxel_cm=10. The catalog exporter independently rebuilds this recipe and divides its preview mesh vertices by 100 before Workbench rendering.",
+    "unit_metadata_interpretation_without_compensation_cm": [6000, 5000, 18000],
+    "interpretation_qualification": "Arithmetic interpretation of raw bounds times FBX UnitScaleFactor=100; this is not a native importer measurement.",
+    "existing_compensation_convention": "Claude's voxel FBX route imports the large-coordinate mesh, preserves vertex colours and uses actor scale 0.01. The dedicated rack adapter must observe actual native asset bounds and apply compensation once, without silently multiplying an already-compensated import.",
+    "observed_native_asset_bounds_cm": null,
+    "rack_import_scale_verified": false
+  },
+  "existing_route_evidence": {
+    "source_importer": {
+      "path": "C:/Users/730ri/projects/D2-build/engines/unreal/DaedalusLink/Content/Python/daedalus_claude_islands.py",
+      "bytes": 10542,
+      "sha256": "82a5f61ee7595ae8a3aec095b1a8ca3c53ab087272514bfebc22c26223f8275f",
+      "scale_constant_line": 23,
+      "actor_scale_application_line": 182,
+      "actor_scale": 0.01,
+      "fbx_options_entrypoint": "_fbx_options",
+      "requested_vertex_colour_mode": "VertexColorImportOption.REPLACE",
+      "interchange_options_entrypoint": "_interchange_options",
+      "requested_interchange_vertex_colour_mode": "InterchangeVertexColorImportOption.IVCIO_REPLACE"
+    },
+    "installed_importer": {
+      "path": "C:/Unreal/DaedalusRealm/Plugins/DaedalusLink/Content/Python/daedalus_claude_islands.py",
+      "bytes": 8765,
+      "sha256": "bcd2f6d820db258322cfda2917c96c40699d3d6eec90e25a81c3a233b313e62d",
+      "scale_constant_line": 23,
+      "actor_scale_application_line": 143,
+      "actor_scale": 0.01,
+      "requested_vertex_colour_mode": "VertexColorImportOption.REPLACE"
+    },
+    "existing_vertex_colour_material_path": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+    "material_source_contract": "MaterialExpressionVertexColor to Base Color; roughness constant 0.9. Reuse requires actual read-only native path/class validation; do not create or modify a shared material through this source addendum.",
+    "reuse_boundary": "Reuse AssetImportTask/options/imported_object_paths and material-binding patterns only. Do not call import_island or place: their destinations and cell-clearing behaviour belong to the island lane.",
+    "dedicated_sims_import_destination_or_entrypoint_found": false,
+    "native_backend_or_option_application_verified": false
+  },
+  "source_view": {
+    "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-sims/sheet-machine.png",
+    "bytes": 2399286,
+    "sha256": "d78d2799de611a7355c5f9a03cabf234fc4ad5874d110bbfc6b0507e50d288a1",
+    "viewed": true,
+    "observation": "Small oblique source contact-sheet view shows a dark tall cabinet with projecting metal bays and green/amber accents, consistent with the measured recipe. The front is not shown as a full detailed acceptance view.",
+    "qualification": "Regenerated Workbench VERTEX-colour source view; not a render of the retained FBX and not native appearance acceptance."
+  },
+  "next_operation": "Main operator prepares a dedicated pinned single-asset rack import with owned destination, material/vertex-colour preservation and expected-bounds readbacks. Import/save is a separate production operation; no world placement is granted here.",
+  "execution_limits": {
+    "source_data_parser_used": true,
+    "new_models_or_exports_generated": false,
+    "blender_executed": false,
+    "native_calls_made": false,
+    "tests_run": false,
+    "historical_receipt_modified": false,
+    "main_adapter_modified": false,
+    "native_imported": false,
+    "native_saved": false,
+    "world_placed": false,
+    "appearance_or_collision_accepted": false
+  }
+}

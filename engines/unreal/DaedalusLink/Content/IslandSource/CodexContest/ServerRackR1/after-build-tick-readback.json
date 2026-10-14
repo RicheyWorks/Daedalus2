@@ -1,0 +1,26 @@
+{
+  "world_mutated": false,
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "native_bounds_cm": {
+    "min": [
+      -3000.000244140625,
+      -3000.000244140625,
+      0.0
+    ],
+    "max": [
+      3000.000244140625,
+      2000.000244140625,
+      18000.0
+    ]
+  },
+  "dirty_map_packages": [],
+  "dirty_content_packages": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack"
+  ],
+  "save_called": false,
+  "build_wait_classes": {
+    "AssetCompilingManager": null,
+    "StaticMeshCompilingManager": null
+  },
+  "read_code_sha256": "12b5691d84fc59180a0c8bc047e5309ca1fecc47af164931a938cc1663073ae7"
+}

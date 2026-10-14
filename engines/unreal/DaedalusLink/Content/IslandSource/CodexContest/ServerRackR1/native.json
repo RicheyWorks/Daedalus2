@@ -1,0 +1,48 @@
+{
+  "schema": "daedalus.codex-existing-rack-native.v1",
+  "stage": "import_returned",
+  "source_fbx_sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1",
+  "source_bytes": 16428,
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80",
+  "world_placed": 0,
+  "requested_options": {
+    "backend": "explicit_InterchangePipelineStackOverride",
+    "build_scale3d": [
+      0.01,
+      0.01,
+      0.01
+    ],
+    "vertex_colors": "REPLACE",
+    "bake_meshes": true,
+    "build_nanite": false,
+    "generate_lightmap_u_vs": false,
+    "collision": false,
+    "import_materials": false,
+    "replace_existing": false
+  },
+  "save_return": null,
+  "import_s": 0.128696,
+  "imported_object_paths": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack"
+  ],
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "native_bounds_cm": {
+    "min": [
+      -3000.000244140625,
+      -3000.000244140625,
+      0.0
+    ],
+    "max": [
+      3000.000244140625,
+      2000.000244140625,
+      18000.0
+    ]
+  },
+  "native_dimensions_cm": [
+    6000.00048828125,
+    5000.00048828125,
+    18000.0
+  ],
+  "import_data_class": "InterchangeAssetImportData",
+  "nanite_enabled": false
+}

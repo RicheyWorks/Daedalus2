@@ -1,0 +1,21 @@
+{
+  "stage": "existing_rack_prepared_asset_only",
+  "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\ServerRackR1\\Prop_Sims_Server_Rack.fbx",
+  "fbx_fingerprint": {
+    "sha256": "873c11e011876c80d4680a666c4fc397265cc4bb3b80542df83ddff4b04ad6a1",
+    "bytes": 16428
+  },
+  "source_resolution": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-server-rack-source-resolution-2330.json",
+  "source_resolution_fingerprint": {
+    "sha256": "d33658f4f45885b9cf95b8e2953735286d86072a98751624be8e5282d57b3219",
+    "bytes": 9755
+  },
+  "source_module": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack.py",
+  "source_module_fingerprint": {
+    "sha256": "d606b4cf46a44fef9f8a4b7029521658d53d7ac5a81d74a00bc1cf146c4388e2",
+    "bytes": 9220
+  },
+  "unit_contract": "60x50x180cm; explicit per-task Interchange build_scale3d=.01 once, native bounds required",
+  "colour_contract": "exact four source RGBA; all174 native triangles read before save",
+  "world_placement": "held; no authored UCX/native appearance/app integration acceptance"
+}

@@ -1,0 +1,126 @@
+{
+  "stage": "existing_build_settings_apply_returned",
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "bounds_before_cm": {
+    "min": [
+      -3000.000244140625,
+      -3000.000244140625,
+      0.0
+    ],
+    "max": [
+      3000.000244140625,
+      2000.000244140625,
+      18000.0
+    ]
+  },
+  "existing_absolute_build_scale3d": [
+    0.01,
+    0.01,
+    0.01
+  ],
+  "scale_multiplied": false,
+  "import_repeated": false,
+  "vertex_colours_before": {
+    "triangles": 174,
+    "unique_rgba": [
+      [
+        0.4235294,
+        0.4235294,
+        0.4470588,
+        1.0
+      ],
+      [
+        0.5803921,
+        0.9764705,
+        0.7294118,
+        1.0
+      ],
+      [
+        0.8784313,
+        0.8862745,
+        0.9019607,
+        1.0
+      ],
+      [
+        0.9999999,
+        0.8784313,
+        0.5803921,
+        1.0
+      ]
+    ],
+    "direct_rgba_bytes": [
+      [
+        108,
+        108,
+        114,
+        255
+      ],
+      [
+        148,
+        249,
+        186,
+        255
+      ],
+      [
+        224,
+        226,
+        230,
+        255
+      ],
+      [
+        255,
+        224,
+        148,
+        255
+      ]
+    ],
+    "linear_to_srgb_rgba_bytes": [
+      [
+        174,
+        174,
+        178,
+        255
+      ],
+      [
+        200,
+        252,
+        222,
+        255
+      ],
+      [
+        241,
+        242,
+        244,
+        255
+      ],
+      [
+        255,
+        241,
+        200,
+        255
+      ]
+    ],
+    "source_match": "direct_rgba_bytes",
+    "persistent_mesh_modified": false
+  },
+  "world_placed": 0,
+  "save_return": null,
+  "apply_s": 0.000674,
+  "native_bounds_cm": {
+    "min": [
+      -3000.000244140625,
+      -3000.000244140625,
+      0.0
+    ],
+    "max": [
+      3000.000244140625,
+      2000.000244140625,
+      18000.0
+    ]
+  },
+  "native_dimensions_cm": [
+    6000.00048828125,
+    5000.00048828125,
+    18000.0
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "stage": "one_rack_saved_world_held",
+  "sources": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack.py",
+      "fingerprint": {
+        "sha256": "d606b4cf46a44fef9f8a4b7029521658d53d7ac5a81d74a00bc1cf146c4388e2",
+        "bytes": 9220
+      }
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_server_rack_pipeline_units.py",
+      "fingerprint": {
+        "sha256": "091c9eaa0d83874ffd05e6a02b4a9ce95f587791023abf0616c1d7b33363b3cd",
+        "bytes": 6812
+      }
+    }
+  ],
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "known_import_fingerprint": {
+    "sha256": "3e7a82ed91c8c258f488d9aa95c5dc26cfaf69447c714b0f588cd17858bd1a1c",
+    "bytes": 3486
+  },
+  "build_basis_fingerprint": {
+    "sha256": "fb34151c67862b515850684804d84a6d97b5aaa003d0ac68de40adb08d0c3141",
+    "bytes": 1648
+  },
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "output_fingerprint": {
+    "sha256": "c3ba3e32de4560b338b3e12bda359005d5783640e9dd6338dea2892dcdc45335",
+    "bytes": 34914
+  }
+}

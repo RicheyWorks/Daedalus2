@@ -1,0 +1,51 @@
+{
+  "stage": "ten_existing_meshes_prepared_asset_only",
+  "manifest": {
+    "original_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-prepared.delivery.json",
+    "original_manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+    "revision_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.receipt.json",
+    "replacement": "CodexPalette_g84011_p91011",
+    "fbx": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.fbx",
+      "sha256": "81f6e75d2995fe7a30b10319433de96ade41062157140149c5068aa21fe8678a",
+      "bytes": 1581836
+    },
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/81f6e75d2995fe7a",
+    "output_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\Native91011\\codex-palette-p91011.delivery.json",
+    "output_sha256": "a205eb79672f672616e30a7482dfb078de162b1765740d3c21523151c516ff25",
+    "created": true,
+    "entries": 24,
+    "unchanged_entry_json_spans": 23,
+    "expected_meshes": 49,
+    "importer_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+    "importer_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+    "stage": "candidate_manifest_prepared; owner approval and guarded import remain pending"
+  },
+  "source_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.receipt.json",
+  "source_receipt_fingerprint": {
+    "sha256": "9293da4acca8206b7a7777a035c103760127688fbf37bd2915c4ff0dc5cf65d2",
+    "bytes": 31824
+  },
+  "source_review_witnesses": {
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.receipt.json": {
+      "sha256": "9293da4acca8206b7a7777a035c103760127688fbf37bd2915c4ff0dc5cf65d2",
+      "bytes": 31824
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\overview.png": {
+      "sha256": "358baae550f72e04ec4ebc0f3997e57792ef00d46cedafa933ebabaad1a71d3d",
+      "bytes": 837497
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\route.png": {
+      "sha256": "432dbab3eeac5c27e3d723ef5ff0cf704799e6b99cef346982e88546444eda91",
+      "bytes": 732249
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\crown.png": {
+      "sha256": "2323e961413bba196ee1e9d266a928acefb0a0a1ddce92c29ac6fc57f02ee3ef",
+      "bytes": 786091
+    }
+  },
+  "source_commit": "05736b02ccc4427b95350d5f1d608695aef23f74",
+  "personally_inspected_source_views": 3,
+  "world_placement": "held; no authored UCX and no native palette appearance acceptance",
+  "native_palette": "existing importer assigns shared material; source palette recipe retained for future component overrides"
+}

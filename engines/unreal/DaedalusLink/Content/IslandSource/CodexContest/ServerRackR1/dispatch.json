@@ -1,0 +1,16 @@
+{
+  "stage": "native_returned_inspect_before_replay",
+  "code_sha256": "489c4c6ac5235eea5febdf2d007f8998ad9da79f06a06f19458165b0a04b89cd",
+  "prepared_fingerprint": {
+    "sha256": "e5685ad68668d63b2bb4381816772bfcb453ec12e6cd847dc91601468e67e9e2",
+    "bytes": 1382
+  },
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "reply_fingerprint": {
+    "sha256": "c01e9afdc13ac70656691c6ba1301520d1346c0ee9ab6f0a923c32311ce6ed40",
+    "bytes": 786
+  }
+}

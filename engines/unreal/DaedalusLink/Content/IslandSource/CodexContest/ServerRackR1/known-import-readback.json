@@ -1,0 +1,70 @@
+{
+  "world_mutated": false,
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack.Prop_Sims_Server_Rack",
+  "native_bounds_cm": {
+    "min": [
+      -3000.000244140625,
+      -3000.000244140625,
+      0.0
+    ],
+    "max": [
+      3000.000244140625,
+      2000.000244140625,
+      18000.0
+    ]
+  },
+  "build_scale3d": [
+    0.01,
+    0.01,
+    0.01
+  ],
+  "generate_lightmap_u_vs": false,
+  "import_data_doc": "Interchange Asset Import Data\r\n\r\n**C++ Source:**\r\n\r\n- **Module**: InterchangeEngine\r\n- **File**: InterchangeAssetImportData.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``node_container`` (InterchangeBaseNodeContainer):  [Read-Write]\r\n  deprecated: Use GetNodeContainer/SetNodeContainer instead.\r\n- ``node_unique_id`` (str):  [Read-Only] The Node UID passed to the factory that existed in the graph that was used to create this asset.\r\n- ``pipelines`` (Array[Object]):  [Read-Write]\r\n  deprecated: Use GetPipelines/SetPipelines instead.\r\n- ``scene_import_asset`` (SoftObjectPath):  [Read-Write] On a level import, set to the UInterchangeSceneImportAsset created during the import.\r\n- ``source_data`` (AssetImportInfo):  [Read-Only] Source file data describing the files that were used to import this asset.",
+  "dirty_map_packages": [],
+  "dirty_content_packages": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/ServerRack_873c11e011876c80/Prop_Sims_Server_Rack"
+  ],
+  "simple_collision_count": 0,
+  "nanite_enabled": false,
+  "pipelines": {
+    "unexposed": "InterchangeAssetImportData: Property 'pipelines' on 'InterchangeAssetImportData' is deprecated: Use GetPipelines/SetPipelines instead."
+  },
+  "save_called": false,
+  "set_lod_build_settings_doc": "x.set_lod_build_settings(static_mesh, lod_index, build_options) -> None\r\nSet the LOD build options for the specified LOD index.\r\n\r\nArgs:\r\n    static_mesh (StaticMesh): Mesh to process.\r\n    lod_index (int32): The LOD we will apply the build settings.\r\n    build_options (MeshBuildSettings): The build settings we want to apply to the LOD.",
+  "translator_settings": {
+    "unexposed": "InterchangeAssetImportData: Failed to find property 'translator_settings' for attribute 'translator_settings' on 'InterchangeAssetImportData'"
+  },
+  "copy_reply_shape": {
+    "type": "tuple",
+    "repr": "(<Object '/Engine/Transient.DynamicMesh_0' (0x000002340B4CAC60) Class 'DynamicMesh'>, <GeometryScriptOutcomePins.SUCCESS: 1>)"
+  },
+  "triangle_count": 174,
+  "first_triangle_colour_reply": "(<Object '/Engine/Transient.DynamicMesh_0' (0x000002340B4CAC60) Class 'DynamicMesh'>, <Struct 'LinearColor' (0x00000230AF64BE20) {r: 0.423529, g: 0.423529, b: 0.447059, a: 1.000000}>, <Struct 'LinearColor' (0x00000230AF64BE60) {r: 0.423529, g: 0.423529, b: 0.447059, a: 1.000000}>, <Struct 'LinearColor' (0x00000230AF64BF20) {r: 0.423529, g: 0.423529, b: 0.447059, a: 1.000000}>, True)",
+  "unique_native_triangle_rgba": [
+    [
+      0.4235294,
+      0.4235294,
+      0.4470588,
+      1.0
+    ],
+    [
+      0.5803921,
+      0.9764705,
+      0.7294118,
+      1.0
+    ],
+    [
+      0.8784313,
+      0.8862745,
+      0.9019607,
+      1.0
+    ],
+    [
+      0.9999999,
+      0.8784313,
+      0.5803921,
+      1.0
+    ]
+  ],
+  "read_code_sha256": "822f7eb69af9f3ee3e540a327f3d6cb4769a1a83e3c3d1feffe377dae7cb3ae9"
+}

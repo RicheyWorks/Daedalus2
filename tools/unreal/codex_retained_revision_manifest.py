@@ -20,6 +20,9 @@ SALVAGE_ORIGINAL = "CodexModule_CopperPatina_BridgeCoupler_85000"
 SALVAGE_REVISION = "CodexSalvage_PowerUnit_86100"
 GARDEN_ORIGINAL = "CodexIsland_cliff_garden_84022"
 GARDEN_REVISION = GARDEN_ORIGINAL + "_GardenGateR1"
+PALETTE_REVISION = "CodexPalette_g84011_p91011"
+PALETTE_CONFIG = "29684f704007f28b354c02df0f7a98822c4d13aae692a0e95a9c2d8817bf06cc"
+PALETTE_ROLES = ("clouds", "cottage", "crystals", "flowers", "island", "landmarks", "rocks", "route_steps", "trees", "water")
 DEST = "/Game/Daedalus/Art/Islands/CodexContest/Prepared/"
 DECODER = json.JSONDecoder()
 
@@ -97,10 +100,13 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if len({entry["name"] for _, _, entry in entries}) != 24:
         raise ValueError("original asset identities are duplicated")
     if replace_name == ORIGINAL:
-        hero = receipt.get("config", {}).get("revision")
-        if hero not in ("HeroR3", "HeroR4"):
-            raise ValueError("require the exact retained HeroR3 or HeroR4 summit revision")
-        kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", ORIGINAL + "_" + hero, 10
+        if receipt.get("name") == PALETTE_REVISION:
+            kind, schema, revision, object_count = "island", "daedalus.codex-palette-variant.v1", PALETTE_REVISION, 10
+        else:
+            hero = receipt.get("config", {}).get("revision")
+            if hero not in ("HeroR3", "HeroR4"):
+                raise ValueError("require the exact retained HeroR3, HeroR4 or palette91011 summit export")
+            kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", ORIGINAL + "_" + hero, 10
     elif replace_name == SALVAGE_ORIGINAL:
         kind, schema, revision, object_count = "module", "daedalus.codex-salvage-assembly.v1", SALVAGE_REVISION, 5
     elif replace_name == GARDEN_ORIGINAL:
@@ -115,7 +121,13 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if receipt.get("schema") != schema or receipt.get("stage") != "exported" or receipt.get("name") != revision:
         raise ValueError("require the exact exported retained candidate receipt")
     if kind == "island":
-        if replace_name == GARDEN_ORIGINAL:
+        if revision == PALETTE_REVISION:
+            if (receipt.get("config_sha256") != PALETTE_CONFIG or config.get("seed") != 84011 or
+                config.get("geometry_seed") != 84011 or config.get("palette_seed") != 91011 or
+                config.get("source_name") != ORIGINAL + "_HeroR3" or
+                receipt.get("geometry_and_transforms_unchanged") is not True):
+                raise ValueError("require the exact unchanged-geometry palette91011 source contract")
+        elif replace_name == GARDEN_ORIGINAL:
             if config.get("preset") != "cliff-garden" or config.get("revision") != "GardenGateR1" or config.get("seed") != 84022:
                 raise ValueError("receipt is not the exact retained cliff seed84022 GardenGateR1 revision")
         elif config.get("preset") != "summit-rim" or config.get("revision") != hero or config.get("seed") != 84011:
@@ -131,6 +143,8 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if kind == "module" and {row["name"] for row in objects} != {
             SALVAGE_REVISION + "_" + role for role in ("gearbox", "shaft", "rotor", "battery", "support")}:
         raise ValueError("PowerUnit source object roles differ from the exact retained assembly")
+    if revision == PALETTE_REVISION and {row["name"] for row in objects} != {revision + "_" + role for role in PALETTE_ROLES}:
+        raise ValueError("palette91011 requires the exact ten retained role names")
     for row in objects:
         dims = row.get("dims", [])
         if not row["name"].startswith(revision + "_") or len(dims) != 3 or any(
