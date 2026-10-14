@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="940" viewBox="0 0 1280 940" fill="#19393d" role="img" aria-labelledby="title description">
+  <title id="title">Lumenwake Island Connection Standard</title>
+  <desc id="description">Original vector blueprint of four independently labelled island plots. A, B, C and D sit at east and north positions plus or minus 128 metres. Each land envelope is 240 metres wide on a 256 metre cell pitch. Four cardinal bridges span 16 metre gaps with 8 metre walking width at a 10 metre deck datum. Two or three connected islands remain an ordinary island group; four or more distinct connected islands form a Super Island. This is authoring geometry and allocates no deeds.</desc>
+  <defs>
+    <pattern id="cellGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#d4dfd6" stroke-width=".6"/>
+    </pattern>
+    <pattern id="deckPlanks" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="#bf8e53"/>
+      <path d="M 0 0 V 4" stroke="#795b38" stroke-width=".7"/>
+    </pattern>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 7 3.5 L 0 7 Z" fill="#536e70"/>
+    </marker>
+    <marker id="axisArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 8 4 L 0 8 Z" fill="#2b6666"/>
+    </marker>
+    <style>
+      text { font-family: 'Segoe UI', Arial, sans-serif; }
+      .title { font-size: 31px; font-weight: 700; letter-spacing: 2px; fill: #f4eddb; }
+      .subtitle { font-size: 16px; fill: #b5cec5; }
+      .section { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+      .label { font-size: 16px; font-weight: 600; }
+      .body { font-size: 14px; }
+      .small { font-size: 12px; }
+      .dimension { font-size: 13px; fill: #42666b; font-weight: 600; }
+      .plotID { font-size: 25px; font-weight: 700; letter-spacing: 1px; }
+      .cell { fill: none; stroke: #809ba0; stroke-width: 1.1; stroke-dasharray: 5 5; }
+      .envelope { fill: #dce9dc; stroke: #39766c; stroke-width: 2; }
+      .dimLine { fill: none; stroke: #536e70; stroke-width: 1; marker-start: url(#arrow); marker-end: url(#arrow); }
+      .dimTick { stroke: #536e70; stroke-width: 1; }
+      .route { fill: none; stroke: #f3e8cc; stroke-width: 8; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="940" fill="#102f34"/>
+  <path d="M 40 112 H 1240" stroke="#496967"/>
+  <text x="40" y="58" class="title">ISLAND CONNECTION STANDARD</text>
+  <text x="42" y="87" class="subtitle">LUMENWAKE / Crew blueprint / Version 1 / Metres, east–north–up</text>
+  <rect x="1060" y="34" width="180" height="43" rx="21" fill="#28514f"/>
+  <text x="1150" y="61" text-anchor="middle" font-size="14" font-weight="600" fill="#f4eddb">AUTHORING ONLY</text>
+
+  <rect x="40" y="140" width="700" height="660" rx="14" fill="#f3f0e5"/>
+  <text x="66" y="175" class="section">FOUR DISTINCT PLOTS</text>
+  <text x="715" y="174" text-anchor="end" class="small">Plan scale: 1 pixel = 1 metre</text>
+  <rect x="144" y="204" width="512" height="512" fill="url(#cellGrid)"/>
+
+  <!-- Each dashed cell is 256 m. Each solid envelope is 240 m. -->
+  <rect x="144" y="204" width="256" height="256" class="cell"/>
+  <rect x="400" y="204" width="256" height="256" class="cell"/>
+  <rect x="144" y="460" width="256" height="256" class="cell"/>
+  <rect x="400" y="460" width="256" height="256" class="cell"/>
+  <rect x="152" y="212" width="240" height="240" class="envelope"/>
+  <rect x="408" y="212" width="240" height="240" class="envelope"/>
+  <rect x="152" y="468" width="240" height="240" class="envelope"/>
+  <rect x="408" y="468" width="240" height="240" class="envelope"/>
+
+  <!-- Routes terminate at compatible cardinal socket collars. -->
+  <path d="M 272 332 H 392 M 272 332 V 452" class="route"/>
+  <path d="M 408 332 H 528 M 528 332 V 452" class="route"/>
+  <path d="M 272 468 V 588 M 272 588 H 392" class="route"/>
+  <path d="M 528 468 V 588 M 408 588 H 528" class="route"/>
+  <rect x="386" y="326" width="6" height="12" fill="#c8b88e"/>
+  <rect x="408" y="326" width="6" height="12" fill="#c8b88e"/>
+  <rect x="386" y="582" width="6" height="12" fill="#c8b88e"/>
+  <rect x="408" y="582" width="6" height="12" fill="#c8b88e"/>
+  <rect x="266" y="446" width="12" height="6" fill="#c8b88e"/>
+  <rect x="266" y="468" width="12" height="6" fill="#c8b88e"/>
+  <rect x="522" y="446" width="12" height="6" fill="#c8b88e"/>
+  <rect x="522" y="468" width="12" height="6" fill="#c8b88e"/>
+  <rect x="392" y="328" width="16" height="8" fill="url(#deckPlanks)"/>
+  <rect x="392" y="584" width="16" height="8" fill="url(#deckPlanks)"/>
+  <rect x="268" y="452" width="8" height="16" fill="url(#deckPlanks)"/>
+  <rect x="524" y="452" width="8" height="16" fill="url(#deckPlanks)"/>
+  <path d="M 392 327 H 408 M 392 337 H 408 M 392 583 H 408 M 392 593 H 408 M 267 452 V 468 M 277 452 V 468 M 523 452 V 468 M 533 452 V 468" stroke="#6a563e" stroke-width=".8"/>
+
+  <!-- Labels preserve independent members, rather than making one estate deed. -->
+  <text x="172" y="253" class="plotID">DEMO-C</text>
+  <text x="172" y="277" class="body">Root: −128, +128, 0 m</text>
+  <text x="172" y="296" class="small">Template / separate member</text>
+  <text x="428" y="253" class="plotID">DEMO-D</text>
+  <text x="428" y="277" class="body">Root: +128, +128, 0 m</text>
+  <text x="428" y="296" class="small">Template / separate member</text>
+  <text x="172" y="509" class="plotID">DEMO-A</text>
+  <text x="172" y="533" class="body">Root: −128, −128, 0 m</text>
+  <text x="172" y="552" class="small">Showcase / separate member</text>
+  <text x="428" y="509" class="plotID">DEMO-B</text>
+  <text x="428" y="533" class="body">Root: +128, −128, 0 m</text>
+  <text x="428" y="552" class="small">Template / separate member</text>
+
+  <g fill="#39766c">
+    <circle cx="272" cy="332" r="3"/><circle cx="528" cy="332" r="3"/>
+    <circle cx="272" cy="588" r="3"/><circle cx="528" cy="588" r="3"/>
+  </g>
+  <text x="290" y="354" class="small">E →</text>
+  <text x="290" y="610" class="small">E →</text>
+  <text x="245" y="393" class="small">S ↓</text>
+  <text x="501" y="393" class="small">S ↓</text>
+  <circle cx="400" cy="460" r="3" fill="#647d82"/>
+  <path d="M 400 460 L 683 438" fill="none" stroke="#647d82" stroke-width="1"/>
+  <text x="677" y="420" text-anchor="end" class="small">Group origin: 0, 0</text>
+  <text x="677" y="436" text-anchor="end" class="small">Retained sky seam</text>
+
+  <!-- Envelope and cell-pitch dimensions. -->
+  <path d="M 152 726 V 748 M 648 726 V 748" class="dimTick"/>
+  <path d="M 152 740 H 648" class="dimLine"/>
+  <text x="400" y="764" text-anchor="middle" class="dimension">496 m outer land extent / 512 m cell footprint</text>
+  <path d="M 125 212 H 139 M 125 452 H 139" class="dimTick"/>
+  <path d="M 131 212 V 452" class="dimLine"/>
+  <text x="116" y="332" text-anchor="middle" transform="rotate(-90 116 332)" class="dimension">240 m land envelope</text>
+  <path d="M 272 622 V 650 M 528 622 V 650" class="dimTick"/>
+  <path d="M 272 640 H 528" class="dimLine"/>
+  <text x="400" y="661" text-anchor="middle" class="dimension">256 m centre pitch</text>
+  <path d="M 81 239 V 207 M 81 239 H 113" stroke="#2b6666" stroke-width="2" marker-end="url(#axisArrow)" fill="none"/>
+  <text x="81" y="198" text-anchor="middle" class="small">N</text>
+  <text x="121" y="244" class="small">E</text>
+
+  <rect x="780" y="140" width="460" height="292" rx="14" fill="#f3f0e5"/>
+  <text x="806" y="175" class="section">ONE CONNECTION CONTRACT</text>
+  <text x="806" y="207" class="label">Compatible pairs connect by bridge.</text>
+  <text x="806" y="231" class="body">Paths meet cardinal sockets at local ±120 m.</text>
+  <text x="806" y="252" class="body">All walking decks share a +10 m datum.</text>
+  <path d="M 806 272 H 1212" stroke="#c4d4c9"/>
+  <rect x="806" y="289" width="82" height="43" rx="8" fill="#d9e5dc"/>
+  <text x="847" y="317" text-anchor="middle" font-size="22" font-weight="700">2–3</text>
+  <text x="904" y="307" class="label">Ordinary island group</text>
+  <text x="904" y="328" class="small">Connected, below the Super Island threshold.</text>
+  <rect x="806" y="348" width="82" height="43" rx="8" fill="#2e746b"/>
+  <text x="847" y="377" text-anchor="middle" font-size="23" font-weight="700" fill="#fff4da">4+</text>
+  <text x="904" y="366" class="label">Super Island</text>
+  <text x="904" y="388" class="small">Four or more distinct, connected members.</text>
+
+  <rect x="780" y="452" width="460" height="348" rx="14" fill="#f3f0e5"/>
+  <text x="806" y="488" class="section">SOCKET JOINT / 8× DETAIL</text>
+  <text x="806" y="512" class="small">Connector remains separate from both terrain meshes.</text>
+  <rect x="812" y="576" width="124" height="80" fill="#dce9dc"/>
+  <rect x="1064" y="576" width="124" height="80" fill="#dce9dc"/>
+  <path d="M 936 560 V 672 M 1064 560 V 672" stroke="#39766c" stroke-width="2"/>
+  <path d="M 812 616 H 936 M 1064 616 H 1188" stroke="#e6d6ab" stroke-width="64"/>
+  <rect x="936" y="584" width="128" height="64" fill="url(#deckPlanks)"/>
+  <path d="M 936 582 H 1064 M 936 650 H 1064" stroke="#675134" stroke-width="2"/>
+  <path d="M 936 548 H 1064" class="dimLine"/>
+  <text x="1000" y="538" text-anchor="middle" class="dimension">16 m gap</text>
+  <path d="M 1088 584 V 648" class="dimLine"/>
+  <text x="1102" y="613" class="dimension">8 m</text>
+  <text x="1102" y="631" class="small">clear</text>
+  <text x="874" y="694" text-anchor="middle" class="label">E socket</text>
+  <text x="1126" y="694" text-anchor="middle" class="label">W socket</text>
+  <text x="1000" y="729" text-anchor="middle" class="body">Deck elevation: Z = +10 m</text>
+  <text x="806" y="768" class="small">Use matched water sockets for a separate aqueduct.</text>
+
+  <rect x="40" y="822" width="1200" height="85" rx="12" fill="#21464a"/>
+  <text x="65" y="852" font-size="17" font-weight="600" fill="#f2e8d0">KEEP EVERY MEMBER ID. MOVE THE PLOT ROOT. CONNECT THE SOCKETS.</text>
+  <text x="65" y="878" font-size="13" fill="#c4d8ce">Example labels preserve separate plots; this blueprint allocates no deeds and establishes no ownership.</text>
+  <text x="1217" y="877" text-anchor="end" font-size="12" fill="#c4d8ce">Original Lumenwake vector / Sol crew / 14 Oct 2026</text>
+</svg>
