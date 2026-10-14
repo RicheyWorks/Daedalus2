@@ -619,3 +619,11 @@ Courier/Alchemist. Create additive alias deliveries with exact metadata renames,
 manifest hashes and prove all binary chunks plus unrelated JSON unchanged. Keep original art.
 The extra Bricks Builder is Hero builder, not an invented thirteenth NPC. Runtime binding still
 requires consumer acceptance; CPU file checks do not establish an imported or playable character.
+
+
+## Audit role identity before inventing another export name (2026-10-13, Codex)
+DCS who-name parity must honor the native resolver's Brick/Bricks, Labyrinth/Lab and article/
+possessive forms. With two additive aliases all four source manifests cover12/12 talkers;
+Labyrinth's runtime11/12 therefore needs imported-package evidence, not an assumed missing export.
+Report extra hero art separately and never delete it to make NPC counts match. CI identity parity
+is a preflight gate, not proof of imported assets or gameplay acceptance.

@@ -18,3 +18,15 @@ Reproduce with tools/art/cast_role_alias.py using the original production manife
 root; output directory must not exist. Use --help for required arguments. Never infer imported
 success from these offline checks. Claude owns imports, saved package proof, role binding and
 runtime realm_ground verification after GPU recovery. No Blender/editor/GPU work was invoked.
+
+
+## Offline identity parity follow-up
+`tools/realms/cast_manifest_parity.py` checks DCS who-lines against manifest IDs, including
+native realm variants and article/possessive forms. Extra assets are reported, not deleted.
+The committed alias overlay records the two delivered aliases; source manifests remain untouched.
+Actual audits with that overlay: Gallery12/12, Parcels12/12, Bricks12/12, Labyrinth12/12.
+Reports: C:/Users/730ri/Documents/Codex/2026-10-13/cast-role-parity/*.json.
+Four regression groups pass. CI runs all four identity audits. This checks manifest identity,
+not presence of GLB bytes, imported packages, material correctness or runtime binding.
+Labyrinth's runtime11/12 has no missing source-manifest role under the native alias rules;
+consumer must compare imported package identities/path resolution rather than rename blindly.
