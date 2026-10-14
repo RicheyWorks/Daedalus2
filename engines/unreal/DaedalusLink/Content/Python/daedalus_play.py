@@ -784,7 +784,7 @@ def scenario_realm(p):
     walked = 0
     for way in ("right", "left", "down", "up"):   # the first way that isn't water or a wall
         h.realm_input("hold:" + way)
-        yield from _frames(30)
+        yield from _seconds(1.0)
         h.realm_input("release:" + way)
         yield from _frames(5)
         walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
@@ -1562,7 +1562,7 @@ def scenario_airship(p):
             st = g.mount_state()
             checks.append(_check("%s: the hero is aboard %s" % (realm, st.split(" ")[0]), pc.get_controlled_pawn() == g, st))
             g.lift(2500.0)
-            yield from _frames(30)
+            yield from _seconds(1.5)
             legs = [(name, a.get_actor_location()) for name, a in stops]
             if realm == "WORLD-ZERO":
                 hub_cm = __import__("daedalus_realm_ground").ORIGINS["WORLD-ZERO"]
@@ -1574,14 +1574,14 @@ def scenario_airship(p):
                 z0 = g.get_actor_location().z
                 frames, d = yield from _fly_to(g, pc, at)
                 g.lift(0.0)   # settle onto the pad
-                yield from _frames(40)
+                yield from _seconds(2.0)
                 st = g.mount_state()
                 grounded = "grounded=1" in st
                 here = g.get_actor_location()
                 landings.append({"realm": realm, "stop": name, "dist_cm": round(d), "frames": frames, "z": round(here.z), "grounded": grounded})
                 checks.append(_check("%s: docked at %s" % (realm, name), d < 1500.0 and grounded, "d=%.0f frames=%d %s" % (d, frames, st)))
                 g.lift(2500.0)
-                yield from _frames(20)
+                yield from _seconds(1.0)
             g.dismount()
             yield from _frames(2)
             g.destroy_actor()
