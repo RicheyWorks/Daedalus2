@@ -1181,3 +1181,6 @@ Receipt consumer integration: route successful storage context through ConfirmRe
 
 ## Accept the current native save/receipt slice at its actual build head (2026-10-14)
 Full isolated UE5.8 plugin6706cd50 compiled/linked61actions305.87s,198snapshot hashes rechecked; DRSH1 and recordreceipt consumer compile with existing systems. New proof shardstead-storage-native-build-proof.json preserves this head separately from prior04f7. Focused Java controller tests pass: exact >2^53 revision headers forUPDATED/REPLAY,409currentrecord semantics,wronghost rejected before payloadread. First Maven call failed because unquoted dotted -D property was split by PowerShell; quoted retry completed. No warning suppression, liveinstall, authpolicy change or HTTPnetwork/nativegameplay claim.
+
+## Add production motions to existing rigs rather than replacement characters (2026-10-14)
+Worker generator appends Mine/Trade/Repair NLA tracks while retaining Idle/Walk/Attack/Hurt, existing meshes and14bone rig. Reset every pose at each key and return bind pose before export; separate visual motion from authoritative production events. Python compile passes; no Blender execution/newGLB/native animation proof yet. Existing BlenderPID3668 observed with emptyhublocks, which does not establish its ownership; ask owner rather than infer an available turn.

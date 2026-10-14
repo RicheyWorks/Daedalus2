@@ -1,6 +1,45 @@
 """Original Shardstead workers. Run Blender background with -- OUTPUT. Reuses owned cast rig."""
 from pathlib import Path
 exec(compile(Path(__file__).with_name('realm_humanoid.py').read_text(),__file__,'exec'))
+
+def animate_worker_activity(rig):
+    """Append job motions to the existing rig; no root motion or gameplay events."""
+    for clip,length in [('Mine',36),('Trade',48),('Repair',36)]:
+        rig.animation_data_create()
+        action=bpy.data.actions.new(clip)
+        rig.animation_data.action=action
+        for frame in range(1,length+2,3):
+            phase=(frame-1)/length*2*math.pi
+            stroke=(1-math.cos(phase))/2
+            for pose in rig.pose.bones:
+                pose.rotation_euler=(0,0,0)
+                pose.location=(0,0,0)
+            if clip=='Mine':
+                rig.pose.bones['spine'].rotation_euler.x=.12*stroke
+                rig.pose.bones['arm.R'].rotation_euler.x=-1.15*stroke
+                rig.pose.bones['forearm.R'].rotation_euler.x=-.45*stroke
+                rig.pose.bones['arm.L'].rotation_euler.x=-.35*stroke
+            elif clip=='Trade':
+                rig.pose.bones['arm.L'].rotation_euler.x=-.65*stroke
+                rig.pose.bones['forearm.L'].rotation_euler.x=-.30*stroke
+                rig.pose.bones['head'].rotation_euler.x=.06*stroke
+            else:
+                rig.pose.bones['spine'].rotation_euler.x=.08
+                for side,sign in [('R',1),('L',-1)]:
+                    rig.pose.bones['arm.'+side].rotation_euler.x=-.55
+                    rig.pose.bones['forearm.'+side].rotation_euler.x=-.30+.12*math.sin(phase)*sign
+            for pose in rig.pose.bones:
+                pose.keyframe_insert(data_path='rotation_euler',frame=frame)
+                pose.keyframe_insert(data_path='location',frame=frame)
+        track=rig.animation_data.nla_tracks.new()
+        track.name=clip
+        track.strips.new(clip,1,action)
+        track.mute=True
+        rig.animation_data.action=None
+    for pose in rig.pose.bones:
+        pose.rotation_euler=(0,0,0)
+        pose.location=(0,0,0)
+
 records=[]
 roles=[('Twaker_Prospector','prospector',(.12,.36,.38)),('Twaker_Cachekeeper','crystal cache keeper',(.34,.16,.48)),('Twaker_Trader','barter merchant',(.55,.29,.12)),('Shardstead_Farmer','food producer',(.22,.40,.13)),('Shardstead_Energywright','energy producer',(.12,.30,.52)),('Shardstead_Rescuer','unicorn rescue guide',(.57,.22,.24))]
 for i,(name,role,color) in enumerate(roles):
@@ -27,9 +66,9 @@ for i,(name,role,color) in enumerate(roles):
         box((0,-.17,1.28),(.17,.03,.045),white,'spine')
         box((0,-.17,1.28),(.045,.03,.17),white,'spine')
         ring((.32,-.05,1.05),.10,.018,cream,'forearm.L')
-    mesh,rig=rig_mesh(name);animate_humanoid(rig)
+    mesh,rig=rig_mesh(name);animate_humanoid(rig);animate_worker_activity(rig)
     records.append(export_character(mesh,rig,role,'shared-humanoid-14',{'realm':'Island','activity':'Shardstead'}))
     rig.location=(i%3*3,i//3*3,0);label(role,i,3,3)
-finish_scene(records,3,3,'shardstead-workers',['Idle','Walk','Attack','Hurt'],render='--render' in sys.argv)
+finish_scene(records,3,3,'shardstead-workers',['Idle','Walk','Attack','Hurt','Mine','Trade','Repair'],render='--render' in sys.argv)
 
 manifest=json.loads((OUT/'manifest.json').read_text());manifest['realm']='Island';manifest['activity']='Shardstead';(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2))
