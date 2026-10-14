@@ -79,17 +79,30 @@ def _editor_inputs():
     return [(c[0], c[1], s) for c, s in estates], hub_cells, hub_cm, ground
 
 
-def _existing():
+def _prefix(realm):
+    return "Land_" if realm == "WORLD-ZERO" else "Land_%s_" % realm.replace("-", "")
+
+
+def _existing(realm="WORLD-ZERO"):
     import unreal
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-    return {a.get_actor_label(): a for a in sub.get_all_level_actors() if a.get_actor_label().startswith("Land_")}
+    import re
+    pat = re.compile(r"^%s\d+(_Sign)?$" % re.escape(_prefix(realm)))
+    return {a.get_actor_label(): a for a in sub.get_all_level_actors() if pat.match(a.get_actor_label())}
 
 
-def apply(rings=6):
+def apply(rings=6, realm="WORLD-ZERO", hub_cm=None, ground=None, hub_cells=None):
+    """World Zero: estates and hub come from the live level. Another realm: pass its hub centre (cm), ground z and
+    the cells its hub island holds (daedalus_realm_ground does)."""
     import unreal
-    estates, hub_cells, hub_cm, ground = _editor_inputs()
+    if realm == "WORLD-ZERO":
+        estates, hub_cells, hub_cm, ground = _editor_inputs()
+    else:
+        estates, hub_cells = [], set(hub_cells or ())
     todo = plan(rings, estates, hub_cells, hub_cm, ground)
-    have = _existing()
+    have = _existing(realm)
+    pre = _prefix(realm)
+    folder = FOLDER if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     cube = unreal.load_asset(CUBE)
     made = skipped = 0
@@ -97,7 +110,7 @@ def apply(rings=6):
         task.make_dialog(True)
         for p in todo:
             task.enter_progress_frame(1)
-            label = "Land_%d" % p["n"]
+            label = "%s%d" % (pre, p["n"])
             if label in have:
                 skipped += 1
                 continue
@@ -106,34 +119,34 @@ def apply(rings=6):
             slab.static_mesh_component.set_static_mesh(cube)
             slab.set_actor_scale3d(unreal.Vector(LAND_M, LAND_M, SLAB_M))
             slab.set_actor_label(label)
-            slab.set_folder_path("%s/District_%d" % (FOLDER, p["district"]))
-            slab.tags = [unreal.Name("Land"), unreal.Name("Deed:%d" % p["n"]), unreal.Name("District:%d" % p["district"])]
+            slab.set_folder_path("%s/District_%d" % (folder, p["district"]))
+            slab.tags = [unreal.Name("Land"), unreal.Name("Realm:%s" % realm), unreal.Name("Deed:%d" % p["n"]), unreal.Name("District:%d" % p["district"])]
             txt = sub.spawn_actor_from_class(unreal.TextRenderActor, unreal.Vector(x, y, z + 300.0), unreal.Rotator(90.0, 0.0, 0.0))
             txt.text_render.set_text(unreal.Text("LAND %d" % p["n"]))
             txt.text_render.set_world_size(600.0)
             txt.text_render.set_horizontal_alignment(unreal.HorizTextAligment.EHTA_CENTER)
-            txt.set_actor_label("Land_%d_Sign" % p["n"])
-            txt.set_folder_path("%s/District_%d" % (FOLDER, p["district"]))
+            txt.set_actor_label("%s%d_Sign" % (pre, p["n"]))
+            txt.set_folder_path("%s/District_%d" % (folder, p["district"]))
             txt.attach_to_actor(slab, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
             made += 1
     unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
-    return {"rings": rings, "free_cells": len(todo), "made": made, "skipped": skipped, "estates": len(estates),
+    return {"realm": realm, "rings": rings, "free_cells": len(todo), "made": made, "skipped": skipped, "estates": len(estates),
             "hub_cells": len(hub_cells), "ground_cm": ground, "districts": sorted({p["district"] for p in todo})}
 
 
-def remove():
+def remove(realm="WORLD-ZERO"):
     import unreal
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     gone = 0
-    for label, a in _existing().items():
+    for label, a in _existing(realm).items():
         sub.destroy_actor(a)
         gone += 1
     unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
     return {"removed": gone}
 
 
-def report():
-    have = _existing()
+def report(realm="WORLD-ZERO"):
+    have = _existing(realm)
     slabs = [l for l in have if not l.endswith("_Sign")]
-    return {"plots": len(slabs), "signs": len(have) - len(slabs),
-            "lowest": min((int(l.split("_")[1]) for l in slabs), default=-1), "highest": max((int(l.split("_")[1]) for l in slabs), default=-1)}
+    nums = [int(l.split("_")[-1]) for l in slabs]
+    return {"realm": realm, "plots": len(slabs), "signs": len(have) - len(slabs), "lowest": min(nums, default=-1), "highest": max(nums, default=-1)}
