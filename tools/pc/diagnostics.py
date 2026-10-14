@@ -64,6 +64,18 @@ def _number(value, unit):
         return False
 
 
+def _identity(value):
+    """A provider token or process PID plus creation time, never loose equality."""
+    if isinstance(value, str) and value.strip() and len(value) <= 256:
+        return ("token", value)
+    if isinstance(value, Mapping) and set(value) == {"pid", "created_at"}:
+        pid, created = value["pid"], value["created_at"]
+        if (type(pid) is int and 0 < pid <= 0xFFFFFFFF and isinstance(created, str)
+                and _utc(created) is not None):
+            return ("process", pid, _iso(_utc(created)))
+    return None
+
+
 def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
              availability="available", reason=None, instance_id=None,
              expected_instance_id=None, max_age_seconds=30):
@@ -71,7 +83,9 @@ def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
 
     Age equal to the freshness budget is stale. Future or missing source times
     are unknown, even if an imported file was just read. Instance matching is
-    explicit: callers supply a verified identity, such as PID plus creation UTC.
+    explicit: a nonempty provider token or a mapping containing exactly `pid`
+    (positive integer) and `created_at` (aware timestamp string). Process times
+    compare in UTC; PID alone, booleans and empty identifiers cannot match.
     """
     observed = _utc(observed_at)
     if observed is None:
@@ -87,7 +101,11 @@ def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
         raise ValueError("metrics must be a mapping")
     captured = _utc(sampled_at)
     age = (observed - captured).total_seconds() if captured else None
-    if expected_instance_id is not None and (instance_id is None or instance_id != expected_instance_id):
+    actual_identity = _identity(instance_id)
+    expected_identity = _identity(expected_instance_id)
+    if ((instance_id is not None and actual_identity is None) or
+            (expected_instance_id is not None and
+             (expected_identity is None or actual_identity != expected_identity))):
         availability, reason = "unavailable", "instance_mismatch"
     if availability != "available":
         freshness = "unavailable"
@@ -121,7 +139,8 @@ def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
         "age_seconds": age if age is not None and age >= 0 else None,
         "max_age_seconds": max_age_seconds,
         "freshness": freshness,
-        "instance_id": instance_id,
+        "instance_id": (dict(instance_id) if isinstance(instance_id, Mapping) else instance_id)
+                       if actual_identity is not None else None,
         "metrics": normalized,
         "capabilities": {"minimized_live_read": "unverified"},
     }
