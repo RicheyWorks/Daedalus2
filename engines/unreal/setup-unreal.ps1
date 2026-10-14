@@ -341,6 +341,22 @@ function Set-IniValue([string]$file, [string]$section, [string]$key, [string]$va
     Set-Content -Path $file -Value $out -Encoding UTF8
 }
 
+function Ensure-GameFeatureDataCookRule([string]$file) {
+    # Preserve inherited array scans and any existing project rule for this type.
+    $section = "/Script/Engine.AssetManagerSettings"
+    $inSection = $false
+    foreach ($line in $(if (Test-Path -LiteralPath $file) { Get-Content -LiteralPath $file } else { @() })) {
+        if ($line -match '^\s*\[(.+)\]\s*$') {
+            $inSection = ($Matches[1] -eq $section)
+        } elseif ($inSection -and $line -match '^\s*[+.]?PrimaryAssetTypesToScan\s*=.*PrimaryAssetType\s*=\s*"?GameFeatureData"?\s*[,)]') {
+            return $false
+        }
+    }
+    $rule = '(PrimaryAssetType="GameFeatureData",AssetBaseClass="/Script/GameFeatures.GameFeatureData",bHasBlueprintClasses=False,bIsEditorOnly=False,Directories=(),SpecificAssets=(),Rules=(Priority=-1,ChunkId=-1,bApplyRecursively=True,CookRule=AlwaysCook))'
+    Set-IniValue $file $section "+PrimaryAssetTypesToScan" $rule
+    return $true
+}
+
 # Processes that have a file under $dir loaded (a running editor keeps the plugin's DLL open).
 function Get-Lockers([string]$dir) {
     $full = [System.IO.Path]::GetFullPath($dir)
@@ -427,6 +443,8 @@ if (-not $WhatIfOnly -and (Test-Path $Project)) {
     Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "GameDefaultMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
     # No camera motion blur: a fast mouse turn smeared the whole screen (Richey, 2026-10-13).
     Set-IniValue $ini "/Script/Engine.RendererSettings" "r.DefaultFeature.MotionBlur" "False"
+    $gameIni = Join-Path (Join-Path $ProjectDir "Config") "DefaultGame.ini"
+    [void](Ensure-GameFeatureDataCookRule $gameIni)
     Write-Host "    project settings: DirectX 12 with Shader Model 6 (for Nanite), Daedalus level at startup, no motion blur"
 }
 

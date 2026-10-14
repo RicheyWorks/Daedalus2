@@ -71,6 +71,10 @@ jobs:
       - name: plan only
         shell: pwsh
         run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly
+      - name: preserve GameFeatureData config arrays
+        # Config helper tests do not invoke the installer or touch an editor.
+        shell: powershell
+        run: .\engines\unreal\core-test\game_feature_config_test.ps1
       - name: project and plugin, for real
         shell: powershell
         run: |
