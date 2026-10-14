@@ -5,6 +5,21 @@ records (main 1cb065e2). It does not decide damage, spend MP, award loot or repl
 the sprite battle. Assign dedicated presentation actors to member/foe slots,
 and optional attack/hurt sequences sharing each mesh's skeleton.
 
+Imported cast clips are resolved per skeletal mesh under
+`/Game/Daedalus/Art/Cast/<Id>/`, including child folders. An exact `Attack`/`Hurt`
+name or `_Attack`/`_Hurt` suffix selects the role. Only sequences with the exact
+mesh skeleton qualify; deterministic asset-path order breaks duplicate ties.
+Compatible explicit attack/hurt overrides still take precedence. A mismatched
+override falls back to that mesh's imported clips, never another cast's folder.
+Missing clips leave the character untouched.
+
+BeginPlay prewarms the stage's first 32 member and foe slots. Call
+RefreshCastAnimations after replacing stage meshes or importing/reloading clips.
+The GC-tracked cache holds at most 64 mesh bindings; runtime additions can resolve
+on their first cue, so prewarm before showing a battle. ResolveCastAnimation is
+also callable for integration inspection without playing a clip. Restrict stage
+slots to dedicated presentation actors as before.
+
 Submit a director batch once when its battle line starts. Cue At values are
 relative to submission. Batches are atomically validated: 512 queued cues maximum,
 32 dispatches per tick, bounded slots/text and finite nonnegative times. Equal
@@ -22,3 +37,12 @@ The actor/reflection module compiled and linked in an isolated UE5.8 scratch
 plugin, not the full shared plugin or live world. Director subscription in
 Hero/Realm, cast placement, animation assets, camera/FX/audio, deterministic
 functional scenarios and live Play comparison still need integration with Claude.
+
+The per-mesh update built the complete 151-file tracked plugin snapshot c419b8b4
+in 236.33 seconds. Native Daedalus.Battle.CastAnimations passed in 0.038427
+seconds with no test warnings/errors: two synthetic skeletons, folder-local
+attack/hurt selection, wrong-skeleton refusal, compatible override retention,
+fallback from an incompatible override, and missing/null/component refusal.
+See battle-cast-animation-proof.json. This is synthetic engine verification;
+actual imported clip naming, director subscription, animation playback, return
+to idle, camera/FX/audio and rendered battle acceptance remain open.
