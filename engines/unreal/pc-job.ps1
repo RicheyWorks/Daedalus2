@@ -2,7 +2,7 @@
 # A long job on this PC that outlives the Claude call, quiet with antivirus (ADR-045), for anything that is not
 # an Unreal build (those are unreal-job.ps1): a Play-scenario run, an import, a server probe.
 #
-#   .\pc-job.ps1 -Start -Script tools\unreal_play\run_scenarios.py -Args "cast realm_switch"   -> "started job-MMdd-HHmmss pid=N"
+#   .\pc-job.ps1 -Start -Script tools\unreal_play\run_scenarios.py -ScriptArgs "cast realm_switch"   -> "started job-MMdd-HHmmss pid=N"
 #   .\pc-job.ps1 -Wait  [-Id x] [-Seconds 50]                                                 -> RUNNING / DONE <code> + the tail
 #   .\pc-job.ps1 -Tail  [-Id x] [-Lines 40]
 #
@@ -12,7 +12,7 @@
 # %LOCALAPPDATA%\Daedalus\jobs through the shell (no -RedirectStandardOutput), and there is no -ExecutionPolicy flag.
 param(
     [switch]$Start, [switch]$Wait, [switch]$Tail,
-    [string]$Script = "", [string]$Args = "",
+    [string]$Script = "", [string]$ScriptArgs = "",
     [string]$Id = "", [int]$Seconds = 50, [int]$Lines = 40
 )
 $Jobs = Join-Path $env:LOCALAPPDATA "Daedalus\jobs"
@@ -31,10 +31,11 @@ if ($Start) {
     $exit = Join-Path $Jobs "$Id.exit"
     $runner = if ($full -like "*.py") { "python" } elseif ($full -like "*.ps1") { "powershell.exe -NoProfile -File" } else { throw "a .py or .ps1 script" }
     # cmd runs the script and writes the exit code last; the window is minimized and never hidden.
-    $cmd = "cmd.exe /c `"cd /d `"$Repo`" && $runner `"$full`" $Args >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
+    # /S keeps the inner quotes intact; /c "..." with nested quotes otherwise loses the first and last one.
+    $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
     $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
-    "$(Get-Date -Format s) start $Script $Args" | Out-File -FilePath $log -Encoding utf8
+    "$(Get-Date -Format s) start $Script $ScriptArgs" | Out-File -FilePath $log -Encoding utf8
     "started $Id pid=$($r.ProcessId)"
     exit
 }
