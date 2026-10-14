@@ -1,0 +1,169 @@
+{
+  "schema": "daedalus.photo-pdf.native-install-binding.v1",
+  "stage": "source_written_unverified",
+  "repository": "RicheyWorks/Daedalus2",
+  "branch": "codex/photo-pdf-terminal-20261014",
+  "baselineCommit": "5887f860be17f6d7356f9393599c005dc83450b3",
+  "revisionBinding": "Use the exact PR head / containing Git commit delivered with this manifest. Per-file SHA256 values identify the eight additive native sources; never install from an unpinned branch tip.",
+  "hashNormalization": "SHA256 over UTF-8 without BOM, with CRLF normalized to LF; preserve all other bytes and the final newline. This permits normal Windows Git checkout line endings.",
+  "claim": {
+    "owner": "pootscoot-practical-apps",
+    "exactScopeMessage": 31039,
+    "coordinatorAcceptance": 31050,
+    "operatorScopeAcknowledgment": 31054,
+    "operatorAcknowledgmentMeansRuntimeAcceptance": false
+  },
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfClient.h",
+      "sha256": "0ca4841b7c9dab515b389be6654843daf8a38b630cfbb754016d491ff0c4f906"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfClient.cpp",
+      "sha256": "2154d35bb02c14b61f016972a76acea590b059ff20f987f4c22bf2a5d93c4357"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfTerminal.h",
+      "sha256": "9df9f9543efb95c7d7d9c0049ecea31cfb68658ab85ae4932e4d106e8d80ecb6"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
+      "sha256": "adca1095fb1d44c334a230d75720542f551a01927a88850cb0ad1419c957d92b"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.h",
+      "sha256": "2e2a1cc24c397e7ac3fb5b8fbc4cf7c23001621589cfdea80c5a858ab84e0179"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.cpp",
+      "sha256": "a8f02526874be3fd4feb376b0abc63f080f7412237f838740c2c4558ecf58877"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
+      "sha256": "ea15e11f4f3b4a6480eda23629bc4fbbe479d10b93b027016786352f043846ef"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+      "sha256": "802652858e2e34db6db194dca196df3045a86f09ede1ecb1d8462a963ff6c756"
+    }
+  ],
+  "documentationFiles": [
+    "docs/contracts/photo-pdf-v1/native-terminal.md",
+    "docs/contracts/photo-pdf-v1/install-binding-manifest.json",
+    "docs/contracts/companion-apps-v1/README.md",
+    "docs/contracts/companion-apps-v1/capability-map.json"
+  ],
+  "binding": {
+    "nativeClass": "/Script/DaedalusLink.DaedalusPhotoPdfTerminal",
+    "module": "DaedalusLink",
+    "interaction": "Existing ADaedalusUsable / local ADaedalusHero Interact",
+    "supportedFileDialogPlatform": "Windows",
+    "mesh": "Constructor engine cube placeholder; physical art and placement remain owner work.",
+    "configuration": "No pairing URL, token, path or service port in class defaults or map properties. Pair through the open local panel only.",
+    "playerScope": "Nearby local possessed Hero in same running game world, realm, viewport and mapped Slate user; UI-only input without pausing. Dedicated server, remote/AI pawn, editor world and another Hero overlay are rejected.",
+    "existingFilesModified": [],
+    "buildModuleEditsRequiredBySource": false,
+    "existingDependenciesUsed": [
+      "Slate",
+      "SlateCore",
+      "Json",
+      "libcurl"
+    ],
+    "windowsLinkDirective": "Comdlg32.lib via platform-guarded pragma in selected-file helper; linkage is unverified."
+  },
+  "companion": {
+    "repository": "RicheyWorks/PhotosToPDF",
+    "pullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/3",
+    "sourceCommit": "7927f75f1e347fdb0c75a0af27b46f6f89b34ebc",
+    "module": "PhotosToPDFPC",
+    "service": "Existing opt-in RealmPhotoBridge in the app JVM",
+    "conversionAuthority": "Existing PdfConversionService / PDFBox; one image-sized single-page PDF per selected photo",
+    "protocol": "photospdf.local.v1",
+    "outputMode": "one_pdf_per_photo",
+    "pairingGrammar": "http://127.0.0.1:<port>/#token=<capability>",
+    "wireFormat": "PTP1 typed image bytes, never local paths/filenames",
+    "sessionRoute": "/v1/sessions",
+    "sessionHeader": "X-Session-Token",
+    "jobRoute": "/v1/jobs",
+    "outputRoute": "/v1/jobs/{canonical-owned-uuid}/outputs/{one-based-index}",
+    "authority": "Private process Bearer capability and session capability in transient local client/worker memory",
+    "installedCompanionBinaryVerified": false,
+    "launchOrActivationPerformed": false
+  },
+  "nativeBounds": {
+    "selectedFiles": 8,
+    "selectedFileTypes": [
+      "PNG",
+      "JPEG"
+    ],
+    "perImageBytes": 8388608,
+    "completeRequestFrameBytes": 25165824,
+    "jsonResponseBytes": 32768,
+    "totalResponseHeaderBytes": 8192,
+    "perPdfDownloadAndExportBytes": 67108864,
+    "connectTimeoutMilliseconds": 3000,
+    "requestTimeoutMilliseconds": 30000,
+    "shutdownRevokeTimeoutMilliseconds": 3000,
+    "progressPollingSeconds": 1,
+    "maximumAncestorDirectories": 128,
+    "pollingStopsOnError": true,
+    "backendDecodeAuthority": "Existing app validates dimension/pixel budgets (4096 per dimension, 12M pixels/image, 24M pixels/batch), decodes formats and cleans partial conversion output.",
+    "pdfValidationMeaning": "Bounded content type/header/end-marker envelope checks only; structural/page/content validation is deferred.",
+    "coverageLimit": "A valid backend image is not guaranteed to produce an output under the native PDF cap. Oversize fails explicitly."
+  },
+  "actionAndCleanup": {
+    "uncertainSubmission": "Freeze exact bytes/key. Retry or cancellation reconciliation uses the same action; do not substitute selected bytes or a new key.",
+    "jobDeletion": "Within a live session, reset key/selection after confirmed job deletion; the photo service releases deleted keys. Confirmed session revocation or authorization loss clears local state; shutdown abandons state without claiming remote deletion.",
+    "disconnect": "Explicit session DELETE; unconfirmed cleanup remains visible and does not become a success receipt.",
+    "lifecycleClose": "Clear masked input, invalidate panel generation and abort active transport; request bounded best-effort session revoke. Late output cannot open an export dialog in another panel generation.",
+    "lostSessionCreationReceipt": "Without the returned session capability the native client cannot confirm revoke; existing app expiry/retention is authoritative.",
+    "localExport": "Explicit new local PDF target. Retained validated ancestor handles and checked local volume paths reject reparse/network aliases. Bounded sibling write, failure disposition and non-replacing rename use the still-owned temporary handle. Existing images/documents are not overwritten; exported user files remain after job deletion.",
+    "thirdPartyUploads": false,
+    "documentScanning": false,
+    "multiPageMergeAdded": false,
+    "realFaxInvocation": false
+  },
+  "operatorHandoff": {
+    "soleNativeOperator": "codex-play-guard",
+    "currentExecutionPermission": "Deferred: no builds, tests, service activation, module loading, binding, map placement, editor operation or Play in this source delivery.",
+    "futureInstallationSequence": [
+      "Owner chooses an authorized application window and verifies exact delivered commit and source hashes against the intended checkout; do not copy shared launchers/Hero/Build.cs.",
+      "Owner separately establishes native compilation/UHT/link/loading evidence at the installed source revision.",
+      "Owner binds the additive native actor through the existing interaction seam and coordinates physical object art/realm placement with realm/art owners.",
+      "Owner separately establishes an installed matching local PhotosToPDF bridge and runs explicit synthetic-image selected-bytes conversion/export acceptance.",
+      "Owner records native binding/runtime receipts and actual output evidence, distinct from this source claim and handoff acknowledgment."
+    ],
+    "acceptanceCasesDeferred": [
+      "Invalid/corrupt/mismatched image, oversized file/frame/dimensions, bounded error response",
+      "Repeated submit, lost response then same-action recovery, cancel during submission/conversion/download, unknown-job cancellation reconciliation",
+      "Session ownership, wrong capability, no path/token leakage, expiry/revoke and unconfirmed-cleanup reporting",
+      "Export cancel, existing-file refusal, write/commit failure cleanup, local/reparse path handling and no original-file overwrite",
+      "Structural PDF parsing, exact one-page/image-size/content checks using synthetic fixtures",
+      "Pawn/realm/reach/focus/overlay/paused/end-play lifecycle, controller input restoration and late download fencing",
+      "Physical object placement, art, local interaction and actual Play result"
+    ]
+  },
+  "verification": {
+    "sourceReviewed": true,
+    "testsRun": false,
+    "buildsRun": false,
+    "uhtRun": false,
+    "ciRequested": false,
+    "servicesStarted": false,
+    "nativeInstalled": false,
+    "nativeBound": false,
+    "nativeRuntimeVerified": false,
+    "overall": "UNVERIFIED source delivery; test/build/runtime deferral is an instruction, not a passing result."
+  },
+  "sourceCorrections": [
+    {
+      "defect": "Controller restart invalidates ignore counters; close could decrement another owner. Destroyed controller could leave viewport state behind.",
+      "stage": "source_corrected_unverified",
+      "runtimeVerified": false,
+      "source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
+      "correction": "UIOnly viewport owns input without controller counts. Restore owned opening viewport even if controller is destroyed; retain focus/viewport ownership guards.",
+      "claim": 31157,
+      "focusedSourceReview": "complete_source_only; independent review found no remaining concrete P1/P2 in the scoped patch"
+    }
+  ]
+}

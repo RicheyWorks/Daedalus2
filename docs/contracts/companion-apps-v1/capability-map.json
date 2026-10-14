@@ -1,0 +1,547 @@
+{
+  "schema": "daedalus.companion-apps.capability-map.v1",
+  "inspectionDate": "2026-10-14",
+  "purpose": "Map original implemented app features to existing interfaces, native bindings and remaining code; eventual full capability coverage is the target, not a completion claim.",
+  "complete": false,
+  "inspection": {
+    "method": "read-only source inspection before authoring these two inventory documents",
+    "testsExecuted": false,
+    "buildsExecuted": false,
+    "servicesStarted": false,
+    "personalFilesRead": false,
+    "nativeInstalled": false,
+    "nativeRuntimeVerified": false,
+    "reasonVerificationDeferred": "User requested source implementation with tests deferred.",
+    "evidenceMeaning": "source_inspected means symbols, routes and documented behavior were read at the source pin; it is not a fresh execution result. source_written_unverified means source is delivered but unbuilt and uninstalled, with functionality pending exercise rather than an observed runtime result."
+  },
+  "stageDefinitions": {
+    "source_inspected": "Implementation or contract exists at the pinned source; not executed during this inventory.",
+    "desktop_only_intentionally_unexposed": "Existing app capability preserved; no permission or bridge endpoint exposes it to this native interface.",
+    "browser_interface_only": "Native actor validates a private local link and opens the existing browser interface; it does not submit work or report job completion.",
+    "source_written_unverified": "New native connection source is delivered, but unbuilt, uninstalled and not accepted; functionality is a source implementation pending exercise.",
+    "native_unbound": "Existing app endpoint has no native work/result UI binding in this scope.",
+    "not_implemented": "Source does not implement the proposed capability.",
+    "disabled_unverified_transport": "Provider adapter exists but defaults disabled; no real provider execution is authorized or established."
+  },
+  "nativeRepository": {
+    "repository": "RicheyWorks/Daedalus2",
+    "baselineCommit": "5887f860be17f6d7356f9393599c005dc83450b3",
+    "module": "engines/unreal/DaedalusLink/Source/DaedalusLink",
+    "interactionSeam": "ADaedalusUsable.Use / existing local Hero interaction",
+    "claim": { "hubMessage": 31050, "scope": "Additive photo native client, terminal, panel and selected-file/export helpers plus these inventory documents", "acceptedByCoordinator": true },
+    "runtimeOperator": "codex-play-guard",
+    "installationAcceptance": "pending; a delivered handoff is not acceptance",
+    "bindings": [
+      {
+        "id": "photo-browser",
+        "stage": "browser_interface_only",
+        "source": [
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfMachine.h", "symbols": ["ADaedalusPhotoPdfMachine", "PairLocalApp", "ClearRuntimePairing", "GetChooserState"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfMachine.cpp", "symbols": ["Use"] }
+        ],
+        "completionAuthority": "existing PhotosToPDFPC job result, never browser launch"
+      },
+      {
+        "id": "photo-native-terminal",
+        "stage": "source_written_unverified",
+        "source": [
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfClient.h", "symbols": ["FDaedalusPhotoPdfClient", "FDaedalusPhotoPdfView", "Pair", "SetImages", "SubmitOrRetry", "Refresh", "CancelJob", "Disconnect", "Shutdown", "Tick", "Download"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfTerminal.h", "symbols": ["ADaedalusPhotoPdfTerminal", "PairLocalApp", "ChoosePhotos", "SubmitOrRetry", "RefreshJob", "CancelJob", "DisconnectApp", "ExportPdf", "ClosePanel"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h", "symbols": ["DaedalusPhotoPdfFiles::Supported", "SelectImages", "SavePdf"] }
+        ],
+        "implementationTargets": [
+          "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfClient.cpp",
+          "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
+          "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.h",
+          "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.cpp",
+          "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp"
+        ],
+        "implementedWork": ["explicitly selected PNG/JPEG bytes", "authenticated capabilities/session/job requests", "stable uncertain-response retry identity", "real job status", "authenticated output download", "cancel/delete session and job", "explicit new local PDF export"],
+        "implementationEvidence": "Source delivered by the scoped implementation owners; no build, installation or runtime exercise establishes these behaviors yet.",
+        "staticReview": { "scope": ["DaedalusPhotoPdfFiles.h", "DaedalusPhotoPdfFiles.cpp", "SDaedalusPhotoPdfPanel.h", "SDaedalusPhotoPdfPanel.cpp"], "stage": "complete_source_only", "findings": "Ancestor-path and temporary-file identity findings addressed in source; no remaining concrete blocker found in this four-file scope. Windows API and Slate behavior remain unbuilt and unexercised." },
+        "inputLifecycleCorrection": { "claim": 31157, "stage": "source_corrected_unverified", "source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp", "defect": "Controller restart resets ignore counters; an old terminal close could consume a later owner's count, while destroyed controller could leave viewport input state behind.", "correction": "Use existing UIOnly viewport input without controller counters; restore owned opening viewport independently of controller survival.", "runtimeVerified": false },
+        "conversionAuthority": "com.photostopdfpc.service.PdfConversionService in the existing app JVM",
+        "notAdded": ["folder scanning", "multi-page merging", "OCR", "physical printing", "server-side filesystem path input"],
+        "verification": { "built": false, "tested": false, "installed": false, "playAccepted": false }
+      },
+      {
+        "id": "typed-browser",
+        "stage": "browser_interface_only",
+        "source": [
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLocalAppMachine.h", "symbols": ["ADaedalusLocalAppMachine", "EDaedalusLocalAppKind::ImageOptimizer", "EDaedalusLocalAppKind::Synapse", "SetApplication", "PairLocalApp", "ClearRuntimePairing", "GetCompanionState"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalAppMachine.cpp", "symbols": ["Use"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalAppLauncher.cpp", "symbols": ["guarded Windows browser launcher"] }
+        ],
+        "states": ["Unpaired", "Paired", "CompanionOpened"],
+        "stateProvesCompletedWork": false,
+        "missingCode": ["native image job controls and result/export UI", "native Synapse due/reveal/review receipt UI"]
+      }
+    ],
+    "relevantInfrastructure": {
+      "nativePlugin": "engines/unreal/DaedalusLink/DaedalusLink.uplugin",
+      "connectorsFound": [
+        { "path": "connectors/claude-unreal-connector", "role": "Existing Claude Unreal bridge plugin and Python connector; not a photo/image/study/fax service adapter." },
+        { "path": "connectors/claude-asset-pipeline", "role": "Existing art queue, GLB and live handoff pipeline; placement/art coordination, not app conversion or review logic." }
+      ],
+      "pluginModulesFound": ["daedalus-plugin-api", "daedalus-plugin-runtime"],
+      "pluginRole": "General Java MazePlugin SPI/runtime. No four-app connector found in these modules at the baseline.",
+      "exampleDirectoriesFound": ["examples/benchmark-harness", "examples/biome-plugin", "examples/dungeon-layout", "examples/loadbalancer-topology", "examples/openxr-plugin"],
+      "exampleRole": "Existing examples; no photo/image/Synapse/fax integration found by scoped tracked-source search.",
+      "existingContracts": ["docs/contracts/photo-pdf-v1/object.json", "docs/contracts/local-app-v1/objects.json", "docs/contracts/fax-v1/README.md"],
+      "scopeExclusions": ["Blackjack PR152", "CSRBT PR153", "shared editor operation", "other owners' game/realm/art sources"]
+    }
+  },
+  "applications": [
+    {
+      "id": "photos-to-pdf",
+      "repository": "RicheyWorks/PhotosToPDF",
+      "sourceCommit": "7927f75f1e347fdb0c75a0af27b46f6f89b34ebc",
+      "draftPullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/3",
+      "modules": [
+        { "path": "PhotosToPDFPC", "role": "Focused JavaFX/PDFBox 3 Maven app and same-process private bridge; integration authority." },
+        { "path": "src", "role": "Earlier themed implementation; not selected for bridge integration." },
+        { "path": "PhotosToPDF", "role": "Earlier separately configured themed Maven variant; not selected for bridge integration." },
+        { "path": "themes", "role": "Earlier theme resources; some earlier media/packaging assets are placeholders, not proof of working distribution." }
+      ],
+      "extensionInventory": { "scope": "tracked paths and top-level module inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "implementedConnector": "PhotosToPDFPC/src/main/java/com/photostopdfpc/bridge/RealmPhotoBridge.java" },
+      "prerequisites": ["JDK 21+", "Maven for source launch", "graphical JavaFX desktop", "explicit --realm-bridge opt-in; no listener in normal launch"],
+      "launch": { "directory": "PhotosToPDFPC", "command": "mvn javafx:run -Djavafx.args=\"--realm-bridge\"", "pairingControl": "Pair realm object" },
+      "protocol": {
+        "contract": "PhotosToPDFPC/docs/REALM_BRIDGE.md",
+        "pairingUri": "http://127.0.0.1:<ephemeral-port>/#token=<43-character-base64url-capability>",
+        "capabilities": { "route": "GET /v1/capabilities", "protocol": "photospdf.local.v1", "outputMode": "one_pdf_per_photo", "productIdFieldPresent": false },
+        "authorization": "Authorization: Bearer <process-capability>; X-Session-Token after session creation",
+        "origin": "Exact literal-loopback Host required. Origin may be absent for native requests; if present it must equal the exact loopback origin. No CORS permission.",
+        "session": { "create": "POST /v1/sessions", "body": "empty", "responseFields": ["sessionId", "sessionToken", "expiresInSeconds"], "delete": "DELETE /v1/sessions", "maxSessions": 4, "absoluteTtlSeconds": 900 },
+        "routes": ["POST /v1/jobs", "GET /v1/jobs/{uuid}", "GET /v1/jobs/{uuid}/outputs/{one-based-index}", "DELETE /v1/jobs/{uuid}"],
+        "submit": { "contentType": "application/octet-stream", "idempotencyHeader": "Idempotency-Key", "keyGrammar": "8-80 ASCII letters/digits/underscore/hyphen", "envelope": "PTP1; big-endian uint32 count; each: uint8 type(1 PNG,2 JPEG), uint32 length, exact bytes; no trailing bytes", "retry": "identical key and bytes recover same job; changed bytes return 409" },
+        "cancellation": "DELETE removes access, outputs and action key; read becomes 404. Reusing the released key can create new work, so a client must not retry canceled work as an uncertain active action.",
+        "states": ["QUEUED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELED"],
+        "limits": { "images": 8, "bytesPerImage": 8388608, "batchBytesIncludingFraming": 25165824, "dimension": 4096, "pixelsPerImage": 12000000, "pixelsPerBatch": 24000000, "retainedJobs": 16, "workerThreads": 1, "queuedJobs": 2 },
+        "privacy": "Selected bytes only; no source names/paths or client export paths on the wire; generated photo-N.pdf attachments; output PDFs contain decoded normalized pixels; no external upload."
+      },
+      "features": [
+        {
+          "id": "select-convert-export",
+          "behavior": "Explicit image selection and one image-sized single-page PDF per image; no merging.",
+          "source": [
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/controller/MainController.java", "symbols": ["onAddFiles", "onChooseOutput", "onConvert"] },
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/service/PdfConversionService.java", "symbols": ["convertAll", "convertSingle", "convertImage", "addImagePage", "resolveUniqueOutput"] },
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/bridge/RealmPhotoBridge.java", "symbols": ["submit", "convert", "download"] }
+          ],
+          "existingInterface": "JavaFX selection/output chooser; private browser jobs/download; bridge PNG/JPEG is a bounded subset of desktop inputs.",
+          "nativeBindings": ["photo-browser", "photo-native-terminal"],
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "remainingVerification": ["operator builds, installs and binds the statically reviewed source, then verifies actual conversion/export"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "folder-and-output-workflow",
+          "behavior": "Scan one selected folder without recursion; choose output directory or PDFs beside first input; preserve existing filenames using suffixes; remove/clear desktop queue.",
+          "source": [
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/util/FileUtils.java", "symbols": ["scanDirectory", "defaultOutputDir", "ensureDirectory"] },
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/controller/MainController.java", "symbols": ["onAddFolder", "onRemoveSelected", "onClearAll", "onChooseOutput"] },
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/service/PdfConversionService.java", "symbols": ["resolveUniqueOutput"] }
+          ],
+          "existingInterface": "JavaFX only; no bridge folder/path API.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["future explicit local-only folder/queue UX if separately scoped; never server filesystem paths"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "progress-retry-cancel-cleanup",
+          "behavior": "Desktop per-file progress/error status; bridge scoped real jobs, repeated action recovery, session/job deletion and cleanup.",
+          "source": [
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/controller/MainController.java", "symbols": ["onConvert"] },
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/bridge/RealmPhotoBridge.java", "symbols": ["handle", "snapshot", "expire", "cancelSession", "cancel", "close"] },
+            { "path": "PhotosToPDFPC/src/main/resources/realm/bridge.js", "symbols": ["browser action/session/job workflow"] }
+          ],
+          "existingInterface": "Private browser and job API; desktop failures are per image, bridge publishes outputs only after whole batch success.",
+          "nativeBindings": ["photo-native-terminal"],
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "remainingVerification": ["operator exercises the source implementation to verify uncertainty, cancellation, cleanup and real failure UI"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "desktop-codecs-themes-packaging",
+          "behavior": "Desktop picker lists JPG/JPEG/PNG/BMP/GIF/TIFF/TIF/WebP; successful decoding depends on available codecs. Earlier variants contain themes and incomplete packaging/media resources.",
+          "source": [
+            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/config/AppConfig.java", "symbols": ["SUPPORTED_EXTENSIONS"] },
+            { "path": "README.md", "symbols": ["Repository map", "format and placeholder limitations"] },
+            { "path": "PhotosToPDF/src/main/java/com/photostopdf/theme/ThemeProfile.java", "symbols": ["ThemeProfile"] }
+          ],
+          "existingInterface": "Desktop/earlier variants only. Presence of resources does not establish usable sound, mobile support or installed distribution.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["codec-specific review before extending bounded native/bridge types", "separately verify and complete any desired earlier themes/distribution"],
+          "evidenceStage": "source_inspected"
+        }
+      ]
+    },
+    {
+      "id": "image-optimizer",
+      "repository": "RicheyWorks/image-optimizer",
+      "sourceCommit": "486a121c2da6d320045f2447739f2b65c9bc88b3",
+      "draftPullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/4",
+      "modules": [ { "path": ".", "role": "Single Maven Swing application; shared Thumbnailator service and same-process bridge live under src/main." } ],
+      "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "implementedConnector": "src/main/java/com/terpenepirate/imageoptimizer/bridge/RealmImageBridge.java" },
+      "prerequisites": ["JDK 21+", "graphical Swing desktop", "built executable JAR", "explicit --realm-bridge opt-in"],
+      "launch": { "command": "java -jar target/image-optimizer-1.0.0.jar --realm-bridge", "pairingControl": "Realm workbench" },
+      "protocol": {
+        "contract": "docs/REALM_BRIDGE.md",
+        "pairingUri": "http://127.0.0.1:<ephemeral-port>/realm/image-optimizer/#token=<43-character-base64url-capability>",
+        "capabilities": { "route": "GET /v1/capabilities", "productId": "image-optimizer", "protocol": "imageoptimizer.local.v1", "capabilities": ["image.optimize"], "outputMode": "one_image_per_input" },
+        "authorization": "Authorization: Bearer <process-capability>; X-Session-Token after session creation",
+        "origin": "Exact literal-loopback Host; native may omit Origin, browser Origin must match; no CORS permission.",
+        "session": { "create": "POST /v1/sessions", "body": "empty", "responseFields": ["sessionId", "sessionToken", "expiresInSeconds"], "delete": "DELETE /v1/sessions", "maxSessions": 4, "absoluteTtlSeconds": 900 },
+        "routes": ["POST /v1/jobs", "GET /v1/jobs/{uuid}", "GET /v1/jobs/{uuid}/outputs/{one-based-index}", "DELETE /v1/jobs/{uuid}"],
+        "submit": { "contentType": "application/octet-stream", "idempotencyHeader": "Idempotency-Key", "envelope": "IOP1; big-endian uint32 count; uint8 quality(70..95); uint8 resize(0/1); uint32 width(1..4096); uint8 outputFormat(0 source,1 PNG,2 JPEG); each uint8 sourceType(1 PNG,2 JPEG), uint32 length, exact bytes", "retry": "fingerprint includes settings and bytes; freeze both key and envelope after uncertain response" },
+        "cancellation": "Retains key and CANCELED tombstone until session expiry; identical canceled retry cannot resurrect work. Changed work requires deliberately new action identity.",
+        "states": ["QUEUED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELED"],
+        "limits": { "images": 8, "bytesPerImage": 8388608, "batchBytesIncludingFraming": 25165824, "dimension": 4096, "pixelsPerImage": 12000000, "pixelsPerBatch": 24000000, "outputBytesPerBatch": 33554432, "retainedActions": 16 },
+        "privacy": "Selected PNG/JPEG bytes and settings only; generic image-N outputs, normalized pixels without source metadata; no source overwrite or external upload. JPEG loses transparency; output may be larger."
+      },
+      "features": [
+        {
+          "id": "resize-reencode-format",
+          "behavior": "Shared Thumbnailator quality/resize/re-encode; bridge adds keep-format/PNG/JPEG controls and never enlarges small images. Desktop retains its original file primitive behavior.",
+          "source": [
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["optimizeImage", "OptimizationWorker.doInBackground"] },
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizationService.java", "symbols": ["Settings", "configured", "optimizeFile", "optimizePixels"] },
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/bridge/RealmImageBridge.java", "symbols": ["submit", "convert", "download"] }
+          ],
+          "existingInterface": "Swing and private browser/job API.",
+          "nativeBindings": ["typed-browser"],
+          "bindingStage": "native_unbound",
+          "missingCode": ["native selected-file/settings submission", "real job polling and optimized-image export UI"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "folder-plan-and-alias-protection",
+          "behavior": "Dropped files/folders and Select Folder; preserve relative layouts in optimized output, collision suffixes, exclude optimized folders, skip symlink inputs and reject output aliases/junctions/hardlinks to sources.",
+          "source": [
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["drop", "startOptimization"] },
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/OptimizationPlan.java", "symbols": ["fromSelection", "resolveOutput", "collectImages", "uniqueOutput"] }
+          ],
+          "existingInterface": "Swing local filesystem planner; no bridge folder/path endpoint.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["future explicitly selected local folder workflow using original planner if scoped"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "duplicate-and-existing-output-skip",
+          "behavior": "Optional MD5 content duplicate detection and skip when existing destination is less than 95 percent of source size; a heuristic, not quality equivalence.",
+          "source": [ { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["getMD5", "OptimizationWorker.doInBackground", "duplicateCheckBox", "skipOptimizedCheckBox"] } ],
+          "existingInterface": "Swing only; selected-byte bridge creates new private outputs and exposes neither option.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["product decision and bounded API design before exposing desktop skip semantics"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "job-results-retry-cancel",
+          "behavior": "Bridge real status, actual input/output byte counts and dimensions, frozen uncertain retries, cancel/session deletion/expiry. Desktop has progress/logs but no persistent job history or cancel control.",
+          "source": [
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/bridge/RealmImageBridge.java", "symbols": ["snapshot", "cancel", "cancelSession", "expire", "close"] },
+            { "path": "src/main/resources/realm/bridge.js", "symbols": ["browser action/session/job workflow"] },
+            { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["OptimizationWorker", "log"] }
+          ],
+          "existingInterface": "Private browser/API; original Swing progress/logs.",
+          "nativeBindings": ["typed-browser"],
+          "bindingStage": "native_unbound",
+          "missingCode": ["native owned job/result model with image-specific tombstones", "cancel/disconnect/status UI without claiming guaranteed savings"],
+          "evidenceStage": "source_inspected"
+        }
+      ]
+    },
+    {
+      "id": "synapse",
+      "repository": "RicheyWorks/synapse",
+      "sourceCommit": "793de9fb005648efbb72ef018b71ee300f802522",
+      "draftPullRequest": "https://github.com/RicheyWorks/synapse/pull/3",
+      "modules": [
+        { "path": "synapse-core", "role": "Existing domain, schedulers, statistics, persistence and transactional StudyService authority." },
+        { "path": "src-tauri", "role": "Tauri desktop shell/commands using the same Arc<StudyService>." },
+        { "path": "src", "role": "Svelte desktop interface including opt-in StudyDesk component." },
+        { "path": "synapse-desk", "role": "Private Axum loopback interface and browser desk, not another vault." }
+      ],
+      "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "implementedConnector": "synapse-desk/src/lib.rs" },
+      "prerequisites": ["running existing Tauri desktop", "Rust/Node 22.12+ and Tauri v1 toolchain for source launch", "desktop explicitly chooses a supported track and enables Study desk", "off on every startup"],
+      "launch": { "sourceDevelopmentCommands": ["npm run dev", "cargo tauri dev"], "pairingControl": "Study desk: choose track, Enable selected track, Show pairing link for realm" },
+      "protocol": {
+        "contract": "docs/STUDY_DESK.md",
+        "pairingUri": "http://127.0.0.1:<ephemeral-port>/realm/synapse/#token=<43-character-base64url-capability>",
+        "capabilities": { "route": "GET /v1/capabilities", "productId": "synapse", "version": 1, "actions": ["due", "reveal", "review", "revoke"], "localOnly": true },
+        "authorization": "Authorization: Bearer <pairing-capability>; X-Desk-Session after claim",
+        "origin": "Exact literal-loopback Host required; every mutation requires Origin equal to http://127.0.0.1:<port>, including native requests. Cross-site fetch metadata denied; no CORS permission.",
+        "session": { "create": "POST /v1/session", "responseFields": ["session", "selected_count", "expires_in_seconds"], "maxClaims": 1, "duplicateClaimStatus": 409, "absoluteTtlSeconds": 900, "revoke": "POST /v1/revoke" },
+        "routes": [
+          { "route": "GET /v1/due", "response": "due_count and at most one selected due card: id, prompt, kind, revision and optional masked cloze context; no answer/history/settings/links" },
+          { "route": "POST /v1/reveal", "requestFields": ["card_id", "revision"], "response": "card tagged type=basic/cloze/code with answer/text/language+code only after explicit reveal" },
+          { "route": "POST /v1/review", "requestFields": ["card_id", "revision", "score", "action_id"], "response": "action_id, card_id, score, reviewed_at, next_review, interval_days, persisted" },
+          { "route": "POST /v1/revoke", "response": "revoked=true; closes listener, preserves already committed reviews" }
+        ],
+        "retry": "score 0..5, UUID action_id, exact card revision; reveal required for new review; same receipt can be recovered without scheduling twice; freeze action identity after uncertain save.",
+        "limits": { "selectedCardsMin": 1, "selectedCardsMax": 100, "promptBytesMax": 32768, "answerTextBytesMax": 32768, "jsonBodyBytesMax": 4096 },
+        "privacy": "Frozen selected ID allowlist, basic/cloze/code only; later additions/image paths/remote URLs/whole vault enumeration excluded. Token and session memory-only."
+      },
+      "features": [
+        {
+          "id": "real-scheduled-reviews",
+          "behavior": "Due-card recall, explicit reveal and score update the existing SM-2/FSRS scheduler, vault and review history with an atomic durable receipt; no parallel gameplay schedule.",
+          "source": [
+            { "path": "synapse-core/src/service.rs", "symbols": ["StudyService::review", "review_once", "receipt", "ReviewReceipt", "revision"] },
+            { "path": "synapse-core/src/scheduler.rs", "symbols": ["Scheduler", "Sm2Scheduler"] },
+            { "path": "synapse-core/src/fsrs.rs", "symbols": ["FsrsScheduler"] },
+            { "path": "synapse-desk/src/lib.rs", "symbols": ["due", "reveal", "review", "masked_cloze"] },
+            { "path": "src-tauri/src/main.rs", "symbols": ["review_memory", "start_review_session"] }
+          ],
+          "existingInterface": "Desktop review UI and private browser due/reveal/review endpoints.",
+          "nativeBindings": ["typed-browser"],
+          "bindingStage": "native_unbound",
+          "missingCode": ["native card/reveal/score UI", "Origin-aware desk session client, revision conflicts and stable receipt recovery"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "selected-track-permission",
+          "behavior": "Desktop chooses current basic/cloze/code IDs; replace/revoke pairing; fixed expiry; no implicit whole-vault or future-card grant.",
+          "source": [
+            { "path": "src/lib/components/StudyDesk.svelte", "symbols": ["enable", "revoke", "openDesk"] },
+            { "path": "src-tauri/src/main.rs", "symbols": ["enable_study_desk", "revoke_study_desk", "study_desk_active"] },
+            { "path": "synapse-desk/src/lib.rs", "symbols": ["select_track", "DeskServer::start", "pairing", "revoke", "session"] }
+          ],
+          "existingInterface": "Desktop grants permission; private browser claims and revokes it.",
+          "nativeBindings": ["typed-browser"],
+          "bindingStage": "native_unbound",
+          "missingCode": ["native transient pairing/claim/disconnect UI preserving single-claim semantics"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "card-authoring-tracks-and-images",
+          "behavior": "Create memories; list tracks/vault; import picked image into managed assets; basic/cloze/code/image card types.",
+          "source": [
+            { "path": "src-tauri/src/main.rs", "symbols": ["add_memory", "get_all_memories", "get_due_memories", "list_all_tracks", "import_image_asset"] },
+            { "path": "synapse-core/src/assets.rs", "symbols": ["import_asset"] },
+            { "path": "synapse-core/src/domain.rs", "symbols": ["CardContent", "MemoryItem"] }
+          ],
+          "existingInterface": "Tauri desktop commands only; desk does not author/list the vault or serve image paths.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["separate explicit permissions and bounded APIs before native authoring/image support"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "settings-and-themes",
+          "behavior": "Select scheduler/daily review settings and desktop themes; existing cards retain scheduling history.",
+          "source": [
+            { "path": "src-tauri/src/main.rs", "symbols": ["get_settings", "update_settings"] },
+            { "path": "synapse-core/src/service.rs", "symbols": ["update_settings"] },
+            { "path": "synapse-core/src/settings.rs", "symbols": ["Settings", "SettingsStore"] }
+          ],
+          "existingInterface": "Tauri desktop settings, no desk settings endpoint.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["permission/product design before any native vault settings mutation"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "analytics-and-gamification",
+          "behavior": "Statistics, tracks, heatmap, retention/forgetting projections, hardest cards, lapses/leeches, XP/levels/achievements derived from real review history.",
+          "source": [
+            { "path": "src-tauri/src/main.rs", "symbols": ["get_stats", "get_review_heatmap", "get_retention_curve", "get_forgetting_curve", "get_hardest_items", "get_gamification"] },
+            { "path": "synapse-core/src/stats.rs", "symbols": ["compute_stats", "review_heatmap", "retention_over_time", "forgetting_curve", "hardest_items"] },
+            { "path": "synapse-core/src/gamification.rs", "symbols": ["compute_gamification"] }
+          ],
+          "existingInterface": "Desktop analytics only; bridge receipt is not an analytics/history grant.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["selected-scope aggregate endpoint and native views if authorized later"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "knowledge-graph",
+          "behavior": "Link/unlink memories and explore related memory graph.",
+          "source": [
+            { "path": "src-tauri/src/main.rs", "symbols": ["get_knowledge_graph", "link_memories", "unlink_memories"] },
+            { "path": "synapse-core/src/graph.rs", "symbols": ["build_graph", "link", "unlink"] }
+          ],
+          "existingInterface": "Tauri desktop graph; no desk links/graph endpoint.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["explicit graph subset permissions and native graph interaction"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "backup-import-export",
+          "behavior": "Local JSON import/export, manual/rotating backups, pre-import/pre-restore safety snapshots and restore.",
+          "source": [
+            { "path": "src-tauri/src/main.rs", "symbols": ["export_memories", "import_memories", "create_manual_backup", "list_backups", "restore_backup"] },
+            { "path": "synapse-core/src/backup.rs", "symbols": ["create_backup", "list_backups", "restore_backup", "rotate_backups"] },
+            { "path": "synapse-core/src/store.rs", "symbols": ["import_from_path", "export_to_path", "JsonFileStore"] }
+          ],
+          "existingInterface": "Tauri desktop with local file choices; no desk filesystem/import/export/restore endpoint.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["separately scoped local file UX and destructive restore consent before extending native interface"],
+          "evidenceStage": "source_inspected"
+        }
+      ]
+    },
+    {
+      "id": "fax-trident",
+      "repository": "RicheyWorks/fax-trident",
+      "sourceCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f",
+      "draftPullRequest": "https://github.com/RicheyWorks/fax-trident/pull/3",
+      "modules": [
+        { "path": "fax-trident-server", "role": "Spring REST/WebSocket, JWT/Redis, PDF processing, Flyway/JPA private jobs and default-disabled transport." },
+        { "path": "fax-trident-desktop", "role": "Separate Spring-free JavaFX REST/WebSocket client, exact PDF review and private job recovery." }
+      ],
+      "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "localRealmBridgeFound": false, "existingClients": ["fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/FaxUpdateClient.java"], "providerAdapter": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java" },
+      "prerequisites": ["JDK 21 and existing server/desktop", "existing JWT secret and authenticated account", "Redis for auth/rate-limit infrastructure", "persistent PostgreSQL and provider configuration only for separately authorized real transport; no configuration/credential change performed here"],
+      "launch": { "desktopCommand": "mvn -pl fax-trident-desktop javafx:run", "serverDefaultOrigin": "http://localhost:8080", "note": "Existing server/auth must be available; this inventory starts nothing and creates no credentials." },
+      "protocol": {
+        "contract": "docs/confirmed-fax-transport.md",
+        "localCapabilityPairing": null,
+        "authorization": "Existing JWT login via POST /api/auth/login; Authorization: Bearer <JWT>; private jobs scoped to authenticated owner.",
+        "routes": [
+          { "route": "POST /api/fax/uploads", "body": "multipart field file containing explicitly selected PDF; returns opaque uploadId" },
+          { "route": "POST /api/fax/jobs", "body": "recipient, uploadId, idempotencyKey; returns PREPARED immutable snapshot metadata; no provider send" },
+          { "route": "GET /api/fax/jobs/pending", "body": "none; recover own unresolved jobs" },
+          { "route": "GET /api/fax/jobs/{id}", "body": "none; private state/evidence" },
+          { "route": "GET /api/fax/jobs/{id}/document", "body": "none; exact reviewed PDF snapshot" },
+          { "route": "POST /api/fax/jobs/{id}/cancel", "body": "empty JSON; only pre-submission cancellation" },
+          { "route": "POST /api/fax/jobs/{id}/confirm", "body": "recipient, documentSha256, pageCount, confirmed:true", "integrationMayCall": false, "reason": "Could submit real transport when an existing server is enabled; real transmission is not authorized." }
+        ],
+        "limits": { "pdfBytes": 26214400, "pageCountMin": 1, "pageCountMax": 100, "pageDimensionPointsMax": 14400, "snapshotLeaseSeconds": 86400 },
+        "retry": "Stable owner/idempotency key; recover existing job after uncertainty. SUBMITTING is committed before one provider POST. Never blindly retry a send.",
+        "delivery": "PREPARED and TRANSPORT_DISABLED are not sent. Accepted request is queued. Only verified correlated complete-page delivery evidence means DELIVERED.",
+        "privacy": "Opaque upload/job identifiers and owner-isolated snapshot; no arbitrary server file paths. No credentials in native assets; no user document or provider accessed during inventory."
+      },
+      "features": [
+        {
+          "id": "prepare-review-private-pdf",
+          "behavior": "Upload selected bounded PDF, prepare immutable recipient/digest/page tuple, retrieve exact snapshot for review; preparation performs no provider transmission.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/upload/FaxUploadService.java", "symbols": ["resolveOwned"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["prepare", "preview"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDocuments.java", "symbols": ["copy", "read", "sha256"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "symbols": ["uploadPdf", "prepareFax", "reviewPdf"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java", "symbols": ["sendFax"] }
+          ],
+          "existingInterface": "JavaFX and authenticated REST; no private-loopback companion/native actor.",
+          "nativeBindings": [],
+          "bindingStage": "native_unbound",
+          "missingCode": ["bounded preparation-only native/local interface using existing authenticated client/service", "explicit account/session handoff without embedded credentials", "review/download UI and actual install binding"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "status-recovery-cancel-retention",
+          "behavior": "Owner-scoped durable job status, unresolved-job recovery, safe pre-submission cancellation, snapshot expiry and managed cleanup; uncertain submission is not silently resent.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["get", "pending", "cancel", "observe"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java", "symbols": ["status", "pending", "cancel"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "symbols": ["faxJob", "pendingFaxJobs", "cancelFax"] }
+          ],
+          "existingInterface": "JavaFX Refresh Fax and private REST jobs.",
+          "nativeBindings": [],
+          "bindingStage": "native_unbound",
+          "missingCode": ["native status/recovery model preserving real uncertainty and cancellation limits"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "real-provider-transmission",
+          "behavior": "Default-disabled Telnyx adapter, signed Ed25519 callbacks, deduplication and bounded GET reconciliation. Existing source is not proof of actual receipt.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java", "symbols": ["enabled", "submit", "status", "observation"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxWebhookVerifier.java", "symbols": ["verify"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["confirm", "observe"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java", "symbols": ["confirm", "media", "webhook"] }
+          ],
+          "existingInterface": "Exact-review confirmation in desktop/REST; disabled by default.",
+          "nativeBindings": [],
+          "bindingStage": "disabled_unverified_transport",
+          "missingCode": ["not authorized to activate or connect confirm in this scope", "separate provider/deployment/consented receipt qualification would be required"],
+          "confirmationCalledByThisIntegration": false,
+          "realFaxSent": false,
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "contacts-history-suggestions",
+          "behavior": "Contact search/save, heuristic suggestions, legacy fax logs/status/metadata endpoints. These are separate from owner-scoped confirmed jobs and require their own access review before native exposure.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java", "symbols": ["searchContacts", "predictContact", "getFaxLogsByNumber", "getRecentLogs", "getMetadata", "getFaxStatus"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java", "symbols": ["findOrCreateContact", "saveContact"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/ContactSuggestionService.java", "symbols": ["suggestContact"] }
+          ],
+          "existingInterface": "Existing server REST, not a native permission grant. Suggestions are deterministic heuristics, not a model.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["owner/privacy review of legacy surfaces before any native contacts/history connector"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "pdf-text-barcodes-and-theme",
+          "behavior": "Server PDF text extraction/barcode generation and cleanup; JavaFX preview/theme/preferences; no OCR implementation established.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/PdfProcessingService.java", "symbols": ["extractTextFromPdf", "generateBarcode", "cleanupBarcode", "cleanupAllBarcodes"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/PreviewPane.java", "symbols": ["PreviewPane"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/ThemeManager.java", "symbols": ["ThemeManager"] },
+            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/config/DesktopPreferences.java", "symbols": ["DesktopPreferences"] }
+          ],
+          "existingInterface": "Existing server internals/desktop; no realm endpoint or native binding.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["explicit bounded extraction/preview interface if later scoped; preserve metadata privacy"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "admin-and-auth-infrastructure",
+          "behavior": "JWT login/logout, Redis rate limits and admin diagnostics/cache/barcode cleanup; separate USER/ADMIN roles.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AuthController.java", "symbols": ["AuthController"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/config/SecurityConfig.java", "symbols": ["SecurityConfig"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AdminController.java", "symbols": ["getDashboard", "clearCache", "cleanupBarcodes"] }
+          ],
+          "existingInterface": "Existing authenticated server; not exposed through an object or new credentials.",
+          "nativeBindings": [],
+          "bindingStage": "desktop_only_intentionally_unexposed",
+          "missingCode": ["future existing-session authentication handoff; admin operations are not part of a normal fax object"],
+          "evidenceStage": "source_inspected"
+        },
+        {
+          "id": "legacy-simulation-and-inbound-gap",
+          "behavior": "Legacy send/process/auto-send paths are preparation/simulation, not real delivery. Dev-only inbound simulator fabricates rows; no real inbound transport is implemented.",
+          "source": [
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java", "symbols": ["sendFax", "processInput", "listenForInboundFax"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/InboundFaxSimulator.java", "symbols": ["poll"] },
+            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java", "symbols": ["sendFax", "autoSendFax", "processInput"] }
+          ],
+          "existingInterface": "Explicitly labeled legacy simulation; /api/fax/send rejects legacy sends in favor of confirmed jobs; dev inbound simulator must not be presented as receipt.",
+          "nativeBindings": [],
+          "bindingStage": "not_implemented",
+          "missingCode": ["real inbound transport and correlated authenticated receipt service are absent; outside this authorized implementation"],
+          "evidenceStage": "source_inspected"
+        }
+      ]
+    }
+  ],
+  "crossAppBoundaries": {
+    "physicalObjectIsAnotherInterface": true,
+    "preserveDesktopFeatures": true,
+    "noReplacementConvertersOrSchedulers": true,
+    "capabilitiesTransientAndNonreplicated": true,
+    "arbitraryServerPathsAccepted": false,
+    "externalUploadsIntroduced": false,
+    "faxConfirmationMayBeCalled": false,
+    "newCredentialsOrPurchases": false,
+    "productionDeployment": false,
+    "nftMintingOrEntitlementImplementation": false,
+    "licenseChanges": false,
+    "completionEvidence": "App job SUCCEEDED plus real authenticated output export, or persisted Synapse receipt. Native installation/placement/Play must be independently accepted by codex-play-guard.",
+    "remainingPortfolioWork": "Build, verify and install the written photo native source, then bind image jobs and selected Synapse reviews; design preparation-only fax/auth bridge; track every intentionally unexposed desktop group before claiming full capability coverage."
+  }
+}
