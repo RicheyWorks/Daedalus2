@@ -19,6 +19,85 @@ MAT = 'editor_toolset.toolsets.material.MaterialTools'
 OBJ = 'editor_toolset.toolsets.object.ObjectTools'
 ACTOR = 'editor_toolset.toolsets.actor.ActorTools'
 ASSET = 'editor_toolset.toolsets.asset.AssetTools'
+INSTANCE = 'editor_toolset.toolsets.material_instance.MaterialInstanceTools'
+
+
+def create_instance(args):
+    """Fresh instance only; owner applies it to district ISMs separately."""
+    output = pathlib.Path(args.output)
+    folder = '/Game/Daedalus/Art/Islands/PilotMaterials'
+    name = 'MI_WZ_GroveGround_v1'
+    content = pathlib.Path(args.content_root).resolve()
+    parent_file = content / 'Daedalus/Art/Islands/PilotMaterials/M_WZ_GroveGround_v1.uasset'
+    instance_file = parent_file.with_name(name + '.uasset')
+    if output.exists() or instance_file.exists():
+        raise ValueError('existing instance/journal refused; reconcile outcome before another creation')
+    if not parent_file.is_file():
+        raise ValueError('saved GroveGround parent required')
+    output.parent.mkdir(parents=True, exist_ok=True)
+    parent = {'refPath': folder + '/M_WZ_GroveGround_v1.M_WZ_GroveGround_v1'}
+    parent_hash = hashlib.sha256(parent_file.read_bytes()).hexdigest()
+    report = {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'asset': folder + '/' + name, 'parent': parent,
+              'parentBeforeSHA256': parent_hash, 'owner': args.owner,
+              'calls': [], 'status': 'started'}
+    sys.path.insert(0, str(pathlib.Path(args.client_root).resolve()))
+    m = importlib.import_module('client').Mcp(timeout=45)
+
+    def checkpoint():
+        output.write_text(json.dumps(report, indent=2), encoding='utf-8')
+
+    def call(toolset, tool, **arguments):
+        with urllib.request.urlopen('http://127.0.0.1:9890/locks', timeout=5) as response:
+            if json.load(response).get('unreal', {}).get('holder') != args.owner:
+                raise ValueError('explicit current editor owner lease required')
+        report['pending'] = {'toolset': toolset, 'tool': tool, 'arguments': arguments}
+        checkpoint()
+        try:
+            result = m.call(toolset, tool, **arguments)
+        except Exception as error:
+            report['status'], report['error'] = 'outcome-unknown', str(error)
+            checkpoint()
+            raise
+        report['calls'].append({**report['pending'], 'result': result})
+        report['pending'] = None
+        checkpoint()
+        return result
+
+    if call('EditorToolset.EditorAppToolset', 'IsPIERunning') is not False:
+        raise ValueError('Play must be stopped')
+    parameters = call(INSTANCE, 'list_parameters', material=parent)
+    if not isinstance(parameters, list) or not {('ForestColor', 'Vector'), ('MossColor', 'Vector'),
+            ('Roughness', 'Scalar')}.issubset({(p.get('name'), p.get('type')) for p in parameters if isinstance(p, dict)}):
+        raise ValueError('saved parent parameter contract changed')
+    ref = call(INSTANCE, 'create', folder_path=folder, asset_name=name, parent=parent)
+    if not isinstance(ref, dict) or ref.get('refPath') != folder + '/' + name + '.' + name:
+        raise ValueError('new instance reference unverified')
+    props = json.loads(call(OBJ, 'get_properties', instance=ref, properties=['parent']))
+    if props.get('parent') != parent:
+        raise ValueError('instance parent readback mismatch')
+    expected = {'ForestColor': {'r': .035, 'g': .12, 'b': .045, 'a': 1},
+                'MossColor': {'r': .18, 'g': .28, 'b': .075, 'a': 1}}
+    for key, color in expected.items():
+        actual = call(INSTANCE, 'get_vector_parameter', instance=ref, name=key)
+        if not isinstance(actual, dict) or any(type(actual.get(c)) not in (int, float)
+                or abs(actual[c] - value) > .000001 for c, value in color.items()):
+            raise ValueError('inherited color readback mismatch: ' + key)
+    roughness = call(INSTANCE, 'get_scalar_parameter', instance=ref, name='Roughness')
+    if type(roughness) not in (int, float) or abs(roughness - .92) > .000001:
+        raise ValueError('inherited roughness readback mismatch')
+    if call(ASSET, 'save_assets', asset_paths=[report['asset']]) is not True:
+        raise ValueError('instance save unverified')
+    if not instance_file.is_file():
+        raise ValueError('saved instance file missing')
+    report['parentAfterSHA256'] = hashlib.sha256(parent_file.read_bytes()).hexdigest()
+    if report['parentAfterSHA256'] != parent_hash:
+        raise ValueError('parent file changed during instance creation')
+    report['savedInstance'] = {'bytes': instance_file.stat().st_size,
+                              'sha256': hashlib.sha256(instance_file.read_bytes()).hexdigest()}
+    report['status'] = 'instance-saved; district assignment pending owner'
+    checkpoint()
+    print(report['status'])
 
 
 def main():
@@ -27,9 +106,17 @@ def main():
     parser.add_argument('--content-root', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--bind-floor', action='store_true')
+    parser.add_argument('--create-instance', action='store_true',
+                        help='Create a fresh inherited MI only; never assign district materials')
+    parser.add_argument('--owner', default='team-codex',
+                        help='Explicit current editor owner for instance mode; does not acquire a lease')
     parser.add_argument('--resume-graph', action='store_true',
                         help='Resume a known six-node graph; reconcile existing connections without replay')
     args = parser.parse_args()
+    if args.create_instance:
+        if args.bind_floor or args.resume_graph:
+            parser.error('instance mode cannot rebuild/bind/resume the parent graph')
+        return create_instance(args)
     output = pathlib.Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     content = pathlib.Path(args.content_root)

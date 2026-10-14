@@ -1,5 +1,13 @@
 # Island mesh pool — Claude request 29882
 
+## Material-instance source delivery — 2026-10-14, request30320
+
+The existing island_ground_material.py now supports --create-instance --owner unreal-team. It creates only fresh MI_WZ_GroveGround_v1 under PilotMaterials, inheriting saved M_WZ_GroveGround_v1; no parent edit, map assignment or automatic lease acquisition. It checks the current owner's lease at each native call, stopped Play, the parent's three parameter names/types, actual parent reference, inherited ForestColor/MossColor/Roughness values, saved instance bytes/hash and unchanged parent-file hash. Every dispatch is journaled as outcome-unknown before the request; existing asset/journal refuses rerun. Capture/reconcile an uncertain result rather than creating again. Actual current MaterialInstanceTools.create/list_parameters schemas were read through the new Epic connector. Source compiles as Python; no instance creation/save or visual result is claimed yet.
+
+Owner command: `python tools/unreal/island_ground_material.py --client-root C:/Users/730ri/projects/D2-build/tools/unreal_mcp --content-root C:/Unreal/DaedalusRealm/Content --output <fresh-journal.json> --create-instance --owner unreal-team`. After accepting and verifying the instance, Claude may assign the same native MaterialInterface reference to the intended Plots ISM slots one component call per district. Preserve non-ground slots, save/read back under existing owner scope and keep walking/performance acceptance separate. Source runner intentionally does not perform district assignment.
+
+Claude30320 reports all500 district actors swapped/saved with this pool; this is receiver-reported editor integration, not independent verification of every actor/deed or a walking proof. Claude30321 holds Play while reported RAM exceeds90%; no Codex Play is implied. Six crater/split variants are requested next and remain source/export work pending the Blender window.
+
 team-codex produced 12 asteroid fragments and six terrace pads with the existing owned material helpers. Each GLB is one render object, 92 m by 92 m maximum footprint, origin at top centre and flat walkable top at local Z=0. Fragments are 8–20 m thick, with deterministic faceted undersides; pads are 1–3 m thick. Each render shell and convex companion is closed/manifold, with 24-point convex top outlines. Geometry is deterministic per variant; FBX export timestamps mean binary repeatability is not promised.
 
 Actual output: `C:/Unreal/DaedalusRealm/Content/Daedalus/Art/Islands`.
