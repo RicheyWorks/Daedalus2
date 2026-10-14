@@ -413,3 +413,44 @@ existing tool before writing a second one.
 (4) `FindTeleportSpot ... root component not being a collider` x28: foes spawned deferred with
 AdjustIfPossibleButAlwaysSpawn before their collider existed; FindSpot already traced the ground, so AlwaysSpawn.
 Rule: tools/unreal_play/editor_log_report.py after each Play run; its counts are part of the result line.
+
+## Control over Unreal is a set of named levers, not execute_python (2026-10-13)
+Richey asked for more control over the engine. execute_python can do anything but every call is bespoke and
+PIE-unsafe by accident; what gives control is a small set of named bridge commands any bot can call the same way:
+daedalus.console (any console command in the right world), daedalus.cvar, daedalus.input (real Enhanced Input
+injected into the hero, held for N seconds like a key), daedalus.goto / look / state, daedalus.automation (the
+editor's own test runner, results collected from the log), daedalus.log_report (errors/warnings since Play).
+Scenario 'control' proves each one. Next levers when needed: camera paths, spawn-by-id, time-of-day, save/load.
+## Verify imported paths and role names against actual assets (2026-10-13)
+The first synthetic battle test used `_Attack` names and passed, but the actual
+Gallery import generated `<MeshName>Attack` below `<Id>/<Id>/SkeletalMeshes`.
+Filesystem inspection exposed both differences. Native selection now accepts
+the exact mesh-name-plus-role form and scans recursively within that cast's
+folder. A private copy of all 13 imported Gallery characters then verified all
+26 attack/hurt bindings through the native API, with errors=0 warnings=0 and
+152 unchanged art hashes. Synthetic success alone had not proved the integration.
+The updated synthetic run had no test errors/warnings but one editor layout
+warning; report both scopes. Neither selection probe proves animation playback,
+cooking or rendered battle acceptance. The nested-path importer stamp lookup was
+reported to Claude, its owner, instead of editing the same lane concurrently.
+
+## A long save loop inside one bridge call crashed the editor (2026-10-13, 19:14)
+`daedalus_nanite_materials.run(500)` saved 500 material instances through `EditorAssetLibrary.save_loaded_asset`
+inside a single execute_python: that path is InternalPromptForCheckoutAndSave, which opens a window per save; after
+3.5 minutes of it the editor died with `Fatal: CreateSwapChainResult failed with DXGI_ERROR_INVALID_CALL` (D3D11,
+while the game thread had been blocked the whole time). Rules: (1) saves go through
+`EditorLoadingAndSavingUtils.save_packages(pkgs, only_dirty=True)` (no prompt, one call); (2) a bridge call does
+at most ~100 asset saves, and the host loops; (3) never kill the client mid-call to "stop" a job: the editor keeps
+running the call; stop by making the next batch small, not by killing. The ledger made the run resumable, which
+is why nothing was lost.
+
+## An answer without reply_to is not an answer (2026-10-13)
+Sol's inbox matches replies by `reply_to`; mine were sent as fresh notes, so 28937/28957 sat "overdue" for an
+hour while I had in fact answered. The CLI never had a `--reply-to` flag; it does now (`teamlink send --reply-to
+<id>`), and the rule is: every answer to a request carries the id it answers, then `teamlink ack <id>`.
+
+## Adapter review from the other lane found three real gaps in twenty minutes (2026-10-13)
+My hero->stage cue forwarder took cues even with no stage (losing the debug take), looked for the stage only once,
+and dropped a batch the stage refused. Fixed (hold cues until a stage accepts; re-look every 2 s; ClearCues on
+realm exit; cues_held/cues_dropped in RealmState). Ask the owner of the consumer to review the producer's seam
+before calling it closed; it is cheaper than a scenario.

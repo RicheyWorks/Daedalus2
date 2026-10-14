@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DaedalusBattleStageCore.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/GameModeBase.h"
 #include "DaedalusHero.generated.h"
@@ -188,6 +189,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString InventoryCatalogName() const;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString InventoryRealm;
 
+	// Control from the bridge (Richey 2026-10-13: "more control over Unreal"): real Enhanced Input injected into the
+	// hero's actions, so a harness or a bot plays the game the way a pad does; and the two editor-ish moves a tester
+	// wants without a cheat console.
+	/** Inject an action for Seconds (0 = one frame): Move (X right, Y forward), LookStick, Jump, Attack, Melee, Dash, Aim,
+	 *  Switch, Interact, Sprint, ViewCycle, CallVehicle, NextCube, Shoulder, Menu, View, Inventory. Returns what was injected. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") FString Inject(const FString& Action, FVector Value, float Seconds);
+	/** Put the hero at a world point (feet on the ground when Snap), facing Yaw. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") bool Teleport(FVector Where, float Yaw, bool bSnap);
+	/** Point the camera: yaw/pitch in degrees (the control rotation). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") void Look(float Yaw, float Pitch);
+	/** One line of everything a tester wants: position, yaw, health/shield, weapon, realm, speed, what is open. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") FString ControlState() const;
+
 	// The realm session (hub 28885): which realm this player is in and how they move between them. The rules are
 	// DaedalusRealmSessionCore.h; a switch sets the inventory catalog and dialogue theme, saves the session, and
 	// tells the realm hosts (world actors, Sol's Ocean view) through OnRealmChange so they stream the right world.
@@ -335,6 +349,9 @@ private:
 	TSharedPtr<SWidget> DialogueHost;
 	TArray<FString> DialogueSfx;
 	TSharedPtr<struct FDaedalusRealmSessionHolder> RealmSession;
+	struct FInjected { TObjectPtr<UInputAction> Action; FVector Value; float Left; };
+	TArray<FInjected> Injected;
+	UInputAction* ActionNamed(const FString& Name) const;
 	FString RealmSessionLine;   // saved with progress
 	void DialogueOutcome(const struct FDaedalusDialogueOutcome& Outcome);
 	void DialogueSound(const FString& Event);
@@ -345,6 +362,11 @@ private:
 	TSharedPtr<SDaedalusHud> Hud;
 	TSharedPtr<SWidget> HudHost;
 	TSharedPtr<class SDaedalusRealm> RealmView;
+	/** The 3D battle stage (Sol's ADaedalusBattlePresentation) that plays the 8-bit realm's cues; found once per Play. */
+	TWeakObjectPtr<class ADaedalusBattlePresentation> Stage;
+	float StageLookT = 0.f;
+	std::vector<daedalus::stage::Cue> StageHeld;   // taken from the director, not yet accepted by the stage
+	int32 CuesStaged = 0, CuesDropped = 0;
 	TSharedPtr<SWidget> RealmHost;
 	FString RealmSource;
 	void RealmReady(const FString& Spec, const FString& Source);

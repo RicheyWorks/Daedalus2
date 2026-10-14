@@ -104,6 +104,11 @@ def _register(bridge):
         daedalus_play.register(bridge)
     except Exception as e:  # the play harness is optional; never block the other commands
         unreal.log_warning("Daedalus: play harness not loaded: %r" % (e,))
+    try:
+        import daedalus_control
+        daedalus_control.register(bridge)
+    except Exception as e:  # console, input, goto, look, state, automation, log_report
+        unreal.log_warning("Daedalus: control commands not loaded: %r" % (e,))
 
 
 _state = {"handle": None, "ticks": 0}

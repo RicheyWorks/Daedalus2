@@ -1,0 +1,311 @@
+{
+  "scope": "Actual copied imported mesh and Attack/Hurt selection through native stage API. No rendered battle or playback claim.",
+  "verified": [
+    {
+      "id": "Mob_Gallery_CriticBloom",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloom.Mob_Gallery_CriticBloom",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomAttack.Mob_Gallery_CriticBloomAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomHurt.Mob_Gallery_CriticBloomHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_CuratorVell",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVell.Mob_Gallery_CuratorVell",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellAttack.Mob_Gallery_CuratorVellAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellHurt.Mob_Gallery_CuratorVellHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_DroneMechanicPell",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPell.Mob_Gallery_DroneMechanicPell",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellAttack.Mob_Gallery_DroneMechanicPellAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellHurt.Mob_Gallery_DroneMechanicPellHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_EchoChoir",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoir.Mob_Gallery_EchoChoir",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirAttack.Mob_Gallery_EchoChoirAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirHurt.Mob_Gallery_EchoChoirHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_FrameHangerTwins",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwins.Mob_Gallery_FrameHangerTwins",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsAttack.Mob_Gallery_FrameHangerTwinsAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsHurt.Mob_Gallery_FrameHangerTwinsHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_GalleryGuard",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuard.Mob_Gallery_GalleryGuard",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardAttack.Mob_Gallery_GalleryGuardAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardHurt.Mob_Gallery_GalleryGuardHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_LightTailor",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailor.Mob_Gallery_LightTailor",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorAttack.Mob_Gallery_LightTailorAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorHurt.Mob_Gallery_LightTailorHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_LostSelfPortrait",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortrait.Mob_Gallery_LostSelfPortrait",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitAttack.Mob_Gallery_LostSelfPortraitAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitHurt.Mob_Gallery_LostSelfPortraitHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_PigmentMiner",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMiner.Mob_Gallery_PigmentMiner",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerAttack.Mob_Gallery_PigmentMinerAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerHurt.Mob_Gallery_PigmentMinerHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_RestorerAma",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAma.Mob_Gallery_RestorerAma",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaAttack.Mob_Gallery_RestorerAmaAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaHurt.Mob_Gallery_RestorerAmaHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_Sketcher",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_Sketcher.Mob_Gallery_Sketcher",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherAttack.Mob_Gallery_SketcherAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherHurt.Mob_Gallery_SketcherHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_StreetMuralist",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralist.Mob_Gallery_StreetMuralist",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistAttack.Mob_Gallery_StreetMuralistAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistHurt.Mob_Gallery_StreetMuralistHurt"
+      }
+    },
+    {
+      "id": "Mob_Gallery_VarnishMonk",
+      "mesh": "/Game/Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonk.Mob_Gallery_VarnishMonk",
+      "clips": {
+        "Attack": "/Game/Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkAttack.Mob_Gallery_VarnishMonkAttack",
+        "Hurt": "/Game/Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkHurt.Mob_Gallery_VarnishMonkHurt"
+      }
+    }
+  ],
+  "art_file_count": 152,
+  "input_manifest_sha256": "d4d7bbfd001750a5442f98b828014056f175828f2105c94ffd3af23aae29387c",
+  "maps_or_assets_saved": false,
+  "shared_editor_contacted": false,
+  "production_source_head": "36adcecc7f8afabd2166894cb1eeb1455b855d4a",
+  "production_dll_sha256": "17b774d935d6b6c5cd682ef91a1fb0d2223ae076ed071a3364cc1ba95dd86b6f",
+  "art_inputs": {
+    "source": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Cast",
+    "cast_ids": [
+      "Mob_Gallery_CriticBloom",
+      "Mob_Gallery_CuratorVell",
+      "Mob_Gallery_DroneMechanicPell",
+      "Mob_Gallery_EchoChoir",
+      "Mob_Gallery_FrameHangerTwins",
+      "Mob_Gallery_GalleryGuard",
+      "Mob_Gallery_LightTailor",
+      "Mob_Gallery_LostSelfPortrait",
+      "Mob_Gallery_PigmentMiner",
+      "Mob_Gallery_RestorerAma",
+      "Mob_Gallery_Sketcher",
+      "Mob_Gallery_StreetMuralist",
+      "Mob_Gallery_VarnishMonk"
+    ],
+    "mesh_packages": {
+      "Mob_Gallery_CriticBloom": "/Game/Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloom",
+      "Mob_Gallery_CuratorVell": "/Game/Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVell",
+      "Mob_Gallery_DroneMechanicPell": "/Game/Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPell",
+      "Mob_Gallery_EchoChoir": "/Game/Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoir",
+      "Mob_Gallery_FrameHangerTwins": "/Game/Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwins",
+      "Mob_Gallery_GalleryGuard": "/Game/Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuard",
+      "Mob_Gallery_LightTailor": "/Game/Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailor",
+      "Mob_Gallery_LostSelfPortrait": "/Game/Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortrait",
+      "Mob_Gallery_PigmentMiner": "/Game/Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMiner",
+      "Mob_Gallery_RestorerAma": "/Game/Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAma",
+      "Mob_Gallery_Sketcher": "/Game/Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_Sketcher",
+      "Mob_Gallery_StreetMuralist": "/Game/Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralist",
+      "Mob_Gallery_VarnishMonk": "/Game/Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonk"
+    },
+    "files": {
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/Materials/Gallery_CriticBloom.uasset": "11d4ce3a27f78d4bcb1581971822668b6d400eee4cb25ff0e2a3372c44809561",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/Materials/Portal_brass.uasset": "e42a7d7e0063ecb2ff02e1df62e2bb6f74c0276ffcdca72d296cfd26fc1717fc",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/Materials/Portal_cream.uasset": "14bbbe7a904c61cda8a0f37c987339f1e449e7faad856948c1a5372c25db4a2b",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/Materials/Portal_ink.uasset": "e9e8f84f00696653cc6944e57f8c9220e542ecd5fef341bbfafe87a6dd8f70e9",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/Materials/Portal_warm_skin.uasset": "395f4b6d8b9ae25c18eb99978e7f689dc3d18ed25a6a6e02c99f093931aff695",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloom.uasset": "d39817b7c42e97b243af85ebdfceb18a8ef3a1e7a131c54477e213425506d9e7",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloom_PhysicsAsset.uasset": "80cc305a3f7cd6314cf3fb7dc3c9d78c1b70b27cf59170c3324faa67d0a9cf7f",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloom_Skeleton.uasset": "bb7b2e65bdee8fd5f0162c70f66b4840b23850137f1d8d6029edd9cc3e4507e5",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomAttack.uasset": "a150c6985c1adbb63d3032a1a4c71d4ee49c78d77b53d7fb626cf7160349d2bb",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomHurt.uasset": "80dc23d2841d76ac83d86a3de150546a57f8c1d85ed8b10a41029a88438ded83",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomIdle.uasset": "874f617bb0525ec4ee355197e9ea60d09592c81548de82618f30e1f0a94baf7a",
+      "Daedalus/Art/Cast/Mob_Gallery_CriticBloom/Mob_Gallery_CriticBloom/SkeletalMeshes/Mob_Gallery_CriticBloomWalk.uasset": "b7c834ceb6278c21421d41a894f88ee1157f28b86b0488e2594c0f5427d2478b",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/Materials/Gallery_CuratorVell.uasset": "3fa0f5af0f98093bf5e8a72597d062346f71d946d96225f80c6606dea73f1d33",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/Materials/Portal_brass.uasset": "4bd03f48842e9930ba0d51a7cd480ddf4abd67c7b71b1ecab2943bee4327ef56",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/Materials/Portal_ink.uasset": "8ef0873259e070d7f6424f86eb13e9e8a3025a958a17154581f7cb6a8bbff520",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/Materials/Portal_warm_skin.uasset": "89a48decb94452137b4868682728232606ec0567e02263f5ce7e7ced103e186b",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVell.uasset": "7b7a6b2a51d00e801f9d2270580203a1cce12b1502db82946598e438668e54c3",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVell_PhysicsAsset.uasset": "7e501284a9885b57053d9e2c5ff1b25ae9a8eaa0f72b470ab6632cb32f38c19f",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVell_Skeleton.uasset": "4c097d7dfe869a513070acb81cb8aff1b771724a97e4a99893bb169c8e86514b",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellAttack.uasset": "89d17d952319171e2857ae2f92140c93f0dda181ff55b26397c3f5e8c16eb6b9",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellHurt.uasset": "c4b04a6b125dfcffba0123492ac3904a4dbac4c460738452c0a6bc9ef9d6661d",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellIdle.uasset": "68eefd527e9cc17396cbd0845826df907ead041630a43104890001f3d19ebff3",
+      "Daedalus/Art/Cast/Mob_Gallery_CuratorVell/Mob_Gallery_CuratorVell/SkeletalMeshes/Mob_Gallery_CuratorVellWalk.uasset": "2260933e57bfa1975f10da6d63fc083f398db330efb9ced81328f0e2433c4232",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/Materials/Gallery_DroneMechanicPell.uasset": "d643d60ad8f6a1f036d49c2b0efbe0405b1e0a55143f37dfaaf2800ea24c8d07",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/Materials/Portal_brass.uasset": "f25af8628e716e73782a15db15955163feba6f059fb0d3f2aeb978ef18be3d1c",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/Materials/Portal_ink.uasset": "154cc0389d11d86a46d0e473c6c6a228256584e7c96bf65d0c88504eaafa1f83",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/Materials/Portal_warm_skin.uasset": "76b0707ef335072c05142ed15fb65f862dea7c05caa6a657c96b14f91de0372d",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPell.uasset": "ea4ebe928dd10f611b6634cf62cba3cb7ae3583b8a7c561261986615ef669a1c",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPell_PhysicsAsset.uasset": "cb5ab7f5d17cb60146c0ef9550ceb9d20af50c5beff666bf171a52d6b91a41c1",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPell_Skeleton.uasset": "a42eacc4395967df7b0525ab63ac248bfc9458b3e169326a92fa880365d6170f",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellAttack.uasset": "62fd3de6618bdeedbe046cc131e790a65d24d9da3187488bd73aa830c69ba14f",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellHurt.uasset": "b22b7b3d7b24dd7d300e10757afdf3a132f9b0b1526fcfc277f2ca58120173d3",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellIdle.uasset": "e0f14676f97b12c9926d6cc9a05bfa6e34b439f1313b3d2b84fe1aadd0805069",
+      "Daedalus/Art/Cast/Mob_Gallery_DroneMechanicPell/Mob_Gallery_DroneMechanicPell/SkeletalMeshes/Mob_Gallery_DroneMechanicPellWalk.uasset": "d2149d2f6e974ddffb1a5ea9ee69d63b594b4581921fe3751801764c48ad8861",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/Materials/Gallery_EchoChoir.uasset": "24b4563bece2d181c1aa19d2f022a6a86f58894ebed8e572f60a4b091595d300",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/Materials/Portal_brass.uasset": "f578bbb7802bd4aea65713a1fbb2171cfba8d93895fdf4384989afcb5cddab3d",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/Materials/Portal_cream.uasset": "b847e4c492272009b04a34aafb65c197b350da0623a3b9b3289fc77dcd138be1",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/Materials/Portal_ink.uasset": "e100f99b48be7bc3eff061f693afa2a1aa1b05dd2e39a751683763917edc6e6f",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/Materials/Portal_warm_skin.uasset": "558350efe647667769944b67eb36569e0cd81e150f59873f8b60a16c89815bb5",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoir.uasset": "e9772dac2b0fa9798b9f28b8fce9acbcb2e64a2120c1145cfa91d47a30efa006",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoir_PhysicsAsset.uasset": "4ca825a8fa3da0f5306b4859f02db8f0b236a499a7a6ea5b91c3ce6fc6b464ea",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoir_Skeleton.uasset": "00f18aa7c9bc3bfa534044e0a2b9fb805aafde9963a2aea0edcb0df3874f8f30",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirAttack.uasset": "1260b350ac969df9542e6f46e9443134646f1fbe8bb41b6d2e080c80ff88aa1d",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirHurt.uasset": "d064004c8163867536705e6ac890a0f66a5ff23e93597eeec9e427de9e463ee0",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirIdle.uasset": "16dbb1f82fe06f6cbe01e665c4e029df1eeb80ef312938e24ff44d01fa34bc86",
+      "Daedalus/Art/Cast/Mob_Gallery_EchoChoir/Mob_Gallery_EchoChoir/SkeletalMeshes/Mob_Gallery_EchoChoirWalk.uasset": "6bb6f6069fe7ceb41134e05ebc8bae1eaea0b540751fb550d6cc8031fa45a30f",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/Materials/Gallery_FrameHangerTwins.uasset": "18c33689f41dd5ba1ca4ae52050f05312702f161401dac6b647fadc1d87e732b",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/Materials/Portal_brass.uasset": "130fceef9cd7d396ff89f706a98ee7ba1a6f8de91aa43470268dd844d1d78e74",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/Materials/Portal_cream.uasset": "4e1c0cd2987c7618723bc6288f33afb77227ab6c00904789c4f687b6e9383444",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/Materials/Portal_ink.uasset": "5975cb45eab8a401772beef77d01aa80a35e1d07ef26002468a224490c312406",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/Materials/Portal_warm_skin.uasset": "174a4f7032a91b98378fc59a7a1c3ecb8361f11e070b246078fe7dba17e3500d",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwins.uasset": "8ee4abedd177dd463a27da53f8f012a04fcd4ae3d7fe46bf51cdd9f355feba14",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwins_PhysicsAsset.uasset": "100d0d2845e41297cbc916ffda61086967e1db22d2961b09ecb8e39bafe2c764",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwins_Skeleton.uasset": "c9ad62e17a6f9301101a67683d595065a37b703ec149fbc0d334d4060e03ec56",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsAttack.uasset": "25183ed7151081a8e81564221dc46c5723704095e90ef92abc60162f043ab389",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsHurt.uasset": "819c7691c048f70ec266e1ebd418bbf7f85fd081be431e7331c305aa1cc1c5c3",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsIdle.uasset": "65cebaa6b0b019ad1d663e42c871df12df7011702a478811259e6b595996dd78",
+      "Daedalus/Art/Cast/Mob_Gallery_FrameHangerTwins/Mob_Gallery_FrameHangerTwins/SkeletalMeshes/Mob_Gallery_FrameHangerTwinsWalk.uasset": "d5170256879f55a17aeadb6d673fb9fd5ad57b66017c1a51fee41daf7a63c520",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/Materials/Gallery_GalleryGuard.uasset": "fc39530747593a516f0b2cdffdf20e646cf30953c6953eee59914a4a47586752",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/Materials/Portal_brass.uasset": "03c7ed03c448800a3fe8e5e26944f3f5f9d1470be065000184cc07d9f5ede561",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/Materials/Portal_ink.uasset": "5ba17649b549f14c8fcb65b5d9b799406cf8c81ac744451fa64ddf63c94d5af8",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/Materials/Portal_warm_skin.uasset": "9b81873606dfd4b49767216fda80bef097951643b7675124fb753e9da2f884d7",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuard.uasset": "f92d86f882403a455e05678dcdc3dcb2239fa2812d62cce7831641f4dbfb3d07",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuard_PhysicsAsset.uasset": "e837afe73faa9f37cb7e1e192822bc13bfb7b6fc6c1c9ecf41cbc2fd28eeb764",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuard_Skeleton.uasset": "ed4828d20b5ad62b296d9a099c6892685ae0a22267ffb9fab3698f11a666e91a",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardAttack.uasset": "aefb330259973a7ef5f48df9868ea924db16d17ef340ae789ea295c737ad1346",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardHurt.uasset": "c434d5b6da22958b044016ef358ea9abbb1bdace0f4b59d8d7b44d852e6baff3",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardIdle.uasset": "543f316e92979fa09cc5576c67003f1d9c4f3878ef5aec4e45466ed87b851866",
+      "Daedalus/Art/Cast/Mob_Gallery_GalleryGuard/Mob_Gallery_GalleryGuard/SkeletalMeshes/Mob_Gallery_GalleryGuardWalk.uasset": "f804e804024d9d6c444ab0ab51624f40b2834bff1681be7096a74ead7ee7696b",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/Materials/Gallery_LightTailor.uasset": "2b899124cab291e3f74f6cd5e41ec89cbf941f6b2d5bf7f4bef42364c5d2079c",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/Materials/Portal_brass.uasset": "1b590566bb26fabe9ba72e85534933b40857155e8cb7eaf8aa3e0bbe138fd7e6",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/Materials/Portal_cream.uasset": "3b3ffd4adc53eea6d76bc801f27e03c3cc6232668d28d252cc88f2566cc58a46",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/Materials/Portal_ink.uasset": "6b43df309c14a1fbe1e5bd6a672c8b7c53b6dae7fde4d4814414056acf0c34e2",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/Materials/Portal_warm_skin.uasset": "bbe3e44c69fa1626d62e41f292380809d4b8134cd33d546078e5bbbbdea7e44b",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailor.uasset": "cad714636de09629317c1610b2fc9fd1565fcefcdb9565efc5585cd7c00f7c1d",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailor_PhysicsAsset.uasset": "ab626e3d26172edea08a6b7c17781392eab8ee377be7d9e70a36f63366870995",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailor_Skeleton.uasset": "e6d5f86622a62221df1dc768eea227499e1e62384b9541941302ce3eeefbf18a",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorAttack.uasset": "a6b06119c63fc5d3dc02ef2c3c30df82f196c474cf8e36feeb7526310c8c3380",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorHurt.uasset": "b8f8a825f69691771f8a74a87dc6183f24ac5e431183a5eb47a64df39c616cdb",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorIdle.uasset": "92e790149c63421804bb3b20a90a89d8bfd83def31b56f68e3d0f860648f4171",
+      "Daedalus/Art/Cast/Mob_Gallery_LightTailor/Mob_Gallery_LightTailor/SkeletalMeshes/Mob_Gallery_LightTailorWalk.uasset": "34d7004ab3355853ba005e1ef8fbe309c1b24eaaea3098eebccbb7fcbd1c9ea5",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/Materials/Gallery_LostSelfPortrait.uasset": "43532d397f57bd198c81c28d94630a7e51ce3fd50c70b75e042885b2d3ea8480",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/Materials/Portal_brass.uasset": "3d101e509f22305a4c3b6259174facfb651b562a20b08749505db2aade23fe80",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/Materials/Portal_cream.uasset": "fc3a13e70250df48810282af7b043e0af7882e2e27299e46261978dc15ecd346",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/Materials/Portal_ink.uasset": "101eec8cf746c31932ce831d7c3afd881d362df243cc4007a003508b76bdc654",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/Materials/Portal_warm_skin.uasset": "8d19a325e0b8965e3367e68f46510d539e3e27af1baca35d8050c011aa9633b3",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortrait.uasset": "7eedeeb4333975ef39eceb9bff69cf78a531e6e99531fcd5fe8590e61a368be0",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortrait_PhysicsAsset.uasset": "67e661e076e4321402b924d517ec0ba539130f8d4e4ffc73fcc58994b3ae8a10",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortrait_Skeleton.uasset": "c98e4105fb9a6b3f5e2294546a324b7e8e8a2c84201e03aa021280b8884e5a65",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitAttack.uasset": "6afeef5d95b4bc443a0bb913e4f7dabc83407308c5f4cd86b00438b0e714ba96",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitHurt.uasset": "5cc0289724a2ea7f3b0f7f198330cd2919e3841297a42c0c4470a7f2c4cc7fc1",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitIdle.uasset": "192f1d475e095a3692d19ee89dbda6db8d6c1d051af5d23a89ddee6810204fc1",
+      "Daedalus/Art/Cast/Mob_Gallery_LostSelfPortrait/Mob_Gallery_LostSelfPortrait/SkeletalMeshes/Mob_Gallery_LostSelfPortraitWalk.uasset": "b5cdcd7bebae7d7a4f1531962276ba93172437d726d7f2163263b594eab2a3f4",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/Materials/Gallery_PigmentMiner.uasset": "c7e681b9e510c0fbfeb84c09930fa3379acdc4b5a3f00590dd4c510e5ea5ab22",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/Materials/Portal_brass.uasset": "d0ab94eaedfe9b7bb1bbc3d95ceee51d2bffb4eb8ebcd2fc63c1c8bc48098f91",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/Materials/Portal_ink.uasset": "7e635611aa689f7672769470b3673d42a24432118d66bac95c4554414890802d",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/Materials/Portal_warm_skin.uasset": "add8b6df388c5a0de956dbc64266b0fcd63e4d568325095e7eb48d031bb4b862",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMiner.uasset": "461c4a8b8deb309be2afbe984a30b889b4ca8553c9cd1c6d5e49e72491d9233c",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMiner_PhysicsAsset.uasset": "4918761d11f787c8514bea6113f41d21103ba3ece347b0e4d1ad4d7beef6332b",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMiner_Skeleton.uasset": "4f035b8c0e9ee06b638c003f25dbda46cb47dc66281d34b28010c98fc5d69465",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerAttack.uasset": "bfc52f690ee8e60e14d6509012100b5c68537985fba014c12546f73995e1b16b",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerHurt.uasset": "20281bb9b2ebf7ea7c8a0b76e1773ee1e221e65485e1c8cf925881bc69a40d3b",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerIdle.uasset": "dd9febb83e690ecad38dd2dbd5e2a2b977da57d01bd56fbe52018e02c9c95381",
+      "Daedalus/Art/Cast/Mob_Gallery_PigmentMiner/Mob_Gallery_PigmentMiner/SkeletalMeshes/Mob_Gallery_PigmentMinerWalk.uasset": "02d0e803b62c223d1460fe0260b8e55d04d6d4b1618e921311d784b722a3eb2e",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/Materials/Gallery_RestorerAma.uasset": "bae41a6d8b820ee24ce7e88935bd4ae29991a31dee36324e41b2037e632e81db",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/Materials/Portal_brass.uasset": "2ae1aa4093eba577eda2437c320d60ca07f23939cc0d9556a8913008863b9e89",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/Materials/Portal_cream.uasset": "8e93fc27b8213cca1e0ec9f8547b344694eec37b07a00b1347b381d76315cbbd",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/Materials/Portal_ink.uasset": "89b66ca1d8d6bb09d619cc5616e9aa8118075c7f22d1ba23832391739ef3e63b",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/Materials/Portal_warm_skin.uasset": "b223389fb2fa0a13436f0ef0f44b3528c20a89c176e1d81f835dc500ebed892b",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAma.uasset": "203627962ca737586d28168023875f64e969dc60d22012f6f5fafd6d5050d64e",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAma_PhysicsAsset.uasset": "e6cd2ea14c75764fe7e2a04372915f8b9adb57662db7ff830460debb5f6b2406",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAma_Skeleton.uasset": "efdf39872b490293e189325d6c893a519d8bf0832abb2daed8ae50d21a9d906e",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaAttack.uasset": "c7b40250ef9705d83cfd1a24b37a2570d609d002e774d635d6ecc8809fa7a426",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaHurt.uasset": "375665ebbf7d8006ad414b65324e11e9ae59277fd70715c8e96fec25f458f42d",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaIdle.uasset": "e83c666b24d8020468ee453073280386ec9dbe481f85a8cb68bcbd2043419dbd",
+      "Daedalus/Art/Cast/Mob_Gallery_RestorerAma/Mob_Gallery_RestorerAma/SkeletalMeshes/Mob_Gallery_RestorerAmaWalk.uasset": "0eb3ba407821c1df2b6afce978ee8b794ae7acf78844b07e459f6a17ed0419c7",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/Materials/Gallery_Sketcher.uasset": "f0640ba2465e7f9709ab176855db1ba882a2d28047ed9e5ac964d46653a696cd",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/Materials/Portal_brass.uasset": "dc636eb8ecbd01899553d6e3d9ae1884f3ba174e304d105ff01224d466601e51",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/Materials/Portal_cream.uasset": "8b948638b806d1a0aba84c6856b0170cefc90af327e3d8ea060299da4e674e07",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/Materials/Portal_ink.uasset": "f3052bd6e1d9a827dd55a5781f5d89f36964c4144e75424e430fa8ea75159a5e",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/Materials/Portal_warm_skin.uasset": "bb2690cbbb5087af54cb5fc88b5177ebcbf441eea7bcbcdf5385a0da5b9b9e80",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_Sketcher.uasset": "d4d28f47deca584fa26b115830b9aa3877f10299e94702e7d97c6da571b8d7a9",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_Sketcher_PhysicsAsset.uasset": "c0e59ed3c90d7a4fab519b95e6ddde1afd10fc3a1d6ecb79ca944a431466adc3",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_Sketcher_Skeleton.uasset": "3eb93a051e174424332f83e81eb06a3226293a8d4cde47baac8d2adea945c0a0",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherAttack.uasset": "8f0dbf6c92470aabb67d512b1c67da89ef3a77af25a77e0cbfe025ba85ffa242",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherHurt.uasset": "bf761faac5ceee92f4d5b58299fac2f04c2437659efb3c0bf67d1ce4abb9c22e",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherIdle.uasset": "a9d935c92e86c6616eeecf4964f5040d237d7a2389ebb3a94e07d2d351b53641",
+      "Daedalus/Art/Cast/Mob_Gallery_Sketcher/Mob_Gallery_Sketcher/SkeletalMeshes/Mob_Gallery_SketcherWalk.uasset": "2ef3cc63a71cba0081e9778874bd3409d3240b440d2e198d2f0ceca1178f39ee",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/Materials/Gallery_StreetMuralist.uasset": "ccfb015e6f7cfb14dfd087bab5e4469dc0f42871cf7499fb3ce7e350e08d07e5",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/Materials/Portal_brass.uasset": "55c11801e87e0d98ed9985049fbfd25294675259c1b1d56d2de380bfa4097ed0",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/Materials/Portal_cream.uasset": "153a1f7ac878cc50db5b9b5921ed8feadbbbfc2ca5c30306ba859b3aa0ecf88f",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/Materials/Portal_ink.uasset": "e98a5835d08a59b906efd0335f286830d1a9546ac60fc6394bd08cb1971343e3",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/Materials/Portal_warm_skin.uasset": "4a3bdf75c0d63696a0ac392f2403de119a1a2deb7efa707fade0fac7bdcbc9cc",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralist.uasset": "281d4527a915db748ef766181fd9ecd7e22cf4a73d073ae59be24b6496e9d434",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralist_PhysicsAsset.uasset": "4f96afeff20065a234febcca7c9256111db91ce10afdd1ee3dbc15c21914d251",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralist_Skeleton.uasset": "27cf09ea0284d2318f344c59925235f991215942af291aa8979e9a5a3a534ad2",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistAttack.uasset": "be8c2292f107e8606115a2e1cb2b565e4b9205b19384a45482e7a92d12398890",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistHurt.uasset": "a7fada9a019f2d1d3b3c4929d26ea6e57c16ad20a362d487a25f3e1986e491d6",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistIdle.uasset": "54f40d1a3efdf36e59c67a981f3e9831926a9463763b7f51ba5f78d027eebcba",
+      "Daedalus/Art/Cast/Mob_Gallery_StreetMuralist/Mob_Gallery_StreetMuralist/SkeletalMeshes/Mob_Gallery_StreetMuralistWalk.uasset": "ccbb8ef670caa3eb2f8fbb2d92368365246dd46ec1027330c44211a346328508",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/Materials/Gallery_VarnishMonk.uasset": "74f416195dd23e24f49b6ff09b161b2f493e5adb90699a84e173df607f4f4db9",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/Materials/Portal_brass.uasset": "9523f9e7960e6c53dcfebd747c72b749a9eae5a879a80a8447783cdd1f63059f",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/Materials/Portal_ink.uasset": "2f304340fe566b0ba8d4ea5f09c627481dcb3261c584faef33f7caca31def7de",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/Materials/Portal_warm_skin.uasset": "69eedef1a05590b426d7dbdbbf8147abc9c65e020e45bd36f8f1ee1a8f51204d",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/Materials/Portal_white.uasset": "0688d6ebc91d6668c094c5d3587ce97f66b3eea8b1c4c7cc20fcc52c2b41ff61",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonk.uasset": "5eda9e0f00c4677685a6e78bc82705ee7a80de0520608addcc8b98588b617c13",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonk_PhysicsAsset.uasset": "414663051e92c40021942d6dff6aa55744b7a86f08a04b01b39dbbbf01b47422",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonk_Skeleton.uasset": "81ca0820e6e1702c18ca75139a6e1b1f91ce80716bdd9cc2c59dea2a705ecd92",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkAttack.uasset": "b5e05940b153b62017a99def15a6598a019a19abf908204f135b591edca55027",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkHurt.uasset": "c386a5023cc70618ddaaaedd564deec163e4fb816dd359a18cb4b2e89e154620",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkIdle.uasset": "633cec27f33a4e428eb8571d6f1b26597139b4f6751c0c74a2f696b57ffe393e",
+      "Daedalus/Art/Cast/Mob_Gallery_VarnishMonk/Mob_Gallery_VarnishMonk/SkeletalMeshes/Mob_Gallery_VarnishMonkWalk.uasset": "a9970d1d1a587177dd467d8c84582059aefd5fdd5a14d63e6d76e7864e7fd37d"
+    }
+  },
+  "editor_log_diagnostics": {
+    "errors": 0,
+    "warnings": 0,
+    "details": "errors=0 warnings=0",
+    "reporter_sha256": "fe426186e5db60a3f8a1c2fe75b5e59c62fceab1ab29b9a3fb69752d6ee101cb"
+  },
+  "editor_log_sha256": "794febc7337bc44f6d5e0d92a49de2e60f3474ba5247ab52a1a829ce56def0ff",
+  "commandlet_seconds": 0.68,
+  "time_scope": "Commandlet body only; excludes process startup"
+}

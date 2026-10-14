@@ -44,6 +44,8 @@
 #include "SDaedalusInventory.h"
 #include "SDaedalusDialogue.h"
 #include "DaedalusRealmSessionCore.h"
+#include "DaedalusBattlePresentation.h"
+#include "Kismet/GameplayStatics.h"
 #include "SDaedalusHud.h"
 #include "SDaedalusRealm.h"
 #include "Containers/Ticker.h"
@@ -66,6 +68,80 @@ static TAutoConsoleVariable<float> CVarLookAccel(TEXT("daedalus.LookAccel"), 3.f
 static TAutoConsoleVariable<float> CVarDeadzone(TEXT("daedalus.Deadzone"), 0.15f, TEXT("Stick deadzone used before settings load."));
 static TAutoConsoleVariable<int32> CVarRumble(TEXT("daedalus.Rumble"), 1, TEXT("0 turns controller rumble off."));
 static TAutoConsoleVariable<float> CVarRumbleScale(TEXT("daedalus.RumbleScale"), 1.f, TEXT("Rumble strength, 0-1."));
+// ------------------------------------------------------------------------------------------- control hooks
+
+UInputAction* ADaedalusHero::ActionNamed(const FString& Name) const
+{
+	const FString N = Name.ToLower();
+	if (N == TEXT("move")) return MoveAction;
+	if (N == TEXT("lookstick") || N == TEXT("look")) return LookStickAction;
+	if (N == TEXT("jump")) return JumpAction;
+	if (N == TEXT("attack")) return AttackAction;
+	if (N == TEXT("melee")) return MeleeAction;
+	if (N == TEXT("dash")) return DashAction;
+	if (N == TEXT("aim")) return AimAction;
+	if (N == TEXT("switch")) return SwitchAction;
+	if (N == TEXT("interact")) return InteractAction;
+	if (N == TEXT("sprint")) return SprintAction;
+	if (N == TEXT("viewcycle")) return ViewCycleAction;
+	if (N == TEXT("callvehicle")) return CallVehicleAction;
+	if (N == TEXT("nextcube")) return NextCubeAction;
+	if (N == TEXT("shoulder")) return ShoulderAction;
+	if (N == TEXT("menu")) return MenuAction;
+	if (N == TEXT("view")) return ViewAction;
+	if (N == TEXT("inventory")) return InventoryAction;
+	return nullptr;
+}
+
+FString ADaedalusHero::Inject(const FString& Action, FVector Value, float Seconds)
+{
+	UInputAction* A = ActionNamed(Action);
+	if (!A) return TEXT("unknown action ") + Action;
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	UEnhancedInputLocalPlayerSubsystem* Sub = PC ? ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()) : nullptr;
+	if (!Sub) return TEXT("no local player (not in Play?)");
+	// Inject once now; Tick keeps injecting it every frame while Left > 0, the way a held key does.
+	Sub->InjectInputForAction(A, FInputActionValue(Value), {}, {});
+	if (Seconds > 0.f)
+	{
+		bool bFound = false;
+		for (FInjected& I : Injected) if (I.Action == A) { I.Value = Value; I.Left = Seconds; bFound = true; }
+		if (!bFound) Injected.Add({A, Value, Seconds});
+	}
+	return FString::Printf(TEXT("injected %s (%.2f, %.2f, %.2f) for %.2fs"), *Action, Value.X, Value.Y, Value.Z, Seconds);
+}
+
+bool ADaedalusHero::Teleport(FVector Where, float Yaw, bool bSnap)
+{
+	UWorld* W = GetWorld();
+	if (!W) return false;
+	if (bSnap)
+	{
+		FHitResult Hit;
+		FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusTeleport), false, this);
+		if (W->LineTraceSingleByChannel(Hit, Where + FVector(0, 0, 5000.f), Where - FVector(0, 0, 5000.f), ECC_WorldStatic, Q))
+			Where = Hit.ImpactPoint + FVector(0, 0, GetCapsuleComponent() ? GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f : 100.f);
+	}
+	const bool bOk = TeleportTo(Where, FRotator(0.f, Yaw, 0.f), false, true);
+	if (AController* C = GetController()) C->SetControlRotation(FRotator(0.f, Yaw, 0.f));
+	return bOk;
+}
+
+void ADaedalusHero::Look(float Yaw, float Pitch)
+{
+	if (AController* C = GetController()) C->SetControlRotation(FRotator(Pitch, Yaw, 0.f));
+}
+
+FString ADaedalusHero::ControlState() const
+{
+	const FVector P = GetActorLocation();
+	const FRotator R = GetController() ? GetController()->GetControlRotation() : GetActorRotation();
+	const FString Open = Menu.IsValid() ? TEXT("menu") : Field.IsValid() ? TEXT("field") : Inventory.IsValid() ? TEXT("inventory") : Dialogue.IsValid() ? TEXT("dialogue") : RealmView.IsValid() ? TEXT("realm") : TEXT("none");
+	return FString::Printf(TEXT("pos=%.0f,%.0f,%.0f yaw=%.0f pitch=%.0f speed=%.0f health=%.0f shield=%.0f/%.0f weapon=%s armor=%s realm=%s open=%s injected=%d"),
+		P.X, P.Y, P.Z, R.Yaw, R.Pitch, GetVelocity().Size(), Health, Shield, MaxShield,
+		CurrentWeapon == 2 ? TEXT("PICK") : CurrentWeapon == 1 ? TEXT("BLASTER") : TEXT("SWORD"), *ArmorName(), *RealmNow(), *Open, Injected.Num());
+}
+
 // -------------------------------------------------------------------------------------------- the realm session
 
 struct FDaedalusRealmSessionHolder { daedalus::session::Session Session; };
@@ -1288,6 +1364,9 @@ void ADaedalusHero::ExitRealm()
 	if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
 	HideOverlay(RealmHost);
 	RealmView.Reset();
+	if (ADaedalusBattlePresentation* S = Stage.Get()) S->ClearCues();   // the fight is over with the realm
+	StageHeld.clear();
+	StageLookT = 0.f;
 	{
 		daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
 		if (S.Current() == "PORTAL" && !S.PortalFrom().empty())
@@ -1307,7 +1386,7 @@ bool ADaedalusHero::IsRealmOpen() const
 FString ADaedalusHero::RealmState() const
 {
 	if (!RealmView.IsValid()) return TEXT("closed");
-	return FString::Printf(TEXT("source=%s sprites=%d %s"), *RealmSource, RealmView->SpriteCount(), UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
+	return FString::Printf(TEXT("source=%s sprites=%d stage=%s cues_staged=%d cues_held=%d cues_dropped=%d %s"), *RealmSource, RealmView->SpriteCount(), Stage.IsValid() ? TEXT("1") : TEXT("0"), CuesStaged, static_cast<int32>(StageHeld.size()), CuesDropped, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
 }
 
 bool ADaedalusHero::RealmCapture(const FString& Path)
@@ -1376,6 +1455,7 @@ FString ADaedalusHero::RealmInput(const FString& Command)
 	else if (Verb == TEXT("stage"))
 	{
 		// The battle stage director's cues since the last take (hub 28710), one per line: for a 3D stage and the harness.
+		if (Stage.IsValid()) return FString::Printf(TEXT("staged to %s: %d cues so far"), *Stage->GetName(), CuesStaged);   // Tick forwards them
 		FString Out;
 		for (const daedalus::stage::Cue& C : G.TakeStage()) Out += FString::Printf(TEXT("%s @%.2f +%.2f\n"), UTF8_TO_TCHAR(C.Describe().c_str()), C.At, C.Dur);
 		return Out.IsEmpty() ? TEXT("(no cues)") : Out;
@@ -1460,6 +1540,41 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	UCharacterMovementComponent* Mv = GetCharacterMovement();
+	// The 8-bit realm's battle cues go to the 3D stage when one is in the world (hub 28710/29054): the sprite battle
+	// keeps drawing; ADaedalusBattlePresentation plays the same fight on models.
+	if (RealmView.IsValid())
+	{
+		// Look for a stage every two seconds while there is none (one may be spawned later or replaced).
+		StageLookT -= DeltaSeconds;
+		if (!Stage.IsValid() && StageLookT <= 0.f)
+		{
+			StageLookT = 2.f;
+			Stage = Cast<ADaedalusBattlePresentation>(UGameplayStatics::GetActorOfClass(GetWorld(), ADaedalusBattlePresentation::StaticClass()));
+		}
+		// Only take cues when a stage can play them; otherwise they stay in the director for RealmInput(stage).
+		if (ADaedalusBattlePresentation* S = Stage.Get())
+		{
+			if (StageHeld.empty() && RealmView->Game().StagePending() > 0) StageHeld = RealmView->Game().TakeStage();
+			if (!StageHeld.empty())
+			{
+				if (S->Submit(StageHeld)) { CuesStaged += static_cast<int32>(StageHeld.size()); StageHeld.clear(); }
+				else if (StageHeld.size() > 512) { CuesDropped += static_cast<int32>(StageHeld.size()); StageHeld.clear(); }   // the stage refused for too long: say so, don't grow forever
+			}
+		}
+	}
+	// Held injected input (Inject with Seconds > 0): fed every frame like a held key until its time is up.
+	if (Injected.Num() > 0)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		UEnhancedInputLocalPlayerSubsystem* Sub = PC ? ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()) : nullptr;
+		for (int32 i = Injected.Num() - 1; i >= 0; --i)
+		{
+			FInjected& I = Injected[i];
+			I.Left -= DeltaSeconds;
+			if (Sub && I.Action) Sub->InjectInputForAction(I.Action, FInputActionValue(I.Value), {}, {});
+			if (I.Left <= 0.f) Injected.RemoveAt(i);
+		}
+	}
 
 	// Islands float in the sky: remember the last ground, and fall back onto it instead of falling forever.
 	if (Mv->IsMovingOnGround())

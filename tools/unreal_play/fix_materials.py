@@ -17,7 +17,7 @@ from asset_pipeline import wire  # noqa: E402
 
 
 def main(argv):
-    batch = int(argv[0]) if argv else 200
+    batch = min(int(argv[0]) if argv else 100, 150)   # short bridge calls: a long save loop crashed the editor (2026-10-13)
     max_batches = int(argv[1]) if len(argv) > 1 else 200
     if wire.call(wire.UNREAL, "ping", timeout=10).get("playing"):
         print("stop Play first: saving assets is an editor operation")
@@ -30,12 +30,12 @@ def main(argv):
         out = (r.get("stdout") or "").strip()
         err = r.get("stderr") or r.get("error") or ""
         print("pass %d: %s %s" % (i + 1, out[-200:], ("ERR " + err[:300]) if err else ""), flush=True)
-        if err or "'left': 0" in out or "left=0" in out or out.endswith("0}"):
+        if err or "'left': 0," in out or "'moved_now': 0" in out:
             break
     r = wire.call(wire.UNREAL, "execute_python", code=status, timeout=600)
     after = (r.get("stdout") or "").strip()
     print("after:", after[-200:], flush=True)
-    return 0 if "'left': 0" in after or "left=0" in after else 1
+    return 0 if "'left': 0," in after else 1
 
 
 if __name__ == "__main__":

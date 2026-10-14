@@ -15,13 +15,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "connectors", "claude-asset-pipeline"))
 from asset_pipeline import wire  # noqa: E402
 
-ALL = ("realm", "inventory", "dialogue", "cast", "realm_switch", "shiny", "shoot", "dig", "fall", "armor")
+ALL = ("realm", "inventory", "dialogue", "cast", "realm_switch", "control", "shiny", "shoot", "dig", "fall", "armor")
 
 
 def main(argv):
     names = [a for a in argv if not a.startswith("--")]
     if "--all" in argv or not names:
-        names = list(ALL[:5])
+        names = list(ALL[:6])
     keep = "--keep" in argv
     for _ in range(60):   # the editor may still be opening after a build
         try:

@@ -9,7 +9,7 @@ first, and undo() puts every instance back on its old parent.
 
     import daedalus_nanite_materials as n
     n.status()          # how many are still on the engine plugin's base
-    n.run(200)          # move (and save) up to 200; call again until left == 0
+    n.run(100)          # move (and save) up to 100 per call: keep each bridge call short; call again until left == 0
     n.undo()            # put them all back
 """
 import json
@@ -66,19 +66,34 @@ def status():
 
 
 def run(batch=200):
+    """Move up to `batch` instances. The ledger (the way back) is written once before the batch's changes and once
+    after: writing it after every asset made a 10,000-entry JSON rewrite per move (about a second each, 2026-10-13)."""
     book = _ledger()
     todo = _engine_bound()[:int(batch)]
-    moved = 0
+    pending = []
     for a in todo:
         mi = a.get_asset()
         old = mi.get_editor_property("parent")
         if old is None:
             continue
         book[mi.get_path_name()] = old.get_path_name()
-        _write(book)                     # the way back is on disk before anything changes
-        unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
-        EAL.save_loaded_asset(mi, only_if_is_dirty=False)
-        moved += 1
+        pending.append((mi, old))
+    _write(book)                         # every old parent is on disk before anything changes
+    moved = 0
+    with unreal.ScopedSlowTask(len(pending), "Daedalus: materials onto the project base") as task:
+        task.make_dialog(True)
+        for mi, old in pending:
+            if task.should_cancel():
+                break
+            task.enter_progress_frame(1)
+            unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
+            moved += 1
+    # Save without the per-asset checkout prompt: EditorAssetLibrary.save_loaded_asset goes through
+    # InternalPromptForCheckoutAndSave, which opens a window per save; 3.5 minutes of that inside one bridge call
+    # ended in a D3D11 CreateSwapChain fatal error (editor crash, 2026-10-13). save_packages has no prompt.
+    pkgs = [mi.get_outermost() for mi, _ in pending[:moved]]
+    if pkgs:
+        unreal.EditorLoadingAndSavingUtils.save_packages(pkgs, only_dirty=True)
     out = status()
     out["moved_now"] = moved
     return out

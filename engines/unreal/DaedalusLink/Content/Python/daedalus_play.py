@@ -1199,6 +1199,79 @@ def scenario_realm_switch(p):
     ]}
 
 
+def scenario_control(p):
+    """More control over Unreal (Richey 2026-10-13): injected Enhanced Input moves the hero like a held key, a jump
+    leaves the ground, goto snaps to the ground, look turns the camera, a console command runs in the Play world
+    and the log report reads clean of errors for this Play."""
+    import daedalus_control as C
+    h = hero()
+    w = world()
+    p0 = h.get_actor_location()
+    p0 = (p0.x, p0.y, p0.z)
+    r = C.hero_input({"action": "Move", "y": 1.0, "seconds": 1.5})
+    t0 = unreal.GameplayStatics.get_time_seconds(w)
+    while unreal.GameplayStatics.get_time_seconds(w) - t0 < 2.0:
+        yield
+    p1 = h.get_actor_location()
+    walked = ((p1.x - p0[0]) ** 2 + (p1.y - p0[1]) ** 2) ** 0.5
+    zs = []
+    C.hero_input({"action": "Jump"})
+    for _ in range(25):
+        zs.append(h.get_actor_location().z)
+        yield
+    rose = max(zs) - min(zs)
+    far = unreal.Vector(p0[0] + 600.0, p0[1] + 600.0, p0[2] + 3000.0)
+    g = C.goto({"x": far.x, "y": far.y, "z": far.z, "yaw": 90.0, "snap": True})
+    yield from _frames(5)
+    p2 = h.get_actor_location()
+    lk = C.look({"yaw": 180.0, "pitch": -20.0})
+    st = C.state({})["state"]
+    cs = C.console({"cmd": "stat none"})
+    rep = C.log_report({})
+    return {"checks": [
+        _check("injected Move walks the hero (held 1.5 s)", walked > 150.0, "walked=%.0f %s" % (walked, r["result"])),
+        _check("an injected Jump leaves the ground", rose > 40.0, "rose=%.0f" % rose),
+        _check("goto lands on the ground near the asked point, not 3000 up", g["ok"] and abs(p2.z - far.z) > 500.0 and abs(p2.x - far.x) < 50.0, g["state"]),
+        _check("look turns the camera", "yaw=180" in lk["state"] or "yaw=-180" in lk["state"], lk["state"]),
+        _check("state is one line with health, weapon and realm", "health=" in st and "weapon=" in st and "realm=" in st, st),
+        _check("a console command runs in the Play world", cs["playing"] is True, str(cs)[:200]),
+        _check("no editor errors this Play", rep["errors"] == 0, str(rep["top_errors"])[:300]),
+    ]}
+
+
+def scenario_stage(p):
+    """The 8-bit battle on the 3D stage (hub 28710/29054): with Sol's ADaedalusBattlePresentation in the Play world,
+    a realm fight's cues are forwarded to it every frame; RealmState counts them."""
+    h = hero()
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    at = h.get_actor_location()
+    stage = spawn(h, unreal.DaedalusBattlePresentation, at + unreal.Vector(0, 0, 400), unreal.Rotator(0, 0, 0))
+    yield from _frames(2)
+    h.enter_realm(7)
+    for _ in range(80):
+        if "map=" in h.realm_state() or "refused" in h.realm_state():
+            break
+        yield
+    for _ in range(8):
+        if _kv(h.realm_state()).get("ui") == "NONE":
+            break
+        h.realm_input("b")
+    h.realm_input("toughen")
+    h.realm_input("battle:BLIGHT_SLIME+PUFFCAP")
+    yield from _frames(2)
+    h.realm_input("autofight")
+    yield from _frames(4)
+    st = h.realm_state()
+    line = h.realm_input("stage")
+    h.exit_realm()
+    yield from _frames(2)
+    return {"checks": [
+        _check("the stage actor was found by the hero", "stage=1" in st, st[:200]),
+        _check("a fight's cues reached it", int(_kv(st).get("cues_staged", "0")) >= 10, st[:200]),
+        _check("the stage command says where they went", line.startswith("staged to"), line),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1220,6 +1293,8 @@ SCENARIOS = {
     "dialogue": scenario_dialogue,
     "cast": scenario_cast,
     "realm_switch": scenario_realm_switch,
+    "control": scenario_control,
+    "stage": scenario_stage,
 }
 
 
