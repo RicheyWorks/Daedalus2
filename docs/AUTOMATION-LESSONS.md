@@ -512,3 +512,9 @@ swallowed the freshly laid plots (fixed by excluding Land_ labels); set the came
 set_level_viewport_camera_info and read the result with editor_windows (which always works) rather than
 viewport_screenshot (which timed out 4/5 times today). Realms live at fixed origins 40 km apart in the one
 persistent level for now; streaming them by district is the polish step, not the lay-down step.
+
+## A "*/" inside a doc comment ended it (2026-10-13)
+`dock:*/shore` in a `/** ... */` comment closed the comment on line 1; the second line's ` *  without markers...`
+became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
+through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
+the offending text; write "x or y", never "x/y", after a star in a comment.

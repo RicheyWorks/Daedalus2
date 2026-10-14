@@ -140,6 +140,15 @@ def check_cpp(path, text, errors, sources, holders=frozenset()):
                            "(a saved older copy overrides it on load)" % name))
 
 
+    # P9: a block comment that closes itself early ("dock:*/shore" ended a /** */ doc comment, C3927/C2146 at the
+    # PC build, 2026-10-13). After the first "*/" of a block comment, the next non-blank characters on that line or
+    # the following line must not be text that belongs to the comment (an " *" continuation line).
+    for m in re.finditer(r"/\*.*?\*/", text, re.S):
+        lines = text[m.end():m.end() + 400].split("\n")
+        nxt = lines[1].strip() if len(lines) > 1 else ""
+        if nxt.startswith("*") and not nxt.startswith("*/"):
+            errors.append((path, line_of(text, m.end()), "P9", "a '*/' inside a comment closed it early (the next line still starts with ' *'); "
+                           "write 'x or y' instead of 'x/y' after a star"))
     # P8: C++ exceptions (C4530 in a game target). Strip comments and string literals first, keeping line numbers.
     code = STRIP_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
     for m in EH_RE.finditer(code):
