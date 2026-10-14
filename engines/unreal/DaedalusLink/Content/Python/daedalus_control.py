@@ -22,10 +22,17 @@ import unreal
 STRIP = re.compile(r"^\[[^\]]+\]\[\s*\d+\]")
 
 
+def _playing():
+    les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+    check = getattr(les, "is_in_play_in_editor", None)
+    return bool(check()) if check else False
+
+
 def _game_world():
+    """The Play world while Play runs, else the editor world (UWorld exposes no 'am I a game world' in Python)."""
     ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
     g = getattr(ues, "get_game_world", None)
-    w = g() if g else None
+    w = g() if (g and _playing()) else None
     return w if w is not None else ues.get_editor_world()
 
 
@@ -54,7 +61,7 @@ def console(p):
     unreal.SystemLibrary.execute_console_command(_game_world(), cmd)
     time.sleep(0.05)
     after = _log_lines()[before:]
-    return {"cmd": cmd, "playing": _game_world().is_game_world(), "log": [STRIP.sub("", l).strip() for l in after][-60:]}
+    return {"cmd": cmd, "playing": _playing(), "log": [STRIP.sub("", l).strip() for l in after][-60:]}
 
 
 def cvar(p):
@@ -136,7 +143,7 @@ def look(p):
 
 def state(p):
     h = _hero()
-    return {"state": h.control_state() if h else "no hero (not in Play)", "playing": _game_world().is_game_world()}
+    return {"state": h.control_state() if h else "no hero (not in Play)", "playing": _playing()}
 
 
 def automation(p):
