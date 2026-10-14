@@ -1,11 +1,22 @@
 # Desktop maze and adventure ports
 
-Native polish update (2026-10-14, dedicated minigame owner): Dungeon now has an
+Native polish cycle 2 (2026-10-14, claims hub 31185/31186): Pac-Man now guards only
+lethal unfrightened-ghost collisions for exactly 90 subsequent live steps after a
+nonterminal death. This explicit native rule extension leaves movement, ghost
+updates/random calls, pellets/fright/captures, scores, loss-before-win and ghost
+revival ordering unchanged. Initial run/terminal death have no guard; Reset clears it and
+terminal steps freeze. A cyan halo/counter, remaining dot/power counts and fresh
+Action/Fire/Jump/host R retry explain existing state. Dungeon cycle 1 and Zelda
+are unchanged by this continuation. No tests/builds/CI/Unreal/Play were run.
+Later validation must check the protected 90th step versus vulnerable 91st,
+frightened captures during grace, terminal/reset and last-dot/lethal ordering.
+
+Native polish cycle 1 checkpoint (2026-10-14, dedicated minigame owner): Dungeon has an
 original Threadlight Passage lantern circuit in its existing room. Map/start/
 movement/collision/Action reset remain source-derived, but ordered Fire/Jump
 interaction, local terminal completion, seed permutations and feedback are new
 native design. They are uncompiled/untested and outside the historical Python
-parity evidence below. Pac-Man/Zelda remain unchanged. Architecture/story, before/
+parity evidence below. Pac-Man/Zelda were unchanged at that checkpoint. Architecture/story, before/
 after, per-game backlog and operator requirements are in the existing canonical
 [DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md), with a source-only
 install packet at `docs/desktop-games-polish-install.json`. No dedicated tests,
@@ -47,7 +58,10 @@ session can create at most nine collectibles. Pac-Man has four ghosts and a
 fixed 304-collectible array represented by a bounded vector. Render commands use
 the shared 4,096-command cap. Animation phases are bounded.
 
-## Preserved rules and deliberate repairs
+## Historical baseline preserved rules and deliberate repairs
+
+The following baseline predates the explicitly identified native polish above.
+Its original-source facts and old verification pins remain historical evidence.
 
 **Dungeon:** exact seven source rows, 40-pixel tiles, starting green 40x40 box at
 `(80,80)`, 5 pixels per frame per digital axis, and X-before-Y movement. The source

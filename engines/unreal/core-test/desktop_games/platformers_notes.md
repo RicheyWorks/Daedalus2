@@ -1,5 +1,31 @@
 # Desktop platformer ports: CONTRA and Shadow Ninja
 
+## Native polish cycle 2 — source only, 2026-10-14
+
+Claims hub 31185/31186 cover only `NinjaBoss` cue constants/read-only helpers and
+`ShadowNinjaGame` feedback. CONTRA, `NinjaPlayer`, attack/enemy helpers and all
+existing damage/movement/input/randomness remain unchanged. Boss movement still
+precedes predecrementing its timer: initial 40, subsequent 50. Strike reach is the
+strict axis rectangle `abs(dx)<300 && abs(dy)<100`, independent of ordinary boss
+contact at distance <35; eligible strike damage remains one health and 60-step
+invincibility. Static constants preserve those exact defaults and comparisons.
+
+The final 12 timer steps display a countdown and current reach outline. This is
+not a prediction of the next moved position and does not promise safety from
+contact/enemies. Each existing instant pulse records an eight-step cosmetic
+"pulse fired" cue, including misses or invincible players; it never asserts damage
+or extends an attack. Existing ground/air/wall jump, spin cooldown/ground need and
+shared sword/star cooldown/64-attack cap drive readiness text. Boss entry remains
+score 1200, level remains 1 and host R/Restart still resets the game.
+
+**Uncompiled/untested.** No CI, service, editor, controller or native gameplay run.
+The exact source packet and current per-game coverage/queue are in
+`docs/desktop-games-polish-install.json` and
+[DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md). Later validation
+must inspect timer 13/12/1/50, strict range edges, invincibility, moving boss and
+receipt on hit/miss/protected pulses. The old oracle receipts below do not prove
+the new cues. No new Blender assets or character imports were created.
+
 These are ports of the actual user's Desktop scripts into the existing `daedalus::desktop::Game` contract. The Python originals are preserved. Both native cores start a playable session immediately; the Daedalus launcher owns opening, closing and restarting the minigame.
 
 ## Canonical source selection
@@ -52,7 +78,7 @@ Shadow Ninja preserves start at (175,380), feet-based platform collision and its
 - Native sessions use the shared deterministic portable random stream, not Python's random generator. Cosmetic explosions have a separate stream and rendering does not consume gameplay randomness. Seed replay is native-to-native evidence, not a claim of seed-for-seed Python replay.
 - Source ellipses and polygons are approximated with the existing rectangle/circle/line/triangle render contract. There is no audio or imported character mesh in this portable slice.
 
-## Verification and limits
+## Historical baseline verification and limits
 
 `platformers_source_oracle.py` checks both original SHA256 hashes before selecting reviewed AST constants, controller accessors, non-rendering class methods and bounded award/pickup fragments. It runs those selected source statements with controlled controller/random/Rect providers. It never imports Pygame, runs source module initialization, starts a full main loop, displays a window or initializes audio. The Rect provider models truncation toward zero and strict right/bottom edge exclusion; this is a stub contract, not evidence from an installed Pygame runtime.
 

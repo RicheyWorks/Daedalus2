@@ -1,6 +1,79 @@
 # Desktop Python games into Daedalus
 
-## Native polish cycle 1 — source only, 2026-10-14
+## Native polish cycle 2 — source only, 2026-10-14
+
+Continuation claims: hub 31185/31186; scope/PR139 acknowledgment 31193. This pass
+uses the actual existing `Game::Reset/Step/Render/GetStatus` interface and catalog
+IDs `pacman` and `shadow_ninja`. The original Python files, cycle 1 Dungeon/Pong,
+Zelda, Contra, player helpers, actor/registry/Slate and PR139 remain preserved.
+There is no Sonic game in the assessed eleven-family catalog.
+
+**Uncompiled and untested.** No current build, connection, native play, controller
+feel or end-to-end acceptance is claimed. This source pass does not complete the
+full original-app integration backlog. The existing
+[PR152 capability map](https://github.com/RicheyWorks/Daedalus2/blob/89ece418/docs/java-arcade/capability-coverage.md)
+continues to track all eleven native families and Java Sudoku/Blackjack gaps.
+
+### Pac-Man: protect and explain the respawn
+
+Before: a nonterminal death resets only the hero, leaving ghosts live; another
+ghost can take the next life on the next fixed step. After: each nonterminal death
+starts an explicit **90 subsequent live-step lethal-collision guard** (nominal
+1.5 seconds at 60 Hz), with a visible cyan halo and remaining-step label. This is
+a new native gameplay rule, not cosmetic immunity or unchanged Python parity.
+The initial run and terminal death receive no grace. A snapshot before timer decrement
+protects the 90th subsequent collision step; the 91st is vulnerable. Reset clears
+the counter, and terminal steps freeze it until a fresh replay/reset.
+
+Only unfrightened ghost life loss is guarded. Hero movement, ghost updates and
+random-call ordering, pellets, 300-step fright, frightened captures, scores,
+all-dead ghost revival and loss-before-win ordering remain unchanged. The HUD and
+`Status` now report remaining collectibles and power pellets. Terminal feedback
+names the existing fresh Action/Fire/Jump retry and host R/Restart. No new score,
+ghost AI, tunnel, persistence or realm reward is introduced.
+
+### Shadow Ninja: show the existing strike and action readiness
+
+Before: the boss's periodic strike is invisible until damage. After: the last
+12 timer steps show a countdown and outlined **current** rectangular reach.
+The source moves the boss before its strict `abs(dx)<300 && abs(dy)<100` check;
+the outline therefore reports current reach, not a predicted safe zone. Ordinary
+boss contact and enemies can still hurt. The first strike remains at 40 steps,
+then every 50; damage remains one health with 60-step invincibility when eligible.
+Named constants and a read-only range helper replace identical literals.
+
+An eight-step "pulse fired" receipt follows every existing instant pulse, including
+a miss or protected player. It does not assert a hit or keep damage active. Jump,
+air-jump/wall-jump, spin/ground requirement and shared sword/star cooldown/cap
+readiness are derived from existing player/attack state. Boss-entry score progress
+and a host R/Restart terminal hint use the original 1,200 threshold and host API.
+No damage, timing, movement, RNG, spawn, score, level or attack-input rule changes.
+No replacement character, Blender asset or audio work is included.
+
+### Existing-interface coverage and remaining evidence
+
+The paths below are relative to
+`engines/unreal/DaedalusLink/Source/DaedalusLink/`. All bindings already exist:
+`Public/DesktopGames/DaedalusDesktopGameRegistry.h::CreateGame` selects the core,
+`Driver::Advance` calls bounded fixed `Step` updates and refreshes `Render`,
+`Private/DaedalusDesktopArcade.cpp::GetState` exposes `Status`, and
+`Private/SDaedalusDesktopArcade.cpp` paints frame commands and routes input/restart.
+No new adapter is proposed or required for these four feedback passes.
+
+| Implemented feature | Exact core interface/source path | Existing Daedalus UI/service binding | Missing code or scope | End-to-end evidence |
+|---|---|---|---|---|
+| Dungeon ordered lanterns, exit, completion/replay | `Public/DesktopGames/DaedalusDesktopMazeCore.h::DungeonGame::Step/Render/GetStatus` | Catalog `dungeon`; frame/footer and actor status; existing Action/R reset | No server quest/reward or durable run save; those are separate scope | Source written/reviewed; build/load/Hero Use/route/replay pending |
+| Pong point preparation, early serve, rally/contact cues | `Public/DesktopGames/DaedalusDesktopPongCore.h::PongGame::Step/Render/GetStatus` | Catalog `pong`; existing digital/analog/hat actions and frame | No match-win rule or persistence added | Source written/reviewed; timing/controller/native rendering pending |
+| Pac-Man lethal respawn guard, dot/power counts, fresh retry | `Public/DesktopGames/DaedalusDesktopMazeCore.h::PacmanGame::Step/Render/GetStatus/RespawnFramesRemaining` | Catalog `pacman`; existing merged hat/stick input, terminal press edges and host R/Restart | No profile/save/inventory backend for this source game; no new adapter | Source written; exact 90/91 boundary, fright capture, reset/terminal and native play pending |
+| Shadow Ninja periodic strike/readiness feedback | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange`; `ShadowNinjaGame::Step/Render/GetStatus` | Catalog `shadow_ninja`; existing separate hat/axes and sword/star/spin edges; host R/Restart | No character mesh/audio/progression invented; source level remains 1 | Source written; timer/range/invincibility receipt boundaries and native readability pending |
+
+Later authorized validation must distinguish source, committed, connected, native
+and accepted stages. Exact commit/blobs/SHA256 and pending operator observations
+are in [the existing install packet](desktop-games-polish-install.json). Only
+`codex-play-guard` operates Unreal. Legacy oracle/build receipts below apply to
+their historical source pins and do not prove this pass.
+
+## Native polish cycle 1 checkpoint — source only, 2026-10-14
 
 Dedicated owner: `pootscoot-desktop-games`, exact claims hub 31121/31122.
 User direction is to iterate and polish **each existing game** in bounded code
@@ -38,8 +111,8 @@ The original map, ragged-row/boundary collision, start `(80,80)`, 40px body and
 keyboard input; Slate's existing hat mapping stays unchanged. Fresh Fire/Jump
 edges interact (`J/Z/X/Ctrl/RB` or `Space`, pad X/A); existing Action (`K/C/Enter`,
 pad B) resets, and host `R` still restarts. No registry, actor, Slate or shared
-input rewrite is required. Pac-Man and Zelda sections in the shared header remain
-unchanged.
+input rewrite is required. At this cycle 1 checkpoint, Pac-Man and Zelda sections
+in the shared header were unchanged; cycle 2 above changes only Pac-Man.
 
 Three fixed reachable centres are `(140,60)`, `(660,140)`, `(380,220)`, with exit
 `(60,220)`. `seed % 6` selects permutations `012,021,102,120,201,210`. Seed 0
@@ -83,9 +156,9 @@ game or an endless documentation pass. Native gameplay proof is a separate stage
 |---|---|---|---|
 | 1 Dungeon | Lantern objective/input/completion/replay, above | Original room, movement, reset; new goal explicitly native | Source written; compile, target reachability and Play pending |
 | 2 Pong | Serve/rally/contact feedback, above | Endless source scores, speeds/collision, immediate opening | Source written; timing, controller and rendering Play pending |
-| 3 Pac-Man | Visible respawn grace, remaining-dot feedback, fresh retry | Map, speeds, ghosts, scores and win rules | Queued; claim next exact section before edits |
-| 4 Shadow Ninja | Telegraph existing boss attack; jump/spin readiness | Existing attack timing/damage and platform movement | Queued; no balance change or new boss invented |
-| 5 Football | Short goal/kickoff transition and kick feedback | Remote-kick source quirk, 90-second match | Queued; state/clock decisions need source review |
+| 3 Pac-Man | 90-step lethal respawn guard, remaining-dot/power feedback, fresh retry | Map, speeds, ghosts, scores and win rules; guard explicitly new native rule | Cycle 2 source written; 90/91 boundary, reset, captures and Play pending |
+| 4 Shadow Ninja | Telegraph existing boss attack; jump/spin/attack readiness and pulse receipt | Existing attack timing/damage and platform movement | Cycle 2 source written; timer/range boundaries and native readability pending |
+| 5 Football | Short goal/kickoff transition and kick feedback | Remote-kick source quirk, 90-second match | Next queued game; exact source/claim required before edits |
 | 6 Contra | Stage distance/checkpoint and pickup readiness cues | Source distance victory, held-jump behavior, cheat distinctions | Queued; title bonus binding remains a separate gap |
 | 7 Dodge Ball | Tournament/round summary, throw/catch/charge readiness | Simultaneous trio control and existing held rethrow | Queued; no new bracket/persistence claim |
 | 8 Asteroids | Wave-ready/protection countdown and local run feedback | Wrap/inertia, progressive rock counts and lives | Queued; no ship physics replacement |

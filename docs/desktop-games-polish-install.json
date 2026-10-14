@@ -1,5 +1,5 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
   "status": "UNCOMPILED_UNTESTED_SOURCE",
@@ -7,30 +7,45 @@
   "operator": "codex-play-guard",
   "claim_messages": [
     31121,
-    31122
+    31122,
+    31185,
+    31186,
+    31193
   ],
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "114e4e71d40d159fdfd5068639b39428415cce84",
+    "code_commit": "d98c6b780af6a13857f1aa395a56b85cf7938cd2",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
-        "git_blob": "3e0fcc005af2ec9a4899ed9327af9d24076060a2",
-        "sha256": "F97635F94946BF5716EFFDA27D83C51D312C6AE3E1E1429C145E1FEC31D2010D"
+        "git_blob": "89500a3960ee9d26c4a503518686b21e680bd578",
+        "sha256": "C852F9A7CB843D6977BCDE285444B8D3EA88C6AD95A0AEC6B41B08046553FF3E"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
         "git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
         "sha256": "DD748E33887B1F7DFF6C5362443B65D881A96E2B3C96752E4E288C480E98563E"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+        "git_blob": "2bd4d68f76848cdae7605ce06139039ffcb84e0f",
+        "sha256": "E4A09BAB5E1F721C9E797005AC0527793DB689D048B09BDE4FCEEB189092B5D1"
       }
     ],
     "peer_sections_preserved": [
-      "PacmanGame",
-      "ZeldaGame"
+      "DungeonGame cycle1",
+      "PongCore cycle1",
+      "ZeldaGame",
+      "ContraGame",
+      "NinjaPlayer",
+      "NinjaAttack",
+      "NinjaEnemy"
     ],
-    "prior_delivery_preserved": "PR15289ece418 remains separate and unchanged"
+    "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
+    "prior_checkpoint_commit": "a388169b8b784b08021df7d9bd87ce7cadd571c0",
+    "prior_runtime_commit": "114e4e71d40d159fdfd5068639b39428415cce84"
   },
   "registration": {
     "module": "DaedalusLink",
@@ -38,11 +53,19 @@
     "interaction": "existing Hero Interact -> Usable Nearest/Use -> Desktop Slate",
     "catalog_ids": [
       "dungeon",
-      "pong"
+      "pong",
+      "pacman",
+      "shadow_ninja"
     ],
     "registry_actor_slate_changed": false,
     "pr139_minesweeper_changed": false,
-    "runtime_dependencies_changed": false
+    "runtime_dependencies_changed": false,
+    "existing_interfaces_traced": [
+      "Public/DesktopGames/DaedalusDesktopGameRegistry.h::CreateGame selects existing IDs and Driver::Advance calls Step/Refresh",
+      "Public/DaedalusDesktopArcade.h::GetArcadeFrame returns Driver::GetFrame",
+      "Private/DaedalusDesktopArcade.cpp::GetState converts Status.Note, score, lives, Over/Won",
+      "Private/SDaedalusDesktopArcade.cpp::SGameCanvas::OnPaint consumes Frame commands; StatusText displays actor Note; PushInput and Restart/R retain existing mappings"
+    ]
   },
   "games": [
     {
@@ -127,6 +150,91 @@
       "early_serve": "fresh FirePressed/JumpPressed/ActionPressed; next fixed step launches",
       "new_hud": "event-only; Reset frame retains original6draw commands",
       "inventory_or_server_rewards": false
+    },
+    {
+      "id": "pacman",
+      "InitialGameId": "pacman",
+      "InitialSeed": 730,
+      "original_source": "C:/Users/730ri/OneDrive/Desktop/pacman.py",
+      "original_sha256": "6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed",
+      "native_rule_extension": "Every nonterminal death starts 90 subsequent live collision steps of lethal unfrightened-ghost grace; initial run and terminal death do not start grace.",
+      "grace_step_policy": "Snapshot protection before decrement: subsequent steps 1 through 90 protected, step 91 vulnerable; Reset clears; terminal steps freeze.",
+      "feedback": [
+        "cyan halo and remaining grace steps",
+        "remaining dot and power-pellet counts",
+        "fresh Action/Fire/Jump or host R/Restart terminal hint"
+      ],
+      "original_rules_preserved": [
+        "map and repaired source coordinates",
+        "player and ghost speeds/directions",
+        "ghost updates and RNG call order",
+        "pellets and 300-step fright",
+        "frightened captures including during grace",
+        "scores and ghost revival",
+        "loss-before-win ordering"
+      ],
+      "interfaces": [
+        "PacmanGame::Step",
+        "PacmanGame::Render",
+        "PacmanGame::GetStatus",
+        "PacmanGame::RespawnFramesRemaining",
+        "PacmanGame::PowerPelletsLeft"
+      ],
+      "frame_size_px": [
+        800,
+        660
+      ],
+      "inventory_or_server_rewards": false,
+      "missing_scope": [
+        "durable profile/run save",
+        "character assets",
+        "native acceptance"
+      ]
+    },
+    {
+      "id": "shadow_ninja",
+      "InitialGameId": "shadow_ninja",
+      "InitialSeed": 730,
+      "original_source": "C:/Users/730ri/OneDrive/Desktop/shadow_ninja_platform_fixed.py",
+      "original_sha256": "83dd921b95043a2723b61513d84471adbfaede29dd18744367835fbc3aa03e36",
+      "feedback_only": true,
+      "strike_policy": "Original initial 40 and recurring 50 steps; boss moves then predecrements; strict abs(dx)<300 and abs(dy)<100; eligible damage 1 and invincibility 60.",
+      "telegraph_steps": 12,
+      "current_range_half_size_px": [
+        300,
+        100
+      ],
+      "telegraph_limit": "Outline shows current strict axis reach, not the next moved position or safety from body contact/enemies.",
+      "pulse_receipt_steps": 8,
+      "pulse_receipt_policy": "Cosmetic receipt of existing instant pulse, including misses and protected players; neither damage proof nor an extended active hitbox.",
+      "feedback": [
+        "source timer countdown/current reach",
+        "ground/air/wall jump readiness",
+        "spin duration/cooldown/ground requirement",
+        "shared sword/star cooldown and 64-attack cap",
+        "existing boss entry at score 1200",
+        "host R/Restart terminal hint"
+      ],
+      "original_rules_preserved": [
+        "all health/damage/contact/invincibility",
+        "strike timing/range/move order",
+        "player/attack/enemy mechanics",
+        "input edges and hat/axis semantics",
+        "spawns, RNG and scores",
+        "level stays 1"
+      ],
+      "interfaces": [
+        "platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange",
+        "ShadowNinjaGame::Step/Render/GetStatus",
+        "ShadowNinjaGame::PulseReceiptFramesRemaining"
+      ],
+      "inventory_or_server_rewards": false,
+      "missing_scope": [
+        "character mesh and animation",
+        "audio",
+        "durable profile/run save",
+        "native acceptance"
+      ]
     }
   ],
   "presentation": {
@@ -139,7 +247,19 @@
       "footer instruction"
     ],
     "new_blender_or_bitmap_exports": [],
-    "character_upgrade_status": "separate pending owner/art work"
+    "character_upgrade_status": "separate pending owner/art work",
+    "pacman_noncolour_cues": [
+      "Dots left",
+      "Power count",
+      "Respawn grace step label",
+      "fresh replay instruction"
+    ],
+    "shadow_ninja_noncolour_cues": [
+      "pulse countdown",
+      "current reach label and outline",
+      "action readiness words",
+      "pulse fired receipt"
+    ]
   },
   "placement": {
     "map": "/Game/Daedalus/DaedalusWorld",
@@ -153,7 +273,7 @@
     "saved": false
   },
   "stages": {
-    "source": "implemented and independently read-only reviewed",
+    "source": "Four bounded native source passes implemented and independently read-only reviewed; source facts only",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -161,23 +281,27 @@
     "native_loaded": false,
     "world_placed": false,
     "play_verified": false,
-    "game_feel_verified": false
+    "game_feel_verified": false,
+    "existing_bindings_source_traced": true,
+    "connected_current_build": false
   },
   "pending_operator_steps": [
-    "Read exact source commit/blobs/SHA256 and review canonical docs; do not infer permission to build/install while deferral remains.",
-    "After separately authorized source adoption/build/load, verify exact installed module source/binary revision and preserve other owners/PR139.",
-    "Use approved existing Desktop Arcade or owned staging placement with normal Hero Use, InitialGameId=dungeon, InitialSeed=0, one fixed-step clock.",
-    "Observe Hall -> Watch -> Root -> EXIT with fresh input; wrong order retains progress, held input cannot skip, completion freezes, Action/R resets and seed1 changes only route.",
-    "Switch via existing catalog to pong; observe one scored point, controllable bounded paddles during45frame preparation, fresh early serve, original velocities/scores and rally/contact feedback.",
-    "Check pause/focus/controller lifecycle and frame footer/readability with real play; source review provides no game-feel evidence.",
-    "Return actual exact-head/binary/map/actor/input/transform/save and redacted play observations only after authorized execution."
+    "Read exact runtime source commit/blobs/SHA256 and canonical coverage docs; this packet does not authorize tests/build/install while deferral remains.",
+    "After separately authorized adoption/build/load, record exact installed module source/binary revision; preserve other owners and PR139.",
+    "Use an approved existing Desktop Arcade or approved owned staging placement with normal Hero Use, one fixed-step clock and the listed InitialGameId/seed.",
+    "Dungeon seed0: Hall -> Watch -> Root -> EXIT; wrong order retains progress, fresh input progresses, completion freezes, Action/R resets; seed1 changes only route.",
+    "Pong: scored point, live bounded paddles during 45-step preparation, fresh early serve, original velocities/scores and rally/contact cues.",
+    "Pac-Man: nonterminal death sets90, exactly90 subsequent live steps protect lethal collisions, step91 vulnerable; frightened captures remain active; verify Reset, terminal freeze and last-dot/lethal ordering.",
+    "Shadow Ninja: timer13/12/1/50, moving boss, strict absX300/absY100 boundaries, invincibility0/1; receipt appears for hit/miss/protected pulse and never extends damage; ordinary contact/enemies remain independent.",
+    "Check all four frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review supplies no current play evidence.",
+    "Return exact source/binary/map/actor/input/transform/save and redacted play observations only after authorized execution."
   ],
   "backlog_order": [
     "dungeon source-pass1",
     "pong source-pass1",
-    "pacman next",
-    "shadow_ninja",
-    "football",
+    "pacman source-pass2",
+    "shadow_ninja source-pass2",
+    "football next",
     "contra",
     "dodge_ball",
     "asteroids",
@@ -193,5 +317,11 @@
     "No PR139 registry/Desktop actor/Slate change",
     "No invented inventory/currency/realm quest rewards",
     "No live financial/service operation"
-  ]
+  ],
+  "capability_coverage": {
+    "canonical_full_app_map": "https://github.com/RicheyWorks/Daedalus2/blob/89ece41824b9132403ac0bfffae15343b08b13f8/docs/java-arcade/capability-coverage.md",
+    "current_feature_source_binding_gaps_evidence": "docs/DESKTOP-PYTHON-GAMES.md: Existing-interface coverage and remaining evidence",
+    "full_original_app_integration_complete": false,
+    "current_connected_or_native_e2e_evidence": false
+  }
 }
