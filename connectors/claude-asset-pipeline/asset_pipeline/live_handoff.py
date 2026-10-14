@@ -15,6 +15,17 @@ PAGE_SIZE = 128
 STATES = ('accepted', 'blocked', 'completed')
 
 
+def message_body(message):
+    body = message.get('body')
+    return body if isinstance(body, dict) else {'text': str(body or '')}
+
+
+def transport_receipt(message):
+    body = message_body(message)
+    return (message.get('type') == 'ack' and type(body.get('id')) is int
+            and body['id'] == message.get('reply_to') and set(body) <= {'id', 'type'})
+
+
 @contextmanager
 def locked_state(path, me, start_after=None):
     """OS lock is released on process death; an old lock file alone never blocks recovery."""
@@ -110,7 +121,7 @@ def collect(state, link):
                             item['reply'] = message
                             if incoming in ('accepted', 'completed'):
                                 item.setdefault('acceptance_observed_at', time.time())
-            if message['type'] != 'ack':
+            if not transport_receipt(message):
                 if len(state['pending']) >= MAX_PENDING:
                     break  # Do not advance past a message we cannot durably retain.
                 state['pending'].setdefault(str(message['id']), dict(message=message, state='queued'))
@@ -157,7 +168,7 @@ def summary(state, now=None, limit=12):
             'inbox_capacity': MAX_PENDING,
             'messages': [{'id': p['message']['id'], 'from': p['message']['from'],
                           'type': p['message']['type'], 'state': p['state'],
-                          'text': str((p['message'].get('body') or {}).get('text', ''))[:700]}
+                          'text': str(message_body(p['message']).get('text', ''))[:700]}
                          for p in pending[:limit]],
             'requests': [{'key': key, 'id': item.get('id'), 'to': item['to'], 'state': item['state'],
                           'acceptance_observed_seconds': round(item['acceptance_observed_at'] - item['sent_at'], 3)
@@ -181,6 +192,7 @@ def main(argv=None):
     reply.add_argument('--status', choices=STATES, required=True); reply.add_argument('--text', required=True)
     sub.add_parser('status')
     receipt = sub.add_parser('ack'); receipt.add_argument('--id', type=int, required=True)
+    replay = sub.add_parser('replay'); replay.add_argument('--after', type=int, required=True)
     sub.add_parser('archive-completed')
     a = p.parse_args(argv)
     link = Link(a.me, a.port)
@@ -200,6 +212,10 @@ def main(argv=None):
             respond(state, link, a.id, a.status, a.text)
         elif a.command == 'poll':
             collect(state, link)
+        elif a.command == 'replay':
+            if not 0 <= a.after <= state['cursor']:
+                raise ValueError('Replay cursor must be between 0 and the current cursor')
+            state['cursor'] = a.after
         elif a.command == 'ack':
             item = state['pending'].get(str(a.id))
             if not item or item['message']['type'] == 'request':
