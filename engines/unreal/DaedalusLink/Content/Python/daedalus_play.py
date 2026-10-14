@@ -196,6 +196,11 @@ def _finish(result=None, error=None):
         result["passed"] = sum(1 for c in checks if c["pass"])
         result["total"] = len(checks)
         result["human_input_frames"] = _run["human"]
+        import time as _t
+        secs = max(_t.time() - _run.get("t0", _t.time()), 1e-3)
+        result["frames"] = _run["frames"]
+        result["seconds"] = round(secs, 1)
+        result["fps"] = round(_run["frames"] / secs, 1)   # 02:42: a slow run explains itself (3 fps = the editor throttle)
         if _run["human"]:   # a person touched the controls: the numbers are not the scenario's
             result["interrupted"] = "human input on %d sampled frames; rerun with the Play window unfocused" % _run["human"]
     _run["result"] = result
@@ -211,7 +216,8 @@ def play_scenario(p):
     if _run["handle"] is not None:
         unreal.unregister_slate_post_tick_callback(_run["handle"])
     full_speed()
-    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0)
+    import time as _t
+    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0, t0=_t.time())
     _run["handle"] = unreal.register_slate_post_tick_callback(_tick)
     return {"started": name}
 
