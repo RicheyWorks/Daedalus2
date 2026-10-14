@@ -228,4 +228,11 @@ state before exercising the real wrapper. A direct implementation call can help
 diagnose movement logic but cannot substitute for dispatch verification. Neither
 standalone dispatch nor a direct handler proves client/server network delivery.
 
+### C++ prefixes do not make Unreal reflection names unique
+
+ADaedalusOceanDock and FDaedalusOceanDock collided in UHT even though their C++
+names differ. Unreal removes type prefixes when deriving reflected names. Name
+new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
+established data APIs. A full reflection build caught this before publication.
+
 
