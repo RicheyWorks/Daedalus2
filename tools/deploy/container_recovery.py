@@ -10,7 +10,7 @@ import secrets
 import time
 import urllib.error
 import urllib.request
-from container_smoke import ROOT, docker, request
+from container_smoke import ROOT, docker, request, start_server
 
 
 def token_for(key):
@@ -76,26 +76,8 @@ def main():
         (output / (label + '.log')).write_text((logs.stdout + logs.stderr).replace(secret, '[redacted]'))
 
     def start(index):
-        name = containers[index]
-        docker('run', '--detach', '--rm', '--name', name, '--publish', '127.0.0.1:0:8080',
-            '--volume', volumes[index] + ':/var/daedalus', '--env', 'SPRING_PROFILES_ACTIVE=prod',
-            '--env', 'DAEDALUS_JWT_SECRET', '--env', 'DAEDALUS_ADMIN_PASSWORD_BCRYPT', args.image,
-            '--daedalus.redis.enabled=false', '--daedalus.plugins.scan-on-startup=false',
-            '--daedalus.security.jwt.issuer=recovery-smoke', env=environment)
-        port = int(docker('port', name, '8080/tcp').stdout.strip().rsplit(':', 1)[1])
-        base = 'http://127.0.0.1:' + str(port)
-        deadline = time.monotonic() + 120
-        while True:
-            if docker('inspect', '--format', '{{.State.Running}}', name).stdout.strip() != 'true':
-                raise RuntimeError('Recovery container exited during startup')
-            try:
-                if request(base + '/actuator/health')[0] == 200:
-                    return base
-            except (OSError, urllib.error.URLError):
-                pass
-            if time.monotonic() > deadline:
-                raise RuntimeError('Recovery container startup timed out')
-            time.sleep(.5)
+        return start_server(args.image, containers[index], environment,
+                            volume=volumes[index], issuer='recovery-smoke')
 
     try:
         for volume in volumes:

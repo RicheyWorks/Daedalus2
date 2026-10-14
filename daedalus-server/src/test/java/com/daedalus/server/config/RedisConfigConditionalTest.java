@@ -12,8 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Locks in the audit's #3 server fix: {@link RedisConfig} must only contribute its Lettuce
- * connection factory + {@code RedisTemplate} beans when {@code daedalus.redis.enabled=true}.
+ * The custom {@code RedisTemplate} is opt-in; Boot owns the configured connection factory.
  *
  * <p>Without the conditional, Spring Boot tries to dial Redis on every startup — including
  * dev profiles that explicitly opt out via {@code application-dev.yml}. The
@@ -69,5 +68,33 @@ class RedisConfigConditionalTest {
         // Audit's stated default: "Defaults to false when property is absent → matches
         // LeaderboardService default." Verify that contract holds.
         runner.run(ctx -> assertThat(ctx).doesNotHaveBean(RedisConfig.class));
+    }
+
+    @Test
+    void configuredConnectionPropertiesAreNotReplacedByLocalhostDefaults() {
+        runner.withPropertyValues("daedalus.redis.enabled=true", "spring.data.redis.host=redis-fixture.invalid",
+                        "spring.data.redis.port=6388", "spring.data.redis.database=3",
+                        "spring.data.redis.username=fixture-user", "spring.data.redis.password=fixture-password",
+                        "spring.data.redis.timeout=750ms", "spring.data.redis.connect-timeout=400ms")
+                .run(ctx -> {
+                    var factory = ctx.getBean(org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.class);
+                    assertThat(factory.getHostName()).isEqualTo("redis-fixture.invalid");
+                    assertThat(factory.getPort()).isEqualTo(6388);
+                    assertThat(factory.getDatabase()).isEqualTo(3);
+                    assertThat(factory.getStandaloneConfiguration().getUsername()).isEqualTo("fixture-user");
+                    assertThat(factory.getStandaloneConfiguration().getPassword().isPresent()).isTrue();
+                    assertThat(factory.getStandaloneConfiguration().getPassword().get()).containsExactly("fixture-password".toCharArray());
+                    assertThat(factory.getClientConfiguration().getCommandTimeout()).isEqualTo(java.time.Duration.ofMillis(750));
+                    assertThat(factory.getClientConfiguration().getClientOptions()).isPresent();
+                    assertThat(factory.getClientConfiguration().getClientOptions().orElseThrow()
+                            .getSocketOptions().getConnectTimeout()).isEqualTo(java.time.Duration.ofMillis(400));
+                });
+    }
+
+    @Test
+    void bootRetainsConfiguredTlsInsteadOfAnUnencryptedDefaultFactory() {
+        runner.withPropertyValues("daedalus.redis.enabled=true", "spring.data.redis.ssl.enabled=true")
+                .run(ctx -> assertThat(ctx.getBean(org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.class)
+                        .getClientConfiguration().isUseSsl()).isTrue());
     }
 }
