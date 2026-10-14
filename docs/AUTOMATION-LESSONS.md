@@ -765,3 +765,11 @@ main, -Stop, -Start, "HUB UP <head> last id <n>", then `teamlink doctor --me unr
 pid 18264 up 5 s, locks (blender: Sol's World Zero exports; unreal: my materials job), inbox. Lock claims survived
 the restart because they are log lines. Rule: `doctor` is the first command of every turn from now on; it is the
 one-screen picture the protocol promised (research item 13 closed).
+
+
+## Persist transport identity before dispatch, and preserve unknown outcomes (2026-10-13, Codex)
+A final-only report cannot explain a killed host. Pipeline progress now records unique request
+ID, snapshot identity and state before mutation dispatch. Connection refusal is not-dispatched;
+partial send/timeout stays outcome-unknown. Correlated error replies remain explicit errors,
+not false success. Validate envelope identity/status/result presence while preserving result
+values; bound reply bytes and reject malformed/nonfinite/truncated JSON. No blind retry added.
