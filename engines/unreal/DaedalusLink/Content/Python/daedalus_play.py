@@ -196,6 +196,11 @@ def _finish(result=None, error=None):
         result["passed"] = sum(1 for c in checks if c["pass"])
         result["total"] = len(checks)
         result["human_input_frames"] = _run["human"]
+        import time as _t
+        secs = max(_t.time() - _run.get("t0", _t.time()), 1e-3)
+        result["frames"] = _run["frames"]
+        result["seconds"] = round(secs, 1)
+        result["fps"] = round(_run["frames"] / secs, 1)   # 02:42: a slow run explains itself (3 fps = the editor throttle)
         if _run["human"]:   # a person touched the controls: the numbers are not the scenario's
             result["interrupted"] = "human input on %d sampled frames; rerun with the Play window unfocused" % _run["human"]
     _run["result"] = result
@@ -211,7 +216,8 @@ def play_scenario(p):
     if _run["handle"] is not None:
         unreal.unregister_slate_post_tick_callback(_run["handle"])
     full_speed()
-    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0)
+    import time as _t
+    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0, t0=_t.time())
     _run["handle"] = unreal.register_slate_post_tick_callback(_tick)
     return {"started": name}
 
@@ -784,7 +790,7 @@ def scenario_realm(p):
     walked = 0
     for way in ("right", "left", "down", "up"):   # the first way that isn't water or a wall
         h.realm_input("hold:" + way)
-        yield from _frames(30)
+        yield from _seconds(1.0)
         h.realm_input("release:" + way)
         yield from _frames(5)
         walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
@@ -1395,7 +1401,7 @@ def scenario_mounts(p):
         if g:
             z0 = g.get_actor_location().z
             g.lift(3000.0)
-            yield from _frames(45)
+            yield from _seconds(2.0)   # game time (45 frames at 46 fps was under a second: Gallery dz=0, 02:15)
             z1 = g.get_actor_location().z
             st2 = g.mount_state()
             checks.append(_check("%s: it climbs when lifted, within its ceiling" % realm, z1 - z0 > 800.0 and "wanted=3000" in st2, "dz=%.0f %s" % (z1 - z0, st2)))
@@ -1424,24 +1430,21 @@ def scenario_portals(p):
     east = portals.get("Portal_WORLD-ZERO_to_GALLERY-CITY")
     if east:
         h.teleport(east.get_actor_location() + unreal.Vector(-700, 0, 0), 0.0, True)
-        yield from _frames(2)
+        yield from _seconds(3.5)   # the switch above set LastRealmSwitchAt: wait out the cooldown (02:15: 2 frames at 46 fps was not)
         r = east.cross(h)   # the same path the overlap takes
         yield from _frames(4)
         checks.append(_check("the east gate carries the hero to Gallery City", r.startswith("ok WORLD-ZERO -> GALLERY-CITY") and h.realm_now() == "GALLERY-CITY", r))
         home = portals.get("Portal_GALLERY-CITY_Gate")
         early = home.cross(h) if home else "no portal"
         checks.append(_check("the landing gate is on cooldown, so no bounce", early == "cooldown", early))
-        for _ in range(int(3.5 * 30)):
-            yield
+        yield from _seconds(3.5)   # game time, not frames: 105 frames at 46 fps is under the 3 s cooldown
         back = home.cross(h) if home else "no portal"
         yield from _frames(3)
         checks.append(_check("after the cooldown the gate takes him home", back.startswith("ok GALLERY-CITY -> WORLD-ZERO") and h.realm_now() == "WORLD-ZERO", back))
     dock = portals.get("Portal_PARCELS_Dock")
     if dock:
         h.switch_realm("parcels", "gate", "")
-        yield from _frames(3)
-        for _ in range(int(3.5 * 30)):
-            yield
+        yield from _seconds(3.5)
         r = dock.cross(h)
         yield from _frames(2)
         checks.append(_check("a dock portal asks the session for the Ocean (boat)", r.startswith("ok PARCELS -> OCEAN") or r.startswith("refused"), r))
@@ -1565,7 +1568,7 @@ def scenario_airship(p):
             st = g.mount_state()
             checks.append(_check("%s: the hero is aboard %s" % (realm, st.split(" ")[0]), pc.get_controlled_pawn() == g, st))
             g.lift(2500.0)
-            yield from _frames(30)
+            yield from _seconds(1.5)
             legs = [(name, a.get_actor_location()) for name, a in stops]
             if realm == "WORLD-ZERO":
                 hub_cm = __import__("daedalus_realm_ground").ORIGINS["WORLD-ZERO"]
@@ -1577,14 +1580,14 @@ def scenario_airship(p):
                 z0 = g.get_actor_location().z
                 frames, d = yield from _fly_to(g, pc, at)
                 g.lift(0.0)   # settle onto the pad
-                yield from _frames(40)
+                yield from _seconds(2.0)
                 st = g.mount_state()
                 grounded = "grounded=1" in st
                 here = g.get_actor_location()
                 landings.append({"realm": realm, "stop": name, "dist_cm": round(d), "frames": frames, "z": round(here.z), "grounded": grounded})
                 checks.append(_check("%s: docked at %s" % (realm, name), d < 1500.0 and grounded, "d=%.0f frames=%d %s" % (d, frames, st)))
                 g.lift(2500.0)
-                yield from _frames(20)
+                yield from _seconds(1.0)
             g.dismount()
             yield from _frames(2)
             g.destroy_actor()

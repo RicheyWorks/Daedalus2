@@ -34,7 +34,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | hub = persistent level footprint centre (14850,-9500) cm, 432 m square; cells 49..51 reserved |
 | 2 | Terrain host | **done** | Fable | DaedalusWorld persistent level, 1863 static meshes, PCG |
-| 3 | Lands laid down | **partial** | Fable | 14 team islands on estates deeds 9..59 (dab971586, 7552 actors, undo table saved). Missing: plot markers for the rest of ring 1..N |
+| 3 | Lands laid down | **done** | Fable | 9,091 islands: 89 labelled Land_ slabs (rings 1-6) + 100 instanced districts (finish_world_zero 00:50), dressed as asteroid fragments (own height +-40 m, 8-20 m thick, rock underside, 2,255 kit props; dress_islands 01:27); the 14 team estates hold the other cells. Ledger docs/production/lands/world-zero.json |
 | 4 | Mint row | **missing** | Sol | contract signs `to,slot,seed,radius,deadline` only, 64 slots, no realm/estate/egg fields (29124). Needs realm-aware mint design |
 | 5 | Cast | **partial** | Fable/Sol | `world-zero.dcs`: the six cross-realm NPCs (Ferryman Bram, Rainbow Painter, Merchant Zee with stock by realm visited, Heartstone Seeker Captain, Courier of Worlds, Tugboat Balloonist); lay_cast rings them round the PlayerStart; art: Sol to export Mob_Zero_* (6) |
 | 6 | Creatures | **partial** | Fable | Encounters spawn foes (AlwaysSpawn); 10 enemy candidates validated of 500 |
@@ -51,7 +51,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props validated (GAL02), no streamed ground ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | see WORLD-ZERO 4 |
 | 5 | Cast | **done** | Fable | `gallery-city.dcs` 12 roles/44 steps; 13 Mob_Gallery_* imported, Talkers bound (CAST-IMPORT) |
 | 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
@@ -68,7 +68,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (23 props + AMF trough (PAR02), no ground ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `parcels.dcs` 12/46; GLBs in `Codex\2026-10-13\parcels-buildout\cast` NOT imported yet |
 | 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
@@ -85,7 +85,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props (BRK02): meadow, road, runway, workshop ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `bricks.dcs` 12/45; `bricks-buildout\cast` NOT imported yet |
 | 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
@@ -102,7 +102,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (32 props (incl. 12 Halloween, LAB09), Wall4m, FoldingMaze ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `labyrinth.dcs` 12/46; 35 Mob_Lab_* GLBs exported, not imported |
 | 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |

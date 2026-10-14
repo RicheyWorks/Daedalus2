@@ -987,3 +987,156 @@ A partial six-resource DTO must not display missing entries as zero or retain a 
 
 ## Run the Unreal preflight on component DTOs before handing off (2026-10-14)
 The Shardstead seam's portable checks did not cover UHT declarations. Existing preflight caught eleven BlueprintReadOnly properties missing Category (P2). Added Daedalus|Shardstead categories and the same four-file scan to Engines CI. Focused scan now reports zero errors. This is source preflight, not actual UHT/native compilation; keep that distinction in the handoff.
+## 2026-10-14 01:50 — the 3 fps that was not render cost (first real save by the connector)
+
+The airship tour crawled: play_status counted 4-6 fps on the fully dressed map (24,440 actors, ~57k instances), and
+the first guess was render cost (cull distances, shadows — perf_steps was written and run; keep it, it's cheap).
+tools/unreal_play/fps_probe.py then read the engine's own delta: dt = 0.333 on every sample. A flat frame time is a
+cap, not load. It was EditorPerformanceSettings.bThrottleCPUWhenNotForeground, the editor's "use less CPU in the
+background" — 3 fps whenever the editor is not the active window, which under bot control is always. full_speed()
+had been "setting" it since 23:xx with a console `set EditorPerformanceSettings ...`; the connector's
+ConfigSettingsToolset read the value back as still true. SetSectionProperties(Editor/General/
+EditorPerformanceSettings, {bThrottleCPUWhenNotForeground:false, bAllowSlateThrottling:false}) flipped it live and
+saved it: 46.5 fps on the same map, same camera.
+
+Rules:
+1. Measure the frame TIME before touching the scene: a flat dt is a cap (throttle, t.MaxFPS, vsync); a noisy dt is load.
+2. A console `set` on a class default is not proof the setting changed. Read it back (ConfigSettings
+   GetSectionPropertyValues) — the connector makes that a one-liner.
+3. The throttle must be off for any unattended editor; it belongs in every editor start (unreal-job/-Open) and in
+   `teamlink doctor`'s output. Sent to Poot as part of H8.
+4. 2Hot2Trot's play-guard stops PIE after 8 min when imports are queued; scenarios must fit that budget — at 46 fps
+   the tour does. Frame-driven scenarios should also log fps in their receipt so a slow run is explained by its own data.
+
+## 2026-10-14 02:25 — the connector after 80 minutes: what it changed, what the harness updates did, what is still rough
+
+Richey: "add to lessons learned what you have learned about using the new connector so far and the harness
+updates and what could be better with the harness."
+
+What the connector is good for (measured tonight):
+- Reading back state instead of trusting a command: ConfigSettings GetSectionPropertyValues showed the editor
+  throttle was still on after our console `set`; SetSectionProperties flipped it live (3 -> 46 fps). The whole
+  night's "slow Play" was this one setting.
+- Scene queries by tag/class/bounds (find_actors) in 0.4 s vs a 23k-actor Python walk; camera placement
+  (SetCameraTransform) + our bridge screenshot = a proof frame in two calls; IsPIERunning/StartPIE/StopPIE.
+- Every tool carries a schema (describe_toolset): zero AttributeErrors since 01:07, against five the night before.
+What it is not for: bulk mutation (49k islands laid and dressed through budgeted daedalus.steps at ~1 s per 100
+instances), builds, or anything under the hub lock. It also bypasses the lock entirely — rule H6 stands.
+
+Harness updates that landed and what they bought:
+- H1 (Sol PR138, merged cf7fce8): bounded transport in the stdio proxy, exact byte counts on failure
+  ("received=3,010,190 expected=3,064,801"), native capture as an MCP image block. Direct 2.8 MB captures now
+  pass; the desktop-proxy path still trips Epic's ~5 s write-idle close near 3 MB — server-side, Poot has it.
+- H4 (codex helper): setup-owner column per connector step in the BOARD registry. Would have saved the 25
+  refusal minutes at 00:36.
+- Doctor/hub discipline from last night held: every block, pause and handback tonight was a hub message with a
+  reply_to within a minute; Poot's install block was routed round in 6 minutes by merging the reviewed PR instead
+  of copying files.
+- Our own: run_scenarios waits 900 s (was 180: the tour was abandoned mid-flight), scenario waits in game
+  seconds not frames (46 fps broke every 30 fps assumption: portal cooldowns, mount climbs), fps_probe (frame
+  TIME, the diagnostic that found the throttle), perf_steps (cull + shadows), fill_holes_steps (trace a cell,
+  block what is empty — 673 holes round the World Zero hub), island_plan (unique islands from the deed hash).
+
+What could be better (the next asks, in order):
+1. The 8-minute play-guard (2Hot2Trot) and the import queue need a lease, not a kill: a scenario that holds the
+   `unreal` lock should get to finish; the guard should post "stopping in 60 s" to the hub first. Owner: Buffffff/Poot.
+2. Editor start must apply the throttle-off config, start the MCP server and print both in `teamlink doctor`
+   (H2/H3). Until then every rebuild silently regresses to 3 fps and no connector.
+3. Captures via the desktop proxy: either Epic's write-idle timeout patched, or a lower-res capture tool; today the
+   workaround is the bridge screenshot (1.5 MB in 2 s) and capture.py to disk.
+4. `pc-job.ps1` tail through the device bridge caps at 60 s; long jobs need a "last N lines + state" command that
+   returns instantly (it mostly does) and never a Sleep inside the bridge call (the bridge, not the job, times out).
+5. The desktop app's local-server config is a file my reviewer refuses to write without an in-turn "do it"; the
+   registry's setup-owner column should say "Richey (one line) or Poot" for that step so nobody retries it.
+6. Autosave collides with our proven saves (ok=False at 02:20 while "Auto-saving out of date packages" ran):
+   save_world should wait for the autosave to finish (poll the editor_windows list for the progress dialog) and
+   retry once instead of raising.
+7. PowerShell quoting through the bridge eats Python one-liners (three times tonight): anything over one line is a
+   repo script run by path, never an inline `python -c`.
+8. Game-time waits everywhere in daedalus_play (a sweep for `_frames(` used as a clock), and fps in every receipt.
+
+## 2026-10-14 02:42 — the modal the harness missed ("38 changes to source content files... import them?")
+
+Richey: "the harness is missing this." An editor modal freezes every bridge call behind it; tonight's was the
+auto-reimport prompt (bMonitorContentDirectories + bPromptBeforeAutoImporting, both default on), raised by the
+team's own art drops into Content/. Answered with the bridge's editor_windows + window_input ("Don't Import" — the
+import queue owns imports), then the cause removed through the connector: LoadingSaving {bMonitorContentDirectories:
+false, bPromptBeforeAutoImporting: false, bAutoDeleteAssets: false, bDetectChangesOnStartup: false,
+autoSaveTimeMinutes: 30}. tools/unreal_mcp/doctor.py now reads these and the throttle back (--fix sets them) so the
+doctor says BAD before a job hangs. Harness ask 9 (Poot): a modal guard in the bridge — poll editor_windows every
+few seconds while a job runs; a known-dialog table (import prompt -> Don't Import; autosave progress -> wait;
+"save changes?" -> hub alarm, never answered by a bot; crash reporter -> hub alarm + log path); unknown dialog ->
+screenshot to the hub and stop the job's clock. Ask 10: `unreal-job.ps1 -Open` runs doctor.py --fix after the
+editor is up, so a relaunch cannot regress these.
+
+## 2026-10-14 03:02 — what I have learned about Unreal Engine tonight (Richey: "add to lessons learned so far")
+
+Engine facts, each paid for once:
+1. Instanced static meshes are the only way to hold 10k+ things in one level: 49k plots + 60k extras as ~1,700
+   ADaedalusLandDistrict actors cost ~1 s per 100 instances to lay and nothing to tick; the same as actors was
+   60 s per district and 76k outliner rows. Instance i -> Cells[i] keeps every plot addressable for the registry.
+2. An ISM's collision follows the component (QueryAndPhysics in the constructor); scaled instances collide fine.
+   Traces (SystemLibrary.line_trace_single, ECC_Visibility) are the cheap truth about "is there floor here":
+   256 probes in 20 s found the World Zero hub was 87% air; 3,721 cell probes found 673 holes round it.
+3. A "floor" that is many small slabs leaves pits round anything smaller than a slab; a hub wants ONE plate 2 cm
+   under the plane and the content on top of it. Use the plane every placer uses (PlayerStart z - 1 m), not the
+   first mesh a trace hits (a terrain chunk 1.8 m higher put every block in a pit).
+4. Re-deriving a base height from the first instance drifts on every rerun (district 33 ended 114 m low). Base
+   heights come from a fixed source (ORIGINS / PlayerStart), never from what was laid last time.
+5. Editor "settings" are two things: the console `set` on a class default (not persisted, not even applied here)
+   and the UDeveloperSettings object (persisted, what the editor reads). Read-back via ConfigSettings before
+   believing either. The ones that bite bots: bThrottleCPUWhenNotForeground (3 fps), bPromptBeforeAutoImporting
+   (modal), bAutoDeleteAssets (deletes on a file move), autosave interval (collides with scripted saves).
+6. Overlap order: a teleport fires BeginOverlap synchronously INSIDE the teleport call. Anything the overlap
+   handler reads (a cooldown stamp) must be written before the teleport, not after (the portal bounce).
+7. PIE copies the whole editor world; at 92% RAM Play is the crash moment. Frame-driven scripts crawl at 3 fps
+   but physics-driven ones (Dt capped at 0.05) move ~960 cm/s real time — a tour that is 5 min at 46 fps is 40
+   min at 3. Time waits in game seconds; count frames only for frame facts.
+8. save_dirty_packages can clear dirty flags without writing; save_packages([pk], only_dirty=False) plus an mtime
+   check is the only proof. Autosave can make even that return False once; retry after 8 s.
+9. UE 5.8 Python has no World.streaming_levels; levels come from EditorLevelUtils.get_levels and a streaming
+   object from GameplayStatics.get_streaming_level(world, pkg). Sublevel actors are only visible to
+   get_all_level_actors while loaded.
+10. The native MCP server (ModelContextProtocol plugin): Streamable HTTP, Mcp-Session-Id per client, 3 meta-tools
+    over 67 toolsets / 830 tools; call_tool takes toolset_name + SHORT tool_name; replies over ~3 MB are cut by a
+    5 s write-idle close; the session dies with the editor process, so a long-lived proxy must re-initialize.
+    Fastest wins so far: find_actors by tag (0.07 s), SetCameraTransform + screenshot, ConfigSettings read-back,
+    SearchCVars, trace_world, plugin and folder listings. Untested yet: Sequencer (140 tools), Blueprint (53),
+    Niagara (46), PCG (30), UMG (23), SlateInspector (UI automation) — the next exploration slices.
+11. Modal dialogs (import prompt, autosave progress, save-changes, crash reporter) stop the game thread, so the
+    bridge and the MCP server both go silent; only the out-of-process editor_windows/window_input can answer them.
+12. A background editor (not the active window) is the normal state under bot control; every setting that assumes
+    a human in front of it (throttle, Slate throttling, notifications, prompts) must be off, and the doctor must
+    say so at every start.
+
+## 2026-10-14 03:05 — end-of-session handoff (Richey back ~05:00): harness — what works, what to improve
+
+Working well tonight (keep):
+- The hub as the only channel: 60+ messages, every block/pause/handback a reply_to within a minute; Poot's
+  install block routed round in 6 min via a merged PR; no user-mediated relay after 01:00.
+- Budgeted daedalus.steps for bulk work (49k plots laid + dressed twice, 673 holes, 1,402 extras: all under 4 min
+  per pass) and pc-job for anything longer than a bridge call.
+- Proven saves (mtime) with one autosave retry; labels as idempotency keys; the ledger as the mint's contract.
+- Connector for looking and checking: tag queries, camera + screenshot, settings read-back, PIE state; and for
+  the two real fixes of the night (throttle 3->46 fps, import modal off).
+- Receipts with fps/frames/seconds; run_scenarios waits 900 s; game-time waits.
+
+Improve (Poot's list, ordered; items 1-10 already on the hub, 11-13 new tonight):
+1. play-guard lease + 60 s hub warning + refuse Play above 90% RAM (vitals.py) instead of killing mid-run.
+2. editor start = StartServer + doctor.py --fix + MCP READY line in teamlink doctor (H2/H3).
+3. desktop-proxy captures near 3 MB (Epic 5 s write-idle close) — server patch or low-res capture.
+4. bridge calls cap at 60 s: job tails must return instantly (job_status.py, play-guard helper owns it).
+5. setup-owner column: done (H4); keep it current when a new connector lands.
+6. save_world autosave retry: done. 7. no inline python through the bridge: rule, in lessons.
+8. fps in receipts: done. 9. modal guard with a dialog table (bridge). 10. unreal-job -Open runs doctor --fix.
+11. stdio proxy must re-initialize on "Unknown session id" after an editor restart (fixed on main 99cc50a; the
+    app only loads it on its next launch — Richey restarts the app once in the morning).
+12. vitals --watch 60 as a standing job; editor_mb + ram_pct in the doctor; the structural fix is district
+    streaming (ADR-063) so PIE does not copy 24k actors.
+13. The hole-fill probe must use the plane, not the first hit, and dedupe against instanced cells before the
+    ledger (34 duplicate deeds reached Sol's check tonight; fixed, ledger 9,979 unique).
+
+State at handoff: all five realms laid, dressed (unique per deed), hub floors solid, portal bounce fixed and
+proven (portals 5/5, realm_switch 10/10, mounts 9/9, realm_ground 17/17), ledger exported (49,943 lands), editor
+up on a9c56af with MCP on, doctor green, RAM 87%. Not done: district streaming, airship tour receipt, material
+reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER rows 2/12 per realm.

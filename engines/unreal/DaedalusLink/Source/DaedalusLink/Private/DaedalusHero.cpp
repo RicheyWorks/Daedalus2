@@ -2192,9 +2192,11 @@ FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, co
 	const FString ViaStr = UTF8_TO_TCHAR(ViaName(How));
 	OnRealmChange.Broadcast(From, Dest, ViaStr, Hint);
 	// Enter: the 8-bit realm opens over the world; the Ocean and the gated realms are their hosts' to stream.
+	// Stamp the switch BEFORE landing: the landing marker's portal overlaps the hero inside LandAt's teleport, and
+	// its cooldown check reads this stamp (02:45: stamped after, the Gallery gate bounced him home at once).
+	if (UWorld* W = GetWorld()) LastRealmSwitchAt = W->GetTimeSeconds();
 	if (Dest == TEXT("PORTAL")) EnterRealm(static_cast<int64>(GetTypeHash(From)) % 1000000);
 	else LandedAt = LandAt(Dest, Hint);
-	if (UWorld* W = GetWorld()) LastRealmSwitchAt = W->GetTimeSeconds();
 	SaveProgress();
 	UE_LOG(LogDaedalus, Log, TEXT("Realm %s -> %s by %s at %s"), *From, *Dest, *ViaStr, *Hint);
 	return FString::Printf(TEXT("ok %s -> %s via=%s hint=%s"), *From, *Dest, *ViaStr, *Hint);

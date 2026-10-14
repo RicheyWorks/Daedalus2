@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: MIT
+"""PC vitals without a UI (Richey 02:49, TMOG): one JSON line per sample with system RAM, CPU, and the top
+processes by memory/CPU, from Windows performance counters and the process table — the same numbers the Task
+Manager TMOG summary shows, readable by the harness and the diagnostic.
+
+    python tools/pc/vitals.py                 # one sample, printed
+    python tools/pc/vitals.py --watch 60      # a sample every 60 s appended to %LOCALAPPDATA%/Daedalus/vitals.jsonl
+    python tools/pc/vitals.py --alarm 90      # exit 2 when RAM use is over 90 % (for job scripts to check)
+"""
+import json
+import os
+import subprocess
+import sys
+import time
+
+PS = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
+SCRIPT = r"""
+$os = Get-CimInstance Win32_OperatingSystem
+$cpu = (Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average
+$procs = Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 12 Id, ProcessName, @{n='mb';e={[int]($_.WorkingSet64/1MB)}}, @{n='cpu_s';e={[int]$_.CPU}}
+$gpu = $null
+try { $gpu = (& nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv,noheader,nounits 2>$null) } catch {}
+[pscustomobject]@{
+  total_mb = [int]($os.TotalVisibleMemorySize/1KB); free_mb = [int]($os.FreePhysicalMemory/1KB)
+  cpu_pct = $cpu; gpu = $gpu; top = $procs
+} | ConvertTo-Json -Depth 4 -Compress
+"""
+
+
+def sample():
+    out = subprocess.run(PS + [SCRIPT], capture_output=True, text=True, timeout=60)
+    d = json.loads(out.stdout.strip() or "{}")
+    d["when"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+    d["ram_pct"] = round(100.0 * (d["total_mb"] - d["free_mb"]) / max(d["total_mb"], 1), 1) if d.get("total_mb") else None
+    editor = next((p for p in d.get("top", []) if p["ProcessName"].lower().startswith("unrealeditor")), None)
+    d["editor_mb"] = editor["mb"] if editor else None
+    return d
+
+
+def main(argv):
+    watch = int(argv[argv.index("--watch") + 1]) if "--watch" in argv else 0
+    alarm = float(argv[argv.index("--alarm") + 1]) if "--alarm" in argv else None
+    path = os.path.join(os.environ.get("LOCALAPPDATA", "."), "Daedalus", "vitals.jsonl")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    while True:
+        d = sample()
+        line = "%s ram %s%% (%s MB free) cpu %s%% editor %s MB gpu %s" % (d["when"], d["ram_pct"], d.get("free_mb"), d.get("cpu_pct"), d["editor_mb"], (d.get("gpu") or "-"))
+        print(line, flush=True)
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(d) + "\n")
+        if alarm is not None and d["ram_pct"] is not None and d["ram_pct"] > alarm:
+            print("ALARM ram %s%% > %s%%" % (d["ram_pct"], alarm), flush=True)
+            if not watch:
+                return 2
+        if not watch:
+            return 0
+        time.sleep(watch)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
