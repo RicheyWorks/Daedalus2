@@ -29,9 +29,17 @@ jobs:
         run: docker build --tag daedalus-resource-smoke:${{ github.sha }} .
       - name: Boot production image and verify packaged resources and authenticated HTTP
         run: python3 tools/deploy/container_smoke.py --image daedalus-resource-smoke:${{ github.sha }} --output "${{ runner.temp }}/container-proof"
+      - name: Restore saved worlds and edits from an actual backup into a different volume
+        run: python3 tools/deploy/container_recovery.py --image daedalus-resource-smoke:${{ github.sha }} --output "${{ runner.temp }}/recovery-proof"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: container-resource-proof
           path: ${{ runner.temp }}/container-proof
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-recovery-proof
+          path: ${{ runner.temp }}/recovery-proof
           if-no-files-found: ignore
