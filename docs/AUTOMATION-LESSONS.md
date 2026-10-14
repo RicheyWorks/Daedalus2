@@ -545,3 +545,11 @@ save; (2) after adding modify(), `save_dirty_packages(True, True)` cleared the f
 `save_packages([level packages], only_dirty=False)` wrote all 14 .umaps in 29 s. Fix (b41d7b02f+): every editor
 tool that changes a level saves the exact packages and proves it by the .umap mtime (`daedalus_layout.save_levels`,
 `daedalus_plots.save_world`), raising when a file was not written. Rule: a "saved" claim needs a file timestamp.
+
+## Another bot's private checkout shadowed the live plugin's Python (2026-10-13, 22:10)
+After Poot's editor turn, `daedalus_play.__file__` pointed at `Documents\Codex\...\task-3\base-builder\...\Content\Python`
+(prepended to sys.path seven times), so my hot-copied modules were never the ones running: "unknown scenario" for
+a scenario the live file had, and spiral_apply ran an old daedalus_layout whose save wrote nothing. Rules:
+(1) nobody prepends a checkout to the editor's sys.path; hot-copy into the live plugin folder instead;
+(2) run_scenarios.py now strips Documents\Codex paths, puts the live plugin first and reloads every daedalus_*
+module before running; (3) any tool that reports a result prints `module.__file__` next to it when in doubt.

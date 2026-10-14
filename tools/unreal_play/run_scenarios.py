@@ -32,7 +32,18 @@ def main(argv):
     # Pick up a hot-copied daedalus_play.py: the bridge registered play_scenario at editor start and reload()
     # re-executes the module in place, so the registered function sees the new SCENARIOS (2026-10-13: "unknown
     # scenario" for a scenario added after the editor opened).
-    rl = wire.call(wire.UNREAL, "execute_python", code="import importlib, daedalus_play, daedalus_control\nimportlib.reload(daedalus_control)\nimportlib.reload(daedalus_play)\nprint(sorted(daedalus_play.SCENARIOS))", timeout=30)
+    # Also drop any private checkout another bot prepended to sys.path (22:10: Poot's Documents\Codex\...\Content\Python
+    # shadowed the live plugin seven times over), so the live plugin's modules are the ones that run.
+    code = (
+        "import sys, importlib, os\n"
+        "live = r'C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python'\n"
+        "sys.path[:] = [p for p in sys.path if 'Documents' not in p or 'Codex' not in p]\n"
+        "if live not in sys.path: sys.path.insert(0, live)\n"
+        "for m in [m for m in list(sys.modules) if m.startswith('daedalus_') and os.path.exists(os.path.join(live, m + '.py'))]:\n"
+        "    importlib.reload(sys.modules[m])\n"
+        "import daedalus_play, daedalus_control\n"
+        "print(daedalus_play.__file__)\nprint(sorted(daedalus_play.SCENARIOS))\n")
+    rl = wire.call(wire.UNREAL, "execute_python", code=code, timeout=60)
     print("scenarios:", (rl.get("stdout") or "").strip()[-400:], flush=True)
     st = wire.call(wire.UNREAL, "ping", timeout=10)
     if not st.get("playing"):
