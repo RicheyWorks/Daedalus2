@@ -163,6 +163,26 @@ def main(argv):
         ew = "log_report: %s" % e
     hub("status", "NIGHT RUN end on %s: %s %s; fails: %s" % (sha, total, ew, "; ".join(fails)[:900] or "none"))
     say("%s %s" % (total, ew))
+    # J: a machine-readable receipt beside the job log (BASE-LAYER's "Laid down" table is regenerated from these)
+    interrupted = [l.strip() for l in text.splitlines() if "INTERRUPTED" in l]
+    per = {}
+    for l in text.splitlines():
+        if " passed=" in l and " error=" in l:
+            name = l.split()[0]
+            per[name] = l.split("passed=")[1].strip()
+    receipt = {"when": time.strftime("%Y-%m-%dT%H:%M:%S"), "sha": sha, "build": build, "laid": lay, "scenarios": per,
+               "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
+    out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
+    try:
+        os.makedirs(out_dir, exist_ok=True)
+        path = os.path.join(out_dir, "night-run-%s.json" % time.strftime("%m%d-%H%M%S"))
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(receipt, f, indent=1)
+        with open(os.path.join(REPO, "docs", "production", "night-run-latest.json"), "w", encoding="utf-8") as f:
+            json.dump(receipt, f, indent=1)
+        say("receipt " + path)
+    except OSError as e:
+        say("receipt not written: %s" % e)
     return 0
 
 
