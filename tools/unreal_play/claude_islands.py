@@ -21,9 +21,9 @@ from asset_pipeline import wire  # noqa: E402
 EDITOR = r"C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe"
 UPROJECT = r"C:\Unreal\DaedalusRealm\DaedalusRealm.uproject"
 RECYCLE_EVERY = 24      # islands per editor session: the loaded world is ~12 GB and 25 islands take it to the commit limit
-COMMIT_MAX = 99.0       # commit % gate; a freshly loaded world already sits at ~97 % (limit 46 GB, auto pagefile), so
+COMMIT_MAX = 99.5       # commit % gate; a freshly loaded world already sits at ~97 % (limit 46 GB, auto pagefile), so
                         # the gate only catches the last percent; RAM_MAX is the real guard
-RAM_MAX = 93.0
+RAM_MAX = 96.0   # a fresh world load is 83 % and three imports take it past 93: the gate is for the last few %
 
 
 def vitals():
