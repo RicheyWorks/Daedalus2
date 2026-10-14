@@ -1,0 +1,1053 @@
+{
+  "assets": [
+    {
+      "config_sha256": "5d20648964618296354238092725ca7c6c24a71606ad84835940a8e05bf3477f",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286",
+      "fbx": {
+        "bytes": 1844780,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.fbx",
+        "sha256": "5cef78b0fcfdb2861c0e2913ff3647ab9863c273100c48b19944af36a86d653c"
+      },
+      "kind": "island",
+      "name": "CodexIsland_summit_rim_84011",
+      "objects": [
+        {
+          "dims": [
+            92.0,
+            89.0,
+            43.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_grass",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_summit_rim_84011_island",
+          "triangles": 80708
+        },
+        {
+          "dims": [
+            89.0,
+            87.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_foam",
+            "CodexVoxel_water"
+          ],
+          "name": "CodexIsland_summit_rim_84011_water",
+          "triangles": 3956
+        },
+        {
+          "dims": [
+            74.0,
+            54.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexIsland_summit_rim_84011_trees",
+          "triangles": 3608
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_door",
+            "CodexVoxel_roof",
+            "CodexVoxel_wall",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexIsland_summit_rim_84011_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            78.0,
+            78.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexIsland_summit_rim_84011_flowers",
+          "triangles": 612
+        },
+        {
+          "dims": [
+            44.0,
+            19.0,
+            17.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_summit_rim_84011_rocks",
+          "triangles": 124
+        },
+        {
+          "dims": [
+            38.0,
+            37.0,
+            15.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexIsland_summit_rim_84011_crystals",
+          "triangles": 420
+        },
+        {
+          "dims": [
+            107.0,
+            80.0,
+            7.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexIsland_summit_rim_84011_clouds",
+          "triangles": 1248
+        }
+      ],
+      "seed": 84011,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "930b4abc0847f090d0b289ef47fcd22447fb48824a23034c4285ccdd7a3e38ac",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c",
+      "fbx": {
+        "bytes": 2013356,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_cliff_garden_84022\\CodexIsland_cliff_garden_84022.fbx",
+        "sha256": "2053cd40f71a735ce1c5642e42b902518e0047b4181f1e2b0388d47dd70ecc1f"
+      },
+      "kind": "island",
+      "name": "CodexIsland_cliff_garden_84022",
+      "objects": [
+        {
+          "dims": [
+            92.0,
+            86.0,
+            51.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_grass",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_island",
+          "triangles": 89952
+        },
+        {
+          "dims": [
+            28.0,
+            24.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_foam",
+            "CodexVoxel_water"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_water",
+          "triangles": 1012
+        },
+        {
+          "dims": [
+            68.0,
+            66.0,
+            24.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_trees",
+          "triangles": 3000
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_door",
+            "CodexVoxel_sand",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            78.0,
+            73.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_flowers",
+          "triangles": 588
+        },
+        {
+          "dims": [
+            78.0,
+            47.0,
+            20.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_rocks",
+          "triangles": 152
+        },
+        {
+          "dims": [
+            33.0,
+            27.0,
+            13.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_crystals",
+          "triangles": 176
+        },
+        {
+          "dims": [
+            127.0,
+            16.0,
+            6.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_clouds",
+          "triangles": 1224
+        },
+        {
+          "dims": [
+            14.0,
+            14.0,
+            2.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_crystal2",
+            "CodexVoxel_dirt",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_landmarks",
+          "triangles": 1056
+        }
+      ],
+      "seed": 84022,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "a3e7bf8071ac97bd7a10581e8fdd2fbf17353a6692b1611fedc5d4c71bf43655",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56",
+      "fbx": {
+        "bytes": 1451948,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.fbx",
+        "sha256": "eff77fd4050b4f5643facf34f979cdb713b3fee5f28b6e0b53fb80c3a5b3a677"
+      },
+      "kind": "island",
+      "name": "CodexIsland_river_canyon_84033",
+      "objects": [
+        {
+          "dims": [
+            92.0,
+            90.0,
+            50.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_river_canyon_84033_island",
+          "triangles": 93616
+        },
+        {
+          "dims": [
+            91.0,
+            36.0,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_water"
+          ],
+          "name": "CodexIsland_river_canyon_84033_water",
+          "triangles": 3212
+        },
+        {
+          "dims": [
+            78.0,
+            53.0,
+            13.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexIsland_river_canyon_84033_trees",
+          "triangles": 3084
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_door",
+            "CodexVoxel_roof",
+            "CodexVoxel_wall",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexIsland_river_canyon_84033_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            86.0,
+            83.0,
+            7.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexIsland_river_canyon_84033_flowers",
+          "triangles": 596
+        },
+        {
+          "dims": [
+            68.0,
+            40.0,
+            5.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_river_canyon_84033_rocks",
+          "triangles": 232
+        },
+        {
+          "dims": [
+            41.0,
+            39.0,
+            25.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexIsland_river_canyon_84033_crystals",
+          "triangles": 228
+        },
+        {
+          "dims": [
+            46.0,
+            16.0,
+            5.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexIsland_river_canyon_84033_clouds",
+          "triangles": 872
+        },
+        {
+          "dims": [
+            15.0,
+            14.0,
+            5.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_w"
+          ],
+          "name": "CodexIsland_river_canyon_84033_landmarks",
+          "triangles": 440
+        }
+      ],
+      "seed": 84033,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "ab6385bca9d38775bfadab7559e83d66fabab909b432cbdb6e55d8728c372a7a",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4",
+      "fbx": {
+        "bytes": 19228,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx",
+        "sha256": "d09d0b1aaacea5d4474ed8745733cba69a9793172cd69c76a0fd44d78d118714"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            1.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_roof",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexModule_CopperPatina_BridgeCoupler_85000_part",
+          "triangles": 416
+        }
+      ],
+      "seed": 85000,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "8ddd030839f6753db52561033ddde9a9015fa4f2f9d07f9c202ad542d8b7aac1",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db",
+      "fbx": {
+        "bytes": 20892,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85001\\CodexModule_CopperPatina_SailPanel_85001.fbx",
+        "sha256": "956c0286fde7f7dbe8be75614a2c19d266f8cf357309e939c3743631c27d2541"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_SailPanel_85001",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            3.0,
+            0.25
+          ],
+          "materials": [
+            "CodexVoxel_cloud",
+            "CodexVoxel_leaf2"
+          ],
+          "name": "CodexModule_CopperPatina_SailPanel_85001_part",
+          "triangles": 656
+        }
+      ],
+      "seed": 85001,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "aa6f1dcf4d2f76f6b46b6d9c6fa00fab48f0ee568719b21348b5fc8a35c3f02f",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe",
+      "fbx": {
+        "bytes": 20124,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85002\\CodexModule_CopperPatina_WagonWheel_85002.fbx",
+        "sha256": "c4950bb2cbdf3abe23680f5cb9ddc39a4e8a14513360e0e557f0906a17cb9038"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_WagonWheel_85002",
+      "objects": [
+        {
+          "dims": [
+            2.5,
+            2.5,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_rock2",
+            "CodexVoxel_roof"
+          ],
+          "name": "CodexModule_CopperPatina_WagonWheel_85002_part",
+          "triangles": 560
+        }
+      ],
+      "seed": 85002,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "116e2dd9b3ad42d4807f882eb3320ba344de1a19c2e8595fdadceaec81bb0412",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886",
+      "fbx": {
+        "bytes": 23740,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85003\\CodexModule_CopperPatina_TurbineRotor_85003.fbx",
+        "sha256": "7f2992a907d2088647b53f90ce1b45fefe3fd5623bc21d981bc749c6478d11f9"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_TurbineRotor_85003",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            4.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_leaf2",
+            "CodexVoxel_roof"
+          ],
+          "name": "CodexModule_CopperPatina_TurbineRotor_85003_part",
+          "triangles": 1024
+        }
+      ],
+      "seed": 85003,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "ddd19d6ee445ff6c216a5571586169478c0e53cb5809d308586cc4abd113f6fc",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082",
+      "fbx": {
+        "bytes": 20476,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85004\\CodexModule_CopperPatina_CrystalBattery_85004.fbx",
+        "sha256": "9f571185388bc082156c7f65dd8c4d90447387cdedf613ad4ff55f76ad5d6001"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_CrystalBattery_85004",
+      "objects": [
+        {
+          "dims": [
+            2.25,
+            1.5,
+            1.5
+          ],
+          "materials": [
+            "CodexVoxel_leaf2",
+            "CodexVoxel_rock2",
+            "CodexVoxel_roof"
+          ],
+          "name": "CodexModule_CopperPatina_CrystalBattery_85004_part",
+          "triangles": 432
+        }
+      ],
+      "seed": 85004,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "b51335b26c0311565d3e8e5204dd242f64e268c048c93b10afb4906239e9b2da",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049",
+      "fbx": {
+        "bytes": 19676,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85005\\CodexModule_CopperPatina_GearboxHousing_85005.fbx",
+        "sha256": "990d332407308049c3a084a42edbbe529f95465b46c729ea7e0b4545d5932914"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_GearboxHousing_85005",
+      "objects": [
+        {
+          "dims": [
+            1.5,
+            1.5,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_rock2",
+            "CodexVoxel_roof",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexModule_CopperPatina_GearboxHousing_85005_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85005,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "612e08e23baceea1fde3f10f5b88dc596b27eb0ab91489984fcff620d7957556",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b",
+      "fbx": {
+        "bytes": 18556,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85006\\CodexModule_CopperPatina_DriveShaft_85006.fbx",
+        "sha256": "d25f7e7d89422a6bbcf8f2e00646b4688f23ad86485bbdd9ebac63d3cc6f06cb"
+      },
+      "kind": "module",
+      "name": "CodexModule_CopperPatina_DriveShaft_85006",
+      "objects": [
+        {
+          "dims": [
+            3.0,
+            1.0,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_leaf2",
+            "CodexVoxel_roof"
+          ],
+          "name": "CodexModule_CopperPatina_DriveShaft_85006_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85006,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "0b644824fc26677f0821667491b2f2449fd2fa21b4b37aab51f966ac3b5c537d",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379",
+      "fbx": {
+        "bytes": 19228,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85100\\CodexModule_DawnCrimson_BridgeCoupler_85100.fbx",
+        "sha256": "3019aaa06df6f37917059dd8ba5e36e70a97b9eeee95e32d288546d0b1e4bfa7"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            1.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_sand",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexModule_DawnCrimson_BridgeCoupler_85100_part",
+          "triangles": 416
+        }
+      ],
+      "seed": 85100,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "949f53d2b56c2db70edcbcac3fb7b814589ae6a6129205a8ce78f4fff393d5af",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf",
+      "fbx": {
+        "bytes": 20892,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.fbx",
+        "sha256": "11ffdda61a11dcbfd8efb8bf4f5179750a7458fded0d86a5c5f8d39973c792f6"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_SailPanel_85101",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            3.0,
+            0.25
+          ],
+          "materials": [
+            "CodexVoxel_cloud",
+            "CodexVoxel_flower_r"
+          ],
+          "name": "CodexModule_DawnCrimson_SailPanel_85101_part",
+          "triangles": 656
+        }
+      ],
+      "seed": 85101,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "87238253a445720ab6dd5309b8e6b1894b3777550c2a058e51e024118a8cddd6",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e",
+      "fbx": {
+        "bytes": 20124,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.fbx",
+        "sha256": "c859c181e1efd94e0cbcf011643151aefc7f1be7e22e42bc2a3f4ce75335509f"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_WagonWheel_85102",
+      "objects": [
+        {
+          "dims": [
+            2.5,
+            2.5,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexModule_DawnCrimson_WagonWheel_85102_part",
+          "triangles": 560
+        }
+      ],
+      "seed": 85102,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "4790c291dbc3870e99e3e2737f4040db4f405b6caaaf157f58620b156c5a0cf7",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf",
+      "fbx": {
+        "bytes": 22860,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85103\\CodexModule_DawnCrimson_TurbineRotor_85103.fbx",
+        "sha256": "10358ac734efd6cf9082079620fcacdb67ab4f192fb0e46b2354cfbbb74e3ce3"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_TurbineRotor_85103",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            4.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexModule_DawnCrimson_TurbineRotor_85103_part",
+          "triangles": 912
+        }
+      ],
+      "seed": 85103,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "63d62d21f1339bfb47cdcad008f2f4ce16e14f7af84d418d9c7be90c1bdddab3",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921",
+      "fbx": {
+        "bytes": 20476,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85104\\CodexModule_DawnCrimson_CrystalBattery_85104.fbx",
+        "sha256": "6dfbaa8194bbe921bca03e5a43156d154f016fa20a22b4502c8db05faae30221"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_CrystalBattery_85104",
+      "objects": [
+        {
+          "dims": [
+            2.25,
+            1.5,
+            1.5
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexModule_DawnCrimson_CrystalBattery_85104_part",
+          "triangles": 432
+        }
+      ],
+      "seed": 85104,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "c8878bd1b918311473c8d3805e9b9b5ed11c219a5b2adb0100dfa87a33150f4f",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c",
+      "fbx": {
+        "bytes": 19660,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.fbx",
+        "sha256": "b58f07137ee2545c830ba13f6eefb991a76d871db5e618f358658896405ba4f6"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_GearboxHousing_85105",
+      "objects": [
+        {
+          "dims": [
+            1.5,
+            1.5,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexModule_DawnCrimson_GearboxHousing_85105_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85105,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "8d128dfc8ee9999c2c90383952b68787aaea11319a29a774b8defba5e92ed432",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389",
+      "fbx": {
+        "bytes": 18556,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.fbx",
+        "sha256": "1c52ebfc34c1c38936ee4c233c9bd60a9dc50d4e63d1c77617027dcb0e480103"
+      },
+      "kind": "module",
+      "name": "CodexModule_DawnCrimson_DriveShaft_85106",
+      "objects": [
+        {
+          "dims": [
+            3.0,
+            1.0,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexModule_DawnCrimson_DriveShaft_85106_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85106,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "d7ed777befe3563d37b62589ae1c947432aa9a7722d7c740faee0c8c4d0bf287",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f",
+      "fbx": {
+        "bytes": 19228,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.fbx",
+        "sha256": "a4ddbcc9e9dd167f7f61cd49c6cf59550b36907ad7269e6c003d6ce12a2df663"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            1.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part",
+          "triangles": 416
+        }
+      ],
+      "seed": 85200,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "e1f9299785a936f184a4cd82df0834f78bc6c9c1d6b3a97f31fedddcfe2ee559",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86",
+      "fbx": {
+        "bytes": 20892,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.fbx",
+        "sha256": "28d587c9231e7d8668b354470395c4285b92c272f581d3a4304a08731d782156"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_SailPanel_85201",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            3.0,
+            0.25
+          ],
+          "materials": [
+            "CodexVoxel_cloud",
+            "CodexVoxel_crystal"
+          ],
+          "name": "CodexModule_StormAmethyst_SailPanel_85201_part",
+          "triangles": 656
+        }
+      ],
+      "seed": 85201,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "259940caabcb5d755a05b43f83115997cd91378819c904dc6fddeb3b0f347b61",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7",
+      "fbx": {
+        "bytes": 20140,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.fbx",
+        "sha256": "6650da60f6be3fb72c782eea32606d5820f92ab84b3207e94eb1a0f29181394e"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_WagonWheel_85202",
+      "objects": [
+        {
+          "dims": [
+            2.5,
+            2.5,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexModule_StormAmethyst_WagonWheel_85202_part",
+          "triangles": 560
+        }
+      ],
+      "seed": 85202,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "0d5c7bb52bc650b1ccd85afd079437cc3d7b7efc000a3a7cf3ae048f9fa105a7",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515",
+      "fbx": {
+        "bytes": 23756,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85203\\CodexModule_StormAmethyst_TurbineRotor_85203.fbx",
+        "sha256": "76ac7373b76245159d61b288af8b3cfea3d6ff6fef11da18199e8edf1b6243a0"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_TurbineRotor_85203",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            4.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_rock"
+          ],
+          "name": "CodexModule_StormAmethyst_TurbineRotor_85203_part",
+          "triangles": 1024
+        }
+      ],
+      "seed": 85203,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "160210b5384caf1a1bcabff2f37db38ccdc8e709f40cea5bbdcbbe5bb5bf8f1b",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d",
+      "fbx": {
+        "bytes": 20476,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.fbx",
+        "sha256": "47ee7222bd45c30d34a4941f8e5bf5fd2cbd8104d4d90d760df615a40201983a"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_CrystalBattery_85204",
+      "objects": [
+        {
+          "dims": [
+            2.25,
+            1.5,
+            1.5
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexModule_StormAmethyst_CrystalBattery_85204_part",
+          "triangles": 432
+        }
+      ],
+      "seed": 85204,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "7b260fd8d3cdb5df9ece84a711fc976675767c50bce6319e9f184dbc98085338",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315",
+      "fbx": {
+        "bytes": 19676,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.fbx",
+        "sha256": "f903dda8bd30a3158ab8b5db44ab90b9e8a89037dba4fcf244d5fe5adbbd3f57"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_GearboxHousing_85205",
+      "objects": [
+        {
+          "dims": [
+            1.5,
+            1.5,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexModule_StormAmethyst_GearboxHousing_85205_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85205,
+      "stage": "exported",
+      "world_placement": "held"
+    },
+    {
+      "config_sha256": "1c55c2d0c70e7a46f4a6c21b0f810b30810c47e818834de0545bb2d5cd00f677",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009",
+      "fbx": {
+        "bytes": 18556,
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.fbx",
+        "sha256": "0248ed0a300ef00913a5cb8daaff3f8eadcace3c56a3b2270912976aeeb28948"
+      },
+      "kind": "module",
+      "name": "CodexModule_StormAmethyst_DriveShaft_85206",
+      "objects": [
+        {
+          "dims": [
+            3.0,
+            1.0,
+            1.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_rock"
+          ],
+          "name": "CodexModule_StormAmethyst_DriveShaft_85206_part",
+          "triangles": 336
+        }
+      ],
+      "seed": 85206,
+      "stage": "exported",
+      "world_placement": "held"
+    }
+  ],
+  "expected_meshes": 47,
+  "import_options": {
+    "auto_generate_collision": false,
+    "build_nanite": false,
+    "combine_meshes": false,
+    "generate_lightmap_u_vs": false,
+    "import_materials": false,
+    "import_textures": false,
+    "vertex_color_import_option": "REPLACE"
+  },
+  "islands": 3,
+  "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+  "modules": 21,
+  "prepared_files": 48,
+  "prepared_groups": 24,
+  "schema": "daedalus.codex-prepared-delivery.v1",
+  "source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "source_sha256": "fea4ee6ba4016f4e0fad8b8ec966af937bfb9eee1044c5707a70664ee2f15054",
+  "world_placement": "held; import/save assets only; no actor or map changes"
+}
