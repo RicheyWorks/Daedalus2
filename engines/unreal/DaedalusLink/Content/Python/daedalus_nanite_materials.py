@@ -9,7 +9,7 @@ first, and undo() puts every instance back on its old parent.
 
     import daedalus_nanite_materials as n
     n.status()          # how many are still on the engine plugin's base
-    n.run(200)          # move (and save) up to 200; call again until left == 0
+    n.run(100)          # move (and save) up to 100 per call: keep each bridge call short; call again until left == 0
     n.undo()            # put them all back
 """
 import json
@@ -88,8 +88,12 @@ def run(batch=200):
             task.enter_progress_frame(1)
             unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
             moved += 1
-    for mi, _ in pending[:moved]:
-        EAL.save_loaded_asset(mi, only_if_is_dirty=True)
+    # Save without the per-asset checkout prompt: EditorAssetLibrary.save_loaded_asset goes through
+    # InternalPromptForCheckoutAndSave, which opens a window per save; 3.5 minutes of that inside one bridge call
+    # ended in a D3D11 CreateSwapChain fatal error (editor crash, 2026-10-13). save_packages has no prompt.
+    pkgs = [mi.get_outermost() for mi, _ in pending[:moved]]
+    if pkgs:
+        unreal.EditorLoadingAndSavingUtils.save_packages(pkgs, only_dirty=True)
     out = status()
     out["moved_now"] = moved
     return out

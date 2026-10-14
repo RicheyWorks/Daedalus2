@@ -433,3 +433,13 @@ The updated synthetic run had no test errors/warnings but one editor layout
 warning; report both scopes. Neither selection probe proves animation playback,
 cooking or rendered battle acceptance. The nested-path importer stamp lookup was
 reported to Claude, its owner, instead of editing the same lane concurrently.
+
+## A long save loop inside one bridge call crashed the editor (2026-10-13, 19:14)
+`daedalus_nanite_materials.run(500)` saved 500 material instances through `EditorAssetLibrary.save_loaded_asset`
+inside a single execute_python: that path is InternalPromptForCheckoutAndSave, which opens a window per save; after
+3.5 minutes of it the editor died with `Fatal: CreateSwapChainResult failed with DXGI_ERROR_INVALID_CALL` (D3D11,
+while the game thread had been blocked the whole time). Rules: (1) saves go through
+`EditorLoadingAndSavingUtils.save_packages(pkgs, only_dirty=True)` (no prompt, one call); (2) a bridge call does
+at most ~100 asset saves, and the host loops; (3) never kill the client mid-call to "stop" a job: the editor keeps
+running the call; stop by making the next batch small, not by killing. The ledger made the run resumable, which
+is why nothing was lost.

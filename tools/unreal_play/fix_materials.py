@@ -17,7 +17,7 @@ from asset_pipeline import wire  # noqa: E402
 
 
 def main(argv):
-    batch = int(argv[0]) if argv else 200
+    batch = min(int(argv[0]) if argv else 100, 150)   # short bridge calls: a long save loop crashed the editor (2026-10-13)
     max_batches = int(argv[1]) if len(argv) > 1 else 200
     if wire.call(wire.UNREAL, "ping", timeout=10).get("playing"):
         print("stop Play first: saving assets is an editor operation")
