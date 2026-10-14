@@ -7,7 +7,10 @@ and optional attack/hurt sequences sharing each mesh's skeleton.
 
 Imported cast clips are resolved per skeletal mesh under
 `/Game/Daedalus/Art/Cast/<Id>/`, including child folders. An exact `Attack`/`Hurt`
-name or `_Attack`/`_Hurt` suffix selects the role. Only sequences with the exact
+name, `_Attack`/`_Hurt` suffix, or exact mesh name plus `Attack`/`Hurt` selects
+the role. The last form matches the observed imported
+`Mob_Gallery_CuratorVellAttack` and `Mob_Gallery_CuratorVellHurt` filenames.
+Only sequences with the exact
 mesh skeleton qualify; deterministic asset-path order breaks duplicate ties.
 Compatible explicit attack/hurt overrides still take precedence. A mismatched
 override falls back to that mesh's imported clips, never another cast's folder.

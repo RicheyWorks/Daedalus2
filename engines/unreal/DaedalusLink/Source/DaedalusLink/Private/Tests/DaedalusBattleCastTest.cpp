@@ -40,8 +40,9 @@ bool FDaedalusBattleCastTest::RunTest(const FString& Parameters)
     auto* PackageA=CreatePackage(*(TEXT("/Game/Daedalus/Art/Cast/")+IdA+TEXT("/Clips")));
     auto* PackageB=CreatePackage(*(TEXT("/Game/Daedalus/Art/Cast/")+IdB+TEXT("/Clips")));
     MakeClip(PackageA,TEXT("A_Attack"),SkeletonB); // Earlier name, wrong skeleton.
-    auto* AttackA=MakeClip(PackageA,TEXT("B_Attack"),SkeletonA);
-    auto* HurtA=MakeClip(PackageA,TEXT("B_Hurt"),SkeletonA);
+    // UE's actual cast import concatenates the mesh and clip names without an underscore.
+    auto* AttackA=MakeClip(PackageA,TEXT("MeshAttack"),SkeletonA);
+    auto* HurtA=MakeClip(PackageA,TEXT("MeshHurt"),SkeletonA);
     auto* AttackB=MakeClip(PackageB,TEXT("B_Attack"),SkeletonB);
     Stage->Members={A,B};Stage->RefreshCastAnimations();
     TestEqual(TEXT("First actor receives its own attack"),Stage->ResolveCastAnimation(A,false),AttackA);

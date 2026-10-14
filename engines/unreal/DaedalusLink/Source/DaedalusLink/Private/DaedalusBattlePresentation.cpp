@@ -65,8 +65,12 @@ const FDaedalusBattleCastClips* ADaedalusBattlePresentation::ClipsFor(USkeletalM
             {
                 if (Asset.AssetClassPath!=UAnimSequence::StaticClass()->GetClassPathName()) continue;
                 const FString Name=Asset.AssetName.ToString();
-                const bool Attack=Name.Equals(TEXT("Attack"),ESearchCase::IgnoreCase)||Name.EndsWith(TEXT("_Attack"),ESearchCase::IgnoreCase);
-                const bool Hurt=Name.Equals(TEXT("Hurt"),ESearchCase::IgnoreCase)||Name.EndsWith(TEXT("_Hurt"),ESearchCase::IgnoreCase);
+                const bool Attack=Name.Equals(TEXT("Attack"),ESearchCase::IgnoreCase)
+                    ||Name.EndsWith(TEXT("_Attack"),ESearchCase::IgnoreCase)
+                    ||Name.Equals(Mesh->GetName()+TEXT("Attack"),ESearchCase::IgnoreCase);
+                const bool Hurt=Name.Equals(TEXT("Hurt"),ESearchCase::IgnoreCase)
+                    ||Name.EndsWith(TEXT("_Hurt"),ESearchCase::IgnoreCase)
+                    ||Name.Equals(Mesh->GetName()+TEXT("Hurt"),ESearchCase::IgnoreCase);
                 if ((!Attack||Clips.Attack) && (!Hurt||Clips.Hurt)) continue;
                 auto* Clip=Cast<UAnimSequence>(Asset.GetAsset());
                 if (!Clip || !Mesh->GetSkeleton() || Clip->GetSkeleton()!=Mesh->GetSkeleton()) continue;
