@@ -21,24 +21,38 @@ def main():
     parser.add_argument('--source', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--first', type=int, default=1)
-    parser.add_argument('--last', type=int, default=18)
+    parser.add_argument('--last', type=int)
+    parser.add_argument('--special-pool', action='store_true', help='Verify the separate six-asset crater/rift batch')
+    parser.add_argument('--content-root', help='Native project Content directory; required for importing the separate special batch')
+    parser.add_argument('--owner', default='team-codex', help='Explicit current editor lease holder; acquires no lease')
     parser.add_argument('--import-new', action='store_true')
     parser.add_argument('--save-verified', action='store_true')
     args = parser.parse_args()
-    if not 1 <= args.first <= args.last <= 18:
-        parser.error('require 1 <= first <= last <= 18')
+    count = 6 if args.special_pool else 18
+    if args.last is None: args.last = count
+    if not 1 <= args.first <= args.last <= count:
+        parser.error('require a bounded selection within the chosen pool')
+    if args.special_pool and args.import_new and not args.content_root:
+        parser.error('special imports require explicit native --content-root')
     source = pathlib.Path(args.source).resolve()
     assets = json.loads((source / 'island-mesh-pool.json').read_text())['assets']
     selected = assets[args.first - 1:args.last]
-    if len(assets) != 18 or len({a['id'] for a in assets}) != 18:
-        raise ValueError('expected the complete unique 18-asset pool')
+    ids = ([f'Island_Frag_Special_{i:02d}' for i in range(1,7)] if args.special_pool else
+           [f'Island_Frag_{i:02d}' for i in range(1,13)] + [f'Island_Pad_{i:02d}' for i in range(1,7)])
+    if len(assets) != count or {a['id'] for a in assets} != set(ids):
+        raise ValueError('expected the complete unique selected pool identity set')
+    if args.special_pool and any(asset.get('collision_hulls') != 24 or asset.get('kind') not in
+            ('crater-fragment','split-top-fragment') for asset in assets):
+        raise ValueError('special surface/collision contract missing')
+    native_folder = (pathlib.Path(args.content_root).resolve() / 'Daedalus/Art/Islands/NativePool'
+                     if args.content_root else source / 'NativePool')
     for asset in selected:
         file = source / asset['fbx']
         if file.resolve().parent != source:
             raise ValueError('source escapes pool')
         if hashlib.sha256(file.read_bytes()).hexdigest() != asset['fbx_sha256']:
             raise ValueError('FBX hash mismatch: ' + asset['id'])
-        if args.import_new and (source / 'NativePool' / (asset['id'] + '.uasset')).exists():
+        if args.import_new and (native_folder / (asset['id'] + '.uasset')).exists():
             raise ValueError('existing mesh refused: ' + asset['id'])
     sys.path.insert(0, str(pathlib.Path(args.client_root).resolve()))
     mcp = importlib.import_module('client').Mcp(timeout=45)
@@ -60,8 +74,8 @@ def main():
             if args.import_new:
                 with urllib.request.urlopen('http://127.0.0.1:9890/locks', timeout=5) as response:
                     locks = json.load(response)
-                if locks.get('unreal', {}).get('holder') != 'team-codex':
-                    raise ValueError('team-codex editor lease required')
+                if locks.get('unreal', {}).get('holder') != args.owner:
+                    raise ValueError('explicit current editor owner lease required')
                 output.write_text(json.dumps(rows + [{**row, 'status': 'dispatching-outcome-unknown'}],
                                              indent=2), encoding='utf-8')
                 row['importResult'] = mcp.call(mesh_ts, 'import_file', folder_path=folder,
@@ -85,7 +99,7 @@ def main():
             actual = [bounds['max'][axis] - bounds['min'][axis] for axis in ('x', 'y', 'z')]
             if (not bounds['isValid'] or any(abs(a - b) > 1 for a, b in zip(actual, expected))
                     or abs(bounds['max']['z']) > .01 or not values['bCustomizedCollision']
-                    or len(row['collision']['aggGeom']['convexElems']) != 1
+                    or len(row['collision']['aggGeom']['convexElems']) != (24 if args.special_pool else 1)
                     or len(row['materials']) != (2 if asset['kind'] == 'terrace-pad' else 3)):
                 raise ValueError('native bounds/collision/material acceptance failed')
             saves.add(folder + '/' + asset['id'])
@@ -106,8 +120,8 @@ def main():
     if args.import_new or args.save_verified:
         with urllib.request.urlopen('http://127.0.0.1:9890/locks', timeout=5) as response:
             locks = json.load(response)
-        if locks.get('unreal', {}).get('holder') != 'team-codex':
-            raise ValueError('team-codex editor lease required for save')
+        if locks.get('unreal', {}).get('holder') != args.owner:
+            raise ValueError('explicit current editor owner lease required for save')
         saved = mcp.call('editor_toolset.toolsets.asset.AssetTools', 'save_assets', asset_paths=sorted(saves))
         output.with_suffix('.save.json').write_text(json.dumps({'saved': saved, 'paths': sorted(saves)}))
         if saved is not True:

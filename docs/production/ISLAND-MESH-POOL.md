@@ -8,6 +8,8 @@ Footprint remains92m XY, maximum rimZ0, thickness8..13.45m. Centre walking surfa
 
 Source Python compilation passes. Actual Blender export/manifold guards, collision import/geometry, appearance and walking are pending the accepted app window. The24-hull choice has no proven physics/memory performance budget; inspect an isolated native pilot before large district assignment. No original GLB/FBX/uasset, actor or map was regenerated/replaced by this code change.
 
+Reuse the existing island_pool_acceptance.py with `--special-pool` for this batch. It validates all six unique special IDs, expects24 convex collision elements per native mesh and defaults the selection to six. Imports from a separate export directory require explicit `--content-root C:/Unreal/DaedalusRealm/Content` to check native package existence; exporter-directory absence does not prove native absence. `--owner unreal-team` checks the actual current lease on import/save without acquiring it. Verify mode remains read-only; imports/save need explicit flags, a fresh journal and sole-owner scope. This importer extension has Python compilation evidence only; no new asset import was run.
+
 Lesson: a concave walking surface requires matching collision decomposition and an explicit rim-versus-centre height contract. A visual crater with one flat convex top is not a usable crater. Carry those distinctions in export manifests and importer readbacks before calling the new art native-ready.
 
 ## Material-instance source delivery — 2026-10-14, request30320
