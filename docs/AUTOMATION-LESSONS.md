@@ -831,3 +831,7 @@ Checkpoint the current orchestration stage before each major operation. Early ex
 ### Night-run job identity (2026-10-13)
 Never wait on latest build after launching a specific job: it can return the prior job's green log before the new log exists. Require one explicit launch ID, refuse reused IDs, await that ID's terminal marker, validate its exit code, then query Wait with the same ID. Log words DONE/FAIL are not terminal markers. Observation expiry stops this orchestration without restarting the editor or job. Existing PR89/104 still provide truthful atomic marker writers; keyed consumption does not repair an old writer.
 
+
+### Cast import identity coverage (2026-10-14)
+Terminal aggregate counts can cover the wrong identities. Return every planned asset ID/hash/status, validate ordered coverage and derive counts from those rows independently of the200-line progress tail. Reject stale manifest hashes before bridge calls and recheck before native import. This still does not make the source file immutable during native import or prove art binding/render quality. Placement diagnostics must propagate nonzero rather than disappearing after successful imports.
+

@@ -28,6 +28,28 @@ def call(code, timeout=120):
     return (r.get("stdout") or ""), err
 
 
+def terminal_counts(reply,plan):
+    """Terminal rows must cover every planned identity; progress tails are not evidence."""
+    if not 1<=len(plan)<=500:
+        raise ValueError('invalid terminal plan size')
+    if not isinstance(reply,dict) or 'error' not in reply or reply['error'] is not None:
+        raise ValueError('import terminal result unavailable')
+    result=reply.get('result')
+    if not isinstance(result,dict) or type(result.get('planned')) is not int or result['planned']!=len(plan):
+        raise ValueError('import plan coverage differs')
+    rows=result.get('assets')
+    if not isinstance(rows,list) or len(rows)!=len(plan):
+        raise ValueError('import identities omitted')
+    counts={'imported':0,'skipped':0,'failed':0}
+    for row,(asset_id,_,digest) in zip(rows,plan):
+        if not isinstance(row,dict) or row.get('id')!=asset_id or row.get('sha256')!=digest or row.get('status') not in counts:
+            raise ValueError('import terminal identity/status differs')
+        counts[row['status']]+=1
+    if result.get('counts')!=counts or any(type(n) is not int for n in result['counts'].values()):
+        raise ValueError('import terminal counts contradict asset rows')
+    return counts
+
+
 def main(argv):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('folder')
@@ -45,6 +67,11 @@ def main(argv):
     if not plan:
         print('import: no planned assets; refusing empty success', flush=True)
         return 2
+    if len(plan)>500 or len({row[0] for row in plan})!=len(plan):
+        parser.error('import requires at most500 unique assets')
+    for asset_id,glb,digest in plan:
+        if IC.sha256(glb)!=digest:
+            parser.error('manifest/source SHA256 differs for '+asset_id)
     _, setup_error = call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n", 30)
     if setup_error:
         print('import: setup failed; no import dispatched\nERR '+str(setup_error)[-600:],flush=True)
@@ -54,8 +81,9 @@ def main(argv):
         for i, (aid, glb, sha) in enumerate(plan, 1):
             t0 = time.time()
             code = ("import daedalus_import_cast as C\n"
-                    "s, made = C.import_one(%r, r'%s', %r, False, %r)\n"
-                    "print(s, sum(1 for a in made if a['class'] == 'SkeletalMesh'), ','.join(a['name'] for a in made if a['class'] == 'AnimSequence'))\n") % (aid, glb, sha, root)
+                    "if C.sha256(%r) != %r: raise ValueError('source changed before import')\n"
+                    "s, made = C.import_one(%r, %r, %r, False, %r)\n"
+                    "print(s, sum(1 for a in made if a['class'] == 'SkeletalMesh'), ','.join(a['name'] for a in made if a['class'] == 'AnimSequence'))\n") % (glb,sha,aid,glb,sha,root)
             out, err = call(code, 180)
             status = (out.split() or ["failed"])[0]
             if err:
@@ -74,25 +102,24 @@ def main(argv):
                 "PLAN = %r\n"
                 "def steps():\n"
                 "    counts = {'imported': 0, 'skipped': 0, 'failed': 0}\n"
+                "    assets = []\n"
                 "    for aid, glb, sha in PLAN:\n"
+                "        if C.sha256(glb) != sha: raise ValueError('source changed before import: ' + aid)\n"
                 "        s, made = C.import_one(aid, glb, sha, False, %r)\n"
                 "        if s not in counts: raise ValueError('unknown import status: ' + str(s))\n"
                 "        counts[s] += 1\n"
+                "        assets.append({'id': aid, 'sha256': sha, 'status': s})\n"
                 "        yield '%%s %%s' %% (s, aid)\n"
-                "    return {'counts': counts, 'planned': len(PLAN)}\n") % ([(a, g, h) for a, g, h in plan], root)
+                "    return {'counts': counts, 'planned': len(PLAN), 'assets': assets}\n") % ([(a, g, h) for a, g, h in plan], root)
         r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="import_cast", timeout=max(120, 15 * len(plan)))
         res = r   # wire.call returns the command result: {steps, yielded, result, error, seconds}
         for line in res.get("yielded", []):
             print("  " + line, flush=True)
-        summary = res.get('result')
-        final = summary.get('counts') if isinstance(summary, dict) else None
-        valid = (isinstance(final, dict) and set(final) == set(counts) and
-                 all(type(n) is int and n >= 0 for n in final.values()) and
-                 type(summary.get('planned')) is int and summary['planned'] == len(plan) and
-                 sum(final.values()) == len(plan))
-        if res.get('error') is not None or not valid:
+        try:
+            final=terminal_counts(res,plan)
+        except ValueError as error:
             print('import: outcome unknown; terminal counts unavailable; no placement or retry', flush=True)
-            print('ERR '+str(res.get('error') or 'incomplete terminal result')[-600:], flush=True)
+            print('ERR '+str(error)[-600:], flush=True)
             return 2
         counts = final
         print("steps=%s seconds=%s (one tick per file, one round trip)" % (res.get("steps"), res.get("seconds", round(time.time() - t0, 1))), flush=True)
@@ -102,6 +129,8 @@ def main(argv):
     if place:
         out, err = call("import importlib, daedalus_realm_ground as R\nimportlib.reload(R)\nprint(R.place_creatures(%r))\n" % place, 300)
         print(out[-1500:], ("ERR " + err[:800]) if err else "", flush=True)
+        if err:
+            return 2
     return 0 if counts["failed"] == 0 else 1
 
 
