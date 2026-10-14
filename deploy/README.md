@@ -17,6 +17,8 @@ The Dockerfile now includes both external resource inputs.
 The first actual image CI run also exposed missing `config/checkstyle.xml`;
 the shared Checkstyle/SpotBugs configuration is now copied into the build stage
 so the normal Maven gates remain enabled.
+The shared `.mvn/jvm.config` is also copied, preserving the repository's compiler
+stack setting rather than silently using different JVM settings inside Docker.
 
 The `Container runtime resources` workflow builds the actual image and runs a
 disposable production-profile container. It compares the embedded catalogs and

@@ -16,6 +16,7 @@ WORKDIR /workspace
 # source changes then don't re-download the world. Every reactor module listed in pom.xml must be here.
 COPY pom.xml .
 COPY config config
+COPY .mvn .mvn
 COPY daedalus-plugin-api/pom.xml daedalus-plugin-api/
 COPY daedalus-core/pom.xml daedalus-core/
 COPY daedalus-wallet/pom.xml daedalus-wallet/
