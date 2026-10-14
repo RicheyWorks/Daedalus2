@@ -628,8 +628,7 @@ def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
     if realm == "WORLD-ZERO":
         ps = [a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"]
         at = ps[0].get_actor_location() if ps else unreal.Vector(R.ORIGINS[realm][0], R.ORIGINS[realm][1], R.GROUND_Z)
-        hit = unreal.SystemLibrary.line_trace_single(world, at + unreal.Vector(0, 0, 3000), at - unreal.Vector(0, 0, 20000), unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
-        top = hit.to_tuple()[4].z if hit else at.z - 100.0
+        top = at.z - 100.0   # the hub plane every plot uses (P._editor_inputs); 02:58: the chunk under the spawn is 1.8 m higher and left the blocks in pits
         cx, cy = R.ORIGINS[realm]
     else:
         cx, cy = R.ORIGINS[realm]
