@@ -12,6 +12,7 @@ import math
 from pathlib import Path
 import re
 import time
+import uuid
 
 from codex_admitted_asset_assembly import POWER_NAME, RETAINED_ISLANDS, plan_admitted
 from codex_contest_island_delivery import DEST, Mcp, SCENE, fingerprint, package
@@ -157,10 +158,13 @@ def prepare_palette(plan, source_receipt, journal_path, timeout=180):
     if mcp.call("EditorToolset.EditorAppToolset", "IsPIERunning") or package(mcp.call(SCENE, "get_current_level")) != plan["map_package"]:
         raise RuntimeError("require stopped PIE and the exact agreed map")
     # Read only the admitted meshes, without a full-world actor snapshot.
+    read_label = "Codex admitted palette readback " + uuid.uuid4().hex
     code = '''import unreal,sys
 rows=ROWS
 b=sys.modules.get('claude_unreal_bridge')
-if b is None or b._running or b._jobs.qsize() or b._remote_lock.locked():
+others=[req for gen,req,box in list(b._running)
+        if req.get('type')!='execute_python' or (req.get('params') or {}).get('label')!=OWN_LABEL] if b else [None]
+if others or b._jobs.qsize() or b._remote_lock.locked():
     raise RuntimeError('conflicting or unobservable bridge job; no palette mutation')
 if unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages() or unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages():
     raise RuntimeError('preserve dirty packages before palette preparation')
@@ -169,9 +173,9 @@ for row in rows:
     mesh=unreal.EditorAssetLibrary.load_asset(row['mesh_path'])
     if not isinstance(mesh,unreal.StaticMesh) or mesh.get_path_name()!=row['mesh_path']:raise RuntimeError('admitted mesh identity changed')
     result[row['label']]=[str(slot.material_slot_name) for slot in mesh.get_editor_property('static_materials')]
-'''.replace("ROWS", repr(plan["entries"]), 1)
+'''.replace("ROWS", repr(plan["entries"]), 1).replace("OWN_LABEL", repr(read_label), 1)
     started = time.perf_counter()
-    reply = wire.call(wire.UNREAL, "execute_python", code=code, unattended=False, timeout=30, side="Unreal")
+    reply = wire.call(wire.UNREAL, "execute_python", code=code, label=read_label, unattended=False, timeout=30, side="Unreal")
     record["slot_readback_reply"] = reply
     record["timings_s"]["slot_readback"] = round(time.perf_counter() - started, 6)
     _write(journal, record)
@@ -179,6 +183,8 @@ for row in rows:
     if not isinstance(actual, dict) or set(actual) != set(slots) or any(len(actual[label]) != len(expected) or set(actual[label]) != set(expected) for label, expected in slots.items()):
         raise RuntimeError("saved native material slots differ from the exported source")
     record["stage"] = "palette_mutation_pending"
+    palette_label = "Codex admitted palette before placement " + uuid.uuid4().hex
+    record["native_palette_label"] = palette_label
     _write(journal, record)
     code = '''from pathlib import Path
 import hashlib,sys,unreal
@@ -190,15 +196,15 @@ exec(compile(raw,source,'exec'),scope)
 def steps():
     b=sys.modules.get('claude_unreal_bridge')
     others=[req for gen,req,box in list(b._running)
-            if req.get('type')!='daedalus.steps' or (req.get('params') or {}).get('label')!='Codex admitted palette before placement'] if b else [None]
+            if req.get('type')!='daedalus.steps' or (req.get('params') or {}).get('label')!=OWN_LABEL] if b else [None]
     if others or b._jobs.qsize() or b._remote_lock.locked():raise RuntimeError('conflicting bridge job; preserve palette journal')
     if unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages() or unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages():
         raise RuntimeError('dirty packages changed before palette admission')
     return (yield from scope['palette_steps'](SETTINGS,JOURNAL))
-'''.replace("SOURCE", repr(str(HELPER)), 1).replace("EXPECTED", repr(record["helper_fingerprint"]["sha256"]), 1).replace("SETTINGS", repr(settings), 1).replace("JOURNAL", repr(str(journal)), 1)
+'''.replace("SOURCE", repr(str(HELPER)), 1).replace("EXPECTED", repr(record["helper_fingerprint"]["sha256"]), 1).replace("SETTINGS", repr(settings), 1).replace("JOURNAL", repr(str(journal)), 1).replace("OWN_LABEL", repr(palette_label), 1)
     started = time.perf_counter()
     try:
-        reply = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="Codex admitted palette before placement", budget_ms=1, timeout=timeout, side="Unreal")
+        reply = wire.call(wire.UNREAL, "daedalus.steps", code=code, label=palette_label, budget_ms=1, timeout=timeout, side="Unreal")
     except Exception as error:
         # The native helper may have journaled a partial action. Retain it.
         record, _ = _read(journal)
