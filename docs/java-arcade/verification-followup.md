@@ -1,5 +1,16 @@
 # Verification follow-up: thirteen cabinets
 
+Recovery update (2026-10-14): PR53 merged, then deleting its base branch
+automatically closed PR55 without merging it. The same PR55 is recovered against
+`main`, preserving delivered `5f35983130f55a183906382a6881282ab6663147` and normally
+merging main snapshot `1ee121e0fd41302889f54bed0c3caaefacd92214` without conflicts.
+All five Java client runtime files, Build.cs, both portable test files and the
+pinned source/fixture/compile/full-link evidence remain identical; see
+[stack recovery proof](stack-recovery.json). Fresh CI results belong to the final
+recovery head in the PR body. The existing 43-action DLL proof retains its original
+106-input manifest; this recovery does not claim a fresh Unreal build, loading or
+in-world Play. Historical stack wording below describes the earlier handoff.
+
 The approved PR53 dependency at `7427deffef766ce6e6ef83e6d1acd33cbe680938`
 and current main at `d57a388e7ae59b804d033b52c76e2b8df529d5d6` were incorporated
 without conflicts into PR55's isolated feature branch. PR55 is stacked on
