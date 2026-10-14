@@ -1339,3 +1339,15 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   (`build(keep=False)`): 71 creatures in 29 s. Keep them only for a contact sheet (`--sheet`).
 - Factory startup ships a cube, a light and a camera — delete them before a contact-sheet render or the cube
   photobombs the sheet.
+
+## 2026-10-14 16:30 — eggs / house-grave-sports / Sims realm catalogues, and a launcher gotcha
+- `export_catalog.py {eggs|props|sims} OUT [family…]` exported 412 assets in ~10 s total (3 s / 2 s / 1 s plus
+  sheets) — freeing objects after every export is what keeps the FBX exporter linear.
+- The bridge's `powershell_start` background jobs stopped launching silently (job .ps1 written, no log, no
+  process, `running:true` forever). Launch the written job script yourself instead:
+  `Start-Process powershell -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",<job.ps1> -WindowStyle Hidden`
+  and have the script append to its own log under `projects\_to_delete\`. Check `Get-Process blender` /
+  the log after 8 s — don't wait a minute on a job that never started.
+- Roof lesson: a sloped voxel roof built as "edge rows per z" leaves see-through slats when the run per rise
+  is > 1 voxel; fill `run` rows per step (voxel_sims starter house, 3-per-1 pitch) and add a ceiling slab.
+- Single-item contact sheets: centre with `(cols - 1) * pitch / 2`, not `cols * pitch / 2`.
