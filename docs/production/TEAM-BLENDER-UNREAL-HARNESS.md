@@ -40,3 +40,13 @@ and bounded progress/status inspection. Add producer/consumer stage timestamps t
 export, import and verification separately. Do not label planned changes as installed.
 
 No installed addon, live Blender scene, Unreal editor, stable team client or hosted service was changed by this PR.
+
+
+## Follow-up implementation: private import snapshots
+land() now copies into a unique temporary daedalus-pipeline/import-snapshots subdirectory,
+verifies the copy and sends its path plus digest to Unreal. The import script validates the
+snapshot before creating AssetImportTask. Source path and private import path are both in the
+report. Snapshots remain after success/failure/timeout; do not delete them while a job might
+still be active. A future explicit quiescent-job cleanup command is needed to bound disk use.
+This is isolated handoff storage, not OS-enforced immutability or protection against an adversary
+changing the private file after the importer's digest check. Legacy evidence remains labelled.
