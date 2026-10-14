@@ -21,6 +21,7 @@ def build(root,script,prefix,output):
     roles=re.findall(r'^who (.+)$',text,re.M);roles=[role.strip() for role in roles]
     if len(set(roles))!=len(roles):raise ValueError('Duplicate DCS role')
     aliases={'lostletterghost':'lostlettercourier'} if manifest['realm']=='The Parcels' else {}
+    if manifest['realm']=='Brick Realm':aliases={'gluewitch':'adhesivealchemist'}
     rows=[]
     for who in roles:
         key=aliases.get(normalize(who),normalize(who))

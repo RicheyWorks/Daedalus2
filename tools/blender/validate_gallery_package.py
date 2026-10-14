@@ -6,15 +6,17 @@ import sys
 from validate_labyrinth_cast import validate as validate_cast
 from validate_static_kit import validate as validate_static
 
-def build(root):
+def build(root,realm='Gallery City',prefix='gallery-buildout',scenes=None):
+    scenes=scenes or {'cast':'gallery-city-cast','creatures':'gallery-creatures','environment':'gallery-environment'}
     validate_cast(root/'cast');validate_cast(root/'creatures');validate_static(root/'environment')
     rows=[];seen=set()
     for folder in ['cast','creatures','environment']:
         manifest=json.loads((root/folder/'manifest.json').read_text())
+        assert manifest['realm']==realm,'Wrong realm manifest'
         for asset in manifest['assets']:
             assert asset['id'] not in seen;seen.add(asset['id'])
             rows.append({**asset,'file':folder+'/'+asset['file'],'kind':'Prop' if folder=='environment' else 'Character',
-                'realm':'Gallery City','clips':'' if folder=='environment' else 'Idle, Walk, Attack, Hurt',
+                'realm':realm,'clips':'' if folder=='environment' else 'Idle, Walk, Attack, Hurt',
                 'export':'Validated','unreal':'Pending','mechanic':'Binding pending'})
     assert len(rows)==56 and sum(row['role_count'] for row in rows)==32
     (root/'production-data.json').write_text(json.dumps(rows,indent=2))
@@ -24,11 +26,11 @@ def build(root):
         writer=csv.writer(file);writer.writerow(['name','kind','category','world','owner','status','queue_status','blender_files','uassets','path'])
         for row in rows:
             folder=row['file'].split('/')[0]
-            scene={'cast':'gallery-city-cast','creatures':'gallery-creatures','environment':'gallery-environment'}[folder]
+            scene=scenes[folder]
             writer.writerow([row['id'],'Mob' if row['kind']=='Character' else 'Prop',
                 'fauna' if folder=='creatures' else 'characters' if folder=='cast' else 'props (other)',
-                'Gallery City','team-codex','blender_only','READY','gallery-buildout/'+folder+'/'+scene+'.blend',
-                '', 'gallery-buildout/'+row['file']])
-    print('GALLERY_PACKAGE_PASS',56,'exports',sum(row['triangles'] for row in rows),'triangles')
+                realm,'team-codex','blender_only','READY',prefix+'/'+folder+'/'+scene+'.blend',
+                '', prefix+'/'+row['file']])
+    print('REALM_PACKAGE_PASS',realm,56,'exports',sum(row['triangles'] for row in rows),'triangles')
 
 if __name__=='__main__':build(Path(sys.argv[1]))
