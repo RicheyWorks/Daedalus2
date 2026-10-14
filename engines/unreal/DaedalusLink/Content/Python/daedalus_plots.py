@@ -17,7 +17,7 @@ import math
 import daedalus_land_grid as G
 
 LAND_M = 92.0        # launch size of a land (ADR-065 rule 8)
-SLAB_M = 2.0
+SLAB_M = 12.0        # a plot is a solid floating slab of ground (the asteroid's pieces), not a sheet
 CUBE = "/Engine/BasicShapes/Cube.Cube"        # 100 cm a side
 FOLDER = "Lands"
 
@@ -59,6 +59,13 @@ def plan(rings=6, estates=(), hub_cells=(), hub_cm=(0.0, 0.0), ground_cm=0.0, pi
 
 
 # ---- editor side ----------------------------------------------------------------------------------------------
+
+def _labels_cache(sub=None):
+    """{label} of every actor; a fresh scan each call (cheap enough: ~12k actors in ~50 ms)."""
+    import unreal
+    sub = sub or unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    return {a.get_actor_label() for a in sub.get_all_level_actors()}
+
 
 def save_packages_proven(pkgs):
     """Save these packages and prove each by its file mtime; raises naming any that was not written."""

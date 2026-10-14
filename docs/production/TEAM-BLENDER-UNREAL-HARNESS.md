@@ -50,3 +50,11 @@ report. Snapshots remain after success/failure/timeout; do not delete them while
 still be active. A future explicit quiescent-job cleanup command is needed to bound disk use.
 This is isolated handoff storage, not OS-enforced immutability or protection against an adversary
 changing the private file after the importer's digest check. Legacy evidence remains labelled.
+
+
+## Failure-receipt follow-up
+CLI --report now writes partial failure evidence as well as final verification. Reports publish
+through same-directory temporary file + os.replace. Import state is outcome-unknown before
+request dispatch and reply-received after response; this is observation state, not a proof of
+remote success. A retained import_path/import_artifact lets the operator reconcile a timeout.
+No automatic retries or snapshot cleanup are introduced. Export failures have no invented import path.

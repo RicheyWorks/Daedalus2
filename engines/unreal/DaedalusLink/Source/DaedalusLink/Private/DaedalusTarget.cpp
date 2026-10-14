@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusTarget.h"
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "Animation/AnimSequence.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
 
 #include "DaedalusTactics.h"
 
@@ -100,6 +104,33 @@ FString ADaedalusTarget::ArtFor(const FString& InKind)
 // ADR-055: wear the shipped creature. The crystal stays as the (hidden) collision shape, so every hit, trace and
 // sight line works as before; a small inverted crystal over the head keeps the kind's colour and the orange
 // telegraph, so attacks still read at a glance.
+// A realm creature (bestiary): Sol's rigged export under /Game/Daedalus/Art/Creatures/<id>/, Idle looping.
+// Returns 1 when the mesh was found (the "parts" count DressArt expects), 0 to fall back to the crystal.
+int32 ADaedalusTarget::DressSkeletal()
+{
+	FAssetRegistryModule& Reg = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	TArray<FAssetData> Found;
+	Reg.Get().GetAssetsByPath(FName(*(TEXT("/Game/Daedalus/Art/Creatures/") + SkeletalArt)), Found, true);
+	USkeletalMesh* Mesh = nullptr;
+	UAnimSequence* Idle = nullptr;
+	for (const FAssetData& D : Found)
+	{
+		if (D.AssetClassPath.GetAssetName() == USkeletalMesh::StaticClass()->GetFName() && !Mesh) Mesh = Cast<USkeletalMesh>(D.GetAsset());
+		if (D.AssetClassPath.GetAssetName() == UAnimSequence::StaticClass()->GetFName() && (!Idle || D.AssetName.ToString().Contains(TEXT("Idle")))) Idle = Cast<UAnimSequence>(D.GetAsset());
+	}
+	if (!Mesh) return 0;
+	SkinMesh = NewObject<USkeletalMeshComponent>(this, TEXT("SkinMesh"));
+	SkinMesh->SetMobility(EComponentMobility::Movable);
+	SkinMesh->SetupAttachment(Look);
+	SkinMesh->SetSkeletalMesh(Mesh);
+	SkinMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SkinMesh->RegisterComponent();
+	AddInstanceComponent(SkinMesh);
+	if (Idle) { SkinMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode); SkinMesh->PlayAnimation(Idle, true); }
+	ArtHeight = Mesh->GetBounds().BoxExtent.Z * 2.f;
+	return 1;
+}
+
 void ADaedalusTarget::DressArt()
 {
 	Look = NewObject<USceneComponent>(this, TEXT("Look"));
@@ -110,7 +141,7 @@ void ADaedalusTarget::DressArt()
 	Look->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));   // the art faces +Y; actors face +X
 	Look->RegisterComponent();
 	AddInstanceComponent(Look);
-	ArtParts = DaedalusMob::Build(this, Look, ArtFor(Kind), nullptr, &ArtHeight);
+	ArtParts = SkeletalArt.IsEmpty() ? DaedalusMob::Build(this, Look, ArtFor(Kind), nullptr, &ArtHeight) : DressSkeletal();
 	if (ArtParts == 0)
 	{
 		Look->DestroyComponent();

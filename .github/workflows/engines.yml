@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -47,13 +47,18 @@ jobs:
         run: python3 verify_judge_test.py
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
-          for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test; do
+          for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do
             g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public $t.cpp -o $t && ./$t | tail -1
           done
           cd ../DaedalusLink/Content/Python
           for t in test_daedalus_land_grid test_daedalus_layout test_daedalus_plots test_daedalus_realm_ground test_daedalus_land_sync test_daedalus_districts; do
             python3 $t.py | tail -1
           done
+      - name: realm deed writer order and committed fixture
+        working-directory: tools/realm
+        run: |
+          python3 test_portal_lands.py
+          python3 portal_lands.py --check
       - name: the Claude Unreal connector, end to end against a stand-in editor
         run: |
           C=../../../connectors/claude-unreal-connector

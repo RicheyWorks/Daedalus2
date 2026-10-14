@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusEncounters.h"
+#include "DaedalusBestiaryCore.h"
 
 #include "DaedalusHero.h"
 #include "DaedalusTarget.h"
@@ -148,12 +149,31 @@ bool UDaedalusEncounters::FindGround(const APawn* Player, FVector& Out)
 	return false;
 }
 
+static FString RealmOfPlayer(UWorld* W)
+{
+	for (TActorIterator<ADaedalusHero> It(W); It; ++It) return It->RealmNow();
+	return TEXT("WORLD-ZERO");
+}
+
 ADaedalusTarget* UDaedalusEncounters::SpawnFoe(const FVector& At, int32 RuleIndex)
 {
 	UWorld* W = GetWorld();
-	const TArray<FDaedalusFoeRule>& R = ADaedalusHero::FoeRules();
-	if (!W || R.Num() == 0) return nullptr;
-	const FDaedalusFoeRule& Rule = R[RuleIndex % R.Num()];
+	if (!W) return nullptr;
+	// In a 3D realm the pack comes from that realm's bestiary (DaedalusBestiaryCore, Sol's creatures); World Zero
+	// keeps the server's foe rules.
+	const daedalus::bestiary::Foe* B = daedalus::bestiary::Pick(TCHAR_TO_UTF8(*RealmOfPlayer(W)), Rng.FRand());
+	FDaedalusFoeRule Rule;
+	if (B)
+	{
+		Rule.Kind = UTF8_TO_TCHAR(B->Kind.c_str()); Rule.Title = UTF8_TO_TCHAR(B->Title.c_str());
+		Rule.Life = B->Life; Rule.Power = B->Power; Rule.Exp = B->Exp;
+	}
+	else
+	{
+		const TArray<FDaedalusFoeRule>& R = ADaedalusHero::FoeRules();
+		if (R.Num() == 0) return nullptr;
+		Rule = R[RuleIndex % R.Num()];
+	}
 	const FTransform Where(FRotator(0.f, Rng.FRandRange(0.f, 360.f), 0.f), At + FVector(0.f, 0.f, 60.f));
 	// AlwaysSpawn: the spot was traced to the ground already, and a deferred foe has no collider yet, so the
 	// engine's adjust pass only logs "FindTeleportSpot ... root component not being a collider" (28x a Play, 2026-10-13).
@@ -162,6 +182,7 @@ ADaedalusTarget* UDaedalusEncounters::SpawnFoe(const FVector& At, int32 RuleInde
 	if (!T) return nullptr;
 	T->Kind = Rule.Kind;
 	T->Title = Rule.Title;
+	if (B) T->SkeletalArt = UTF8_TO_TCHAR(B->ArtId.c_str());
 	T->ExpValue = Rule.Exp;
 	T->Health = Rule.Life * 30.f;
 	T->Power = Rule.Power;
