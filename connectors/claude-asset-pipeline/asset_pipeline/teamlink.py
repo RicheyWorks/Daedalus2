@@ -683,7 +683,7 @@ def main(argv=None):
     s.add_argument("--port", type=int, default=PORT)
     s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
                    help="where to write {url} for clients to find the broker ('' for none)")
-    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch"):
+    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
         p.add_argument("--port", type=int, default=PORT)
@@ -704,6 +704,8 @@ def main(argv=None):
             p.add_argument("--note", default="", help="claim: what for (shown to whoever is refused)")
             p.add_argument("--ttl", type=float, default=LOCK_TTL_S, help="claim: seconds before a quiet holder's claim expires")
             p.add_argument("--force", action="store_true", help="release: take a lock from a quiet holder")
+        if name == "ack":
+            p.add_argument("id", type=int, help="the broker id you handled (from inbox/wait)")
         if name == "watch":
             p.add_argument("--after", type=int, default=-1, help="broker id to start after (-1: now)")
             p.add_argument("--minutes", type=float, default=30)
@@ -726,6 +728,8 @@ def main(argv=None):
         out = {"messages": link.pending()}
     elif a.cmd == "inbox":
         out = {"messages": link.inbox()}
+    elif a.cmd == "ack":
+        out = link.ack(a.id) or {"ok": False}
     elif a.cmd == "claim":
         ok, st = link.lock(a.name, a.note, a.ttl)
         out = {"ok": ok, "lock": st}

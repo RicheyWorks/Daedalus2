@@ -60,7 +60,8 @@ python -m asset_pipeline.teamlink claim unreal --me unreal-team --note "build 56
 python -m asset_pipeline.teamlink claim merge-queue --me team-codex --note "57-72"
 python -m asset_pipeline.teamlink release unreal --me unreal-team                            --force takes it from a quiet holder
 python -m asset_pipeline.teamlink locks                                                       who has what, for how long
-python -m asset_pipeline.teamlink inbox --me unreal-team                                      requests/pings to me that I haven't acked, oldest first, with age
+python -m asset_pipeline.teamlink inbox --me unreal-team                                      requests/pings to me that I have not acked, oldest first, with age
+python -m asset_pipeline.teamlink ack 28937 --me unreal-team                                  I handled it: it leaves my inbox, the sender gets a receipt
 python -m asset_pipeline.teamlink watch --me team-codex --minutes 60                          a terminal: one line per message as it arrives
 ```
 
