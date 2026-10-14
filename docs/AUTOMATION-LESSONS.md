@@ -975,3 +975,5 @@ that waits for the write-up at the end of the night is a lesson Poot gets a day 
 6. H6 Lock rule on the pinned POD checklist: mutating connector calls only while holding `unreal`.
 7. H7 Per-call log from the proxy (tool, ms, bytes, error) to link/mcp-calls.jsonl.
 Claude keeps feeding Poot a line each time the connector helps or hurts, the same hour, on topic harness-needs.
+
+2026-10-14 — Shardstead / new realms: extend the native DesktopGames registry rather than create another cabinet. Reuse shared rig builders and PortalQuest authoritative event progress. Portable production and survival rules are source deliverables; they do not imply server persistence, wallet ownership or visible Unreal acceptance. Host-owned cycles and revision-checked decisions are needed before multiplayer launch. Original reference-game mechanics need original characters, plots and assets. Separate personal survival days from always-on settlement time to avoid offline starvation. Headless Blender export succeeded despite an addon port-in-use warning; no live connector was restarted.

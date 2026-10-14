@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusDesktopPongCore.h"
+#include "DaedalusDesktopMinesweeperCore.h"
 #include "DaedalusDesktopMazeCore.h"
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
@@ -12,6 +13,7 @@ namespace daedalus { namespace desktop {
 struct Entry { std::string Id, Title, Controls; };
 inline const std::vector<Entry>& Catalog() {
     static const std::vector<Entry> Entries{
+        {"minesweeper","Minesweeper","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
         {"pong","Pong","Up/Down or left stick: paddle"},
         {"dungeon","Dungeon Prototype","Move: WASD/arrows or left stick"},
         {"asteroids","Asteroids","Left/Right: turn; Up: thrust; J/X: shoot"},
@@ -27,6 +29,7 @@ inline const std::vector<Entry>& Catalog() {
     return Entries;
 }
 inline std::unique_ptr<Game> CreateGame(const std::string& Id) {
+    if(Id=="minesweeper") return std::make_unique<MinesweeperGame>();
     if(Id=="pong") return std::make_unique<PongGame>();
     if(Id=="dungeon") return std::make_unique<DungeonGame>();
     if(Id=="asteroids") return std::make_unique<AsteroidsGame>();
