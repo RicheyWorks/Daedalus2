@@ -1,0 +1,23 @@
+name: Cast manifest identity parity
+on:
+  pull_request:
+    paths:
+      - 'tools/realms/cast_manifest_parity*'
+      - 'data/art/**'
+      - 'engines/unreal/DaedalusLink/Content/Casts/**'
+      - '.github/workflows/cast-parity.yml'
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/realms/cast_manifest_parity_test.py
+      - run: python tools/realms/cast_manifest_parity.py --dcs engines/unreal/DaedalusLink/Content/Casts/gallery-city.dcs --manifest data/art/gallery/production-manifest.json --overlay data/art/cast-role-aliases.json
+      - run: python tools/realms/cast_manifest_parity.py --dcs engines/unreal/DaedalusLink/Content/Casts/parcels.dcs --manifest data/art/parcels/production-manifest.json --overlay data/art/cast-role-aliases.json
+      - run: python tools/realms/cast_manifest_parity.py --dcs engines/unreal/DaedalusLink/Content/Casts/bricks.dcs --manifest data/art/bricks/production-manifest.json --overlay data/art/cast-role-aliases.json
+      - run: python tools/realms/cast_manifest_parity.py --dcs engines/unreal/DaedalusLink/Content/Casts/labyrinth.dcs --manifest data/art/labyrinth/production-manifest.json --overlay data/art/cast-role-aliases.json
