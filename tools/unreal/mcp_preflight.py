@@ -89,10 +89,20 @@ def inspect(project,engine):
               fields.get('BindAddress')=='127.0.0.1' and fields.get('ReuseAddressAndPort','').lower()=='false')
     configured=(not errors and all(plugins[name]['explicit_enabled'] is True for name in ('ModelContextProtocol','AllToolsets')) and
                 (plugins['ToolsetRegistry']['explicit_enabled'] is True or plugins['ToolsetRegistry']['enabled_via_declared_dependency']) and loopback)
-    return {'schema_version':1,'project':str(project),'project_sha256':digest,'plugins':plugins,
+    findings=[]
+    for name in ('ModelContextProtocol','AllToolsets'):
+        if plugins[name]['explicit_enabled'] is not True:
+            findings.append({'code':'PLUGIN_NOT_EXPLICITLY_ENABLED','plugin':name,'observed':plugins[name]['explicit_enabled']})
+    if plugins['ToolsetRegistry']['explicit_enabled'] is not True and not plugins['ToolsetRegistry']['enabled_via_declared_dependency']:
+        findings.append({'code':'TOOLSET_REGISTRY_ENABLE_NOT_ESTABLISHED','plugin':'ToolsetRegistry'})
+    if not loopback:
+        findings.append({'code':'LOOPBACK_OVERRIDE_NOT_ESTABLISHED','port':8000,
+                         'matching_rows':len(overrides),'array_edits':len(array_edits)})
+    return {'schema_version':1,'available':not errors,'project':str(project),'project_sha256':digest,'plugins':plugins,
+            'status':'configuration-unavailable' if errors else 'configuration-matches' if configured else 'configuration-mismatch','findings':findings,
             'descriptors':descriptors,'errors':errors,'listener_override_rows':overrides,
             'listener_array_edits':array_edits,'config_sha256':hashlib.sha256(config_raw).hexdigest(),
-            'loopback_override_consistent':loopback,'configuration_matches_request':configured,
+            'loopback_override_consistent':loopback,'configuration_matches_request':configured if not errors else None,
             'server_ready':None,'editor_queried':False,'mutation':False,
             'scope':'Project/default config and declared dependencies only; merged config, loaded modules and MCP readiness unverified'}
 
@@ -102,7 +112,15 @@ def main(argv=None):
     parser.add_argument('--project',required=True,type=Path)
     parser.add_argument('--engine',required=True,type=Path)
     args=parser.parse_args(argv)
-    result=inspect(args.project,args.engine)
+    try:
+        result=inspect(args.project,args.engine)
+    except (OSError,ValueError,RecursionError) as error:
+        result={'schema_version':1,'available':False,'status':'configuration-unavailable',
+                'configuration_matches_request':None,'project':str(args.project),'engine':str(args.engine),
+                'errors':[{'code':'CONFIGURATION_UNAVAILABLE' if isinstance(error,OSError) else 'CONFIGURATION_INVALID',
+                           'type':type(error).__name__,'message':str(error)[-2000:]}],
+                'server_ready':None,'editor_queried':False,'mutation':False,
+                'scope':'Unavailable file evidence; no inference about the running editor or MCP server'}
     print(json.dumps(result,indent=2))
     return 0 if result['configuration_matches_request'] else 2
 

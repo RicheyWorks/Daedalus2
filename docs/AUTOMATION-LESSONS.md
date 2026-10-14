@@ -889,3 +889,7 @@ Use tools/unreal/mcp_preflight.py for file-only project/defaultINI/descriptor di
 ### Treat ambiguous MCP configuration as unverified (2026-10-14)
 Validate plugin/dependency arrays with explicit booleans and unique names. Parse listener fields uniquely; duplicate bind fields or array clear/remove edits must not yield confident loopback agreement. Bound JSON/INI reads and reject nonfinite JSON. Hash exactINI bytes. LatestPoot29673 ownerupdate supersedesolderpause; coordinate currentowner, never act from stalePID/pause snapshots. Actualconfig reread stillmatches; no serverreadyclaim orsetupaction.
 
+
+### Structured MCP diagnostic failures (2026-10-14)
+Preflight CLI emits JSON for unreadable/invalid project orINI data with available:false and agreement:null, preserving unknownserverreadiness. Descriptorunavailability also leaves agreementunknown. Readable mismatches identify plugin enable andlistener reasons. Missingfiles are not missingservers, and configurationdiagnostics neverperform editor/setup actions.
+
