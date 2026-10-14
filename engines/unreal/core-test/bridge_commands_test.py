@@ -42,7 +42,7 @@ check("the built-ins are still there", {"ping", "execute_python", "viewport_scre
 # daedalus.steps: one editor tick per item (the GPU-watchdog fix at the root, 2026-10-13)
 import types
 code = "def steps():\n    for i in range(5):\n        yield 'item %d' % i\n    return {'done': 5}\n"
-gen = daedalus_bridge_commands.run_steps({"code": code})
+gen = daedalus_bridge_commands.run_steps({"code": code, "budget_ms": 0})
 check("daedalus.steps is a generator command (the bridge steps it once per tick)", isinstance(gen, types.GeneratorType))
 ticks = 0
 try:
@@ -50,7 +50,15 @@ try:
         next(gen); ticks += 1
 except StopIteration as stop:
     result = stop.value
-check("five items took five ticks: one yield per item", ticks == 5, ticks)
+check("with a zero budget, five items took five ticks: one yield per item", ticks == 5, ticks)
+fast = daedalus_bridge_commands.run_steps({"code": code, "budget_ms": 1000})
+ticks = 0
+try:
+    while True:
+        next(fast); ticks += 1
+except StopIteration as stop:
+    r_fast = stop.value
+check("with a budget, cheap items run back to back inside one tick", ticks <= 1 and r_fast["steps"] == 5, ticks)
 check("every yielded value is collected and the return value is the result", result["steps"] == 5 and result["yielded"][0] == "item 0" and result["result"] == {"done": 5}, result)
 bad = daedalus_bridge_commands.run_steps({"code": "def steps():\n    yield 1\n    raise RuntimeError('boom at 2')\n"})
 try:

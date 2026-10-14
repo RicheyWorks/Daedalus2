@@ -241,7 +241,7 @@ def lay(realm, rings=6):
     return {"realm": realm, "origin": origin, "made": made, "lands": {k: lands[k] for k in ("free_cells", "made", "skipped")}}
 
 
-CASTS = {"GALLERY-CITY": "gallery-city", "PARCELS": "parcels", "BRICKS": "bricks", "LABYRINTH": "labyrinth"}
+CASTS = {"GALLERY-CITY": "gallery-city", "PARCELS": "parcels", "BRICKS": "bricks", "LABYRINTH": "labyrinth", "WORLD-ZERO": "world-zero"}
 CAST_RADIUS_CM = 6000.0
 
 
@@ -272,12 +272,16 @@ def lay_cast(realm):
     catalog = CASTS[realm]
     with open(_dcs_path(catalog), encoding="utf-8") as f:
         roles = cast_roles(f.read())
-    origin = ORIGINS[realm]
-    centre = markers(origin)["Spawn"]
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     have = _labels()
+    if realm == "WORLD-ZERO":   # the hub has no Spawn marker: the cross-realm NPCs ring the PlayerStart
+        ps = next((a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"), None)
+        l = ps.get_actor_location() if ps else unreal.Vector(ORIGINS[realm][0], ORIGINS[realm][1], GROUND_Z + 100.0)
+        centre = (l.x, l.y, l.z - 100.0, 0.0)
+    else:
+        centre = markers(ORIGINS[realm])["Spawn"]
     made, bound, unbound = 0, [], []
-    for who, (x, y, z, yaw) in zip(roles, cast_ring(len(roles), centre)):
+    for who, (x, y, z, yaw) in zip(roles, cast_ring(len(roles), centre, ground=centre[2], radius=CAST_RADIUS_CM if realm != "WORLD-ZERO" else 2500.0)):
         label = "Talker_%s_%s" % (realm, "".join(w[:1].upper() + w[1:] for w in "".join(c if c.isalnum() else " " for c in who).split()))
         if label in have:
             t = have[label]
@@ -350,6 +354,104 @@ def place_creatures(realm):
     return {"realm": realm, "imported": len(s["imported"]), "skipped": len(s["skipped"]), "failed": s["failed"], "placed": made, "no_mesh": no_mesh}
 
 
+PORTALS = {   # marker -> (Target, Via, Detail) for a 3D realm's crossings; the hub's four gates point outward
+    "Gate": ("WORLD-ZERO", "gate", ""),
+    "Dock": ("OCEAN", "dock", "boat:{realm_lower}-dock"),
+    "SubDock": ("OCEAN", "dock", "sub:{realm_lower}-airlock"),
+}
+HUB_GATES = {"GALLERY-CITY": (1.0, 0.0), "PARCELS": (-1.0, 0.0), "BRICKS": (0.0, 1.0), "LABYRINTH": (0.0, -1.0)}   # east/west/north/south of the PlayerStart
+
+
+def portal_plan(realm):
+    """[(label, target, via, detail, (x, y, z, yaw))]: one walk-in portal per marker (daedalus_realm_ground markers),
+    or, for World Zero, four gates 40 m from the spawn pointing at the four realms. Pure."""
+    out = []
+    if realm == "WORLD-ZERO":
+        for to, (ex, ny) in HUB_GATES.items():
+            out.append(("Portal_WORLD-ZERO_to_%s" % to, to, "gate", "", (ex * 4000.0, ny * 4000.0, 0.0, 0.0)))
+        # the hub's docks (Session: WORLD-ZERO HasDocks): a boat pier and a sub airlock south-east of the spawn
+        out.append(("Portal_WORLD-ZERO_Dock", "OCEAN", "dock", "boat:world-zero-dock", (3000.0, -3000.0, 0.0, 0.0)))
+        out.append(("Portal_WORLD-ZERO_SubDock", "OCEAN", "dock", "sub:world-zero-airlock", (3000.0, -4200.0, 0.0, 0.0)))
+        return out
+    m = markers(ORIGINS[realm])
+    for name, (target, via, detail) in PORTALS.items():
+        if name in m:
+            x, y, z, yaw = m[name]
+            out.append(("Portal_%s_%s" % (realm, name), target, via, detail.format(realm_lower=realm.lower()), (x, y, z, yaw)))
+    return out
+
+
+def lay_portals(realm):
+    """Spawn ADaedalusRealmPortal at each marker (idempotent by label). World Zero's are relative to the PlayerStart."""
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    have = _labels()
+    base = (0.0, 0.0, 0.0)
+    if realm == "WORLD-ZERO":
+        ps = next((a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"), None)
+        l = ps.get_actor_location() if ps else unreal.Vector(ORIGINS[realm][0], ORIGINS[realm][1], GROUND_Z + 100.0)
+        base = (l.x, l.y, l.z - 100.0)
+    made = 0
+    for label, target, via, detail, (x, y, z, yaw) in portal_plan(realm):
+        if label in have:
+            continue
+        a = sub.spawn_actor_from_class(unreal.DaedalusRealmPortal, unreal.Vector(base[0] + x, base[1] + y, base[2] + z + 250.0), unreal.Rotator(0.0, yaw, 0.0))
+        a.set_editor_property("target", target)
+        a.set_editor_property("via", via)
+        a.set_editor_property("detail", detail)
+        a.set_actor_label(label)
+        a.set_folder_path("Realms/%s/Portals" % realm if realm != "WORLD-ZERO" else "Daedalus/Portals")
+        a.tags = [unreal.Name("Portal"), unreal.Name("Realm:%s" % realm)]
+        made += 1
+    __import__('daedalus_plots').save_world()
+    return {"realm": realm, "made": made, "portals": len(portal_plan(realm))}
+
+
+def lay_ocean_markers():
+    """The Ocean is Sol's/Poot's host (harbor at the +E/-N corner): give it the markers the hero lands on
+    (Spawn/Dock/SubDock tagged Realm:OCEAN) at Poot's dock actors, so a boat from any realm arrives on the pier
+    and a shore landing returns home. Idempotent by label."""
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    have = _labels()
+    docks = [a for a in sub.get_all_level_actors() if any(str(t) == "Realm:OCEAN" for t in a.tags) and "Docks" in str(a.get_folder_path())]
+    if not docks:
+        return {"realm": "OCEAN", "made": 0, "why": "no Realm:OCEAN actors in a Docks folder"}
+    docks.sort(key=lambda a: a.get_actor_label())
+    made = 0
+    spots = {"Dock": docks[0], "SubDock": docks[-1], "Spawn": docks[0]}
+    for name, a in spots.items():
+        label = "%s_OCEAN" % name
+        if label in have:
+            continue
+        l = a.get_actor_location()
+        m = sub.spawn_actor_from_class(unreal.TargetPoint, unreal.Vector(l.x, l.y + (400.0 if name == "Spawn" else 0.0), l.z + 150.0), unreal.Rotator(0.0, 0.0, 0.0))
+        m.set_actor_label(label)
+        m.set_folder_path("Realms/OCEAN/Markers")
+        m.tags = [unreal.Name(name), unreal.Name("Realm:OCEAN")]
+        made += 1
+    __import__('daedalus_plots').save_world()
+    return {"realm": "OCEAN", "made": made, "at": [d.get_actor_label() for d in docks][:3]}
+
+
+def lay_cast_steps(realms):
+    """One realm per editor tick: lay_cast for each (daedalus.steps shape)."""
+    out = {}
+    for r in realms:
+        if r in CASTS:
+            out[r] = lay_cast(r)
+            yield "%s cast: %s" % (r, out[r])
+    return out
+
+
+def lay_portals_steps(realms):
+    out = {}
+    for r in realms:
+        out[r] = lay_portals(r)
+        yield "%s portals: %s" % (r, out[r])
+    out["OCEAN"] = lay_ocean_markers()
+    yield "OCEAN markers: %s" % out["OCEAN"]
+    return out
+
+
 def report(realm):
     import daedalus_plots as P
     have = _labels()
@@ -358,5 +460,5 @@ def report(realm):
     return {"realm": realm, "actors": len(mine), "hub": "Hub_%s" % realm in have,
             "markers": sorted(l for l in mine if l.endswith("_" + realm) and not l.startswith("Hub_")),
             "kit": sum(1 for l in mine if l.startswith("Kit_")), "cast": sum(1 for l in mine if l.startswith("Talker_")),
-            "creatures": sum(1 for l in mine if l.startswith("Creature_")),
+            "creatures": sum(1 for l in mine if l.startswith("Creature_")), "portals": sum(1 for l in mine if l.startswith("Portal_")),
             "lands": P.report(realm)}

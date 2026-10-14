@@ -19,7 +19,7 @@ import os
 
 import unreal
 
-_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None}
+_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None, "human": 0}
 
 
 # ---------------------------------------------------------------------------------------------------- the world
@@ -151,6 +151,25 @@ def _check(name, ok, detail=""):
     return {"check": name, "pass": bool(ok), "detail": detail}
 
 
+HUMAN_KEYS = ("LeftMouseButton", "RightMouseButton", "W", "A", "S", "D", "SpaceBar", "E", "Escape", "Tab", "I", "LeftShift",
+              "Gamepad_LeftX", "Gamepad_LeftY", "Gamepad_FaceButton_Bottom")
+
+
+def _human_input():
+    """True when a person is driving the Play window right now (23:37: Richey's mouse locked into the viewport
+    mid-run and the hero walked off the script). Checked every frame while a scenario runs."""
+    try:
+        pc = unreal.GameplayStatics.get_player_controller(world(), 0)
+        if not pc:
+            return False
+        for k in HUMAN_KEYS:
+            if pc.is_input_key_down(unreal.Key(k)):
+                return True
+    except Exception:
+        return False
+    return False
+
+
 def _tick(_dt):
     if _run["gen"] is None:
         return
@@ -158,6 +177,8 @@ def _tick(_dt):
         _finish(error="Play stopped")
         return
     _run["frames"] += 1
+    if _run["frames"] % 5 == 0 and _human_input():
+        _run["human"] += 1
     try:
         next(_run["gen"])
     except StopIteration as done:
@@ -174,6 +195,9 @@ def _finish(result=None, error=None):
         checks = result.get("checks", [])
         result["passed"] = sum(1 for c in checks if c["pass"])
         result["total"] = len(checks)
+        result["human_input_frames"] = _run["human"]
+        if _run["human"]:   # a person touched the controls: the numbers are not the scenario's
+            result["interrupted"] = "human input on %d sampled frames; rerun with the Play window unfocused" % _run["human"]
     _run["result"] = result
 
 
@@ -187,7 +211,7 @@ def play_scenario(p):
     if _run["handle"] is not None:
         unreal.unregister_slate_post_tick_callback(_run["handle"])
     full_speed()
-    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None)
+    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0)
     _run["handle"] = unreal.register_slate_post_tick_callback(_tick)
     return {"started": name}
 
@@ -1386,6 +1410,82 @@ def scenario_mounts(p):
     return {"checks": checks}
 
 
+def scenario_portals(p):
+    """Walk-in crossings (BASE-LAYER row 10, ADaedalusRealmPortal): the hub's east gate takes the hero to Gallery
+    City by overlap alone, the cooldown keeps the landing gate from bouncing him back, Gallery's gate home returns
+    him, and a dock portal asks the Ocean (refused or accepted by the session rules, never a crash)."""
+    h = hero()
+    w = world()
+    portals = {a.get_actor_label(): a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusRealmPortal)}
+    checks = [_check("portals are laid in the world (hub gates + realm gates/docks)", len(portals) >= 4 + 3 * 4, str(len(portals)))]
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    east = portals.get("Portal_WORLD-ZERO_to_GALLERY-CITY")
+    if east:
+        h.teleport(east.get_actor_location() + unreal.Vector(-700, 0, 0), 0.0, True)
+        yield from _frames(2)
+        r = east.cross(h)   # the same path the overlap takes
+        yield from _frames(4)
+        checks.append(_check("the east gate carries the hero to Gallery City", r.startswith("ok WORLD-ZERO -> GALLERY-CITY") and h.realm_now() == "GALLERY-CITY", r))
+        home = portals.get("Portal_GALLERY-CITY_Gate")
+        early = home.cross(h) if home else "no portal"
+        checks.append(_check("the landing gate is on cooldown, so no bounce", early == "cooldown", early))
+        for _ in range(int(3.5 * 30)):
+            yield
+        back = home.cross(h) if home else "no portal"
+        yield from _frames(3)
+        checks.append(_check("after the cooldown the gate takes him home", back.startswith("ok GALLERY-CITY -> WORLD-ZERO") and h.realm_now() == "WORLD-ZERO", back))
+    dock = portals.get("Portal_PARCELS_Dock")
+    if dock:
+        h.switch_realm("parcels", "gate", "")
+        yield from _frames(3)
+        for _ in range(int(3.5 * 30)):
+            yield
+        r = dock.cross(h)
+        yield from _frames(2)
+        checks.append(_check("a dock portal asks the session for the Ocean (boat)", r.startswith("ok PARCELS -> OCEAN") or r.startswith("refused"), r))
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    return {"checks": checks}
+
+
+def scenario_bestiary(p):
+    """The realm's bestiary (BASE-LAYER row 6, DaedalusBestiaryCore): packs spawned in Gallery City are gallery
+    creatures (kinds from the table) wearing Sol's skeletal art; back in World Zero the crystal kinds return."""
+    h = hero()
+    w = world()
+    checks = []
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    h.switch_realm("gallery-city", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    made = sum(h.spawn_pack() for _ in range(3))
+    yield from _frames(4)
+    new = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    kinds = sorted({str(a.get_editor_property("kind")) for a in new})
+    gallery = {"SMUDGELING", "THUMBTACK_BEETLE", "CANVAS_MOTH", "EASEL_STRIDER", "TURPENTINE_TOAD", "MOSAIC_HOUND", "GILDED_FRAME_MIMIC", "SENTINEL_BUST", "GREY_WASH"}
+    dressed = sum(1 for a in new if a.get_editor_property("skin_mesh") is not None)
+    checks.append(_check("packs spawn in Gallery City", made >= 2 and len(new) >= 2, "made=%d new=%d" % (made, len(new))))
+    checks.append(_check("every foe is a gallery creature from the bestiary", bool(kinds) and set(kinds) <= gallery, str(kinds)))
+    checks.append(_check("each wears its skeletal art (not the crystal)", new and dressed == len(new), "dressed=%d/%d" % (dressed, len(new))))
+    for a in new:
+        a.destroy_actor()
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    h.spawn_pack()
+    yield from _frames(3)
+    home = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    hk = sorted({str(a.get_editor_property("kind")) for a in home})
+    checks.append(_check("home, the server's crystal kinds are back", bool(hk) and not (set(hk) & gallery), str(hk)))
+    for a in home:
+        a.destroy_actor()
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1410,6 +1510,8 @@ SCENARIOS = {
     "realm_ground": scenario_realm_ground,
     "realm_host": scenario_realm_host,
     "mounts": scenario_mounts,
+    "portals": scenario_portals,
+    "bestiary": scenario_bestiary,
     "control": scenario_control,
     "stage": scenario_stage,
 }
