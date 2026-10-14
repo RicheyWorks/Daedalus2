@@ -41,6 +41,26 @@ class HandoffTest(unittest.TestCase):
         self.assertNotIn(('b', mid), self.broker.acked)
         self.assertEqual(live.summary(self.state)['pending_count'], 1)
 
+    def test_human_ack_text_is_not_hidden_as_a_transport_receipt(self):
+        mid = self.a.send('b', 'ack', {'text':'Recovery complete; heads ready'}, reply_to=99)
+        live.collect(self.state, self.b)
+        self.assertIn(str(mid), self.state['pending'])
+        self.assertEqual(live.summary(self.state)['messages'][0]['text'], 'Recovery complete; heads ready')
+
+    def test_only_pure_broker_receipts_are_filtered(self):
+        mid = self.put(); self.b.ack(mid)
+        state = dict(version=1, me='a', cursor=mid, pending={}, outgoing={})
+        live.collect(state, self.a)
+        self.assertEqual(state['pending'], {})
+        meaningful = self.b.send('a', 'ack', {'id':mid,'text':'build started'}, reply_to=mid)
+        live.collect(state, self.a)
+        self.assertIn(str(meaningful), state['pending'])
+
+    def test_non_object_body_is_visible_instead_of_crashing_summary(self):
+        mid = self.broker.send('a','b','note','plain text')
+        live.collect(self.state, self.b)
+        self.assertEqual(live.summary(self.state)['messages'][0]['text'], 'plain text')
+
     def test_explicit_response_reaches_sender_and_ack_is_separate(self):
         mid = self.put(); live.collect(self.state, self.b)
         live.respond(self.state, self.b, mid, 'accepted', 'building now')
@@ -189,6 +209,11 @@ class HandoffTest(unittest.TestCase):
         run('b', self.path, 'respond', '--id',str(mid),'--status','accepted','--text','building')
         result = run('a', a_path, 'poll')
         self.assertEqual(result['requests'][0]['state'], 'accepted')
+        result = run('b', self.path, 'replay', '--after','0')
+        self.assertEqual(result['cursor'], 0)
+        result = run('b', self.path, 'poll')
+        self.assertEqual(result['pending_count'], 1)
+        self.assertEqual(result['messages'][0]['state'], 'accepted')
 
 
 if __name__ == '__main__':

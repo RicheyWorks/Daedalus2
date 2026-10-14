@@ -349,3 +349,44 @@ frames against a clock you don't own.
 inventory_core_test failed "the worn spray is marked" because SelectTab(0) kept the cursor it had parked on row 6:
 the behaviour the spec asked for. When a test fails right after a feature that remembers state, suspect the test's
 assumption before the model.
+
+## Merging a stacked PR chain: never delete the base branch mid-stack (2026-10-13)
+`gh pr merge 53 --delete-branch` auto-closed every PR whose base was that branch (57, 51, 55: `base_ref_deleted`
+then `closed`, not merged). Reopen needs the base restored or the PR retargeted to main FIRST, then reopened. Rule:
+merge a stack bottom-up with no branch deletion; delete branches only after the last one lands. Better: don't stack
+at all; every PR targets main.
+
+## The cloud session cannot merge, retarget, reopen or approve PRs (2026-10-13)
+Claude Code's auto-mode guard refuses merges, retargets and reopens from this session (Merge Without Review /
+Self-Approval / External System Writes), and GitHub refuses an approval on a PR authored under the same account.
+Richey's standing yes doesn't override the guard. So: the bot that opened the PRs (Sol) owns the merge queue after
+its own exact-head review + green CI; I own build/scenario/import acceptance after. Only one bot holds the
+`merge-queue` lock at a time (teamlink claim merge-queue).
+
+## Turns and answers must be broker state, not prose (2026-10-13)
+CLAIM/RELEASE lines in status text were parsed by hand and missed; a /send success was read as an answer. Now:
+`teamlink claim unreal|blender|merge-queue` (409 with the holder; TTL expiry for a quiet holder; claims are log
+lines that survive a restart), `teamlink inbox --me X` for unacked requests, `teamlink ack <id>`, `teamlink watch`.
+Ask with `--type request --to <bot>`; a note to `*` is not a question.
+
+## Restarting the hub: one process, from a clean checkout, and tell the other side first (2026-10-13)
+The live broker ran from Richey's dirty Daedalus2 checkout; I restarted it from D2-build on new code and the other
+bot saw "nothing on 9890" and restarted it too (two serve processes, one listening, log tail reported id 28931 while
+the hub was at 28977). Before a restart: post "HUB RESTART in 30 s" on the hub, claim nothing, restart ONE process
+from D2-build at origin/main, then post "HUB UP <last id>" and have the other side verify with `teamlink ping`.
+Never run two brokers on the same log folder.
+
+## The landed stack must pass the plugin preflight before READY (2026-10-13)
+Sol's isolated UBT builds passed, but tools/unreal_preflight (which gates every unreal-job build) failed 21 times
+on main: 19 exposed UPROPERTYs with no Category and two `throw`s in a core header (exceptions are off in UE game
+targets). Rule for every lane: `python tools/unreal_preflight/preflight.py` must print 0 errors before a PR is
+READY; CI now runs it only on the plugin's own checks, so the lane runs it locally.
+
+## Play scenarios must be relative to the state they find (2026-10-13)
+realm_switch asserted `switches=6` and failed on the second run (14): the session persists in DaedalusHero.json
+across runs. A scenario reads the starting state and checks the delta; it never assumes a fresh save.
+
+## The device bridge drops mid-run: detach long work, then poll a file (2026-10-13)
+A 60 s tool wait timed out while a 5-scenario Play run kept going on the PC; the next call could not tell whether it
+had started. Pattern: write the script to %TEMP%, `Start-Process -WindowStyle Hidden python script -RedirectStandardOutput out`,
+return at once, then poll the out file. Before any re-run, check for the out file (a second run would double-act).

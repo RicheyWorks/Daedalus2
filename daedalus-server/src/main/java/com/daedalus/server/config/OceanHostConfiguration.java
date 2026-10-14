@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(name="daedalus.ocean.enabled",havingValue="true")
+@ConditionalOnProperty(name = "daedalus.ocean.enabled", havingValue = "true")
 public class OceanHostConfiguration {
     @Bean(destroyMethod="close")
     public OceanHostService oceanHostService(

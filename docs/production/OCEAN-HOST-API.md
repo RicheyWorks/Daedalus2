@@ -44,3 +44,11 @@ SecurityConfig, WorldHub, WorldService and the Unreal loader are unchanged. The
 sector is not automatically registered in /worlds, and no player is moved into
 it by these routes. Native authenticated client binding, server realm registration
 and actual dock-to-realm transition/visible Play acceptance remain open.
+
+Operator settings are listed under `daedalus.ocean` in application.yml. The
+`DAEDALUS_OCEAN_ENABLED` environment flag defaults to false. When enabling it,
+provide `DAEDALUS_OCEAN_DIRECTORY` and `DAEDALUS_OCEAN_SEED` explicitly. Optional
+`DAEDALUS_OCEAN_CAPACITY` defaults to 128; `DAEDALUS_OCEAN_MIN_X` and
+`DAEDALUS_OCEAN_MAX_X`, with corresponding Y/Z variables, select the sector with the same defaults
+as the host configuration. No development directory or seed is supplied as a
+production fallback. Configuration discovery checks cover these documented keys.

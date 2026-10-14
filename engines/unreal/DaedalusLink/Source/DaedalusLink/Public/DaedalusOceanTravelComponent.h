@@ -91,24 +91,24 @@ USTRUCT(BlueprintType)
 struct FDaedalusOceanDock
 {
     GENERATED_BODY()
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FString Id;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FString Realm;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FString ArrivalAnchor;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bUnderwater = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FString Id;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FString Realm;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FString ArrivalAnchor;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") bool bUnderwater = false;
     // Authoritative world-space boarding position, in Unreal centimetres.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FVector BoardingLocation = FVector::ZeroVector;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FVector ExitLocation = FVector::ZeroVector;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) double BoardingRadiusCm = 500.0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FVector BoardingLocation = FVector::ZeroVector;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FVector ExitLocation = FVector::ZeroVector;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") double BoardingRadiusCm = 500.0;
 };
 
 USTRUCT(BlueprintType)
 struct FDaedalusOceanConnection
 {
     GENERATED_BODY()
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FString DepartureId;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FString DestinationId;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bBoats = false;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bSubmarines = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FString DepartureId;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") FString DestinationId;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") bool bBoats = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Daedalus|Ocean") bool bSubmarines = false;
 };
 
 /** Server-side eligibility only. The realm loader consumes the returned route. */
