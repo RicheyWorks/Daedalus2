@@ -47,5 +47,26 @@ g = L.groups({"AMF": (4000000, 2000000, 6000, 6300), "AMF_Pets": (3999800, 20002
               "Disk": (4000000, 4000000, 9000, 9000)})
 check("a level sitting on another island moves with it", any(set(m) == {"AMF", "AMF_Pets"} for m, _ in g.values()))
 check("separate islands stay separate groups", len(g) == 2)
+
+# ---- ADR-065 spiral placement (Richey 2026-10-13: 'why are the islands so far apart') ----
+import daedalus_land_grid as G
+hub = (-1000000.0, 500000.0)
+sp = L.spiral_targets([(n, w, d) for n, w, d in boxes] + [("Big", 60000, 78000)], hub, (30000, 30000))
+check("spiral: every island placed", set(sp) == set(names) | {"Big"})
+allcells = {}
+for n, t in sp.items():
+    x, y = t["cell"]; s = t["size"]
+    cs = []
+    check("spiral: %s estate is whole and inside one district" % n, G.estate(x, y, s, cs) == t["deed"] and t["deed"] >= 0)
+    for c in cs:
+        check("spiral: cell %s used once" % (c,), c not in allcells); allcells[c] = n
+hubc = L.hub_cells(30000, 30000)
+check("spiral: the hub island's cells are reserved", not (set(allcells) & hubc) and (G.HUB, G.HUB) in hubc)
+check("spiral: a 780 m island takes a 4x4 estate", sp["Big"]["size"] == 4 and G.size_for(600, 780) == 4)
+check("spiral: small islands are single cells", all(sp[n]["size"] == 1 for n in names if max(dict((b[0], b[1:]) for b in boxes)[n]) < 17000))
+dists = [max(abs(t["to"][0] - hub[0]), abs(t["to"][1] - hub[1])) for t in sp.values()]
+check("spiral: everything sits within 6 cells of the hub", max(dists) <= 6 * G.PITCH_M * 100)
+check("spiral: lowest deeds go to the biggest islands", sp["Big"]["deed"] <= min(t["deed"] for n, t in sp.items() if n != "Big") or sp["Big"]["size"] == 4)
+
 print("%d/%d" % (ok, total))
 raise SystemExit(0 if ok == total else 1)

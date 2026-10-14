@@ -73,6 +73,39 @@ def groups(rows, gap=GAP_CM):
     return res
 
 
+def hub_cells(hub_w, hub_d, pitch_m=None, margin_m=40.0):
+    """Cells the hub island (the persistent level) covers, centred on the hub cell: reserved before any estate is
+    placed. hub_w/hub_d in cm."""
+    import daedalus_land_grid as G
+    pitch = pitch_m or G.PITCH_M
+    half_w = (hub_w / 100.0) / 2.0 + margin_m
+    half_d = (hub_d / 100.0) / 2.0 + margin_m
+    out = set()
+    for x in range(G.SIDE):
+        for y in range(G.SIDE):
+            mx, my = (x - G.HUB) * pitch, (y - G.HUB) * pitch
+            if abs(mx) <= half_w + pitch / 2.0 and abs(my) <= half_d + pitch / 2.0:
+                out.add((x, y))
+    return frozenset(out)
+
+
+def spiral_targets(boxes, hub_cm, hub_size_cm, pitch_m=None):
+    """ADR-065 placement (Richey 2026-10-13: 'why are the islands so far apart'): each island group becomes the
+    lowest-numbered free estate that fits it, spiralling out from the hub. boxes: [(name, w, d)] in cm; hub_cm the
+    hub island's centre in world cm; hub_size_cm its (w, d). Returns {name: {"to": (cx, cy) cm, "cell": (x, y),
+    "size": s, "deed": n}}. Pure: test_daedalus_layout.py proves no overlap and no split district."""
+    import daedalus_land_grid as G
+    pitch = pitch_m or G.PITCH_M
+    sizes = {name: G.size_for(w / 100.0, d / 100.0, pitch) for name, w, d in boxes}
+    taken = hub_cells(hub_size_cm[0], hub_size_cm[1], pitch)
+    placed = G.place_estates(sizes, taken)
+    out = {}
+    for name, (x, y, s, deed) in placed.items():
+        mx, my = G.estate_centre_m(x, y, s, pitch)
+        out[name] = {"to": (hub_cm[0] + mx * 100.0, hub_cm[1] + my * 100.0), "cell": (x, y), "size": s, "deed": deed}
+    return out
+
+
 def _median(v):
     s = sorted(v)
     return s[len(s) // 2] if s else 0.0
@@ -130,6 +163,72 @@ def plan():
             out.append({"level": lv, "group": g, "from": [round(cx), round(cy)], "to": [round(tx), round(ty)],
                         "size_m": [round(w / 100), round(d / 100)], "move": [round(tx - cx), round(ty - cy)]})
     return out
+
+
+def _hub():
+    """(centre cm, (w, d) cm) of the persistent level's island: the spiral's hub cell."""
+    import unreal
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    pts = []
+    for a in sub.get_all_level_actors():
+        if a.get_level().get_outer().get_name() not in SKIP_LEVELS:
+            continue
+        o, e = a.get_actor_bounds(False)
+        if e.x == 0 and e.y == 0:
+            o, e = a.get_actor_location(), type(o)(0, 0, 0)
+        if e.x > 50000 or e.y > 50000:
+            continue
+        pts.append((o.x, o.y, e.x, e.y))
+    cx, cy, w, d = footprint(pts) if pts else (0.0, 0.0, 0.0, 0.0)
+    return (cx, cy), (w, d)
+
+
+def _rows():
+    import unreal  # noqa: F401
+    rows = {}
+    for lv, actors in _levels().items():
+        pts = []
+        for a in actors:
+            o, e = a.get_actor_bounds(False)
+            if e.x == 0 and e.y == 0:
+                o, e = a.get_actor_location(), type(o)(0, 0, 0)
+            if e.x > 50000 or e.y > 50000:
+                continue
+            pts.append((o.x, o.y, e.x, e.y))
+        if pts:
+            rows[lv] = footprint(pts)
+    return rows
+
+
+def spiral_plan():
+    """Dry run of the ADR-065 placement: every island group, its estate (cell, size, deed) and the move."""
+    hub_cm, hub_size = _hub()
+    gs = groups(_rows())
+    target = spiral_targets([(g, f[2], f[3]) for g, (_, f) in gs.items()], hub_cm, hub_size)
+    out = []
+    for g, (members, (cx, cy, w, d)) in sorted(gs.items()):
+        t = target[g]
+        tx, ty = t["to"]
+        for lv in members:
+            out.append({"level": lv, "group": g, "from": [round(cx), round(cy)], "to": [round(tx), round(ty)],
+                        "size_m": [round(w / 100), round(d / 100)], "move": [round(tx - cx), round(ty - cy)],
+                        "cell": list(t["cell"]), "estate": t["size"], "deed": t["deed"]})
+    return {"hub": [round(hub_cm[0]), round(hub_cm[1])], "hub_size_m": [round(hub_size[0] / 100), round(hub_size[1] / 100)], "plan": out}
+
+
+def spiral_apply():
+    """Move every island onto its estate, save, write the undo table (undo(path) puts them back)."""
+    import unreal
+    sp = spiral_plan()
+    p = sp["plan"]
+    moves = {r["level"]: (float(r["move"][0]), float(r["move"][1])) for r in p}
+    n = _move(moves)
+    path = os.path.join(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_saved_dir()), "Daedalus",
+                        time.strftime("layout-undo-spiral-%m%d-%H%M%S.json"))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump({"plan": sp, "undo": {lv: [-dx, -dy] for lv, (dx, dy) in moves.items()}}, f, indent=1)
+    return {"levels": len(p), "actors_moved": n, "undo": path, "hub": sp["hub"], "plan": p}
 
 
 def _move(level_moves):
