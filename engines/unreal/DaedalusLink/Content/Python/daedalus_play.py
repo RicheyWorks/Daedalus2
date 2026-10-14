@@ -1152,6 +1152,51 @@ def scenario_cast(p):
     ]}
 
 
+def scenario_realm_switch(p):
+    """The realm session (hub 28885): one player, seven realms, four ways between them. Gates from World Zero,
+    the portal in and back, a boat at a dock into the Ocean and a shore landing home; refusals leave the session
+    where it is; the inventory catalog follows the realm; the session is in the hero's progress file."""
+    h = hero()
+    start = h.realm_session_state()
+    g = h.switch_realm("gallery-city", "gate", "")
+    cat_after_gate = h.inventory_catalog_name()
+    bad = h.switch_realm("parcels", "gate", "")
+    po = h.switch_realm("portal", "portal", "")
+    yield from _frames(3)
+    for _ in range(80):   # the 8-bit realm loads from the server or the shipped spec
+        if "map=" in h.realm_state() or "refused" in h.realm_state():
+            break
+        yield
+    in_portal = h.is_realm_open()
+    back = h.switch_realm("gallery-city", "portal", "")
+    yield from _frames(3)
+    out = not h.is_realm_open()
+    dock = h.switch_realm("ocean", "dock", "boat:vat-pier")
+    wrong = h.switch_realm("bricks", "dock", "boat:x")
+    shore = h.switch_realm("gallery-city", "shore", "")
+    home = h.switch_realm("world-zero", "gate", "")
+    state = h.realm_session_state()
+    import os, json
+    path = os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusHero.json")
+    saved = ""
+    try:
+        with open(path, encoding="utf-8") as f:
+            saved = json.load(f).get("realm_session", "")
+    except Exception as e:
+        saved = "no file: %s" % e
+    return {"checks": [
+        _check("a gate reaches Gallery City and its catalog follows", g.startswith("ok WORLD-ZERO -> GALLERY-CITY") and cat_after_gate == "gallery-city", g + " " + cat_after_gate),
+        _check("a gate between two realms is refused", bad.startswith("refused"), bad),
+        _check("the portal opens the 8-bit realm", po.startswith("ok GALLERY-CITY -> PORTAL") and in_portal, po),
+        _check("and leads back where you came from", back.startswith("ok PORTAL -> GALLERY-CITY") and out, back),
+        _check("a boat at a dock enters the Ocean", dock.startswith("ok GALLERY-CITY -> OCEAN"), dock),
+        _check("a boat cannot land at another realm's dock", wrong.startswith("refused"), wrong),
+        _check("a shore landing returns to the departure", shore.startswith("ok OCEAN -> GALLERY-CITY"), shore),
+        _check("home by gate, six switches counted", home.startswith("ok GALLERY-CITY -> WORLD-ZERO") and "switches=6" in state, state),
+        _check("the session is saved with the hero's progress", saved.startswith("WORLD-ZERO"), saved),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1172,6 +1217,7 @@ SCENARIOS = {
     "inventory": scenario_inventory,
     "dialogue": scenario_dialogue,
     "cast": scenario_cast,
+    "realm_switch": scenario_realm_switch,
 }
 
 
