@@ -406,7 +406,9 @@ poll during Play called EditorActorSubsystem, which the editor refuses in PIE. T
 world's actors via GameplayStatics while Play runs (connector contract test proves no editor call in PIE).
 (2) `LogMaterial ... will recompile every editor launch until resaved` x340 + `missing usage flag
 InstancedStaticMeshes! Default Material will be used in game`: the Dresser's HISM pools use Prop materials that
-never had the flag, so a packaged game would draw them grey. daedalus_fix_materials.py sets the flags and saves.
+never had the flag, so a packaged game would draw them grey. the ADR-055 tool (daedalus_nanite_materials: reparent each instance onto the project's flagged base, undoable) already
+existed but had not been run to zero; tools/unreal_play/fix_materials.py drives it until left == 0. Check for an
+existing tool before writing a second one.
 (3) `AttachTo ... is not static, cannot attach` x4 per pool: the Dresser's root was Movable, its pools Static.
 (4) `FindTeleportSpot ... root component not being a collider` x28: foes spawned deferred with
 AdjustIfPossibleButAlwaysSpawn before their collider existed; FindSpot already traced the ground, so AlwaysSpawn.
