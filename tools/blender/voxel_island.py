@@ -29,7 +29,8 @@ PAL = {
     "blossom": (0.93, 0.60, 0.78), "blossom2": (0.98, 0.75, 0.86), "wall": (0.82, 0.72, 0.55), "roof": (0.70, 0.22, 0.20),
     "window": (1.00, 0.90, 0.55), "door": (0.35, 0.22, 0.12), "flower_r": (0.90, 0.25, 0.30), "flower_y": (0.95, 0.85, 0.25),
     "flower_w": (0.95, 0.95, 0.95), "crystal": (0.75, 0.55, 0.95), "crystal2": (0.55, 0.85, 0.95), "cloud": (0.97, 0.97, 0.99),
-    "path": (0.62, 0.55, 0.42),
+    "path": (0.62, 0.55, 0.42), "fence": (0.55, 0.40, 0.25), "lantern": (1.00, 0.85, 0.45), "shroom": (0.85, 0.25, 0.20),
+    "shroom_dot": (0.98, 0.95, 0.90), "plank": (0.60, 0.45, 0.28), "boat": (0.45, 0.30, 0.18), "sail": (0.95, 0.93, 0.85),
 }
 # v2 biomes (09:36 "whoever comes up with seeds and algorithms to produce mass work at high quality will win"): a seed
 # picks a biome, which remaps the palette keys so every island reads differently from the air.
@@ -196,6 +197,56 @@ def plan(seed, size=46, thick=22):
                 for dy in range(0, rng.randint(1, 2)):
                     for dz in range(1, rng.randint(2, 3)):
                         vox["rocks"].append((x + dx, y + dy, hill(x, y) + dz, "rock" if rng.random() < 0.5 else "rock2"))
+    # v3 (10:46): lantern posts along the path, a fenced garden by the cottage, mushrooms under the trees,
+    # a plank pier off the rim with a little boat — the landmarks the contest reference islands had.
+    for i in range(d // 2 + 3, steps_n - 6, 7):
+        px, py = int(round(cx + (pcx - cx) * i / steps_n)), int(round(cy + (pcy - cy) * i / steps_n))
+        lx, ly = px - 1, py - 1
+        if (lx, ly) in top and (lx, ly) not in pond:
+            base = hill(lx, ly)
+            for z in range(base + 1, base + 4):
+                vox["rocks"].append((lx, ly, z, "trunk"))
+            vox["rocks"].append((lx, ly, base + 4, "lantern"))
+    gx, gy = cx + w // 2 + 3, cy - d // 2 - 1       # garden: 8x6 fence east of the cottage
+    for x in range(gx, gx + 9):
+        for y in range(gy, gy + 7):
+            if (x, y) not in top or (x, y) in pond:
+                continue
+            base = hill(x, y)
+            if x in (gx, gx + 8) or y in (gy, gy + 6):
+                if (x + y) % 2 == 0 or x in (gx, gx + 8):
+                    vox["rocks"].append((x, y, base + 1, "fence"))
+            elif (x + y) % 2 == 0:
+                vox["flowers"].append((x, y, base + 1, rng.choice(("flower_r", "flower_y", "flower_w"))))
+    for _ in range(rng.randint(6, 12)):
+        x, y = rng.randint(-size, size), rng.randint(-size, size)
+        if free(x, y, 1):
+            base = hill(x, y)
+            vox["rocks"].append((x, y, base + 1, "trunk"))
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    vox["rocks"].append((x + dx, y + dy, base + 2, "shroom_dot" if (dx, dy) == (0, 0) else "shroom"))
+    pier_ang = pang + rng.uniform(1.6, 2.6) * rng.choice((-1, 1))
+    pdx, pdy = math.cos(pier_ang), math.sin(pier_ang)
+    rim_r = radius(pier_ang)
+    for i in range(int(rim_r) - 4, int(rim_r) + 9):
+        for side in (-1, 0, 1):
+            x, y = int(round(i * pdx - side * pdy)), int(round(i * pdy + side * pdx))
+            vox["rocks"].append((x, y, -1, "plank"))
+            if i % 4 == 0 and side:
+                for z in range(-6, 0):
+                    vox["rocks"].append((x, y, z, "fence"))
+    bx, by = int(round((rim_r + 11) * pdx + 3 * pdy)), int(round((rim_r + 11) * pdy - 3 * pdx))
+    for dx in range(-3, 4):
+        for dy in range(-1, 2):
+            vox["rocks"].append((bx + dx, by + dy, -3, "boat"))
+            if abs(dx) < 3:
+                vox["rocks"].append((bx + dx, by + dy, -2, "boat" if dy else "plank"))
+    for z in range(-1, 5):
+        vox["rocks"].append((bx, by, z, "trunk"))
+        if 0 <= z < 4:
+            for dx in range(1, 4 - z):
+                vox["rocks"].append((bx + dx, by, z, "sail"))
     # 7. crystals hanging below the keel, clouds beside
     for _ in range(rng.randint(3, 6)):
         x, y = rng.randint(-size // 2, size // 2), rng.randint(-size // 2, size // 2)
