@@ -85,14 +85,21 @@ def import_island(seed, force=False, save=False):
         sm = unreal.EditorAssetLibrary.load_asset(p)
         for i in range(sm.get_num_sections(0)):
             sm.set_material(i, m)
-        if l in ("island", "body") and sm.get_num_sections(0) and not str(p).endswith("_body"):
-            bs = sm.get_editor_property("body_setup")      # GLB islands (no UCX) walk on complex collision
+        if l in ("island", "body") and not _simple_collision(sm):
+            bs = sm.get_editor_property("body_setup")      # no UCX hull (GLB islands): walk on complex collision
             if bs is not None:
                 bs.set_editor_property("collision_trace_flag", unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)
         if save:
             unreal.EditorAssetLibrary.save_loaded_asset(sm)
         out[l] = p
     return out
+
+
+def _simple_collision(sm):
+    try:
+        return unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem).get_simple_collision_count(sm) > 0
+    except Exception:
+        return False
 
 
 def clear_cell(cx, cy, r=CLEAR_R, district=None):
