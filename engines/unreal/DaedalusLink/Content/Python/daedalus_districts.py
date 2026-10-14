@@ -662,6 +662,66 @@ def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
     return {"realm": realm, "probed": probed, "holes": len(holes), "top_cm": round(top)}
 
 
+POOL = "/Game/Daedalus/Art/Islands/NativePool"
+FRAG_THICK_M = [8.0 + 12.0 * k / 11.0 for k in range(12)]     # Sol's manifest: Island_Frag_01..12 are 8..20 m thick
+PAD_THICK_M = [1.0 + 0.4 * k for k in range(6)]                 # Island_Pad_01..06 are 1..3 m thick
+
+
+def pool_variant(realm, d):
+    """Pure: (mesh name, exported thickness m) for a district: World Zero fragments, realm pads; deterministic."""
+    if realm == "WORLD-ZERO":
+        k = (d * 7 + 3) % 12
+        return "Island_Frag_%02d" % (k + 1), FRAG_THICK_M[k]
+    k = (d * 5 + 1) % 6
+    return "Island_Pad_%02d" % (k + 1), PAD_THICK_M[k]
+
+
+def mesh_pool_steps(realms):
+    """Swap the cube for Sol's island meshes (PR140, 08:35): each Lands_<R>_D<dd> actor's Plots instances become one
+    pool mesh (top-centre origin, 92 m footprint): translation = the slab's top, yaw kept, Z scale = slab thickness /
+    exported thickness for fragments, 1 for pads. Cells and extras untouched, so the ledger and deeds hold. One
+    district per tick; rerunning re-derives from the current instances (idempotent)."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cube = unreal.load_asset(P.CUBE)
+    done = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() != "DaedalusLandDistrict" or not a.get_actor_label().startswith("Lands_"):
+            continue
+        realm = str(a.get_editor_property("realm"))
+        if realm not in realms:
+            continue
+        d = int(a.get_editor_property("district"))
+        name, exported = pool_variant(realm, d)
+        mesh = unreal.load_asset("%s/%s.%s" % (POOL, name, name))
+        if not mesh:
+            yield "%s D%02d: %s missing in %s" % (realm, d, name, POOL)
+            continue
+        comp = a.get_editor_property("plots")
+        cells = list(a.get_editor_property("cells"))
+        was_cube = comp.static_mesh == cube
+        ts = []
+        for i in range(len(cells)):
+            t = comp.get_instance_transform(i, True)
+            loc, rot, sc = t.translation, t.rotation.rotator(), t.scale3d
+            if was_cube:   # cube: centre-origin, scale = metres; pool mesh: top-centre, unit = 92 m
+                top = loc.z + sc.z * 50.0
+                thick = sc.z
+            else:          # already a pool mesh: origin is the top, thickness = Z scale * exported
+                top = loc.z
+                thick = sc.z * exported if realm == "WORLD-ZERO" else exported
+            zscale = thick / exported if realm == "WORLD-ZERO" else 1.0
+            ts.append(unreal.Transform(unreal.Vector(loc.x, loc.y, top), unreal.Rotator(0.0, rot.yaw, 0.0), unreal.Vector(1.0, 1.0, zscale)))
+        comp.set_static_mesh(mesh)
+        a.lay_plots(cells, ts)
+        a.modify(True)
+        done[realm] = done.get(realm, 0) + 1
+        yield "%s D%02d: %d plots as %s" % (realm, d, len(cells), name)
+    P.save_world()
+    return done
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 

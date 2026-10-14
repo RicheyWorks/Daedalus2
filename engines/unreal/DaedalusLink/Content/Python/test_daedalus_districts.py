@@ -49,5 +49,9 @@ rows = D.ledger_rows("PARCELS", [(33, cells33[:3], [(100.0, 200.0, 4620.0, 12.0)
 check("the ledger has one row per land, sorted by deed, with top height, thickness and prop count",
       [r["deed"] for r in rows] == sorted([5] + cells33[:3]) and next(r for r in rows if r["deed"] == cells33[1])["props"] == 2
       and next(r for r in rows if r["deed"] == cells33[0])["top_cm"] == 5220 and next(r for r in rows if r["deed"] == cells33[2])["thick_m"] == 16.0, rows[:2])
+check("mesh pool: World Zero districts use all 12 fragments, realms use all 6 pads, deterministically",
+      {D.pool_variant("WORLD-ZERO", d)[0] for d in range(100)} == {"Island_Frag_%02d" % k for k in range(1, 13)}
+      and {D.pool_variant("PARCELS", d)[0] for d in range(100)} == {"Island_Pad_%02d" % k for k in range(1, 7)}
+      and abs(D.pool_variant("WORLD-ZERO", 0)[1] - D.FRAG_THICK_M[3]) < 1e-9 and D.pool_variant("WORLD-ZERO", 5) == D.pool_variant("WORLD-ZERO", 5))
 print("%d/%d" % (ok, total))
 raise SystemExit(0 if ok == total else 1)
