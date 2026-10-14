@@ -24,4 +24,7 @@ jobs:
       - run: python harness/artifact_identity_test.py
       - run: python harness/glb_test.py
       - run: python harness/judge_test.py
+
+      - run: python -m py_compile asset_pipeline/pipeline_batch.py
       - run: python harness/scene_observation_test.py
+      - run: python harness/dispatch_gate_test.py

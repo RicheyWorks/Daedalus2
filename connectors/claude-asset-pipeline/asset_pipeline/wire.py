@@ -46,7 +46,7 @@ def validate_reply(reply, request_id, side):
     return reply["result"]
 
 
-def call(addr, command, timeout=600, side="bridge", receipt=None, on_progress=None, **params):
+def call(addr, command, timeout=600, side="bridge", receipt=None, on_progress=None, before_dispatch=None, **params):
     """One request, one validated reply. A transport failure never triggers a retry.
 
     receipt is optional host evidence, not an extra wire field. on_progress may
@@ -67,6 +67,13 @@ def call(addr, command, timeout=600, side="bridge", receipt=None, on_progress=No
         publish("not-dispatched")
         raise
     with connection as stream:
+        if before_dispatch is not None:
+            try:
+                before_dispatch()
+            except Exception:
+                # The connection exists, but no request bytes have been sent.
+                publish("not-dispatched")
+                raise
         # Persist unknown before send: sendall can fail after a partial write.
         publish("outcome-unknown")
         stream.sendall(payload)

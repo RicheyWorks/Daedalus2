@@ -782,6 +782,21 @@ Nullable is not missing. Reported match must agree with requested predicates and
 Paged observations remain non-atomic/loaded-only even with stable context. Never promote an empty
 check list, missing count, stale epoch or status:ok envelope to a successful scene verification.
 
+
+## Batch resume must distinguish completed work from a lost import reply (2026-10-13, Codex)
+An operator batch journal binds input spec/source root, locks one writer and persists every dispatch.
+Completed assets skip; only explicitly non-dispatched/preparation states can rerun. Unknown or
+reply-received-without-final-verification holds for reconciliation. Observe the existing Unreal
+lease before each asset, stop after dispatch failure and route rigs away from static imports.
+This executor reuses the pipeline and does not introduce another art board or remote queue.
 ### Scene consumer review corrections (2026-10-13)
 An exception string can legitimately be empty. Accept empty diagnostic text while retaining its required field. Explicit observed:null is different from a missing observed key. Catalogue diagnostic count, retained list and truncation flag must agree. Consumer CI must execute actual pinned producer fixtures plus malformed-value regressions; unrelated green pipeline checks do not prove this contract.
+
+
+### Lease observation at dispatch (2026-10-14)
+Preparation can outlive an initially valid lease. Reobserve the existing owner/window after preparation, before request bytes are sent. A failed final gate is genuinely not-dispatched, unlike a send/response failure. Preserve both lease observations; never silently acquire or renew. This is a host guard, not an engine-side atomic fencing guarantee.
+
+
+### Inspect interrupted batches without replay (2026-10-14)
+Expose request IDs, retained snapshot identities and replay eligibility as a read-only journal view. Hash checks can identify snapshot drift but cannot settle an unknown native outcome. Keep inspection independent of lease mutation and journal writes so another team can understand a handoff before taking an editor turn.
 
