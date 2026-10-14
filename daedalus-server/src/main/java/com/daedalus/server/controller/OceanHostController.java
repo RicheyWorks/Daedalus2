@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/ocean/v1")
-@ConditionalOnProperty(name="daedalus.ocean.enabled",havingValue="true")
+@ConditionalOnProperty(name = "daedalus.ocean.enabled", havingValue = "true")
 public class OceanHostController {
     private final OceanHostService ocean;
     public OceanHostController(OceanHostService ocean) { this.ocean=ocean; }
