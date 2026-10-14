@@ -151,7 +151,11 @@ def read_response(resp, max_response_bytes=MAX_RESPONSE_BYTES,
 
 
 def post_json(url, msg, session, timeout=600, observation=None):
-    """Submit once. There is intentionally no retry/reinitialization loop."""
+    """Submit once. There is intentionally no retry/reinitialization loop.
+
+    Optional observations describe local urllib/read completion times, not packet
+    arrival or server activity. Failure observations are copied before return.
+    """
     headers = {"Content-Type": "application/json",
                "Accept": "application/json, text/event-stream"}
     if session.get("id"):
