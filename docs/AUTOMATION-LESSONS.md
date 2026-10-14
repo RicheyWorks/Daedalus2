@@ -529,3 +529,9 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+## A fresh World Zero made the old restore drill pass (2026-10-13)
+restore-drill.sh claimed every backed-up world was served but only checked got>=1; it printed an expected
+snapshot count without using it. Build a manifest from the archive registry and saved world files, then compare
+actual HTTP IDs, styles, seeds and titles exactly. Test missing worlds and same-count wrong identities. These
+checks still do not prove every saved block, sidecar or Redis record: keep full data recovery acceptance open.
