@@ -14,6 +14,8 @@ Local reproducible evidence: `C:/Users/730ri/Documents/Codex/2026-10-14/project-
 
 ## Inventory
 
+Incident delta30345/30362: editor41828 first GPU crash, owner relaunch44204, later owner-reported Parcels79/100 save crash/relaunch5792. Current recovery/duplicate reconciliation stays Claude's lane, watcher source repair Poot's. Historical map, archive and successful pre-crash connector snapshots are preserved; none proves current readiness or runtime/ledger acceptance. No independent popup identity or memory-cause diagnosis is claimed. Latest named/fresh HTTP failures and OS memory snapshot are in existing automation lessons.
+
 08:42 PT delivery delta: Claude30320 reports all500 district actors assigned to the saved NativePool, superseding pending mesh acknowledgment; this is owner evidence, not independent500-actor/deed/ledger or walk verification. Later stable map read is211434993bytes/SHAf8a591d0498f37c9c8591316086f1d60de9f81a1b9e61c190f9cc8fb483a1676 at15:42:50UTC. Named Epic binding now actually returned IsPIERunning=false; earlier startup refusal remains historical. PR140 bf641e47 has source-only material-instance mode; live instance/export/new variant proof remains pending. See existing automation lessons and realm handoff for full stage boundaries.
 
 Claude30333 reports100 LABYRINTH sublevels/560 actor moves in106s,error=-. Keep this owner-reported editor conversion separate from independent live streaming/gameplay/ledger verification. Documentation owner receipts are tracked in the existing realm handoff; a mesh acknowledgment is not documentation acceptance.
