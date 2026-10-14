@@ -6,13 +6,17 @@ transport failure stops the batch without replaying an uncertain import.
 """
 import argparse
 import datetime
-import hashlib
 import importlib
 import json
 import pathlib
 import sys
 import time
 import urllib.request
+
+# Reuse only the existing file-identity helpers; all engine calls below remain
+# on the new Epic MCP client, never asset_pipeline's legacy TCP transport.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'connectors/claude-asset-pipeline'))
+from asset_pipeline.ship import fingerprint, import_snapshot
 
 
 def main():
@@ -48,11 +52,13 @@ def main():
                      if args.content_root else source / 'NativePool')
     if args.content_root and not native_folder.is_dir():
         raise ValueError('explicit native Content root must contain the saved NativePool directory')
+    artifacts = {}
     for asset in selected:
         file = source / asset['fbx']
         if file.resolve().parent != source:
             raise ValueError('source escapes pool')
-        if hashlib.sha256(file.read_bytes()).hexdigest() != asset['fbx_sha256']:
+        artifacts[asset['id']] = artifact = fingerprint(str(file))
+        if artifact['sha256'] != asset['fbx_sha256']:
             raise ValueError('FBX hash mismatch: ' + asset['id'])
         if args.import_new and (native_folder / (asset['id'] + '.uasset')).exists():
             raise ValueError('existing mesh refused: ' + asset['id'])
@@ -78,10 +84,13 @@ def main():
                     locks = json.load(response)
                 if locks.get('unreal', {}).get('holder') != args.owner:
                     raise ValueError('explicit current editor owner lease required')
+                snapshot = import_snapshot(str(source / asset['fbx']), artifacts[asset['id']])
+                row['importPath'] = snapshot
+                row['importArtifact'] = artifacts[asset['id']]
                 output.write_text(json.dumps(rows + [{**row, 'status': 'dispatching-outcome-unknown'}],
                                              indent=2), encoding='utf-8')
                 row['importResult'] = mcp.call(mesh_ts, 'import_file', folder_path=folder,
-                    asset_name=asset['id'], source_file=str(source / asset['fbx']),
+                    asset_name=asset['id'], source_file=snapshot,
                     import_materials=True, import_textures=False, combine_meshes=True)
             ref = {'refPath': folder + '/' + asset['id'] + '.' + asset['id']}
             row['bounds'] = bounds = mcp.call(mesh_ts, 'get_bounds', mesh=ref)
