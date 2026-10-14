@@ -540,3 +540,7 @@ staged archive and launch. Do not ship editor Python or developer saves to make 
 ### Optional runtime-family enumeration (2026-10-14)
 Check Directory.Exists before enumerating optional DSP packs in Unreal module rules; a missing optional directory must not crash rule evaluation. Mandatory DIC/DCS/DRR declarations remain intact. Runtime-declaration verification now rejects duplicate JSON fields, nonfinite values and malformed SHA256s rather than silently accepting collapsed manifest data. Six offline checks pass; the earlier UBT proof remains tied to its earlier head, not this follow-up.
 
+
+### Bind and atomically publish runtime declaration proofs (2026-10-14)
+Record SHA256/length for the exact manifest and UBT export bytes parsed by the verifier, with bounded strict JSON input. Publish proof via fsync-and-replace so serialization/write failure preserves the prior file. Six declaration checks and failed-serialization preservation smoke pass. These are declaration/source proofs, never cook, staged archive or packaged launch acceptance.
+

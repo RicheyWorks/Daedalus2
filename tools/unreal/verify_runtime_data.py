@@ -3,10 +3,12 @@ import argparse
 import hashlib
 import json
 import re
+import os
+import uuid
 from pathlib import Path
 
 
-def read_json(path):
+def read_json(path,evidence=None):
     def unique(pairs):
         result={}
         for key,value in pairs:
@@ -14,15 +16,33 @@ def read_json(path):
             result[key]=value
         return result
     def invalid(value):raise ValueError('Nonfinite JSON value: '+value)
-    value=json.loads(Path(path).read_text(encoding='utf-8-sig'),object_pairs_hook=unique,parse_constant=invalid)
+    with Path(path).open('rb') as stream:raw=stream.read(64*1024*1024+1)
+    if len(raw)>64*1024*1024:raise ValueError('JSON document exceeds64MiB')
+    value=json.loads(raw.decode('utf-8-sig'),object_pairs_hook=unique,parse_constant=invalid)
     if not isinstance(value,dict):raise ValueError('Expected JSON object')
+    if evidence is not None:
+        evidence.update(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw))
     return value
+
+
+def write_proof(path,proof):
+    path=Path(path)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    temporary=path.with_name(path.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        with temporary.open('x',encoding='utf-8',newline='\n') as stream:
+            json.dump(proof,stream,indent=2,allow_nan=False)
+            stream.write('\n');stream.flush();os.fsync(stream.fileno())
+        os.replace(temporary,path)
+    finally:
+        if temporary.exists():temporary.unlink()
 
 
 def verify(host, exported):
     host = Path(host).resolve()
-    manifest = read_json(host / 'source-manifest.json')
-    target = read_json(exported)
+    manifest_identity={};target_identity={}
+    manifest = read_json(host / 'source-manifest.json',manifest_identity)
+    target = read_json(exported,target_identity)
     if not isinstance(manifest.get('files'),dict) or not manifest['files']:
         raise ValueError('Source manifest files missing')
     if target.get('Configuration') != 'Shipping':
@@ -70,6 +90,7 @@ def verify(host, exported):
     if staged != expected.keys():
         raise ValueError('Runtime files omitted: ' + ', '.join(str(p.name) for p in expected.keys() - staged))
     return {'schema': 1, 'sourceHead': manifest['source_head'],
+            'inputDocuments':{'sourceManifest':manifest_identity,'targetExport':target_identity},
             'trackedPluginFiles': manifest['tracked_file_count'],
             'targetConfiguration': target['Configuration'], 'targetPlatform': target.get('Platform'),
             'declarations': declarations,
@@ -85,5 +106,5 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     proof = verify(args.host, args.export)
-    args.output.write_text(json.dumps(proof, indent=2) + '\n')
+    write_proof(args.output,proof)
     print('RUNTIME_DATA_PASS', len(proof['files']), 'files covered by UBT Shipping declarations')
