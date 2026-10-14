@@ -476,3 +476,8 @@ Richey (19:20): "must improve communication". The failures, each with its fix:
    between lanes, the producer posts "please review <sha> <file>" as a request and waits for the completed before
    calling it closed.
 The protocol lives in docs/TEAMLINK.md rules 6-8; this entry is why each rule exists.
+
+## UE Python has no World.is_game_world; "playing" is LevelEditorSubsystem.is_in_play_in_editor (2026-10-13)
+A scenario died on `AttributeError: 'World' object has no attribute 'is_game_world'`. The one reliable test is
+`unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()`; `UnrealEditorSubsystem.get_game_world()`
+is the Play world only while that is true. Use the shared helper, never a guessed UWorld method.
