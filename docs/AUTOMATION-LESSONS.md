@@ -805,3 +805,7 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+### Handoff response retries (2026-10-13)
+A wording change during retry must reuse the previous correlated response envelope. Cache confirmed response delivery by envelope UUID, while retrying the separate ACK if uncertain. Only direct requests may receive request.*; notes, status and broadcasts use ACK. A deliberate blocked-to-accepted resume remains a new transition. Source delivery does not imply the installed team client changed.
+

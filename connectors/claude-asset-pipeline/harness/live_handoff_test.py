@@ -78,9 +78,17 @@ class HandoffTest(unittest.TestCase):
         mid = self.put(); live.collect(self.state, self.b)
         first = live.respond(self.state, self.b, mid, 'accepted', 'building')
         self.assertEqual(live.respond(self.state, self.b, mid, 'accepted', 'building'), first)
+        self.assertEqual(live.respond(self.state, self.b, mid, 'accepted', 'reworded retry'), first)
         live.respond(self.state, self.b, mid, 'blocked', 'missing file')
         resumed = live.respond(self.state, self.b, mid, 'accepted', 'building')
         self.assertNotEqual(first, resumed)
+
+    def test_status_and_broadcast_cannot_receive_request_acceptance(self):
+        for recipient, kind in [('b', 'status'), ('*', 'request')]:
+            mid = self.a.send(recipient, kind, {'text': 'announcement'})
+            live.collect(self.state, self.b)
+            with self.assertRaises(ValueError):
+                live.respond(self.state, self.b, mid, 'accepted', 'wrong protocol')
 
     def test_restart_preserves_unread_messages_and_cursor(self):
         mid = self.put()
