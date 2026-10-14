@@ -1395,7 +1395,7 @@ def scenario_mounts(p):
         if g:
             z0 = g.get_actor_location().z
             g.lift(3000.0)
-            yield from _frames(45)
+            yield from _seconds(2.0)   # game time (45 frames at 46 fps was under a second: Gallery dz=0, 02:15)
             z1 = g.get_actor_location().z
             st2 = g.mount_state()
             checks.append(_check("%s: it climbs when lifted, within its ceiling" % realm, z1 - z0 > 800.0 and "wanted=3000" in st2, "dz=%.0f %s" % (z1 - z0, st2)))
@@ -1424,24 +1424,21 @@ def scenario_portals(p):
     east = portals.get("Portal_WORLD-ZERO_to_GALLERY-CITY")
     if east:
         h.teleport(east.get_actor_location() + unreal.Vector(-700, 0, 0), 0.0, True)
-        yield from _frames(2)
+        yield from _seconds(3.5)   # the switch above set LastRealmSwitchAt: wait out the cooldown (02:15: 2 frames at 46 fps was not)
         r = east.cross(h)   # the same path the overlap takes
         yield from _frames(4)
         checks.append(_check("the east gate carries the hero to Gallery City", r.startswith("ok WORLD-ZERO -> GALLERY-CITY") and h.realm_now() == "GALLERY-CITY", r))
         home = portals.get("Portal_GALLERY-CITY_Gate")
         early = home.cross(h) if home else "no portal"
         checks.append(_check("the landing gate is on cooldown, so no bounce", early == "cooldown", early))
-        for _ in range(int(3.5 * 30)):
-            yield
+        yield from _seconds(3.5)   # game time, not frames: 105 frames at 46 fps is under the 3 s cooldown
         back = home.cross(h) if home else "no portal"
         yield from _frames(3)
         checks.append(_check("after the cooldown the gate takes him home", back.startswith("ok GALLERY-CITY -> WORLD-ZERO") and h.realm_now() == "WORLD-ZERO", back))
     dock = portals.get("Portal_PARCELS_Dock")
     if dock:
         h.switch_realm("parcels", "gate", "")
-        yield from _frames(3)
-        for _ in range(int(3.5 * 30)):
-            yield
+        yield from _seconds(3.5)
         r = dock.cross(h)
         yield from _frames(2)
         checks.append(_check("a dock portal asks the session for the Ocean (boat)", r.startswith("ok PARCELS -> OCEAN") or r.startswith("refused"), r))
