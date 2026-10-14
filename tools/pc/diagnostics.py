@@ -139,7 +139,8 @@ def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
         "age_seconds": age if age is not None and age >= 0 else None,
         "max_age_seconds": max_age_seconds,
         "freshness": freshness,
-        "instance_id": (dict(instance_id) if isinstance(instance_id, Mapping) else instance_id)
+        "instance_id": (actual_identity[1] if actual_identity[0] == "token" else
+                        {"pid": actual_identity[1], "created_at": actual_identity[2]})
                        if actual_identity is not None else None,
         "metrics": normalized,
         "capabilities": {"minimized_live_read": "unverified"},
