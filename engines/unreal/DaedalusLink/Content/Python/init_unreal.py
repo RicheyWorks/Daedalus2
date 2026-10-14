@@ -32,6 +32,12 @@ def guard_sys_path(path=None, log=None):
 
 guard_sys_path(log=unreal.log_warning)
 
+try:   # the editor must not crawl at one tick per 12 s when another window is in front (00:03)
+    import daedalus_play as _play
+    _play.full_speed()
+except Exception as _e:  # never block startup on a nicety
+    unreal.log_warning("Daedalus: full_speed at start: %r" % (_e,))
+
 try:
     import daedalus_view
 except ImportError:  # pragma: no cover
