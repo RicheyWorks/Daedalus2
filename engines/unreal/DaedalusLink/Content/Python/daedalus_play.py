@@ -1467,7 +1467,7 @@ def scenario_bestiary(p):
     new = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
     kinds = sorted({str(a.get_editor_property("kind")) for a in new})
     gallery = {"SMUDGELING", "THUMBTACK_BEETLE", "CANVAS_MOTH", "EASEL_STRIDER", "TURPENTINE_TOAD", "MOSAIC_HOUND", "GILDED_FRAME_MIMIC", "SENTINEL_BUST", "GREY_WASH"}
-    dressed = sum(1 for a in new if a.get_editor_property("hide") is not None)
+    dressed = sum(1 for a in new if a.get_editor_property("skin_mesh") is not None)
     checks.append(_check("packs spawn in Gallery City", made >= 2 and len(new) >= 2, "made=%d new=%d" % (made, len(new))))
     checks.append(_check("every foe is a gallery creature from the bestiary", bool(kinds) and set(kinds) <= gallery, str(kinds)))
     checks.append(_check("each wears its skeletal art (not the crystal)", new and dressed == len(new), "dressed=%d/%d" % (dressed, len(new))))

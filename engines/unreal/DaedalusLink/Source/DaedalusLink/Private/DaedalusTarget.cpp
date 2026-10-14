@@ -119,14 +119,14 @@ int32 ADaedalusTarget::DressSkeletal()
 		if (D.AssetClassPath.GetAssetName() == UAnimSequence::StaticClass()->GetFName() && (!Idle || D.AssetName.ToString().Contains(TEXT("Idle")))) Idle = Cast<UAnimSequence>(D.GetAsset());
 	}
 	if (!Mesh) return 0;
-	Hide = NewObject<USkeletalMeshComponent>(this, TEXT("Hide"));
-	Hide->SetMobility(EComponentMobility::Movable);
-	Hide->SetupAttachment(Look);
-	Hide->SetSkeletalMesh(Mesh);
-	Hide->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Hide->RegisterComponent();
-	AddInstanceComponent(Hide);
-	if (Idle) { Hide->SetAnimationMode(EAnimationMode::AnimationSingleNode); Hide->PlayAnimation(Idle, true); }
+	SkinMesh = NewObject<USkeletalMeshComponent>(this, TEXT("SkinMesh"));
+	SkinMesh->SetMobility(EComponentMobility::Movable);
+	SkinMesh->SetupAttachment(Look);
+	SkinMesh->SetSkeletalMesh(Mesh);
+	SkinMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SkinMesh->RegisterComponent();
+	AddInstanceComponent(SkinMesh);
+	if (Idle) { SkinMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode); Hide->PlayAnimation(Idle, true); }
 	ArtHeight = Mesh->GetBounds().BoxExtent.Z * 2.f;
 	return 1;
 }

@@ -82,7 +82,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 ArtParts = 0;
 	/** A realm's bestiary creature (DaedalusBestiaryCore): the skeletal art id worn instead of the static Mob_ parts. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString SkeletalArt;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<class USkeletalMeshComponent> Hide;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<class USkeletalMeshComponent> SkinMesh;
 	/** The Mob_ asset each kind wears. */
 	static FString ArtFor(const FString& Kind);
 	int32 DressSkeletal();
