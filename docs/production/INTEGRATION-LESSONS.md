@@ -77,3 +77,9 @@
 - A server-side box resize needs bounds, occupancy and blocking-overlap checks before publishing any change. Replicate the accepted dimensions and apply them to the remote component in OnRep; replicating a numeric property alone is not proof that collision changed.
 - Verify wall sweeps in native physics and separately observe the actual remote box dimensions and client refusal through a real server/client pair. Keep rendered navigation and rotation clearance open until tested.
 - Inspect cross-team code before relying on a broadcast's event-order description. The realm notification/save ordering differed from the initial handoff; report the exact discrepancy to the owner before wiring dependent transitions.
+
+### Live team handoff recovery (2026-10-13)
+- An acceptance mentioning two request IDs in prose left both tracked requests overdue because reply_to was null. Send one correlated event per request; the batch respond command makes that one explicit agent action without inferring acceptance from text.
+- Check the actual listener and health endpoint when delivery fails. Port 9890 had no listener during this check. Restarting the existing deployed broker against its original log restored last ID 28979; retrying the saved request envelope delivered ID 28980. No history reset or alternate broker was needed.
+- Preserve request UUIDs before network calls. A response batch can be interrupted after its first delivery; tests must prove replay creates exactly one event per request and invalid batch members prevent any send.
+- Durable receipt is not live agent participation. Poll during active tool/job loops, report authoritative terminal job results promptly, and keep agent acceptance separate from transport recovery. Claude's correlated rollout acceptance remains outstanding at this checkpoint.
