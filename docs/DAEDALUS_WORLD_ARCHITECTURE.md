@@ -546,3 +546,92 @@ loop between items, mechanics and the realm storyline must be tracked and iterat
 **The loop.** A realm's story names a need → a Mechanics row → a Chemistry row → the seed rolls it → the island
 carries it with a reason → the day book, the market and the raids make it worth collecting → the story gains the
 scene → repeat. Richer colony → richer story → more items.
+
+## 14. How Team Claude builds an island, exactly (for whoever continues: Opus 5.5, Codex, anyone)
+
+Richey 14:21: "be very specific how you make these islands so that Opus 5.5 on the team can continue to build those
+and learn and iterate and get better." Everything below is on `main`; nothing needs the Blender GUI or Unreal.
+
+### 14.1 The contract
+- **Units.** 1 voxel = 1 m in the plan; the mesher writes 100 Blender units per voxel; the FBX arrives in Unreal at
+  100× and is placed with actor scale **0.01**. Pivot = plateau top centre: the walk surface is z = 0 (Super
+  Island members are lifted so the plateau sits on the 10 m deck datum).
+- **Colours.** Every voxel carries a palette *key* (`"grass"`, `"rock2"`, `"heartstone"`, `"fruit_apple"`…), never an
+  RGB. `hero_island.PAL` maps keys → linear RGB; kinds (`KINDS[kind]["pal"]`) and cluster themes override keys;
+  inside a cluster each island's overridden keys become `key@kind` so one palette serves four kinds. The mesher
+  writes `Col` byte colours **sRGB-encoded** (`c ** (1/2.2)`) because Unreal reads FBX vertex colours as sRGB.
+- **Layers → meshes.** `H.LAYERS = island, water, trees, cottage, props, flowers, crystals, clouds`; `H.GROUPS`
+  merges them into three meshes: `body` (everything solid), `water` (needs a translucent material), `clouds`.
+- **Collision.** `V._ucx_boxes` makes one `UCX_<name>_body_NN` box (6 m deep) per walk-surface rectangle from
+  `V.walk_rects(island_voxels)`. Bridges/landings add their plank rectangles. No hull.
+- **Manifests.** `Island_H<seed>.chemistry.json` (`island_chemistry.manifest`) next to every FBX; Super Islands
+  write `<name>.super-island.json` in Ultra's `daedalus.super-island.authoring/v1` schema.
+
+### 14.2 The planner, step by step (`tools/blender/hero_island.py::plan(seed, realm, kind, size)`)
+1. `rng = random.Random(seed * 7919 + 11)`; `salt` for the hash noise; `chem = island_chemistry.profile(seed, realm)`;
+   `K = KINDS[kind]` (tree shape, lake kind, extra).
+2. **Footprint**: `_disc(size, _harm(rng))` — radius = size × (1 + Σ a·sin(kθ+φ)) with three harmonics
+   (a 0.04–0.10, k 2–5); `voxel_island.plan` adds a strong 2nd harmonic when `seed % 4 == 1` (two-lobed).
+3. **Hill + lake**: hill centre `(hx, hy) = (-8, 6)`, radius 34, height `7·(1 − (d/34)²)`; lake = cells within 11.5 of
+   the hill centre at `lake_z = hill − 2`; stream = a 2-wide meander (`sin(i/6)·0.9` across the heading) from the
+   lake rim to the far rim; the rim cell where it leaves becomes the **waterfall** (5 wide, pours 46 m).
+4. **Body** (`_body`): per top cell — sand if within 2 m of the edge, else grass/grass2 by `_patch` (4-voxel hash
+   noise); 4 m of dirt under it; rock down to `depth = thick·(1 − frac^3.2)^0.7 + jag` (jag = −1..2 per 3×3
+   column), `thick = int(size·0.63)`; `terrace=(7, 2)` drops the outer 7 m by 2.
+5. **Water**: lake plane, stream bed, waterfall sheet; **ocean basin** = a second disc (size 30) 50 m below and
+   22 m past the fall with a sea filling its interior and a thin overflow fall; **source islet** = a disc (size 14)
+   34 m up and `size − 8` m behind the hill with a spring; **sky river** = a 3-wide ribbon from the spring to the
+   lake: straight line in xy, `z = lerp + 14·sin(πt)` (rises then dives), lateral weave `1.2·sin(9t)`, foam every
+   5th cell, droplets under it every 7th, a cloud at the apex it passes through.
+6. **Buildings**: stone cottage 9×7×5 with red gable roof, chimney and smoke spheres, on the hill shoulder at
+   `cang = sang + 0.75π`; path (2 wide, `"path"` keys replace the top) from the door to the dock with lantern posts
+   every 6th step; dock planks + boat + sail; plank bridge with rails a third of the way down the stream;
+   starter town (`tang = cang − 0.45`, 27 m out): well, news board, shop with striped awning, inn, smithy with
+   anvil + forge glow + chimney, windmill with cloth sails, **power unit** (Codex recipe) beside the smithy.
+7. **Farm + chemistry props**: crop rows (`"soil"` top + wheat/carrot), livestock pen with sheep and hens, herb
+   ring (six beds, only `chem.flora.herbs` grow), brew trough + clean-water barrel, waterworks (filter hut + water
+   wheel on the stream), orchard grove with fruit on the canopies (`chem.flora.orchard`), ark moored at the dock,
+   fishing pier on the basin.
+8. **ADR-050 geology**: Heartstone sphere at the keel (`−thick − 1`), ore veins by depth (coal −2..−22, copper
+   −6..−28, iron −14..−38, gold −26..−46 with `gold_mult`), cave mouth + lit tunnel + geode, mine rails + cart,
+   meteor crater + starmetal mass **only if `chem.geology.starmetal_crater`** (LEGENDARY).
+9. **Trees**: `big_tree` = 2×2 trunk 6–9 m, canopy by `K["tree"]` — round (3 overlapping spheres r 3–4), pine
+   (stacked diamonds), palm (8 fronds), mangrove (stilt roots), dead (bare forks + embers); 5 groves of 3–5, 4
+   blossom trees, 3 on the islet; counts scale with `f2 = (size/60)²`.
+10. **Dressing**: flowers (260·f2, five keys), fenced garden, mushrooms (14·f2), rocks (10·f2), the kind's extra
+    (obsidian spires / cacti / lily pads / crystal spires / hot spring), crystals under all three rocks, 5 clouds.
+11. Return `vox`. `build()` meshes it, writes the manifest, exports FBX; `export_hero.py` adds two Workbench views.
+
+### 14.3 Clusters and Super Islands
+- `island_cluster.plan(seed, theme)`: four `hero_island.plan(seed·10+i, realm, kind)` shifted by `ISLAND_LAYOUT`
+  (`(0,0,0), (165,40,22), (60,170,−18), (−120,130,38)`), lakes found by `_lake_of`, sky rivers from each lake to
+  the next lower lake (`18·sin(πt)` arc), rope bridges between rims 0–1, 0–3, 1–2 (sag `−4·sin(πt)`), then
+  `_theme_props` (eggs/tulips, lantern strings, pumpkins/hay/scarecrows, jack-o-lanterns/candles/fog, lights/
+  canes/gifts/star). Themes set `realm` (harvest → PARCELS, halloween → LABYRINTH).
+- `voxel_super_island.plan(seed, kinds)`: Ultra's layout (256 m pitch, roots at (±128, ±128), sockets at ±120 m,
+  deck 10 m) → `member_plan` (size 104, plateau lifted +10, a 12 m stone landing from the rim to each socket with
+  posts/rails and lantern posts at the mouth) → `_bridge` for every connector (8 m walk, sills, rails, rope posts)
+  → sky rivers between member lakes → manifest.
+
+### 14.4 How to iterate (what to change, where, and how to check)
+- **New prop with a reason**: add the palette key(s) to `PAL`, add the item to the realm's chemistry row (so the
+  seed can roll it), place it in `plan()` near the thing it serves, add the registry line and the Mechanics row.
+- **New kind**: a `KINDS` entry (palette overrides, `tree`, `lake`, `extra`) + the `extra` branch in `plan()`.
+- **New theme**: a `THEMES` entry + a `_theme_props` branch.
+- **Check without Blender**: `python -m unittest tools/blender/test_voxel_island.py`; raster preview = the 20-line
+  isometric painter in the lessons (sort voxels by `x+y`, then `z`); `greedy_quads` count tells you the mesh cost.
+- **Check with Blender (headless)**: `export_hero.py`, `export_heroes.py` (batches), `export_cluster.py`,
+  `export_super.py`, `export_creatures.py` — always `-b --factory-startup --python-exit-code 1`, absolute out dir,
+  one Blender process at a time on the shared PC; previews are Workbench VERTEX with the `Col` attribute active.
+- **Check in Unreal (when it is our turn)**: `daedalus_claude_islands.import_island` (FbxImportUI: Nanite off,
+  vertex colours REPLACE, no lightmap UVs, no auto collision) → `place` at the deed's `x_cm, y_cm, top_cm` from
+  `docs/production/lands/<realm>.json`, scale 0.01 → `viewport_screenshot`.
+- **Seeds**: same seed + realm + kind = same island forever. LEGENDARY seeds (crater): 39, 91, 124, 125, 131, 144, 158…
+  (`[s for s in range(N) if CH.profile(s)["geology"]["grade"] == "LEGENDARY"]`).
+
+### 14.5 Characters (`tools/blender/voxel_creatures.py`)
+Body plans in 10 cm voxels (`_quadruped`, `_bird`, `_bee`, `_plant`) → one mesh with a vertex group per bone →
+the shared 8-bone rig (root, body, head, tail, leg.L/R, wing.L/R — Codex's Portal creature layout) → NLA clips
+Idle / Walk / Attack / Hurt (plants: Idle sway, Attack = the trap snaps; bees hover with 6× wing beats) → GLB with
+animations + FBX + json. 64 species today: 24 animals, 18 birds, 9 bees, 13 carnivorous plants. Add a species by
+adding a dict entry (animal/bird/bee) or a branch in `_plant`.
