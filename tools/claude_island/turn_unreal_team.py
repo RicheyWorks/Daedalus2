@@ -20,11 +20,14 @@ Steps (each one is timed and reported; a step that fails is recorded and the tur
 Nothing here deletes files or closes other programs.
 """
 import json
+import copy
 import os
 import re
 import subprocess
 import sys
 import time
+import tempfile
+import uuid
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -34,6 +37,35 @@ REPORT = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "Daedalus", "jobs", 
 SCENARIOS = ["tactics", "tactics_remote", "wild", "orrery"]
 PYDIR = os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\")
 THREE_NPC = os.path.join(REPO, "docs", "benchmarks", "adaptive-initial", "three-npc.dto")
+# Keep legacy launcher receipts readable while accepting its collision-safe GUID IDs.
+BUILD_ID = r"build-\d{4}-\d{6}(?:-[0-9a-fA-F]{32})?"
+
+
+def atomic_report(path, report):
+    """Publish a complete JSON checkpoint, preserving the previous one on failure."""
+    folder = os.path.dirname(os.path.abspath(path))
+    os.makedirs(folder, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=folder,
+                                         prefix=".turn-", suffix=".tmp", delete=False) as f:
+            temporary = f.name
+            json.dump(report, f, indent=1, allow_nan=False)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary and os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def report_exit_code(report):
+    """Completion alone is not success; a dry plan has no executed steps."""
+    if "plan" in report and "steps" not in report:
+        return 0
+    steps = report.get("steps")
+    return 0 if (not report.get("stopped") and steps
+                 and all(s.get("ok") is True for s in steps)) else 1
 
 PLACE = r'''
 import sys, types, importlib
@@ -103,9 +135,24 @@ def ram():
 
 
 class Turn:
-    def __init__(self, call, run, ram_fn, link, now=time.time, sleep=time.sleep):
+    def __init__(self, call, run, ram_fn, link, now=time.time, sleep=time.sleep,
+                 checkpoint=None, job_id=None, progress_path=None):
         self.call, self.run, self.ram, self.link, self.now, self.sleep = call, run, ram_fn, link, now, sleep
         self.steps = []
+        self.checkpoint = checkpoint
+        self.job_id = job_id or "turn-" + uuid.uuid4().hex
+        self.progress_path = progress_path
+
+    def report(self, state="running", stop_reason=None, before=None, after=None):
+        return {"stopped": stop_reason, "ram_before": before, "ram_after": after,
+                "steps": copy.deepcopy(self.steps), "schema_version": 1, "job_id": self.job_id,
+                "progress_path": self.progress_path, "state": state,
+                "completed_steps": len(self.steps),
+                "last_step": self.steps[-1]["step"] if self.steps else None}
+
+    def publish(self, report):
+        if self.checkpoint:
+            self.checkpoint(report)
 
     def step(self, name, fn):
         t0 = self.now()
@@ -115,6 +162,8 @@ class Turn:
             out = {"ok": False, "error": repr(e)[:400]}
         out.update(step=name, seconds=round(self.now() - t0, 1))
         self.steps.append(out)
+        # A failed checkpoint stops orchestration before another editor operation.
+        self.publish(self.report())
         return out
 
     def build(self, tries=8):
@@ -123,13 +172,13 @@ class Turn:
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "fetch", "-q", "origin"])
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "checkout", "-q", "--detach", "origin/main"])
         started = self.run(["powershell", "-NoProfile", "-File", job, "-Start", "-Fast"])
-        match = re.search(r"(?m)^started (build-\d{4}-\d{6}) pid=\d+\s*$", started)
+        match = re.search(r"(?m)^started (" + BUILD_ID + r") pid=\d+\s*$", started)
         if not match:
             raise RuntimeError("Build start did not return a job id; refusing to wait for an unrelated build")
         job_id = match.group(1)
         for _ in range(tries):
             out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait", "-Id", job_id])
-            status = re.search(r"(?m)^(BUILD OK|BUILD FAILED|JOB ENDED|RUNNING) (build-\d{4}-\d{6})(?:\s|$)", out)
+            status = re.search(r"(?m)^(BUILD OK|BUILD FAILED|JOB ENDED|RUNNING) (" + BUILD_ID + r")(?:\s|$)", out)
             if not status or status.group(2) != job_id:
                 raise RuntimeError("Build wait returned no matching status for " + job_id)
             if status.group(1) in ("BUILD FAILED", "JOB ENDED"):
@@ -226,7 +275,9 @@ class Turn:
         return self.finish(None, before.get("result"), after.get("result"))
 
     def finish(self, stop_reason, before=None, after=None):
-        report = {"stopped": stop_reason, "ram_before": before, "ram_after": after, "steps": self.steps}
+        report = self.report(stop_reason=stop_reason, before=before, after=after)
+        report["state"] = "failed" if report_exit_code(report) else "succeeded"
+        self.publish(report)
         ok = sum(1 for s in self.steps if s["ok"])
         text = ("TURN DONE unreal-team: %d/%d steps ok%s. RAM before %s, after %s. Report: turn-report.json"
                 % (ok, len(self.steps), "" if not stop_reason else " (stopped: %s)" % stop_reason, before, after))
@@ -254,13 +305,40 @@ def main(argv):
         subprocess.run([sys.executable, "-m", "asset_pipeline.teamlink", "send", "--me", "unreal-team", "--to", "*",
                         "--type", "note", "--text", text], cwd=os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
-    report = Turn(call, run, ram, link).go(dry, light, after_build)
+    job_id = "turn-" + uuid.uuid4().hex
+    progress_path = os.path.join(os.path.dirname(REPORT), job_id + ".json")
+    runner = Turn(call, run, ram, link, job_id=job_id, progress_path=progress_path,
+                  checkpoint=None if dry else lambda report: atomic_report(progress_path, report))
+    checkpoint_failed = False
+    try:
+        if not dry:
+            runner.publish(runner.report())
+            print("TURN STARTED %s report=%s" % (job_id, progress_path), flush=True)
+        report = runner.go(dry, light, after_build)
+    except Exception as e:
+        report = runner.report("failed", "orchestration failed: " + repr(e)[:400])
+        if not dry:
+            try:
+                runner.publish(report)
+            except Exception as checkpoint_error:
+                checkpoint_failed = True
+                print("CHECKPOINT FAILED %s: %r" % (job_id, checkpoint_error), file=sys.stderr)
     if not dry:
-        os.makedirs(os.path.dirname(REPORT), exist_ok=True)
-        with open(REPORT, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=1)
+        # Keep the existing final-report path and keys for existing consumers. It
+        # is a compatibility alias; explicit job paths identify concurrent runs.
+        try:
+            atomic_report(REPORT, report)
+        except Exception as report_error:
+            checkpoint_failed = True
+            print("REPORT FAILED %s: %r" % (job_id, report_error), file=sys.stderr)
+            report["state"] = "failed"
+            report["stopped"] = "final report failed: " + repr(report_error)[:400]
+            try:
+                runner.publish(report)
+            except Exception as checkpoint_error:
+                print("CHECKPOINT FAILED %s: %r" % (job_id, checkpoint_error), file=sys.stderr)
     print(json.dumps(report, indent=1)[:4000])
-    return 0
+    return 1 if checkpoint_failed else report_exit_code(report)
 
 
 if __name__ == "__main__":
