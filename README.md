@@ -310,6 +310,8 @@ public consumers).
 | `GET` | `/api/v1/retro/{seed}` | public | The 8-bit realm behind a portal, generated whole from a seed (field, towns, castle, three cave floors, every chest, lock and monster table) as the plain-text DRR 1 spec the C++ core plays (ADR-052) |
 | `GET` | `/api/v1/retro/{seed}/check` | public | Walks that realm like a party would and reports whether every chest, lock, guardian and townsperson can be reached (ADR-052) |
 | `GET` | `/api/v1/inventory/{realm}/catalog` | required | Canonical DIC 1 item definitions for a realm; read-only, with no player quantities or cross-realm transfer |
+| `GET` | `/api/v1/ocean/v1` | required | Opt-in Ocean sector manifest; authenticated in every profile, disabled by default |
+| `GET` | `/api/v1/ocean/v1/chunk?x=&y=&z=` | required | Persisted Ocean chunk using the existing block DTO; bounded sector and per-key rate limit, no HTTP edits |
 | `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
 | `POST` | `/api/v1/tactics/decide` | required | Unreal's squad round trip: `{roster: DTR 1, events: DTE 1}` in, `{result: APPLY/REPEAT/STALE, spec: DTO 1}` out, fenced per session and squad (ADR-060) |
 | `POST` | `/api/v1/kennel/brew` | required | Configured engine host calculates a deterministic TONIC 1 from herbs/coat/drinker/stage/charm/seed; no inventory mutation. [Contract and fixtures](docs/contracts/tonic-v1/README.md). |
