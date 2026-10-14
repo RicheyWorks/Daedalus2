@@ -183,9 +183,11 @@ def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, ti
     report["import_path"] = snapshot
     report["dest"] = dest + "/" + report["name"]
     t = time.time()
+    report["import_state"] = "outcome-unknown"
     made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
                      bridge_timeout=timeout,
                      code=sides.script(sides.UNREAL_IMPORT, path=snapshot, artifact=current, dest=report["dest"], save=save))
+    report["import_state"] = "reply-received"
     made = wire.obj(made, "Unreal", "the import")
     checks = judge(report["blender"], report["file"], made)
     report.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, imported_s=round(time.time() - t, 2),
@@ -202,6 +204,21 @@ def ship(name, objects=None, dest="/Game/Daedalus/Assets", folder=None, save=Tru
 ship.export, ship.land, ship.prebuilt = export, land, prebuilt   # the watcher overlaps the halves: Blender exports the next asset while Unreal imports this one
 
 
+def write_report(path, report):
+    """Publish complete JSON; an interrupted write must not destroy the prior receipt."""
+    folder = os.path.dirname(os.path.abspath(path))
+    fd, temporary = tempfile.mkstemp(prefix=".pipeline-report-", suffix=".tmp", dir=folder)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            json.dump(report, stream, indent=2)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--name", required=True, help="asset name: the .glb file and the Unreal folder")
@@ -213,18 +230,25 @@ def main(argv=None):
     ap.add_argument("--blender-port", type=int, default=wire.BLENDER[1])
     ap.add_argument("--unreal-port", type=int, default=wire.UNREAL[1])
     a = ap.parse_args(argv)
+    r = {"name": a.name, "phase": "export", "ok": False}
     try:
-        r = ship(a.name, [o for o in a.objects.split(",") if o], a.dest, a.folder, not a.no_save,
-                 (wire.BLENDER[0], a.blender_port), (wire.UNREAL[0], a.unreal_port))
+        r = export(a.name, [o for o in a.objects.split(",") if o], a.folder,
+                   (wire.BLENDER[0], a.blender_port))
+        r["phase"] = "import"
+        land(r, a.dest, not a.no_save, (wire.UNREAL[0], a.unreal_port))
+        r["phase"] = "verified"
     except (wire.BridgeError, OSError, ValueError) as e:
+        r.update(ok=False, error={"type": type(e).__name__, "message": str(e)},
+                 retry="Do not repeat an import with unknown outcome; inspect the original job and retained snapshot first.")
+        if a.report:
+            write_report(a.report, r)
         print("FAIL  %s" % e)
         return 2
     for c in r["checks"]:
         print("%-4s  %-46s %s" % ("ok" if c["ok"] else "FAIL", c["check"], c["detail"]))
     print("%s  %s -> %s in %.1fs" % ("SHIPPED" if r["ok"] else "REJECTED", r["path"], r["dest"], r["seconds"]))
     if a.report:
-        with open(a.report, "w") as f:
-            json.dump(r, f, indent=2)
+        write_report(a.report, r)
     return 0 if r["ok"] else 1
 
 
