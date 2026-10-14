@@ -54,7 +54,7 @@ inline Route Board(const std::string& currentRealm, const Dock& departure,
     return {true, oceanArrival.Realm, oceanArrival.ArrivalAnchor};
 }
 inline Route Land(const std::string& currentRealm, const Dock& destination,
-                  Vessel vessel)
+                  Vessel vessel, const std::string& shoreReturnRealm = "Portal Realm")
 {
     if (!ValidVessel(vessel) || !ValidDock(destination)
         || !IsOceanRealm(currentRealm) || destination.Id.empty()
@@ -62,9 +62,10 @@ inline Route Land(const std::string& currentRealm, const Dock& destination,
         || destination.ArrivalAnchor.empty()
         || (vessel == Vessel::Boat && destination.Underwater))
         return {};
-    // Other worlds require their configured underwater docks. Ordinary shores
-    // return to Portal/Dragon Warrior land, never an arbitrary requested realm.
-    if (!destination.Underwater && !IsPortalRealm(destination.Realm)) return {};
+    // The caller supplies its host-owned departure record, never a requested destination.
+    // The legacy three-argument API retains its original Portal-only shore behavior.
+    if (!destination.Underwater && (!ValidIdentifier(shoreReturnRealm)
+        || IsOceanRealm(shoreReturnRealm) || !SameRealmIdentity(destination.Realm, shoreReturnRealm))) return {};
     return {true, destination.Realm, destination.ArrivalAnchor};
 }
 
@@ -87,12 +88,13 @@ class DockRegistry
         for (const auto& dock : docks) if (dock.Id == id) return &dock;
         return nullptr;
     }
-    static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel)
+    static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel,
+                             const std::string& shoreReturnRealm = "Portal Realm")
     {
         if (IsOceanRealm(from.Realm))
         {
             if (vessel == Vessel::Boat && from.Underwater) return {};
-            return Land(from.Realm, to, vessel);
+            return Land(from.Realm, to, vessel, shoreReturnRealm);
         }
         return Board(from.Realm, from, to, vessel);
     }
@@ -127,8 +129,9 @@ public:
             const Dock* from=Find(docks,connection.DepartureId);
             const Dock* to=Find(docks,connection.DestinationId);
             if (!from || !to || from == to) return false;
-            if (connection.Boats && !ResolvePair(*from,*to,Vessel::Boat).Allowed) return false;
-            if (connection.Submarines && !ResolvePair(*from,*to,Vessel::Submarine).Allowed) return false;
+            // A configured shore edge is only potential. Resolve checks the actual passenger departure.
+            if (connection.Boats && !ResolvePair(*from,*to,Vessel::Boat,to->Realm).Allowed) return false;
+            if (connection.Submarines && !ResolvePair(*from,*to,Vessel::Submarine,to->Realm).Allowed) return false;
             for (std::size_t j=0;j<i;++j)
                 if (connections[j].DepartureId == connection.DepartureId
                     && connections[j].DestinationId == connection.DestinationId) return false;
@@ -141,7 +144,8 @@ public:
         return true;
     }
     Route Resolve(const std::string& currentRealm, const std::string& departureId,
-                  const std::string& destinationId, Vessel vessel) const
+                  const std::string& destinationId, Vessel vessel,
+                  const std::string& shoreReturnRealm = "Portal Realm") const
     {
         if (!ValidVessel(vessel) || !ValidIdentifier(currentRealm)
             || !ValidIdentifier(departureId) || !ValidIdentifier(destinationId)) return {};
@@ -152,7 +156,7 @@ public:
             if (connection.DepartureId == departureId && connection.DestinationId == destinationId
                 && ((vessel == Vessel::Boat && connection.Boats)
                     || (vessel == Vessel::Submarine && connection.Submarines)))
-                return ResolvePair(*from,*to,vessel);
+                return ResolvePair(*from,*to,vessel,shoreReturnRealm);
         return {};
     }
 };

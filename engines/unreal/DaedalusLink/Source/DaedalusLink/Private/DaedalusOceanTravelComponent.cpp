@@ -277,8 +277,12 @@ bool UDaedalusOceanTravelComponent::ResolveForPlayer(AController* Player,
     });
     if (!Dock || FVector::DistSquared(Location, Dock->BoardingLocation)
         > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
+    FString ShoreReturnRealm;
+    if (const auto* Boarding = BoardingAvatars.Find(Player);
+        Boarding && Boarding->Vessel.Get() == Vessel && Boarding->Avatar.IsValid())
+        ShoreReturnRealm = Boarding->DepartureRealm;
     const auto Route = Registry.Resolve(Utf8(Vessel->CurrentRealm), Utf8(DepartureId),
-                                       Utf8(DestinationId), Kind);
+                                       Utf8(DestinationId), Kind, Utf8(ShoreReturnRealm));
     if (!Route.Allowed) return false;
     DestinationRealm = UTF8_TO_TCHAR(Route.DestinationRealm.c_str());
     ArrivalAnchor = UTF8_TO_TCHAR(Route.ArrivalAnchor.c_str());
@@ -311,7 +315,8 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
     }
     Player->Possess(Vessel);
     if (Player->GetPawn() != Vessel || Vessel->GetController() != Player) return false;
-    BoardingAvatars.Add(Player, {Avatar, Vessel, Avatar->GetActorEnableCollision(), Avatar->IsHidden()});
+    const FString DepartureRealm = DaedalusOceanTravel::IsOceanRealm(Utf8(Dock->Realm)) ? FString() : Dock->Realm;
+    BoardingAvatars.Add(Player, {Avatar, Vessel, Avatar->GetActorEnableCollision(), Avatar->IsHidden(), DepartureRealm});
     Avatar->SetActorEnableCollision(false);
     Avatar->SetActorHiddenInGame(true);
     return true;

@@ -127,6 +127,45 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Vessel->CalcCamera(.016f,View);
     TestTrue(TEXT("Chase camera provides a view behind hull"),View.Location.X<Vessel->GetActorLocation().X-100);
     TestTrue(TEXT("Chase camera provides an elevated view"),View.Location.Z>Vessel->GetActorLocation().Z+100);
+    // A fresh host demonstrates that shore identity comes from successful boarding, not the destination.
+    AActor* ReturnHost=World->SpawnActor<AActor>();
+    auto* ReturnTravel=NewObject<UDaedalusOceanTravelComponent>(ReturnHost);
+    ReturnHost->AddInstanceComponent(ReturnTravel);ReturnTravel->RegisterComponent();
+    auto* ReturnPlayer=World->SpawnActor<APlayerController>();
+    auto* ReturnAvatar=World->SpawnActor<ADaedalusOceanVessel>(FVector(5000,300,0),FRotator::ZeroRotator);
+    auto* ReturnVessel=World->SpawnActor<ADaedalusOceanVessel>(FVector(5000,0,0),FRotator::ZeroRotator);
+    if (!TestNotNull(TEXT("Return controller"),ReturnPlayer)||!TestNotNull(TEXT("Return avatar"),ReturnAvatar)
+        ||!TestNotNull(TEXT("Return vessel"),ReturnVessel)) {World->DestroyWorld(false);return false;}
+    ReturnAvatar->SetActorEnableCollision(false);ReturnVessel->CurrentRealm=TEXT("GALLERY-CITY");
+    ReturnPlayer->Possess(ReturnAvatar);
+    FDaedalusOceanDock Gallery;
+    Gallery.Id=TEXT("gallery");Gallery.Realm=TEXT("GALLERY-CITY");Gallery.ArrivalAnchor=TEXT("gallery_shore");
+    Gallery.BoardingLocation=FVector(5000,0,0);Gallery.ExitLocation=FVector(5000,300,0);Gallery.BoardingRadiusCm=500;
+    auto Ocean=Gallery;Ocean.Id=TEXT("ocean");Ocean.Realm=TEXT("OCEAN");Ocean.ArrivalAnchor=TEXT("sea");
+    auto Portal=Gallery;Portal.Id=TEXT("portal");Portal.Realm=TEXT("PORTAL");Portal.ArrivalAnchor=TEXT("portal_shore");
+    FDaedalusOceanConnection Out;Out.DepartureId=Gallery.Id;Out.DestinationId=Ocean.Id;Out.bBoats=true;
+    auto Back=Out;Back.DepartureId=Ocean.Id;Back.DestinationId=Gallery.Id;
+    auto Wrong=Back;Wrong.DestinationId=Portal.Id;
+    TestTrue(TEXT("Host config includes potential shore returns"),ReturnTravel->ConfigureHost(
+        {Gallery.Realm,Ocean.Realm,Portal.Realm},{Gallery,Ocean,Portal},{Out,Back,Wrong}));
+    ReturnPlayer->Possess(ReturnVessel);ReturnVessel->CurrentRealm=Ocean.Realm;
+    TestFalse(TEXT("No boarding record cannot authorize shore"),ReturnTravel->ResolveForPlayer(
+        ReturnPlayer,ReturnVessel,Ocean.Id,Gallery.Id,Realm,Anchor));
+    ReturnPlayer->Possess(ReturnAvatar);ReturnVessel->CurrentRealm=Gallery.Realm;
+    TestTrue(TEXT("Verified Gallery boarding captures origin"),ReturnTravel->BoardAtDock(ReturnPlayer,ReturnVessel,Gallery.Id));
+    ReturnVessel->CurrentRealm=Ocean.Realm; // Host arrival simulation, not a live load/transfer assertion.
+    TestTrue(TEXT("Captured Gallery departure permits Gallery shore"),ReturnTravel->ResolveForPlayer(
+        ReturnPlayer,ReturnVessel,Ocean.Id,Gallery.Id,Realm,Anchor));
+    TestEqual(TEXT("Shore route preserves canonical destination"),Realm,Gallery.Realm);
+    TestFalse(TEXT("Configured Portal shore cannot replace captured origin"),ReturnTravel->ResolveForPlayer(
+        ReturnPlayer,ReturnVessel,Ocean.Id,Portal.Id,Realm,Anchor));
+    TestTrue(TEXT("Rejected shore clears result"),Realm.IsEmpty()&&Anchor.IsEmpty());
+    ReturnVessel->CurrentRealm=Gallery.Realm;
+    TestTrue(TEXT("Ending the boarding session clears its departure"),ReturnTravel->DisembarkAtDock(ReturnPlayer,ReturnVessel,Gallery.Id));
+    ReturnVessel->CurrentRealm=Ocean.Realm;
+    TestTrue(TEXT("Boarding a vessel already in Ocean has no assumed departure"),ReturnTravel->BoardAtDock(ReturnPlayer,ReturnVessel,Ocean.Id));
+    TestFalse(TEXT("New Ocean boarding cannot reuse previous Gallery origin"),ReturnTravel->ResolveForPlayer(
+        ReturnPlayer,ReturnVessel,Ocean.Id,Gallery.Id,Realm,Anchor));
     World->DestroyWorld(false);
     return true;
 }

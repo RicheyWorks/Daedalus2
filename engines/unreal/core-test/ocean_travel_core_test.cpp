@@ -113,5 +113,22 @@ int main()
     aliases=canonicalRealms;aliases.push_back("Portal Realm");
     CHECK(!canonical.Configure(aliases,{canonicalHome,canonicalSea},{}));
     CHECK(canonical.Resolve("PORTAL","home","sea",Vessel::Boat).DestinationRealm=="OCEAN");
+    const Dock galleryShore{"gallery_shore","GALLERY-CITY","gallery_shore_anchor",false};
+    DockRegistry returning;
+    CHECK(returning.Configure(canonicalRealms,{canonicalHome,canonicalSea,galleryShore},
+        {{"gallery_shore","sea",true,true},{"sea","gallery_shore",true,true},{"sea","home",true,true}}));
+    CHECK(returning.Resolve("GALLERY-CITY","gallery_shore","sea",Vessel::Boat,"").Allowed);
+    CHECK(returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat,"GALLERY-CITY").Allowed);
+    CHECK(returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Submarine,"GALLERY-CITY").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat,"PORTAL").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat,"").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","home",Vessel::Boat,"GALLERY-CITY").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","home",Vessel::Boat,"").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat,"OCEAN").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat,std::string("GALLERY-CITY\0",13)).Allowed);
+    CHECK(canonical.Resolve("OCEAN","reef","gallery",Vessel::Submarine,"").Allowed);
+    CHECK(!canonical.Resolve("OCEAN","reef","gallery",Vessel::Boat,"GALLERY-CITY").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","missing",Vessel::Boat,"GALLERY-CITY").Allowed);
+    CHECK(!returning.Resolve("OCEAN","sea","gallery_shore",Vessel::Boat).Allowed);
     std::cout << "OCEAN_TRAVEL_PASS " << checks << " checks\n";
 }

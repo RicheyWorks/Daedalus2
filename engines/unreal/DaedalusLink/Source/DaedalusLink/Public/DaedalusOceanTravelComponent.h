@@ -138,6 +138,8 @@ private:
         TWeakObjectPtr<ADaedalusOceanVessel> Vessel;
         bool bCollision = true;
         bool bHidden = false;
+        // Captured from a validated host dock after possession succeeds. Never a client field.
+        FString DepartureRealm;
     };
     TMap<TWeakObjectPtr<AController>, BoardingState> BoardingAvatars;
     bool IsHost() const;
