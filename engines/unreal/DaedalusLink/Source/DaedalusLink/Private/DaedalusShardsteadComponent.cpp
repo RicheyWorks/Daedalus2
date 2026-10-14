@@ -62,11 +62,8 @@ FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& P
     Out.Available=true;Out.Friendship=Crew->Friendship;Out.Infamy=Crew->Infamy;
     for(int Value:Crew->Cargo)Out.Cargo.Add(Value);
     Out.Cycle=View.Cycle()>static_cast<std::uint64_t>(MAX_int64)?MAX_int64:static_cast<int64>(View.Cycle());
-    auto Forecast=View;
-    if(View.Cycle()!=UINT64_MAX&&Forecast.Produce(View.Cycle()+1)){
-        const auto* Next=Forecast.Stats(Key(PlayerKey));
-        for(unsigned K=0;K<daedalus::shardstead::Slot(daedalus::shardstead::Resource::Count);++K)Out.ProjectedNet.Add(Next->Cargo[K]-Crew->Cargo[K]);
-    }
+    daedalus::shardstead::Stock Net{};
+    if(View.ForecastNet(Key(PlayerKey),Net))for(int Quantity:Net)Out.ProjectedNet.Add(Quantity);
     return Out;
 }
 TArray<FDaedalusIslandClaimRow> UDaedalusShardsteadComponent::GetClaimRows(const FString& PlayerKey) const {

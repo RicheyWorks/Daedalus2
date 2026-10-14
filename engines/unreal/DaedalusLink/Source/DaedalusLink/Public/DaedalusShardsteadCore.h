@@ -44,6 +44,17 @@ class Economy {
     std::set<std::string> Workers;
     static constexpr int MaxStock=1000000;
     static bool Amounts(const Stock& A){return std::all_of(A.begin(),A.end(),[](int V){return V>=0&&V<=MaxStock;});}
+    static int ProducePlot(Crew& C,const Plot& P){
+        int Job=P.Task==Resource::Food?0:P.Task==Resource::Energy?1:2;
+        unsigned K=Slot(P.Task);
+        int Yield=Job<2?1+P.Remaining[K]/100:std::min(3,P.Remaining[K]);
+        if(Job==0&&C.Cargo[0]==0)Yield=1;
+        if((Job!=0&&C.Cargo[0]<1)||(Job==2&&C.Cargo[1]<1))return 0;
+        Yield=std::min(Yield,MaxStock-C.Cargo[K]);if(Yield<=0)return 0;
+        if(Job!=0)--C.Cargo[0];
+        if(Job==2)--C.Cargo[1];
+        C.Cargo[K]+=Yield;return Yield;
+    }
 public:
     explicit Economy(std::uint64_t RealmSeed):Seed(RealmSeed){}
     bool Join(const std::string& Player){return Identity(Player)&&Crews.size()<256&&Crews.emplace(Player,Crew{}).second;}
@@ -68,16 +79,20 @@ public:
         for(int Pass=0;Pass<3;++Pass)for(auto& Pair:Plots){
             auto& P=Pair.second;int Job=P.Task==Resource::Food?0:P.Task==Resource::Energy?1:2;
             if(!P.Assigned||Job!=Pass)continue;
-            auto& C=Crews.find(P.Owner)->second;unsigned K=Slot(P.Task);
-            int Yield=Job<2?1+P.Remaining[K]/100:std::min(3,P.Remaining[K]);
-            if(Job==0 && C.Cargo[0]==0)Yield=1;
-            if(Job!=0 && C.Cargo[0]<1)continue;
-            if(Job==2 && C.Cargo[1]<1)continue;
-            Yield=std::min(Yield,MaxStock-C.Cargo[K]);if(Yield<=0)continue;
-            if(Job!=0)--C.Cargo[0];if(Job==2)--C.Cargo[1];
-            C.Cargo[K]+=Yield;if(Job==2)P.Remaining[K]-=Yield;
+            int Yield=ProducePlot(Crews.find(P.Owner)->second,P);
+            if(Job==2)P.Remaining[Slot(P.Task)]-=Yield;
         }
         LastCycle=Cycle;return true;
+    }
+    bool ForecastNet(const std::string& Player,Stock& Out) const{
+        const Crew* Current=Stats(Player);if(!Current||LastCycle==UINT64_MAX)return false;
+        Crew Candidate=*Current;
+        for(int Pass=0;Pass<3;++Pass)for(const auto& Pair:Plots){
+            const auto& P=Pair.second;int Job=P.Task==Resource::Food?0:P.Task==Resource::Energy?1:2;
+            if(P.Assigned&&P.Owner==Player&&Job==Pass)ProducePlot(Candidate,P);
+        }
+        for(unsigned K=0;K<Slot(Resource::Count);++K)Out[K]=Candidate.Cargo[K]-Current->Cargo[K];
+        return true;
     }
     bool Mine(const std::string& Player,std::uint32_t Island,Resource R,int Quantity,bool HostAtDeposit) {
         auto I=Plots.find(Island);if(!HostAtDeposit||I==Plots.end()||I->second.Owner!=Player||!Valid(R)||Slot(R)<Slot(Resource::Iron)||Quantity<=0||Quantity>25)return false;
