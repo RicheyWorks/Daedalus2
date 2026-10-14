@@ -3,6 +3,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/GameModeBase.h"
 #include "DaedalusOceanHostClient.h"
+#include "DaedalusOceanSectorView.h"
 #include "OceanHttpProbe.generated.h"
 UCLASS()
 class AOceanHttpProbe : public AActor
@@ -16,6 +17,7 @@ public:
     UFUNCTION() void Failed(int32 Status,const FString& Reason);
 private:
     UPROPERTY() TObjectPtr<UDaedalusOceanHostClient> Client;
+    UPROPERTY() TObjectPtr<ADaedalusOceanSectorView> View;
     FString Origin,Token;
     int32 Phase=0;
     float Elapsed=0,Wait=0;

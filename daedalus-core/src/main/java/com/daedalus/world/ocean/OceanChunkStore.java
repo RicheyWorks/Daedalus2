@@ -60,7 +60,13 @@ public final class OceanChunkStore implements AutoCloseable {
         Objects.requireNonNull(chunk, "chunk");
         Path file = file(at);
         // Do not replace an existing corrupt/foreign record during routine saving.
-        if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) read(file, at);
+        if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+            Chunk previous = read(file, at);
+            if (chunk.revision() < previous.revision()
+                    || (chunk.revision() == previous.revision() && !java.util.Arrays.equals(chunk.ordinals(), previous.ordinals()))) {
+                throw new IOException("Ocean chunk revision regressed or conflicted");
+            }
+        }
         write(file, at, chunk.copy());
     }
 
@@ -81,7 +87,7 @@ public final class OceanChunkStore implements AutoCloseable {
         // WorldStore's compatibility fallback may overwrite non-atomically. Keep
         // that operation private to staging, then require atomic publication here.
         World image = World.from(new WorldSnapshot(ID, new WorldRevision(0),
-                chunk.isEmpty() ? Map.of() : Map.of(at, chunk)));
+                Map.of(at, chunk)));
         Path pending = Files.createTempFile(directory, "ocean-chunk-", ".tmp");
         try {
             WorldStore.save(image, pending);

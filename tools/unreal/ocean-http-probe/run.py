@@ -17,6 +17,9 @@ import urllib.request
 def main(args):
     out=args.output.resolve()
     out.mkdir()  # Existing proof directories are never replaced.
+    seed=subprocess.run([str(args.java),'--class-path',str(args.classpath.resolve()),str(args.store_probe.resolve()),
+                         'write',str(out/'store')],capture_output=True,text=True,timeout=30,check=True)
+    if 'OCEAN_PROCESS_WRITE_PASS' not in seed.stdout:raise RuntimeError('Persistent Ocean fixture not seeded')
     with socket.socket() as reservation:
         reservation.bind(('127.0.0.1',0));port=reservation.getsockname()[1]
     origin=f'http://127.0.0.1:{port}'
@@ -57,10 +60,12 @@ def main(args):
                 native.wait(timeout=40)
             text=native_log.read_text(encoding='utf-8',errors='replace')
             if native.returncode!=0 or 'OCEAN_NATIVE_HTTP_PASS' not in text:raise RuntimeError('Native HTTP probe failed; inspect private log')
+            if 'OCEAN_NATIVE_MESH_BUILT' not in text:raise RuntimeError('No native procedural mesh proof')
+            if 'OCEAN_NATIVE_CLEARED_MESH_REMOVED' not in text:raise RuntimeError('No cleared revision/geometry proof')
             for name in ['server.log','native.log','native-stdout.log']:
                 if token in (out/name).read_text(encoding='utf-8',errors='replace'):
                     raise RuntimeError('Test token appeared in private log; do not publish it')
-            result={'packaged_server_to_native_client':True,'water_payload':True,'bounds404':True,'jwt401':True,
+            result={'packaged_server_to_native_client':True,'native_procedural_geometry':True,'water_collision_disabled':True,'cleared_revision_and_mesh_removal':True,'water_payload':True,'bounds404':True,'jwt401':True,
                     'cancelled_reply_ignored':True,'reconnect':True,'token_not_in_logs':True,
                     'elapsed_seconds':round(time.monotonic()-start,3),'scope':'Java server startup plus native engine startup and HTTP scenario',
                     'jar_sha256':hashlib.sha256(args.jar.read_bytes()).hexdigest(),
@@ -84,5 +89,5 @@ def main(args):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
-    for name in ['java','jar','engine','project','output']:parser.add_argument('--'+name,required=True,type=Path)
+    for name in ['java','jar','engine','project','output','classpath','store-probe']:parser.add_argument('--'+name,required=True,type=Path)
     main(parser.parse_args())

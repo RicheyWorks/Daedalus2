@@ -56,3 +56,9 @@
 - Keep bearer tokens out of reflected/config/replicated properties, command arguments and logs. The private probe uses fresh short-lived credentials in child environments and checks logs before recording hashes.
 - A final response URL check does not prove safe redirect credential handling. Keep TLS/redirect policy and rendered travel as explicit open gates after successful loopback transport.
 - Bound streamed response bytes before accumulating them; validate exact chunk identity, canonical payload length and palette indices before publishing a result. Cancel and invalidate session generations on both destruction and EndPlay.
+
+### Native Ocean geometry and cleared revisions
+- Generate palette metadata from the existing Java canonical tables and check drift; do not hand-maintain another colour/visibility table.
+- Mesh chunks in local coordinates and use double component offsets. This preserves local geometry at distant plots and avoids global signed mesher boundary arithmetic.
+- Empty data still has a revision. Persist the explicit empty chunk rather than dropping it from the snapshot, or a restarted server can send an older revision that native stale-update guards refuse. Store replacements now reject older or same-revision conflicting payloads.
+- Verify the boundary with a separate Java writer, packaged server reader and native scene consumer. The private fixture proves a persisted clear removes old geometry; NullRHI geometry/collision flags are distinct from rendered appearance and physical walking acceptance.
