@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "sourceCommit": "20b9bb4fdfd7055de9fb0e9e01105f1ee331fc1a",
+  "command": "mvn -B -pl daedalus-server -am verify",
+  "result": "BUILD SUCCESS",
+  "logPath": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\labyrinth-host-verify-final.log",
+  "logSha256": "0dff1e501727044acc0f47f447d7e11986a71b890094dd9617cc71a24a32849d",
+  "modules": {
+    "daedalus-core": {
+      "tests": 723,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "daedalus-plugin-api": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "daedalus-wallet": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "daedalus-plugin-runtime": {
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "daedalus-server": {
+      "tests": 801,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "delivery": {
+    "schema": 1,
+    "realm": "LABYRINTH",
+    "scope": "bounded starter terrain; not the complete realm",
+    "seed": "42",
+    "sideMetres": 189,
+    "corridorWidthMetres": 3,
+    "coordinates": "glTF right-handed Y-up metres; feet anchors",
+    "spawn": [
+      -90,
+      1,
+      -93
+    ],
+    "exit": [
+      90,
+      1,
+      93
+    ],
+    "chunks": 144,
+    "glbBytes": 779252,
+    "glbSha256": "b5c78b90f1a5e51c41bb10c9a5207dfa9b22aa0a08c3a1e54ba53b42f5f40f1c",
+    "unrealImportAndCollisionVerified": false
+  },
+  "files": {
+    "labyrinth-starter.json": {
+      "bytes": 449,
+      "sha256": "36f8532fc8fc05fff5f358a2892e0b3bd2592830d158a45719c724a276c5930b"
+    },
+    "labyrinth.daew": {
+      "bytes": 75190,
+      "sha256": "bdea3e081275c532a8ff34a0087d6cc17819f1c61f9f2a20665f30fe25773d6b"
+    },
+    "Labyrinth_Starter.glb": {
+      "bytes": 779252,
+      "sha256": "b5c78b90f1a5e51c41bb10c9a5207dfa9b22aa0a08c3a1e54ba53b42f5f40f1c"
+    }
+  },
+  "warnings": "Existing SpringDoc, test annotation processing, and ArkHarbor ecology persistence warnings observed; not an Unreal run.",
+  "unrealImportVerified": false,
+  "unrealCollisionVerified": false,
+  "gameplayWalkthroughVerified": false
+}

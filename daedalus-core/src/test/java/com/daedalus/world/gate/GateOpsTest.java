@@ -93,15 +93,19 @@ class GateOpsTest {
     }
 
     @Test
-    void everyWorldStyleHasAMountThatFliesOnceItsWorldShips() {
+    void everyWorldStyleNamesItsMountAndFlightReadinessStaysIndependentOfTerrain() {
         assertThat(Mount.of(WorldStyle.SKY_ISLANDS)).isEqualTo(Mount.ARK);
         assertThat(Mount.of(WorldStyle.PARCELS)).isEqualTo(Mount.HELICOPTER);
         assertThat(Mount.of(WorldStyle.BRICKS)).isEqualTo(Mount.PLANE);
         assertThat(Mount.of(WorldStyle.GALLERY)).isEqualTo(Mount.DRONE);
         assertThat(Mount.of(WorldStyle.LABYRINTH)).isEqualTo(Mount.SKY_STRIDER);
         for (WorldStyle s : WorldStyle.values()) {
-            assertThat(Mount.of(s).ready()).as(s.name()).isEqualTo(s.ready());
+            if (s != WorldStyle.LABYRINTH) {
+                assertThat(Mount.of(s).ready()).as(s.name()).isEqualTo(s.ready());
+            }
         }
+        assertThat(WorldStyle.LABYRINTH.ready()).as("walkable terrain can be mounted").isTrue();
+        assertThat(Mount.SKY_STRIDER.ready()).as("terrain does not implement the flying mount").isFalse();
         assertThat(BlockType.PORTAL.seeThrough()).isTrue();
         assertThat(BlockType.RAINBOW_RED.seeThrough()).isTrue();
         assertThat(BlockType.CRYSTAL.seeThrough()).isFalse();

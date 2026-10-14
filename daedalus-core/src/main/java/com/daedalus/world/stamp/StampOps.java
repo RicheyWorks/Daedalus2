@@ -30,11 +30,16 @@ public final class StampOps {
     }
 
     public static ParcelBounds boundsOf(BlockCoordinate origin, MazeGrid maze, int wallHeight) {
+        return boundsOf(origin, maze, wallHeight, 1);
+    }
+
+    public static ParcelBounds boundsOf(BlockCoordinate origin, MazeGrid maze, int wallHeight, int tileScale) {
         Objects.requireNonNull(origin, "Stamp origin is required");
         Objects.requireNonNull(maze, "MazeGrid is required");
         if (wallHeight < 1) {
             throw new IllegalArgumentException("wallHeight must be at least 1");
         }
+        if (tileScale < 1 || tileScale > 4) throw new IllegalArgumentException("tileScale must be 1..4");
         TileType[][] tiles = maze.toTileGrid();
         int rows = tiles.length;
         int cols = tiles[0].length;
@@ -42,9 +47,9 @@ public final class StampOps {
                 origin.x(),
                 origin.y(),
                 origin.z(),
-                origin.x() + cols - 1,
-                origin.y() + wallHeight,
-                origin.z() + rows - 1);
+                Math.addExact(origin.x(), Math.multiplyExact(cols, tileScale) - 1),
+                Math.addExact(origin.y(), wallHeight),
+                Math.addExact(origin.z(), Math.multiplyExact(rows, tileScale) - 1));
     }
 
     /**
@@ -86,19 +91,22 @@ public final class StampOps {
         BlockCoordinate origin = request.origin();
         int floorY = request.floorY();
         int wallHeight = request.wallHeight();
-        ParcelBounds bounds = boundsOf(origin, request.maze(), wallHeight);
+        int scale = request.tileScale();
+        ParcelBounds bounds = boundsOf(origin, request.maze(), wallHeight, scale);
         List<BlockCoordinate> positions = new ArrayList<>();
         List<BlockType> types = new ArrayList<>();
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                int x = origin.x() + c;
-                int z = origin.z() + r;
-                if (tiles[r][c] == TileType.WALL) {
-                    for (int y = floorY; y <= floorY + wallHeight; y++) {
-                        remember(world, positions, types, x, y, z);
+                for (int dz = 0; dz < scale; dz++) {
+                    for (int dx = 0; dx < scale; dx++) {
+                        int x = origin.x() + c * scale + dx;
+                        int z = origin.z() + r * scale + dz;
+                        if (tiles[r][c] == TileType.WALL) {
+                            for (int y = floorY; y <= floorY + wallHeight; y++) {
+                                remember(world, positions, types, x, y, z);
+                            }
+                        } else remember(world, positions, types, x, floorY, z);
                     }
-                } else {
-                    remember(world, positions, types, x, floorY, z);
                 }
             }
         }

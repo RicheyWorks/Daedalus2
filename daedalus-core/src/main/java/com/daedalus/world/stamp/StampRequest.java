@@ -16,7 +16,12 @@ public record StampRequest(
         BlockCoordinate origin,
         MazeGrid maze,
         int floorY,
-        int wallHeight) {
+        int wallHeight,
+        int tileScale) {
+
+    public StampRequest(WorldId worldId, BlockCoordinate origin, MazeGrid maze, int floorY, int wallHeight) {
+        this(worldId, origin, maze, floorY, wallHeight, 1);
+    }
 
     public StampRequest {
         Objects.requireNonNull(worldId, "WorldId is required");
@@ -28,5 +33,6 @@ public record StampRequest(
         if (wallHeight < 1) {
             throw new IllegalArgumentException("wallHeight must be at least 1");
         }
+        if (tileScale < 1 || tileScale > 4) throw new IllegalArgumentException("tileScale must be 1..4");
     }
 }

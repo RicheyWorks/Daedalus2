@@ -6,7 +6,8 @@ package com.daedalus.world;
  * How a world looks and is generated (ADR-029, ADR-030). Storage is the same for every style —
  * chunked cubes, parcels, frames — so portals, claims, deeds and mazes work in all of them. A style
  * is {@link #ready} once its generator and renderer have shipped; the others are named now so the
- * registry, the API and the chain agree on them from the start.
+ * registry, the API and the chain agree on them from the start. This is terrain-host readiness;
+ * individual gameplay capabilities such as flying mounts retain their own readiness flags.
  */
 public enum WorldStyle {
     /** Minecraft / The Sandbox: seeded floating islands and arks (ADR-018..028). */
@@ -18,7 +19,7 @@ public enum WorldStyle {
     /** Cryptovoxels: a street-grid city of parcels with height limits, and galleries of maze art (ADR-035). */
     GALLERY(true, "Gallery City"),
     /** Daedalus itself: World One mazes at walking scale. */
-    LABYRINTH(false, "Labyrinth");
+    LABYRINTH(true, "Labyrinth");
 
     private final boolean ready;
     private final String title;
