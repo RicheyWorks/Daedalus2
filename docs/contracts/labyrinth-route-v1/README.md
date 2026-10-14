@@ -19,7 +19,8 @@ events advance revision. Exact retries remain harmless after later events or
 restoration; an ID with a changed action, point or expected revision is refused.
 Identity is checked before replay lookup. Refusals spend nothing. Applied IDs
 are never evicted, and the 512-event cap reserves space for remaining lesson
-turns and the return, so optional exploration cannot exhaust completion space.
+turns, any erasures needed to free a small trail, and the return, so optional
+exploration cannot exhaust completion space.
 
 The host verifies a real deliberate turn before `markTurn`, an approved world
 erasure before `erase`, and the actual lectern interaction before

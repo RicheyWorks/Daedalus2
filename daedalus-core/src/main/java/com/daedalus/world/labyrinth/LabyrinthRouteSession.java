@@ -126,7 +126,9 @@ public final class LabyrinthRouteSession {
                 if (trail.marks().contains(point)) return decision(Result.ALREADY_MARKED, false);
                 if (trail.marks().size() == capacity) return decision(Result.TRAIL_FULL, false);
                 if (trail.charges() == 0) return decision(Result.OUT_OF_CHALK, false);
-                if (!hasRouteEventSpace(!learnedTurns.contains(point))) return decision(Result.REPLAY_CAPACITY, false);
+                if (!hasRouteEventSpace(!learnedTurns.contains(point), trail.marks().size() + 1)) {
+                    return decision(Result.REPLAY_CAPACITY, false);
+                }
                 if (trail.mark(point) != ChalkTrail.Result.ADDED) {
                     throw new IllegalStateException("route and chalk state disagree");
                 }
@@ -136,7 +138,7 @@ public final class LabyrinthRouteSession {
             }
             case ERASE -> {
                 if (!trail.marks().contains(point)) return decision(Result.NOT_MARKED, false);
-                if (!hasRouteEventSpace(false)) return decision(Result.REPLAY_CAPACITY, false);
+                if (!hasRouteEventSpace(false, trail.marks().size() - 1)) return decision(Result.REPLAY_CAPACITY, false);
                 trail.erase(point);
                 outcome = Result.ERASED;
             }
@@ -161,9 +163,13 @@ public final class LabyrinthRouteSession {
     }
 
     /** Optional exploration/erosion cannot consume slots needed to finish the lesson. */
-    private boolean hasRouteEventSpace(boolean earnsTurn) {
-        int remainingLessonEvents = returned ? 0 : REQUIRED_TURNS - learnedTurns.size() + 1;
-        if (!returned && learnedTurns.size() < REQUIRED_TURNS && earnsTurn) remainingLessonEvents--;
+    private boolean hasRouteEventSpace(boolean earnsTurn, int nextMarkCount) {
+        int missingTurns = REQUIRED_TURNS - learnedTurns.size();
+        if (missingTurns > 0 && earnsTurn) missingTurns--;
+        // A small trail may need an erasure between new turns. Reserve those too;
+        // otherwise a final optional re-mark can fill capacity and strand progress.
+        int necessaryErasures = Math.max(0, missingTurns - (capacity - nextMarkCount));
+        int remainingLessonEvents = returned ? 0 : missingTurns + necessaryErasures + 1;
         return events.size() + 1 + remainingLessonEvents <= LabyrinthRouteSnapshot.MAX_EVENTS;
     }
 
