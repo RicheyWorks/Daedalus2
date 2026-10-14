@@ -774,3 +774,12 @@ build, which closed the editor mid-reparent (5,940 of 11,000; ledger intact, res
 sends `bridge_timeout = timeout` (b…); a job's end is the ledger/result, not a reply. Open for Poot's bridge
 lifecycle slice: when the client has given up, the bridge should close the generator (or keep the result for
 `job_result`) rather than run on headless.
+
+## A person at the Play window changes the numbers (2026-10-13, 23:37)
+Richey: "my mouse locked on the screen and stopped you." During the night run's Play suite the viewport took the
+mouse; the scenarios kept calling the hero while a person drove it (possess/eject and real input), and the
+results (realm_switch 3/10, mounts 3/9, portals 2/5) were the person's, not the code's. Fixes: daedalus_play
+samples the player controller's keys/mouse every 5 frames during a scenario and marks the result
+`interrupted` with the frame count; run_scenarios reruns an interrupted scenario once after 5 s and otherwise
+counts it as not run, never as failed. Rule: a Play result is only a result when `human_input_frames` is 0;
+if you want to watch, watch — the run will say it was watched and rerun itself.

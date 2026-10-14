@@ -19,7 +19,7 @@ import os
 
 import unreal
 
-_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None}
+_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None, "human": 0}
 
 
 # ---------------------------------------------------------------------------------------------------- the world
@@ -151,6 +151,25 @@ def _check(name, ok, detail=""):
     return {"check": name, "pass": bool(ok), "detail": detail}
 
 
+HUMAN_KEYS = ("LeftMouseButton", "RightMouseButton", "W", "A", "S", "D", "SpaceBar", "E", "Escape", "Tab", "I", "LeftShift",
+              "Gamepad_LeftX", "Gamepad_LeftY", "Gamepad_FaceButton_Bottom")
+
+
+def _human_input():
+    """True when a person is driving the Play window right now (23:37: Richey's mouse locked into the viewport
+    mid-run and the hero walked off the script). Checked every frame while a scenario runs."""
+    try:
+        pc = unreal.GameplayStatics.get_player_controller(world(), 0)
+        if not pc:
+            return False
+        for k in HUMAN_KEYS:
+            if pc.is_input_key_down(unreal.Key(k)):
+                return True
+    except Exception:
+        return False
+    return False
+
+
 def _tick(_dt):
     if _run["gen"] is None:
         return
@@ -158,6 +177,8 @@ def _tick(_dt):
         _finish(error="Play stopped")
         return
     _run["frames"] += 1
+    if _run["frames"] % 5 == 0 and _human_input():
+        _run["human"] += 1
     try:
         next(_run["gen"])
     except StopIteration as done:
@@ -174,6 +195,9 @@ def _finish(result=None, error=None):
         checks = result.get("checks", [])
         result["passed"] = sum(1 for c in checks if c["pass"])
         result["total"] = len(checks)
+        result["human_input_frames"] = _run["human"]
+        if _run["human"]:   # a person touched the controls: the numbers are not the scenario's
+            result["interrupted"] = "human input on %d sampled frames; rerun with the Play window unfocused" % _run["human"]
     _run["result"] = result
 
 
@@ -187,7 +211,7 @@ def play_scenario(p):
     if _run["handle"] is not None:
         unreal.unregister_slate_post_tick_callback(_run["handle"])
     full_speed()
-    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None)
+    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0)
     _run["handle"] = unreal.register_slate_post_tick_callback(_tick)
     return {"started": name}
 
