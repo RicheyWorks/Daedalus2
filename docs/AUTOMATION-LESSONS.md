@@ -1192,3 +1192,6 @@ Record-header consumer: bound64lines/8192bytes, reset metadata at each HTTP resp
 
 ## Register new native host endpoints in all existing server gates (2026-10-14)
 FullCI caught three missing record API registrations: configdocumentation, prod-auth table/README and per-caller mutationlimit. Added them through existing PerKeyRateLimit/config registry while keeping endpointdisabled andtrustedhost subjects mandatory. Targeted four suites pass. Never infer API integration readiness from a direct controller test alone; configuration/auth/rate-limit completeness gates cover separate obligations. No globalSecurityConfig/liveenablement change.
+
+## Verify the complete record API with real JWT HTTP and restart (2026-10-14)
+RealmRecordHttpRestartTest uses a disposable loopback app in prod/test profiles, temporaryworld/plugins/record directories and native-generated570byte DRSH1 fixture. Actual HTTP assertions pass for401anonymous,403unconfigured subject,404absent,200UPDATED/REPLAY and exactheaders/bytes,409conflict,429percallerquota and fullappclose/restart persistentread. HttpClient redirects disabled. No developer saves or live server settings used. This proves Java HTTP/storage transport with nativecompatible bytes, not an Unreal request or canonical inventory transaction.
