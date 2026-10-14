@@ -3,51 +3,12 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusHero.h"
+#include "DaedalusLocalAppLauncher.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "HAL/PlatformTime.h"
 #include "UObject/ConstructorHelpers.h"
-
-#if PLATFORM_WINDOWS
-#include "Windows/WindowsHWrapper.h"
-#include "Windows/AllowWindowsPlatformTypes.h"
-#include <shellapi.h>
-#include "Windows/HideWindowsPlatformTypes.h"
-#pragma comment(lib, "shell32.lib")
-#endif
-
-namespace
-{
-	bool SupportsPrivateChooserLaunch()
-	{
-#if PLATFORM_WINDOWS
-		return true;
-#else
-		return false;
-#endif
-	}
-
-	bool LaunchPrivateChooser(const FString& CapabilityLink)
-	{
-#if PLATFORM_WINDOWS
-		// UE's generic LaunchURL path can log the complete browser command on failure (Mac always
-		// logs the URL). This Windows pilot calls the OS directly so our token never enters UE logs.
-		// Safe only AFTER the exact loopback URL grammar was checked. No command or extra parameters.
-		SHELLEXECUTEINFOW LaunchInfo{};
-		LaunchInfo.cbSize = sizeof(LaunchInfo);
-		LaunchInfo.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOASYNC;
-		LaunchInfo.lpVerb = L"open";
-		LaunchInfo.lpFile = *CapabilityLink;
-		LaunchInfo.nShow = SW_SHOWNORMAL;
-		return ::ShellExecuteExW(&LaunchInfo) != 0;
-#else
-		// Fail closed until the platform has a vetted launcher that does not log capabilities.
-		(void)CapabilityLink;
-		return false;
-#endif
-	}
-}
 
 ADaedalusPhotoPdfMachine::ADaedalusPhotoPdfMachine()
 {
@@ -73,7 +34,7 @@ bool ADaedalusPhotoPdfMachine::PairLocalApp(const FString& CapabilityLink)
 {
 	ClearRuntimePairing();
 	const UWorld* World = GetWorld();
-	if (!SupportsPrivateChooserLaunch() || !IsInGameThread() || !World || !World->IsGameWorld()
+	if (!daedalus::localapp::launcher::IsSupported() || !IsInGameThread() || !World || !World->IsGameWorld()
 		|| World->GetNetMode() == NM_DedicatedServer || IsActorBeingDestroyed())
 		return false;
 	// Bound before conversion. Preserve the length so an embedded NUL is rejected, not silently truncated.
@@ -94,7 +55,7 @@ void ADaedalusPhotoPdfMachine::ClearRuntimePairing()
 bool ADaedalusPhotoPdfMachine::CanUseLocally(const ADaedalusHero* Hero) const
 {
 	const UWorld* World = GetWorld();
-	if (!SupportsPrivateChooserLaunch() || !IsInGameThread() || !World || !IsValid(Hero) || IsActorBeingDestroyed()) return false;
+	if (!daedalus::localapp::launcher::IsSupported() || !IsInGameThread() || !World || !IsValid(Hero) || IsActorBeingDestroyed()) return false;
 	const APlayerController* Player = Cast<APlayerController>(Hero->GetController());
 	const bool LocalPlayer = Hero->IsLocallyControlled() && Player && Player->IsLocalPlayerController();
 	// Hero::Interact already chooses a nearby Usable. Recheck for direct native Use callers as well.
@@ -117,7 +78,7 @@ bool ADaedalusPhotoPdfMachine::Use(ADaedalusHero* Hero)
 		return false;
 	}
 	if (!LaunchGate.TryBegin(FPlatformTime::Seconds())) return false;
-	if (!LaunchPrivateChooser(RuntimeCapabilityLink)) return false;
+	if (!daedalus::localapp::launcher::LaunchPhotoPdf(RuntimeCapabilityLink)) return false;
 	ChooserState = EDaedalusPhotoPdfState::ChooserLaunched;
 	return true;
 }
