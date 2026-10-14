@@ -68,7 +68,12 @@ public class RealmRecordController {
                 throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Snapshot exceeds record limit");
             var write = records.compareAndSet(realm, key, expectedRevision, payload);var stored = write.record();
             var status = write.result() == RealmRecordStore.WriteResult.CONFLICT ? HttpStatus.CONFLICT : HttpStatus.OK;
-            return ResponseEntity.status(status).body(new WriteReply(write.result().name(), realm, key,
+            var response = ResponseEntity.status(status);
+            // Native consumers can parse the exact decimal revision without JSON double rounding.
+            // Conflict headers describe the current record, never confirm the candidate write.
+            if (stored != null) response.header("X-Record-Revision", Long.toString(stored.revision()))
+                    .header("X-Payload-SHA256", stored.sha256());
+            return response.body(new WriteReply(write.result().name(), realm, key,
                     stored == null ? 0 : stored.revision(), stored == null ? null : stored.sha256()));
         } catch (IllegalArgumentException bad) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid record update", bad); }
         catch (IOException unavailable) {
