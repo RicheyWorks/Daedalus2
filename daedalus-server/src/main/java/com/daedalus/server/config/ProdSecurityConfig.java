@@ -206,7 +206,7 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/presence").permitAll()
                         // The multiverse's index (ADR-030): which worlds exist. Mounting one needs a token.
                         .requestMatchers(HttpMethod.GET, "/api/v1/worlds").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/realms").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/realms", "/api/v1/realms/*/lands").authenticated()
                         // Sky gates (ADR-031): where they are and where they lead. Opening one needs a token.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/gates").permitAll()
                         // World Packages (ADR-032): the same public cubes, packed for an engine.
