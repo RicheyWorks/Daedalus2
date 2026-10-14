@@ -118,7 +118,7 @@ def cave():
 
 def foliage(seed, pink):
     rng = random.Random(seed)
-    for i in range(22):
+    for i in range(48):
         angle = rng.uniform(0, math.tau); radius = rng.uniform(23, 34)
         x, y = radius*math.cos(angle), radius*math.sin(angle)
         if y < -18 or (x < -8 and y < 18): continue
@@ -126,11 +126,29 @@ def foliage(seed, pink):
         cone((x, y, h/2), .35, .22, h, wood)
         for dx, dy, dz in [(0, 0, h), (-1.7, .2, h-.8), (1.5, -.7, h-.5)]:
             ball((x+dx, y+dy, dz), (2.5, 2.1, 1.8), blossom if pink and i%3 == 0 else leaf)
-    for i in range(60):
+    for i in range(160):
         x, y = rng.uniform(-30, 30), rng.uniform(-25, 25)
         if x*x+y*y > 900 or (x < -8 and y > 0) or (x > 8 and y < 0): continue
         cone((x, y, .25), .06, .04, .5, leaf, n=5)
         ball((x, y, .55), (.22, .22, .13), blossom if i%2 else lamp)
+
+
+def garden_paths():
+    # Meandering stepping stones connect the dock, cottage and beacon.
+    for i in range(24):
+        t = i/23
+        x = 15-30*t+2*math.sin(t*math.tau)
+        y = -16+22*t
+        stone = box((x, y, .12), (1.3, 1., .24), sand, bevel=.14)
+        stone.rotation_euler.z = .25*math.sin(i)
+    for x, y in [(-5, -12), (-6, 16), (19, 9), (3, 18)]:
+        ball((x, y, .23), (4, 2.5, .35), leaf)
+        for i in range(7):
+            t = i*math.tau/7
+            ball((x+2.4*math.cos(t), y+1.4*math.sin(t), .75), (.5, .5, .35), blossom)
+    for i in range(13):
+        t = i*math.pi/12
+        ball((12+10*math.cos(t), -28+13*math.sin(t), .28), (.7, .6, .55), sand)
 
 
 def export_role_meshes(name, objects):
@@ -217,9 +235,10 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     group('Boathouse', boathouse)
     group('CaveArch', cave)
     group('Foliage', lambda: foliage(950+index, index == 1))
-    group('Lagoon', lambda: ball((4, -26, .05), (9, 12, .12), water))
+    group('Garden', garden_paths)
+    group('Lagoon', lambda: ball((12, -28, .08), (9, 14, .15), water))
     # Water props require fitting to the receiving terrain's shoreline on placement.
-    group('Waterfall', lambda: box((3, -43, -9), (2.5, .25, 18), water))
+    group('Waterfall', lambda: box((12, -42, -9), (2.5, .35, 18), water))
     name = 'CodexHarbor_' + title
     objects = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     generation_seconds = time.perf_counter()-generation_started
