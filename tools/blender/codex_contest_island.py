@@ -131,7 +131,7 @@ def plan(preset="summit-rim", seed=None):
         dz = heights[xy] - old_top[xy]
         if z == old_top[xy]:
             if xy in wet:
-                colour = "rock2" if preset == "volcanic-cliffs" else "sand"
+                colour = "sand"
             elif preset == "cliff-garden" and heights[xy] >= 9:
                 colour = "rock"
             elif preset == "summit-rim" and heights[xy] >= 12:
@@ -360,7 +360,9 @@ def _palette_slots(bpy, obj, cells):
             material.name = name
         mesh.materials.append(material)
     for polygon in mesh.polygons:
-        rgb = colour.data[polygon.loop_start].color[:3]
+        # BMesh's byte-color layer stores the base palette as sRGB. Reading its
+        # linear .color here misidentifies grass/rock as darker dirt palette keys.
+        rgb = colour.data[polygon.loop_start].color_srgb[:3]
         key = min(keys, key=lambda k: sum((a - b) ** 2 for a, b in zip(rgb, BASE.PAL[k])))
         polygon.material_index = keys.index(key)
         for loop_index in polygon.loop_indices:

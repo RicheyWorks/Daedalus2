@@ -72,15 +72,10 @@ def _verified_metadata(mcp, paths, expected):
 def _bounds_dimensions(bounds):
     # Native FBox serializes min/max vectors, rather than actor-scale dimensions.
     low, high = bounds["min"], bounds["max"]
-    import math
     if bounds.get("isValid") is not True or any(not math.isfinite(v[axis]) for v in (low, high) for axis in ("x", "y", "z")):
         raise ValueError("native bounds are not valid finite coordinates")
     if any(high[axis] < low[axis] for axis in ("x", "y", "z")):
         raise ValueError("native bounds are reversed")
-    if bounds.get("isValid") is not True or any(
-            not math.isfinite(low[axis]) or not math.isfinite(high[axis]) or high[axis] < low[axis]
-            for axis in ("x", "y", "z")):
-        raise ValueError("native bounds are invalid")
     return sorted([high[axis] - low[axis] for axis in ("x", "y", "z")], reverse=True)
 
 
@@ -153,6 +148,9 @@ def _palette(mcp, receipts):
             mcp.call(MAT, "connect_to_output", expression=expression, output_name=outputs[0], material_property=output)
         mcp.call(MAT, "recompile", material_or_function=base)
         save_paths.append(base_path)
+    flags = _properties(mcp, base, ["usedWithNanite", "usedWithInstancedStaticMeshes"])
+    if flags.get("usedWithNanite") is not True or flags.get("usedWithInstancedStaticMeshes") is not True:
+        raise RuntimeError("palette base usage flag readback differs")
     materials = {}
     for key, rgb in sorted(colours.items()):
         tint = dict(zip(("r", "g", "b", "a"), list(rgb) + [1]))
@@ -207,6 +205,29 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
         transforms, before_map = {}, None
 
     mcp = Mcp(timeout=120)
+    call_journal = Path(receipt_paths[0]).parent.parent / "codex-delivery.calls.jsonl"
+    if call_journal.is_file():
+        lines = call_journal.read_text(encoding="utf-8").splitlines()
+        if lines and json.loads(lines[-1])["state"] in ("pending", "uncertain"):
+            raise RuntimeError("previous native call requires inspection: " + str(call_journal))
+    original_call = mcp.call
+
+    def record(value):
+        with call_journal.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(value, sort_keys=True) + "\n")
+
+    def observed_call(toolset, tool, **arguments):
+        target = {"toolset": toolset, "tool": tool, "arguments": arguments}
+        record(dict(target, state="pending"))
+        try:
+            value = original_call(toolset, tool, **arguments)
+        except Exception as error:
+            record(dict(target, state="uncertain", error=str(error)))
+            raise
+        record(dict(target, state="responded", result=value))
+        return value
+
+    mcp.call = observed_call
     if placements is not None:
         current = mcp.call(SCENE, "get_current_level")
         if package(current) != package(map_path):

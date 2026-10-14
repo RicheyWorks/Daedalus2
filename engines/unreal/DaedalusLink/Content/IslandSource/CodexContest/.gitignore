@@ -1,0 +1,9 @@
+# Local source exports; regenerate using the checked-in generator and receipts.
+*.glb
+*.fbx
+*.calls.jsonl
+*.unreal.json
+# Superseded illustrative plans retained locally after the original-design correction.
+CodexIsland_tropical_lagoon_*.plan.json
+CodexIsland_volcanic_cliffs_*.plan.json
+CodexIsland_alpine_terraces_*.plan.json

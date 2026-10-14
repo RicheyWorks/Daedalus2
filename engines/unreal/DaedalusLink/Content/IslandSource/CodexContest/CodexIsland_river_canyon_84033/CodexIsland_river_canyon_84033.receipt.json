@@ -1,0 +1,627 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 1451948,
+        "sha256": "eff77fd4050b4f5643facf34f979cdb713b3fee5f28b6e0b53fb80c3a5b3a677"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 5764524,
+        "sha256": "f9e53b83204f5b6254477d1d623ee639bba5e6ad51b588e58127f4adc478305d"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 5764524,
+    "objects": [
+      {
+        "dims": [
+          92.0,
+          90.0,
+          50.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_river_canyon_84033_island",
+        "triangles": 93616
+      },
+      {
+        "dims": [
+          91.0,
+          36.0,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_river_canyon_84033_water",
+        "triangles": 3212
+      },
+      {
+        "dims": [
+          78.0,
+          53.0,
+          13.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_river_canyon_84033_trees",
+        "triangles": 3084
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_river_canyon_84033_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          86.0,
+          83.0,
+          7.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_river_canyon_84033_flowers",
+        "triangles": 596
+      },
+      {
+        "dims": [
+          68.0,
+          40.0,
+          5.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_river_canyon_84033_rocks",
+        "triangles": 232
+      },
+      {
+        "dims": [
+          41.0,
+          39.0,
+          25.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_river_canyon_84033_crystals",
+        "triangles": 228
+      },
+      {
+        "dims": [
+          46.0,
+          16.0,
+          5.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_river_canyon_84033_clouds",
+        "triangles": 872
+      },
+      {
+        "dims": [
+          15.0,
+          14.0,
+          5.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_w"
+        ],
+        "name": "CodexIsland_river_canyon_84033_landmarks",
+        "triangles": 440
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.glb"
+  },
+  "bounds_metres": {
+    "max": [
+      68,
+      44,
+      20
+    ],
+    "min": [
+      -46,
+      -46,
+      -37
+    ]
+  },
+  "collision_hulls": 289,
+  "config": {
+    "depth": 26,
+    "features": [
+      "branching river canyon",
+      "gold-green plateaus",
+      "white pillar ring"
+    ],
+    "original": "prometheus",
+    "preset": "river-canyon",
+    "radius": 46,
+    "reference": {
+      "author": "prometheus",
+      "id": "prometheus",
+      "image": "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/shots/PI_hero_blender.png",
+      "inspection": "historical image and original source catalog; not current native acceptance",
+      "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+      "manifest": null,
+      "name": "Prometheus Island",
+      "provenance": "Original competition Grok slot; Prometheus registered as Grok bot",
+      "sources": [
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/island.json",
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/heights.json",
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/ue_transforms.json",
+        "C:/Users/730ri/projects/Daedalus2/engines/unreal/prometheus-island/terrain_gs.py"
+      ],
+      "team": "Grok"
+    },
+    "relief": 15,
+    "seed": 84033,
+    "source_sha256": "547d3ec7238ca381699b17fb8e2f2ab9c0a90275e9d72aa1f2a5672654fbb48f",
+    "terrace": 3,
+    "version": 1,
+    "voxel_metres": 1.0
+  },
+  "config_sha256": "a3e7bf8071ac97bd7a10581e8fdd2fbf17353a6692b1611fedc5d4c71bf43655",
+  "elapsed_s": {
+    "fbx_export": 0.273257,
+    "generation": 0.270194,
+    "glb_export": 0.35532,
+    "mesh": 0.813635
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_dirt",
+      "CodexVoxel_dirt2",
+      "CodexVoxel_grass2",
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand",
+      "CodexVoxel_water",
+      "CodexVoxel_blossom",
+      "CodexVoxel_blossom2",
+      "CodexVoxel_leaf",
+      "CodexVoxel_leaf2",
+      "CodexVoxel_trunk",
+      "CodexVoxel_door",
+      "CodexVoxel_roof",
+      "CodexVoxel_wall",
+      "CodexVoxel_window",
+      "CodexVoxel_flower_r",
+      "CodexVoxel_flower_w",
+      "CodexVoxel_flower_y",
+      "CodexVoxel_crystal2",
+      "CodexVoxel_cloud"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          92,
+          90,
+          50
+        ],
+        "extent": [
+          92,
+          50,
+          90
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_river_canyon_84033_island",
+        "triangles": 93616
+      },
+      {
+        "dims": [
+          91,
+          36,
+          1
+        ],
+        "extent": [
+          91,
+          1,
+          36
+        ],
+        "materials": [
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_river_canyon_84033_water",
+        "triangles": 3212
+      },
+      {
+        "dims": [
+          78,
+          53,
+          13
+        ],
+        "extent": [
+          53,
+          13,
+          78
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_river_canyon_84033_trees",
+        "triangles": 3084
+      },
+      {
+        "dims": [
+          9,
+          9,
+          8
+        ],
+        "extent": [
+          9,
+          8,
+          9
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_river_canyon_84033_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          86,
+          83,
+          7
+        ],
+        "extent": [
+          86,
+          7,
+          83
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_river_canyon_84033_flowers",
+        "triangles": 596
+      },
+      {
+        "dims": [
+          68,
+          40,
+          5
+        ],
+        "extent": [
+          68,
+          5,
+          40
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_river_canyon_84033_rocks",
+        "triangles": 232
+      },
+      {
+        "dims": [
+          41,
+          39,
+          25
+        ],
+        "extent": [
+          41,
+          25,
+          39
+        ],
+        "materials": [
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_river_canyon_84033_crystals",
+        "triangles": 228
+      },
+      {
+        "dims": [
+          46,
+          16,
+          5
+        ],
+        "extent": [
+          16,
+          5,
+          46
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_river_canyon_84033_clouds",
+        "triangles": 872
+      },
+      {
+        "dims": [
+          15,
+          14,
+          5
+        ],
+        "extent": [
+          15,
+          5,
+          14
+        ],
+        "materials": [
+          "CodexVoxel_flower_w"
+        ],
+        "name": "CodexIsland_river_canyon_84033_landmarks",
+        "triangles": 440
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          92.0,
+          90.0,
+          50.0
+        ],
+        "mesh": 0,
+        "name": "CodexIsland_river_canyon_84033_island"
+      },
+      {
+        "dims": [
+          91.0,
+          36.0,
+          1.0
+        ],
+        "mesh": 1,
+        "name": "CodexIsland_river_canyon_84033_water"
+      },
+      {
+        "dims": [
+          78.0,
+          53.0,
+          13.0
+        ],
+        "mesh": 2,
+        "name": "CodexIsland_river_canyon_84033_trees"
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "mesh": 3,
+        "name": "CodexIsland_river_canyon_84033_cottage"
+      },
+      {
+        "dims": [
+          86.0,
+          83.0,
+          7.0
+        ],
+        "mesh": 4,
+        "name": "CodexIsland_river_canyon_84033_flowers"
+      },
+      {
+        "dims": [
+          68.0,
+          40.0,
+          5.0
+        ],
+        "mesh": 5,
+        "name": "CodexIsland_river_canyon_84033_rocks"
+      },
+      {
+        "dims": [
+          41.0,
+          39.0,
+          25.0
+        ],
+        "mesh": 6,
+        "name": "CodexIsland_river_canyon_84033_crystals"
+      },
+      {
+        "dims": [
+          46.0,
+          16.0,
+          5.0
+        ],
+        "mesh": 7,
+        "name": "CodexIsland_river_canyon_84033_clouds"
+      },
+      {
+        "dims": [
+          15.0,
+          14.0,
+          5.0
+        ],
+        "mesh": 8,
+        "name": "CodexIsland_river_canyon_84033_landmarks"
+      }
+    ]
+  },
+  "name": "CodexIsland_river_canyon_84033",
+  "palette": [
+    "blossom",
+    "blossom2",
+    "cloud",
+    "crystal2",
+    "dirt",
+    "dirt2",
+    "door",
+    "flower_r",
+    "flower_w",
+    "flower_y",
+    "grass2",
+    "leaf",
+    "leaf2",
+    "rock",
+    "rock2",
+    "roof",
+    "sand",
+    "trunk",
+    "wall",
+    "water",
+    "window"
+  ],
+  "palette_rgb": {
+    "blossom": [
+      0.9,
+      0.38,
+      0.77
+    ],
+    "blossom2": [
+      0.98,
+      0.67,
+      0.89
+    ],
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "crystal2": [
+      0.55,
+      0.85,
+      0.95
+    ],
+    "dirt": [
+      0.45,
+      0.31,
+      0.19
+    ],
+    "dirt2": [
+      0.52,
+      0.37,
+      0.22
+    ],
+    "door": [
+      0.35,
+      0.22,
+      0.12
+    ],
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "flower_w": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "flower_y": [
+      0.95,
+      0.85,
+      0.25
+    ],
+    "grass2": [
+      0.67,
+      0.83,
+      0.32
+    ],
+    "leaf": [
+      0.27,
+      0.73,
+      0.43
+    ],
+    "leaf2": [
+      0.29,
+      0.82,
+      0.73
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ],
+    "wall": [
+      0.82,
+      0.72,
+      0.55
+    ],
+    "water": [
+      0.14,
+      0.74,
+      0.93
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "saved_unreal": false,
+  "schema": "daedalus.codex-island.v1",
+  "stage": "exported",
+  "voxel_sha256": "70a3705bd6207a5fc8867d40fcefd1261133dcd5683679a745ec4739efe27934",
+  "voxels": {
+    "clouds": 228,
+    "cottage": 312,
+    "crystals": 27,
+    "flowers": 50,
+    "island": 100515,
+    "landmarks": 50,
+    "rocks": 29,
+    "trees": 882,
+    "water": 622
+  }
+}
