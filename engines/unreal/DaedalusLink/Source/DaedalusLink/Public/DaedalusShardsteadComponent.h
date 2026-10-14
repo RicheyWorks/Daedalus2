@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 THIRD_PARTY_INCLUDES_START
 #include "DaedalusShardsteadSaveCore.h"
+#include "DaedalusRecordReceiptCore.h"
 THIRD_PARTY_INCLUDES_END
 #include "DaedalusShardsteadComponent.generated.h"
 
@@ -53,6 +54,10 @@ public:
     bool LedgerRevisionFromHost(uint64& Out) const;
     bool InitializeLedgerBytesFromHost(int64 RealmSeed,const std::vector<std::uint8_t>& Bytes);
     bool PendingBytesFromHost(std::vector<std::uint8_t>& Out) const;
+    // Expected context must be captured from the actual outgoing encoded candidate.
+    bool ConfirmRecordReplyFromHost(const FString& Request,uint64 PreparedRevision,
+        const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
+        const daedalus::records::WriteReply& Reply,uint64& CommittedStoreRevision);
 private:
     bool Ready=false;
     int64 BoundSeed=0;

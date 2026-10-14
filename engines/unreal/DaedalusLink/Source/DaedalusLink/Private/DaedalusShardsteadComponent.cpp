@@ -64,6 +64,16 @@ bool UDaedalusShardsteadComponent::PendingBytesFromHost(std::vector<std::uint8_t
     const auto* Saved=PendingFromHost();
     return Saved&&daedalus::shardstead::EncodeLedgerSave(*Saved,Out);
 }
+bool UDaedalusShardsteadComponent::ConfirmRecordReplyFromHost(const FString& Request,uint64 PreparedRevision,
+    const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
+    const daedalus::records::WriteReply& Reply,uint64& CommittedStoreRevision){
+    const auto* Saved=PendingFromHost();
+    if(!Saved||Saved->Revision!=PreparedRevision)return false;
+    uint64 StoreRevision=0;
+    if(!daedalus::records::ConfirmWrite(TransportOK,HttpStatus,Expected,Reply,StoreRevision))return false;
+    if(!ConfirmPersistedFromHost(Request,PreparedRevision))return false;
+    CommittedStoreRevision=StoreRevision;return true;
+}
 FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& PlayerKey) const {
     FDaedalusIslandStats Out;if(!Ready||!Host())return Out;
     const auto& View=ReadRules();
