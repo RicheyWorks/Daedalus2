@@ -2,6 +2,7 @@
 package com.daedalus.server.controller;
 
 import com.daedalus.server.service.RealmRecordService;
+import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.world.persistence.RealmRecordStore;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class RealmRecordController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Configured world host required");
     }
     @GetMapping(value = "/{realm}/{key}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PerKeyRateLimit("realmRecords")
     public ResponseEntity<byte[]> read(@PathVariable String realm, @PathVariable String key, Authentication auth) {
         host(auth);
         try {
@@ -54,6 +56,7 @@ public class RealmRecordController {
     }
     public record WriteReply(String result, String realm, String key, long revision, String sha256) {}
     @PutMapping(value = "/{realm}/{key}", consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PerKeyRateLimit("realmRecords")
     public ResponseEntity<WriteReply> write(@PathVariable String realm, @PathVariable String key,
             @RequestHeader("X-Expected-Revision") long expectedRevision, HttpServletRequest request, Authentication auth) {
         host(auth);
