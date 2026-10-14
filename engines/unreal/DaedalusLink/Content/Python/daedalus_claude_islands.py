@@ -41,11 +41,15 @@ def import_island(seed, force=False):
     """Import Island_C<seed>.glb under ROOT/Island_C<seed>; returns {layer: mesh path}."""
     name = "Island_C%d" % seed
     dest = "%s/%s" % (ROOT, name)
+    # the interchange importer makes <destination_path>/<destination_name>/StaticMeshes/...
     paths = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, l, name, l) for l in LAYERS}
+    if not unreal.EditorAssetLibrary.does_asset_exist(paths["island"]):   # the first batch imported one level deeper
+        paths = {l: "%s/%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, name, l, name, l) for l in LAYERS}
     if force or not unreal.EditorAssetLibrary.does_asset_exist(paths["island"]):
+        paths = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, l, name, l) for l in LAYERS}
         t = unreal.AssetImportTask()
         t.filename = os.path.join(GLB_DIR, name + ".glb")
-        t.destination_path = dest
+        t.destination_path = ROOT
         t.destination_name = name
         t.automated = True
         t.replace_existing = True
