@@ -146,6 +146,19 @@ def require_import_receipt(path,folder,expected):
     return summary
 
 
+def scenario_process(command,timeout=1800):
+    try:
+        result=subprocess.run(command,capture_output=True,text=True,timeout=timeout,cwd=REPO)
+        return result,False
+    except subprocess.TimeoutExpired as error:
+        def decoded(value):
+            return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else value or ''
+        # subprocess.run has stopped its local child. This says nothing about
+        # already accepted Unreal work and never triggers an editor restart.
+        result=subprocess.CompletedProcess(command,124,decoded(error.stdout),decoded(error.stderr))
+        return result,True
+
+
 def assess_run(text, returncode, report):
     """A missing summary/log observation is unverified, never an empty successful run."""
     totals = re.findall(r'^TOTAL (\d+)/(\d+)\s*$', text, re.MULTILINE)
@@ -352,9 +365,9 @@ def run_options(options,progress):
 
     say("play suite")
     checkpoint_run(progress,'play-scenarios')
-    out = subprocess.run([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "bestiary", "cast", "control"],
-                         capture_output=True, text=True, timeout=1800, cwd=REPO)
+    out,timed_out = scenario_process([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "bestiary", "cast", "control"])
     text = (out.stdout or "") + (out.stderr or "")
+    progress.update(scenario_output_tail=text[-6000:],scenario_process_timed_out=timed_out)
     print(text[-6000:])
     total = next((l for l in reversed(text.splitlines()) if l.startswith("TOTAL")), "TOTAL ?")
     fails = [l.strip() for l in text.splitlines() if l.strip().startswith("FAIL")]
@@ -366,6 +379,9 @@ def run_options(options,progress):
     except Exception as e:
         ew = "log_report: %s" % e
     outcome = assess_run(text, out.returncode, rep)
+    if timed_out:
+        outcome.update(status='unverified',passed=False,exit_code=2)
+        outcome['reasons'].append('local-scenario-timeout-native-outcome-unknown')
     hub("status", "NIGHT RUN end on %s: status=%s %s %s; fails: %s" % (sha, outcome['status'], total, ew, "; ".join(fails)[:900] or "none"))
     say("%s %s" % (total, ew))
     # J: a machine-readable receipt beside the job log (BASE-LAYER's "Laid down" table is regenerated from these)
@@ -378,6 +394,7 @@ def run_options(options,progress):
     receipt = {"when": time.strftime("%Y-%m-%dT%H:%M:%S"), "sha": sha, "build": build, "laid": lay, "scenarios": per,
                "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
     receipt['outcome'] = outcome
+    receipt.update(scenario_process_timed_out=timed_out,scenario_output_tail=text[-6000:])
     receipt['import_receipts']=progress.get('import_receipts',[])
     receipt['import_expected_plans']=progress.get('import_expected_plans',[])
     receipt['checkpoint_run_id']=progress['run_id']

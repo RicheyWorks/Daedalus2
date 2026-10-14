@@ -863,3 +863,7 @@ Use monotonic elapsed time for night-run totals and each stage interval. Preserv
 ### Validate green receipt labels (2026-10-14)
 A handoff summary must retain the reported label but downgrade passed to unverified if positive scenario coverage, process exit0 and editorerrors0 are missing or inconsistent. Saved labels are not runtime evidence by themselves. Focused night-run CI now executes identity, result and import-terminal checks on Windows/Linux without editor calls; local19checks passed, remoteCI not yet observed.
 
+
+### Preserve scenario timeout output (2026-10-14)
+TimeoutExpired can contain byte stdout/stderr even with text mode. Decode and retain bounded output in progress/final receipts, mark the suite unverified and return2. subprocess.run stopping its local child is not cancellation/quiescence of accepted Unreal work; do not restart the editor or replay based on this timeout.
+
