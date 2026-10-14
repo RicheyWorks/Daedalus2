@@ -529,3 +529,10 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+## A passing production-profile test can still open real world files (2026-10-13)
+The Labyrinth reactor was green but ArkHarbor warned that it could not persist ecology in the developer's
+.daedalus directory. Five prod-profile Spring test contexts inherited the production world-file default;
+normal test-profile configuration did not apply to them. IsolatedWorldStorage now binds each context to
+its own temporary world file before bean construction. Assert the actual injected host path and empty
+registry, not just that authentication passed. Do not suppress persistence warnings or delete existing saves.

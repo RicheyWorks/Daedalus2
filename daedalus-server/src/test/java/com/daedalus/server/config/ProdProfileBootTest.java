@@ -34,11 +34,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("prod")
 class ProdProfileBootTest {
 
+    @org.springframework.test.context.DynamicPropertySource
+    static void isolateWorldStorage(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        com.daedalus.server.IsolatedWorldStorage.register(registry);
+    }
+
+
     @LocalServerPort
     private int port;
 
     @Autowired
     private ApplicationContext context;
+
+    @Test
+    void productionProfileUsesAnEmptyIsolatedWorldDirectory() {
+        var world = context.getBean(com.daedalus.server.service.WorldService.class);
+        var directory = world.file().toAbsolutePath().getParent();
+        assertThat(directory.getFileName().toString()).startsWith("daedalus-prod-test-");
+        assertThat(java.nio.file.Files.isDirectory(directory)).isTrue();
+        assertThat(context.getBean(com.daedalus.server.service.WorldHub.class).worlds())
+                .extracting(com.daedalus.server.service.WorldHub.WorldEntry::id)
+                .containsExactly("world-zero");
+        assertThat(world.copy("world-zero").chunkCount()).isZero();
+    }
 
     @Test
     void theProdContextAssemblesAndServes() {
