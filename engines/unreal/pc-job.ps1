@@ -37,9 +37,11 @@ if ($Start) {
     # cmd runs the script and writes the exit code last; the window is minimized and never hidden.
     # /S keeps the inner quotes intact; /c "..." with nested quotes otherwise loses the first and last one.
     $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
+    # The start line goes in BEFORE the job launches: written after, Out-File truncated what the job had already
+    # appended (every job read as 'DONE 0' with no output, 2026-10-13).
+    "$(Get-Date -Format s) start $Script $ScriptArgs" | Out-File -FilePath $log -Encoding ascii
     $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
-    "$(Get-Date -Format s) start $Script $ScriptArgs" | Out-File -FilePath $log -Encoding utf8
     "started $Id pid=$($r.ProcessId)"
     exit
 }
