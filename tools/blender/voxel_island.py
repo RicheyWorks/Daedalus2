@@ -404,9 +404,37 @@ def _mesh_from_voxels(name, voxels, scale=100.0, pal=PAL):
 GROUPS = {"body": ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals"), "clouds": ("clouds",)}
 
 
+def clouds_ob(name):
+    return bpy.data.objects.get("%s_clouds" % name)
+
+
+def walk_rects(island_voxels):
+    """[(x0, y0, w, h, ztop)] rectangles covering the island's upward faces (colour-agnostic greedy merge)."""
+    flat = [(x, y, z, "k") for x, y, z, _ in island_voxels]
+    return [(u, v, w, h, sl + 1) for axis, sign, sl, u, v, w, h, _ in greedy_quads(flat) if axis == 2 and sign == 1]
+
+
+def _ucx_boxes(name, island_voxels, depth=6, scale=100.0):
+    out = []
+    for i, (x0, y0, w, h, zt) in enumerate(walk_rects(island_voxels)):
+        bm = bmesh.new()
+        bmesh.ops.create_cube(bm, size=1.0)
+        for v in bm.verts:
+            v.co.x = (x0 + (w if v.co.x > 0 else 0)) * scale
+            v.co.y = (y0 + (h if v.co.y > 0 else 0)) * scale
+            v.co.z = (zt if v.co.z > 0 else zt - depth) * scale
+        me = bpy.data.meshes.new("UCX_%s_body_%02d" % (name, i))
+        bm.to_mesh(me)
+        bm.free()
+        ob = bpy.data.objects.new("UCX_%s_body_%02d" % (name, i), me)
+        bpy.context.scene.collection.objects.link(ob)
+        out.append(ob)
+    return out
+
+
 def build(seed, out, size=46, thick=22, keep=False):
-    """Build the island for `seed` in the open Blender scene and export it to `out` (GLB), plus a UCX convex hull
-    of the body as a sibling FBX. Returns stats."""
+    """Build the island for `seed` in the open Blender scene and export it as FBX next to `out` (body + clouds +
+    UCX boxes); `out` is the .glb path by convention, the GLB itself only when VOXEL_ISLAND_GLB is set."""
     vox = plan(seed, size, thick)
     name = "Island_C%d" % seed
     for ob in list(bpy.data.objects):
@@ -421,27 +449,20 @@ def build(seed, out, size=46, thick=22, keep=False):
         ob.select_set(ob in objs)
     bpy.context.view_layer.objects.active = objs[0]
     os.makedirs(os.path.dirname(out), exist_ok=True)
-    bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_format="GLB", export_apply=True, export_yup=True)
-    # collision: a convex hull of the island body only
+    if os.environ.get("VOXEL_ISLAND_GLB"):     # the GLB lane is kept for reference only; FBX is what Unreal eats
+        bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_format="GLB", export_apply=True, export_yup=True)
+    # collision (v4, from Codex's hand-off): one convex box per walk-surface rectangle, named UCX_<body>_NN, so the
+    # importer gets simple collision that follows the hill, pond and rim instead of one hull bridging everything
     body = bpy.data.objects.get("%s_body" % name)
+    hulls = []
     if body is not None:
-        hull = body.copy()
-        hull.data = body.data.copy()
-        hull.name = "UCX_%s_body_00" % name     # FBX collision prefix must match the mesh object name
-        bpy.context.scene.collection.objects.link(hull)
-        bpy.context.view_layer.objects.active = hull
+        hulls = _ucx_boxes(name, vox["island"], depth=6)
         for ob in bpy.data.objects:
-            ob.select_set(ob is hull)
-        bpy.ops.object.mode_set(mode="EDIT")
-        bpy.ops.mesh.select_all(action="SELECT")
-        bpy.ops.mesh.convex_hull()
-        bpy.ops.object.mode_set(mode="OBJECT")
-        clouds = bpy.data.objects.get("%s_clouds" % name)
-        for ob in bpy.data.objects:
-            ob.select_set(ob is hull or ob is body or ob is clouds)
+            ob.select_set(ob is body or ob in hulls or ob is clouds_ob(name))
         bpy.ops.export_scene.fbx(filepath=out[:-4] + ".fbx", use_selection=True, apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z")
         if not keep:
-            bpy.data.objects.remove(hull, do_unlink=True)
+            for h in hulls:
+                bpy.data.objects.remove(h, do_unlink=True)
     if not keep:
         for ob in objs:
             bpy.data.objects.remove(ob, do_unlink=True)

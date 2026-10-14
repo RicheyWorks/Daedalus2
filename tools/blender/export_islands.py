@@ -2,7 +2,7 @@
 """Headless contest export (Richey 09:36 "be smart when sharing ... keep building"): runs voxel_island.build_many in a
 background Blender, so Team Claude's batches never need the shared Blender GUI lock.
 
-    "C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe" -b --python tools/blender/export_islands.py -- 250 300 [out_dir]
+    "C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe" -b --factory-startup --python-exit-code 1 --python tools/blender/export_islands.py -- 250 300 [out_dir]
 """
 import importlib.util
 import os
