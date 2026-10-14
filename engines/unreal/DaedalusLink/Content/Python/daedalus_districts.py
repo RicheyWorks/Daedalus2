@@ -739,20 +739,22 @@ def reconcile_steps(realm):
     for a in sub.get_all_level_actors():
         if not any(str(t) == tag for t in a.tags):
             continue
-        by_label.setdefault(a.get_actor_label(), []).append(a)
+        by_label.setdefault(a.get_actor_label(), []).append((a, str(a.get_level().get_outermost().get_name())))   # level read once: a destroyed actor has none
     dup = {l: v for l, v in by_label.items() if len(v) > 1}
     gone = 0
-    pkgs = sorted({str(a.get_level().get_outermost().get_name()) for v in dup.values() for a in v if str(a.get_level().get_outermost().get_name()) != persistent})
+    pkgs = sorted({lvl for v in dup.values() for _, lvl in v if lvl != persistent})
+    done_labels = set()
     for pkg in pkgs:
         n = 0
         for l, v in dup.items():
-            levels = {str(a.get_level().get_outermost().get_name()) for a in v}
-            if pkg in levels:
-                for a in v:
-                    if str(a.get_level().get_outermost().get_name()) == persistent:
-                        sub.destroy_actor(a)
-                        gone += 1
-                        n += 1
+            if l in done_labels or pkg not in {lvl for _, lvl in v}:
+                continue
+            for a, lvl in v:
+                if lvl == persistent:
+                    sub.destroy_actor(a)
+                    gone += 1
+                    n += 1
+            done_labels.add(l)
         yield "%s %s: %d persistent duplicates removed" % (realm, pkg.rsplit("/", 1)[-1], n)
     P.save_world()
     return {"realm": realm, "duplicate_labels": len(dup), "removed": gone, "packages": len(pkgs)}
