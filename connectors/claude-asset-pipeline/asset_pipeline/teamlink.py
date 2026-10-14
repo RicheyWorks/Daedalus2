@@ -264,6 +264,13 @@ class Broker:
         with self.cond:
             return [m for m in self._for(me, 0) if m["type"] != "ack" and (me, m["id"]) not in self.acked]
 
+    def pending_summary(self, me):
+        """Same delivery set as pending(), without serializing message bodies."""
+        with self.cond:
+            ids = [m["id"] for m in self._for(me, 0)
+                   if m["type"] != "ack" and (me, m["id"]) not in self.acked]
+            return {"count": len(ids), "ids": ids[-10:], "omitted": max(0, len(ids)-10)}
+
     def heartbeat(self, me, status=""):
         with self.cond:
             self.seen[me] = (self.clock(), status or self.seen.get(me, (0, ""))[1])
@@ -421,6 +428,8 @@ def make_handler(broker):
                     topics = [t for t in q.get("topics", "").split(",") if t] or None
                     got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)), topics)
                     return self._out(200, {"messages": got, "last": last})
+                if path == "/pending-summary":
+                    return self._out(200, broker.pending_summary(q["me"]))
                 if path == "/pending":
                     return self._out(200, {"messages": broker.pending(q["me"])})
                 if path == "/inbox":
@@ -677,14 +686,17 @@ class Link:
         health = self._call("GET", "/health")
         locks = self._call("GET", "/locks")
         inbox = self._call("GET", "/inbox?" + urllib.parse.urlencode({"me": self.me}))
-        pending = self._call("GET", "/pending?" + urllib.parse.urlencode({"me": self.me}))
+        pending = self._call("GET", "/pending-summary?" + urllib.parse.urlencode({"me": self.me}))
         unavailable = []
         for name, value in (("health", health), ("locks", locks), ("inbox", inbox), ("pending", pending)):
             if not isinstance(value, dict):
                 unavailable.append(name)
-        for name, value in (("inbox", inbox), ("pending", pending)):
-            if isinstance(value, dict) and not isinstance(value.get("messages"), list):
-                unavailable.append(name)
+        if isinstance(inbox, dict) and not isinstance(inbox.get("messages"), list):
+            unavailable.append("inbox")
+        if isinstance(pending, dict) and (not isinstance(pending.get("count"), int) or
+                                         not isinstance(pending.get("ids"), list) or
+                                         not isinstance(pending.get("omitted"), int)):
+            unavailable.append("pending")
         broker_up = isinstance(health, dict) and health.get("ok") is True
         if not broker_up and "health" not in unavailable:
             unavailable.append("health")
@@ -700,7 +712,7 @@ class Link:
                 "broker_since": health.get("since") if isinstance(health, dict) else None,
                 "locks": locks if "locks" not in unavailable else None,
                 "unacked_inbox": summary(inbox, "inbox"),
-                "pending_outgoing": summary(pending, "pending"), "unavailable": unavailable,
+                "pending_delivery": pending if "pending" not in unavailable else None, "unavailable": unavailable,
                 "meaning": "Read-only snapshot; delivery is not acceptance. Missing broker PID/uptime may mean an older broker."}
 
     def health(self):

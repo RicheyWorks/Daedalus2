@@ -11,7 +11,7 @@ class DoctorTest(unittest.TestCase):
         calls=[]
         replies={"/health":{"ok":True,"last":42,"pid":123,"uptime_s":7},"/locks":{"unreal":{"holder":"claude"}},
                  "/inbox?me=team+codex":{"messages":[{"id":5,"body":{"secret":"do not print"}}]},
-                 "/pending?me=team+codex":{"messages":[]}}
+                 "/pending-summary?me=team+codex":{"count":0,"ids":[],"omitted":0}}
         if missing:replies[missing]=None
         def call(method,path,*args,**kwargs):
             calls.append((method,path));return replies.get(path)
@@ -24,12 +24,40 @@ class DoctorTest(unittest.TestCase):
         self.assertEqual(r['broker_pid'],123)
         self.assertEqual(len(calls),4);self.assertTrue(all(m=='GET' for m,p in calls))
         self.assertNotIn('secret',str(r))
-    def test_large_history_is_bounded(self):
-        link,_,replies=self.link()
-        replies['/pending?me=team+codex']={'messages':[{'id':i} for i in range(15000)]}
-        r=link.doctor()['pending_outgoing']
-        self.assertEqual(r['count'],15000);self.assertEqual(len(r['ids']),10)
-        self.assertEqual(r['omitted'],14990)
+    def test_broker_summary_matches_pending_without_bodies(self):
+        from asset_pipeline.teamlink import Broker
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            broker=Broker(folder)
+            for i in range(15): broker.send("claude", "codex", "note", {"text":"large body"*1000})
+            broker.send("claude", "other", "note", {})
+            broker.ack("codex",1)
+            before=broker.last
+            summary=broker.pending_summary("codex")
+            expected=[m["id"] for m in broker.pending("codex")]
+            self.assertEqual(summary['count'],len(expected))
+            self.assertEqual(summary['ids'],expected[-10:])
+            self.assertEqual(summary['omitted'],len(expected)-10)
+            self.assertEqual(before,broker.last)
+            self.assertNotIn('large body',str(summary))
+
+    def test_actual_http_doctor_uses_summary(self):
+        from asset_pipeline.teamlink import Broker,make_handler,ThreadingHTTPServer
+        import tempfile,threading,json
+        with tempfile.TemporaryDirectory() as folder:
+            broker=Broker(folder)
+            broker.send('claude','codex','request',{'text':'body must not appear'})
+            server=ThreadingHTTPServer(('127.0.0.1',0),make_handler(broker))
+            thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+            try:
+                before=broker.last
+                report=Link('codex',server.server_port).doctor()
+                self.assertTrue(report['ok'],report)
+                self.assertEqual(report['pending_delivery']['count'],1)
+                self.assertNotIn('body must not appear',json.dumps(report))
+                self.assertEqual(before,broker.last)
+            finally:
+                server.shutdown();server.server_close();thread.join()
 
     def test_partial_failure_is_unknown_not_empty(self):
         link,_,_=self.link('/inbox?me=team+codex');r=link.doctor()
