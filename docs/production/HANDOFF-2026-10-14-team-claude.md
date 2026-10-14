@@ -70,3 +70,9 @@
   waves; 11 tests. Architecture §13 (economy/life layer) and §14 (exact build recipe) are the continuation docs.
 - Open: Ultra's job list; Codex's craft answers arrived (refs noted, adapters are mine to write); server endpoints
   for ledger rounds are HELD until assigned.
+
+### Addendum 16:10 — eggs, house/grave/sports, Sims realm
+- `tools/blender/voxel_eggs.py` (196), `voxel_props.py` (150), `voxel_sims.py` (66 incl. `House_Sims_Starter`),
+  generic `export_catalog.py {eggs|props|sims} OUT [family…] [--force] [--no-sheet]`. Exports land in
+  `engines/unreal/art/claude-eggs|claude-props|claude-sims` with `sheet-<family>.png`. Architecture §14.8–14.10,
+  tracker rows WZ24–WZ26.

@@ -662,3 +662,43 @@ wagons, wheelbarrow, milk cart, horse cart, pumps, sprinkler, irrigation pipe, w
 (27, 10 cm), `Prop_Crop_*` (35: trellises with fruit, root crops with the root below ground, greens, berry/melon
 patches, grains/paddy/cane/cotton rows, orchard rows). `export_farm.py OUT [family…]`. In the ledger a machine
 is an outfitted FOOD worker (`PART_COST["FOOD"]`), crops are the chemistry's `soil.crops`.
+
+### 14.8 Eggs and hatching (`tools/blender/voxel_eggs.py`, 196 props)
+`Prop_Egg_<Type>_<Intact|Cracked|Hatching|Shiny>` for 49 egg types (gemstone: ruby/sapphire/emerald/amethyst/
+diamond/opal/…; metal: gold/silver/bronze/copper/platinum; material: silk/wool/stone/obsidian/ice/lava/cloud/…;
+realm/holiday: easter, halloween, christmas, starmetal). Each `EGGS[type] = (pattern, colours, rarity, hatch_pool)`;
+`RARITY` odds common 70 / rare 22 / legendary 7 / ultra 1, `SHINY_ODDS` for the Shiny re-skin. The shell is an
+ellipsoid (`_shell`) painted by pattern (solid, speckle, stripe, swirl, facet, metallic), Cracked adds a zig-zag
+crack, Hatching opens the top rim with eyes/nose/yolk showing; every stage sits in a twig nest (ground at z=0).
+`hatch_pool` names a `voxel_creatures` family (quadruped/bird/bee/insect/plant/fish/dino/sea) — the game rolls the
+species from that family using the realm's ecology, so one egg type hatches different things on different islands
+(PORT06 egg stages, Adopt-Me-style minigame in the quality bar). `eggs.manifest.json` ships the whole table.
+Export: `export_catalog.py eggs OUT`. Ledger: eggs are market goods found by scavenging/fishing/festival events.
+
+### 14.9 House, grave and sports props (`tools/blender/voxel_props.py`, 150 props)
+`Prop_House_*` (69: bed/bunk/sofa/tables/chairs/wardrobe/dresser/desk/bookshelf/fridge/stove/sink/counter/
+dish rack/washer/bathtub/shower/toilet/towel rack/mirror/lamps/fireplace/television/rug/clock/plant pot/…),
+`Prop_Grave_*` (29: tombstones round/cross/obelisk/angel/celtic/crooked/mossy, crypt, mausoleum door, open grave,
+coffin, urn, wreath, lantern, dead tree, raven, bone pile, zombie hand — the zombie-wave spawn dressing),
+`Prop_Sport_*` (52: baseball bat/ball/glove/bases/pitcher mound/backstop, basketball + hoop, football + goal posts,
+dodgeballs (`json.throwable=true`), soccer, tennis, volleyball net, hockey, golf, bowling, frisbee, bleachers,
+scoreboard, water cooler). `ball(...)` carries seams so a thrown ball reads at 10 cm voxels. Minigames
+catch / dodgeball / baseball / basketball / football use the throwable set (row WZ25). Export: `export_catalog.py
+props OUT [house|grave|sport]`.
+
+### 14.10 Sims realm (`tools/blender/voxel_sims.py`, 66 assets) — the practical-apps realm's build-out
+`Build_Sims_*` kit (26: floors wood/tile/carpet/lawn/concrete/driveway/pool, walls plain/window/door/corner/half/
+exterior/garage, roofs flat/slope/ridge/gable-end/tile, stairs, porch, white fence, pool edge + ladder, chimney,
+street mailbox; 1 m grid at 10 cm voxels), `Prop_Sims_*` practical machines (18) that map to real tools in
+`docs/PRACTICAL-APPS.md` — the json `app` field names the app: Scanner_Printer→PhotosToPDFPC, Fax_Machine→
+fax-trident, Photo_Workbench→image-optimizer, Study_Desk→synapse, Server_Rack→LoadBalancerPro; plus computer desk,
+laptop, phones, router, shredder, filing cabinet, whiteboard, bulletin board, safe, 3D printer, camera tripod, game
+console — and 21 appliances (washer/dryer/dishwasher/microwave/coffee/toaster/vacuum/iron board/treadmill/hot tub/
+grill/patio set/lawnmower/sprinkler/bins/water cooler/AC/ceiling fan/aquarium/pet bed). `House_Sims_Starter` is a
+furnished 10×8 m one-storey house (lounge, kitchen, bedroom, bathroom, office) assembled from `voxel_props.house`
+furniture + the machines, on a lawn with driveway, fence, patio, grill and mailbox — exported as six part meshes
+(floors/walls/roof/furniture/machines/yard) so Unreal can swap rooms. `starter_house()` is the recipe to copy for
+more house types (`_place(dst, voxels, dx, dy, dz, rot)` stamps any catalogue item at a position/rotation).
+A Sims-realm lot = one `Build_Sims_Floor_*` footprint on a PARCELS-realm plot; the machines are the practical
+layer (use the scanner → run the real app), the appliances are the needs loop (hunger/hygiene/energy/fun) that
+feeds the ledger's FOOD/ENERGY goods. Export: `export_catalog.py sims OUT [kit|machine|appliance|house]`.
