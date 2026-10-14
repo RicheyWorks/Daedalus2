@@ -74,12 +74,30 @@ if __name__=='__main__':
     p=argparse.ArgumentParser()
     for name in ['engine','project','output']:p.add_argument('--'+name,required=True,type=Path)
     p.add_argument('--expect',required=True,choices=['accepted','refused'])
-    a=p.parse_args();a.output.mkdir()
+    a=p.parse_args()
+    plugin=a.project.parent/'Plugins/DaedalusLink'
+    manifest=json.loads((a.project.parent/'source-manifest.json').read_text(encoding='utf-8'))
+    prefix='engines/unreal/DaedalusLink/'
+    for name,digest in manifest['files'].items():
+        source=plugin/name.removeprefix(prefix)
+        if hashlib.sha256(source.read_bytes()).hexdigest()!=digest:
+            raise RuntimeError('Production source differs from recorded build input: '+name)
+    fixture_files=['Public/OceanRedirectProbe.h','Private/OceanRedirectProbe.cpp']
+    expected={name.removeprefix(prefix+'Source/DaedalusLink/') for name in manifest['files']
+              if name.startswith(prefix+'Source/DaedalusLink/')}
+    actual={str(path.relative_to(plugin/'Source/DaedalusLink')).replace('\\','/')
+            for path in (plugin/'Source/DaedalusLink').rglob('*') if path.is_file()}
+    if actual != expected | set(fixture_files):
+        raise RuntimeError('Undeclared or missing probe source additions')
+    a.output.mkdir()
     modes=['direct','same-origin-path','cross-origin-port','same-origin-case']
     rows=[scenario(a.engine,a.project.resolve(),a.output/mode,mode,'accepted' if mode=='direct' else a.expect) for mode in modes]
-    plugin=a.project.parent/'Plugins/DaedalusLink'
     proof={'scope':'Actual UE loopback redirects; no TLS or pre-forward prevention claim','cases':rows,
         'baseline_defect_demonstration':a.expect=='accepted','owned_children_stopped':True,
+        'production_source_head':manifest['source_head'],
+        'declared_fixture_additions':fixture_files,
+        'fixture_source_sha256':{name:hashlib.sha256((plugin/'Source/DaedalusLink'/name).read_bytes()).hexdigest()
+                                 for name in fixture_files},
         'client_source_sha256':hashlib.sha256((plugin/'Source/DaedalusLink/Private/DaedalusOceanHostClient.cpp').read_bytes()).hexdigest(),
         'module_sha256':hashlib.sha256((plugin/'Binaries/Win64/UnrealEditor-DaedalusLink.dll').read_bytes()).hexdigest()}
     (a.output/'proof.json').write_text(json.dumps(proof,indent=2)+'\n',encoding='utf-8')

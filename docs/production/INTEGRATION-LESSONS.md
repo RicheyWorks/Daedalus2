@@ -77,3 +77,8 @@
 - A server-side box resize needs bounds, occupancy and blocking-overlap checks before publishing any change. Replicate the accepted dimensions and apply them to the remote component in OnRep; replicating a numeric property alone is not proof that collision changed.
 - Verify wall sweeps in native physics and separately observe the actual remote box dimensions and client refusal through a real server/client pair. Keep rendered navigation and rotation clearance open until tested.
 - Inspect cross-team code before relying on a broadcast's event-order description. The realm notification/save ordering differed from the initial handoff; report the exact discrepancy to the owner before wiring dependent transitions.
+
+### Actual HTTP destination and build serialization
+- UE GetURL retains the request URL after redirects. Verify GetEffectiveURL with case-sensitive resource-path matching and test actual transport against direct, path, port and path-case endpoints.
+- A refused redirected payload does not prove that transport withheld credentials. Record observed forwarding separately and retain the production transport gate.
+- Even private Unreal startup invokes Build.bat platform validation. Serialize private probes and compilation with the compute lease; a startup waiting on another build is not a failed HTTP scenario or a reason to restart a live build.

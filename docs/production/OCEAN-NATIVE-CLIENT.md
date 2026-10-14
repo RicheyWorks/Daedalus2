@@ -37,3 +37,30 @@ ocean-client-runtime-proof.json and ocean-client-http-proof.json.
 The probe uses temporary test JWTs in
 child environment variables, binds only loopback, changes no shared editor/world,
 and will not be counted as rendered gameplay or cross-realm travel.
+
+### Effective URL validation
+
+UE 5.8 retains the original request URL in GetURL() after a redirect. The old
+comparison therefore accepted redirected chunk data. The client now compares
+GetEffectiveURL() to the exact requested URL with case-sensitive matching before
+publishing a payload. Resource path case is significant.
+
+The original native baseline accepted both a same-origin path redirect and a
+cross-port redirect (ocean-redirect-baseline-proof.json). With the fix, four fresh
+UE processes accepted the direct response and refused path, port and path-case
+redirected payloads in 38.407 seconds including startup. The production snapshot
+dab439d6 built all 148 tracked files in 220.56 seconds and passed five native Ocean
+tests. Adding the two declared external probe files rebuilt 52 actions in 261.13
+seconds. Production hashes were checked before the HTTP probes; fixture hashes
+and the resulting module hash are recorded separately.
+
+See ocean-effective-url-build-proof.json, ocean-effective-url-runtime-proof.json,
+and ocean-effective-url-redirect-proof.json. These snapshots predate later main
+metadata/quest fixes; they do not claim a full build of those later changes.
+The source candidate passes the main plugin preflight after merging those fixes.
+
+The transport still contacted redirect destinations. The fresh fake credential
+was forwarded on same-origin redirects and withheld on the observed cross-port
+redirect. Token text was absent from probe logs. Payload refusal does not prevent
+credential forwarding and does not prove TLS, pinning, public hosting or a
+production redirect policy. Those release gates remain open.
