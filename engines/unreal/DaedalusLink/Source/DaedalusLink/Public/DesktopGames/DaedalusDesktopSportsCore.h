@@ -42,6 +42,9 @@ inline void Outline(Frame& F,double X,double Y,double W,double H,Color C,double 
 class FootballGame final : public Game {
 public:
     enum class Phase { Title, Playing, Won, Lost, Draw };
+    enum class GoalScorer { None, Human, Cpu };
+    enum class KickReceipt { None, Accepted, Cooldown };
+    static constexpr int GoalReceiptFrames=90,KickReceiptFrames=12;
     struct Player {
         double X=200,Y=300,Speed=3.5;
         bool Cpu=false;
@@ -56,9 +59,14 @@ public:
         Phase Mode=Phase::Title;
     } Data;
     FootballGame() { Reset(730); }
-    void Reset(std::uint32_t) override { Data=State{}; }
+    void Reset(std::uint32_t) override { Data=State{}; ClearFeedback(); }
     static void MovePlayer(Player& P,const Input& I,const Ball& B) {
-        Vec D=P.Cpu ? sports_detail::Unit(B.X-P.X,B.Y-P.Y) : sports_detail::Direction(I);
+        // Mirror the existing Slate hat merge for direct portable/Blueprint input.
+        // Right/down precedence and the original stick override stay unchanged.
+        Input Controls=I;
+        Controls.Left=I.Left || I.PadLeft; Controls.Right=I.Right || I.PadRight;
+        Controls.Up=I.Up || I.PadUp; Controls.Down=I.Down || I.PadDown;
+        Vec D=P.Cpu ? sports_detail::Unit(B.X-P.X,B.Y-P.Y) : sports_detail::Direction(Controls);
         const double Rate=P.Speed*(P.Cpu ? 0.9 : 1.0);
         P.X=Clamp(P.X+D.X*Rate,40,760);P.Y=Clamp(P.Y+D.Y*Rate,40,560);
         if(P.KickCooldown>0) --P.KickCooldown;
@@ -83,8 +91,15 @@ public:
     void Step(const Input& I) override {
         if(Data.Mode!=Phase::Playing) {
             if(!(I.FirePressed || I.ActionPressed)) return;
-            Data=State{};Data.Mode=Phase::Playing;
-        } else if(I.FirePressed) Kick(Data.Human,Data.Football);
+            Data=State{};Data.Mode=Phase::Playing;ClearFeedback();
+        } else {
+            if(GoalCueFrames>0) --GoalCueFrames;
+            if(KickCueFrames>0 && --KickCueFrames==0) LastKick=KickReceipt::None;
+            if(I.FirePressed) {
+                LastKick=Kick(Data.Human,Data.Football)?KickReceipt::Accepted:KickReceipt::Cooldown;
+                KickCueFrames=KickReceiptFrames;
+            }
+        }
         MovePlayer(Data.Human,I,Data.Football);MovePlayer(Data.Cpu,I,Data.Football);
         UpdateBall(Data.Football);Deflect(Data.Human,Data.Football);Deflect(Data.Cpu,Data.Football);
         const bool LeftGoal=Data.Football.X<50 && Data.Football.Y>220 && Data.Football.Y<380;
@@ -92,6 +107,10 @@ public:
         if(LeftGoal || RightGoal) {
             if(LeftGoal) ++Data.CpuScore; else ++Data.HumanScore;
             Data.Football=Ball{};Data.Human.X=200;Data.Human.Y=300;Data.Cpu.X=600;Data.Cpu.Y=300;
+            LastScorer=LeftGoal?GoalScorer::Cpu:GoalScorer::Human;GoalCueFrames=GoalReceiptFrames;
+            LastKick=KickReceipt::None;KickCueFrames=0;
+            // Receipt only: the source's immediate reset, live movement and
+            // clock continue unchanged. Goal reset retains source kick cooldowns.
         }
         Data.Seconds-=1.0/60.0;
         if(Data.Seconds<=0) {
@@ -102,35 +121,81 @@ public:
     }
     Status GetStatus() const override {
         const bool End=Data.Mode==Phase::Won || Data.Mode==Phase::Lost || Data.Mode==Phase::Draw;
-        return {Data.HumanScore,0,End,Data.Mode==Phase::Won,
-            Data.Mode==Phase::Title ? "Football: Fire/Action to start" :
-            (End ? "Football: Fire/Action to restart" : "Move; Fire press kicks; 90 seconds")};
+        std::string Text;
+        if(Data.Mode==Phase::Title) Text="Football: fresh Fire/Action starts a 90-second match. Move: keys/stick/hat; attack right.";
+        else if(End) Text=ResultText()+" Final score "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore)
+            +". Fresh Fire/Action plays again; host R/Restart returns to title.";
+        else {
+            Text="YOU "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore)+" CPU | "
+                +std::to_string(static_cast<int>(Data.Seconds))+"s | "+KickReadiness()+". Attack right; source kicks work from any distance.";
+            if(GoalCueFrames>0) Text+=" "+GoalText();
+            if(KickCueFrames>0) Text+=" "+KickText();
+        }
+        return {Data.HumanScore,0,End,Data.Mode==Phase::Won,Text};
     }
+    bool IsKickReady() const { return Data.Mode==Phase::Playing && Data.Human.KickCooldown==0; }
+    int GoalReceiptFramesRemaining() const { return GoalCueFrames; }
+    int KickReceiptFramesRemaining() const { return KickCueFrames; }
+    GoalScorer GetLastScorer() const { return LastScorer; }
+    KickReceipt GetLastKickReceipt() const { return LastKick; }
     void Render(Frame& F) const override {
         constexpr Color Green{0,128,0,255},Blue{30,100,255,255},Red{255,50,50,255};
         F.Clear(800,600,Green);
+        F.AddRect(0,0,800,34,{0,65,0,255});
         sports_detail::Ring(F,400,300,60,White,3);F.AddCircle(400,300,8,White);
         F.AddLine(400,40,400,560,White,3);
         sports_detail::Outline(F,30,220,20,160,White,4);sports_detail::Outline(F,750,220,20,160,White,4);
         sports_detail::Outline(F,30,150,120,300,White,3);sports_detail::Outline(F,650,150,120,300,White,3);
         if(Data.Mode==Phase::Playing) {
+            F.AddText(35,195,"DEFEND",White,13);F.AddText(680,195,"ATTACK",White,13);
+            if(GoalCueFrames>0) {
+                const bool HumanGoal=LastScorer==GoalScorer::Human;
+                const Color Cue=HumanGoal?Color{180,220,255,255}:Color{255,180,180,255};
+                sports_detail::Outline(F,HumanGoal?750:30,220,20,160,Cue,6);
+                F.AddRect(230,70,365,32,{0,50,0,230});F.AddText(245,76,GoalText(),Cue,16);
+            }
             F.AddCircle(Data.Human.X,Data.Human.Y,12,Blue);sports_detail::Ring(F,Data.Human.X,Data.Human.Y,12,White);
+            if(KickCueFrames>0) sports_detail::Ring(F,Data.Human.X,Data.Human.Y,18,
+                LastKick==KickReceipt::Accepted?Color{255,235,100,255}:Color{255,180,100,255},3);
             F.AddCircle(Data.Cpu.X,Data.Cpu.Y,12,Red);sports_detail::Ring(F,Data.Cpu.X,Data.Cpu.Y,12,White);
             F.AddCircle(Data.Football.X,Data.Football.Y,8,White);sports_detail::Ring(F,Data.Football.X,Data.Football.Y,8,Black);
             F.AddText(25,5,"YOU: "+std::to_string(Data.HumanScore),Blue,24);
             F.AddText(640,5,"CPU: "+std::to_string(Data.CpuScore),Red,24);
             F.AddText(340,5,"TIME: "+std::to_string(static_cast<int>(Data.Seconds)),White,24);
-            F.AddText(250,565,"Move: arrows / stick; Fire: kick",White,18);
+            F.AddText(25,565,"Move: WASD/arrows/stick/hat  Kick: Space/J/Z/X or pad A/X (fresh press)",White,13);
+            F.AddText(25,583,KickReadiness()+" | "+(KickCueFrames>0?KickText():"Attack RIGHT; source kicks work from any distance."),White,12);
         } else if(Data.Mode==Phase::Title) {
             F.AddText(270,160,"FOOTBALL",White,48);F.AddText(235,235,"1980s STYLE FOOTBALL",White,24);
-            F.AddText(200,320,"Fire / Action to kick off",White,26);
-            F.AddText(190,385,"Move: arrows / stick; Fire: kick",White,20);
-            F.AddText(220,440,"Score goals and beat the CPU!",White,20);
+            F.AddText(170,320,"Fresh Fire / Action: kick off",White,26);
+            F.AddText(150,380,"Move: WASD/arrows/stick/hat. Attack the RIGHT goal.",White,17);
+            F.AddText(190,410,"Kick: Space/J/Z/X or pad A/X; fresh press.",White,17);
+            F.AddText(185,445,"90 seconds. Source kicks work from any distance.",White,17);
         } else {
-            F.AddText(255,230,Data.Mode==Phase::Won ? "YOU WIN!" : (Data.Mode==Phase::Lost ? "CPU WINS!" : "IT'S A DRAW!"),White,42);
+            F.AddText(255,230,ResultText(),White,42);
             F.AddText(260,310,"Final score: "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore),White,26);
-            F.AddText(210,375,"Fire / Action to play again",White,24);
+            F.AddText(170,375,"Fresh Fire / Action: play again",White,24);
+            F.AddText(240,415,"Host R / Restart: title",White,18);
+            if(GoalCueFrames>0) F.AddText(260,450,LastScorer==GoalScorer::Human?"Last goal: YOU":"Last goal: CPU",White,16);
         }
+    }
+private:
+    GoalScorer LastScorer=GoalScorer::None;
+    KickReceipt LastKick=KickReceipt::None;
+    int GoalCueFrames=0,KickCueFrames=0;
+    void ClearFeedback() {
+        LastScorer=GoalScorer::None;LastKick=KickReceipt::None;GoalCueFrames=KickCueFrames=0;
+    }
+    std::string ResultText() const {
+        return Data.Mode==Phase::Won?"YOU WIN!":(Data.Mode==Phase::Lost?"CPU WINS!":"IT'S A DRAW!");
+    }
+    std::string KickReadiness() const {
+        return Data.Human.KickCooldown==0?"Kick READY":"Kick wait "+std::to_string(Data.Human.KickCooldown)+" steps";
+    }
+    std::string GoalText() const { return LastScorer==GoalScorer::Human?"YOU scored; play continues.":"CPU scored; play continues."; }
+    std::string KickText() const {
+        // Acceptance describes the input receipt. Later contact deflection may
+        // overwrite the same step's velocity; this is not a trajectory promise.
+        return LastKick==KickReceipt::Accepted?"Kick press accepted.":"Kick press ignored: cooldown.";
     }
 };
 
