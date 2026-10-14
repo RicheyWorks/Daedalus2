@@ -416,7 +416,19 @@ def cmd_batch(p):
 def cmd_list_commands(_p):
     return {"commands": [{"name": n, "description": DESCRIPTIONS.get(n, ""), "params": PARAMS.get(n, {}),
                           "risk": RISK_OF.get(n, "MUTATE")} for n in sorted(COMMANDS)],
-            "policy": dict(POLICY), "risks": list(RISKS)}
+            "policy": dict(POLICY), "risks": list(RISKS),
+            # Shared invocation metadata; individual command params/risk stay unchanged.
+            "async_jobs": {
+                "submit": {"parameter": "params.async", "value": True,
+                           "job_id_field": "job_id", "initial_state": "running"},
+                "poll": {"command": "job_result", "parameter": "params.job_id",
+                         "states": ["running", "done"], "running_includes_queued": True},
+                "completion": {"state": "done", "reply_field": "reply", "status_field": "status",
+                               "success_status": "ok", "error_status": "error",
+                               "meaning": "terminal reply available; inspect its status, not just the done state"},
+                "retention": {"seconds": JOB_KEEP_S, "from": "acceptance", "storage": "memory",
+                              "cleanup": "job_result", "active_jobs_can_expire": True},
+            }}
 
 
 COMMANDS = {
