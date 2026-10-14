@@ -648,10 +648,12 @@ def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
                 holes.append((x, y))
         yield "%s hub row %d/%d: %d holes so far" % (realm, iy + 1, n, len(holes))
     if holes:
+        # 03:00: slabs only in the empty squares left pits round every block smaller than a square; one full plate
+        # 2 cm under the plane, and everything already standing there stays on top of it
         a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(cx, cy, top))
         a.set_editor_property("realm", realm)
         a.set_editor_property("district", -2)
-        a.lay_ground([unreal.Transform(unreal.Vector(x, y, top - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(slab_m, slab_m, 4.0)) for x, y in holes])
+        a.lay_ground([unreal.Transform(unreal.Vector(cx, cy, top - 2.0 - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(half * 2 / 100.0, half * 2 / 100.0, 4.0))])
         a.get_editor_property("ground").set_cull_distances(0, 0)
         a.set_actor_label(label)
         a.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
