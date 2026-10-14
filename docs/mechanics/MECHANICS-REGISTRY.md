@@ -73,3 +73,6 @@ interceptable cargo, fences/towers/patrols/traps). Rows WZ10–WZ15; the Excel t
 `tools/blender/voxel_creatures.py`: 64 rigged voxel species (animals, birds, bees, carnivorous plants) on the
 shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on an island comes from the ecology
 (seral stage, water, biome) and the chemistry (livestock list, fish); carnivorous plants tie to LAB10/LAB11.
+- 14:45: 171 species (+24 zombies for the wave apocalypse — ledger event `zombie_wave`, 5 escalating waves vs
+  defence, fallen zombies drop salvage — +10 dinosaurs incl. pterodactyl/quetzal, +19 sea creatures, +46 animals:
+  cats, monkeys, snakes, extinct animals). Rows WZ19–WZ20.

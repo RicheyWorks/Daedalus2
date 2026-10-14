@@ -39,7 +39,12 @@ FLOOR = {"FOOD": 2.0, "ENERGY": 3.0, "ORE": 4.0, "CRYSTAL": 8.0}     # shop/inn 
 FISH_SEASON = {"rillperch": ("spring", "summer"), "glassfin": ("summer", "autumn"), "skytrout": ("autumn", "winter"), "ember_koi": ("winter", "spring")}
 BUGS_BY_SERAL = {0: ("fireweed_moth", "yarrow_beetle"), 1: ("meadow_bee", "blue_butterfly"), 2: ("scrub_cricket", "hen_thief_wasp"), 3: ("stag_beetle", "oak_lanternfly")}
 FOSSILS = ("shard_fossil", "ammonite", "starmetal_shard", "old_ark_plank")
-EVENTS = ("meteor", "blight", "raiders", "wampus", "festival", "quiet")
+EVENTS = ("meteor", "blight", "raiders", "wampus", "festival", "quiet", "zombie_wave")
+ZOMBIE_WAVE = {   # Richey 14:33: "zombie apocalypse that hits the island in waves at times" - wave n brings these
+    1: ("zombie_villager", "zombie_farmer", "zombie_child"), 2: ("zombie_miner", "zombie_smith", "zombie_crawler", "zombie_runner"),
+    3: ("zombie_knight", "zombie_pirate", "zombie_sailor", "zombie_bloated"), 4: ("zombie_frost", "zombie_ember", "zombie_mud", "ghoul"),
+    5: ("zombie_crystal", "zombie_giant", "wraith", "zombie_king"),
+}
 
 
 NPC_WANTS = {   # cast roles (data/art/<realm>/population-plan.json friendly types) -> the items they ask for
@@ -287,6 +292,16 @@ class Ledger:
         elif kind == "wampus":
             detail = "a creature hides on deed %d" % deed
             p.add("bounty", 1)
+        elif kind == "zombie_wave":
+            wave = 1 + len([e for e in self.log if e[0] == "event" and e[2] == "zombie_wave"]) % 5
+            size = 4 * wave + int(self.rng.random() * 4)
+            losses = max(0.0, size - 2.0 * p.defence)       # fences, towers, patrols and traps hold the line
+            for it in list(p.store):
+                if family_of(it) == "FOOD":
+                    p.store[it] *= max(0.0, 1.0 - 0.05 * losses)
+            p.hulks_after = None
+            detail = "wave %d: %d of %s hit deed %d; defence %d held %d" % (wave, size, "/".join(ZOMBIE_WAVE[wave]), deed, p.defence, min(size, 2 * p.defence))
+            p.add("zombie_drop", float(min(size, 2 * p.defence)))     # fallen zombies drop salvage the smith can use
         elif kind == "festival":
             fam = self.rng.choice(FAMILIES)
             for it in self.prices:

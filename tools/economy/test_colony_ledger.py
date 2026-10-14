@@ -74,8 +74,9 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(self.L.plots[300].store["coal"], 4)
 
     def test_events_change_the_world(self):
-        kinds = {self.L.event(r)[0] for r in range(40)}
+        kinds = {self.L.event(r)[0] for r in range(60)}
         self.assertTrue({"meteor", "raiders"} & kinds)
+        self.assertIn("zombie_wave", kinds)
 
     def test_day_book_finds_and_collection(self):
         d = self.L.day_book(240, day=3, hour=8, ecology={"seral": 1, "biodiversity": 1.0, "season": "summer"})
