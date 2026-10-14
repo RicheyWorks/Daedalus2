@@ -19,9 +19,19 @@ void AOceanProbeController::Tick(float Dt)
     if (HasAuthority() || !IsLocalController()) return;
     if (FParse::Param(FCommandLine::Get(),TEXT("ProbeDock")))
     {
+        const bool ExitKey=FParse::Param(FCommandLine::Get(),TEXT("ProbeExitKey"));
+        if (ExitKey && ExitRequested && !ExitReleased)
+        {
+            InputKey(FInputKeyEventArgs(nullptr,INPUTDEVICEID_NONE,EKeys::E,IE_Released,1.f,false,FPlatformTime::Cycles64()));
+            ExitReleased=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_EXIT_KEY_RELEASED"));
+        }
         if (auto* Hero=Cast<ADaedalusHero>(GetPawn()))
         {
             Hero->GetCharacterMovement()->DisableMovement(); // Stationary interaction fixture.
+            if (DockRequested && BoardClientLogged && ExitRequested && !Hero->IsHidden() && !ExitClientLogged)
+            {
+                ExitClientLogged=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_EXIT_CLIENT_POSSESSION"));
+            }
             if (!DockRequested && Hero->FindComponentByClass<UDaedalusOceanInteractor>())
                 if (auto* Dock=Cast<ADaedalusOceanDockControl>(ADaedalusUsable::Nearest(Hero,350));
                     Dock && Dock->Vessel && Dock->TravelHost)
@@ -30,12 +40,28 @@ void AOceanProbeController::Tick(float Dt)
                     UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_DOCK_REQUEST"));
                 }
         }
-        if (auto* Vessel=Cast<ADaedalusOceanVessel>(GetPawn());Vessel && Vessel->GetController()==this && !BoardClientLogged)
+        if (auto* Vessel=Cast<ADaedalusOceanVessel>(GetPawn());Vessel && Vessel->GetController()==this)
         {
             const auto Expected=FParse::Param(FCommandLine::Get(),TEXT("ProbeDive"))
                 ? EDaedalusOceanVessel::Submarine : EDaedalusOceanVessel::Boat;
             if (Vessel->VesselType!=Expected || Vessel->CurrentRealm!=TEXT("Ocean Realm")) return;
-            BoardClientLogged=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_BOARD_CLIENT_POSSESSION"));
+            if (!BoardClientLogged) {BoardClientLogged=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_BOARD_CLIENT_POSSESSION"));}
+            if (FParse::Param(FCommandLine::Get(),TEXT("ProbeRoundTrip")))
+            {
+                ExitClock+=Dt;
+                if (ExitClock>.75f && !ExitRequested)
+                    for (TActorIterator<ADaedalusOceanDockControl> It(GetWorld());It;++It)
+                        if (It->Vessel==Vessel)
+                        {
+                            if (ExitKey)
+                            {
+                                InputKey(FInputKeyEventArgs(nullptr,INPUTDEVICEID_NONE,EKeys::E,IE_Pressed,1.f,false,FPlatformTime::Cycles64()));
+                                UE_LOG(LogTemp,Display,TEXT("OCEAN_EXIT_KEY_PRESSED"));
+                            }
+                            else Vessel->RequestDockExit(*It);
+                            ExitRequested=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_EXIT_REQUEST"));break;
+                        }
+            }
         }
         return;
     }
@@ -163,10 +189,24 @@ void AOceanProbeGameMode::Tick(float Dt)
         if (Player && Target.IsValid() && DockHero.IsValid() && Player->GetPawn()==Target.Get()
             && Target->GetController()==Player && DockHero->IsHidden() && !DockHero->GetActorEnableCollision())
         {
+            WasBoarded=true;
             BoardTime+=Dt;
-            if (BoardTime>2)
+            if (BoardTime>2 && !FParse::Param(FCommandLine::Get(),TEXT("ProbeRoundTrip")))
             {
                 UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_BOARD_PASS mode=%s authority_possession=1 saved_avatar_hidden=1"),
+                    FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? TEXT("submarine") : TEXT("boat"));
+                FPlatformMisc::RequestExitWithStatus(false,0);
+            }
+        }
+        if (FParse::Param(FCommandLine::Get(),TEXT("ProbeRoundTrip")) && WasBoarded && Player
+            && DockHero.IsValid() && Target.IsValid() && Player->GetPawn()==DockHero.Get()
+            && DockHero->GetController()==Player && !DockHero->IsHidden() && DockHero->GetActorEnableCollision()
+            && !Target->GetController())
+        {
+            RestoreTime+=Dt;
+            if (RestoreTime>2)
+            {
+                UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_ROUNDTRIP_PASS mode=%s original_hero=1 collision_restored=1"),
                     FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? TEXT("submarine") : TEXT("boat"));
                 FPlatformMisc::RequestExitWithStatus(false,0);
             }

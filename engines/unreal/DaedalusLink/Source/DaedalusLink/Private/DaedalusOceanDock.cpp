@@ -46,3 +46,16 @@ void ADaedalusOceanDockControl::GetLifetimeReplicatedProps(TArray<FLifetimePrope
     DOREPLIFETIME(ADaedalusOceanDockControl,Vessel);
     DOREPLIFETIME(ADaedalusOceanDockControl,InteractionReachCm);
 }
+bool ADaedalusOceanDockControl::ExitVessel(ADaedalusOceanVessel* OccupiedVessel)
+{
+    if (!HasAuthority() || !IsValid(OccupiedVessel) || !OccupiedVessel->HasAuthority()
+        || OccupiedVessel->GetWorld()!=GetWorld() || !IsValid(TravelHost)
+        || TravelHost->GetWorld()!=GetWorld() || !FMath::IsFinite(InteractionReachCm)
+        || InteractionReachCm<=0 || InteractionReachCm>1000) return false;
+    const double Distance=FVector::DistSquared(OccupiedVessel->GetActorLocation(),GetActorLocation());
+    if (!FMath::IsFinite(Distance) || Distance>InteractionReachCm*InteractionReachCm) return false;
+    auto* Player=Cast<APlayerController>(OccupiedVessel->GetController());
+    auto* Travel=TravelHost->FindComponentByClass<UDaedalusOceanTravelComponent>();
+    if (!IsValid(Player) || Player->GetPawn()!=OccupiedVessel || !Travel) return false;
+    return Travel->DisembarkAtDock(Player,OccupiedVessel,DockId);
+}

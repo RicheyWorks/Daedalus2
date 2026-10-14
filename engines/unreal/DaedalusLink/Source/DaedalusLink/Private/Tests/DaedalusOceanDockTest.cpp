@@ -48,6 +48,14 @@ bool FDaedalusOceanDockTest::RunTest(const FString& Parameters)
     Hero->SetActorLocation(FVector(0,-300,0));
     Interactor->RequestDockUse(Dock);
     TestTrue(TEXT("Owned endpoint boards validated hero"),Player->GetPawn()==Vessel);
+    Vessel->RequestDockExit(nullptr);
+    TestTrue(TEXT("Null exit retains vessel"),Player->GetPawn()==Vessel);
+    Vessel->SetActorLocation(FVector(0,1000,0));
+    Vessel->RequestDockExit(Dock);
+    TestTrue(TEXT("Distant exit retains vessel"),Player->GetPawn()==Vessel);
+    Vessel->SetActorLocation(FVector::ZeroVector);
+    Vessel->RequestDockExit(Dock);
+    TestTrue(TEXT("Owned exit restores original hero"),Player->GetPawn()==Hero);
     World->DestroyWorld(false);return true;
 }
 #endif

@@ -21,3 +21,9 @@
 * Use isolated Unreal scratch modules with supported hot-reload settings for
   compile checks, and release the editor turn. A scratch DLL does not prove the
   full shared plugin or a live scene.
+
+### Dock round-trip verification
+- Exercise remote boarding and exit together: original-character identity, visibility and collision must be checked after possession returns on both endpoints.
+- An injected InputKey E event proves the engine binding and owner RPC path, not a physical keyboard or a rendered scene.
+- A headless Unreal launch can generate DefaultInput.ini. Inspect it before changing it; this host already selected EnhancedPlayerInput/EnhancedInputComponent, so it was preserved.
+- Keep production DLL/source proof before adding test actors. Fixture shutdown deliberately closes the connection; distinguish those messages from failures before the pass marker.

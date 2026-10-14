@@ -21,6 +21,10 @@ private:
     bool KeysReleased=false;
     bool DockRequested=false;
     bool BoardClientLogged=false;
+    bool ExitRequested=false;
+    bool ExitReleased=false;
+    bool ExitClientLogged=false;
+    float ExitClock=0;
 };
 
 UCLASS()
@@ -40,4 +44,6 @@ private:
     TWeakObjectPtr<class ADaedalusOceanVessel> Target;
     TWeakObjectPtr<class ADaedalusHero> DockHero;
     float BoardTime=0;
+    float RestoreTime=0;
+    bool WasBoarded=false;
 };

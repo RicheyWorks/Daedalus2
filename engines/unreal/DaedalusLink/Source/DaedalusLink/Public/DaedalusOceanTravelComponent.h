@@ -13,6 +13,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class APlayerController;
+class ADaedalusOceanDockControl;
 struct FInputActionValue;
 
 UENUM(BlueprintType, meta=(ScriptName="OceanVesselKind"))
@@ -36,6 +37,8 @@ public:
     bool SetLocalHelmInput(float Forward, float Turn, float Dive);
     UFUNCTION(Server, Unreliable, BlueprintCallable, Category="Daedalus|Ocean")
     void SetHelmInput(float Forward, float Turn, float Dive);
+    UFUNCTION(Server,Reliable,BlueprintCallable,Category="Daedalus|Ocean")
+    void RequestDockExit(ADaedalusOceanDockControl* Dock);
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float SeaLevelCm = 0;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
@@ -51,6 +54,7 @@ public:
     UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey RightKey = EKeys::D;
     UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey SurfaceKey = EKeys::SpaceBar;
     UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey DiveKey = EKeys::LeftControl;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey InteractKey = EKeys::E;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     EDaedalusOceanVessel VesselType = EDaedalusOceanVessel::Boat;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
@@ -67,11 +71,13 @@ private:
     UPROPERTY() TObjectPtr<UInputAction> ForwardAction;
     UPROPERTY() TObjectPtr<UInputAction> TurnAction;
     UPROPERTY() TObjectPtr<UInputAction> DiveAction;
+    UPROPERTY() TObjectPtr<UInputAction> DockAction;
     TWeakObjectPtr<APlayerController> MappingController;
     void RemoveHelmMapping();
     void InputForward(const FInputActionValue& Value);
     void InputTurn(const FInputActionValue& Value);
     void InputDive(const FInputActionValue& Value);
+    void InputDock();
 };
 
 USTRUCT(BlueprintType)
