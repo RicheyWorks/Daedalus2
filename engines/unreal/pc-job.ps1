@@ -29,7 +29,11 @@ if ($Start) {
     $Id = "job-" + (Get-Date -Format "MMdd-HHmmss")
     $log = Join-Path $Jobs "$Id.log"
     $exit = Join-Path $Jobs "$Id.exit"
-    $runner = if ($full -like "*.py") { "python" } elseif ($full -like "*.ps1") { "powershell.exe -NoProfile -File" } else { throw "a .py or .ps1 script" }
+    # A WMI-started cmd has the system PATH only, where "python" is the Store alias that exits 0 doing nothing:
+    # resolve the real interpreter here, where the user PATH is.
+    $py = (Get-Command python.exe -ErrorAction SilentlyContinue | Where-Object { $_.Source -notlike "*WindowsApps*" } | Select-Object -First 1).Source
+    if (-not $py) { $py = Join-Path $env:LOCALAPPDATA "Programs\Python\Python310\python.exe" }
+    $runner = if ($full -like "*.py") { "`"$py`"" } elseif ($full -like "*.ps1") { "powershell.exe -NoProfile -File" } else { throw "a .py or .ps1 script" }
     # cmd runs the script and writes the exit code last; the window is minimized and never hidden.
     # /S keeps the inner quotes intact; /c "..." with nested quotes otherwise loses the first and last one.
     $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
