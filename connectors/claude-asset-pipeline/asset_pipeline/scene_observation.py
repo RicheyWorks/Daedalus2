@@ -81,7 +81,7 @@ def errors(values,name):
         require('path' in error,name+'.path missing')
         string(error.get('path'),name+'.path',nullable=True)
         string(error.get('code'),name+'.code')
-        string(error.get('message'),name+'.message')
+        string(error.get('message'),name+'.message',empty=True)
 
 
 def actor(value):
@@ -211,6 +211,14 @@ def verification(value,requested):
     require(isinstance(value,dict) and type(value.get('schema_version')) is int and value['schema_version']==1,'unsupported verification schema')
     boolean(value.get('passed'),'passed');context(value.get('context'),nullable=True)
     checks=value.get('checks');require(isinstance(checks,list) and len(checks)<=128,'checks must be bounded')
+    metadata={'observation_errors','error_count','errors_truncated'}
+    if metadata & set(value):
+        require(metadata<=set(value),'observation error metadata must preserve all three fields')
+        errors(value['observation_errors'],'observation_errors')
+        integer(value['error_count'],'error_count')
+        boolean(value['errors_truncated'],'errors_truncated')
+        require(value['error_count']>=len(value['observation_errors']),'observation error count inconsistent')
+        require(value['errors_truncated']==(value['error_count']>len(value['observation_errors'])),'observation error truncation inconsistent')
     if value.get('code') in TOP_FAILURES:
         require(value['passed'] is False and not checks,'top-level failure cannot contain successful checks')
         return copy.deepcopy(value)
@@ -220,6 +228,7 @@ def verification(value,requested):
         require(isinstance(check,dict),'check must be an object')
         path=check.get('path');require(path in wanted and path not in seen,'unexpected or duplicate check identity');seen.add(path)
         status=check.get('status');require(status in ('match','mismatch','unavailable'),'unsupported check status')
+        require('observed' in check,'check.observed missing; null must be explicit')
         mismatches=check.get('mismatches');require(isinstance(mismatches,list),'mismatch diagnostics missing')
         for mismatch in mismatches:
             require(isinstance(mismatch,dict) and {'predicate','expected','observed'}<=set(mismatch),'mismatch must preserve expected and observed values')
@@ -237,11 +246,6 @@ def verification(value,requested):
             require(len(reported)==len(mismatches) and reported==failures,'mismatch diagnostics contradict requested/observed values')
     require(seen==set(wanted),'verification omitted requested actors')
     require(value['passed']==all(check['status']=='match' for check in checks),'passed flag contradicts explicit checks')
-    if 'observation_errors' in value:errors(value['observation_errors'],'observation_errors')
-    if 'error_count' in value:
-        integer(value['error_count'],'error_count')
-        require(value['error_count']>=len(value.get('observation_errors',[])),'observation error count inconsistent')
-    if 'errors_truncated' in value:boolean(value['errors_truncated'],'errors_truncated')
     return copy.deepcopy(value)
 
 

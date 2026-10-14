@@ -781,3 +781,7 @@ exact actor/component paths and numeric values; it separates mismatch, unavailab
 Nullable is not missing. Reported match must agree with requested predicates and observed values.
 Paged observations remain non-atomic/loaded-only even with stable context. Never promote an empty
 check list, missing count, stale epoch or status:ok envelope to a successful scene verification.
+
+### Scene consumer review corrections (2026-10-13)
+An exception string can legitimately be empty. Accept empty diagnostic text while retaining its required field. Explicit observed:null is different from a missing observed key. Catalogue diagnostic count, retained list and truncation flag must agree. Consumer CI must execute actual pinned producer fixtures plus malformed-value regressions; unrelated green pipeline checks do not prove this contract.
+
