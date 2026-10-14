@@ -64,6 +64,64 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   j = JSON.parse(text(r));
   const addon = j.commands.find((c) => c.name === 'test.countdown');
   check('list_commands shows built-ins and a project add-on with its params', addon && addon.params.from === 'int' && j.commands.some((c) => c.name === 'execute_python'), text(r));
+  const jobs = j.async_jobs;
+  const originalPolicy = j.policy;
+  check('list_commands advertises the existing shared async invocation and retention contract',
+    jobs && jobs.submit.parameter === 'params.async' && jobs.submit.value === true &&
+    jobs.poll.command === 'job_result' && jobs.poll.parameter === 'params.job_id' &&
+    JSON.stringify(jobs.poll.states) === '["running","done"]' && jobs.poll.running_includes_queued === true &&
+    jobs.completion.success_status === 'ok' && jobs.completion.error_status === 'error' &&
+    jobs.retention.seconds === 3600 && jobs.retention.from === 'acceptance' &&
+    jobs.retention.storage === 'memory' && jobs.retention.cleanup === jobs.poll.command &&
+    jobs.retention.active_jobs_can_expire === true, text(r));
+  if (jobs) {
+    // Use discovery to submit once, then poll the exact accepted ID. Never resubmit.
+    const submitKey = jobs.submit.parameter.split('.').pop();
+    const pollKey = jobs.poll.parameter.split('.').pop();
+    const submit = async (command, params) => {
+      const reply = await call('run_command', { command, params: Object.assign({}, params, { [submitKey]: jobs.submit.value }) });
+      const accepted = reply.isError ? {} : JSON.parse(text(reply));
+      check('advertised async flag returns an accepted job ID immediately',
+        !reply.isError && typeof accepted[jobs.submit.job_id_field] === 'string' && accepted.state === jobs.submit.initial_state, text(reply));
+      return accepted[jobs.submit.job_id_field];
+    };
+    const poll = async (jobId) => {
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const reply = await call('run_command', { command: jobs.poll.command, params: { [pollKey]: jobId } });
+        const status = reply.isError ? {} : JSON.parse(text(reply));
+        if (reply.isError || status.job_id !== jobId || !jobs.poll.states.includes(status.state)) return {};
+        if (status.state === jobs.completion.state) return status;
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+      return {};
+    };
+    const successfulId = await submit('test.countdown', { from: 4, who: 'async-test' });
+    const successful = await poll(successfulId);
+    const successfulReply = successful[jobs.completion.reply_field] || {};
+    check('advertised polling retrieves the exact job and its nested successful result',
+      successful.job_id === successfulId && successfulReply[jobs.completion.status_field] === jobs.completion.success_status &&
+      JSON.stringify((successfulReply.result || {}).counted) === '[4,3,2,1]', JSON.stringify(successful));
+    const failedId = await submit('get_actor_info', { name: 'missing-async-actor' });
+    const failed = await poll(failedId);
+    const failedReply = failed[jobs.completion.reply_field] || {};
+    check('done is completion, not success: async terminal errors stay in the nested reply',
+      failed.state === jobs.completion.state && failedReply[jobs.completion.status_field] === jobs.completion.error_status &&
+      /no actor/.test(failedReply.message || ''), JSON.stringify(failed));
+    const beforeCount = JSON.parse(text(await call('run_command', { command: 'test.count' }))).count;
+    try {
+      await call('run_command', { command: 'test.policy', params: { allow: ['READ'] } });
+      const refusedId = await submit('test.count', {});
+      const refused = await poll(refusedId);
+      const refusedReply = refused[jobs.completion.reply_field] || {};
+      check('async submission preserves the command risk policy',
+        refusedReply[jobs.completion.status_field] === jobs.completion.error_status &&
+        refusedReply.code === 'REFUSED' && refusedReply.risk === 'MUTATE', JSON.stringify(refused));
+    } finally {
+      await call('run_command', { command: 'test.policy', params: { allow: Object.keys(originalPolicy).filter((risk) => originalPolicy[risk]) } });
+    }
+    const afterCount = JSON.parse(text(await call('run_command', { command: 'test.count' }))).count;
+    check('the refused async mutation did not execute', afterCount === beforeCount + 1, `${beforeCount} -> ${afterCount}`);
+  }
   r = await call('run_command', { command: 'test.countdown', params: { from: 4, who: 'grok' } });
   j = JSON.parse(text(r));
   check('run_command runs the add-on across editor ticks', JSON.stringify(j.counted) === '[4,3,2,1]' && j.by === 'grok', text(r));
