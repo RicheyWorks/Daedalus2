@@ -590,6 +590,7 @@ INSECTS = ("butterfly", "moth", "dragonfly", "firefly", "ladybug", "beetle", "gr
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
 SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH),
            "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA, "insect": INSECTS}
+EXTRA = {}   # family -> (names, plan_fn): other catalogues (voxel_dragons) register here and ride the same rig/clips/export
 
 
 def plan(species):
@@ -611,15 +612,21 @@ def plan(species):
         return _sea(species)
     if species in INSECTS:
         return _insect(species)
+    for names, fn in EXTRA.values():
+        if species in names:
+            return fn(species)
     raise KeyError(species)
 
 
 def family_of(species):
-    return next(f for f, names in SPECIES.items() if species in names)
+    for f, names in SPECIES.items():
+        if species in names:
+            return f
+    return next(f for f, (names, _) in EXTRA.items() if species in names)
 
 
 def all_species():
-    return [s for names in SPECIES.values() for s in names]
+    return [s for names in SPECIES.values() for s in names] + [s for names, _ in EXTRA.values() for s in names]
 
 
 # ---- Blender: mesh, rig, clips, export -------------------------------------------------------------------------
@@ -713,7 +720,13 @@ def build(species, out_dir, scale=10.0, keep=False):
                 p.rotation_euler = (0, 0, 0)
             rig.pose.bones["body"].location.z = 0.02 * k * math.sin(ph)
             if clip == "Idle":
-                if fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
+                if fam == "dragon":                                                 # hovering: slow wingbeats, tail sway
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 0.7 * math.sin(ph * 2) * (1 if side == "L" else -1)
+                    rig.pose.bones["body"].location.z = 0.25 * k + 0.06 * k * math.sin(ph * 2)
+                    rig.pose.bones["tail"].rotation_euler.z = 0.25 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph)
+                elif fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.9 * math.sin(ph * 6) * (1 if side == "L" else -1)
                     rig.pose.bones["body"].location.z = 0.05 * k * math.sin(ph) + 0.3 * k
@@ -723,6 +736,15 @@ def build(species, out_dir, scale=10.0, keep=False):
                 else:
                     rig.pose.bones["head"].rotation_euler.x = 0.08 * math.sin(ph)
                     rig.pose.bones["tail"].rotation_euler.z = 0.3 * math.sin(ph * 2)
+            elif clip in ("Walk", "Run") and fam == "dragon":                          # Walk = cruise, Run = dive-speed
+                fast = 1.6 if clip == "Run" else 1.0
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["wing." + side].rotation_euler.y = 1.0 * math.sin(ph * 2 * fast) * sgn
+                    rig.pose.bones["leg." + side].rotation_euler.x = -0.6                 # legs tucked in flight
+                rig.pose.bones["body"].location.z = 0.25 * k + 0.08 * k * math.sin(ph * 2 * fast)
+                rig.pose.bones["body"].rotation_euler.x = 0.1 * fast
+                rig.pose.bones["tail"].rotation_euler.x = 0.2 * math.sin(ph * 2 * fast)
+                rig.pose.bones["head"].rotation_euler.x = -0.1 * fast
             elif clip == "Run" and fam not in ("plant",):
                 for side, sgn in (("L", 1), ("R", -1)):
                     rig.pose.bones["leg." + side].rotation_euler.x = 0.8 * math.sin(ph) * sgn
@@ -756,6 +778,13 @@ def build(species, out_dir, scale=10.0, keep=False):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.x = -0.6 * (1 - math.cos(ph)) / 2   # grab
                     rig.pose.bones["head"].rotation_euler.x = 0.3 * math.sin(ph)
+                elif fam == "dragon":                                                           # breath: rear back, then pour it out
+                    rear = max(0.0, math.sin(ph)) if ph < math.pi else 0.0
+                    rig.pose.bones["head"].rotation_euler.x = -0.6 * rear + 0.5 * max(0.0, math.sin(ph - math.pi))
+                    rig.pose.bones["body"].rotation_euler.x = -0.2 * rear
+                    rig.pose.bones["body"].location.z = 0.25 * k
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 0.8 * (1 if side == "L" else -1) * (0.5 + 0.5 * rear)
                 elif fam == "dino":
                     rig.pose.bones["head"].rotation_euler.z = 0.5 * math.sin(ph)                    # roar sweep
                     rig.pose.bones["head"].rotation_euler.x = -0.4 * max(0.0, math.sin(ph))
@@ -787,7 +816,7 @@ def build(species, out_dir, scale=10.0, keep=False):
             for p in rig.pose.bones:
                 p.keyframe_insert(data_path="rotation_euler", frame=f)
                 p.keyframe_insert(data_path="location", frame=f)
-        if clip in ("Walk", "Run"):
+        if clip in ("Walk", "Run") and fam != "dragon":      # flyers glide smoothly; walkers keep the stepped feel
             for fc in act.fcurves:
                 for key in fc.keyframe_points:
                     key.interpolation = "CONSTANT"        # the stepped voxel feel, like the Portal creatures

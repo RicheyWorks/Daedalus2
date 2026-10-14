@@ -14,11 +14,13 @@ out_dir = argv[0]
 here = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, here)
 import voxel_creatures as VC  # noqa: E402
+import voxel_dragons  # noqa: E402,F401  (registers the dragon family)
 
 for o in list(bpy.data.objects):          # factory startup ships a cube, a light and a camera
     bpy.data.objects.remove(o, do_unlink=True)
 wanted = [a for a in argv[1:] if not a.startswith("--")] or VC.all_species()
-species = [s for w in wanted for s in (VC.SPECIES[w] if w in VC.SPECIES else (w,))]
+fams = dict(VC.SPECIES, **{f: n for f, (n, _) in VC.EXTRA.items()})
+species = [s for w in wanted for s in (fams[w] if w in fams else (w,))]
 t0 = time.time()
 done = []
 for sp in species:
