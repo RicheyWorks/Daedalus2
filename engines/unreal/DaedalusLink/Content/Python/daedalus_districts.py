@@ -577,6 +577,40 @@ def fill_holes_steps(realm="WORLD-ZERO", rings=15, probe_cm=6000.0):
     return {"realm": realm, "probed": probed, "holes": holes, "filled": filled, "deeds": deeds[:200]}
 
 
+def extras_for_labelled_steps(realms):
+    """Unique shapes for the labelled Land_ slabs too (the rings 1..6 plots and the hole-fill blocks, 02:28): one
+    Extras_<R>_Hub district actor per realm whose Ground instances are island_plan terraces/rocks for every
+    labelled slab, on the slab's own plane (no floating near the hub). Replaced on rerun."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    made = {}
+    for a in list(sub.get_all_level_actors()):
+        if a.get_class().get_name() == "DaedalusLandDistrict" and a.get_actor_label().startswith("Extras_"):
+            sub.destroy_actor(a)
+    for realm in realms:
+        slabs = [(int(l[len(P._prefix(realm)):]), a) for l, a in P._existing(realm).items() if not l.endswith("_Sign")]
+        extras = []
+        for n, a in slabs:
+            loc, sc = a.get_actor_location(), a.get_actor_scale3d()
+            top = loc.z + sc.z * 50.0
+            extras.extend(island_plan(n, loc.x, loc.y, top, sc.z, "PARCELS"))   # on-plane variant (rocks sit on the slab level)
+        if not extras:
+            continue
+        ex = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(0.0, 0.0, 0.0))
+        ex.set_editor_property("realm", realm)
+        ex.set_editor_property("district", -1)
+        ex.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in extras])
+        ex.get_editor_property("ground").set_cast_shadow(False)
+        ex.set_actor_label("Extras_%s_Hub" % realm.replace("-", ""))
+        ex.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
+        ex.tags = [unreal.Name("Extras"), unreal.Name("Realm:%s" % realm)]
+        made[realm] = (len(slabs), len(extras))
+        yield "%s: %d labelled slabs given %d terraces/rocks" % (realm, len(slabs), len(extras))
+    P.save_world()
+    return made
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 
