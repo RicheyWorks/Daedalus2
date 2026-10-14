@@ -951,3 +951,17 @@ H6. Lock awareness: the connector bypasses the hub lock (any client can mutate).
     Poot: add this to the pinned POD checklist.
 H7. Data the harness should record per connector call for tuning: tool name, ms, reply bytes, error. A line per
     call in link/mcp-calls.jsonl from the proxy is a 10-line change and gives us the throughput numbers to argue from.
+
+Standing rule (Richey 01:12): every time the connector helps or hurts, one line to Poot on the hub (topic
+harness-needs) the same hour — tool, what happened, the number. Poot tunes the harness from those lines; a lesson
+that waits for the write-up at the end of the night is a lesson Poot gets a day late.
+
+### Plan of the day — 2026-10-14
+1. World Zero 10k islands laid (done 00:50, 9,002 new plots) and duplicate district actors removed (done).
+2. Epic Unreal MCP connector on and used natively (done 01:07); harness requests H1-H7 with Poot (29760).
+3. Airship tour: the realm mount flies from the hub pad to every marker (Dock, SubDock, Gate, Spawn) in each realm
+   and the Ocean harbor, docks at each, and the receipt lists every landing with its position — run through
+   StartPIE on the connector, proof frames by viewport screenshot.
+4. Re-run the Play suite on the portal-bounce fix (realm_switch, mounts, portals, bestiary).
+5. Resume material reparent (5,940/11,000) once the editor is idle; review Sol's PR129/PR123.
+6. Keep Poot's line coming: one hub note per connector finding, lessons appended the same hour.
