@@ -17,6 +17,7 @@ import math
 import os
 import random
 
+import island_chemistry as CH
 import voxel_island as V
 
 PAL = dict(V.PAL)
@@ -85,7 +86,7 @@ def _body(vox, top, ztop_of, thick, salt, cx=0, cy=0, sand_w=2.0, terrace=None):
             vox["island"].append((x, y, z, "dirt" if _patch(x, y, z, salt) else "dirt2"))
         frac = d / max(d + edge, 1.0)
         jag = (((x // 3) * 2654435761 ^ (y // 3) * 40503 ^ salt) & 7) // 2 - 1
-        depth = int(thick * (1.0 - frac ** 1.8) + jag)
+        depth = int(thick * (1.0 - frac ** 3.2) ** 0.7 + jag)      # a fat keel like the reference, thin only at the rim
         for z in range(zt - 5, zt - 5 - max(depth, 2), -1):
             vox["island"].append((x, y, z, "rock" if _patch(x, y, z, salt, 0.6) else "rock2"))
 
@@ -98,11 +99,19 @@ def _sphere(vox, layer, cx, cy, cz, rad, pick):
                     vox[layer].append((cx + dx, cy + dy, cz + dz, pick()))
 
 
-def plan(seed=1):
+FRUIT = {"apple": (0.90, 0.20, 0.20), "cherry": (0.75, 0.10, 0.25), "plum": (0.45, 0.20, 0.55), "orange": (1.00, 0.60, 0.15),
+         "pear": (0.75, 0.85, 0.35), "lemon": (0.98, 0.92, 0.30)}
+PAL.update({"fruit_" + k: v for k, v in FRUIT.items()})
+
+
+def plan(seed=1, realm="WORLD-ZERO"):
     rng = random.Random(seed * 7919 + 11)
     salt = rng.randint(0, 1 << 20)
     vox = {k: [] for k in LAYERS}
-    occupied_top = {}
+    chem = CH.profile(seed, realm)          # the seed's chemistry decides herbs, fruit, ores, grade
+    herbs_here = chem["flora"]["herbs"]
+    orchard = list(chem["flora"]["orchard"])
+    legendary = chem["geology"]["starmetal_crater"]
 
     # ---- main island: size 60, a hill with the lake on top -----------------------------------------------
     size, thick = 60, 38
@@ -297,7 +306,7 @@ def plan(seed=1):
             return False
         return abs(x - cx) > w // 2 + m or abs(y - cy) > d // 2 + m
 
-    def big_tree(x, y, base, kind="leaf"):
+    def big_tree(x, y, base, kind="leaf", fruit=None):
         hgt = rng.randint(6, 9)
         for z in range(base + 1, base + hgt + 1):
             for (tx, ty) in ((x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)):
@@ -308,6 +317,10 @@ def plan(seed=1):
         _sphere(vox, "trees", x, y, base + hgt + 1, r, pick)
         _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + rng.randint(0, 2), r - 1, pick)
         _sphere(vox, "trees", x + rng.randint(-2, 2), y + rng.randint(-2, 2), base + hgt + 3, r - 1, pick)
+        if fruit:                              # fruit hangs on the canopy's underside and sides
+            for _ in range(10):
+                fx_, fy_, fz_ = x + rng.randint(-r, r), y + rng.randint(-r, r), base + hgt + rng.randint(-1, 2)
+                vox["trees"].append((fx_, fy_, fz_, "fruit_" + fruit))
     for _ in range(5):
         for _try in range(60):
             gx, gy = rng.randint(-size, size), rng.randint(-size, size)
@@ -329,6 +342,13 @@ def plan(seed=1):
             if (tx, ty) in itop and itop[(tx, ty)][1] > 3 and (tx, ty) not in spring:
                 big_tree(tx, ty, iz, "blossom" if rng.random() < 0.4 else "leaf")
                 break
+    # orchard: a grove of this island's fruit species beside the fields (island_chemistry: what the fruit is for)
+    oang = cang + 1.4
+    ogx, ogy = int(hx + 30 * math.cos(oang)), int(hy + 30 * math.sin(oang))
+    for i, species in enumerate(orchard * 3):
+        tx, ty = ogx + (i % 3) * 7 - 7, ogy + (i // 3) * 7 - 7
+        if free(top, tx, ty, 3):
+            big_tree(tx, ty, hill(tx, ty), "leaf", fruit=CH.ORCHARD[species][0])
     # ---- flowers, garden, mushrooms, rocks ----------------------------------------------------------------
     for _ in range(260):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
@@ -397,7 +417,7 @@ def plan(seed=1):
         vox["props"].append((cx2 + dx, cy2, hill(cx2, cy2) + 3, "coal" if dx else "gold"))
     # meteor crater with a starmetal mass, on the terrace near the rim opposite the waterfall
     crx, cry = int(-dirx * (size - 14)), int(-diry * (size - 14))
-    for (x, y), (d, e) in top.items():
+    for (x, y), (d, e) in (top.items() if legendary else ()):
         dd = math.hypot(x - crx, y - cry)
         if dd <= 7.5:
             zt = hill(x, y) - int(round(3.0 * (1.0 - dd / 7.5)))
@@ -405,7 +425,7 @@ def plan(seed=1):
                 vox["island"].append((x, y, z, "crater" if dd > 2.5 else "starmetal"))
             if dd > 7.0:
                 vox["island"].append((x, y, hill(x, y) + 1, "deepstone"))
-    for z in range(hill(crx, cry) - 4, hill(crx, cry) - 14, -1):
+    for z in (range(hill(crx, cry) - 4, hill(crx, cry) - 14, -1) if legendary else ()):
         for dx in range(-2, 3):
             for dy in range(-2, 3):
                 if dx * dx + dy * dy <= 5:
@@ -513,6 +533,8 @@ def plan(seed=1):
     # herb garden: six herbs in a ring (RingInfusion), the brew trough and the clean-water barrel in the middle
     hgx, hgy = int(hx + 20 * math.cos(cang + 2.2)), int(hy + 20 * math.sin(cang + 2.2))
     for k, herb in enumerate(HERBS):
+        if herb not in herbs_here:            # the ring has six beds; only this island's herbs grow in them
+            continue
         a = k * math.pi / 3.0
         x, y = int(round(hgx + 4 * math.cos(a))), int(round(hgy + 4 * math.sin(a)))
         if (x, y) in top:
@@ -578,10 +600,12 @@ def plan(seed=1):
     return vox
 
 
-def build(seed, out, keep=False):
-    """Blender: mesh and export the hero island as FBX (body + water + clouds + UCX boxes)."""
+def build(seed, out, keep=False, realm="WORLD-ZERO"):
+    """Blender: mesh and export the hero island as FBX (body + water + clouds + UCX boxes) + chemistry manifest."""
     import bpy
-    vox = plan(seed)
+    vox = plan(seed, realm)
+    with open(out[:-4] + ".chemistry.json", "w", encoding="utf-8") as f:
+        f.write(CH.manifest(seed, realm))
     name = "Island_H%d" % seed
     for ob in list(bpy.data.objects):
         if ob.name.startswith(name) or ob.name.startswith("UCX_" + name):
