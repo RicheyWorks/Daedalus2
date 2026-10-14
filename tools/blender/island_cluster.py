@@ -180,6 +180,9 @@ def plan(seed, theme="spring"):
     islands = []
     for i, (kind, (dx, dy, dz)) in enumerate(zip(T["kinds"], ISLAND_LAYOUT)):
         vox = H.plan(seed * 10 + i, T["realm"], kind)
+        kp = H.KINDS[kind].get("pal", {})
+        if kp:                       # keep each kind's own colours inside the shared cluster palette
+            vox = {k: [(x, y, z, (c + "@" + kind) if c in kp else c) for x, y, z, c in v] for k, v in vox.items()}
         vox = _shift(vox, dx, dy, dz)
         islands.append((kind, (dx, dy, dz), _lake_of(vox)))
         for k in out:
@@ -200,6 +203,9 @@ def plan(seed, theme="spring"):
 
 def palette_for(theme):
     pal = dict(PAL)
+    for kind, K in H.KINDS.items():
+        for c, rgb in K.get("pal", {}).items():
+            pal[c + "@" + kind] = rgb
     pal.update(THEMES[theme].get("pal", {}))
     return pal
 
