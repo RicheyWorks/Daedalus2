@@ -40,6 +40,22 @@ Try every upgrade on staging first.
 - Run a restore drill weekly: `./restore-drill.sh`. It starts a throwaway server on the newest backup, checks that
   the worlds are served, and touches nothing live.
 
+The drill requires Python 3 on its host. Before creating its temporary Docker
+volume, it reads the archive's `worlds/world/worlds.registry` and saved `.daew`
+entries. A registered world missing its snapshot, an orphan snapshot or an
+invalid snapshot header fails the drill. After startup, it compares every
+served world ID, style, seed and title with that manifest. A fresh World Zero
+alone no longer passes a multi-world restore, and equal counts with different
+worlds also fail. The temporary manifest/HTTP response are removed on exit.
+
+`python3 deploy/test_restore_manifest.py` runs eight focused regressions without
+Docker, including those false-positive cases. Run it from the repository root.
+These checks establish world-list completeness; they do not verify every block,
+sidecar or Redis record. A full data-recovery drill must additionally exercise
+representative saved edits and Redis data on an actual restored server. The
+local Windows development host has no running Linux Docker daemon, so a full
+local Docker restore has not been demonstrated by these unit tests.
+
 ## Upgrades and rollback
 - Set `DAEDALUS_VERSION=<git sha>` in `.env`, then `docker compose up -d --build`.
 - To roll back, set the old tag and run `up -d`. The worlds volume is untouched by an image change. Back up before
