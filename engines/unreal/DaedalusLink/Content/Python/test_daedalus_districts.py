@@ -35,9 +35,7 @@ xy = [(float(G.cell(n)[0]) * 25600.0, float(G.cell(n)[1]) * 25600.0) for n in ce
 plots, rubble, decor = D.dress_plan(cells33, xy, "WORLD-ZERO", 5000.0)
 check("World Zero: every island keeps its cell, floats at its own height within +-40 m and is 8..20 m thick",
       len(plots) == 100 and all(abs(p[2] + p[6] * 50.0 - 5000.0) <= 4000.0 and 8.0 <= p[6] <= 20.0 and (p[0], p[1]) == xy[i] for i, p in enumerate(plots)) and len({round(p[2]) for p in plots}) > 50)
-under = rubble[::1]
-under = [e for e in rubble if e[4] >= 41.0 and e[6] >= 30.0]   # undersides: 41..64 m wide and 33..52 m tall; terraces/rocks are smaller
-check("World Zero: a rock underside per island, below the slab, plus its unique extras", len(under) == 100 and len(rubble) > 100 and all(any(e[2] < p[2] and abs(e[0] - p[0]) < 700.0 and abs(e[1] - p[1]) < 700.0 for e in under) for p in plots))
+check("World Zero: no cube undersides any more (Sol's fragments carry their own); extras are terraces and rocks only", all(e[4] < 41.0 for e in rubble) and len(rubble) > 100)
 check("about every fourth island gets a prop, deterministically", 10 <= len(decor) <= 45 and decor == D.dress_plan(cells33, xy, "WORLD-ZERO", 5000.0)[2])
 plots2, extras2, _ = D.dress_plan(cells33, xy, "PARCELS", 5220.0)
 check("a realm's plots keep the ground plane (no floating, no turning) and its extras sit on or above the ground", all(abs(p[2] + p[6] * 50.0 - 5220.0) < 1.0 and p[3] == 0.0 for p in plots2) and all(e[2] - e[6] * 50.0 >= 5220.0 - 101.0 for e in extras2))

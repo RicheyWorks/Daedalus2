@@ -1522,7 +1522,7 @@ def _fly_to(g, pc, at, max_frames=9000, arrive_cm=1200.0):
         d = math.hypot(dx, dy)
         if d < arrive_cm:
             break
-        pc.set_control_rotation(unreal.Rotator(0.0, math.degrees(math.atan2(dy, dx)), 0.0))
+        pc.set_control_rotation(unreal.Rotator(0.0, 0.0, math.degrees(math.atan2(dy, dx))))   # Rotator(roll, pitch, yaw)
         g.drive(1.0, 0.0, d > 3000.0)
         n += 1
         yield

@@ -322,9 +322,6 @@ def dress_plan(cells, xy, realm, ground_z):
         top = ground_z + dz
         yaw = _h(n, 0) * 360.0 if realm == "WORLD-ZERO" else 0.0   # a fragment turns as it drifts; a city plot stays square
         plots.append((x, y, top - thick * 50.0, yaw, P.LAND_M, P.LAND_M, thick))
-        if realm == "WORLD-ZERO":
-            s = P.LAND_M * (0.45 + 0.25 * _h(n, 3))
-            extras.append((x + (_h(n, 4) - 0.5) * 1200.0, y + (_h(n, 5) - 0.5) * 1200.0, top - thick * 100.0 - s * 40.0, _h(n, 6) * 90.0, s, s * (0.7 + 0.5 * _h(n, 7)), s * 0.8))
         extras.extend(island_plan(n, x, y, top, thick, realm))
         if int(_h(n, 8) * 4) == 0:
             decor.append((n, x, y, top, _h(n, 9) * 360.0))
@@ -395,10 +392,14 @@ def dress_islands_steps(realms, decor_per_district=3):
             else:
                 ground_z = R.GROUND_Z
             plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)   # rubble = extras (terraces, rocks, undersides)
-            a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
+            if comp.static_mesh == cube:
+                a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
+            else:   # Sol's pool mesh (mesh_pool_steps): top-centre origin, unit = 92 m, Z scale = thickness / exported
+                name, exported = pool_variant(realm, int(label.rsplit("D", 1)[1]))
+                a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z + sz * 50.0), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(1.0, 1.0, (sz / exported) if realm == "WORLD-ZERO" else 1.0)) for x, y, z, yaw, sx, sy, sz in plots])
             d = int(label.rsplit("D", 1)[1])
             ground = a.get_editor_property("ground")
-            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in district_ground(realm, d) + rubble])
+            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in district_ground(realm, d) + rubble])
             if realm != "WORLD-ZERO":
                 ground.set_cull_distances(0, 0)   # the ground slab must never cull
             ground.set_cast_shadow(False)
@@ -410,7 +411,7 @@ def dress_islands_steps(realms, decor_per_district=3):
                 dec.get_editor_property("plots").set_static_mesh(mesh)
                 dec.set_editor_property("realm", realm)
                 dec.set_editor_property("district", d)
-                dec.lay_plots([n for n, _, _, _, _ in spots], [unreal.Transform(unreal.Vector(x, y, top), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(1.0, 1.0, 1.0)) for _, x, y, top, yaw in spots])
+                dec.lay_plots([n for n, _, _, _, _ in spots], [unreal.Transform(unreal.Vector(x, y, top), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(1.0, 1.0, 1.0)) for _, x, y, top, yaw in spots])
                 dec.set_actor_label("Decor_%s_D%02d_%d" % (realm.replace("-", ""), d, k))
                 dec.set_folder_path("Realms/%s/Decor" % realm if realm != "WORLD-ZERO" else "Decor")
                 dec.tags = [unreal.Name("Decor"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
@@ -606,7 +607,7 @@ def extras_for_labelled_steps(realms):
         ex = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(0.0, 0.0, 0.0))
         ex.set_editor_property("realm", realm)
         ex.set_editor_property("district", -1)
-        ex.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in extras])
+        ex.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in extras])
         ex.get_editor_property("ground").set_cast_shadow(False)
         ex.set_actor_label("Extras_%s_Hub" % realm.replace("-", ""))
         ex.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
@@ -718,7 +719,7 @@ def mesh_pool_steps(realms):
                 top = loc.z
                 thick = sc.z * exported if realm == "WORLD-ZERO" else exported
             zscale = thick / exported if realm == "WORLD-ZERO" else 1.0
-            ts.append(unreal.Transform(unreal.Vector(loc.x, loc.y, top), unreal.Rotator(0.0, rot.yaw, 0.0), unreal.Vector(1.0, 1.0, zscale)))
+            ts.append(unreal.Transform(unreal.Vector(loc.x, loc.y, top), unreal.Rotator(0.0, 0.0, rot.yaw), unreal.Vector(1.0, 1.0, zscale)))
         comp.set_static_mesh(mesh)
         a.lay_plots(cells, ts)
         a.modify(True)
@@ -865,7 +866,7 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
         for species, k, px, py, pz, pyaw, sc in detail_plan(n, x, y, top, yaw, realm, pools):
             label = "Detail_%s_D%02d_%s%d" % (realm.replace("-", ""), d, species, k)
             row = per_actor.setdefault(label, (d, meshes[species][k], [], []))
-            row[2].append(unreal.Transform(unreal.Vector(px, py, pz), unreal.Rotator(0.0, pyaw, 0.0), unreal.Vector(sc, sc, sc)))
+            row[2].append(unreal.Transform(unreal.Vector(px, py, pz), unreal.Rotator(0.0, 0.0, pyaw), unreal.Vector(sc, sc, sc)))
             row[3].append(n)
             placed += 1
         yield "%s deed %d (%s): %d props" % (realm, n, biome_of(n), placed)

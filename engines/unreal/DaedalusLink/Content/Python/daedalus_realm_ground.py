@@ -216,7 +216,7 @@ def lay(realm, rings=6):
         label = "%s_%s" % (name, realm)
         if label in have:
             continue
-        m = sub.spawn_actor_from_class(unreal.TargetPoint, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+        m = sub.spawn_actor_from_class(unreal.TargetPoint, unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
         m.set_actor_label(label)
         m.set_folder_path(folder + "/Markers")
         m.tags = [unreal.Name(name), tag]
@@ -227,7 +227,7 @@ def lay(realm, rings=6):
         label = "Kit_%s" % aid
         if label in have:
             continue
-        a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+        a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
         a.static_mesh_component.set_static_mesh(unreal.load_asset(meshes[aid]))
         a.set_actor_label(label)
         a.set_folder_path(folder + "/Kit")
@@ -286,7 +286,7 @@ def lay_cast(realm):
         if label in have:
             t = have[label]
         else:
-            t = sub.spawn_actor_from_class(unreal.DaedalusTalker, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+            t = sub.spawn_actor_from_class(unreal.DaedalusTalker, unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
             t.set_editor_property("cast", catalog)
             t.set_editor_property("who", who)
             t.set_actor_label(label)
@@ -340,7 +340,7 @@ def place_creatures(realm):
         if not mesh:
             no_mesh.append(aid)
             continue
-        a = sub.spawn_actor_from_class(unreal.SkeletalMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+        a = sub.spawn_actor_from_class(unreal.SkeletalMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
         a.skeletal_mesh_component.set_skeletal_mesh_asset(unreal.load_asset(mesh))
         if idle:
             c = a.skeletal_mesh_component
@@ -394,7 +394,7 @@ def lay_portals(realm):
     for label, target, via, detail, (x, y, z, yaw) in portal_plan(realm):
         if label in have:
             continue
-        a = sub.spawn_actor_from_class(unreal.DaedalusRealmPortal, unreal.Vector(base[0] + x, base[1] + y, base[2] + z + 250.0), unreal.Rotator(0.0, yaw, 0.0))
+        a = sub.spawn_actor_from_class(unreal.DaedalusRealmPortal, unreal.Vector(base[0] + x, base[1] + y, base[2] + z + 250.0), unreal.Rotator(0.0, 0.0, yaw))
         a.set_editor_property("target", target)
         a.set_editor_property("via", via)
         a.set_editor_property("detail", detail)
