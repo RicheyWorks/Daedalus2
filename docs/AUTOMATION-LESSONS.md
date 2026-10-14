@@ -805,3 +805,30 @@ H. (Sol) manifest-vs-DCS parity in CI (in flight) and a `tools/realms/check_bind
 I. (Poot) `_find_actor` by full path with duplicate-label refusal (claimed).
 J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, errors=, warnings=, interrupted)
    beside the job log, and BASE-LAYER.md's "Laid down" table is regenerated from it.
+
+## What slowed the build-out tonight, and how to build a metaverse faster (2026-10-13, 23:59, Richey: "i need you to be fast like you were")
+What was fast: moving 14 whole islands in one shot (7,552 actors, 0.6 s); laying a realm's hub in 8 s; importing
+a cast in one steps() call. What was slow, and the fix in code:
+1. One actor per thing. 100 plots + 100 signs per district = 200 actors and a save each, 6.5 s a district,
+   40 min for the map. Fix (now): one InstancedStaticMesh actor per district (100 instances, no signs), save
+   every 10 districts: ~0.3 s a district. Rule: anything repeated more than ~50 times in a level is instances
+   of one actor (plots, fences, trees, road tiles), never actors. Labelled actors are for things with identity
+   the game talks to (rings 1..6 lands, talkers, portals, markers).
+2. Proving by Play before the material exists. The Play suite is for seams, not for laying bricks; Richey
+   said "skip testing and just build". Rule: lay first (idempotent, saved, counted), run the suite once at the
+   end of a build-out, not between every layer.
+3. Waiting on the editor for things that need no editor. Ground, plots, districts, casts, portals are all
+   computed headlessly and only *spawned* in the editor; the computation (which cell, which name, which
+   file) runs in milliseconds here. Rule: everything that can be decided outside the editor is decided outside;
+   the editor call carries a plan, not a question.
+4. API archaeology at run time (5.8: no World.streaming_levels, create_new_streaming_level takes 3 args,
+   `hide` collides with AActor). Rule: when a UE Python call fails once, write the working call into the module
+   docstring and a lessons line the same minute, so no bot pays for it twice.
+5. Serial jobs on one editor. The materials job held the editor for 75 min; building waited. Rule: material
+   fixes and other polish run only in the gaps; lay-down jobs have priority on the lease (ADR-066 §7).
+6. Humans and bots sharing the Play window. Rule: build-out runs with Play off; proof runs announce "hands off"
+   and detect a hand (interrupted).
+7. Each realm by hand. The four realms were laid by four calls to the same tools; that is the shape to keep:
+   a new realm = ORIGINS line + .dcs + .dic + three GLB folders + one mount row + bestiary rows, then
+   `finish_islands.py`. Next speed-up: a single `realm.yaml` per realm that generates all of those, so adding a
+   realm is one file and one job.
