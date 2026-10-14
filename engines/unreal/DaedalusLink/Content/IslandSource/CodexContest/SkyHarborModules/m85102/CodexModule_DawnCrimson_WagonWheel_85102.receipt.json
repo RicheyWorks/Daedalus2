@@ -1,0 +1,149 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 20124,
+        "sha256": "c859c181e1efd94e0cbcf011643151aefc7f1be7e22e42bc2a3f4ce75335509f"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 28604,
+        "sha256": "8b37196c18d46d579a2ef7067a09858f8c203ac0196cd0767661daedb198143f"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 28604,
+    "objects": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexModule_DawnCrimson_WagonWheel_85102_part",
+        "triangles": 560
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "WagonWheel",
+    "preset": "DawnCrimson",
+    "seed": 85102,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "87238253a445720ab6dd5309b8e6b1894b3777550c2a058e51e024118a8cddd6",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "axle",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.009083,
+    "generation": 0.001933,
+    "glb_export": 0.013701,
+    "mesh": 0.00308
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "extent": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexModule_DawnCrimson_WagonWheel_85102_part",
+        "triangles": 560
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "mesh": 0,
+        "name": "CodexModule_DawnCrimson_WagonWheel_85102_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_DawnCrimson_WagonWheel_85102",
+  "palette_rgb": {
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": [
+    0,
+    1,
+    0
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "2945f988fd718791d9af444f41277bffbb1ad118a91dd7605e2d5d80a62c5524"
+}

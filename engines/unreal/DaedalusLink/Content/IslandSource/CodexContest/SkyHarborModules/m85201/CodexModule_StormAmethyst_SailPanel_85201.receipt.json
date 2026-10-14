@@ -1,0 +1,145 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 20892,
+        "sha256": "28d587c9231e7d8668b354470395c4285b92c272f581d3a4304a08731d782156"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 26796,
+        "sha256": "eb559acbf40ee6f1e8fbaf9084caea0e3ce88d5fb39e6f0235c2d6f8de23a2b1"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 26796,
+    "objects": [
+      {
+        "dims": [
+          4.0,
+          3.0,
+          0.25
+        ],
+        "materials": [
+          "CodexVoxel_cloud",
+          "CodexVoxel_crystal"
+        ],
+        "name": "CodexModule_StormAmethyst_SailPanel_85201_part",
+        "triangles": 656
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "SailPanel",
+    "preset": "StormAmethyst",
+    "seed": 85201,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "e1f9299785a936f184a4cd82df0834f78bc6c9c1d6b3a97f31fedddcfe2ee559",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "sail-mast",
+      "name": "mast-seat",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.008288,
+    "generation": 0.001516,
+    "glb_export": 0.01935,
+    "mesh": 0.003943
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_cloud",
+      "CodexVoxel_crystal"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          4,
+          3,
+          0.25
+        ],
+        "extent": [
+          3,
+          4,
+          0.25
+        ],
+        "materials": [
+          "CodexVoxel_cloud",
+          "CodexVoxel_crystal"
+        ],
+        "name": "CodexModule_StormAmethyst_SailPanel_85201_part",
+        "triangles": 656
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          4.0,
+          3.0,
+          0.25
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_SailPanel_85201_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_SailPanel_85201",
+  "palette_rgb": {
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "crystal": [
+      0.7,
+      0.42,
+      0.96
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "b9de0d1a96baec4aebe2e4f91b89edbe97f65b807a48d7311b5090192a9d3502"
+}

@@ -1,0 +1,172 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 20476,
+        "sha256": "47ee7222bd45c30d34a4941f8e5bf5fd2cbd8104d4d90d760df615a40201983a"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 19336,
+        "sha256": "f74937be7ae1f1f43f7b7614d12870a10b14b15a716da4125d796b9643e5dd38"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 19336,
+    "objects": [
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexModule_StormAmethyst_CrystalBattery_85204_part",
+        "triangles": 432
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "CrystalBattery",
+    "preset": "StormAmethyst",
+    "seed": 85204,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "160210b5384caf1a1bcabff2f37db38ccdc8e709f40cea5bbdcbbe5bb5bf8f1b",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "kind": "battery-base",
+      "name": "battery-seat",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "power-port",
+      "name": "power",
+      "position_metres": [
+        0,
+        -0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.005694,
+    "generation": 0.001188,
+    "glb_export": 0.013723,
+    "mesh": 0.002271
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_crystal",
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "extent": [
+          1.5,
+          2.25,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexModule_StormAmethyst_CrystalBattery_85204_part",
+        "triangles": 432
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_CrystalBattery_85204_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_CrystalBattery_85204",
+  "palette_rgb": {
+    "crystal": [
+      0.7,
+      0.42,
+      0.96
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "46d7a96b08f21c81bc2e20c45403b5429684f62a4b9637ec621f6b9cf5e815ac"
+}

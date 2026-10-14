@@ -7,3 +7,5 @@
 CodexIsland_tropical_lagoon_*.plan.json
 CodexIsland_volcanic_cliffs_*.plan.json
 CodexIsland_alpine_terraces_*.plan.json
+# First module export attempt used long repeated names; retained locally, superseded.
+SkyHarborModules/CodexModule_*/

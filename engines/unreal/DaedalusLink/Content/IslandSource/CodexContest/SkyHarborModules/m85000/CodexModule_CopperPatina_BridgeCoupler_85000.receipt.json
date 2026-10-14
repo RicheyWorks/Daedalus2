@@ -1,0 +1,164 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 19228,
+        "sha256": "d09d0b1aaacea5d4474ed8745733cba69a9793172cd69c76a0fd44d78d118714"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 17592,
+        "sha256": "e16945a473f6c1fb05b283151d853351e995aadc0fd6a689bcbea5ba9f84c808"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 17592,
+    "objects": [
+      {
+        "dims": [
+          4.0,
+          1.0,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_roof",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexModule_CopperPatina_BridgeCoupler_85000_part",
+        "triangles": 416
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "BridgeCoupler",
+    "preset": "CopperPatina",
+    "seed": 85000,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "ab6385bca9d38775bfadab7559e83d66fabab909b432cbdb6e55d8728c372a7a",
+  "connection_points": [
+    {
+      "forward": [
+        -1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "near",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "far",
+      "position_metres": [
+        4,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.073738,
+    "generation": 0.001869,
+    "glb_export": 0.89247,
+    "mesh": 0.002384
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_roof",
+      "CodexVoxel_trunk"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          4,
+          1.0,
+          0.5
+        ],
+        "extent": [
+          4,
+          0.5,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_roof",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexModule_CopperPatina_BridgeCoupler_85000_part",
+        "triangles": 416
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          4.0,
+          1.0,
+          0.5
+        ],
+        "mesh": 0,
+        "name": "CodexModule_CopperPatina_BridgeCoupler_85000_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+  "palette_rgb": {
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "9a47fa0746e847c6aaa2fa77812cfd9ddeb62b9ca4462358114a5afd3eca4e68"
+}

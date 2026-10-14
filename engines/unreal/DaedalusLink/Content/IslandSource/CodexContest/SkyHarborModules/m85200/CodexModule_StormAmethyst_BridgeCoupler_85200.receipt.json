@@ -1,0 +1,164 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 19228,
+        "sha256": "a4ddbcc9e9dd167f7f61cd49c6cf59550b36907ad7269e6c003d6ce12a2df663"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 17596,
+        "sha256": "2e4e63a80a65e325af31a885e6a54be58b29d9a7f5e71803bdd15e1cf77b8f6c"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 17596,
+    "objects": [
+      {
+        "dims": [
+          4.0,
+          1.0,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part",
+        "triangles": 416
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "BridgeCoupler",
+    "preset": "StormAmethyst",
+    "seed": 85200,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "d7ed777befe3563d37b62589ae1c947432aa9a7722d7c740faee0c8c4d0bf287",
+  "connection_points": [
+    {
+      "forward": [
+        -1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "near",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "far",
+      "position_metres": [
+        4,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.004704,
+    "generation": 0.00165,
+    "glb_export": 0.011741,
+    "mesh": 0.002278
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock",
+      "CodexVoxel_trunk"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          4,
+          1.0,
+          0.5
+        ],
+        "extent": [
+          4,
+          0.5,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part",
+        "triangles": 416
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          4.0,
+          1.0,
+          0.5
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_BridgeCoupler_85200",
+  "palette_rgb": {
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "60afd7985a40fb807db991a719798d73bbad66ca19ae966e6d2abb0c4fecb07c"
+}

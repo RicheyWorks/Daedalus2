@@ -1,0 +1,89 @@
+{
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "GearboxHousing",
+    "preset": "CopperPatina",
+    "seed": 85005,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "b51335b26c0311565d3e8e5204dd242f64e268c048c93b10afb4906239e9b2da",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "input",
+      "position_metres": [
+        0,
+        -0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "output",
+      "position_metres": [
+        0,
+        0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "implemented_gameplay": false,
+  "name": "CodexModule_CopperPatina_GearboxHousing_85005",
+  "palette_rgb": {
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "planned",
+  "voxel_sha256": "4f88a48f3df8363f02fe9a55f483a7b31d9f4f15442a51bc17613d0fb55a53ad"
+}

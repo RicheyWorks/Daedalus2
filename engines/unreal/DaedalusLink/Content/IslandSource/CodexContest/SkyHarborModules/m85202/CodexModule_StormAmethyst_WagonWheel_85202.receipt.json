@@ -1,0 +1,149 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 20140,
+        "sha256": "6650da60f6be3fb72c782eea32606d5820f92ab84b3207e94eb1a0f29181394e"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 28608,
+        "sha256": "c65732cc45aa1944c787b43ca1772e50016a013a3b745a2d44f876d4270ec78b"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 28608,
+    "objects": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexModule_StormAmethyst_WagonWheel_85202_part",
+        "triangles": 560
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "WagonWheel",
+    "preset": "StormAmethyst",
+    "seed": 85202,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "259940caabcb5d755a05b43f83115997cd91378819c904dc6fddeb3b0f347b61",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "axle",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.006815,
+    "generation": 0.00133,
+    "glb_export": 0.018477,
+    "mesh": 0.003515
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "extent": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexModule_StormAmethyst_WagonWheel_85202_part",
+        "triangles": 560
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          2.5,
+          2.5,
+          0.5
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_WagonWheel_85202_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_WagonWheel_85202",
+  "palette_rgb": {
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": [
+    0,
+    1,
+    0
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "3d5b2779468332f1692d760c89bf4554f0c5d64bcb0c8a9cfe88defc2180b512"
+}

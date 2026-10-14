@@ -1,0 +1,168 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 18556,
+        "sha256": "1c52ebfc34c1c38936ee4c233c9bd60a9dc50d4e63d1c77617027dcb0e480103"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 15096,
+        "sha256": "321a1bd986475050d257101f5f7b3faf71b84df415ad60b54c44f2a4ea6829f2"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 15096,
+    "objects": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexModule_DawnCrimson_DriveShaft_85106_part",
+        "triangles": 336
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "DriveShaft",
+    "preset": "DawnCrimson",
+    "seed": 85106,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "8d128dfc8ee9999c2c90383952b68787aaea11319a29a774b8defba5e92ed432",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "input",
+      "position_metres": [
+        0,
+        -1.5,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "output",
+      "position_metres": [
+        0,
+        1.5,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.006044,
+    "generation": 0.001358,
+    "glb_export": 0.015725,
+    "mesh": 0.001922
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_flower_r",
+      "CodexVoxel_sand"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "extent": [
+          1.0,
+          1.0,
+          3.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexModule_DawnCrimson_DriveShaft_85106_part",
+        "triangles": 336
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "mesh": 0,
+        "name": "CodexModule_DawnCrimson_DriveShaft_85106_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_DawnCrimson_DriveShaft_85106",
+  "palette_rgb": {
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": [
+    0,
+    1,
+    0
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "970fc54c9dcd12d6d01e0b3d9b60d35b22fdc61a52585abe6ae6a1146f90f08a"
+}

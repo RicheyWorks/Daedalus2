@@ -28,7 +28,7 @@ MAT = "editor_toolset.toolsets.material.MaterialTools"
 INSTANCE = "editor_toolset.toolsets.material_instance.MaterialInstanceTools"
 DEST = "/Game/Daedalus/Art/Islands/CodexContest"
 PALETTE = DEST + "/Palette"
-LAYERS = ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds", "landmarks")
+LAYERS = ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds", "landmarks", "part")
 
 
 def reference(path):
@@ -183,7 +183,7 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
     if not receipts or len({r["name"] for r in receipts}) != len(receipts):
         raise ValueError("supply distinct exported island receipts")
     for receipt in receipts:
-        if receipt.get("schema") != "daedalus.codex-island.v1" or receipt.get("stage") != "exported":
+        if receipt.get("schema") not in ("daedalus.codex-island.v1", "daedalus.codex-module.v1") or receipt.get("stage") != "exported":
             raise ValueError("delivery requires exported receipts, not plans")
         artifact = receipt["artifacts"]["fbx"]
         if fingerprint(artifact["path"]) != artifact["fingerprint"]:

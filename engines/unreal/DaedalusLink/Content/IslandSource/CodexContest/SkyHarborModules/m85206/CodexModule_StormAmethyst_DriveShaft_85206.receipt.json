@@ -1,0 +1,168 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 18556,
+        "sha256": "0248ed0a300ef00913a5cb8daaff3f8eadcace3c56a3b2270912976aeeb28948"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 15100,
+        "sha256": "597207ba91ff5bc93085ae933f9e7d0c668d8c4f56a1004870866285967a30b2"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 15100,
+    "objects": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_rock"
+        ],
+        "name": "CodexModule_StormAmethyst_DriveShaft_85206_part",
+        "triangles": 336
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "DriveShaft",
+    "preset": "StormAmethyst",
+    "seed": 85206,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "1c55c2d0c70e7a46f4a6c21b0f810b30810c47e818834de0545bb2d5cd00f677",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "input",
+      "position_metres": [
+        0,
+        -1.5,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "output",
+      "position_metres": [
+        0,
+        1.5,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.004547,
+    "generation": 0.000972,
+    "glb_export": 0.011751,
+    "mesh": 0.001886
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_crystal",
+      "CodexVoxel_rock"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "extent": [
+          1.0,
+          1.0,
+          3.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_rock"
+        ],
+        "name": "CodexModule_StormAmethyst_DriveShaft_85206_part",
+        "triangles": 336
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_DriveShaft_85206_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_DriveShaft_85206",
+  "palette_rgb": {
+    "crystal": [
+      0.7,
+      0.42,
+      0.96
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": [
+    0,
+    1,
+    0
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "77c6a3a10c7015b3c94e0c1bb5adbc7e25160cc2b5a41e9dcba55ba5387058f8"
+}
