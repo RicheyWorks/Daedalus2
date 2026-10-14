@@ -24,6 +24,7 @@ const pending=runs.getRange('D8:D43').values.findIndex(row=>row[0]==='Pending');
 if(pending<0)throw Error('Missing source pending style');
 runs.getRange('D47').copyFrom(runs.getRange('D'+(8+pending)),'all');
 runs.getRange('D47').values=[['Pending']];
+runs.getRange('D47').format.verticalAlignment='center';
 const text=await fs.readFile(repo+'/engines/unreal/DaedalusLink/Content/Inventory/ocean.dic','utf8');
 const items=text.split(/\r?\n/).filter(l=>l.startsWith('item ')).map(l=>{const f=l.split(' ');return{id:f[1],tab:f[2],actions:f[4],name:f.slice(5).join(' ')};});
 if(items.length!==13||items.some(i=>i.actions!=='INSPECT'))throw Error('Unexpected catalog');
