@@ -1,0 +1,63 @@
+{
+  "deadline_epoch": 1792003440.0,
+  "imported_groups": 1,
+  "manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+  "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+  "prepared_groups": 24,
+  "prepared_islands": 3,
+  "prepared_modules": 21,
+  "requested_import_options": {
+    "auto_generate_collision": false,
+    "build_nanite": false,
+    "combine_meshes": false,
+    "generate_lightmap_u_vs": false,
+    "import_materials": false,
+    "import_textures": false,
+    "vertex_color_import_option": "REPLACE"
+  },
+  "results": [
+    {
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921",
+      "elapsed_s": {
+        "import": 0.066672
+      },
+      "import_skipped": false,
+      "imported_object_paths": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104"
+      ],
+      "kind": "module",
+      "meshes": [
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+          "save_return": true,
+          "save_s": 0.022216,
+          "source_name": "CodexModule_DawnCrimson_CrystalBattery_85104_part"
+        }
+      ],
+      "name": "CodexModule_DawnCrimson_CrystalBattery_85104",
+      "stage": "assets_saved_held_from_world"
+    }
+  ],
+  "saved_groups": 1,
+  "saved_meshes": 1,
+  "selected_groups": 1,
+  "selected_names": [
+    "CodexModule_DawnCrimson_CrystalBattery_85104"
+  ],
+  "stage": "assets_saved",
+  "world_placed": 0
+}

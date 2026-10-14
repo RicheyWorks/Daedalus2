@@ -3,6 +3,8 @@
 *.fbx
 *.calls.jsonl
 *.unreal.json
+*.previous
+*.before-recovery
 # Superseded illustrative plans retained locally after the original-design correction.
 CodexIsland_tropical_lagoon_*.plan.json
 CodexIsland_volcanic_cliffs_*.plan.json

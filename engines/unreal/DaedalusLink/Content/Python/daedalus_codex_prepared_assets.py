@@ -73,6 +73,10 @@ def _verify(entry, meshes):
     for mesh in meshes:
         name = mesh.get_name()
         match = [key for key in expected if name == key or name.endswith("_" + key)]
+        # Interchange uses destination_name for a single source mesh. Retain the
+        # source object's logical identity after the normal bound checks below.
+        if not match and len(expected) == 1 and name == entry["name"]:
+            match = list(expected)
         if len(match) != 1 or match[0] in actual:
             raise RuntimeError("imported mesh identity differs: " + name)
         actual[match[0]] = mesh
@@ -168,6 +172,10 @@ def import_all(manifest_path, report_path=None, deadline_epoch=None, asset_names
             result["imported_object_paths"] = [str(path) for path in task.imported_object_paths]
             meshes = _meshes(dest)
             result["import_skipped"] = False
+            # Import returned; persist paths before validation can raise.
+            result["stage"] = "import_returned"
+            report["stage"] = "import_returned"
+            _write(report_path, report)
         verified = _verify(entry, meshes)
         result["stage"] = "imported"
         report["imported_groups"] += 1

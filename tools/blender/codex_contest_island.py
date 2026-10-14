@@ -322,6 +322,8 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
     cached = _cached(saved_path, config)
     if cached:
         return dict(cached, export_skipped=True)
+    if saved_path.exists() or (folder / (name + ".glb")).exists() or (folder / (name + ".fbx")).exists():
+        raise RuntimeError("retain existing revision; choose a new output folder or seed: " + str(folder))
     started = time.perf_counter()
     config, voxels = plan(preset, seed, hero)
     report = receipt(config, voxels)

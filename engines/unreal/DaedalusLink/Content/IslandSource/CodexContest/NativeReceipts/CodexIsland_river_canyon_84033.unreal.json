@@ -1,0 +1,228 @@
+{
+  "deadline_epoch": 1792003440.0,
+  "imported_groups": 1,
+  "manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+  "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+  "prepared_groups": 24,
+  "prepared_islands": 3,
+  "prepared_modules": 21,
+  "requested_import_options": {
+    "auto_generate_collision": false,
+    "build_nanite": false,
+    "combine_meshes": false,
+    "generate_lightmap_u_vs": false,
+    "import_materials": false,
+    "import_textures": false,
+    "vertex_color_import_option": "REPLACE"
+  },
+  "results": [
+    {
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56",
+      "elapsed_s": {
+        "import": 4.372201
+      },
+      "import_skipped": false,
+      "imported_object_paths": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_clouds.CodexIsland_river_canyon_84033_clouds",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_cottage.CodexIsland_river_canyon_84033_cottage",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_crystals.CodexIsland_river_canyon_84033_crystals",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_flowers.CodexIsland_river_canyon_84033_flowers",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_island.CodexIsland_river_canyon_84033_island",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_landmarks.CodexIsland_river_canyon_84033_landmarks",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_rocks.CodexIsland_river_canyon_84033_rocks",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_trees.CodexIsland_river_canyon_84033_trees",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_water.CodexIsland_river_canyon_84033_water"
+      ],
+      "kind": "island",
+      "meshes": [
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_clouds.CodexIsland_river_canyon_84033_clouds",
+          "save_return": true,
+          "save_s": 0.072321,
+          "source_name": "CodexIsland_river_canyon_84033_clouds"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_cottage.CodexIsland_river_canyon_84033_cottage",
+          "save_return": true,
+          "save_s": 0.075444,
+          "source_name": "CodexIsland_river_canyon_84033_cottage"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_crystals.CodexIsland_river_canyon_84033_crystals",
+          "save_return": true,
+          "save_s": 0.070634,
+          "source_name": "CodexIsland_river_canyon_84033_crystals"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_flowers.CodexIsland_river_canyon_84033_flowers",
+          "save_return": true,
+          "save_s": 0.012649,
+          "source_name": "CodexIsland_river_canyon_84033_flowers"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_island.CodexIsland_river_canyon_84033_island",
+          "save_return": true,
+          "save_s": 0.026941,
+          "source_name": "CodexIsland_river_canyon_84033_island"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_landmarks.CodexIsland_river_canyon_84033_landmarks",
+          "save_return": true,
+          "save_s": 0.016556,
+          "source_name": "CodexIsland_river_canyon_84033_landmarks"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_rocks.CodexIsland_river_canyon_84033_rocks",
+          "save_return": true,
+          "save_s": 0.015232,
+          "source_name": "CodexIsland_river_canyon_84033_rocks"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_trees.CodexIsland_river_canyon_84033_trees",
+          "save_return": true,
+          "save_s": 0.01235,
+          "source_name": "CodexIsland_river_canyon_84033_trees"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_water.CodexIsland_river_canyon_84033_water",
+          "save_return": true,
+          "save_s": 0.012089,
+          "source_name": "CodexIsland_river_canyon_84033_water"
+        }
+      ],
+      "name": "CodexIsland_river_canyon_84033",
+      "stage": "assets_saved_held_from_world"
+    }
+  ],
+  "saved_groups": 1,
+  "saved_meshes": 9,
+  "selected_groups": 1,
+  "selected_names": [
+    "CodexIsland_river_canyon_84033"
+  ],
+  "stage": "assets_saved",
+  "world_placed": 0
+}
