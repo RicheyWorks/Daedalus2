@@ -1,0 +1,17 @@
+{
+  "passed": [
+    {
+      "asset": "Prop_Ocean_TideSkiff",
+      "triangles": 1766
+    },
+    {
+      "asset": "Prop_Ocean_CoralSubmarine",
+      "triangles": 6676
+    },
+    {
+      "asset": "Prop_Ocean_HarbourDock",
+      "triangles": 8352
+    }
+  ],
+  "native_collision_proven": false
+}

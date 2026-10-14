@@ -21,6 +21,13 @@ private:
     FString Origin,Token;
     int32 Phase=0;
     float Elapsed=0,Wait=0;
+    TArray<FIntVector> RenderKeys;
+    int32 RenderLoaded=0;
+    bool RenderPending=false,CaptureRequested=false;
+    FString CapturePath;
+    UPROPERTY() TObjectPtr<class USkyLightComponent> RenderSkyLight;
+    bool LightingRecaptured=false;
+    void BeginRender();
     void Stop();
 };
 UCLASS()
