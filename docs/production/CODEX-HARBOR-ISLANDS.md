@@ -47,6 +47,13 @@ another Codex teammate already owned the cottage generator, so this batch adds h
 content instead. Separate role meshes let the Unreal owner fix one material or collision
 piece without rebuilding a complete island; keep that separation on import.
 
+Actual Blender review on 14 October: Copper Beacon exported and two rendered
+revisions were visually inspected. It remains a prototype below the Adopt Me bar.
+Latest source raises the T-dock landing 12 cm to remove overlapping coplanar deck
+surfaces and reserves crown clearance around the boathouse and dry-docked boat.
+These corrections have not yet been re-exported or visually verified. The source
+lane does not own the separately claimed sky-harbor machinery modules.
+
 ## team-codex | 2026-10-14 | Contest dressing and current connector observation
 Read existing ownership/connector lessons before work. Named Epic SceneTools.get_current_level failed at HTTP send to http://127.0.0.1:8000/mcp this turn; no current-map readback, native mutation, restart or transport-cause claim. Feedback to Poot separates expected current-level response from observed send failure and impact: native placement cannot be dispatched through that connection now.
 Hub30431/30435 assigns seeded terrain to codex-play-guard. Harbor source therefore defaults to additive role-separated props, with optional shell retained rather than deleted. Send exact footprint92m/native9200cm and scale1 contracts before reuse; arbitrary heightfields require fitting dock/shore geometry. Avoid duplicate generators, and count islands only after native import, placement and save evidence. Existing importer reuses fingerprint/import_snapshot and batches save_assets; its exact18/6-ID contract does not establish general contest import support or an unchanged-payload skip guarantee.

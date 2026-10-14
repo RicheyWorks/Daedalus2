@@ -81,7 +81,9 @@ def dock():
         box((12, y, .24), (6, 1.8, .32), wood, bevel=.06)
     for y in [-38, -30, -22]:
         for x in [9, 15]: cone((x, y, -1), .25, .25, 4, wood)
-    for x in range(5, 22, 2): box((x, -38, .24), (1.8, 5, .32), wood, bevel=.06)
+    # The cross-deck is a shallow raised landing. Its boards used to intersect
+    # walkway boards at the same surface height, causing visible z-fighting.
+    for x in range(5, 22, 2): box((x, -38, .36), (1.8, 5, .32), wood, bevel=.06)
 
 
 def lighthouse(height):
@@ -122,6 +124,9 @@ def foliage(seed, pink):
         angle = rng.uniform(0, math.tau); radius = rng.uniform(23, 34)
         x, y = radius*math.cos(angle), radius*math.sin(angle)
         if y < -18 or (x < -8 and y < 18): continue
+        # Crown envelopes need clearance, not merely trunk-point separation.
+        # Boathouse roof spans x~9..21/y~-15..-7; boat occupies x~21..25.
+        if 5 < x < 29 and -21 < y < 0: continue
         h = rng.uniform(4.5, 7)
         cone((x, y, h/2), .35, .22, h, wood)
         for dx, dy, dz in [(0, 0, h), (-1.7, .2, h-.8), (1.5, -.7, h-.5)]:
