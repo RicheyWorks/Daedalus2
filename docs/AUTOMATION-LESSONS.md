@@ -975,3 +975,24 @@ that waits for the write-up at the end of the night is a lesson Poot gets a day 
 6. H6 Lock rule on the pinned POD checklist: mutating connector calls only while holding `unreal`.
 7. H7 Per-call log from the proxy (tool, ms, bytes, error) to link/mcp-calls.jsonl.
 Claude keeps feeding Poot a line each time the connector helps or hurts, the same hour, on topic harness-needs.
+
+## 2026-10-14 01:50 — the 3 fps that was not render cost (first real save by the connector)
+
+The airship tour crawled: play_status counted 4-6 fps on the fully dressed map (24,440 actors, ~57k instances), and
+the first guess was render cost (cull distances, shadows — perf_steps was written and run; keep it, it's cheap).
+tools/unreal_play/fps_probe.py then read the engine's own delta: dt = 0.333 on every sample. A flat frame time is a
+cap, not load. It was EditorPerformanceSettings.bThrottleCPUWhenNotForeground, the editor's "use less CPU in the
+background" — 3 fps whenever the editor is not the active window, which under bot control is always. full_speed()
+had been "setting" it since 23:xx with a console `set EditorPerformanceSettings ...`; the connector's
+ConfigSettingsToolset read the value back as still true. SetSectionProperties(Editor/General/
+EditorPerformanceSettings, {bThrottleCPUWhenNotForeground:false, bAllowSlateThrottling:false}) flipped it live and
+saved it: 46.5 fps on the same map, same camera.
+
+Rules:
+1. Measure the frame TIME before touching the scene: a flat dt is a cap (throttle, t.MaxFPS, vsync); a noisy dt is load.
+2. A console `set` on a class default is not proof the setting changed. Read it back (ConfigSettings
+   GetSectionPropertyValues) — the connector makes that a one-liner.
+3. The throttle must be off for any unattended editor; it belongs in every editor start (unreal-job/-Open) and in
+   `teamlink doctor`'s output. Sent to Poot as part of H8.
+4. 2Hot2Trot's play-guard stops PIE after 8 min when imports are queued; scenarios must fit that budget — at 46 fps
+   the tour does. Frame-driven scenarios should also log fps in their receipt so a slow run is explained by its own data.
