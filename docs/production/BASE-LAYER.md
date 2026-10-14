@@ -51,7 +51,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props validated (GAL02), no streamed ground ); district ground tiles still to lay |
-| 3 | Lands | **missing** | Fable | after 1–2 |
+| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | see WORLD-ZERO 4 |
 | 5 | Cast | **done** | Fable | `gallery-city.dcs` 12 roles/44 steps; 13 Mob_Gallery_* imported, Talkers bound (CAST-IMPORT) |
 | 6 | Creatures | **partial** | Sol | 19 creature/mount/pet visuals validated (GAL01); not spawned |
