@@ -233,7 +233,9 @@ def _mesh_from_voxels(name, voxels, scale=100.0, pal=PAL):
              ((0, 0, 1), ((0, 0, 1), (1, 0, 1), (1, 1, 1), (0, 1, 1))), ((0, 0, -1), ((0, 0, 0), (0, 1, 0), (1, 1, 0), (1, 0, 0)))]
     cache = {}
     for (x, y, z) in occupied:
-        col = pal[colour[(x, y, z)]] + (1.0,)
+        # FBX carries vertex colours raw and Unreal reads them as sRGB bytes, so encode the linear palette to sRGB
+        # here (the GLB exporter did this itself; FBX-imported islands came out washed-out beige).
+        col = tuple(c ** (1.0 / 2.2) for c in pal[colour[(x, y, z)]]) + (1.0,)
         for (nx, ny, nz), quad in faces:
             if (x + nx, y + ny, z + nz) in occupied:
                 continue
