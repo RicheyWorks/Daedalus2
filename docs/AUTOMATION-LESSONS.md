@@ -1183,3 +1183,17 @@ Morning slices (08:30-08:45):
 Engine facts added: ULevelStreaming in 5.8 Python exposes get_world_asset_package_f_name (no _name variant);
 mesh swap on an ISM keeps instances but their transforms must be re-derived for the new origin convention (cube
 centre -> pool top-centre) in the same step, or every island drops by half its thickness.
+
+### 08:45 — asks to Poot after the morning run (Richey: "let poot know what you would like")
+P1. Editor relaunch is still three manual steps (Start-Process with the .uproject, console StartServer, doctor --fix):
+    one `unreal-job.ps1 -Open` that does all three and posts EDITOR UP on the hub. (H2/H3, highest.)
+P2. The desktop-app proxy still runs the pre-fix code until the app restarts; after any editor restart the
+    in-chat connector is dead until then. Either the app's server entry points at a tiny launcher that execs the
+    current main proxy, or Richey restarts the app once per day — say which.
+P3. RAM: the editor is 11 GB and the box runs at 96%; Play is refused by rule. Standing vitals job is running
+    (job-1014-083542); please own the "what else is resident" question and the play-guard RAM refusal.
+P4. The 60 s bridge cap makes every long job a tail-polling loop; PR141's job_status is the right shape — wire
+    pc-job -Tail to it so a tail never blocks.
+P5. CI on main cancels itself on every push (five pushes in ten minutes this morning); a merge queue or a
+    "run on the newest head only, don't cancel the reactor/examples jobs" rule.
+What works and should not change: the hub protocol, budgeted steps, proven saves, the doctor read-back, pc-jobs.
