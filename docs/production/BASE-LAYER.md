@@ -41,7 +41,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `world-zero.dic` 14 items |
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
-| 10 | Docks / gates | **partial** | Fable | four `ADaedalusRealmPortal` gates 40 m E/W/N/S of the PlayerStart (one per realm) laid by `lay_portals('WORLD-ZERO')`; HasDocks=true in Session table, dock actors still to place |
+| 10 | Docks / gates | **partial** | Fable | four `ADaedalusRealmPortal` gates 40 m E/W/N/S of the PlayerStart (one per realm) + boat pier and sub airlock portals to OCEAN, laid by `lay_portals('WORLD-ZERO')`; Ocean landing markers at Poot's harbor docks (`lay_ocean_markers`); build + editor turn pending |
 | 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
@@ -143,7 +143,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **missing** | Fable | no `ocean.dic` (Session table names catalog `ocean`; server loads 5 catalogs) |
 | 8 | Dialogue theme | **partial** | Fable | `ocean` theme name only |
 | 9 | Mounts | **partial** | Sol | skiff + submarine: boarding, propulsion, hull, exit verified in network tests; rendered piloting pending |
-| 10 | Docks / gates | **partial** | Sol | dock interaction verified headless; REALM transfer pending; shore return rule in Session core |
+| 10 | Docks / gates | **partial** | Sol/Fable | dock interaction verified headless; Spawn/Dock/SubDock markers at the harbor so a boat from any realm lands on the pier (LandAt); shore return rule in Session core; Sol's vessel possession on arrival pending |
 | 11 | Server endpoints | **done** | Sol | OCEAN-HOST-API (auth sector reads, quotas, URL check) |
 | 12 | Play proof | **partial** | Sol | 27 verified runs, 5 pending (HW, REALM, ART, AUTH, HOST) |
 
