@@ -21,6 +21,12 @@ WANT = {
     ("LoadingSaving", "bAutoDeleteAssets"): (False, "a deleted source file must never delete assets"),
     ("LoadingSaving", "bDetectChangesOnStartup"): (False, "no import prompt at editor start"),
     ("LoadingSaving", "autoSaveTimeMinutes"): (30, "autosave collides with proven saves; 30 min, not 10"),
+    ("LoadingSaving", "autoSaveWarningInSeconds"): (0, "no autosave warning popup"),
+    ("LoadingSaving", "bPromptForCheckoutOnAssetModification"): (False, "no source-control checkout prompts"),
+    ("LoadingSaving", "restoreOpenAssetTabsOnRestart"): ("NeverRestore", "no 'restore open assets?' prompt at start"),
+    ("EditorPerformanceSettings", "bEnableNotifications"): (False, "no editor performance warning toasts"),
+    ("EditorPerformanceSettings", "bMonitorEditorPerformance"): (False, "the editor must not change scalability on its own"),
+    ("EditorPerformanceSettings", "bEnableScalabilityWarningIndicator"): (False, "no scalability warning overlay"),
 }
 
 
