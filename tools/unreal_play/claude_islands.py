@@ -62,7 +62,12 @@ def recycle_editor():
             except Exception:
                 continue
     subprocess.run([sys.executable, os.path.join(REPO, "tools", "unreal_mcp", "doctor.py"), "--fix"], capture_output=True, text=True, timeout=120)
-    print("RECYCLE: editor back, ram/commit %s" % (vitals(),), flush=True)
+    for _ in range(12):                 # let the shader-compile spike pass before the gate samples again
+        ram, commit = vitals()
+        if ram < RAM_MAX - 4:
+            break
+        time.sleep(20)
+    print("RECYCLE: editor back, ram/commit %s" % ((ram, commit),), flush=True)
 
 
 def reimport(start, stop, chunk):
