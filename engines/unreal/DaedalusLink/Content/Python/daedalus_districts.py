@@ -312,7 +312,12 @@ def dress_islands_steps(realms, decor_per_district=3):
     props = {r: 0 for r in realms}
     for realm in realms:
         kit = sorted(R._kit_meshes(realm).items())
-        meshes = [unreal.load_asset(p) for _, p in kit[:decor_per_district]] if kit else []
+        if not kit and realm == "WORLD-ZERO":   # the asteroid's fragments carry pieces of every realm
+            pool = []
+            for other in ("GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH"):
+                pool += sorted(R._kit_meshes(other).items())[:2]
+            kit = pool
+        meshes = [unreal.load_asset(p) for _, p in kit[:max(decor_per_district, 8 if realm == "WORLD-ZERO" else 0)]] if kit else []
         pre = "Lands_%s_D" % realm.replace("-", "")
         for label in sorted(l for l in districts if l.startswith(pre)):
             a = districts[label]
