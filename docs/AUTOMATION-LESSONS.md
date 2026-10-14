@@ -773,3 +773,11 @@ ID, snapshot identity and state before mutation dispatch. Connection refusal is 
 partial send/timeout stays outcome-unknown. Correlated error replies remain explicit errors,
 not false success. Validate envelope identity/status/result presence while preserving result
 values; bound reply bytes and reject malformed/nonfinite/truncated JSON. No blind retry added.
+
+
+## Consume the actual producer schema and preserve observation limits (2026-10-13, Codex)
+Poot supplied SCENE-V1 plus actual offline envelopes. Host validation preserves four context fields,
+exact actor/component paths and numeric values; it separates mismatch, unavailable and malformed.
+Nullable is not missing. Reported match must agree with requested predicates and observed values.
+Paged observations remain non-atomic/loaded-only even with stable context. Never promote an empty
+check list, missing count, stale epoch or status:ok envelope to a successful scene verification.
