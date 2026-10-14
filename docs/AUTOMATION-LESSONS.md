@@ -654,3 +654,19 @@ recompile each), not our loop — the rescan I removed was not the bottleneck (s
 the numbers showed in two minutes. The full 10,431 run as one background job (~75 min) with the lock held and the
 hub told the end time. Rule: when a rate does not change after an "optimisation", the bottleneck was elsewhere;
 say so and stop optimising that part.
+
+## Operating Unreal from Python, four facts learned tonight (2026-10-13, 23:00)
+1. UE's Python classes are immutable: `EditorActorSubsystem.get_all_level_actors = ...` raises "cannot set
+   attribute of immutable type". To instrument an engine call, wrap the module function that hands out the
+   object (`unreal.get_editor_subsystem`) and return a proxy; `daedalus_control.pie_guard` does this and it
+   catches every caller that resolves the function at call time (a `from unreal import get_editor_subsystem`
+   done at import escapes it).
+2. A hot-copied `daedalus_bridge_commands.py` registers nothing until `importlib.reload(...)` +
+   `daedalus_bridge_commands.install()` run inside the editor; "unknown command" after a copy means exactly that.
+   The install is idempotent, so run it after every copy of that file.
+3. A rigged GLB through AssetImportTask (automated, Interchange) costs ~2.5 s of game thread; a prop ~1.2 s;
+   `set_material_instance_parent` ~0.4 s (shader recompile). Budget bulk jobs from these numbers: anything
+   above ~100 items is a steps() job, not a call.
+4. The MCP execute_python tool returns after 60 s but the editor keeps running the call; the result is lost to
+   the tool, not to the editor. For anything that may exceed 60 s, go through pc-job + daedalus.steps and read
+   the job log; use the direct tool only for sub-minute probes.
