@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusWorldActor.h"
+#include "DaedalusRealmDirectoryCore.h"
+#include "DaedalusHero.h"
 
 #include "DaedalusLinkModule.h"
 #include "Components/SceneComponent.h"
@@ -69,6 +71,22 @@ void ADaedalusWorldActor::BeginPlay()
 	if (bLoadOnBeginPlay)
 	{
 		LoadWorld();
+	}
+	// The realm directory, and the hero's gates: a successful SwitchRealm to a hosted 3D realm makes this actor
+	// become that realm's world (the 8-bit realm opens over the world instead; the Ocean has its own host).
+	if (UWorld* W = GetWorld(); W && W->IsGameWorld() && bFollowHeroRealm)
+	{
+		LoadDirectory();
+		for (TActorIterator<ADaedalusHero> It(W); It; ++It)
+		{
+			TWeakObjectPtr<ADaedalusWorldActor> Self(this);
+			It->OnRealmChange.AddLambda([Self](const FString&, const FString& To, const FString&, const FString&)
+			{
+				if (!Self.IsValid() || To == TEXT("PORTAL") || To == TEXT("OCEAN")) return;
+				Self->TravelToRealm(To);
+			});
+			break;
+		}
 	}
 }
 
@@ -209,6 +227,81 @@ void ADaedalusWorldActor::GetJson(const FString& Path, FJsonHandler OnJson)
 			OnJson(Json);
 		});
 	Req->ProcessRequest();
+}
+
+void ADaedalusWorldActor::GetText(const FString& Path, FTextHandler OnText)
+{
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(ServerUrl + Path);
+	Req->SetVerb(TEXT("GET"));
+	Req->SetHeader(TEXT("Accept"), TEXT("application/json"));
+	TWeakObjectPtr<ADaedalusWorldActor> Self(this);
+	Req->OnProcessRequestComplete().BindLambda(
+		[Self, Path, OnText = MoveTemp(OnText)](FHttpRequestPtr, FHttpResponsePtr Resp, bool bConnected)
+		{
+			if (!Self.IsValid()) return;
+			const int32 Code = Resp.IsValid() ? Resp->GetResponseCode() : 0;
+			OnText(bConnected && Resp.IsValid() ? Resp->GetContentAsString() : FString(), Code);
+		});
+	Req->ProcessRequest();
+}
+
+// ---- the realm directory (DaedalusRealmDirectoryCore) ------------------------------------------------------
+
+void ADaedalusWorldActor::LoadDirectory()
+{
+	TWeakObjectPtr<ADaedalusWorldActor> Self(this);
+	GetText(TEXT("/api/v1/realms"), [Self](const FString& Text, int32 Code)
+	{
+		if (!Self.IsValid()) return;
+		if (Code != 200)
+		{
+			Self->DirectoryWhy = FString::Printf(TEXT("http %d"), Code);
+			Self->DirectoryJson.Empty();
+			Self->DirectoryRows = 0;
+			UE_LOG(LogDaedalus, Warning, TEXT("GET /api/v1/realms failed (%d)"), Code);
+			return;
+		}
+		const daedalus::directory::Directory D = daedalus::directory::Read(TCHAR_TO_UTF8(*Text));
+		Self->DirectoryJson = D.Ok ? Text : FString();
+		Self->DirectoryRows = D.Ok ? static_cast<int32>(D.Rows.size()) : 0;
+		Self->DirectoryWhy = D.Ok ? TEXT("") : UTF8_TO_TCHAR(D.Why.c_str());
+		UE_LOG(LogDaedalus, Log, TEXT("Realm directory: %s"), *Self->DirectoryState());
+	});
+}
+
+FString ADaedalusWorldActor::DirectoryState() const
+{
+	if (DirectoryJson.IsEmpty()) return TEXT("directory=none why=") + (DirectoryWhy.IsEmpty() ? TEXT("not loaded") : DirectoryWhy);
+	const daedalus::directory::Directory D = daedalus::directory::Read(TCHAR_TO_UTF8(*DirectoryJson));
+	FString Hosted, Unhosted;
+	for (const daedalus::directory::Row& R : D.Rows)
+		if (R.Bound()) Hosted += (Hosted.IsEmpty() ? TEXT("") : TEXT(",")) + FString(UTF8_TO_TCHAR(R.Realm.c_str())) + TEXT("=") + FString(UTF8_TO_TCHAR(R.Id.c_str()));
+	for (const std::string& U : D.Unhosted()) Unhosted += (Unhosted.IsEmpty() ? TEXT("") : TEXT(",")) + FString(UTF8_TO_TCHAR(U.c_str()));
+	return FString::Printf(TEXT("directory=ok rows=%d hosted=%s unhosted=%s"), static_cast<int32>(D.Rows.size()), *Hosted, Unhosted.IsEmpty() ? TEXT("-") : *Unhosted);
+}
+
+FString ADaedalusWorldActor::WorldIdForRealm(const FString& SessionRealm) const
+{
+	if (DirectoryJson.IsEmpty()) return TEXT("");
+	const daedalus::directory::Directory D = daedalus::directory::Read(TCHAR_TO_UTF8(*DirectoryJson));
+	const daedalus::directory::Row* R = D.ForRealm(TCHAR_TO_UTF8(*SessionRealm.ToUpper()));
+	return R ? FString(UTF8_TO_TCHAR(R->Id.c_str())) : FString();
+}
+
+bool ADaedalusWorldActor::TravelToRealm(const FString& SessionRealm)
+{
+	const FString Id = WorldIdForRealm(SessionRealm);
+	if (Id.IsEmpty())
+	{
+		UE_LOG(LogDaedalus, Warning, TEXT("TravelToRealm %s: no host in the directory (%s)"), *SessionRealm, *DirectoryState());
+		return false;
+	}
+	if (Id == WorldId) return true;
+	WorldId = Id;
+	LoadWorld();
+	UE_LOG(LogDaedalus, Log, TEXT("TravelToRealm %s -> world %s"), *SessionRealm, *Id);
+	return true;
 }
 
 void ADaedalusWorldActor::ReadManifest(const TSharedPtr<FJsonObject>& Json)

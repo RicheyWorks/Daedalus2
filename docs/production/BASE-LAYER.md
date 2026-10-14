@@ -42,7 +42,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
 | 10 | Docks / gates | **partial** | Fable | rainbow gates to 4 realms (ADR-053) as TargetPoints; HasDocks=true in Session table, no dock actors placed |
-| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumer `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
+| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
 ## GALLERY-CITY (catalog `gallery-city`, theme `gallery`, mount drone)
@@ -180,7 +180,8 @@ warning (Prop_Gallery_Ramp degenerate tangents, Sol's export).
 1. ~~World Zero plot markers~~ done; ~~Gallery/Parcels/Bricks/Labyrinth hub + kit + lands~~ done (table above).
 1b. Hero `SwitchRealm` lands at `Gate_<Realm>`/`Spawn_<Realm>`; WorldActor streams by realm origin. Fable.
 2. Realm-aware mint design + `/api/v1/lands?realm=` endpoint. Sol. Fable consumes it in WorldActor.
-3. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
+3. District sublevels: `daedalus_districts.steps(realm)` moves each realm's lands into `Realms/<R>/D<dd>` Dynamic sublevels and the hub kit into `<R>_Hub`, listed in islands.json for UDaedalusStreamer — the prerequisite for rings 7..49. Fable (tool on main, editor turn pending).
+3b. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
 4. Import Parcels/Bricks/Labyrinth casts (tool exists: `tools/unreal_play/import_cast.py`). Fable.
 5. Repeat 3 for Parcels, Bricks, Labyrinth. Mounts after ground.
 6. `ocean.dic` + Ocean role target. Fable / Sol.

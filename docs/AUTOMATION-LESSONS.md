@@ -663,3 +663,32 @@ exactly pending()'s delivery filter and writes no state. The doctor calls this b
 The earlier pending_outgoing label was inaccurate: pending() includes deliveries to this bot,
 including broadcasts; the field is now pending_delivery. Older brokers return unavailable
 until reviewed deployment; do not silently fall back to downloading the oversized history.
+
+## Material reparent, measured through steps() (2026-10-13, 22:55)
+Old shape: 150 per bridge call, ledger rewritten per move, prompting saves — crashed at 19:14. New shape: one
+`daedalus.steps` call, 25 reparents per editor tick, save every 150, queue scanned once. Measured: 500 in 219 s
+(2.3/s) with the editor ticking the whole time; the cost is `set_material_instance_parent` itself (a shader
+recompile each), not our loop — the rescan I removed was not the bottleneck (same rate before and after), which
+the numbers showed in two minutes. The full 10,431 run as one background job (~75 min) with the lock held and the
+hub told the end time. Rule: when a rate does not change after an "optimisation", the bottleneck was elsewhere;
+say so and stop optimising that part.
+
+## Operating Unreal from Python, four facts learned tonight (2026-10-13, 23:00)
+1. UE's Python classes are immutable: `EditorActorSubsystem.get_all_level_actors = ...` raises "cannot set
+   attribute of immutable type". To instrument an engine call, wrap the module function that hands out the
+   object (`unreal.get_editor_subsystem`) and return a proxy; `daedalus_control.pie_guard` does this and it
+   catches every caller that resolves the function at call time (a `from unreal import get_editor_subsystem`
+   done at import escapes it).
+2. A hot-copied `daedalus_bridge_commands.py` registers nothing until `importlib.reload(...)` +
+   `daedalus_bridge_commands.install()` run inside the editor; "unknown command" after a copy means exactly that.
+   The install is idempotent, so run it after every copy of that file.
+3. A rigged GLB through AssetImportTask (automated, Interchange) costs ~2.5 s of game thread; a prop ~1.2 s;
+   `set_material_instance_parent` ~0.4 s (shader recompile). Budget bulk jobs from these numbers: anything
+   above ~100 items is a steps() job, not a call.
+4. The MCP execute_python tool returns after 60 s but the editor keeps running the call; the result is lost to
+   the tool, not to the editor. For anything that may exceed 60 s, go through pc-job + daedalus.steps and read
+   the job log; use the direct tool only for sub-minute probes.
+14. (Poot, 29464) Blueprint graph readback / scoped reflection (PinWright, UnrealClientProtocol style: GUID, node,
+    pin readback, compile diagnostics). Refused for now: Daedalus has no gameplay Blueprints; revisit if a
+    Blueprint-authored system appears. Their source caveats agree with our rule: a discarded restore boolean,
+    a dirty flag, or an ignored TryCreateConnection return is not a result.

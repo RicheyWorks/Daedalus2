@@ -99,6 +99,44 @@ def run(batch=200):
     return out
 
 
+def steps(chunk=25, save_every=150, limit=None):
+    """Generator for daedalus.steps: reparent `chunk` instances per editor tick, save every `save_every`, until none
+    is left on the engine base (or `limit` moved). One bridge call, the editor ticks between chunks, so neither
+    the GPU watchdog (22:19) nor the swap-chain fatal (19:14) can fire. Yields a status line per chunk."""
+    book = _ledger()
+    moved = 0
+    pending_pkgs = []
+    queue = _engine_bound()            # scanned ONCE: rescanning 13k assets per chunk cost 10 s a chunk (22:50)
+    if limit is not None:
+        queue = queue[:int(limit)]
+    total = len(queue)
+    while queue:
+        todo, queue = queue[:int(chunk)], queue[int(chunk):]
+        pairs = []
+        for a in todo:
+            mi = a.get_asset()
+            old = mi.get_editor_property("parent")
+            if old is None:
+                continue
+            book[mi.get_path_name()] = old.get_path_name()
+            pairs.append((mi, old))
+        _write(book)
+        for mi, old in pairs:
+            unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(old))
+            pending_pkgs.append(mi.get_outermost())
+            moved += 1
+        if len(pending_pkgs) >= save_every:
+            unreal.EditorLoadingAndSavingUtils.save_packages(pending_pkgs, only_dirty=True)
+            pending_pkgs = []
+        yield "moved=%d of %d" % (moved, total)
+    if pending_pkgs:
+        unreal.EditorLoadingAndSavingUtils.save_packages(pending_pkgs, only_dirty=True)
+        yield "saved tail"
+    out = status()
+    out["moved_now"] = moved
+    return out
+
+
 def undo():
     book = _ledger()
     back = 0
