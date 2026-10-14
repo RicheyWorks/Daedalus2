@@ -71,6 +71,18 @@ namespace JavaArcadeWire
         const TSharedPtr<FJsonValue>* Field = Json.IsValid() ? Json->Values.Find(Name) : nullptr;
         return Field && Field->IsValid() && (*Field)->Type == EJson::Boolean && (*Field)->TryGetBool(Out);
     }
+    bool DecimalLong(const TSharedPtr<FJsonObject>& Json, const TCHAR* Name, FString& Out, bool bSigned = false)
+    {
+        if (!String(Json, Name, Out, 20)) return false;
+        const bool bNegative = Out[0] == TEXT('-');
+        if (bNegative && !bSigned) return false;
+        const int32 Start = bNegative ? 1 : 0;
+        const int32 Digits = Out.Len() - Start;
+        if (Digits < 1 || Digits > 19 || (Digits > 1 && Out[Start] == TEXT('0')) || (bNegative && Out == TEXT("-0"))) return false;
+        for (int32 I = Start; I < Out.Len(); ++I) if (Out[I] < TEXT('0') || Out[I] > TEXT('9')) return false;
+        const FString Limit = bNegative ? TEXT("9223372036854775808") : TEXT("9223372036854775807");
+        return Digits < 19 || Out.Mid(Start).Compare(Limit, ESearchCase::CaseSensitive) <= 0;
+    }
     bool SafeText(const FString& Text)
     {
         // Bound recursive JSON parser depth before parsing. Braces inside quoted strings do not count.
@@ -440,15 +452,87 @@ bool ADaedalusJavaArcade::ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, co
     if (!JavaArcadeWire::String(*Dealer, TEXT("caption"), Next.DealerCaption, 256, true)
         || !JavaArcadeWire::String(S, TEXT("resultText"), Next.ResultText, 512, true)
         || !JavaArcadeWire::Bool(S, TEXT("insuranceAcceptAllowed"), Next.bInsuranceAcceptAllowed)) return false;
-    for (const auto& H : Candidate.Hands)
+    const TSharedPtr<FJsonObject>* Rules = nullptr;
+    const TSharedPtr<FJsonObject>* Stats = nullptr;
+    const TSharedPtr<FJsonObject>* Shoe = nullptr;
+    if (!S->TryGetObjectField(TEXT("rules"), Rules) || !S->TryGetObjectField(TEXT("stats"), Stats)
+        || !S->TryGetObjectField(TEXT("shoe"), Shoe)) return false;
+    auto& R = Next.BlackjackRules;
+    const TSharedPtr<FJsonValue>* Penetration = (*Rules)->Values.Find(TEXT("penetration"));
+    if (!JavaArcadeWire::Integer(*Rules, TEXT("decks"), R.Decks, 1, 8)
+        || (R.Decks != 1 && R.Decks != 2 && R.Decks != 4 && R.Decks != 6 && R.Decks != 8)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("maxHands"), R.MaxHands, 2, 4)
+        || !Penetration || !Penetration->IsValid() || (*Penetration)->Type != EJson::Number
+        || !(*Penetration)->TryGetNumber(R.Penetration)
+        || !FMath::IsFinite(R.Penetration) || R.Penetration < 0 || R.Penetration > 1
+        || !JavaArcadeWire::Bool(*Rules, TEXT("dealerHitsSoft17"), R.bDealerHitsSoft17)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("lateSurrender"), R.bLateSurrender)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("offerInsurance"), R.bOfferInsurance)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("doubleAfterSplit"), R.bDoubleAfterSplit)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("splitAcesOneCard"), R.bSplitAcesOneCard)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("blackjackPayoutNum"), R.BlackjackPayoutNum, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("blackjackPayoutDen"), R.BlackjackPayoutDen, 1, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("insurancePayoutNum"), R.InsurancePayoutNum, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("insurancePayoutDen"), R.InsurancePayoutDen, 1, 2147483647LL)) return false;
+    auto& T = Next.BlackjackStats;
+    if (!JavaArcadeWire::Integer(*Stats, TEXT("hands"), T.Hands, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("wins"), T.Wins, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("losses"), T.Losses, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("pushes"), T.Pushes, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("blackjacks"), T.Blackjacks, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("busts"), T.Busts, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("doubles"), T.Doubles, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("splits"), T.Splits, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("surrenders"), T.Surrenders, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("peakBankroll"), T.PeakBankroll, 0, 2147483647LL)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("totalWagered"), T.TotalWagered)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("totalReturned"), T.TotalReturned)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("net"), T.Net, true)) return false;
+    auto& Q = Next.BlackjackShoe;
+    if (!JavaArcadeWire::Integer(*Shoe, TEXT("decks"), Q.Decks, 1, 8) || Q.Decks != R.Decks
+        || !JavaArcadeWire::Integer(*Shoe, TEXT("remaining"), Q.Remaining, 0, Q.Decks * 52)
+        || !JavaArcadeWire::Integer(*Shoe, TEXT("reshuffleAt"), Q.ReshuffleAt, 0, Q.Decks * 52)
+        || !JavaArcadeWire::Bool(*Shoe, TEXT("needsShuffle"), Q.bNeedsShuffle)
+        || !JavaArcadeWire::Integer(S, TEXT("insuranceBet"), Next.InsuranceBet, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastNet"), Next.LastNet, -2147483648LL, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastInsurance"), Next.LastInsurance, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastInsuranceReturn"), Next.LastInsuranceReturn, 0, 2147483647LL)) return false;
+    const TArray<TSharedPtr<FJsonValue>>* Outcomes = nullptr;
+    if (!S->TryGetArrayField(TEXT("lastOutcomes"), Outcomes) || Outcomes->Num() > 4) return false;
+    for (const auto& Outcome : *Outcomes)
     {
-        FDaedalusJavaHand R; R.Bet = H.Bet; R.Value = H.Value;
-        for (const auto& C : H.Cards) R.Cards.Add(JavaArcadeWire::Reflect(C));
-        Next.PlayerHands.Add(MoveTemp(R));
+        FString Name;
+        if (!Outcome.IsValid() || Outcome->Type != EJson::String || !Outcome->TryGetString(Name)
+            || (Name != TEXT("BLACKJACK") && Name != TEXT("WIN") && Name != TEXT("PUSH")
+                && Name != TEXT("LOSS") && Name != TEXT("BUST") && Name != TEXT("SURRENDER"))) return false;
+        Next.LastOutcomes.Add(Name);
+    }
+    Next.bDealerValueAvailable = Candidate.HasDealerDerivedValues;
+    if (Next.bDealerValueAvailable
+        && (!JavaArcadeWire::Integer(*Dealer, TEXT("value"), Next.DealerValue, 0, 231)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("soft"), Next.bDealerSoft)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("bust"), Next.bDealerBust)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("blackjack"), Next.bDealerBlackjack))) return false;
+    for (int32 I = 0; I < static_cast<int32>(Candidate.Hands.size()); ++I)
+    {
+        const auto& H = Candidate.Hands[static_cast<std::size_t>(I)];
+        const auto Hand = (*Hands)[I]->AsObject();
+        FDaedalusJavaHand Reflected; Reflected.Bet = H.Bet; Reflected.Value = H.Value;
+        if (!JavaArcadeWire::Bool(Hand, TEXT("soft"), Reflected.bSoft)
+            || !JavaArcadeWire::Bool(Hand, TEXT("bust"), Reflected.bBust)
+            || !JavaArcadeWire::Bool(Hand, TEXT("blackjack"), Reflected.bBlackjack)
+            || !JavaArcadeWire::Bool(Hand, TEXT("doubled"), Reflected.bDoubled)
+            || !JavaArcadeWire::Bool(Hand, TEXT("surrendered"), Reflected.bSurrendered)
+            || !JavaArcadeWire::Bool(Hand, TEXT("fromSplit"), Reflected.bFromSplit)
+            || !JavaArcadeWire::Bool(Hand, TEXT("splitAce"), Reflected.bSplitAce)
+            || !JavaArcadeWire::Bool(Hand, TEXT("stood"), Reflected.bStood)) return false;
+        for (const auto& C : H.Cards) Reflected.Cards.Add(JavaArcadeWire::Reflect(C));
+        Next.PlayerHands.Add(MoveTemp(Reflected));
     }
     for (const auto& C : Candidate.DealerCards) Next.DealerCards.Add(JavaArcadeWire::Reflect(C));
     for (const auto& A : Candidate.LegalActions) Next.LegalActions.Add(UTF8_TO_TCHAR(A.c_str()));
     for (int B : Candidate.LegalBetAmounts) Next.LegalBetAmounts.Add(B);
+    Next.bBlackjackDetailsAvailable = true;
     Next.Message = View.Message;
     Blackjack = std::move(Candidate); View = MoveTemp(Next);
     return true;

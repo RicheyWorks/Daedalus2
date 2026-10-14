@@ -21,6 +21,8 @@ public:
 private:
     TSharedRef<SWidget> SudokuPanel();
     TSharedRef<SWidget> BlackjackPanel();
+    TSharedRef<SWidget> BlackjackSettings();
+    TSharedRef<SWidget> BlackjackRule(const TCHAR* Label, const TCHAR* Rule, bool FDaedalusJavaBlackjackRules::* Field);
     TSharedRef<SWidget> Button(const TCHAR* Label, TFunction<void()> Action, TFunction<bool()> Enabled = [] { return true; });
     FDaedalusJavaArcadeState State() const;
     FReply SelectCell(int32 Index);
@@ -28,6 +30,7 @@ private:
     FSlateColor CellColor(int32 Index) const;
     FText StatusText() const;
     FText TableText() const;
+    FText BlackjackDetailsText() const;
     FReply Configure();
     void FocusBoard();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;

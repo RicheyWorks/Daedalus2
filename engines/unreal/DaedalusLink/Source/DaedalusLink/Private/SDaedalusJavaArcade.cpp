@@ -4,6 +4,7 @@
 #include "InputCoreTypes.h"
 #include "Styling/CoreStyle.h"
 #include "Widgets/Input/SButton.h"
+#include "Widgets/Input/SCheckBox.h"
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
@@ -154,14 +155,94 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::TableText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Chips]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Actions]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[BlackjackSettings()]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
             SNew(SHorizontalBox)
-            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Accept insurance"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, true); }, [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")) && State().bInsuranceAcceptAllowed; })]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [SNew(SButton).Text_Lambda([this]
+                {
+                    const auto S = State();
+                    return FText::FromString(S.Phase == TEXT("INSURANCE") && S.PlayerHands.IsValidIndex(0) && S.PlayerHands[0].bBlackjack
+                        ? TEXT("Take even money") : TEXT("Accept insurance"));
+                })
+                .IsEnabled_Lambda([this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")) && State().bInsuranceAcceptAllowed; })
+                .OnClicked_Lambda([this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, true); FocusBoard(); return FReply::Handled(); })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Decline insurance"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, false); }, [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")); })]
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("End Java session"), [this] { if (Game.IsValid()) Game->CloseRemoteBlackjackSession(); }, [this] { return State().bReady && !State().bRemoteClosed; })]
         ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
+        [Button(TEXT("Reset table and stats (1000 simulated credits)"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("newSession")); },
+            [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("newSession")); })]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
+        [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::BlackjackDetailsText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(FText::FromString(TEXT("Java hides the dealer hole card and future shoe. Closing this cabinet cancels local work; end the Java session first when ready. Unreached sessions expire in Java."))).AutoWrapText(true)];
+}
+TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackRule(const TCHAR* Label, const TCHAR* Rule, bool FDaedalusJavaBlackjackRules::* Field)
+{
+    const FString RuleName(Rule);
+    return SNew(SCheckBox)
+        .IsEnabled_Lambda([this] { return Game.IsValid() && State().bBlackjackDetailsAvailable && Game->IsBlackjackActionLegal(TEXT("setRule")); })
+        .IsChecked_Lambda([this, Field] { return State().BlackjackRules.*Field ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
+        .OnCheckStateChanged_Lambda([this, RuleName](ECheckBoxState Checked)
+        {
+            if (Game.IsValid() && Checked != ECheckBoxState::Undetermined) Game->SetBlackjackRule(RuleName, Checked == ECheckBoxState::Checked);
+            FocusBoard();
+        })
+        [SNew(STextBlock).Text(FText::FromString(Label))];
+}
+TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackSettings()
+{
+    auto Decks = SNew(SHorizontalBox);
+    Decks->AddSlot().AutoWidth().Padding(0, 0, 8, 0)[SNew(STextBlock).Text(FText::FromString(TEXT("Decks:")))];
+    for (int32 Count : { 1, 2, 4, 6, 8 })
+    {
+        const FString Label = FString::FromInt(Count);
+        Decks->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
+        [Button(*Label, [this, Count] { if (Game.IsValid()) Game->SetBlackjackDecks(Count); },
+            [this, Count] { return Game.IsValid() && State().bBlackjackDetailsAvailable && State().BlackjackRules.Decks != Count && Game->IsBlackjackActionLegal(TEXT("setDecks")); })];
+    }
+    auto Hands = SNew(SHorizontalBox);
+    Hands->AddSlot().AutoWidth().Padding(0, 0, 8, 0)[SNew(STextBlock).Text(FText::FromString(TEXT("Maximum hands:")))];
+    for (int32 Count : { 2, 3, 4 })
+    {
+        const FString Label = FString::FromInt(Count);
+        Hands->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
+        [Button(*Label, [this, Count] { if (Game.IsValid()) Game->SetBlackjackSplitLimit(Count); },
+            [this, Count] { return Game.IsValid() && State().bBlackjackDetailsAvailable && State().BlackjackRules.MaxHands != Count && Game->IsBlackjackActionLegal(TEXT("setSplitLimit")); })];
+    }
+    return SNew(SVerticalBox)
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text_Lambda([this]
+        {
+            const auto S = State();
+            return FText::FromString(S.bBlackjackDetailsAvailable
+                ? FString::Printf(TEXT("Table settings: %d decks, up to %d hands. Changes apply after the table confirms them, between rounds."), S.BlackjackRules.Decks, S.BlackjackRules.MaxHands)
+                : TEXT("Table settings are available after starting a Java session."));
+        }).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)[Decks]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)[Hands]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 4)[BlackjackRule(TEXT("Dealer hits soft 17"), TEXT("dealerHitsSoft17"), &FDaedalusJavaBlackjackRules::bDealerHitsSoft17)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 4)[BlackjackRule(TEXT("Late surrender"), TEXT("lateSurrender"), &FDaedalusJavaBlackjackRules::bLateSurrender)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 4)[BlackjackRule(TEXT("Offer insurance"), TEXT("offerInsurance"), &FDaedalusJavaBlackjackRules::bOfferInsurance)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 4)[BlackjackRule(TEXT("Double after split"), TEXT("doubleAfterSplit"), &FDaedalusJavaBlackjackRules::bDoubleAfterSplit)]
+        + SVerticalBox::Slot().AutoHeight()[BlackjackRule(TEXT("Split aces receive one card"), TEXT("splitAcesOneCard"), &FDaedalusJavaBlackjackRules::bSplitAcesOneCard)];
+}
+FText SDaedalusJavaArcade::BlackjackDetailsText() const
+{
+    const auto S = State();
+    if (!S.bBlackjackDetailsAvailable) return FText::GetEmpty();
+    const auto& R = S.BlackjackRules;
+    const auto& T = S.BlackjackStats;
+    const auto& Q = S.BlackjackShoe;
+    FString Text = FString::Printf(TEXT("Blackjack payout %d:%d · Insurance payout %d:%d · Shoe penetration %.0f%%\nShoe: %d decks, %d cards remaining, reshuffle at %d remaining%s"),
+        R.BlackjackPayoutNum, R.BlackjackPayoutDen, R.InsurancePayoutNum, R.InsurancePayoutDen, R.Penetration * 100.0,
+        Q.Decks, Q.Remaining, Q.ReshuffleAt, Q.bNeedsShuffle ? TEXT(" · shuffle needed") : TEXT(""));
+    Text += FString::Printf(TEXT("\nLast round net %lld · Insurance stake %lld · Insurance return %lld"), S.LastNet, S.LastInsurance, S.LastInsuranceReturn);
+    if (!S.LastOutcomes.IsEmpty()) Text += TEXT("\nHand outcomes: ") + FString::Join(S.LastOutcomes, TEXT(", "));
+    Text += FString::Printf(TEXT("\nSession: %d rounds · %d wins · %d losses · %d pushes · %d blackjacks · %d busts\n%d doubles · %d splits · %d surrenders · Peak credits %d\nWagered %s · Returned %s · Net %s"),
+        T.Hands, T.Wins, T.Losses, T.Pushes, T.Blackjacks, T.Busts, T.Doubles, T.Splits, T.Surrenders, T.PeakBankroll, *T.TotalWagered, *T.TotalReturned, *T.Net);
+    return FText::FromString(Text);
 }
 FText SDaedalusJavaArcade::TableText() const
 {
@@ -176,8 +257,22 @@ FText SDaedalusJavaArcade::TableText() const
     Text += TEXT("Dealer: ") + Cards(S.DealerCards);
     for (int32 I = 0; I < S.HiddenDealerCards; ++I) Text += TEXT("   [hidden]");
     Text += TEXT("\n") + S.DealerCaption;
+    if (S.bDealerValueAvailable)
+        Text += FString::Printf(TEXT(" · Total %d%s%s%s"), S.DealerValue, S.bDealerSoft ? TEXT(" · soft") : TEXT(""), S.bDealerBust ? TEXT(" · bust") : TEXT(""), S.bDealerBlackjack ? TEXT(" · blackjack") : TEXT(""));
+    if (S.InsuranceBet > 0) Text += FString::Printf(TEXT("\nInsurance stake %lld"), S.InsuranceBet);
     for (int32 I = 0; I < S.PlayerHands.Num(); ++I)
+    {
+        const auto& Hand = S.PlayerHands[I];
         Text += FString::Printf(TEXT("\n%sHand %d: %s  ·  Total %d  ·  Bet %lld"), I == S.ActiveHand ? TEXT("▶ ") : TEXT(""), I + 1, *Cards(S.PlayerHands[I].Cards), S.PlayerHands[I].Value, S.PlayerHands[I].Bet);
+        if (Hand.bSoft) Text += TEXT(" · soft");
+        if (Hand.bBust) Text += TEXT(" · bust");
+        if (Hand.bBlackjack) Text += TEXT(" · blackjack");
+        if (Hand.bDoubled) Text += TEXT(" · doubled");
+        if (Hand.bSurrendered) Text += TEXT(" · surrendered");
+        if (Hand.bFromSplit) Text += TEXT(" · split");
+        if (Hand.bSplitAce) Text += TEXT(" · split ace");
+        if (Hand.bStood) Text += TEXT(" · stood");
+    }
     if (!S.ResultText.IsEmpty()) Text += TEXT("\n") + S.ResultText;
     return FText::FromString(Text);
 }
