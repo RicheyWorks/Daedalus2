@@ -36,6 +36,7 @@ registered.
 | `get_actor_info` | `name` | `label`, `class`, `folder`, `location`, `rotation`, `scale`, `bounds`, `components` |
 | `execute_python` | `code` | `stdout` and `result` (whatever the code assigned to `result`) |
 | `viewport_screenshot` | `width`, `height` | `image_png_base64`, `path`, `bytes` |
+| `capture_view` | `width`, `height`, `readiness_timeout` (default 10, > 0 and <= 30 seconds) | `captured`, `readiness`; PNG fields only when captured; see [readiness observations](docs/CAPTURE-READINESS.md) |
 | `play` / `stop` | `simulate` (play) | `playing` |
 | `save` | | `level_saved`, `dirty_packages_saved` |
 | `output_log` | `lines`, `filter` | `file`, `lines` |

@@ -26,17 +26,20 @@ class CaptureViewTest(unittest.TestCase):
         fake_unreal.LEVEL[:] = self.actors
 
     def capture(self):
-        # Advance straight past the deadline if no PNG exists, so the old filename
-        # defect fails promptly instead of spending 20 real seconds in the waiter.
+        # Use a deterministic filename. The fixed six-plus-one step budget
+        # fails promptly if the PNG is missing, without waiting 20 seconds.
         with mock.patch.object(bridge.tempfile, "gettempdir", return_value=self.temporary.name), \
-                mock.patch.object(bridge.time, "time", side_effect=[100, 100, 121]):
+                mock.patch.object(bridge.time, "time", return_value=100):
             job = bridge.cmd_capture_view({"width": 960, "height": 540})
-            self.assertIsNone(next(job))  # capture readback yields to the render thread
+            # Two exclusive warm-up ticks, two pre-capture idle ticks, then
+            # two post-capture confirmation ticks precede any PNG export.
+            for _ in range(6):
+                self.assertIsNone(next(job))
             try:
                 next(job)
             except StopIteration as done:
                 return done.value
-            self.fail("capture did not finish after the render-thread yield")
+            self.fail("capture did not finish after the readiness and confirmation ticks")
 
     def test_capture_exports_png_with_requested_dimensions_and_cleans_up(self):
         result = self.capture()

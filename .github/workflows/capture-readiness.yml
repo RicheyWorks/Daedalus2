@@ -1,0 +1,36 @@
+name: Capture readiness
+
+on:
+  pull_request:
+    paths:
+      - 'connectors/claude-unreal-connector/plugin/**'
+      - 'connectors/claude-unreal-connector/tests/**'
+      - '.github/workflows/capture-readiness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'connectors/claude-unreal-connector/plugin/**'
+      - 'connectors/claude-unreal-connector/tests/**'
+      - '.github/workflows/capture-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Offline readiness (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: connectors/claude-unreal-connector
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p '*test*.py' -v
+      - run: python -m compileall -q plugin/ClaudeUnrealBridge/Content/Python

@@ -36,6 +36,8 @@ import time
 import traceback
 import types
 
+from capture_readiness import validate_timeout, wait_for_readiness
+
 try:
     import unreal
 except ImportError:  # pragma: no cover - tests install a stand-in module first
@@ -353,6 +355,10 @@ def cmd_capture_view(p):
     """A picture of what the editor camera sees, rendered by a SceneCapture2D into a render target and exported
     as PNG: no editor UI, and no dependence on the viewport's size or focus. The capture actor is removed after."""
     width, height = int(p.get("width", 1280)), int(p.get("height", 720))
+    timeout = validate_timeout(p.get("readiness_timeout", 10))
+    deadline = time.monotonic() + timeout
+    owner_socket = _server["sock"]
+    cancelled = lambda: _server["sock"] is not owner_socket
     world = _world()
     loc, rot = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_level_viewport_camera_info()
     # Float targets export as HDR/EXR; the command's response and waiter require PNG.
@@ -363,20 +369,33 @@ def cmd_capture_view(p):
         comp = cap.get_component_by_class(unreal.SceneCaptureComponent2D)
         comp.set_editor_property("texture_target", rt)
         comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
+        comp.set_editor_property("capture_every_frame", False)
+        comp.set_editor_property("capture_on_movement", False)
+        before = yield from wait_for_readiness(unreal, world, timeout, deadline=deadline, cancelled=cancelled)
+        if not before["condition_met"]:
+            return {"captured": False, "readiness": before, "readiness_phase": "before_capture"}
         comp.capture_scene()
-        yield   # let the render thread finish the capture before reading it back
+        readiness = yield from wait_for_readiness(unreal, world, timeout, deadline=deadline,
+                                                  cancelled=cancelled, warmup_frames=0, fail_on_busy=True)
+        if not readiness["condition_met"]:
+            return {"captured": False, "readiness": readiness, "readiness_before_capture": before,
+                    "readiness_phase": "after_capture"}
         out_dir = tempfile.gettempdir()
         name = "claude_unreal_capture_%d" % int(time.time() * 1000)
         # Export uses the supplied filename verbatim, without adding an extension.
         unreal.RenderingLibrary.export_render_target(world, rt, out_dir, name + ".png")
         path = os.path.join(out_dir, name + ".png")
-        deadline = time.time() + 20
+        deadline = time.monotonic() + 20
         while not (os.path.exists(path) and os.path.getsize(path) > 0):
-            if time.time() > deadline:
+            if cancelled():
+                return {"captured": False, "readiness": readiness, "readiness_before_capture": before,
+                        "incomplete_reason": "bridge stopped during export", "readiness_phase": "export"}
+            if time.monotonic() >= deadline:
                 raise TimeoutError("the render target was not written")
             yield
         b64, n = _png_b64(path)
-        return {"image_png_base64": b64, "path": path, "bytes": n, "width": width, "height": height}
+        return {"image_png_base64": b64, "path": path, "bytes": n, "width": width, "height": height,
+                "captured": True, "readiness": readiness, "readiness_before_capture": before}
     finally:
         actors.destroy_actor(cap)
 
@@ -449,7 +468,7 @@ DESCRIPTIONS = {
     "stop": "Stop Play In Editor and wait until it ends",
     "save": "Save the current level and every changed asset",
     "output_log": "The last lines of the editor log; params lines, filter",
-    "capture_view": "A PNG of what the editor camera sees, rendered by a scene capture (no editor UI); params width, height",
+    "capture_view": "Scene-capture PNG gated by bounded read-only readiness observations; params width, height, readiness_timeout. Inspect captured and readiness; idle is not full render completion",
     "batch": "Several commands in order as one undo step; params commands [{type, params}], transaction, keep_going",
     "job_result": "The answer to a command sent with async: true; params job_id. status running or done",
 }
@@ -457,7 +476,7 @@ PARAMS = {
     "get_level_info": {"limit": "int", "folder": "str"}, "get_actor_info": {"name": "str (required)"},
     "execute_python": {"code": "str (required)"}, "viewport_screenshot": {"width": "int", "height": "int"},
     "play": {"simulate": "bool"}, "output_log": {"lines": "int", "filter": "str"},
-    "capture_view": {"width": "int", "height": "int"},
+    "capture_view": {"width": "int", "height": "int", "readiness_timeout": "float > 0 and <= 30 (default 10)"},
     "batch": {"commands": "list (required)", "transaction": "str", "keep_going": "bool"},
     "job_result": {"job_id": "str (required)"},
 }
