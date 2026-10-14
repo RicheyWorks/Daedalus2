@@ -41,7 +41,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `world-zero.dic` 14 items |
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
-| 10 | Docks / gates | **partial** | Fable | rainbow gates to 4 realms (ADR-053) as TargetPoints; HasDocks=true in Session table, no dock actors placed |
+| 10 | Docks / gates | **partial** | Fable | four `ADaedalusRealmPortal` gates 40 m E/W/N/S of the PlayerStart (one per realm) laid by `lay_portals('WORLD-ZERO')`; HasDocks=true in Session table, dock actors still to place |
 | 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
@@ -58,7 +58,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
 | 9 | Mounts | **partial** | Fable | `DaedalusMountCore` profile (gallery drone, ceiling 120 m); the called vehicle wears Mob_Gallery_GalleryDrone and flies (Ghost::Wear/Lift); `mounts` scenario; build pending |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | PR80 row |
 | 12 | Play proof | **partial** | Fable | cast 8/8 (talk), no walk-the-realm scenario |
 
@@ -75,7 +75,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
 | 9 | Mounts | **partial** | Fable | profile parcel helicopter (ceiling 200 m), wears Mob_Parcels_ParcelHelicopter |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -92,7 +92,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
 | 9 | Mounts | **partial** | Fable | profile brick plane (fastest, ceiling 240 m), wears Mob_Bricks_BrickPlane; hover cart later |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -109,7 +109,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
 | 9 | Mounts | **partial** | Fable | profile sky-strider (ceiling 60 m), wears Mob_Lab_SkyStrider |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 

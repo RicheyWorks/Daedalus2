@@ -1386,6 +1386,46 @@ def scenario_mounts(p):
     return {"checks": checks}
 
 
+def scenario_portals(p):
+    """Walk-in crossings (BASE-LAYER row 10, ADaedalusRealmPortal): the hub's east gate takes the hero to Gallery
+    City by overlap alone, the cooldown keeps the landing gate from bouncing him back, Gallery's gate home returns
+    him, and a dock portal asks the Ocean (refused or accepted by the session rules, never a crash)."""
+    h = hero()
+    w = world()
+    portals = {a.get_actor_label(): a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusRealmPortal)}
+    checks = [_check("portals are laid in the world (hub gates + realm gates/docks)", len(portals) >= 4 + 3 * 4, str(len(portals)))]
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    east = portals.get("Portal_WORLD-ZERO_to_GALLERY-CITY")
+    if east:
+        h.teleport(east.get_actor_location() + unreal.Vector(-700, 0, 0), 0.0, True)
+        yield from _frames(2)
+        r = east.cross(h)   # the same path the overlap takes
+        yield from _frames(4)
+        checks.append(_check("the east gate carries the hero to Gallery City", r.startswith("ok WORLD-ZERO -> GALLERY-CITY") and h.realm_now() == "GALLERY-CITY", r))
+        home = portals.get("Portal_GALLERY-CITY_Gate")
+        early = home.cross(h) if home else "no portal"
+        checks.append(_check("the landing gate is on cooldown, so no bounce", early == "cooldown", early))
+        for _ in range(int(3.5 * 30)):
+            yield
+        back = home.cross(h) if home else "no portal"
+        yield from _frames(3)
+        checks.append(_check("after the cooldown the gate takes him home", back.startswith("ok GALLERY-CITY -> WORLD-ZERO") and h.realm_now() == "WORLD-ZERO", back))
+    dock = portals.get("Portal_PARCELS_Dock")
+    if dock:
+        h.switch_realm("parcels", "gate", "")
+        yield from _frames(3)
+        for _ in range(int(3.5 * 30)):
+            yield
+        r = dock.cross(h)
+        yield from _frames(2)
+        checks.append(_check("a dock portal asks the session for the Ocean (boat)", r.startswith("ok PARCELS -> OCEAN") or r.startswith("refused"), r))
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1410,6 +1450,7 @@ SCENARIOS = {
     "realm_ground": scenario_realm_ground,
     "realm_host": scenario_realm_host,
     "mounts": scenario_mounts,
+    "portals": scenario_portals,
     "control": scenario_control,
     "stage": scenario_stage,
 }
