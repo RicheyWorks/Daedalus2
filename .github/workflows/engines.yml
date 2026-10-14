@@ -53,6 +53,8 @@ jobs:
           node $C/tests/client.js 9911
       - name: DaedalusLink adds its commands through the connector's register()
         run: python3 bridge_commands_test.py
+      - name: bounded seven-realm base-layer plans and ownership guards
+        run: python3 ../DaedalusLink/Content/Python/test_daedalus_base_layer.py
 
   setup-plan:
     name: setup-unreal.ps1 plan (Windows)
