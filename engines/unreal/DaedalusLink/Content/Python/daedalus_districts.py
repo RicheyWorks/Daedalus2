@@ -196,10 +196,13 @@ def lay_ground_steps(realm, districts):
     return {"realm": realm, "ground": made}
 
 
-def lay_district_steps(realm, districts, taken=frozenset()):
-    """Lay EVERY free cell of each district as a plot straight into the district's sublevel, one district per
-    editor tick (daedalus.steps). This is how rings 7..49 get laid: 100 districts x 100 cells a realm, streamed.
-    `taken`: cell numbers to skip (estates, the hub). Idempotent by label. Yields a line per district."""
+def lay_district_steps(realm, districts, taken=frozenset(), save_every=10):
+    """Lay EVERY free cell of each district as ONE instanced-mesh actor (Lands_<Realm>_D<dd>: 100 plot instances
+    of the cube, tagged District:<d>, instance i = district_cells(d)[i]) plus the district's ground slab, straight
+    into the district's streamed sublevel; sublevels are saved every `save_every` districts. 23:56 Richey: "I need
+    you to be fast": 100 plot actors + 100 signs + a save per district was 6.5 s each; one actor per district is
+    ~0.3 s. Rings 1..6 keep their labelled Land_ actors (the registry sync reconciles those by label).
+    `taken`: cell numbers to skip. Idempotent by label. Yields a line per district."""
     import unreal
     import daedalus_land_grid as G
     import daedalus_plots as P
@@ -207,11 +210,12 @@ def lay_district_steps(realm, districts, taken=frozenset()):
     world = _world()
     origin = R.ORIGINS[realm]
     ground = R.GROUND_Z
-    have = P._existing(realm)
-    pre = P._prefix(realm)
+    have = P._labels_cache()
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     cube = unreal.load_asset(P.CUBE)
+    pre = P._prefix(realm)
     total = 0
+    pending = []
     for d in districts:
         pkg = "%s/%s/D%02d" % (ROOT, realm_dir(realm), d)
         sl = _sublevel(world, pkg)
@@ -219,19 +223,41 @@ def lay_district_steps(realm, districts, taken=frozenset()):
         g = lay_ground(realm, d, sub=sub, cube=cube)
         if g is not None:
             made.append(g)
-        for n in district_cells(d):
-            if n in taken or ("%s%d" % (pre, n)) in have:
-                continue
-            x, y = G.cell(n)
-            at = (origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground)
-            made.append(P.lay_one(realm, n, at, d, cube=cube, sub=sub))
+        label = "Lands_%s_D%02d" % (realm.replace("-", ""), d)
+        n_inst = 0
+        if label not in have:
+            cells = [n for n in district_cells(d) if n not in taken and ("%s%d" % (pre, n)) not in have]
+            if cells:
+                a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(origin[0], origin[1], ground))
+                a.static_mesh_component.set_visibility(False)   # the root is an empty anchor; the plots are instances
+                ism = unreal.new_object(unreal.InstancedStaticMeshComponent, outer=a, name="Plots")
+                ism.set_static_mesh(cube)
+                ism.set_mobility(unreal.ComponentMobility.STATIC)
+                ism.attach_to_component(a.root_component, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
+                ism.register_component()
+                a.add_instance_component(ism)
+                for n in cells:
+                    x, y = G.cell(n)
+                    t = unreal.Transform(unreal.Vector(origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground - P.SLAB_M * 50.0),
+                                         unreal.Rotator(0.0, 0.0, 0.0), unreal.Vector(P.LAND_M, P.LAND_M, P.SLAB_M))
+                    ism.add_instance(t, True)
+                a.set_actor_label(label)
+                a.set_folder_path("Realms/%s/Lands" % realm)
+                a.tags = [unreal.Name("Lands"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d), unreal.Name("Cells:%s" % ",".join(str(c) for c in cells))]
+                made.append(a)
+                n_inst = len(cells)
         if made:
             unreal.EditorLevelUtils.move_actors_to_level(made, sl, False, False)
-            level = sl.get_loaded_level()
-            if level is not None:
-                P.save_packages_proven([level.get_outermost()])
-        total += len(made)
-        yield "%s D%02d: %d plots laid into the sublevel" % (realm, d, len(made))
+            lv = sl.get_loaded_level()
+            if lv is not None:
+                pending.append(lv.get_outermost())
+        total += n_inst
+        if len(pending) >= save_every:
+            P.save_packages_proven(pending)
+            pending = []
+        yield "%s D%02d: %d plots as one actor%s" % (realm, d, n_inst, " + ground" if g is not None else "")
+    if pending:
+        P.save_packages_proven(pending)
     P.save_world()
     import daedalus_islands
     daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
