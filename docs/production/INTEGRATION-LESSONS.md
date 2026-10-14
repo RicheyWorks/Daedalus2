@@ -27,3 +27,9 @@
 - An injected InputKey E event proves the engine binding and owner RPC path, not a physical keyboard or a rendered scene.
 - A headless Unreal launch can generate DefaultInput.ini. Inspect it before changing it; this host already selected EnhancedPlayerInput/EnhancedInputComponent, so it was preserved.
 - Keep production DLL/source proof before adding test actors. Fixture shutdown deliberately closes the connection; distinguish those messages from failures before the pass marker.
+
+### Seeded Ocean terrain
+- Reuse the existing chunk palette, save format and GLB exporter instead of introducing another terrain file format. Generate requested absolute-coordinate chunks; never allocate all lands just to bootstrap a sea sector.
+- Save seed and generator version separately in realm metadata; the current voxel save does not record procedural generator provenance. Persist mined-to-empty area markers before adding live regeneration.
+- Locale-dependent floating-point formatting can invalidate JSON. The exporter uses Locale.ROOT and was repeated under German locale; save and GLB bytes matched the original export.
+- A generated sector is one terrain asset reference and zero character roles. Keep its Unreal status pending until actual import and Play proof exist.
