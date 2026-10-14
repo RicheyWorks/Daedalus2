@@ -719,6 +719,29 @@ def _accept(sock, generation):
         threading.Thread(target=_client, args=(conn, generation), name="claude-unreal-client", daemon=True).start()
 
 
+def _create_listener(port):
+    """Bind a new loopback listener without publishing it or disturbing another owner.
+
+    Windows reuse can allow competing binds; exclusive ownership must precede
+    bind. POSIX reuse supports normal restart without enabling SO_REUSEPORT.
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        if sys.platform == "win32":
+            option = getattr(socket, "SO_EXCLUSIVEADDRUSE", None)
+            if option is None:
+                raise RuntimeError("Windows exclusive listener binding is unavailable")
+        else:
+            option = socket.SO_REUSEADDR
+        sock.setsockopt(socket.SOL_SOCKET, option, 1)
+        sock.bind(("127.0.0.1", port))
+        sock.listen(8)
+        return sock
+    except BaseException:
+        sock.close()  # This descriptor is new and has never been published.
+        raise
+
+
 def start(port=None, register_tick=True):
     """On the editor thread, listen and pump commands on its ticks. Returns the port."""
     if _server["stopping"]:
@@ -729,24 +752,25 @@ def start(port=None, register_tick=True):
     if _server["sock"] is not None:
         return _server["port"]
     port = int(port or os.environ.get("CLAUDE_UNREAL_PORT") or os.environ.get("DAEDALUS_BRIDGE_PORT") or DEFAULT_PORT)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind(("127.0.0.1", port))
-    sock.listen(8)
-    generation = object()
-    with _lifecycle_lock:
-        _server.update(sock=sock, port=sock.getsockname()[1], generation=generation,
-                       owner=threading.get_ident())
-    _server["thread"] = threading.Thread(target=_accept, args=(sock, generation), name="claude-unreal-accept", daemon=True)
+    sock = _create_listener(port)
     try:
+        actual_port = sock.getsockname()[1]
+        generation = object()
+        with _lifecycle_lock:
+            _server.update(sock=sock, port=actual_port, generation=generation,
+                           owner=threading.get_ident())
+        _server["thread"] = threading.Thread(target=_accept, args=(sock, generation), name="claude-unreal-accept", daemon=True)
         _server["thread"].start()
         if register_tick and unreal is not None:
             _server["tick"] = unreal.register_slate_post_tick_callback(pump)
-    except Exception:
-        stop()
+        if unreal is not None:
+            unreal.log("Claude Unreal Bridge: listening on 127.0.0.1:%d" % _server["port"])
+    except BaseException:
+        if _server["sock"] is sock:
+            stop()  # Retain PR116's owner-thread cleanup and failed-handle policy.
+        else:
+            sock.close()  # getsockname failed before this listener was published.
         raise
-    if unreal is not None:
-        unreal.log("Claude Unreal Bridge: listening on 127.0.0.1:%d" % _server["port"])
     return _server["port"]
 
 
