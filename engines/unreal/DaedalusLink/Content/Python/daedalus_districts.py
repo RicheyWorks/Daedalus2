@@ -359,6 +359,39 @@ def dress_islands_steps(realms, decor_per_district=3):
 HUB_DISTRICTS = frozenset((44, 45, 54, 55))   # the hub island's four districts keep their labelled Land_ actors
 
 
+CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
+RUBBLE_CULL = (0, 200000)
+
+
+def perf_steps():
+    """Cheap render wins for the dressed map (01:45: PIE at 6 fps with ~57k instances): cull distances on every
+    district ISM, shadows off on rubble and props (plots keep theirs). One realm per tick."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    by_realm = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() == "DaedalusLandDistrict":
+            by_realm.setdefault(str(a.get_editor_property("realm")), []).append(a)
+    touched = 0
+    for realm, actors in sorted(by_realm.items()):
+        for a in actors:
+            kind = a.get_actor_label().split("_", 1)[0]
+            plots = a.get_editor_property("plots")
+            ground = a.get_editor_property("ground")
+            lo, hi = CULL.get(kind, CULL["Lands"])
+            plots.set_cull_distances(lo, hi)
+            ground.set_cull_distances(*RUBBLE_CULL)
+            ground.set_cast_shadow(False)
+            if kind == "Decor":
+                plots.set_cast_shadow(False)
+            a.modify(True)
+            touched += 1
+        yield "%s: %d district actors culled" % (realm, len(actors))
+    P.save_world()
+    return {"actors": touched}
+
+
 def convert_steps(realm, keep_districts=HUB_DISTRICTS):
     """Replace a realm's old per-plot Land_<R>_<n> actors (and their signs) outside the hub districts with
     instanced district actors, then dress them (01:28: Gallery City still had 57 districts as 5,860 slab actors).
