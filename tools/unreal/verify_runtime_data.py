@@ -52,6 +52,9 @@ def verify(host, exported):
         raise ValueError('DaedalusLink is not linked into this target')
     prefix = 'engines/unreal/DaedalusLink/'
     plugin = host / 'Plugins/DaedalusLink'
+    resolved_plugin=plugin.resolve()
+    if not resolved_plugin.is_relative_to(host):
+        raise ValueError('Plugin snapshot escapes host root')
     expected = {}
     data_types = {'Inventory': {'.dic'}, 'Casts': {'.dcs'}, 'Realm': {'.drr', '.dsp'}}
     for name, digest in manifest['files'].items():
@@ -61,6 +64,8 @@ def verify(host, exported):
         if not name.startswith(prefix) or relative.is_absolute() or '..' in relative.parts:
             raise ValueError('Invalid source manifest path')
         source = plugin / relative
+        if not source.resolve().is_relative_to(resolved_plugin):
+            raise ValueError('Source snapshot link escapes plugin root')
         if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest() != digest:
             raise ValueError('Snapshot missing or changed: ' + name)
         if len(relative.parts) == 3 and relative.parts[0] == 'Content':
@@ -73,9 +78,11 @@ def verify(host, exported):
     for dependency in module.get('RuntimeDependencies', []):
         pattern = Path(dependency['Path'])
         try:
-            pattern.relative_to(plugin)
+            relative_pattern=pattern.relative_to(plugin)
         except ValueError:
             continue  # Engine/third-party dependencies are outside this verifier's scope.
+        if '..' in relative_pattern.parts or not pattern.parent.resolve().is_relative_to(resolved_plugin):
+            raise ValueError('Runtime dependency escapes plugin snapshot')
         if dependency.get('Type') != 'UFS':
             raise ValueError('Runtime data must be declared UFS')
         matches = list(pattern.parent.glob(pattern.name))
@@ -84,6 +91,8 @@ def verify(host, exported):
         declarations.append(dependency)
         for file in matches:
             resolved = file.resolve()
+            if not resolved.is_relative_to(resolved_plugin):
+                raise ValueError('Runtime dependency link escapes plugin snapshot')
             if resolved not in expected:
                 raise ValueError('Unexpected plugin data staged: ' + str(file))
             staged.add(resolved)
