@@ -1,0 +1,201 @@
+{
+  "schema": "daedalus.image-optimizer.native-install-binding.v1",
+  "stage": "source_written_unverified",
+  "repository": "RicheyWorks/Daedalus2",
+  "branch": "codex/image-optimizer-terminal-20261014",
+  "baselineCommit": "c3f842214e921c9597dcd5400dd52028e440f0c2",
+  "stackDependency": {
+    "pullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/156",
+    "exactHead": "c3f842214e921c9597dcd5400dd52028e440f0c2",
+    "photoInputCorrectionCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c",
+    "existingNativeSourcesModified": false
+  },
+  "revisionBinding": "Install the exact containing delivery commit / PR head with its recorded stack base, not a moving branch tip.",
+  "hashNormalization": "SHA256 over UTF-8 without BOM with CRLF normalized to LF; preserve all other bytes and final newline.",
+  "claim": {
+    "owner": "pootscoot-practical-apps",
+    "retainedOwnerAcknowledgments": [
+      31050,
+      31115
+    ],
+    "exactScopeMessage": 31169,
+    "rootOwnershipAcceptance": 31174,
+    "additionalCoordinatorAcknowledgment": 31188,
+    "additionalCoordinatorAcknowledgmentStatus": "31188 confirms no overlap and retained direct-user source scope; no extra acknowledgment gate, publication/native authority or runtime acceptance added",
+    "runtimeAcceptance": false
+  },
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusImageOptimizerClient.h",
+      "sha256": "32aa220245354e19bc9685560099fd89090566fea0b550906f236179cceda760"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerClient.cpp",
+      "sha256": "b922cfea36f891f4136cd92aaeb34ba19c16942dbafa5af425f7cf294eaffc44"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusImageOptimizerTerminal.h",
+      "sha256": "318334446207d80ee26973e001b8d84e83728e03bdd70d69a701ed9a6baa1134"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerTerminal.cpp",
+      "sha256": "0ddf3ecff27ca2b675051cec37b96f7c8848beccf709fc2733cd912c67018b75"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.h",
+      "sha256": "fbacf6f95ffe08a77b8f737fa5b6c6eaacdcfba51f9a234912be0d8eeeea3583"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.cpp",
+      "sha256": "e69e1011530cf23d8a2c823f4eebd99fc037fa25ce9dec843e7ba0cd27f8a502"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.h",
+      "sha256": "c14d260acc0e4edd48dcb134b298212d021a30b191133ec12ac22529b8c7ae4c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
+      "sha256": "5fa7e7d0c9cc564963307222dd8b870a2373a6f6844479340d800f9194c9849e"
+    }
+  ],
+  "documentationFiles": [
+    "docs/contracts/image-optimizer-v1/native-terminal.md",
+    "docs/contracts/image-optimizer-v1/install-binding-manifest.json",
+    "docs/contracts/companion-apps-v1/README.md",
+    "docs/contracts/companion-apps-v1/capability-map.json"
+  ],
+  "binding": {
+    "nativeClass": "/Script/DaedalusLink.DaedalusImageOptimizerTerminal",
+    "module": "DaedalusLink",
+    "interaction": "Existing ADaedalusUsable / possessed local Hero Interact",
+    "fileDialogPlatform": "Windows",
+    "configuration": "No link/token/service port/path/image content in class defaults or map properties; pair through local open panel",
+    "mesh": "Engine cube placeholder; physical art and realm placement pending owner",
+    "input": "UIOnly viewport, no controller move/look ignore counters; stored opening viewport, mapped Slate user and weak owner/generation guards",
+    "existingNativeFilesModified": [],
+    "buildModuleEditsRequiredBySource": false,
+    "existingDependenciesUsed": [
+      "Slate",
+      "SlateCore",
+      "Json",
+      "libcurl"
+    ],
+    "windowsLinkDirective": "Platform-guarded Comdlg32.lib pragma; actual linkage deferred"
+  },
+  "companion": {
+    "repository": "RicheyWorks/image-optimizer",
+    "pullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/4",
+    "sourceCommit": "486a121c2da6d320045f2447739f2b65c9bc88b3",
+    "service": "Existing opt-in same-JVM RealmImageBridge and ImageOptimizationService.optimizePixels / Thumbnailator",
+    "protocol": "imageoptimizer.local.v1",
+    "productId": "image-optimizer",
+    "capabilities": [
+      "image.optimize"
+    ],
+    "outputMode": "one_image_per_input",
+    "pairingGrammar": "http://127.0.0.1:<port>/realm/image-optimizer/#token=<43-base64url-characters>",
+    "sessionRoute": "/v1/sessions",
+    "sessionSuccessCode": 201,
+    "sessionRequestBody": "empty",
+    "sessionHeader": "X-Session-Token",
+    "nativeOrigin": "May omit; if supplied must match literal local origin",
+    "wire": "IOP1, fixed15-byte header including settings; typed selected bytes only",
+    "installedBinaryVerified": false,
+    "launchOrActivationPerformed": false
+  },
+  "controls": {
+    "quality": {
+      "min": 70,
+      "max": 95,
+      "nativeDefault": 85
+    },
+    "resizeDefault": false,
+    "width": {
+      "min": 1,
+      "max": 4096,
+      "nativeDefault": 1280,
+      "requiredWhenResizeDisabled": true
+    },
+    "outputFormat": {
+      "keepSource": 0,
+      "png": 1,
+      "jpeg": 2,
+      "nativeDefault": 0
+    },
+    "changesExistingDesktopOrBrowserDefaults": false,
+    "jpegPreservesTransparency": false,
+    "guaranteedFileSizeSavings": false
+  },
+  "bounds": {
+    "selectedFiles": 8,
+    "sourceTypes": [
+      "PNG",
+      "JPEG"
+    ],
+    "perImageBytes": 8388608,
+    "completeRequestFrameBytes": 25165824,
+    "fixedHeaderBytes": 15,
+    "perImageFrameBytes": 5,
+    "dimension": 4096,
+    "pixelsPerImage": 12000000,
+    "pixelsPerBatch": 24000000,
+    "encodedOutputBytesForWholeJob": 33554432,
+    "jsonResponseBytes": 32768,
+    "totalResponseHeaderBytes": 8192,
+    "connectTimeoutMilliseconds": 3000,
+    "requestTimeoutMilliseconds": 30000,
+    "shutdownRevokeTimeoutMilliseconds": 3000,
+    "progressPollingSeconds": 1,
+    "maximumAncestorDirectories": 128,
+    "sessionSeconds": 900,
+    "retainedActionsAcrossProcess": 16
+  },
+  "actionAndCleanup": {
+    "submission": "Freeze exact key, settings and IOP1 image bytes. Changed work cannot reuse the key; uncertain action reconciles before replacement.",
+    "completedRepeat": "Refresh same unchanged completed job, no duplicate optimization",
+    "cancel": "Confirm CANCELED or authenticated owned NOT_FOUND before retiring local action; neither is a secure-erase receipt. Server retains a canceled tombstone/key until session expiry. Next deliberate batch uses a fresh action key.",
+    "uncertainCancel": "Recover same key/body then cancel known owned job, or explicitly revoke session; failed recovery does not unlock new work",
+    "outputs": "Infer type from frozen format/source; exact generated name and scoped path, bytes/sourceBytes/dimensions and aggregate32MiB; never follow arbitrary returned paths",
+    "downloadValidation": "Expected MIME, exact snapshot byte count, signature/header dimensions; no claim of full pixel decode or metadata proof",
+    "localExport": "Explicit matching new PNG/JPEG filename, locked local ancestors/stable volume path and owned temporary handle through no-replace rename/failure disposition; no existing-file overwrite",
+    "lifecycle": "Clear pairing input, invalidate generation, abort active transfer and request bounded best-effort session revoke. Unconfirmed cleanup remains unknown; exports already saved remain user files.",
+    "lostSessionReceipt": "No returned session capability means revoke cannot be confirmed; app expiry remains authoritative",
+    "privacy": "Transient local memory only; no file paths/names on wire, folder walk, arbitrary output path, logs/config/replication/saves/third-party upload"
+  },
+  "operatorHandoff": {
+    "soleNativeAdopter": "codex-play-guard",
+    "currentExecutionPermission": "Deferred tests/builds/UHT/CI/services/editor/native/Play",
+    "futureSequence": [
+      "Verify exact delivery commit, corrected stack base and source hashes in owner checkout",
+      "Separately establish compile/UHT/link/load evidence",
+      "Bind native class through existing Hero interaction and coordinate physical workbench art/realm placement",
+      "Use explicitly selected approved synthetic PNG/JPEG fixtures against matching installed app",
+      "Record decoded outputs, source preservation, cleanup, ownership, controls/retry/tombstones and actual Play receipts separately from handoff"
+    ],
+    "deferredAcceptanceCases": [
+      "All quality/resize/format settings and no enlargement",
+      "Decoded dimensions/colors/alpha/metadata sentinel removal, actual source/output sizes and source hashes",
+      "Invalid/mismatched/animated/oversized sources and exact15-byte frame accounting",
+      "Whole-job32MiB output cap and partial failure cleanup",
+      "Owned sessions, wrong capability, expiry and lost session receipt",
+      "Frozen settings+bytes/key retry, repeated completed actions and stale callbacks",
+      "CANCELED tombstones, new deliberate key, cancel during upload/conversion/download and uncertain recovery",
+      "Explicit dialog cancel, overwrite refusal, locked local path/reparse boundaries and write/commit cleanup",
+      "Actor/controller restart/destruction, focus/realm/reach/pause/end-play and modal weak-owner guards",
+      "Physical art, placement and actual Play"
+    ]
+  },
+  "verification": {
+    "sourceReviewed": true,
+    "testsRun": false,
+    "buildsRun": false,
+    "uhtRun": false,
+    "ciRequested": false,
+    "servicesStarted": false,
+    "personalImagesRead": false,
+    "nativeInstalled": false,
+    "nativeBound": false,
+    "nativeRuntimeVerified": false,
+    "overall": "UNVERIFIED source increment; deferred checks are not passing results"
+  }
+}
