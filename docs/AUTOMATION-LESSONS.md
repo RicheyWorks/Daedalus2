@@ -670,3 +670,7 @@ say so and stop optimising that part.
 4. The MCP execute_python tool returns after 60 s but the editor keeps running the call; the result is lost to
    the tool, not to the editor. For anything that may exceed 60 s, go through pc-job + daedalus.steps and read
    the job log; use the direct tool only for sub-minute probes.
+14. (Poot, 29464) Blueprint graph readback / scoped reflection (PinWright, UnrealClientProtocol style: GUID, node,
+    pin readback, compile diagnostics). Refused for now: Daedalus has no gameplay Blueprints; revisit if a
+    Blueprint-authored system appears. Their source caveats agree with our rule: a discarded restore boolean,
+    a dirty flag, or an ignored TryCreateConnection return is not a result.
