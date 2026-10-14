@@ -1057,3 +1057,43 @@ few seconds while a job runs; a known-dialog table (import prompt -> Don't Impor
 "save changes?" -> hub alarm, never answered by a bot; crash reporter -> hub alarm + log path); unknown dialog ->
 screenshot to the hub and stop the job's clock. Ask 10: `unreal-job.ps1 -Open` runs doctor.py --fix after the
 editor is up, so a relaunch cannot regress these.
+
+## 2026-10-14 03:02 — what I have learned about Unreal Engine tonight (Richey: "add to lessons learned so far")
+
+Engine facts, each paid for once:
+1. Instanced static meshes are the only way to hold 10k+ things in one level: 49k plots + 60k extras as ~1,700
+   ADaedalusLandDistrict actors cost ~1 s per 100 instances to lay and nothing to tick; the same as actors was
+   60 s per district and 76k outliner rows. Instance i -> Cells[i] keeps every plot addressable for the registry.
+2. An ISM's collision follows the component (QueryAndPhysics in the constructor); scaled instances collide fine.
+   Traces (SystemLibrary.line_trace_single, ECC_Visibility) are the cheap truth about "is there floor here":
+   256 probes in 20 s found the World Zero hub was 87% air; 3,721 cell probes found 673 holes round it.
+3. A "floor" that is many small slabs leaves pits round anything smaller than a slab; a hub wants ONE plate 2 cm
+   under the plane and the content on top of it. Use the plane every placer uses (PlayerStart z - 1 m), not the
+   first mesh a trace hits (a terrain chunk 1.8 m higher put every block in a pit).
+4. Re-deriving a base height from the first instance drifts on every rerun (district 33 ended 114 m low). Base
+   heights come from a fixed source (ORIGINS / PlayerStart), never from what was laid last time.
+5. Editor "settings" are two things: the console `set` on a class default (not persisted, not even applied here)
+   and the UDeveloperSettings object (persisted, what the editor reads). Read-back via ConfigSettings before
+   believing either. The ones that bite bots: bThrottleCPUWhenNotForeground (3 fps), bPromptBeforeAutoImporting
+   (modal), bAutoDeleteAssets (deletes on a file move), autosave interval (collides with scripted saves).
+6. Overlap order: a teleport fires BeginOverlap synchronously INSIDE the teleport call. Anything the overlap
+   handler reads (a cooldown stamp) must be written before the teleport, not after (the portal bounce).
+7. PIE copies the whole editor world; at 92% RAM Play is the crash moment. Frame-driven scripts crawl at 3 fps
+   but physics-driven ones (Dt capped at 0.05) move ~960 cm/s real time — a tour that is 5 min at 46 fps is 40
+   min at 3. Time waits in game seconds; count frames only for frame facts.
+8. save_dirty_packages can clear dirty flags without writing; save_packages([pk], only_dirty=False) plus an mtime
+   check is the only proof. Autosave can make even that return False once; retry after 8 s.
+9. UE 5.8 Python has no World.streaming_levels; levels come from EditorLevelUtils.get_levels and a streaming
+   object from GameplayStatics.get_streaming_level(world, pkg). Sublevel actors are only visible to
+   get_all_level_actors while loaded.
+10. The native MCP server (ModelContextProtocol plugin): Streamable HTTP, Mcp-Session-Id per client, 3 meta-tools
+    over 67 toolsets / 830 tools; call_tool takes toolset_name + SHORT tool_name; replies over ~3 MB are cut by a
+    5 s write-idle close; the session dies with the editor process, so a long-lived proxy must re-initialize.
+    Fastest wins so far: find_actors by tag (0.07 s), SetCameraTransform + screenshot, ConfigSettings read-back,
+    SearchCVars, trace_world, plugin and folder listings. Untested yet: Sequencer (140 tools), Blueprint (53),
+    Niagara (46), PCG (30), UMG (23), SlateInspector (UI automation) — the next exploration slices.
+11. Modal dialogs (import prompt, autosave progress, save-changes, crash reporter) stop the game thread, so the
+    bridge and the MCP server both go silent; only the out-of-process editor_windows/window_input can answer them.
+12. A background editor (not the active window) is the normal state under bot control; every setting that assumes
+    a human in front of it (throttle, Slate throttling, notifications, prompts) must be off, and the doctor must
+    say so at every start.
