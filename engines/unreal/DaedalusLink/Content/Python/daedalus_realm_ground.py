@@ -298,14 +298,25 @@ CREATURE_ROOT = "/Game/Daedalus/Art/Creatures"
 CREATURE_RADIUS_CM = 11000.0
 
 
+CREATURE_PREFIX = {"GALLERY-CITY": "Mob_Gallery_", "PARCELS": "Mob_Parcels_", "BRICKS": "Mob_Bricks_", "LABYRINTH": "Mob_Lab_"}
+
+
 def lay_creatures(realm, folder):
-    """Import the realm's creature GLBs (Mob_*.glb, 8-bone rigs with clips) under /Game/Daedalus/Art/Creatures/<Id>/
-    and stand each one in an outer ring round the spawn playing its Idle clip, as a SkeletalMeshActor labelled
-    Creature_<Id>. Encounters spawn the live ones; these are the realm's bestiary, laid down."""
-    import daedalus_import_cast as IC
-    s = IC.import_folder(folder, root=CREATURE_ROOT)
+    """DO NOT run this from one bridge call for a whole folder: 22 imports in one call blocked the game thread and
+    the GPU watchdog killed the editor (2026-10-13 22:19). Use tools/unreal_play/import_cast.py <folder>
+    --root /Game/Daedalus/Art/Creatures --place REALM, which imports one GLB per call and then place_creatures()."""
+    raise RuntimeError("lay_creatures is retired: run tools/unreal_play/import_cast.py %s --root %s --place %s" % (folder, CREATURE_ROOT, realm))
+
+
+def place_creatures(realm):
+    """Stand every imported creature of the realm (by id prefix under /Game/Daedalus/Art/Creatures) in an outer
+    ring round the spawn playing its Idle clip, as a SkeletalMeshActor labelled Creature_<Id>. Encounters spawn the
+    live ones; these are the realm's bestiary, laid down. Idempotent by label."""
     reg = unreal.AssetRegistryHelpers.get_asset_registry()
-    ids = sorted(s["imported"] + s["skipped"])
+    pre = CREATURE_PREFIX[realm]
+    ids = sorted({str(d.package_path).split("/")[5] for d in reg.get_assets_by_path(CREATURE_ROOT, recursive=True)
+                  if len(str(d.package_path).split("/")) > 5 and str(d.package_path).split("/")[5].startswith(pre)})
+    s = {"imported": [], "skipped": ids, "failed": []}
     centre = markers(ORIGINS[realm])["Spawn"]
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     have = _labels()

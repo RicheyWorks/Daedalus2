@@ -553,3 +553,14 @@ a scenario the live file had, and spiral_apply ran an old daedalus_layout whose 
 (1) nobody prepends a checkout to the editor's sys.path; hot-copy into the live plugin folder instead;
 (2) run_scenarios.py now strips Documents\Codex paths, puts the live plugin first and reloads every daedalus_*
 module before running; (3) any tool that reports a result prints `module.__file__` next to it when in doubt.
+
+## GPU crash 22:19: twenty-two imports in one bridge call starved the GPU watchdog (2026-10-13)
+`lay_creatures("LABYRINTH", folder)` imported 22 rigged GLBs inside ONE execute_python call. The log shows the
+frame counter stuck at [0] for the whole call; at the second file Aftermath timed out, DRED had no breadcrumb,
+`D3D12Util.TerminateOnGPUCrash`. Same family as the 19:14 crash (3.5 min of saves in one call): a bridge call
+that blocks the game thread for more than a few seconds is a crash waiting for the watchdog. Rules now in code:
+(1) `tools/unreal_play/import_cast.py` imports ONE GLB per bridge call (~2 s each) with a 0.5 s gap, then places
+in a second call; `lay_creatures` is retired and raises with the command to run instead; (2) any editor loop over
+N assets is driven from the host script, one bridge call per item or per ≤150 light items, never N heavy items
+in one call; (3) the map had been saved 33 s before the crash (save_world after each realm), so nothing was lost:
+save after every realm, not at the end.
