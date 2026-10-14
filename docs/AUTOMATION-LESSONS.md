@@ -1154,3 +1154,6 @@ reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER r
 ## Preserve both consumers when resolving CI integration conflicts (2026-10-14)
 
 PR94 integration overlapped newer realm workflow triggers and appended Unreal lessons. Keep both runtime-data and tools/realm trigger paths, both focused verifier and realm jobs, and both sets of lessons. A successful native archive does not merge its reproducible source setup into main; confirm branch integration separately. No live installer, data overwrite, editor restart or gameplay launch is needed for this source resolution.
+
+## Read existing Unreal config independently of PowerShell ANSI defaults (2026-10-14)
+Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.

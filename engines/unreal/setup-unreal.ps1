@@ -320,7 +320,9 @@ function Get-TreeHash([string]$dir) {
 # Sets key=value under [section] in an .ini, adding the section or key if missing; other lines stay as they are.
 # A key listed with a leading '+' (an Unreal array entry) is added once, never duplicated.
 function Set-IniValue([string]$file, [string]$section, [string]$key, [string]$value) {
-    $lines = if (Test-Path $file) { @(Get-Content $file) } else { @() }
+    # .NET reads BOM-less UTF-8 and detects Unicode BOMs consistently in PS5.1/7.
+    # Get-Content's PS5.1 ANSI default can corrupt existing non-ASCII settings.
+    $lines = if (Test-Path -LiteralPath $file) { @([System.IO.File]::ReadAllLines($file)) } else { @() }
     $out = New-Object System.Collections.Generic.List[string]
     $inSection = $false; $done = $false; $seen = $false
     foreach ($l in $lines) {
@@ -345,7 +347,7 @@ function Ensure-GameFeatureDataCookRule([string]$file) {
     # Preserve inherited array scans and any existing project rule for this type.
     $section = "/Script/Engine.AssetManagerSettings"
     $inSection = $false
-    foreach ($line in $(if (Test-Path -LiteralPath $file) { Get-Content -LiteralPath $file } else { @() })) {
+    foreach ($line in $(if (Test-Path -LiteralPath $file) { [System.IO.File]::ReadAllLines($file) } else { @() })) {
         if ($line -match '^\s*\[(.+)\]\s*$') {
             $inSection = ($Matches[1] -eq $section)
         } elseif ($inSection -and $line -match '^\s*[+.]?PrimaryAssetTypesToScan\s*=.*PrimaryAssetType\s*=\s*"?GameFeatureData"?\s*[,)]') {

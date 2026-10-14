@@ -27,4 +27,15 @@ if (Ensure-GameFeatureDataCookRule $path) { throw "Existing custom rule was over
 if ([Convert]::ToBase64String($before) -ne [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))) { throw "Custom rule bytes changed" }
 @('[/Script/Engine.AssetManagerSettings]', '; +PrimaryAssetTypesToScan=(PrimaryAssetType="GameFeatureData")') | Set-Content -LiteralPath $path -Encoding UTF8
 if (-not (Ensure-GameFeatureDataCookRule $path)) { throw "Commented entry blocked repair" }
-Write-Host "PASS: creation, idempotence, existing scans/sections, custom rule preservation and comments"
+$accent = "Caf" + [char]0x00e9 + " " + [char]0x96ea
+$unicodeConfig = "[Other]`nDisplayName=$accent`n[/Script/Engine.AssetManagerSettings]`n+PrimaryAssetTypesToScan=(PrimaryAssetType=`"Map`",CookRule=AlwaysCook)`n"
+foreach ($encoding in @((New-Object System.Text.UTF8Encoding($false)), [System.Text.Encoding]::Unicode)) {
+    [IO.File]::WriteAllText($path, $unicodeConfig, $encoding)
+    if (-not (Ensure-GameFeatureDataCookRule $path)) { throw "Unicode missing-rule repair failed" }
+    $observed = [IO.File]::ReadAllText($path)
+    if (-not $observed.Contains("DisplayName=$accent") -or -not $observed.Contains('PrimaryAssetType="Map"')) { throw "Unicode settings corrupted" }
+    $before = [IO.File]::ReadAllBytes($path)
+    if (Ensure-GameFeatureDataCookRule $path) { throw "Unicode repair was not idempotent" }
+    if ([Convert]::ToBase64String($before) -ne [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))) { throw "Unicode second pass changed bytes" }
+}
+Write-Host "PASS: creation, idempotence, existing scans/sections, custom rules, comments, BOM-less UTF8 and UTF16 values"
