@@ -50,7 +50,6 @@ def import_island(seed, force=False, save=False):
             paths = cand
             break
     if force or not paths:
-        paths = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, l, name, l) for l in LAYERS}
         t = unreal.AssetImportTask()
         t.filename = os.path.join(GLB_DIR, name + ".glb")
         t.destination_path = ROOT
@@ -59,6 +58,12 @@ def import_island(seed, force=False, save=False):
         t.replace_existing = True
         t.save = False
         unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([t])
+        made = [str(p) for p in t.imported_object_paths]
+        paths = {}
+        for p in made:                      # the GLB decides the layer set (2 for v2, 8 for the first batches)
+            tail = p.rsplit(".", 1)[-1]
+            if tail.startswith(name + "_"):
+                paths[tail[len(name) + 1:]] = p
     m = material()
     out = {}
     for l, p in paths.items():
