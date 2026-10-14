@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Assemble an exact guarded, saved Codex island revision additively.
+"""Assemble exact guarded, saved Codex islands or the retained PowerUnit.
 
 Local planning verifies admission identity and disk witnesses. Actual placement
 uses the existing journaled saved-asset execution body during the root operator's
@@ -21,11 +21,36 @@ RETAINED_ISLANDS = {
     "CodexIsland_summit_rim_84011_HeroR4": ("summit-rim", "HeroR4", 84011, ISLAND_LAYERS + ("route_steps",)),
     "CodexIsland_cliff_garden_84022_GardenGateR1": ("cliff-garden", "GardenGateR1", 84022, ISLAND_LAYERS),
 }
+POWER_NAME = "CodexSalvage_PowerUnit_86100"
+POWER_CONFIG_SHA256 = "0b66a3639f80f8addf477b109710bb065d2993ce4061111bb5653c892a3eefa9"
+POWER_ROLES = ("battery", "gearbox", "rotor", "shaft", "support")
+
+
+def _power_contract(settings, manifest):
+    """Admit only the already-saved, reviewed five-part PowerUnit recipe."""
+    if type(settings.get("seed")) is not int or settings["seed"] != 86100 or settings.get("config_sha256") != POWER_CONFIG_SHA256:
+        raise ValueError("PowerUnit seed/config differs from the exact retained recipe")
+    if "kind" in settings and settings["kind"] != "module":
+        raise ValueError("PowerUnit admission kind must be module")
+    if "preset" in settings and settings["preset"] != "codex_prepared_existing_options_v1":
+        raise ValueError("PowerUnit importer preset differs from the proven existing options")
+    for container in (settings, manifest):
+        if "config" in container:
+            config = container["config"]
+            if not isinstance(config, dict) or any(config.get(field) != expected for field, expected in
+                                                  (("assembly", "PowerUnit"), ("preset", "CopperPatina"), ("seed", 86100))):
+                raise ValueError("exposed PowerUnit config identity differs")
+            digest = hashlib.sha256(json.dumps(config, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+            if digest != POWER_CONFIG_SHA256:
+                raise ValueError("exposed PowerUnit config hash differs from the retained recipe")
+    return {POWER_NAME + "_" + role for role in POWER_ROLES}
 
 
 def _retained_contract(settings, manifest):
     """Select a fixed name/seed/role contract, never an arbitrary mesh count."""
     name = settings.get("name")
+    if name == POWER_NAME:
+        return _power_contract(settings, manifest)
     if name not in RETAINED_ISLANDS:
         raise ValueError("require the exact retained HeroR3, HeroR4 or GardenGateR1 island")
     preset, revision, seed, layers = RETAINED_ISLANDS[name]
@@ -76,8 +101,9 @@ def plan_admitted(receipt_path, placement_cm, map_path, map_file):
         raise ValueError("receipt destination is not the exact owned Ingestion/key24 revision")
     native = receipt.get("native_result", {})
     name = settings.get("name")
-    if settings.get("kind") != "island" or native.get("kind") != "island" or not isinstance(name, str) or re.fullmatch("CodexIsland_[A-Za-z0-9_]+", name) is None:
-        raise ValueError("only exact owned island-kind receipts can be assembled")
+    kind = "module" if name == POWER_NAME else "island"
+    if settings.get("kind") != kind or native.get("kind") != kind or not isinstance(name, str) or (name != POWER_NAME and re.fullmatch("CodexIsland_[A-Za-z0-9_]+", name) is None):
+        raise ValueError("require an exact owned island-kind receipt or the retained module-kind PowerUnit")
     if receipt.get("name") != name or native.get("name") != name or native.get("destination") != destination or native.get("stage") != "assets_saved_held_from_world":
         raise ValueError("native saved identity differs from its admission settings")
     if re.fullmatch("[0-9a-f]{64}", str(settings.get("config_sha256", ""))) is None or type(settings.get("seed")) is not int:
@@ -90,10 +116,10 @@ def plan_admitted(receipt_path, placement_cm, map_path, map_file):
         raise ValueError("admitted source FBX bytes changed after the saved receipt")
     objects = settings.get("objects", [])
     if not isinstance(objects, list) or len(objects) != expected_count or any(not isinstance(row, dict) for row in objects):
-        raise ValueError("retained island source-object count differs from its exact role contract")
+        raise ValueError("retained source-object count differs from its exact role contract")
     names = [row.get("name") for row in objects]
     if any(not isinstance(value, str) for value in names) or len(set(names)) != expected_count or set(names) != expected_names:
-        raise ValueError("source object names differ from the exact retained island roles")
+        raise ValueError("source object names differ from the exact retained roles")
     meshes = native.get("meshes", [])
     if not isinstance(meshes, list) or len(meshes) != expected_count or any(not isinstance(row, dict) for row in meshes) or {row.get("source_name") for row in meshes} != expected_names:
         raise ValueError("native source-name set differs from its exact admitted objects")

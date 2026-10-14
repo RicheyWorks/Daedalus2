@@ -1,0 +1,43 @@
+{
+  "schema": "daedalus.codex-arcade-delivery-audit.v1",
+  "stage": "integration_manifest_pending",
+  "requested_action": "check existing arcade owner integration manifest without replacing island ingestion",
+  "audit_scope": "bounded known task4 arcade worktrees, D2-build docs and existing art queue/glb/Prop directories; no broad filesystem census",
+  "latest_owner": "pootscoot-desktop-games",
+  "owner_messages": [30959, 30960],
+  "owner_status": "Minesweeper UI binding and exact operator manifest proposed; source delivery/non-overlap acknowledgment pending",
+  "proposed_binding": "docs/arcade/minesweeper-ui-binding.md",
+  "current_reviewed_native_payload": null,
+  "historical_source_manifest": {
+    "path": "C:/Users/730ri/projects/D2-build/docs/java-arcade/full-link-source-manifest.json",
+    "bytes": 18789,
+    "sha256": "b7ce5fed2140d7f0ac8fd03f180fb86019bb39f98bd4ff524706a21c37882d97",
+    "scope": "compiled source inventory; not Blender/import payload"
+  },
+  "historical_dll": {
+    "path": "C:/Users/730ri/Documents/Codex/2026-10-13/task-4/java-arcade-full-link-v3/HostProject/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.dll",
+    "bytes": 7645696,
+    "sha256": "df174a531a6aabd2bd5bacdcf43843750950a85dea7e70b2a3186ed655560ea6",
+    "historical_editor_load": false,
+    "historical_live_gameplay": false,
+    "historical_packaging": false,
+    "current_rollout_verified": false
+  },
+  "art_brief": {
+    "path": "C:/Users/730ri/projects/D2-build/docs/java-arcade/character-brief.md",
+    "sha256": "97954e15d143f6b4af0ea70ce4d98f9f03ccd6e9c5a98d730cec2fc7a75ca56d",
+    "statement": "no produced 3D assets, rigging or imports"
+  },
+  "blocker": {
+    "action": "apply current arcade owner integration package",
+    "target": "current reviewed arcade operator manifest and payload",
+    "reason": "no completed current integration manifest/payload located in bounded audit; owner describes it as proposed",
+    "state": "pending",
+    "denied": false,
+    "uncertain_execution": false
+  },
+  "completed": "source/path/hash audit only; continued island/PowerUnit production independently",
+  "native_arcade_calls": 0,
+  "compile_calls": 0,
+  "play_tests": 0
+}

@@ -1,0 +1,84 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "a32fd910fb3a29ce89b09590cdfd8fa18ab4cc91d08a31b06538cd7280f1db18",
+  "views": [
+    {
+      "island": "CodexSalvage_PowerUnit_86100",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexSalvage_PowerUnit_86100.power-unit-native-2205-overview.png",
+      "camera": {
+        "location": {
+          "x": -366550,
+          "y": 347900,
+          "z": 19015.324
+        },
+        "rotation": {
+          "pitch": -25.229261642740788,
+          "yaw": -133.2642954110716,
+          "roll": -1.7579711124826425e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "bb585964adb70fa9d26750ffeb056e29383412fc649b7e9b172a7cf57ca85b5c",
+      "bytes": 1347767,
+      "when_utc": "2026-10-14T22:12:31.063902+00:00"
+    },
+    {
+      "island": "CodexSalvage_PowerUnit_86100",
+      "view": "connections",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexSalvage_PowerUnit_86100.power-unit-native-2205-connections.png",
+      "camera": {
+        "location": {
+          "x": -367850,
+          "y": 347550,
+          "z": 18815.324
+        },
+        "rotation": {
+          "pitch": -22.989767773608854,
+          "yaw": -44.99999999999998,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "7bbaf7eb3951676a6318621a195776c67eeebd111022c72c08bff251dcbe2c77",
+      "bytes": 1257366,
+      "when_utc": "2026-10-14T22:12:31.620452+00:00"
+    },
+    {
+      "island": "CodexSalvage_PowerUnit_86100",
+      "view": "workshop_context",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexSalvage_PowerUnit_86100.power-unit-native-2205-workshop_context.png",
+      "camera": {
+        "location": {
+          "x": -366350,
+          "y": 348400,
+          "z": 19415.324
+        },
+        "rotation": {
+          "pitch": -26.797257587642996,
+          "yaw": -134.99999999999997,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "283ba6fc7a09c7aa359f99c1e27dfc0b9bb0df3dd2c7e6e5d75d244c809b03d8",
+      "bytes": 1397662,
+      "when_utc": "2026-10-14T22:12:32.003854+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\power-unit-native-local-views.json",
+  "projection": "existing native viewport projection/FOV unchanged"
+}

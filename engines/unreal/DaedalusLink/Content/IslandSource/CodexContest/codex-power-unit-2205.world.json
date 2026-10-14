@@ -1,0 +1,540 @@
+{
+  "actors": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3976"
+      },
+      "group": "CodexSalvage_PowerUnit_86100",
+      "label": "CodexSalvage_PowerUnit_86100_battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery",
+      "transform": {
+        "location": {
+          "x": -367350.0,
+          "y": 346900.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3977"
+      },
+      "group": "CodexSalvage_PowerUnit_86100",
+      "label": "CodexSalvage_PowerUnit_86100_gearbox",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox",
+      "transform": {
+        "location": {
+          "x": -367350.0,
+          "y": 346900.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3978"
+      },
+      "group": "CodexSalvage_PowerUnit_86100",
+      "label": "CodexSalvage_PowerUnit_86100_rotor",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor",
+      "transform": {
+        "location": {
+          "x": -367350.0,
+          "y": 346900.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3979"
+      },
+      "group": "CodexSalvage_PowerUnit_86100",
+      "label": "CodexSalvage_PowerUnit_86100_shaft",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft",
+      "transform": {
+        "location": {
+          "x": -367350.0,
+          "y": 346900.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3980"
+      },
+      "group": "CodexSalvage_PowerUnit_86100",
+      "label": "CodexSalvage_PowerUnit_86100_support",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support",
+      "transform": {
+        "location": {
+          "x": -367350.0,
+          "y": 346900.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "assembly_s": 0.936072,
+  "created_actors": 5,
+  "folder": "CodexContest/Staging",
+  "map_after": {
+    "bytes": 209300005,
+    "sha256": "17a16e1e5efc73e05e88fd37228816c8cb82b506fd17366ec79a83d41fdfaa0c"
+  },
+  "map_before": {
+    "bytes": 209288788,
+    "sha256": "8195054a37c2b6813f8993db6004c79157eb66e1710b93cadc5de6a72c65c6e7"
+  },
+  "map_save_s": 20.504441,
+  "native_mutations": [
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery",
+        "name": "CodexSalvage_PowerUnit_86100_battery",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3976"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3976"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox",
+        "name": "CodexSalvage_PowerUnit_86100_gearbox",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3977"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3977"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor",
+        "name": "CodexSalvage_PowerUnit_86100_rotor",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3978"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3978"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft",
+        "name": "CodexSalvage_PowerUnit_86100_shaft",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3979"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3979"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support",
+        "name": "CodexSalvage_PowerUnit_86100_support",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3980"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3980"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "result": true,
+      "state": "responded",
+      "tool": "save_assets",
+      "toolset": "editor_toolset.toolsets.asset.AssetTools"
+    }
+  ],
+  "ownership_tags_added": false,
+  "plan": {
+    "config_sha256": "0b66a3639f80f8addf477b109710bb065d2993ce4061111bb5653c892a3eefa9",
+    "entries": [
+      {
+        "group": "CodexSalvage_PowerUnit_86100",
+        "label": "CodexSalvage_PowerUnit_86100_battery",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery",
+        "transform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexSalvage_PowerUnit_86100",
+        "label": "CodexSalvage_PowerUnit_86100_gearbox",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox",
+        "transform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexSalvage_PowerUnit_86100",
+        "label": "CodexSalvage_PowerUnit_86100_rotor",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor",
+        "transform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexSalvage_PowerUnit_86100",
+        "label": "CodexSalvage_PowerUnit_86100_shaft",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft",
+        "transform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexSalvage_PowerUnit_86100",
+        "label": "CodexSalvage_PowerUnit_86100_support",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support",
+        "transform": {
+          "location": {
+            "x": -367350.0,
+            "y": 346900.0,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts\\codex-ingestion-e3f098e65a1dc4ddb1129b79.json",
+    "manifest_embedded": true,
+    "manifest_fingerprint": {
+      "bytes": 16364,
+      "sha256": "86c509329962af235780c72ce5f85189505ae3159003539f9ff59fe60ffff845"
+    },
+    "manifest_key": "e3f098e65a1dc4ddb1129b79da5cc81497da02ddc78b2b38543d955b9d940c39",
+    "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "map_package": "/Game/Daedalus/DaedalusWorld",
+    "native_output_fingerprints": {
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery": {
+        "bytes": 81869,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\e3f098e65a1dc4ddb1129b79\\CodexSalvage_PowerUnit_86100_battery.uasset",
+        "sha256": "2ebc4302e7d8215e768975ea9992c8840ec1ea95cdf7866ddbfe68a7873a10ae"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox": {
+        "bytes": 80231,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\e3f098e65a1dc4ddb1129b79\\CodexSalvage_PowerUnit_86100_gearbox.uasset",
+        "sha256": "b3cd6d7f2347b0ad2b935dc188e5b2f5b2e6f7c75464ca7b28a929a03514d62a"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor": {
+        "bytes": 89253,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\e3f098e65a1dc4ddb1129b79\\CodexSalvage_PowerUnit_86100_rotor.uasset",
+        "sha256": "0cc69895c56024771f53dce030f205de6766c569b578576c60ebb09d934269c7"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft": {
+        "bytes": 79093,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\e3f098e65a1dc4ddb1129b79\\CodexSalvage_PowerUnit_86100_shaft.uasset",
+        "sha256": "59f725362b375db8df664d6cbeafead9bfc6ff21683f554de61e887beac7b00e"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support": {
+        "bytes": 83287,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\e3f098e65a1dc4ddb1129b79\\CodexSalvage_PowerUnit_86100_support.uasset",
+        "sha256": "c8e2bbb0e14258d7c538341bab4b60fb96561bcf44ba7093a831221e64d1cbed"
+      }
+    },
+    "placements_cm": {
+      "CodexSalvage_PowerUnit_86100": [
+        -367350.0,
+        346900.0,
+        18315.324
+      ]
+    },
+    "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts\\codex-ingestion-e3f098e65a1dc4ddb1129b79.json",
+    "saved_receipt_fingerprint": {
+      "bytes": 16364,
+      "sha256": "86c509329962af235780c72ce5f85189505ae3159003539f9ff59fe60ffff845"
+    },
+    "schema": "daedalus.codex-admitted-assembly.v1",
+    "seed": 86100,
+    "source_fingerprint": {
+      "bytes": 46940,
+      "sha256": "ff0a4ab513626b6793d346e9826b0f9315ed5b5c05bfbb6387dc27c047f850db"
+    },
+    "validated_saved_meshes": 5
+  },
+  "reused_actors": 0,
+  "save_return": true,
+  "saved_unreal": true,
+  "stage": "placed_and_saved",
+  "staging_only": true
+}

@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,6 +27,7 @@ BASE = ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest"
 CANDIDATES = {
     "hero-r4": ("CodexIsland_summit_rim_84011_HeroR4", BASE / "HeroR4/codex-hero-r4.delivery.json"),
     "garden-gate-r1": ("CodexIsland_cliff_garden_84022_GardenGateR1", BASE / "GardenGateR1/codex-garden-gate-r1.delivery.json"),
+    "power-unit": ("CodexSalvage_PowerUnit_86100", BASE / "codex-power-unit.delivery.json"),
 }
 NATIVE = '''import sys,hashlib,json,time
 from pathlib import Path
@@ -73,10 +75,13 @@ def steps():
 '''
 
 
-def run(candidate, review, deadline_epoch, expected_manifest_sha256):
+def run(candidate, review, deadline_epoch, expected_manifest_sha256, receipt_suffix=None):
     name, manifest = CANDIDATES[candidate]
-    report = BASE / ("codex-" + candidate + ".adoption.json")
-    reply_path = BASE / ("codex-" + candidate + ".adoption.reply.json")
+    if receipt_suffix is not None and re.fullmatch(r"[a-z0-9][a-z0-9-]{0,39}", receipt_suffix) is None:
+        raise ValueError("receipt suffix must be a bounded filename-safe revision")
+    stem = "codex-" + candidate + ("." + receipt_suffix if receipt_suffix else "")
+    report = BASE / (stem + ".adoption.json")
+    reply_path = BASE / (stem + ".adoption.reply.json")
     if report.exists() or reply_path.exists():
         raise RuntimeError("inspect retained attempt before another run: " + str(report))
     actual = hashlib.sha256(manifest.read_bytes()).hexdigest()
@@ -111,5 +116,6 @@ if __name__ == "__main__":
     parser.add_argument("--review", type=Path, required=True)
     parser.add_argument("--deadline-epoch", type=float, required=True)
     parser.add_argument("--expected-manifest-sha256", required=True)
+    parser.add_argument("--receipt-suffix", help="retain a separate later production/reuse receipt; never replaces an earlier attempt")
     args = parser.parse_args()
-    run(args.candidate, args.review, args.deadline_epoch, args.expected_manifest_sha256)
+    run(args.candidate, args.review, args.deadline_epoch, args.expected_manifest_sha256, args.receipt_suffix)

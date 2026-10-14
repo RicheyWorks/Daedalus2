@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'connectors/claude-asset-pipeline'))
 from asset_pipeline import wire
 from codex_contest_island_delivery import ASSET,Mcp,fingerprint,package
-from codex_admitted_asset_assembly import _retained_contract
+from codex_admitted_asset_assembly import POWER_NAME, _retained_contract
 from codex_workshop_terrain import _islands
 APP='EditorToolset.EditorAppToolset'
 
@@ -40,7 +40,8 @@ def apply(folder,islands,journal,repair_empty_base=False,assembly=None,source_re
         expected=_retained_contract(settings,{})
         name=candidate['name']
         plan=placed.get('plan',{})
-        if islands!={name} or candidate.get('stage')!='exported' or candidate.get('schema')!='daedalus.codex-island.v1':
+        source_schema='daedalus.codex-salvage-assembly.v1' if name==POWER_NAME else 'daedalus.codex-island.v1'
+        if islands!={name} or candidate.get('stage')!='exported' or candidate.get('schema')!=source_schema:
             raise ValueError('select one exact exported retained candidate for its own palette')
         if placed.get('stage')!='placed_and_saved' or placed.get('save_return') is not True or plan.get('schema')!='daedalus.codex-admitted-assembly.v1':
             raise ValueError('additional retained candidate must have a saved admitted assembly')
@@ -52,7 +53,7 @@ def apply(folder,islands,journal,repair_empty_base=False,assembly=None,source_re
         if len(source_objects)!=len(expected) or {row.get('name') for row in source_objects}!=expected or len(actors)!=len(expected) or {row.get('label') for row in actors}!=expected:
             raise ValueError('candidate source/actor roles differ from the exact retained contract')
         if len(entries)!=len(expected) or {row.get('label') for row in entries}!=expected or any(row.get('group')!=name for row in actors+entries):
-            raise ValueError('saved assembly entries leave the exact retained island')
+            raise ValueError('saved assembly entries leave the exact retained identity')
         if {(row['label'],row['mesh_path']) for row in actors}!={(row['label'],row['mesh_path']) for row in entries}:
             raise ValueError('saved actor mesh mapping differs from the admitted assembly plan')
         fbx=candidate.get('artifacts',{}).get('fbx',{})
@@ -211,7 +212,7 @@ if __name__=='__main__':
     parser.add_argument('--island',action='append',required=True)
     parser.add_argument('--journal',type=Path,required=True)
     parser.add_argument('--repair-inspected-empty-base',action='store_true',help='only after native inspection confirms the known failed owned stub has zero expressions')
-    parser.add_argument('--assembly',type=Path,help='saved admitted HeroR3/HeroR4/GardenGateR1 assembly journal; pair with --source-receipt')
+    parser.add_argument('--assembly',type=Path,help='saved admitted HeroR3/HeroR4/GardenGateR1/PowerUnit assembly journal; pair with --source-receipt')
     parser.add_argument('--source-receipt',type=Path,help='exact exported candidate receipt supplying its own palette/config/FBX witnesses')
     args=parser.parse_args()
     print(json.dumps(apply(args.folder,set(args.island),args.journal,args.repair_inspected_empty_base,args.assembly,args.source_receipt),indent=2))
