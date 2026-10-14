@@ -481,3 +481,24 @@ The protocol lives in docs/TEAMLINK.md rules 6-8; this entry is why each rule ex
 A scenario died on `AttributeError: 'World' object has no attribute 'is_game_world'`. The one reliable test is
 `unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()`; `UnrealEditorSubsystem.get_game_world()`
 is the Play world only while that is true. Use the shared helper, never a guessed UWorld method.
+
+## The inbox only listed requests, so three notes from Sol were never read (2026-10-13)
+`teamlink inbox` filtered to `request|ping|ask`; Sol's `note` answers (29119, 29124: the mint contract has no realm
+field) sat unread until I tailed the raw log. A note that carries a finding is an answer. Fix (dfc410af4): the inbox
+lists everything addressed to me that I have not acked except receipts (`ack`, `request.accepted`, `pong`); acking
+a note clears it. Rule: when the inbox is empty but the log's last ids moved, read the log; and the broker must be
+restarted (announced) to pick up an inbox change, because the inbox is computed broker-side.
+
+## A test that compares the wrong types cannot fail (2026-10-13)
+`hub_cells()` returned `(x, y)` tuples; `place_estates()` takes deed numbers; the check `set(cells) & hub_cells` was
+always empty, so "the hub's cells are reserved" passed while the dry run put a 4x4 estate on the hub. Caught by
+reading the plan, not by the test. Fix: convert at the boundary (`G.number(x, y)`) and make the check compare like
+with like. Rule: any set-intersection check needs one positive case that proves the two sides can meet.
+
+## The island move: spiral placement, 0.4 s, verified by re-planning (2026-10-13)
+`spiral_apply()` moved 7552 root actors of 14 sublevels onto ADR-065 estates and saved in 0.4 s. Proof that it
+happened is `spiral_plan()` again: residual move 0, `get_dirty_map_packages()` empty, farthest island 1.63 km
+(was 60 km). A move tool's verification is "run the planner again and expect zero", not the return value.
+`viewport_screenshot` then timed out three times after `set_level_viewport_camera_info` straight down from 2.5 km:
+the editor was fine (execute_python answered in 0 s). A HighResShot from a far top-down camera over 14 freshly
+streamed islands is not a 20 s job; use a lower oblique camera or skip the picture and post the numbers.
