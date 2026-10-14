@@ -21,12 +21,15 @@ int main()
         CHECK(gate.RecordBullAtSea(id, true, true) == Outcome::Duplicate);
     }
     CHECK(gate.BullsAtSea() == 10 && gate.Eligible());
+    CHECK(gate.HasRecordedBull("0"));
+    CHECK(!gate.HasRecordedBull("not-counted"));
     CHECK(gate.ClaimReward());
     CHECK(!gate.ClaimReward());
     const auto saved = gate.Export();
     Gate restored;
     CHECK(restored.Restore(saved));
     CHECK(restored.Eligible() && restored.RewardClaimed());
+    CHECK(restored.HasRecordedBull("0"));
     CHECK(!restored.ClaimReward());
     CHECK(!restored.Restore(saved));
     Snapshot invalid = saved;

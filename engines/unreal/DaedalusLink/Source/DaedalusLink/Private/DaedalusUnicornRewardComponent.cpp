@@ -48,6 +48,13 @@ bool UDaedalusUnicornRewardComponent::RecordBullAtSea(const FString& BullId, boo
     return Accepted;
 }
 
+bool UDaedalusUnicornRewardComponent::HasRecordedBull(const FString& BullId) const
+{
+    if (!CanRecord()) return false;
+    const FTCHARToUTF8 Encoded(*BullId);
+    return Gate.HasRecordedBull(std::string(Encoded.Get(), Encoded.Length()));
+}
+
 bool UDaedalusUnicornRewardComponent::RecordPackEncounter(const FString& PackId, int32 Members, bool EncounterVerified)
 {
     if (!CanRecord() || RecordRevision == MAX_int64 || Members != static_cast<int32>(DaedalusUnicornReward::Gate::LegendaryPackSize)) return false;

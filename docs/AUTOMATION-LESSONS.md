@@ -925,3 +925,7 @@ BullSeaEventComponent bindsstablebull identity/creditedplayer throughhost only, 
 ### Bound sea-arrival callbacks to current overlap and actor lifetime (2026-10-14)
 Bullproducer guardsreentrant record callbacks, retries at4Hz onlywhile stilloverlapping pendingsea, andclears timer/delegates onexit/EndPlay. Hostfire updates canextinguish eligibility beforecredit. Rootinside-volume validation remainsrequired; no tickingactorloop. Sourceonly/UHT-runtime pending; authoredvolumes,movement anddurableeventreplay remainunfinished.
 
+
+### Settle duplicate sea arrivals from restored identity evidence (2026-10-14)
+Core/authorityquery exposes alreadyrecordedbull IDs withoutmutation. Sea producer can settle a duplicate fromtheloaded record ratherthanretrying forever; itstillrequires currentsea containment. Bindvalidates actualUTF8byte identity throughsharedcorevalidator, preservingembeddedNUL forrejection. Nativeportablecore42checks pass; UEproducer/UHT/runtime pending.
+

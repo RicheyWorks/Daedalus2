@@ -24,6 +24,8 @@ bool UDaedalusBullSeaEventComponent::BindHostBull(const FString& StableBullId, U
     if (!Authority() || !BullId.IsEmpty() || StableBullId.IsEmpty() || StableBullId.Len() > 100 ||
         !IsValid(CreditedPlayer) || CreditedPlayer->GetWorld() != GetWorld() ||
         !CreditedPlayer->GetOwner() || !CreditedPlayer->GetOwner()->HasAuthority()) return false;
+    const FTCHARToUTF8 Encoded(*StableBullId);
+    if (!DaedalusUnicornReward::Gate::ValidEntityIdentity(std::string(Encoded.Get(), Encoded.Length()))) return false;
     BullId = StableBullId;
     Reward = CreditedPlayer;
     bBurningVerified = BurningVerified;
@@ -48,7 +50,7 @@ bool UDaedalusBullSeaEventComponent::RetryPendingArrival()
         Sea->GetWorld() != GetWorld() || !Sea->ActorHasTag(TEXT("DaedalusSeaArrival")) ||
         !Sea->EncompassesPoint(GetOwner()->GetActorLocation())) return false;
     TGuardValue<bool> Guard(bRecordingArrival, true);
-    bArrivalRecorded = Player->RecordBullAtSea(BullId, true, true);
+    bArrivalRecorded = Player->HasRecordedBull(BullId) || Player->RecordBullAtSea(BullId, true, true);
     if (bArrivalRecorded) ClearPendingArrival();
     return bArrivalRecorded;
 }

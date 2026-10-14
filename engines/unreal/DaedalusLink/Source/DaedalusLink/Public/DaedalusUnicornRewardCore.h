@@ -49,6 +49,8 @@ public:
     }
 
     unsigned BullsAtSea() const { return static_cast<unsigned>(Bulls.size()); }
+    static bool ValidEntityIdentity(const std::string& id) { return Identity(id); }
+    bool HasRecordedBull(const std::string& id) const { return Identity(id) && Bulls.count(id) != 0; }
     bool HasLegendaryEncounter() const { return !PackId.empty(); }
     const std::string& EncounterId() const { return PackId; }
     bool Eligible() const { return Quest.Complete(); }

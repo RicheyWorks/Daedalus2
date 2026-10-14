@@ -42,6 +42,8 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RecordBullAtSea(const FString& BullId, bool WasBurning, bool SeaArrivalVerified);
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
+    bool HasRecordedBull(const FString& BullId) const;
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
     bool RecordPackEncounter(const FString& PackId, int32 Members, bool EncounterVerified);
     /** Call only AFTER the host committed its idempotent durable reward transaction. */
     UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category="Daedalus|Unicorn")
