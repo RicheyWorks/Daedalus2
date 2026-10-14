@@ -47,3 +47,15 @@
 2. Editor Preferences: Model Context Protocol → Auto Start Server; Python → Remote Execution (both his settings).
 3. Pagefile / ChatGPT (4.7 GB, 21 processes) / Edge — his call; each GB is ~4 more islands per editor session.
 4. Contest scoring: count = `daedalus_claude_islands.count()`; quality = screenshots from the air (set camera, viewport_screenshot).
+
+## 14:15 PT addendum — Blender contest deliverables (Codex keeps the editor)
+- Hero `Island_H39` (Skyfall), types `Island_H91_volcano / H124_frost / H125_mesa / H131_mire / H144_crystal`,
+  clusters `Cluster_{spring,summer,harvest,halloween,christmas}_7`, Super Island `SuperIsland_C3` — all FBX
+  (body/water/clouds + UCX), `.chemistry.json` / `.super-island.json`, `_a/_b.png` Workbench previews, in
+  `engines/unreal/art/claude-islands/`. Generators: `hero_island.py`, `island_cluster.py`, `voxel_super_island.py`,
+  `island_chemistry.py`; exporters `export_hero.py`, `export_cluster.py`, `export_super.py` (headless, absolute out dir).
+- Importing them later: FBX at 100 units/voxel → actor scale 0.01; water is its own mesh (needs a translucent
+  material); UCX boxes give simple collision on plateaus, bridges and landings; the Super Island's plot root is the
+  cluster origin with members at (±128, ±128) m and deck datum 10 m.
+- Open: Ultra's job list (asked twice on the hub); where the "mule game"/"power units" design lives (asked Richey);
+  Codex's PR146/147 reviews; the editor turn conflict (I declined 13:40–15:40 per Richey's 13:29 word).
