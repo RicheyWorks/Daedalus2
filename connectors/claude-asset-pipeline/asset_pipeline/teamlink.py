@@ -725,6 +725,9 @@ def main(argv=None):
         if a.text:
             body["text"] = " ".join(a.text)
         out = {"id": link.send(a.to, a.type, body, reply_to=a.reply_to, topic=a.topic)}
+        if out["id"] is None:   # 2026-10-13 22:46: a dead broker answered {"id": null} and a request was lost
+            print(json.dumps({"id": None, "error": "hub down: nothing was sent (teamlink.ps1 -Status / -Start)", "port": a.port}, indent=1))
+            return 2
     elif a.cmd == "wait":
         msgs, last = link.wait(a.after, a.timeout)
         out = {"messages": msgs, "last": last}
