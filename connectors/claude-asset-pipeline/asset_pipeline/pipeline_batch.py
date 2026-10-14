@@ -216,8 +216,12 @@ class BatchExecutor:
                 report['lease_observation']=lease
                 report['phase']='import'
                 self.journal.checkpoint(asset['name'],report)
+                def dispatch_guard():
+                    report['dispatch_lease_observation']=self.authorize()
+                    self.journal.checkpoint(asset['name'],report)
                 pipeline.land(report,asset['dest'],True,self.addr,self.timeout,
-                              checkpoint=lambda r,name=asset['name']:self.journal.checkpoint(name,r))
+                              checkpoint=lambda r,name=asset['name']:self.journal.checkpoint(name,r),
+                              before_dispatch=dispatch_guard)
                 report['phase']='verified'
                 self.journal.finish(asset['name'],report)
                 processed+=1

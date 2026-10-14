@@ -792,3 +792,7 @@ This executor reuses the pipeline and does not introduce another art board or re
 ### Scene consumer review corrections (2026-10-13)
 An exception string can legitimately be empty. Accept empty diagnostic text while retaining its required field. Explicit observed:null is different from a missing observed key. Catalogue diagnostic count, retained list and truncation flag must agree. Consumer CI must execute actual pinned producer fixtures plus malformed-value regressions; unrelated green pipeline checks do not prove this contract.
 
+
+### Lease observation at dispatch (2026-10-14)
+Preparation can outlive an initially valid lease. Reobserve the existing owner/window after preparation, before request bytes are sent. A failed final gate is genuinely not-dispatched, unlike a send/response failure. Preserve both lease observations; never silently acquire or renew. This is a host guard, not an engine-side atomic fencing guarantee.
+

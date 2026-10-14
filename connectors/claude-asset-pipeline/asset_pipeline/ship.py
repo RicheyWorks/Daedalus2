@@ -166,7 +166,7 @@ def import_snapshot(path, expected):
     return snapshot
 
 
-def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT, checkpoint=None):
+def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT, checkpoint=None, before_dispatch=None):
     """The Unreal half: import the exported file, then judge all three sides."""
     expected = report.get("artifact")
     current = fingerprint(report["path"])
@@ -190,7 +190,7 @@ def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, ti
         if checkpoint is not None:
             checkpoint(report)
     made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal",
-                     receipt=report["transport"], on_progress=progress, unattended=False,
+                     receipt=report["transport"], on_progress=progress, before_dispatch=before_dispatch, unattended=False,
                      bridge_timeout=timeout,
                      code=sides.script(sides.UNREAL_IMPORT, path=snapshot, artifact=current, dest=report["dest"], save=save))
     report["import_state"] = "reply-received"

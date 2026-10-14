@@ -39,3 +39,6 @@ unknown dispatch refusal, and overlapping-writer lock refusal. No bridge/editor 
 This does not prove live batch speed, import correctness or frame-budget behavior on large assets.
 Shared-editor operation remains owner-controlled. A separate journal does not grant a second engine
 lease; the lease guard is required before mutation.
+
+The existing Unreal lease is observed again after artifact preparation and TCP connection, immediately before any request bytes are sent. A refused final gate publishes not-dispatched and closes that connection. It does not acquire or renew a lease. Broker observation cannot atomically fence engine execution; other teams must still respect the lease handoff.
+
