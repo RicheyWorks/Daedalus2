@@ -63,6 +63,19 @@ def main(argv):
             if not s.get("running"):
                 break
         r = s.get("result") or {}
+        if r.get("interrupted"):   # a person drove the Play window: rerun this one once, hands off
+            print("%s INTERRUPTED: %s -> rerunning once" % (name, r["interrupted"]), flush=True)
+            time.sleep(5)
+            wire.call(wire.UNREAL, "daedalus.play_scenario", name=name, timeout=20)
+            for _ in range(180):
+                time.sleep(1)
+                s = wire.call(wire.UNREAL, "daedalus.play_status", timeout=20)
+                if not s.get("running"):
+                    break
+            r = s.get("result") or {}
+            if r.get("interrupted"):
+                print("%s INTERRUPTED again: counted as not run" % name, flush=True)
+                continue
         print("%s error= %s passed=%s/%s" % (name, s.get("error"), r.get("passed"), r.get("total")), flush=True)
         for c in r.get("checks", []):
             print("  %s %s :: %s" % ("PASS" if c["pass"] else "FAIL", c["check"], (c.get("detail") or "")[:260]), flush=True)

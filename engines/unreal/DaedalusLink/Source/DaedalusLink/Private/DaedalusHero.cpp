@@ -1500,7 +1500,9 @@ ADaedalusGhost* ADaedalusHero::SpawnVehicle()
 	}
 	FActorSpawnParameters P;
 	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	return W->SpawnActor<ADaedalusGhost>(ADaedalusGhost::StaticClass(), Spot, FRotator(0.f, Yaw, 0.f), P);
+	ADaedalusGhost* G = W->SpawnActor<ADaedalusGhost>(ADaedalusGhost::StaticClass(), Spot, FRotator(0.f, Yaw, 0.f), P);
+	if (G) G->Wear(RealmNow());   // the realm's mount (DaedalusMountCore): drone, helicopter, plane, sky-strider
+	return G;
 }
 
 void ADaedalusHero::FetchFoeRules()
@@ -2192,6 +2194,7 @@ FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, co
 	// Enter: the 8-bit realm opens over the world; the Ocean and the gated realms are their hosts' to stream.
 	if (Dest == TEXT("PORTAL")) EnterRealm(static_cast<int64>(GetTypeHash(From)) % 1000000);
 	else LandedAt = LandAt(Dest, Hint);
+	if (UWorld* W = GetWorld()) LastRealmSwitchAt = W->GetTimeSeconds();
 	SaveProgress();
 	UE_LOG(LogDaedalus, Log, TEXT("Realm %s -> %s by %s at %s"), *From, *Dest, *ViaStr, *Hint);
 	return FString::Printf(TEXT("ok %s -> %s via=%s hint=%s"), *From, *Dest, *ViaStr, *Hint);

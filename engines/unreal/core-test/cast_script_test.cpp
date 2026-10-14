@@ -123,7 +123,7 @@ int main(int argc, char** argv)
         Bt = H.Talk();
         Check("and never twice", Bt.Gifts.empty() && Bt.Text.find("honey's holding") != std::string::npos, Bt.Text);
         // every gift in every cast names an item of that realm's catalog
-        for (const char* F : {"gallery-city", "parcels", "bricks", "labyrinth"})
+        for (const char* F : {"gallery-city", "parcels", "bricks", "labyrinth", "world-zero"})
         {
             Cast C;
             C.Parse(ReadAll(Dir + "/" + F + ".dcs"), E);
@@ -137,7 +137,7 @@ int main(int argc, char** argv)
     }
 
     // ---- every shipped cast parses, and each has a quest chain that sets a flag
-    for (const char* F : {"parcels", "bricks", "labyrinth"})
+    for (const char* F : {"parcels", "bricks", "labyrinth", "world-zero"})
     {
         Cast C;
         std::string E;
@@ -146,7 +146,26 @@ int main(int argc, char** argv)
         if (!Loaded) continue;
         int Flags = 0, Asks = 0;
         for (const Script& S : C.Scripts) for (const Step& T : S.Steps) for (const Node& N : T.Nodes) { Flags += N.K == Node::Kind::Set; Asks += N.K == Node::Kind::Ask; }
-        Check(std::string(F) + ": at least ten roles, flags and questions", C.Scripts.size() >= 10 && Flags >= 5 && Asks >= 8, std::to_string(C.Scripts.size()) + " " + std::to_string(Flags) + " " + std::to_string(Asks));
+        const bool Hub = std::string(F) == "world-zero";   // the six cross-realm NPCs (REALM-CASTS build order 1)
+        Check(std::string(F) + (Hub ? ": six cross-realm roles, flags and questions" : ": at least ten roles, flags and questions"),
+              (Hub ? C.Scripts.size() == 6 : C.Scripts.size() >= 10) && Flags >= 5 && Asks >= (Hub ? 6 : 8), std::to_string(C.Scripts.size()) + " " + std::to_string(Flags) + " " + std::to_string(Asks));
+    }
+    {
+        // Zee's stock follows the realms visited: the realm casts set visited_* and Zee reads them through the
+        // shared flags; the first matching branch wins, so the most recent realm must be tested first.
+        Cast Z;
+        std::string E;
+        Z.Parse(ReadAll(Dir + "/world-zero.dcs"), E);
+        const Script* S = Z.Find("Wandering Merchant Zee");
+        Conversation Fresh, Back;
+        bool Ok = S != nullptr;
+        std::string First, Stock;
+        if (S)
+        {
+            Fresh.Bind(S); First = Fresh.Talk().Text;
+            Back.Bind(S); Back.Restore("start:0 visited_gallery"); Stock = Back.Talk().Text;
+        }
+        Check("Zee without travel has no stock; after the galleries, gallery goods", Ok && First.find("Stock follows") != std::string::npos && Stock.find("galleries") != std::string::npos, First + " | " + Stock);
     }
     {
         // The Riddler's door and the Apprentice share a realm-wide flag: the host copies it in on bind.
