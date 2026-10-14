@@ -38,7 +38,10 @@ PAL.update({
 BONES = (("root", (0, 0, 0), (0, 0, 0.1), None), ("body", (0, 0, 0.3), (0, 0, 0.6), "root"), ("head", (0, 0.3, 0.6), (0, 0.3, 0.9), "body"),
          ("tail", (0, -0.3, 0.5), (0, -0.6, 0.5), "body"), ("leg.L", (0.15, 0, 0.3), (0.15, 0, 0.0), "body"), ("leg.R", (-0.15, 0, 0.3), (-0.15, 0, 0.0), "body"),
          ("wing.L", (0.2, 0, 0.6), (0.6, 0, 0.6), "body"), ("wing.R", (-0.2, 0, 0.6), (-0.6, 0, 0.6), "body"))
-CLIPS = (("Idle", 48), ("Walk", 24), ("Attack", 24), ("Hurt", 24))
+CLIPS = (("Idle", 48), ("Walk", 24), ("Run", 16), ("Attack", 24), ("Hurt", 24), ("Turn", 24), ("Jump", 24), ("Action", 36))
+# VISUAL-QUALITY-BAR.md 117: idle/walk/run/start-stop/turn/jump-land/role action, grounded feet, head attention.
+# Walk and Run are stepped (CONSTANT keys) so feet plant instead of sliding; Turn yaws the body with the head leading;
+# Jump tucks the legs and lands with a squash; Action is the role move (graze/peck/sting/snap/swim-flip/shamble-grab).
 
 
 def box(out, bone, x0, y0, z0, w, d, h, colour):
@@ -591,7 +594,9 @@ def build(species, out_dir, scale=10.0, keep=False):
         p.rotation_mode = "XYZ"
     # clips: the same names and feel as the Portal creatures; plants snap instead of walking
     for clip, n in CLIPS:
-        if fam == "plant" and clip == "Walk":
+        if fam == "plant" and clip in ("Walk", "Run", "Jump", "Turn"):
+            continue
+        if fam in ("fish", "sea") and clip == "Jump":
             continue
         rig.animation_data_create()
         act = bpy.data.actions.new(name + "_" + clip)
@@ -613,13 +618,53 @@ def build(species, out_dir, scale=10.0, keep=False):
                 else:
                     rig.pose.bones["head"].rotation_euler.x = 0.08 * math.sin(ph)
                     rig.pose.bones["tail"].rotation_euler.z = 0.3 * math.sin(ph * 2)
+            elif clip == "Run" and fam not in ("plant",):
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.8 * math.sin(ph) * sgn
+                    rig.pose.bones["wing." + side].rotation_euler.y = (1.1 if fam in ("bird", "bee") else 0.4) * math.sin(ph * 2) * sgn
+                rig.pose.bones["body"].location.z = 0.06 * k * abs(math.sin(ph))
+                rig.pose.bones["body"].rotation_euler.x = 0.12                     # leans into the run
+                rig.pose.bones["head"].rotation_euler.x = 0.15 * math.sin(ph * 2)
+                rig.pose.bones["tail"].rotation_euler.z = 0.4 * math.sin(ph * 2)
+            elif clip == "Turn":
+                rig.pose.bones["head"].rotation_euler.z = 0.6 * math.sin(ph / 2)   # the head leads
+                rig.pose.bones["body"].rotation_euler.z = 0.5 * math.sin(ph / 2 - 0.4)
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.25 * math.sin(ph) * sgn
+            elif clip == "Jump" and fam not in ("plant", "fish", "sea"):
+                h = max(0.0, math.sin(ph)) if ph < math.pi else 0.0
+                rig.pose.bones["body"].location.z = 0.6 * k * h - (0.08 * k * max(0.0, math.sin(ph - math.pi)))   # arc, then land squash
+                for side in ("L", "R"):
+                    rig.pose.bones["leg." + side].rotation_euler.x = -0.7 * h                     # tuck
+                rig.pose.bones["head"].rotation_euler.x = -0.2 * h
+            elif clip == "Action":
+                if fam == "animal":
+                    rig.pose.bones["head"].rotation_euler.x = 0.7 * (1 - math.cos(ph)) / 2          # graze
+                elif fam == "bird":
+                    rig.pose.bones["head"].rotation_euler.x = 0.9 * max(0.0, math.sin(ph * 3))      # peck
+                elif fam == "bee":
+                    rig.pose.bones["tail"].rotation_euler.x = 0.8 * max(0.0, math.sin(ph))          # sting
+                    rig.pose.bones["body"].rotation_euler.x = -0.4 * max(0.0, math.sin(ph))
+                elif fam in ("fish", "sea"):
+                    rig.pose.bones["body"].rotation_euler.y = 2 * math.pi * (ph / (2 * math.pi))    # a full flip
+                elif fam == "zombie":
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.x = -0.6 * (1 - math.cos(ph)) / 2   # grab
+                    rig.pose.bones["head"].rotation_euler.x = 0.3 * math.sin(ph)
+                elif fam == "dino":
+                    rig.pose.bones["head"].rotation_euler.z = 0.5 * math.sin(ph)                    # roar sweep
+                    rig.pose.bones["head"].rotation_euler.x = -0.4 * max(0.0, math.sin(ph))
+                else:
+                    rig.pose.bones["head"].rotation_euler.x = -0.9 * (1 - math.cos(ph)) / 2
             elif clip == "Walk" and fam == "fish":
                 rig.pose.bones["tail"].rotation_euler.z = 0.5 * math.sin(ph * 2)
                 rig.pose.bones["body"].rotation_euler.z = 0.1 * math.sin(ph * 2)
                 rig.pose.bones["body"].location.z = 0.3 * k + 0.03 * k * math.sin(ph)
             elif clip == "Walk":
                 for side, sgn in (("L", 1), ("R", -1)):
-                    rig.pose.bones["leg." + side].rotation_euler.x = 0.45 * math.sin(ph) * sgn
+                    rig.pose.bones["leg." + side].rotation_euler.x = (0.3 if fam == "zombie" else 0.45) * math.sin(ph) * sgn
+                if fam == "zombie":
+                    rig.pose.bones["body"].rotation_euler.z = 0.15 * math.sin(ph)              # the shamble
                     rig.pose.bones["wing." + side].rotation_euler.y = (0.8 if fam == "bird" else 0.15) * math.sin(ph * (2 if fam == "bird" else 1)) * sgn
                 rig.pose.bones["body"].location.z = 0.03 * k * abs(math.sin(ph))
                 rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 2)
@@ -637,7 +682,7 @@ def build(species, out_dir, scale=10.0, keep=False):
             for p in rig.pose.bones:
                 p.keyframe_insert(data_path="rotation_euler", frame=f)
                 p.keyframe_insert(data_path="location", frame=f)
-        if clip == "Walk":
+        if clip in ("Walk", "Run"):
             for fc in act.fcurves:
                 for key in fc.keyframe_points:
                     key.interpolation = "CONSTANT"        # the stepped voxel feel, like the Portal creatures
@@ -665,5 +710,5 @@ def build(species, out_dir, scale=10.0, keep=False):
     import json
     with open(glb[:-4] + ".json", "w", encoding="utf-8") as f:
         json.dump({"species": species, "family": fam, "voxel_cm": scale, "height_m": round(zmax, 2), "bones": [b[0] for b in BONES],
-                   "clips": [c for c, _ in CLIPS if not (fam == "plant" and c == "Walk")], "voxels": {b: len(v) for b, v in parts.items()}}, f, indent=1)
+                   "clips": [t.name for t in rig.animation_data.nla_tracks], "voxels": {b: len(v) for b, v in parts.items()}}, f, indent=1)
     return {"species": species, "glb": glb, "height_m": zmax}

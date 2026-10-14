@@ -26,7 +26,39 @@ for sp in species:
     name = "Creature_" + "".join(w.capitalize() for w in sp.split("_"))
     if os.path.exists(os.path.join(out_dir, name + ".glb")) and "--force" not in argv:
         continue
-    r = VC.build(sp, out_dir, keep="--sheet" in argv)      # keep objects only when a contact sheet is wanted
+    r = VC.build(sp, out_dir, keep=("--sheet" in argv) or ("--views" in argv))
+    if "--views" in argv:                                   # quality-bar views: front / side / back + grayscale silhouette
+        sc = bpy.context.scene
+        sc.render.engine = "BLENDER_WORKBENCH"
+        sc.render.resolution_x, sc.render.resolution_y = 600, 600
+        if sc.world is None:
+            sc.world = bpy.data.worlds.new("Sky")
+        sc.world.use_nodes = False
+        sc.world.color = (0.62, 0.72, 0.88)
+        cam = bpy.data.objects.get("ViewCam") or bpy.data.objects.new("ViewCam", bpy.data.cameras.new("ViewCam"))
+        if cam.name not in sc.collection.objects:
+            sc.collection.objects.link(cam)
+        sc.camera = cam
+        cam.data.lens = 50
+        h = max(r["height_m"], 0.4)
+        for o in bpy.data.objects:
+            if o.type == "MESH" and "Col" in o.data.color_attributes:
+                o.data.color_attributes.active_color = o.data.color_attributes["Col"]
+        for view, (yaw, color) in {"front": (90, "VERTEX"), "side": (0, "VERTEX"), "back": (270, "VERTEX"), "silhouette": (0, "SINGLE")}.items():
+            a = math.radians(yaw)
+            cam.location = (3.2 * h * math.cos(a), 3.2 * h * math.sin(a), h * 0.6)
+            cam.rotation_euler = (math.radians(85), 0, a + math.radians(90))
+            sc.display.shading.color_type = color
+            sc.display.shading.single_color = (0.02, 0.02, 0.02)
+            sc.display.shading.light = "FLAT" if view == "silhouette" else "STUDIO"
+            sc.render.filepath = os.path.join(out_dir, "views", name + "." + view + ".png")
+            bpy.ops.render.render(write_still=True)
+        for o in list(bpy.data.objects):
+            if o.name.startswith(name):
+                bpy.data.objects.remove(o, do_unlink=True)
+        for a in list(bpy.data.actions):
+            if a.name.startswith(name + "_"):
+                bpy.data.actions.remove(a)
     print("CREATURE %s %.2f m %.1fs" % (sp, r["height_m"], time.time() - t), flush=True)
     done.append(sp)
 # contact sheet: line every creature up on a grid and render once (Workbench, vertex colours)
