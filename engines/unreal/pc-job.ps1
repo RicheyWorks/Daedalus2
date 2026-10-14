@@ -2,8 +2,8 @@
 # A long job on this PC that outlives the Claude call, quiet with antivirus (ADR-045), for anything that is not
 # an Unreal build (those are unreal-job.ps1): a Play-scenario run, an import, a server probe.
 #
-#   .\pc-job.ps1 -Start -Script tools\unreal_play\run_scenarios.py -ScriptArgs "cast realm_switch"   -> "started job-MMdd-HHmmss pid=N"
-#   .\pc-job.ps1 -Wait  [-Id x] [-Seconds 50]                                                 -> RUNNING / DONE <code> + the tail
+#   .\pc-job.ps1 -Start -Script tools\unreal_play\run_scenarios.py -ScriptArgs "cast realm_switch"   -> "started job-MMdd-HHmmss-<unique> pid=N"
+#   .\pc-job.ps1 -Wait  [-Id x] [-Seconds 50]                                                 -> RUNNING / DONE <code> + the tail; exits with the completed job's code
 #   .\pc-job.ps1 -Tail  [-Id x] [-Lines 40]
 #
 # The rules that keep Norton quiet (2026-10-13: a hidden python started from %TEMP% with redirected output was
@@ -17,16 +17,21 @@ param(
 )
 $Jobs = Join-Path $env:LOCALAPPDATA "Daedalus\jobs"
 New-Item -ItemType Directory -Force -Path $Jobs | Out-Null
-$Repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+$Repo = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..\..")
 
-function Latest { Get-ChildItem $Jobs -Filter "job-*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1 | ForEach-Object { $_.BaseName } }
+function Latest {
+    # A launch can be waiting for cmd to create its log, or fail before a log exists.
+    Get-ChildItem -LiteralPath $Jobs -File | Where-Object { $_.Name -like "job-*.log" -or $_.Name -like "job-*.exit" -or $_.Name -like "job-*.started" } |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 1 | ForEach-Object { $_.BaseName }
+}
 
 if ($Start) {
     if (-not $Script) { throw "-Script <path relative to the repo> is required" }
     $full = Join-Path $Repo $Script
-    if (-not (Test-Path $full)) { throw "no such script in the repo: $full" }
+    if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { throw "no such script in the repo: $full" }
     if ($full -like "$env:TEMP*") { throw "scripts never run from TEMP (ADR-045)" }
-    $Id = "job-" + (Get-Date -Format "MMdd-HHmmss")
+    # Starts within the same second must never share a log or an old completion marker.
+    $Id = "job-" + (Get-Date -Format "MMdd-HHmmss") + "-" + [guid]::NewGuid().ToString("N")
     $log = Join-Path $Jobs "$Id.log"
     $exit = Join-Path $Jobs "$Id.exit"
     # A WMI-started cmd has the system PATH only, where "python" is the Store alias that exits 0 doing nothing:
@@ -39,9 +44,17 @@ if ($Start) {
     # cmd creates the log itself: a log pre-created by PowerShell's Out-File swallowed everything cmd appended to it
     # (every job read 'DONE 0' with no output; reproduced 2026-10-13), so nothing touches the log before cmd does.
     $stamp = Get-Date -Format s
-    $cmd = "cmd.exe /S /c `"cd /d `"$Repo`" && (echo $stamp start $Script $ScriptArgs > `"$log`") && $runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & echo done %ERRORLEVEL% > `"$exit`"`""
-    $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
-    $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
+    # A plain %ERRORLEVEL% in this /c line expands before the job runs. CALL expands the
+    # caret-protected variable after it finishes. Default to failure until the child
+    # actually runs: a failed echo redirection can leave cmd's ERRORLEVEL at zero. Keep
+    # delayed expansion off so literal ! in paths and arguments survives, and disable AutoRun.
+    # Publish only a complete marker: Wait must not see the file between creation and echo.
+    $cmd = "cmd.exe /D /E:ON /V:OFF /S /c `"set `"ERRORLEVEL=`" & set `"PCJOB_CODE=1`" & cd /d `"$Repo`" && (echo $stamp start > `"$log`") && ($runner `"$full`" $ScriptArgs >> `"$log`" 2>&1 & call set PCJOB_CODE=^%ERRORLEVEL^%) & call echo done ^%PCJOB_CODE^% > `"$exit.tmp`" && move /y `"$exit.tmp`" `"$exit`" > nul`""
+    $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 } -ErrorAction Stop
+    $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup } -ErrorAction Stop
+    if ($r.ReturnValue -ne 0 -or -not $r.ProcessId) { throw "could not start $Id (Win32_Process.Create returned $($r.ReturnValue), pid=$($r.ProcessId))" }
+    # Record the accepted launch without precreating cmd's output log.
+    Set-Content -LiteralPath (Join-Path $Jobs "$Id.started") -Value "pid=$($r.ProcessId)" -Encoding ASCII -ErrorAction Stop
     "started $Id pid=$($r.ProcessId)"
     exit
 }
@@ -49,11 +62,17 @@ if ($Start) {
 if (-not $Id) { $Id = Latest }
 $log = Join-Path $Jobs "$Id.log"; $exit = Join-Path $Jobs "$Id.exit"
 
+$jobCode = 0
 if ($Wait) {
     $until = (Get-Date).AddSeconds($Seconds)
-    while ((Get-Date) -lt $until -and -not (Test-Path $exit)) { Start-Sleep -Seconds 3 }
-    if (Test-Path $exit) { (Get-Content $exit).Trim().ToUpper() } else { "RUNNING $Id" }
+    while ((Get-Date) -lt $until -and -not (Test-Path -LiteralPath $exit)) { Start-Sleep -Seconds 3 }
+    if (Test-Path -LiteralPath $exit) {
+        $marker = (Get-Content -LiteralPath $exit -Raw | Out-String).Trim()
+        if ($marker -match '^done (-?\d+)$' -and [int]::TryParse($Matches[1], [ref]$jobCode)) { "DONE $jobCode" }
+        else { "FAILED $Id invalid exit marker"; $jobCode = 1 }
+    } else { "RUNNING $Id" }
 }
-if (Test-Path $log) { Get-Content $log -Tail $Lines }
+if (Test-Path -LiteralPath $log -PathType Leaf) { Get-Content -LiteralPath $log -Tail $Lines }
 $norton = Join-Path $env:TEMP "daedalus-norton.log"
 if (Test-Path $norton) { $a = Get-Content $norton | Where-Object { $_ -ge (Get-Date).AddMinutes(-30).ToString("s") }; if ($a) { "NORTON is asking you something:"; $a } }
+if ($Wait) { exit $jobCode }
