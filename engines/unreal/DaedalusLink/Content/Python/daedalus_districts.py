@@ -356,6 +356,33 @@ def dress_islands_steps(realms, decor_per_district=3):
     return {"districts": done, "props": props}
 
 
+HUB_DISTRICTS = frozenset((44, 45, 54, 55))   # the hub island's four districts keep their labelled Land_ actors
+
+
+def convert_steps(realm, keep_districts=HUB_DISTRICTS):
+    """Replace a realm's old per-plot Land_<R>_<n> actors (and their signs) outside the hub districts with
+    instanced district actors, then dress them (01:28: Gallery City still had 57 districts as 5,860 slab actors).
+    One district per tick. Returns {districts, actors_removed}."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    by_d = {}
+    for label, a in P._existing(realm).items():
+        d = next((int(str(t)[9:]) for t in a.tags if str(t).startswith("District:")), None)
+        if d is None or d in keep_districts:
+            continue
+        by_d.setdefault(d, []).append(a)
+    gone = 0
+    for d in sorted(by_d):
+        for a in by_d[d]:
+            sub.destroy_actor(a)
+            gone += 1
+        yield "%s D%02d: %d slab actors removed" % (realm, d, len(by_d[d]))
+    r = yield from lay_district_steps(realm, sorted(by_d))
+    r2 = yield from dress_islands_steps([realm])
+    return {"districts": len(by_d), "actors_removed": gone, "laid": r, "dressed": r2}
+
+
 def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, sublevels=False, ground=None):
     """Lay EVERY free cell of each district as ONE instanced-mesh actor (Lands_<Realm>_D<dd>: 100 plot instances
     of the cube, tagged District:<d>, instance i = district_cells(d)[i]) plus the district's ground slab, straight
