@@ -693,6 +693,8 @@ def main(argv=None):
             p.add_argument("--body", default="{}", help="JSON (or use --asset / --text: no quoting trouble in PowerShell)")
             p.add_argument("--asset", help="shorthand for --body {\"asset\": ...}")
             p.add_argument("--text", nargs="+", help="shorthand for --body {\"text\": ...}; the rest of the line")
+            p.add_argument("--reply-to", type=int, default=None, help="the broker id this answers (inbox protocol: answers carry it)")
+            p.add_argument("--topic", default=None)
         if name in ("wait", "log"):
             p.add_argument("--after", type=int, default=0)
             p.add_argument("--timeout", type=float, default=25)
@@ -720,7 +722,7 @@ def main(argv=None):
             body["asset"] = a.asset
         if a.text:
             body["text"] = " ".join(a.text)
-        out = {"id": link.send(a.to, a.type, body)}
+        out = {"id": link.send(a.to, a.type, body, reply_to=a.reply_to, topic=a.topic)}
     elif a.cmd == "wait":
         msgs, last = link.wait(a.after, a.timeout)
         out = {"messages": msgs, "last": last}

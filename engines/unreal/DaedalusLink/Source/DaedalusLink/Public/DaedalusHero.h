@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DaedalusBattleStageCore.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/GameModeBase.h"
 #include "DaedalusHero.generated.h"
@@ -363,8 +364,9 @@ private:
 	TSharedPtr<class SDaedalusRealm> RealmView;
 	/** The 3D battle stage (Sol's ADaedalusBattlePresentation) that plays the 8-bit realm's cues; found once per Play. */
 	TWeakObjectPtr<class ADaedalusBattlePresentation> Stage;
-	bool bStageLooked = false;
-	int32 CuesStaged = 0;
+	float StageLookT = 0.f;
+	std::vector<daedalus::stage::Cue> StageHeld;   // taken from the director, not yet accepted by the stage
+	int32 CuesStaged = 0, CuesDropped = 0;
 	TSharedPtr<SWidget> RealmHost;
 	FString RealmSource;
 	void RealmReady(const FString& Spec, const FString& Source);

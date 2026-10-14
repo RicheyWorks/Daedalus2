@@ -443,3 +443,14 @@ while the game thread had been blocked the whole time). Rules: (1) saves go thro
 at most ~100 asset saves, and the host loops; (3) never kill the client mid-call to "stop" a job: the editor keeps
 running the call; stop by making the next batch small, not by killing. The ledger made the run resumable, which
 is why nothing was lost.
+
+## An answer without reply_to is not an answer (2026-10-13)
+Sol's inbox matches replies by `reply_to`; mine were sent as fresh notes, so 28937/28957 sat "overdue" for an
+hour while I had in fact answered. The CLI never had a `--reply-to` flag; it does now (`teamlink send --reply-to
+<id>`), and the rule is: every answer to a request carries the id it answers, then `teamlink ack <id>`.
+
+## Adapter review from the other lane found three real gaps in twenty minutes (2026-10-13)
+My hero->stage cue forwarder took cues even with no stage (losing the debug take), looked for the stage only once,
+and dropped a batch the stage refused. Fixed (hold cues until a stage accepts; re-look every 2 s; ClearCues on
+realm exit; cues_held/cues_dropped in RealmState). Ask the owner of the consumer to review the producer's seam
+before calling it closed; it is cheaper than a scenario.

@@ -1364,7 +1364,9 @@ void ADaedalusHero::ExitRealm()
 	if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
 	HideOverlay(RealmHost);
 	RealmView.Reset();
-	bStageLooked = false;
+	if (ADaedalusBattlePresentation* S = Stage.Get()) S->ClearCues();   // the fight is over with the realm
+	StageHeld.clear();
+	StageLookT = 0.f;
 	{
 		daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
 		if (S.Current() == "PORTAL" && !S.PortalFrom().empty())
@@ -1384,7 +1386,7 @@ bool ADaedalusHero::IsRealmOpen() const
 FString ADaedalusHero::RealmState() const
 {
 	if (!RealmView.IsValid()) return TEXT("closed");
-	return FString::Printf(TEXT("source=%s sprites=%d stage=%s cues_staged=%d %s"), *RealmSource, RealmView->SpriteCount(), Stage.IsValid() ? TEXT("1") : TEXT("0"), CuesStaged, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
+	return FString::Printf(TEXT("source=%s sprites=%d stage=%s cues_staged=%d cues_held=%d cues_dropped=%d %s"), *RealmSource, RealmView->SpriteCount(), Stage.IsValid() ? TEXT("1") : TEXT("0"), CuesStaged, static_cast<int32>(StageHeld.size()), CuesDropped, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
 }
 
 bool ADaedalusHero::RealmCapture(const FString& Path)
@@ -1542,15 +1544,22 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 	// keeps drawing; ADaedalusBattlePresentation plays the same fight on models.
 	if (RealmView.IsValid())
 	{
-		if (!bStageLooked)
+		// Look for a stage every two seconds while there is none (one may be spawned later or replaced).
+		StageLookT -= DeltaSeconds;
+		if (!Stage.IsValid() && StageLookT <= 0.f)
 		{
-			bStageLooked = true;
+			StageLookT = 2.f;
 			Stage = Cast<ADaedalusBattlePresentation>(UGameplayStatics::GetActorOfClass(GetWorld(), ADaedalusBattlePresentation::StaticClass()));
 		}
-		if (RealmView->Game().StagePending() > 0)
+		// Only take cues when a stage can play them; otherwise they stay in the director for RealmInput(stage).
+		if (ADaedalusBattlePresentation* S = Stage.Get())
 		{
-			const std::vector<daedalus::stage::Cue> Cues = RealmView->Game().TakeStage();
-			if (ADaedalusBattlePresentation* S = Stage.Get()) { if (S->Submit(Cues)) CuesStaged += static_cast<int32>(Cues.size()); }
+			if (StageHeld.empty() && RealmView->Game().StagePending() > 0) StageHeld = RealmView->Game().TakeStage();
+			if (!StageHeld.empty())
+			{
+				if (S->Submit(StageHeld)) { CuesStaged += static_cast<int32>(StageHeld.size()); StageHeld.clear(); }
+				else if (StageHeld.size() > 512) { CuesDropped += static_cast<int32>(StageHeld.size()); StageHeld.clear(); }   // the stage refused for too long: say so, don't grow forever
+			}
 		}
 	}
 	// Held injected input (Inject with Seconds > 0): fed every frame like a held key until its time is up.
