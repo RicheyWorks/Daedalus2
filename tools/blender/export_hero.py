@@ -40,6 +40,9 @@ scene.world.color = (0.62, 0.72, 0.88)
 for ob in bpy.data.objects:
     if ob.name.startswith("UCX_"):
         ob.hide_render = True
+    elif ob.type == "MESH" and "Col" in ob.data.color_attributes:
+        ob.data.color_attributes.active_color = ob.data.color_attributes["Col"]      # Workbench VERTEX reads the active one
+        ob.data.color_attributes.render_color_index = ob.data.color_attributes.find("Col")
 cam_data = bpy.data.cameras.new("HeroCam")
 cam = bpy.data.objects.new("HeroCam", cam_data)
 scene.collection.objects.link(cam)
