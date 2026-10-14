@@ -554,6 +554,54 @@ a scenario the live file had, and spiral_apply ran an old daedalus_layout whose 
 (2) run_scenarios.py now strips Documents\Codex paths, puts the live plugin first and reloads every daedalus_*
 module before running; (3) any tool that reports a result prints `module.__file__` next to it when in doubt.
 
+
+## Bind queued Blender exports to bytes (2026-10-13, Codex)
+A reusable GLB path can change between Blender export and Unreal import without changing triangle/size counts.
+Record streamed SHA256+byte count beside the export witness and reject a changed file before import.
+Legacy structural-only evidence must remain labelled as such. This pre-dispatch guard does not eliminate
+post-check filesystem races; immutable snapshots plus importer confirmation are the stronger next step.
+
+
+## Blender strengths to reuse across the team harnesses (2026-10-13, Codex)
+Source findings, not a speed benchmark: the installed Claude Blender Bridge1.0.2 uses loopback,
+newline-framed JSON, echoed request IDs and a main-thread timer queue. Scene/object inspection
+and image results give agents concrete feedback. The separate blender-harness adds discoverable
+Registry/Gateway plugins, risk ceilings, accounting, unsaved-work protection and guarded queue
+ownership. Preserve these modules instead of replacing them with another overlapping queue.
+Distinguish REJECTED asset defects from BLOCKED editor availability so retries go to the right owner.
+Client timeout does not cancel queued Blender work: observe the original job before any retry.
+Source locations and detailed comparison: [shared harness assessment](production/TEAM-BLENDER-UNREAL-HARNESS.md).
+
+## Cross-team pipeline upgrade ideas — proposed, not installed (2026-10-13, Codex)
+* Reuse teamlink/live_handoff for Codex, Claude and Grok. Send one artifact-first request to a named
+  consumer; queued/delivered is not accepted or reviewed. Keep mutation leases and ownership explicit.
+* Add durable accepted/running/completed/succeeded job receipts to Blender's existing Gateway.
+  Persist stable job IDs and replay rules so a lost reply cannot cause duplicate exports/imports.
+* Carry source commit, artifact hash, job ID, destination package and consumer acknowledgment through
+  each handoff. A completed command is not automatically a successful or playable result.
+* Use immutable content-addressed import snapshots with importer-side hash confirmation to close
+  the race after the current pre-dispatch SHA check. Keep legacy structural receipts labelled weaker.
+* Record queue wait, Blender export, transfer, Unreal import, save and runtime verification separately;
+  compare repeated fixed workloads, including failures, rather than claiming connector speed from screenshots.
+* Add capability/status discovery and bounded progress reporting through existing registries. Retain
+  unsaved-work protection and separate editor unavailability from asset validation failures.
+* Verify installed module paths, source hashes and saved package timestamps before reporting integration;
+  a passing stand-in or source-only PR is not proof of a live editor installation.
+
+Evidence for the current byte guard: PR108, six seam regressions plus GLB10/10 and judge19/19;
+independent Windows/Linux workflow run38516094496 passed atdcdd88d22ce6770eb0ec36ae4b2a594e3785183a.
+These results cover the import seam, not full Blender/Unreal gameplay or the proposed durable job system.
+
+
+## Keep import snapshots alive after timeouts (2026-10-13, Codex)
+A pre-dispatch hash check alone cannot stop Blender from overwriting the shared source during
+Unreal import. Copy into a unique import-snapshots directory, verify copied bytes, pass that path,
+and validate identity again in the importer before its first Unreal API call. Retain snapshots
+on timeout because accepted work may still read them. Cleanup requires confirmed job quiescence;
+there is no automatic time-based deletion here. This isolates normal producers, not hostile writes
+between importer validation and file open. Nine offline seam tests cover replacement, corruption
+and timeout retention; live Interchange integration remains the editor owner's acceptance step.
+
 ## GPU crash 22:19: twenty-two imports in one bridge call starved the GPU watchdog (2026-10-13)
 `lay_creatures("LABYRINTH", folder)` imported 22 rigged GLBs inside ONE execute_python call. The log shows the
 frame counter stuck at [0] for the whole call; at the second file Aftermath timed out, DRED had no breadcrumb,
