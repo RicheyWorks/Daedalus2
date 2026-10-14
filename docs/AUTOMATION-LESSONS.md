@@ -847,3 +847,7 @@ Use handoff_status.py --receipt PATH --jobs-root JOBS to inspect recorded stage/
 ### Preflight rigged cast handoffs before editor time (2026-10-14)
 import_cast.py --plan validates uniqueIDs, SHA256 agreement, skinnedGLB document and namedclips without bridge calls; its successful output is machine-readableJSON. Night-run preflights all import folders before any build. Actual WorldZero6-file preflight passed. File structure/hashes do not prove native import, skeleton compatibility or rendered quality.
 
+
+### Pin the handoff before import (2026-10-14)
+Night-run keeps the file-only preflight result and passes it as --expected-plan to the importer. A changed asset set/hash/path/clip document refuses before bridge setup/import. After subprocess completion, validate the retained receipt against that original plan and require counts to agree with stdout before layout. The pinned plan is retained beside the import receipt. This detects handoff drift but still does not make files immutable during the native read.
+

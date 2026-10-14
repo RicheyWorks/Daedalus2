@@ -107,6 +107,7 @@ def main(argv):
     parser.add_argument('--one-per-call',action='store_true')
     parser.add_argument('--report',type=Path,help='new atomic import receipt; never used for automatic resume')
     parser.add_argument('--plan',action='store_true',help='validate source files only; no bridge calls')
+    parser.add_argument('--expected-plan',type=Path,help='pinned --plan JSON that must still match before bridge calls')
     args=parser.parse_args(argv)
     folder,root,place=args.folder,args.root,args.place
     if not os.path.isdir(folder):parser.error('import folder does not exist')
@@ -118,6 +119,10 @@ def main(argv):
         print('import: no planned assets; refusing empty success', flush=True)
         return 2
     planned=preflight(plan,root)
+    if args.expected_plan is not None:
+        from handoff_status import read
+        if read(args.expected_plan)!=planned:
+            parser.error('source handoff differs from pinned expected plan; no import dispatched')
     if args.plan:
         if args.report is not None:
             if args.report.exists():parser.error('planning report exists; choose a new output')

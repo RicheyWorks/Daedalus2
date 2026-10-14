@@ -134,6 +134,18 @@ def require_stage(reply, label):
     return reply['result']
 
 
+def require_import_receipt(path,folder,expected):
+    from handoff_status import read,cast_summary
+    value=read(Path(path))
+    summary=cast_summary(Path(path),value)
+    if summary['recorded_state']!='completed' or summary['counts']['failed'] or summary['reconciliation_required']:
+        raise RuntimeError('Import receipt is not a complete successful terminal record')
+    planned=[{'id':row['id'],'sha256':row['sha256']} for row in expected['assets']]
+    if value.get('planned')!=planned or value.get('folder')!=os.path.abspath(folder) or value.get('root')!='/Game/Daedalus/Art/Cast':
+        raise RuntimeError('Import receipt differs from the preflighted handoff')
+    return summary
+
+
 def assess_run(text, returncode, report):
     """A missing summary/log observation is unverified, never an empty successful run."""
     totals = re.findall(r'^TOTAL (\d+)/(\d+)\s*$', text, re.MULTILINE)
@@ -197,8 +209,9 @@ def parse_options(argv):
         parser.error('every import folder must exist before any build is started')
     if args.imports:
         from import_cast import IC,preflight
+        args.import_plans={}
         for folder in args.imports:
-            try:preflight(IC.plan(folder),IC.CAST_ROOT)
+            try:args.import_plans[os.path.abspath(folder)]=preflight(IC.plan(folder),IC.CAST_ROOT)
             except (OSError,ValueError,TypeError) as error:
                 parser.error('import preflight failed before build: '+str(error))
     return args
@@ -271,15 +284,24 @@ def run_options(options,progress):
     folders = options.imports
     for folder in folders:
         import_receipt=os.path.join(os.path.dirname(progress['_checkpoint_path']),'cast-import-'+uuid.uuid4().hex+'.json')
+        pinned_plan=import_receipt+'.plan.json'
+        write_report(pinned_plan,options.import_plans[os.path.abspath(folder)])
         progress.setdefault('import_receipts',[]).append(import_receipt)
-        checkpoint_run(progress,'import',import_folder=folder,import_receipt=import_receipt)
-        out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder,'--report',import_receipt], capture_output=True, text=True, timeout=1800, cwd=REPO)
+        checkpoint_run(progress,'import',import_folder=folder,import_receipt=import_receipt,import_expected_plan=pinned_plan)
+        out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder,'--report',import_receipt,'--expected-plan',pinned_plan], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
         lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
         terminal = re.fullmatch(r'import: (\d+) imported, (\d+) skipped, (\d+) failed',last[-1] if last else '')
         if out.returncode != 0 or not terminal or int(terminal[3]) != 0 or sum(map(int,terminal.groups())) == 0:
             hub('status','NIGHT RUN stopped at import %s: code=%s; %s; no retry' % (folder,out.returncode,lay[-1]))
             return 1
+        try:
+            accepted=require_import_receipt(import_receipt,folder,options.import_plans[os.path.abspath(folder)])
+            if [accepted['counts'][key] for key in ('imported','skipped','failed')]!=list(map(int,terminal.groups())):
+                raise RuntimeError('Import stdout differs from retained terminal receipt')
+        except (OSError,ValueError,RuntimeError,TypeError,KeyError) as error:
+            hub('status','NIGHT RUN stopped: import receipt unavailable/inconsistent: %s; no layout or Play' % error)
+            return 2
     try:
         checkpoint_run(progress,'cast')
         r = steps("__import__('daedalus_realm_ground').lay_cast_steps(['WORLD-ZERO'] + %r)" % realms, "lay_cast")

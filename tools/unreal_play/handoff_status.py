@@ -27,8 +27,8 @@ def read(path):
     return value
 
 
-def cast_summary(path):
-    value=read(path)
+def cast_summary(path,value=None):
+    value=read(path) if value is None else value
     if type(value.get('schema_version')) is not int or value['schema_version']!=1 or value.get('state') not in CAST_STATES:
         raise ValueError('unsupported cast receipt')
     planned,assets=value.get('planned'),value.get('assets')
