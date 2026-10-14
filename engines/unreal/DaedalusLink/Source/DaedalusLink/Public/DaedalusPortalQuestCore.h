@@ -1,6 +1,5 @@
 #pragma once
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -45,7 +44,7 @@ public:
     Result Apply(const std::string& eventId, const std::string& type,
                  const std::string& target, unsigned amount = 1)
     {
-        if (eventId.empty() || eventId.size() > 128 || amount == 0)
+        if (!Valid() || eventId.empty() || eventId.size() > 128 || amount == 0)
             return Result::Ignored;
         if (Seen.count(eventId)) return Result::Duplicate;
         if (Complete()) return Result::Ignored;
@@ -60,7 +59,7 @@ public:
         return Complete() ? Result::Completed : Result::Progressed;
     }
 
-    bool Complete() const { return Current == Steps.size(); }
+    bool Complete() const { return Valid() && Current == Steps.size(); }
     std::size_t StepIndex() const { return Current; }
     unsigned StepCount() const { return Count; }
     bool ClaimReward()
