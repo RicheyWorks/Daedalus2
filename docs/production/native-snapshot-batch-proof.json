@@ -1,0 +1,11 @@
+{
+  "sourceHead": "7366425e9754072babe7dd896af94b7f785551e7",
+  "files": 198,
+  "baselineSeconds": 12.328,
+  "manifestsIdentical": true,
+  "allFilesRehashed": true,
+  "scope": "One sequential local warm-cache observation; not Unreal compile, network or general throughput proof",
+  "wholeBufferBatchSeconds": 0.547,
+  "streamingBatchSeconds": 0.594,
+  "wholeCorpusBuffered": false
+}

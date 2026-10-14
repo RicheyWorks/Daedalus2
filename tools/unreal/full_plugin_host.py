@@ -5,6 +5,24 @@ import json
 from pathlib import Path
 import subprocess
 
+def read_blobs(repo, entries):
+    # Stream object records through one Git process; no whole-corpus buffer.
+    with subprocess.Popen(['git','cat-file','--batch'],cwd=repo,
+                          stdin=subprocess.PIPE,stdout=subprocess.PIPE) as process:
+        for name,blob in entries:
+            process.stdin.write((blob+'\n').encode('ascii'))
+            process.stdin.flush()
+            fields=process.stdout.readline().split()
+            if len(fields)!=3 or fields[0]!=blob.encode('ascii') or fields[1]!=b'blob' or not fields[2].isdigit():
+                raise ValueError('Git batch object identity/type mismatch')
+            size=int(fields[2]);raw=process.stdout.read(size)
+            if len(raw)!=size or process.stdout.read(1)!=b'\n':
+                raise ValueError('Truncated Git batch object')
+            yield name,raw
+        process.stdin.close()
+        if process.stdout.read(1): raise ValueError('Unexpected trailing Git batch data')
+        if process.wait()!=0: raise ValueError('Git batch reader failed')
+
 def snapshot(repo, destination):
     repo=repo.resolve();destination=destination.resolve()
     if destination.exists(): raise ValueError('Destination must be fresh; existing hosts are never reset')
@@ -29,11 +47,10 @@ def snapshot(repo, destination):
         raise ValueError('Pinned plugin descriptor missing')
     plugin=destination/'Plugins/DaedalusLink'
     inputs={}
-    for name,blob in entries:
+    for name,raw in read_blobs(repo,entries):
         relative=Path(name[len(prefix):])
         target=(plugin/relative).resolve();target.relative_to(plugin)
         target.parent.mkdir(parents=True,exist_ok=True)
-        raw=subprocess.check_output(['git','cat-file','blob',blob],cwd=repo)
         target.write_bytes(raw)
         digest=hashlib.sha256(raw).hexdigest()
         assert hashlib.sha256(target.read_bytes()).hexdigest()==digest
