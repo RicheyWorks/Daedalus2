@@ -328,10 +328,9 @@ def lay_creatures(realm, folder):
         a = sub.spawn_actor_from_class(unreal.SkeletalMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
         a.skeletal_mesh_component.set_skeletal_mesh_asset(unreal.load_asset(mesh))
         if idle:
-            a.skeletal_mesh_component.set_animation_mode(unreal.AnimationMode.ANIMATION_SINGLE_NODE)
-            a.skeletal_mesh_component.animation_data.anim_to_play = unreal.load_asset(idle)
-            a.skeletal_mesh_component.animation_data.looping = True
-            a.skeletal_mesh_component.animation_data.playing = True
+            c = a.skeletal_mesh_component
+            c.set_animation_mode(unreal.AnimationMode.ANIMATION_SINGLE_NODE)
+            c.set_editor_property("animation_data", unreal.SingleAnimationPlayData(anim_to_play=unreal.load_asset(idle), saved_looping=True, saved_playing=True))
         a.set_actor_label(label)
         a.set_folder_path("Realms/%s/Creatures" % realm)
         a.tags = [unreal.Name("Creature"), unreal.Name("Realm:%s" % realm)]
