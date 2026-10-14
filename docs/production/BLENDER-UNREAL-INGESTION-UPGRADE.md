@@ -14,6 +14,8 @@ Interchange is already processing the current FBX imports on this machine. Insta
 
 The manifest binds source bytes/path, destination, the named `claude_voxel_fbx_existing_options_v1` preset and explicit import/postprocessing settings, engine version, backend control readbacks, loaded Python code identity, importer/orchestration source files and existing project default INIs. The per-item receipt records the requested native API and separate import/postprocess/save call-completion fields; available tools are not represented as called. Callers must include additional file dependencies for customized pipelines, materials or other external inputs. UE's existing source-file hash alone does not cover that complete identity.
 
+Per-mesh import-data class and stored pipeline-class observations are also recorded via the installed `InterchangeAssetImportData.GetPipelines` API (`InterchangeAssetImportData.h:148-170`). An unavailable observation remains explicit; configured default pipeline assets alone are not an actual-use receipt. Background compilation is recorded as `not_queried`, separate from native save-call completion.
+
 Unchanged skip requires a structurally consistent `saved` receipt, matching manifest key, asset membership, existing native assets, matching saved `.uasset` byte witnesses and no dirty output packages. Inputs with missing receipts receive a verified import; existing filenames alone do not earn a skip. Dirty owned destinations/materials stop before mutation so another author's unsaved edits are not overwritten.
 
 Receipts distinguish `input_verified`, `import_started`, `imported`, `postprocessed`, `save_started`, `saved`, `input_failed` and `uncertain`. A successful native save, unchanged source/snapshot/config identity, output files and clean output packages precede `saved`. The existing material helper may also save a newly created material during postprocessing; receipt stages do not imply that all writes happen only in the final save call.
@@ -95,6 +97,19 @@ Actual `list_toolsets`/four `describe_toolset` responses on2026-10-14 returned t
 | `AssetTools.duplicate` | Copies assets/folders; this is not shared-geometry deduplication |
 
 No registered-tool script or asset operation was executed. This wrapper uses the direct Python importer because its known options and postprocessor fit the current Claude content. Native programmatic batching is available for the separately owned Codex delivery module after its owner reviews the execution environment.
+
+### Linked study, owner and actual-use map
+
+| Study / applicable capability | Owner / outcome at this checkpoint |
+| --- | --- |
+| [Epic Interchange guide](https://dev.epicgames.com/documentation/en-us/unreal-engine/importing-assets-using-interchange-in-unreal-engine) | Read by this audit; local API/stack assets verified. Existing Claude FBX imports complete through Interchange in the preserved log; new wrapper not loaded. Export hook is documented nonfunctional; runtime cooking advice is not an editor-ingestion requirement |
+| [Epic DDC guide](https://dev.epicgames.com/documentation/unreal-engine/using-derived-data-cache-in-unreal-engine?lang=en-US) | Existing engine session uses local Zen/filesystem DDC per disk log. Preserve it; no new cache settings or measured hit-rate claim |
+| [Asset compilation manager](https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Engine/FAssetCompilingManager) | Installed save chain reviewed. `StaticMesh.cpp:7356-7366` fences that static mesh during normal serialization. Save chain does not directly call generic finish-for-objects; material shader/global completion remains unverified. No global wait added |
+| [UE5.8 compilation controls](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-console-variables-reference) | `Editor.AsyncAssetCompilationMaxMemoryUsage`, `MemoryPerCore` and concurrency settings govern native compilation, not total import admission. Effective current values were not queried from the owner-held editor and were absent from inspected log/default project config; no overrides made |
+| [EA/Motive Texture Sets compiler](https://github.com/electronicarts/texturesets/blob/main/Docs/Technical/Compilation.md) | Reference supplied by parallel research: immutable in-flight input and delayed payload allocation. This slice queues at most three descriptors/manifests, streams hashes, then imports/loads one item at a time. No Texture Sets install, engine patch or speedup claim |
+| Native programmatic batching / InterchangeTests / Dataprep | Metadata/installed source inspected. Programmatic script execution, tests and Dataprep operation execution remain deferred; no all-tools adoption claim |
+
+Root's actual native use consists of metadata discovery only. Existing owner log imports are separate evidence and do not prove the new source was called, compiled, saved or adopted. Future wrapper receipts record requested preset/settings and observed pipeline provenance after an actual owner-controlled call.
 
 ### DDC, source formats and reusable processing
 

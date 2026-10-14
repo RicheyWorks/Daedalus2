@@ -59,6 +59,20 @@ def _dirty_packages():
     return {package.get_name() for package in unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()}
 
 
+def _pipeline_observation(mesh):
+    """Read saved import-data provenance; unavailable observations stay explicit."""
+    try:
+        data = mesh.get_editor_property("asset_import_data")
+        if data is None:
+            return {"state": "absent"}
+        pipelines = data.get_pipelines() if hasattr(data, "get_pipelines") else None
+        return {"state": "observed", "import_data_class": data.get_class().get_path_name(),
+                "pipeline_classes": [pipeline.get_class().get_path_name() for pipeline in pipelines]
+                if pipelines is not None else None}
+    except Exception as error:
+        return {"state": "unavailable", "error": str(error)}
+
+
 def _destination_matches(path, witness, dirty):
     return (unreal.EditorAssetLibrary.does_asset_exist(path)
             and path.split(".", 1)[0] not in dirty
@@ -122,7 +136,7 @@ def import_saved_batch(seeds, dependencies=(), force=False, retry_uncertain=Fals
                               "postprocess": "daedalus_claude_islands.import_island",
                               "save": "EditorAssetLibrary.save_loaded_assets"},
                       "import_call_completed": False, "postprocess_completed": False,
-                      "save_call_completed": False}
+                      "save_call_completed": False, "background_compilation": "not_queried"}
             receipts.write_receipt(receipt_path, record)
 
             def state(value, **fields):
@@ -149,6 +163,9 @@ def import_saved_batch(seeds, dependencies=(), force=False, retry_uncertain=Fals
                 loaded = [unreal.EditorAssetLibrary.load_asset(path) for path in paths]
                 if any(asset is None for asset in loaded):
                     raise RuntimeError("postprocessed asset could not be loaded")
+                state("postprocessed", pipeline_observations={
+                    path: _pipeline_observation(asset) for path, asset in zip(paths, loaded)
+                    if path in assets.values()})
                 state("save_started")
                 if unreal.EditorAssetLibrary.save_loaded_assets(loaded, only_if_is_dirty=True) is not True:
                     raise RuntimeError("explicit item asset save did not confirm success")
