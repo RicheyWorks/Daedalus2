@@ -749,3 +749,10 @@ returns2, recovered/up returns0. It never starts/stops a broker or replays messa
 health observation, not automatic process recovery; a timeout alone cannot authorize a duplicate
 server. Native Windows fixtures exercise recovery and persistent unavailability with process
 operations trapped. Use doctor for details, then verify the owner/process before recovery.
+
+## Hub rollout with the protocol, 40 s end to end (2026-10-13, 23:15)
+Sol's doctor/pending-summary/watch stack merged (5b160fb7); rollout: announce "HUB RESTART in 30 s", pull D2-build
+main, -Stop, -Start, "HUB UP <head> last id <n>", then `teamlink doctor --me unreal-team` as the receipt: broker
+pid 18264 up 5 s, locks (blender: Sol's World Zero exports; unreal: my materials job), inbox. Lock claims survived
+the restart because they are log lines. Rule: `doctor` is the first command of every turn from now on; it is the
+one-screen picture the protocol promised (research item 13 closed).
