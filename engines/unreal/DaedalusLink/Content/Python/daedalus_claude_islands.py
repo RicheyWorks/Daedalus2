@@ -163,6 +163,6 @@ def count():
     seeds = set()
     for a in sub.get_all_level_actors():
         lab = a.get_actor_label()
-        if lab.startswith("ClaudeIsland_") and lab.endswith("_island"):
+        if lab.startswith("ClaudeIsland_") and (lab.endswith("_island") or lab.endswith("_body")):
             seeds.add(int(lab.split("_")[1]))
     return {"islands": len(seeds), "seeds": sorted(seeds)}
