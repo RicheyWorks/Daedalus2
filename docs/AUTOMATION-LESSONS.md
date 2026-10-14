@@ -881,3 +881,7 @@ so a new connector is the first line of the next turn; (2) every connector we ow
 command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
 harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
 register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
+
+### Count discovered actions without claiming execution (2026-10-14)
+Saved MCPdescriptions can form a reproducible unique toolset/name catalog with preservedschemas/annotations. AbsentreadOnly hints stayunknown; Get names do notestablish effects. Initializeexecutionstate not-executed, captureSHA recorded. The exposedcatalog is not everyUnrealfunction or proof of benchmarkcompletion.
+
