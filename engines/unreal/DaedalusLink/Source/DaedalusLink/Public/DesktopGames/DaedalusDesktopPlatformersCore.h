@@ -167,13 +167,19 @@ struct NinjaEnemy {
     }
 };
 struct NinjaBoss {
-    double X=700,Y=380,VX=-1; int Health=25,AttackTimer=40;
+    static constexpr int InitialAttackFrames=40,AttackPeriodFrames=50,TelegraphFrames=12;
+    static constexpr double AttackHalfWidth=300,AttackHalfHeight=100;
+    double X=700,Y=380,VX=-1; int Health=25,AttackTimer=InitialAttackFrames;
+    bool IsTelegraphing() const { return AttackTimer>0 && AttackTimer<=TelegraphFrames; }
+    bool InStrikeRange(const NinjaPlayer& P) const {
+        return std::abs(X-P.X)<AttackHalfWidth && std::abs(Y-P.Y)<AttackHalfHeight;
+    }
     void Update(NinjaPlayer& P) {
         X+=VX;
         if(X<500 || X>720) VX=-VX;
         if(--AttackTimer<=0) {
-            AttackTimer=50;
-            if(std::abs(X-P.X)<300 && std::abs(Y-P.Y)<100 && P.Invincible<=0) {
+            AttackTimer=AttackPeriodFrames;
+            if(InStrikeRange(P) && P.Invincible<=0) {
                 --P.Health; P.Invincible=60;
             }
         }
@@ -388,7 +394,7 @@ class ShadowNinjaGame final : public Game {
     std::vector<Vec> Gold;
     platformers::NinjaBoss Boss;
     bool BossActive=false,Over=false,Won=false;
-    int SpawnTimer=0;
+    int SpawnTimer=0,BossPulseCueFrames=0;
     std::int64_t Score=0;
     Random Rng; Input Previous;
     void Attack(bool Star) {
@@ -402,14 +408,16 @@ class ShadowNinjaGame final : public Game {
     }
 public:
     static constexpr std::size_t MaxAttacks=64,MaxEnemies=5;
+    static constexpr int BossScoreThreshold=1200,PulseReceiptFrames=8;
     ShadowNinjaGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         Player={}; Attacks.clear(); Enemies.clear(); Gold.clear(); Boss={};
-        BossActive=false; Over=false; Won=false; SpawnTimer=0; Score=0; Previous={}; Rng.Seed(Seed);
+        BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; Previous={}; Rng.Seed(Seed);
         for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
     }
     void Step(const Input& I) override {
         if(Over) return;
+        if(BossPulseCueFrames>0) --BossPulseCueFrames;
         // Source attacks are KEYDOWN/JOYBUTTONDOWN events, not held auto-fire.
         if(I.FirePressed || (I.Fire && !Previous.Fire)) Attack(false);
         if(I.ActionPressed || (I.Action && !Previous.Action)) Attack(true);
@@ -457,9 +465,13 @@ public:
             for(const auto& E:Enemies) if(Distance(Player.X,Player.Y,E.X,E.Y)<22) { Hurt(45); break; }
         }
         if(Over) return;
-        if(Score>=1200 && !BossActive) { Boss={}; BossActive=true; }
+        if(Score>=BossScoreThreshold && !BossActive) { Boss={}; BossActive=true; }
         if(BossActive) {
+            const bool PulseThisStep=Boss.AttackTimer<=1;
             Boss.Update(Player);
+            // Receipt of the existing instant pulse, including misses/protected
+            // players. Cosmetic only: never infer that health changed or extend damage.
+            if(PulseThisStep) BossPulseCueFrames=PulseReceiptFrames;
             if(Player.Health<=0) { Player.Health=0; Over=true; return; }
             if(Distance(Player.X,Player.Y,Boss.X,Boss.Y)<35) Hurt(45);
             if(Over) return;
@@ -472,11 +484,19 @@ public:
         }
     }
     Status GetStatus() const override {
-        return {Score,Player.Health,Over,Won,Won?"BOSS DEFEATED!":(Over?"GAME OVER":"Shadow Ninja: sword, star, spin, wall climb, double jump")};
+        std::string Text=Won?"BOSS DEFEATED! Host R/Restart replays."
+            :(Over?"GAME OVER. Host R/Restart replays.":ReadinessText());
+        if(!Over) {
+            if(BossActive && Boss.IsTelegraphing()) Text+=" Boss pulse in "+std::to_string(Boss.AttackTimer)+" steps; current strike range shown.";
+            else if(BossActive && BossPulseCueFrames>0) Text+=" Boss pulse fired; contact/enemies remain dangerous.";
+            else if(!BossActive) Text+=" Boss at score "+std::to_string(BossScoreThreshold)+".";
+        }
+        return {Score,Player.Health,Over,Won,Text};
     }
     const platformers::NinjaPlayer& GetPlayer() const { return Player; }
     const platformers::NinjaBoss& GetBoss() const { return Boss; }
     bool HasBoss() const { return BossActive; }
+    int PulseReceiptFramesRemaining() const { return BossPulseCueFrames; }
     std::size_t EnemyCount() const { return Enemies.size(); }
     std::size_t AttackCount() const { return Attacks.size(); }
     std::size_t GoldCount() const { return Gold.size(); }
@@ -485,6 +505,17 @@ public:
         for(int X:{80,300,520,720}) { F.AddRect(X,200,8,40,{100,60,20,255}); F.AddCircle(X+4,195,6,{255,150,50,255}); }
         for(const auto& P:platformers::NinjaPlatforms()) { F.AddRect(P.X,P.Y,P.W,12,{80,80,100,255}); F.AddRect(P.X,P.Y,P.W,4,{120,120,140,255}); }
         for(int X:{150,450,650}) { F.AddRect(X,350,20,130,{40,80,40,255}); F.AddCircle(X+10,340,25,{30,100,30,255}); }
+        if(BossActive && !Over && Boss.IsTelegraphing()) {
+            // The source checks strict axis distances after moving the boss.
+            // This outline is current reach, not a prediction or a safe-zone promise.
+            const double L=Clamp(Boss.X-platformers::NinjaBoss::AttackHalfWidth,0,800);
+            const double R=Clamp(Boss.X+platformers::NinjaBoss::AttackHalfWidth,0,800);
+            const double T=Clamp(Boss.Y-platformers::NinjaBoss::AttackHalfHeight,0,600);
+            const double B=Clamp(Boss.Y+platformers::NinjaBoss::AttackHalfHeight,0,600);
+            const Color Cue{255,150,50,255};
+            F.AddLine(L,T,R,T,Cue,2); F.AddLine(R,T,R,B,Cue,2);
+            F.AddLine(R,B,L,B,Cue,2); F.AddLine(L,B,L,T,Cue,2);
+        }
         if(!(Player.Invincible>0 && Player.Invincible%8<4)) {
             const double X=Player.X,Y=Player.Y;
             F.AddRect(X-8,Y-20,16,28,{60,60,80,255});
@@ -522,8 +553,29 @@ public:
         }
         F.AddText(30,20,"SCORE: "+std::to_string(Score),{255,200,50,255});
         F.AddText(630,20,"HEALTH: "+std::to_string(Player.Health),{220,50,50,255}); F.AddText(350,20,"LEVEL: 1",{80,150,255,255},16);
+        if(!Over) {
+            F.AddText(30,50,ReadinessText(),White,13);
+            if(!BossActive) F.AddText(30,72,"Boss entry: "+std::to_string(Score)+" / "+std::to_string(BossScoreThreshold),{255,200,50,255},14);
+            else if(Boss.IsTelegraphing()) {
+                F.AddText(30,72,"BOSS PULSE IN "+std::to_string(Boss.AttackTimer)+" STEPS: current reach",{255,150,50,255},16);
+                F.AddText(30,94,Boss.InStrikeRange(Player)?"Inside current pulse reach. Contact/enemies can still hurt."
+                    :"Outside current pulse reach. Boss moves before striking; watch contact/enemies.",White,13);
+            } else if(BossPulseCueFrames>0) F.AddText(30,72,"Boss pulse fired (instant strike; hit not implied)",{255,150,50,255},14);
+        }
         F.AddText(60,575,"Jump: A/Space  Sword: B/X  Star: Y/RB  Spin: LB  Wall: up/down",White,16);
-        if(Over) { F.AddRect(180,240,440,130,{20,20,40,240}); F.AddText(260,270,Won?"BOSS DEFEATED!":"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},32); }
+        if(Over) {
+            F.AddRect(180,240,440,130,{20,20,40,240});
+            F.AddText(260,270,Won?"BOSS DEFEATED!":"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},32);
+            F.AddText(245,325,"Host R / Restart: fresh run",White,16);
+        }
+    }
+private:
+    std::string ReadinessText() const {
+        const std::string Jump=Player.OnWall?"wall jump":(Player.OnGround?"ground jump":(Player.DoubleJump?"air jump ready":"air jump used"));
+        const std::string Spin=Player.Spinning>0?"spinning":(Player.SpinCooldown>0?"spin wait "+std::to_string(Player.SpinCooldown)
+            :(!Player.OnGround?"spin needs ground":"spin ready"));
+        const std::string AttackState=Attacks.size()>=MaxAttacks?"attacks full":(Player.AttackCooldown>0?"sword/star wait "+std::to_string(Player.AttackCooldown):"sword/star ready");
+        return Jump+" | "+Spin+" | "+AttackState;
     }
 };
 }} // daedalus::desktop

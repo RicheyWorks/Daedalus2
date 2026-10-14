@@ -157,6 +157,7 @@ private:
 class PacmanGame final : public Game {
 public:
     static constexpr int Tile=20, Columns=28, Rows=31;
+    static constexpr int RespawnGraceFrames=90; // Native rule extension after a nonterminal death.
     inline static constexpr std::array<const char*,Rows> Map{{
         "############################", "#............##............#",
         "#.####.#####.##.#####.####.#", "#.####.#####.##.#####.####.#",
@@ -240,7 +241,7 @@ public:
     struct Pellet { double X=0, Y=0; bool Power=false, Alive=true; };
     PacmanGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
-        SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Lives=3; Over=false; Won=false; Level=1;
+        SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Lives=3; Over=false; Won=false; Level=1; RespawnFrames=0;
         Pellets.clear();
         for(int Row=0;Row<Rows;++Row) for(int Col=0;Col<Columns;++Col) if(Map[static_cast<std::size_t>(Row)][Col]=='.') {
             const bool Power=(Row==1 || Row==29) && (Col==1 || Col==26);
@@ -254,6 +255,10 @@ public:
     }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
+        // Snapshot before ticking: a new 90-step guard protects exactly the next
+        // 90 live collision steps. Movement, pellets, frightened captures and RNG stay live.
+        const bool ProtectedThisStep=RespawnFrames>0;
+        if(ProtectedThisStep) --RespawnFrames;
         Hero.Update(I);
         for(auto& G:Ghosts) G.Update(Hero,Rng);
         for(auto& P:Pellets) if(P.Alive && Distance(Hero.X,Hero.Y,P.X,P.Y)<12) {
@@ -262,10 +267,10 @@ public:
         }
         for(auto& G:Ghosts) if(G.Alive && Hero.GetRect().Overlaps(G.GetRect())) {
             if(G.Frightened) { G.Alive=false; Score+=200; }
-            else {
+            else if(!ProtectedThisStep) {
                 --Lives;
                 if(Lives<=0) Over=true;
-                else Hero={};
+                else { Hero={}; RespawnFrames=RespawnGraceFrames; }
                 // One lethal collision per frame; source could consume all lives in one stacked collision.
                 break;
             }
@@ -279,12 +284,17 @@ public:
     const std::vector<Pellet>& GetPellets() const { return Pellets; }
     int DotsLeft() const { return Remaining; }
     int GetLevel() const { return Level; }
+    int RespawnFramesRemaining() const { return RespawnFrames; }
+    int PowerPelletsLeft() const {
+        return static_cast<int>(std::count_if(Pellets.begin(),Pellets.end(),[](const Pellet& P){return P.Alive && P.Power;}));
+    }
     void Render(Frame& Out) const override {
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
         for(int Row=0;Row<Rows;++Row) for(int Col=0;Col<Columns;++Col)
             if(IsWall(Col,Row)) Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
         for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
+        if(RespawnFrames>0 && !Over && !Won) Out.AddCircle(Hero.X,Hero.Y,14,{80,200,255,255});
         Out.AddCircle(Hero.X,Hero.Y,10,maze::Yellow);
         const double Angle=Hero.Dir.X<0 ? 3.141592653589793 : Hero.Dir.Y<0 ? -1.5707963267948966 : Hero.Dir.Y>0 ? 1.5707963267948966 : 0;
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
@@ -299,12 +309,21 @@ public:
         Out.AddText(10,630,"SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level));
         Out.AddText(580,140,"PAC-MAN",maze::Yellow,28);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
-        Out.AddText(580,225,"Eat all dots; pellets frighten",White,14);
-        Out.AddText(580,245,"ghosts for 300 frames.",White,14);
-        if(Over || Won) Out.AddText(580,300,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
-        if(Over || Won) Out.AddText(580,340,"Action / Fire: restart",White,16);
+        Out.AddText(580,225,"Dots left: "+std::to_string(Remaining),White,16);
+        Out.AddText(580,250,"Power: "+std::to_string(PowerPelletsLeft())+" (300-step fright)",White,13);
+        if(RespawnFrames>0 && !Over && !Won)
+            Out.AddText(580,280,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},14);
+        if(Over || Won) Out.AddText(580,320,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
+        if(Over || Won) Out.AddText(580,360,"Fresh Action / Fire / Jump",White,14);
+        if(Over || Won) Out.AddText(580,383,"or host R: replay",White,14);
     }
-    Status GetStatus() const override { return {Score,Lives,Over,Won,"Pac-Man: eat all dots; power pellets frighten ghosts. Action after end restarts."}; }
+    Status GetStatus() const override {
+        std::string Text=Won?"All dots cleared. Fresh Action/Fire/Jump or host R replays."
+            :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
+                :"Pac-Man: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
+        if(RespawnFrames>0 && !Over && !Won) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        return {Score,Lives,Over,Won,Text};
+    }
 private:
     friend struct MazeTestAccess;
     std::uint32_t SessionSeed=730;
@@ -313,7 +332,7 @@ private:
     std::array<Ghost,4> Ghosts;
     std::vector<Pellet> Pellets;
     std::int64_t Score=0;
-    int Lives=3, Remaining=0, Level=1;
+    int Lives=3, Remaining=0, Level=1, RespawnFrames=0;
     bool Over=false, Won=false;
 };
 
