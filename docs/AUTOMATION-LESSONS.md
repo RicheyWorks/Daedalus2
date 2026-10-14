@@ -1290,3 +1290,16 @@ the pagefile size is Richey's setting, not the bots'.
   object.
 - Hand-off protocol both teams now follow: the holder posts "UNREAL RELEASED" with the saved map state; nobody
   closes or steals the editor; the other team's actors are never cleared; map saves are allowed only by the holder.
+
+## 2026-10-14 13:50 — Blender contest (hero island, types, clusters)
+- Richey's turn: contest moved to Blender; Codex keeps the editor; Team Claude builds headless. Hero island
+  "Skyfall" (`tools/blender/hero_island.py`, seed 39) exports in 7 s; a four-island cluster (1.9 M island voxels,
+  `island_cluster.py`) in ~27 s; Workbench previews render in 1.5 s each — `color_attributes.active_color` must be
+  set or VERTEX shading renders black. Relative out_dir paths lose the PNGs (Blender resolves render paths from its
+  own cwd): pass absolute paths.
+- Items need reasons: `island_chemistry.py` rolls the island's materials and economy from the seed per realm, and
+  `docs/mechanics/MECHANICS-REGISTRY.md` says where every mechanic is tracked (the Mechanics sheet in
+  `Realm-production-2026-10-13.xlsx` is THE list; WZ01–07 added). Halloween belongs to the Labyrinth (LAB09), so the
+  halloween cluster is a LABYRINTH realm asset.
+- Cluster palettes: colour keys are shared across islands, so a theme's grass override repainted every kind; the fix
+  is per-kind key suffixes (`grass@mesa`) added to the cluster palette.
