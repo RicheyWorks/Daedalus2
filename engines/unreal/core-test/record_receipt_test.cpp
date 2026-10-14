@@ -21,6 +21,12 @@ int main(){
     if(ParseWriteReply(Json+"x","9007199254740993",Digest,R)||ParseWriteReply(Json,"9007199254740994",Digest,R))return 9;
     auto Fraction=Json;auto At=Fraction.find("9007199254740993");Fraction.replace(At,16,"9007199254740993.0");
     if(ParseWriteReply(Fraction,"9007199254740993",Digest,R))return 10;
+    const std::vector<std::uint8_t> Candidate{1,2,3};
+    if(!ConfirmReadBack(true,200,E,Candidate,Candidate,"9007199254740993",Digest,Out))return 11;
+    Out=7;
+    if(ConfirmReadBack(true,200,E,Candidate,{1,2,4},"9007199254740993",Digest,Out)||Out!=7)return 12;
+    if(ConfirmReadBack(false,200,E,Candidate,Candidate,"9007199254740993",Digest,Out)||Out!=7)return 13;
+    if(ConfirmReadBack(true,200,E,Candidate,Candidate,"9007199254740994",Digest,Out)||Out!=7)return 14;
     std::cout<<"PASS exact 64-bit revision, replay, conflict/unknown, hash and identity receipt checks\n";
     return 0;
 }

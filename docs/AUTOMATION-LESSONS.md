@@ -1184,3 +1184,6 @@ Full isolated UE5.8 plugin6706cd50 compiled/linked61actions305.87s,198snapshot h
 
 ## Add production motions to existing rigs rather than replacement characters (2026-10-14)
 Worker generator appends Mine/Trade/Repair NLA tracks while retaining Idle/Walk/Attack/Hurt, existing meshes and14bone rig. Reset every pose at each key and return bind pose before export; separate visual motion from authoritative production events. Python compile passes; no Blender execution/newGLB/native animation proof yet. Existing BlenderPID3668 observed with emptyhublocks, which does not establish its ownership; ask owner rather than infer an available turn.
+
+## Reconcile unknown writes with actual read-back bytes (2026-10-14)
+Added owned receipt/component read-back path: compare actual pendingencoded bytes with returned record, exact capturedSHA and outerCAS revision, then confirm matched preparedrequest. A lostPUTreply can recover from a validGET without issuing a duplicate mutation. Missing/mismatched/stale outcomes remain pending; no timeout cancellation. Actual strictMSVC cases pass for matching and rejectchangedbytes/unavailabletransport/unrelatedrevision. No sharedtransport files changed or liveHTTP proof claimed.

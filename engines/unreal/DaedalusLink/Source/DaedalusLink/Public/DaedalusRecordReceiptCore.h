@@ -5,6 +5,7 @@
 #include <limits>
 #include <string>
 #include <utility>
+#include <vector>
 #include "DaedalusLandRegistryCore.h"
 namespace daedalus { namespace records {
 struct WriteExpectation {std::string Realm,Key,SHA256;std::uint64_t StoreRevision=0;};
@@ -55,5 +56,14 @@ inline bool ConfirmWrite(bool TransportOK,int HttpStatus,const WriteExpectation&
     std::uint64_t Observed=0;
     if(Expected.StoreRevision>=static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max())||!Revision(Reply.RevisionHeader,Observed)||Observed!=Expected.StoreRevision+1)return false;
     CommittedStoreRevision=Observed;return true;
+}
+// A successful GET of the pinned record can reconcile a lost PUT reply.
+// Compare actual candidate bytes, not just a claimed domain revision or UI balance.
+inline bool ConfirmReadBack(bool TransportOK,int HttpStatus,const WriteExpectation& Expected,
+    const std::vector<std::uint8_t>& Candidate,const std::vector<std::uint8_t>& Returned,
+    const std::string& RevisionHeader,const std::string& HashHeader,std::uint64_t& CommittedStoreRevision){
+    if(Candidate.empty()||Candidate.size()>8*1024*1024||Candidate!=Returned)return false;
+    const WriteReply Reply{"REPLAY",Expected.Realm,Expected.Key,RevisionHeader,HashHeader,Expected.SHA256};
+    return ConfirmWrite(TransportOK,HttpStatus,Expected,Reply,CommittedStoreRevision);
 }
 }}

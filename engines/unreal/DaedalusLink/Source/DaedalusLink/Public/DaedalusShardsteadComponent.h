@@ -58,6 +58,10 @@ public:
     bool ConfirmRecordReplyFromHost(const FString& Request,uint64 PreparedRevision,
         const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
         const daedalus::records::WriteReply& Reply,uint64& CommittedStoreRevision);
+    bool ConfirmRecordReadBackFromHost(const FString& Request,uint64 PreparedRevision,
+        const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
+        const std::vector<std::uint8_t>& Returned,const std::string& RevisionHeader,
+        const std::string& HashHeader,uint64& CommittedStoreRevision);
 private:
     bool Ready=false;
     int64 BoundSeed=0;

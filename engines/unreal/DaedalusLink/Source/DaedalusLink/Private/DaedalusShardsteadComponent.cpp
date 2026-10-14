@@ -74,6 +74,16 @@ bool UDaedalusShardsteadComponent::ConfirmRecordReplyFromHost(const FString& Req
     if(!ConfirmPersistedFromHost(Request,PreparedRevision))return false;
     CommittedStoreRevision=StoreRevision;return true;
 }
+bool UDaedalusShardsteadComponent::ConfirmRecordReadBackFromHost(const FString& Request,uint64 PreparedRevision,
+    const daedalus::records::WriteExpectation& Expected,bool TransportOK,int32 HttpStatus,
+    const std::vector<std::uint8_t>& Returned,const std::string& RevisionHeader,
+    const std::string& HashHeader,uint64& CommittedStoreRevision){
+    const auto* Saved=PendingFromHost();if(!Saved||Saved->Revision!=PreparedRevision)return false;
+    std::vector<std::uint8_t> Candidate;uint64 StoreRevision=0;
+    if(!PendingBytesFromHost(Candidate)||!daedalus::records::ConfirmReadBack(TransportOK,HttpStatus,Expected,Candidate,Returned,RevisionHeader,HashHeader,StoreRevision))return false;
+    if(!ConfirmPersistedFromHost(Request,PreparedRevision))return false;
+    CommittedStoreRevision=StoreRevision;return true;
+}
 FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& PlayerKey) const {
     FDaedalusIslandStats Out;if(!Ready||!Host())return Out;
     const auto& View=ReadRules();
