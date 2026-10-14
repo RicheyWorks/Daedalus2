@@ -1043,3 +1043,17 @@ What could be better (the next asks, in order):
 7. PowerShell quoting through the bridge eats Python one-liners (three times tonight): anything over one line is a
    repo script run by path, never an inline `python -c`.
 8. Game-time waits everywhere in daedalus_play (a sweep for `_frames(` used as a clock), and fps in every receipt.
+
+## 2026-10-14 02:42 — the modal the harness missed ("38 changes to source content files... import them?")
+
+Richey: "the harness is missing this." An editor modal freezes every bridge call behind it; tonight's was the
+auto-reimport prompt (bMonitorContentDirectories + bPromptBeforeAutoImporting, both default on), raised by the
+team's own art drops into Content/. Answered with the bridge's editor_windows + window_input ("Don't Import" — the
+import queue owns imports), then the cause removed through the connector: LoadingSaving {bMonitorContentDirectories:
+false, bPromptBeforeAutoImporting: false, bAutoDeleteAssets: false, bDetectChangesOnStartup: false,
+autoSaveTimeMinutes: 30}. tools/unreal_mcp/doctor.py now reads these and the throttle back (--fix sets them) so the
+doctor says BAD before a job hangs. Harness ask 9 (Poot): a modal guard in the bridge — poll editor_windows every
+few seconds while a job runs; a known-dialog table (import prompt -> Don't Import; autosave progress -> wait;
+"save changes?" -> hub alarm, never answered by a bot; crash reporter -> hub alarm + log path); unknown dialog ->
+screenshot to the hub and stop the job's clock. Ask 10: `unreal-job.ps1 -Open` runs doctor.py --fix after the
+editor is up, so a relaunch cannot regress these.
