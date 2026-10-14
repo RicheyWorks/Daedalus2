@@ -98,6 +98,7 @@ jobs:
           python3 -m py_compile tools/blender/brick_cast.py tools/blender/brick_creatures.py
           python3 -m py_compile tools/blender/brick_environment.py tools/blender/validate_brick_package.py
           python3 -m py_compile tools/unreal/ocean-http-probe/run.py
+          python3 -m py_compile tools/unreal/battle_cast_import_probe.py tools/unreal/copy_battle_cast_probe_assets.py tools/unreal/record_battle_cast_proof.py
   windows:
     runs-on: windows-latest
     steps:

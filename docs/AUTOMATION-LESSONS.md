@@ -413,3 +413,16 @@ existing tool before writing a second one.
 (4) `FindTeleportSpot ... root component not being a collider` x28: foes spawned deferred with
 AdjustIfPossibleButAlwaysSpawn before their collider existed; FindSpot already traced the ground, so AlwaysSpawn.
 Rule: tools/unreal_play/editor_log_report.py after each Play run; its counts are part of the result line.
+
+## Verify imported paths and role names against actual assets (2026-10-13)
+The first synthetic battle test used `_Attack` names and passed, but the actual
+Gallery import generated `<MeshName>Attack` below `<Id>/<Id>/SkeletalMeshes`.
+Filesystem inspection exposed both differences. Native selection now accepts
+the exact mesh-name-plus-role form and scans recursively within that cast's
+folder. A private copy of all 13 imported Gallery characters then verified all
+26 attack/hurt bindings through the native API, with errors=0 warnings=0 and
+152 unchanged art hashes. Synthetic success alone had not proved the integration.
+The updated synthetic run had no test errors/warnings but one editor layout
+warning; report both scopes. Neither selection probe proves animation playback,
+cooking or rendered battle acceptance. The nested-path importer stamp lookup was
+reported to Claude, its owner, instead of editing the same lane concurrently.
