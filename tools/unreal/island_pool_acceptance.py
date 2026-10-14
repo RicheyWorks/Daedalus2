@@ -46,6 +46,8 @@ def main():
         raise ValueError('special surface/collision contract missing')
     native_folder = (pathlib.Path(args.content_root).resolve() / 'Daedalus/Art/Islands/NativePool'
                      if args.content_root else source / 'NativePool')
+    if args.content_root and not native_folder.is_dir():
+        raise ValueError('explicit native Content root must contain the saved NativePool directory')
     for asset in selected:
         file = source / asset['fbx']
         if file.resolve().parent != source:
