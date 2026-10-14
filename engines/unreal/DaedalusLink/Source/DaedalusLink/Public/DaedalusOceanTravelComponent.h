@@ -26,6 +26,7 @@ class DAEDALUSLINK_API ADaedalusOceanVessel : public APawn
     GENERATED_BODY()
 public:
     ADaedalusOceanVessel();
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
     virtual UInputComponent* CreatePlayerInputComponent() override;
@@ -39,6 +40,11 @@ public:
     void SetHelmInput(float Forward, float Turn, float Dive);
     UFUNCTION(Server,Reliable,BlueprintCallable,Category="Daedalus|Ocean")
     void RequestDockExit(ADaedalusOceanDockControl* Dock);
+    /** Host configuration while unoccupied. Refuses a hull that would overlap blocking geometry. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
+    bool ConfigureHull(const FVector& HalfExtentCm);
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_HullHalfExtent, Category="Daedalus|Ocean")
+    FVector HullHalfExtentCm = FVector(180,80,70);
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float SeaLevelCm = 0;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
@@ -60,6 +66,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     FString CurrentRealm;
 private:
+    UFUNCTION() void OnRep_HullHalfExtent();
     FVector Helm = FVector::ZeroVector;
     float InputAge = 1;
     float ForwardSpeed = 0;

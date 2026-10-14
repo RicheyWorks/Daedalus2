@@ -10,6 +10,7 @@
 #include "DaedalusOceanDock.h"
 #include "DaedalusOceanInteractor.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
 
 AOceanProbeController::AOceanProbeController() { PrimaryActorTick.bCanEverTick=true; }
 void AOceanProbeController::Tick(float Dt)
@@ -89,6 +90,13 @@ void AOceanProbeController::Tick(float Dt)
         const auto Expected=Dive ? EDaedalusOceanVessel::Submarine : EDaedalusOceanVessel::Boat;
         if (Vessel->VesselType!=Expected || Vessel->CurrentRealm!=TEXT("Ocean Realm")
             || Vessel->CruiseSpeedCm!=700 || Vessel->SeaLevelCm!=25 || Vessel->MaxDepthCm!=15000) return;
+        if (FParse::Param(FCommandLine::Get(),TEXT("ProbeHullProfile")))
+        {
+            const FVector Extent=Dive?FVector(280,115,90):FVector(235,95,65);
+            if (!Vessel->HullHalfExtentCm.Equals(Extent) || !Vessel->HullCollision->GetUnscaledBoxExtent().Equals(Extent)) return;
+            if (Vessel->ConfigureHull(FVector(10))) {UE_LOG(LogTemp,Error,TEXT("OCEAN_CLIENT_HULL_MUTATION"));return;}
+            if (!IdentityLogged) UE_LOG(LogTemp,Display,TEXT("OCEAN_HULL_REPLICATED extent=%s client_resize_refused=1"),*Extent.ToString());
+        }
         if (!IdentityLogged)
         {
             UE_LOG(LogTemp,Display,TEXT("OCEAN_REPLICATED_IDENTITY mode=%s realm=%s speed=%.0f sea=%.0f depth=%.0f"),
@@ -178,7 +186,13 @@ APawn* AOceanProbeGameMode::SpawnDefaultPawnAtTransform_Implementation(AControll
     Spawn.Owner=Player;
     Spawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     // Separate collision-enabled hulls; no spawn adjustment along the measured X axis.
-    return GetWorld()->SpawnActor<ADaedalusOceanVessel>(FVector(0,GetNumPlayers()*1200,25),FRotator::ZeroRotator,Spawn);
+    auto* Vessel=GetWorld()->SpawnActor<ADaedalusOceanVessel>(FVector(0,GetNumPlayers()*1200,25),FRotator::ZeroRotator,Spawn);
+    if (FParse::Param(FCommandLine::Get(),TEXT("ProbeHullProfile")))
+    {
+        const FVector Extent=FParse::Param(FCommandLine::Get(),TEXT("ProbeDive"))?FVector(280,115,90):FVector(235,95,65);
+        if (!Vessel || !Vessel->ConfigureHull(Extent)) {UE_LOG(LogTemp,Error,TEXT("OCEAN_SERVER_HULL_CONFIGURATION_FAILED"));return nullptr;}
+    }
+    return Vessel;
 }
 void AOceanProbeGameMode::Tick(float Dt)
 {

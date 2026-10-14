@@ -15,6 +15,7 @@
 #include "InputModifiers.h"
 #include "DaedalusOceanDock.h"
 #include "EngineUtils.h"
+#include "CollisionQueryParams.h"
 
 namespace
 {
@@ -56,6 +57,32 @@ ADaedalusOceanVessel::ADaedalusOceanVessel()
 UInputComponent* ADaedalusOceanVessel::CreatePlayerInputComponent()
 {
     return NewObject<UEnhancedInputComponent>(this,TEXT("HelmInput"));
+}
+void ADaedalusOceanVessel::BeginPlay()
+{
+    Super::BeginPlay();
+    OnRep_HullHalfExtent();
+}
+void ADaedalusOceanVessel::OnRep_HullHalfExtent()
+{
+    if (HullCollision) HullCollision->SetBoxExtent(HullHalfExtentCm,true);
+}
+bool ADaedalusOceanVessel::ConfigureHull(const FVector& HalfExtentCm)
+{
+    if (!HasAuthority() || GetController() || !GetWorld() || !HullCollision || !Finite(HalfExtentCm)
+        || HalfExtentCm.GetMin()<10 || HalfExtentCm.GetMax()>5000) return false;
+    const FVector Scale=HullCollision->GetComponentScale().GetAbs();
+    if (!Finite(Scale) || Scale.GetMin()<=0 || !Finite(GetActorLocation())) return false;
+    const FVector WorldExtent=HalfExtentCm*Scale;
+    if (!Finite(WorldExtent) || WorldExtent.GetMax()>5000) return false;
+    FCollisionQueryParams Query(SCENE_QUERY_STAT(OceanHullConfiguration),false,this);
+    if (GetWorld()->OverlapBlockingTestByProfile(HullCollision->GetComponentLocation(),
+        HullCollision->GetComponentQuat(),HullCollision->GetCollisionProfileName(),
+        FCollisionShape::MakeBox(WorldExtent),Query)) return false;
+    HullHalfExtentCm=HalfExtentCm;
+    OnRep_HullHalfExtent();
+    ForceNetUpdate();
+    return true;
 }
 void ADaedalusOceanVessel::SetupPlayerInputComponent(UInputComponent* Input)
 {
@@ -152,6 +179,7 @@ void ADaedalusOceanVessel::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
     DOREPLIFETIME(ADaedalusOceanVessel,CruiseSpeedCm);
     DOREPLIFETIME(ADaedalusOceanVessel,SeaLevelCm);
     DOREPLIFETIME(ADaedalusOceanVessel,MaxDepthCm);
+    DOREPLIFETIME(ADaedalusOceanVessel,HullHalfExtentCm);
 }
 
 void ADaedalusOceanVessel::Tick(float DeltaSeconds)

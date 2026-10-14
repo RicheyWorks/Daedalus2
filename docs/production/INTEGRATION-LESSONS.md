@@ -71,3 +71,9 @@
 - Inclusive voxel coordinates describe occupied cells: x=-6..6 spans 13 metres and has centre x=0.5. Fit decorative meshes to those physical extents without silently changing collision.
 - Blender tessellation indices can vary between equivalent exports. Freeze accepted GLB bytes when adding unrelated assets and record their source hashes instead of claiming byte-identical regeneration.
 - A rendered inspection proves appearance in that private scene. It does not establish controls, collision fitting, cross-realm loading, cooking or shared-world acceptance.
+
+### Configurable Ocean body collision
+- Fit the navigation body explicitly; a skiff's sail or submarine's periscope should not silently enlarge its navigation box. Keep decorative geometry distinct from the documented collision profile.
+- A server-side box resize needs bounds, occupancy and blocking-overlap checks before publishing any change. Replicate the accepted dimensions and apply them to the remote component in OnRep; replicating a numeric property alone is not proof that collision changed.
+- Verify wall sweeps in native physics and separately observe the actual remote box dimensions and client refusal through a real server/client pair. Keep rendered navigation and rotation clearance open until tested.
+- Inspect cross-team code before relying on a broadcast's event-order description. The realm notification/save ordering differed from the initial handoff; report the exact discrepancy to the owner before wiring dependent transitions.
