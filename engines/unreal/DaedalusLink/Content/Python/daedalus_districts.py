@@ -611,6 +611,55 @@ def extras_for_labelled_steps(realms):
     return made
 
 
+def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
+    """Plug the holes in a hub island's own floor (02:54: a trace at World Zero's hub centre hit nothing): probe a
+    grid across the hub estate (3x3 cells, 768 m) and lay one slab per empty grid square at the spawn's floor
+    height, as instances of one Floor_<R>_Hub district actor. Idempotent (replaced on rerun). One row per tick."""
+    import unreal
+    import daedalus_land_grid as G
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    world = _world()
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    label = "Floor_%s_Hub" % realm.replace("-", "")
+    for a in list(sub.get_all_level_actors()):
+        if a.get_actor_label() == label:
+            sub.destroy_actor(a)
+    if realm == "WORLD-ZERO":
+        ps = [a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"]
+        at = ps[0].get_actor_location() if ps else unreal.Vector(R.ORIGINS[realm][0], R.ORIGINS[realm][1], R.GROUND_Z)
+        hit = unreal.SystemLibrary.line_trace_single(world, at + unreal.Vector(0, 0, 3000), at - unreal.Vector(0, 0, 20000), unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
+        top = hit.to_tuple()[4].z if hit else at.z - 100.0
+        cx, cy = R.ORIGINS[realm]
+    else:
+        cx, cy = R.ORIGINS[realm]
+        top = R.GROUND_Z
+    half = R.hub_half_cm()
+    n = int((half * 2) // step_cm)
+    holes = []
+    probed = 0
+    for iy in range(n):
+        y = cy - half + step_cm * (iy + 0.5)
+        for ix in range(n):
+            x = cx - half + step_cm * (ix + 0.5)
+            probed += 1
+            hit = unreal.SystemLibrary.line_trace_single(world, unreal.Vector(x, y, top + 2000), unreal.Vector(x, y, top - 6000), unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
+            if not hit:
+                holes.append((x, y))
+        yield "%s hub row %d/%d: %d holes so far" % (realm, iy + 1, n, len(holes))
+    if holes:
+        a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(cx, cy, top))
+        a.set_editor_property("realm", realm)
+        a.set_editor_property("district", -2)
+        a.lay_ground([unreal.Transform(unreal.Vector(x, y, top - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(slab_m, slab_m, 4.0)) for x, y in holes])
+        a.get_editor_property("ground").set_cull_distances(0, 0)
+        a.set_actor_label(label)
+        a.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
+        a.tags = [unreal.Name("Floor"), unreal.Name("Realm:%s" % realm)]
+    P.save_world()
+    return {"realm": realm, "probed": probed, "holes": len(holes), "top_cm": round(top)}
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 
