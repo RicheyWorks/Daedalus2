@@ -66,7 +66,7 @@ if "--no-sheet" not in argv:
             cm = M.CATALOG[n][1]
             ob = V._mesh_from_voxels(n, vox, scale=cm, pal=M.PAL)
             zmin = min(z for _, _, z, _ in vox)
-            ob.location = ((i % cols) * pitch - cols * pitch / 2, -(i // cols) * pitch, -zmin * cm / 100.0)
+            ob.location = ((i % cols) * pitch - (cols - 1) * pitch / 2, -(i // cols) * pitch, -zmin * cm / 100.0)
             for v in ob.data.vertices:
                 v.co /= 100.0
             ob.data.color_attributes.active_color = ob.data.color_attributes["Col"]
