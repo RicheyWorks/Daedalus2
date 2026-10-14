@@ -1,0 +1,21 @@
+{
+  "original_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-prepared.delivery.json",
+  "original_manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+  "revision_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.receipt.json",
+  "replacement": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "fbx": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.fbx",
+    "sha256": "3c2bf700adc07b0425565cf85c983c6ac45ed75be4a01e057065b5716c94290c",
+    "bytes": 2060764
+  },
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/3c2bf700adc07b04",
+  "output_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\codex-garden-gate-r1.delivery.json",
+  "output_sha256": "cd38894b650b91292fd053409426444a27c9fdf69c9faeb177472984edb3af85",
+  "created": true,
+  "entries": 24,
+  "unchanged_entry_json_spans": 23,
+  "expected_meshes": 47,
+  "importer_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "importer_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "stage": "candidate_manifest_prepared; owner approval and guarded import remain pending"
+}

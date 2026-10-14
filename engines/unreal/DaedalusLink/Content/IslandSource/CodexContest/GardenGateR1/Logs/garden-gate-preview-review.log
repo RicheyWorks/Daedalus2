@@ -1,0 +1,43 @@
+14:23:32 | INFO: Data are loaded, start creating Blender stuff
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_island
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_water
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_trees
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_cottage
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_flowers
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_rocks
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_crystals
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_clouds
+14:23:32 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_landmarks
+14:23:32 | INFO: glTF import finished in 0.23s
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+Fra:1 Mem:84.34M (Peak 93.52M) | Time:00:41.15 | Rendering 1 / 64 samples
+Fra:1 Mem:84.34M (Peak 93.52M) | Time:00:41.66 | Rendering 25 / 64 samples
+Fra:1 Mem:84.34M (Peak 93.52M) | Time:00:41.81 | Rendering 50 / 64 samples
+Fra:1 Mem:84.34M (Peak 93.52M) | Time:00:41.85 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\GardenGateR1\PreviewQA\overview.png'
+Time: 00:42.12 (Saving: 00:00.24)
+
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.07 | Rendering 1 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.12 | Rendering 25 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.18 | Rendering 50 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.21 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\GardenGateR1\PreviewQA\entrance.png'
+Time: 00:00.31 (Saving: 00:00.07)
+
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.07 | Rendering 1 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.13 | Rendering 25 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.19 | Rendering 50 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.22 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\GardenGateR1\PreviewQA\courtyard_player.png'
+Time: 00:00.35 (Saving: 00:00.09)
+
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.07 | Rendering 1 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.15 | Rendering 25 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.20 | Rendering 50 / 64 samples
+Fra:1 Mem:84.34M (Peak 92.23M) | Time:00:00.24 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\GardenGateR1\PreviewQA\crops.png'
+Time: 00:00.33 (Saving: 00:00.06)
+
+{"stage": "source_multiview_rendered", "name": "CodexIsland_cliff_garden_84022_GardenGateR1", "seed": 84022, "glb_sha256": "750d07ac62da5b5707e66b8df0ec3e1aab6b77c7da2a0e52a4d3e5ab303894d8", "views": [{"name": "overview", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\PreviewQA\\overview.png", "position": [110, -140, 105], "target": [0, 0, -3], "camera_type": "ORTHO", "framing": 150, "elapsed_s": 42.136235, "sha256": "b5cf871f4a9534095346028db0bcdfdd8c6615d75ed77403f4fb0bfd81c16475"}, {"name": "entrance", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\PreviewQA\\entrance.png", "position": [0, -58, 6], "target": [0, -28, 6], "camera_type": "PERSP", "framing": 28, "elapsed_s": 0.325122, "sha256": "5b63ffd275cb0ce62660eafeea7d054006d2406b4c3240f0cbb46946de17e9e3"}, {"name": "courtyard_player", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\PreviewQA\\courtyard_player.png", "position": [0, -26, 2.7], "target": [0, 12, 2.7], "camera_type": "PERSP", "framing": 28, "elapsed_s": 0.364053, "sha256": "af07c78b9039ed38722931807b243a05d3f84b54682b8312d926eb660cf16662"}, {"name": "crops", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\PreviewQA\\crops.png", "position": [27, -25, 16], "target": [17, -12, 2], "camera_type": "PERSP", "framing": 40, "elapsed_s": 0.346375, "sha256": "bff1975e00babef4250392dfd4f0a805b1268919695233f98dcff4a7ed4d494d"}], "saved_unreal": false, "view_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\views-main.json", "acceptance": "appearance only; Unreal, collision and movement remain unverified"}
+
+Blender quit

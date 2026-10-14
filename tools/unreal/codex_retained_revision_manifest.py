@@ -2,7 +2,7 @@
 """Prepare a bounded retained candidate manifest without invoking an importer.
 
 Keep the full original 24-entry batch and its importer source/options/material.
-Replace only the original summit/HeroR3/HeroR4 or CopperPatina coupler/PowerUnit entry,
+Replace only the exact summit/hero, cliff/GardenGateR1 or coupler/PowerUnit entry,
 preserve every other entry's JSON
 bytes, and bind the replacement to the retained FBX's actual bytes. This grants
 no editor ownership, import/admission approval, or world-placement authority.
@@ -18,6 +18,8 @@ ORIGINAL = "CodexIsland_summit_rim_84011"
 REVISION = ORIGINAL + "_HeroR3"
 SALVAGE_ORIGINAL = "CodexModule_CopperPatina_BridgeCoupler_85000"
 SALVAGE_REVISION = "CodexSalvage_PowerUnit_86100"
+GARDEN_ORIGINAL = "CodexIsland_cliff_garden_84022"
+GARDEN_REVISION = GARDEN_ORIGINAL + "_GardenGateR1"
 DEST = "/Game/Daedalus/Art/Islands/CodexContest/Prepared/"
 DECODER = json.JSONDecoder()
 
@@ -101,8 +103,10 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
         kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", ORIGINAL + "_" + hero, 10
     elif replace_name == SALVAGE_ORIGINAL:
         kind, schema, revision, object_count = "module", "daedalus.codex-salvage-assembly.v1", SALVAGE_REVISION, 5
+    elif replace_name == GARDEN_ORIGINAL:
+        kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", GARDEN_REVISION, 9
     else:
-        raise ValueError("only the exact original summit or CopperPatina BridgeCoupler may be replaced")
+        raise ValueError("only the exact retained summit, cliff or CopperPatina coupler may be replaced")
     targets = [(index, span) for index, span in enumerate(entries) if span[2]["name"] == replace_name]
     if len(targets) != 1 or targets[0][1][2].get("kind") != kind:
         raise ValueError("exact original replacement entry is absent, ambiguous or a different kind")
@@ -111,7 +115,10 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if receipt.get("schema") != schema or receipt.get("stage") != "exported" or receipt.get("name") != revision:
         raise ValueError("require the exact exported retained candidate receipt")
     if kind == "island":
-        if config.get("preset") != "summit-rim" or config.get("revision") != hero or config.get("seed") != 84011:
+        if replace_name == GARDEN_ORIGINAL:
+            if config.get("preset") != "cliff-garden" or config.get("revision") != "GardenGateR1" or config.get("seed") != 84022:
+                raise ValueError("receipt is not the exact retained cliff seed84022 GardenGateR1 revision")
+        elif config.get("preset") != "summit-rim" or config.get("revision") != hero or config.get("seed") != 84011:
             raise ValueError("receipt is not the exact retained summit seed84011 hero revision")
     elif config.get("assembly") != "PowerUnit" or config.get("preset") != "CopperPatina" or config.get("seed") != 86100:
         raise ValueError("receipt is not the retained CopperPatina PowerUnit seed86100 assembly")
@@ -190,7 +197,7 @@ def main():
     parser.add_argument("original_manifest", type=Path)
     parser.add_argument("revision_receipt", type=Path)
     parser.add_argument("output_manifest", type=Path)
-    parser.add_argument("--replace", dest="replace_name", choices=(ORIGINAL, SALVAGE_ORIGINAL), default=ORIGINAL,
+    parser.add_argument("--replace", dest="replace_name", choices=(ORIGINAL, SALVAGE_ORIGINAL, GARDEN_ORIGINAL), default=ORIGINAL,
                         help="exact original entry to replace; default retains the HeroR3/HeroR4 summit contract")
     args = parser.parse_args()
     print(json.dumps(prepare(args.original_manifest, args.revision_receipt, args.output_manifest, args.replace_name), indent=2))

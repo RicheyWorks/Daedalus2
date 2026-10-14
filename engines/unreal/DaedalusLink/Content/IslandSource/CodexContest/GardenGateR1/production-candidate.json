@@ -1,0 +1,753 @@
+{
+  "schema": "daedalus.codex-source-candidate.v1",
+  "stage": "exported_candidate_reviewed",
+  "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "geometry_seed": 84022,
+  "palette_seed": 92022,
+  "revision": "GardenGateR1",
+  "saved_unreal": false,
+  "imported_unreal": false,
+  "placed_unreal": false,
+  "provenance": {
+    "author": "buffffff",
+    "id": "buffffff",
+    "image": "C:/Users/730ri/projects/bot-team/art/buffffff/hero/Buffffff_Island_hero.png",
+    "inspection": "historical image and original source catalog; not current native acceptance",
+    "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+    "manifest": "C:/Users/730ri/projects/bot-team/art/buffffff/manifest.json",
+    "name": "Buffffff / Six-F Island",
+    "provenance": "Original competition Grok slot and author asset directory",
+    "sources": [
+      "C:/Users/730ri/projects/bot-team/art/buffffff/layout.json",
+      "C:/Users/730ri/projects/bot-team/art/buffffff/core.json",
+      "C:/Users/730ri/projects/Daedalus2/tools/islands/buffffff/buffffff_island_ue.py"
+    ],
+    "team": "Grok"
+  },
+  "design": {
+    "base_type": "cliff-garden",
+    "retained_baseline_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_cliff_garden_84022\\CodexIsland_cliff_garden_84022.receipt.json",
+    "retained_baseline_receipt_fingerprint": {
+      "bytes": 13817,
+      "sha256": "f42161732f1377de7cd024e2b11df600924d30cf96f9f37d28e78e68e7b3f2ba"
+    },
+    "recipe": {
+      "entry_x": 0,
+      "entry_y": -44,
+      "court_y": 14,
+      "route_half_width": 2,
+      "floor_voxel_z": 0,
+      "entry_fan_half_width": 5,
+      "entry_fan_step": 2,
+      "crop_gap_y": [
+        -17,
+        -13,
+        -9,
+        -5
+      ],
+      "crop_outer_x": [
+        26,
+        27
+      ],
+      "crop_outer_y": [
+        -19,
+        -3
+      ],
+      "cottage_approach": [
+        9,
+        12
+      ],
+      "gate_y": -35,
+      "gate_post_x": [
+        -4,
+        4
+      ],
+      "gate_post_half_width": 1,
+      "gate_post_top_z": 8,
+      "gate_arch_base_z": 9,
+      "gate_arch_rise": 3,
+      "gate_arch_thickness": 2
+    },
+    "palette_profile": "lime-seaglass-lavender-v1",
+    "palette_rgb_srgb": {
+      "blossom": [
+        0.6896505,
+        0.4868121,
+        0.8417792
+      ],
+      "blossom2": [
+        0.872205,
+        0.6997924,
+        0.9533403
+      ],
+      "cloud": [
+        0.97,
+        0.97,
+        0.99
+      ],
+      "crystal": [
+        0.2332641,
+        0.6490828,
+        0.7200762
+      ],
+      "crystal2": [
+        0.5476636,
+        0.8620631,
+        0.8012116
+      ],
+      "dirt": [
+        0.4027273,
+        0.3241464,
+        0.2455654
+      ],
+      "dirt2": [
+        0.4518404,
+        0.3634369,
+        0.2750333
+      ],
+      "door": [
+        0.35,
+        0.22,
+        0.12
+      ],
+      "flower_r": [
+        0.9,
+        0.25,
+        0.3
+      ],
+      "flower_w": [
+        0.9437737,
+        0.9337335,
+        0.8333321
+      ],
+      "flower_y": [
+        0.95,
+        0.85,
+        0.25
+      ],
+      "foam": [
+        0.7295914,
+        0.9070596,
+        0.8873409
+      ],
+      "grass": [
+        0.5124962,
+        0.7235241,
+        0.3416641
+      ],
+      "grass2": [
+        0.5727899,
+        0.7637199,
+        0.3919089
+      ],
+      "leaf": [
+        0.4622515,
+        0.7034262,
+        0.3014684
+      ],
+      "leaf2": [
+        0.3115173,
+        0.6632304,
+        0.5124962
+      ],
+      "rock": [
+        0.5598892,
+        0.6581154,
+        0.7072285
+      ],
+      "rock2": [
+        0.2848559,
+        0.4125499,
+        0.4714857
+      ],
+      "sand": [
+        0.8433722,
+        0.7329306,
+        0.481927
+      ],
+      "trunk": [
+        0.4,
+        0.26,
+        0.15
+      ],
+      "water": [
+        0.1577495,
+        0.660576,
+        0.7295914
+      ],
+      "window": [
+        1.0,
+        0.9,
+        0.55
+      ]
+    },
+    "palette_surface": {
+      "blossom": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "blossom2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "cloud": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "crystal": {
+        "metallic": 0.12,
+        "roughness": 0.28
+      },
+      "crystal2": {
+        "metallic": 0.12,
+        "roughness": 0.28
+      },
+      "dirt": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "dirt2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "door": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_r": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_w": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_y": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "foam": {
+        "metallic": 0.0,
+        "roughness": 0.18
+      },
+      "grass": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "grass2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "leaf": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "leaf2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "rock": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "rock2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "sand": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "trunk": {
+        "metallic": 0.0,
+        "roughness": 0.72
+      },
+      "water": {
+        "metallic": 0.0,
+        "roughness": 0.18
+      },
+      "window": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      }
+    },
+    "source_dependencies": {
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\blender\\codex_contest_island.py": {
+        "bytes": 36113,
+        "sha256": "1a015374ebdc6c046ef2e97c908bef02e94ef86a6c6b6231cae8cefd2dc6801a"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\blender\\voxel_island.py": {
+        "bytes": 13255,
+        "sha256": "c04d929fa2951291defb669c4aa4a4a9f41910bc8222a92c9590ca309f8b1a45"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\connectors\\claude-asset-pipeline\\asset_pipeline\\ship.py": {
+        "bytes": 12577,
+        "sha256": "c59ea88f3f55ad64a8b0eb7d29709207af878f0fea4c26720583ab19385a0fc3"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\connectors\\claude-asset-pipeline\\asset_pipeline\\sides.py": {
+        "bytes": 7407,
+        "sha256": "607b4e0c48f660d0157c6bbacbcde77d65b0812c6b35bc9a478f73e9e31a06e2"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\connectors\\claude-asset-pipeline\\asset_pipeline\\glb.py": {
+        "bytes": 3516,
+        "sha256": "7a2ee1054f7aa99f1a0790b7bae1472c273d515627762b9fddd2dd3492a45f3b"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\blender\\review_codex_hero.py": {
+        "bytes": 5458,
+        "sha256": "88b48cd508ecd7c66bcaf53dcb51e263058d73c50a1e0669a3e46bc19a8f10ac"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_retained_revision_manifest.py": {
+        "bytes": 11735,
+        "sha256": "4385685eecde43eb5ce5e6ab25f377a82ac72f80fabe6a11597d8723470ed639"
+      }
+    },
+    "layer_comparison": {
+      "island": {
+        "occupied_positions_unchanged": false,
+        "voxel_count": 106650,
+        "occupied_positions_sha256": "4ec9e5c1cbbdfa4609413c666aa871db5e93da8376d555ca562d8893f72c5d82"
+      },
+      "water": {
+        "occupied_positions_unchanged": true,
+        "voxel_count": 181,
+        "occupied_positions_sha256": "0f569ed3fdd953808e5dda0baefa807d8e20f4a3c3c1bcfdeae6a768c2f5de94"
+      },
+      "trees": {
+        "occupied_positions_unchanged": true,
+        "voxel_count": 1013,
+        "occupied_positions_sha256": "59d82079575abdc1d9f47791b1f7d4af1ae069791681ce306f0f43770a986f33"
+      },
+      "cottage": {
+        "occupied_positions_unchanged": true,
+        "voxel_count": 312,
+        "occupied_positions_sha256": "84c289b327fa0490ee9427c3b02a2bf8f41e8c8327d83235b1a16d0d78fc3451"
+      },
+      "flowers": {
+        "occupied_positions_unchanged": false,
+        "voxel_count": 48,
+        "occupied_positions_sha256": "b98d4a9b4757d94112b3d9fb11da79a9b3015223bf1785cffc8e7de4965d5e1e"
+      },
+      "rocks": {
+        "occupied_positions_unchanged": false,
+        "voxel_count": 16,
+        "occupied_positions_sha256": "9bf50aae3bd87888d875398a94953c533c60eda896bd67a9cfe4e9f546234d10"
+      },
+      "crystals": {
+        "occupied_positions_unchanged": true,
+        "voxel_count": 21,
+        "occupied_positions_sha256": "ab438c1daf02b39329be107001d8505aedefb07326d0595ed4e957bb8d5059b3"
+      },
+      "clouds": {
+        "occupied_positions_unchanged": true,
+        "voxel_count": 327,
+        "occupied_positions_sha256": "9a1befb14ba153305bdb9f7fec0cd3fedd4fe413a047e01c86542e044ef2c46b"
+      },
+      "landmarks": {
+        "occupied_positions_unchanged": false,
+        "voxel_count": 354,
+        "occupied_positions_sha256": "83c95d900f57a28f136a606cd040e9475e7fd86edffbe34929b9c0890cfdbead"
+      }
+    },
+    "improvement": [
+      "Open south entrance interrupts the enclosing bowl and leads to a stepped decorative gate",
+      "Five-metre level main route with an entrance fan up to eleven metres wide; two-metre crop-row paths and a cottage approach",
+      "Related lime/seaglass/lavender colours from local PRNG seed92022; reduced grass value contrast",
+      "Route and gate foundations clear inherited tree/flower/rock dressing without disturbing the pond or waterfall"
+    ],
+    "route_readback": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\source-layout-refined.json",
+      "fingerprint": {
+        "bytes": 21707,
+        "sha256": "1050df900aac2f1bdd52c8da701a94bf957ad1c6887c5bd4a4e135cb661aac1c"
+      }
+    },
+    "arch_kind": "decorative voxel architecture; no portal/gameplay operation"
+  },
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 2060764,
+        "sha256": "3c2bf700adc07b0425565cf85c983c6ac45ed75be4a01e057065b5716c94290c"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 6134872,
+        "sha256": "f0873128b184a0efc08b94d40e6ce47fe39a9c87abe3cefe7127dde198f479f5"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.glb"
+    },
+    "receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.receipt.json",
+      "fingerprint": {
+        "bytes": 17523,
+        "sha256": "f9c97245726c7bbd6592f15fcfd151245a467ae8a3f82afc6d88a09ab3ac13cf"
+      }
+    },
+    "delivery_manifest": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\codex-garden-gate-r1.delivery.json",
+      "fingerprint": {
+        "bytes": 35726,
+        "sha256": "cd38894b650b91292fd053409426444a27c9fdf69c9faeb177472984edb3af85"
+      }
+    }
+  },
+  "contract": {
+    "source_units": "metres; source pivot at [0,0,0], native scale/pivot not observed for this candidate",
+    "roles": [
+      {
+        "dims": [
+          92.0,
+          86.0,
+          51.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "triangles": 90588
+      },
+      {
+        "dims": [
+          28.0,
+          24.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "triangles": 1012
+      },
+      {
+        "dims": [
+          68.0,
+          66.0,
+          24.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "triangles": 3000
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_door",
+          "CodexVoxel_sand",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78.0,
+          73.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "triangles": 576
+      },
+      {
+        "dims": [
+          78.0,
+          47.0,
+          20.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "triangles": 140
+      },
+      {
+        "dims": [
+          33.0,
+          27.0,
+          13.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "triangles": 176
+      },
+      {
+        "dims": [
+          127.0,
+          16.0,
+          6.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "triangles": 1224
+      },
+      {
+        "dims": [
+          31.0,
+          29.0,
+          13.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_dirt",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "triangles": 1756
+      }
+    ],
+    "source_meshes": 9,
+    "source_triangles": 99420,
+    "body_bounds_metres": {
+      "min": [
+        -46,
+        -43,
+        -32
+      ],
+      "max": [
+        46,
+        43,
+        19
+      ]
+    },
+    "collision": {
+      "authored_ucx_boxes": 672,
+      "target": "island body, including the level route floor",
+      "excluded": "decorative gate and other prop/dressing meshes",
+      "native_hulls_honoured": null,
+      "native_collision_movement_or_navmesh": "unverified"
+    },
+    "material_binding": "Col vertex colours plus existing CodexVoxel_<key> face slots; recipe RGB is sRGB and converted once to linear",
+    "importer_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+    "importer_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+    "options_requested": {
+      "auto_generate_collision": false,
+      "build_nanite": false,
+      "combine_meshes": false,
+      "generate_lightmap_u_vs": false,
+      "import_materials": false,
+      "import_textures": false,
+      "vertex_color_import_option": "REPLACE"
+    },
+    "native_backend_settings_observed": null
+  },
+  "delivery": {
+    "candidate_name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+    "candidate_manifest_index": 1,
+    "candidate_meshes": 9,
+    "manifest_entries": 24,
+    "unrelated_raw_entry_spans_unchanged": 23,
+    "whole_manifest_expected_meshes": 47,
+    "proposed_native_destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/3c2bf700adc07b04",
+    "native_destination_exists_verified": false,
+    "policy": "Only this candidate proposed for a later owned guarded import. No blanket import of other entries. No editor turn or placement authority.",
+    "native_scope": "Source candidate complete. Direct user21:29:45 assigns Codex operator; actual native import/save remains separate and pending fresh single-writer preflight."
+  },
+  "source_review": {
+    "bar_path": "C:\\Users\\730ri\\.codex\\worktrees\\island-mesh-pool\\Daedalus2\\docs\\production\\VISUAL-QUALITY-BAR.md",
+    "bar_acceptance": "not established; source design comparison only",
+    "reviewed_views": [
+      {
+        "name": "overview",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\overview.png",
+        "position": [
+          110,
+          -140,
+          105
+        ],
+        "target": [
+          0,
+          0,
+          -3
+        ],
+        "camera_type": "ORTHO",
+        "framing": 150,
+        "elapsed_s": 52.148805,
+        "sha256": "09987a1d203b230afa6f8a5216cb1833aa268a70913025da90d89bef3c1b87ae"
+      },
+      {
+        "name": "garden_overlook",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\garden_overlook.png",
+        "position": [
+          72,
+          -92,
+          120
+        ],
+        "target": [
+          0,
+          -7,
+          0
+        ],
+        "camera_type": "ORTHO",
+        "framing": 125,
+        "elapsed_s": 0.388315,
+        "sha256": "4363b290c652fbc12428d2c1845f617dd51b6377148f96ca9dc1898c0c787324"
+      },
+      {
+        "name": "entrance",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\entrance.png",
+        "position": [
+          0,
+          -58,
+          6
+        ],
+        "target": [
+          0,
+          -28,
+          6
+        ],
+        "camera_type": "PERSP",
+        "framing": 28,
+        "elapsed_s": 0.341908,
+        "sha256": "9636e7d61ba3df4f7cd1718daf5c9aa382db5169559d2e7612589e9995499672"
+      },
+      {
+        "name": "gate_court",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\gate_court.png",
+        "position": [
+          0,
+          -22,
+          8
+        ],
+        "target": [
+          0,
+          -35,
+          7
+        ],
+        "camera_type": "PERSP",
+        "framing": 28,
+        "elapsed_s": 0.374859,
+        "sha256": "f22127524e34d165ac3fc95aadfc4fb282cba12cc7566270615d52dfc59f5e6f"
+      },
+      {
+        "name": "courtyard_player",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\courtyard_player.png",
+        "position": [
+          0,
+          -26,
+          2.7
+        ],
+        "target": [
+          0,
+          12,
+          2.7
+        ],
+        "camera_type": "PERSP",
+        "framing": 28,
+        "elapsed_s": 0.354958,
+        "sha256": "49a8f5802131efdd4cef6899177e15ff29a833c83ab26628165c7fb4bb3ff5d0"
+      },
+      {
+        "name": "crops",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2QA\\crops.png",
+        "position": [
+          24,
+          -25,
+          24
+        ],
+        "target": [
+          17,
+          -12,
+          2
+        ],
+        "camera_type": "PERSP",
+        "framing": 40,
+        "elapsed_s": 0.351099,
+        "sha256": "f9cc86e592b672d04c24ee1f56379d829612c103f3d0002da5524148ae04238a"
+      },
+      {
+        "name": "gate_full",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\FinalQA\\gate_full.png",
+        "position": [
+          0,
+          -17,
+          8
+        ],
+        "target": [
+          0,
+          -35,
+          7
+        ],
+        "camera_type": "PERSP",
+        "framing": 28,
+        "elapsed_s": 42.113067,
+        "sha256": "cafb846133e9d56c44611f8178ff9adccee51da690fd23a5eba2495d651fc693"
+      }
+    ],
+    "final_payload_byte_identical_to_reviewed_preview": true,
+    "known_limits": [
+      "Inherited dark triangular shading remains on terrain and crop forms; cause not established",
+      "Water remains inherited opaque voxel geometry; native water/material appearance unverified",
+      "The baseline camera hides some courtyard beds; the elevated/crop views expose the route and bed layout",
+      "No native movement, collision, runtime profiling or day/dusk acceptance"
+    ],
+    "first_preview_retained": {
+      "folder": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview",
+      "views": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\PreviewQA",
+      "observed_defects": [
+        "Entrance initially reads as a narrow slot",
+        "Crop camera was embedded in cliff geometry"
+      ],
+      "fixes": [
+        "Bounded entrance fan",
+        "Safe higher crop camera and extra elevated/interior views"
+      ],
+      "status": "superseded, not a final delivery payload"
+    },
+    "reviewed_view_count": 7,
+    "observed_improvement": "Open south entrance and stepped decorative gate; connected level cottage/crop paths; reduced grass contrast. Final full-gate framing inspected, with original and refined views retained."
+  },
+  "preservation": {
+    "retained_binary_files": 96,
+    "all_byte_identical": true,
+    "pin_file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\retained-inputs.before.json",
+    "pin_fingerprint": {
+      "bytes": 36308,
+      "sha256": "320abfb3f3ca7266e17be47f1999628e54f33c76e31c59b25d99bca7ab2549bc"
+    },
+    "original_manifest_fingerprint": {
+      "bytes": 35480,
+      "sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79"
+    }
+  },
+  "elapsed_s_observed": {
+    "fbx_export": 1.054268,
+    "generation": 0.48256,
+    "glb_export": 1.596688,
+    "mesh": 1.522147
+  },
+  "operator_scope": "Factory headless Blender, threads2, one own process at a time. No Unreal calls, tests, GUI/lock/ownership/settings changes."
+}

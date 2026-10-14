@@ -1,0 +1,485 @@
+{
+  "stage": "retained_sources_pinned_before_GardenGateR1",
+  "files": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_cliff_garden_84022\\CodexIsland_cliff_garden_84022.fbx",
+      "bytes": 2013356,
+      "sha256": "2053cd40f71a735ce1c5642e42b902518e0047b4181f1e2b0388d47dd70ecc1f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_cliff_garden_84022\\CodexIsland_cliff_garden_84022.glb",
+      "bytes": 6061384,
+      "sha256": "b51f4d44138e2bee01ada56e1d1778ca3591a8243df96045ff28d1f05ff2c711"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.fbx",
+      "bytes": 1451948,
+      "sha256": "eff77fd4050b4f5643facf34f979cdb713b3fee5f28b6e0b53fb80c3a5b3a677"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_river_canyon_84033\\CodexIsland_river_canyon_84033.glb",
+      "bytes": 5764524,
+      "sha256": "f9e53b83204f5b6254477d1d623ee639bba5e6ad51b588e58127f4adc478305d"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.fbx",
+      "bytes": 1844780,
+      "sha256": "5cef78b0fcfdb2861c0e2913ff3647ab9863c273100c48b19944af36a86d653c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.glb",
+      "bytes": 5439096,
+      "sha256": "fe057ea62b867114eccb5300675c1c0ef3ef25b1cf8a36064a6197118272aef7"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR2\\h84011\\CodexIsland_summit_rim_84011_HeroR2.fbx",
+      "bytes": 1939852,
+      "sha256": "e4f53e3fc5ef680f97c8c0a551ae88b0bbdff8762c15ee2eb95a86e531c94d23"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR2\\h84011\\CodexIsland_summit_rim_84011_HeroR2.glb",
+      "bytes": 5486680,
+      "sha256": "726ff3cea429966892b8405fc11f6769e34d54dedb26fdd8379835e6e5a2c12c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR3\\h84011\\CodexIsland_summit_rim_84011_HeroR3.fbx",
+      "bytes": 2085516,
+      "sha256": "47d14ae998b1e6a28c51404fc81e722a4f21795acf4f4654ed13357e01b5a987"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR3\\h84011\\CodexIsland_summit_rim_84011_HeroR3.glb",
+      "bytes": 6075572,
+      "sha256": "56c6b939a326b7474e9cd96d8b4a38f9a69ccf88b2b41556315a4238d4c807f9"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.fbx",
+      "bytes": 2097724,
+      "sha256": "9ce0558be9129d7e80a0c1e8142d847f19f41db765ee3c2f352e15f56501d50c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.glb",
+      "bytes": 6183440,
+      "sha256": "59c952d6d48c70ff750839f9803b43b0de95ac7392a3df553faca1246850ec72"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.fbx",
+      "bytes": 1581836,
+      "sha256": "81f6e75d2995fe7a30b10319433de96ade41062157140149c5068aa21fe8678a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.glb",
+      "bytes": 6075480,
+      "sha256": "d57da19df24817d7ae08d4a66b93b7db4049eff94dabb178bca03fdde290ce2f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\a86100\\CodexSalvage_PowerUnit_86100.fbx",
+      "bytes": 46940,
+      "sha256": "ff0a4ab513626b6793d346e9826b0f9315ed5b5c05bfbb6387dc27c047f850db"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\a86100\\CodexSalvage_PowerUnit_86100.glb",
+      "bytes": 118404,
+      "sha256": "ce022107cc0d757934f8c48a37183db990b8d4249ddd358cd81ad783fae467b3"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_BridgeCoupler_85000\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx",
+      "bytes": 19228,
+      "sha256": "b79cadd76800b7d68f9f7fe90982eda33e90bc1161269d2a5031d9152d822d48"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_BridgeCoupler_85000\\CodexModule_CopperPatina_BridgeCoupler_85000.glb",
+      "bytes": 17592,
+      "sha256": "e16945a473f6c1fb05b283151d853351e995aadc0fd6a689bcbea5ba9f84c808"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_CrystalBattery_85004\\CodexModule_CopperPatina_CrystalBattery_85004.fbx",
+      "bytes": 20476,
+      "sha256": "0a55fd8e979219f0a1a23ad1386d27ebbc2d057b93730ce8e1e5058c2872a157"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_CrystalBattery_85004\\CodexModule_CopperPatina_CrystalBattery_85004.glb",
+      "bytes": 19332,
+      "sha256": "187141d142164b0e8b990f6ed2d3bc400754a26211b86f06c38c72e6cb5ef7ee"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_DriveShaft_85006\\CodexModule_CopperPatina_DriveShaft_85006.fbx",
+      "bytes": 18556,
+      "sha256": "1e17cc4deca19ec57b34da54c1138ee1da039c47546028d29cd9edadd9b3d013"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_DriveShaft_85006\\CodexModule_CopperPatina_DriveShaft_85006.glb",
+      "bytes": 15096,
+      "sha256": "563f2b6f37ab24e08fa34715c0d35bc2033fe8669941aef9812ae3e26198cf1e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_GearboxHousing_85005\\CodexModule_CopperPatina_GearboxHousing_85005.fbx",
+      "bytes": 19676,
+      "sha256": "2347544ef8d91dc6ae6dd2dfd404aa7878a5e122daf17c131d08d28cc0daa1ec"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_GearboxHousing_85005\\CodexModule_CopperPatina_GearboxHousing_85005.glb",
+      "bytes": 15132,
+      "sha256": "1bf03b2442aa49b2bc81e3e5d286bb7873481bd16a762ce60735232b0e98737a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_SailPanel_85001\\CodexModule_CopperPatina_SailPanel_85001.fbx",
+      "bytes": 20892,
+      "sha256": "40004c4a1e76d7f301adbd9db6c2e22f6b2f5ad5a8b9a6319d786f8148107aad"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_SailPanel_85001\\CodexModule_CopperPatina_SailPanel_85001.glb",
+      "bytes": 26792,
+      "sha256": "a02795bb2eefbaa15ea7541a59bedbcc9861b55f5b9017882d7104ff4e3826bf"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_TurbineRotor_85003\\CodexModule_CopperPatina_TurbineRotor_85003.fbx",
+      "bytes": 20860,
+      "sha256": "09558969dbe2ced94511be6b149316af68b4986254d9a6a6c78641cfa4bc7076"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_TurbineRotor_85003\\CodexModule_CopperPatina_TurbineRotor_85003.glb",
+      "bytes": 37152,
+      "sha256": "efd512dc50dbb2f86df0435cf70e0f5d760d0e9f78966c6ff1ebb39cb250c16b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_WagonWheel_85002\\CodexModule_CopperPatina_WagonWheel_85002.fbx",
+      "bytes": 20124,
+      "sha256": "3091c523ef2936d9455c5e0a5c25ccf405efe2c60aaa47c1e81609353fcc0ed2"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_CopperPatina_WagonWheel_85002\\CodexModule_CopperPatina_WagonWheel_85002.glb",
+      "bytes": 28608,
+      "sha256": "12beeb33b41d2ab2c1df6f905f97b056a77708c3271926debd33a5cdb4eb6e0e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_BridgeCoupler_85100\\CodexModule_DawnCrimson_BridgeCoupler_85100.fbx",
+      "bytes": 19228,
+      "sha256": "66a38dd7cffdb2bd442805a24634eeca6f2d8fe33c9b45a1c5d1bce361fd8814"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_BridgeCoupler_85100\\CodexModule_DawnCrimson_BridgeCoupler_85100.glb",
+      "bytes": 17592,
+      "sha256": "16a6b2ca9a00bf25b8f8f6a704bbc2b3290aa6dd0e9f5a334aa6359bbe0953ca"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_CrystalBattery_85104\\CodexModule_DawnCrimson_CrystalBattery_85104.fbx",
+      "bytes": 20476,
+      "sha256": "079c3a55e6aaeddff77414eff75c6e52678872b32f6aba2be922a6d10e749532"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_CrystalBattery_85104\\CodexModule_DawnCrimson_CrystalBattery_85104.glb",
+      "bytes": 19332,
+      "sha256": "c9da8be0a51f309a1e828d60c0730af1c305e42ab61770110ada708b1581528b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_DriveShaft_85106\\CodexModule_DawnCrimson_DriveShaft_85106.fbx",
+      "bytes": 18556,
+      "sha256": "a038af837693569d05aac37ca70d722efd25135e405a29d3f49596df24024fc0"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_DriveShaft_85106\\CodexModule_DawnCrimson_DriveShaft_85106.glb",
+      "bytes": 15096,
+      "sha256": "321a1bd986475050d257101f5f7b3faf71b84df415ad60b54c44f2a4ea6829f2"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_GearboxHousing_85105\\CodexModule_DawnCrimson_GearboxHousing_85105.fbx",
+      "bytes": 19660,
+      "sha256": "167a01f5ab47dd4f411185d36312f74713af246663be75be032af697c133b7b4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_GearboxHousing_85105\\CodexModule_DawnCrimson_GearboxHousing_85105.glb",
+      "bytes": 15128,
+      "sha256": "f6666d5bd480646e7439ae4681689791e47afc667aafd0aa1f8f552dfc4014c4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_SailPanel_85101\\CodexModule_DawnCrimson_SailPanel_85101.fbx",
+      "bytes": 20892,
+      "sha256": "a5db1dde5daede2857c07abd0ca48ada8e30e0082d2457984492b6181ad5015c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_SailPanel_85101\\CodexModule_DawnCrimson_SailPanel_85101.glb",
+      "bytes": 26792,
+      "sha256": "6df1d52ab36c92e23c6be6021dd5da078b6fb496e5c629df4b528147a150f56e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_TurbineRotor_85103\\CodexModule_DawnCrimson_TurbineRotor_85103.fbx",
+      "bytes": 19580,
+      "sha256": "ca134c56b3f706ea6ae0821648f18096d4db60a34186de10fc3da89c4d4b84dc"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_TurbineRotor_85103\\CodexModule_DawnCrimson_TurbineRotor_85103.glb",
+      "bytes": 33312,
+      "sha256": "d394522d6aba05ca61eec2f0ea7d3e5be79b654eb15abb386f7b5fed163a4e55"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_WagonWheel_85102\\CodexModule_DawnCrimson_WagonWheel_85102.fbx",
+      "bytes": 20124,
+      "sha256": "aedffa258f97d61650a02360519e5e59f0665ccdba6c3d44f3cdd278c7d3ea5f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_DawnCrimson_WagonWheel_85102\\CodexModule_DawnCrimson_WagonWheel_85102.glb",
+      "bytes": 28604,
+      "sha256": "8b37196c18d46d579a2ef7067a09858f8c203ac0196cd0767661daedb198143f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_BridgeCoupler_85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.fbx",
+      "bytes": 19228,
+      "sha256": "bb1bad723285b276e809c3ddd6cc0f600ff767c58671830d3756828991ffc0ff"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_BridgeCoupler_85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.glb",
+      "bytes": 17596,
+      "sha256": "2e4e63a80a65e325af31a885e6a54be58b29d9a7f5e71803bdd15e1cf77b8f6c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_CrystalBattery_85204\\CodexModule_StormAmethyst_CrystalBattery_85204.fbx",
+      "bytes": 20476,
+      "sha256": "fa29c11eb435b6ceb3ee0484d8c042153f8392198577a4f62bfd8fa529b31b97"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_CrystalBattery_85204\\CodexModule_StormAmethyst_CrystalBattery_85204.glb",
+      "bytes": 19336,
+      "sha256": "f74937be7ae1f1f43f7b7614d12870a10b14b15a716da4125d796b9643e5dd38"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_SailPanel_85201\\CodexModule_StormAmethyst_SailPanel_85201.fbx",
+      "bytes": 20892,
+      "sha256": "3654026022af2a6438ef487fe04204d7e14c4f2a6d9dbb447ba69be08cc81a51"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_SailPanel_85201\\CodexModule_StormAmethyst_SailPanel_85201.glb",
+      "bytes": 26796,
+      "sha256": "eb559acbf40ee6f1e8fbaf9084caea0e3ce88d5fb39e6f0235c2d6f8de23a2b1"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_TurbineRotor_85203\\CodexModule_StormAmethyst_TurbineRotor_85203.fbx",
+      "bytes": 20860,
+      "sha256": "d729f572072c956d8762d6c35442f8a31337fb0af4c4888865a2bec37ccfbca7"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_TurbineRotor_85203\\CodexModule_StormAmethyst_TurbineRotor_85203.glb",
+      "bytes": 37156,
+      "sha256": "b5ee17dbd7317907f0b1658e5d388f13b244b5b437ca7441fa3c0a6245f18307"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_WagonWheel_85202\\CodexModule_StormAmethyst_WagonWheel_85202.fbx",
+      "bytes": 20140,
+      "sha256": "0ccf05743b32dd5a99066868142ee3cbcd34fa2273cbe765ca96a6a726d87e4e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\CodexModule_StormAmethyst_WagonWheel_85202\\CodexModule_StormAmethyst_WagonWheel_85202.glb",
+      "bytes": 28608,
+      "sha256": "c65732cc45aa1944c787b43ca1772e50016a013a3b745a2d44f876d4270ec78b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx",
+      "bytes": 19228,
+      "sha256": "d09d0b1aaacea5d4474ed8745733cba69a9793172cd69c76a0fd44d78d118714"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.glb",
+      "bytes": 17592,
+      "sha256": "e16945a473f6c1fb05b283151d853351e995aadc0fd6a689bcbea5ba9f84c808"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85001\\CodexModule_CopperPatina_SailPanel_85001.fbx",
+      "bytes": 20892,
+      "sha256": "956c0286fde7f7dbe8be75614a2c19d266f8cf357309e939c3743631c27d2541"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85001\\CodexModule_CopperPatina_SailPanel_85001.glb",
+      "bytes": 26792,
+      "sha256": "a02795bb2eefbaa15ea7541a59bedbcc9861b55f5b9017882d7104ff4e3826bf"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85002\\CodexModule_CopperPatina_WagonWheel_85002.fbx",
+      "bytes": 20124,
+      "sha256": "c4950bb2cbdf3abe23680f5cb9ddc39a4e8a14513360e0e557f0906a17cb9038"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85002\\CodexModule_CopperPatina_WagonWheel_85002.glb",
+      "bytes": 28608,
+      "sha256": "12beeb33b41d2ab2c1df6f905f97b056a77708c3271926debd33a5cdb4eb6e0e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85003\\CodexModule_CopperPatina_TurbineRotor_85003.fbx",
+      "bytes": 23740,
+      "sha256": "7f2992a907d2088647b53f90ce1b45fefe3fd5623bc21d981bc749c6478d11f9"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85003\\CodexModule_CopperPatina_TurbineRotor_85003.glb",
+      "bytes": 50684,
+      "sha256": "6b6abe956a55b2bded3bbb9da0093cf729c38b21c60671f0f19d5a60cdbba62e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85004\\CodexModule_CopperPatina_CrystalBattery_85004.fbx",
+      "bytes": 20476,
+      "sha256": "9f571185388bc082156c7f65dd8c4d90447387cdedf613ad4ff55f76ad5d6001"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85004\\CodexModule_CopperPatina_CrystalBattery_85004.glb",
+      "bytes": 19332,
+      "sha256": "187141d142164b0e8b990f6ed2d3bc400754a26211b86f06c38c72e6cb5ef7ee"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85005\\CodexModule_CopperPatina_GearboxHousing_85005.fbx",
+      "bytes": 19676,
+      "sha256": "990d332407308049c3a084a42edbbe529f95465b46c729ea7e0b4545d5932914"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85005\\CodexModule_CopperPatina_GearboxHousing_85005.glb",
+      "bytes": 15132,
+      "sha256": "1bf03b2442aa49b2bc81e3e5d286bb7873481bd16a762ce60735232b0e98737a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85006\\CodexModule_CopperPatina_DriveShaft_85006.fbx",
+      "bytes": 18556,
+      "sha256": "d25f7e7d89422a6bbcf8f2e00646b4688f23ad86485bbdd9ebac63d3cc6f06cb"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85006\\CodexModule_CopperPatina_DriveShaft_85006.glb",
+      "bytes": 15096,
+      "sha256": "563f2b6f37ab24e08fa34715c0d35bc2033fe8669941aef9812ae3e26198cf1e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85100\\CodexModule_DawnCrimson_BridgeCoupler_85100.fbx",
+      "bytes": 19228,
+      "sha256": "3019aaa06df6f37917059dd8ba5e36e70a97b9eeee95e32d288546d0b1e4bfa7"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85100\\CodexModule_DawnCrimson_BridgeCoupler_85100.glb",
+      "bytes": 17592,
+      "sha256": "16a6b2ca9a00bf25b8f8f6a704bbc2b3290aa6dd0e9f5a334aa6359bbe0953ca"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.fbx",
+      "bytes": 20892,
+      "sha256": "11ffdda61a11dcbfd8efb8bf4f5179750a7458fded0d86a5c5f8d39973c792f6"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.glb",
+      "bytes": 26792,
+      "sha256": "6df1d52ab36c92e23c6be6021dd5da078b6fb496e5c629df4b528147a150f56e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.fbx",
+      "bytes": 20124,
+      "sha256": "c859c181e1efd94e0cbcf011643151aefc7f1be7e22e42bc2a3f4ce75335509f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85102\\CodexModule_DawnCrimson_WagonWheel_85102.glb",
+      "bytes": 28604,
+      "sha256": "8b37196c18d46d579a2ef7067a09858f8c203ac0196cd0767661daedb198143f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85103\\CodexModule_DawnCrimson_TurbineRotor_85103.fbx",
+      "bytes": 22860,
+      "sha256": "10358ac734efd6cf9082079620fcacdb67ab4f192fb0e46b2354cfbbb74e3ce3"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85103\\CodexModule_DawnCrimson_TurbineRotor_85103.glb",
+      "bytes": 44248,
+      "sha256": "fba3272ebb5f93527bb7e02c368e6486b6be5a802a170e7cc9b943531419b8ce"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85104\\CodexModule_DawnCrimson_CrystalBattery_85104.fbx",
+      "bytes": 20476,
+      "sha256": "6dfbaa8194bbe921bca03e5a43156d154f016fa20a22b4502c8db05faae30221"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85104\\CodexModule_DawnCrimson_CrystalBattery_85104.glb",
+      "bytes": 19332,
+      "sha256": "c9da8be0a51f309a1e828d60c0730af1c305e42ab61770110ada708b1581528b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.fbx",
+      "bytes": 19660,
+      "sha256": "b58f07137ee2545c830ba13f6eefb991a76d871db5e618f358658896405ba4f6"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.glb",
+      "bytes": 15128,
+      "sha256": "f6666d5bd480646e7439ae4681689791e47afc667aafd0aa1f8f552dfc4014c4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.fbx",
+      "bytes": 18556,
+      "sha256": "1c52ebfc34c1c38936ee4c233c9bd60a9dc50d4e63d1c77617027dcb0e480103"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85106\\CodexModule_DawnCrimson_DriveShaft_85106.glb",
+      "bytes": 15096,
+      "sha256": "321a1bd986475050d257101f5f7b3faf71b84df415ad60b54c44f2a4ea6829f2"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.fbx",
+      "bytes": 19228,
+      "sha256": "a4ddbcc9e9dd167f7f61cd49c6cf59550b36907ad7269e6c003d6ce12a2df663"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85200\\CodexModule_StormAmethyst_BridgeCoupler_85200.glb",
+      "bytes": 17596,
+      "sha256": "2e4e63a80a65e325af31a885e6a54be58b29d9a7f5e71803bdd15e1cf77b8f6c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.fbx",
+      "bytes": 20892,
+      "sha256": "28d587c9231e7d8668b354470395c4285b92c272f581d3a4304a08731d782156"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85201\\CodexModule_StormAmethyst_SailPanel_85201.glb",
+      "bytes": 26796,
+      "sha256": "eb559acbf40ee6f1e8fbaf9084caea0e3ce88d5fb39e6f0235c2d6f8de23a2b1"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.fbx",
+      "bytes": 20140,
+      "sha256": "6650da60f6be3fb72c782eea32606d5820f92ab84b3207e94eb1a0f29181394e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85202\\CodexModule_StormAmethyst_WagonWheel_85202.glb",
+      "bytes": 28608,
+      "sha256": "c65732cc45aa1944c787b43ca1772e50016a013a3b745a2d44f876d4270ec78b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85203\\CodexModule_StormAmethyst_TurbineRotor_85203.fbx",
+      "bytes": 23756,
+      "sha256": "76ac7373b76245159d61b288af8b3cfea3d6ff6fef11da18199e8edf1b6243a0"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85203\\CodexModule_StormAmethyst_TurbineRotor_85203.glb",
+      "bytes": 50688,
+      "sha256": "72a12f577133b453623ff0e650b7f91ab533c1fee00b9db4750f2282d3914cc1"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.fbx",
+      "bytes": 20476,
+      "sha256": "47ee7222bd45c30d34a4941f8e5bf5fd2cbd8104d4d90d760df615a40201983a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85204\\CodexModule_StormAmethyst_CrystalBattery_85204.glb",
+      "bytes": 19336,
+      "sha256": "f74937be7ae1f1f43f7b7614d12870a10b14b15a716da4125d796b9643e5dd38"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.fbx",
+      "bytes": 19676,
+      "sha256": "f903dda8bd30a3158ab8b5db44ab90b9e8a89037dba4fcf244d5fe5adbbd3f57"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.glb",
+      "bytes": 15128,
+      "sha256": "9edaf9f62e524c1b5cb705e0e78eed48e0d54ca313a0e57b6f21a672ec72a18b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.fbx",
+      "bytes": 18556,
+      "sha256": "0248ed0a300ef00913a5cb8daaff3f8eadcace3c56a3b2270912976aeeb28948"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85206\\CodexModule_StormAmethyst_DriveShaft_85206.glb",
+      "bytes": 15100,
+      "sha256": "597207ba91ff5bc93085ae933f9e7d0c668d8c4f56a1004870866285967a30b2"
+    }
+  ]
+}

@@ -56,7 +56,7 @@ def _json(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
 
-def configuration(preset, seed=None, hero=False):
+def configuration(preset, seed=None, hero=False, revision=None):
     if preset not in PRESETS:
         raise ValueError("unknown preset: " + str(preset))
     config = dict(PRESETS[preset], preset=preset, version=VERSION, voxel_metres=1.0)
@@ -74,6 +74,21 @@ def configuration(preset, seed=None, hero=False):
                           crown_heights=[7, 9, 12, 8, 6, 5, 7])
             config["features"] += ["asymmetric fitted crystal fan", "warm route edge bands",
                                    "controlled grass contrast", "explicit sRGB palette conversion"]
+    if revision is not None:
+        if hero or preset != "cliff-garden" or revision != "GardenGateR1":
+            raise ValueError("GardenGateR1 is a retained cliff-garden revision; do not combine with --hero")
+        config.update(revision=revision, palette_seed=92022, palette_profile="lime-seaglass-lavender-v1",
+                      garden_recipe={"entry_x": 0, "entry_y": -44, "court_y": 14,
+                                     "route_half_width": 2, "floor_voxel_z": 0,
+                                     "entry_fan_half_width": 5, "entry_fan_step": 2,
+                                     "crop_gap_y": [-17, -13, -9, -5], "crop_outer_x": [26, 27],
+                                     "crop_outer_y": [-19, -3],
+                                     "cottage_approach": [9, 12], "gate_y": -35,
+                                     "gate_post_x": [-4, 4], "gate_post_half_width": 1,
+                                     "gate_post_top_z": 8, "gate_arch_base_z": 9,
+                                     "gate_arch_rise": 3, "gate_arch_thickness": 2})
+        config["features"] = config["features"] + ["open south cliff entrance", "fitted stepped garden gate",
+                                                  "level crop and cottage route", "controlled lime grass contrast"]
     catalog = json.loads(INVENTORY.read_text(encoding="utf-8"))
     original = next(entry for entry in catalog["entries"] if entry["id"] == config["original"])
     config["reference"] = {key: original.get(key) for key in ("id", "name", "author", "team", "provenance", "image", "sources", "manifest")}
@@ -94,13 +109,49 @@ def identity(config):
                                       "_" + config["revision"] if config.get("revision") else "")
 
 
-def plan(preset="summit-rim", seed=None, hero=False):
+def _garden_pads(recipe):
+    return {(x, y) for centre in recipe["gate_post_x"]
+            for x in range(centre - recipe["gate_post_half_width"], centre + recipe["gate_post_half_width"] + 1)
+            for y in range(recipe["gate_y"] - 1, recipe["gate_y"] + 2)}
+
+
+def _garden_route(heights, wet, cottage_xy, recipe):
+    """A level courtyard path, clipped to this retained island's actual footprint."""
+    cx = recipe["entry_x"]
+    route = {(x, y) for x in range(cx - recipe["route_half_width"], cx + recipe["route_half_width"] + 1)
+             for y in range(recipe["entry_y"], recipe["court_y"] + 1)}
+    for y in range(recipe["entry_y"], recipe["gate_y"] - 1):
+        half = min(recipe["entry_fan_half_width"], recipe["route_half_width"] +
+                   max(0, (recipe["gate_y"] - 2 - y) // recipe["entry_fan_step"]))
+        route |= {(x, y) for x in range(cx - half, cx + half + 1)}
+    for y in recipe["crop_gap_y"]:
+        route |= {(x, yy) for x in range(cx, max(recipe["crop_outer_x"]) + 1) for yy in (y, y + 1)}
+    route |= {(x, y) for x in recipe["crop_outer_x"] for y in range(recipe["crop_outer_y"][0], recipe["crop_outer_y"][1] + 1)}
+    ax, ay = recipe["cottage_approach"]
+    route |= {(x, y) for x in range(min(cx, ax - 1), max(cx, ax + 1) + 1) for y in range(ay + 1, ay + 4)}
+    route |= {(x, y) for x in range(ax - 1, ax + 2) for y in range(ay, ay + 3)}
+    route &= set(heights)
+    if route & wet or route & cottage_xy:
+        raise ValueError("garden route would disturb retained water or cottage; choose a separate recipe")
+    for xy in route:
+        heights[xy] = recipe["floor_voxel_z"]
+    # Flatten each post's entire foundation, rather than balancing a wide post
+    # on its centre column or pushing it through the enclosing cliff.
+    for xy in _garden_pads(recipe):
+        if xy not in heights or xy in wet or xy in cottage_xy:
+            raise ValueError("garden gate lacks a clear fitted source foundation")
+        heights[xy] = recipe["floor_voxel_z"]
+    return route
+
+
+def plan(preset="summit-rim", seed=None, hero=False, revision=None):
     """Reuse the seeded footprint, strata and dressing; apply bounded biome terraces.
 
     The body fits inside 92 x 92 metres. Clouds may extend outside that footprint.
     All randomness is local; dictionary/list order and voxel hash are reproducible.
     """
-    config = configuration(preset, seed, hero)
+    config = configuration(preset, seed, hero, revision)
+    garden = config.get("revision") == "GardenGateR1"
     radius = config["radius"]
     original = BASE.plan(config["seed"], radius, config["depth"])
     old_top = {}
@@ -160,6 +211,9 @@ def plan(preset="summit-rim", seed=None, hero=False):
         heights[xy] = cottage_level
         wet.discard(xy)
         route.discard(xy)
+    if garden:
+        route = _garden_route(heights, wet, cottage_xy, config["garden_recipe"])
+    dressing_clear = route | (_garden_pads(config["garden_recipe"]) if garden else set())
 
     route_steps = {}
     if hero and config["revision"] in ("HeroR3", "HeroR4"):
@@ -194,7 +248,11 @@ def plan(preset="summit-rim", seed=None, hero=False):
         dz = heights[xy] - old_top[xy]
         if z == old_top[xy]:
             if xy in route:
-                colour = "rock2" if route_steps else ("flower_w" if (x + y) % 7 else "sand")
+                if garden:
+                    edge = any((x + dx, y + dy) not in route for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)))
+                    colour = "sand" if edge else "flower_w"
+                else:
+                    colour = "rock2" if route_steps else ("flower_w" if (x + y) % 7 else "sand")
             elif xy in wet:
                 colour = "sand"
             elif preset == "cliff-garden" and heights[xy] >= 9:
@@ -231,7 +289,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
                     todo.append(q)
         root = min(component, key=lambda p: (p[2], p[0], p[1]))
         xy = root[:2]
-        if xy not in heights or xy in wet or (hero and any((x, y) in route for x, y, _ in component)):
+        if xy not in heights or xy in wet or ((hero or garden) and any((x, y) in dressing_clear for x, y, _ in component)):
             continue
         shift = heights[xy] - old_top[xy]
         for x, y, z in component:
@@ -245,7 +303,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
                 shift = 0
             elif xy not in heights or (xy in wet and layer != "crystals"):
                 continue
-            elif hero and xy in route and layer in ("flowers", "rocks"):
+            elif (hero or garden) and xy in dressing_clear and layer in ("flowers", "rocks"):
                 continue
             elif layer == "cottage":
                 shift = cottage_level
@@ -304,6 +362,20 @@ def plan(preset="summit-rim", seed=None, hero=False):
                             voxels["landmarks"].append((x, y, 1, "dirt"))
                             if (x + y) % 2 == 0:
                                 voxels["landmarks"].append((x, y, 2, ("blossom", "sand", "crystal2")[col]))
+        if garden:
+            recipe = config["garden_recipe"]
+            gy = recipe["gate_y"]
+            for centre in recipe["gate_post_x"]:
+                for x in range(centre - recipe["gate_post_half_width"], centre + recipe["gate_post_half_width"] + 1):
+                    for y in range(gy - 1, gy + 2):
+                        for z in range(1, recipe["gate_post_top_z"] + 1):
+                            colour = "sand" if z in (1, 7, 8) else "rock2"
+                            voxels["landmarks"].append((x, y, z, colour))
+            for x in range(-5, 6):
+                bottom = recipe["gate_arch_base_z"] + max(0, recipe["gate_arch_rise"] - abs(x))
+                for y in range(gy - 1, gy + 2):
+                    for dz in range(recipe["gate_arch_thickness"]):
+                        voxels["landmarks"].append((x, y, bottom + dz, "flower_w" if dz else "crystal2"))
     elif preset == "river-canyon":
         # An architectural ring, not a copy of Prometheus's source assets.
         for index in range(10):
@@ -322,7 +394,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
 
 def palette_for(config):
     """Keep historical palettes intact; HeroR4 has a retained local seed."""
-    if config.get("revision") != "HeroR4":
+    if config.get("revision") not in ("HeroR4", "GardenGateR1"):
         return PALETTE
     palette = dict(PALETTE, grass=(.32,.65,.40), grass2=(.39,.70,.43),
                    rock=(.29,.38,.51), rock2=(.17,.24,.34), dirt=(.38,.29,.25),
@@ -330,6 +402,13 @@ def palette_for(config):
                    leaf=(.20,.55,.41), leaf2=(.31,.67,.54), blossom=(.94,.43,.48),
                    blossom2=(.99,.65,.60), crystal=(.32,.78,.87), crystal2=(.72,.53,.89),
                    roof=(.53,.21,.29), sand=(.85,.68,.39), flower_w=(.95,.91,.81))
+    if config.get("revision") == "GardenGateR1":
+        palette = dict(PALETTE, grass=(.51,.72,.34), grass2=(.57,.76,.39),
+                       rock=(.57,.67,.72), rock2=(.29,.42,.48), dirt=(.41,.33,.25),
+                       dirt2=(.46,.37,.28), water=(.16,.67,.74), foam=(.74,.92,.90),
+                       leaf=(.46,.70,.30), leaf2=(.31,.66,.51), blossom=(.68,.48,.83),
+                       blossom2=(.86,.69,.94), crystal=(.23,.64,.71), crystal2=(.54,.85,.79),
+                       roof=(.42,.33,.59), sand=(.84,.73,.48), flower_w=(.94,.93,.83))
     rng = random.Random(config["palette_seed"])
     # One small gain per related role, not independent random face colours.
     for keys in (("grass", "grass2", "leaf", "leaf2"), ("rock", "rock2", "dirt", "dirt2"),
@@ -383,7 +462,7 @@ def _cached(path, config):
         return None
 
 
-def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
+def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False, revision=None, preview_only=False):
     """Export through the existing pipeline during an explicitly coordinated turn.
 
     Uses metre geometry, existing VoxelVertexColour, selected objects only, a sibling
@@ -395,9 +474,9 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
         raise RuntimeError("build requires Blender bpy; use --plan-only outside Blender")
     if bpy.context.mode != "OBJECT":
         raise RuntimeError("finish the owner's current edit operation before exporting")
-    config = configuration(preset, seed, hero)
+    config = configuration(preset, seed, hero, revision)
     name = identity(config)
-    folder = Path(out_folder).resolve() / ("h" + str(config["seed"]) if hero else name)
+    folder = Path(out_folder).resolve() / ("h" + str(config["seed"]) if config.get("revision") else name)
     saved_path = folder / (name + ".receipt.json")
     cached = _cached(saved_path, config)
     if cached:
@@ -405,7 +484,7 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
     if saved_path.exists() or (folder / (name + ".glb")).exists() or (folder / (name + ".fbx")).exists():
         raise RuntimeError("retain existing revision; choose a new output folder or seed: " + str(folder))
     started = time.perf_counter()
-    config, voxels = plan(preset, seed, hero)
+    config, voxels = plan(preset, seed, hero, revision)
     report = receipt(config, voxels)
     report["elapsed_s"] = {"generation": round(time.perf_counter() - started, 6)}
     folder.mkdir(parents=True, exist_ok=True)
@@ -433,6 +512,14 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
         report["blender"] = pipeline["blender"]
         report["file"] = pipeline["file"]
         report["elapsed_s"]["glb_export"] = round(time.perf_counter() - started, 6)
+        if preview_only:
+            # Use the same geometry/material/export witness for source review,
+            # but defer delivery FBX/UCX until the visible composition is reviewed.
+            report.update(stage="source_preview_exported", export_skipped=False,
+                          artifacts={"glb": {"path": str(glb_path), "fingerprint": ship.fingerprint(glb_path)}})
+            _write(folder / (name + ".sent.json"), pipeline)
+            _write(saved_path, report)
+            return report
         started = time.perf_counter()
         _collision(bpy, name, voxels["island"], hulls)
         for o in bpy.context.view_layer.objects:
@@ -498,7 +585,7 @@ def _palette_slots(bpy, obj, cells, config=None):
         key = min(keys, key=lambda k: sum((a - b) ** 2 for a, b in zip(rgb, BASE.PAL[k])))
         polygon.material_index = keys.index(key)
         rgb = palette[key]
-        if config and config.get("revision") == "HeroR4":
+        if config and config.get("revision") in ("HeroR4", "GardenGateR1"):
             rgb = tuple(value / 12.92 if value <= .04045 else ((value + .055) / 1.055) ** 2.4 for value in rgb)
         for loop_index in polygon.loop_indices:
             colour.data[loop_index].color = rgb + (1.0,)
@@ -556,6 +643,8 @@ def main():
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--hero", action="store_true", help="retained summit-rim revision; preserve prepared exports")
     parser.add_argument("--hero-revision", choices=("HeroR2", "HeroR3", "HeroR4"), default="HeroR3")
+    parser.add_argument("--revision", choices=("GardenGateR1",), help="retained non-summit source refinement")
+    parser.add_argument("--preview-only", action="store_true", help="GLB/witness for source review; defer FBX and UCX")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--out", type=Path, default=ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None
@@ -564,17 +653,21 @@ def main():
         parser.error("--seed names one island; omit --all")
     if args.hero and args.all:
         parser.error("--hero prepares one summit-rim revision")
+    if args.revision and (args.all or args.hero):
+        parser.error("--revision prepares one non-summit candidate; omit --all and --hero")
+    if args.preview_only and args.all:
+        parser.error("--preview-only reviews one candidate")
     if args.plan_only:
         results = []
         for preset in PRESETS if args.all else [args.preset]:
             started = time.perf_counter()
-            config, voxels = plan(preset, args.seed, args.hero_revision if args.hero else False)
+            config, voxels = plan(preset, args.seed, args.hero_revision if args.hero else False, args.revision)
             value = receipt(config, voxels)
             value["elapsed_s"] = {"generation": round(time.perf_counter() - started, 6)}
             _write(args.out / (identity(config) + ".plan.json"), value)
             results.append(value)
     else:
-        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed, hero=args.hero_revision if args.hero else False)]
+        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed, hero=args.hero_revision if args.hero else False, revision=args.revision, preview_only=args.preview_only)]
     print(json.dumps(results, indent=2))
 
 

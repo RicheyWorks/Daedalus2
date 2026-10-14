@@ -1,0 +1,438 @@
+{
+  "artifact": {
+    "bytes": 6134872,
+    "sha256": "f0873128b184a0efc08b94d40e6ce47fe39a9c87abe3cefe7127dde198f479f5"
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 6134872,
+    "objects": [
+      {
+        "dims": [
+          92.0,
+          86.0,
+          51.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "triangles": 90588
+      },
+      {
+        "dims": [
+          28.0,
+          24.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "triangles": 1012
+      },
+      {
+        "dims": [
+          68.0,
+          66.0,
+          24.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "triangles": 3000
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_door",
+          "CodexVoxel_sand",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78.0,
+          73.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "triangles": 576
+      },
+      {
+        "dims": [
+          78.0,
+          47.0,
+          20.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "triangles": 140
+      },
+      {
+        "dims": [
+          33.0,
+          27.0,
+          13.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "triangles": 176
+      },
+      {
+        "dims": [
+          127.0,
+          16.0,
+          6.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "triangles": 1224
+      },
+      {
+        "dims": [
+          31.0,
+          29.0,
+          13.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_dirt",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "triangles": 1756
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.glb"
+  },
+  "exported_s": 0.0,
+  "file": {
+    "materials": [
+      "CodexVoxel_dirt",
+      "CodexVoxel_dirt2",
+      "CodexVoxel_flower_w",
+      "CodexVoxel_grass",
+      "CodexVoxel_grass2",
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand",
+      "CodexVoxel_foam",
+      "CodexVoxel_water",
+      "CodexVoxel_blossom",
+      "CodexVoxel_blossom2",
+      "CodexVoxel_leaf",
+      "CodexVoxel_leaf2",
+      "CodexVoxel_trunk",
+      "CodexVoxel_crystal",
+      "CodexVoxel_door",
+      "CodexVoxel_window",
+      "CodexVoxel_flower_r",
+      "CodexVoxel_flower_y",
+      "CodexVoxel_crystal2",
+      "CodexVoxel_cloud"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          92,
+          86,
+          51
+        ],
+        "extent": [
+          92,
+          51,
+          86
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "triangles": 90588
+      },
+      {
+        "dims": [
+          28,
+          24,
+          10
+        ],
+        "extent": [
+          28,
+          10,
+          24
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "triangles": 1012
+      },
+      {
+        "dims": [
+          68,
+          66,
+          24
+        ],
+        "extent": [
+          66,
+          24,
+          68
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "triangles": 3000
+      },
+      {
+        "dims": [
+          9,
+          9,
+          8
+        ],
+        "extent": [
+          9,
+          8,
+          9
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_door",
+          "CodexVoxel_sand",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78,
+          73,
+          19
+        ],
+        "extent": [
+          78,
+          19,
+          73
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "triangles": 576
+      },
+      {
+        "dims": [
+          78,
+          47,
+          20
+        ],
+        "extent": [
+          78,
+          20,
+          47
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "triangles": 140
+      },
+      {
+        "dims": [
+          33,
+          27,
+          13
+        ],
+        "extent": [
+          27,
+          13,
+          33
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "triangles": 176
+      },
+      {
+        "dims": [
+          127,
+          16,
+          6
+        ],
+        "extent": [
+          127,
+          6,
+          16
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "triangles": 1224
+      },
+      {
+        "dims": [
+          31,
+          29,
+          13
+        ],
+        "extent": [
+          29,
+          13,
+          31
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_dirt",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "triangles": 1756
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          92.0,
+          86.0,
+          51.0
+        ],
+        "mesh": 0,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island"
+      },
+      {
+        "dims": [
+          28.0,
+          24.0,
+          10.0
+        ],
+        "mesh": 1,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water"
+      },
+      {
+        "dims": [
+          68.0,
+          66.0,
+          24.0
+        ],
+        "mesh": 2,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees"
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "mesh": 3,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage"
+      },
+      {
+        "dims": [
+          78.0,
+          73.0,
+          19.0
+        ],
+        "mesh": 4,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers"
+      },
+      {
+        "dims": [
+          78.0,
+          47.0,
+          20.0
+        ],
+        "mesh": 5,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks"
+      },
+      {
+        "dims": [
+          33.0,
+          27.0,
+          13.0
+        ],
+        "mesh": 6,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals"
+      },
+      {
+        "dims": [
+          127.0,
+          16.0,
+          6.0
+        ],
+        "mesh": 7,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds"
+      },
+      {
+        "dims": [
+          31.0,
+          29.0,
+          13.0
+        ],
+        "mesh": 8,
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks"
+      }
+    ]
+  },
+  "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Preview2\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.glb",
+  "prebuilt": true,
+  "started": 1792013148.1112506
+}

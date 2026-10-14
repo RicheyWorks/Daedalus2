@@ -1,0 +1,22 @@
+14:28:50 | INFO: Data are loaded, start creating Blender stuff
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_island
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_water
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_trees
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_cottage
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_flowers
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_rocks
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_crystals
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_clouds
+14:28:50 | INFO: Blender create Mesh node CodexIsland_cliff_garden_84022_GardenGateR1_landmarks
+14:28:50 | INFO: glTF import finished in 0.22s
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+Fra:1 Mem:84.37M (Peak 93.57M) | Time:00:40.98 | Rendering 1 / 64 samples
+Fra:1 Mem:84.37M (Peak 93.57M) | Time:00:41.60 | Rendering 25 / 64 samples
+Fra:1 Mem:84.37M (Peak 93.57M) | Time:00:41.78 | Rendering 50 / 64 samples
+Fra:1 Mem:84.37M (Peak 93.57M) | Time:00:41.81 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\GardenGateR1\FinalQA\gate_full.png'
+Time: 00:42.10 (Saving: 00:00.25)
+
+{"stage": "source_multiview_rendered", "name": "CodexIsland_cliff_garden_84022_GardenGateR1", "seed": 84022, "glb_sha256": "f0873128b184a0efc08b94d40e6ce47fe39a9c87abe3cefe7127dde198f479f5", "views": [{"name": "gate_full", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\FinalQA\\gate_full.png", "position": [0, -17, 8], "target": [0, -35, 7], "camera_type": "PERSP", "framing": 28, "elapsed_s": 42.113067, "sha256": "cafb846133e9d56c44611f8178ff9adccee51da690fd23a5eba2495d651fc693"}], "saved_unreal": false, "view_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\views-gate-full.json", "acceptance": "appearance only; Unreal, collision and movement remain unverified"}
+
+Blender quit

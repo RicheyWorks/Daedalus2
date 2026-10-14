@@ -1,0 +1,29 @@
+{
+  "stage": "source_multiview_rendered",
+  "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "seed": 84022,
+  "glb_sha256": "f0873128b184a0efc08b94d40e6ce47fe39a9c87abe3cefe7127dde198f479f5",
+  "views": [
+    {
+      "name": "gate_full",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\FinalQA\\gate_full.png",
+      "position": [
+        0,
+        -17,
+        8
+      ],
+      "target": [
+        0,
+        -35,
+        7
+      ],
+      "camera_type": "PERSP",
+      "framing": 28,
+      "elapsed_s": 42.113067,
+      "sha256": "cafb846133e9d56c44611f8178ff9adccee51da690fd23a5eba2495d651fc693"
+    }
+  ],
+  "saved_unreal": false,
+  "view_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\views-gate-full.json",
+  "acceptance": "appearance only; Unreal, collision and movement remain unverified"
+}
