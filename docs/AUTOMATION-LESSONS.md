@@ -1239,3 +1239,27 @@ Rules: vitals reports committed/limit (added) and jobs gate on commit > 95% as w
 (graceful close + reopen via unreal-job -Fast) after any session of heavy edits before the next batch; streamed
 districts should be unloaded in the editor when not being edited (next slice: EditorLevelUtils unload per realm);
 the pagefile size is Richey's setting, not the bots'.
+
+## 2026-10-14 10:05 — Contest pipeline (Team Claude), the first 36 islands
+- **Generator-first wins the race.** `tools/blender/voxel_island.py` plans an island from a seed in pure Python
+  (tests run without Blender); Blender only meshes and exports. 50 islands export in ~50 s **headless**
+  (`blender.exe -b --python tools/blender/export_islands.py -- 250 300`), so Team Claude never needs the shared
+  Blender GUI lock while Team Codex has it. The "[Claude Bridge] port 9876 in use" warning in headless runs is harmless.
+- **Unreal import is the bottleneck, not Blender.** Interchange GLB import of one island took 10–19 s on a loaded PC
+  (CPU 70 %+, RAM 94 %), per island, not per mesh (merging 8 layers into 2 changed nothing; FBX was 9.6 s). So
+  placement runs as a background job (`tools/unreal_play/claude_islands.py start stop chunk` via pc-job.ps1) with
+  chunks of 4 that fit in one `daedalus.steps` call; bridge calls that import more than ~3 islands time out at 60 s.
+- **Importer nests `destination_name`**: `destination_path=/A/B` + `destination_name=X` yields `/A/B/X/StaticMeshes/X_layer`.
+  Take the asset paths from `task.imported_object_paths`, never from a guessed layout (the second batch imported 24
+  islands into a layout the placer didn't look at: "placed=4" with the tally frozen at 36).
+- **Vertex colours need a material**: the GLB's imported material ignores vertex colour; one `M_VoxelVertexColour`
+  (VertexColor → BaseColor, roughness 0.9) assigned to every section makes the whole island read. The GLB arrives at
+  100× (Blender metres × our 100-unit voxels), so actors are placed at scale 0.01.
+- **Clearing the old deed**: scanning every ISM instance of all 500 districts per deed costs ~10 s; filter actors by
+  the deed's district label (`_D55`) first (0.1 s). The ledger (`docs/production/lands/<realm>.json`) gives
+  x/y/top/district per deed, so seed = deed number and reruns are idempotent.
+- **Commit limit, again**: the PC sat at RAM 94–98 % / commit 97–98 % during the imports with the editor at 12.7 GB;
+  one persistent-level save (21 s) then a graceful `quit_editor()` + relaunch brought it to RAM 52 % / commit 74 %.
+  Of the remaining 34 GB commit the visible processes account for ~20 GB (ChatGPT ×21 processes 4.7 GB, Edge/webview
+  2.2 GB, node 0.9 GB); the rest is driver/kernel. The commit *limit* itself moved 61 → 52 → 46 GB between samples
+  (dynamic pagefile), which is why commit % jumps without the editor changing.
