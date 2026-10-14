@@ -12,13 +12,66 @@ import os
 from pathlib import Path
 import re
 import shutil
+import sys
 import tempfile
+from types import CodeType
 import uuid
 
 
 SCHEMA = "daedalus.ingestion-receipt.v1"
 SAFE_RETRY_STATES = {"input_verified", "input_failed"}
 STATES = SAFE_RETRY_STATES | {"import_started", "imported", "postprocessed", "save_started", "saved", "uncertain"}
+
+
+def loaded_code_fingerprint(function):
+    """Canonical semantics, independent of marshal's reference-count encoding.
+
+    Public co_code excludes CPython's adaptive execution caches. Source files
+    remain separate manifest dependencies; this also covers loaded defaults.
+    """
+    def encode(value):
+        kind = type(value)
+        if value is None:
+            return ["none"]
+        if value is Ellipsis:
+            return ["ellipsis"]
+        if kind is bool:
+            return ["bool", value]
+        if kind is int:
+            return ["int", str(value)]
+        if kind is float:
+            return ["float", value.hex()]
+        if kind is complex:
+            return ["complex", value.real.hex(), value.imag.hex()]
+        if kind is str:
+            return ["str", value]
+        if kind is bytes:
+            return ["bytes", value.hex()]
+        if kind in (tuple, frozenset):
+            items = [encode(item) for item in value]
+            if kind is frozenset:
+                items.sort(key=lambda item: json.dumps(item, sort_keys=True, separators=(",", ":")))
+            return [kind.__name__, items]
+        if kind is dict and all(type(key) is str for key in value):
+            return ["dict", [[key, encode(value[key])] for key in sorted(value)]]
+        if kind is CodeType:
+            fields = ("co_argcount", "co_posonlyargcount", "co_kwonlyargcount", "co_nlocals",
+                      "co_stacksize", "co_flags", "co_code", "co_consts", "co_names", "co_varnames",
+                      "co_freevars", "co_cellvars", "co_name", "co_filename", "co_firstlineno")
+            code = {field: encode(getattr(value, field)) for field in fields}
+            for field in ("co_qualname", "co_linetable", "co_lnotab", "co_exceptiontable"):
+                if hasattr(value, field):
+                    code[field] = encode(getattr(value, field))
+            return ["code", code]
+        raise TypeError("unsupported loaded-code constant/default type: " + kind.__name__)
+    if function.__closure__:
+        raise ValueError("loaded closure state requires an explicit supported identity contract")
+    identity = {"algorithm": "daedalus.loaded-code.v1", "implementation": sys.implementation.name,
+                "cache_tag": sys.implementation.cache_tag, "python": list(sys.version_info[:3]),
+                "code": encode(function.__code__), "defaults": encode(function.__defaults__),
+                "kwdefaults": encode(function.__kwdefaults__)}
+    return hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":"),
+                                     allow_nan=False).encode("utf-8")).hexdigest()
 
 
 def utc_now():

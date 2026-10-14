@@ -7,7 +7,6 @@ enables plugins. Start only between the current owner's legacy import jobs.
 """
 import hashlib
 import inspect
-import marshal
 from pathlib import Path
 
 import unreal
@@ -39,11 +38,11 @@ def _backend():
             "fbx_worker_cvar_readback": unreal.SystemLibrary.get_console_variable_int_value(
                 "Interchange.FeatureFlags.Translator.UseWorker.FBX"),
             "loaded_importer_code": {
-                name: hashlib.sha256(marshal.dumps(getattr(islands, name).__code__)).hexdigest()
+                name: receipts.loaded_code_fingerprint(getattr(islands, name))
                 for name in ("import_island", "material", "_simple_collision")},
             "loaded_orchestration_code": {
-                function.__module__ + "." + function.__name__: hashlib.sha256(marshal.dumps(function.__code__)).hexdigest()
-                for function in (import_saved_batch, _manifest, _destination_matches, receipts.fingerprint,
+                function.__module__ + "." + function.__name__: receipts.loaded_code_fingerprint(function)
+                for function in (import_saved_batch, _manifest, _destination_matches, receipts.loaded_code_fingerprint, receipts.fingerprint,
                                  receipts.manifest, receipts.validate_receipt, receipts.write_receipt,
                                  receipts.verified_snapshot, receipts.may_skip, receipts.require_retry_permission)}}
 

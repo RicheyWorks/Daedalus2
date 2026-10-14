@@ -10,7 +10,6 @@ import hashlib
 import importlib.util
 import inspect
 import json
-import marshal
 import math
 from pathlib import Path
 import re
@@ -73,11 +72,11 @@ def _backend(native):
     return {"api": "AssetTools.import_asset_tasks/AssetImportTask/FbxImportUI",
             "selected_preset": "codex_prepared_existing_options_v1",
             "fbx_cvar_readback": unreal.SystemLibrary.get_console_variable_int_value("Interchange.FeatureFlags.Import.FBX"),
-            "loaded_code": {name: hashlib.sha256(marshal.dumps(getattr(native, name).__code__)).hexdigest()
+            "loaded_code": {name: receipts.loaded_code_fingerprint(getattr(native, name))
                             for name in ("import_all", "_verify", "_tags", "_observed_import")},
             "loaded_receipt_code": {
-                function.__module__ + "." + function.__name__: hashlib.sha256(marshal.dumps(function.__code__)).hexdigest()
-                for function in (import_steps, _manifest, _verify_saved, receipts.manifest,
+                function.__module__ + "." + function.__name__: receipts.loaded_code_fingerprint(function)
+                for function in (import_steps, _manifest, _verify_saved, _require_manifest, receipts.loaded_code_fingerprint, receipts.manifest,
                                  receipts.validate_receipt, receipts.write_receipt, receipts.verified_snapshot,
                                  receipts.may_skip, receipts.require_retry_permission)}}
 
