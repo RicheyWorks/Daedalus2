@@ -71,6 +71,8 @@ class SnapshotTest(unittest.TestCase):
         extra.unlink()
         output=host/'Plugins/DaedalusLink/Binaries/Win64/test.dll';output.parent.mkdir(parents=True);output.write_bytes(b'output')
         self.assertTrue(full_plugin_host.verify(host)['verified'])
+        nested=host/'Source/Binaries/Extra.cpp';nested.parent.mkdir();nested.write_text('unrecorded source')
+        with self.assertRaises(ValueError):full_plugin_host.verify(host)
 
     def test_verify_refuses_manifest_escape_and_overlay(self):
         host=self.base/'host';full_plugin_host.snapshot(self.repo,host)

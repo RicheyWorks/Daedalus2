@@ -41,7 +41,8 @@ def verify(destination):
         for path in (destination/base).rglob('*'):
             relative=path.relative_to(destination).as_posix()
             parts=path.relative_to(destination/base).parts
-            if any(x in ('Binaries','Intermediate','Saved','__pycache__') for x in parts):continue
+            if base=='Plugins/DaedalusLink' and parts and parts[0] in ('Binaries','Intermediate','Saved'):continue
+            if '__pycache__' in parts:continue
             if path.is_file() and relative not in expected:
                 raise ValueError('Unrecorded input: '+relative)
     return {'source_head':manifest['source_head'],'plugin_files':len(files),
