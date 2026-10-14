@@ -3,10 +3,12 @@
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
 #include <cstring>
+#include <limits>
 
 // Desktop-only canonical sources: PythonGames/main.py, pacman.py and zelda.py.
 // See core-test/desktop_games/maze_notes.md for source pins and deliberate fixes.
-// Every Step is one 60 Hz source frame; callers own the bounded accumulator.
+// Every Step is one 60 Hz frame; callers own the bounded accumulator. Dungeon's
+// Threadlight circuit is an original native extension, not Python-source parity.
 namespace daedalus { namespace desktop {
 namespace maze {
 inline Rect PixelRect(double X, double Y, double W, double H) {
@@ -35,6 +37,15 @@ public:
         "####################"
     }};
     struct Player { double X=80, Y=80; };
+    enum class CircuitStage { Lanterns, ExitUnlocked, Complete };
+    static constexpr int LanternCount=3;
+    // Original cabinet chapter within the existing source room; no realm quest or reward.
+    inline static constexpr std::array<Vec,LanternCount> Lanterns{{{140,60},{660,140},{380,220}}};
+    inline static constexpr std::array<const char*,LanternCount> LanternNames{{"Hall lantern","Watch lantern","Root lantern"}};
+    inline static constexpr std::array<std::array<int,LanternCount>,6> Routes{{
+        {{0,1,2}},{{0,2,1}},{{1,0,2}},{{1,2,0}},{{2,0,1}},{{2,1,0}}
+    }};
+    inline static constexpr Vec Exit{60,220};
     static bool IsWall(int Col,int Row) {
         // Ragged source rows and all out-of-map coordinates are solid.
         return Row<0 || Row>=Rows || Col<0 || Col>=Columns ||
@@ -48,28 +59,99 @@ public:
         const int Bottom=static_cast<int>(std::floor((Y+Tile-0.001)/Tile));
         return IsWall(Left,Top)||IsWall(Right,Top)||IsWall(Left,Bottom)||IsWall(Right,Bottom);
     }
-    void Reset(std::uint32_t Seed) override { SessionSeed=Seed; Hero={}; }
+    void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed; Hero={}; Order=Routes[Seed%Routes.size()];
+        Lit={}; LitCount=0; RunFrames=0; Started=false; Complete=false;
+        Notice.clear(); NoticeFrames=0;
+    }
     void Step(const Input& I) override {
         if(I.ActionPressed) { Reset(SessionSeed); return; }
+        if(Complete) return; // A fresh reset is deliberate; held interaction cannot replay.
+        if(NoticeFrames>0 && --NoticeFrames==0) Notice.clear();
         auto D=maze::KeyboardDirection(I);
+        // Slate already merges hats for ordinary games; direct portable/Blueprint
+        // input can provide the separate Pad fields without synthesizing keyboard keys.
+        if(!I.Left && !I.Right) D.X=(I.PadRight?1:0)-(I.PadLeft?1:0);
+        if(!I.Up && !I.Down) D.Y=(I.PadDown?1:0)-(I.PadUp?1:0);
         // Analog support is an adapter enhancement; digital speed remains 5/frame.
         const double X=std::abs(Axis(I.AxisX))>0.2 ? Axis(I.AxisX) : static_cast<double>(D.X);
         const double Y=std::abs(Axis(I.AxisY))>0.2 ? Axis(I.AxisY) : static_cast<double>(D.Y);
         const double Dx=X*5, Dy=Y*5;
+        const Player Before=Hero;
         if(!Collides(Hero.X+Dx,Hero.Y)) Hero.X+=Dx;
         if(!Collides(Hero.X,Hero.Y+Dy)) Hero.Y+=Dy;
+        const bool Interact=I.FirePressed || I.JumpPressed;
+        Started=Started || Hero.X!=Before.X || Hero.Y!=Before.Y || Interact;
+        if(Started && RunFrames<std::numeric_limits<std::uint64_t>::max()) ++RunFrames;
+        if(Interact) InteractWithCircuit();
     }
     const Player& GetPlayer() const { return Hero; }
+    int GetLitCount() const { return LitCount; }
+    std::uint64_t GetElapsedFrames() const { return RunFrames; }
+    CircuitStage GetCircuitStage() const {
+        return Complete?CircuitStage::Complete:(LitCount==LanternCount?CircuitStage::ExitUnlocked:CircuitStage::Lanterns);
+    }
     void Render(Frame& Out) const override {
-        Out.Clear(Columns*Tile,Rows*Tile,Black);
+        Out.Clear(Columns*Tile,Rows*Tile+64,Black);
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
             if(IsWall(X,Y)) Out.AddRect(X*Tile,Y*Tile,Tile,Tile,{100,100,100,255});
         Out.AddRect(Hero.X,Hero.Y,Tile,Tile,maze::Green);
+        for(int L=0;L<LanternCount;++L) {
+            const Vec P=Lanterns[static_cast<std::size_t>(L)];
+            const bool Next=LitCount<LanternCount && Order[static_cast<std::size_t>(LitCount)]==L;
+            const Color Tint=Lit[static_cast<std::size_t>(L)]?Color{90,220,160,255}:(Next?maze::Yellow:Color{120,135,155,255});
+            Out.AddCircle(P.X,P.Y,16,Tint);
+            int Number=1;
+            for(int N=0;N<LanternCount;++N) if(Order[static_cast<std::size_t>(N)]==L) Number=N+1;
+            Out.AddText(P.X-5,P.Y-10,std::to_string(Number),Black,17);
+            if(Lit[static_cast<std::size_t>(L)]) Out.AddText(P.X-14,P.Y+18,"LIT",White,12);
+            else if(Next) Out.AddText(P.X-18,P.Y+18,"NEXT",White,12);
+        }
+        Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
+        Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
+        const std::string Progress=Complete?"Circuit clear in "+std::to_string(RunFrames/60)+"s. K/Enter/B or R: replay."
+            :(LitCount==LanternCount?"Threadlight Passage: exit unsealed. Approach EXIT and light it."
+                :"Threadlight Passage: "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]);
+        Out.AddText(12,Rows*Tile+8,Progress,White,16);
+        Out.AddText(12,Rows*Tile+35,Notice.empty()?"Move: arrows/WASD/stick/hat. J/Space or pad A/X: light. K/Enter/B: reset.":Notice,White,14);
     }
-    Status GetStatus() const override { return {0,1,false,false,"Dungeon prototype: move; Action resets. No source win condition."}; }
+    Status GetStatus() const override {
+        std::string Text=Complete?"Threadlight circuit complete; Action/R replays."
+            :(LitCount==LanternCount?"Exit unlocked; approach EXIT and press Fire/Jump."
+                :"Threadlight "+std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
+        if(!Notice.empty()) Text+=" "+Notice;
+        return {0,1,Complete,Complete,Text}; // Local completion only; no invented score/reward.
+    }
 private:
+    bool Near(Vec P) const { return Distance(Hero.X+Tile/2.0,Hero.Y+Tile/2.0,P.X,P.Y)<=Tile*0.8; }
+    void Say(const std::string& Text) { Notice=Text; NoticeFrames=90; }
+    void InteractWithCircuit() {
+        if(Near(Exit)) {
+            if(LitCount==LanternCount) { Complete=true; Say("The way home is lit. Circuit complete."); }
+            else Say("The exit is sealed. Light all three numbered lanterns in order.");
+            return;
+        }
+        for(int L=0;L<LanternCount;++L) {
+            if(!Near(Lanterns[static_cast<std::size_t>(L)])) continue;
+            if(Lit[static_cast<std::size_t>(L)]) Say("This lantern is already lit.");
+            else if(LitCount<LanternCount && Order[static_cast<std::size_t>(LitCount)]==L) {
+                Lit[static_cast<std::size_t>(L)]=true; ++LitCount;
+                Say(LitCount==LanternCount?"All three lanterns are lit. The exit is unsealed."
+                    :std::string(LanternNames[static_cast<std::size_t>(L)])+" lit. Follow the next numbered lantern.");
+            }
+            else Say("Not yet: follow the lantern marked NEXT. No progress was lost.");
+            return;
+        }
+        Say("Move close to a numbered lantern or EXIT, then press J/Space or pad A/X.");
+    }
     Player Hero;
     std::uint32_t SessionSeed=0;
+    std::array<int,LanternCount> Order{{0,1,2}};
+    std::array<bool,LanternCount> Lit{};
+    int LitCount=0, NoticeFrames=0;
+    std::uint64_t RunFrames=0;
+    bool Started=false, Complete=false;
+    std::string Notice;
 };
 
 class PacmanGame final : public Game {
