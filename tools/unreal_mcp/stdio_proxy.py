@@ -39,12 +39,14 @@ def post(msg):
 def main():
     out = sys.stdout
     for line in sys.stdin:
-        line = line.strip()
+        line = line.strip().lstrip("﻿")
         if not line:
             continue
         try:
             msg = json.loads(line)
-        except ValueError:
+        except ValueError as e:
+            sys.stderr.write("stdio_proxy: not JSON (%s): %r\n" % (e, line[:120]))
+            sys.stderr.flush()
             continue
         has_id = isinstance(msg, dict) and "id" in msg
         try:
