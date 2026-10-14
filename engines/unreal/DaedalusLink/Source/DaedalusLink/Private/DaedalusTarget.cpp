@@ -126,7 +126,7 @@ int32 ADaedalusTarget::DressSkeletal()
 	SkinMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SkinMesh->RegisterComponent();
 	AddInstanceComponent(SkinMesh);
-	if (Idle) { SkinMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode); Hide->PlayAnimation(Idle, true); }
+	if (Idle) { SkinMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode); SkinMesh->PlayAnimation(Idle, true); }
 	ArtHeight = Mesh->GetBounds().BoxExtent.Z * 2.f;
 	return 1;
 }
