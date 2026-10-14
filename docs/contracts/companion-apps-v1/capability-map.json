@@ -29,7 +29,10 @@
     "module": "engines/unreal/DaedalusLink/Source/DaedalusLink",
     "interactionSeam": "ADaedalusUsable.Use / existing local Hero interaction",
     "claim": { "hubMessage": 31050, "scope": "Additive photo native client, terminal, panel and selected-file/export helpers plus these inventory documents", "acceptedByCoordinator": true },
-    "currentIncrement": { "id": "synapse-selected-track-terminal", "baselineCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "baselinePullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/154", "branch": "codex/synapse-study-terminal-20261014", "retainedOwnerLaneHubMessage": 31050, "exactClaimHubMessage": 31102, "directUserContinuationHubMessage": 31109, "coordinatorAcknowledgmentHubMessage": 31115, "scopeAccepted": true, "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true },
+    "previousIncrements": [
+      { "id": "synapse-selected-track-terminal", "baselineCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "baselinePullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/154", "branch": "codex/synapse-study-terminal-20261014", "retainedOwnerLaneHubMessage": 31050, "exactClaimHubMessage": 31102, "directUserContinuationHubMessage": 31109, "coordinatorAcknowledgmentHubMessage": 31115, "scopeAccepted": true, "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true }
+    ],
+    "currentIncrement": { "id": "image-optimizer-native-workbench", "baselineCommit": "c3f842214e921c9597dcd5400dd52028e440f0c2", "inheritedPhotoCorrectionCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "branch": "codex/image-optimizer-terminal-20261014", "retainedLaneHubMessages": [31050, 31115], "exactClaimHubMessage": 31169, "semanticFollowUpHubMessage": 31174, "authorization": "direct user continuation and root-owner acceptance of exact source scope", "rootOwnerAccepted": true, "additionalCoordinatorAcknowledgmentHubMessage": 31188, "additionalCoordinatorAcknowledgmentState": "no overlap confirmed; retained direct-user source scope, no added publication/native authority", "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true },
     "runtimeOperator": "codex-play-guard",
     "installationAcceptance": "pending; a delivered handoff is not acceptance",
     "bindings": [
@@ -75,8 +78,8 @@
         ],
         "states": ["Unpaired", "Paired", "CompanionOpened"],
         "stateProvesCompletedWork": false,
-        "missingCode": ["native image job controls and result/export UI"],
-        "additiveSourceBindings": ["synapse-native-terminal"]
+        "missingCode": [],
+        "additiveSourceBindings": ["synapse-native-terminal", "image-optimizer-native-workbench"]
       },
       {
         "id": "synapse-native-terminal",
@@ -100,6 +103,32 @@
         "completionAuthority": "synapse-core StudyService::review_once / receipt in the existing Synapse app; not an animation, browser launch or parallel scheduler",
         "privacy": "transient nonreplicated permission, card and action data; no files, vault-wide enumeration, image paths, settings, analytics, graph or backup routes",
         "verification": { "built": false, "tested": false, "installed": false, "playAccepted": false }
+      },
+      {
+        "id": "image-optimizer-native-workbench",
+        "stage": "source_written_unverified",
+        "source": [
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusImageOptimizerClient.h", "symbols": ["FDaedalusImageOptimizerClient", "FDaedalusImageOptimizerImage", "FDaedalusImageOptimizerSettings", "FDaedalusImageOptimizerOutput", "FDaedalusImageOptimizerView", "Pair", "SetImages", "SetSettings", "SubmitOrRetry", "Refresh", "CancelJob", "Disconnect", "Shutdown", "Tick", "Download"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerClient.cpp", "symbols": ["bounded IOP1 session/job/output implementation using the existing app"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusImageOptimizerTerminal.h", "symbols": ["ADaedalusImageOptimizerTerminal", "GetView", "PairLocalApp", "ChooseImages", "SetSettings", "SubmitOrRetry", "RefreshJob", "CancelJob", "DisconnectApp", "ExportImage", "ClosePanel", "IsPanelOpen"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerTerminal.cpp", "symbols": ["local player workbench interaction and lifecycle"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.h", "symbols": ["SDaedalusImageOptimizerPanel"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.cpp", "symbols": ["masked pairing input, explicit image/settings/job/export controls"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.h", "symbols": ["DaedalusImageOptimizerFiles", "Supported", "SelectImages", "SaveImage"] },
+          { "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp", "symbols": ["bounded explicitly selected local image reads and no-replace image export"] }
+        ],
+        "contracts": ["docs/contracts/image-optimizer-v1/native-terminal.md", "docs/contracts/image-optimizer-v1/install-binding-manifest.json"],
+        "implementedWork": ["validate typed image-optimizer capability before session creation", "explicit selected PNG/JPEG bytes with quality, resize, width and output-format controls", "bounded IOP1 framing and stable uncertain-action identity", "real scoped job polling and output metadata", "image-specific canceled tombstones and cleanup", "bounded authenticated output download and new local image export"],
+        "implementationEvidence": "All eight scoped source files written and frozen by their owners; functionality remains a source implementation pending exercise, not observed execution.",
+        "staticReviews": [
+          { "scope": ["DaedalusImageOptimizerClient.h", "DaedalusImageOptimizerClient.cpp"], "stage": "complete_source_only", "findings": "Independent final client review and reciprocal peer review complete; no remaining concrete P1/P2 blocker reported. No image bytes or pixels produced by native execution." },
+          { "scope": ["DaedalusImageOptimizerTerminal.h", "DaedalusImageOptimizerTerminal.cpp"], "stage": "complete_source_only", "findings": "Independent final actor review complete; no remaining concrete P1/P2 blocker reported. Input ownership and asynchronous lifecycle behavior remain unbuilt and unexercised." },
+          { "scope": ["DaedalusImageOptimizerFiles.h", "DaedalusImageOptimizerFiles.cpp", "SDaedalusImageOptimizerPanel.h", "SDaedalusImageOptimizerPanel.cpp"], "stage": "complete_source_only", "findings": "Independent helper/panel review complete: IOP1 fixed-header accounting, bounded local reads, signature/type/extension checks, retained directory handles, owned temporary identity, no-replace export, neutral dialog cancel and explicit frozen-setting actions. No concrete blocker found; Windows/Slate behavior not exercised." }
+        ],
+        "completionAuthority": "existing ImageOptimizationService.optimizePixels and RealmImageBridge job/output response, never an animation or browser launch",
+        "privacy": "transient nonreplicated local capabilities, selected bytes and action settings; no folder scanning, source filenames on the wire, arbitrary export paths on the server or third-party uploads",
+        "notAdded": ["desktop folder planner", "duplicate detection", "existing-output skip heuristic", "guaranteed file-size reduction", "original-file overwrite"],
+        "verification": { "built": false, "tested": false, "installed": false, "playAccepted": false }
       }
     ],
     "relevantInfrastructure": {
@@ -113,7 +142,7 @@
       "exampleDirectoriesFound": ["examples/benchmark-harness", "examples/biome-plugin", "examples/dungeon-layout", "examples/loadbalancer-topology", "examples/openxr-plugin"],
       "exampleRole": "Existing examples; no photo/image/Synapse/fax integration found by scoped tracked-source search.",
       "existingContracts": ["docs/contracts/photo-pdf-v1/object.json", "docs/contracts/local-app-v1/objects.json", "docs/contracts/fax-v1/README.md"],
-      "currentIncrementContracts": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
+      "currentIncrementContracts": ["docs/contracts/image-optimizer-v1/native-terminal.md", "docs/contracts/image-optimizer-v1/install-binding-manifest.json"],
       "scopeExclusions": ["Blackjack PR152", "CSRBT PR153", "shared editor operation", "other owners' game/realm/art sources"]
     }
   },
@@ -240,9 +269,12 @@
             { "path": "src/main/java/com/terpenepirate/imageoptimizer/bridge/RealmImageBridge.java", "symbols": ["submit", "convert", "download"] }
           ],
           "existingInterface": "Swing and private browser/job API.",
-          "nativeBindings": ["typed-browser"],
-          "bindingStage": "native_unbound",
-          "missingCode": ["native selected-file/settings submission", "real job polling and optimized-image export UI"],
+          "nativeBindings": ["typed-browser", "image-optimizer-native-workbench"],
+          "nativeWorkflow": "NativeSelectedImageSettings",
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "nativeContractTargets": ["docs/contracts/image-optimizer-v1/native-terminal.md", "docs/contracts/image-optimizer-v1/install-binding-manifest.json"],
+          "remainingVerification": ["operator builds, installs and exercises real settings, conversion and image export; validates actual output pixels/metadata separately from source review"],
           "evidenceStage": "source_inspected"
         },
         {
@@ -277,9 +309,12 @@
             { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["OptimizationWorker", "log"] }
           ],
           "existingInterface": "Private browser/API; original Swing progress/logs.",
-          "nativeBindings": ["typed-browser"],
-          "bindingStage": "native_unbound",
-          "missingCode": ["native owned job/result model with image-specific tombstones", "cancel/disconnect/status UI without claiming guaranteed savings"],
+          "nativeBindings": ["typed-browser", "image-optimizer-native-workbench"],
+          "nativeWorkflow": "jobOutputCancel",
+          "bindingStage": "source_written_unverified",
+          "missingCode": [],
+          "nativeContractTargets": ["docs/contracts/image-optimizer-v1/native-terminal.md", "docs/contracts/image-optimizer-v1/install-binding-manifest.json"],
+          "remainingVerification": ["operator exercises uncertain retries, repeat actions, cancellation, output validation and session revocation"],
           "evidenceStage": "source_inspected"
         }
       ]
@@ -572,6 +607,6 @@
     "nftMintingOrEntitlementImplementation": false,
     "licenseChanges": false,
     "completionEvidence": "App job SUCCEEDED plus real authenticated output export, or a matching persisted Synapse receipt. Native installation/placement/Play must be independently accepted by codex-play-guard.",
-    "remainingPortfolioWork": "Operator builds, verifies and installs written photo/Synapse sources when authorized; the photo input-counter correction 5e14c374 is inherited by this stack and still requires native acceptance. Bind image jobs and design a preparation-only fax/auth bridge; track every intentionally unexposed desktop group before claiming full capability coverage."
+    "remainingPortfolioWork": "Operator builds, verifies and installs written photo/Synapse/image sources when authorized; corrected photo 5e14c374 and Synapse c3f84221 are inherited, still without native acceptance. Design a preparation-only fax/auth bridge and track every intentionally unexposed desktop group before claiming full capability coverage."
   }
 }
