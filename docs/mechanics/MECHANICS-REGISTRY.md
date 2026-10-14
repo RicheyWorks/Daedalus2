@@ -58,3 +58,13 @@ datum, 8 m clear walk, 16 m bridge spans, each member keeps its deed/seed. `tool
 makes our voxel islands members of that standard (landings to every socket, bridges from the layout's connectors,
 sky rivers between member lakes, per-member chemistry in `<out>.super-island.json`). Mechanic rows: WZ08 (plot
 sockets + tug anchors → ADR-065 tugging), WZ09 (sky rivers as water connectors between members).
+
+## Colony Ledger (ADR-066) — 14:20
+`tools/economy/colony_ledger.py` (pure core, `test_colony_ledger.py` 10/10): the M.U.L.E. loop per realm —
+plots = deeds with their chemistry profile; workers (pack mule / Codex PowerUnit) outfitted per good family by
+consuming parts; production = chemistry × ecology (seral stage, biodiversity, season from pcg-ecology) with the
+energy tax and adjacency bonus; market day double auction with ark cargo; events; **day book** (Animal Crossing:
+fish/bugs/fossils/fruit finds, collection, charm, cast requests from `data/art/<realm>/population-plan.json` —
+kings, unicorn guides, bakers… and their quests, PORT09); **raid/defend** (Arc Raiders: hulks and rich lands,
+interceptable cargo, fences/towers/patrols/traps). Rows WZ10–WZ15; the Excel tracker has a "Team Claude
+2026-10-14" sheet listing every deliverable.
