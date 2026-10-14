@@ -1,0 +1,194 @@
+{
+  "world_benchmarks": 10,
+  "supplements": 7,
+  "ranking": "curated visual references; not a popularity or beauty ranking",
+  "references": [
+    {
+      "title": "Adopt Me \u2014 minimum bar",
+      "file": "01-adopt-me.jpg",
+      "source_url": "https://www.playadopt.me/",
+      "context": "Official website video frame",
+      "category": "ten-world-benchmark",
+      "sha256": "2747e70e763f8458973b1718361a961ed3118b85f97985b887c1ae8d0c4c3b8f",
+      "bytes": 93979,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "The Sandbox",
+      "file": "02-sandbox.jpg",
+      "source_url": "https://www.animocabrands.com/announcement/the-sandbox-partners-with-shibuya109-to-launch-shibuya109-land",
+      "context": "Partnership promotional scene",
+      "category": "ten-world-benchmark",
+      "sha256": "f970468764fdb1e49b29adecbe70a7e4ccb4edd94bcdf34833687a6316ce49db",
+      "bytes": 138723,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Otherside",
+      "file": "03-otherside.jpg",
+      "source_url": "https://www.theboredapegazette.com/post/yuga-labs-gave-the-community-an-update-on-the-otherside-and-showed-new-gameplay-footage",
+      "context": "Historical gameplay image, third-party republication",
+      "category": "ten-world-benchmark",
+      "sha256": "a09ed0dbe4c906992223f5497c6bb726b745909b859b9302f9db930acfbb8e3f",
+      "bytes": 70284,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Decentraland",
+      "file": "04-decentraland.jpg",
+      "source_url": "https://decentraland.org/",
+      "context": "Official landing-page promotional image",
+      "category": "ten-world-benchmark",
+      "sha256": "bea88b17dd60521299b187ba248130e0eaeaa352c4f5f4a93c71319f41ac237c",
+      "bytes": 88020,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Somnium Space",
+      "file": "05-somnium.jpg",
+      "source_url": "https://store.steampowered.com/app/875480/Somnium_Space_VR/",
+      "context": "Historical publisher screenshot",
+      "category": "ten-world-benchmark",
+      "sha256": "129ff918bd6f701a6dc68cdba4d1549cf8ffc2f794f90bdd8b4905406cca66eb",
+      "bytes": 70297,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Spatial",
+      "file": "06-spatial.jpg",
+      "source_url": "https://www.spatial.io/",
+      "context": "Official website environmental background",
+      "category": "ten-world-benchmark",
+      "sha256": "3ba00d4c5e8436966d815fafca7a8e1ce32f02061e070ba7d7d0d832d61e9f6c",
+      "bytes": 89350,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "VRChat",
+      "file": "07-vrchat.jpg",
+      "source_url": "https://hello.vrchat.com/",
+      "context": "Official world/avatar panels",
+      "category": "ten-world-benchmark",
+      "sha256": "8b43152a8918f7cf7b72b26c382b7850ccb87873fb067fad44a3eaf520cb209d",
+      "bytes": 112176,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "LEGO Fortnite Odyssey",
+      "file": "08-lego-fortnite.jpg",
+      "source_url": "https://www.fortnite.com/news/lego-fortnite-becomes-lego-fortnite-odyssey-with-the-storm-chasers-update",
+      "context": "Official 2024 village image",
+      "category": "ten-world-benchmark",
+      "sha256": "54a4929169390c02b570db6f475b5cd609e0a1ce1be5eff57226197b63a90e17",
+      "bytes": 132689,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Voxels / CryptoVoxels",
+      "file": "09-voxels.jpg",
+      "source_url": "https://museumofcryptoart.medium.com/a-brief-history-of-virtual-values-4986e7b692c6",
+      "context": "Historical tour image published by Museum of Crypto Art",
+      "category": "ten-world-benchmark",
+      "sha256": "6e82634950b0aabcad1e991d5f628c006df99bdb9558c163b0cdf4deb8030a45",
+      "bytes": 146708,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Meta Horizon Worlds",
+      "file": "15-horizon.jpg",
+      "source_url": "https://www.meta.com/experiences/worlds/2532035600194083/",
+      "context": "Official trailer poster; not runtime proof",
+      "category": "ten-world-benchmark",
+      "sha256": "119ce0acdd8c9b6e5fa491246bd2f4571e6940961a2a3dc005e99531b4026491",
+      "bytes": 107843,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Minecraft Vibrant Visuals",
+      "file": "10b-minecraft-mesa.jpg",
+      "source_url": "https://www.minecraft.net/en-us/vibrant-visuals-update",
+      "context": "Official enhanced mesa screenshot",
+      "category": "supplement",
+      "sha256": "c184dba8c5e2bcd4020f21975027fce086e6c3177bde6450031ddfe8ba8727db",
+      "bytes": 93410,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Animal Crossing",
+      "file": "11-animal-crossing.jpg",
+      "source_url": "https://animalcrossing.nintendo.com/new-horizons/",
+      "context": "Official key art; character design reference",
+      "category": "supplement",
+      "sha256": "6c103f136764f7ee33b7f26ecf3fc5159321a0db5955dad5267120886fb9a71b",
+      "bytes": 145926,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Palia",
+      "file": "14-palia.jpg",
+      "source_url": "https://palia.com/press",
+      "context": "Official fishing screenshot",
+      "category": "supplement",
+      "sha256": "6a8ed6e2b2c8164e8935773d3d743035220e461a8806c8d12a73fda2d96aab68",
+      "bytes": 175838,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Adopt Me Dragon",
+      "file": "01c-adopt-me-dragon.jpg",
+      "source_url": "https://www.playadopt.me/discover/pets/dragon",
+      "context": "Official pet display",
+      "category": "supplement",
+      "sha256": "2076e158b7e555cdb783caa63708bda28e68892dc5dc906e40296e104536b901",
+      "bytes": 63881,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Roblox Dress To Impress",
+      "file": "17-roblox-dress-to-impress.jpg",
+      "source_url": "https://www.roblox.com/games/15101393044/Dress-To-Impress",
+      "context": "Official listing video frame",
+      "category": "supplement",
+      "sha256": "aa90eb9ec49f835cddd65318526f65f2611ef505cb3af98f6d48bd92df5f99d3",
+      "bytes": 81291,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Bitcoin BlockForge Identity #057",
+      "file": "12c-bitcoin-inscription-057.jpg",
+      "source_url": "https://ordinals.com/content/9b44736ba8dc36b0d43ba3b86392a987df690df403b63032966782b040a50c59i56",
+      "context": "Live inscription browser render; voxel character",
+      "category": "supplement",
+      "sha256": "99e9b4394cfc186e28d5ad36b21ba808a28fcca56d2b6fea9c119d2bf80a1825",
+      "bytes": 165674,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    },
+    {
+      "title": "Bitcoin OCM Dimensions #215",
+      "file": "16b-ocm-live.jpg",
+      "source_url": "https://ord.osura.com/content/2ea8e9c4454dff626a584c5da0b5db88f66b7efa39aabfcc6714fcbff695901ci0",
+      "context": "Live generative sculpture; not a voxel metaverse",
+      "category": "supplement",
+      "sha256": "f7827b3a14eb9135feea1e6933af002aacaf70233f51cd3d71c6479b37506a3a",
+      "bytes": 43788,
+      "capture_date": "2026-10-14",
+      "capture_method": "cua browser screenshot"
+    }
+  ]
+}

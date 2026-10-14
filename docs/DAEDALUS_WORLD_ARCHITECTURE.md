@@ -524,3 +524,6 @@ When Slice 1 is green, Phase 2 is a file-backed `WorldStore` with an explicit re
 6. **Smallest path to World Zero.** Slice 1 primitives → file persistence → `/api/v1/world` → STOMP → one door → registry → `UNACCOUNTED = 0`.
 7. **Serious problems.** No voxels; no durable store; plugin SPI is not capabilities; explore is not a voxel engine. All are expected. Dual spatial models are the design, not a defect.
 8. **Exact first slice.** The file list in §11. Stop after those types and tests are proven. Do not restructure the reactor.
+
+## Adopt Me minimum visual bar (user decision, 2026-10-14)
+All realms retain their identities and current work while characters, pets, movement, UI and environments are brought to at least Adopt Me quality. Only finished strongest assets are native delivery candidates. Refer to docs/production/VISUAL-QUALITY-BAR.md for the 10-world screenshot study, supplementary character/Bitcoin references, concrete finish criteria and evidence requirements. This is an art/runtime target, not a claim that current source, Blender exports or native scenes already meet it. Motion requires continuous native evidence; stills prove only appearance. Preserve modular assets and improve one hero environment/character/pet before propagating variants.

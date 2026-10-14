@@ -236,3 +236,6 @@ new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
 
+
+## 2026-10-14 · Adopt Me visual baseline
+User sets Adopt Me as minimum appearance/movement bar and permits only the best finished assets into the metaverse. Source study: docs/production/VISUAL-QUALITY-BAR.md plus reference/visual-benchmark-20261014 (10 world benchmarks and 7 supplements, 17 actual browser captures with context/URLs/hashes). Still images cannot establish animation or frame rate; promotional/historical imagery is labelled. Finish one environment and one character/pet against normal-camera references before multiplying variants. CopperBeacon actual Blender review found flat empty terrain, cottage/tree overlaps, a rigid waterfall and dock surface artifacts; export success did not make it contest-ready. Headless export completed despite bridge9876 bind warning; existing bridge left intact. First166-object kit gen1.31s/GLB.31s is one observation, not a general speed benchmark. Live Bitcoin BlockForge #057 and OCM #215 viewers rendered; distinguish voxel avatar from generative sculpture and per-piece data from shared dependencies. No native import/gameplay/performance claim from this study.
