@@ -58,18 +58,24 @@ def _world():
 
 
 def _streaming(world):
-    try:
-        return list(world.get_editor_property("streaming_levels") or [])
-    except Exception:
-        return list(world.get_streaming_levels())
+    """UE 5.8 Python exposes neither World.streaming_levels nor get_streaming_levels(); the loaded ULevels come
+    from EditorLevelUtils.get_levels and a ULevelStreaming by package from GameplayStatics.get_streaming_level."""
+    import unreal
+    out = []
+    for lv in unreal.EditorLevelUtils.get_levels(world):
+        pkg = str(lv.get_outermost().get_name())
+        sl = unreal.GameplayStatics.get_streaming_level(world, pkg)
+        if sl is not None:
+            out.append(sl)
+    return out
 
 
 def _sublevel(world, pkg, create=True):
     """The ULevelStreaming for pkg, created (Dynamic) when missing."""
     import unreal
-    for sl in _streaming(world):
-        if str(sl.get_world_asset_package_name()) == pkg:
-            return sl
+    sl = unreal.GameplayStatics.get_streaming_level(world, pkg)
+    if sl is not None:
+        return sl
     if not create:
         return None
     sl = unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, pkg, False, False)
