@@ -236,7 +236,34 @@ def lay_ground_steps(realm, districts):
     return {"realm": realm, "ground": made}
 
 
-def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, sublevels=False):
+def dedupe_steps(realms):
+    """Destroy duplicate Lands_<Realm>_D<dd> district actors (a rerun after an editor reload laid some districts
+    twice, 00:46: Bricks 124/96, Labyrinth 172/96): keep the first per (realm, district). Yields a line per realm."""
+    import unreal
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    gone = {}
+    for realm in realms:
+        seen = set()
+        gone[realm] = 0
+        for a in sub.get_all_level_actors():
+            if a.get_class().get_name() != "DaedalusLandDistrict":
+                continue
+            tags = [str(t) for t in a.tags]
+            if ("Realm:%s" % realm) not in tags:
+                continue
+            d = next((t for t in tags if t.startswith("District:")), None)
+            if d in seen:
+                sub.destroy_actor(a)
+                gone[realm] += 1
+            else:
+                seen.add(d)
+        yield "%s: %d duplicate district actors removed, %d kept" % (realm, gone[realm], len(seen))
+    import daedalus_plots as P
+    P.save_world()
+    return gone
+
+
+def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, sublevels=False, ground=None):
     """Lay EVERY free cell of each district as ONE instanced-mesh actor (Lands_<Realm>_D<dd>: 100 plot instances
     of the cube, tagged District:<d>, instance i = district_cells(d)[i]) plus the district's ground slab, straight
     into the district's streamed sublevel; sublevels are saved every `save_every` districts. 23:56 Richey: "I need
@@ -249,7 +276,13 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, suble
     import daedalus_realm_ground as R
     world = _world()
     origin = R.ORIGINS[realm]
-    ground = R.GROUND_Z
+    if realm == "WORLD-ZERO":   # the 10k NFT islands: hub centre and ground come from the live level (the estates too)
+        estates, hub_cells, hub_cm, g0 = P._editor_inputs()
+        origin = (hub_cm[0], hub_cm[1])
+        taken = set(taken) | set(hub_cells) | P.taken_by_estates(estates)
+        ground = g0 if ground is None else ground
+    elif ground is None:
+        ground = R.GROUND_Z
     have = P._labels_cache()
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     cube = unreal.load_asset(P.CUBE)
