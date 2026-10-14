@@ -188,6 +188,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString InventoryCatalogName() const;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString InventoryRealm;
 
+	// The realm session (hub 28885): which realm this player is in and how they move between them. The rules are
+	// DaedalusRealmSessionCore.h; a switch sets the inventory catalog and dialogue theme, saves the session, and
+	// tells the realm hosts (world actors, Sol's Ocean view) through OnRealmChange so they stream the right world.
+	/** Where the player is: WORLD-ZERO, GALLERY-CITY, PARCELS, BRICKS, LABYRINTH, PORTAL, OCEAN. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString RealmNow() const;
+	/** Go to a realm by a way: gate, portal, dock, shore. Detail: "boat:<dock>" / "sub:<dock>" for a dock.
+	 *  Returns "ok <from> -> <to> hint=<where>" or "refused: <why>". Nothing moves on a refusal. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString SwitchRealm(const FString& To, const FString& Via, const FString& Detail);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString RealmSessionState() const;
+	DECLARE_MULTICAST_DELEGATE_FourParams(FOnRealmChange, const FString& /*From*/, const FString& /*To*/, const FString& /*Via*/, const FString& /*Hint*/);
+	/** Realm hosts subscribe: leave From, enter To at Hint. World Zero's world actor and the Portal are wired here. */
+	FOnRealmChange OnRealmChange;
+
 	// Dialogue (Richey, 2026-10-13): every realm has dialogue boxes. The 3D realms speak through SDaedalusDialogue in
 	// the realm's theme (Animal Crossing's bubble, name tag, babble); the 8-bit realm keeps its FF1 window.
 	/** An NPC speaks: opens the box (or queues behind the line showing). Choices end the line on a pick. */
@@ -321,6 +334,8 @@ private:
 	TSharedPtr<SDaedalusDialogue> Dialogue;
 	TSharedPtr<SWidget> DialogueHost;
 	TArray<FString> DialogueSfx;
+	TSharedPtr<struct FDaedalusRealmSessionHolder> RealmSession;
+	FString RealmSessionLine;   // saved with progress
 	void DialogueOutcome(const struct FDaedalusDialogueOutcome& Outcome);
 	void DialogueSound(const FString& Event);
 	TSharedPtr<struct FDaedalusCatalogHolder> InventoryCatalog;
