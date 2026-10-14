@@ -341,3 +341,13 @@ Architecture: docs/production/ISLAND-AND-NEW-REALMS.md. Source first slice is no
 - [ ] Prepared marine tanks, flora/fungi banks, predator separation and sanctuary restoration Blender modules.
 - [ ] Mount Production page in existing themed tab shell; owner-scoped replicated DTOs; revision-cached forecast.
 - [ ] Hearthwake rescue toggle disclosure, daily chance display and public leaderboards wired to authenticated host persistence.
+
+### Local save pipeline
+
+- [x] Native refuge run/household binary codec with validated decode.
+- [x] Checksummed local RealmRecordStore with directory ownership lock, atomic replace and revision CAS.
+- [x] Explicitly enabled host-only GET/PUT transport using existing signed-JWT subject allowlist.
+- [x] Native payload persisted and reopened by Java in a disposable proof directory.
+- [ ] Native authenticated binary HTTP adapter; timeout reconciliation and response identity/hash binding.
+- [ ] Bundle full ecosystem, life manifest, run/household and both boards in one authoritative storage transaction.
+- [ ] Managed database adapter and multi-server transaction/CAS verification before production deployment.
