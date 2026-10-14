@@ -285,9 +285,9 @@ def island_plan(n, x, y, top, thick, realm):
     terraces = int(_h(n, 10) * 3)            # 0, 1, 2
     size, z = P.LAND_M, top
     for k in range(terraces):
-        f = 0.35 + 0.3 * _h(n, 11 + k)       # footprint fraction of the level below
+        f = 0.2 + 0.25 * _h(n, 11 + k)       # footprint fraction of the level below (09:12: 0.35-0.65 ate the whole top)
         w, d = size * f, size * f * (0.7 + 0.6 * _h(n, 14 + k))
-        h = 3.0 + 5.0 * _h(n, 17 + k)
+        h = 2.0 + 3.0 * _h(n, 17 + k)
         ox = (_h(n, 20 + k) - 0.5) * (size - w) * 100.0
         oy = (_h(n, 23 + k) - 0.5) * (size - d) * 100.0
         out.append((x + ox, y + oy, z + h * 50.0, 0.0, w, d, h))
