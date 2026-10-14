@@ -1426,6 +1426,42 @@ def scenario_portals(p):
     return {"checks": checks}
 
 
+def scenario_bestiary(p):
+    """The realm's bestiary (BASE-LAYER row 6, DaedalusBestiaryCore): packs spawned in Gallery City are gallery
+    creatures (kinds from the table) wearing Sol's skeletal art; back in World Zero the crystal kinds return."""
+    h = hero()
+    w = world()
+    checks = []
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    h.switch_realm("gallery-city", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    made = sum(h.spawn_pack() for _ in range(3))
+    yield from _frames(4)
+    new = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    kinds = sorted({str(a.get_editor_property("kind")) for a in new})
+    gallery = {"SMUDGELING", "THUMBTACK_BEETLE", "CANVAS_MOTH", "EASEL_STRIDER", "TURPENTINE_TOAD", "MOSAIC_HOUND", "GILDED_FRAME_MIMIC", "SENTINEL_BUST", "GREY_WASH"}
+    dressed = sum(1 for a in new if a.get_editor_property("hide") is not None)
+    checks.append(_check("packs spawn in Gallery City", made >= 2 and len(new) >= 2, "made=%d new=%d" % (made, len(new))))
+    checks.append(_check("every foe is a gallery creature from the bestiary", bool(kinds) and set(kinds) <= gallery, str(kinds)))
+    checks.append(_check("each wears its skeletal art (not the crystal)", new and dressed == len(new), "dressed=%d/%d" % (dressed, len(new))))
+    for a in new:
+        a.destroy_actor()
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    h.spawn_pack()
+    yield from _frames(3)
+    home = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    hk = sorted({str(a.get_editor_property("kind")) for a in home})
+    checks.append(_check("home, the server's crystal kinds are back", bool(hk) and not (set(hk) & gallery), str(hk)))
+    for a in home:
+        a.destroy_actor()
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1451,6 +1487,7 @@ SCENARIOS = {
     "realm_host": scenario_realm_host,
     "mounts": scenario_mounts,
     "portals": scenario_portals,
+    "bestiary": scenario_bestiary,
     "control": scenario_control,
     "stage": scenario_stage,
 }

@@ -150,7 +150,7 @@ def main(argv):
     hub("status", "NIGHT RUN laid on %s: %s" % (sha, " | ".join(lay)))
 
     say("play suite")
-    out = subprocess.run([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "cast", "control"],
+    out = subprocess.run([sys.executable, os.path.join(HERE, "run_scenarios.py"), "realm_switch", "realm_ground", "realm_host", "mounts", "portals", "bestiary", "cast", "control"],
                          capture_output=True, text=True, timeout=1800, cwd=REPO)
     text = (out.stdout or "") + (out.stderr or "")
     print(text[-6000:])

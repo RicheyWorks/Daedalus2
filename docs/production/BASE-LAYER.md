@@ -54,7 +54,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | see WORLD-ZERO 4 |
 | 5 | Cast | **done** | Fable | `gallery-city.dcs` 12 roles/44 steps; 13 Mob_Gallery_* imported, Talkers bound (CAST-IMPORT) |
-| 6 | Creatures | **partial** | Sol | 19 creature/mount/pet visuals validated (GAL01); not spawned |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
 | 9 | Mounts | **partial** | Fable | `DaedalusMountCore` profile (gallery drone, ceiling 120 m); the called vehicle wears Mob_Gallery_GalleryDrone and flies (Ghost::Wear/Lift); `mounts` scenario; build pending |
@@ -71,7 +71,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `parcels.dcs` 12/46; GLBs in `Codex\2026-10-13\parcels-buildout\cast` NOT imported yet |
-| 6 | Creatures | **partial** | Sol | 32 role models validated (PAR01) |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
 | 9 | Mounts | **partial** | Fable | profile parcel helicopter (ceiling 200 m), wears Mob_Parcels_ParcelHelicopter |
@@ -88,7 +88,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `bricks.dcs` 12/45; `bricks-buildout\cast` NOT imported yet |
-| 6 | Creatures | **partial** | Sol | 32 role models (BRK01) |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
 | 9 | Mounts | **partial** | Fable | profile brick plane (fastest, ceiling 240 m), wears Mob_Bricks_BrickPlane; hover cart later |
@@ -105,7 +105,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `labyrinth.dcs` 12/46; 35 Mob_Lab_* GLBs exported, not imported |
-| 6 | Creatures | **partial** | Sol | plants LAB10 policy tested |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
 | 9 | Mounts | **partial** | Fable | profile sky-strider (ceiling 60 m), wears Mob_Lab_SkyStrider |
