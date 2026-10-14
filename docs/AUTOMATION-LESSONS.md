@@ -881,3 +881,27 @@ so a new connector is the first line of the next turn; (2) every connector we ow
 command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
 harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
 register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
+
+### Diagnose MCP configuration without replaying refused actions (2026-10-14)
+Use tools/unreal/mcp_preflight.py for file-only project/defaultINI/descriptor diagnosis. ToolsetRegistry can be enabled through the ModelContextProtocol descriptor dependency even without an explicit project entry. Configuration agreement is not loaded-module/server readiness: return server_ready:null and make no editor/socket/control calls. Actual project/UE5.8 configuration matched; no edits or restart/start performed.
+
+
+### Treat ambiguous MCP configuration as unverified (2026-10-14)
+Validate plugin/dependency arrays with explicit booleans and unique names. Parse listener fields uniquely; duplicate bind fields or array clear/remove edits must not yield confident loopback agreement. Bound JSON/INI reads and reject nonfinite JSON. Hash exactINI bytes. LatestPoot29673 ownerupdate supersedesolderpause; coordinate currentowner, never act from stalePID/pause snapshots. Actualconfig reread stillmatches; no serverreadyclaim orsetupaction.
+
+
+### Structured MCP diagnostic failures (2026-10-14)
+Preflight CLI emits JSON for unreadable/invalid project orINI data with available:false and agreement:null, preserving unknownserverreadiness. Descriptorunavailability also leaves agreementunknown. Readable mismatches identify plugin enable andlistener reasons. Missingfiles are not missingservers, and configurationdiagnostics neverperform editor/setup actions.
+
+
+### Reuse the owner's MCP initialization client (2026-10-14)
+Preflight --probe is opt-in and reuses tools/unreal_mcp/client.py for initialize/initialized only; default stays file-only. Actualloopback server returned protocol2025-11-25, capabilities andsessionheader; its serverInfo name/version are empty, so report metadata incomplete separately rather than reject a working session. Ready means initialization evidence, not native-tool/editor health. No startup or toolcall performed.
+
+
+### Timestamp readiness observations (2026-10-14)
+Optional MCPprobe records UTC observationtime, monotonicelapsed, per-requesttimeout and ownerclient sourceSHA. Dependencyimport failures become structured unknownreadiness. Validatefinitepositive timeout and expectedloopback default. Initializationusesmultiple HTTPrequests, so per-requesttimeout is not a hardtotaldeadline or proof of editorquiescence.
+
+
+### Bound MCP initialization claims (2026-10-14)
+Probe checks the exact2025-11-25 version requested by the inspectedclient. Othernegotiated versions are observed but not validated bythisprobe; readinessstaysunknown. Require typedserver metadata and boundedprintable sessionheader, report emptyname/version as metadatafinding and advertisedtools separately. No native tooldiscovery or toolhealth claim is inferred from initialize.
+
