@@ -60,6 +60,23 @@ def plan(rings=6, estates=(), hub_cells=(), hub_cm=(0.0, 0.0), ground_cm=0.0, pi
 
 # ---- editor side ----------------------------------------------------------------------------------------------
 
+def save_packages_proven(pkgs):
+    """Save these packages and prove each by its file mtime; raises naming any that was not written."""
+    import os
+    import time
+    import unreal
+    t0 = time.time()
+    ok = unreal.EditorLoadingAndSavingUtils.save_packages(list(pkgs), only_dirty=False)
+    stale = []
+    for pk in pkgs:
+        fn = unreal.Paths.convert_relative_path_to_full(unreal.PackageTools.package_name_to_filename(pk.get_name(), ".umap"))
+        if not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+            stale.append(pk.get_name())
+    if not ok or stale:
+        raise RuntimeError("not written: ok=%s %s" % (ok, stale))
+    return round(time.time() - t0, 1)
+
+
 def save_world():
     """Save the persistent level explicitly and prove it by the .umap mtime (save_dirty_packages can clear the
     dirty flag without writing, 2026-10-13). Returns the seconds the save took."""

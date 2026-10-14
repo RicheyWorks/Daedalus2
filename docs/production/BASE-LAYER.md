@@ -180,7 +180,8 @@ warning (Prop_Gallery_Ramp degenerate tangents, Sol's export).
 1. ~~World Zero plot markers~~ done; ~~Gallery/Parcels/Bricks/Labyrinth hub + kit + lands~~ done (table above).
 1b. Hero `SwitchRealm` lands at `Gate_<Realm>`/`Spawn_<Realm>`; WorldActor streams by realm origin. Fable.
 2. Realm-aware mint design + `/api/v1/lands?realm=` endpoint. Sol. Fable consumes it in WorldActor.
-3. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
+3. District sublevels: `daedalus_districts.steps(realm)` moves each realm's lands into `Realms/<R>/D<dd>` Dynamic sublevels and the hub kit into `<R>_Hub`, listed in islands.json for UDaedalusStreamer — the prerequisite for rings 7..49. Fable (tool on main, editor turn pending).
+3b. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
 4. Import Parcels/Bricks/Labyrinth casts (tool exists: `tools/unreal_play/import_cast.py`). Fable.
 5. Repeat 3 for Parcels, Bricks, Labyrinth. Mounts after ground.
 6. `ocean.dic` + Ocean role target. Fable / Sol.
