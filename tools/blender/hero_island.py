@@ -145,7 +145,7 @@ FRUIT = {"apple": (0.90, 0.20, 0.20), "cherry": (0.75, 0.10, 0.25), "plum": (0.4
 PAL.update({"fruit_" + k: v for k, v in FRUIT.items()})
 
 
-def plan(seed=1, realm="WORLD-ZERO", kind="meadow"):
+def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
     K = KINDS.get(kind, KINDS["meadow"])
     tree_shape = K.get("tree", "round")
     rng = random.Random(seed * 7919 + 11)
@@ -157,7 +157,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow"):
     legendary = chem["geology"]["starmetal_crater"]
 
     # ---- main island: size 60, a hill with the lake on top -----------------------------------------------
-    size, thick = 60, 38
+    thick = int(size * 0.63)
     harm = _harm(rng)
     top = _disc(size, harm)
     hx, hy = -8, 6                       # hill centre; the lake sits in the hill
@@ -232,7 +232,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow"):
         vox["water"].append((bx - int(round(diry)), by + int(round(dirx)), z, "water"))
 
     # ---- source islet: small, 34 m above and behind, with the spring -------------------------------------
-    ix, iy = int(hx - dirx * 52), int(hy - diry * 52)
+    ix, iy = int(hx - dirx * (size - 8)), int(hy - diry * (size - 8))
     iz = 34
     itop = _disc(14, _harm(rng, 2, 0.04, 0.08), ix, iy)
     spring = {(x, y) for (x, y), (d, e) in itop.items() if d <= 4.5}
