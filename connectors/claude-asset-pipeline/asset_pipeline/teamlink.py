@@ -152,11 +152,13 @@ class Broker:
                     for n, L in sorted(self.locks.items())}
 
     def inbox(self, me):
-        """What still needs an answer from `me`: unacked requests and pings addressed to me, oldest first, with age."""
+        """What `me` has not acked yet: requests and pings (need an answer) and notes, answers and statuses
+        addressed to me (need reading), oldest first, with age. Acks and request.accepted are not listed: they are
+        receipts. (2026-10-13: three notes went unread because only requests were listed.)"""
         now = self.clock()
         out = []
         for m in self.pending(me):
-            if m["to"] != me or m["type"] not in ("request", "ping", "ask"):
+            if m["to"] != me or m["type"] in ("ack", "request.accepted", "pong"):
                 continue
             try:
                 age = round(now - datetime.datetime.fromisoformat(m["ts"]).timestamp(), 1)
