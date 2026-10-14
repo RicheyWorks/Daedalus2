@@ -835,7 +835,7 @@ def _species_pools(limit_per_species=6):
     return {s: sorted(v)[:limit_per_species] for s, v in pools.items()}
 
 
-def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
+def detail_islands_steps(realm, limit=10, start=0, ground_material=None, extras_material="/Game/Claude/Materials/MI_Orr_Rock.MI_Orr_Rock"):
     """Great detail on the next `limit` islands of a realm (deed order from the district actors): props as
     instances on Detail_<R>_D<dd>_<species><k> actors (one mesh each), plus Sol's world-position ground material
     on the district's plots when given. Resumable by `start`; replaces that island's existing detail. One island
@@ -850,6 +850,7 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
         # 09:15: the library is voxel-scale (40 cm grass, 30 cm boulders): scale every mesh to its species' target height
         fit[s] = [(TARGET_M[s] * 100.0) / max(2.0 * m.get_bounds().box_extent.z, 1.0) if m else 1.0 for m in meshes[s]]
     mat = unreal.load_asset(ground_material) if ground_material else None
+    rock = unreal.load_asset(extras_material) if extras_material else None
     # islands in deed order from the Lands_ actors (instance i = cell i)
     lands = []
     actors = {}
@@ -902,10 +903,12 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
         comp.set_cull_distances(0, 60000)   # 600 m: detail is for the walker and the low flyer
         comp.set_cast_shadow(False)
         a.modify(True)
-    if mat is not None:
-        for d in {d for _, d, _, _, _, _ in chunk}:
+    for d in {d for _, d, _, _, _, _ in chunk}:
+        if mat is not None:
             actors[d].get_editor_property("plots").set_material(0, mat)
-            actors[d].modify(True)
+        if rock is not None:
+            actors[d].get_editor_property("ground").set_material(0, rock)   # terraces and satellite rocks read as rock
+        actors[d].modify(True)
     P.save_world()
     return {"realm": realm, "islands": len(chunk), "props": placed, "actors": len(per_actor), "next_start": start + len(chunk)}
 
