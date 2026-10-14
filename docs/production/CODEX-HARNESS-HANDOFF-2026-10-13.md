@@ -62,3 +62,13 @@ Native synthetic regressions exercise stale success text, malformed/overflow/mul
 preflight code2, child code23, live diagnostics and marker replacement. No build/editor calls.
 Earlier Run-stage exceptions outside its current try block and fail-closed git pull handling
 remain follow-ups; this change does not claim all build lifecycle failures are covered.
+
+
+## Run preparation follow-up, stacked on PR104
+The complete Run body now catches preparation errors and publishes failure completion;
+failed git pull stops before configuration/build. Removed the redundant unchecked second pull.
+Preflight failure exits2; normal Run exits its final code. Native copied-harness fixtures stub
+git and force a missing Config failure; both end done1 and never invoke synthetic setup.
+All4 native launcher/wait/writer/preparation groups pass5.536s locally.
+No engine/editor calls, live project writes, installs, actual git pulls or crash recovery in tests.
+Success-path engine build/reopen and crash restoration still require the editor owner's runtime test.

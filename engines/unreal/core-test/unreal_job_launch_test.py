@@ -15,6 +15,42 @@ PS = shutil.which("powershell.exe")
 
 @unittest.skipUnless(os.name == "nt" and PS, "requires Windows PowerShell")
 class UnrealLaunchTest(unittest.TestCase):
+    def test_run_preparation_failure_publishes_terminal_marker(self):
+        with tempfile.TemporaryDirectory(prefix="build prepare ! ", dir=HERE) as root:
+            root = Path(root)
+            harness = root / "repo" / "engines" / "unreal" / "unreal-job.ps1"
+            harness.parent.mkdir(parents=True)
+            shutil.copyfile(HERE.parent / "unreal-job.ps1", harness)
+            # Any accidental build entry is visible and fails the test.
+            sentinel = root / "build-was-called"
+            (harness.parent / "setup-unreal.ps1").write_text(
+                '"unexpected" | Set-Content -LiteralPath "' + str(sentinel) + '"\nexit 0\n')
+            wrapper = root / "fixture.ps1"
+            wrapper.write_text(r'''param($Harness, $Root, [int]$GitCode)
+$env:LOCALAPPDATA = Join-Path $Root "data"
+function git { $global:LASTEXITCODE = $GitCode; "synthetic pull" }
+& $Harness -Run -Id "build-prepare" -Project (Join-Path $Root "project\Realm.uproject")
+exit $LASTEXITCODE
+''', encoding="utf-8")
+            project = root / "project"
+            project.mkdir()
+            # Git failure must stop before config writes. With successful git, the
+            # missing Config directory forces a preparation exception before build.
+            for git_code in (23, 0):
+                with self.subTest(git_code=git_code):
+                    result = subprocess.run([PS, "-NoProfile", "-File", str(wrapper),
+                                             str(harness), str(root), str(git_code)],
+                                            capture_output=True, text=True, timeout=10)
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    jobs = root / "data" / "Daedalus" / "jobs"
+                    self.assertEqual((jobs / "build-prepare.exit").read_text().strip(), "done 1")
+                    log = (jobs / "build-prepare.log").read_text(encoding="utf-8-sig")
+                    self.assertIn("JOB STOPPED", log)
+                    if git_code:
+                        self.assertIn("git pull failed", log)
+                    self.assertFalse(sentinel.exists())
+                    self.assertFalse((project / "Config").exists())
+
     def test_completion_writer_replaces_marker_without_temp_residue(self):
         with tempfile.TemporaryDirectory(prefix="build marker ! ", dir=HERE) as root:
             root = Path(root)

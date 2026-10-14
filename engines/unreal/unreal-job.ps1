@@ -90,18 +90,22 @@ function Set-NoUnattendedCrashUpload {
 }
 if ($Run) {
     $log = Join-Path $Jobs "$Id.log"
+    $ErrorActionPreference = "Stop"
+    $code = 1
+    try {
     Set-Location $Repo
-    Set-FullSpeedDefault
     # Preflight (tools/unreal_preflight): catch the mistakes that cost a whole build slot (a shadowed actor member, a
     # missing Category, a bare Error, a saved component array) BEFORE the editor is closed. Fails = no build, editor stays up.
     git pull --ff-only *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+    if ($LASTEXITCODE -ne 0) { throw "git pull failed (exit $LASTEXITCODE); build not started" }
+    Set-FullSpeedDefault
     $py = (Get-Command python -ErrorAction SilentlyContinue)
     if ($py) {
         & python (Join-Path $Repo "tools\unreal_preflight\preflight.py") *>&1 | Out-File -FilePath $log -Append -Encoding utf8
         if ($LASTEXITCODE -ne 0) {
             "PREFLIGHT FAILED: fix the lines above; the editor was left open" | Out-File -FilePath $log -Append -Encoding utf8
             Write-Completion 2
-            exit
+            exit 2
         }
     }
     Set-NoUnattendedCrashUpload
@@ -115,7 +119,7 @@ if ($Run) {
         }
         $mark = if (Test-Path $log) { (Get-Content $log).Count } else { 0 }
         try {
-            & { git pull --ff-only; & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open -Fast:$Fast } *>&1 |
+            & { & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open -Fast:$Fast } *>&1 |
                 Out-File -FilePath $log -Append -Encoding utf8
             $code = $LASTEXITCODE
         } catch {
@@ -130,8 +134,12 @@ if ($Run) {
     }
     # Job end: close the floating Unreal panels it left (studio-screen-connector tidy.ps1, one pass, best effort).
     $tidy = Join-Path $Repo "..\studio-screen-connector\tidy.ps1"; if (Test-Path $tidy) { try { & powershell.exe -NoProfile -WindowStyle Hidden -File $tidy -Once *>> $log } catch { } }
+    } catch {
+        $code = 1
+        "JOB STOPPED: $($_.Exception.Message)" | Out-File -FilePath $log -Append -Encoding utf8
+    }
     Write-Completion $code
-    exit
+    exit $code
 }
 
 if ($Start) {
