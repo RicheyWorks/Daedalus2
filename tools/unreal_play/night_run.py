@@ -134,7 +134,8 @@ def main(argv):
 
     # lay what is new: first any cast folders waiting for import (one GLB per tick), then the cast, portals, districts
     lay = []
-    for folder in [a for a in argv[argv.index("--import") + 1:] if "--import" in argv and not a.startswith("--")][:8]:
+    folders = [a for a in argv[argv.index("--import") + 1:] if not a.startswith("--")][:8] if "--import" in argv else []
+    for folder in folders:
         out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
         lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
