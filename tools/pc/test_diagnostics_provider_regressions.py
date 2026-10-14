@@ -113,7 +113,8 @@ class SnapshotRegressions(unittest.TestCase):
 
     def test_invalid_enums_and_freshness_budget_are_refused(self):
         for changes in ({"availability": "minimized"}, {"provenance": "tmog"}, {"provenance": "os_fallback"},
-                        {"max_age_seconds": 0}, {"max_age_seconds": -1}, {"max_age_seconds": True},
+                        {"availability": []}, {"availability": {}}, {"provenance": None},
+                        {"provenance": []}, {"max_age_seconds": 0}, {"max_age_seconds": -1}, {"max_age_seconds": True},
                         {"max_age_seconds": float("nan")}, {"max_age_seconds": float("inf")}):
             with self.subTest(changes=changes):
                 with self.assertRaises(ValueError):
@@ -130,17 +131,14 @@ class SnapshotRegressions(unittest.TestCase):
                 self.assert_no_values(result)
         result = sample(instance_id=expected, expected_instance_id=expected)
         self.assertEqual(result["freshness"], "current")
-        self.assertEqual(result["instance_id"], expected)
+        self.assertEqual(result["instance_id"], {"pid": 101, "created_at": "2024-01-02T11:30:00.000000Z"})
 
     def test_malformed_identity_cannot_match_through_boolean_coercion_or_emptiness(self):
         for actual, expected in ((1, True), (True, 1), ("", "")):
             with self.subTest(actual=actual, expected=expected):
-                try:
-                    result = sample(instance_id=actual, expected_instance_id=expected)
-                except (TypeError, ValueError):
-                    # Invalid caller-supplied identity may be explicitly refused.
-                    continue
-                self.assertNotEqual(result["availability"], "available")
+                result = sample(instance_id=actual, expected_instance_id=expected)
+                self.assertEqual(result["availability"], "unavailable")
+                self.assertEqual(result["reason"], "instance_mismatch")
                 self.assert_no_values(result)
 
     def test_process_identity_offsets_match_but_malformed_incarnations_do_not(self):
@@ -148,7 +146,7 @@ class SnapshotRegressions(unittest.TestCase):
         actual = {"pid": 101, "created_at": "2024-01-02T12:00:00+01:00"}
         result = sample(instance_id=actual, expected_instance_id=expected)
         self.assertEqual(result["availability"], "available")
-        self.assertEqual(result["instance_id"], actual)
+        self.assertEqual(result["instance_id"], {"pid": 101, "created_at": "2024-01-02T11:00:00.000000Z"})
         invalid = [
             {"pid": True, "created_at": STAMP},
             {"pid": 101.0, "created_at": STAMP},
@@ -168,6 +166,20 @@ class SnapshotRegressions(unittest.TestCase):
                 self.assertIsNone(result["instance_id"])
                 self.assert_no_values(result)
                 self.assertNotIn("never echo", json.dumps(result))
+
+    def test_output_identity_uses_validated_fields_when_mapping_mutates(self):
+        class MutatingIdentity(dict):
+            def __getitem__(self, key):
+                value = super().__getitem__(key)
+                if key == "pid":
+                    self["unexpected_field"] = "synthetic_marker"
+                return value
+
+        identity = MutatingIdentity(pid=101, created_at=STAMP)
+        result = sample(instance_id=identity)
+        self.assertEqual(result["availability"], "available")
+        self.assertEqual(result["instance_id"], {"pid": 101, "created_at": "2024-01-02T12:00:00.000000Z"})
+        self.assertNotIn("synthetic_marker", json.dumps(result))
 
     def test_identity_tokens_are_bounded_and_invalid_ids_not_echoed(self):
         for token in ("synthetic-token", "x" * 256):
