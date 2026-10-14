@@ -1149,3 +1149,6 @@ The Unreal host component now supports the existing prepare/persist/confirm ledg
 
 ## Compile the actual component and Slate seam in isolation (2026-10-14)
 Exact feb33ebc seven-file production snapshot compiled and linked with UE5.8 UnrealEditor Win64 Development: nine actions, exit0,65.92seconds, generated component reflection,279552byte DLL. Source hashes rechecked against the snapshot. This caught the scope that portable C++ tests/preflight cannot prove without altering the live editor. Keep isolated-module proof separate from full-plugin integration, installed DLL and gameplay acceptance. Pending storage and inventory adapters still require implementation.
+
+## Build snapshots must read the pinned commit, not working files (2026-10-14)
+The existing full_plugin_host helper checked a clean plugin and then copied working files, allowing concurrent edits to mismatch its recorded Git head. It now selects regular files from the pinned commit tree and reads each Git blob, hashes/writes/verifies those exact bytes. Existing/untracked-source guards and fresh-destination refusal remain. Actual execution produced196files at1a7c06e4 in a separate host; no compile/install was launched. Reuse this helper instead of new overlapping build harnesses. It pins committed content, not mutable native Content or runtime state.

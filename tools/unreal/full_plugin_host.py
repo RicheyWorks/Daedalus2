@@ -3,7 +3,6 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-import shutil
 import subprocess
 
 def snapshot(repo, destination):
@@ -14,19 +13,29 @@ def snapshot(repo, destination):
         raise ValueError('Commit plugin edits before recording an exact-head build')
     if subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',prefix],cwd=repo):
         raise ValueError('Untracked plugin files would be omitted; commit them first')
-    paths=subprocess.check_output(['git','ls-files','-z',prefix],cwd=repo).decode().split('\0')
-    paths=[p for p in paths if p]
-    assert paths and any(p.endswith('/DaedalusLink.uplugin') for p in paths)
     sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip()
+    # Pin both names and bytes to this commit. Working files can change while
+    # another agent is building; a clean check alone is not a frozen snapshot.
+    tree=subprocess.check_output(['git','ls-tree','-r','-z',sha,'--',prefix],cwd=repo)
+    entries=[]
+    for row in tree.split(b'\0'):
+        if not row: continue
+        metadata,name=row.split(b'\t',1)
+        mode,kind,blob=metadata.decode('ascii').split()
+        if kind!='blob' or mode not in ('100644','100755'):
+            raise ValueError('Plugin snapshot requires regular tracked files')
+        entries.append((name.decode('utf-8'),blob))
+    if not entries or not any(name.endswith('/DaedalusLink.uplugin') for name,_ in entries):
+        raise ValueError('Pinned plugin descriptor missing')
     plugin=destination/'Plugins/DaedalusLink'
     inputs={}
-    for name in paths:
-        source=(repo/name).resolve();relative=Path(name[len(prefix):])
-        source.relative_to(repo)
+    for name,blob in entries:
+        relative=Path(name[len(prefix):])
         target=(plugin/relative).resolve();target.relative_to(plugin)
         target.parent.mkdir(parents=True,exist_ok=True)
-        shutil.copy2(source,target)
-        digest=hashlib.sha256(source.read_bytes()).hexdigest()
+        raw=subprocess.check_output(['git','cat-file','blob',blob],cwd=repo)
+        target.write_bytes(raw)
+        digest=hashlib.sha256(raw).hexdigest()
         assert hashlib.sha256(target.read_bytes()).hexdigest()==digest
         inputs[name]=digest
     project=destination/'HostProject.uproject'
