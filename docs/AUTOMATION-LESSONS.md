@@ -889,3 +889,7 @@ Saved MCPdescriptions can form a reproducible unique toolset/name catalog with p
 ### Bind action attempts without inventing effect proof (2026-10-14)
 Saved benchmarkattempts must match the catalogcaptureSHA and an exposedtoolset/name pair, with uniqueattemptIDs andfinitenonnegative timings. Referenced evidencefiles stayinside explicitroot and theirhashes mustmatch. Count recordedattempts separately; returnedcalls andhashedfiles do notverify in-worldeffects. This consumer executesnothing and doesn'toverlap Pootnativeadapter/discovery ownership.
 
+
+### Preserve unresolved action attempts and complete catalog artifacts (2026-10-14)
+A later recordedreturn cannotsettle an earlierunknownattempt; count unresolvedattempts peraction andglobally. Publish a fullyserialized/fsynced catalog via no-clobber hardlink, thenremove only itsown temporaryfile. Unsupportedfilesystem fails withoutreplacement. NativeWindows smoke confirmsunknownretention andprioroutputpreservation. Evidencepresence stillnot effectverification.
+

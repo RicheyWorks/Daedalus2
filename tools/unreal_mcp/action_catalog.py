@@ -4,6 +4,8 @@ import argparse
 import hashlib
 import json
 import math
+import os
+import uuid
 from pathlib import Path
 
 
@@ -100,9 +102,27 @@ def attach_attempts(result,attempts,evidence_root):
         row['execution_state']='recorded-'+state
     result['recorded_attempts']=len(records)
     result['actions_with_recorded_attempts']=sum(bool(row.get('recorded_attempts')) for row in result['actions'])
+    for row in result['actions']:
+        row['unresolved_attempts']=sum(attempt['state']=='outcome-unknown' for attempt in row.get('recorded_attempts',[]))
+        row['reconciliation_required']=bool(row['unresolved_attempts'])
+    result['unresolved_attempts']=sum(row['unresolved_attempts'] for row in result['actions'])
     result['effects_verified']=0
     result['attempt_scope']='Recorded attempt/timing claims and hash-bound files; artifact presence does not prove an in-world effect'
     return result
+
+
+def publish_new(path,result):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    temporary=path.with_name(path.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        with temporary.open('x',encoding='utf-8',newline='\n') as stream:
+            json.dump(result,stream,indent=2,allow_nan=False)
+            stream.write('\n');stream.flush();os.fsync(stream.fileno())
+        # Hard-link publication is no-clobber and exposes only complete bytes.
+        # Unsupported filesystems fail rather than replacing a prior artifact.
+        os.link(temporary,path)
+    finally:
+        if temporary.exists():temporary.unlink()
 
 
 def main(argv=None):
@@ -119,9 +139,7 @@ def main(argv=None):
         attempts,attempt_digest=read_capture(args.attempts)
         attach_attempts(result,attempts,args.evidence_root)
         result['attempts_sha256']=attempt_digest
-    args.out.parent.mkdir(parents=True,exist_ok=True)
-    with args.out.open('x',encoding='utf-8') as stream:
-        json.dump(result,stream,indent=2,allow_nan=False);stream.write('\n')
+    publish_new(args.out,result)
     print(json.dumps({'exposed_actions':result['exposed_actions'],'executed_actions':0,'output':str(args.out)}))
     return 0
 
