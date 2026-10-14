@@ -264,8 +264,10 @@ def run_options(options,progress):
     progress['laid']=lay
     folders = options.imports
     for folder in folders:
-        checkpoint_run(progress,'import',import_folder=folder)
-        out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
+        import_receipt=os.path.join(os.path.dirname(progress['_checkpoint_path']),'cast-import-'+uuid.uuid4().hex+'.json')
+        progress.setdefault('import_receipts',[]).append(import_receipt)
+        checkpoint_run(progress,'import',import_folder=folder,import_receipt=import_receipt)
+        out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder,'--report',import_receipt], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
         lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
         terminal = re.fullmatch(r'import: (\d+) imported, (\d+) skipped, (\d+) failed',last[-1] if last else '')
@@ -325,6 +327,7 @@ def run_options(options,progress):
     receipt = {"when": time.strftime("%Y-%m-%dT%H:%M:%S"), "sha": sha, "build": build, "laid": lay, "scenarios": per,
                "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
     receipt['outcome'] = outcome
+    receipt['import_receipts']=progress.get('import_receipts',[])
     receipt['checkpoint_run_id']=progress['run_id']
     out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
     try:

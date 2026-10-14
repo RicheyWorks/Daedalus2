@@ -14,16 +14,44 @@ import os
 import re
 import sys
 import time
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "connectors", "claude-asset-pipeline"))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "engines", "unreal", "DaedalusLink", "Content", "Python"))
 from asset_pipeline import wire  # noqa: E402
+from asset_pipeline.ship import write_report  # noqa: E402
 import daedalus_import_cast as IC  # noqa: E402  (pure helpers: plan, sha)
 
 
-def call(code, timeout=120):
-    r = wire.call(wire.UNREAL, "execute_python", code=code, timeout=timeout)
+def observed_call(receipt,command,timeout=120,**params):
+    if receipt is not None:receipt.save('outcome-unknown',command=command)
+    try:
+        result=wire.call(wire.UNREAL,command,timeout=timeout,**params)
+    except Exception as error:
+        if receipt is not None:receipt.save('outcome-unknown',error={'type':type(error).__name__,'message':str(error)[-2000:]})
+        raise
+    if receipt is not None:receipt.save('reply-received')
+    return result
+
+
+class CastReceipt:
+    def __init__(self,path,folder,root,plan):
+        self.path=path
+        if path is not None and path.exists():raise ValueError('Existing import receipt; choose a new explicit output, do not replay it')
+        self.value={'schema_version':1,'folder':os.path.abspath(folder),'root':root,'assets':[],
+                    'planned':[{'id':aid,'sha256':sha} for aid,_,sha in plan],
+                    'scope':'Import command evidence, not actor binding/render proof or replay authorization'}
+        self.save('prepared')
+    def save(self,state,**values):
+        self.value.update(values,state=state,updated_at=time.time())
+        if self.path is not None:
+            self.path.parent.mkdir(parents=True,exist_ok=True)
+            write_report(str(self.path),self.value)
+
+
+def call(code, timeout=120,receipt=None):
+    r = observed_call(receipt,"execute_python",timeout,code=code)
     err = r.get("stderr") or r.get("error") or ""
     return (r.get("stdout") or ""), err
 
@@ -56,6 +84,7 @@ def main(argv):
     parser.add_argument('--root',default=IC.CAST_ROOT)
     parser.add_argument('--place',default='')
     parser.add_argument('--one-per-call',action='store_true')
+    parser.add_argument('--report',type=Path,help='new atomic import receipt; never used for automatic resume')
     args=parser.parse_args(argv)
     folder,root,place=args.folder,args.root,args.place
     if not os.path.isdir(folder):parser.error('import folder does not exist')
@@ -72,8 +101,11 @@ def main(argv):
     for asset_id,glb,digest in plan:
         if IC.sha256(glb)!=digest:
             parser.error('manifest/source SHA256 differs for '+asset_id)
-    _, setup_error = call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n", 30)
+    receipt=CastReceipt(args.report,folder,root,plan)
+    receipt.save('prepared',evidence_kind='single-call-stdout-status' if args.one_per_call else 'terminal-identity-rows')
+    _, setup_error = call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n",30,receipt)
     if setup_error:
+        receipt.save('reconciliation-required',error={'message':str(setup_error)[-600:]})
         print('import: setup failed; no import dispatched\nERR '+str(setup_error)[-600:],flush=True)
         return 2
     counts = {"imported": 0, "skipped": 0, "failed": 0}
@@ -84,16 +116,20 @@ def main(argv):
                     "if C.sha256(%r) != %r: raise ValueError('source changed before import')\n"
                     "s, made = C.import_one(%r, %r, %r, False, %r)\n"
                     "print(s, sum(1 for a in made if a['class'] == 'SkeletalMesh'), ','.join(a['name'] for a in made if a['class'] == 'AnimSequence'))\n") % (glb,sha,aid,glb,sha,root)
-            out, err = call(code, 180)
+            out, err = call(code,180,receipt)
             status = (out.split() or ["failed"])[0]
             if err:
+                receipt.save('reconciliation-required',error={'message':str(err)[-600:]})
                 print("ERR", aid, err[:400], flush=True)
                 print('import: outcome unknown; stopping without next import or placement',flush=True)
                 return 2
             if status not in counts:
+                receipt.save('reconciliation-required',error={'message':'unrecognized terminal status'})
                 print('import: unrecognized terminal status; stopping without next import',flush=True)
                 return 2
             counts[status if status in counts else "failed"] += 1
+            receipt.value['assets'].append({'id':aid,'sha256':sha,'status':status})
+            receipt.save('partial-terminal',counts=dict(counts))
             print("%2d/%d %-9s %s  %.1fs" % (i, len(plan), status, aid, time.time() - t0), flush=True)
             time.sleep(0.5)
     else:   # one call, one editor tick per file: daedalus.steps (the bridge advances the generator per tick)
@@ -111,26 +147,31 @@ def main(argv):
                 "        assets.append({'id': aid, 'sha256': sha, 'status': s})\n"
                 "        yield '%%s %%s' %% (s, aid)\n"
                 "    return {'counts': counts, 'planned': len(PLAN), 'assets': assets}\n") % ([(a, g, h) for a, g, h in plan], root)
-        r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="import_cast", timeout=max(120, 15 * len(plan)))
+        r = observed_call(receipt,"daedalus.steps",max(120,15*len(plan)),code=code,label="import_cast")
         res = r   # wire.call returns the command result: {steps, yielded, result, error, seconds}
         for line in res.get("yielded", []):
             print("  " + line, flush=True)
         try:
             final=terminal_counts(res,plan)
         except ValueError as error:
+            receipt.save('reconciliation-required',error={'message':str(error)[-600:]})
             print('import: outcome unknown; terminal counts unavailable; no placement or retry', flush=True)
             print('ERR '+str(error)[-600:], flush=True)
             return 2
         counts = final
+        receipt.value['assets']=res['result']['assets']
         print("steps=%s seconds=%s (one tick per file, one round trip)" % (res.get("steps"), res.get("seconds", round(time.time() - t0, 1))), flush=True)
     print("import: %d imported, %d skipped, %d failed" % (counts["imported"], counts["skipped"], counts["failed"]), flush=True)
+    receipt.save('rejected' if counts['failed'] else 'imports-completed',counts=dict(counts))
     if counts['failed']:
         return 1
     if place:
-        out, err = call("import importlib, daedalus_realm_ground as R\nimportlib.reload(R)\nprint(R.place_creatures(%r))\n" % place, 300)
+        out, err = call("import importlib, daedalus_realm_ground as R\nimportlib.reload(R)\nprint(R.place_creatures(%r))\n" % place,300,receipt)
         print(out[-1500:], ("ERR " + err[:800]) if err else "", flush=True)
         if err:
+            receipt.save('reconciliation-required',placement=place,error={'message':str(err)[-600:]})
             return 2
+    receipt.save('completed',counts=dict(counts),placement=place or None)
     return 0 if counts["failed"] == 0 else 1
 
 

@@ -835,3 +835,7 @@ Never wait on latest build after launching a specific job: it can return the pri
 ### Cast import identity coverage (2026-10-14)
 Terminal aggregate counts can cover the wrong identities. Return every planned asset ID/hash/status, validate ordered coverage and derive counts from those rows independently of the200-line progress tail. Reject stale manifest hashes before bridge calls and recheck before native import. This still does not make the source file immutable during native import or prove art binding/render quality. Placement diagnostics must propagate nonzero rather than disappearing after successful imports.
 
+
+### Durable cast-import handoffs (2026-10-14)
+Use a new --report path to retain planned hashes, partial terminal rows, counts and command outcome before/after bridge dispatch. Night-run allocates unique per-folder receipt paths and links them from checkpoints/final reports. Unknown outcomes remain reconciliation-required, never an automatic resume ticket. No wire request ID is invented when the installed wire lacks one; single-call stdout status is labelled weaker evidence. Explicit report paths have no cross-process writer lock; use distinct paths.
+
