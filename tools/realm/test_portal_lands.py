@@ -12,9 +12,9 @@ def check(name, cond, why=""):
     print(("PASS " if cond else "FAIL ") + name + ("" if cond or not why else "  " + str(why)))
 
 
-rows = ["~~~~~~~~", "~....:.~", "~......~", "~......~", "~..T...~", "~......~", "~......~", "~~~~~~~~"]
+rows = ["........", "...:....", "........", "........", "........", ".....T..", "........", "........"]
 b = P.blocks(rows)
-check("only fully open, grid-aligned 4x4 blocks count (the T spoils one)", b == [(1, 1)] or (1, 1) in b and (1, 4) not in b, b)
+check("only fully open, grid-aligned 4x4 blocks count (the T spoils one of four)", b == [(0, 0), (4, 0), (0, 4)], b)
 rows2 = ["." * 12] * 12
 b2 = P.blocks(rows2)
 check("a 12x12 open field holds nine blocks", len(b2) == 9)
