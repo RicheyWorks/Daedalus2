@@ -43,7 +43,7 @@ if "--no-sheet" not in argv:
     for el in (want or list(D.ELEMENTS)):
         names = [n for n in D.NAMES if n.split("_")[1] == el]
         cols = int(math.ceil(math.sqrt(len(names) * 1.6)))
-        pitch = 4.2
+        pitch = 6.5
         obs = []
         for i, n in enumerate(names):
             vox = [v for vs in D.plan(n).values() for v in vs]
