@@ -72,6 +72,11 @@ python -m asset_pipeline.teamlink watch --me team-codex --minutes 60            
 8. HTTP: `POST /lock {me, name, note?, ttl?}` (409 + the holder when refused), `POST /unlock {me, name, force?}`,
    `GET /locks`, `GET /inbox?me=`.
 
+For a durable agent inbox, safe retries and explicit task acceptance, use
+[`asset_pipeline.live_handoff`](TEAM-HANDOFF-LOOP.md). Poll at tool/job boundaries and during build waits.
+Its `accepted`, `blocked` and `completed` replies are distinct from the broker's receipt ACK. It works on
+the existing broker endpoints; a terminal watcher alone does not make an idle agent respond.
+
 ## Message types
 
 | type | from → to | body | what happens |
