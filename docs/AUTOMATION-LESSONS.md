@@ -885,3 +885,7 @@ register_component, add_component_by_class, looping, is_game_world). Owner: Sol 
 ### Count distinct quest entities, not repeated event deliveries (2026-10-14)
 Unicornlegendary eligibility reusesPortalQuestProgress butcounts ten distinctburningbull identities withverifiedseaarrival, plusone verifiedtwelve-memberpack. Eithercondition canarrivefirst. Duplicatebull/pack delivery cannotinflateprogress. The core signalseligibility/one-shotclaim only; authoritycomponent, durable hostrewardtransaction andin-worldproof remainunfinished. No inventory/NFTaward is implied.
 
+
+### Keep quest eligibility separate from durable grants (2026-10-14)
+Unicornrewardcomponent accepts onlyauthority/gameworld events, exposesowner-only replicatedprogress anddeduplicatedUI notifications, andhasnoclientRPC. ConfirmPersistedReward acknowledges an alreadycommitted hostgrant, retrying the same receiptid safely; it doesnot awarditems. Componentstate stillneeds durable restore and actualbull/pack eventproducer bindings. Nativecompile/in-world acceptance remainpending.
+
