@@ -1,0 +1,65 @@
+{
+  "stage": "source_multiview_rendered",
+  "name": "CodexPalette_g84011_p91011",
+  "seed": 84011,
+  "glb_sha256": "d57da19df24817d7ae08d4a66b93b7db4049eff94dabb178bca03fdde290ce2f",
+  "views": [
+    {
+      "name": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\overview.png",
+      "position": [
+        110,
+        -140,
+        105
+      ],
+      "target": [
+        0,
+        0,
+        -3
+      ],
+      "camera_type": "ORTHO",
+      "framing": 150,
+      "elapsed_s": 44.278295,
+      "sha256": "358baae550f72e04ec4ebc0f3997e57792ef00d46cedafa933ebabaad1a71d3d"
+    },
+    {
+      "name": "route",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\route.png",
+      "position": [
+        28,
+        -49,
+        8
+      ],
+      "target": [
+        9,
+        -10,
+        11
+      ],
+      "camera_type": "PERSP",
+      "framing": 35,
+      "elapsed_s": 0.34947,
+      "sha256": "432dbab3eeac5c27e3d723ef5ff0cf704799e6b99cef346982e88546444eda91"
+    },
+    {
+      "name": "crown",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\QA91011\\crown.png",
+      "position": [
+        -22,
+        -26,
+        33
+      ],
+      "target": [
+        0,
+        0,
+        18
+      ],
+      "camera_type": "PERSP",
+      "framing": 45,
+      "elapsed_s": 0.327227,
+      "sha256": "2323e961413bba196ee1e9d266a928acefb0a0a1ddce92c29ac6fc57f02ee3ef"
+    }
+  ],
+  "saved_unreal": false,
+  "view_recipe": "summit_default",
+  "acceptance": "appearance only; Unreal, collision and movement remain unverified"
+}

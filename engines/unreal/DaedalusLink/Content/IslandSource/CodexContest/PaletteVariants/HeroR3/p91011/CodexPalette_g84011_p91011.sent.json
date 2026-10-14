@@ -1,0 +1,474 @@
+{
+  "artifact": {
+    "bytes": 6075480,
+    "sha256": "d57da19df24817d7ae08d4a66b93b7db4049eff94dabb178bca03fdde290ce2f"
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 6075480,
+    "objects": [
+      {
+        "dims": [
+          107.0,
+          80.0,
+          7.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexPalette_g84011_p91011_clouds",
+        "triangles": 1248
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexPalette_g84011_p91011_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          38.0,
+          37.0,
+          15.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexPalette_g84011_p91011_crystals",
+        "triangles": 420
+      },
+      {
+        "dims": [
+          78.0,
+          78.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexPalette_g84011_p91011_flowers",
+        "triangles": 600
+      },
+      {
+        "dims": [
+          92.0,
+          89.0,
+          43.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexPalette_g84011_p91011_island",
+        "triangles": 82320
+      },
+      {
+        "dims": [
+          17.0,
+          14.0,
+          9.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexPalette_g84011_p91011_landmarks",
+        "triangles": 260
+      },
+      {
+        "dims": [
+          44.0,
+          19.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexPalette_g84011_p91011_rocks",
+        "triangles": 48
+      },
+      {
+        "dims": [
+          37.25,
+          18.25,
+          14.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_w",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexPalette_g84011_p91011_route_steps",
+        "triangles": 17448
+      },
+      {
+        "dims": [
+          74.0,
+          54.0,
+          15.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexPalette_g84011_p91011_trees",
+        "triangles": 2532
+      },
+      {
+        "dims": [
+          89.0,
+          87.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexPalette_g84011_p91011_water",
+        "triangles": 3956
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.glb"
+  },
+  "exported_s": 0.0,
+  "file": {
+    "materials": [
+      "CodexVoxel_dirt",
+      "CodexVoxel_dirt2",
+      "CodexVoxel_flower_w",
+      "CodexVoxel_grass",
+      "CodexVoxel_grass2",
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand",
+      "CodexVoxel_foam",
+      "CodexVoxel_water",
+      "CodexVoxel_blossom",
+      "CodexVoxel_blossom2",
+      "CodexVoxel_leaf",
+      "CodexVoxel_leaf2",
+      "CodexVoxel_trunk",
+      "CodexVoxel_door",
+      "CodexVoxel_roof",
+      "CodexVoxel_wall",
+      "CodexVoxel_window",
+      "CodexVoxel_flower_r",
+      "CodexVoxel_flower_y",
+      "CodexVoxel_crystal",
+      "CodexVoxel_crystal2",
+      "CodexVoxel_cloud"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          92,
+          89,
+          43
+        ],
+        "extent": [
+          89,
+          43,
+          92
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_island",
+        "triangles": 82320
+      },
+      {
+        "dims": [
+          89,
+          87,
+          10
+        ],
+        "extent": [
+          87,
+          10,
+          89
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_water",
+        "triangles": 3956
+      },
+      {
+        "dims": [
+          74,
+          54,
+          15
+        ],
+        "extent": [
+          54,
+          15,
+          74
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_trees",
+        "triangles": 2532
+      },
+      {
+        "dims": [
+          9,
+          9,
+          8
+        ],
+        "extent": [
+          9,
+          8,
+          9
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78,
+          78,
+          19
+        ],
+        "extent": [
+          78,
+          19,
+          78
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "triangles": 600
+      },
+      {
+        "dims": [
+          44,
+          19,
+          10
+        ],
+        "extent": [
+          19,
+          10,
+          44
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "triangles": 48
+      },
+      {
+        "dims": [
+          38,
+          37,
+          15
+        ],
+        "extent": [
+          38,
+          15,
+          37
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "triangles": 420
+      },
+      {
+        "dims": [
+          107,
+          80,
+          7
+        ],
+        "extent": [
+          80,
+          7,
+          107
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "triangles": 1248
+      },
+      {
+        "dims": [
+          17,
+          14,
+          9
+        ],
+        "extent": [
+          17,
+          9,
+          14
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "triangles": 260
+      },
+      {
+        "dims": [
+          37.25,
+          18.25,
+          14.0
+        ],
+        "extent": [
+          14.0,
+          18.25,
+          37.25
+        ],
+        "materials": [
+          "CodexVoxel_flower_w",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "triangles": 17448
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          92.0,
+          89.0,
+          43.0
+        ],
+        "mesh": 0,
+        "name": "CodexPalette_g84011_p91011_island"
+      },
+      {
+        "dims": [
+          89.0,
+          87.0,
+          10.0
+        ],
+        "mesh": 1,
+        "name": "CodexPalette_g84011_p91011_water"
+      },
+      {
+        "dims": [
+          74.0,
+          54.0,
+          15.0
+        ],
+        "mesh": 2,
+        "name": "CodexPalette_g84011_p91011_trees"
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "mesh": 3,
+        "name": "CodexPalette_g84011_p91011_cottage"
+      },
+      {
+        "dims": [
+          78.0,
+          78.0,
+          19.0
+        ],
+        "mesh": 4,
+        "name": "CodexPalette_g84011_p91011_flowers"
+      },
+      {
+        "dims": [
+          44.0,
+          19.0,
+          10.0
+        ],
+        "mesh": 5,
+        "name": "CodexPalette_g84011_p91011_rocks"
+      },
+      {
+        "dims": [
+          38.0,
+          37.0,
+          15.0
+        ],
+        "mesh": 6,
+        "name": "CodexPalette_g84011_p91011_crystals"
+      },
+      {
+        "dims": [
+          107.0,
+          80.0,
+          7.0
+        ],
+        "mesh": 7,
+        "name": "CodexPalette_g84011_p91011_clouds"
+      },
+      {
+        "dims": [
+          17.0,
+          14.0,
+          9.0
+        ],
+        "mesh": 8,
+        "name": "CodexPalette_g84011_p91011_landmarks"
+      },
+      {
+        "dims": [
+          37.25,
+          18.25,
+          14.0
+        ],
+        "mesh": 9,
+        "name": "CodexPalette_g84011_p91011_route_steps"
+      }
+    ]
+  },
+  "name": "CodexPalette_g84011_p91011",
+  "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\PaletteVariants\\HeroR3\\p91011\\CodexPalette_g84011_p91011.glb",
+  "prebuilt": true,
+  "started": 1792010029.8227499
+}
