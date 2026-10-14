@@ -12,10 +12,17 @@
 # (this machine's policy already allows local scripts). Logs: %LOCALAPPDATA%\Daedalus\jobs.
 param(
     [switch]$Start, [switch]$Wait, [switch]$Run, [switch]$Fast,
+    [switch]$Rollback, [switch]$SaveGreen,
+    [string]$GreenBuildId = '', [string]$Snapshot = '',
     [string]$Id = "",
     [string]$Project = "C:\Unreal\DaedalusRealm\DaedalusRealm.uproject",
     [int]$Seconds = 50
 )
+if ($Rollback -or $SaveGreen) {
+    if ($Start -or $Run -or $Wait) { throw 'Recovery cannot be combined with build/start/wait' }
+    & (Join-Path $PSScriptRoot 'plugin-recovery.ps1') -Project $Project -Rollback:$Rollback -SaveGreen:$SaveGreen -GreenBuildId $GreenBuildId -Snapshot $Snapshot
+    return
+}
 $Jobs = Join-Path $env:LOCALAPPDATA "Daedalus\jobs"
 New-Item -ItemType Directory -Force -Path $Jobs | Out-Null
 $Repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
