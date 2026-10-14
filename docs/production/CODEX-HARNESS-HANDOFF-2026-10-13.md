@@ -52,3 +52,13 @@ in the same CI job; the workflow also covers the PR101 dependency base.
 Known remaining issues outside this change: build completion markers/Wait exit status,
 error handling before the current Run try block, and fail-closed git pull handling still
 need dedicated review. Start acceptance must never be described as build success.
+
+
+## Build completion follow-up, stacked on PR102
+Unreal -Wait now validates the completion marker and returns the actual failed code. Invalid
+markers fail closed; compiler errors without a marker remain RUNNING diagnostics. A zero
+marker with compiler errors fails. Completion writes use .tmp then same-directory rename.
+Native synthetic regressions exercise stale success text, malformed/overflow/multiple markers,
+preflight code2, child code23, live diagnostics and marker replacement. No build/editor calls.
+Earlier Run-stage exceptions outside its current try block and fail-closed git pull handling
+remain follow-ups; this change does not claim all build lifecycle failures are covered.

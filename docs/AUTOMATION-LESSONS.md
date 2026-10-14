@@ -546,3 +546,11 @@ Win32_Process.Create refused the launch. Append a GUID and require return value 
 a nonzero PID; propagate CIM transport errors. A native Windows fixture freezes the clock,
 captures two launches and three refusal cases without executing either build command.
 This protects log identity and truthful launch reporting; it does not prove build completion.
+
+
+## A build error line is evidence, not a terminal process receipt (2026-10-13, Codex)
+Unreal -Wait previously printed BUILD FAILED yet returned zero and treated partial compiler
+output as terminal. Read a validated atomic completion marker: return its nonzero code,
+reject malformed markers, and keep compiler errors without a marker as RUNNING diagnostics.
+A success phrase in a stale log must not override a failed marker. Publish .exit through
+same-directory .tmp rename. Native fixtures cover failures without launching any engine.
