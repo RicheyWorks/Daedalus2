@@ -802,6 +802,7 @@ def build(species, out_dir, scale=10.0, keep=False):
     glb = os.path.join(out_dir, name + ".glb")
     bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True, export_animations=True, export_animation_mode="NLA_TRACKS", export_yup=True)
     bpy.ops.export_scene.fbx(filepath=glb[:-4] + ".fbx", use_selection=True, add_leaf_bones=False, bake_anim=True, bake_anim_use_nla_strips=True, axis_forward="-Y", axis_up="Z")
+    clip_names = [t.name for t in rig.animation_data.nla_tracks]
     if not keep:                      # exports slow down as actions pile up in the scene: drop this creature's
         for o in (ob, rig):
             bpy.data.objects.remove(o, do_unlink=True)
@@ -815,5 +816,5 @@ def build(species, out_dir, scale=10.0, keep=False):
     import json
     with open(glb[:-4] + ".json", "w", encoding="utf-8") as f:
         json.dump({"species": species, "family": fam, "voxel_cm": scale, "height_m": round(zmax, 2), "bones": [b[0] for b in BONES],
-                   "clips": [t.name for t in rig.animation_data.nla_tracks], "voxels": {b: len(v) for b, v in parts.items()}}, f, indent=1)
+                   "clips": clip_names, "voxels": {b: len(v) for b, v in parts.items()}}, f, indent=1)
     return {"species": species, "glb": glb, "height_m": zmax}
