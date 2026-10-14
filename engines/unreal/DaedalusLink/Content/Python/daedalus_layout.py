@@ -250,15 +250,33 @@ def _move(level_moves):
             a.set_actor_location(a.get_actor_location() + unreal.Vector(dx, dy, 0.0), False, False)
             moved += 1
             touched.add(lv)
-    dirty = {p.get_name().split("/")[-1] for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()}
-    missing = sorted(touched - dirty)
-    if missing:
-        raise RuntimeError("moved actors but these levels are not dirty (nothing would be saved): %s" % missing)
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, True)
-    still = {p.get_name().split("/")[-1] for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()}
-    if still & touched:
-        raise RuntimeError("save left these levels dirty: %s" % sorted(still & touched))
+    save_levels(touched)
     return moved
+
+
+def save_levels(level_names):
+    """Save these streaming levels' packages explicitly and prove it by the .umap mtimes. save_dirty_packages(True,
+    True) cleared the dirty flags of 14 moved sublevels in 0.6 s without writing a byte (2026-10-13); save_packages
+    on the level packages wrote all 14 in 29 s. The proof is the file, not the flag."""
+    import os
+    import time
+    import unreal
+    pkgs = {}
+    for lv, actors in _levels().items():
+        if lv in level_names and actors:
+            pkgs[lv] = actors[0].get_level().get_outermost()
+    if not pkgs:
+        return {}
+    t0 = time.time()
+    ok = unreal.EditorLoadingAndSavingUtils.save_packages(list(pkgs.values()), only_dirty=False)
+    stale = {}
+    for lv, pk in pkgs.items():
+        fn = unreal.Paths.convert_relative_path_to_full(unreal.PackageTools.package_name_to_filename(pk.get_name(), ".umap"))
+        if not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+            stale[lv] = fn
+    if not ok or stale:
+        raise RuntimeError("save_packages ok=%s but these levels were not written: %s" % (ok, stale))
+    return {lv: round(time.time() - t0, 1) for lv in pkgs}
 
 
 def apply():

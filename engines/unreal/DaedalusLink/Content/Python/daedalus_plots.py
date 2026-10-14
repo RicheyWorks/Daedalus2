@@ -60,6 +60,21 @@ def plan(rings=6, estates=(), hub_cells=(), hub_cm=(0.0, 0.0), ground_cm=0.0, pi
 
 # ---- editor side ----------------------------------------------------------------------------------------------
 
+def save_world():
+    """Save the persistent level explicitly and prove it by the .umap mtime (save_dirty_packages can clear the
+    dirty flag without writing, 2026-10-13). Returns the seconds the save took."""
+    import os
+    import time
+    import unreal
+    w = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+    pk = w.get_outermost()
+    fn = unreal.Paths.convert_relative_path_to_full(unreal.PackageTools.package_name_to_filename(pk.get_name(), ".umap"))
+    t0 = time.time()
+    ok = unreal.EditorLoadingAndSavingUtils.save_packages([pk], only_dirty=False)
+    if not ok or not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+        raise RuntimeError("the persistent level was not written: ok=%s %s" % (ok, fn))
+    return round(time.time() - t0, 1)
+
 def _editor_inputs():
     """(estates, hub cells, hub centre cm, ground z cm) from the live level, via daedalus_layout's planner."""
     import unreal
@@ -129,7 +144,7 @@ def apply(rings=6, realm="WORLD-ZERO", hub_cm=None, ground=None, hub_cells=None)
             txt.set_folder_path("%s/District_%d" % (folder, p["district"]))
             txt.attach_to_actor(slab, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
             made += 1
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    save_world()
     return {"realm": realm, "rings": rings, "free_cells": len(todo), "made": made, "skipped": skipped, "estates": len(estates),
             "hub_cells": len(hub_cells), "ground_cm": ground, "districts": sorted({p["district"] for p in todo})}
 
@@ -141,7 +156,7 @@ def remove(realm="WORLD-ZERO"):
     for label, a in _existing(realm).items():
         sub.destroy_actor(a)
         gone += 1
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    save_world()
     return {"removed": gone}
 
 

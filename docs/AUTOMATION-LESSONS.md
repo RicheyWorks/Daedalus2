@@ -536,3 +536,12 @@ The Labyrinth reactor was green but ArkHarbor warned that it could not persist e
 normal test-profile configuration did not apply to them. IsolatedWorldStorage now binds each context to
 its own temporary world file before bean construction. Assert the actual injected host path and empty
 registry, not just that authentication passed. Do not suppress persistence warnings or delete existing saves.
+
+## The islands came back: a save that clears the dirty flag is not a save (2026-10-13, 22:05)
+spiral_apply() moved 7552 actors across 14 sublevels, `get_dirty_map_packages()` was empty afterwards, I posted
+"saved". Two hours later Poot's editor session loaded the islands from disk: 60 km apart again. Two faults:
+(1) `set_actor_location` without `actor.modify()` never dirtied the sublevel packages, so there was nothing to
+save; (2) after adding modify(), `save_dirty_packages(True, True)` cleared the flags in 0.6 s and wrote no file;
+`save_packages([level packages], only_dirty=False)` wrote all 14 .umaps in 29 s. Fix (b41d7b02f+): every editor
+tool that changes a level saves the exact packages and proves it by the .umap mtime (`daedalus_layout.save_levels`,
+`daedalus_plots.save_world`), raising when a file was not written. Rule: a "saved" claim needs a file timestamp.

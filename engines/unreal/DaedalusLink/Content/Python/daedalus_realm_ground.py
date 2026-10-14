@@ -237,7 +237,7 @@ def lay(realm, rings=6):
         made["kit_missing"] = ["no meshes under %s/%s: run import_kit first" % (KIT_ROOT, _realm_dir(realm))]
     # 4. lands around the hub
     lands = P.apply(rings, realm=realm, hub_cm=origin, ground=GROUND_Z, hub_cells=hub_cells())
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    __import__('daedalus_plots').save_world()
     return {"realm": realm, "origin": origin, "made": made, "lands": {k: lands[k] for k in ("free_cells", "made", "skipped")}}
 
 
@@ -290,7 +290,7 @@ def lay_cast(realm):
             t.tags = [unreal.Name("Talker"), unreal.Name("Realm:%s" % realm)]
             made += 1
         (bound if t.rebind() else unbound).append(t.art_id())
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    __import__('daedalus_plots').save_world()
     return {"realm": realm, "roles": len(roles), "made": made, "bound": len(bound), "unbound": unbound}
 
 
@@ -336,7 +336,7 @@ def lay_creatures(realm, folder):
         a.set_folder_path("Realms/%s/Creatures" % realm)
         a.tags = [unreal.Name("Creature"), unreal.Name("Realm:%s" % realm)]
         made += 1
-    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    __import__('daedalus_plots').save_world()
     return {"realm": realm, "imported": len(s["imported"]), "skipped": len(s["skipped"]), "failed": s["failed"], "placed": made, "no_mesh": no_mesh}
 
 
