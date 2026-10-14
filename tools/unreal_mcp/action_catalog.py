@@ -191,15 +191,38 @@ def publish_new(path,result):
         if temporary.exists():temporary.unlink()
 
 
+def compare_catalogs(before,after):
+    old={row['action_id']:row for row in before['actions']}
+    new={row['action_id']:row for row in after['actions']}
+    def identity(row):return {key:row[key] for key in ('action_id','toolset','name')}
+    added=[identity(new[key]) for key in sorted(new.keys()-old.keys())]
+    removed=[identity(old[key]) for key in sorted(old.keys()-new.keys())]
+    changed=[]
+    fields=('input_schema_sha256','annotations','description','client_short_name_ambiguous')
+    for key in sorted(old.keys() & new.keys()):
+        differences={field:{'before':old[key][field],'after':new[key][field]}
+                     for field in fields if old[key][field]!=new[key][field]}
+        if differences:changed.append(dict(identity(new[key]),changes=differences))
+    return {'added':added,'removed':removed,'changed':changed,
+            'unchanged_actions':len(old.keys() & new.keys())-len(changed),
+            'metadata_matches':not added and not removed and not changed,
+            'scope':'Differences between saved exposed metadata; no runtime availability or behavior assertion'}
+
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--capture',required=True,type=Path)
     parser.add_argument('--out',required=True,type=Path)
     parser.add_argument('--attempts',type=Path,help='optional saved attempt wrapper bound to this capture SHA')
     parser.add_argument('--evidence-root',type=Path,help='required with --attempts; referenced files must remain inside it')
+    parser.add_argument('--baseline-capture',type=Path,help='optional prior saved descriptions for exposed metadata comparison')
     args=parser.parse_args(argv)
     capture,digest=read_capture(args.capture)
     result=catalog(capture);result['capture_sha256']=digest
+    if args.baseline_capture:
+        prior,prior_digest=read_capture(args.baseline_capture)
+        result['baseline_capture_sha256']=prior_digest
+        result['catalog_comparison']=compare_catalogs(catalog(prior),result)
     if args.attempts:
         if args.evidence_root is None:parser.error('--attempts requires --evidence-root')
         attempts,attempt_digest=read_capture(args.attempts)

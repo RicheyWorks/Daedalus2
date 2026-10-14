@@ -905,3 +905,7 @@ Count actionswith noattempt, recordedreturns, failures andunknowns separately pe
 ### Preserve full action identity despite short-name calls (2026-10-14)
 Catalog IDs hash exacttoolset/fullname; schemahashes areseparate so changesstayvisible. Flag multiplefullnames mapping to oneclientshortname within a toolset ratherthan silently collapse/invoke them. Optionalattempt actionIDs mustmatch. This is metadataambiguity evidence, not a newadapter or runtimecall; Pootgenericadapter ownership remainsseparate.
 
+
+### Compare captured action metadata before repeat benchmarks (2026-10-14)
+--baseline-capture reports added/removed/stable actions plus schema,annotation,description andshortnameambiguity changes. Bind bothcaptureSHA values; metadataequality is not unchangedruntimebehavior. Keep benchmarkscope changes visible instead of comparing counts orspeeds against adifferent exposedactionset.
+
