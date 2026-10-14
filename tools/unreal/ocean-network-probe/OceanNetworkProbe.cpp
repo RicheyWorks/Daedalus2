@@ -6,6 +6,10 @@
 #include "Misc/Parse.h"
 #include "EngineUtils.h"
 #include "InputKeyEventArgs.h"
+#include "DaedalusHero.h"
+#include "DaedalusOceanDock.h"
+#include "DaedalusOceanInteractor.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AOceanProbeController::AOceanProbeController() { PrimaryActorTick.bCanEverTick=true; }
 void AOceanProbeController::Tick(float Dt)
@@ -13,6 +17,28 @@ void AOceanProbeController::Tick(float Dt)
     Super::Tick(Dt);
     // No server/controller-side input: observed motion must arrive from the client.
     if (HasAuthority() || !IsLocalController()) return;
+    if (FParse::Param(FCommandLine::Get(),TEXT("ProbeDock")))
+    {
+        if (auto* Hero=Cast<ADaedalusHero>(GetPawn()))
+        {
+            Hero->GetCharacterMovement()->DisableMovement(); // Stationary interaction fixture.
+            if (!DockRequested && Hero->FindComponentByClass<UDaedalusOceanInteractor>())
+                if (auto* Dock=Cast<ADaedalusOceanDockControl>(ADaedalusUsable::Nearest(Hero,350));
+                    Dock && Dock->Vessel && Dock->TravelHost)
+                {
+                    Hero->Interact();DockRequested=true;
+                    UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_DOCK_REQUEST"));
+                }
+        }
+        if (auto* Vessel=Cast<ADaedalusOceanVessel>(GetPawn());Vessel && Vessel->GetController()==this && !BoardClientLogged)
+        {
+            const auto Expected=FParse::Param(FCommandLine::Get(),TEXT("ProbeDive"))
+                ? EDaedalusOceanVessel::Submarine : EDaedalusOceanVessel::Boat;
+            if (Vessel->VesselType!=Expected || Vessel->CurrentRealm!=TEXT("Ocean Realm")) return;
+            BoardClientLogged=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_BOARD_CLIENT_POSSESSION"));
+        }
+        return;
+    }
     if (FParse::Param(FCommandLine::Get(),TEXT("ProbeAttack")))
     {
         AttackClock+=Dt;
@@ -84,7 +110,8 @@ void AOceanProbeController::Tick(float Dt)
 AOceanProbeGameMode::AOceanProbeGameMode()
 {
     PrimaryActorTick.bCanEverTick=true;
-    DefaultPawnClass=ADaedalusOceanVessel::StaticClass();
+    DefaultPawnClass=FParse::Param(FCommandLine::Get(),TEXT("ProbeDock"))
+        ? ADaedalusHero::StaticClass() : ADaedalusOceanVessel::StaticClass();
     PlayerControllerClass=AOceanProbeController::StaticClass();
 }
 void AOceanProbeGameMode::BeginPlay()
@@ -94,6 +121,33 @@ void AOceanProbeGameMode::BeginPlay()
 }
 APawn* AOceanProbeGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* Player, const FTransform& Transform)
 {
+    if (FParse::Param(FCommandLine::Get(),TEXT("ProbeDock")))
+    {
+        const FVector Home(0,GetNumPlayers()*1200,25);
+        FActorSpawnParameters AvatarSpawn;AvatarSpawn.Owner=Player;
+        AvatarSpawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        auto* Hero=GetWorld()->SpawnActor<ADaedalusHero>(Home+FVector(0,-300,75),FRotator::ZeroRotator,AvatarSpawn);
+        Hero->SetReplicates(true);Hero->SetReplicateMovement(true);
+        Hero->GetCharacterMovement()->DisableMovement();
+        UDaedalusOceanInteractor::EnsureOnHero(Hero);
+        FActorSpawnParameters PublicSpawn;
+        PublicSpawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        auto* Vessel=GetWorld()->SpawnActor<ADaedalusOceanVessel>(Home,FRotator::ZeroRotator,PublicSpawn);
+        Vessel->CurrentRealm=TEXT("Ocean Realm");Vessel->SeaLevelCm=25;
+        Vessel->VesselType=FParse::Param(FCommandLine::Get(),TEXT("ProbeDive"))
+            ? EDaedalusOceanVessel::Submarine : EDaedalusOceanVessel::Boat;
+        auto* Dock=GetWorld()->SpawnActor<ADaedalusOceanDockControl>(Home+FVector(0,-150,75),FRotator::ZeroRotator,PublicSpawn);
+        auto* Travel=NewObject<UDaedalusOceanTravelComponent>(Dock);
+        Dock->AddInstanceComponent(Travel);Travel->RegisterComponent();
+        FDaedalusOceanDock Definition;
+        Definition.Id=TEXT("harbour");Definition.Realm=Vessel->CurrentRealm;
+        Definition.ArrivalAnchor=TEXT("harbour_arrival");Definition.BoardingLocation=Home;
+        Definition.ExitLocation=Home+FVector(0,300,75);
+        Travel->ConfigureHost({Vessel->CurrentRealm},{Definition},{});
+        Dock->DockId=Definition.Id;Dock->TravelHost=Dock;Dock->Vessel=Vessel;
+        Target=Vessel;DockHero=Hero;
+        return Hero;
+    }
     FActorSpawnParameters Spawn;
     Spawn.Owner=Player;
     Spawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -103,6 +157,23 @@ APawn* AOceanProbeGameMode::SpawnDefaultPawnAtTransform_Implementation(AControll
 void AOceanProbeGameMode::Tick(float Dt)
 {
     Super::Tick(Dt); Elapsed+=Dt;
+    if (FParse::Param(FCommandLine::Get(),TEXT("ProbeDock")))
+    {
+        auto* Player=GetWorld()->GetFirstPlayerController();
+        if (Player && Target.IsValid() && DockHero.IsValid() && Player->GetPawn()==Target.Get()
+            && Target->GetController()==Player && DockHero->IsHidden() && !DockHero->GetActorEnableCollision())
+        {
+            BoardTime+=Dt;
+            if (BoardTime>2)
+            {
+                UE_LOG(LogTemp,Display,TEXT("OCEAN_REMOTE_BOARD_PASS mode=%s authority_possession=1 saved_avatar_hidden=1"),
+                    FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? TEXT("submarine") : TEXT("boat"));
+                FPlatformMisc::RequestExitWithStatus(false,0);
+            }
+        }
+        if (Elapsed>45) {UE_LOG(LogTemp,Error,TEXT("OCEAN_REMOTE_BOARD_FAIL timeout"));FPlatformMisc::RequestExitWithStatus(false,1);}
+        return;
+    }
     const bool NonOwner=FParse::Param(FCommandLine::Get(),TEXT("ProbeNonOwner"));
     for (TActorIterator<ADaedalusOceanVessel> It(GetWorld());It;++It)
     {
