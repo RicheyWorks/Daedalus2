@@ -40,6 +40,7 @@ if ($Start) {
     # The start line goes in BEFORE the job launches: written after, Out-File truncated what the job had already
     # appended (every job read as 'DONE 0' with no output, 2026-10-13).
     "$(Get-Date -Format s) start $Script $ScriptArgs" | Out-File -FilePath $log -Encoding ascii
+    "cmd: $cmd" | Out-File -FilePath $log -Encoding ascii -Append
     $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
     "started $Id pid=$($r.ProcessId)"
