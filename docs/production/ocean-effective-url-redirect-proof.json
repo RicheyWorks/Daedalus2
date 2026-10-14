@@ -1,0 +1,58 @@
+{
+  "scope": "Actual UE loopback redirects; no TLS or pre-forward prevention claim",
+  "cases": [
+    {
+      "mode": "direct",
+      "elapsed_seconds": 11.781,
+      "observed": "accepted",
+      "redirect_target_contacted": false,
+      "authorization_at_target": true,
+      "probe_credential_at_target": true,
+      "token_absent_from_logs": true,
+      "native_log_sha256": "d3701c4a7baf26ec21cd5ac3ebfcc6c9e5ca02ea1b03c7eb69ec8abaeedf4256"
+    },
+    {
+      "mode": "same-origin-path",
+      "elapsed_seconds": 8.907,
+      "observed": "refused",
+      "redirect_target_contacted": true,
+      "authorization_at_target": true,
+      "probe_credential_at_target": true,
+      "token_absent_from_logs": true,
+      "native_log_sha256": "0aa60c6cd848cb6fd7b5ce9002be1280171de26cf4775a30233df24162905e17"
+    },
+    {
+      "mode": "cross-origin-port",
+      "elapsed_seconds": 8.797,
+      "observed": "refused",
+      "redirect_target_contacted": true,
+      "authorization_at_target": false,
+      "probe_credential_at_target": false,
+      "token_absent_from_logs": true,
+      "native_log_sha256": "b129e53c55b2ee96c9f2e65499c0b6b4ded355a7aab2e60a3b39cbb150f8cf65"
+    },
+    {
+      "mode": "same-origin-case",
+      "elapsed_seconds": 8.922,
+      "observed": "refused",
+      "redirect_target_contacted": true,
+      "authorization_at_target": true,
+      "probe_credential_at_target": true,
+      "token_absent_from_logs": true,
+      "native_log_sha256": "1386c4dbf879f36ec695b593a26a2b835e5fe8b0d90d55e68fc6d7dd32807bcb"
+    }
+  ],
+  "baseline_defect_demonstration": false,
+  "owned_children_stopped": true,
+  "production_source_head": "dab439d613ae0e952dc5cbedcbdcd4456770e8d0",
+  "declared_fixture_additions": [
+    "Public/OceanRedirectProbe.h",
+    "Private/OceanRedirectProbe.cpp"
+  ],
+  "fixture_source_sha256": {
+    "Public/OceanRedirectProbe.h": "78f7f2df49ec2b48a40228c3bba08e0c8907470f103709760fd051ecfe4c7033",
+    "Private/OceanRedirectProbe.cpp": "d6b91050915e6ce2d9e4c21ad5992d84446df8d6f586fc6529f495c7fe57a71f"
+  },
+  "client_source_sha256": "1a502da0d0776de5691c5419688fb2ccae8ed05b2d4ed7da88d13e39391543f7",
+  "module_sha256": "ac43c498053461f184645f0ab394f53af3e8121ffd4d2eff8a21ae75fccef1db"
+}

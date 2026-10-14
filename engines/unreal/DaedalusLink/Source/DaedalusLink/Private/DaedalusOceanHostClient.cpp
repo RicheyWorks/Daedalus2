@@ -116,7 +116,9 @@ bool UDaedalusOceanHostClient::RequestChunk(int32 X,int32 Y,int32 Z)
         if (!Self.IsValid() || Self->Generation!=Session) return;
         Self->Pending.Reset();
         const int32 Status=Response?Response->GetResponseCode():0;
-        if (!Connected || !Response || Status!=200 || Response->GetURL()!=Url)
+        // GetURL retains the original request even after a redirect. Validate
+        // the effective target, including the case-sensitive resource path.
+        if (!Connected || !Response || Status!=200 || !Response->GetEffectiveURL().Equals(Url,ESearchCase::CaseSensitive))
         { Self->OnFailure.Broadcast(Status,TEXT("Ocean request failed"));return; }
         FDaedalusOceanChunkView Chunk;
         const FUTF8ToTCHAR Converted(reinterpret_cast<const ANSICHAR*>(Body->GetData()),Body->Num());
