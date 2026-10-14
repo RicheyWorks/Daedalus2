@@ -29,6 +29,11 @@ def main(argv):
             break
         except Exception:
             time.sleep(5)
+    # Pick up a hot-copied daedalus_play.py: the bridge registered play_scenario at editor start and reload()
+    # re-executes the module in place, so the registered function sees the new SCENARIOS (2026-10-13: "unknown
+    # scenario" for a scenario added after the editor opened).
+    rl = wire.call(wire.UNREAL, "execute_python", code="import importlib, daedalus_play, daedalus_control\nimportlib.reload(daedalus_control)\nimportlib.reload(daedalus_play)\nprint(sorted(daedalus_play.SCENARIOS))", timeout=30)
+    print("scenarios:", (rl.get("stdout") or "").strip()[-400:], flush=True)
     st = wire.call(wire.UNREAL, "ping", timeout=10)
     if not st.get("playing"):
         print(wire.call(wire.UNREAL, "play", timeout=30), flush=True)

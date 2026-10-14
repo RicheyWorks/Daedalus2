@@ -1160,6 +1160,13 @@ def scenario_realm_switch(p):
     h = hero()
     start = h.realm_session_state()
     before = int(_kv(start).get("switches", "0")) if "switches=" in start else 0   # the session persists across runs
+    if "switches=" not in start:   # not started yet this Play: the count lives in the saved progress file
+        try:
+            import os, json
+            with open(os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusHero.json"), encoding="utf-8") as f:
+                before = int((json.load(f).get("realm_session", "") + " 0 0 0 0").split()[3])
+        except Exception:
+            before = 0
     g = h.switch_realm("gallery-city", "gate", "")
     cat_after_gate = h.inventory_catalog_name()
     landed = str(h.get_editor_property("landed_at"))
