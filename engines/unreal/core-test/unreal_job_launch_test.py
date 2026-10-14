@@ -15,6 +15,54 @@ PS = shutil.which("powershell.exe")
 
 @unittest.skipUnless(os.name == "nt" and PS, "requires Windows PowerShell")
 class UnrealLaunchTest(unittest.TestCase):
+    def test_completion_writer_replaces_marker_without_temp_residue(self):
+        with tempfile.TemporaryDirectory(prefix="build marker ! ", dir=HERE) as root:
+            root = Path(root)
+            source = (HERE.parent / "unreal-job.ps1").read_text()
+            function = "function Write-Completion" + source.split("function Write-Completion", 1)[1].split("function BuildToolsBusy", 1)[0]
+            script = root / "writer.ps1"
+            script.write_text('param($Jobs)\n$ErrorActionPreference = "Stop"\n$Id = "build-fixture"\n'
+                              + function + '\nWrite-Completion 23\nWrite-Completion 2\n', encoding="utf-8")
+            result = subprocess.run([PS, "-NoProfile", "-File", str(script), str(root)],
+                                    capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual((root / "build-fixture.exit").read_text().strip(), "done 2")
+            self.assertFalse(list(root.glob("*.tmp")))
+
+    def test_wait_failure_markers_and_live_diagnostics(self):
+        with tempfile.TemporaryDirectory(prefix="build wait ! ", dir=HERE) as root:
+            root = Path(root)
+            env = os.environ.copy()
+            env["LOCALAPPDATA"] = str(root)
+            jobs = root / "Daedalus" / "jobs"
+            jobs.mkdir(parents=True)
+            log = jobs / "build-fixture.log"
+            marker = log.with_suffix(".exit")
+            for content, expected in (("done 23", 23), ("done 2", 2), ("", 1),
+                                      ("done 0 extra", 1), ("done 99999999999999999", 1),
+                                      ("done 0\ndone 23", 1)):
+                with self.subTest(marker=content):
+                    marker.write_text(content)
+                    # A stale success log must never override a failed marker.
+                    log.write_text("BUILD SUCCESSFUL\n")
+                    result = subprocess.run([PS, "-NoProfile", "-File", str(HERE.parent / "unreal-job.ps1"),
+                                             "-Wait", "-Id", "build-fixture", "-Seconds", "0"],
+                                            env=env, capture_output=True, text=True, timeout=10)
+                    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+                    self.assertIn("BUILD FAILED", result.stdout)
+                    self.assertNotIn("BUILD OK", result.stdout)
+            log.write_text("file.cpp: error C1234: synthetic compiler failure\n")
+            for complete in (False, True):
+                if complete:
+                    marker.write_text("done 0")
+                else:
+                    marker.unlink()
+                result = subprocess.run([PS, "-NoProfile", "-File", str(HERE.parent / "unreal-job.ps1"),
+                                         "-Wait", "-Id", "build-fixture", "-Seconds", "0"],
+                                        env=env, capture_output=True, text=True, timeout=10)
+                self.assertEqual(result.returncode, 1 if complete else 0, result.stdout + result.stderr)
+                self.assertIn("BUILD FAILED" if complete else "RUNNING", result.stdout)
+
     def test_identity_and_refusals(self):
         with tempfile.TemporaryDirectory(prefix="unreal launch ! ", dir=HERE) as root:
             root = Path(root)

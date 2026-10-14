@@ -22,6 +22,13 @@ $Repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 
 function Latest { (Get-ChildItem $Jobs -Filter "build-*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName }
 
+function Write-Completion([int]$Code) {
+    # Wait must never consume a partially written terminal marker.
+    $marker = Join-Path $Jobs "$Id.exit"
+    [IO.File]::WriteAllText("$marker.tmp", "done $Code`r`n", [Text.Encoding]::ASCII)
+    Move-Item -LiteralPath "$marker.tmp" -Destination $marker -Force -ErrorAction Stop
+}
+
 function BuildToolsBusy {
     # Unreal's AutomationTool and UnrealBuildTool run as dotnet; only one may build at a time.
     @(Get-CimInstance Win32_Process -Filter "Name = 'dotnet.exe' OR Name = 'UnrealBuildTool.exe' OR Name = 'AutomationTool.exe'" -ErrorAction SilentlyContinue |
@@ -93,7 +100,7 @@ if ($Run) {
         & python (Join-Path $Repo "tools\unreal_preflight\preflight.py") *>&1 | Out-File -FilePath $log -Append -Encoding utf8
         if ($LASTEXITCODE -ne 0) {
             "PREFLIGHT FAILED: fix the lines above; the editor was left open" | Out-File -FilePath $log -Append -Encoding utf8
-            "done 2" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
+            Write-Completion 2
             exit
         }
     }
@@ -123,7 +130,7 @@ if ($Run) {
     }
     # Job end: close the floating Unreal panels it left (studio-screen-connector tidy.ps1, one pass, best effort).
     $tidy = Join-Path $Repo "..\studio-screen-connector\tidy.ps1"; if (Test-Path $tidy) { try { & powershell.exe -NoProfile -WindowStyle Hidden -File $tidy -Once *>> $log } catch { } }
-    "done $code" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
+    Write-Completion $code
     exit
 }
 
@@ -149,9 +156,27 @@ if ($Wait) {
     $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error |\): Error: ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
     $norton = Join-Path $env:TEMP "daedalus-norton.log"
     $alerts = if (Test-Path $norton) { Get-Content $norton | Where-Object { $_ -ge (Get-Date).AddMinutes(-30).ToString("s") } } else { @() }
+    $jobCode = 0
+    $completed = Test-Path -LiteralPath $exit -PathType Leaf
+    if ($completed) {
+        $marker = ([IO.File]::ReadAllText($exit)).Trim()
+        if ($marker -notmatch '^done (-?\d+)$' -or -not [int]::TryParse($Matches[1], [ref]$jobCode)) {
+            "BUILD FAILED $Id (invalid exit marker)"
+            exit 1
+        }
+        if ($jobCode -ne 0) {
+            "BUILD FAILED $Id (exit $jobCode)"
+            if ($errors) { $errors }
+            elseif (Test-Path -LiteralPath $log -PathType Leaf) { Get-Content -LiteralPath $log -Tail 8 }
+            exit $jobCode
+        }
+    }
     # Compiler errors first: they are the real cause. AutomationTool's ErrorLog.txt is only written when it dies
     # before logging, so an old one is stale; show it only if it was written during this job.
-    if ($errors) { "BUILD FAILED $Id"; $errors }
+    if ($errors) {
+        if ($completed) { "BUILD FAILED $Id"; $errors; exit 1 }
+        "RUNNING $Id (compiler errors observed; awaiting completion)"; $errors
+    }
     elseif ((Test-Path $log) -and (Select-String -Path $log -Pattern 'X BuildPlugin exited' -Quiet) -and -not (Select-String -Path $log -Pattern 'BUILD SUCCESSFUL' -Quiet) -and (Test-Path $exit)) {
         $uat = Join-Path $env:LOCALAPPDATA "UnrealEngine\Programs\AutomationTool\Saved\Logs\ErrorLog.txt"
         if ((Test-Path $uat) -and (Get-Item $uat).LastWriteTime -ge (Get-Item $log).CreationTime) {
@@ -159,6 +184,7 @@ if ($Wait) {
             Get-Content $uat -Tail 6
         }
         else { "BUILD FAILED $Id (the plugin build step failed):"; Get-Content $log | Select-String -Pattern 'Result:|ERROR|failed' | Select-Object -Last 8 | ForEach-Object { $_.Line } }
+        exit 1
     }
     elseif (Test-Path $exit) {
         $ok = Select-String -Path $log -Pattern 'BUILD SUCCESSFUL' -Quiet
