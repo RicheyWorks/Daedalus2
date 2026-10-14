@@ -17,7 +17,7 @@ import voxel_creatures as VC  # noqa: E402
 
 for o in list(bpy.data.objects):          # factory startup ships a cube, a light and a camera
     bpy.data.objects.remove(o, do_unlink=True)
-wanted = argv[1:] or VC.all_species()
+wanted = [a for a in argv[1:] if not a.startswith("--")] or VC.all_species()
 species = [s for w in wanted for s in (VC.SPECIES[w] if w in VC.SPECIES else (w,))]
 t0 = time.time()
 done = []
