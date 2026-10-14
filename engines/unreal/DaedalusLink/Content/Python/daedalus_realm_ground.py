@@ -294,6 +294,52 @@ def lay_cast(realm):
     return {"realm": realm, "roles": len(roles), "made": made, "bound": len(bound), "unbound": unbound}
 
 
+CREATURE_ROOT = "/Game/Daedalus/Art/Creatures"
+CREATURE_RADIUS_CM = 11000.0
+
+
+def lay_creatures(realm, folder):
+    """Import the realm's creature GLBs (Mob_*.glb, 8-bone rigs with clips) under /Game/Daedalus/Art/Creatures/<Id>/
+    and stand each one in an outer ring round the spawn playing its Idle clip, as a SkeletalMeshActor labelled
+    Creature_<Id>. Encounters spawn the live ones; these are the realm's bestiary, laid down."""
+    import daedalus_import_cast as IC
+    s = IC.import_folder(folder, root=CREATURE_ROOT)
+    reg = unreal.AssetRegistryHelpers.get_asset_registry()
+    ids = sorted(s["imported"] + s["skipped"])
+    centre = markers(ORIGINS[realm])["Spawn"]
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    have = _labels()
+    made, no_mesh = 0, []
+    for aid, (x, y, z, yaw) in zip(ids, cast_ring(len(ids), centre, radius=CREATURE_RADIUS_CM)):
+        label = "Creature_%s" % aid
+        if label in have:
+            continue
+        mesh, idle = None, None
+        for d in reg.get_assets_by_path("%s/%s" % (CREATURE_ROOT, aid), recursive=True):
+            cls = str(d.asset_class_path.asset_name)
+            path = str(d.package_name) + "." + str(d.asset_name)
+            if cls == "SkeletalMesh" and not mesh:
+                mesh = path
+            if cls == "AnimSequence" and (idle is None or "Idle" in str(d.asset_name)):
+                idle = path
+        if not mesh:
+            no_mesh.append(aid)
+            continue
+        a = sub.spawn_actor_from_class(unreal.SkeletalMeshActor, unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0))
+        a.skeletal_mesh_component.set_skeletal_mesh_asset(unreal.load_asset(mesh))
+        if idle:
+            a.skeletal_mesh_component.set_animation_mode(unreal.AnimationMode.ANIMATION_SINGLE_NODE)
+            a.skeletal_mesh_component.animation_data.anim_to_play = unreal.load_asset(idle)
+            a.skeletal_mesh_component.animation_data.looping = True
+            a.skeletal_mesh_component.animation_data.playing = True
+        a.set_actor_label(label)
+        a.set_folder_path("Realms/%s/Creatures" % realm)
+        a.tags = [unreal.Name("Creature"), unreal.Name("Realm:%s" % realm)]
+        made += 1
+    unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)
+    return {"realm": realm, "imported": len(s["imported"]), "skipped": len(s["skipped"]), "failed": s["failed"], "placed": made, "no_mesh": no_mesh}
+
+
 def report(realm):
     import daedalus_plots as P
     have = _labels()
@@ -302,4 +348,5 @@ def report(realm):
     return {"realm": realm, "actors": len(mine), "hub": "Hub_%s" % realm in have,
             "markers": sorted(l for l in mine if l.endswith("_" + realm) and not l.startswith("Hub_")),
             "kit": sum(1 for l in mine if l.startswith("Kit_")), "cast": sum(1 for l in mine if l.startswith("Talker_")),
+            "creatures": sum(1 for l in mine if l.startswith("Creature_")),
             "lands": P.report(realm)}

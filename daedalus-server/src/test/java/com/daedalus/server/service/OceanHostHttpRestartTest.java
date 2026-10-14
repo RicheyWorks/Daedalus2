@@ -26,6 +26,26 @@ class OceanHostHttpRestartTest {
         try(var client=HttpClient.newHttpClient()) {
             try(var app=start()) {
                 URI base=base(app);String token=app.getBean(JwtTokenService.class).issue("alice").token();
+                URI directoryUri=base.resolve("/api/v1/realms");
+                assertThat(get(client,directoryUri,null).statusCode()).isEqualTo(401);
+                String directoryToken=app.getBean(JwtTokenService.class).issue("directory-client").token();
+                var directoryResponse=get(client,directoryUri,directoryToken);
+                assertThat(directoryResponse.statusCode()).isEqualTo(200);
+                var directory=json.readTree(directoryResponse.body());
+                assertThat(directory.path("schemaVersion").asInt()).isEqualTo(1);
+                assertThat(directory.path("realms")).hasSize(2);
+                var oceanEntry=directory.path("realms").get(1);
+                assertThat(oceanEntry.path("id").asText()).isEqualTo("ocean");
+                assertThat(oceanEntry.path("protocol").asText()).isEqualTo("OCEAN_V1");
+                assertThat(oceanEntry.path("realm").asText()).isEqualTo("OCEAN");
+                assertThat(oceanEntry.path("catalog").asText()).isEqualTo("ocean");
+                assertThat(directory.path("realms").get(0).path("realm").asText()).isEqualTo("WORLD-ZERO");
+                assertThat(oceanEntry.path("blockEditsSupported").asBoolean()).isFalse();
+                String chunkPath=oceanEntry.path("chunkPathTemplate").asText()
+                        .replace("{x}","0").replace("{y}","-1").replace("{z}","0");
+                var discoveredChunk=get(client,base.resolve(chunkPath),directoryToken);
+                assertThat(discoveredChunk.statusCode()).isEqualTo(200);
+                assertThat(Base64.getDecoder().decode(json.readTree(discoveredChunk.body()).path("data").asText())).hasSize(4096);
                 assertThat(get(client,base,null).statusCode()).isEqualTo(401);
                 assertThat(get(client,URI.create(base+"/chunk?x=0&y=-1&z=0"),"invalid").statusCode()).isEqualTo(401);
                 var manifest=get(client,base,token);assertThat(manifest.statusCode()).isEqualTo(200);

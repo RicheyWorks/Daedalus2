@@ -195,6 +195,45 @@ class HandoffTest(unittest.TestCase):
         self.assertEqual(messages[0]['type'], 'request')
         self.assertLess(elapsed, 1)
 
+    def test_work_broadcasts_survive_all_topics_and_restart(self):
+        ids = [self.a.send('*', 'status', {'text': 'asset ready'}, topic=topic)
+               for topic in ('plan', 'land-push', 'integration', None)]
+        self.a.send('someone-else', 'request', {'text': 'private'})
+        self.a.send('*', 'lock', {'name': 'unreal'}, topic='hub')
+        self.a.send('*', 'unlock', {'name': 'unreal'}, topic='hub')
+        self.a.send('*', 'bot.register', {}, topic='hub')
+        self.b.send('*', 'note', {'text': 'my own update'})
+        with live.locked_state(self.path, 'b', 0) as state:
+            live.collect(state, self.b)
+        with live.locked_state(self.path, 'b') as state:
+            self.assertEqual(set(state['pending']), set(map(str, ids)))
+            self.assertFalse(any(bot == 'b' for bot, _ in self.broker.acked))
+
+    def test_cli_long_poll_wakes_on_non_plan_broadcast(self):
+        timer = threading.Timer(.1, lambda: self.a.send(
+            '*', 'note', {'text': 'consumer ready'}, topic='integration'))
+        timer.start()
+        start = time.monotonic()
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            live.main(['--me','b','--state',str(self.path),'--port',str(self.server.server_port),
+                       '--start-after','0','poll','--wait','2'])
+        timer.join()
+        self.assertLess(time.monotonic() - start, 1.5)
+        self.assertEqual(json.loads(output.getvalue())['messages'][0]['text'], 'consumer ready')
+
+    def test_read_returns_full_message_without_acknowledging(self):
+        text = 'consumer details ' + 'x' * 1500
+        mid = self.put(text)
+        with live.locked_state(self.path, 'b', 0) as state:
+            live.collect(state, self.b)
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            live.main(['--me','b','--state',str(self.path),'--port',str(self.server.server_port),
+                       'read','--id',str(mid)])
+        self.assertEqual(json.loads(output.getvalue())['message']['body']['text'], text)
+        self.assertNotIn(('b', mid), self.broker.acked)
+        with live.locked_state(self.path, 'b') as state:
+            self.assertEqual(state['pending'][str(mid)]['state'], 'queued')
+
     def test_batch_responses_correlate_and_retry_after_partial_delivery(self):
         ids = [self.put('first'), self.put('second')]
         live.collect(self.state, self.b)

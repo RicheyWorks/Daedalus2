@@ -2198,7 +2198,7 @@ FString ADaedalusHero::SwitchRealm(const FString& To, const FString& ViaWord, co
 }
 
 /** Stand at the realm's marker for the hint (daedalus_realm_ground lays Spawn/Gate/Dock/SubDock/Mount_<REALM> as
- *  TargetPoints tagged "Realm:<REALM>" + the marker name): gate:* -> Gate, dock:*/shore -> Dock, else Spawn. A realm
+ *  TargetPoints tagged "Realm:<REALM>" + the marker name): gate -> Gate, dock or shore -> Dock, else Spawn. A realm
  *  without markers (World Zero's gates are its own TargetPoints) leaves the hero where it stands. */
 FString ADaedalusHero::LandAt(const FString& Realm, const FString& Hint)
 {

@@ -63,16 +63,16 @@ def plan(folder):
     return out
 
 
-def _stamp_of(asset_id):
-    path = "%s/%s/%s" % (CAST_ROOT, asset_id, asset_id)
+def _stamp_of(asset_id, root=CAST_ROOT):
+    path = "%s/%s/%s" % (root, asset_id, asset_id)
     data = unreal.EditorAssetLibrary.get_metadata_tag(unreal.load_asset(path), STAMP) if unreal.EditorAssetLibrary.does_asset_exist(path) else None
     return data or ""
 
 
-def import_one(asset_id, glb, sha, force=False):
+def import_one(asset_id, glb, sha, force=False, root=CAST_ROOT):
     """Import one GLB. Returns (status, assets): status in imported | skipped | failed."""
-    dest = "%s/%s" % (CAST_ROOT, asset_id)
-    if not force and _stamp_of(asset_id) == sha:
+    dest = "%s/%s" % (root, asset_id)
+    if not force and _stamp_of(asset_id, root) == sha:
         return "skipped", _assets_under(dest)
     task = unreal.AssetImportTask()
     task.filename = glb
@@ -100,11 +100,12 @@ def _assets_under(dest):
     return out
 
 
-def import_folder(folder, force=False):
-    """Import every Mob_*.glb; prints one line per asset and returns the summary dict."""
+def import_folder(folder, force=False, root=CAST_ROOT):
+    """Import every Mob_*.glb (root: /Game/Daedalus/Art/Cast for talkers, .../Creatures for creatures); prints one
+    line per asset and returns the summary dict."""
     summary = {"imported": [], "skipped": [], "failed": []}
     for asset_id, glb, sha in plan(folder):
-        status, made = import_one(asset_id, glb, sha, force)
+        status, made = import_one(asset_id, glb, sha, force, root)
         summary[status].append(asset_id)
         clips = [a["name"] for a in made if a["class"] == "AnimSequence"]
         print("%-9s %s  skeletal=%d clips=%s" % (status, asset_id, sum(1 for a in made if a["class"] == "SkeletalMesh"), ",".join(clips) or "-"))
