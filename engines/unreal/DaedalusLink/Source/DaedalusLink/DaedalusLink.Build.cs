@@ -27,6 +27,10 @@ public class DaedalusLink : ModuleRules
 			"Json",
 			"Slate",
 			"SlateCore",
+			"WebSockets",
 		});
+
+		// A bounded direct-loopback client must disable HTTP redirects before sending credentials.
+		AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl", "nghttp2", "OpenSSL", "zlib");
 	}
 }

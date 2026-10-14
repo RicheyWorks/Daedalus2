@@ -1,0 +1,21 @@
+[
+  "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\DotNET\\UnrealBuildTool\\UnrealBuildTool.dll",
+  "UnrealEditor",
+  "Win64",
+  "Development",
+  "-Project=C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\java-arcade-full-link-v3\\HostProject\\HostProject.uproject",
+  "-Plugin=C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\java-arcade-full-link-v3\\HostProject\\Plugins\\DaedalusLink\\DaedalusLink.uplugin",
+  "-NoHotReload",
+  "-NoUBTMakefiles",
+  "-MaxParallelActions=2",
+  "-NoUBA",
+  "-NoXGE",
+  "-NoFASTBuild",
+  "-NoSNDBS",
+  "-UBADisableRemote",
+  "-UBANoDetour",
+  "-nocache",
+  "-UBARootDir=C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\java-arcade-full-link-v3\\UBA",
+  "-NoEngineChanges",
+  "-Log=C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\java-arcade-full-link-v3\\full-link-ubt.log"
+]
