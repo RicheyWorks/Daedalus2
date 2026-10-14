@@ -100,6 +100,8 @@ def read_response(resp, max_response_bytes=MAX_RESPONSE_BYTES,
         if not isinstance(header, str) or not header.isascii() or not header.isdecimal():
             raise TransportFailure("response_headers", "invalid Content-Length")
         expected = int(header)
+        if observation is not None:
+            observation["expectedBytes"] = expected
         if expected > max_response_bytes:
             raise TransportFailure("response_limit", "Content-Length exceeds the byte limit",
                                    expected=expected)
