@@ -12,6 +12,8 @@ public:
     SLATE_END_ARGS()
     void Construct(const FArguments& Args);
     void Refresh(const FDaedalusIslandStats& Stats,const TArray<FDaedalusIslandClaimRow>& Claims);
+    /** Local authoritative host only. Remote clients must supply their authenticated DTO. */
+    bool RefreshFromHost(const UDaedalusShardsteadComponent* Source,const FString& CrewKey);
 private:
     FString ThemeName;
     FDaedalusIslandStats Stats;

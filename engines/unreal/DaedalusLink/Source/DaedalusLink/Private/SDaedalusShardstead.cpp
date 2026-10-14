@@ -28,6 +28,17 @@ void SDaedalusShardstead::Refresh(const FDaedalusIslandStats& In,const TArray<FD
     if(Stats.ProjectedNet.Num()!=6)Stats.ProjectedNet.Reset();
     Rebuild();
 }
+bool SDaedalusShardstead::RefreshFromHost(const UDaedalusShardsteadComponent* Source,const FString& CrewKey){
+    if(!IsInGameThread())return false;
+    FDaedalusIslandStats Record;
+    TArray<FDaedalusIslandClaimRow> Rows;
+    if(IsValid(Source)&&!CrewKey.IsEmpty()){
+        Record=Source->GetCrewStats(CrewKey);
+        if(Record.Available)Rows=Source->GetClaimRows(CrewKey);
+    }
+    Refresh(Record,Rows);
+    return Stats.Available;
+}
 TSharedRef<SWidget> SDaedalusShardstead::Card(int32 Resource) const {
     const auto& Theme=daedalus::inv::ThemeNamed(TCHAR_TO_UTF8(*ThemeName));
     int32 Quantity=Stats.Cargo.IsValidIndex(Resource)?Stats.Cargo[Resource]:0;
