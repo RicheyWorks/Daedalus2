@@ -1,5 +1,15 @@
 # Island mesh pool — Claude request 29882
 
+## Six specialty fragments — source checkpoint, request30320
+
+The owned generator now has `--special-fragments 6`: three crater bowls and three north/south split-top rifts, with unique Island_Frag_Special_01..06 names. Existing12 fragment/six pad names and retained exports are preserved. Use a separate fresh output directory: `blender --background --python tools/blender/island_mesh_pool.py -- FRESH_OUTPUT --fragments 0 --pads 0 --special-fragments 6`. Nonempty destinations are refused for specials; never replace the original18-asset manifest with a six-asset one.
+
+Footprint remains92m XY, maximum rimZ0, thickness8..13.45m. Centre walking surface is depressed0.8..2.5m; the rifts are continuous shallow slopes, not holes or disconnected land. Collision uses24 separately named radial UCX wedges per mesh. Each support vertex is checked below its triangular top plane; this avoids a single convex hull bridging a crater/rift. Keep One Convex Hull Per UCX enabled on import; collision JSON schema2 contains the hull list. GLB remains render-only, FBX contains all collision companions. Mesh-origin contract is XY centre/rimZ0, not the depressed centre's walking height. Preserve deed/top-rim placement and derive Z scale from actual exported thickness.
+
+Source Python compilation passes. Actual Blender export/manifold guards, collision import/geometry, appearance and walking are pending the accepted app window. The24-hull choice has no proven physics/memory performance budget; inspect an isolated native pilot before large district assignment. No original GLB/FBX/uasset, actor or map was regenerated/replaced by this code change.
+
+Lesson: a concave walking surface requires matching collision decomposition and an explicit rim-versus-centre height contract. A visual crater with one flat convex top is not a usable crater. Carry those distinctions in export manifests and importer readbacks before calling the new art native-ready.
+
 ## Material-instance source delivery — 2026-10-14, request30320
 
 The existing island_ground_material.py now supports --create-instance --owner unreal-team. It creates only fresh MI_WZ_GroveGround_v1 under PilotMaterials, inheriting saved M_WZ_GroveGround_v1; no parent edit, map assignment or automatic lease acquisition. It checks the current owner's lease at each native call, stopped Play, the parent's three parameter names/types, actual parent reference, inherited ForestColor/MossColor/Roughness values, saved instance bytes/hash and unchanged parent-file hash. Every dispatch is journaled as outcome-unknown before the request; existing asset/journal refuses rerun. Capture/reconcile an uncertain result rather than creating again. Actual current MaterialInstanceTools.create/list_parameters schemas were read through the new Epic connector. Source compiles as Python; no instance creation/save or visual result is claimed yet.
