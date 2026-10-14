@@ -359,6 +359,73 @@ def dress_islands_steps(realms, decor_per_district=3):
 HUB_DISTRICTS = frozenset((44, 45, 54, 55))   # the hub island's four districts keep their labelled Land_ actors
 
 
+def ledger_rows(realm, districts):
+    """Pure: [{deed, realm, district, cell:[x,y], x_cm, y_cm, top_cm, thick_m, props}] from
+    districts = [(d, cells, plot_transforms(x,y,z,sz), decor_cells)]. Sorted by deed."""
+    import daedalus_land_grid as G
+    rows = []
+    for d, cells, plots, decor in districts:
+        for n, (x, y, z, sz) in zip(cells, plots):
+            rows.append({"deed": n, "realm": realm, "district": d, "cell": list(G.cell(n)), "x_cm": round(x), "y_cm": round(y),
+                         "top_cm": round(z + sz * 50.0), "thick_m": round(sz, 1), "props": decor.get(n, 0)})
+    rows.sort(key=lambda r: r["deed"])
+    return rows
+
+
+def export_ledger_steps(realms, out_dir=None):
+    """The land ledger (the mint row's input): one JSON per realm with every laid island, read back from the live
+    instanced district actors (Lands_ plots + Decor_ instances) plus the labelled Land_ actors of rings 1..6.
+    Writes <project>/Saved/Daedalus/lands/<realm>.json and returns {realm: rows, path, sha256}. One realm per tick."""
+    import hashlib
+    import json
+    import os
+    import unreal
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    out_dir = out_dir or os.path.join(unreal.Paths.project_saved_dir(), "Daedalus", "lands")
+    os.makedirs(out_dir, exist_ok=True)
+    acts = sub.get_all_level_actors()
+    result = {}
+    for realm in realms:
+        districts, decor_by_d, single = {}, {}, []
+        pre = "Land_" if realm == "WORLD-ZERO" else "Land_%s_" % realm.replace("-", "")
+        for a in acts:
+            tags = [str(t) for t in a.tags]
+            if ("Realm:%s" % realm) not in tags and not (realm == "WORLD-ZERO" and a.get_actor_label().startswith("Land_") and "Realm:" not in " ".join(tags)):
+                continue
+            cls = a.get_class().get_name()
+            label = a.get_actor_label()
+            if cls == "DaedalusLandDistrict":
+                d = int(a.get_editor_property("district"))
+                cells = list(a.get_editor_property("cells"))
+                comp = a.get_editor_property("plots")
+                if label.startswith("Lands_"):
+                    plots = []
+                    for i in range(len(cells)):
+                        t = comp.get_instance_transform(i, True)
+                        plots.append((t.translation.x, t.translation.y, t.translation.z, t.scale3d.z))
+                    districts[d] = (cells, plots)
+                elif label.startswith("Decor_"):
+                    dd = decor_by_d.setdefault(d, {})
+                    for n in cells:
+                        dd[n] = dd.get(n, 0) + 1
+            elif cls == "StaticMeshActor" and label.startswith(pre) and not label.endswith("_Sign") and label[len(pre):].isdigit():
+                loc, sc = a.get_actor_location(), a.get_actor_scale3d()
+                d = next((int(t[9:]) for t in tags if t.startswith("District:")), -1)
+                single.append((d, int(label[len(pre):]), loc.x, loc.y, loc.z, sc.z))
+        packed = [(d, cells, plots, decor_by_d.get(d, {})) for d, (cells, plots) in sorted(districts.items())]
+        for d, n, x, y, z, sz in single:
+            packed.append((d, [n], [(x, y, z, sz)], {}))
+        rows = ledger_rows(realm, packed)
+        path = os.path.join(out_dir, "%s.json" % realm.lower())
+        data = json.dumps({"realm": realm, "count": len(rows), "lands": rows}, separators=(",", ":"))
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(data)
+        result[realm] = {"rows": len(rows), "path": path, "sha256": hashlib.sha256(data.encode()).hexdigest()[:16],
+                         "districts": len(districts), "single_actors": len(single)}
+        yield "%s: %d lands -> %s" % (realm, len(rows), os.path.basename(path))
+    return result
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 

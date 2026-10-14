@@ -39,5 +39,9 @@ check("World Zero: a rock underside per island, below the slab", len(rubble) == 
 check("about every fourth island gets a prop, deterministically", 10 <= len(decor) <= 45 and decor == D.dress_plan(cells33, xy, "WORLD-ZERO", 5000.0)[2])
 plots2, rubble2, _ = D.dress_plan(cells33, xy, "PARCELS", 5220.0)
 check("a realm's plots keep the terrain plane (no floating) and no rubble", not rubble2 and all(abs(p[2] + p[6] * 50.0 - 5220.0) < 1.0 for p in plots2))
+rows = D.ledger_rows("PARCELS", [(33, cells33[:3], [(100.0, 200.0, 4620.0, 12.0), (356.0, 200.0, 4720.0, 10.0), (612.0, 200.0, 4420.0, 16.0)], {cells33[1]: 2}), (0, [5], [(0.0, 0.0, 0.0, 12.0)], {})])
+check("the ledger has one row per land, sorted by deed, with top height, thickness and prop count",
+      [r["deed"] for r in rows] == sorted([5] + cells33[:3]) and next(r for r in rows if r["deed"] == cells33[1])["props"] == 2
+      and next(r for r in rows if r["deed"] == cells33[0])["top_cm"] == 5220 and next(r for r in rows if r["deed"] == cells33[2])["thick_m"] == 16.0, rows[:2])
 print("%d/%d" % (ok, total))
 raise SystemExit(0 if ok == total else 1)
