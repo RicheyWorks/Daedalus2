@@ -79,6 +79,21 @@ PC; not a benchmark. The newly concave terrain deliberately exports no single
 UCX hull: the Unreal owner must review triangle collision separately before use.
 Prop UCX pieces remain independent. Original previews and teammate assets retained.
 
+Continuous creation resumed after user correction30639 while ingestion proceeds
+separately. Revision6 softens the lagoon/channel height transition and replaces
+the straight waterfall box with curved static sheet geometry, lip foam and a few
+flow highlights. Water roughness and review lighting are refined. Both saved
+views were inspected: contact/shoreline reads more clearly, but bank faceting,
+sparse terrain and repetitive groves remain below the Adopt Me bar. This is static
+art review, not fluid simulation, animation or native approval.
+
+Retained output: `Documents/Codex/2026-10-14/harbor-copper-preview-06/`, 381 meshes,
+generation7.13s, combined two-view render18.99s (one loaded-PC observation), CPU
+four threads. No FBX/GLB was created in preview mode. The render process ended
+normally. Other-team report30652 of near-full RAM/commit means subsequent source
+refinement can continue while another render waits for actual available capacity;
+no app termination, resource setting change or editor takeover is implied.
+
 ## team-codex | 2026-10-14 | Contest dressing and current connector observation
 Read existing ownership/connector lessons before work. Named Epic SceneTools.get_current_level failed at HTTP send to http://127.0.0.1:8000/mcp this turn; no current-map readback, native mutation, restart or transport-cause claim. Feedback to Poot separates expected current-level response from observed send failure and impact: native placement cannot be dispatched through that connection now.
 Hub30431/30435 assigns seeded terrain to codex-play-guard. Harbor source therefore defaults to additive role-separated props, with optional shell retained rather than deleted. Send exact footprint92m/native9200cm and scale1 contracts before reuse; arbitrary heightfields require fitting dock/shore geometry. Avoid duplicate generators, and count islands only after native import, placement and save evidence. Existing importer reuses fingerprint/import_snapshot and batches save_assets; its exact18/6-ID contract does not establish general contest import support or an unchanged-payload skip guarantee.

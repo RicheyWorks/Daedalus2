@@ -1,4 +1,4 @@
-"""Original additive harbor contest entries; run only during a claimed Blender turn.
+"""Original additive harbor entries; isolated headless export alongside owner ingestion.
 
 blender -b -P codex_harbor_islands.py -- FRESH_OUTPUT
 Shared helpers reset the background scene. Never execute in a teammate's live scene.
@@ -33,6 +33,8 @@ wood = mat('Harbor cedar', (.31, .17, .095))
 plaster = mat('Harbor lime plaster', (.82, .78, .62))
 roof = mat('Harbor copper roof', (.15, .39, .38), .25)
 water = mat('Harbor lagoon water', (.055, .37, .52))
+water.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value=.28
+foam = mat('Harbor soft foam', (.78,.89,.90))
 leaf = mat('Harbor wind trees', (.20, .37, .22))
 blossom = mat('Harbor blossoms', (.69, .38, .49))
 lamp = mat('Harbor beacon amber', (1., .61, .16))
@@ -60,9 +62,10 @@ def ground_height(x, y):
     if math.hypot(x+15, y-6)<6: hill = 1.3
     # Actual lagoon basin and a narrow outlet to the southern rim.
     basin = ((x-12)/9)**2 + ((y+28)/14)**2
-    channel = abs(x-12)<2.2 and y < -36
-    if basin < 1 or channel: return -.7
-    return .45+hill
+    t=max(0,min(1,(math.sqrt(basin)-.8)/.5))
+    if y < -36: t=min(t,max(0,min(1,(abs(x-12)-1.8)/2.2)))
+    t=t*t*(3-2*t)
+    return -.7*(1-t)+(.45+hill)*t
 
 
 def raise_group(role, height):
@@ -201,6 +204,30 @@ def garden_paths():
         ball((12+10*math.cos(t), -28+13*math.sin(t), .28), (.7, .6, .55), sand)
 
 
+def falling_water(outlet_y):
+    # Static review geometry: a curved falling sheet, not a simulated fluid.
+    vertices=[]
+    for i in range(13):
+        t=i/12
+        width=1.7-.35*t
+        centre=12+.25*math.sin(t*math.pi)
+        y=outlet_y-1.7*t*t
+        z=-.03-18*t
+        vertices.extend([(centre-width,y,z),(centre+width,y,z)])
+    faces=[(2*i,2*i+1,2*i+3,2*i+2) for i in range(12)]
+    data=bpy.data.meshes.new('Curved waterfall');data.from_pydata(vertices,[],faces);data.update()
+    obj=bpy.data.objects.new('Curved waterfall',data);bpy.context.collection.objects.link(obj)
+    data.materials.append(water)
+    solid=obj.modifiers.new('Water sheet thickness','SOLIDIFY');solid.thickness=.035
+    for i in range(9):
+        x=10.6+i*.35
+        ball((x,outlet_y-.1,.01),(.28,.18,.045),foam)
+    # A few restrained highlights help the flow read without a glowing wall.
+    for i in range(3):
+        t=.2+i*.24
+        ball((11.4+i*.5,outlet_y-1.7*t*t,-18*t),(.10,.05,.65),foam)
+
+
 def export_role_meshes(name, objects):
     """One origin-centred FBX per role; reuse native StaticMesh import path.
 
@@ -282,7 +309,12 @@ def review_scene(name):
     bpy.ops.object.light_add(type='SUN')
     bpy.context.object.rotation_euler = (.5, -.4, -.6)
     bpy.context.object.data.energy = 3
-    scene.world.color = (.17, .20, .26)
+    bpy.context.object.data.color=(1.,.88,.73)
+    bpy.context.object.data.angle=.08
+    scene.world.use_nodes=True
+    background=scene.world.node_tree.nodes.get('Background')
+    background.inputs['Color'].default_value=(.30,.48,.65,1.)
+    background.inputs['Strength'].default_value=.35
     scene.render.engine = 'CYCLES'; scene.cycles.device = 'CPU'; scene.cycles.samples = 24
     scene.render.threads_mode = 'FIXED'; scene.render.threads = 4
     scene.render.resolution_x = 1000; scene.render.resolution_y = 1000
@@ -311,7 +343,7 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     outlet_end=SHORE_Y-.25
     group('Outlet', lambda: box((12,(-37+outlet_end)/2,-.03),(3.4,-37-outlet_end,.12),water))
     # Water props require fitting to the receiving terrain's shoreline on placement.
-    group('Waterfall', lambda: box((12, outlet_end, -9), (2.5, .35, 18), water))
+    group('Waterfall', lambda: falling_water(outlet_end))
     name = 'CodexHarbor_' + title
     objects = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     generation_seconds = time.perf_counter()-generation_started
