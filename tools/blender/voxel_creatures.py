@@ -516,7 +516,7 @@ def all_species():
 
 # ---- Blender: mesh, rig, clips, export -------------------------------------------------------------------------
 
-def build(species, out_dir, scale=10.0):
+def build(species, out_dir, scale=10.0, keep=False):
     """One rigged voxel character: mesh (greedy quads, vertex colours, vertex groups per bone) + 8-bone armature +
     Idle/Walk/Attack/Hurt NLA clips, exported as GLB (animations) and FBX. 10 cm voxels -> `scale` cm per voxel."""
     import bmesh
@@ -652,6 +652,16 @@ def build(species, out_dir, scale=10.0):
     glb = os.path.join(out_dir, name + ".glb")
     bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True, export_animations=True, export_animation_mode="NLA_TRACKS", export_yup=True)
     bpy.ops.export_scene.fbx(filepath=glb[:-4] + ".fbx", use_selection=True, add_leaf_bones=False, bake_anim=True, bake_anim_use_nla_strips=True, axis_forward="-Y", axis_up="Z")
+    if not keep:                      # exports slow down as actions pile up in the scene: drop this creature's
+        for o in (ob, rig):
+            bpy.data.objects.remove(o, do_unlink=True)
+        for a in list(bpy.data.actions):
+            if a.name.startswith(name + "_"):
+                bpy.data.actions.remove(a)
+        for blk in (bpy.data.meshes, bpy.data.armatures):
+            for d in list(blk):
+                if d.users == 0:
+                    blk.remove(d)
     import json
     with open(glb[:-4] + ".json", "w", encoding="utf-8") as f:
         json.dump({"species": species, "family": fam, "voxel_cm": scale, "height_m": round(zmax, 2), "bones": [b[0] for b in BONES],

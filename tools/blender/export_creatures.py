@@ -26,7 +26,7 @@ for sp in species:
     name = "Creature_" + "".join(w.capitalize() for w in sp.split("_"))
     if os.path.exists(os.path.join(out_dir, name + ".glb")) and "--force" not in argv:
         continue
-    r = VC.build(sp, out_dir)
+    r = VC.build(sp, out_dir, keep="--sheet" in argv)      # keep objects only when a contact sheet is wanted
     print("CREATURE %s %.2f m %.1fs" % (sp, r["height_m"], time.time() - t), flush=True)
     done.append(sp)
 # contact sheet: line every creature up on a grid and render once (Workbench, vertex colours)
