@@ -156,6 +156,208 @@ def _fish(body, fin, size=1.0, long=False):
     return out
 
 
+def _biped(skin, cloth, hat=None, size=1.0, rot=0, arms_out=True, crawler=False, tool=None, hair=None):
+    """Zombies and other walkers: legs 2x2x6, torso 6x3x7, head 4x4x4, arms on the wing bones (zombies hold them
+    out). `rot` = how rotten: 0 fresh, 1 green patches, 2 bones showing. A crawler has no legs and drags."""
+    s = size
+    out = {}
+    L = 0 if crawler else max(4, int(6 * s))
+    T = max(5, int(7 * s))
+    rng = random.Random(len(skin) + rot)
+    sk = ("scale", "fur_g", "skin")[min(rot, 2)] if skin == "zombie" else skin
+    if not crawler:
+        for sx, bone in ((-2, "leg.L"), (1, "leg.R")):
+            box(out, bone, sx, -1, 0, 2, 2, L, cloth)
+            box(out, bone, sx, -1, 0, 2, 2, 1, "hoof")
+    box(out, "body", -3, -1, L, 6, 3, T, cloth)
+    if rot >= 1:
+        for _ in range(4):
+            box(out, "body", rng.randint(-3, 1), -1, L + rng.randint(0, T - 2), 2, 1, 1, "scale")
+    if rot >= 2:
+        box(out, "body", -1, -2, L + T // 2, 2, 1, 3, "tooth")
+    box(out, "head", -2, -2, L + T, 4, 4, 4, sk)
+    for sx in (-2, 1):
+        box(out, "head", sx, 2, L + T + 2, 1, 1, 1, "eye" if rot == 0 else "flower_r")
+    box(out, "head", -1, 2, L + T + 1, 2, 1, 1, "nose")
+    if hat:
+        box(out, "head", -3, -3, L + T + 4, 6, 6, 1, hat)
+        box(out, "head", -2, -2, L + T + 5, 4, 4, 2, hat)
+    if hair:
+        box(out, "head", -2, -2, L + T + 4, 4, 4, 1, hair)
+    for sgn, bone in ((1, "wing.L"), (-1, "wing.R")):
+        x0 = 3 if sgn > 0 else -5
+        if arms_out:
+            box(out, bone, x0, 2, L + T - 2, 2, 6, 2, sk)      # arms straight out, zombie style
+        else:
+            box(out, bone, x0, -1, L + 1, 2, 2, T - 1, sk)
+    if tool:
+        box(out, "wing.R", -5, 8, L + T - 3, 1, 1, 5, tool)
+    return out
+
+
+def _dino(kind):
+    out = {}
+    if kind in ("trex", "raptor", "allosaurus", "carnotaurus"):
+        big = kind in ("trex", "allosaurus", "carnotaurus")
+        sc = "scale" if kind != "carnotaurus" else "fur_r"
+        L = 9 if big else 6
+        box(out, "leg.L", -3, -1, 0, 3, 3, L, sc)
+        box(out, "leg.R", 1, -1, 0, 3, 3, L, sc)
+        box(out, "body", -3, -4, L, 7, 10, 6 if big else 4, sc)
+        box(out, "body", -2, -3, L, 5, 8, 1, "belly")
+        box(out, "head", -2, 6, L + 4, 5, 8 if big else 5, 4, sc)
+        for y in range(7, 13 if big else 10):
+            box(out, "head", -2, y, L + 4, 1, 1, 1, "tooth")
+            box(out, "head", 2, y, L + 4, 1, 1, 1, "tooth")
+        box(out, "head", -2, 11 if big else 8, L + 7, 1, 1, 1, "eye")
+        box(out, "head", 2, 11 if big else 8, L + 7, 1, 1, 1, "eye")
+        box(out, "tail", -1, -14, L + 2, 3, 10, 3, sc)
+        box(out, "tail", -1, -18, L + 3, 2, 4, 2, sc)
+        box(out, "wing.L", 3, 5, L + 2, 1, 1, 3, sc)
+        box(out, "wing.R", -3, 5, L + 2, 1, 1, 3, sc)
+        if kind == "carnotaurus":
+            box(out, "head", -2, 10, L + 8, 1, 1, 2, "horn")
+            box(out, "head", 2, 10, L + 8, 1, 1, 2, "horn")
+    elif kind in ("triceratops", "stegosaurus", "ankylosaurus", "brontosaurus"):
+        sc = "fur_g" if kind != "brontosaurus" else "scale"
+        big = kind == "brontosaurus"
+        for sx, sy, bone in ((-4, 4, "leg.L"), (2, 4, "leg.R"), (-4, -4, "leg.L"), (2, -4, "leg.R")):
+            box(out, bone, sx, sy, 0, 3, 3, 7 if big else 5, sc)
+        H = 7 if big else 5
+        box(out, "body", -4, -6, 5 if not big else 7, 9, 13, 7, sc)
+        if kind == "triceratops":
+            box(out, "head", -3, 6, 7, 7, 6, 5, sc)
+            box(out, "head", -5, 5, 10, 11, 1, 4, "horn")           # frill
+            for sx in (-3, 2):
+                box(out, "head", sx, 11, 10, 1, 4, 1, "tooth")
+            box(out, "head", 0, 12, 8, 1, 3, 1, "tooth")
+        elif kind == "stegosaurus":
+            box(out, "head", -2, 6, 6, 4, 5, 3, sc)
+            for y in range(-6, 8, 3):
+                box(out, "body", -1, y, 12, 2, 2, 4, "pitcher_r")   # plates
+            box(out, "tail", -1, -14, 5, 3, 8, 3, sc)
+            for y in (-13, -11):
+                box(out, "tail", -1, y, 8, 1, 1, 3, "tooth")
+        elif kind == "ankylosaurus":
+            box(out, "head", -2, 6, 6, 4, 5, 3, sc)
+            for x in range(-4, 5, 2):
+                for y in range(-6, 7, 3):
+                    box(out, "body", x, y, 12, 1, 1, 1, "shell2")
+            box(out, "tail", -1, -14, 5, 3, 8, 3, sc)
+            box(out, "tail", -2, -17, 5, 5, 3, 4, "shell2")         # club
+        else:
+            box(out, "body", -1, 6, 12, 3, 3, 10, sc)                # long neck
+            box(out, "head", -2, 6, 22, 4, 5, 3, sc)
+            box(out, "tail", -1, -20, 8, 3, 14, 3, sc)
+        if kind != "stegosaurus" and kind != "ankylosaurus" and kind != "brontosaurus":
+            box(out, "tail", -1, -12, 7, 3, 6, 3, sc)
+    elif kind in ("pterodactyl", "quetzal"):
+        box(out, "body", -2, -3, 6, 4, 7, 3, "fur_b")
+        box(out, "head", -1, 4, 8, 3, 3, 3, "fur_b")
+        box(out, "head", -1, 7, 8, 2, 6, 1, "beak")
+        box(out, "head", -1, 3, 10, 2, 1, 4, "fur_b")              # crest
+        box(out, "head", 1, 6, 9, 1, 1, 1, "eye")
+        w = 14 if kind == "quetzal" else 9
+        for sgn, bone in ((1, "wing.L"), (-1, "wing.R")):
+            x0 = 2 if sgn > 0 else -2 - w
+            box(out, bone, x0, -3, 7, w, 6, 1, "fur_b")
+            box(out, bone, x0, -5, 7, w // 2, 2, 1, "fur_b")
+        for sx, bone in ((-1, "leg.L"), (1, "leg.R")):
+            box(out, bone, sx, 0, 3, 1, 1, 3, "fur_b")
+        box(out, "tail", -1, -7, 7, 2, 4, 1, "fur_b")
+    return out
+
+
+def _sea(kind):
+    out = {}
+    if kind in ("shark", "dolphin", "orca", "whale", "narwhal"):
+        big = kind in ("whale", "orca")
+        c = {"shark": "fur_g", "dolphin": "feather_b", "orca": "fur_k", "whale": "feather_b", "narwhal": "fur_w"}[kind]
+        D = 18 if big else 12
+        H = 6 if big else 4
+        for y in range(-D // 2, D // 2):
+            h = H if abs(y) < D // 3 else H - 1
+            box(out, "body", -2, y, 3, 5, 1, h, c)
+        box(out, "body", -1, -D // 2, 2, 3, D, 1, "belly")
+        box(out, "head", -2, D // 2, 3, 5, 4, H, c)
+        box(out, "head", 2, D // 2 + 2, 5, 1, 1, 1, "eye")
+        box(out, "head", -2, D // 2 + 2, 5, 1, 1, 1, "eye")
+        if kind == "shark":
+            for y in range(D // 2, D // 2 + 3):
+                box(out, "head", -1, y, 3, 3, 1, 1, "tooth")
+        if kind == "narwhal":
+            box(out, "head", 0, D // 2 + 4, 5, 1, 8, 1, "tooth")
+        box(out, "body", 0, -1, 3 + H, 1, 3, 3 if kind != "whale" else 1, c)     # dorsal
+        box(out, "tail", -3, -D // 2 - 3, 4, 7, 3, 1, c)
+        box(out, "wing.L", 3, 1, 3, 3, 3, 1, c)
+        box(out, "wing.R", -5, 1, 3, 3, 3, 1, c)
+        if kind == "orca":
+            box(out, "body", -2, 2, 6, 5, 2, 1, "fur_w")
+    elif kind in ("octopus", "squid", "jellyfish"):
+        c = {"octopus": "fur_o", "squid": "fur_p", "jellyfish": "wing_c"}[kind]
+        box(out, "head", -3, -3, 6, 6, 6, 5 if kind != "squid" else 9, c)
+        box(out, "head", -2, 3, 8, 1, 1, 1, "eye")
+        box(out, "head", 1, 3, 8, 1, 1, 1, "eye")
+        for i, (dx, dy) in enumerate(((2, 2), (-3, 2), (2, -3), (-3, -3), (0, 3), (0, -4), (3, 0), (-4, 0))):
+            bone = ("leg.L", "leg.R", "wing.L", "wing.R")[i % 4]
+            for t in range(0, 6):
+                box(out, bone, dx, dy, 6 - t, 1, 1, 1, c if kind != "jellyfish" else "dew")
+    elif kind in ("crab", "lobster"):
+        c = "feather_r"
+        box(out, "body", -4, -2, 2, 8 if kind == "crab" else 4, 5 if kind == "crab" else 10, 3, c)
+        box(out, "head", -1, 3 if kind == "crab" else 8, 4, 1, 1, 2, "eye")
+        box(out, "head", 1, 3 if kind == "crab" else 8, 4, 1, 1, 2, "eye")
+        for sx, bone in ((-6, "leg.L"), (5, "leg.R")):
+            for y in (-2, 0, 2):
+                box(out, bone, sx, y, 0, 2, 1, 2, c)
+        box(out, "wing.L", 4, 3, 2, 3, 4, 2, c)
+        box(out, "wing.R", -7, 3, 2, 3, 4, 2, c)
+        if kind == "lobster":
+            box(out, "tail", -2, -7, 2, 4, 5, 2, c)
+    elif kind in ("sea_turtle", "seahorse", "manta", "eel", "clownfish", "pufferfish", "swordfish", "anglerfish", "starfish"):
+        if kind == "sea_turtle":
+            box(out, "body", -4, -5, 2, 8, 10, 3, "shell")
+            box(out, "body", -3, -4, 5, 6, 8, 1, "shell2")
+            box(out, "head", -1, 5, 3, 3, 3, 2, "scale")
+            box(out, "head", 1, 7, 4, 1, 1, 1, "eye")
+            for sx, sy, bone in ((-7, 3, "wing.L"), (4, 3, "wing.R"), (-6, -5, "leg.L"), (4, -5, "leg.R")):
+                box(out, bone, sx, sy, 2, 3, 2, 1, "scale")
+            box(out, "tail", -1, -7, 2, 2, 2, 1, "scale")
+        elif kind == "seahorse":
+            for z in range(0, 8):
+                box(out, "body", -1, 0 if z < 5 else 1, z + 2, 2, 2, 1, "feather_y")
+            box(out, "head", -1, 2, 10, 2, 3, 2, "feather_y")
+            box(out, "head", 0, 5, 11, 1, 2, 1, "beak")
+            box(out, "tail", -1, -1, 0, 2, 2, 2, "feather_y")
+            box(out, "wing.L", 1, 0, 6, 1, 1, 2, "feather_r")
+            box(out, "wing.R", -2, 0, 6, 1, 1, 2, "feather_r")
+        elif kind == "manta":
+            box(out, "body", -3, -4, 3, 6, 9, 2, "fur_k")
+            box(out, "head", -2, 5, 3, 4, 2, 2, "fur_k")
+            box(out, "wing.L", 3, -3, 3, 7, 7, 1, "fur_k")
+            box(out, "wing.R", -10, -3, 3, 7, 7, 1, "fur_k")
+            box(out, "tail", 0, -10, 3, 1, 6, 1, "fur_k")
+        elif kind == "starfish":
+            box(out, "body", -1, -1, 0, 2, 2, 1, "feather_r")
+            for i, (dx, dy) in enumerate(((3, 0), (1, 3), (-3, 1), (-2, -3), (2, -3))):
+                bone = ("wing.L", "wing.R", "leg.L", "leg.R", "tail")[i]
+                for t in range(1, 4):
+                    box(out, bone, int(dx * t / 3), int(dy * t / 3), 0, 1, 1, 1, "feather_r")
+        else:
+            c = {"eel": "fur_g", "clownfish": "fur_o", "pufferfish": "feather_y", "swordfish": "feather_b", "anglerfish": "fur_k"}[kind]
+            f = _fish(c, "feather_w" if kind == "clownfish" else "fur_k", size=1.0 if kind != "eel" else 0.8, long=kind in ("eel", "swordfish"))
+            out.update(f)
+            if kind == "swordfish":
+                box(out, "head", 0, 8, 4, 1, 8, 1, "tooth")
+            if kind == "anglerfish":
+                box(out, "head", 0, 5, 7, 1, 1, 3, "fur_k")
+                box(out, "head", 0, 5, 10, 1, 1, 1, "lantern")
+            if kind == "pufferfish":
+                for dx, dz in ((-2, 5), (2, 5), (0, 7), (-2, 2), (2, 2)):
+                    box(out, "body", dx, 0, dz, 1, 1, 1, "tooth")
+    return out
+
+
 def _plant(kind):
     """Carnivorous plants: root at the soil, 'body' = stem, 'head' = the trap (Attack snaps it), wings = leaves."""
     out = {}
@@ -230,7 +432,19 @@ ANIMALS = {
     "piglet": dict(fur="fur_p", size=0.5, snout=2, tail="long"), "lamb": dict(fur="wool", belly="fur_k", size=0.5),
     "calf": dict(fur="fur_w", spots="fur_k", size=0.7, ears="down"), "kid_goat": dict(fur="fur_g", size=0.5, tail="short"),
     "puppy": dict(fur="fur_b", belly="fur_w", size=0.5, tail="bushy", ears="down"), "kitten": dict(fur="fur_g", size=0.45, tail="long"),
-    "tortoise": dict(fur="shell2", belly="belly", size=0.9, tail="short", ears=None), "salamander": dict(fur="fur_o", spots="fur_k", size=0.4, tail="long", ears=None),
+    "tortoise": dict(fur="shell2", belly="belly", size=0.9, tail="short", ears=None),
+    "bobcat": dict(fur="fur_y", spots="fur_b", size=0.8, tail="short", ears="up"), "lynx": dict(fur="fur_g", spots="fur_k", size=0.9, tail="short", ears="long"),
+    "flying_squirrel": dict(fur="fur_g", belly="fur_w", size=0.45, tail="bushy", mane="fur_g"), "monkey": dict(fur="fur_b", belly="skin", size=0.7, tail="long", ears="up"),
+    "wolverine": dict(fur="fur_k", spots="fur_y", size=0.9, tail="bushy"), "honey_badger": dict(fur="fur_k", mane="fur_w", size=0.8),
+    "lion": dict(fur="fur_y", mane="fur_b", size=1.3, tail="long"), "tiger": dict(fur="fur_o", spots="fur_k", belly="fur_w", size=1.3, tail="long"),
+    "cougar": dict(fur="fur_y", belly="fur_w", size=1.1, tail="long"), "leopard": dict(fur="fur_y", spots="fur_k", size=1.1, tail="long"),
+    "snake": dict(fur="scale", size=0.3, tail="long", ears=None, legs=0, snout=3), "python": dict(fur="fur_b", spots="fur_y", size=0.4, tail="long", ears=None, legs=0, snout=3),
+    "mammoth": dict(fur="fur_b", size=1.8, horns="tooth", mane="fur_b", snout=4), "sabretooth": dict(fur="fur_y", size=1.3, horns="tooth", tail="short"),
+    "dodo": dict(fur="fur_g", belly="fur_w", size=0.7, legs=2, snout=3, tail="short", ears=None), "giant_sloth": dict(fur="fur_b", size=1.6, tail="short", ears="up"),
+    "dire_wolf": dict(fur="fur_k", belly="fur_g", size=1.3, tail="bushy"), "glyptodon": dict(fur="shell", belly="belly", size=1.4, tail="long", ears=None),
+    "moa": dict(fur="fur_b", size=1.5, legs=2, snout=2, tail=None, ears=None), "thylacine": dict(fur="fur_y", spots="fur_k", size=0.9, tail="long"),
+    "gorilla": dict(fur="fur_k", belly="fur_g", size=1.3, tail=None, ears="up"), "lemur": dict(fur="fur_g", belly="fur_w", size=0.5, tail="long", ears="up"),
+    "chimp": dict(fur="fur_k", belly="skin", size=0.8, tail=None, ears="up"), "sloth": dict(fur="fur_g", size=0.6, tail=None, ears="up"), "salamander": dict(fur="fur_o", spots="fur_k", size=0.4, tail="long", ears=None),
 }
 BIRDS = {
     "robin": dict(feather="feather_br", belly="feather_r", size=0.6), "jay": dict(feather="feather_b", belly="feather_w", crest="feather_b", size=0.7),
@@ -250,8 +464,26 @@ FISH = {"rillperch": dict(body="feather_g", fin="feather_y", size=0.8), "glassfi
         "skytrout": dict(body="feather_b", fin="feather_w", size=1.0), "ember_koi": dict(body="feather_r", fin="feather_y", size=1.1),
         "rainbow_eel": dict(body="blossom", fin="feather_b", size=0.8, long=True), "basin_ray": dict(body="fur_g", fin="fur_k", size=1.3),
         "lantern_carp": dict(body="feather_y", fin="feather_r", size=1.0), "stream_minnow": dict(body="fur_g", fin="feather_w", size=0.4)}
+ZOMBIES = {
+    "zombie_villager": dict(skin="zombie", cloth="fur_b", rot=1), "zombie_farmer": dict(skin="zombie", cloth="fur_y", hat="hay", rot=1, tool="plank"),
+    "zombie_miner": dict(skin="zombie", cloth="fur_g", hat="iron", rot=1, tool="iron"), "zombie_knight": dict(skin="zombie", cloth="iron", hat="iron", rot=1),
+    "zombie_king": dict(skin="zombie", cloth="pitcher_r", hat="gold", rot=2), "zombie_pirate": dict(skin="zombie", cloth="fur_k", hat="fur_k", rot=1, tool="tooth"),
+    "zombie_bloated": dict(skin="zombie", cloth="fur_g", rot=2, size=1.3), "zombie_crawler": dict(skin="zombie", cloth="fur_b", rot=2, crawler=True),
+    "zombie_runner": dict(skin="zombie", cloth="fur_w", rot=0, size=0.9, arms_out=False), "zombie_bride": dict(skin="zombie", cloth="fur_w", hair="fur_w", rot=1),
+    "zombie_smith": dict(skin="zombie", cloth="fur_k", rot=1, tool="anvil"), "zombie_baker": dict(skin="zombie", cloth="fur_w", hat="fur_w", rot=1),
+    "zombie_sailor": dict(skin="zombie", cloth="feather_b", hat="fur_w", rot=1), "zombie_hunter": dict(skin="zombie", cloth="fur_g", hat="fur_g", rot=0, tool="trunk"),
+    "zombie_giant": dict(skin="zombie", cloth="fur_b", rot=2, size=1.8), "zombie_child": dict(skin="zombie", cloth="fur_p", rot=1, size=0.6),
+    "zombie_beekeeper": dict(skin="zombie", cloth="fur_w", hat="bee_y", rot=1), "zombie_skeleton": dict(skin="tooth", cloth="tooth", rot=0, arms_out=True),
+    "zombie_frost": dict(skin="clearbell", cloth="fur_w", rot=0), "zombie_ember": dict(skin="forge", cloth="fur_k", rot=2),
+    "zombie_crystal": dict(skin="crystal", cloth="crystal2", rot=0), "zombie_mud": dict(skin="soil", cloth="dirt", rot=2),
+    "ghoul": dict(skin="fur_g", cloth="fur_k", rot=2, size=1.1, arms_out=True), "wraith": dict(skin="smoke", cloth="smoke2", rot=0, crawler=False, arms_out=True),
+}
+DINOS = ("trex", "raptor", "allosaurus", "carnotaurus", "triceratops", "stegosaurus", "ankylosaurus", "brontosaurus", "pterodactyl", "quetzal")
+SEA = ("shark", "dolphin", "orca", "whale", "narwhal", "octopus", "squid", "jellyfish", "crab", "lobster", "sea_turtle", "seahorse", "manta", "eel",
+       "clownfish", "pufferfish", "swordfish", "anglerfish", "starfish")
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
-SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH)}
+SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH),
+           "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA}
 
 
 def plan(species):
@@ -265,6 +497,12 @@ def plan(species):
         return _plant(species)
     if species in FISH:
         return _fish(**FISH[species])
+    if species in ZOMBIES:
+        return _biped(**ZOMBIES[species])
+    if species in DINOS:
+        return _dino(species)
+    if species in SEA:
+        return _sea(species)
     raise KeyError(species)
 
 
