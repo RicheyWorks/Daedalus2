@@ -64,11 +64,16 @@ def configuration(preset, seed=None, hero=False):
         if preset != "summit-rim":
             raise ValueError("hero revision currently uses the inspected summit-rim original")
         config["revision"] = "HeroR3" if hero is True else str(hero)
-        if config["revision"] not in ("HeroR2", "HeroR3"):
+        if config["revision"] not in ("HeroR2", "HeroR3", "HeroR4"):
             raise ValueError("unknown retained hero revision")
         config["features"] = config["features"] + ["winding pale summit route", "crystal summit crown", "fitted flowering groves"]
-        if config["revision"] == "HeroR3":
+        if config["revision"] in ("HeroR3", "HeroR4"):
             config["features"] += ["quarter-metre fitted summit treads"]
+        if config["revision"] == "HeroR4":
+            config.update(palette_seed=91022, palette_profile="teal-coral-ivory-v1",
+                          crown_heights=[7, 9, 12, 8, 6, 5, 7])
+            config["features"] += ["asymmetric fitted crystal fan", "warm route edge bands",
+                                   "controlled grass contrast", "explicit sRGB palette conversion"]
     catalog = json.loads(INVENTORY.read_text(encoding="utf-8"))
     original = next(entry for entry in catalog["entries"] if entry["id"] == config["original"])
     config["reference"] = {key: original.get(key) for key in ("id", "name", "author", "team", "provenance", "image", "sources", "manifest")}
@@ -157,7 +162,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
         route.discard(xy)
 
     route_steps = {}
-    if hero and config["revision"] == "HeroR3":
+    if hero and config["revision"] in ("HeroR3", "HeroR4"):
         # Quarter-metre exposed-face geometry rests on the metre terrain. Keep
         # the dense grid confined to the route rather than subdividing the island.
         deck, low = {}, {}
@@ -175,7 +180,11 @@ def plan(preset="summit-rim", seed=None, hero=False):
         for (xq, yq), zq in deck.items():
             xy = math.floor(xq / 4), math.floor(yq / 4)
             for heightq in range((heights[xy] + 1) * 4, zq + 1):
-                route_steps[xq, yq, heightq] = "flower_w" if (yq // 12) % 5 else "sand"
+                if config["revision"] == "HeroR4":
+                    centre = round((8 + 5 * math.sin(min(1, max(0, (yq / 4 + 40) / 37)) * math.pi * 1.4)) * 4)
+                    route_steps[xq, yq, heightq] = "sand" if abs(xq - centre) >= 7 else "flower_w"
+                else:
+                    route_steps[xq, yq, heightq] = "flower_w" if (yq // 12) % 5 else "sand"
 
     voxels = {layer: [] for layer in original}
     for x, y, z, colour in original["island"]:
@@ -259,6 +268,27 @@ def plan(preset="summit-rim", seed=None, hero=False):
             x, y = round(8 * math.cos(angle)), round(8 * math.sin(angle))
             if (x, y) not in heights or (x, y) in cottage_xy or (x, y) in route:
                 continue
+            if config["revision"] == "HeroR4":
+                # A broad base follows every occupied terrain column. The five
+                # surviving anchors keep the inherited cottage and entry clear.
+                patch = {(xx, yy) for xx in range(x - 1, x + 2) for yy in range(y - 1, y + 2)}
+                if any(xy not in heights or xy in wet or xy in cottage_xy or xy in route for xy in patch):
+                    patch = {(x, y)}
+                cap = max(heights[xy] for xy in patch) + 2
+                for xx, yy in sorted(patch):
+                    for z in range(heights[xx, yy] + 1, cap + 1):
+                        voxels["landmarks"].append((xx, yy, z, "rock2"))
+                height = config["crown_heights"][index]
+                for level in range(height):
+                    # Cut-voxel shoulders taper to one tip; varied heights give
+                    # the summit a skyline instead of a row of identical rods.
+                    radius = 1 if 1 <= level < height - 2 and len(patch) > 1 else 0
+                    for dx in range(-radius, radius + 1):
+                        for dy in range(-radius, radius + 1):
+                            if abs(dx) + abs(dy) <= radius:
+                                colour = "crystal2" if dx + dy > 0 else "crystal"
+                                voxels["landmarks"].append((x + dx, y + dy, cap + 1 + level, colour))
+                continue
             floor = heights[x, y] + 1
             for z in range(floor, floor + 3):
                 voxels["landmarks"].append((x, y, z, "rock2"))
@@ -290,6 +320,27 @@ def plan(preset="summit-rim", seed=None, hero=False):
     return config, voxels
 
 
+def palette_for(config):
+    """Keep historical palettes intact; HeroR4 has a retained local seed."""
+    if config.get("revision") != "HeroR4":
+        return PALETTE
+    palette = dict(PALETTE, grass=(.32,.65,.40), grass2=(.39,.70,.43),
+                   rock=(.29,.38,.51), rock2=(.17,.24,.34), dirt=(.38,.29,.25),
+                   dirt2=(.43,.33,.28), water=(.10,.67,.80), foam=(.73,.93,.94),
+                   leaf=(.20,.55,.41), leaf2=(.31,.67,.54), blossom=(.94,.43,.48),
+                   blossom2=(.99,.65,.60), crystal=(.32,.78,.87), crystal2=(.72,.53,.89),
+                   roof=(.53,.21,.29), sand=(.85,.68,.39), flower_w=(.95,.91,.81))
+    rng = random.Random(config["palette_seed"])
+    # One small gain per related role, not independent random face colours.
+    for keys in (("grass", "grass2", "leaf", "leaf2"), ("rock", "rock2", "dirt", "dirt2"),
+                 ("water", "foam"), ("blossom", "blossom2", "crystal", "crystal2"),
+                 ("roof", "sand", "flower_w")):
+        gain = rng.uniform(.98, 1.02)
+        for key in keys:
+            palette[key] = tuple(round(min(.99, value * gain), 7) for value in palette[key])
+    return palette
+
+
 def receipt(config, voxels):
     all_cells = [cell for cells in voxels.values() for cell in cells]
     scaled_cells = [(cell, .25 if layer == "route_steps" else 1.0) for layer,cells in voxels.items() for cell in cells]
@@ -298,7 +349,7 @@ def receipt(config, voxels):
         "config_sha256": hashlib.sha256(_json(config).encode()).hexdigest(),
         "voxel_sha256": hashlib.sha256(_json(voxels).encode()).hexdigest(),
         "voxels": BASE.stats(voxels), "palette": sorted({c[3] for c in all_cells}),
-        "palette_rgb": {key: list(PALETTE[key]) for key in sorted({c[3] for c in all_cells})},
+        "palette_rgb": {key: list(palette_for(config)[key]) for key in sorted({c[3] for c in all_cells})},
         "palette_surface": {key: SURFACES[key] for key in sorted({c[3] for c in all_cells})},
         "layer_voxel_metres": {layer: .25 if layer == "route_steps" else 1.0 for layer in voxels},
         "bounds_metres": {"min": [min(c[i] * scale for c,scale in scaled_cells) for i in range(3)],
@@ -369,7 +420,7 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
         for layer, cells in voxels.items():
             if cells:
                 obj = BASE._mesh_from_voxels(name + "_" + layer, cells, scale=.25 if layer == "route_steps" else 1.0)
-                _palette_slots(bpy, obj, cells)
+                _palette_slots(bpy, obj, cells, config)
                 obj["daedalus_owner"] = OWNER
                 obj["daedalus_config_sha256"] = report["config_sha256"]
                 objects.append(obj)
@@ -415,7 +466,7 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
             bpy.context.view_layer.objects.active = active
 
 
-def _palette_slots(bpy, obj, cells):
+def _palette_slots(bpy, obj, cells, config=None):
     """Keep existing vertex colours, and encode face colours as stable slot names.
 
     Native FBX import_file defaults to ignoring vertex colours. Palette slots let
@@ -423,6 +474,7 @@ def _palette_slots(bpy, obj, cells):
     shared importer defaults. GLB still uses the existing vertex-colour shader.
     """
     keys = sorted({cell[3] for cell in cells})
+    palette = palette_for(config or {})
     mesh = obj.data
     colour = mesh.color_attributes.get("Col")
     if colour is None:
@@ -445,8 +497,11 @@ def _palette_slots(bpy, obj, cells):
         rgb = colour.data[polygon.loop_start].color_srgb[:3]
         key = min(keys, key=lambda k: sum((a - b) ** 2 for a, b in zip(rgb, BASE.PAL[k])))
         polygon.material_index = keys.index(key)
+        rgb = palette[key]
+        if config and config.get("revision") == "HeroR4":
+            rgb = tuple(value / 12.92 if value <= .04045 else ((value + .055) / 1.055) ** 2.4 for value in rgb)
         for loop_index in polygon.loop_indices:
-            colour.data[loop_index].color = PALETTE[key] + (1.0,)
+            colour.data[loop_index].color = rgb + (1.0,)
 
 
 def _collision(bpy, name, body, hulls):
@@ -499,8 +554,8 @@ def main():
     parser.add_argument("--preset", choices=PRESETS, default="summit-rim")
     parser.add_argument("--seed", type=int)
     parser.add_argument("--all", action="store_true")
-    parser.add_argument("--hero", action="store_true", help="retained summit-rim HeroR2 revision; preserve prepared exports")
-    parser.add_argument("--hero-revision", choices=("HeroR2", "HeroR3"), default="HeroR3")
+    parser.add_argument("--hero", action="store_true", help="retained summit-rim revision; preserve prepared exports")
+    parser.add_argument("--hero-revision", choices=("HeroR2", "HeroR3", "HeroR4"), default="HeroR3")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--out", type=Path, default=ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None

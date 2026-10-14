@@ -2,7 +2,7 @@
 """Prepare a bounded retained candidate manifest without invoking an importer.
 
 Keep the full original 24-entry batch and its importer source/options/material.
-Replace only the original summit/HeroR3 or CopperPatina coupler/PowerUnit entry,
+Replace only the original summit/HeroR3/HeroR4 or CopperPatina coupler/PowerUnit entry,
 preserve every other entry's JSON
 bytes, and bind the replacement to the retained FBX's actual bytes. This grants
 no editor ownership, import/admission approval, or world-placement authority.
@@ -95,7 +95,10 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if len({entry["name"] for _, _, entry in entries}) != 24:
         raise ValueError("original asset identities are duplicated")
     if replace_name == ORIGINAL:
-        kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", REVISION, 10
+        hero = receipt.get("config", {}).get("revision")
+        if hero not in ("HeroR3", "HeroR4"):
+            raise ValueError("require the exact retained HeroR3 or HeroR4 summit revision")
+        kind, schema, revision, object_count = "island", "daedalus.codex-island.v1", ORIGINAL + "_" + hero, 10
     elif replace_name == SALVAGE_ORIGINAL:
         kind, schema, revision, object_count = "module", "daedalus.codex-salvage-assembly.v1", SALVAGE_REVISION, 5
     else:
@@ -108,8 +111,8 @@ def prepare(original_manifest_path, revision_receipt_path, output_path, replace_
     if receipt.get("schema") != schema or receipt.get("stage") != "exported" or receipt.get("name") != revision:
         raise ValueError("require the exact exported retained candidate receipt")
     if kind == "island":
-        if config.get("preset") != "summit-rim" or config.get("revision") != "HeroR3" or config.get("seed") != 84011:
-            raise ValueError("receipt is not the retained summit seed84011 HeroR3 revision")
+        if config.get("preset") != "summit-rim" or config.get("revision") != hero or config.get("seed") != 84011:
+            raise ValueError("receipt is not the exact retained summit seed84011 hero revision")
     elif config.get("assembly") != "PowerUnit" or config.get("preset") != "CopperPatina" or config.get("seed") != 86100:
         raise ValueError("receipt is not the retained CopperPatina PowerUnit seed86100 assembly")
     config_sha = hashlib.sha256(json.dumps(config, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
@@ -188,7 +191,7 @@ def main():
     parser.add_argument("revision_receipt", type=Path)
     parser.add_argument("output_manifest", type=Path)
     parser.add_argument("--replace", dest="replace_name", choices=(ORIGINAL, SALVAGE_ORIGINAL), default=ORIGINAL,
-                        help="exact original entry to replace; default retains the HeroR3 summit contract")
+                        help="exact original entry to replace; default retains the HeroR3/HeroR4 summit contract")
     args = parser.parse_args()
     print(json.dumps(prepare(args.original_manifest, args.revision_receipt, args.output_manifest, args.replace_name), indent=2))
 

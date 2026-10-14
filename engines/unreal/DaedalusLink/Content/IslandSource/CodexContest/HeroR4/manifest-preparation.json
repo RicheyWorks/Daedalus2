@@ -1,0 +1,21 @@
+{
+  "original_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-prepared.delivery.json",
+  "original_manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+  "revision_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.receipt.json",
+  "replacement": "CodexIsland_summit_rim_84011_HeroR4",
+  "fbx": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.fbx",
+    "sha256": "9ce0558be9129d7e80a0c1e8142d847f19f41db765ee3c2f352e15f56501d50c",
+    "bytes": 2097724
+  },
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/9ce0558be9129d7e",
+  "output_manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\codex-hero-r4.delivery.json",
+  "output_sha256": "2e69980702cd12d3d1e7cbfc98b347aa2858374970ceb1f444774791ca5becbd",
+  "created": true,
+  "entries": 24,
+  "unchanged_entry_json_spans": 23,
+  "expected_meshes": 49,
+  "importer_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "importer_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "stage": "candidate_manifest_prepared; owner approval and guarded import remain pending"
+}

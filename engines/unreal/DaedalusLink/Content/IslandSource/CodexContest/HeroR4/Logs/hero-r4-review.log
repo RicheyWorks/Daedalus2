@@ -1,0 +1,37 @@
+14:09:19 | INFO: Data are loaded, start creating Blender stuff
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_island
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_water
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_trees
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_cottage
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_flowers
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_rocks
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_crystals
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_clouds
+14:09:19 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_landmarks
+14:09:20 | INFO: Blender create Mesh node CodexIsland_summit_rim_84011_HeroR4_route_steps
+14:09:20 | INFO: glTF import finished in 0.24s
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+Fra:1 Mem:87.25M (Peak 96.00M) | Time:00:44.24 | Rendering 1 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.00M) | Time:00:44.83 | Rendering 25 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.00M) | Time:00:45.01 | Rendering 50 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.00M) | Time:00:45.04 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\HeroR4\QA\overview.png'
+Time: 00:45.28 (Saving: 00:00.20)
+
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.08 | Rendering 1 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.13 | Rendering 25 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.18 | Rendering 50 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.22 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\HeroR4\QA\route.png'
+Time: 00:00.32 (Saving: 00:00.07)
+
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.08 | Rendering 1 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.14 | Rendering 25 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.20 | Rendering 50 / 64 samples
+Fra:1 Mem:87.25M (Peak 96.08M) | Time:00:00.23 | Rendering 64 / 64 samples
+Saved: 'C:\Users\730ri\Documents\Codex\2026-10-14\task-2\contest-island-production\engines\unreal\DaedalusLink\Content\IslandSource\CodexContest\HeroR4\QA\crown.png'
+Time: 00:00.34 (Saving: 00:00.08)
+
+{"stage": "source_multiview_rendered", "name": "CodexIsland_summit_rim_84011_HeroR4", "seed": 84011, "glb_sha256": "59c952d6d48c70ff750839f9803b43b0de95ac7392a3df553faca1246850ec72", "views": [{"name": "overview", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\overview.png", "position": [110, -140, 105], "target": [0, 0, -3], "camera_type": "ORTHO", "framing": 150, "elapsed_s": 45.295573, "sha256": "e3476edd25037c0a8dadb9789b6f86272e7f3629a020fd514d55f5f226219154"}, {"name": "route", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\route.png", "position": [28, -49, 8], "target": [9, -10, 11], "camera_type": "PERSP", "framing": 35, "elapsed_s": 0.329192, "sha256": "b25f744822dc07c713b332f0e6052997dab31d785fb310699dc37387720486ff"}, {"name": "crown", "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\crown.png", "position": [-22, -26, 33], "target": [0, 0, 18], "camera_type": "PERSP", "framing": 45, "elapsed_s": 0.356738, "sha256": "61a0e22dd48016f5005f1c131dda1cc3de6544ddcc68c5490f093754c1d867ec"}], "saved_unreal": false, "view_recipe": "summit_default", "acceptance": "appearance only; Unreal, collision and movement remain unverified"}
+
+Blender quit

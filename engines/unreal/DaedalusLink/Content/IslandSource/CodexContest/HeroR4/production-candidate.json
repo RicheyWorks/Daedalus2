@@ -1,0 +1,2608 @@
+{
+  "schema": "daedalus.codex-source-candidate.v1",
+  "stage": "exported_candidate_native_held",
+  "name": "CodexIsland_summit_rim_84011_HeroR4",
+  "geometry_seed": 84011,
+  "palette_seed": 91022,
+  "revision": "HeroR4",
+  "saved_unreal": false,
+  "imported_unreal": false,
+  "placed_unreal": false,
+  "provenance": {
+    "author": "blender-team",
+    "id": "blender-boss",
+    "image": "C:/Users/730ri/projects/bot-team/art/flagship/contest_island_v4.png",
+    "inspection": "historical image and original source catalog; not current native acceptance",
+    "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+    "manifest": "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/manifest.json",
+    "name": "Blender Boss Island",
+    "provenance": "Original tracker assigns Blender Boss to blender-team; retain per-asset creator fields rather than guessing a team",
+    "sources": [
+      "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/layout.json"
+    ],
+    "team": null
+  },
+  "design": {
+    "baseline": "retained HeroR3",
+    "improvement": [
+      "Asymmetric five-anchor fitted crystal fan replaces five equal-height thin rods",
+      "Warm 0.5 metre route edge bands preserve the quarter-metre ascent geometry",
+      "Teal/coral/ivory palette uses related role gains from local PRNG seed 91022 and reduced grass contrast",
+      "sRGB recipe values are explicitly converted to linear vertex colours for this revision only"
+    ],
+    "crown_recipe": {
+      "candidate_heights_metres": [
+        7,
+        9,
+        12,
+        8,
+        6,
+        5,
+        7
+      ],
+      "candidate_arc_radians": [
+        2.199114857512855,
+        6.283185307179586
+      ],
+      "radius_metres": 8,
+      "anchors": 7,
+      "surviving_fitted_anchors": 5,
+      "exclude": "inherited cottage and route masks",
+      "landmark_voxels": [
+        [
+          -9,
+          1,
+          13,
+          "rock2"
+        ],
+        [
+          -9,
+          1,
+          14,
+          "rock2"
+        ],
+        [
+          -9,
+          1,
+          15,
+          "rock2"
+        ],
+        [
+          -9,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          -9,
+          1,
+          17,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          13,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          14,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          15,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          16,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          17,
+          "rock2"
+        ],
+        [
+          -9,
+          2,
+          19,
+          "crystal"
+        ],
+        [
+          -9,
+          2,
+          20,
+          "crystal"
+        ],
+        [
+          -9,
+          2,
+          21,
+          "crystal"
+        ],
+        [
+          -9,
+          2,
+          22,
+          "crystal"
+        ],
+        [
+          -9,
+          2,
+          23,
+          "crystal"
+        ],
+        [
+          -9,
+          2,
+          24,
+          "crystal"
+        ],
+        [
+          -9,
+          3,
+          13,
+          "rock2"
+        ],
+        [
+          -9,
+          3,
+          14,
+          "rock2"
+        ],
+        [
+          -9,
+          3,
+          15,
+          "rock2"
+        ],
+        [
+          -9,
+          3,
+          16,
+          "rock2"
+        ],
+        [
+          -9,
+          3,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          -4,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          -4,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          -4,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          -4,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          -4,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          -3,
+          19,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          20,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          21,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          22,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          23,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          24,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          25,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          26,
+          "crystal"
+        ],
+        [
+          -8,
+          -3,
+          27,
+          "crystal"
+        ],
+        [
+          -8,
+          -2,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          -2,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          -2,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          -2,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          -2,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          1,
+          19,
+          "crystal"
+        ],
+        [
+          -8,
+          1,
+          20,
+          "crystal"
+        ],
+        [
+          -8,
+          1,
+          21,
+          "crystal"
+        ],
+        [
+          -8,
+          1,
+          22,
+          "crystal"
+        ],
+        [
+          -8,
+          1,
+          23,
+          "crystal"
+        ],
+        [
+          -8,
+          1,
+          24,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          2,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          2,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          2,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          2,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          2,
+          18,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          19,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          20,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          21,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          22,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          23,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          24,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          25,
+          "crystal"
+        ],
+        [
+          -8,
+          2,
+          26,
+          "crystal"
+        ],
+        [
+          -8,
+          3,
+          13,
+          "rock2"
+        ],
+        [
+          -8,
+          3,
+          14,
+          "rock2"
+        ],
+        [
+          -8,
+          3,
+          15,
+          "rock2"
+        ],
+        [
+          -8,
+          3,
+          16,
+          "rock2"
+        ],
+        [
+          -8,
+          3,
+          17,
+          "rock2"
+        ],
+        [
+          -8,
+          3,
+          19,
+          "crystal2"
+        ],
+        [
+          -8,
+          3,
+          20,
+          "crystal2"
+        ],
+        [
+          -8,
+          3,
+          21,
+          "crystal2"
+        ],
+        [
+          -8,
+          3,
+          22,
+          "crystal2"
+        ],
+        [
+          -8,
+          3,
+          23,
+          "crystal2"
+        ],
+        [
+          -8,
+          3,
+          24,
+          "crystal2"
+        ],
+        [
+          -7,
+          -4,
+          13,
+          "rock2"
+        ],
+        [
+          -7,
+          -4,
+          14,
+          "rock2"
+        ],
+        [
+          -7,
+          -4,
+          15,
+          "rock2"
+        ],
+        [
+          -7,
+          -4,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          -4,
+          17,
+          "rock2"
+        ],
+        [
+          -7,
+          -4,
+          19,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          20,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          21,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          22,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          23,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          24,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          25,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          26,
+          "crystal"
+        ],
+        [
+          -7,
+          -4,
+          27,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          -3,
+          17,
+          "rock2"
+        ],
+        [
+          -7,
+          -3,
+          18,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          19,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          20,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          21,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          22,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          23,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          24,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          25,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          26,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          27,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          28,
+          "crystal"
+        ],
+        [
+          -7,
+          -3,
+          29,
+          "crystal"
+        ],
+        [
+          -7,
+          -2,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          -2,
+          17,
+          "rock2"
+        ],
+        [
+          -7,
+          -2,
+          19,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          20,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          21,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          22,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          23,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          24,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          25,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          26,
+          "crystal2"
+        ],
+        [
+          -7,
+          -2,
+          27,
+          "crystal2"
+        ],
+        [
+          -7,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          1,
+          17,
+          "rock2"
+        ],
+        [
+          -7,
+          2,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          2,
+          17,
+          "rock2"
+        ],
+        [
+          -7,
+          2,
+          19,
+          "crystal2"
+        ],
+        [
+          -7,
+          2,
+          20,
+          "crystal2"
+        ],
+        [
+          -7,
+          2,
+          21,
+          "crystal2"
+        ],
+        [
+          -7,
+          2,
+          22,
+          "crystal2"
+        ],
+        [
+          -7,
+          2,
+          23,
+          "crystal2"
+        ],
+        [
+          -7,
+          2,
+          24,
+          "crystal2"
+        ],
+        [
+          -7,
+          3,
+          16,
+          "rock2"
+        ],
+        [
+          -7,
+          3,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          -4,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          -4,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          -3,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          -3,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          -3,
+          19,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          20,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          21,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          22,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          23,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          24,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          25,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          26,
+          "crystal2"
+        ],
+        [
+          -6,
+          -3,
+          27,
+          "crystal2"
+        ],
+        [
+          -6,
+          -2,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          -2,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          5,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          5,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          13,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          14,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          15,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          17,
+          "rock2"
+        ],
+        [
+          -6,
+          6,
+          19,
+          "crystal"
+        ],
+        [
+          -6,
+          6,
+          20,
+          "crystal"
+        ],
+        [
+          -6,
+          6,
+          21,
+          "crystal"
+        ],
+        [
+          -6,
+          6,
+          22,
+          "crystal"
+        ],
+        [
+          -6,
+          7,
+          13,
+          "rock2"
+        ],
+        [
+          -6,
+          7,
+          14,
+          "rock2"
+        ],
+        [
+          -6,
+          7,
+          15,
+          "rock2"
+        ],
+        [
+          -6,
+          7,
+          16,
+          "rock2"
+        ],
+        [
+          -6,
+          7,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          -8,
+          13,
+          "rock2"
+        ],
+        [
+          -5,
+          -8,
+          14,
+          "rock2"
+        ],
+        [
+          -5,
+          -8,
+          15,
+          "rock2"
+        ],
+        [
+          -5,
+          -8,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          -8,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          13,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          14,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          15,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          -7,
+          19,
+          "crystal"
+        ],
+        [
+          -5,
+          -7,
+          20,
+          "crystal"
+        ],
+        [
+          -5,
+          -7,
+          21,
+          "crystal"
+        ],
+        [
+          -5,
+          -7,
+          22,
+          "crystal"
+        ],
+        [
+          -5,
+          -7,
+          23,
+          "crystal"
+        ],
+        [
+          -5,
+          -6,
+          13,
+          "rock2"
+        ],
+        [
+          -5,
+          -6,
+          14,
+          "rock2"
+        ],
+        [
+          -5,
+          -6,
+          15,
+          "rock2"
+        ],
+        [
+          -5,
+          -6,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          -6,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          5,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          5,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          5,
+          19,
+          "crystal"
+        ],
+        [
+          -5,
+          5,
+          20,
+          "crystal"
+        ],
+        [
+          -5,
+          5,
+          21,
+          "crystal"
+        ],
+        [
+          -5,
+          5,
+          22,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          6,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          6,
+          18,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          19,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          20,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          21,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          22,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          23,
+          "crystal"
+        ],
+        [
+          -5,
+          6,
+          24,
+          "crystal"
+        ],
+        [
+          -5,
+          7,
+          13,
+          "rock2"
+        ],
+        [
+          -5,
+          7,
+          14,
+          "rock2"
+        ],
+        [
+          -5,
+          7,
+          15,
+          "rock2"
+        ],
+        [
+          -5,
+          7,
+          16,
+          "rock2"
+        ],
+        [
+          -5,
+          7,
+          17,
+          "rock2"
+        ],
+        [
+          -5,
+          7,
+          19,
+          "crystal2"
+        ],
+        [
+          -5,
+          7,
+          20,
+          "crystal2"
+        ],
+        [
+          -5,
+          7,
+          21,
+          "crystal2"
+        ],
+        [
+          -5,
+          7,
+          22,
+          "crystal2"
+        ],
+        [
+          -4,
+          -8,
+          13,
+          "rock2"
+        ],
+        [
+          -4,
+          -8,
+          14,
+          "rock2"
+        ],
+        [
+          -4,
+          -8,
+          15,
+          "rock2"
+        ],
+        [
+          -4,
+          -8,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          -8,
+          17,
+          "rock2"
+        ],
+        [
+          -4,
+          -8,
+          19,
+          "crystal"
+        ],
+        [
+          -4,
+          -8,
+          20,
+          "crystal"
+        ],
+        [
+          -4,
+          -8,
+          21,
+          "crystal"
+        ],
+        [
+          -4,
+          -8,
+          22,
+          "crystal"
+        ],
+        [
+          -4,
+          -8,
+          23,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          13,
+          "rock2"
+        ],
+        [
+          -4,
+          -7,
+          14,
+          "rock2"
+        ],
+        [
+          -4,
+          -7,
+          15,
+          "rock2"
+        ],
+        [
+          -4,
+          -7,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          -7,
+          17,
+          "rock2"
+        ],
+        [
+          -4,
+          -7,
+          18,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          19,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          20,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          21,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          22,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          23,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          24,
+          "crystal"
+        ],
+        [
+          -4,
+          -7,
+          25,
+          "crystal"
+        ],
+        [
+          -4,
+          -6,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          -6,
+          17,
+          "rock2"
+        ],
+        [
+          -4,
+          -6,
+          19,
+          "crystal2"
+        ],
+        [
+          -4,
+          -6,
+          20,
+          "crystal2"
+        ],
+        [
+          -4,
+          -6,
+          21,
+          "crystal2"
+        ],
+        [
+          -4,
+          -6,
+          22,
+          "crystal2"
+        ],
+        [
+          -4,
+          -6,
+          23,
+          "crystal2"
+        ],
+        [
+          -4,
+          5,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          5,
+          17,
+          "rock2"
+        ],
+        [
+          -4,
+          6,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          6,
+          17,
+          "rock2"
+        ],
+        [
+          -4,
+          6,
+          19,
+          "crystal2"
+        ],
+        [
+          -4,
+          6,
+          20,
+          "crystal2"
+        ],
+        [
+          -4,
+          6,
+          21,
+          "crystal2"
+        ],
+        [
+          -4,
+          6,
+          22,
+          "crystal2"
+        ],
+        [
+          -4,
+          7,
+          16,
+          "rock2"
+        ],
+        [
+          -4,
+          7,
+          17,
+          "rock2"
+        ],
+        [
+          -3,
+          -8,
+          13,
+          "rock2"
+        ],
+        [
+          -3,
+          -8,
+          14,
+          "rock2"
+        ],
+        [
+          -3,
+          -8,
+          15,
+          "rock2"
+        ],
+        [
+          -3,
+          -8,
+          16,
+          "rock2"
+        ],
+        [
+          -3,
+          -8,
+          17,
+          "rock2"
+        ],
+        [
+          -3,
+          -7,
+          16,
+          "rock2"
+        ],
+        [
+          -3,
+          -7,
+          17,
+          "rock2"
+        ],
+        [
+          -3,
+          -7,
+          19,
+          "crystal2"
+        ],
+        [
+          -3,
+          -7,
+          20,
+          "crystal2"
+        ],
+        [
+          -3,
+          -7,
+          21,
+          "crystal2"
+        ],
+        [
+          -3,
+          -7,
+          22,
+          "crystal2"
+        ],
+        [
+          -3,
+          -7,
+          23,
+          "crystal2"
+        ],
+        [
+          -3,
+          -6,
+          16,
+          "rock2"
+        ],
+        [
+          -3,
+          -6,
+          17,
+          "rock2"
+        ],
+        [
+          7,
+          -1,
+          16,
+          "rock2"
+        ],
+        [
+          7,
+          -1,
+          17,
+          "rock2"
+        ],
+        [
+          7,
+          0,
+          16,
+          "rock2"
+        ],
+        [
+          7,
+          0,
+          17,
+          "rock2"
+        ],
+        [
+          7,
+          0,
+          19,
+          "crystal"
+        ],
+        [
+          7,
+          0,
+          20,
+          "crystal"
+        ],
+        [
+          7,
+          0,
+          21,
+          "crystal"
+        ],
+        [
+          7,
+          0,
+          22,
+          "crystal"
+        ],
+        [
+          7,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          7,
+          1,
+          17,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          13,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          14,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          15,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          16,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          17,
+          "rock2"
+        ],
+        [
+          8,
+          -1,
+          19,
+          "crystal"
+        ],
+        [
+          8,
+          -1,
+          20,
+          "crystal"
+        ],
+        [
+          8,
+          -1,
+          21,
+          "crystal"
+        ],
+        [
+          8,
+          -1,
+          22,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          13,
+          "rock2"
+        ],
+        [
+          8,
+          0,
+          14,
+          "rock2"
+        ],
+        [
+          8,
+          0,
+          15,
+          "rock2"
+        ],
+        [
+          8,
+          0,
+          16,
+          "rock2"
+        ],
+        [
+          8,
+          0,
+          17,
+          "rock2"
+        ],
+        [
+          8,
+          0,
+          18,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          19,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          20,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          21,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          22,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          23,
+          "crystal"
+        ],
+        [
+          8,
+          0,
+          24,
+          "crystal"
+        ],
+        [
+          8,
+          1,
+          13,
+          "rock2"
+        ],
+        [
+          8,
+          1,
+          14,
+          "rock2"
+        ],
+        [
+          8,
+          1,
+          15,
+          "rock2"
+        ],
+        [
+          8,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          8,
+          1,
+          17,
+          "rock2"
+        ],
+        [
+          8,
+          1,
+          19,
+          "crystal2"
+        ],
+        [
+          8,
+          1,
+          20,
+          "crystal2"
+        ],
+        [
+          8,
+          1,
+          21,
+          "crystal2"
+        ],
+        [
+          8,
+          1,
+          22,
+          "crystal2"
+        ],
+        [
+          9,
+          -1,
+          13,
+          "rock2"
+        ],
+        [
+          9,
+          -1,
+          14,
+          "rock2"
+        ],
+        [
+          9,
+          -1,
+          15,
+          "rock2"
+        ],
+        [
+          9,
+          -1,
+          16,
+          "rock2"
+        ],
+        [
+          9,
+          -1,
+          17,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          13,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          14,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          15,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          16,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          17,
+          "rock2"
+        ],
+        [
+          9,
+          0,
+          19,
+          "crystal2"
+        ],
+        [
+          9,
+          0,
+          20,
+          "crystal2"
+        ],
+        [
+          9,
+          0,
+          21,
+          "crystal2"
+        ],
+        [
+          9,
+          0,
+          22,
+          "crystal2"
+        ],
+        [
+          9,
+          1,
+          13,
+          "rock2"
+        ],
+        [
+          9,
+          1,
+          14,
+          "rock2"
+        ],
+        [
+          9,
+          1,
+          15,
+          "rock2"
+        ],
+        [
+          9,
+          1,
+          16,
+          "rock2"
+        ],
+        [
+          9,
+          1,
+          17,
+          "rock2"
+        ]
+      ]
+    },
+    "layer_comparison_to_retained_HeroR3": {
+      "island": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "11f30f9982c15db7107e28e8596331b9a3bd451712a6fd59718b00466c60a2fb",
+        "voxel_count": 88738,
+        "voxel_metres": 1.0
+      },
+      "water": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "e974d648f26abe8ae84a98bf633b79c0c123f2ebc2eeb068add012a78e305c64",
+        "voxel_count": 629,
+        "voxel_metres": 1.0
+      },
+      "trees": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "1628eaf310b7cdba8eaa63aa4f6cf3b4d844297e861cc1633dca84c2c89c85a5",
+        "voxel_count": 665,
+        "voxel_metres": 1.0
+      },
+      "cottage": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "173450f57beac1a119855a1751628ee98c861dd3add783b614465d0df36bd3d2",
+        "voxel_count": 312,
+        "voxel_metres": 1.0
+      },
+      "flowers": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "90e4ea60b602798748ca30cf924c9d033b42272089e31b89b9033000622d0b18",
+        "voxel_count": 50,
+        "voxel_metres": 1.0
+      },
+      "rocks": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "2f530574d6365e780b77f5dcb08722cbca92288e83089224f63550ab2c2bc769",
+        "voxel_count": 5,
+        "voxel_metres": 1.0
+      },
+      "crystals": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "f283470b6ebb7ffdf49fc0bff6529c697606f52f352aaab72fbc404c89fb8076",
+        "voxel_count": 50,
+        "voxel_metres": 1.0
+      },
+      "clouds": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "61b0fe9fe301054b4eee930a9afef191c6a2768178b4507073b2df9d5917f14a",
+        "voxel_count": 333,
+        "voxel_metres": 1.0
+      },
+      "landmarks": {
+        "occupied_positions_unchanged": false,
+        "position_sha256": "982ebcaf035d75559cd3e883c5869b6da1c249f43b5040c664022278bad7a453",
+        "voxel_count": 320,
+        "voxel_metres": 1.0
+      },
+      "route_steps": {
+        "occupied_positions_unchanged": true,
+        "position_sha256": "f44c45e4ad5823322358947c13b8a354a6358efda3765b6d989c4906893d4617",
+        "voxel_count": 7976,
+        "voxel_metres": 0.25
+      }
+    },
+    "palette_rgb_srgb": {
+      "blossom": [
+        0.9323941,
+        0.4265207,
+        0.4761161
+      ],
+      "blossom2": [
+        0.9819895,
+        0.6447406,
+        0.5951452
+      ],
+      "cloud": [
+        0.97,
+        0.97,
+        0.99
+      ],
+      "crystal": [
+        0.3174108,
+        0.7736887,
+        0.8629605
+      ],
+      "crystal2": [
+        0.7141742,
+        0.5257116,
+        0.8827987
+      ],
+      "dirt": [
+        0.3754084,
+        0.2864959,
+        0.2469792
+      ],
+      "dirt2": [
+        0.4248042,
+        0.3260125,
+        0.2766167
+      ],
+      "door": [
+        0.35,
+        0.22,
+        0.12
+      ],
+      "flower_r": [
+        0.9,
+        0.25,
+        0.3
+      ],
+      "flower_w": [
+        0.9627266,
+        0.9221908,
+        0.8208511
+      ],
+      "flower_y": [
+        0.95,
+        0.85,
+        0.25
+      ],
+      "foam": [
+        0.7342004,
+        0.9353512,
+        0.9454087
+      ],
+      "grass": [
+        0.3185216,
+        0.6469971,
+        0.398152
+      ],
+      "grass2": [
+        0.3881982,
+        0.6967661,
+        0.4280134
+      ],
+      "leaf": [
+        0.199076,
+        0.5474591,
+        0.4081058
+      ],
+      "leaf2": [
+        0.3085678,
+        0.6669047,
+        0.5375053
+      ],
+      "rock": [
+        0.2864959,
+        0.3754084,
+        0.5038375
+      ],
+      "rock2": [
+        0.1679458,
+        0.2371,
+        0.3358917
+      ],
+      "roof": [
+        0.5371001,
+        0.2128133,
+        0.293885
+      ],
+      "sand": [
+        0.861387,
+        0.6891096,
+        0.3952246
+      ],
+      "trunk": [
+        0.4,
+        0.26,
+        0.15
+      ],
+      "wall": [
+        0.82,
+        0.72,
+        0.55
+      ],
+      "water": [
+        0.1005754,
+        0.6738551,
+        0.8046031
+      ],
+      "window": [
+        1.0,
+        0.9,
+        0.55
+      ]
+    },
+    "palette_surface": {
+      "blossom": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "blossom2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "cloud": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "crystal": {
+        "metallic": 0.12,
+        "roughness": 0.28
+      },
+      "crystal2": {
+        "metallic": 0.12,
+        "roughness": 0.28
+      },
+      "dirt": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "dirt2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "door": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_r": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_w": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "flower_y": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "foam": {
+        "metallic": 0.0,
+        "roughness": 0.18
+      },
+      "grass": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "grass2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "leaf": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "leaf2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "rock": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "rock2": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "roof": {
+        "metallic": 0.55,
+        "roughness": 0.42
+      },
+      "sand": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "trunk": {
+        "metallic": 0.0,
+        "roughness": 0.72
+      },
+      "wall": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      },
+      "water": {
+        "metallic": 0.0,
+        "roughness": 0.18
+      },
+      "window": {
+        "metallic": 0.0,
+        "roughness": 0.85
+      }
+    }
+  },
+  "contract": {
+    "source_units": "metres, 1 source unit per metre",
+    "source_pivot_metres": [
+      0,
+      0,
+      0
+    ],
+    "source_actor_transform": "identity; native transform not evaluated",
+    "role_meshes": [
+      {
+        "dims": [
+          92.0,
+          89.0,
+          43.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_island",
+        "triangles": 82320
+      },
+      {
+        "dims": [
+          89.0,
+          87.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_water",
+        "triangles": 3956
+      },
+      {
+        "dims": [
+          74.0,
+          54.0,
+          15.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_trees",
+        "triangles": 2532
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78.0,
+          78.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_flowers",
+        "triangles": 600
+      },
+      {
+        "dims": [
+          44.0,
+          19.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_rocks",
+        "triangles": 48
+      },
+      {
+        "dims": [
+          38.0,
+          37.0,
+          15.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_crystals",
+        "triangles": 420
+      },
+      {
+        "dims": [
+          107.0,
+          80.0,
+          7.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_clouds",
+        "triangles": 1248
+      },
+      {
+        "dims": [
+          19.0,
+          17.0,
+          16.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_landmarks",
+        "triangles": 1592
+      },
+      {
+        "dims": [
+          37.25,
+          18.25,
+          14.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_w",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_HeroR4_route_steps",
+        "triangles": 17448
+      }
+    ],
+    "mesh_count": 10,
+    "triangles": 111112,
+    "collision": {
+      "authored_ucx_boxes": 639,
+      "targets": "island body only",
+      "excluded_roles": [
+        "route_steps",
+        "landmarks",
+        "all other role meshes"
+      ],
+      "native_hulls_honoured": null,
+      "walkability": "unverified"
+    },
+    "material_binding": "existing CodexVoxel_<key> slots plus Col vertex colours; use recipe sRGB palette and convert once to linear material parameters",
+    "importer_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+    "importer_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+    "import_options_requested": {
+      "auto_generate_collision": false,
+      "build_nanite": false,
+      "combine_meshes": false,
+      "generate_lightmap_u_vs": false,
+      "import_materials": false,
+      "import_textures": false,
+      "vertex_color_import_option": "REPLACE"
+    },
+    "native_backend_settings_observed": null
+  },
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 2097724,
+        "sha256": "9ce0558be9129d7e80a0c1e8142d847f19f41db765ee3c2f352e15f56501d50c"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 6183440,
+        "sha256": "59c952d6d48c70ff750839f9803b43b0de95ac7392a3df553faca1246850ec72"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.glb"
+    },
+    "receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\h84011\\CodexIsland_summit_rim_84011_HeroR4.receipt.json",
+      "fingerprint": {
+        "bytes": 17737,
+        "sha256": "0f35a89dce0ed8209a0523ac9da36821e3e9ed085faadfc0f8762eeb60a39302"
+      }
+    },
+    "delivery_manifest": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\codex-hero-r4.delivery.json",
+      "fingerprint": {
+        "bytes": 36212,
+        "sha256": "2e69980702cd12d3d1e7cbfc98b347aa2858374970ceb1f444774791ca5becbd"
+      }
+    }
+  },
+  "delivery": {
+    "exact_candidate_name": "CodexIsland_summit_rim_84011_HeroR4",
+    "exact_manifest_index": 0,
+    "candidate_native_path_proposed": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/9ce0558be9129d7e",
+    "candidate_native_path_exists_verified": false,
+    "prepared_manifest_entries": 24,
+    "unrelated_entry_json_spans_unchanged": 23,
+    "full_manifest_expected_meshes": 49,
+    "candidate_meshes": 10,
+    "policy": "held from all native import/save/placement; manifest preparation confers no editor turn or placement authority"
+  },
+  "retained_source_readback": {
+    "binary_files": 94,
+    "all_byte_identical": true,
+    "pin_file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\retained-inputs.before.json",
+    "pin_fingerprint": {
+      "bytes": 35628,
+      "sha256": "1ac8dd0f868df471c05743535dd64aa805ae82e5c9494197b39b6ac3aa9d87bb"
+    },
+    "original_manifest_fingerprint": {
+      "bytes": 35480,
+      "sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79"
+    },
+    "baseline_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR3\\h84011\\CodexIsland_summit_rim_84011_HeroR3.receipt.json",
+    "baseline_receipt_fingerprint": {
+      "bytes": 17143,
+      "sha256": "794487b8870d8ace2baad2603527a98faa82d21b8fc3a09747304b8b91ad319d"
+    }
+  },
+  "elapsed_s_observed": {
+    "fbx_export": 1.212368,
+    "generation": 0.470144,
+    "glb_export": 1.885291,
+    "mesh": 1.574402
+  },
+  "source_review": {
+    "same_cameras": [
+      {
+        "name": "overview",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\overview.png",
+        "position": [
+          110,
+          -140,
+          105
+        ],
+        "target": [
+          0,
+          0,
+          -3
+        ],
+        "camera_type": "ORTHO",
+        "framing": 150,
+        "elapsed_s": 45.295573,
+        "sha256": "e3476edd25037c0a8dadb9789b6f86272e7f3629a020fd514d55f5f226219154"
+      },
+      {
+        "name": "route",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\route.png",
+        "position": [
+          28,
+          -49,
+          8
+        ],
+        "target": [
+          9,
+          -10,
+          11
+        ],
+        "camera_type": "PERSP",
+        "framing": 35,
+        "elapsed_s": 0.329192,
+        "sha256": "b25f744822dc07c713b332f0e6052997dab31d785fb310699dc37387720486ff"
+      },
+      {
+        "name": "crown",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QA\\crown.png",
+        "position": [
+          -22,
+          -26,
+          33
+        ],
+        "target": [
+          0,
+          0,
+          18
+        ],
+        "camera_type": "PERSP",
+        "framing": 45,
+        "elapsed_s": 0.356738,
+        "sha256": "61a0e22dd48016f5005f1c131dda1cc3de6544ddcc68c5490f093754c1d867ec"
+      }
+    ],
+    "bar_path": "C:\\Users\\730ri\\.codex\\worktrees\\island-mesh-pool\\Daedalus2\\docs\\production\\VISUAL-QUALITY-BAR.md",
+    "bar_acceptance": "not established; source appearance review only",
+    "known_limits": [
+      "Default comparison crown view crops taller tips; QAFull/crown_full.png resolves framing and was visually inspected.",
+      "Triangular dark shadow patches remain visible on stepped terrain in the existing EEVEE setup; cause not established",
+      "Water is inherited opaque voxel geometry; native water/material/movement quality not established",
+      "No runtime collision, movement, performance or day/dusk acceptance"
+    ],
+    "additional_full_and_player_views": [
+      {
+        "name": "crown_full",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QAFull\\crown_full.png",
+        "position": [
+          -34,
+          -42,
+          42
+        ],
+        "target": [
+          0,
+          0,
+          18
+        ],
+        "camera_type": "PERSP",
+        "framing": 40,
+        "elapsed_s": 48.415066,
+        "sha256": "91f29b97e015d74a3f3a235cd682661d5ec53bb37041695482aa0dee13c4ed8f"
+      },
+      {
+        "name": "approach_player",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HeroR4\\QAFull\\approach_player.png",
+        "position": [
+          13,
+          -43,
+          2.7
+        ],
+        "target": [
+          10,
+          -16,
+          11
+        ],
+        "camera_type": "PERSP",
+        "framing": 28,
+        "elapsed_s": 0.318299,
+        "sha256": "2bd25393570e7170bf3fa634070386ba9e56f7418d8096bac7e4ba6feb5936e0"
+      }
+    ],
+    "observed_improvement": "Same overview and route cameras show a taller tiered destination silhouette, warm stair edges, reduced grass speckle contrast and coherent teal/coral accents. Full-crown and lower approach views inspected. This is a source design comparison, not BAR/native acceptance.",
+    "reviewed_view_count": 5
+  },
+  "validation": "Actual source generation/export/witness and retained artifact readback only. No test suites, Unreal calls or ownership changes."
+}
