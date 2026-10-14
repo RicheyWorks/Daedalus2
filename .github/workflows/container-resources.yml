@@ -1,0 +1,37 @@
+name: Container runtime resources
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'tools/deploy/**'
+      - 'tools/inventory/packaged_server_smoke.py'
+      - 'engines/unreal/DaedalusLink/Content/Inventory/**'
+      - 'tools/islands/kennel-isle/tonics.json'
+      - 'daedalus-core/pom.xml'
+      - 'daedalus-server/pom.xml'
+      - '.github/workflows/container-resources.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: container-resources-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resource verifier rejects missing or changed data
+        run: python3 tools/deploy/test_container_resources.py
+      - name: Build the real container image
+        run: docker build --tag daedalus-resource-smoke:${{ github.sha }} .
+      - name: Boot production image and verify packaged resources and authenticated HTTP
+        run: python3 tools/deploy/container_smoke.py --image daedalus-resource-smoke:${{ github.sha }} --output "${{ runner.temp }}/container-proof"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-resource-proof
+          path: ${{ runner.temp }}/container-proof
+          if-no-files-found: ignore
