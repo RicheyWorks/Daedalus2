@@ -60,6 +60,23 @@ def benchmark_summary(result):
             'scope':'Recorded attempt durations; sums are not run wall time and returned calls are not verified effects'}
 
 
+def coverage_summary(rows):
+    def counts(group):
+        states=[{attempt['state'] for attempt in row.get('recorded_attempts',[])} for row in group]
+        attempted=sum(bool(state) for state in states)
+        return {'exposed_actions':len(group),'actions_without_attempts':len(group)-attempted,
+                'actions_with_recorded_attempts':attempted,
+                'actions_with_returned_attempts':sum('returned' in state for state in states),
+                'actions_with_failed_attempts':sum('failed' in state for state in states),
+                'actions_with_unknown_attempts':sum('outcome-unknown' in state for state in states),
+                'recorded_attempt_coverage_percent':100*attempted/len(group) if group else None,
+                'effects_verified':0,'all_effects_verified':False}
+    sets={}
+    for row in rows:sets.setdefault(row['toolset'],[]).append(row)
+    return {'total':counts(rows),'per_toolset':{name:counts(group) for name,group in sorted(sets.items())},
+            'count_semantics':'Outcome categories overlap across attempts; recorded coverage is not effect verification'}
+
+
 def catalog(capture):
     if not isinstance(capture,dict) or type(capture.get('schema_version')) is not int or capture['schema_version']!=1:
         raise ValueError('Expected saved-description wrapper schema1')
@@ -95,6 +112,7 @@ def catalog(capture):
             if len(rows)>50000:raise ValueError('Catalog exceeds50000 exposed actions')
     return {'schema_version':1,'exposed_actions':len(rows),'toolsets':len(sets),'per_toolset':counts,
             'actions':rows,'executed_actions':0,'mutation':False,'server_queried':False,
+            'coverage':coverage_summary(rows),
             'scope':'Unique toolset/name pairs in saved descriptions; not every engine function, execution proof or risk approval'}
 
 
@@ -142,6 +160,7 @@ def attach_attempts(result,attempts,evidence_root):
     result['effects_verified']=0
     result['attempt_scope']='Recorded attempt/timing claims and hash-bound files; artifact presence does not prove an in-world effect'
     result['benchmark_summary']=benchmark_summary(result)
+    result['coverage']=coverage_summary(result['actions'])
     return result
 
 

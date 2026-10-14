@@ -897,3 +897,7 @@ A later recordedreturn cannotsettle an earlierunknownattempt; count unresolvedat
 ### Compare recorded timings by outcome (2026-10-14)
 Actioncatalog benchmarksummary groups returned/failed/unknown attempts separately, globally andpertoolset, with finite sums/means andnearest-rank p50/p95. Emptygroups remainexplicit. Duration sums are notwalltime; returnedstatus is not effectproof. Keep failed/unknown performance separate ratherthan presenting fasterincomplete runs asimprovement.
 
+
+### Make action coverage explicit (2026-10-14)
+Count actionswith noattempt, recordedreturns, failures andunknowns separately pertoolset/overall. Outcome categories overlap acrossattempts; recordedattemptcoverage percentage doesnotmean verifiedeffects. Keep effectsverified0/allEffectsVerifiedfalse without effectvalidators, includingemptycatalogs. This prevents a mixedreturned/unknown history lookingcomplete.
+
