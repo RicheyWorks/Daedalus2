@@ -530,6 +530,27 @@ became code and the PC build failed with C3927/C2146 after a 2-minute job. Prefl
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
 
+## Editor text-file loading does not prove cooked data is staged (2026-10-13)
+Hero/Talker loaded DIC, DCS and DRR from the plugin Content tree, but Build.cs declared none of those custom
+files as runtime dependencies. Add explicit UFS families and include optional existing DSP sprite packs.
+Evaluate the actual Shipping target rules in an isolated exact-head host with UBT JsonExport; compare every
+expected source hash to covered runtime declarations. Keep that evidence separate from an actual cook,
+staged archive and launch. Do not ship editor Python or developer saves to make a missing-data error disappear.
+
+### Optional runtime-family enumeration (2026-10-14)
+Check Directory.Exists before enumerating optional DSP packs in Unreal module rules; a missing optional directory must not crash rule evaluation. Mandatory DIC/DCS/DRR declarations remain intact. Runtime-declaration verification now rejects duplicate JSON fields, nonfinite values and malformed SHA256s rather than silently accepting collapsed manifest data. Six offline checks pass; the earlier UBT proof remains tied to its earlier head, not this follow-up.
+
+
+### Bind and atomically publish runtime declaration proofs (2026-10-14)
+Record SHA256/length for the exact manifest and UBT export bytes parsed by the verifier, with bounded strict JSON input. Publish proof via fsync-and-replace so serialization/write failure preserves the prior file. Six declaration checks and failed-serialization preservation smoke pass. These are declaration/source proofs, never cook, staged archive or packaged launch acceptance.
+
+
+### Recheck runtime snapshot stability before proof publication (2026-10-14)
+After evaluating staging declarations, rehash all manifest-bound plugin sources and re-read manifest/export identities. Refuse normal file edits/replacements during verification. This finite observation is not an atomicfilesystem snapshot or producer lock; packaged/cook/runtime claims remain separate. Six offline declaration checks passed on this follow-up.
+
+
+### Build/cook staging lessons from the actual native project (2026-10-14)
+A genericUnrealGame target can return0 after one metadata action; it is not proof of plugincompilation. Use the generated projecttarget and verify actual compile/link actions and executable. Blueprintproject packaging may require an editorreceipt; use the supported explicit-unrealexe path to the existing commandlet when appropriate, not a fabricatedreceipt or unneedededitorrebuild. GameFeatureData requires nondefaultAssetManager rules; use the engine's normal additive AlwaysCook repair and preserve existing scans. Include that fix in the project generator. A rule-declaration proof is not a payloadproof: extract the actualPAK rawfiles and compare current hashes/lengths. Existing native data can be newer than an isolated branch snapshot; preserve it and pinprovenance rather than overwrite it. Check each nativecommand exit: a later0 can hide an earlierfailed assertion/lease command. Current archive/payload success does not prove runtime launch or ownership.
 ## A passing production-profile test can still open real world files (2026-10-13)
 The Labyrinth reactor was green but ArkHarbor warned that it could not persist ecology in the developer's
 .daedalus directory. Five prod-profile Spring test contexts inherited the production world-file default;
@@ -1129,3 +1150,12 @@ State at handoff: all five realms laid, dressed (unique per deed), hub floors so
 proven (portals 5/5, realm_switch 10/10, mounts 9/9, realm_ground 17/17), ledger exported (49,943 lands), editor
 up on a9c56af with MCP on, doctor green, RAM 87%. Not done: district streaming, airship tour receipt, material
 reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER rows 2/12 per realm.
+
+## Preserve both consumers when resolving CI integration conflicts (2026-10-14)
+
+PR94 integration overlapped newer realm workflow triggers and appended Unreal lessons. Keep both runtime-data and tools/realm trigger paths, both focused verifier and realm jobs, and both sets of lessons. A successful native archive does not merge its reproducible source setup into main; confirm branch integration separately. No live installer, data overwrite, editor restart or gameplay launch is needed for this source resolution.
+
+## Read existing Unreal config independently of PowerShell ANSI defaults (2026-10-14)
+Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.
+
+Encoding follow-up: use strict UTF8 decoding for BOM-less config input. Unsupported ANSI or damaged byte sequences must fail before any additive write, preserving original bytes rather than replacing them with Unicode replacement characters. Added actual invalid-UTF8 unchanged-bytes regression; PS7/PS5.1 pass while valid UTF16 BOM detection remains supported.
