@@ -1,9 +1,15 @@
 # SPDX-License-Identifier: MIT
 import unittest
-from night_run import assess_run
+from night_run import assess_run, require_stage
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_stage_requires_explicit_successful_terminal_result(self):
+        for reply in (None,{}, {'result':{'realm':'WORLD-ZERO'}},
+                      {'error':'','result':{'realm':'WORLD-ZERO'}}, {'error':None,'result':{}}):
+            with self.assertRaises(RuntimeError): require_stage(reply,'fixture')
+        self.assertEqual(require_stage({'error':None,'result':{'realm':'WORLD-ZERO'}},'fixture'),{'realm':'WORLD-ZERO'})
+
     def test_complete_suite_without_editor_errors_passes(self):
         self.assertEqual(assess_run('TOTAL 47/47\n',0,{'errors':0,'warnings':716})['exit_code'],0)
 

@@ -93,6 +93,13 @@ def steps(expr, label, timeout=3600):
     return r
 
 
+def require_stage(reply, label):
+    if (not isinstance(reply, dict) or 'error' not in reply or reply['error'] is not None or
+            not isinstance(reply.get('result'), dict) or not reply['result']):
+        raise RuntimeError(label+' lacks a successful terminal stage result; no subsequent mutation')
+    return reply['result']
+
+
 def assess_run(text, returncode, report):
     """A missing summary/log observation is unverified, never an empty successful run."""
     totals = re.findall(r'^TOTAL (\d+)/(\d+)\s*$', text, re.MULTILINE)
@@ -168,13 +175,28 @@ def main(argv):
         out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
         lay.append("import %s: %s" % (os.path.basename(os.path.dirname(folder)), last[-1] if last else (out.stderr or "")[-200:]))
-    r = steps("__import__('daedalus_realm_ground').lay_cast_steps(['WORLD-ZERO'] + %r)" % realms, "lay_cast")
-    lay.append("cast: %s %s" % (r.get("result"), (r.get("error") or "")[-200:]))
-    r = steps("__import__('daedalus_realm_ground').lay_portals_steps(['WORLD-ZERO'] + %r)" % realms, "lay_portals")
-    lay.append("portals: %s %s" % (r.get("result"), (r.get("error") or "")[-200:]))
-    for realm in realms:
-        r = steps("__import__('daedalus_districts').steps(%r)" % realm, "districts " + realm)
-        lay.append("districts %s: %s %s" % (realm, r.get("result"), (r.get("error") or "")[-200:]))
+        terminal = re.fullmatch(r'import: (\d+) imported, (\d+) skipped, (\d+) failed',last[-1] if last else '')
+        if out.returncode != 0 or not terminal or int(terminal[3]) != 0 or sum(map(int,terminal.groups())) == 0:
+            hub('status','NIGHT RUN stopped at import %s: code=%s; %s; no retry' % (folder,out.returncode,lay[-1]))
+            return 1
+    try:
+        r = steps("__import__('daedalus_realm_ground').lay_cast_steps(['WORLD-ZERO'] + %r)" % realms, "lay_cast")
+        result = require_stage(r,'cast')
+        lay.append('cast: '+str(result))
+        if not set(['WORLD-ZERO']+realms)<=set(result):
+            raise RuntimeError('cast omitted a requested realm')
+        if any(not isinstance(row,dict) or not isinstance(row.get('unbound'),list) or row['unbound'] or
+               type(row.get('roles')) is not int or row['roles'] <= 0 or
+               type(row.get('bound')) is not int or row['bound'] != row['roles'] for row in result.values()):
+            raise RuntimeError('cast contains unbound or unavailable script roles')
+        r = steps("__import__('daedalus_realm_ground').lay_portals_steps(['WORLD-ZERO'] + %r)" % realms, "lay_portals")
+        lay.append('portals: '+str(require_stage(r,'portals')))
+        for realm in realms:
+            r = steps("__import__('daedalus_districts').steps(%r)" % realm, "districts " + realm)
+            lay.append('districts %s: %s' % (realm,require_stage(r,'districts '+realm)))
+    except Exception as error:
+        hub('status','NIGHT RUN stopped during layout: %s; no next mutation or Play' % error)
+        return 1
     for line in lay:
         say(line)
     hub("status", "NIGHT RUN laid on %s: %s" % (sha, " | ".join(lay)))

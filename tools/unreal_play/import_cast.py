@@ -36,7 +36,13 @@ def main(argv):
     place = argv[argv.index("--place") + 1] if "--place" in argv else ""
     plan = IC.plan(folder)
     print("%d GLBs in %s -> %s" % (len(plan), folder, root), flush=True)
-    call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n", 30)
+    if not plan:
+        print('import: no planned assets; refusing empty success', flush=True)
+        return 2
+    _, setup_error = call("import importlib, daedalus_import_cast\nimportlib.reload(daedalus_import_cast)\n", 30)
+    if setup_error:
+        print('import: setup failed; no import dispatched\nERR '+str(setup_error)[-600:],flush=True)
+        return 2
     counts = {"imported": 0, "skipped": 0, "failed": 0}
     if "--one-per-call" in argv:   # the slow, safe fallback: one bridge round trip per file
         for i, (aid, glb, sha) in enumerate(plan, 1):
@@ -47,8 +53,12 @@ def main(argv):
             out, err = call(code, 180)
             status = (out.split() or ["failed"])[0]
             if err:
-                status = "failed"
                 print("ERR", aid, err[:400], flush=True)
+                print('import: outcome unknown; stopping without next import or placement',flush=True)
+                return 2
+            if status not in counts:
+                print('import: unrecognized terminal status; stopping without next import',flush=True)
+                return 2
             counts[status if status in counts else "failed"] += 1
             print("%2d/%d %-9s %s  %.1fs" % (i, len(plan), status, aid, time.time() - t0), flush=True)
             time.sleep(0.5)
@@ -57,21 +67,32 @@ def main(argv):
         code = ("import daedalus_import_cast as C\n"
                 "PLAN = %r\n"
                 "def steps():\n"
+                "    counts = {'imported': 0, 'skipped': 0, 'failed': 0}\n"
                 "    for aid, glb, sha in PLAN:\n"
                 "        s, made = C.import_one(aid, glb, sha, False, %r)\n"
+                "        if s not in counts: raise ValueError('unknown import status: ' + str(s))\n"
+                "        counts[s] += 1\n"
                 "        yield '%%s %%s' %% (s, aid)\n"
-                "    return 'done'\n") % ([(a, g, h) for a, g, h in plan], root)
+                "    return {'counts': counts, 'planned': len(PLAN)}\n") % ([(a, g, h) for a, g, h in plan], root)
         r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="import_cast", timeout=max(120, 15 * len(plan)))
         res = r   # wire.call returns the command result: {steps, yielded, result, error, seconds}
         for line in res.get("yielded", []):
-            status = line.split()[0]
-            counts[status if status in counts else "failed"] += 1
             print("  " + line, flush=True)
-        if res.get("error"):
-            print("ERR after %s steps: %s" % (res.get("steps"), res["error"][-600:]), flush=True)
-            counts["failed"] += max(0, len(plan) - int(res.get("steps") or 0))
+        summary = res.get('result')
+        final = summary.get('counts') if isinstance(summary, dict) else None
+        valid = (isinstance(final, dict) and set(final) == set(counts) and
+                 all(type(n) is int and n >= 0 for n in final.values()) and
+                 type(summary.get('planned')) is int and summary['planned'] == len(plan) and
+                 sum(final.values()) == len(plan))
+        if res.get('error') is not None or not valid:
+            print('import: outcome unknown; terminal counts unavailable; no placement or retry', flush=True)
+            print('ERR '+str(res.get('error') or 'incomplete terminal result')[-600:], flush=True)
+            return 2
+        counts = final
         print("steps=%s seconds=%s (one tick per file, one round trip)" % (res.get("steps"), res.get("seconds", round(time.time() - t0, 1))), flush=True)
     print("import: %d imported, %d skipped, %d failed" % (counts["imported"], counts["skipped"], counts["failed"]), flush=True)
+    if counts['failed']:
+        return 1
     if place:
         out, err = call("import importlib, daedalus_realm_ground as R\nimportlib.reload(R)\nprint(R.place_creatures(%r))\n" % place, 300)
         print(out[-1500:], ("ERR " + err[:800]) if err else "", flush=True)

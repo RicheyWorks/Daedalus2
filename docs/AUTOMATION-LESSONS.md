@@ -809,3 +809,7 @@ J. (Fable) night_run writes a machine-readable receipt (json: sha, steps, n/m, e
 ### Night-run result fidelity (2026-10-14)
 No FAIL text is not success: crashed/interrupted suites may never print TOTAL. Require exactly one positive consistent TOTAL, zero scenario process exit, no failure/interruption lines and a valid editor log report with zero errors. Keep failed versus unverified distinct in the receipt and propagate nonzero exit. Warnings remain reported rather than automatically fatal. This outcome covers scenario/log evidence, not the separate asset/layout acceptance gap.
 
+
+### Terminal import and layout outcomes (2026-10-14)
+The steps bridge retains only its last200 yields. Never use that log tail as an import census. Return terminal counts from the generator and require exact planned coverage, nonnegative integer counts and no terminal error. Empty plans and missing terminal counts cannot succeed. Night-run stage errors or missing results stop before later layout mutations/Play. Cast Rebind counts prove script binding only, not skeletal art; art audit remains126.
+
