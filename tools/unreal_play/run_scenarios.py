@@ -11,6 +11,8 @@ import os
 import sys
 import time
 
+MAX_WAIT_S = int(os.environ.get("DAEDALUS_SCENARIO_WAIT_S", "900"))
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "connectors", "claude-asset-pipeline"))
 from asset_pipeline import wire  # noqa: E402
@@ -57,7 +59,7 @@ def main(argv):
             tot += 1
             continue
         s = {}
-        for _ in range(180):
+        for _ in range(MAX_WAIT_S):   # 01:35: the airship tour flies ~5 min; 180 s abandoned it mid-flight
             time.sleep(1)
             s = wire.call(wire.UNREAL, "daedalus.play_status", timeout=20)
             if not s.get("running"):
@@ -67,7 +69,7 @@ def main(argv):
             print("%s INTERRUPTED: %s -> rerunning once" % (name, r["interrupted"]), flush=True)
             time.sleep(5)
             wire.call(wire.UNREAL, "daedalus.play_scenario", name=name, timeout=20)
-            for _ in range(180):
+            for _ in range(MAX_WAIT_S):
                 time.sleep(1)
                 s = wire.call(wire.UNREAL, "daedalus.play_status", timeout=20)
                 if not s.get("running"):
