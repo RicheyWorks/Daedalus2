@@ -1160,3 +1160,6 @@ Production UI copied the entire Economy then advanced all crews to forecast one 
 
 ## Broaden native acceptance from a seam to the whole plugin (2026-10-14)
 Exact04f7dda4 full plugin snapshot196Gitblob files compiled and linked under UE5.8 UnrealEditor Win64 Development:61actions,exit0,298.82s. Allsnapshot hashes rechecked. This includes current component/Slate forecast with existing Hero, Inventory, Ocean and reflectedmodule. Existing RawInput/cloudreflection deprecations reported to Claude; not edited midbuild. Keep this full compile distinct from installation and runtime proof. PR139 andPR94 are separate source branches: future sync must preserve nativeUFS staging, GameFeatureData config andcurrent34landDRR additions.
+
+## Preserve receipt history in native economy save bytes (2026-10-14)
+DRSH1 uses existing byte primitives and record-store size contract. Save full committed/candidate snapshot plus request history, not just displayed quantities; validate restored state by replay before publishing. Bounded counts, duplicate-key/trailing/truncation rejection and unchanged output on failure prevent partial restores. Actual strictMSVC tests pass; no native gameplay or disk persistence inferred from codec success. Local scratch CMake initially lacked a newline and failed parsing; repaired before successful compile, not counted as a build pass.

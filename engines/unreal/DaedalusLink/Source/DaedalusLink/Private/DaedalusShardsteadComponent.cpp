@@ -55,6 +55,15 @@ bool UDaedalusShardsteadComponent::LedgerRevisionFromHost(uint64& Out) const{
     if(!Ready||!Host()||!Durable)return false;
     Out=Durable->CurrentRevision();return true;
 }
+bool UDaedalusShardsteadComponent::InitializeLedgerBytesFromHost(int64 RealmSeed,const std::vector<std::uint8_t>& Bytes){
+    if(!Host()||Ready)return false;
+    daedalus::shardstead::LedgerSnapshot Saved;
+    return daedalus::shardstead::DecodeLedgerSave(Bytes,Saved)&&InitializeLedgerFromHost(RealmSeed,&Saved);
+}
+bool UDaedalusShardsteadComponent::PendingBytesFromHost(std::vector<std::uint8_t>& Out) const{
+    const auto* Saved=PendingFromHost();
+    return Saved&&daedalus::shardstead::EncodeLedgerSave(*Saved,Out);
+}
 FDaedalusIslandStats UDaedalusShardsteadComponent::GetCrewStats(const FString& PlayerKey) const {
     FDaedalusIslandStats Out;if(!Ready||!Host())return Out;
     const auto& View=ReadRules();

@@ -51,6 +51,8 @@ jobs:
           python3 ../../../tools/unreal_preflight/preflight.py "$S/Public/DaedalusShardsteadComponent.h" "$S/Private/DaedalusShardsteadComponent.cpp" "$S/Private/SDaedalusShardstead.h" "$S/Private/SDaedalusShardstead.cpp"
       - name: production forecast matches actual cycle without state mutation
         run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_forecast_test.cpp -o shardstead_forecast_test && ./shardstead_forecast_test
+      - name: ledger save roundtrip and malformed payload rejection
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_save_test.cpp -o shardstead_save_test && ./shardstead_save_test
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
           for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do

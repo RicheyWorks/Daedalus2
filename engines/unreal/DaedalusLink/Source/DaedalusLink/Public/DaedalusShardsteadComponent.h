@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 THIRD_PARTY_INCLUDES_START
-#include "DaedalusShardsteadLedger.h"
+#include "DaedalusShardsteadSaveCore.h"
 THIRD_PARTY_INCLUDES_END
 #include "DaedalusShardsteadComponent.generated.h"
 
@@ -51,6 +51,8 @@ public:
     bool CancelConfirmedUncommittedFromHost(const FString& Request,uint64 ExpectedRevision);
     bool ExportCommittedFromHost(daedalus::shardstead::LedgerSnapshot& Out) const;
     bool LedgerRevisionFromHost(uint64& Out) const;
+    bool InitializeLedgerBytesFromHost(int64 RealmSeed,const std::vector<std::uint8_t>& Bytes);
+    bool PendingBytesFromHost(std::vector<std::uint8_t>& Out) const;
 private:
     bool Ready=false;
     int64 BoundSeed=0;
