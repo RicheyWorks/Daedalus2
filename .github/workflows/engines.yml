@@ -12,7 +12,7 @@ on:
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match approved cabinet and harness dependency stacks as well as main.
-    branches: [ main, codex/realm-production-queue, codex/pc-job-exit-status ]
+    branches: [ main, codex/realm-production-queue, codex/pc-job-exit-status, codex/pc-job-launch-receipt ]
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
@@ -34,7 +34,10 @@ jobs:
           python-version: "3.x"
       - name: native cmd and Windows PowerShell regression fixtures
         shell: powershell
-        run: python engines/unreal/core-test/pc_job_test.py
+        run: |
+          python engines/unreal/core-test/pc_job_test.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python engines/unreal/core-test/unreal_job_launch_test.py
 
   mesh-parity:
     name: C++ mesher parity (gcc, clang)

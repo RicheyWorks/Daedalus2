@@ -539,6 +539,14 @@ command once, and verifies that the same ID returns its actual exit code 23. CIM
 this verifies launcher behavior without touching Unreal. PowerShell wraps warning lines, so
 assert warning text after whitespace normalization rather than assuming one output line.
 
+
+## Build launch IDs and CIM acceptance are part of the harness contract (2026-10-13, Codex)
+The Unreal build launcher also used second-resolution IDs and printed started even when
+Win32_Process.Create refused the launch. Append a GUID and require return value zero plus
+a nonzero PID; propagate CIM transport errors. A native Windows fixture freezes the clock,
+captures two launches and three refusal cases without executing either build command.
+This protects log identity and truthful launch reporting; it does not prove build completion.
+
 Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
 abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
 the blocked-receipt regression now runs with strict warnings to cover that exact failure.

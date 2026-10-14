@@ -39,3 +39,16 @@ The full metaverse goal is unfinished. All source changes require normal review 
 
 The Engines workflow includes the PR89 base branch so this stacked follow-up receives
 Windows pc-job and existing engine-free integration checks before merging.
+
+
+## Unreal build-launch follow-up
+The branch stacked on PR101 changes unreal-job.ps1 Start only: GUID-suffixed build IDs,
+terminating CIM errors, and explicit rejection of nonzero return values or missing PIDs.
+The new unreal_job_launch_test.py freezes the clock and checks two accepted launches plus
+three refusal/transport cases. It captures but NEVER executes -Run. No actual engine build,
+restart, autosave restoration or project configuration write occurs in this fixture.
+Local native Windows result: all five cases passed in1.927s. Existing pc-job cases remain
+in the same CI job; the workflow also covers the PR101 dependency base.
+Known remaining issues outside this change: build completion markers/Wait exit status,
+error handling before the current Run try block, and fail-closed git pull handling still
+need dedicated review. Start acceptance must never be described as build success.
