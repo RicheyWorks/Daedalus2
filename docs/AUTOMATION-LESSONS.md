@@ -564,3 +564,9 @@ in a second call; `lay_creatures` is retired and raises with the command to run 
 N assets is driven from the host script, one bridge call per item or per ≤150 light items, never N heavy items
 in one call; (3) the map had been saved 33 s before the crash (save_world after each realm), so nothing was lost:
 save after every realm, not at the end.
+
+## A dead hub answers {"id": null} (2026-10-13, 22:46)
+The broker had died (nothing on 9890) and `teamlink send` printed `"id": null`, exit 0; a request to Sol never
+existed. Fix: the CLI exits 2 with "hub down: nothing was sent" when the broker returns no id. Rule: after any
+send, the id in the output is the receipt; `null` is not a receipt. The restart protocol held: one process from
+D2-build main, "HUB UP <last id>" announced, ping asked.
