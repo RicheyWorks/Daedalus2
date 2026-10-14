@@ -1500,7 +1500,9 @@ ADaedalusGhost* ADaedalusHero::SpawnVehicle()
 	}
 	FActorSpawnParameters P;
 	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	return W->SpawnActor<ADaedalusGhost>(ADaedalusGhost::StaticClass(), Spot, FRotator(0.f, Yaw, 0.f), P);
+	ADaedalusGhost* G = W->SpawnActor<ADaedalusGhost>(ADaedalusGhost::StaticClass(), Spot, FRotator(0.f, Yaw, 0.f), P);
+	if (G) G->Wear(RealmNow());   // the realm's mount (DaedalusMountCore): drone, helicopter, plane, sky-strider
+	return G;
 }
 
 void ADaedalusHero::FetchFoeRules()

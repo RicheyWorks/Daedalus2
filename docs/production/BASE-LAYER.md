@@ -57,7 +57,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 19 creature/mount/pet visuals validated (GAL01); not spawned |
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
-| 9 | Mounts | **missing** | Sol/Fable | drone art validated, no possession |
+| 9 | Mounts | **partial** | Fable | `DaedalusMountCore` profile (gallery drone, ceiling 120 m); the called vehicle wears Mob_Gallery_GalleryDrone and flies (Ghost::Wear/Lift); `mounts` scenario; build pending |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | PR80 row |
 | 12 | Play proof | **partial** | Fable | cast 8/8 (talk), no walk-the-realm scenario |
@@ -74,7 +74,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 32 role models validated (PAR01) |
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
-| 9 | Mounts | **missing** | Sol/Fable | helicopter + helipad art only |
+| 9 | Mounts | **partial** | Fable | profile parcel helicopter (ceiling 200 m), wears Mob_Parcels_ParcelHelicopter |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
@@ -91,7 +91,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | 32 role models (BRK01) |
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
-| 9 | Mounts | **missing** | Sol/Fable | plane, hover cart (BRK03) art only |
+| 9 | Mounts | **partial** | Fable | profile brick plane (fastest, ceiling 240 m), wears Mob_Bricks_BrickPlane; hover cart later |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
@@ -108,7 +108,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 6 | Creatures | **partial** | Sol | plants LAB10 policy tested |
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
-| 9 | Mounts | **missing** | Sol/Fable | sky-strider (LAB05) |
+| 9 | Mounts | **partial** | Fable | profile sky-strider (ceiling 60 m), wears Mob_Lab_SkyStrider |
 | 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
