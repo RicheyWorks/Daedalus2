@@ -158,6 +158,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
 
     # ---- main island: size 60, a hill with the lake on top -----------------------------------------------
     thick = int(size * 0.63)
+    f2 = (size / 60.0) ** 2            # dressing counts scale with the plateau area (Super Island members are 104)
     harm = _harm(rng)
     top = _disc(size, harm)
     hx, hy = -8, 6                       # hill centre; the lake sits in the hill
@@ -390,7 +391,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
             for _ in range(10):
                 fx_, fy_, fz_ = x + rng.randint(-r, r), y + rng.randint(-r, r), base + hgt + rng.randint(-1, 2)
                 vox["trees"].append((fx_, fy_, fz_, "fruit_" + fruit))
-    for _ in range(5):
+    for _ in range(int(5 * f2)):
         for _try in range(60):
             gx, gy = rng.randint(-size, size), rng.randint(-size, size)
             if free(top, gx, gy, 6):
@@ -399,7 +400,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
             tx, ty = gx + rng.randint(-7, 7), gy + rng.randint(-7, 7)
             if free(top, tx, ty, 5):
                 big_tree(tx, ty, hill(tx, ty))
-    for _ in range(4):
+    for _ in range(int(4 * f2)):
         for _try in range(60):
             tx, ty = rng.randint(-size, size), rng.randint(-size, size)
             if free(top, tx, ty, 5):
@@ -419,7 +420,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
         if free(top, tx, ty, 3):
             big_tree(tx, ty, hill(tx, ty), "leaf", fruit=CH.ORCHARD[species][0])
     # ---- flowers, garden, mushrooms, rocks ----------------------------------------------------------------
-    for _ in range(260):
+    for _ in range(int(260 * f2)):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if free(top, x, y, 1):
             vox["flowers"].append((x, y, hill(x, y) + 1, rng.choice(("flower_r", "flower_y", "flower_w", "flower_p", "flower_b"))))
@@ -434,7 +435,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
                     vox["props"].append((x, y, b + 1, "fence"))
             elif (x + y) % 2 == 0:
                 vox["flowers"].append((x, y, b + 1, rng.choice(("flower_r", "flower_y", "flower_p"))))
-    for _ in range(14):
+    for _ in range(int(14 * f2)):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if free(top, x, y, 1):
             b = hill(x, y)
@@ -442,7 +443,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
             for ddx in (-1, 0, 1):
                 for ddy in (-1, 0, 1):
                     vox["props"].append((x + ddx, y + ddy, b + 2, "shroom_dot" if (ddx, ddy) == (0, 0) else "shroom"))
-    for _ in range(10):
+    for _ in range(int(10 * f2)):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if free(top, x, y, 2):
             b = hill(x, y)
@@ -454,7 +455,7 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
     extra = K.get("extra")
     if K.get("lake") == "ice":
         vox["water"] = [(x, y, z, ("clearbell" if c in ("water", "sea2") else c)) for x, y, z, c in vox["water"]]
-    for _ in range({"obsidian_spires": 7, "cacti": 16, "lilies": 40, "spires": 10, "hot_spring": 1}.get(extra, 0)):
+    for _ in range(int({"obsidian_spires": 7, "cacti": 16, "lilies": 40, "spires": 10, "hot_spring": 1}.get(extra, 0) * (f2 if extra != "hot_spring" else 1))):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if extra == "lilies":
             lx_, ly_ = hx + rng.randint(-10, 10), hy + rng.randint(-10, 10)
