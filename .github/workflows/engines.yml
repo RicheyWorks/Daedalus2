@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -45,6 +45,8 @@ jobs:
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
+      - name: runtime data verifier refuses incomplete staging evidence
+        run: python3 ../../../tools/unreal/test_runtime_data.py
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
           for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do
@@ -83,6 +85,10 @@ jobs:
       - name: plan only
         shell: pwsh
         run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly
+      - name: preserve GameFeatureData config arrays
+        # Config helper tests do not invoke the installer or touch an editor.
+        shell: powershell
+        run: .\engines\unreal\core-test\game_feature_config_test.ps1
       - name: project and plugin, for real
         shell: powershell
         run: |

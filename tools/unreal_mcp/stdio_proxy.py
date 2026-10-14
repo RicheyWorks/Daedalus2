@@ -57,8 +57,27 @@ def _is_complete_png(png):
     return False
 
 
+INIT = {"jsonrpc": "2.0", "method": "initialize", "params": {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "daedalus-proxy", "version": "2"}}}
+
+
+def _stale_session(reply):
+    err = reply.get("error") if isinstance(reply, dict) else None
+    return bool(err) and "session" in str(err.get("message", "")).lower() and "unknown" in str(err.get("message", "")).lower()
+
+
 def post(msg):
-    return expose_capture_image(msg, post_json(URL, msg, SESSION))
+    reply = post_json(URL, msg, SESSION)
+    if _stale_session(reply) and msg.get("method") != "initialize":
+        # 02:57: the editor was rebuilt and its server restarted; the app keeps this proxy alive with the old
+        # Mcp-Session-Id. Re-initialize once (the app never resends initialize) and resend the request.
+        SESSION["id"] = None
+        init = dict(INIT, id="reinit-%s" % msg.get("id", "0"))
+        post_json(URL, init, SESSION)
+        post_json(URL, {"jsonrpc": "2.0", "method": "notifications/initialized"}, SESSION)
+        sys.stderr.write("stdio_proxy: server session was stale; re-initialized as %s\n" % SESSION["id"])
+        sys.stderr.flush()
+        reply = post_json(URL, msg, SESSION)
+    return expose_capture_image(msg, reply)
 
 
 def expose_capture_image(msg, reply):

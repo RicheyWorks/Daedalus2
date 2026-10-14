@@ -530,6 +530,27 @@ became code and the PC build failed with C3927/C2146 after a 2-minute job. Prefl
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
 
+## Editor text-file loading does not prove cooked data is staged (2026-10-13)
+Hero/Talker loaded DIC, DCS and DRR from the plugin Content tree, but Build.cs declared none of those custom
+files as runtime dependencies. Add explicit UFS families and include optional existing DSP sprite packs.
+Evaluate the actual Shipping target rules in an isolated exact-head host with UBT JsonExport; compare every
+expected source hash to covered runtime declarations. Keep that evidence separate from an actual cook,
+staged archive and launch. Do not ship editor Python or developer saves to make a missing-data error disappear.
+
+### Optional runtime-family enumeration (2026-10-14)
+Check Directory.Exists before enumerating optional DSP packs in Unreal module rules; a missing optional directory must not crash rule evaluation. Mandatory DIC/DCS/DRR declarations remain intact. Runtime-declaration verification now rejects duplicate JSON fields, nonfinite values and malformed SHA256s rather than silently accepting collapsed manifest data. Six offline checks pass; the earlier UBT proof remains tied to its earlier head, not this follow-up.
+
+
+### Bind and atomically publish runtime declaration proofs (2026-10-14)
+Record SHA256/length for the exact manifest and UBT export bytes parsed by the verifier, with bounded strict JSON input. Publish proof via fsync-and-replace so serialization/write failure preserves the prior file. Six declaration checks and failed-serialization preservation smoke pass. These are declaration/source proofs, never cook, staged archive or packaged launch acceptance.
+
+
+### Recheck runtime snapshot stability before proof publication (2026-10-14)
+After evaluating staging declarations, rehash all manifest-bound plugin sources and re-read manifest/export identities. Refuse normal file edits/replacements during verification. This finite observation is not an atomicfilesystem snapshot or producer lock; packaged/cook/runtime claims remain separate. Six offline declaration checks passed on this follow-up.
+
+
+### Build/cook staging lessons from the actual native project (2026-10-14)
+A genericUnrealGame target can return0 after one metadata action; it is not proof of plugincompilation. Use the generated projecttarget and verify actual compile/link actions and executable. Blueprintproject packaging may require an editorreceipt; use the supported explicit-unrealexe path to the existing commandlet when appropriate, not a fabricatedreceipt or unneedededitorrebuild. GameFeatureData requires nondefaultAssetManager rules; use the engine's normal additive AlwaysCook repair and preserve existing scans. Include that fix in the project generator. A rule-declaration proof is not a payloadproof: extract the actualPAK rawfiles and compare current hashes/lengths. Existing native data can be newer than an isolated branch snapshot; preserve it and pinprovenance rather than overwrite it. Check each nativecommand exit: a later0 can hide an earlierfailed assertion/lease command. Current archive/payload success does not prove runtime launch or ownership.
 ## A passing production-profile test can still open real world files (2026-10-13)
 The Labyrinth reactor was green but ArkHarbor warned that it could not persist ecology in the developer's
 .daedalus directory. Five prod-profile Spring test contexts inherited the production world-file default;
@@ -1049,3 +1070,165 @@ What could be better (the next asks, in order):
 ## 2026-10-14 — native import readback and connector exposure
 
 The first four PR140 FBX fragments imported through the existing Epic MCP HTTP client when named MCP tools were absent in this chat. Native calls verified bounds (9200 cm), top origin (Z0), bodySetup convex hull, material references, save result and written uasset files. Use the supported connector client already present before declaring missing chat bindings an execution blocker. This is still new Epic MCP, not the old TCP bridge. Retain exact native tool/readback receipts; an import return or zero process exit alone does not prove collisions or a passed scenario. Live land assignment and walking remain separate.
+## 2026-10-14 02:42 — the modal the harness missed ("38 changes to source content files... import them?")
+
+Richey: "the harness is missing this." An editor modal freezes every bridge call behind it; tonight's was the
+auto-reimport prompt (bMonitorContentDirectories + bPromptBeforeAutoImporting, both default on), raised by the
+team's own art drops into Content/. Answered with the bridge's editor_windows + window_input ("Don't Import" — the
+import queue owns imports), then the cause removed through the connector: LoadingSaving {bMonitorContentDirectories:
+false, bPromptBeforeAutoImporting: false, bAutoDeleteAssets: false, bDetectChangesOnStartup: false,
+autoSaveTimeMinutes: 30}. tools/unreal_mcp/doctor.py now reads these and the throttle back (--fix sets them) so the
+doctor says BAD before a job hangs. Harness ask 9 (Poot): a modal guard in the bridge — poll editor_windows every
+few seconds while a job runs; a known-dialog table (import prompt -> Don't Import; autosave progress -> wait;
+"save changes?" -> hub alarm, never answered by a bot; crash reporter -> hub alarm + log path); unknown dialog ->
+screenshot to the hub and stop the job's clock. Ask 10: `unreal-job.ps1 -Open` runs doctor.py --fix after the
+editor is up, so a relaunch cannot regress these.
+
+## 2026-10-14 03:02 — what I have learned about Unreal Engine tonight (Richey: "add to lessons learned so far")
+
+Engine facts, each paid for once:
+1. Instanced static meshes are the only way to hold 10k+ things in one level: 49k plots + 60k extras as ~1,700
+   ADaedalusLandDistrict actors cost ~1 s per 100 instances to lay and nothing to tick; the same as actors was
+   60 s per district and 76k outliner rows. Instance i -> Cells[i] keeps every plot addressable for the registry.
+2. An ISM's collision follows the component (QueryAndPhysics in the constructor); scaled instances collide fine.
+   Traces (SystemLibrary.line_trace_single, ECC_Visibility) are the cheap truth about "is there floor here":
+   256 probes in 20 s found the World Zero hub was 87% air; 3,721 cell probes found 673 holes round it.
+3. A "floor" that is many small slabs leaves pits round anything smaller than a slab; a hub wants ONE plate 2 cm
+   under the plane and the content on top of it. Use the plane every placer uses (PlayerStart z - 1 m), not the
+   first mesh a trace hits (a terrain chunk 1.8 m higher put every block in a pit).
+4. Re-deriving a base height from the first instance drifts on every rerun (district 33 ended 114 m low). Base
+   heights come from a fixed source (ORIGINS / PlayerStart), never from what was laid last time.
+5. Editor "settings" are two things: the console `set` on a class default (not persisted, not even applied here)
+   and the UDeveloperSettings object (persisted, what the editor reads). Read-back via ConfigSettings before
+   believing either. The ones that bite bots: bThrottleCPUWhenNotForeground (3 fps), bPromptBeforeAutoImporting
+   (modal), bAutoDeleteAssets (deletes on a file move), autosave interval (collides with scripted saves).
+6. Overlap order: a teleport fires BeginOverlap synchronously INSIDE the teleport call. Anything the overlap
+   handler reads (a cooldown stamp) must be written before the teleport, not after (the portal bounce).
+7. PIE copies the whole editor world; at 92% RAM Play is the crash moment. Frame-driven scripts crawl at 3 fps
+   but physics-driven ones (Dt capped at 0.05) move ~960 cm/s real time — a tour that is 5 min at 46 fps is 40
+   min at 3. Time waits in game seconds; count frames only for frame facts.
+8. save_dirty_packages can clear dirty flags without writing; save_packages([pk], only_dirty=False) plus an mtime
+   check is the only proof. Autosave can make even that return False once; retry after 8 s.
+9. UE 5.8 Python has no World.streaming_levels; levels come from EditorLevelUtils.get_levels and a streaming
+   object from GameplayStatics.get_streaming_level(world, pkg). Sublevel actors are only visible to
+   get_all_level_actors while loaded.
+10. The native MCP server (ModelContextProtocol plugin): Streamable HTTP, Mcp-Session-Id per client, 3 meta-tools
+    over 67 toolsets / 830 tools; call_tool takes toolset_name + SHORT tool_name; replies over ~3 MB are cut by a
+    5 s write-idle close; the session dies with the editor process, so a long-lived proxy must re-initialize.
+    Fastest wins so far: find_actors by tag (0.07 s), SetCameraTransform + screenshot, ConfigSettings read-back,
+    SearchCVars, trace_world, plugin and folder listings. Untested yet: Sequencer (140 tools), Blueprint (53),
+    Niagara (46), PCG (30), UMG (23), SlateInspector (UI automation) — the next exploration slices.
+11. Modal dialogs (import prompt, autosave progress, save-changes, crash reporter) stop the game thread, so the
+    bridge and the MCP server both go silent; only the out-of-process editor_windows/window_input can answer them.
+12. A background editor (not the active window) is the normal state under bot control; every setting that assumes
+    a human in front of it (throttle, Slate throttling, notifications, prompts) must be off, and the doctor must
+    say so at every start.
+
+## 2026-10-14 03:05 — end-of-session handoff (Richey back ~05:00): harness — what works, what to improve
+
+Working well tonight (keep):
+- The hub as the only channel: 60+ messages, every block/pause/handback a reply_to within a minute; Poot's
+  install block routed round in 6 min via a merged PR; no user-mediated relay after 01:00.
+- Budgeted daedalus.steps for bulk work (49k plots laid + dressed twice, 673 holes, 1,402 extras: all under 4 min
+  per pass) and pc-job for anything longer than a bridge call.
+- Proven saves (mtime) with one autosave retry; labels as idempotency keys; the ledger as the mint's contract.
+- Connector for looking and checking: tag queries, camera + screenshot, settings read-back, PIE state; and for
+  the two real fixes of the night (throttle 3->46 fps, import modal off).
+- Receipts with fps/frames/seconds; run_scenarios waits 900 s; game-time waits.
+
+Improve (Poot's list, ordered; items 1-10 already on the hub, 11-13 new tonight):
+1. play-guard lease + 60 s hub warning + refuse Play above 90% RAM (vitals.py) instead of killing mid-run.
+2. editor start = StartServer + doctor.py --fix + MCP READY line in teamlink doctor (H2/H3).
+3. desktop-proxy captures near 3 MB (Epic 5 s write-idle close) — server patch or low-res capture.
+4. bridge calls cap at 60 s: job tails must return instantly (job_status.py, play-guard helper owns it).
+5. setup-owner column: done (H4); keep it current when a new connector lands.
+6. save_world autosave retry: done. 7. no inline python through the bridge: rule, in lessons.
+8. fps in receipts: done. 9. modal guard with a dialog table (bridge). 10. unreal-job -Open runs doctor --fix.
+11. stdio proxy must re-initialize on "Unknown session id" after an editor restart (fixed on main 99cc50a; the
+    app only loads it on its next launch — Richey restarts the app once in the morning).
+12. vitals --watch 60 as a standing job; editor_mb + ram_pct in the doctor; the structural fix is district
+    streaming (ADR-063) so PIE does not copy 24k actors.
+13. The hole-fill probe must use the plane, not the first hit, and dedupe against instanced cells before the
+    ledger (34 duplicate deeds reached Sol's check tonight; fixed, ledger 9,979 unique).
+
+State at handoff: all five realms laid, dressed (unique per deed), hub floors solid, portal bounce fixed and
+proven (portals 5/5, realm_switch 10/10, mounts 9/9, realm_ground 17/17), ledger exported (49,943 lands), editor
+up on a9c56af with MCP on, doctor green, RAM 87%. Not done: district streaming, airship tour receipt, material
+reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER rows 2/12 per realm.
+
+## Preserve both consumers when resolving CI integration conflicts (2026-10-14)
+
+PR94 integration overlapped newer realm workflow triggers and appended Unreal lessons. Keep both runtime-data and tools/realm trigger paths, both focused verifier and realm jobs, and both sets of lessons. A successful native archive does not merge its reproducible source setup into main; confirm branch integration separately. No live installer, data overwrite, editor restart or gameplay launch is needed for this source resolution.
+
+## Read existing Unreal config independently of PowerShell ANSI defaults (2026-10-14)
+Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.
+
+Encoding follow-up: use strict UTF8 decoding for BOM-less config input. Unsupported ANSI or damaged byte sequences must fail before any additive write, preserving original bytes rather than replacing them with Unicode replacement characters. Added actual invalid-UTF8 unchanged-bytes regression; PS7/PS5.1 pass while valid UTF16 BOM detection remains supported.
+
+## 2026-10-14 08:45 — morning: the mesh pool landed, streaming started, and what the night's /goal run produced
+
+Overnight (03:06-08:27) with Richey asleep: Poot's seat delivered PR141 (job snapshots), PR142 (diagnostics
+providers), PR143 (doctor read-back gate), PR144 (capture transfer measurement) — all tools-only, CI green, merged
+at 08:30 after their tests ran here. Sol's seat delivered the island mesh pool (PR140: 12 fragments + 6 pads, Blender
+4.3, imported natively through the connector into /Game/Daedalus/Art/Islands/NativePool with convex collision and
+bounds read back), a World-Zero deed-1 pilot (rock underside, trees, world-position ground shader), PR139 (Minesweeper
++ Shardstead), and a Shipping package. The hub carried it all; nobody waited on a human.
+
+Morning slices (08:30-08:45):
+- Editor was closed by the packaging run: relaunched by Start-Process (setup-unreal.ps1 needs -Project), StartServer
+  by console, doctor --fix green, map loaded in ~2.5 min.
+- mesh_pool_steps: every Lands_ district actor's Plots ISM now uses a pool mesh — WZ fragments Z-scaled to each
+  deed's thickness (top-centre origin: translation = slab top), realm pads at unit scale. 500 districts in 43 s.
+  First look: faceted asteroid fragments at their own heights; realms are green terrace pads on the ground.
+- District streaming (ADR-063) finally run: LABYRINTH 100 sublevels, 560 actors, 106 s; hub content kept in the
+  persistent level (districts_only) so LandAt/portals never miss their markers. Other realms running.
+- RAM 96.8% / 1 GB free at 08:35 (editor 11 GB, the rest other apps): Play refused until < 90%; vitals --watch 60
+  --alarm 92 is a standing job (job-1014-083542).
+
+Engine facts added: ULevelStreaming in 5.8 Python exposes get_world_asset_package_f_name (no _name variant);
+mesh swap on an ISM keeps instances but their transforms must be re-derived for the new origin convention (cube
+centre -> pool top-centre) in the same step, or every island drops by half its thickness.
+
+### 08:45 — asks to Poot after the morning run (Richey: "let poot know what you would like")
+P1. Editor relaunch is still three manual steps (Start-Process with the .uproject, console StartServer, doctor --fix):
+    one `unreal-job.ps1 -Open` that does all three and posts EDITOR UP on the hub. (H2/H3, highest.)
+P2. The desktop-app proxy still runs the pre-fix code until the app restarts; after any editor restart the
+    in-chat connector is dead until then. Either the app's server entry points at a tiny launcher that execs the
+    current main proxy, or Richey restarts the app once per day — say which.
+P3. RAM: the editor is 11 GB and the box runs at 96%; Play is refused by rule. Standing vitals job is running
+    (job-1014-083542); please own the "what else is resident" question and the play-guard RAM refusal.
+P4. The 60 s bridge cap makes every long job a tail-polling loop; PR141's job_status is the right shape — wire
+    pc-job -Tail to it so a tail never blocks.
+P5. CI on main cancels itself on every push (five pushes in ten minutes this morning); a merge queue or a
+    "run on the newest head only, don't cancel the reactor/examples jobs" rule.
+What works and should not change: the hub protocol, budgeted steps, proven saves, the doctor read-back, pc-jobs.
+
+## 2026-10-14 08:58 — two GPU-driver crashes in 11 minutes: what they were and the rule that follows
+
+08:41:31 and 08:52 local: DXGI_ERROR_DRIVER_INTERNAL_ERROR / DEVICE_REMOVED (DRED: no page fault, VRAM 4.5 of
+23 GB), both while district streaming was saving sublevels with system RAM at 96-97% and the editor at 11-12.5 GB.
+The driver, not the engine, gave up; the common factor is the box out of RAM. The team's crashguard relaunched the
+editor the second time (good); Crash Reporter windows were closed by me (the dialog table says: alarm, close, log).
+
+What survived: every sublevel save is atomic and the persistent level is saved only at the end of a realm, so a
+crash mid-realm leaves either (a) sublevels registered + duplicate actors in the persistent level (Gallery: 224
+removed by reconcile_steps) or (b) orphan .umap files and an untouched persistent level (Parcels: 79 orphans, no
+data loss). Both are recoverable without a human. Labyrinth and Gallery are fully streamed; Parcels, Bricks and
+World Zero are not.
+
+Rules:
+1. No sublevel-save batches, Play, or rebuilds above 90% system RAM (vitals --alarm 90 gates every job).
+2. The editor's own footprint is the lever: unloading far sublevels in the editor, Zen/shader worker limits and
+   the transaction buffer are Poot's investigation; until then, big saves run with the viewport not realtime.
+3. Streaming jobs save the persistent level every 25 districts, not only at the end (smaller loss window).
+4. reconcile_steps after any crash before any new move.
+
+## 2026-10-14 09:04 — unreal.Rotator is (roll, pitch, yaw)
+
+Every `unreal.Rotator(0.0, yaw, 0.0)` written since last night set PITCH, not yaw. Fragments came out tumbled
+or upside-down (the first "great detail" look at deed 240 showed the faceted underside on top), terraces and rocks
+were pitched, markers and portals pitched, and the airship's `set_control_rotation(Rotator(0, heading, 0))` pitched
+the camera instead of steering — which is why the tour "flew" so badly. Found by writing three rotators into one
+instance and reading them back: (0,300,0) read back as pitch -60. Fix: keyword args or (roll, pitch, yaw) order,
+everywhere (13 sites); re-dress all realms. Rule: any new engine constructor gets a one-instance write/read-back
+before it is used in a loop — the connector's ObjectTools or a 3-line execute_python does it in a second.

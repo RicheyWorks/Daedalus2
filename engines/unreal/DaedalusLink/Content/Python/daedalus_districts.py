@@ -99,14 +99,16 @@ def plan(realm):
     rows = [(a.get_actor_label(), a.tags, str(a.get_level().get_outermost().get_name())) for a in _actors(realm)]
     moves, skipped = group(realm, rows)
     world = _world()
-    have = {str(sl.get_world_asset_package_name()) for sl in _streaming(world)}
+    have = {str(sl.get_world_asset_package_f_name()) for sl in _streaming(world)}
     return {"realm": realm, "moves": {p: len(v) for p, v in sorted(moves.items())}, "skipped": skipped,
             "exists": {p: (p in have) for p in sorted(moves)}}
 
 
-def steps(realm):
+def steps(realm, districts_only=True):
     """One district per editor tick: create the sublevel, move its actors, save the sublevel; finally save the
-    persistent level and list the sublevels for the streamer. Yields a line per district."""
+    persistent level and list the sublevels for the streamer. Yields a line per district. districts_only (08:38):
+    the hub's markers/portals/cast stay in the persistent level so LandAt and the portals always find them;
+    only District:<d>-tagged actors (Lands_, Decor_, Land_ plots) stream."""
     import unreal
     import daedalus_plots
     import daedalus_islands
@@ -114,6 +116,8 @@ def steps(realm):
     actors = {a.get_actor_label(): a for a in _actors(realm)}
     rows = [(l, a.tags, str(a.get_level().get_outermost().get_name())) for l, a in actors.items()]
     moves, skipped = group(realm, rows)
+    if districts_only:
+        moves = {p: v for p, v in moves.items() if p.rsplit("/", 1)[-1].startswith("D")}
     moved_total = 0
     for pkg in sorted(moves):
         sl = _sublevel(world, pkg)
@@ -126,6 +130,8 @@ def steps(realm):
         if level is not None:
             daedalus_plots.save_packages_proven([level.get_outermost()])
         yield "%s: moved %d (roots %d) -> %s" % (realm, len(batch), int(n), pkg.split("/")[-1])
+        if moved_total and (moved_total // max(len(batch), 1)) % 25 == 0:
+            daedalus_plots.save_world()   # 08:58: a crash mid-realm then loses at most 25 districts of registration
     daedalus_plots.save_world()
     daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
     yield "islands.json updated"
@@ -279,9 +285,9 @@ def island_plan(n, x, y, top, thick, realm):
     terraces = int(_h(n, 10) * 3)            # 0, 1, 2
     size, z = P.LAND_M, top
     for k in range(terraces):
-        f = 0.35 + 0.3 * _h(n, 11 + k)       # footprint fraction of the level below
+        f = 0.2 + 0.25 * _h(n, 11 + k)       # footprint fraction of the level below (09:12: 0.35-0.65 ate the whole top)
         w, d = size * f, size * f * (0.7 + 0.6 * _h(n, 14 + k))
-        h = 3.0 + 5.0 * _h(n, 17 + k)
+        h = 2.0 + 3.0 * _h(n, 17 + k)
         ox = (_h(n, 20 + k) - 0.5) * (size - w) * 100.0
         oy = (_h(n, 23 + k) - 0.5) * (size - d) * 100.0
         out.append((x + ox, y + oy, z + h * 50.0, 0.0, w, d, h))
@@ -316,9 +322,6 @@ def dress_plan(cells, xy, realm, ground_z):
         top = ground_z + dz
         yaw = _h(n, 0) * 360.0 if realm == "WORLD-ZERO" else 0.0   # a fragment turns as it drifts; a city plot stays square
         plots.append((x, y, top - thick * 50.0, yaw, P.LAND_M, P.LAND_M, thick))
-        if realm == "WORLD-ZERO":
-            s = P.LAND_M * (0.45 + 0.25 * _h(n, 3))
-            extras.append((x + (_h(n, 4) - 0.5) * 1200.0, y + (_h(n, 5) - 0.5) * 1200.0, top - thick * 100.0 - s * 40.0, _h(n, 6) * 90.0, s, s * (0.7 + 0.5 * _h(n, 7)), s * 0.8))
         extras.extend(island_plan(n, x, y, top, thick, realm))
         if int(_h(n, 8) * 4) == 0:
             decor.append((n, x, y, top, _h(n, 9) * 360.0))
@@ -352,6 +355,7 @@ def dress_islands_steps(realms, decor_per_district=3):
     import daedalus_realm_ground as R
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     labels = P._labels_cache(sub)
+    cube = unreal.load_asset(P.CUBE)
     districts = {}
     for a in sub.get_all_level_actors():
         if a.get_class().get_name() == "DaedalusLandDistrict":
@@ -389,10 +393,14 @@ def dress_islands_steps(realms, decor_per_district=3):
             else:
                 ground_z = R.GROUND_Z
             plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)   # rubble = extras (terraces, rocks, undersides)
-            a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
+            if comp.static_mesh == cube:
+                a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
+            else:   # Sol's pool mesh (mesh_pool_steps): top-centre origin, unit = 92 m, Z scale = thickness / exported
+                name, exported = pool_variant(realm, int(label.rsplit("D", 1)[1]))
+                a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z + sz * 50.0), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(1.0, 1.0, (sz / exported) if realm == "WORLD-ZERO" else 1.0)) for x, y, z, yaw, sx, sy, sz in plots])
             d = int(label.rsplit("D", 1)[1])
             ground = a.get_editor_property("ground")
-            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in district_ground(realm, d) + rubble])
+            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in district_ground(realm, d) + rubble])
             if realm != "WORLD-ZERO":
                 ground.set_cull_distances(0, 0)   # the ground slab must never cull
             ground.set_cast_shadow(False)
@@ -404,7 +412,7 @@ def dress_islands_steps(realms, decor_per_district=3):
                 dec.get_editor_property("plots").set_static_mesh(mesh)
                 dec.set_editor_property("realm", realm)
                 dec.set_editor_property("district", d)
-                dec.lay_plots([n for n, _, _, _, _ in spots], [unreal.Transform(unreal.Vector(x, y, top), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(1.0, 1.0, 1.0)) for _, x, y, top, yaw in spots])
+                dec.lay_plots([n for n, _, _, _, _ in spots], [unreal.Transform(unreal.Vector(x, y, top), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(1.0, 1.0, 1.0)) for _, x, y, top, yaw in spots])
                 dec.set_actor_label("Decor_%s_D%02d_%d" % (realm.replace("-", ""), d, k))
                 dec.set_folder_path("Realms/%s/Decor" % realm if realm != "WORLD-ZERO" else "Decor")
                 dec.tags = [unreal.Name("Decor"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
@@ -600,7 +608,7 @@ def extras_for_labelled_steps(realms):
         ex = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(0.0, 0.0, 0.0))
         ex.set_editor_property("realm", realm)
         ex.set_editor_property("district", -1)
-        ex.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in extras])
+        ex.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, 0.0, yaw), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in extras])
         ex.get_editor_property("ground").set_cast_shadow(False)
         ex.set_actor_label("Extras_%s_Hub" % realm.replace("-", ""))
         ex.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
@@ -609,6 +617,291 @@ def extras_for_labelled_steps(realms):
         yield "%s: %d labelled slabs given %d terraces/rocks" % (realm, len(slabs), len(extras))
     P.save_world()
     return made
+
+
+def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
+    """Plug the holes in a hub island's own floor (02:54: a trace at World Zero's hub centre hit nothing): probe a
+    grid across the hub estate (3x3 cells, 768 m) and lay one slab per empty grid square at the spawn's floor
+    height, as instances of one Floor_<R>_Hub district actor. Idempotent (replaced on rerun). One row per tick."""
+    import unreal
+    import daedalus_land_grid as G
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    world = _world()
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    label = "Floor_%s_Hub" % realm.replace("-", "")
+    for a in list(sub.get_all_level_actors()):
+        if a.get_actor_label() == label:
+            sub.destroy_actor(a)
+    if realm == "WORLD-ZERO":
+        ps = [a for a in sub.get_all_level_actors() if a.get_class().get_name() == "PlayerStart"]
+        at = ps[0].get_actor_location() if ps else unreal.Vector(R.ORIGINS[realm][0], R.ORIGINS[realm][1], R.GROUND_Z)
+        top = at.z - 100.0   # the hub plane every plot uses (P._editor_inputs); 02:58: the chunk under the spawn is 1.8 m higher and left the blocks in pits
+        cx, cy = R.ORIGINS[realm]
+    else:
+        cx, cy = R.ORIGINS[realm]
+        top = R.GROUND_Z
+    half = R.hub_half_cm()
+    n = int((half * 2) // step_cm)
+    holes = []
+    probed = 0
+    for iy in range(n):
+        y = cy - half + step_cm * (iy + 0.5)
+        for ix in range(n):
+            x = cx - half + step_cm * (ix + 0.5)
+            probed += 1
+            hit = unreal.SystemLibrary.line_trace_single(world, unreal.Vector(x, y, top + 2000), unreal.Vector(x, y, top - 6000), unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
+            # floored only when something is at the plane (+-1.5 m); a hit far below is a pit, a hit far above is a prop on air
+            if not hit or abs(hit.to_tuple()[4].z - top) > 150.0:
+                holes.append((x, y))
+        yield "%s hub row %d/%d: %d holes so far" % (realm, iy + 1, n, len(holes))
+    if holes:
+        # 03:00: slabs only in the empty squares left pits round every block smaller than a square; one full plate
+        # 2 cm under the plane, and everything already standing there stays on top of it
+        a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, unreal.Vector(cx, cy, top))
+        a.set_editor_property("realm", realm)
+        a.set_editor_property("district", -2)
+        a.lay_ground([unreal.Transform(unreal.Vector(cx, cy, top - 30.0 - 200.0), unreal.Rotator(0, 0, 0), unreal.Vector(half * 2 / 100.0, half * 2 / 100.0, 4.0))])   # 30 cm under: 2 cm z-fought with every floor on it (03:05 'screen glitching')
+        a.get_editor_property("ground").set_cull_distances(0, 0)
+        a.set_actor_label(label)
+        a.set_folder_path("Lands" if realm == "WORLD-ZERO" else "Realms/%s/Lands" % realm)
+        a.tags = [unreal.Name("Floor"), unreal.Name("Realm:%s" % realm)]
+    P.save_world()
+    return {"realm": realm, "probed": probed, "holes": len(holes), "top_cm": round(top)}
+
+
+POOL = "/Game/Daedalus/Art/Islands/NativePool"
+FRAG_THICK_M = [8.0 + 12.0 * k / 11.0 for k in range(12)]     # Sol's manifest: Island_Frag_01..12 are 8..20 m thick
+PAD_THICK_M = [1.0 + 0.4 * k for k in range(6)]                 # Island_Pad_01..06 are 1..3 m thick
+
+
+def pool_variant(realm, d):
+    """Pure: (mesh name, exported thickness m) for a district: World Zero fragments, realm pads; deterministic."""
+    if realm == "WORLD-ZERO":
+        k = (d * 7 + 3) % 12
+        return "Island_Frag_%02d" % (k + 1), FRAG_THICK_M[k]
+    k = (d * 5 + 1) % 6
+    return "Island_Pad_%02d" % (k + 1), PAD_THICK_M[k]
+
+
+def mesh_pool_steps(realms):
+    """Swap the cube for Sol's island meshes (PR140, 08:35): each Lands_<R>_D<dd> actor's Plots instances become one
+    pool mesh (top-centre origin, 92 m footprint): translation = the slab's top, yaw kept, Z scale = slab thickness /
+    exported thickness for fragments, 1 for pads. Cells and extras untouched, so the ledger and deeds hold. One
+    district per tick; rerunning re-derives from the current instances (idempotent)."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cube = unreal.load_asset(P.CUBE)
+    done = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() != "DaedalusLandDistrict" or not a.get_actor_label().startswith("Lands_"):
+            continue
+        realm = str(a.get_editor_property("realm"))
+        if realm not in realms:
+            continue
+        d = int(a.get_editor_property("district"))
+        name, exported = pool_variant(realm, d)
+        mesh = unreal.load_asset("%s/%s.%s" % (POOL, name, name))
+        if not mesh:
+            yield "%s D%02d: %s missing in %s" % (realm, d, name, POOL)
+            continue
+        comp = a.get_editor_property("plots")
+        cells = list(a.get_editor_property("cells"))
+        was_cube = comp.static_mesh == cube
+        ts = []
+        for i in range(len(cells)):
+            t = comp.get_instance_transform(i, True)
+            loc, rot, sc = t.translation, t.rotation.rotator(), t.scale3d
+            if was_cube:   # cube: centre-origin, scale = metres; pool mesh: top-centre, unit = 92 m
+                top = loc.z + sc.z * 50.0
+                thick = sc.z
+            else:          # already a pool mesh: origin is the top, thickness = Z scale * exported
+                top = loc.z
+                thick = sc.z * exported if realm == "WORLD-ZERO" else exported
+            zscale = thick / exported if realm == "WORLD-ZERO" else 1.0
+            ts.append(unreal.Transform(unreal.Vector(loc.x, loc.y, top), unreal.Rotator(0.0, 0.0, rot.yaw), unreal.Vector(1.0, 1.0, zscale)))
+        comp.set_static_mesh(mesh)
+        a.lay_plots(cells, ts)
+        a.modify(True)
+        done[realm] = done.get(realm, 0) + 1
+        yield "%s D%02d: %d plots as %s" % (realm, d, len(cells), name)
+    P.save_world()
+    return done
+
+
+def reconcile_steps(realm):
+    """After a crash mid-stream (08:41: GPU crash during Gallery): actors saved into D<dd> sublevels still exist in
+    the persistent level (its removal was never saved). Keep the sublevel copy, destroy the persistent duplicate,
+    save the persistent level. One district package per tick."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    tag = "Realm:%s" % realm
+    persistent = str(_world().get_outermost().get_name())
+    by_label = {}
+    for a in sub.get_all_level_actors():
+        if not any(str(t) == tag for t in a.tags):
+            continue
+        by_label.setdefault(a.get_actor_label(), []).append((a, str(a.get_level().get_outermost().get_name())))   # level read once: a destroyed actor has none
+    dup = {l: v for l, v in by_label.items() if len(v) > 1}
+    gone = 0
+    pkgs = sorted({lvl for v in dup.values() for _, lvl in v if lvl != persistent})
+    done_labels = set()
+    for pkg in pkgs:
+        n = 0
+        for l, v in dup.items():
+            if l in done_labels or pkg not in {lvl for _, lvl in v}:
+                continue
+            for a, lvl in v:
+                if lvl == persistent:
+                    sub.destroy_actor(a)
+                    gone += 1
+                    n += 1
+            done_labels.add(l)
+        yield "%s %s: %d persistent duplicates removed" % (realm, pkg.rsplit("/", 1)[-1], n)
+    P.save_world()
+    return {"realm": realm, "duplicate_labels": len(dup), "removed": gone, "packages": len(pkgs)}
+
+
+# ---- great detail (Richey 08:58: "build out all the islands in great detail, chunks of 10 then scale up") -------
+
+BIOMES = ("meadow", "forest", "rocky", "crystal", "mushroom")
+SPECIES = {   # species -> (asset-name regex, scale range, how many per island per biome weight)
+    "tree": ("Prop_DS_Tree_", (0.8, 1.4)),
+    "boulder": ("Prop_Island_Boulder_", (0.7, 1.6)),
+    "bush": ("Prop_Dress_AMF_Bush_V", (0.8, 1.3)),
+    "grass": ("Prop_Grass_", (0.9, 1.5)),
+    "fern": ("Prop_Fern_|Prop_Shrub_Fern", (0.8, 1.3)),
+    "flower": ("Prop_Flower_|Prop_Bloom_", (0.9, 1.2)),
+    "mushroom": ("Prop_Dress_PYT_Mushroom_V", (0.8, 1.6)),
+    "crystal": ("Prop_OR_Crystal_", (0.7, 1.5)),
+}
+COUNTS = {   # biome -> {species: (min, max)}
+    "meadow":   {"grass": (10, 18), "flower": (6, 12), "bush": (2, 4), "tree": (1, 3), "boulder": (0, 2)},
+    "forest":   {"tree": (5, 9), "fern": (4, 8), "bush": (2, 5), "grass": (4, 8), "boulder": (1, 2)},
+    "rocky":    {"boulder": (4, 7), "grass": (3, 6), "bush": (1, 3), "tree": (0, 2), "crystal": (0, 2)},
+    "crystal":  {"crystal": (4, 8), "boulder": (2, 4), "grass": (2, 5), "tree": (0, 1)},
+    "mushroom": {"mushroom": (5, 10), "fern": (3, 6), "tree": (2, 4), "boulder": (0, 2), "grass": (2, 4)},
+}
+
+
+def biome_of(n):
+    return BIOMES[int(_h(n, 50) * len(BIOMES))]
+
+
+def detail_plan(n, x, y, top, yaw, realm, pools):
+    """Pure: [(species, variant index, x, y, z, yaw, scale)] for one island: a biome from the deed, counts per
+    species from the biome, every prop inside a 38 m disc on the top (the slab is 92 m; terraces sit nearer the
+    centre so props keep to a ring 8..38 m), turned with the island's yaw, scaled per hash. `pools` = {species:
+    number of variants} so a variant index is stable even when the asset list grows."""
+    import math
+    out = []
+    b = biome_of(n)
+    salt = 100
+    for species, (lo, hi) in COUNTS[b].items():
+        k = len(pools.get(species, []))
+        if k == 0:
+            continue
+        count = lo + int(_h(n, salt) * (hi - lo + 1))
+        salt += 1
+        smin, smax = SPECIES[species][1]
+        for i in range(count):
+            r = (8.0 + 30.0 * _h(n, salt)) * 100.0
+            ang = _h(n, salt + 1) * 6.283185 + math.radians(yaw)
+            px, py = x + math.cos(ang) * r, y + math.sin(ang) * r
+            out.append((species, int(_h(n, salt + 2) * k) % k, px, py, top, _h(n, salt + 3) * 360.0, smin + (smax - smin) * _h(n, salt + 4)))
+            salt += 5
+    return out
+
+
+def _species_pools(limit_per_species=6):
+    """{species: [asset paths]} from the asset registry, a bounded, sorted (stable) pick per species."""
+    import re
+    import unreal
+    reg = unreal.AssetRegistryHelpers.get_asset_registry()
+    pools = {s: [] for s in SPECIES}
+    for d in reg.get_assets_by_path("/Game", recursive=True):
+        if str(d.asset_class_path.asset_name) != "StaticMesh":
+            continue
+        name = str(d.asset_name)
+        for s, (pat, _) in SPECIES.items():
+            if re.search(pat, name):
+                pools[s].append(str(d.package_name) + "." + name)
+                break
+    return {s: sorted(v)[:limit_per_species] for s, v in pools.items()}
+
+
+def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
+    """Great detail on the next `limit` islands of a realm (deed order from the district actors): props as
+    instances on Detail_<R>_D<dd>_<species><k> actors (one mesh each), plus Sol's world-position ground material
+    on the district's plots when given. Resumable by `start`; replaces that island's existing detail. One island
+    per tick; saves at the end."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    pools = _species_pools()
+    meshes = {}
+    for s, paths in pools.items():
+        meshes[s] = [unreal.load_asset(p) for p in paths]
+    mat = unreal.load_asset(ground_material) if ground_material else None
+    # islands in deed order from the Lands_ actors (instance i = cell i)
+    lands = []
+    actors = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() == "DaedalusLandDistrict" and a.get_actor_label().startswith("Lands_") and str(a.get_editor_property("realm")) == realm:
+            d = int(a.get_editor_property("district"))
+            actors[d] = a
+            comp = a.get_editor_property("plots")
+            for i, n in enumerate(a.get_editor_property("cells")):
+                t = comp.get_instance_transform(i, True)
+                lands.append((int(n), d, t.translation.x, t.translation.y, t.translation.z, t.rotation.rotator().yaw))
+        elif a.get_class().get_name() == "DaedalusLandDistrict" and a.get_actor_label().startswith("Detail_%s_" % realm.replace("-", "")):
+            actors.setdefault("detail", {})[a.get_actor_label()] = a
+    lands.sort()
+    chunk = lands[start:start + limit]
+    existing = actors.pop("detail", {})
+    per_actor = {}   # label -> (district, mesh, [transforms], [cells])
+    placed = 0
+    for n, d, x, y, top, yaw in chunk:
+        for species, k, px, py, pz, pyaw, sc in detail_plan(n, x, y, top, yaw, realm, pools):
+            label = "Detail_%s_D%02d_%s%d" % (realm.replace("-", ""), d, species, k)
+            row = per_actor.setdefault(label, (d, meshes[species][k], [], []))
+            row[2].append(unreal.Transform(unreal.Vector(px, py, pz), unreal.Rotator(0.0, 0.0, pyaw), unreal.Vector(sc, sc, sc)))
+            row[3].append(n)
+            placed += 1
+        yield "%s deed %d (%s): %d props" % (realm, n, biome_of(n), placed)
+    for label, (d, mesh, ts, cells) in per_actor.items():
+        a = existing.get(label)
+        if a is None:
+            a = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, actors[d].get_actor_location())
+            a.get_editor_property("plots").set_static_mesh(mesh)
+            a.set_editor_property("realm", realm)
+            a.set_editor_property("district", d)
+            a.set_actor_label(label)
+            a.set_folder_path("Detail" if realm == "WORLD-ZERO" else "Realms/%s/Detail" % realm)
+            a.tags = [unreal.Name("Detail"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
+            a.lay_plots(cells, ts)
+        else:   # keep what other islands already put on this actor, replace this chunk's deeds
+            comp = a.get_editor_property("plots")
+            old_cells = list(a.get_editor_property("cells"))
+            keep_t, keep_c = [], []
+            mine = {c for c in cells}
+            for i, c in enumerate(old_cells):
+                if int(c) not in mine:
+                    keep_t.append(comp.get_instance_transform(i, True))
+                    keep_c.append(int(c))
+            a.lay_plots(keep_c + cells, keep_t + ts)
+        comp = a.get_editor_property("plots")
+        comp.set_cull_distances(0, 60000)   # 600 m: detail is for the walker and the low flyer
+        comp.set_cast_shadow(False)
+        a.modify(True)
+    if mat is not None:
+        for d in {d for _, d, _, _, _, _ in chunk}:
+            actors[d].get_editor_property("plots").set_material(0, mat)
+            actors[d].modify(True)
+    P.save_world()
+    return {"realm": realm, "islands": len(chunk), "props": placed, "actors": len(per_actor), "next_start": start + len(chunk)}
 
 
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km

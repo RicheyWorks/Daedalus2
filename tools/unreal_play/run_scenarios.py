@@ -78,7 +78,7 @@ def main(argv):
             if r.get("interrupted"):
                 print("%s INTERRUPTED again: counted as not run" % name, flush=True)
                 continue
-        print("%s error= %s passed=%s/%s" % (name, s.get("error"), r.get("passed"), r.get("total")), flush=True)
+        print("%s error= %s passed=%s/%s fps=%s frames=%s seconds=%s" % (name, s.get("error"), r.get("passed"), r.get("total"), r.get("fps"), r.get("frames"), r.get("seconds")), flush=True)
         for c in r.get("checks", []):
             print("  %s %s :: %s" % ("PASS" if c["pass"] else "FAIL", c["check"], (c.get("detail") or "")[:260]), flush=True)
         tot += r.get("total") or 0
