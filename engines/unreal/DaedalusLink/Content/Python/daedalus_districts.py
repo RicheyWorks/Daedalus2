@@ -335,7 +335,8 @@ def dress_islands_steps(realms, decor_per_district=3):
             ground_z = R.GROUND_Z if realm != "WORLD-ZERO" else z0
             plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)
             a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
-            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in rubble])
+            if realm == "WORLD-ZERO":   # a realm district's Ground holds its solid slab (ground_steps): leave it
+                a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in rubble])
             d = int(label.rsplit("D", 1)[1])
             for k, mesh in enumerate(meshes):
                 spots = [s for j, s in enumerate(decor) if j % len(meshes) == k]
@@ -426,6 +427,53 @@ def export_ledger_steps(realms, out_dir=None):
     return result
 
 
+def ground_steps(realms=("GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH")):
+    """Solid ground under every district of the 3D realms (Richey 02:17: "the first islands have holes in the floor
+    you were supposed to fill" — the floating-fragment story is World Zero's only; a realm island has ground with
+    no gaps). One 2,560 m x 4 m slab per district on the district actor's Ground instances, top 1 m under the plot
+    tops so plots read as pads; no cull on ground. One district per tick."""
+    import unreal
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    done = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() != "DaedalusLandDistrict" or not a.get_actor_label().startswith("Lands_"):
+            continue
+        realm = str(a.get_editor_property("realm"))
+        if realm not in realms:
+            continue
+        comp = a.get_editor_property("plots")
+        n = comp.get_instance_count()
+        if n == 0:
+            continue
+        xs, ys = [], []
+        for i in range(n):
+            t = comp.get_instance_transform(i, True).translation
+            xs.append(t.x)
+            ys.append(t.y)
+        # the district's centre from its laid cells (the hub districts are partial: use the cell grid, not the mean)
+        import daedalus_land_grid as G
+        d = int(a.get_editor_property("district"))
+        cells = district_cells(d)
+        cx = sum(G.cell(c)[0] for c in cells) / float(len(cells))
+        cy = sum(G.cell(c)[1] for c in cells) / float(len(cells))
+        origin = R.ORIGINS[realm]
+        x = origin[0] + (cx - G.HUB) * G.PITCH_M * 100.0
+        y = origin[1] + (cy - G.HUB) * G.PITCH_M * 100.0
+        top = R.GROUND_Z - 100.0
+        a.lay_ground([unreal.Transform(unreal.Vector(x, y, top - GROUND_THICK_M * 50.0), unreal.Rotator(0.0, 0.0, 0.0),
+                                       unreal.Vector(GROUND_M, GROUND_M, GROUND_THICK_M))])
+        g = a.get_editor_property("ground")
+        g.set_cull_distances(0, 0)
+        g.set_cast_shadow(False)
+        a.modify(True)
+        done[realm] = done.get(realm, 0) + 1
+        yield "%s D%02d: ground slab at (%.0f, %.0f)" % (realm, d, x, y)
+    P.save_world()
+    return done
+
+
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
 RUBBLE_CULL = (0, 200000)
 
@@ -448,7 +496,8 @@ def perf_steps():
             ground = a.get_editor_property("ground")
             lo, hi = CULL.get(kind, CULL["Lands"])
             plots.set_cull_distances(lo, hi)
-            ground.set_cull_distances(*RUBBLE_CULL)
+            if realm == "WORLD-ZERO":
+                ground.set_cull_distances(*RUBBLE_CULL)   # rubble; a realm's ground slab is never culled
             ground.set_cast_shadow(False)
             if kind == "Decor":
                 plots.set_cast_shadow(False)
