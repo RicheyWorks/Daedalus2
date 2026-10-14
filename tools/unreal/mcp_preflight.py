@@ -6,6 +6,9 @@ import json
 from pathlib import Path
 import re
 import sys
+import time
+import math
+from datetime import datetime,timezone
 
 DESCRIPTORS={
     'ModelContextProtocol':'Experimental/ModelContextProtocol/ModelContextProtocol.uplugin',
@@ -53,9 +56,20 @@ def listener_fields(line):
 
 def probe_initialization(timeout=5):
     # Reuse the owner's client. No tools/list, tools/call or startup console command.
-    sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-    from unreal_mcp.client import Mcp,URL
+    started=time.monotonic()
+    observation={'observed_utc':datetime.now(timezone.utc).isoformat(),
+                 'url':'http://127.0.0.1:8000/mcp','native_tools_called':False,
+                 'per_request_timeout_seconds':None}
     try:
+        if type(timeout) not in (int,float) or not math.isfinite(timeout) or not 0<timeout<=15:
+            raise ValueError('Probe timeout must be finite and0..15 seconds')
+        observation['per_request_timeout_seconds']=timeout
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+        from unreal_mcp import client as owner_client
+        observation['client_source_sha256']=hashlib.sha256(Path(owner_client.__file__).read_bytes()).hexdigest()
+        Mcp,URL=owner_client.Mcp,owner_client.URL
+        if URL!='http://127.0.0.1:8000/mcp':raise ValueError('Owner client default is not the expected loopback endpoint')
+        observation['url']=URL
         client=Mcp(timeout=timeout)
         server=client.server
         valid=(isinstance(server,dict) and isinstance(server.get('protocolVersion'),str) and
@@ -63,13 +77,15 @@ def probe_initialization(timeout=5):
                isinstance(server.get('serverInfo'),dict) and isinstance(server['serverInfo'].get('name'),str) and
                isinstance(client.sid,str) and bool(client.sid))
         if not valid:raise ValueError('Initialization response/session evidence incomplete')
-        return {'initialization_observed':True,'url':URL,'protocol_version':server['protocolVersion'],
-                'server_name':server['serverInfo']['name'],'session_id_observed':True,
-                'server_metadata_complete':bool(server['serverInfo']['name'] and server['serverInfo'].get('version')),
-                'native_tools_called':False,'server_ready':True}
+        return dict(observation,initialization_observed=True,protocol_version=server['protocolVersion'],
+                elapsed_seconds=round(time.monotonic()-started,6),
+                server_name=server['serverInfo']['name'],session_id_observed=True,
+                server_metadata_complete=bool(server['serverInfo']['name'] and server['serverInfo'].get('version')),
+                server_ready=True)
     except Exception as error:
-        return {'initialization_observed':False,'url':URL,'server_ready':None,
-                'error':{'type':type(error).__name__,'message':str(error)[-1000:]},'native_tools_called':False}
+        return dict(observation,initialization_observed=False,server_ready=None,
+                    elapsed_seconds=round(time.monotonic()-started,6),
+                    error={'type':type(error).__name__,'message':str(error)[-1000:]})
 
 
 def inspect(project,engine):
@@ -134,6 +150,7 @@ def main(argv=None):
     parser.add_argument('--project',required=True,type=Path)
     parser.add_argument('--engine',required=True,type=Path)
     parser.add_argument('--probe',action='store_true',help='opt-in loopback MCP initialize through the existing client; no native tools')
+    parser.add_argument('--probe-timeout',type=float,default=5,help='per HTTP request,0..15 seconds; initialize uses multiple requests')
     args=parser.parse_args(argv)
     try:
         result=inspect(args.project,args.engine)
@@ -145,7 +162,7 @@ def main(argv=None):
                 'server_ready':None,'editor_queried':False,'mutation':False,
                 'scope':'Unavailable file evidence; no inference about the running editor or MCP server'}
     if args.probe:
-        result['probe']=probe_initialization()
+        result['probe']=probe_initialization(args.probe_timeout)
         result['server_ready']=result['probe']['server_ready']
     print(json.dumps(result,indent=2))
     return 0 if result['configuration_matches_request'] and (not args.probe or result['server_ready'] is True) else 2
