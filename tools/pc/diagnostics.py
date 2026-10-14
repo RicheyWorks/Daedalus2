@@ -35,6 +35,10 @@ PROVENANCE = frozenset(("live", "imported"))
 MAX_ARTIFACT_BYTES = 64 * 1024 * 1024
 
 
+def _now():
+    return datetime.now(timezone.utc)
+
+
 def _utc(value):
     """Reject naive times; never infer the machine's timezone for an import."""
     try:
@@ -191,19 +195,20 @@ def _windows_memory():
 def collect_windows(*, observed_at=None):
     """One system-memory read; no subprocess, top-process scan or policy action."""
     if os.name != "nt":
-        now = observed_at if observed_at is not None else datetime.now(timezone.utc)
+        now = observed_at if observed_at is not None else _now()
         return snapshot("windows_psapi", {}, provenance="live", sampled_at=None,
                         observed_at=now, availability="unsupported", reason="windows_only")
     try:
         values = _windows_memory()
     except (OSError, ValueError):
-        now = observed_at if observed_at is not None else datetime.now(timezone.utc)
+        now = observed_at if observed_at is not None else _now()
         return snapshot("windows_psapi", {}, provenance="live", sampled_at=None,
                         observed_at=now, availability="failed", reason="collection_failed")
-    # This collector measures now. An injected observation time also supplies
-    # the sample time so deterministic callers do not fabricate clock skew.
-    now = observed_at if observed_at is not None else datetime.now(timezone.utc)
-    result = snapshot("windows_psapi", values, provenance="live", sampled_at=now, observed_at=now)
+    # Capture time comes from the post-read clock. A caller's observation time
+    # may compare ages but cannot relabel a live measurement as historical data.
+    captured = _now()
+    observed = observed_at if observed_at is not None else captured
+    result = snapshot("windows_psapi", values, provenance="live", sampled_at=captured, observed_at=observed)
     result["capabilities"]["minimized_live_read"] = "not_applicable"
     return result
 
@@ -263,7 +268,7 @@ def artifact_snapshot(path, *, observed_at, sampled_at=None, max_bytes=MAX_ARTIF
     kind = {".tmogtrace": "opaque_trace", ".txt": "unverified_text_export",
             ".png": "unverified_image", ".jpg": "unverified_image",
             ".jpeg": "unverified_image"}.get(suffix, "opaque_file")
-    result["artifact"] = {"kind": kind, "size_bytes": size, "sha256": digest.hexdigest(),
+    result["artifact"] = {"availability": "available", "kind": kind, "size_bytes": size, "sha256": digest.hexdigest(),
                           "schema_verified": False}
     # The artifact itself is available; live metrics and capture time are not.
     result["reason"] = "opaque_import_no_metric_binding"
