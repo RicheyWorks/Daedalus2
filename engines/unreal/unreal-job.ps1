@@ -128,11 +128,12 @@ if ($Run) {
 }
 
 if ($Start) {
-    $Id = "build-" + (Get-Date -Format "MMdd-HHmmss")
-    $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }   # minimized, no focus
+    $Id = "build-" + (Get-Date -Format "MMdd-HHmmss") + "-" + [guid]::NewGuid().ToString("N")
+    $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 } -ErrorAction Stop   # minimized, no focus
     $cmd = "powershell.exe -NoProfile -File `"$PSCommandPath`" -Run -Id $Id -Project `"$Project`"" + $(if ($Fast) { " -Fast" } else { "" })
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{
-        CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
+        CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup } -ErrorAction Stop
+    if ($r.ReturnValue -ne 0 -or -not $r.ProcessId) { throw "could not start $Id (Win32_Process.Create returned $($r.ReturnValue), pid=$($r.ProcessId))" }
     "started $Id pid=$($r.ProcessId)"
     exit
 }

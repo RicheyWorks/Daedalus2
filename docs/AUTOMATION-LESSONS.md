@@ -538,3 +538,11 @@ A native Windows regression blocks the receipt with a directory, executes the ca
 command once, and verifies that the same ID returns its actual exit code 23. CIM is a stand-in;
 this verifies launcher behavior without touching Unreal. PowerShell wraps warning lines, so
 assert warning text after whitespace normalization rather than assuming one output line.
+
+
+## Build launch IDs and CIM acceptance are part of the harness contract (2026-10-13, Codex)
+The Unreal build launcher also used second-resolution IDs and printed started even when
+Win32_Process.Create refused the launch. Append a GUID and require return value zero plus
+a nonzero PID; propagate CIM transport errors. A native Windows fixture freezes the clock,
+captures two launches and three refusal cases without executing either build command.
+This protects log identity and truthful launch reporting; it does not prove build completion.
