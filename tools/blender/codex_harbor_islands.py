@@ -6,9 +6,14 @@ Exports separated role meshes in GLB, editable .blend and placement/provenance m
 Collision and gameplay are deliberately separate Unreal integration steps.
 """
 from pathlib import Path
-import sys, math, random, json, hashlib
+import sys, math, random, json, hashlib, argparse
 
-OUT = Path(sys.argv[sys.argv.index('--') + 1])
+parser = argparse.ArgumentParser()
+parser.add_argument('output')
+parser.add_argument('--with-terrain', action='store_true',
+                    help='Optional original shell; default exports additive dressing only')
+args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
+OUT = Path(args.output)
 if OUT.exists() and any(OUT.iterdir()):
     raise ValueError('Use a fresh output directory; existing entries must be retained')
 exec(compile(Path(__file__).with_name('portal_common.py').read_text(), __file__, 'exec'))
@@ -62,6 +67,7 @@ def terrain(seed):
     for material in [grass, sand, rock]: mesh.materials.append(material)
     for polygon, slot in zip(mesh.polygons, slots): polygon.material_index = slot
     # Exactly 92m XY, matching the existing pool's native footprint contract.
+    bpy.context.view_layer.update()
     obj.scale.x = 92 / obj.dimensions.x; obj.scale.y = 92 / obj.dimensions.y
     bpy.context.view_layer.objects.active = obj; obj.select_set(True)
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
@@ -128,14 +134,15 @@ records = []
 for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove']):
     bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
     parts = []
-    group('Terrain', lambda: terrain(8401+index))
+    if args.with_terrain:
+        group('Terrain', lambda: terrain(8401+index))
     group('Dock', dock)
     group('Beacon', lambda: lighthouse(12+index*3))
     group('Boathouse', boathouse)
     group('CaveArch', cave)
     group('Foliage', lambda: foliage(950+index, index == 1))
     group('Lagoon', lambda: ball((4, -26, .05), (9, 12, .12), water))
-    # Stream meets the southern rim, with separate waterfall ribbons below it.
+    # Water props require fitting to the receiving terrain's shoreline on placement.
     group('Waterfall', lambda: box((3, -43, -9), (2.5, .25, 18), water))
     name = 'CodexHarbor_' + title
     objects = [o for o in bpy.context.scene.objects if o.type == 'MESH']
@@ -145,9 +152,13 @@ for index, title in enumerate(['CopperBeacon', 'BlossomHarbor', 'StormwatchCove'
     bpy.ops.export_scene.gltf(filepath=str(glb), export_format='GLB', use_selection=True, export_animations=False)
     bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(name+'.blend')))
     records.append({'id': name, 'file': glb.name, 'sha256': hashlib.sha256(glb.read_bytes()).hexdigest(),
-                    'seed': 8401+index, 'footprint_metres': [92, 92], 'origin': 'ground centre Z=0',
+                    'seed': 8401+index, 'foliage_seed': 950+index,
+                    'includes_terrain': args.with_terrain, 'target_footprint_metres': [92, 92],
+                    'origin': 'receiving terrain ground centre Z=0',
                     'objects': len(objects), 'roles': sorted({o['harbor_role'] for o in objects}),
                     'stage': 'Blender export; Unreal placement, collision and gameplay pending'})
     (OUT/'harbor-manifest.json').write_text(json.dumps({'schemaVersion': 1, 'assets': records,
-        'native_verified': False, 'author': 'team-codex'}, indent=2)+'\n')
+        'native_verified': False, 'author': 'team-codex',
+        'placement_contract': 'Metres +Z up; role objects retain local positions; fit to receiving terrain',
+        'collision_contract': 'No collision authored; foliage/water nonblocking; dock/building collision required'}, indent=2)+'\n')
     print('HARBOR_EXPORTED '+name, flush=True)
