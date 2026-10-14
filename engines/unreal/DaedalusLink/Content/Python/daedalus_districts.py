@@ -229,17 +229,18 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, suble
             if cells:
                 a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(origin[0], origin[1], ground))
                 a.static_mesh_component.set_visibility(False)   # the root is an empty anchor; the plots are instances
-                ism = unreal.new_object(unreal.InstancedStaticMeshComponent, outer=a, name="Plots")
+                # AddComponentByClass registers and attaches (UE Python has no register_component); the instances
+                # are world-space transforms, so the anchor's own location does not matter.
+                ism = a.add_component_by_class(unreal.InstancedStaticMeshComponent, False, unreal.Transform(), False)
                 ism.set_static_mesh(cube)
                 ism.set_mobility(unreal.ComponentMobility.STATIC)
-                ism.attach_to_component(a.root_component, "", unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, unreal.AttachmentRule.KEEP_WORLD, False)
-                ism.register_component()
-                a.add_instance_component(ism)
+                a.finish_adding_component(ism)
+                ts = []
                 for n in cells:
                     x, y = G.cell(n)
-                    t = unreal.Transform(unreal.Vector(origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground - P.SLAB_M * 50.0),
-                                         unreal.Rotator(0.0, 0.0, 0.0), unreal.Vector(P.LAND_M, P.LAND_M, P.SLAB_M))
-                    ism.add_instance(t, True)
+                    ts.append(unreal.Transform(unreal.Vector(origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground - P.SLAB_M * 50.0),
+                                               unreal.Rotator(0.0, 0.0, 0.0), unreal.Vector(P.LAND_M, P.LAND_M, P.SLAB_M)))
+                ism.add_instances(ts, False, True)
                 a.set_actor_label(label)
                 a.set_folder_path("Realms/%s/Lands" % realm)
                 a.tags = [unreal.Name("Lands"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d), unreal.Name("Cells:%s" % ",".join(str(c) for c in cells))]
