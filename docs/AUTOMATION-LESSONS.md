@@ -1303,3 +1303,33 @@ the pagefile size is Richey's setting, not the bots'.
   halloween cluster is a LABYRINTH realm asset.
 - Cluster palettes: colour keys are shared across islands, so a theme's grass override repainted every kind; the fix
   is per-kind key suffixes (`grass@mesa`) added to the cluster palette.
+
+## 2026-10-14 14:20 — How Team Claude builds islands in Blender (recipe + seeds)
+**Pipeline.** `plan(seed, realm, kind)` is pure Python: it returns `{layer: [(x, y, z, colour_key)]}` at 1 voxel =
+1 m with the walk surface at z=0 and the pivot at the plateau centre. Nothing touches `bpy` until `build()`, so the
+planner is unit-tested in the cloud, previewed with a 20-line raster, and only then meshed. Meshing is
+`voxel_island.greedy_quads` (coplanar same-colour faces merged into rectangles; colour noise in 4-voxel patches
+and keel jaggedness per 3×3 column so the merge pays: 40k → 11k quads per island) into one bmesh per layer group
+(body / water / clouds) with a `Col` byte-colour attribute (palette sRGB-encoded because Unreal reads FBX colours
+as sRGB). Collision = one `UCX_<body>_NN` box per walk-surface rectangle. Export = FBX (`FBX_SCALE_ALL`, −Y
+forward, Z up) at 100 units per voxel → place in Unreal at scale 0.01. Previews: Workbench, `color_type VERTEX`,
+and the `Col` attribute must be the mesh's **active color** or it renders black. Always headless
+(`blender -b --factory-startup --python-exit-code 1 --python … -- args`), absolute output paths, one process at a
+time on the shared PC; never the GUI lock.
+
+**The seed decides everything.** `seed % 6` → biome/kind, `seed % 4 == 1` → two-lobed footprint, and
+`island_chemistry.profile(seed, realm)` rolls grade (COMMON 70 / RICH 25 / LEGENDARY 5 — the meteor crater and
+starmetal appear only on LEGENDARY), spring purity (filter hut), herbs, orchard species, crops, livestock, power
+source, fish, and the four goods. Same seed + realm = same island forever; a different realm = a different
+island from the same seed. Seeds used today: deeds 240–368 (World Zero, v1–v4 contest islands, placed), hero
+`Island_H39` (LEGENDARY: apple/cherry/pear, water wheel, filter needed), types H91 volcano, H124 frost, H125 mesa,
+H131 mire, H144 crystal (all LEGENDARY rolls so the crater shows), clusters seed 7 (members 70–73), Super Island
+seed 3 (members 30–33), hero batch 1000–1059 (kind = seed % 6). Find LEGENDARY seeds with
+`[s for s in range(N) if CH.profile(s)["geology"]["grade"] == "LEGENDARY"]`.
+
+**Composition rules that read from the air** (the quality bar + Codex's review notes): fat keel with ore veins and
+the glowing Heartstone, terraced rim, a hill with the lake on it, a stream with a readable source → basin →
+outlet → brink → waterfall and the destination (ocean basin) visible below, a sky river that arcs through a cloud,
+one principal landmark (cottage + chimney smoke) and clusters at different heights, groves not grids, flowers in
+beds and drifts, props with a reason (well, filter hut, water wheel, herb ring, trough, orchard, crop rows, pen,
+shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rails, cave mouth, crater).
