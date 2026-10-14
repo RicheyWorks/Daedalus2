@@ -152,6 +152,30 @@ The first source milestone is frozen in draftPR146; initial code was published a
 
 Rollback, if needed, uses the owner's retained importer source and a between-job reload. Preserve receipt/snapshot evidence; reverting Python does not undo imported assets. The current CodexContest window does not satisfy step4, and no Root deployment was attempted.
 
+### Codex production-use follow-up
+
+Owner30702 identified the actual working native importer as `daedalus_codex_prepared_assets.py`, sourceSHA256 `dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982`, published inPR147. Its24-group/47-mesh import completed before this adapter; that outcome is not new-wrapper adoption. The older CLI delivery path is not substituted for this verified backend.
+
+The separate [Codex adapter](../../engines/unreal/DaedalusLink/Content/Python/daedalus_codex_ingestion.py) now reuses the portable receipt layer with that exact importer. It executes verified source bytes in a private module, preserves its ROOT and working fallback, and delegates mesh alias/bounds/material/save handling to `import_all`. The original24-input manifest and47 saved assets are untouched. An admitted entry gets an immutable FBX snapshot and a full-key revision under `/Game/Daedalus/Art/Islands/CodexContest/Ingestion`; the caller may select another subfolder of that same owned root. Shared vertex-color material is reused **read-only**, bound as a dependency, never edited or saved by the adapter.
+
+One-to-three selected entries yield one item at a time for the existing owner `daedalus.steps` runner. Preflight identities are checked again between editor ticks and before unchanged skip. Saved proof includes the exact revision, native metadata/material/geometry, clean packages and disk witnesses. Unfinished item gates remain effective after a key change. Separate native reports/private manifests/snapshots live under `Saved/Daedalus/Ingestion/CodexContest`; neither old delivery receipts nor native fallback reports are replaced.
+
+Owner recipe, **not yet executed**. Load the new adapter and portable receipt module from this reviewed checkout in the sole operator's existing Python context; do not replace its current importer. Pass the generator to the existing steps runner rather than draining it synchronously:
+
+```python
+import daedalus_codex_ingestion as ingestion
+steps = ingestion.import_steps(
+    r"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/contest-island-production/engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/codex-prepared.delivery.json",
+    ["CodexModule_CopperPatina_BridgeCoupler_85000"],
+    r"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/contest-island-production/engines/unreal/DaedalusLink/Content/Python/daedalus_codex_prepared_assets.py",
+    "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+)
+```
+
+The actual full18:40-20:40UTC handoff30701/30708 has occurred, with `codex-play-guard` the sole operator. Source readiness does not prove load/use: the operator must accept a gap after its current job, retain actual new native save/receipt evidence, then an identical-input skip receipt. User authorizes production use as validation; separate test suites remain deferred. Root has not claimed the editor or executed this recipe.
+
+Latest Claude recommendations (owner-reported19s to1.2s after greedy meshes/Nanite off) are compatible references, not a wrapper benchmark. This adapter preserves the verified Codex importer with requested Nanite off/vertex-color REPLACE and its normal100cm bounds contract. Baking an additional0.01 import scale would violate that existing contract and is not added. Pipeline-stack overrides, UCX recognition, async completion callbacks and a custom toolset remain separate follow-ups requiring installed-version and actual saved-output proof. No experimental uFBX, remote-execution enablement, world restructuring, scheduler replacement or resource downloads are introduced by this slice.
+
 ## Deferred validation checklist
 
 No checklist item was executed in this slice. Current user instructions defer tests/benchmarks and preserve the live editor.
