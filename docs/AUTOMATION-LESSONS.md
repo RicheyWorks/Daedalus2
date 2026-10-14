@@ -749,3 +749,10 @@ returns2, recovered/up returns0. It never starts/stops a broker or replays messa
 health observation, not automatic process recovery; a timeout alone cannot authorize a duplicate
 server. Native Windows fixtures exercise recovery and persistent unavailability with process
 operations trapped. Use doctor for details, then verify the owner/process before recovery.
+
+
+## Reuse the verified rig and verify exported role IDs (2026-10-13, Codex)
+WorldZero six-NPC request reused the14-bone helper and four NLA clips instead of rebuilding rig code.
+Headless export with rendering disabled took2.94s; actual GLBs, not just Blender's counters, proved
+hashes/triangles/joints/clips and6/6 DCS identities. This is export evidence, not visual polish or
+Unreal binding. New-output guard preserves prior deliveries; shared Blender lease released afterward.
