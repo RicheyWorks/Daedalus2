@@ -1333,3 +1333,9 @@ outlet → brink → waterfall and the destination (ocean basin) visible below, 
 one principal landmark (cottage + chimney smoke) and clusters at different heights, groves not grids, flowers in
 beds and drifts, props with a reason (well, filter hut, water wheel, herb ring, trough, orchard, crop rows, pen,
 shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rails, cave mouth, crater).
+- **(14:45) Blender exporters slow down with scene size, not file size.** Exporting 171 rigged creatures in one
+  process went from 0.5 s to 10 s each because every creature's actions and armature stayed in `bpy.data`; glTF and
+  FBX scan all actions per export. Free the creature's objects, actions, mesh and armature after each export
+  (`build(keep=False)`): 71 creatures in 29 s. Keep them only for a contact sheet (`--sheet`).
+- Factory startup ships a cube, a light and a camera — delete them before a contact-sheet render or the cube
+  photobombs the sheet.

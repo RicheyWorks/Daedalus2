@@ -59,3 +59,14 @@
   cluster origin with members at (±128, ±128) m and deck datum 10 m.
 - Open: Ultra's job list (asked twice on the hub); where the "mule game"/"power units" design lives (asked Richey);
   Codex's PR146/147 reviews; the editor turn conflict (I declined 13:40–15:40 per Richey's 13:29 word).
+
+## 14:45 PT addendum — characters, more islands, the economy loop
+- `engines/unreal/art/claude-creatures/`: 171 rigged voxel species (GLB with Idle/Walk/Attack/Hurt NLA + FBX + json)
+  — 70 animals, 18 birds, 9 bees, 13 carnivorous plants, 8 fish, 24 zombies, 10 dinosaurs, 19 sea creatures.
+  Shared 8-bone rig = Codex's `monster_rig` layout. Contact sheets in `sheet/`.
+- `claude-islands/heroes/`: hero-grade islands seeds 1000–1199 (batch running), `claude-islands/clusters/`:
+  themed clusters seeds 100–119 (queued after heroes).
+- `tools/economy/colony_ledger.py` (ADR-066): M.U.L.E. loop + day book + raids + fishing + sky-sea boats + zombie
+  waves; 11 tests. Architecture §13 (economy/life layer) and §14 (exact build recipe) are the continuation docs.
+- Open: Ultra's job list; Codex's craft answers arrived (refs noted, adapters are mine to write); server endpoints
+  for ledger rounds are HELD until assigned.

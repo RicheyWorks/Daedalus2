@@ -630,8 +630,17 @@ and learn and iterate and get better." Everything below is on `main`; nothing ne
   (`[s for s in range(N) if CH.profile(s)["geology"]["grade"] == "LEGENDARY"]`).
 
 ### 14.5 Characters (`tools/blender/voxel_creatures.py`)
-Body plans in 10 cm voxels (`_quadruped`, `_bird`, `_bee`, `_plant`) → one mesh with a vertex group per bone →
-the shared 8-bone rig (root, body, head, tail, leg.L/R, wing.L/R — Codex's Portal creature layout) → NLA clips
-Idle / Walk / Attack / Hurt (plants: Idle sway, Attack = the trap snaps; bees hover with 6× wing beats) → GLB with
-animations + FBX + json. 64 species today: 24 animals, 18 birds, 9 bees, 13 carnivorous plants. Add a species by
-adding a dict entry (animal/bird/bee) or a branch in `_plant`.
+Body plans in 10 cm voxels → one mesh with a vertex group per bone → the shared 8-bone rig (root, body, head,
+tail, leg.L/R, wing.L/R — Codex's Portal creature layout) → NLA clips Idle / Walk / Attack / Hurt → GLB with
+animations + FBX + json. **171 species** (14:45): `_quadruped` (70 animals: farm, forest, cats, monkeys, snakes
+with `legs=0`, extinct — mammoth, sabretooth, dodo, moa, dire wolf…), `_bird` (18; wings folded along the flank at
+rest, rotated out by the Walk clip), `_bee` (9; hover + 6× wing beats in Idle), `_plant` (13 carnivorous; Attack
+snaps the trap), `_fish` (8, the chemistry's `water.fish` + rainbow eel + basin ray; Walk = swim/tail wag),
+`_biped` (24 **zombies** for the wave apocalypse: `rot` 0–2 = fresh/green/bones, hats, tools, crawler, giant,
+elemental frost/ember/crystal/mud, ghoul, wraith), `_dino` (10: T-rex/raptor/allosaurus/carnotaurus bipeds,
+triceratops/stegosaurus/ankylosaurus/brontosaurus quadrupeds, pterodactyl/quetzal fliers), `_sea` (19: shark →
+starfish). Add a species = one dict entry (`ANIMALS/BIRDS/BEES/FISH/ZOMBIES`) or a branch (`_plant/_dino/_sea`).
+Exports: `export_creatures.py OUT [family|species…] [--sheet] [--force]`; ~0.4 s per creature once each
+creature's objects/actions are freed after export (left in the scene, Blender's exporters slow to 10 s each).
+Where they live comes from the ecology (habitat by seral stage/water/biome), the chemistry (livestock, fish) and
+the ledger events (zombie waves: 5 escalating waves vs defence, `ZOMBIE_WAVE`).
