@@ -306,8 +306,8 @@ def dress_islands_steps(realms, decor_per_district=3):
             l = a.get_actor_label()
             if l.startswith("Lands_"):
                 districts[l] = a
-            elif l.startswith("Decor_"):
-                sub.destroy_actor(a)
+            elif l.startswith("Decor_") and any(l.startswith("Decor_%s_" % r.replace("-", "")) for r in realms):
+                sub.destroy_actor(a)   # only this run's realms (02:03: dressing the 3D realms had wiped World Zero's props)
     done = {r: 0 for r in realms}
     props = {r: 0 for r in realms}
     for realm in realms:
