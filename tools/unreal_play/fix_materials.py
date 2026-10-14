@@ -17,25 +17,22 @@ from asset_pipeline import wire  # noqa: E402
 
 
 def main(argv):
-    batch = min(int(argv[0]) if argv else 100, 150)   # short bridge calls: a long save loop crashed the editor (2026-10-13)
-    max_batches = int(argv[1]) if len(argv) > 1 else 200
+    chunk = min(int(argv[0]) if argv else 25, 50)
+    limit = int(argv[1]) if len(argv) > 1 else None
     if wire.call(wire.UNREAL, "ping", timeout=10).get("playing"):
         print("stop Play first: saving assets is an editor operation")
         return 2
-    status = "import daedalus_nanite_materials as n\nprint(n.status())\n"
-    r = wire.call(wire.UNREAL, "execute_python", code=status, timeout=600)
+    r = wire.call(wire.UNREAL, "execute_python", code="import importlib, daedalus_nanite_materials as n\nimportlib.reload(n)\nprint(n.status())\n", timeout=600)
     print("before:", (r.get("stdout") or "").strip()[-200:], flush=True)
-    for i in range(max_batches):
-        r = wire.call(wire.UNREAL, "execute_python", code="import daedalus_nanite_materials as n\nprint(n.run(%d))\n" % batch, timeout=1800)
-        out = (r.get("stdout") or "").strip()
-        err = r.get("stderr") or r.get("error") or ""
-        print("pass %d: %s %s" % (i + 1, out[-200:], ("ERR " + err[:300]) if err else ""), flush=True)
-        if err or "'left': 0," in out or "'moved_now': 0" in out:
-            break
-    r = wire.call(wire.UNREAL, "execute_python", code=status, timeout=600)
-    after = (r.get("stdout") or "").strip()
-    print("after:", after[-200:], flush=True)
-    return 0 if "'left': 0," in after else 1
+    # One bridge call for the whole run: daedalus.steps advances the generator one editor tick per chunk.
+    code = "import daedalus_nanite_materials as n\ndef steps():\n    return (yield from n.steps(chunk=%d, limit=%r))\n" % (chunk, limit)
+    r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="fix_materials", timeout=7200)
+    for line in r.get("yielded", [])[-5:]:
+        print("  " + line, flush=True)
+    print("steps=%s seconds=%s error=%s" % (r.get("steps"), r.get("seconds"), (r.get("error") or "")[-400:]), flush=True)
+    print("after:", r.get("result"), flush=True)
+    res = r.get("result") or {}
+    return 0 if not r.get("error") and res.get("left") == 0 else 1
 
 
 if __name__ == "__main__":
