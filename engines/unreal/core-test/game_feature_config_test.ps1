@@ -38,4 +38,10 @@ foreach ($encoding in @((New-Object System.Text.UTF8Encoding($false)), [System.T
     if (Ensure-GameFeatureDataCookRule $path) { throw "Unicode repair was not idempotent" }
     if ([Convert]::ToBase64String($before) -ne [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))) { throw "Unicode second pass changed bytes" }
 }
-Write-Host "PASS: creation, idempotence, existing scans/sections, custom rules, comments, BOM-less UTF8 and UTF16 values"
+[byte[]]$invalidUtf8 = @(0x5b,0x4f,0x74,0x68,0x65,0x72,0x5d,0x0a,0x58,0x3d,0xe9,0x0a)
+[IO.File]::WriteAllBytes($path, $invalidUtf8)
+$rejected = $false
+try { Ensure-GameFeatureDataCookRule $path | Out-Null } catch { $rejected = $true }
+if (-not $rejected) { throw "Invalid UTF8 was silently rewritten" }
+if ([Convert]::ToBase64String($invalidUtf8) -ne [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))) { throw "Rejected encoding changed input bytes" }
+Write-Host "PASS: creation, idempotence, scans, custom rules, comments, UTF8/UTF16 values and invalid UTF8 preservation"

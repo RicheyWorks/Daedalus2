@@ -1157,3 +1157,5 @@ PR94 integration overlapped newer realm workflow triggers and appended Unreal le
 
 ## Read existing Unreal config independently of PowerShell ANSI defaults (2026-10-14)
 Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.
+
+Encoding follow-up: use strict UTF8 decoding for BOM-less config input. Unsupported ANSI or damaged byte sequences must fail before any additive write, preserving original bytes rather than replacing them with Unicode replacement characters. Added actual invalid-UTF8 unchanged-bytes regression; PS7/PS5.1 pass while valid UTF16 BOM detection remains supported.
