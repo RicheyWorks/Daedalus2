@@ -1263,3 +1263,13 @@ the pagefile size is Richey's setting, not the bots'.
   Of the remaining 34 GB commit the visible processes account for ~20 GB (ChatGPT ×21 processes 4.7 GB, Edge/webview
   2.2 GB, node 0.9 GB); the rest is driver/kernel. The commit *limit* itself moved 61 → 52 → 46 GB between samples
   (dynamic pagefile), which is why commit % jumps without the editor changing.
+- **(10:50 addendum) The import cost was Nanite.** Interchange's GLB pipeline builds Nanite for every static mesh
+  by default: 10–19 s and ~250 MB per island. The classic FBX importer with `FbxImportUI.static_mesh_import_data.
+  build_nanite = False` (plus no lightmap UVs, no auto collision, vertex colours REPLACE) imports an island in 6 s
+  and the editor stays ~2 GB lighter per 24 islands. FBX vertex colours arrive raw and Unreal reads them as sRGB,
+  so the palette is sRGB-encoded at mesh build time (`c ** (1/2.2)`); the GLB exporter had done that silently. The
+  UCX hull is ignored by the importer here (0 simple collision even with `UCX_<body>_00`), so the body falls back to
+  complex-as-simple collision, which walks fine at 80k tris.
+- **Recycle loop trap.** A RAM gate that fires right after a relaunch (shader compile spike, a headless Blender
+  export running at the same time) recycles the editor again after 3 islands: 4 minutes per 3 islands. Sample the
+  gate after the editor has settled, and don't run the headless export while the editor is loading.
