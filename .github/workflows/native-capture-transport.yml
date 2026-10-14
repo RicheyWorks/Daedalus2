@@ -22,4 +22,4 @@ jobs:
         with:
           python-version: '3.10'
       - name: Offline transport and image regressions
-        run: python -m unittest tools.unreal_mcp.test_transport tools.unreal_mcp.test_capture_proxy -v
+        run: python -m unittest tools.unreal_mcp.test_transport tools.unreal_mcp.test_capture_proxy tools.unreal_mcp.test_large_capture_transfer -v
