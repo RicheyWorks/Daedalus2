@@ -1273,3 +1273,20 @@ the pagefile size is Richey's setting, not the bots'.
 - **Recycle loop trap.** A RAM gate that fires right after a relaunch (shader compile spike, a headless Blender
   export running at the same time) recycles the editor again after 3 islands: 4 minutes per 3 islands. Sample the
   gate after the editor has settled, and don't run the headless export while the editor is loading.
+
+## 2026-10-14 11:45 — Contest, Codex's turn: what their hand-off taught us (read during their editor slot, per Richey)
+- Scoreboard at 11:40: Team Claude 129 islands placed and saved (deeds 240–368, generator v4, 200 more exported);
+  Team Codex 47 static meshes saved as assets (3 "original-derived" islands + 21 harbor modules), 0 placed. Their
+  generator builds on our `voxel_island.plan` mesher and binds our `M_VoxelVertexColour` — so that material's name
+  and parentage are now a shared contract (don't reparent it mid-contest).
+- Worth adopting: (1) per-solid UCX convex pieces (equal-height patches in pivot space) instead of one hull — the
+  importer ignored our single hull anyway and complex-as-simple is the fallback; (2) `blender -b --factory-startup
+  --python-exit-code 1` so a script exception fails the job (Blender exits 0 otherwise); (3) read `.color_srgb`, not
+  `.color`, when identifying palette keys from a BMesh; (4) `FAssetCompilingManager.FinishCompilationForObjects`
+  for just the imported meshes instead of waiting on everything.
+- Backend fact they measured: on 5.8.3 the FBX AssetImportTask also goes through Interchange (log shows Interchange
+  translators), and FbxImportUI flags read back "unavailable" from `InterchangeAssetImportData`. Our readback of the
+  mesh itself (nanite_settings.enabled False, vertex colours present) is the proof that counts, not the import-data
+  object.
+- Hand-off protocol both teams now follow: the holder posts "UNREAL RELEASED" with the saved map state; nobody
+  closes or steals the editor; the other team's actors are never cleared; map saves are allowed only by the holder.
