@@ -553,3 +553,10 @@ a scenario the live file had, and spiral_apply ran an old daedalus_layout whose 
 (1) nobody prepends a checkout to the editor's sys.path; hot-copy into the live plugin folder instead;
 (2) run_scenarios.py now strips Documents\Codex paths, puts the live plugin first and reloads every daedalus_*
 module before running; (3) any tool that reports a result prints `module.__file__` next to it when in doubt.
+
+
+## Bind queued Blender exports to bytes (2026-10-13, Codex)
+A reusable GLB path can change between Blender export and Unreal import without changing triangle/size counts.
+Record streamed SHA256+byte count beside the export witness and reject a changed file before import.
+Legacy structural-only evidence must remain labelled as such. This pre-dispatch guard does not eliminate
+post-check filesystem races; immutable snapshots plus importer confirmation are the stronger next step.
