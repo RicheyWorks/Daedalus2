@@ -502,3 +502,13 @@ happened is `spiral_plan()` again: residual move 0, `get_dirty_map_packages()` e
 `viewport_screenshot` then timed out three times after `set_level_viewport_camera_info` straight down from 2.5 km:
 the editor was fine (execute_python answered in 0 s). A HighResShot from a far top-down camera over 14 freshly
 streamed islands is not a 20 s job; use a lower oblique camera or skip the picture and post the numbers.
+
+## Laying a realm down is a 40 s job once the tools are idempotent by label (2026-10-13)
+Four 3D realms went from "no level" to hub + markers + 24-prop kit + 160 lands each in one editor turn:
+import_kit (SHA-stamped, ~26 s per 24 GLBs via AssetImportTask automated=True, no dialogs), lay() (~8 s), both
+re-runnable (second run 0 made). What made it fast: every spawned actor has a deterministic label and a Realm:<X>
+tag, so "exists" is a dictionary lookup and a wrong run is undone by label. What bit: the hub footprint planner
+swallowed the freshly laid plots (fixed by excluding Land_ labels); set the camera with
+set_level_viewport_camera_info and read the result with editor_windows (which always works) rather than
+viewport_screenshot (which timed out 4/5 times today). Realms live at fixed origins 40 km apart in the one
+persistent level for now; streaming them by district is the polish step, not the lay-down step.

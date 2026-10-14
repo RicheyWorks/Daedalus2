@@ -49,8 +49,8 @@ merge queue), **Poot** (cabinets, photo/image objects).
 
 | # | Layer | State | Owner | Evidence / gap |
 |---|-------|-------|-------|----------------|
-| 1 | Grid + hub | **missing** | Fable | no realm level yet; grid math realm-agnostic, needs a hub spawn + gate landing |
-| 2 | Terrain host | **missing** | Fable/Sol | 24 modular props validated (GAL02), no streamed ground |
+| 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
+| 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props validated (GAL02), no streamed ground ); district ground tiles still to lay |
 | 3 | Lands | **missing** | Fable | after 1–2 |
 | 4 | Mint row | **missing** | Sol | see WORLD-ZERO 4 |
 | 5 | Cast | **done** | Fable | `gallery-city.dcs` 12 roles/44 steps; 13 Mob_Gallery_* imported, Talkers bound (CAST-IMPORT) |
@@ -58,7 +58,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
 | 9 | Mounts | **missing** | Sol/Fable | drone art validated, no possession |
-| 10 | Docks / gates | **partial** | Fable | Session table: gate+docks+sub dock; nothing placed |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | PR80 row |
 | 12 | Play proof | **partial** | Fable | cast 8/8 (talk), no walk-the-realm scenario |
 
@@ -66,16 +66,16 @@ merge queue), **Poot** (cabinets, photo/image objects).
 
 | # | Layer | State | Owner | Evidence / gap |
 |---|-------|-------|-------|----------------|
-| 1 | Grid + hub | **missing** | Fable | |
-| 2 | Terrain host | **missing** | Fable/Sol | 23 props + AMF trough (PAR02), no ground |
-| 3 | Lands | **missing** | Fable | |
+| 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
+| 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (23 props + AMF trough (PAR02), no ground ); district ground tiles still to lay |
+| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `parcels.dcs` 12/46; GLBs in `Codex\2026-10-13\parcels-buildout\cast` NOT imported yet |
 | 6 | Creatures | **partial** | Sol | 32 role models validated (PAR01) |
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
 | 9 | Mounts | **missing** | Sol/Fable | helicopter + helipad art only |
-| 10 | Docks / gates | **partial** | Fable | table only |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -83,16 +83,16 @@ merge queue), **Poot** (cabinets, photo/image objects).
 
 | # | Layer | State | Owner | Evidence / gap |
 |---|-------|-------|-------|----------------|
-| 1 | Grid + hub | **missing** | Fable | |
-| 2 | Terrain host | **missing** | Fable/Sol | 24 modular props (BRK02): meadow, road, runway, workshop |
-| 3 | Lands | **missing** | Fable | |
+| 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
+| 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props (BRK02): meadow, road, runway, workshop ); district ground tiles still to lay |
+| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `bricks.dcs` 12/45; `bricks-buildout\cast` NOT imported yet |
 | 6 | Creatures | **partial** | Sol | 32 role models (BRK01) |
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
 | 9 | Mounts | **missing** | Sol/Fable | plane, hover cart (BRK03) art only |
-| 10 | Docks / gates | **partial** | Fable | table: gate + docks, no sub dock |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -100,16 +100,16 @@ merge queue), **Poot** (cabinets, photo/image objects).
 
 | # | Layer | State | Owner | Evidence / gap |
 |---|-------|-------|-------|----------------|
-| 1 | Grid + hub | **missing** | Fable | the maze itself is the terrain; cells still mint as rooms/corridors |
-| 2 | Terrain host | **missing** | Fable/Sol | 32 props (incl. 12 Halloween, LAB09), Wall4m, FoldingMaze |
-| 3 | Lands | **missing** | Fable | |
+| 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
+| 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (32 props (incl. 12 Halloween, LAB09), Wall4m, FoldingMaze ); district ground tiles still to lay |
+| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `labyrinth.dcs` 12/46; 35 Mob_Lab_* GLBs exported, not imported |
 | 6 | Creatures | **partial** | Sol | plants LAB10 policy tested |
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
 | 9 | Mounts | **missing** | Sol/Fable | sky-strider (LAB05) |
-| 10 | Docks / gates | **partial** | Fable | gate only; sub dock in table |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -162,11 +162,25 @@ merge queue), **Poot** (cabinets, photo/image objects).
 - **Stale**: Production sheet says "Play proven 0" for every realm; Gallery cast is now imported and Talkers
   speak in Play (cast 8/8). Mechanics PORT10 "live binding pending" is now wired (c7ff1dcb4). Sol to re-issue.
 
+## Laid down 2026-10-13 19:50 (2ec591291, editor turn)
+
+| Realm | Hub | Markers | Kit props | Lands | Actors |
+|-------|-----|---------|-----------|-------|--------|
+| WORLD-ZERO | existing island | PlayerStart | 1863 meshes | 13 estates (deeds 9..59) + 89 plots (60..168) | +178 |
+| GALLERY-CITY | 768 m slab | 5 | 24 | 160 plots | 190 |
+| PARCELS | 768 m slab | 5 | 24 | 160 plots | 190 |
+| BRICKS | 768 m slab | 5 | 24 | 160 plots | 190 |
+| LABYRINTH | 768 m slab | 5 | 24 (12 maze + 12 Halloween) | 160 plots | 190 |
+
+Every tool is idempotent (second run: 0 made) and saved; editor log after the imports: 0 new errors, 1 new
+warning (Prop_Gallery_Ramp degenerate tangents, Sol's export).
+
 ## Order of work (lay down, then polish)
 
-1. World Zero plot markers for every free cell in rings 1–6 (≈150 plots next to the 13 estates). Fable, editor Python.
+1. ~~World Zero plot markers~~ done; ~~Gallery/Parcels/Bricks/Labyrinth hub + kit + lands~~ done (table above).
+1b. Hero `SwitchRealm` lands at `Gate_<Realm>`/`Spawn_<Realm>`; WorldActor streams by realm origin. Fable.
 2. Realm-aware mint design + `/api/v1/lands?realm=` endpoint. Sol. Fable consumes it in WorldActor.
-3. Gallery City ground: one district from the 24 props, hub + gate landing, spiral markers. Fable (UE) + Sol (props kit).
+3. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
 4. Import Parcels/Bricks/Labyrinth casts (tool exists: `tools/unreal_play/import_cast.py`). Fable.
 5. Repeat 3 for Parcels, Bricks, Labyrinth. Mounts after ground.
 6. `ocean.dic` + Ocean role target. Fable / Sol.
