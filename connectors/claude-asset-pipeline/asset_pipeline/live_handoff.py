@@ -139,8 +139,12 @@ def prepare_response(state, link, mid, status, text):
     if item['state'] == 'completed' and status != 'completed':
         raise ValueError('Completed handoff cannot move backwards')
     message = item['message']
+    if message.get('type') != 'request' or message.get('to') != link.me:
+        raise ValueError('Only a direct request can receive request.*; ACK notes and broadcasts')
+    # Wording changes on retries must not create five accepted replies.
+    # A blocked -> accepted transition remains a new, deliberate resume event.
     previous = item.get('response_envelope')
-    if previous and previous['type'] == 'request.' + status and previous['body']['text'] == text:
+    if previous and previous['type'] == 'request.' + status:
         return previous
     envelope = {'v': 1, 'id': str(uuid.uuid4()),
                 'from': link.me, 'to': message['from'], 'type': 'request.' + status,
@@ -153,7 +157,11 @@ def respond(state, link, mid, status, text):
     envelope = prepare_response(state, link, mid, status, text)
     item = state['pending'][str(mid)]
     # Never ACK just because a listener received bytes. This follows an explicit agent decision.
-    seq = deliver(link, envelope)
+    delivered = item.setdefault('response_ids', {})
+    seq = delivered.get(envelope['id'])
+    if seq is None:
+        seq = deliver(link, envelope)
+        delivered[envelope['id']] = seq
     item['state'] = status
     item['response'] = seq
     if not link.ack(mid):
