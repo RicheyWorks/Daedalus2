@@ -23,6 +23,9 @@ t0 = time.time()
 done = []
 for sp in species:
     t = time.time()
+    name = "Creature_" + "".join(w.capitalize() for w in sp.split("_"))
+    if os.path.exists(os.path.join(out_dir, name + ".glb")) and "--force" not in argv:
+        continue
     r = VC.build(sp, out_dir)
     print("CREATURE %s %.2f m %.1fs" % (sp, r["height_m"], time.time() - t), flush=True)
     done.append(sp)
