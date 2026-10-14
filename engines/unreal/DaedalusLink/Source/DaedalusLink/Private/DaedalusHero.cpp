@@ -958,7 +958,7 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 		FVector Spot;
 		if (!FindSpot(i, Spot)) continue;
 		ADaedalusTarget* T = W->SpawnActorDeferred<ADaedalusTarget>(ADaedalusTarget::StaticClass(), FTransform(Spot), this,
-			nullptr, ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+			nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);   // FindSpot traced the ground; no adjust pass (2026-10-13)
 		if (!T) continue;
 		const FDaedalusFoeRule& Rule = R[i % R.Num()];
 		T->Kind = Rule.Kind;

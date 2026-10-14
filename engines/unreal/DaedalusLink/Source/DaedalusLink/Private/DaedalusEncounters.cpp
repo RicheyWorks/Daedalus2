@@ -155,8 +155,10 @@ ADaedalusTarget* UDaedalusEncounters::SpawnFoe(const FVector& At, int32 RuleInde
 	if (!W || R.Num() == 0) return nullptr;
 	const FDaedalusFoeRule& Rule = R[RuleIndex % R.Num()];
 	const FTransform Where(FRotator(0.f, Rng.FRandRange(0.f, 360.f), 0.f), At + FVector(0.f, 0.f, 60.f));
+	// AlwaysSpawn: the spot was traced to the ground already, and a deferred foe has no collider yet, so the
+	// engine's adjust pass only logs "FindTeleportSpot ... root component not being a collider" (28x a Play, 2026-10-13).
 	ADaedalusTarget* T = W->SpawnActorDeferred<ADaedalusTarget>(ADaedalusTarget::StaticClass(), Where, nullptr, nullptr,
-		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	if (!T) return nullptr;
 	T->Kind = Rule.Kind;
 	T->Title = Rule.Title;

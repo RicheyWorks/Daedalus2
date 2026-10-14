@@ -51,6 +51,8 @@ bridge.register("test.policy", lambda p: bridge.set_policy(p["allow"]) or {"poli
                 "Set the bridge's policy (the contract suite)", {"allow": "list (required)"}, risk="READ")
 bridge.register("test.transactions", lambda p: {"calls": [c for c in fake_unreal.CALLS if c.startswith("transaction")]},
                 "Every editor transaction opened or closed so far")
+bridge.register("test.actor_calls", lambda p: {"calls": [c for c in fake_unreal.CALLS if "actors" in c or "selected" in c]},
+                "How actors were listed so far: editor_actors / game_actors, with _in_pie when Play was running")
 bridge.register("test.freeze", lambda p: FROZEN.append(True) or {"frozen": True}, "Stop ticking, like a modal dialog")
 bridge.register("test.countdown", _countdown, "Counts down one number per editor tick", {"from": "int", "who": "str"})
 port = bridge.start(int(sys.argv[1]), register_tick=False)

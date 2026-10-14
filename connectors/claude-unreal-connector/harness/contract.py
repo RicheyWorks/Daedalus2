@@ -103,6 +103,24 @@ def run(port):
     check("an unknown command is an error, code UNKNOWN, listing the known ones",
           r.get("status") == "error" and r.get("code") == "UNKNOWN" and "test.count" in r.get("message", ""), r)
 
+    # Status polls during Play never touch the editor's actor subsystem (2026-10-13: 58 'Editor is currently in a
+    # play mode' errors in one session came from bots polling ping/get_level_info while Play ran).
+    c("test.policy", {"allow": ["READ", "SENSITIVE_READ", "MUTATE", "DESTRUCTIVE"]})
+    c("play")
+    for _ in range(20):
+        if c("ping")["result"].get("playing"):
+            break
+        time.sleep(0.1)
+    a0 = len(c("test.actor_calls")["result"]["calls"])
+    p = c("ping")
+    li = c("get_level_info")
+    calls = c("test.actor_calls")["result"]["calls"][a0:]
+    check("ping and get_level_info during Play list the game world's actors",
+          p["result"]["playing"] and li["result"]["actors_total"] > 0 and "game_actors" in calls, calls)
+    check("and never ask the editor's actor subsystem while Play runs", not any(x.endswith("_in_pie") for x in calls), calls)
+    check("selection reads as empty during Play instead of erroring", li["result"]["selected"] == [], li["result"].get("selected"))
+    c("stop")
+
 
 def main():
     with standin() as port:

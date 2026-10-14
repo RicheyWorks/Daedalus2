@@ -94,8 +94,12 @@ class _CaptureActor(Actor):
 
 
 class EditorActorSubsystem:
-    def get_all_level_actors(self): return list(LEVEL)
-    def get_selected_level_actors(self): return LEVEL[:1]
+    def get_all_level_actors(self):
+        CALLS.append("editor_actors" + ("_in_pie" if STATE["pie"] else ""))   # in Play the real editor logs an error here
+        return list(LEVEL)
+    def get_selected_level_actors(self):
+        CALLS.append("editor_selected" + ("_in_pie" if STATE["pie"] else ""))
+        return LEVEL[:1]
     def spawn_actor_from_class(self, cls, loc, rot=None):
         a = _CaptureActor() if cls is SceneCapture2D else Actor(cls.__name__, cls.__name__, "", (loc.x, loc.y, loc.z))
         LEVEL.append(a); CALLS.append("spawn " + cls.__name__)
@@ -125,7 +129,15 @@ class RenderingLibrary:
 
 class UnrealEditorSubsystem:
     def get_editor_world(self): return _World()
+    def get_game_world(self): return _World() if STATE["pie"] else None
     def get_level_viewport_camera_info(self): return V(-500, -500, 800), R(-30, 45, 0)
+
+
+class GameplayStatics:
+    @staticmethod
+    def get_all_actors_of_class(world, cls):
+        CALLS.append("game_actors")
+        return list(LEVEL)
 
 
 class LevelEditorSubsystem:
