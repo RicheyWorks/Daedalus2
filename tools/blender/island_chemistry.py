@@ -100,6 +100,18 @@ def profile(seed, realm="WORLD-ZERO"):
     ore = grade[2]
     crystal = round(grade[3] * 0.5 + (1.0 if grade[0] == "LEGENDARY" else 0.0), 2)
     goods = {"FOOD": food, "ENERGY": energy, "ORE": ore, "CRYSTAL": crystal}
+    # Codex's salvage PowerUnit (contest-island-production: codex_salvage_assembly.py, seed 86100): GearboxHousing +
+    # DriveShaft + TurbineRotor + CrystalBattery on a support frame. Our chemistry says what each part is made of and
+    # where the island gets it, so a power unit is something you BUILD from the island's goods (Arc-Raiders salvage
+    # vibe): rotor turned by wind or water, battery charged by crystal, gearbox forged from copper + iron.
+    power_unit = {
+        "parts": {"GearboxHousing": ["copper", "iron"], "DriveShaft": ["iron"], "TurbineRotor": ["iron", "copper"] if power == "windmill" else ["iron", "plank"],
+                  "CrystalBattery": ["crystal"], "SupportFrame": ["rock", "plank"]},
+        "drive": {"windmill": "wind at the rim", "water_wheel": "the stream", "crystal_lamp": "crystal only (no rotor)"}.get(power, "unknown"),
+        "salvageable": grade[0] != "COMMON",      # rich/legendary lands start with a broken unit to repair
+        "energy_per_unit": energy,
+        "source": "codex_salvage_assembly.py PowerUnit (asset-only; wiring/snapping not implemented)",
+    }
     surplus = max(goods, key=goods.get)
     need = min(goods, key=goods.get)
     return {
@@ -117,6 +129,7 @@ def profile(seed, realm="WORLD-ZERO"):
         "flora": {"herbs": herbs, "herb_essences": {h: HERB_ESSENCE[h] for h in herbs},
                   "orchard": {s: {"fruit": ORCHARD[s][0], "uses": list(ORCHARD[s][1])} for s in orchard}},
         "fauna": {"livestock": {k: LIVESTOCK[k] for k in livestock}},
+        "power_unit": power_unit,
         "power": {"source": power, "note": {"windmill": "mills the wheat; needs wind - sails face the rim",
                                             "water_wheel": "driven by the stream; sits by the filter hut",
                                             "crystal_lamp": "a crystal from the keel lights the smithy and the dock"}.get(power, "realm power source")},

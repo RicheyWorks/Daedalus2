@@ -604,6 +604,26 @@ def plan(seed=1, realm="WORLD-ZERO", kind="meadow", size=60):
     for z in range(sb + 4, sb + 8):
         vox["cottage"].append((tx0 - 2, ty0 + 9, z, "stone2"))
     _sphere(vox, "props", tx0 - 2, ty0 + 9, sb + 9, 1, lambda: "smoke")
+    # a salvage power unit beside the smithy (Codex's PowerUnit recipe, 1 m voxels): frame, gearbox, shaft, rotor,
+    # crystal battery - the thing the ore, the wheel and the crystals are FOR (island_chemistry power_unit)
+    pux, puy = tx0 - 12, ty0 + 9
+    pb = hill(pux, puy)
+    for dx in range(-2, 3):
+        for dy in range(-2, 3):
+            if abs(dx) == 2 or abs(dy) == 2:
+                vox["props"].append((pux + dx, puy + dy, pb + 1, "rock2"))
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            for z in range(pb + 2, pb + 4):
+                vox["props"].append((pux + dx, puy + dy, z, "copper" if (dx + dy + z) % 2 else "iron"))
+    for i in range(1, 4):
+        vox["props"].append((pux, puy - 1 - i, pb + 3, "iron"))
+    for k in range(-2, 3):
+        vox["props"].append((pux + k, puy - 5, pb + 3, "copper" if k else "iron"))
+        vox["props"].append((pux, puy - 5, pb + 3 + k, "copper" if k else "iron"))
+    for z in range(pb + 1, pb + 4):
+        vox["props"].append((pux + 3, puy, z, "crystal2"))
+    vox["props"].append((pux + 3, puy, pb + 4, "crystal"))
     # windmill on the hill shoulder: the island's power (tower, sails of cloth)
     wmx, wmy = int(hx + 16 * math.cos(cang - 1.2)), int(hy + 16 * math.sin(cang - 1.2))
     wb = hill(wmx, wmy)
