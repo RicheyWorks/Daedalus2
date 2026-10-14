@@ -694,6 +694,24 @@ follow, each one a concrete change to make or keep:
 10. Measure everything in the status line: items, seconds, errors=/warnings= from log_report, n/m. A number
     that is not posted did not happen.
 
+
+## Doctor diagnostics must be bounded and read-only (2026-10-13, Codex)
+teamlink doctor collects health, lock holders, unacked inbox and pending outgoing counts using
+GET only. Failed endpoints remain unknown, not empty success. Older brokers lacking PID/uptime
+report null; do not guess from a stale PID file. A live check exposed large legacy pending
+history, so summaries retain full counts but only the last10 IDs and an omitted count. Message
+bodies are excluded. Never ACK historical messages or restart a broker just to make doctor green.
+New broker PID/uptime fields require reviewed restart; the client works with older brokers.
+
+
+## Bound broker responses before transport, not only the display (2026-10-13, Codex)
+Doctor's compact display still fetched full pending bodies and timed out on live history.
+GET /pending-summary now returns full count plus at most10 IDs with omitted count; it uses
+exactly pending()'s delivery filter and writes no state. The doctor calls this bounded endpoint.
+The earlier pending_outgoing label was inaccurate: pending() includes deliveries to this bot,
+including broadcasts; the field is now pending_delivery. Older brokers return unavailable
+until reviewed deployment; do not silently fall back to downloading the oversized history.
+
 ## Material reparent, measured through steps() (2026-10-13, 22:55)
 Old shape: 150 per bridge call, ledger rewritten per move, prompting saves — crashed at 19:14. New shape: one
 `daedalus.steps` call, 25 reparents per editor tick, save every 150, queue scanned once. Measured: 500 in 219 s
@@ -722,3 +740,12 @@ say so and stop optimising that part.
     pin readback, compile diagnostics). Refused for now: Daedalus has no gameplay Blueprints; revisit if a
     Blueprint-authored system appears. Their source caveats agree with our rule: a discarded restore boolean,
     a dirty flag, or an ignored TryCreateConnection return is not a result.
+
+
+## Watch broker health without mistaking an expired observation for process death (2026-10-13, Codex)
+teamlink.ps1 -Watch observes /health, prints state changes and a five-minute heartbeat, and
+keeps retrying observation after failure. -Checks bounds a diagnostic run; final unavailable
+returns2, recovered/up returns0. It never starts/stops a broker or replays messages. This is
+health observation, not automatic process recovery; a timeout alone cannot authorize a duplicate
+server. Native Windows fixtures exercise recovery and persistent unavailability with process
+operations trapped. Use doctor for details, then verify the owner/process before recovery.
