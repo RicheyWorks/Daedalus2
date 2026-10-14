@@ -1,10 +1,22 @@
 # SPDX-License-Identifier: MIT
 import unittest
 import tempfile
+from unittest.mock import patch
+import subprocess
+import night_run
 from night_run import assess_run, require_stage, parse_options
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_powershell_failure_cannot_be_read_as_successful_output(self):
+        with patch.object(night_run.subprocess,'run',return_value=subprocess.CompletedProcess([],7,'BUILD OK stale','failed')):
+            with self.assertRaises(RuntimeError):night_run.ps('fixture')
+
+    def test_copy_failure_prevents_reload_dispatch(self):
+        with patch.object(night_run,'ps',side_effect=RuntimeError('copy failed')), patch.object(night_run.wire,'call') as call:
+            with self.assertRaises(RuntimeError):night_run.hot_copy()
+            call.assert_not_called()
+
     def test_import_folders_do_not_consume_following_option_values(self):
         with tempfile.TemporaryDirectory() as folder:
             options=parse_options(['--import',folder,'--realms','PARCELS','--no-build'])

@@ -35,8 +35,11 @@ def say(msg):
 
 
 def ps(cmd, timeout=600):
-    r = subprocess.run(PS + [cmd], capture_output=True, text=True, timeout=timeout, cwd=REPO)
-    return (r.stdout or "") + (r.stderr or "")
+    r = subprocess.run(PS + ["$ErrorActionPreference = 'Stop'; " + cmd], capture_output=True, text=True, timeout=timeout, cwd=REPO)
+    output = (r.stdout or "") + (r.stderr or "")
+    if r.returncode != 0:
+        raise RuntimeError('PowerShell step exited %d: %s' % (r.returncode, output[-2000:]))
+    return output
 
 
 def hub(kind, text, topic="night-run"):
@@ -85,7 +88,12 @@ def hot_copy():
             "    importlib.reload(sys.modules[m])\n"
             "import daedalus_bridge_commands as B\nB.install()\nprint('reloaded')\n") % LIVE
     r = wire.call(wire.UNREAL, "execute_python", code=code, timeout=120)
-    return (r.get("stdout") or "").strip()[-200:]
+    if not isinstance(r,dict) or r.get('error') or r.get('stderr'):
+        raise RuntimeError('Content reload failed; no layout or Play will follow')
+    output = (r.get('stdout') or '').strip()
+    if 'reloaded' not in output.splitlines():
+        raise RuntimeError('Content reload completion marker missing; no layout or Play will follow')
+    return output[-200:]
 
 
 def steps(expr, label, timeout=3600):
@@ -189,7 +197,11 @@ def main(argv):
     if not st:
         hub("status", "NIGHT RUN stopped: bridge not up after the build")
         return 1
-    say("bridge up: " + hot_copy())
+    try:
+        say("bridge up: " + hot_copy())
+    except Exception as error:
+        hub('status','NIGHT RUN stopped during content copy/reload: %s; no layout or Play' % error)
+        return 1
 
     # lay what is new: first any cast folders waiting for import (one GLB per tick), then the cast, portals, districts
     lay = []

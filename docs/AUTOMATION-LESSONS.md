@@ -817,3 +817,7 @@ The steps bridge retains only its last200 yields. Never use that log tail as an 
 ### Parse production CLI options before launching (2026-10-14)
 Collecting every non-flag string after --import also collected later option values as directories. Use argparse option boundaries and validate all folders, distinct realms, job IDs and import limits before a build/editor call. Reject oversized batches instead of silently slicing them. Validate import content roots before embedding them into editor code.
 
+
+### Content synchronization failures must stop orchestration (2026-10-14)
+A captured PowerShell error string is not a successful command result. Enable terminating cmdlet errors and inspect subprocess exit codes. Copy failure must prevent Python reload; reload must return its explicit completion marker without diagnostics before layout/Play. This detects failure but does not make the multi-file copy atomic or roll back partially copied content. Keep that limitation separate from binary rollback125.
+
