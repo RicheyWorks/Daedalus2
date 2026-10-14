@@ -110,6 +110,7 @@ def plan(part, variant, seed):
             "config_sha256": hashlib.sha256(ISLANDS._json(config).encode()).hexdigest(),
             "voxel_sha256": hashlib.sha256(ISLANDS._json(voxels).encode()).hexdigest(),
             "palette_rgb": {key: list(ISLANDS.PALETTE[key]) for key in sorted(set(cells.values()))},
+            "palette_surface": {key: ISLANDS.SURFACES[key] for key in sorted(set(cells.values()))},
             "pivot_metres": [0,0,0], "rotation_axis": axis, "connection_points": joints,
             "snap_grid_metres": GRID, "stage": "planned", "saved_unreal": False,
             "provenance": {"author": "team-codex", "design_request_hub": 30513,

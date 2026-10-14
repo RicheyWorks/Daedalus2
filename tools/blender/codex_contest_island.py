@@ -35,6 +35,13 @@ INVENTORY = ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContes
 PALETTE = dict(BASE.PAL, grass=(.40,.76,.28), grass2=(.67,.83,.32), rock=(.37,.42,.61),
                rock2=(.20,.24,.39), sand=(.95,.79,.38), water=(.14,.74,.93), leaf=(.27,.73,.43),
                leaf2=(.29,.82,.73), blossom=(.90,.38,.77), blossom2=(.98,.67,.89), crystal=(.70,.42,.96))
+SURFACES = {key: {"roughness": .85, "metallic": 0.0} for key in PALETTE}
+for _key in ("water", "foam"):
+    SURFACES[_key] = {"roughness": .18, "metallic": 0.0}
+for _key in ("crystal", "crystal2"):
+    SURFACES[_key] = {"roughness": .28, "metallic": .12}
+SURFACES["roof"] = {"roughness": .42, "metallic": .55}
+SURFACES["trunk"] = {"roughness": .72, "metallic": 0.0}
 PRESETS = {
     "summit-rim": {"seed": 84011, "radius": 46, "depth": 22, "terrace": 3, "relief": 21,
                    "original": "blender-boss", "features": ["circular water rim", "stepped central summit", "pastel block trees"]},
@@ -49,10 +56,15 @@ def _json(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
 
-def configuration(preset, seed=None):
+def configuration(preset, seed=None, hero=False):
     if preset not in PRESETS:
         raise ValueError("unknown preset: " + str(preset))
     config = dict(PRESETS[preset], preset=preset, version=VERSION, voxel_metres=1.0)
+    if hero:
+        if preset != "summit-rim":
+            raise ValueError("hero revision currently uses the inspected summit-rim original")
+        config["revision"] = "HeroR2"
+        config["features"] = config["features"] + ["winding pale summit route", "crystal summit crown", "fitted flowering groves"]
     catalog = json.loads(INVENTORY.read_text(encoding="utf-8"))
     original = next(entry for entry in catalog["entries"] if entry["id"] == config["original"])
     config["reference"] = {key: original.get(key) for key in ("id", "name", "author", "team", "provenance", "image", "sources", "manifest")}
@@ -69,16 +81,17 @@ def configuration(preset, seed=None):
 
 
 def identity(config):
-    return "CodexIsland_%s_%s" % (config["preset"].replace("-", "_"), config["seed"])
+    return "CodexIsland_%s_%s%s" % (config["preset"].replace("-", "_"), config["seed"],
+                                      "_" + config["revision"] if config.get("revision") else "")
 
 
-def plan(preset="summit-rim", seed=None):
+def plan(preset="summit-rim", seed=None, hero=False):
     """Reuse the seeded footprint, strata and dressing; apply bounded biome terraces.
 
     The body fits inside 92 x 92 metres. Clouds may extend outside that footprint.
     All randomness is local; dictionary/list order and voxel hash are reproducible.
     """
-    config = configuration(preset, seed)
+    config = configuration(preset, seed, hero)
     radius = config["radius"]
     original = BASE.plan(config["seed"], radius, config["depth"])
     old_top = {}
@@ -116,12 +129,28 @@ def plan(preset="summit-rim", seed=None):
     for xy in wet:
         heights[xy] = liquid_level - 2
 
+    route = set()
+    if hero:
+        # A broad ribbon climbs the existing summit rather than a detached prop.
+        # One-metre steps are visual terrain; native movement remains unverified.
+        for index in range(38):
+            t = index / 37
+            cx, cy = round(8 + 5 * math.sin(t * math.pi * 1.4)), -40 + index
+            level = round(18 * t)
+            for x in range(cx - 2, cx + 3):
+                for y in range(cy - 1, cy + 2):
+                    if (x, y) in heights:
+                        heights[x, y] = level
+                        wet.discard((x, y))
+                        route.add((x, y))
+
     # The inherited cottage gets a level foundation, rather than sheared walls.
     cottage_xy = {(x, y) for x, y, _, _ in original["cottage"] if (x, y) in heights}
     cottage_level = max((heights[xy] for xy in cottage_xy), default=0)
     for xy in cottage_xy:
         heights[xy] = cottage_level
         wet.discard(xy)
+        route.discard(xy)
 
     voxels = {layer: [] for layer in original}
     for x, y, z, colour in original["island"]:
@@ -130,7 +159,9 @@ def plan(preset="summit-rim", seed=None):
             continue
         dz = heights[xy] - old_top[xy]
         if z == old_top[xy]:
-            if xy in wet:
+            if xy in route:
+                colour = "flower_w" if (x + y) % 7 else "sand"
+            elif xy in wet:
                 colour = "sand"
             elif preset == "cliff-garden" and heights[xy] >= 9:
                 colour = "rock"
@@ -166,7 +197,7 @@ def plan(preset="summit-rim", seed=None):
                     todo.append(q)
         root = min(component, key=lambda p: (p[2], p[0], p[1]))
         xy = root[:2]
-        if xy not in heights or xy in wet:
+        if xy not in heights or xy in wet or (hero and any((x, y) in route for x, y, _ in component)):
             continue
         shift = heights[xy] - old_top[xy]
         for x, y, z in component:
@@ -180,6 +211,8 @@ def plan(preset="summit-rim", seed=None):
                 shift = 0
             elif xy not in heights or (xy in wet and layer != "crystals"):
                 continue
+            elif hero and xy in route and layer in ("flowers", "rocks"):
+                continue
             elif layer == "cottage":
                 shift = cottage_level
                 if preset == "cliff-garden":
@@ -192,6 +225,18 @@ def plan(preset="summit-rim", seed=None):
             voxels[layer].append((x, y, z + shift, colour))
 
     voxels["landmarks"] = []
+    if hero:
+        # Repeated fitted pedestals make a readable crown, clear of the cottage.
+        for index in range(7):
+            angle = math.pi * .7 + index * math.pi * 1.3 / 6
+            x, y = round(8 * math.cos(angle)), round(8 * math.sin(angle))
+            if (x, y) not in heights or (x, y) in cottage_xy or (x, y) in route:
+                continue
+            floor = heights[x, y] + 1
+            for z in range(floor, floor + 3):
+                voxels["landmarks"].append((x, y, z, "rock2"))
+            for z in range(floor + 3, floor + 6):
+                voxels["landmarks"].append((x, y, z, "crystal2" if index % 2 else "crystal"))
     if preset == "cliff-garden":
         # New colourful crop-grid geometry derived from Six-F's observed layout.
         for row in range(4):
@@ -226,6 +271,7 @@ def receipt(config, voxels):
         "voxel_sha256": hashlib.sha256(_json(voxels).encode()).hexdigest(),
         "voxels": BASE.stats(voxels), "palette": sorted({c[3] for c in all_cells}),
         "palette_rgb": {key: list(PALETTE[key]) for key in sorted({c[3] for c in all_cells})},
+        "palette_surface": {key: SURFACES[key] for key in sorted({c[3] for c in all_cells})},
         "bounds_metres": {"min": [min(c[i] for c in all_cells) for i in range(3)],
                           "max": [max(c[i] + 1 for c in all_cells) for i in range(3)]},
         "stage": "planned", "saved_unreal": False,
@@ -257,7 +303,7 @@ def _cached(path, config):
         return None
 
 
-def build(out_folder, preset="summit-rim", seed=None, keep=False):
+def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
     """Export through the existing pipeline during an explicitly coordinated turn.
 
     Uses metre geometry, existing VoxelVertexColour, selected objects only, a sibling
@@ -269,15 +315,15 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False):
         raise RuntimeError("build requires Blender bpy; use --plan-only outside Blender")
     if bpy.context.mode != "OBJECT":
         raise RuntimeError("finish the owner's current edit operation before exporting")
-    config = configuration(preset, seed)
+    config = configuration(preset, seed, hero)
     name = identity(config)
-    folder = Path(out_folder).resolve() / name
+    folder = Path(out_folder).resolve() / ("h" + str(config["seed"]) if hero else name)
     saved_path = folder / (name + ".receipt.json")
     cached = _cached(saved_path, config)
     if cached:
         return dict(cached, export_skipped=True)
     started = time.perf_counter()
-    config, voxels = plan(preset, seed)
+    config, voxels = plan(preset, seed, hero)
     report = receipt(config, voxels)
     report["elapsed_s"] = {"generation": round(time.perf_counter() - started, 6)}
     folder.mkdir(parents=True, exist_ok=True)
@@ -358,6 +404,9 @@ def _palette_slots(bpy, obj, cells):
         if material is None:
             material = original.copy()
             material.name = name
+        shader = material.node_tree.nodes.get("Principled BSDF")
+        shader.inputs["Roughness"].default_value = SURFACES[key]["roughness"]
+        shader.inputs["Metallic"].default_value = SURFACES[key]["metallic"]
         mesh.materials.append(material)
     for polygon in mesh.polygons:
         # BMesh's byte-color layer stores the base palette as sRGB. Reading its
@@ -419,23 +468,26 @@ def main():
     parser.add_argument("--preset", choices=PRESETS, default="summit-rim")
     parser.add_argument("--seed", type=int)
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--hero", action="store_true", help="retained summit-rim HeroR2 revision; preserve prepared exports")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--out", type=Path, default=ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None
     args = parser.parse_args(argv)
     if args.all and args.seed is not None:
         parser.error("--seed names one island; omit --all")
+    if args.hero and args.all:
+        parser.error("--hero prepares one summit-rim revision")
     if args.plan_only:
         results = []
         for preset in PRESETS if args.all else [args.preset]:
             started = time.perf_counter()
-            config, voxels = plan(preset, args.seed)
+            config, voxels = plan(preset, args.seed, args.hero)
             value = receipt(config, voxels)
             value["elapsed_s"] = {"generation": round(time.perf_counter() - started, 6)}
             _write(args.out / (identity(config) + ".plan.json"), value)
             results.append(value)
     else:
-        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed)]
+        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed, hero=args.hero)]
     print(json.dumps(results, indent=2))
 
 

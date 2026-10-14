@@ -205,3 +205,46 @@ def import_all(manifest_path, report_path=None, deadline_epoch=None, asset_names
     report["stage"] = "assets_saved"
     _write(report_path, report)
     return report
+
+
+def import_steps(manifest_path, report_path=None, deadline_epoch=None):
+    """Existing daedalus.steps adapter: one prepared payload, then an editor tick."""
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    report_path = report_path or str(Path(manifest_path).with_name("codex-prepared.unreal.json"))
+    receipt_dir = Path(report_path).parent / "NativeReceipts"
+    receipt_dir.mkdir(exist_ok=True)
+    report = {"stage": "prepared", "prepared_groups": 24, "prepared_islands": 3, "prepared_modules": 21,
+              "imported_groups": 0, "saved_groups": 0, "saved_meshes": 0, "world_placed": 0,
+              "results": [], "manifest_sha256": fingerprint(manifest_path)["sha256"],
+              "requested_import_options": manifest["import_options"], "deadline_epoch": deadline_epoch}
+    if Path(report_path).is_file():
+        prior = json.loads(Path(report_path).read_text(encoding="utf-8"))
+        if prior.get("stage") not in ("assets_saved", "window_paused"):
+            raise RuntimeError("unfinished batch requires outcome inspection: " + report_path)
+        _write(report_path + "." + str(time.time_ns()) + ".previous", prior)
+    # Small parts establish the active importer contract before the heavier islands.
+    entries = sorted(manifest["assets"], key=lambda entry: (entry["kind"] == "island", entry["name"]))
+    for entry in entries:
+        if deadline_epoch is not None and time.time() >= deadline_epoch - 90:
+            report["stage"] = "window_paused"
+            _write(report_path, report)
+            return report
+        report["stage"] = "item_pending"
+        report["pending_name"] = entry["name"]
+        _write(report_path, report)
+        part = import_all(manifest_path, str(receipt_dir / (entry["name"] + ".unreal.json")),
+                          deadline_epoch, [entry["name"]])
+        if part["stage"] != "assets_saved":
+            report["stage"] = part["stage"]
+            _write(report_path, report)
+            return report
+        report["results"].extend(part["results"])
+        for key in ("imported_groups", "saved_groups", "saved_meshes"):
+            report[key] += part[key]
+        report.pop("pending_name", None)
+        report["stage"] = "between_items"
+        _write(report_path, report)
+        yield {"name": entry["name"], "saved_meshes": part["saved_meshes"]}
+    report["stage"] = "assets_saved"
+    _write(report_path, report)
+    return report
