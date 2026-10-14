@@ -46,6 +46,27 @@ def _tags(entry):
             "codex_seed": str(entry["seed"]), "codex_kind": entry["kind"]}
 
 
+def _observed_import(mesh):
+    """Record applied properties when exposed; requested FbxImportUI is not proof."""
+    observed = {}
+    try:
+        data = mesh.get_editor_property("asset_import_data")
+        observed["import_data_class"] = data.get_class().get_name() if data else None
+        for key in ("vertex_color_import_option", "generate_lightmap_u_vs", "auto_generate_collision", "build_nanite", "combine_meshes"):
+            try:
+                value = data.get_editor_property(key)
+                observed[key] = value if isinstance(value, (bool, int, float, str)) else str(value)
+            except Exception:
+                observed[key] = "unavailable"
+    except Exception as error:
+        observed["import_data_readback"] = str(error)
+    try:
+        observed["nanite_enabled"] = bool(mesh.get_editor_property("nanite_settings").enabled)
+    except Exception:
+        observed["nanite_enabled"] = "unavailable"
+    return observed
+
+
 def _verify(entry, meshes):
     expected = {row["name"]: row for row in entry["objects"]}
     actual = {}
@@ -68,7 +89,7 @@ def _verify(entry, meshes):
     return actual
 
 
-def import_all(manifest_path, report_path=None):
+def import_all(manifest_path, report_path=None, deadline_epoch=None, asset_names=None):
     """Import/save the prepared batch; saved assets remain held from placement.
 
     Byte-bound revision folders preserve earlier assets. Unknown/pending import
@@ -86,20 +107,32 @@ def import_all(manifest_path, report_path=None):
             raise ValueError("prepared FBX changed: " + entry["name"])
         if not entry["destination"].startswith(ROOT + "/"):
             raise ValueError("destination outside owned namespace")
+    if asset_names is not None:
+        selected = set(asset_names)
+        if not selected or not selected.issubset({entry["name"] for entry in entries}):
+            raise ValueError("unknown prepared asset selection")
+        entries = [entry for entry in entries if entry["name"] in selected]
     material = EAL.load_asset(MATERIAL)
     if not isinstance(material, unreal.MaterialInterface):
         raise RuntimeError("existing vertex-colour material unavailable; nothing imported")
     report_path = report_path or str(Path(manifest_path).with_name("codex-prepared.unreal.json"))
     if Path(report_path).is_file():
         prior = json.loads(Path(report_path).read_text(encoding="utf-8"))
-        if prior.get("stage") != "assets_saved":
+        if prior.get("stage") not in ("assets_saved", "window_paused"):
             raise RuntimeError("unfinished import report requires outcome inspection: " + report_path)
         Path(report_path + "." + str(time.time_ns()) + ".previous").write_text(json.dumps(prior), encoding="utf-8")
     report = {"stage": "prepared", "prepared_groups": 24, "prepared_islands": 3, "prepared_modules": 21,
               "imported_groups": 0, "saved_groups": 0, "saved_meshes": 0, "world_placed": 0,
-              "material": MATERIAL, "results": [], "manifest_sha256": fingerprint(manifest_path)["sha256"]}
+              "material": MATERIAL, "results": [], "manifest_sha256": fingerprint(manifest_path)["sha256"],
+              "requested_import_options": manifest["import_options"], "deadline_epoch": deadline_epoch,
+              "selected_groups": len(entries), "selected_names": [entry["name"] for entry in entries]}
     _write(report_path, report)
     for entry in entries:
+        # Leave time to finish/save the current item and release the owner's window.
+        if deadline_epoch is not None and time.time() >= deadline_epoch - 90:
+            report["stage"] = "window_paused"
+            _write(report_path, report)
+            return report
         dest = entry["destination"]
         result = {"name": entry["name"], "kind": entry["kind"], "destination": dest,
                   "stage": "prepared", "meshes": [], "elapsed_s": {}}
@@ -151,7 +184,8 @@ def import_all(manifest_path, report_path=None):
                     body.set_editor_property("collision_trace_flag", unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)
             for key,value in tags.items(): EAL.set_metadata_tag(mesh,key,value)
             row = {"path": mesh.get_path_name(), "source_name": source_name, "save_return": None,
-                   "material_paths": [mesh.get_material(i).get_path_name() for i in range(len(mesh.get_editor_property("static_materials")))]}
+                   "material_paths": [mesh.get_material(i).get_path_name() for i in range(len(mesh.get_editor_property("static_materials")))],
+                   "observed_import": _observed_import(mesh)}
             result["meshes"].append(row)
             result["stage"] = "save_pending"
             report["stage"] = "save_pending"

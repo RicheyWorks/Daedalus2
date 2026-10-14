@@ -1048,6 +1048,6 @@
   "prepared_groups": 24,
   "schema": "daedalus.codex-prepared-delivery.v1",
   "source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
-  "source_sha256": "fea4ee6ba4016f4e0fad8b8ec966af937bfb9eee1044c5707a70664ee2f15054",
+  "source_sha256": "592f26c88fbe80dc9b47f56c54a5ee3809b83078a4e1ef32972fdf4cf7c0fa21",
   "world_placement": "held; import/save assets only; no actor or map changes"
 }
