@@ -1,0 +1,236 @@
+{
+  "artifact": {
+    "bytes": 118404,
+    "sha256": "ce022107cc0d757934f8c48a37183db990b8d4249ddd358cd81ad783fae467b3"
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 118404,
+    "objects": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_gearbox",
+        "triangles": 336
+      },
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_shaft",
+        "triangles": 336
+      },
+      {
+        "dims": [
+          4.0,
+          4.0,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_rotor",
+        "triangles": 912
+      },
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_battery",
+        "triangles": 432
+      },
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_support",
+        "triangles": 512
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\a86100\\CodexSalvage_PowerUnit_86100.glb"
+  },
+  "exported_s": 0.0,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock2",
+      "CodexVoxel_roof",
+      "CodexVoxel_window",
+      "CodexVoxel_leaf2"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1
+        ],
+        "extent": [
+          1.5,
+          1,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_gearbox",
+        "triangles": 336
+      },
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "extent": [
+          1.0,
+          1.0,
+          3.0
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_shaft",
+        "triangles": 336
+      },
+      {
+        "dims": [
+          4,
+          4,
+          0.5
+        ],
+        "extent": [
+          4,
+          4,
+          0.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_rotor",
+        "triangles": 912
+      },
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "extent": [
+          1.5,
+          2.25,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_battery",
+        "triangles": 432
+      },
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "extent": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_leaf2",
+          "CodexVoxel_rock2",
+          "CodexVoxel_roof"
+        ],
+        "name": "CodexSalvage_PowerUnit_86100_support",
+        "triangles": 512
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "mesh": 0,
+        "name": "CodexSalvage_PowerUnit_86100_gearbox"
+      },
+      {
+        "dims": [
+          3.0,
+          1.0,
+          1.0
+        ],
+        "mesh": 1,
+        "name": "CodexSalvage_PowerUnit_86100_shaft"
+      },
+      {
+        "dims": [
+          4.0,
+          4.0,
+          0.5
+        ],
+        "mesh": 2,
+        "name": "CodexSalvage_PowerUnit_86100_rotor"
+      },
+      {
+        "dims": [
+          2.25,
+          1.5,
+          1.5
+        ],
+        "mesh": 3,
+        "name": "CodexSalvage_PowerUnit_86100_battery"
+      },
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "mesh": 4,
+        "name": "CodexSalvage_PowerUnit_86100_support"
+      }
+    ]
+  },
+  "name": "CodexSalvage_PowerUnit_86100",
+  "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SalvageAssemblies\\a86100\\CodexSalvage_PowerUnit_86100.glb",
+  "prebuilt": true,
+  "started": 1792004253.1207194
+}

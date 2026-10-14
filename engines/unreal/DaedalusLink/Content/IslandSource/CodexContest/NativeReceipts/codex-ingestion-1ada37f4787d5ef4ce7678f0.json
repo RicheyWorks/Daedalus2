@@ -1,0 +1,157 @@
+{
+  "api": "native.import_all -> AssetImportTasks/FbxImportUI -> SaveLoadedAsset",
+  "assets": {
+    "CodexModule_CopperPatina_BridgeCoupler_85000_part": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000"
+  },
+  "backend_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "backend_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "background_compilation": "not_queried",
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0",
+  "key": "1ada37f4787d5ef4ce7678f084f060d44cade0b824ae9a16fd34d63a4e1c2a6a",
+  "manifest": {
+    "backend": {
+      "api": "AssetTools.import_asset_tasks/AssetImportTask/FbxImportUI",
+      "fbx_cvar_readback": 1,
+      "loaded_code": {
+        "_observed_import": "167649bdc5402b5fd892f2bc3c970866e83b5b47da350a53fbd5de5e62fffed3",
+        "_tags": "783eb2319099196fd0abf9a664307e305732a57f6d724c2f94df96a97d512ecf",
+        "_verify": "c65eb78077c9b4e470cecb3642d9f57d8c9a0a58f742b3fe6a63c65fa28b5807",
+        "import_all": "3e1c93cbf9cdbb078d46216b44247fbd0f4073b8a9b4e0e1889d985f52a5641e"
+      },
+      "loaded_receipt_code": {
+        "daedalus_codex_ingestion._manifest": "de8064199eac48220444cf1d0e92438637e25d9db4a09c60d6c0c2109b001848",
+        "daedalus_codex_ingestion._require_manifest": "07d342a06de872850d79872fca1bce46c1da69d1c54f0a02c98780ead4271350",
+        "daedalus_codex_ingestion._verify_saved": "9674dd75359bb3805e6494f63b9a224ef7123ade20bfbbcfa99967d679b5e9a7",
+        "daedalus_codex_ingestion.import_steps": "430c645b0ec8cf33ef31b07cbaf3927ff756550d660f6a47d01c4f008849ceb6",
+        "daedalus_ingestion_receipts.loaded_code_fingerprint": "5893a6ca15a357520f97d6442478dcaa941d6230e2d500ce1dcae998c3fee683",
+        "daedalus_ingestion_receipts.manifest": "bb1350e5b3ebd57b891d84e939e8b3df80260181c55cae3127571ba5f5534fdc",
+        "daedalus_ingestion_receipts.may_skip": "519532bbba58cd3e24cd759493611ea2e10b7d0bdab1c77a99ae5e3e992e051b",
+        "daedalus_ingestion_receipts.require_retry_permission": "a0b4b632d781c6e3d4d99aedcf77fc782afd35527aeda0144b12902c625e1158",
+        "daedalus_ingestion_receipts.validate_receipt": "b36821d96d6c1d5db40a834ceca896bcf863f785789be1e6613749fc92b1aad9",
+        "daedalus_ingestion_receipts.verified_snapshot": "893ca5138f11f12339188b2700c04c0bfd657f6aedd4f1d2a0dae8b7f0ebb3b7",
+        "daedalus_ingestion_receipts.write_receipt": "c9502d92986551a21606bd19dd2ab5b2fc480ee94ad002e785b0a720d81a3249"
+      },
+      "selected_preset": "codex_prepared_existing_options_v1"
+    },
+    "dependencies": {
+      "C:\\Unreal\\DaedalusRealm\\Config\\DefaultEngine.ini": {
+        "bytes": 995,
+        "sha256": "32e7917b6cbdda424e49461222b03314714168a665360e3f838d0e788bb61b35"
+      },
+      "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\ClaudeIslands\\M_VoxelVertexColour.uasset": {
+        "bytes": 9801,
+        "sha256": "5da5a09f183424869300bac051e32da589328a63b28c2dbd8d61714faf3bbd58"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py": {
+        "bytes": 15632,
+        "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py": {
+        "bytes": 9627,
+        "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-prepared.delivery.json": {
+        "bytes": 35480,
+        "sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py": {
+        "bytes": 13679,
+        "sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982"
+      }
+    },
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+    "engine": "5.8.3-58210709+++UE5+Release-5.8",
+    "schema": "daedalus.ingestion-receipt.v1",
+    "settings": {
+      "config_sha256": "ab6385bca9d38775bfadab7559e83d66fabab909b432cbdb6e55d8728c372a7a",
+      "kind": "module",
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+      "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+      "namespace": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+      "objects": [
+        {
+          "dims": [
+            4.0,
+            1.0,
+            0.5
+          ],
+          "materials": [
+            "CodexVoxel_roof",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexModule_CopperPatina_BridgeCoupler_85000_part",
+          "triangles": 416
+        }
+      ],
+      "placement": false,
+      "preset": "codex_prepared_existing_options_v1",
+      "requested_import_options": {
+        "auto_generate_collision": false,
+        "build_nanite": false,
+        "combine_meshes": false,
+        "generate_lightmap_u_vs": false,
+        "import_materials": false,
+        "import_textures": false,
+        "vertex_color_import_option": "REPLACE"
+      },
+      "seed": 85000,
+      "shared_material_policy": "read-only reuse"
+    },
+    "source": {
+      "bytes": 19228,
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85000\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx",
+      "sha256": "d09d0b1aaacea5d4474ed8745733cba69a9793172cd69c76a0fd44d78d118714"
+    }
+  },
+  "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+  "native_report": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\1ada37f4787d5ef4ce7678f0\\native.json",
+  "native_result": {
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0",
+    "elapsed_s": {
+      "import": 0.166624
+    },
+    "import_skipped": false,
+    "imported_object_paths": [
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000"
+    ],
+    "kind": "module",
+    "meshes": [
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+        "save_return": true,
+        "save_s": 0.088118,
+        "source_name": "CodexModule_CopperPatina_BridgeCoupler_85000_part"
+      }
+    ],
+    "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+    "stage": "assets_saved_held_from_world"
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/1ada37f4787d5ef4ce7678f0/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000": {
+      "bytes": 80732,
+      "sha256": "b2b408fc646e5ed073f530c54b222120c2a5b626505b47928b819993983717a3"
+    }
+  },
+  "save_call_completed": true,
+  "save_confirmed": true,
+  "saved_utc": "2026-10-14T19:49:27.128685+00:00",
+  "schema": "daedalus.ingestion-receipt.v1",
+  "snapshot": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\1ada37f4787d5ef4ce7678f0\\input\\CodexModule_CopperPatina_BridgeCoupler_85000.fbx",
+  "started_utc": "2026-10-14T19:49:26.789723+00:00",
+  "state": "saved",
+  "updated_utc": "2026-10-14T19:49:27.128685+00:00",
+  "world_placed": 0
+}

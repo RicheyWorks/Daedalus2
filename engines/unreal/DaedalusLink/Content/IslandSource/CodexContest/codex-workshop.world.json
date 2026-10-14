@@ -1,0 +1,2601 @@
+{
+  "actors": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_961"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_housing",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+      "role": "housing",
+      "transform": {
+        "location": {
+          "x": -368150,
+          "y": 346900,
+          "z": 18465.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_962"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_shaft",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006",
+      "role": "shaft",
+      "transform": {
+        "location": {
+          "x": -368150,
+          "y": 347125.0,
+          "z": 18515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_963"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_rotor",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003",
+      "role": "rotor",
+      "transform": {
+        "location": {
+          "x": -368150,
+          "y": 347275.0,
+          "z": 18515.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_964"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "role": "crossbeam",
+      "transform": {
+        "location": {
+          "x": -368350,
+          "y": 346900,
+          "z": 18440.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_965"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_west_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "role": "west_leg",
+      "transform": {
+        "location": {
+          "x": -368300.0,
+          "y": 346900,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_966"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_east_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "role": "east_leg",
+      "transform": {
+        "location": {
+          "x": -368000.0,
+          "y": 346900,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3926"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+      "role": "battery",
+      "transform": {
+        "location": {
+          "x": -367950,
+          "y": 346800,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3927"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_spare_wheel",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002",
+      "role": "spare_wheel",
+      "transform": {
+        "location": {
+          "x": -367800.0,
+          "y": 346750.0,
+          "z": 18440.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3928"
+      },
+      "island": "CodexIsland_cliff_garden_84022",
+      "label": "CodexDress_CopperPatina_signal_sail",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001",
+      "role": "signal_sail",
+      "transform": {
+        "location": {
+          "x": -368000.0,
+          "y": 346600,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3929"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_housing",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105",
+      "role": "housing",
+      "transform": {
+        "location": {
+          "x": -369150,
+          "y": 321800,
+          "z": 20165.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3930"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_shaft",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106",
+      "role": "shaft",
+      "transform": {
+        "location": {
+          "x": -369150,
+          "y": 322025.0,
+          "z": 20215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3931"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_rotor",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103",
+      "role": "rotor",
+      "transform": {
+        "location": {
+          "x": -369150,
+          "y": 322175.0,
+          "z": 20215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3932"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "role": "crossbeam",
+      "transform": {
+        "location": {
+          "x": -369350,
+          "y": 321800,
+          "z": 20140.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3933"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_west_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "role": "west_leg",
+      "transform": {
+        "location": {
+          "x": -369300.0,
+          "y": 321800,
+          "z": 20015.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3934"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_east_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "role": "east_leg",
+      "transform": {
+        "location": {
+          "x": -369000.0,
+          "y": 321800,
+          "z": 20015.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3935"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+      "role": "battery",
+      "transform": {
+        "location": {
+          "x": -368950,
+          "y": 321700,
+          "z": 20015.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3936"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_spare_wheel",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102",
+      "role": "spare_wheel",
+      "transform": {
+        "location": {
+          "x": -368800.0,
+          "y": 321650.0,
+          "z": 20140.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3937"
+      },
+      "island": "CodexIsland_river_canyon_84033",
+      "label": "CodexDress_DawnCrimson_signal_sail",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101",
+      "role": "signal_sail",
+      "transform": {
+        "location": {
+          "x": -369000.0,
+          "y": 321500,
+          "z": 20015.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3938"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_housing",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205",
+      "role": "housing",
+      "transform": {
+        "location": {
+          "x": -366150,
+          "y": 298200,
+          "z": 17765.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3939"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_shaft",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206",
+      "role": "shaft",
+      "transform": {
+        "location": {
+          "x": -366150,
+          "y": 298425.0,
+          "z": 17815.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3940"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_rotor",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203",
+      "role": "rotor",
+      "transform": {
+        "location": {
+          "x": -366150,
+          "y": 298575.0,
+          "z": 17815.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3941"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "role": "crossbeam",
+      "transform": {
+        "location": {
+          "x": -366350,
+          "y": 298200,
+          "z": 17740.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3942"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_west_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "role": "west_leg",
+      "transform": {
+        "location": {
+          "x": -366300.0,
+          "y": 298200,
+          "z": 17615.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3943"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_east_leg",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "role": "east_leg",
+      "transform": {
+        "location": {
+          "x": -366000.0,
+          "y": 298200,
+          "z": 17615.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 0.3125,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3944"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204",
+      "role": "battery",
+      "transform": {
+        "location": {
+          "x": -365950,
+          "y": 298100,
+          "z": 17615.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3945"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_spare_wheel",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202",
+      "role": "spare_wheel",
+      "transform": {
+        "location": {
+          "x": -365800.0,
+          "y": 298050.0,
+          "z": 17740.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3946"
+      },
+      "island": "CodexIsland_summit_rim_84011",
+      "label": "CodexDress_StormAmethyst_signal_sail",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201",
+      "role": "signal_sail",
+      "transform": {
+        "location": {
+          "x": -366000.0,
+          "y": 297900,
+          "z": 17615.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "admitted": false,
+  "created_actors": 27,
+  "dressing_s": 5.684576,
+  "map_after": {
+    "bytes": 209206705,
+    "sha256": "9da80c3ff526988e8897b7e6f7e0c38153aad7b19db16dd2ff83f595042c48cc"
+  },
+  "map_before": {
+    "bytes": 209146561,
+    "sha256": "f615f1394001c3ce178ace71108b2e3ca7045586c93d42ca7a2d7df5fa1a24f9"
+  },
+  "map_save_s": 21.320304,
+  "native_mutations": [
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005",
+        "name": "CodexDress_CopperPatina_housing",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368150,
+            "y": 346900,
+            "z": 18465.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_961"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_961"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006",
+        "name": "CodexDress_CopperPatina_shaft",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368150,
+            "y": 347125.0,
+            "z": 18515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_962"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_962"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003",
+        "name": "CodexDress_CopperPatina_rotor",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368150,
+            "y": 347275.0,
+            "z": 18515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_963"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_963"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000",
+        "name": "CodexDress_CopperPatina_crossbeam",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368350,
+            "y": 346900,
+            "z": 18440.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_964"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_964"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000",
+        "name": "CodexDress_CopperPatina_west_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368300.0,
+            "y": 346900,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_965"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_965"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000",
+        "name": "CodexDress_CopperPatina_east_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368000.0,
+            "y": 346900,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_966"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_966"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004",
+        "name": "CodexDress_CopperPatina_battery",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367950,
+            "y": 346800,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3926"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3926"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002",
+        "name": "CodexDress_CopperPatina_spare_wheel",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -367800.0,
+            "y": 346750.0,
+            "z": 18440.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3927"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3927"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001",
+        "name": "CodexDress_CopperPatina_signal_sail",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368000.0,
+            "y": 346600,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3928"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3928"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105",
+        "name": "CodexDress_DawnCrimson_housing",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369150,
+            "y": 321800,
+            "z": 20165.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3929"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3929"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106",
+        "name": "CodexDress_DawnCrimson_shaft",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369150,
+            "y": 322025.0,
+            "z": 20215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3930"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3930"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103",
+        "name": "CodexDress_DawnCrimson_rotor",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369150,
+            "y": 322175.0,
+            "z": 20215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3931"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3931"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "name": "CodexDress_DawnCrimson_crossbeam",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369350,
+            "y": 321800,
+            "z": 20140.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3932"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3932"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "name": "CodexDress_DawnCrimson_west_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369300.0,
+            "y": 321800,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3933"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3933"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "name": "CodexDress_DawnCrimson_east_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369000.0,
+            "y": 321800,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3934"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3934"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104",
+        "name": "CodexDress_DawnCrimson_battery",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368950,
+            "y": 321700,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3935"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3935"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102",
+        "name": "CodexDress_DawnCrimson_spare_wheel",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -368800.0,
+            "y": 321650.0,
+            "z": 20140.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3936"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3936"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101",
+        "name": "CodexDress_DawnCrimson_signal_sail",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -369000.0,
+            "y": 321500,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3937"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3937"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205",
+        "name": "CodexDress_StormAmethyst_housing",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366150,
+            "y": 298200,
+            "z": 17765.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3938"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3938"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206",
+        "name": "CodexDress_StormAmethyst_shaft",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366150,
+            "y": 298425.0,
+            "z": 17815.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3939"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3939"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203",
+        "name": "CodexDress_StormAmethyst_rotor",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366150,
+            "y": 298575.0,
+            "z": 17815.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3940"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3940"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "name": "CodexDress_StormAmethyst_crossbeam",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366350,
+            "y": 298200,
+            "z": 17740.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3941"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3941"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "name": "CodexDress_StormAmethyst_west_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366300.0,
+            "y": 298200,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3942"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3942"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "name": "CodexDress_StormAmethyst_east_leg",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366000.0,
+            "y": 298200,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3943"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3943"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204",
+        "name": "CodexDress_StormAmethyst_battery",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -365950,
+            "y": 298100,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3944"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3944"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202",
+        "name": "CodexDress_StormAmethyst_spare_wheel",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -365800.0,
+            "y": 298050.0,
+            "z": 17740.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3945"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3945"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201",
+        "name": "CodexDress_StormAmethyst_signal_sail",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -366000.0,
+            "y": 297900,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3946"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3946"
+        },
+        "folder_path": "CodexContest/Staging/Workshops"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "result": true,
+      "state": "responded",
+      "tool": "save_assets",
+      "toolset": "editor_toolset.toolsets.asset.AssetTools"
+    }
+  ],
+  "ownership_tags_added": false,
+  "plan": {
+    "dressing_plan": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-workshop.dressing.json",
+    "dressing_plan_fingerprint": {
+      "bytes": 18028,
+      "sha256": "4b3823d36c615b198e3157f7b9cf78f8db60743c9e52b9c4de557b5fa4293f70"
+    },
+    "entries": [
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_housing",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+        "role": "housing",
+        "transform": {
+          "location": {
+            "x": -368150,
+            "y": 346900,
+            "z": 18465.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_shaft",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006",
+        "role": "shaft",
+        "transform": {
+          "location": {
+            "x": -368150,
+            "y": 347125.0,
+            "z": 18515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_rotor",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003",
+        "role": "rotor",
+        "transform": {
+          "location": {
+            "x": -368150,
+            "y": 347275.0,
+            "z": 18515.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_crossbeam",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+        "role": "crossbeam",
+        "transform": {
+          "location": {
+            "x": -368350,
+            "y": 346900,
+            "z": 18440.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_west_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+        "role": "west_leg",
+        "transform": {
+          "location": {
+            "x": -368300.0,
+            "y": 346900,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_east_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+        "role": "east_leg",
+        "transform": {
+          "location": {
+            "x": -368000.0,
+            "y": 346900,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_battery",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+        "role": "battery",
+        "transform": {
+          "location": {
+            "x": -367950,
+            "y": 346800,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_spare_wheel",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002",
+        "role": "spare_wheel",
+        "transform": {
+          "location": {
+            "x": -367800.0,
+            "y": 346750.0,
+            "z": 18440.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_cliff_garden_84022",
+        "label": "CodexDress_CopperPatina_signal_sail",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001",
+        "role": "signal_sail",
+        "transform": {
+          "location": {
+            "x": -368000.0,
+            "y": 346600,
+            "z": 18315.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_housing",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105",
+        "role": "housing",
+        "transform": {
+          "location": {
+            "x": -369150,
+            "y": 321800,
+            "z": 20165.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_shaft",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106",
+        "role": "shaft",
+        "transform": {
+          "location": {
+            "x": -369150,
+            "y": 322025.0,
+            "z": 20215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_rotor",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103",
+        "role": "rotor",
+        "transform": {
+          "location": {
+            "x": -369150,
+            "y": 322175.0,
+            "z": 20215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_crossbeam",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "role": "crossbeam",
+        "transform": {
+          "location": {
+            "x": -369350,
+            "y": 321800,
+            "z": 20140.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_west_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "role": "west_leg",
+        "transform": {
+          "location": {
+            "x": -369300.0,
+            "y": 321800,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_east_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "role": "east_leg",
+        "transform": {
+          "location": {
+            "x": -369000.0,
+            "y": 321800,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_battery",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+        "role": "battery",
+        "transform": {
+          "location": {
+            "x": -368950,
+            "y": 321700,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_spare_wheel",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102",
+        "role": "spare_wheel",
+        "transform": {
+          "location": {
+            "x": -368800.0,
+            "y": 321650.0,
+            "z": 20140.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_river_canyon_84033",
+        "label": "CodexDress_DawnCrimson_signal_sail",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101",
+        "role": "signal_sail",
+        "transform": {
+          "location": {
+            "x": -369000.0,
+            "y": 321500,
+            "z": 20015.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_housing",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205",
+        "role": "housing",
+        "transform": {
+          "location": {
+            "x": -366150,
+            "y": 298200,
+            "z": 17765.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_shaft",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206",
+        "role": "shaft",
+        "transform": {
+          "location": {
+            "x": -366150,
+            "y": 298425.0,
+            "z": 17815.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_rotor",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203",
+        "role": "rotor",
+        "transform": {
+          "location": {
+            "x": -366150,
+            "y": 298575.0,
+            "z": 17815.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_crossbeam",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "role": "crossbeam",
+        "transform": {
+          "location": {
+            "x": -366350,
+            "y": 298200,
+            "z": 17740.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_west_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "role": "west_leg",
+        "transform": {
+          "location": {
+            "x": -366300.0,
+            "y": 298200,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_east_leg",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "role": "east_leg",
+        "transform": {
+          "location": {
+            "x": -366000.0,
+            "y": 298200,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 90,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 0.3125,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_battery",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204",
+        "role": "battery",
+        "transform": {
+          "location": {
+            "x": -365950,
+            "y": 298100,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_spare_wheel",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202",
+        "role": "spare_wheel",
+        "transform": {
+          "location": {
+            "x": -365800.0,
+            "y": 298050.0,
+            "z": 17740.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "island": "CodexIsland_summit_rim_84011",
+        "label": "CodexDress_StormAmethyst_signal_sail",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201",
+        "role": "signal_sail",
+        "transform": {
+          "location": {
+            "x": -366000.0,
+            "y": 297900,
+            "z": 17615.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "folder": "CodexContest/Staging/Workshops",
+    "islands": [
+      "CodexIsland_cliff_garden_84022",
+      "CodexIsland_river_canyon_84033",
+      "CodexIsland_summit_rim_84011"
+    ],
+    "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "map_package": "/Game/Daedalus/DaedalusWorld",
+    "module_paths": {
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206": {
+        "name": "CodexModule_StormAmethyst_DriveShaft_85206",
+        "source_name": "CodexModule_StormAmethyst_DriveShaft_85206_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103": {
+        "name": "CodexModule_DawnCrimson_TurbineRotor_85103",
+        "source_name": "CodexModule_DawnCrimson_TurbineRotor_85103_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101": {
+        "name": "CodexModule_DawnCrimson_SailPanel_85101",
+        "source_name": "CodexModule_DawnCrimson_SailPanel_85101_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106": {
+        "name": "CodexModule_DawnCrimson_DriveShaft_85106",
+        "source_name": "CodexModule_DawnCrimson_DriveShaft_85106_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201": {
+        "name": "CodexModule_StormAmethyst_SailPanel_85201",
+        "source_name": "CodexModule_StormAmethyst_SailPanel_85201_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100": {
+        "name": "CodexModule_DawnCrimson_BridgeCoupler_85100",
+        "source_name": "CodexModule_DawnCrimson_BridgeCoupler_85100_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204": {
+        "name": "CodexModule_StormAmethyst_CrystalBattery_85204",
+        "source_name": "CodexModule_StormAmethyst_CrystalBattery_85204_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202": {
+        "name": "CodexModule_StormAmethyst_WagonWheel_85202",
+        "source_name": "CodexModule_StormAmethyst_WagonWheel_85202_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104": {
+        "name": "CodexModule_DawnCrimson_CrystalBattery_85104",
+        "source_name": "CodexModule_DawnCrimson_CrystalBattery_85104_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203": {
+        "name": "CodexModule_StormAmethyst_TurbineRotor_85203",
+        "source_name": "CodexModule_StormAmethyst_TurbineRotor_85203_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003": {
+        "name": "CodexModule_CopperPatina_TurbineRotor_85003",
+        "source_name": "CodexModule_CopperPatina_TurbineRotor_85003_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001": {
+        "name": "CodexModule_CopperPatina_SailPanel_85001",
+        "source_name": "CodexModule_CopperPatina_SailPanel_85001_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005": {
+        "name": "CodexModule_CopperPatina_GearboxHousing_85005",
+        "source_name": "CodexModule_CopperPatina_GearboxHousing_85005_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004": {
+        "name": "CodexModule_CopperPatina_CrystalBattery_85004",
+        "source_name": "CodexModule_CopperPatina_CrystalBattery_85004_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200": {
+        "name": "CodexModule_StormAmethyst_BridgeCoupler_85200",
+        "source_name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105": {
+        "name": "CodexModule_DawnCrimson_GearboxHousing_85105",
+        "source_name": "CodexModule_DawnCrimson_GearboxHousing_85105_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002": {
+        "name": "CodexModule_CopperPatina_WagonWheel_85002",
+        "source_name": "CodexModule_CopperPatina_WagonWheel_85002_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102": {
+        "name": "CodexModule_DawnCrimson_WagonWheel_85102",
+        "source_name": "CodexModule_DawnCrimson_WagonWheel_85102_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000": {
+        "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+        "source_name": "CodexModule_CopperPatina_BridgeCoupler_85000_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006": {
+        "name": "CodexModule_CopperPatina_DriveShaft_85006",
+        "source_name": "CodexModule_CopperPatina_DriveShaft_85006_part"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205": {
+        "name": "CodexModule_StormAmethyst_GearboxHousing_85205",
+        "source_name": "CodexModule_StormAmethyst_GearboxHousing_85205_part"
+      }
+    },
+    "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-prepared.unreal.json",
+    "saved_receipt_fingerprint": {
+      "bytes": 67153,
+      "sha256": "4579ccd32d42619ab6639cc805ec47a7be3024517aab9125cb5728e8d786891f"
+    },
+    "schema": "daedalus.codex-module-dressing.v1"
+  },
+  "reused_actors": 0,
+  "save_return": true,
+  "saved_unreal": true,
+  "stage": "placed_and_saved",
+  "staging_only": true
+}

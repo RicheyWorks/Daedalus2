@@ -1,0 +1,7 @@
+{
+  "steps": 0,
+  "yielded": [],
+  "result": null,
+  "error": "Traceback (most recent call last):\n  File \"C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_bridge_commands.py\", line 149, in run_steps\n    v = next(gen)\n        ^^^^^^^^^\n  File \"<daedalus.steps:Codex PR146 actual production import then unchanged reuse>\", line 20, in steps\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py\", line 161, in import_steps\n    raise RuntimeError(\"admitted source/settings/dependencies changed between editor ticks; no item started\")\nRuntimeError: admitted source/settings/dependencies changed between editor ticks; no item started\n",
+  "seconds": 0.0
+}

@@ -1,0 +1,658 @@
+{
+  "assembly_origin_metres": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "config": {
+    "assembly": "PowerUnit",
+    "placements": [
+      {
+        "location_metres": [
+          0.0,
+          0.0,
+          1.5
+        ],
+        "part": "GearboxHousing",
+        "role": "gearbox"
+      },
+      {
+        "location_metres": [
+          0.0,
+          -2.25,
+          2.0
+        ],
+        "part": "DriveShaft",
+        "role": "shaft"
+      },
+      {
+        "location_metres": [
+          0.0,
+          -3.75,
+          2.0
+        ],
+        "part": "TurbineRotor",
+        "role": "rotor"
+      },
+      {
+        "location_metres": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "part": "CrystalBattery",
+        "role": "battery"
+      }
+    ],
+    "preset": "CopperPatina",
+    "seed": 86100,
+    "source_dependencies_sha256": {
+      "codex_contest_island.py": "7266330248622f19b88d70af73a7adec0b3062a31d8400008fc21cc1b7221268",
+      "codex_salvage_assembly.py": "412d2d778d4a9d2f6836f4152667084065260e7a49206f8fed8cd68b056044d6",
+      "codex_skyharbor_modules.py": "596c33b184fadc1d153274e2e1b5e8371a3f33e8c1f0d96a03bde8dae89c6ed7",
+      "ship.py": "c59ea88f3f55ad64a8b0eb7d29709207af878f0fea4c26720583ab19385a0fc3",
+      "sides.py": "607b4e0c48f660d0157c6bbacbcde77d65b0812c6b35bc9a478f73e9e31a06e2",
+      "voxel_island.py": "c04d929fa2951291defb669c4aa4a4a9f41910bc8222a92c9590ca309f8b1a45"
+    },
+    "source_sha256": "f09e8d21772827f256847e112875f1488fb99554a1ad48d56679729f357cb18f",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "0b66a3639f80f8addf477b109710bb065d2993ce4061111bb5653c892a3eefa9",
+  "electrical_wiring": {
+    "battery_role": "battery",
+    "description": "Adjacent battery only; no connection to gearbox or rotor.",
+    "implemented": false
+  },
+  "implemented_gameplay": false,
+  "joins": [
+    {
+      "a": {
+        "role": "gearbox",
+        "socket": "input"
+      },
+      "b": {
+        "role": "shaft",
+        "socket": "output"
+      },
+      "delta_metres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "forward_a": [
+        0,
+        -1,
+        0
+      ],
+      "forward_b": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "opposed_forward": true,
+      "position_metres": [
+        0.0,
+        -0.75,
+        2.0
+      ],
+      "runtime_constraint_implemented": false
+    },
+    {
+      "a": {
+        "role": "shaft",
+        "socket": "input"
+      },
+      "b": {
+        "role": "rotor",
+        "socket": "axle"
+      },
+      "delta_metres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "forward_a": [
+        0,
+        -1,
+        0
+      ],
+      "forward_b": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "opposed_forward": true,
+      "position_metres": [
+        0.0,
+        -3.75,
+        2.0
+      ],
+      "runtime_constraint_implemented": false
+    }
+  ],
+  "name": "CodexSalvage_PowerUnit_86100",
+  "native_collision_verified": false,
+  "parts": [
+    {
+      "assembly_connection_points": [
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "input",
+          "position_metres": [
+            0.0,
+            -0.75,
+            2.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "output",
+          "position_metres": [
+            0.0,
+            0.75,
+            2.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "connection_points": [
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "input",
+          "position_metres": [
+            0,
+            -0.75,
+            0.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "output",
+          "position_metres": [
+            0,
+            0.75,
+            0.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "location_metres": [
+        0.0,
+        0.0,
+        1.5
+      ],
+      "object_name": "CodexSalvage_PowerUnit_86100_gearbox",
+      "part": "GearboxHousing",
+      "pivot_metres": [
+        0,
+        0,
+        0
+      ],
+      "role": "gearbox",
+      "rotation_axis": null,
+      "rotation_euler_radians": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_config": {
+        "part": "GearboxHousing",
+        "preset": "CopperPatina",
+        "seed": 86105,
+        "source_sha256": "9a9589a7ff6a3d0f85e7ea617729c3ef9c8b16d88700f819622fd9655ae2bc90",
+        "version": 1,
+        "voxel_metres": 0.25
+      },
+      "source_config_sha256": "555345b754d78ee423588ade484bb1f4012c6f9dfe0c87651ccdee30cbe739f3",
+      "source_generator": "codex_skyharbor_modules.plan",
+      "voxel_sha256": "4f88a48f3df8363f02fe9a55f483a7b31d9f4f15442a51bc17613d0fb55a53ad"
+    },
+    {
+      "assembly_connection_points": [
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "input",
+          "position_metres": [
+            0.0,
+            -3.75,
+            2.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "output",
+          "position_metres": [
+            0.0,
+            -0.75,
+            2.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "connection_points": [
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "input",
+          "position_metres": [
+            0,
+            -1.5,
+            0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "output",
+          "position_metres": [
+            0,
+            1.5,
+            0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "location_metres": [
+        0.0,
+        -2.25,
+        2.0
+      ],
+      "object_name": "CodexSalvage_PowerUnit_86100_shaft",
+      "part": "DriveShaft",
+      "pivot_metres": [
+        0,
+        0,
+        0
+      ],
+      "role": "shaft",
+      "rotation_axis": [
+        0,
+        1,
+        0
+      ],
+      "rotation_euler_radians": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_config": {
+        "part": "DriveShaft",
+        "preset": "CopperPatina",
+        "seed": 86106,
+        "source_sha256": "9a9589a7ff6a3d0f85e7ea617729c3ef9c8b16d88700f819622fd9655ae2bc90",
+        "version": 1,
+        "voxel_metres": 0.25
+      },
+      "source_config_sha256": "d5778716a6736cb3f3dd7780cb01bc011e86d8d5ae5cf76a2fe80bcb749a96f4",
+      "source_generator": "codex_skyharbor_modules.plan",
+      "voxel_sha256": "a2c74b25997ee05f822047e70956e2de7fa85218ba7ee647ad3c366ab45e98fb"
+    },
+    {
+      "assembly_connection_points": [
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "axle",
+          "position_metres": [
+            0.0,
+            -3.75,
+            2.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "connection_points": [
+        {
+          "forward": [
+            0,
+            1,
+            0
+          ],
+          "kind": "shaft-0.5m",
+          "name": "axle",
+          "position_metres": [
+            0,
+            0,
+            0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "location_metres": [
+        0.0,
+        -3.75,
+        2.0
+      ],
+      "object_name": "CodexSalvage_PowerUnit_86100_rotor",
+      "part": "TurbineRotor",
+      "pivot_metres": [
+        0,
+        0,
+        0
+      ],
+      "role": "rotor",
+      "rotation_axis": [
+        0,
+        1,
+        0
+      ],
+      "rotation_euler_radians": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_config": {
+        "part": "TurbineRotor",
+        "preset": "CopperPatina",
+        "seed": 86103,
+        "source_sha256": "9a9589a7ff6a3d0f85e7ea617729c3ef9c8b16d88700f819622fd9655ae2bc90",
+        "version": 1,
+        "voxel_metres": 0.25
+      },
+      "source_config_sha256": "2ee066517fc45cca0f16aef560c46056702231baec266fcf62b78c7ca7ebf9d8",
+      "source_generator": "codex_skyharbor_modules.plan",
+      "voxel_sha256": "85d68e91acf41b45dab49ce3b6fcff4b6c39f79355e1f8e8b5697f215e1818f5"
+    },
+    {
+      "assembly_connection_points": [
+        {
+          "forward": [
+            0,
+            0,
+            -1
+          ],
+          "kind": "battery-base",
+          "name": "battery-seat",
+          "position_metres": [
+            1.25,
+            0.0,
+            0.0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "power-port",
+          "name": "power",
+          "position_metres": [
+            1.25,
+            -0.75,
+            0.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "connection_points": [
+        {
+          "forward": [
+            0,
+            0,
+            -1
+          ],
+          "kind": "battery-base",
+          "name": "battery-seat",
+          "position_metres": [
+            0,
+            0,
+            0
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "forward": [
+            0,
+            -1,
+            0
+          ],
+          "kind": "power-port",
+          "name": "power",
+          "position_metres": [
+            0,
+            -0.75,
+            0.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "location_metres": [
+        1.25,
+        0.0,
+        0.0
+      ],
+      "object_name": "CodexSalvage_PowerUnit_86100_battery",
+      "part": "CrystalBattery",
+      "pivot_metres": [
+        0,
+        0,
+        0
+      ],
+      "role": "battery",
+      "rotation_axis": null,
+      "rotation_euler_radians": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_config": {
+        "part": "CrystalBattery",
+        "preset": "CopperPatina",
+        "seed": 86104,
+        "source_sha256": "9a9589a7ff6a3d0f85e7ea617729c3ef9c8b16d88700f819622fd9655ae2bc90",
+        "version": 1,
+        "voxel_metres": 0.25
+      },
+      "source_config_sha256": "2b7845b4f0d66e76344aed47d6cb207767e429ded39a995a0f544d732a17da41",
+      "source_generator": "codex_skyharbor_modules.plan",
+      "voxel_sha256": "f8156607a313d5b3dc1ff8ea67b2aeb747defe450c075a3afb8e00a23f23faea"
+    },
+    {
+      "assembly_connection_points": [
+        {
+          "forward": [
+            0,
+            0,
+            1
+          ],
+          "kind": "gearbox-support",
+          "name": "gearbox-seat",
+          "position_metres": [
+            0.0,
+            0.0,
+            1.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "connection_points": [
+        {
+          "forward": [
+            0,
+            0,
+            1
+          ],
+          "kind": "gearbox-support",
+          "name": "gearbox-seat",
+          "position_metres": [
+            0.0,
+            0.0,
+            1.5
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "location_metres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "object_name": "CodexSalvage_PowerUnit_86100_support",
+      "part": "PowerUnitSupportFrame",
+      "pivot_metres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "support",
+      "rotation_axis": null,
+      "rotation_euler_radians": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_generator": "codex_salvage_assembly._support_frame",
+      "supports": {
+        "geometry_fit_only": true,
+        "role": "gearbox",
+        "surface_z_metres": 1.5
+      },
+      "voxel_sha256": "d3a9e39cb4ad4b8556782fc1f94d8ed07c00fca506c6c23535580c6f8892bb5b"
+    }
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-salvage-recipe.v1",
+  "snap_grid_metres": 0.25,
+  "world_placement": "held; reproducible assembly coordinates only"
+}

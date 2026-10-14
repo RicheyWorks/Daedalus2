@@ -1,0 +1,758 @@
+{
+  "stdout": "",
+  "result": [
+    {
+      "group": "CodexModule_CopperPatina_BridgeCoupler_85000",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_BridgeCoupler_85000_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "min": [
+        -4.371138857095502e-06,
+        -50.00003433227539,
+        -25.0
+      ],
+      "max": [
+        400.0,
+        50.0,
+        25.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_CrystalBattery_85004",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_CrystalBattery_85004_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        225.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_DriveShaft_85006",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_DriveShaft_85006_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006",
+      "min": [
+        -50.0000114440918,
+        -150.0,
+        -50.0
+      ],
+      "max": [
+        50.0000114440918,
+        150.0,
+        50.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_GearboxHousing_85005",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_GearboxHousing_85005_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        100.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_SailPanel_85001",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_SailPanel_85001_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001",
+      "min": [
+        0.0,
+        -2.6226833142573014e-05,
+        0.0
+      ],
+      "max": [
+        300.0,
+        25.0,
+        400.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_TurbineRotor_85003",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_TurbineRotor_85003_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003",
+      "min": [
+        -200.0,
+        -25.000017166137695,
+        -200.0
+      ],
+      "max": [
+        200.0,
+        25.000017166137695,
+        200.0
+      ]
+    },
+    {
+      "group": "CodexModule_CopperPatina_WagonWheel_85002",
+      "kind": "module",
+      "source_name": "CodexModule_CopperPatina_WagonWheel_85002_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002",
+      "min": [
+        -125.0,
+        -25.000011444091797,
+        -125.0
+      ],
+      "max": [
+        125.0,
+        25.000011444091797,
+        125.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_BridgeCoupler_85100_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "min": [
+        -4.371138857095502e-06,
+        -50.00003433227539,
+        -25.0
+      ],
+      "max": [
+        400.0,
+        50.0,
+        25.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_CrystalBattery_85104",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_CrystalBattery_85104_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        225.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_DriveShaft_85106",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_DriveShaft_85106_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106",
+      "min": [
+        -50.0000114440918,
+        -150.0,
+        -50.0
+      ],
+      "max": [
+        50.0000114440918,
+        150.0,
+        50.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_GearboxHousing_85105",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_GearboxHousing_85105_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        100.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_SailPanel_85101",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_SailPanel_85101_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101",
+      "min": [
+        0.0,
+        -2.6226833142573014e-05,
+        0.0
+      ],
+      "max": [
+        300.0,
+        25.0,
+        400.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_TurbineRotor_85103",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_TurbineRotor_85103_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103",
+      "min": [
+        -200.0,
+        -25.000017166137695,
+        -200.0
+      ],
+      "max": [
+        200.0,
+        25.000017166137695,
+        200.0
+      ]
+    },
+    {
+      "group": "CodexModule_DawnCrimson_WagonWheel_85102",
+      "kind": "module",
+      "source_name": "CodexModule_DawnCrimson_WagonWheel_85102_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102",
+      "min": [
+        -125.0,
+        -25.000011444091797,
+        -125.0
+      ],
+      "max": [
+        125.0,
+        25.000011444091797,
+        125.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_BridgeCoupler_85200_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "min": [
+        -4.371138857095502e-06,
+        -50.00003433227539,
+        -25.0
+      ],
+      "max": [
+        400.0,
+        50.0,
+        25.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_CrystalBattery_85204",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_CrystalBattery_85204_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        225.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_DriveShaft_85206",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_DriveShaft_85206_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206",
+      "min": [
+        -50.0000114440918,
+        -150.0,
+        -50.0
+      ],
+      "max": [
+        50.0000114440918,
+        150.0,
+        50.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_GearboxHousing_85205",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_GearboxHousing_85205_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205",
+      "min": [
+        -75.00000762939453,
+        -75.00000762939453,
+        0.0
+      ],
+      "max": [
+        75.00000762939453,
+        75.00000762939453,
+        100.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_SailPanel_85201",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_SailPanel_85201_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201",
+      "min": [
+        0.0,
+        -2.6226833142573014e-05,
+        0.0
+      ],
+      "max": [
+        300.0,
+        25.0,
+        400.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_TurbineRotor_85203",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_TurbineRotor_85203_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203",
+      "min": [
+        -200.0,
+        -25.000017166137695,
+        -200.0
+      ],
+      "max": [
+        200.0,
+        25.000017166137695,
+        200.0
+      ]
+    },
+    {
+      "group": "CodexModule_StormAmethyst_WagonWheel_85202",
+      "kind": "module",
+      "source_name": "CodexModule_StormAmethyst_WagonWheel_85202_part",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202",
+      "min": [
+        -125.0,
+        -25.000011444091797,
+        -125.0
+      ],
+      "max": [
+        125.0,
+        25.000011444091797,
+        125.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_clouds",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_clouds.CodexIsland_cliff_garden_84022_clouds",
+      "min": [
+        -6600.0,
+        -3400.00048828125,
+        1100.0
+      ],
+      "max": [
+        6099.99951171875,
+        -1799.99951171875,
+        1700.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_cottage",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_cottage.CodexIsland_cliff_garden_84022_cottage",
+      "min": [
+        499.9999084472656,
+        -1200.0001220703125,
+        100.0
+      ],
+      "max": [
+        1400.0,
+        -300.0000305175781,
+        900.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_crystals",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_crystals.CodexIsland_cliff_garden_84022_crystals",
+      "min": [
+        -400.0002136230469,
+        -2400.0,
+        -3000.0
+      ],
+      "max": [
+        2300.0,
+        899.9998168945312,
+        -1700.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_flowers",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_flowers.CodexIsland_cliff_garden_84022_flowers",
+      "min": [
+        -4000.000244140625,
+        -3599.999755859375,
+        100.0
+      ],
+      "max": [
+        3800.0,
+        3700.000244140625,
+        2000.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_island",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_island.CodexIsland_cliff_garden_84022_island",
+      "min": [
+        -4600.0,
+        -4300.0,
+        -3200.0
+      ],
+      "max": [
+        4600.0,
+        4300.0,
+        1900.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_landmarks",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_landmarks.CodexIsland_cliff_garden_84022_landmarks",
+      "min": [
+        1000.0000610351562,
+        499.9997863769531,
+        100.0
+      ],
+      "max": [
+        2400.000244140625,
+        1899.9998779296875,
+        300.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_rocks",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_rocks.CodexIsland_cliff_garden_84022_rocks",
+      "min": [
+        -4000.0,
+        -1200.0003662109375,
+        100.0
+      ],
+      "max": [
+        3800.0,
+        3500.0,
+        2100.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_trees",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_trees.CodexIsland_cliff_garden_84022_trees",
+      "min": [
+        -3400.0,
+        -3100.000244140625,
+        100.0
+      ],
+      "max": [
+        3199.999755859375,
+        3700.000244140625,
+        2500.0
+      ]
+    },
+    {
+      "group": "CodexIsland_cliff_garden_84022",
+      "kind": "island",
+      "source_name": "CodexIsland_cliff_garden_84022_water",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_water.CodexIsland_cliff_garden_84022_water",
+      "min": [
+        -3799.999755859375,
+        600.0001220703125,
+        -1000.0
+      ],
+      "max": [
+        -999.9998779296875,
+        3000.000244140625,
+        0.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_clouds",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_clouds.CodexIsland_river_canyon_84033_clouds",
+      "min": [
+        5200.0,
+        -2900.00048828125,
+        900.0
+      ],
+      "max": [
+        6800.0,
+        1699.99951171875,
+        1400.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_cottage",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_cottage.CodexIsland_river_canyon_84033_cottage",
+      "min": [
+        -799.9999389648438,
+        600.0,
+        1000.0
+      ],
+      "max": [
+        100.00012969970703,
+        1500.0001220703125,
+        1800.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_crystals",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_crystals.CodexIsland_river_canyon_84033_crystals",
+      "min": [
+        -2100.000244140625,
+        -2300.0,
+        -3200.0
+      ],
+      "max": [
+        2000.0,
+        1599.9998779296875,
+        -700.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_flowers",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_flowers.CodexIsland_river_canyon_84033_flowers",
+      "min": [
+        -4500.0,
+        -4000.0,
+        700.0
+      ],
+      "max": [
+        4100.0,
+        4300.0,
+        1400.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_island",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_island.CodexIsland_river_canyon_84033_island",
+      "min": [
+        -4600.0,
+        -4400.0,
+        -3700.0
+      ],
+      "max": [
+        4600.0,
+        4600.0,
+        1300.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_landmarks",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_landmarks.CodexIsland_river_canyon_84033_landmarks",
+      "min": [
+        -2700.000244140625,
+        -2699.999755859375,
+        1000.0
+      ],
+      "max": [
+        -1200.0001220703125,
+        -1299.999755859375,
+        1500.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_rocks",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_rocks.CodexIsland_river_canyon_84033_rocks",
+      "min": [
+        -3300.0,
+        -1700.000244140625,
+        700.0
+      ],
+      "max": [
+        3500.000244140625,
+        2300.0,
+        1200.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_trees",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_trees.CodexIsland_river_canyon_84033_trees",
+      "min": [
+        -3500.0,
+        -4000.0,
+        700.0
+      ],
+      "max": [
+        1800.000244140625,
+        3800.0,
+        2000.0
+      ]
+    },
+    {
+      "group": "CodexIsland_river_canyon_84033",
+      "kind": "island",
+      "source_name": "CodexIsland_river_canyon_84033_water",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_water.CodexIsland_river_canyon_84033_water",
+      "min": [
+        -4600.0,
+        -3000.000244140625,
+        -600.0
+      ],
+      "max": [
+        4500.0,
+        599.9999389648438,
+        -500.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_clouds",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_clouds.CodexIsland_summit_rim_84011_clouds",
+      "min": [
+        -6800.0,
+        -4099.99951171875,
+        600.0
+      ],
+      "max": [
+        1200.0006103515625,
+        6600.0,
+        1300.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_cottage",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_cottage.CodexIsland_summit_rim_84011_cottage",
+      "min": [
+        -400.0001525878906,
+        -1700.0,
+        1300.0
+      ],
+      "max": [
+        499.99993896484375,
+        -799.9999389648438,
+        2100.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_crystals",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_crystals.CodexIsland_summit_rim_84011_crystals",
+      "min": [
+        -1800.0,
+        -1500.0,
+        -2500.0
+      ],
+      "max": [
+        2000.0,
+        2200.0,
+        -1000.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_flowers",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_flowers.CodexIsland_summit_rim_84011_flowers",
+      "min": [
+        -3800.0,
+        -3800.0,
+        -200.0
+      ],
+      "max": [
+        4000.0,
+        4000.000244140625,
+        1700.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_island",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_island.CodexIsland_summit_rim_84011_island",
+      "min": [
+        -4300.0,
+        -4600.0,
+        -2400.0
+      ],
+      "max": [
+        4600.0,
+        4600.0,
+        1900.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_rocks",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_rocks.CodexIsland_summit_rim_84011_rocks",
+      "min": [
+        200.00033569335938,
+        -400.00018310546875,
+        -200.0
+      ],
+      "max": [
+        2100.0,
+        4000.0,
+        1500.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_trees",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_trees.CodexIsland_summit_rim_84011_trees",
+      "min": [
+        -2300.0,
+        -2800.0,
+        -200.0
+      ],
+      "max": [
+        3100.0,
+        4600.0,
+        1700.0
+      ]
+    },
+    {
+      "group": "CodexIsland_summit_rim_84011",
+      "kind": "island",
+      "source_name": "CodexIsland_summit_rim_84011_water",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_water.CodexIsland_summit_rim_84011_water",
+      "min": [
+        -4300.0,
+        -4400.0,
+        -1000.0
+      ],
+      "max": [
+        4400.0,
+        4500.0,
+        0.0
+      ]
+    }
+  ],
+  "unattended": false
+}
