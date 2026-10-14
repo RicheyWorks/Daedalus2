@@ -1,0 +1,25 @@
+{
+ "when": "2026-10-14T02:00:10",
+ "realms": {
+  "WORLD-ZERO": {
+   "rows": 9091,
+   "sha256": "08a04dfe60175ca3"
+  },
+  "GALLERY-CITY": {
+   "rows": 9991,
+   "sha256": "0b1e0a697a82e064"
+  },
+  "PARCELS": {
+   "rows": 9991,
+   "sha256": "f2262a24ea6a2116"
+  },
+  "BRICKS": {
+   "rows": 9991,
+   "sha256": "81c1d75a74804528"
+  },
+  "LABYRINTH": {
+   "rows": 9991,
+   "sha256": "0cbcdb7024e26d43"
+  }
+ }
+}
