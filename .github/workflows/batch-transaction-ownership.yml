@@ -1,0 +1,52 @@
+name: Bridge batch ownership
+
+on:
+  pull_request:
+    branches: [main, codex/remote-outcome-unknown]
+    paths:
+      - "connectors/claude-unreal-connector/plugin/ClaudeUnrealBridge/Content/Python/claude_unreal_bridge.py"
+      - "connectors/claude-unreal-connector/tests/bridge_batch*.py"
+      - "connectors/claude-unreal-connector/tests/bridge_lifecycle_test.py"
+      - "connectors/claude-unreal-connector/tests/remote_outcome_unknown*.py"
+      - "connectors/claude-unreal-connector/tests/fake_unreal.py"
+      - "connectors/claude-unreal-connector/harness/suites.json"
+      - "connectors/claude-unreal-connector/docs/BATCH-TRANSACTION-OWNERSHIP.md"
+      - ".github/workflows/batch-transaction-ownership.yml"
+  push:
+    branches: [main]
+    paths:
+      - "connectors/claude-unreal-connector/plugin/ClaudeUnrealBridge/Content/Python/claude_unreal_bridge.py"
+      - "connectors/claude-unreal-connector/tests/bridge_batch*.py"
+      - "connectors/claude-unreal-connector/tests/bridge_lifecycle_test.py"
+      - "connectors/claude-unreal-connector/tests/remote_outcome_unknown*.py"
+      - "connectors/claude-unreal-connector/tests/fake_unreal.py"
+      - "connectors/claude-unreal-connector/harness/suites.json"
+      - "connectors/claude-unreal-connector/docs/BATCH-TRANSACTION-OWNERSHIP.md"
+      - ".github/workflows/batch-transaction-ownership.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Offline batch ownership (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ownership regressions and assertion-only gate mutations
+        run: python -B connectors/claude-unreal-connector/tests/bridge_batch_ownership_test.py
+      - name: Remote worker lifetime and batch admission
+        run: python -B connectors/claude-unreal-connector/tests/bridge_batch_remote_test.py
+      - name: Inherited cooperative lifecycle regressions
+        run: python -B connectors/claude-unreal-connector/tests/bridge_lifecycle_test.py
+      - name: Inherited remote uncertainty regressions
+        run: python -B connectors/claude-unreal-connector/tests/remote_outcome_unknown_test.py
+      - name: Inherited remote assertion-only mutations
+        run: python -B connectors/claude-unreal-connector/tests/remote_outcome_unknown_mutation_test.py

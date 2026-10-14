@@ -27,8 +27,8 @@ MUTANTS = (
      "test_remote_lock_error_falls_back_without_touching_another_owners_client"),
     ("timeout_validation_removed", "if not math.isfinite(timeout) or timeout < 0:", "if False:",
      "test_invalid_timeout_is_rejected_before_starting_worker"),
-    ("uncertainty_not_cached", 'reply.get("status") == "ok" or\n                            reply.get("code") == RemoteExecutionUncertain.code',
-     'reply.get("status") == "ok"',
+    ("uncertainty_not_cached", 'reply.get("code") in (RemoteExecutionUncertain.code, "COMMAND_INTERRUPTED")',
+     'reply.get("code") == "COMMAND_INTERRUPTED"',
      "test_uncertain_request_id_retry_returns_terminal_without_new_remote_effect"),
 )
 
