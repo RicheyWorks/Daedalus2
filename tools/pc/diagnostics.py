@@ -76,7 +76,8 @@ def snapshot(provider_id, metrics, *, provenance, sampled_at, observed_at,
     observed = _utc(observed_at)
     if observed is None:
         raise ValueError("observed_at must be an aware timestamp")
-    if availability not in AVAILABILITY or provenance not in PROVENANCE:
+    if (not isinstance(availability, str) or availability not in AVAILABILITY or
+            not isinstance(provenance, str) or provenance not in PROVENANCE):
         raise ValueError("invalid availability or provenance")
     if not isinstance(provider_id, str) or not provider_id or len(provider_id) > 128:
         raise ValueError("invalid provider_id")
