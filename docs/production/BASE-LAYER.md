@@ -36,7 +36,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 2 | Terrain host | **done** | Fable | DaedalusWorld persistent level, 1863 static meshes, PCG |
 | 3 | Lands laid down | **partial** | Fable | 14 team islands on estates deeds 9..59 (dab971586, 7552 actors, undo table saved). Missing: plot markers for the rest of ring 1..N |
 | 4 | Mint row | **missing** | Sol | contract signs `to,slot,seed,radius,deadline` only, 64 slots, no realm/estate/egg fields (29124). Needs realm-aware mint design |
-| 5 | Cast | **partial** | Fable/Sol | Keeper Ostra speaks via dialogue; no `world-zero.dcs` (cross-realm NPCs in REALM-CASTS §165 unbound) |
+| 5 | Cast | **partial** | Fable/Sol | `world-zero.dcs`: the six cross-realm NPCs (Ferryman Bram, Rainbow Painter, Merchant Zee with stock by realm visited, Heartstone Seeker Captain, Courier of Worlds, Tugboat Balloonist); lay_cast rings them round the PlayerStart; art: Sol to export Mob_Zero_* (6) |
 | 6 | Creatures | **partial** | Fable | Encounters spawn foes (AlwaysSpawn); 10 enemy candidates validated of 500 |
 | 7 | Items | **done** | Fable | `world-zero.dic` 14 items |
 | 8 | Dialogue theme | **done** | Fable | `zero` |
