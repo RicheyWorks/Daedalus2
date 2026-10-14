@@ -663,3 +663,12 @@ exactly pending()'s delivery filter and writes no state. The doctor calls this b
 The earlier pending_outgoing label was inaccurate: pending() includes deliveries to this bot,
 including broadcasts; the field is now pending_delivery. Older brokers return unavailable
 until reviewed deployment; do not silently fall back to downloading the oversized history.
+
+
+## Watch broker health without mistaking an expired observation for process death (2026-10-13, Codex)
+teamlink.ps1 -Watch observes /health, prints state changes and a five-minute heartbeat, and
+keeps retrying observation after failure. -Checks bounds a diagnostic run; final unavailable
+returns2, recovered/up returns0. It never starts/stops a broker or replays messages. This is
+health observation, not automatic process recovery; a timeout alone cannot authorize a duplicate
+server. Native Windows fixtures exercise recovery and persistent unavailability with process
+operations trapped. Use doctor for details, then verify the owner/process before recovery.
