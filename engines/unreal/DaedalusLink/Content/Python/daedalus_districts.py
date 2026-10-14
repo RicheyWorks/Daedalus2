@@ -355,6 +355,7 @@ def dress_islands_steps(realms, decor_per_district=3):
     import daedalus_realm_ground as R
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     labels = P._labels_cache(sub)
+    cube = unreal.load_asset(P.CUBE)
     districts = {}
     for a in sub.get_all_level_actors():
         if a.get_class().get_name() == "DaedalusLandDistrict":
