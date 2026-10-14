@@ -26,6 +26,7 @@ import base64
 import contextlib
 import io
 import json
+import math
 import os
 import queue
 import socket
@@ -155,6 +156,14 @@ RESULT_MARK = "__CLAUDE_UNREAL_RESULT__"
 _remote = {"rx": None, "node": None, "error": None}
 
 
+class RemoteExecutionUncertain(RuntimeError):
+    """The remote attempt may have applied effects; automatically replaying is unsafe."""
+    code = "REMOTE_EXECUTION_UNCERTAIN"
+    dispatched = True
+    effects = "unknown"
+    retryable = False
+
+
 def _wrap(code):
     """Claude's code, wrapped so its `result` variable comes back as one marked line of output."""
     return ("import json as _cj, unreal\n"
@@ -177,28 +186,36 @@ def _remote_node(want):
         _remote["error"] = "remote_execution.py not found (%s)" % e
         return None
     rx = rex.RemoteExecution()
-    rx.start()
-    # `want` (this project's folder) is read on the game thread by the caller: this runs on a background thread,
-    # where touching the unreal API raises "Attempted to access Unreal API from outside the main game thread".
-    deadline = time.time() + 3.0
-    node = None
-    while time.time() < deadline and node is None:
-        nodes = list(rx.remote_nodes)
-        for n in nodes:
-            root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
-            if root.rstrip("\\/") == want.rstrip("\\/"):
-                node = n.get("node_id")
-                break
-        if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
-            node = nodes[0].get("node_id")   # one editor answered: this one, even if it names its project differently
-        time.sleep(0.1)
-    if node is None:
-        rx.stop()
-        _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
-        return None
-    rx.open_command_connection(node)
-    _remote.update(rx=rx, node=node, error=None)
-    return rx, node
+    connected = False
+    try:
+        rx.start()
+        # `want` is captured on the game thread; this worker never reads the Unreal API.
+        deadline = time.time() + 3.0
+        node = None
+        while time.time() < deadline and node is None:
+            nodes = list(rx.remote_nodes)
+            for n in nodes:
+                root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
+                if root.rstrip("\\/") == want.rstrip("\\/"):
+                    node = n.get("node_id")
+                    break
+            if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
+                node = nodes[0].get("node_id")   # one editor answered, even if its project name differs
+            time.sleep(0.1)
+        if node is None:
+            _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
+            return None
+        rx.open_command_connection(node)
+        _remote.update(rx=rx, node=node, error=None)
+        connected = True
+        return rx, node
+    finally:
+        if not connected:
+            # A provisional client was never cached; close it even when start/open failed.
+            try:
+                rx.stop()
+            except Exception:
+                pass
 
 
 _remote_lock = threading.Lock()
@@ -211,10 +228,11 @@ def _run_remote(code, box, want):
     One Remote Execution command connection is shared by every client thread and Epic's client is not
     thread-safe: concurrent run_command calls swapped replies (the art queue got another bot's `true` and failed
     with "'bool' object is not subscriptable"). So calls are serialized, but the wait is bounded: a run_command
-    that never returned once held a plain lock and wedged every later call. On a 30 s wait the call runs
-    in-process instead, and any failure drops the connection so the next call reconnects. (2026-10-12)"""
-    got_lock = _remote_lock.acquire(timeout=30)
+    that never returned once held a plain lock and wedged every later call. Only failures before invoking
+    run_command can fall back directly; a lost reply after invocation leaves the effects unknown."""
+    got_lock = False
     try:
+        got_lock = _remote_lock.acquire(timeout=30)
         if not got_lock:
             box["fallback"] = "Remote Execution busy for more than 30 s"
             return
@@ -223,15 +241,22 @@ def _run_remote(code, box, want):
             box["fallback"] = _remote["error"]
             return
         rx, _node = got
-        box["reply"] = rx.run_command(_wrap(code), unattended=True)
+        wrapped = _wrap(code)
+        box["dispatch_attempted"] = True
+        box["reply"] = rx.run_command(wrapped, unattended=True)
     except Exception as e:
-        box["fallback"] = "Remote Execution failed: %s" % e
-        try:
-            if _remote["rx"] is not None:
-                _remote["rx"].stop()
-        except Exception:
-            pass
-        _remote.update(rx=None, node=None)
+        if box.get("dispatch_attempted"):
+            box["error"] = RemoteExecutionUncertain(
+                "Remote Execution outcome is unknown after %s: %s" % (type(e).__name__, e))
+        else:
+            box["fallback"] = "Remote Execution failed: %s" % e
+        if got_lock:
+            try:
+                if _remote["rx"] is not None:
+                    _remote["rx"].stop()
+            except Exception:
+                pass
+            _remote.update(rx=None, node=None)
     finally:
         if got_lock:
             _remote_lock.release()
@@ -258,14 +283,21 @@ def cmd_execute_python(p):
     code = p["code"]
     if not p.get("unattended", True):
         return _exec_here(code)
-    box = {"done": False, "reply": None, "fallback": None}
+    timeout = float(p.get("timeout", 600))
+    if not math.isfinite(timeout) or timeout < 0:
+        raise ValueError("timeout must be finite and nonnegative")
+    box = {"done": False, "reply": None, "fallback": None,
+           "dispatch_attempted": False, "error": None}
     want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
     threading.Thread(target=_run_remote, args=(code, box, want), name="claude-unreal-remote", daemon=True).start()
-    deadline = time.time() + float(p.get("timeout", 600))
+    deadline = time.time() + timeout
     while not box["done"]:
         if time.time() > deadline:
-            raise TimeoutError("the editor did not run the code within the timeout")
+            raise RemoteExecutionUncertain(
+                "Remote Execution worker is still outstanding after the timeout; execution effects are unknown")
         yield
+    if box["error"] is not None:
+        raise box["error"]
     if box["fallback"]:
         out = _exec_here(code)
         out["note"] = box["fallback"] + "; ran directly, so a modal dialog would block the editor"
@@ -534,15 +566,20 @@ def _remember(rid, reply):
 
 def _finish(box, reply):
     rid = box.get("request_id")
-    if rid is not None and reply.get("status") == "ok":
+    if rid is not None and (reply.get("status") == "ok" or
+                            reply.get("code") == RemoteExecutionUncertain.code):
+        # Bounded completed-result replay only; no durable or in-flight request binding.
         _remember(rid, dict(reply))
     box["reply"] = reply
     box["done"].set()
 
 
 def _error(req, e):
-    return {"id": req.get("id"), "status": "error", "message": "%s: %s" % (type(e).__name__, e),
-            "traceback": traceback.format_exc()[-6000:]}
+    reply = {"id": req.get("id"), "status": "error", "message": "%s: %s" % (type(e).__name__, e),
+             "traceback": traceback.format_exc()[-6000:]}
+    if isinstance(e, RemoteExecutionUncertain):
+        reply.update(code=e.code, dispatched=e.dispatched, effects=e.effects, retryable=e.retryable)
+    return reply
 
 
 def _start(req, box):

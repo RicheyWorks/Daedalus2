@@ -1,0 +1,59 @@
+name: Remote execution uncertainty
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "connectors/claude-unreal-connector/plugin/ClaudeUnrealBridge/Content/Python/claude_unreal_bridge.py"
+      - "connectors/claude-unreal-connector/tests/remote_outcome_unknown*.py"
+      - "connectors/claude-unreal-connector/tests/fake_unreal.py"
+      - "connectors/claude-unreal-connector/tests/remote_execution.py"
+      - "connectors/claude-unreal-connector/tests/host.py"
+      - "connectors/claude-unreal-connector/harness/**"
+      - "connectors/claude-unreal-connector/docs/REMOTE-EXECUTION-UNCERTAINTY.md"
+      - "engines/unreal/DaedalusLink/Content/Python/daedalus_bridge_commands.py"
+      - "engines/unreal/core-test/bridge_commands_test.py"
+      - ".github/workflows/remote-outcome-unknown.yml"
+  push:
+    branches: [main]
+    paths:
+      - "connectors/claude-unreal-connector/plugin/ClaudeUnrealBridge/Content/Python/claude_unreal_bridge.py"
+      - "connectors/claude-unreal-connector/tests/remote_outcome_unknown*.py"
+      - "connectors/claude-unreal-connector/tests/fake_unreal.py"
+      - "connectors/claude-unreal-connector/tests/remote_execution.py"
+      - "connectors/claude-unreal-connector/tests/host.py"
+      - "connectors/claude-unreal-connector/harness/**"
+      - "connectors/claude-unreal-connector/docs/REMOTE-EXECUTION-UNCERTAINTY.md"
+      - "engines/unreal/DaedalusLink/Content/Python/daedalus_bridge_commands.py"
+      - "engines/unreal/core-test/bridge_commands_test.py"
+      - ".github/workflows/remote-outcome-unknown.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Offline remote outcome (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Remote uncertainty unit regressions (no sockets)
+        run: python connectors/claude-unreal-connector/tests/remote_outcome_unknown_test.py
+      - name: Healthy baseline and five assertion-only mutations
+        run: python connectors/claude-unreal-connector/tests/remote_outcome_unknown_mutation_test.py
+      - name: Existing transport contract against the stand-in
+        working-directory: connectors/claude-unreal-connector
+        run: python -m harness.contract
+      - name: Existing discovery walk against the stand-in
+        working-directory: connectors/claude-unreal-connector
+        run: python -m harness.walk --standin
+      - name: Daedalus registration and yielding-step contract
+        working-directory: engines/unreal/core-test
+        run: python bridge_commands_test.py
