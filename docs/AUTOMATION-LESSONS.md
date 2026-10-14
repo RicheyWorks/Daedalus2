@@ -929,3 +929,7 @@ Bullproducer guardsreentrant record callbacks, retries at4Hz onlywhile stillover
 ### Settle duplicate sea arrivals from restored identity evidence (2026-10-14)
 Core/authorityquery exposes alreadyrecordedbull IDs withoutmutation. Sea producer can settle a duplicate fromtheloaded record ratherthanretrying forever; itstillrequires currentsea containment. Bindvalidates actualUTF8byte identity throughsharedcorevalidator, preservingembeddedNUL forrejection. Nativeportablecore42checks pass; UEproducer/UHT/runtime pending.
 
+
+### Verify pack membership at encounter time (2026-10-14)
+Legendarypack producer revalidates12distinct liveauthority actors with explicitfemale-unicorn tags inthesameworld, andplayeroverlap inownerzone. Pendingplayer-recordready callbacks recheckmembership/overlap; exit/EndPlay unsubscribe, reentrancyguardprotectscredit. Tagsarehost authoredmetadata, notmesh inference. Spawnrarity/generation/storage andUHT/runtime stillpending; no editorcalls.
+
