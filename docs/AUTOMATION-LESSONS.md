@@ -965,3 +965,13 @@ that waits for the write-up at the end of the night is a lesson Poot gets a day 
 4. Re-run the Play suite on the portal-bounce fix (realm_switch, mounts, portals, bestiary).
 5. Resume material reparent (5,940/11,000) once the editor is idle; review Sol's PR129/PR123.
 6. Keep Poot's line coming: one hub note per connector finding, lessons appended the same hour.
+
+### Poot's plan of the day — 2026-10-14 (harness owner; set by Richey 01:12, items from H1-H7 above)
+1. H1 Proxy large replies: CaptureViewport's PNG must get through (chunk/stream, or image to %TEMP% + path).
+2. H2 `daedalus.mcp_status` bridge command and an MCP READY/DOWN line in `teamlink doctor`.
+3. H3 `unreal-job.ps1` runs `ModelContextProtocol.StartServer` after every editor relaunch (auto-start stays off).
+4. H4 Setup-owner column per connector step in the ARCHITECTURE.md registry rows (with Sol).
+5. H5 daedalus_play scenarios callable natively (toolset function or AutomationTest) so they run via StartPIE.
+6. H6 Lock rule on the pinned POD checklist: mutating connector calls only while holding `unreal`.
+7. H7 Per-call log from the proxy (tool, ms, bytes, error) to link/mcp-calls.jsonl.
+Claude keeps feeding Poot a line each time the connector helps or hurts, the same hour, on topic harness-needs.
