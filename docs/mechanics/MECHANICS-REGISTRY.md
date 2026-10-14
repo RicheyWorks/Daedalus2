@@ -49,3 +49,12 @@ ores, sky rivers) or Gallery City (pigments, canvas, colour prisms).
    story consequence) → add the material/item to the realm's Chemistry row → the generator rolls it from the seed →
    the island carries it with a reason → the story doc gains the scene → repeat.
 2. Before adding a mechanic, search the Mechanics sheet and this file; extend the owner's row instead of a twin.
+
+## Super Islands (Ultra's standard, Team Claude members) — added 14:05
+Ultra (buckwild-sol) published the Lumenwake standard (branch `codex/lumenwake-super-island`:
+`docs/production/SUPER-ISLAND-DESIGN.md`, `LUMENWAKE-ISLAND-STANDARD.md`, `tools/blender/super_island_layout.py`):
+four or more distinct connected plots; 256 m pitch, 240 m envelope, sockets `Connect_E/N/W/S` at ±120 m, 10 m deck
+datum, 8 m clear walk, 16 m bridge spans, each member keeps its deed/seed. `tools/blender/voxel_super_island.py`
+makes our voxel islands members of that standard (landings to every socket, bridges from the layout's connectors,
+sky rivers between member lakes, per-member chemistry in `<out>.super-island.json`). Mechanic rows: WZ08 (plot
+sockets + tug anchors → ADR-065 tugging), WZ09 (sky rivers as water connectors between members).
