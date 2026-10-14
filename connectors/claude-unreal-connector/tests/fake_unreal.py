@@ -70,6 +70,19 @@ class _World:
     def get_path_name(self): return "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
 
 
+class AssetRegistry:
+    def is_loading_assets(self):
+        _game_thread_only("AssetRegistry")
+        return False
+
+
+class AssetRegistryHelpers:
+    @staticmethod
+    def get_asset_registry():
+        _game_thread_only("AssetRegistryHelpers")
+        return AssetRegistry()
+
+
 class SceneCaptureComponent2D(ActorComponent):
     def __init__(self, name):
         super().__init__(name)
