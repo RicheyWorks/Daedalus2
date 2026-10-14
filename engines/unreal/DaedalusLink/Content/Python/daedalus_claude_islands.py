@@ -46,6 +46,8 @@ def import_island(seed, force=False, save=False, source_file=None, on_imported=N
     synchronous import before postprocessing, without claiming it was saved.
     """
     name = "Island_C%d" % seed
+    if source_file is not None and os.path.basename(source_file) != name + ".fbx":
+        raise ValueError("import snapshot basename must match this island seed")
     dest = "%s/%s" % (ROOT, name)
     # the interchange importer makes <destination_path>/<destination_name>/StaticMeshes/...
     paths = {}
@@ -54,7 +56,7 @@ def import_island(seed, force=False, save=False, source_file=None, on_imported=N
         if unreal.EditorAssetLibrary.does_asset_exist(cand[layers[0]]):
             paths = cand
             break
-    if force or not paths:
+    if force or source_file is not None or not paths:
         # Preserve the working FBX task options. Installed 5.8.3 routes these
         # tasks through Interchange too; no backend/feature flag is changed here.
         t = unreal.AssetImportTask()
