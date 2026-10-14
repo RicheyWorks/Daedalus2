@@ -44,7 +44,9 @@ FString ADaedalusRealmPortal::Cross(ADaedalusHero* Hero)
 	UWorld* W = GetWorld();
 	if (!Hero || !W) return TEXT("refused: no hero");
 	const double Now = W->GetTimeSeconds();
-	if (Now < ReadyAt) { LastResult = TEXT("cooldown"); return LastResult; }
+	// A hero who just arrived (any portal, this one included) is not crossing: the landing marker's portal
+	// overlaps him the moment he lands.
+	if (Now < ReadyAt || Now - Hero->LastRealmSwitchAt < CooldownSeconds) { LastResult = TEXT("cooldown"); return LastResult; }
 	ReadyAt = Now + CooldownSeconds;
 	LastResult = Hero->SwitchRealm(Target, Via, Detail);
 	if (LastResult.StartsWith(TEXT("ok"))) ++Crossings;
