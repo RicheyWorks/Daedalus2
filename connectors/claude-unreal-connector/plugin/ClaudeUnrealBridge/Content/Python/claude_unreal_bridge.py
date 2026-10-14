@@ -50,11 +50,11 @@ _server = {"sock": None, "thread": None, "port": None, "tick": None}
 # ---------------------------------------------------------------- helpers
 
 def _vec(v, nd=2):
-    return [round(v.x, nd), round(v.y, nd), round(v.z, nd)]
+    return [float(x) if nd is None else round(x, nd) for x in (v.x, v.y, v.z)]
 
 
 def _rot(r, nd=2):
-    return [round(r.pitch, nd), round(r.yaw, nd), round(r.roll, nd)]
+    return [float(x) if nd is None else round(x, nd) for x in (r.pitch, r.yaw, r.roll)]
 
 
 def _actors():
@@ -78,9 +78,14 @@ def _selected():
 
 
 def _find_actor(name):
-    hits = [a for a in _actors() if a.get_actor_label() == name or a.get_name() == name]
+    actors = list(_actors())
+    exact = [a for a in actors if a.get_path_name() == name]
+    hits = exact or [a for a in actors if a.get_actor_label() == name or a.get_name() == name]
     if not hits:
         raise ValueError("no actor labelled or named %r in the open level" % name)
+    if len(hits) != 1:
+        raise ValueError("ambiguous actor %r; use an exact path: %s" %
+                         (name, ", ".join(sorted(a.get_path_name() for a in hits))))
     return hits[0]
 
 
@@ -133,20 +138,60 @@ def cmd_get_level_info(p):
 
 
 def cmd_get_actor_info(p):
-    a = _find_actor(p["name"])
+    return _actor_info(_find_actor(p["name"]))
+
+
+def _actor_info(a, precise=False, selected=None):
+    """Shared actor value serializer; legacy readback keeps its rounding and keys."""
+    nd = None if precise else 2
     origin, extent = a.get_actor_bounds(False)
     comps = []
-    for c in a.get_components_by_class(unreal.ActorComponent):
+    components = a.get_components_by_class(unreal.ActorComponent)
+    if precise and len(components) > MAX_ACTORS:
+        raise ValueError("actor observation exceeds the component limit %d" % MAX_ACTORS)
+    for c in components:
         entry = {"name": c.get_name(), "class": c.get_class().get_name()}
+        if precise:
+            entry["path"] = c.get_path_name()
         if isinstance(c, unreal.StaticMeshComponent):
             mesh = c.get_editor_property("static_mesh")
             entry["mesh"] = mesh.get_path_name() if mesh else None
-            entry["materials"] = [m.get_path_name() if m else None for m in c.get_materials()]
+            materials = c.get_materials()
+            if precise and len(materials) > MAX_ACTORS:
+                raise ValueError("actor observation exceeds the material slot limit %d" % MAX_ACTORS)
+            entry["materials"] = [m.get_path_name() if m else None for m in materials]
         comps.append(entry)
-    return {"label": a.get_actor_label(), "name": a.get_name(), "class": a.get_class().get_name(),
-            "folder": str(a.get_folder_path()), "location": _vec(a.get_actor_location()),
-            "rotation": _rot(a.get_actor_rotation()), "scale": _vec(a.get_actor_scale3d()),
-            "bounds": {"origin": _vec(origin), "extent": _vec(extent)}, "components": comps}
+    out = {"label": a.get_actor_label(), "name": a.get_name(), "class": a.get_class().get_name(),
+           "folder": str(a.get_folder_path()), "location": _vec(a.get_actor_location(), nd),
+           "rotation": _rot(a.get_actor_rotation(), nd), "scale": _vec(a.get_actor_scale3d(), nd),
+           "bounds": {"origin": _vec(origin, nd), "extent": _vec(extent, nd)}, "components": comps}
+    if precise:
+        parent = a.get_attach_parent_actor()
+        out.update(path=a.get_path_name(), class_path=a.get_class().get_path_name(),
+                   parent_path=parent.get_path_name() if parent is not None else None,
+                   selected=a.get_path_name() in (selected or set()))
+    return out
+
+
+def _scene_source():
+    """Resolve the observation world once; never fall back to editor actors during Play."""
+    subsystem = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
+    playing = _in_pie()
+    world = subsystem.get_game_world() if playing else subsystem.get_editor_world()
+    if world is None:
+        raise SceneWorldUnavailable("the %s world is unavailable" % ("Play" if playing else "editor"))
+    if playing:
+        actors = list(unreal.GameplayStatics.get_all_actors_of_class(world, unreal.Actor))
+        selected = set()
+    else:
+        actors_subsystem = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+        actors = list(actors_subsystem.get_all_level_actors())
+        selected = {a.get_path_name() for a in actors_subsystem.get_selected_level_actors()}
+    return world, "pie" if playing else "editor", actors, selected
+
+
+from claude_unreal_scene import MAX_ACTORS, SceneCommands, SceneWorldUnavailable
+_scene = SceneCommands(_scene_source, _actor_info)
 
 
 # ---------------------------------------------------------------- execute_python, unattended
@@ -433,6 +478,8 @@ COMMANDS = {
     "capture_view": cmd_capture_view,
     "batch": cmd_batch,
     "job_result": lambda p: _job_result({}, p).get("result"),   # answered on the socket thread; listed here
+    "scene_snapshot": _scene.snapshot,
+    "scene_verify": _scene.verify,
 }
 
 
@@ -450,6 +497,8 @@ DESCRIPTIONS = {
     "capture_view": "A PNG of what the editor camera sees, rendered by a scene capture (no editor UI); params width, height",
     "batch": "Several commands in order as one undo step; params commands [{type, params}], transaction, keep_going",
     "job_result": "The answer to a command sent with async: true; params job_id. status running or done",
+    "scene_snapshot": "Read one bounded page of loaded actors with exact paths and world/session context",
+    "scene_verify": "Read exact actor paths and compare explicit expected values; returns observed values and mismatches",
 }
 PARAMS = {
     "get_level_info": {"limit": "int", "folder": "str"}, "get_actor_info": {"name": "str (required)"},
@@ -458,6 +507,9 @@ PARAMS = {
     "capture_view": {"width": "int", "height": "int"},
     "batch": {"commands": "list (required)", "transaction": "str", "keep_going": "bool"},
     "job_result": {"job_id": "str (required)"},
+    "scene_snapshot": {"folder": "str", "offset": "int", "limit": "int"},
+    "scene_verify": {"schema_version": "int (required)", "context": "dict (required)",
+                     "actors": "list (required)", "tolerance": "dict"},
 }
 
 
@@ -473,6 +525,7 @@ RISK_OF = {
     "execute_python": "MUTATE", "play": "MUTATE", "stop": "MUTATE",
     "save": "DESTRUCTIVE",
     "capture_view": "SENSITIVE_READ", "batch": "MUTATE", "job_result": "READ",
+    "scene_snapshot": "READ", "scene_verify": "READ",
 }
 
 

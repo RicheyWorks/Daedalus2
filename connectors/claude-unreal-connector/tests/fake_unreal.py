@@ -31,12 +31,14 @@ class R:
 class _Class:
     def __init__(self, n): self.n = n
     def get_name(self): return self.n
+    def get_path_name(self): return "/Script/Engine." + self.n
 
 
 class ActorComponent:
     def __init__(self, name): self.name = name
     def get_name(self): return self.name
     def get_class(self): return _Class(type(self).__name__)
+    def get_path_name(self): return self.owner.get_path_name() + "." + self.name
 
 
 class StaticMeshComponent(ActorComponent):
@@ -48,6 +50,7 @@ class Actor:
     def __init__(self, label, cls, folder, loc):
         self.label, self.cls, self.folder, self.loc = label, cls, folder, loc
         self.comps = [StaticMeshComponent(label + "_Mesh")]
+        self.comps[0].owner = self
     def get_actor_label(self): return self.label
     def get_name(self): return self.label.replace(" ", "_")
     def get_class(self): return _Class(self.cls)
@@ -57,6 +60,10 @@ class Actor:
     def get_actor_scale3d(self): return V(1, 1, 1)
     def get_actor_bounds(self, _only_colliding): return V(*self.loc), V(100, 100, 100)
     def get_components_by_class(self, _cls): return self.comps
+    def get_path_name(self):
+        world = GAME_WORLD if STATE["pie"] else EDITOR_WORLD
+        return world.get_path_name() + ":PersistentLevel." + self.get_name()
+    def get_attach_parent_actor(self): return None
 
 
 LEVEL = [Actor("chunk_0_2_-6", "StaticMeshActor", "Daedalus/world-zero", (1000, 2000, 3000)),
@@ -67,7 +74,12 @@ STATE = {"pie": False, "pie_wait": 0}
 
 
 class _World:
-    def get_path_name(self): return "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+    def __init__(self, path): self.path = path
+    def get_path_name(self): return self.path
+
+
+EDITOR_WORLD = _World("/Game/Daedalus/DaedalusWorld.DaedalusWorld")
+GAME_WORLD = _World("/Game/Daedalus/UEDPIE_0_DaedalusWorld.DaedalusWorld")
 
 
 class SceneCaptureComponent2D(ActorComponent):
@@ -128,8 +140,8 @@ class RenderingLibrary:
 
 
 class UnrealEditorSubsystem:
-    def get_editor_world(self): return _World()
-    def get_game_world(self): return _World() if STATE["pie"] else None
+    def get_editor_world(self): return EDITOR_WORLD
+    def get_game_world(self): return GAME_WORLD if STATE["pie"] else None
     def get_level_viewport_camera_info(self): return V(-500, -500, 800), R(-30, 45, 0)
 
 
