@@ -1158,6 +1158,7 @@ def scenario_realm_switch(p):
     where it is; the inventory catalog follows the realm; the session is in the hero's progress file."""
     h = hero()
     start = h.realm_session_state()
+    before = int(_kv(start).get("switches", "0")) if "switches=" in start else 0   # the session persists across runs
     g = h.switch_realm("gallery-city", "gate", "")
     cat_after_gate = h.inventory_catalog_name()
     bad = h.switch_realm("parcels", "gate", "")
@@ -1192,7 +1193,7 @@ def scenario_realm_switch(p):
         _check("a boat at a dock enters the Ocean", dock.startswith("ok GALLERY-CITY -> OCEAN"), dock),
         _check("a boat cannot land at another realm's dock", wrong.startswith("refused"), wrong),
         _check("a shore landing returns to the departure", shore.startswith("ok OCEAN -> GALLERY-CITY"), shore),
-        _check("home by gate, six switches counted", home.startswith("ok GALLERY-CITY -> WORLD-ZERO") and "switches=6" in state, state),
+        _check("home by gate, six more switches counted", home.startswith("ok GALLERY-CITY -> WORLD-ZERO") and int(_kv(state).get("switches", "0")) - before == 6, state + " before=%d" % before),
         _check("the session is saved with the hero's progress", saved.startswith("WORLD-ZERO"), saved),
     ]}
 
