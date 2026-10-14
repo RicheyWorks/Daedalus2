@@ -355,7 +355,8 @@ def cmd_capture_view(p):
     width, height = int(p.get("width", 1280)), int(p.get("height", 720))
     world = _world()
     loc, rot = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_level_viewport_camera_info()
-    rt = unreal.RenderingLibrary.create_render_target2d(world, width, height)
+    # Float targets export as HDR/EXR; the command's response and waiter require PNG.
+    rt = unreal.RenderingLibrary.create_render_target2d(world, width, height, unreal.TextureRenderTargetFormat.RTF_RGBA8)
     actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, loc, rot)
     try:
@@ -366,7 +367,8 @@ def cmd_capture_view(p):
         yield   # let the render thread finish the capture before reading it back
         out_dir = tempfile.gettempdir()
         name = "claude_unreal_capture_%d" % int(time.time() * 1000)
-        unreal.RenderingLibrary.export_render_target(world, rt, out_dir, name)
+        # Export uses the supplied filename verbatim, without adding an extension.
+        unreal.RenderingLibrary.export_render_target(world, rt, out_dir, name + ".png")
         path = os.path.join(out_dir, name + ".png")
         deadline = time.time() + 20
         while not (os.path.exists(path) and os.path.getsize(path) > 0):

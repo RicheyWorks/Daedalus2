@@ -53,6 +53,18 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   const img = r.content.find((c) => c.type === 'image');
   check('viewport_screenshot waits for the file over frames and returns a PNG', img && Buffer.from(img.data, 'base64').slice(1, 4).toString() === 'PNG', text(r));
 
+  r = await call('run_command', { command: 'capture_view', params: { width: 960, height: 540 } });
+  const captureImage = r.content.find((c) => c.type === 'image');
+  const captureBytes = captureImage ? Buffer.from(captureImage.data, 'base64') : Buffer.alloc(0);
+  const captureMeta = r.isError ? {} : JSON.parse(text(r));
+  check('capture_view exports actual PNG bytes with a PNG filename and requested dimensions',
+    !r.isError && captureImage && captureImage.mimeType === 'image/png' &&
+    captureBytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+    captureMeta.path.endsWith('.png') && captureMeta.width === 960 && captureMeta.height === 540 &&
+    captureMeta.bytes === captureBytes.length, text(r));
+  r = await call('unreal_status');
+  check('capture_view removes its temporary actor', !r.isError && JSON.parse(text(r)).actors === 3, text(r));
+
   r = await call('play');
   check('play waits until Play In Editor is running', !r.isError && JSON.parse(text(r)).playing === true, text(r));
   r = await call('unreal_status');

@@ -118,13 +118,21 @@ class ScopedEditorTransaction:
     def __exit__(self, *exc): CALLS.append("transaction end"); return False
 
 
+class TextureRenderTargetFormat:
+    RTF_RGBA8 = "RTF_RGBA8"
+    RTF_RGBA16F = "RTF_RGBA16F"
+
+
 class RenderingLibrary:
     @staticmethod
-    def create_render_target2d(world, w, h): return {"w": w, "h": h}
+    def create_render_target2d(world, w, h, format=TextureRenderTargetFormat.RTF_RGBA16F):
+        return {"w": w, "h": h, "format": format}
     @staticmethod
     def export_render_target(world, rt, out_dir, name):
-        with open(os.path.join(out_dir, name + ".png"), "wb") as f:
-            f.write(_png(rt["w"] // 64 or 1, rt["h"] // 64 or 1))
+        # The engine preserves FileName, and a default float target produces EXR, not PNG.
+        with open(os.path.join(out_dir, name), "wb") as f:
+            f.write(_png(rt["w"], rt["h"]) if rt["format"] == TextureRenderTargetFormat.RTF_RGBA8
+                    else b"\x76\x2f\x31\x01fake float render target")
 
 
 class UnrealEditorSubsystem:
