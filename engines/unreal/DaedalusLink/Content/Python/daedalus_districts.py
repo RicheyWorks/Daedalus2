@@ -263,6 +263,94 @@ def dedupe_steps(realms):
     return gone
 
 
+def _h(n, salt=0):
+    """Deterministic 0..1 per deed number (the same island looks the same on every run)."""
+    return (((n + 7919 * salt) * 2654435761) % 1000003) / 1000003.0
+
+
+def dress_plan(cells, xy, realm, ground_z):
+    """Pure: the finished look of a district's islands. Returns (plot transforms, rubble transforms, decor spots)
+    as plain tuples (x, y, z, yaw, sx, sy, sz). World Zero's islands are asteroid fragments: each floats at its own
+    height (+-40 m round the hub plane), is 8..20 m thick and carries a rock underside; a realm's plots stand on
+    Poot's terrain so they keep the plane and only vary thickness. Every fourth island gets a decor spot at its
+    centre (a kit prop)."""
+    import daedalus_plots as P
+    plots, rubble, decor = [], [], []
+    for n, (x, y) in zip(cells, xy):
+        thick = 8.0 + 12.0 * _h(n, 1)
+        dz = (_h(n, 2) - 0.5) * 8000.0 if realm == "WORLD-ZERO" else 0.0
+        top = ground_z + dz
+        plots.append((x, y, top - thick * 50.0, 0.0, P.LAND_M, P.LAND_M, thick))
+        if realm == "WORLD-ZERO":
+            s = P.LAND_M * (0.45 + 0.25 * _h(n, 3))
+            rubble.append((x + (_h(n, 4) - 0.5) * 1200.0, y + (_h(n, 5) - 0.5) * 1200.0, top - thick * 100.0 - s * 40.0, _h(n, 6) * 90.0, s, s * (0.7 + 0.5 * _h(n, 7)), s * 0.8))
+        if int(_h(n, 8) * 4) == 0:
+            decor.append((n, x, y, top, _h(n, 9) * 360.0))
+    return plots, rubble, decor
+
+
+def dress_islands_steps(realms, decor_per_district=3):
+    """Finish the islands (Richey 01:19: "before the airship flys to each end we need to finish the islands so the
+    airship ride will be interesting"): re-lay every Lands_<R>_D<dd> actor's plots with dress_plan (heights,
+    thickness, rock undersides) and stand kit props on every fourth island as Decor_<R>_D<dd>_<k> instanced
+    actors (one kit mesh each). One district per tick; idempotent (decor actors are replaced). Yields a line per
+    district."""
+    import unreal
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    labels = P._labels_cache(sub)
+    districts = {}
+    for a in sub.get_all_level_actors():
+        if a.get_class().get_name() == "DaedalusLandDistrict":
+            l = a.get_actor_label()
+            if l.startswith("Lands_"):
+                districts[l] = a
+            elif l.startswith("Decor_"):
+                sub.destroy_actor(a)
+    done = {r: 0 for r in realms}
+    props = {r: 0 for r in realms}
+    for realm in realms:
+        kit = sorted(R._kit_meshes(realm).items())
+        meshes = [unreal.load_asset(p) for _, p in kit[:decor_per_district]] if kit else []
+        pre = "Lands_%s_D" % realm.replace("-", "")
+        for label in sorted(l for l in districts if l.startswith(pre)):
+            a = districts[label]
+            cells = list(a.get_editor_property("cells"))
+            comp = a.get_editor_property("plots")
+            xy, z0 = [], None
+            for i in range(len(cells)):
+                t = comp.get_instance_transform(i, True)
+                loc = t.translation
+                xy.append((loc.x, loc.y))
+                if z0 is None:
+                    z0 = loc.z + t.scale3d.z * 50.0    # the top of the slab
+            if not cells:
+                continue
+            ground_z = R.GROUND_Z if realm != "WORLD-ZERO" else z0
+            plots, rubble, decor = dress_plan(cells, xy, realm, ground_z)
+            a.lay_plots(cells, [unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in plots])
+            a.lay_ground([unreal.Transform(unreal.Vector(x, y, z), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(sx, sy, sz)) for x, y, z, yaw, sx, sy, sz in rubble])
+            d = int(label.rsplit("D", 1)[1])
+            for k, mesh in enumerate(meshes):
+                spots = [s for j, s in enumerate(decor) if j % len(meshes) == k]
+                if not spots:
+                    continue
+                dec = sub.spawn_actor_from_class(unreal.DaedalusLandDistrict, a.get_actor_location())
+                dec.get_editor_property("plots").set_static_mesh(mesh)
+                dec.set_editor_property("realm", realm)
+                dec.set_editor_property("district", d)
+                dec.lay_plots([n for n, _, _, _, _ in spots], [unreal.Transform(unreal.Vector(x, y, top), unreal.Rotator(0.0, yaw, 0.0), unreal.Vector(1.0, 1.0, 1.0)) for _, x, y, top, yaw in spots])
+                dec.set_actor_label("Decor_%s_D%02d_%d" % (realm.replace("-", ""), d, k))
+                dec.set_folder_path("Realms/%s/Decor" % realm if realm != "WORLD-ZERO" else "Decor")
+                dec.tags = [unreal.Name("Decor"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
+                props[realm] += len(spots)
+            done[realm] += 1
+            yield "%s %s: %d islands dressed, %d rubble, %d props" % (realm, label.rsplit("_", 1)[1], len(plots), len(rubble), len(decor) if meshes else 0)
+    P.save_world()
+    return {"districts": done, "props": props}
+
+
 def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, sublevels=False, ground=None):
     """Lay EVERY free cell of each district as ONE instanced-mesh actor (Lands_<Realm>_D<dd>: 100 plot instances
     of the cube, tagged District:<d>, instance i = district_cells(d)[i]) plus the district's ground slab, straight
