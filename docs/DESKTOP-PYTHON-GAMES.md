@@ -1,5 +1,131 @@
 # Desktop Python games into Daedalus
 
+## Native polish cycle 1 — source only, 2026-10-14
+
+Dedicated owner: `pootscoot-desktop-games`, exact claims hub 31121/31122.
+User direction is to iterate and polish **each existing game** in bounded code
+passes. This first batch starts with Dungeon's missing gameplay loop, then Pong's
+missing between-point transition. It creates no new game ID. PR152 `89ece418`
+remains a separate Java-backed source delivery; PR139 `0582c27a` and its
+Minesweeper/registry/Desktop actor/Slate ownership remain untouched.
+
+**Uncompiled and untested.** Dedicated tests/builds/CI are deferred. No live
+game-feel, controller, readability or native acceptance is claimed. Source starts
+from main `34dfe8340da967392930504d42a8185705449384`; original Python revisions
+and previous evidence remain pinned. The [exact install packet](desktop-games-polish-install.json)
+is source-only for sole Unreal operator `codex-play-guard`, after separately
+authorized adoption/build/load. No source worker edits the shared editor.
+
+### Dungeon: Threadlight Passage
+
+The original `PythonGames/main.py` supplies a seven-row room, a green square
+player and wall movement. It has no enemies, score, quest or victory. That room
+is retained as a compact **local Labyrinth wayfinding exercise**. The established
+[Broken Survey](realms/LABYRINTH-BUILDOUT.md) uses thread, chalk and the Lantern
+Keeper's sheltered route cues; this chapter borrows that wayfinding theme without
+claiming an NPC, realm quest, inventory grant or new cause of the shattering.
+
+Before: walk/reset only, status never ends. After: find the lantern marked NEXT,
+light three numbered lanterns in the seed's order, then approach and light the
+unsealed EXIT. Wrong order gives a bounded hint and loses no progress. Completion
+freezes the local run until a deliberate Action/reset; a held interaction cannot
+replay it. Score stays zero and lives stay one. These are **new native design
+rules**, not a claim about the Python source or server rewards.
+
+Architecture: only `DesktopGames/DaedalusDesktopMazeCore.h::DungeonGame` changes.
+The original map, ragged-row/boundary collision, start `(80,80)`, 40px body and
+5px digital movement remain. Direct Pad fields now work without synthetic
+keyboard input; Slate's existing hat mapping stays unchanged. Fresh Fire/Jump
+edges interact (`J/Z/X/Ctrl/RB` or `Space`, pad X/A); existing Action (`K/C/Enter`,
+pad B) resets, and host `R` still restarts. No registry, actor, Slate or shared
+input rewrite is required. Pac-Man and Zelda sections in the shared header remain
+unchanged.
+
+Three fixed reachable centres are `(140,60)`, `(660,140)`, `(380,220)`, with exit
+`(60,220)`. `seed % 6` selects permutations `012,021,102,120,201,210`. Seed 0
+therefore follows Hall → Watch → Root → EXIT; reset retains that seed/order.
+The player must be within 32px of a target centre. The clock starts on movement
+or an interaction attempt, advances only active fixed steps, freezes on completion
+and resets on replay. Live hints last 90 steps; the terminal cue remains until
+reset. Numbers plus NEXT/LIT/EXIT give non-colour cues. The room remains 800×280;
+a 64px footer carries objective/control feedback. No bitmap/Blender assets are
+created; the existing procedural renderer supplies the presentation.
+
+### Pong: read the point, prepare the next rally
+
+Before: a point instantly re-centres the ball and the next frame resumes play,
+with no contact/rally/point cue. After: points preserve source scoring but hold
+the centred ball for 45 fixed steps (nominal 0.75s), while paddles remain live.
+A fresh Fire/Jump/Action press serves early; the ball launches on the following
+step. Contact/scorer flashes, current/best rally counts and a ready cue make state
+changes visible. Paddle positions remain within the playfield, including the CPU.
+
+Architecture: `DesktopGames/DaedalusDesktopPongCore.h` only. Preserve 800×600,
+100px paddles, source keyboard 6/analog 8 with 0.2 deadzone, sequential CPU tests
+at speed 4, ball velocity 5/3, collision windows and endless scoring. The initial
+rally remains immediate. After a point, horizontal direction remains +5 for a
+CPU point and -5 for a player point; inherited vertical velocity is retained.
+Direct D-pad up/down behaves as digital paddle input. Saturating current/best
+rally counters count paddle returns, not wall bounces or rewards. Contact cues
+last 8 steps and point cues 90; these are design constants, not measured game-feel
+results. Reset clears them. New HUD commands appear only after play events, so the
+original six-command reset frame is preserved. Subsequent timing/visuals deliberately
+differ from the old source; historical oracle passes do not validate this code.
+
+### Per-game polish queue and coverage
+
+Every pass tracks controls/controller, difficulty/progression, feedback, visuals,
+state transitions and replayability. Complete a bounded source pass, preserve its
+checkpoint, then take the next row. Do not turn the queue into an arbitrary new
+game or an endless documentation pass. Native gameplay proof is a separate stage.
+
+| Order / game | Code-supported next increment | Identity/rules to retain | Current stage / remaining validation |
+|---|---|---|---|
+| 1 Dungeon | Lantern objective/input/completion/replay, above | Original room, movement, reset; new goal explicitly native | Source written; compile, target reachability and Play pending |
+| 2 Pong | Serve/rally/contact feedback, above | Endless source scores, speeds/collision, immediate opening | Source written; timing, controller and rendering Play pending |
+| 3 Pac-Man | Visible respawn grace, remaining-dot feedback, fresh retry | Map, speeds, ghosts, scores and win rules | Queued; claim next exact section before edits |
+| 4 Shadow Ninja | Telegraph existing boss attack; jump/spin readiness | Existing attack timing/damage and platform movement | Queued; no balance change or new boss invented |
+| 5 Football | Short goal/kickoff transition and kick feedback | Remote-kick source quirk, 90-second match | Queued; state/clock decisions need source review |
+| 6 Contra | Stage distance/checkpoint and pickup readiness cues | Source distance victory, held-jump behavior, cheat distinctions | Queued; title bonus binding remains a separate gap |
+| 7 Dodge Ball | Tournament/round summary, throw/catch/charge readiness | Simultaneous trio control and existing held rethrow | Queued; no new bracket/persistence claim |
+| 8 Asteroids | Wave-ready/protection countdown and local run feedback | Wrap/inertia, progressive rock counts and lives | Queued; no ship physics replacement |
+| 9 Sega Shooter | Boss entry/pickup/terminal cues | Source powers/boss victory; unused timers are not enemy bullets | Queued; no invented shooting feature |
+| 10 Zelda | Enemy/key/sword readiness and distinct hurt/win cues | Source key goal and decorative shield | Queued; shield gameplay would require an explicit extension |
+| 11 Star Shooter | Wave/boss/pickup/reset readability | Existing difficulty, patterns, native save/top-ten ownership | Queued; failed-save handling unchanged |
+| Java Sudoku | Existing API/native capability gaps in PR152 map | Java rules/clock/score/account/inventory authority | Separate C++ integration lane; no rule port |
+| Java Blackjack | PR152 settings/full visible metadata checkpoint | Java rules, revisions, simulated credits and hidden-state boundary | Draft source `89ece418`; no current connection/native/E2E |
+| Minesweeper | Existing owner's menu/persistence/feedback follow-up | PR139 original game distinct from PR49 Java-rule pilot | Owned by team-codex; no edits in this cycle |
+
+The [full existing-app capability map](https://github.com/RicheyWorks/Daedalus2/blob/89ece418/docs/java-arcade/capability-coverage.md)
+remains canonical for facade/original-app gaps. Eleven C++ source ports plus two
+Java clients are not thirteen installed or fully accepted games.
+
+### Handoff, observations and lessons
+
+Concrete observations: Dungeon had no terminal loop; Pong had no serve phase.
+Both now have source state/feedback implementations. No duration, frame-rate,
+game-feel win, controller result or render screenshot was measured. The first
+isolated branch switch needed a missing promisor blob; a normal authenticated
+retry materialized main. Published PR152 and the shared checkout were preserved.
+
+Reproduction for later authorized operator work: verify packet hashes/build
+source, stage or reuse an approved `ADaedalusDesktopArcade` with `InitialGameId`
+`dungeon` and seed 0, normal Hero Use, and the Hall/Watch/Root/EXIT route. Observe
+out-of-order refusal, fresh interaction, completion/frozen movement and deliberate
+reset, then compare seed 1. Switch to `pong` through the existing catalog and
+observe a point's 45-step preparation/early serve, controllable paddles and rally
+cues. Record exact binary/source/map/actor/input observations. Do not run that
+acceptance while tests/builds/Play remain deferred.
+
+Actionable host lesson: portable feedback can travel through the existing
+`Status`/`Frame` contract without taking another owner's registry/Slate files.
+Future validation should compare state transitions and frame/timer behavior, not
+only old draw-command counts. Preserve the immutable source baseline separately
+from deliberate polish extensions. Character upgrades, asset import, networking,
+durable replay/progress saves and server quest/inventory integration remain open.
+
+## Historical source delivery and recovery evidence
+
 Recovery update (2026-10-14): PR53 merged, then deleting its base branch
 automatically closed PR51 without merging it. The same PR51 is recovered against
 `main`, preserving delivered `9fbd450d895bab288401445d7c488a33bb59196c` and normally

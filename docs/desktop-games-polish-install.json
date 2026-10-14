@@ -1,0 +1,197 @@
+{
+  "manifest_version": 1,
+  "kind": "native-minigame-source-install-handoff",
+  "executable": false,
+  "status": "UNCOMPILED_UNTESTED_SOURCE",
+  "source_owner": "pootscoot-desktop-games",
+  "operator": "codex-play-guard",
+  "claim_messages": [
+    31121,
+    31122
+  ],
+  "source": {
+    "repository": "RicheyWorks/Daedalus2",
+    "branch": "codex/native-minigame-polish-20261014",
+    "code_commit": "114e4e71d40d159fdfd5068639b39428415cce84",
+    "base_main": "34dfe8340da967392930504d42a8185705449384",
+    "files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+        "git_blob": "3e0fcc005af2ec9a4899ed9327af9d24076060a2",
+        "sha256": "F97635F94946BF5716EFFDA27D83C51D312C6AE3E1E1429C145E1FEC31D2010D"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+        "git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
+        "sha256": "DD748E33887B1F7DFF6C5362443B65D881A96E2B3C96752E4E288C480E98563E"
+      }
+    ],
+    "peer_sections_preserved": [
+      "PacmanGame",
+      "ZeldaGame"
+    ],
+    "prior_delivery_preserved": "PR15289ece418 remains separate and unchanged"
+  },
+  "registration": {
+    "module": "DaedalusLink",
+    "uclass": "/Script/DaedalusLink.DaedalusDesktopArcade",
+    "interaction": "existing Hero Interact -> Usable Nearest/Use -> Desktop Slate",
+    "catalog_ids": [
+      "dungeon",
+      "pong"
+    ],
+    "registry_actor_slate_changed": false,
+    "pr139_minesweeper_changed": false,
+    "runtime_dependencies_changed": false
+  },
+  "games": [
+    {
+      "id": "dungeon",
+      "chapter": "Threadlight Passage",
+      "InitialGameId": "dungeon",
+      "InitialSeed": 0,
+      "seed_recipe": "seed modulo6 selects 012,021,102,120,201,210",
+      "landmarks": [
+        {
+          "name": "Hall lantern",
+          "centre_px": [
+            140,
+            60
+          ]
+        },
+        {
+          "name": "Watch lantern",
+          "centre_px": [
+            660,
+            140
+          ]
+        },
+        {
+          "name": "Root lantern",
+          "centre_px": [
+            380,
+            220
+          ]
+        }
+      ],
+      "exit_centre_px": [
+        60,
+        220
+      ],
+      "activation_radius_px": 32,
+      "interact": "fresh FirePressed or JumpPressed: J/Z/X/Ctrl/RB or Space; pad X/A",
+      "reset": "existing ActionPressed: K/C/Enter or pad B; existing host R/restart",
+      "clock": "active60Hzsteps after first movement/interaction; completion freezes; nominal time only, no measured timing",
+      "new_states": [
+        "ordered lantern progress",
+        "exit unlocked",
+        "complete until deliberate reset"
+      ],
+      "original_rules_preserved": [
+        "map and ragged boundaries",
+        "start80,80",
+        "40px body",
+        "5px digital motion",
+        "axis0.2 deadzone",
+        "Action reset"
+      ],
+      "local_score": 0,
+      "local_lives": 1,
+      "inventory_or_server_rewards": false,
+      "frame_size_px": [
+        800,
+        344
+      ]
+    },
+    {
+      "id": "pong",
+      "InitialGameId": "pong",
+      "InitialSeed": 730,
+      "original_rules_preserved": [
+        "immediate opening rally",
+        "endless scores",
+        "800x600 arena",
+        "100px paddles",
+        "6keyboard/8analog deadzone0.2",
+        "sequential4px CPU tests",
+        "5/3 ball speed and collision windows",
+        "point-dependent VX and inherited VY"
+      ],
+      "new_states": [
+        "45frame post-point preparation",
+        "fresh Fire/Jump/Action early serve",
+        "current/best paddle-return rally counters",
+        "8frame contact and90frame scorer cues"
+      ],
+      "new_bounds": "both paddles stay within0..500",
+      "early_serve": "fresh FirePressed/JumpPressed/ActionPressed; next fixed step launches",
+      "new_hud": "event-only; Reset frame retains original6draw commands",
+      "inventory_or_server_rewards": false
+    }
+  ],
+  "presentation": {
+    "renderer": "existing bounded Frame draw commands; no new shaders/assets",
+    "dungeon_noncolour_cues": [
+      "ordinal numbers",
+      "NEXT",
+      "LIT",
+      "EXIT",
+      "footer instruction"
+    ],
+    "new_blender_or_bitmap_exports": [],
+    "character_upgrade_status": "separate pending owner/art work"
+  },
+  "placement": {
+    "map": "/Game/Daedalus/DaedalusWorld",
+    "actor_policy": "sole operator may reuse an approved Desktop Arcade and switch catalog, or stage an approved owned cabinet after adoption",
+    "cabinet_id": "retain/generated unique identity; no new account/entitlement identity",
+    "transform_cm": null,
+    "transform_status": "approved vacant staging location selected by sole operator, no deed allocation by source worker",
+    "bAutoAdvance": true,
+    "clock_policy": "do not also call AdvanceGame from a second clock",
+    "placed": false,
+    "saved": false
+  },
+  "stages": {
+    "source": "implemented and independently read-only reviewed",
+    "code_committed": true,
+    "compiled": false,
+    "tested": false,
+    "ci": false,
+    "native_loaded": false,
+    "world_placed": false,
+    "play_verified": false,
+    "game_feel_verified": false
+  },
+  "pending_operator_steps": [
+    "Read exact source commit/blobs/SHA256 and review canonical docs; do not infer permission to build/install while deferral remains.",
+    "After separately authorized source adoption/build/load, verify exact installed module source/binary revision and preserve other owners/PR139.",
+    "Use approved existing Desktop Arcade or owned staging placement with normal Hero Use, InitialGameId=dungeon, InitialSeed=0, one fixed-step clock.",
+    "Observe Hall -> Watch -> Root -> EXIT with fresh input; wrong order retains progress, held input cannot skip, completion freezes, Action/R resets and seed1 changes only route.",
+    "Switch via existing catalog to pong; observe one scored point, controllable bounded paddles during45frame preparation, fresh early serve, original velocities/scores and rally/contact feedback.",
+    "Check pause/focus/controller lifecycle and frame footer/readability with real play; source review provides no game-feel evidence.",
+    "Return actual exact-head/binary/map/actor/input/transform/save and redacted play observations only after authorized execution."
+  ],
+  "backlog_order": [
+    "dungeon source-pass1",
+    "pong source-pass1",
+    "pacman next",
+    "shadow_ninja",
+    "football",
+    "contra",
+    "dodge_ball",
+    "asteroids",
+    "sega_shooter",
+    "zelda",
+    "star_shooter"
+  ],
+  "java_policy": "Sudoku/Blackjack retain Java authority, C++ integration only; no changes in this packet",
+  "restrictions": [
+    "No shared editor or actor placement by source worker",
+    "No tests/build/CI/Play executed",
+    "No source-original or save mutation",
+    "No PR139 registry/Desktop actor/Slate change",
+    "No invented inventory/currency/realm quest rewards",
+    "No live financial/service operation"
+  ]
+}

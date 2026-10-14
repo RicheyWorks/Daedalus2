@@ -1,5 +1,16 @@
 # Desktop maze and adventure ports
 
+Native polish update (2026-10-14, dedicated minigame owner): Dungeon now has an
+original Threadlight Passage lantern circuit in its existing room. Map/start/
+movement/collision/Action reset remain source-derived, but ordered Fire/Jump
+interaction, local terminal completion, seed permutations and feedback are new
+native design. They are uncompiled/untested and outside the historical Python
+parity evidence below. Pac-Man/Zelda remain unchanged. Architecture/story, before/
+after, per-game backlog and operator requirements are in the existing canonical
+[DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md), with a source-only
+install packet at `docs/desktop-games-polish-install.json`. No dedicated tests,
+builds, CI, editor or gameplay were run to make this documentation update.
+
 These ports use the actual Desktop collection. They do not replace it with the
 unrelated repository ComputerPets or Minesweeper projects. All three families
 have one discovered source variant, so these are also their latest baselines.
