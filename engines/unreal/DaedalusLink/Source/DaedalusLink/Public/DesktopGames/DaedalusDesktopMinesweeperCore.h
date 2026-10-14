@@ -57,7 +57,8 @@ public:
         int Dy=Vertical(I)>.3?1:Vertical(I)<-.3?-1:0;
         bool Moving=Dx||Dy;
         if(Moving&&(!WasMoving||++Repeat>=10)) {X=std::max(0,std::min(Width-1,X+Dx));Y=std::max(0,std::min(Height-1,Y+Dy));Repeat=0;}
-        if(!Moving) Repeat=0;WasMoving=Moving;
+        if(!Moving) Repeat=0;
+        WasMoving=Moving;
         int N=Index(X,Y);
         if(I.ActionPressed&&!Cells[N].Open) Cells[N].Flag=!Cells[N].Flag;
         if(I.FirePressed||I.JumpPressed) Reveal(N);

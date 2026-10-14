@@ -1140,3 +1140,6 @@ State at handoff: all five realms laid, dressed (unique per deed), hub floors so
 proven (portals 5/5, realm_switch 10/10, mounts 9/9, realm_ground 17/17), ledger exported (49,943 lands), editor
 up on a9c56af with MCP on, doctor green, RAM 87%. Not done: district streaming, airship tour receipt, material
 reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER rows 2/12 per realm.
+
+## Keep GCC warning gates in the native arcade handoff (2026-10-14)
+PR139 GCC CI rejected Minesweeper Step for misleading indentation: Repeat reset and unconditional WasMoving update shared a line. Split the statements with behavior preserved. Actual local MSVC /W4 /WX CMake build and six existing desktop tests pass. GCC acceptance requires the new-head CI result; MSVC success alone did not establish it. Source preflight and portable compiler warnings cover different failure classes.
