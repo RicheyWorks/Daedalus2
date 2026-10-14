@@ -602,6 +602,15 @@ there is no automatic time-based deletion here. This isolates normal producers, 
 between importer validation and file open. Nine offline seam tests cover replacement, corruption
 and timeout retention; live Interchange integration remains the editor owner's acceptance step.
 
+
+## Failure reports are part of the pipeline handoff (2026-10-13, Codex)
+Poot review29419 found ship.main returned before --report on timeout, hiding the retained
+snapshot path. The CLI now preserves its partial report and atomically publishes failure JSON:
+phase, error, snapshot path/hash when prepared, and outcome-unknown after dispatch. A timeout
+is not cancellation or proof of import failure; inspect the original job before repeating.
+Export failures also produce a receipt but do not invent an import path. Eleven offline seam
+regressions pass. Bridge request replay/remote job reconciliation still require later work.
+
 ## GPU crash 22:19: twenty-two imports in one bridge call starved the GPU watchdog (2026-10-13)
 `lay_creatures("LABYRINTH", folder)` imported 22 rigged GLBs inside ONE execute_python call. The log shows the
 frame counter stuck at [0] for the whole call; at the second file Aftermath timed out, DRED had no breadcrumb,

@@ -62,6 +62,28 @@ class IdentityTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "identity mismatch"):
                 exec(code, {})
 
+    def test_cli_timeout_keeps_snapshot_receipt(self):
+        import contextlib,io
+        report = self.report()
+        target = Path(self.temp.name) / 'report.json'
+        with patch.object(ship, 'export', return_value=report), patch.object(ship.wire, 'call', side_effect=TimeoutError('waiting expired')), contextlib.redirect_stdout(io.StringIO()):
+            code = ship.main(['--name','Asset','--report',str(target)])
+        saved = json.loads(target.read_text())
+        self.assertEqual(code,2);self.assertFalse(saved['ok'])
+        self.assertEqual(saved['import_state'],'outcome-unknown')
+        self.assertTrue(Path(saved['import_path']).exists())
+        self.assertEqual(saved['import_artifact'],report['artifact'])
+        self.assertFalse(list(target.parent.glob('.pipeline-report-*.tmp')))
+
+    def test_cli_export_failure_still_writes_receipt(self):
+        import contextlib,io
+        target = Path(self.temp.name) / 'failed-export.json'
+        with patch.object(ship,'export',side_effect=ValueError('invalid export')), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(ship.main(['--name','Asset','--report',str(target)]),2)
+        saved=json.loads(target.read_text())
+        self.assertEqual(saved['phase'],'export');self.assertFalse(saved['ok'])
+        self.assertNotIn('import_path',saved)
+
     def test_same_size_changed_bytes_refused(self):
         report = self.report()
         self.path.write_bytes(b"fixture bytes B")
