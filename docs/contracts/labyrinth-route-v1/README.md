@@ -67,7 +67,9 @@ and marker scale/lift are proposed usability/presentation choices, not approved
 balance. Marks use an optional existing mesh/material, remain anchored to the
 grid rather than the moving pawn, and do not collide or alter navigation.
 Only the locally controlled owner draws its marks. Owner-only replication
-requires the existing pawn ownership/replication setup.
+requires the existing pawn ownership/replication setup. Marker meshes also use
+per-view owner visibility for split-screen. Controller changes refresh local
+presentation and clear old ownership; bind the host after possession changes.
 
 ## Deferred verification and adoption
 

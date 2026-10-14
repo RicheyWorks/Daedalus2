@@ -8,6 +8,8 @@
 class UInstancedStaticMeshComponent;
 class UStaticMesh;
 class UMaterialInterface;
+class APawn;
+class AController;
 
 UENUM(BlueprintType)
 enum class EDaedalusLabyrinthRouteStage : uint8 { MarkThreeTurns, ReturnToLectern, Complete };
@@ -112,6 +114,7 @@ private:
     float BoundYaw = 0;
     float BoundCellSize = 400;
     UFUNCTION() void OnRep_RouteView();
+    UFUNCTION() void OnPawnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController);
     bool CanMakeIntent(const FString& CurrentRealm) const;
     bool MakeIntent(EDaedalusLabyrinthRouteIntentKind Kind, FIntPoint Point,
         FDaedalusLabyrinthRouteIntent& OutIntent);

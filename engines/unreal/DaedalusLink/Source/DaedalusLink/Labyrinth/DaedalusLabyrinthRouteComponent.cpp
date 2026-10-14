@@ -68,7 +68,22 @@ UDaedalusLabyrinthRouteComponent::UDaedalusLabyrinthRouteComponent()
 void UDaedalusLabyrinthRouteComponent::BeginPlay()
 {
     Super::BeginPlay();
+    if (APawn* Pawn = Cast<APawn>(GetOwner()))
+        Pawn->ReceiveControllerChangedDelegate.AddDynamic(this, &UDaedalusLabyrinthRouteComponent::OnPawnControllerChanged);
     RefreshMarkers();
+}
+
+void UDaedalusLabyrinthRouteComponent::OnPawnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController)
+{
+    if (!Pawn || Pawn != GetOwner() || OldController == NewController) return;
+    // A new controller needs an explicit new host binding, including on reused pawns.
+    if (Pawn->HasAuthority()) ClearHostRoute();
+    else
+    {
+        // Owner-only clear replication may stop reaching the former owner. Clear locally.
+        if (!Pawn->IsLocallyControlled()) RouteView = FDaedalusLabyrinthRouteView();
+        OnRep_RouteView();
+    }
 }
 
 void UDaedalusLabyrinthRouteComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -219,6 +234,7 @@ void UDaedalusLabyrinthRouteComponent::RefreshMarkers()
         MarkerInstances->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         MarkerInstances->SetCanEverAffectNavigation(false);
         MarkerInstances->SetCastShadow(false);
+        MarkerInstances->SetOnlyOwnerSee(true);
         MarkerInstances->SetMobility(EComponentMobility::Movable);
         // World transforms stay in the maze, even though the component belongs to a moving pawn.
         MarkerInstances->SetAbsolute(true, true, true);
@@ -241,6 +257,8 @@ void UDaedalusLabyrinthRouteComponent::RefreshMarkers()
 
 void UDaedalusLabyrinthRouteComponent::EndPlay(const EEndPlayReason::Type Reason)
 {
+    if (APawn* Pawn = Cast<APawn>(GetOwner()))
+        Pawn->ReceiveControllerChangedDelegate.RemoveDynamic(this, &UDaedalusLabyrinthRouteComponent::OnPawnControllerChanged);
     if (MarkerInstances) MarkerInstances->DestroyComponent();
     MarkerInstances = nullptr;
     Super::EndPlay(Reason);
