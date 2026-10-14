@@ -33,5 +33,3 @@ for i,(name,role,color) in enumerate(roles):
 finish_scene(records,3,3,'shardstead-workers',['Idle','Walk','Attack','Hurt'],render='--render' in sys.argv)
 
 manifest=json.loads((OUT/'manifest.json').read_text());manifest['realm']='Island';manifest['activity']='Shardstead';(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2))
-
-
