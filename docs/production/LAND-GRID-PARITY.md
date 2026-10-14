@@ -24,6 +24,10 @@ produces SHA256 `182c90b14151708051576a1bb57feedb3442c7fbc4e12e8317bd244ee2aaee2
 Native header SHA256: `1483e59d9fe35cf706391d1c826d46480ec15b37349b94140726ad758db31c3e`.
 LandGridTest generates the Java rows independently and checks that digest. Changes to the
 native spec require regenerating and reviewing the output, not blindly replacing the digest.
+The Engines CI job compiles and checks the native dump with both gcc and clang and checks the
+editor Python implementation against the same digest. Java tests run in the Maven CI job;
+changing only one language fails parity. Locally run `python check_land_grid_parity.py <native-output>`
+from core-test after compiling the native dumper.
 
 Four focused tests pass (15.167 s Maven invocation). Full core `mvn -B -pl daedalus-core -am verify`
 passes in 46.197 s: 723 tests, zero failures/errors/skips, coverage ratchet met and SpotBugs zero.
