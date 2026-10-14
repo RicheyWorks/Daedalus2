@@ -859,3 +859,7 @@ A run ID identifies the orchestration; an archive ID identifies a published snap
 ### Time repeatable host stages (2026-10-14)
 Use monotonic elapsed time for night-run totals and each stage interval. Preserve repeated district/import stages separately with their own context so aggregate labels do not hide slow regions. Receipts and read-only handoff summaries carry these intervals for speed comparisons. Timing includes host setup, waits and observation; it is not native CPU/GPU profiling, and a faster failed run is not equivalent completion.
 
+
+### Validate green receipt labels (2026-10-14)
+A handoff summary must retain the reported label but downgrade passed to unverified if positive scenario coverage, process exit0 and editorerrors0 are missing or inconsistent. Saved labels are not runtime evidence by themselves. Focused night-run CI now executes identity, result and import-terminal checks on Windows/Linux without editor calls; local19checks passed, remoteCI not yet observed.
+

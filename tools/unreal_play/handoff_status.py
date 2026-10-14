@@ -73,9 +73,22 @@ def summarize(path,jobs_root):
                             'reconciliation_required':True})
     outcome=value.get('outcome')
     status=outcome.get('status') if isinstance(outcome,dict) else None
+    reported_status=status
+    validation_errors=[]
     if status not in ('running','passed','failed','unverified'):status='unverified'
+    if status=='passed':
+        counts=outcome.get('counts')
+        valid=(outcome.get('passed') is True and type(outcome.get('exit_code')) is int and outcome['exit_code']==0 and
+               type(outcome.get('scenario_returncode')) is int and outcome['scenario_returncode']==0 and
+               type(outcome.get('editor_errors')) is int and outcome['editor_errors']==0 and
+               isinstance(counts,dict) and type(counts.get('total')) is int and counts['total']>0 and
+               type(counts.get('passed')) is int and counts['passed']==counts['total'])
+        if not valid:
+            status='unverified'
+            validation_errors.append('passed outcome lacks consistent scenario/log evidence')
     return {'receipt':str(path),'run_id':value.get('checkpoint_run_id',value.get('run_id')),
             'recorded_status':status,'phase':value.get('stopped_phase',value.get('phase')),
+            'reported_status':reported_status,'validation_errors':validation_errors,
             'sha':value.get('sha'),'build_job':value.get('build_job'),'build_pid':value.get('build_pid'),
             'reported_total':value.get('total'),'imports':imports,
             'elapsed_seconds':value.get('elapsed_seconds'),'stage_intervals':value.get('stage_intervals',[]),

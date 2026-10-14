@@ -1,0 +1,25 @@
+name: Night-run harness
+on:
+  pull_request:
+    paths:
+      - 'tools/unreal_play/**'
+      - 'connectors/claude-asset-pipeline/asset_pipeline/**'
+      - '.github/workflows/night-run-harness.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/unreal_play/night_job_identity_test.py
+      - run: python tools/unreal_play/night_result_test.py
+      - run: python tools/unreal_play/import_terminal_test.py
+      - run: python -m py_compile tools/unreal_play/night_run.py tools/unreal_play/import_cast.py tools/unreal_play/handoff_status.py
