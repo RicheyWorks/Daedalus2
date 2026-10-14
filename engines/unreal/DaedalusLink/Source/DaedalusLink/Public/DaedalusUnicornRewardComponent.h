@@ -7,6 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusUnicornRewardProgress, int32, BullsAtSea, bool, Eligible, bool, Claimed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusUnicornRecordDirty, int64, Revision);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusUnicornRecordStatus, bool, Ready, bool, PersistencePending, int64, Revision);
 
 USTRUCT(BlueprintType)
 struct DAEDALUSLINK_API FDaedalusUnicornRewardRecord
@@ -66,8 +67,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Daedalus|Unicorn")
     FDaedalusUnicornRewardProgress OnProgress;
     UPROPERTY(BlueprintAssignable, Category="Daedalus|Unicorn") FDaedalusUnicornRecordDirty OnRecordDirty;
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Unicorn") int64 RecordRevision = 0;
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Unicorn") bool bPersistencePending = false;
+    UPROPERTY(BlueprintAssignable, Category="Daedalus|Unicorn") FDaedalusUnicornRecordStatus OnRecordStatus;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_RecordStatus, Category="Daedalus|Unicorn") int64 RecordRevision = 0;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_RecordStatus, Category="Daedalus|Unicorn") bool bPersistencePending = false;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_RecordStatus, Category="Daedalus|Unicorn") bool bRecordReady = false;
 
 private:
     static bool ValidHostIdentity(const FString& Value);
@@ -76,10 +79,14 @@ private:
     void Synchronize();
     void MarkRecordDirty();
     UFUNCTION() void OnRep_Progress();
+    UFUNCTION() void OnRep_RecordStatus();
     DaedalusUnicornReward::Gate Gate;
     int32 LastBroadcastBulls = -1;
     bool bLastBroadcastEligible = false;
     bool bLastBroadcastClaimed = false;
     bool bHostRecordRestored = false;
     FString HostPlayerKey;
+    int64 LastBroadcastRevision = -1;
+    bool bLastBroadcastReady = false;
+    bool bLastBroadcastPending = false;
 };

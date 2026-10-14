@@ -909,3 +909,7 @@ Unicornhostrecords carry monotonicrevision; acceptedstatechanges markpersistence
 ### Prepare reward records for one host transaction (2026-10-14)
 PrepareGrantRecord isread-only and requires eligible,unclaimed,currentprogress alreadydurablyacknowledged. It returnsclaimedcandidate atrevision+1 withplayer/receiptidentity. Hostmust atomicallygrantitems andCAS thatrecord againstpreviousrevision, thenConfirmPersistedReward exactplayer/receipt/committedrevision. Sameconfirmedreceipt retryidempotent, stale/dirty confirmationsrefused. No ledger oritemgrantimplementation yet; nativecomponent buildpending.
 
+
+### Expose pending persistence without conflating quest progress (2026-10-14)
+Owner-only unicornrecord readiness/pending/revision fields have a deduplicatedrecordstatus delegate separatefrombull/eligible/claimed UI. Hostrestore/new-recordinit markready; exactpersistenceack clears pending. These are recordworkflow signals, not serverhealth oritemawardproof. Claude29771 PIEtour owns liveeditor; allchanges sourceonly andUHT/runtime stillpending.
+

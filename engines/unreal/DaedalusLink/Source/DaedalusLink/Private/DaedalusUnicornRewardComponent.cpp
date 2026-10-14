@@ -94,7 +94,9 @@ void UDaedalusUnicornRewardComponent::Synchronize()
     BullsAtSea = static_cast<int32>(Gate.BullsAtSea());
     bEligible = Gate.Eligible();
     bClaimed = Gate.RewardClaimed();
+    bRecordReady = bHostRecordRestored;
     OnRep_Progress();
+    OnRep_RecordStatus();
 }
 
 bool UDaedalusUnicornRewardComponent::RestoreHostRecord(const FDaedalusUnicornRewardRecord& Record)
@@ -151,7 +153,17 @@ bool UDaedalusUnicornRewardComponent::ConfirmProgressPersisted(const FString& Ex
 {
     if (!CanRecord() || ExpectedPlayerKey != HostPlayerKey || ExpectedRevision != RecordRevision) return false;
     bPersistencePending = false;
+    OnRep_RecordStatus();
     return true;
+}
+
+void UDaedalusUnicornRewardComponent::OnRep_RecordStatus()
+{
+    if (LastBroadcastRevision == RecordRevision && bLastBroadcastReady == bRecordReady && bLastBroadcastPending == bPersistencePending) return;
+    LastBroadcastRevision = RecordRevision;
+    bLastBroadcastReady = bRecordReady;
+    bLastBroadcastPending = bPersistencePending;
+    OnRecordStatus.Broadcast(bRecordReady, bPersistencePending, RecordRevision);
 }
 
 void UDaedalusUnicornRewardComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -163,4 +175,5 @@ void UDaedalusUnicornRewardComponent::GetLifetimeReplicatedProps(TArray<FLifetim
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, CommittedGrantReceiptId, COND_OwnerOnly);
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, RecordRevision, COND_OwnerOnly);
     DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, bPersistencePending, COND_OwnerOnly);
+    DOREPLIFETIME_CONDITION(UDaedalusUnicornRewardComponent, bRecordReady, COND_OwnerOnly);
 }
