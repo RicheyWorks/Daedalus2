@@ -18,7 +18,8 @@ GLB_DIR = r"C:\Users\730ri\projects\D2-build\engines\unreal\art\claude-islands"
 LEDGER = r"C:\Users\730ri\projects\D2-build\docs\production\lands"
 ROOT = "/Game/Daedalus/Art/Islands/ClaudeIslands"
 MAT = ROOT + "/M_VoxelVertexColour"
-LAYERS = ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds")
+LAYERS = ("body", "clouds")   # voxel_island.GROUPS; the first 36 islands came as 8 layers (see OLD_LAYERS)
+OLD_LAYERS = ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds")
 SCALE = 0.01          # GLB comes in at 100 units/voxel x the importer's 100: scale back to 1 voxel = 1 m
 CLEAR_R = 4200.0      # cm: the deed cell's own instances (fragment/ground/detail), not the neighbours'
 
@@ -42,10 +43,13 @@ def import_island(seed, force=False, save=False):
     name = "Island_C%d" % seed
     dest = "%s/%s" % (ROOT, name)
     # the interchange importer makes <destination_path>/<destination_name>/StaticMeshes/...
-    paths = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, l, name, l) for l in LAYERS}
-    if not unreal.EditorAssetLibrary.does_asset_exist(paths["island"]):   # the first batch imported one level deeper
-        paths = {l: "%s/%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, name, l, name, l) for l in LAYERS}
-    if force or not unreal.EditorAssetLibrary.does_asset_exist(paths["island"]):
+    paths = {}
+    for layers, d in ((LAYERS, dest), (OLD_LAYERS, dest), (OLD_LAYERS, dest + "/" + name)):
+        cand = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (d, name, l, name, l) for l in layers}
+        if unreal.EditorAssetLibrary.does_asset_exist(cand[layers[0]]):
+            paths = cand
+            break
+    if force or not paths:
         paths = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (dest, name, l, name, l) for l in LAYERS}
         t = unreal.AssetImportTask()
         t.filename = os.path.join(GLB_DIR, name + ".glb")
@@ -63,7 +67,7 @@ def import_island(seed, force=False, save=False):
         sm = unreal.EditorAssetLibrary.load_asset(p)
         for i in range(sm.get_num_sections(0)):
             sm.set_material(i, m)
-        if l == "island":
+        if l in ("island", "body"):
             bs = sm.get_editor_property("body_setup")
             if bs is not None:
                 bs.set_editor_property("collision_trace_flag", unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)

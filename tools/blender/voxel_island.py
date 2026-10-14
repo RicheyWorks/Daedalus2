@@ -220,6 +220,9 @@ def _mesh_from_voxels(name, voxels, scale=100.0):
     return ob
 
 
+GROUPS = {"body": ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals"), "clouds": ("clouds",)}
+
+
 def build(seed, out, size=46, thick=22, keep=False):
     """Build the island for `seed` in the open Blender scene and export it to `out` (GLB), plus a UCX convex hull
     of the body as a sibling FBX. Returns stats."""
@@ -229,7 +232,8 @@ def build(seed, out, size=46, thick=22, keep=False):
         if ob.name.startswith("Island_C"):
             bpy.data.objects.remove(ob, do_unlink=True)
     objs = []
-    for layer, voxels in vox.items():
+    for layer, members in GROUPS.items():      # two meshes per island: Unreal's importer costs ~2 s per mesh
+        voxels = [v for m in members for v in vox.get(m, [])]
         if voxels:
             objs.append(_mesh_from_voxels("%s_%s" % (name, layer), voxels))
     for ob in bpy.data.objects:
@@ -238,7 +242,7 @@ def build(seed, out, size=46, thick=22, keep=False):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_format="GLB", export_apply=True, export_yup=True)
     # collision: a convex hull of the island body only
-    body = bpy.data.objects.get("%s_island" % name)
+    body = bpy.data.objects.get("%s_body" % name)
     if body is not None:
         hull = body.copy()
         hull.data = body.data.copy()
