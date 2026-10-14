@@ -1,0 +1,86 @@
+name: Portal production cores
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/portal_population.py'
+      - 'tools/blender/production_queue.py'
+      - 'tools/blender/test_*population.py'
+      - 'tools/blender/test_production_queue.py'
+      - 'engines/unreal/**/DaedalusPortalQuestCore.h'
+      - 'engines/unreal/**/DaedalusExplorationTerrainCore.h'
+      - 'engines/unreal/**/DaedalusOceanTravelCore.h'
+      - 'engines/unreal/core-test/*quest_core_test.cpp'
+      - 'engines/unreal/core-test/*terrain_core_test.cpp'
+      - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
+      - '.github/workflows/portal-production.yml'
+      - 'daedalus-core/src/**/inventory/**'
+      - 'daedalus-core/pom.xml'
+      - 'daedalus-server/src/**/InventoryCatalog*'
+      - 'engines/unreal/DaedalusLink/Content/Inventory/*.dic'
+      - 'engines/unreal/**/DaedalusInventoryCore.h'
+      - 'engines/unreal/core-test/inventory_catalog_dump.cpp'
+      - 'tools/inventory/**'
+      - 'engines/unreal/**/DaedalusBattlePresentation.*'
+      - 'engines/unreal/**/DaedalusBattleStageCore.h'
+      - 'tools/blender/portal_hero*.py'
+      - 'tools/blender/portal_common.py'
+      - 'daedalus-core/src/**/retro/Retro*.java'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  java-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Shared inventory format reader
+        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest,RetroRealmTest,RetroLandTest,ProdAuthPostureTest,ErrorContractTest -Dsurefire.failIfNoSpecifiedTests=false test
+      - name: Packaged production server catalog smoke
+        run: |
+          mvn -B -pl daedalus-server -am -DskipTests package
+          python3 tools/inventory/packaged_server_smoke.py --java "$(command -v java)" --jar daedalus-server/target/daedalus-server-1.2.0-SNAPSHOT-exec.jar --output "$RUNNER_TEMP/catalog-smoke"
+      - name: Actual C++ and Java catalog parity
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror engines/unreal/core-test/inventory_catalog_dump.cpp -o "$RUNNER_TEMP/inventory_dump"
+          mkdir -p "$RUNNER_TEMP/inventory-java"
+          javac -cp daedalus-core/target/classes -d "$RUNNER_TEMP/inventory-java" tools/inventory/InventoryCatalogDump.java
+          python3 tools/inventory/check_parity.py --cpp "$RUNNER_TEMP/inventory_dump" --classpath "daedalus-core/target/classes:$RUNNER_TEMP/inventory-java"
+  native:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and run portable cores with sanitizers
+        shell: bash
+        run: |
+          set -euo pipefail
+          for core in portal_quest exploration_terrain ocean_travel; do
+            "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer "engines/unreal/core-test/${core}_core_test.cpp" -o "$RUNNER_TEMP/$core"
+            "$RUNNER_TEMP/$core"
+          done
+      - name: Population and honest queue status
+        run: |
+          python3 -m unittest discover -s tools/blender -p test_portal_population.py
+          python3 -m unittest discover -s tools/blender -p test_production_queue.py
+          python3 -m py_compile tools/blender/portal_hero_polish.py tools/blender/portal_hero_lods.py tools/blender/portal_common.py
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Compile and run portable cores
+        shell: pwsh
+        run: |
+          foreach ($core in @('portal_quest', 'exploration_terrain', 'ocean_travel')) {
+            cl /nologo /EHsc /std:c++17 /W4 /WX "engines/unreal/core-test/${core}_core_test.cpp" "/Fe:$env:RUNNER_TEMP/$core.exe" "/Fo:$env:RUNNER_TEMP/$core.obj"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            & "$env:RUNNER_TEMP/$core.exe"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }

@@ -1,0 +1,92 @@
+name,kind,category,world,owner,status,queue_status,blender_files,uassets,path
+Mob_Portal_Knight,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_Knight.glb
+Mob_Portal_Tinker,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_Tinker.glb
+Mob_Portal_Herbalist,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_Herbalist.glb
+Mob_Portal_Bard,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_Bard.glb
+Mob_Portal_InnkeeperRusk,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_InnkeeperRusk.glb
+Mob_Portal_SmithGarra,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_SmithGarra.glb
+Mob_Portal_ItemShopPim,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_ItemShopPim.glb
+Mob_Portal_QueenOfCinders,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_QueenOfCinders.glb
+Mob_Portal_RoyalScribe,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_RoyalScribe.glb
+Mob_Portal_FortuneTeller,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_FortuneTeller.glb
+Mob_Portal_Keymaker,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_Keymaker.glb
+Mob_Portal_WellChild,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_WellChild.glb
+Mob_Portal_NightWatch,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_NightWatch.glb
+Mob_Portal_RetiredHero,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_RetiredHero.glb
+Mob_Portal_FerryWoman,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_FerryWoman.glb
+Mob_Portal_TavernBard,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/cast/portal-town-cast.blend,,portal-buildout/cast/Mob_Portal_TavernBard.glb
+Mob_Portal_BLIGHT_SLIME_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BLIGHT_SLIME_T1.glb
+Mob_Portal_BLIGHT_SLIME_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BLIGHT_SLIME_T2.glb
+Mob_Portal_BLIGHT_SLIME_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BLIGHT_SLIME_T3.glb
+Mob_Portal_BOG_SLIME_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BOG_SLIME_T1.glb
+Mob_Portal_BOG_SLIME_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BOG_SLIME_T2.glb
+Mob_Portal_BOG_SLIME_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_BOG_SLIME_T3.glb
+Mob_Portal_LUCKY_DRIP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_LUCKY_DRIP_T1.glb
+Mob_Portal_LUCKY_DRIP_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_LUCKY_DRIP_T2.glb
+Mob_Portal_LUCKY_DRIP_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_LUCKY_DRIP_T3.glb
+Mob_Portal_DUST_WISP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_DUST_WISP_T1.glb
+Mob_Portal_DUST_WISP_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_DUST_WISP_T2.glb
+Mob_Portal_DUST_WISP_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_DUST_WISP_T3.glb
+Mob_Portal_EMBER_WISP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_EMBER_WISP_T1.glb
+Mob_Portal_EMBER_WISP_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_EMBER_WISP_T2.glb
+Mob_Portal_EMBER_WISP_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_EMBER_WISP_T3.glb
+Mob_Portal_SHARDBACK_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARDBACK_T1.glb
+Mob_Portal_SHARDBACK_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARDBACK_T2.glb
+Mob_Portal_SHARDBACK_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARDBACK_T3.glb
+Mob_Portal_GLASSBACK_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLASSBACK_T1.glb
+Mob_Portal_GLASSBACK_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLASSBACK_T2.glb
+Mob_Portal_GLASSBACK_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLASSBACK_T3.glb
+Mob_Portal_PUFFCAP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_PUFFCAP_T1.glb
+Mob_Portal_PUFFCAP_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_PUFFCAP_T2.glb
+Mob_Portal_PUFFCAP_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_PUFFCAP_T3.glb
+Mob_Portal_SHADECAP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHADECAP_T1.glb
+Mob_Portal_SHADECAP_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHADECAP_T2.glb
+Mob_Portal_SHADECAP_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHADECAP_T3.glb
+Mob_Portal_GLOOMWING_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLOOMWING_T1.glb
+Mob_Portal_GLOOMWING_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLOOMWING_T2.glb
+Mob_Portal_GLOOMWING_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GLOOMWING_T3.glb
+Mob_Portal_STARE_ORB_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STARE_ORB_T1.glb
+Mob_Portal_STARE_ORB_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STARE_ORB_T2.glb
+Mob_Portal_STARE_ORB_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STARE_ORB_T3.glb
+Mob_Portal_GNASHBOX_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GNASHBOX_T1.glb
+Mob_Portal_GNASHBOX_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GNASHBOX_T2.glb
+Mob_Portal_GNASHBOX_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GNASHBOX_T3.glb
+Mob_Portal_MOSS_KNIGHT_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_MOSS_KNIGHT_T1.glb
+Mob_Portal_MOSS_KNIGHT_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_MOSS_KNIGHT_T2.glb
+Mob_Portal_MOSS_KNIGHT_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_MOSS_KNIGHT_T3.glb
+Mob_Portal_STONE_KNIGHT_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STONE_KNIGHT_T1.glb
+Mob_Portal_STONE_KNIGHT_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STONE_KNIGHT_T2.glb
+Mob_Portal_STONE_KNIGHT_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_STONE_KNIGHT_T3.glb
+Mob_Portal_SHARD_TYRANT_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARD_TYRANT_T1.glb
+Mob_Portal_SHARD_TYRANT_T2,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARD_TYRANT_T2.glb
+Mob_Portal_SHARD_TYRANT_T3,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_SHARD_TYRANT_T3.glb
+Mob_Portal_GOLDEN_PUFFCAP_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_GOLDEN_PUFFCAP_T1.glb
+Mob_Portal_EGG_HATCHLING_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_EGG_HATCHLING_T1.glb
+Mob_Portal_YOUNG_DRAGON_T1,Mob,fauna,Portal Realm,team-codex,blender_only,READY,portal-buildout/monsters/portal-bestiary.blend,,portal-buildout/monsters/Mob_Portal_YOUNG_DRAGON_T1.glb
+Prop_Portal_GrassTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_GrassTile.glb
+Prop_Portal_ForestTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_ForestTile.glb
+Prop_Portal_MountainTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_MountainTile.glb
+Prop_Portal_WaterTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_WaterTile.glb
+Prop_Portal_SwampTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_SwampTile.glb
+Prop_Portal_SandTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_SandTile.glb
+Prop_Portal_RoadTile,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_RoadTile.glb
+Prop_Portal_TownWall,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_TownWall.glb
+Prop_Portal_TownDoor,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_TownDoor.glb
+Prop_Portal_ShopCounter,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_ShopCounter.glb
+Prop_Portal_InnBed,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_InnBed.glb
+Prop_Portal_SmithAnvil,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_SmithAnvil.glb
+Prop_Portal_CastleWall,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_CastleWall.glb
+Prop_Portal_CastleGate,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_CastleGate.glb
+Prop_Portal_Throne,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_Throne.glb
+Prop_Portal_CaveWall,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_CaveWall.glb
+Prop_Portal_CaveFloor,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_CaveFloor.glb
+Prop_Portal_StairsDown,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_StairsDown.glb
+Prop_Portal_KeyChest,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_KeyChest.glb
+Prop_Portal_BronzeGate,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_BronzeGate.glb
+Prop_Portal_SilverGate,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_SilverGate.glb
+Prop_Portal_StarGate,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_StarGate.glb
+Prop_Portal_PortalArch,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_PortalArch.glb
+Prop_Portal_DragonEggNest,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_DragonEggNest.glb
+Prop_Portal_StagePlatform,Prop,props (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Prop_Portal_StagePlatform.glb
+Item_Portal_DragonEggIntact,Item,items (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Item_Portal_DragonEggIntact.glb
+Item_Portal_DragonEggCracked,Item,items (other),Portal Realm,team-codex,blender_only,READY,portal-buildout/environment/portal-environment.blend,,portal-buildout/environment/Item_Portal_DragonEggCracked.glb

@@ -7,6 +7,7 @@ import com.daedalus.world.retro.RetroRealm.Chest;
 import com.daedalus.world.retro.RetroRealm.Door;
 import com.daedalus.world.retro.RetroRealm.Entry;
 import com.daedalus.world.retro.RetroRealm.Link;
+import com.daedalus.world.retro.RetroRealm.Land;
 import com.daedalus.world.retro.RetroRealm.Loot;
 import com.daedalus.world.retro.RetroRealm.Npc;
 import com.daedalus.world.retro.RetroRealm.Place;
@@ -132,6 +133,11 @@ public final class RetroCodec {
         for (Boss b : r.bosses()) {
             sb.append("boss ").append(place(b.at())).append(' ').append(b.monster().name()).append('\n');
         }
+        for (Land land : r.lands()) {
+            sb.append("land ").append(land.number()).append(' ').append(land.map()).append(' ')
+                    .append(land.x()).append(' ').append(land.y()).append(' ').append(land.width()).append(' ')
+                    .append(land.height()).append(' ').append(land.owner().isEmpty() ? "-" : land.owner()).append('\n');
+        }
         sb.append("spawn ").append(place(r.spawn())).append('\n');
         sb.append("portal ").append(place(r.portal())).append('\n');
         for (String n : r.news()) {
@@ -157,6 +163,7 @@ public final class RetroCodec {
         List<Shop> shops = new ArrayList<>();
         List<Boss> bosses = new ArrayList<>();
         List<String> news = new ArrayList<>();
+        List<Land> lands = new ArrayList<>();
         Place spawn = null;
         Place portal = null;
         for (int i = 1; i < lines.length; i++) {
@@ -167,6 +174,11 @@ public final class RetroCodec {
             String[] f = line.split(" ");
             switch (f[0]) {
                 case "seed" -> seed = Long.parseLong(f[1]);
+                case "land" -> {
+                    if (f.length != 8) throw new IllegalArgumentException("invalid land fields");
+                    lands.add(new Land(Integer.parseInt(f[1]), f[2], Integer.parseInt(f[3]), Integer.parseInt(f[4]),
+                            Integer.parseInt(f[5]), Integer.parseInt(f[6]), f[7].equals("-") ? "" : f[7]));
+                }
                 case "name" -> name = rest(line, 1);
                 case "item" -> checkItem(f, line);
                 case "monster" -> checkMonster(f);
@@ -213,7 +225,7 @@ public final class RetroCodec {
         if (spawn == null || portal == null) {
             throw new IllegalArgumentException("a realm needs a spawn and a portal");
         }
-        return new RetroRealm(seed, name, maps, zones, links, chests, doors, npcs, shops, bosses, spawn, portal, news);
+        return new RetroRealm(seed, name, maps, zones, links, chests, doors, npcs, shops, bosses, spawn, portal, news, lands);
     }
 
     private static int readMap(String[] lines, int at, String[] f, List<RetroMap> maps) {

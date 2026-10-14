@@ -30,10 +30,11 @@ public enum RetroItem {
     CHAIN_MAIL(Kind.ARMOR, 240, 12, "CHAIN MAIL"),
     SHARD_MAIL(Kind.ARMOR, 0, 18, "SHARD MAIL"),
     METEOR_MAIL(Kind.ARMOR, 0, 26, "METEOR MAIL"),
-    STAR_SHARD(Kind.TREASURE, 0, 300, "STAR SHARD");
+    STAR_SHARD(Kind.TREASURE, 0, 300, "STAR SHARD"),
+    DRAGON_EGG(Kind.EGG, 0, 0, "DRAGON EGG");
 
     /** What an item is for. */
-    public enum Kind { USE, KEY, WEAPON, ARMOR, TREASURE }
+    public enum Kind { USE, KEY, WEAPON, ARMOR, TREASURE, EGG }
 
     private final Kind kind;
     private final int price;

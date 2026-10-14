@@ -1,0 +1,30 @@
+{
+  "realm": "Labyrinth",
+  "stage": "art and portable rules; native binding pending",
+  "halloween_exclusive": true,
+  "friendly_plants": [
+    {
+      "id": "Mob_Lab_VenusGuide",
+      "suggested_role": "GUIDE_DEFEND",
+      "attack_players": false,
+      "attack_allies": false,
+      "attack_neutral": false,
+      "defend_requires": "trusted active hostile threat"
+    },
+    {
+      "id": "Mob_Lab_PitcherMedic",
+      "suggested_role": "OFFER_AID",
+      "attack_players": false,
+      "attack_allies": false,
+      "healing_values": "unapproved"
+    },
+    {
+      "id": "Mob_Lab_SundewGuardian",
+      "suggested_role": "HOSTILE_ONLY_SNARE",
+      "snare_players": false,
+      "snare_allies": false,
+      "snare_values": "unapproved"
+    }
+  ],
+  "proposals_document": "docs/realms/LABYRINTH-BUILDOUT.md"
+}
