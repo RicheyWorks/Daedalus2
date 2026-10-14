@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -38,12 +37,8 @@ import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 @ConditionalOnProperty(prefix = "daedalus.redis", name = "enabled", havingValue = "true")
 public class RedisConfig {
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        // Pulls from spring.data.redis.* in application.yml
-        return new LettuceConnectionFactory();
-    }
-
+    // Use Boot's connection factory, which binds host/port/auth/TLS/timeouts from spring.data.redis.*.
+    // Defining a default LettuceConnectionFactory here would replace that configured factory.
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();

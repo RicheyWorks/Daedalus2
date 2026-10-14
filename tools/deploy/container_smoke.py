@@ -25,6 +25,36 @@ def docker(*args, env=None, check=True):
                           text=True, timeout=60)
 
 
+def start_server(image, name, environment, *, volume=None, network=None, redis=False, issuer='container-smoke'):
+    args = ['run', '--detach', '--rm', '--name', name, '--publish', '127.0.0.1:0:8080']
+    if volume:
+        args += ['--volume', volume + ':/var/daedalus']
+    if network:
+        args += ['--network', network]
+    args += ['--env', 'SPRING_PROFILES_ACTIVE=prod', '--env', 'DAEDALUS_JWT_SECRET',
+             '--env', 'DAEDALUS_ADMIN_PASSWORD_BCRYPT']
+    if redis:
+        for key in ('REDIS_HOST', 'REDIS_PORT', 'REDIS_PASSWORD'):
+            args += ['--env', key]
+    args += [image, '--daedalus.redis.enabled=' + str(redis).lower(),
+             '--daedalus.plugins.scan-on-startup=false', '--daedalus.security.jwt.issuer=' + issuer]
+    docker(*args, env=environment)
+    port = int(docker('port', name, '8080/tcp').stdout.strip().rsplit(':', 1)[1])
+    base = 'http://127.0.0.1:' + str(port)
+    deadline = time.monotonic() + 120
+    while True:
+        if docker('inspect', '--format', '{{.State.Running}}', name).stdout.strip() != 'true':
+            raise RuntimeError('Container exited before becoming healthy')
+        try:
+            if request(base + '/actuator/health')[0] == 200:
+                return base
+        except (OSError, urllib.error.URLError):
+            pass
+        if time.monotonic() > deadline:
+            raise RuntimeError('Container startup timed out')
+        time.sleep(.5)
+
+
 def check_jar(jar, root=ROOT):
     fixtures = sorted((root / 'engines/unreal/DaedalusLink/Content/Inventory').glob('*.dic'))
     if not fixtures:
@@ -61,24 +91,7 @@ def main():
         DAEDALUS_ADMIN_PASSWORD_BCRYPT='$2a$10$7EqJtq98hPqEX7fNZaFWoOhi5B0h6C1JcqIcnLmVjKobXAB9Zwmqu')
     started = time.monotonic()
     try:
-        docker('run', '--detach', '--rm', '--name', name, '--publish', '127.0.0.1:0:8080',
-               '--env', 'SPRING_PROFILES_ACTIVE=prod', '--env', 'DAEDALUS_JWT_SECRET',
-               '--env', 'DAEDALUS_ADMIN_PASSWORD_BCRYPT', args.image,
-               '--daedalus.redis.enabled=false', '--daedalus.plugins.scan-on-startup=false',
-               '--daedalus.security.jwt.issuer=container-smoke', env=environment)
-        port = int(docker('port', name, '8080/tcp').stdout.strip().rsplit(':', 1)[1])
-        base = 'http://127.0.0.1:' + str(port)
-        while True:
-            if docker('inspect', '--format', '{{.State.Running}}', name).stdout.strip() != 'true':
-                raise RuntimeError('Container exited before becoming healthy')
-            try:
-                if request(base + '/actuator/health')[0] == 200:
-                    break
-            except (OSError, urllib.error.URLError):
-                pass
-            if time.monotonic() - started > 120:
-                raise RuntimeError('Container startup timed out')
-            time.sleep(.5)
+        base = start_server(args.image, name, environment)
         with tempfile.TemporaryDirectory() as directory:
             jar = Path(directory) / 'app.jar'
             docker('cp', name + ':/app/app.jar', str(jar))
