@@ -322,7 +322,8 @@ def dress_plan(cells, xy, realm, ground_z):
         top = ground_z + dz
         yaw = _h(n, 0) * 360.0 if realm == "WORLD-ZERO" else 0.0   # a fragment turns as it drifts; a city plot stays square
         plots.append((x, y, top - thick * 50.0, yaw, P.LAND_M, P.LAND_M, thick))
-        extras.extend(island_plan(n, x, y, top, thick, realm))
+        if realm != "WORLD-ZERO":   # 09:20: a fragment is its own shape; cube terraces on it were clutter
+            extras.extend(island_plan(n, x, y, top, thick, realm))
         if int(_h(n, 8) * 4) == 0:
             decor.append((n, x, y, top, _h(n, 9) * 360.0))
     return plots, extras, decor
@@ -911,6 +912,33 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None, extras_
         actors[d].modify(True)
     P.save_world()
     return {"realm": realm, "islands": len(chunk), "props": placed, "actors": len(per_actor), "next_start": start + len(chunk)}
+
+
+def strip_extras_steps(realm="WORLD-ZERO"):
+    """Richey 09:20 ("why are we messing up islands that are good?"): the cube terraces and satellite rocks were made
+    for cube islands; on Sol's fragments they are clutter. Clear every district's Ground instances in the realm and
+    remove the Extras_<R>_Hub actor; the fragments, ground shader and real props stay."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    n = cleared = 0
+    for a in list(sub.get_all_level_actors()):
+        l = a.get_actor_label()
+        if a.get_class().get_name() != "DaedalusLandDistrict":
+            continue
+        if l.startswith("Lands_%s_" % realm.replace("-", "")):
+            g = a.get_editor_property("ground")
+            cleared += g.get_instance_count()
+            a.lay_ground([])
+            a.modify(True)
+            n += 1
+            if n % 25 == 0:
+                yield "%s: %d districts stripped, %d blocks gone" % (realm, n, cleared)
+        elif l == "Extras_%s_Hub" % realm.replace("-", ""):
+            cleared += a.get_editor_property("ground").get_instance_count()
+            sub.destroy_actor(a)
+    P.save_world()
+    return {"realm": realm, "districts": n, "blocks_removed": cleared}
 
 
 CULL = {"Lands": (0, 400000), "Decor": (0, 120000)}   # cm: plots seen to 4 km, props to 1.2 km
