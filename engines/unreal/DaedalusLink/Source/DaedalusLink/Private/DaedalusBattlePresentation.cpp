@@ -3,6 +3,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SceneComponent.h"
 #include "Engine/SkeletalMesh.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include <algorithm>
 #include <cmath>
 
@@ -35,13 +36,77 @@ AActor* ADaedalusBattlePresentation::Slot(int Index,bool bFoe) const
     return Slots.IsValidIndex(Index) && IsValid(Slots[Index]) ? Slots[Index].Get() : nullptr;
 }
 
-void ADaedalusBattlePresentation::Play(AActor* Actor,UAnimSequence* Animation)
+void ADaedalusBattlePresentation::BeginPlay()
 {
-    if (!IsValid(Actor) || !IsValid(Animation)) return;
+    Super::BeginPlay();
+    RefreshCastAnimations();
+}
+
+const FDaedalusBattleCastClips* ADaedalusBattlePresentation::ClipsFor(USkeletalMesh* Mesh)
+{
+    if (!IsValid(Mesh)) return nullptr;
+    if (const auto* Existing=CastClips.Find(Mesh)) return Existing;
+    if (CastClips.Num()>=64) return nullptr;
+    FDaedalusBattleCastClips Clips;
+    const FString Root=TEXT("/Game/Daedalus/Art/Cast/");
+    const FString Package=Mesh->GetOutermost()->GetName();
+    if (Package.StartsWith(Root,ESearchCase::CaseSensitive))
+    {
+        const FString Relative=Package.Mid(Root.Len());
+        int32 Slash=INDEX_NONE;
+        if (Relative.FindChar(TEXT('/'),Slash) && Slash>0)
+        {
+            const FString Folder=Root+Relative.Left(Slash);
+            auto& Registry=FModuleManager::LoadModuleChecked<FAssetRegistryModule>(TEXT("AssetRegistry"));
+            TArray<FAssetData> Assets;
+            Registry.Get().GetAssetsByPath(FName(*Folder),Assets,true);
+            Assets.Sort([](const FAssetData& A,const FAssetData& B){return A.GetObjectPathString()<B.GetObjectPathString();});
+            for (const FAssetData& Asset:Assets)
+            {
+                if (Asset.AssetClassPath!=UAnimSequence::StaticClass()->GetClassPathName()) continue;
+                const FString Name=Asset.AssetName.ToString();
+                const bool Attack=Name.Equals(TEXT("Attack"),ESearchCase::IgnoreCase)||Name.EndsWith(TEXT("_Attack"),ESearchCase::IgnoreCase);
+                const bool Hurt=Name.Equals(TEXT("Hurt"),ESearchCase::IgnoreCase)||Name.EndsWith(TEXT("_Hurt"),ESearchCase::IgnoreCase);
+                if ((!Attack||Clips.Attack) && (!Hurt||Clips.Hurt)) continue;
+                auto* Clip=Cast<UAnimSequence>(Asset.GetAsset());
+                if (!Clip || !Mesh->GetSkeleton() || Clip->GetSkeleton()!=Mesh->GetSkeleton()) continue;
+                if (Attack) Clips.Attack=Clip;
+                if (Hurt) Clips.Hurt=Clip;
+            }
+        }
+    }
+    return &CastClips.Add(Mesh,Clips);
+}
+
+void ADaedalusBattlePresentation::RefreshCastAnimations()
+{
+    CastClips.Empty();
+    for (bool Foe:{false,true})
+        for (int32 Index=0;Index<32;++Index)
+            if (auto* Actor=Slot(Index,Foe))
+                if (auto* Mesh=Actor->FindComponentByClass<USkeletalMeshComponent>())
+                    ClipsFor(Mesh->GetSkeletalMeshAsset());
+}
+
+UAnimSequence* ADaedalusBattlePresentation::ResolveCastAnimation(AActor* Actor,bool bHurt)
+{
+    if (!IsValid(Actor)) return nullptr;
     auto* Mesh=Actor->FindComponentByClass<USkeletalMeshComponent>();
-    if (Mesh && Mesh->GetSkeletalMeshAsset()
-        && Mesh->GetSkeletalMeshAsset()->GetSkeleton()==Animation->GetSkeleton())
-        Mesh->PlayAnimation(Animation,false);
+    if (!Mesh || !Mesh->GetSkeletalMeshAsset()) return nullptr;
+    auto* Asset=Mesh->GetSkeletalMeshAsset();
+    UAnimSequence* Animation=bHurt?HurtAnimation.Get():AttackAnimation.Get();
+    if (!IsValid(Animation) || !Asset->GetSkeleton() || Asset->GetSkeleton()!=Animation->GetSkeleton())
+    {
+        const auto* Clips=ClipsFor(Asset);
+        Animation=Clips?(bHurt?Clips->Hurt.Get():Clips->Attack.Get()):nullptr;
+    }
+    return IsValid(Animation)?Animation:nullptr;
+}
+
+void ADaedalusBattlePresentation::Play(AActor* Actor,bool bHurt)
+{
+    if (auto* Animation=ResolveCastAnimation(Actor,bHurt))
+        Actor->FindComponentByClass<USkeletalMeshComponent>()->PlayAnimation(Animation,false);
 }
 
 void ADaedalusBattlePresentation::Tick(float DeltaSeconds)
@@ -60,8 +125,8 @@ void ADaedalusBattlePresentation::Tick(float DeltaSeconds)
         const auto& Cue=Entry.Cue;
         auto* Actor=Slot(Cue.Actor,Cue.ActorIsFoe);
         auto* Target=Slot(Cue.Target,Cue.TargetIsFoe);
-        if (Cue.K==daedalus::stage::Kind::Swing) Play(Actor,AttackAnimation);
-        if (Cue.K==daedalus::stage::Kind::Flinch) Play(Target,HurtAnimation);
+        if (Cue.K==daedalus::stage::Kind::Swing) Play(Actor,false);
+        if (Cue.K==daedalus::stage::Kind::Flinch) Play(Target,true);
         PresentCue(UTF8_TO_TCHAR(daedalus::stage::Name(Cue.K)),Actor,Target,Cue.Amount,
                    UTF8_TO_TCHAR(Cue.Text.c_str()),static_cast<float>(Cue.Dur),Cue.TargetIsFoe,Cue.Target);
     }
