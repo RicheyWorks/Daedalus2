@@ -28,6 +28,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 from asset_pipeline import wire  # noqa: E402
 from asset_pipeline.ship import write_report  # noqa: E402
+from asset_pipeline.local_lock import exclusive_file,LocalOwnerBusy  # noqa: E402
 
 LIVE = r"C:\Unreal\DaedalusRealm\Plugins\DaedalusLink\Content"
 PS = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
@@ -416,7 +417,7 @@ def run_options(options,progress):
     return outcome['exit_code']
 
 
-def main(argv):
+def run_main(argv):
     started=time.monotonic()
     options=parse_options(argv)
     run_id=uuid.uuid4().hex
@@ -445,6 +446,18 @@ def main(argv):
             say('partial receipt unavailable: '+str(error))
         return code or 2
     return code
+
+
+def main(argv):
+    if '--help' in argv or '-h' in argv:
+        parse_options(argv)
+    lock=Path(os.environ.get('LOCALAPPDATA',REPO))/'Daedalus'/'jobs'/'night-run-owner.lock'
+    try:
+        with exclusive_file(lock):
+            return run_main(argv)
+    except LocalOwnerBusy as error:
+        say(str(error)+'; no job or editor call started')
+        return 2
 
 
 if __name__ == "__main__":

@@ -867,3 +867,7 @@ A handoff summary must retain the reported label but downgrade passed to unverif
 ### Preserve scenario timeout output (2026-10-14)
 TimeoutExpired can contain byte stdout/stderr even with text mode. Decode and retain bounded output in progress/final receipts, mark the suite unverified and return2. subprocess.run stopping its local child is not cancellation/quiescence of accepted Unreal work; do not restart the editor or replay based on this timeout.
 
+
+### Exclude overlapping local night runners (2026-10-14)
+A process-held OS file lock covers local night-run orchestration, before commands start. A second runner refuses; a leftover file is not ownership. This prevents concurrent hosts using the shared jobs root, not other editor clients or native work continuing after timeout/death. Continue respecting the team editor lease and unresolved receipt reconciliation. Lock release is not engine quiescence.
+
