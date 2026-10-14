@@ -53,6 +53,8 @@ jobs:
         run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_forecast_test.cpp -o shardstead_forecast_test && ./shardstead_forecast_test
       - name: ledger save roundtrip and malformed payload rejection
         run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_save_test.cpp -o shardstead_save_test && ./shardstead_save_test
+      - name: exact native storage revision and commit receipt checks
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public record_receipt_test.cpp -o record_receipt_test && ./record_receipt_test
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
           for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do
