@@ -52,6 +52,7 @@ PORT = 9890
 DEFAULT_DIR = os.path.join(os.path.expanduser("~"), "projects", "bot-team", "link")
 ALIVE_S = 30
 MAX_WAIT_S = 55
+LOCK_TTL_S = 1800      # an editor turn or the merge queue: a claim expires if the holder goes quiet this long
 MAX_BODY = 256 * 1024
 RATE_PER_S = 20.0      # per sender, sustained (borrowed from LoadBalancerPro's load shedding: one noisy bot can't
 RATE_BURST = 200.0     # starve the rest); a burst of this many is fine
@@ -71,6 +72,7 @@ class Broker:
         self.seen = {}          # name -> (time, status)
         self.bots = {}          # name -> {role, handles, about, registered}
         self.buckets = {}       # name -> [tokens, last time]
+        self.locks = {}         # lock name -> {holder, note, at (clock), ttl}
         self.since = clock()
         if os.path.exists(self.path):
             with open(self.path, encoding="utf-8") as f:
@@ -87,6 +89,81 @@ class Broker:
                         self.bots[m["from"]] = dict(m.get("body") or {}, registered=m["ts"])
                     if m.get("type") == "ack":
                         self.acked.add((m.get("from"), (m.get("body") or {}).get("id")))
+                    if m.get("type") in ("lock", "unlock"):
+                        self._replay_lock(m)
+
+    def _replay_lock(self, m):
+        b = m.get("body") or {}
+        name = b.get("name")
+        if not name:
+            return
+        if m["type"] == "lock":
+            try:
+                at = datetime.datetime.fromisoformat(m["ts"]).timestamp()
+            except (ValueError, KeyError):
+                at = 0.0
+            self.locks[name] = {"holder": m["from"], "note": b.get("note", ""), "at": at, "ttl": float(b.get("ttl", LOCK_TTL_S))}
+        else:
+            self.locks.pop(name, None)
+
+    def _lock_live(self, name, now):
+        L = self.locks.get(name)
+        if L and now - L["at"] > L["ttl"]:
+            del self.locks[name]   # the holder went quiet: the claim expired
+            return None
+        return L
+
+    def lock(self, me, name, note="", ttl=LOCK_TTL_S):
+        """Claim a lock (an editor: 'unreal', 'blender'; the 'merge-queue'). Returns (ok, state). Re-claiming your
+        own lock refreshes it; another holder's live lock refuses with who has it and for how long."""
+        name = str(name).strip().lower()
+        if not name or not me:
+            raise ValueError("lock needs me and name")
+        now = self.clock()
+        with self.cond:
+            L = self._lock_live(name, now)
+            if L and L["holder"] != me:
+                return False, dict(L, name=name, age_s=round(now - L["at"], 1))
+        self.send(me, "*", "lock", {"name": name, "note": note, "ttl": float(ttl)}, topic="hub")
+        with self.cond:
+            self.locks[name] = {"holder": me, "note": note, "at": now, "ttl": float(ttl)}
+            return True, dict(self.locks[name], name=name, age_s=0.0)
+
+    def unlock(self, me, name, force=False):
+        name = str(name).strip().lower()
+        now = self.clock()
+        with self.cond:
+            L = self._lock_live(name, now)
+            if not L:
+                return True, None
+            if L["holder"] != me and not force:
+                return False, dict(L, name=name, age_s=round(now - L["at"], 1))
+        self.send(me, "*", "unlock", {"name": name, "forced": bool(force and L["holder"] != me)}, topic="hub")
+        with self.cond:
+            self.locks.pop(name, None)
+        return True, None
+
+    def lock_table(self):
+        now = self.clock()
+        with self.cond:
+            for n in list(self.locks):
+                self._lock_live(n, now)
+            return {n: dict(L, age_s=round(now - L["at"], 1), left_s=round(L["ttl"] - (now - L["at"]), 1))
+                    for n, L in sorted(self.locks.items())}
+
+    def inbox(self, me):
+        """What still needs an answer from `me`: unacked requests and pings addressed to me, oldest first, with age."""
+        now = self.clock()
+        out = []
+        for m in self.pending(me):
+            if m["to"] != me or m["type"] not in ("request", "ping", "ask"):
+                continue
+            try:
+                age = round(now - datetime.datetime.fromisoformat(m["ts"]).timestamp(), 1)
+            except (ValueError, KeyError):
+                age = None
+            out.append(dict(m, age_s=age))
+        return out
 
     @property
     def last(self):
@@ -344,6 +421,10 @@ def make_handler(broker):
                     return self._out(200, {"messages": got, "last": last})
                 if path == "/pending":
                     return self._out(200, {"messages": broker.pending(q["me"])})
+                if path == "/inbox":
+                    return self._out(200, {"messages": broker.inbox(q["me"])})
+                if path == "/locks":
+                    return self._out(200, broker.lock_table())
                 if path == "/presence":
                     return self._out(200, broker.presence())
                 if path == "/log":
@@ -351,7 +432,8 @@ def make_handler(broker):
                 if path == "/health":
                     return self._out(200, {"ok": True, "last": broker.last,
                                            "since": datetime.datetime.fromtimestamp(broker.since).isoformat(timespec="seconds")})
-                return self._out(404, {"error": "no such path", "paths": ["/send", "/wait", "/ack", "/pending",
+                return self._out(404, {"error": "no such path", "paths": ["/send", "/wait", "/ack", "/pending", "/inbox",
+                                                                          "/lock", "/unlock", "/locks",
                                                                           "/heartbeat", "/presence", "/log", "/health"]})
             except KeyError as e:
                 return self._out(400, {"error": "missing %s" % e})
@@ -379,6 +461,12 @@ def make_handler(broker):
                 if path == "/heartbeat":
                     broker.heartbeat(b["me"], b.get("status", ""))
                     return self._out(200, {"ok": True})
+                if path == "/lock":
+                    ok, st = broker.lock(b["me"], b["name"], b.get("note", ""), float(b.get("ttl", LOCK_TTL_S)))
+                    return self._out(200 if ok else 409, {"ok": ok, "lock": st})
+                if path == "/unlock":
+                    ok, st = broker.unlock(b["me"], b["name"], bool(b.get("force")))
+                    return self._out(200 if ok else 409, {"ok": ok, "lock": st})
                 return self._out(404, {"error": "no such path"})
             except KeyError as e:
                 return self._out(400, {"error": "unknown or missing %s" % e})
@@ -549,6 +637,35 @@ class Link:
         r = self._call("GET", "/pending?me=" + self.me)
         return r["messages"] if r else []
 
+    def inbox(self):
+        r = self._call("GET", "/inbox?me=" + self.me)
+        return r["messages"] if r else []
+
+    def lock(self, name, note="", ttl=LOCK_TTL_S):
+        """(ok, lock state). 409 from the broker comes back as (False, state) with the holder."""
+        data = json.dumps({"me": self.me, "name": name, "note": note, "ttl": ttl}).encode("utf-8")
+        req = urllib.request.Request(self.base + "/lock", data=data, method="POST", headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=5.0) as r:
+                self.up = True
+                return True, json.loads(r.read().decode("utf-8")).get("lock")
+        except urllib.error.HTTPError as e:
+            self.up = True
+            try:
+                return False, json.loads(e.read().decode("utf-8")).get("lock")
+            except ValueError:
+                return False, None
+        except (urllib.error.URLError, socket.timeout, ConnectionError, OSError, ValueError):
+            self.up = False
+            return False, None
+
+    def unlock(self, name, force=False):
+        r = self._call("POST", "/unlock", {"me": self.me, "name": name, "force": force})
+        return bool(r and r.get("ok"))
+
+    def locks(self):
+        return self._call("GET", "/locks") or {}
+
     def presence(self):
         return self._call("GET", "/presence") or {}
 
@@ -566,7 +683,7 @@ def main(argv=None):
     s.add_argument("--port", type=int, default=PORT)
     s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
                    help="where to write {url} for clients to find the broker ('' for none)")
-    for name in ("send", "wait", "pending", "presence", "ping", "log"):
+    for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
         p.add_argument("--port", type=int, default=PORT)
@@ -582,6 +699,14 @@ def main(argv=None):
         if name == "ping":
             p.add_argument("--to", default="blender-team")
             p.add_argument("--timeout", type=float, default=20)
+        if name in ("claim", "release"):
+            p.add_argument("name", help="unreal | blender | merge-queue | any word")
+            p.add_argument("--note", default="", help="claim: what for (shown to whoever is refused)")
+            p.add_argument("--ttl", type=float, default=LOCK_TTL_S, help="claim: seconds before a quiet holder's claim expires")
+            p.add_argument("--force", action="store_true", help="release: take a lock from a quiet holder")
+        if name == "watch":
+            p.add_argument("--after", type=int, default=-1, help="broker id to start after (-1: now)")
+            p.add_argument("--minutes", type=float, default=30)
     a = ap.parse_args(argv)
     if a.cmd == "serve":
         serve(a.folder, a.port, bus_json=a.bus_json or None)
@@ -599,6 +724,30 @@ def main(argv=None):
         out = {"messages": msgs, "last": last}
     elif a.cmd == "pending":
         out = {"messages": link.pending()}
+    elif a.cmd == "inbox":
+        out = {"messages": link.inbox()}
+    elif a.cmd == "claim":
+        ok, st = link.lock(a.name, a.note, a.ttl)
+        out = {"ok": ok, "lock": st}
+        if not ok:
+            link.send("*", "note", {"text": "%s asked for %s; %s has it (%s, %ss): waiting" % (a.me, a.name, (st or {}).get("holder"), (st or {}).get("note", ""), (st or {}).get("age_s"))}, topic="hub")
+        print(json.dumps(out, ensure_ascii=False, indent=1))
+        return 0 if ok else 3
+    elif a.cmd == "release":
+        out = {"ok": link.unlock(a.name, a.force)}
+    elif a.cmd == "locks":
+        out = link.locks()
+    elif a.cmd == "watch":
+        # A terminal view: one line per message for me (or broadcast), as they arrive. Ctrl-C to stop.
+        h = link.health()
+        after = (h["last"] if h else 0) if a.after < 0 else a.after
+        stop = time.time() + a.minutes * 60
+        while time.time() < stop:
+            msgs, after = link.wait(after, 25)
+            for m in msgs:
+                t = (m.get("body") or {}).get("text") or json.dumps(m.get("body") or {}, ensure_ascii=False)
+                print("[%s] #%d %s -> %s (%s): %s" % (m.get("ts", "")[11:19], m["id"], m["from"], m["to"], m["type"], t), flush=True)
+        return 0
     elif a.cmd == "presence":
         out = link.presence()
     elif a.cmd == "log":
