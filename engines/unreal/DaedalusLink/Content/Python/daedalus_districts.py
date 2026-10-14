@@ -138,6 +138,64 @@ def district_cells(d):
     return sorted(G.number(x, y) for x in range(10 * (d % 10), 10 * (d % 10) + 10) for y in range(10 * (d // 10), 10 * (d // 10) + 10))
 
 
+GROUND_M = 2560.0      # one district: 10 cells x 256 m
+GROUND_THICK_M = 4.0
+
+
+def ground_label(realm, d):
+    return "Ground_%s_D%02d" % (realm.replace("-", ""), d)
+
+
+def lay_ground(realm, d, sub=None, cube=None):
+    """One ground slab under a whole district (Richey 23:53: "fix all the falling through the floor stuff. add
+    ground"): 2.56 km square, 4 m thick, its top 1 m under the plots' tops, so the 164 m gaps between 92 m plots
+    are floor, not sky. Idempotent by label. Returns the actor or None when it exists."""
+    import unreal
+    import daedalus_land_grid as G
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    sub = sub or unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cube = cube or unreal.load_asset(P.CUBE)
+    label = ground_label(realm, d)
+    if label in P._labels_cache(sub):
+        return None
+    origin = R.ORIGINS[realm]
+    # the district's centre: cells 10*(d%10)..+9 east, 10*(d//10)..+9 north, cell centres at (x-HUB)*pitch
+    cx = (10 * (d % 10) + 4.5 - G.HUB) * G.PITCH_M * 100.0 + origin[0]
+    cy = (10 * (d // 10) + 4.5 - G.HUB) * G.PITCH_M * 100.0 + origin[1]
+    top = R.GROUND_Z - 100.0            # plots sit at GROUND_Z with a 2 m slab whose top is GROUND_Z
+    z = top - GROUND_THICK_M * 50.0
+    a = sub.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(cx, cy, z))
+    a.static_mesh_component.set_static_mesh(cube)
+    a.set_actor_scale3d(unreal.Vector(GROUND_M, GROUND_M, GROUND_THICK_M))
+    a.set_actor_label(label)
+    a.set_folder_path("Realms/%s/Ground" % realm if realm != "WORLD-ZERO" else "Daedalus/Ground")
+    a.tags = [unreal.Name("Ground"), unreal.Name("Realm:%s" % realm), unreal.Name("District:%d" % d)]
+    return a
+
+
+def lay_ground_steps(realm, districts):
+    """Ground under existing districts (the hub rings laid before ground existed): one per tick, into the
+    district's sublevel when it exists, else the persistent level."""
+    import unreal
+    import daedalus_plots as P
+    world = _world()
+    made = 0
+    for d in districts:
+        a = lay_ground(realm, d)
+        if a is not None:
+            sl = _sublevel(world, "%s/%s/D%02d" % (ROOT, realm_dir(realm), d), create=False)
+            if sl is not None:
+                unreal.EditorLevelUtils.move_actors_to_level([a], sl, False, False)
+                lv = sl.get_loaded_level()
+                if lv is not None:
+                    P.save_packages_proven([lv.get_outermost()])
+            made += 1
+        yield "%s D%02d ground: %s" % (realm, d, "laid" if a is not None else "exists")
+    P.save_world()
+    return {"realm": realm, "ground": made}
+
+
 def lay_district_steps(realm, districts, taken=frozenset()):
     """Lay EVERY free cell of each district as a plot straight into the district's sublevel, one district per
     editor tick (daedalus.steps). This is how rings 7..49 get laid: 100 districts x 100 cells a realm, streamed.
@@ -158,6 +216,9 @@ def lay_district_steps(realm, districts, taken=frozenset()):
         pkg = "%s/%s/D%02d" % (ROOT, realm_dir(realm), d)
         sl = _sublevel(world, pkg)
         made = []
+        g = lay_ground(realm, d, sub=sub, cube=cube)
+        if g is not None:
+            made.append(g)
         for n in district_cells(d):
             if n in taken or ("%s%d" % (pre, n)) in have:
                 continue
