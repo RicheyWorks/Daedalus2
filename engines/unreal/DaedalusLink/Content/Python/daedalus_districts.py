@@ -643,7 +643,8 @@ def hub_floor_steps(realm="WORLD-ZERO", step_cm=4800.0, slab_m=48.0):
             x = cx - half + step_cm * (ix + 0.5)
             probed += 1
             hit = unreal.SystemLibrary.line_trace_single(world, unreal.Vector(x, y, top + 2000), unreal.Vector(x, y, top - 6000), unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
-            if not hit:
+            # floored only when something is at the plane (+-1.5 m); a hit far below is a pit, a hit far above is a prop on air
+            if not hit or abs(hit.to_tuple()[4].z - top) > 150.0:
                 holes.append((x, y))
         yield "%s hub row %d/%d: %d holes so far" % (realm, iy + 1, n, len(holes))
     if holes:
