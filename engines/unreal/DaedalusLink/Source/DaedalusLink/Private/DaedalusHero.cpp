@@ -44,6 +44,8 @@
 #include "SDaedalusInventory.h"
 #include "SDaedalusDialogue.h"
 #include "DaedalusRealmSessionCore.h"
+#include "DaedalusBattlePresentation.h"
+#include "Kismet/GameplayStatics.h"
 #include "SDaedalusHud.h"
 #include "SDaedalusRealm.h"
 #include "Containers/Ticker.h"
@@ -1362,6 +1364,7 @@ void ADaedalusHero::ExitRealm()
 	if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
 	HideOverlay(RealmHost);
 	RealmView.Reset();
+	bStageLooked = false;
 	{
 		daedalus::session::Session& S = SessionOf(RealmSession, RealmSessionLine);
 		if (S.Current() == "PORTAL" && !S.PortalFrom().empty())
@@ -1381,7 +1384,7 @@ bool ADaedalusHero::IsRealmOpen() const
 FString ADaedalusHero::RealmState() const
 {
 	if (!RealmView.IsValid()) return TEXT("closed");
-	return FString::Printf(TEXT("source=%s sprites=%d %s"), *RealmSource, RealmView->SpriteCount(), UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
+	return FString::Printf(TEXT("source=%s sprites=%d stage=%s cues_staged=%d %s"), *RealmSource, RealmView->SpriteCount(), Stage.IsValid() ? TEXT("1") : TEXT("0"), CuesStaged, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
 }
 
 bool ADaedalusHero::RealmCapture(const FString& Path)
@@ -1450,6 +1453,7 @@ FString ADaedalusHero::RealmInput(const FString& Command)
 	else if (Verb == TEXT("stage"))
 	{
 		// The battle stage director's cues since the last take (hub 28710), one per line: for a 3D stage and the harness.
+		if (Stage.IsValid()) return FString::Printf(TEXT("staged to %s: %d cues so far"), *Stage->GetName(), CuesStaged);   // Tick forwards them
 		FString Out;
 		for (const daedalus::stage::Cue& C : G.TakeStage()) Out += FString::Printf(TEXT("%s @%.2f +%.2f\n"), UTF8_TO_TCHAR(C.Describe().c_str()), C.At, C.Dur);
 		return Out.IsEmpty() ? TEXT("(no cues)") : Out;
@@ -1534,6 +1538,21 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	UCharacterMovementComponent* Mv = GetCharacterMovement();
+	// The 8-bit realm's battle cues go to the 3D stage when one is in the world (hub 28710/29054): the sprite battle
+	// keeps drawing; ADaedalusBattlePresentation plays the same fight on models.
+	if (RealmView.IsValid())
+	{
+		if (!bStageLooked)
+		{
+			bStageLooked = true;
+			Stage = Cast<ADaedalusBattlePresentation>(UGameplayStatics::GetActorOfClass(GetWorld(), ADaedalusBattlePresentation::StaticClass()));
+		}
+		if (RealmView->Game().StagePending() > 0)
+		{
+			const std::vector<daedalus::stage::Cue> Cues = RealmView->Game().TakeStage();
+			if (ADaedalusBattlePresentation* S = Stage.Get()) { if (S->Submit(Cues)) CuesStaged += static_cast<int32>(Cues.size()); }
+		}
+	}
 	// Held injected input (Inject with Seconds > 0): fed every frame like a held key until its time is up.
 	if (Injected.Num() > 0)
 	{

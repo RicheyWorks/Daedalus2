@@ -361,6 +361,10 @@ private:
 	TSharedPtr<SDaedalusHud> Hud;
 	TSharedPtr<SWidget> HudHost;
 	TSharedPtr<class SDaedalusRealm> RealmView;
+	/** The 3D battle stage (Sol's ADaedalusBattlePresentation) that plays the 8-bit realm's cues; found once per Play. */
+	TWeakObjectPtr<class ADaedalusBattlePresentation> Stage;
+	bool bStageLooked = false;
+	int32 CuesStaged = 0;
 	TSharedPtr<SWidget> RealmHost;
 	FString RealmSource;
 	void RealmReady(const FString& Spec, const FString& Source);

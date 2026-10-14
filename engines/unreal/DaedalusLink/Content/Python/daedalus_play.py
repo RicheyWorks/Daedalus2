@@ -1239,6 +1239,39 @@ def scenario_control(p):
     ]}
 
 
+def scenario_stage(p):
+    """The 8-bit battle on the 3D stage (hub 28710/29054): with Sol's ADaedalusBattlePresentation in the Play world,
+    a realm fight's cues are forwarded to it every frame; RealmState counts them."""
+    h = hero()
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    at = h.get_actor_location()
+    stage = spawn(h, unreal.DaedalusBattlePresentation, at + unreal.Vector(0, 0, 400), unreal.Rotator(0, 0, 0))
+    yield from _frames(2)
+    h.enter_realm(7)
+    for _ in range(80):
+        if "map=" in h.realm_state() or "refused" in h.realm_state():
+            break
+        yield
+    for _ in range(8):
+        if _kv(h.realm_state()).get("ui") == "NONE":
+            break
+        h.realm_input("b")
+    h.realm_input("toughen")
+    h.realm_input("battle:BLIGHT_SLIME+PUFFCAP")
+    yield from _frames(2)
+    h.realm_input("autofight")
+    yield from _frames(4)
+    st = h.realm_state()
+    line = h.realm_input("stage")
+    h.exit_realm()
+    yield from _frames(2)
+    return {"checks": [
+        _check("the stage actor was found by the hero", "stage=1" in st, st[:200]),
+        _check("a fight's cues reached it", int(_kv(st).get("cues_staged", "0")) >= 10, st[:200]),
+        _check("the stage command says where they went", line.startswith("staged to"), line),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1261,6 +1294,7 @@ SCENARIOS = {
     "cast": scenario_cast,
     "realm_switch": scenario_realm_switch,
     "control": scenario_control,
+    "stage": scenario_stage,
 }
 
 
