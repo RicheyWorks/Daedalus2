@@ -15,7 +15,7 @@ public class InventoryCatalogService {
 
     public InventoryCatalogService() {
         Map<String, InventoryCatalog> loaded = new LinkedHashMap<>();
-        for (String key : new String[]{"world-zero", "gallery-city", "parcels", "bricks", "labyrinth"}) {
+        for (String key : new String[]{"world-zero", "gallery-city", "parcels", "bricks", "labyrinth", "ocean"}) {
             try (var stream = InventoryCatalog.class.getResourceAsStream("/inventory/" + key + ".dic")) {
                 if (stream == null) throw new IllegalStateException("Missing inventory catalog: " + key);
                 var catalog = InventoryCatalog.parse(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
