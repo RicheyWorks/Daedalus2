@@ -126,6 +126,52 @@ def steps(realm):
     return {"realm": realm, "sublevels": len(moves), "moved": moved_total, "skipped": skipped}
 
 
+def district_cells(d):
+    """The 100 cell numbers of district d (0..99), in spiral order."""
+    import daedalus_land_grid as G
+    return sorted(G.number(x, y) for x in range(10 * (d % 10), 10 * (d % 10) + 10) for y in range(10 * (d // 10), 10 * (d // 10) + 10))
+
+
+def lay_district_steps(realm, districts, taken=frozenset()):
+    """Lay EVERY free cell of each district as a plot straight into the district's sublevel, one district per
+    editor tick (daedalus.steps). This is how rings 7..49 get laid: 100 districts x 100 cells a realm, streamed.
+    `taken`: cell numbers to skip (estates, the hub). Idempotent by label. Yields a line per district."""
+    import unreal
+    import daedalus_land_grid as G
+    import daedalus_plots as P
+    import daedalus_realm_ground as R
+    world = _world()
+    origin = R.ORIGINS[realm]
+    ground = R.GROUND_Z
+    have = P._existing(realm)
+    pre = P._prefix(realm)
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cube = unreal.load_asset(P.CUBE)
+    total = 0
+    for d in districts:
+        pkg = "%s/%s/D%02d" % (ROOT, realm_dir(realm), d)
+        sl = _sublevel(world, pkg)
+        made = []
+        for n in district_cells(d):
+            if n in taken or ("%s%d" % (pre, n)) in have:
+                continue
+            x, y = G.cell(n)
+            at = (origin[0] + (x - G.HUB) * G.PITCH_M * 100.0, origin[1] + (y - G.HUB) * G.PITCH_M * 100.0, ground)
+            made.append(P.lay_one(realm, n, at, d, cube=cube, sub=sub))
+        if made:
+            unreal.EditorLevelUtils.move_actors_to_level(made, sl, False, False)
+            level = sl.get_loaded_level()
+            if level is not None:
+                P.save_packages_proven([level.get_outermost()])
+        total += len(made)
+        yield "%s D%02d: %d plots laid into the sublevel" % (realm, d, len(made))
+    P.save_world()
+    import daedalus_islands
+    daedalus_islands.write(prefixes=[ROOT + "/" + realm_dir(realm)])
+    yield "islands.json updated"
+    return {"realm": realm, "districts": len(list(districts)), "plots": total}
+
+
 def apply(realm):
     gen = steps(realm)
     lines = []
