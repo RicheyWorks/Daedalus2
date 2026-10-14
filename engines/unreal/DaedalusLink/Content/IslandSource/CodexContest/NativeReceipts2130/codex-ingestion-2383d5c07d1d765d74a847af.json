@@ -1,0 +1,491 @@
+{
+  "api": "native.import_all -> AssetImportTasks/FbxImportUI -> SaveLoadedAsset",
+  "assets": {
+    "CodexIsland_cliff_garden_84022_GardenGateR1_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+    "CodexIsland_cliff_garden_84022_GardenGateR1_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water"
+  },
+  "backend_source": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py",
+  "backend_source_sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982",
+  "background_compilation": "not_queried",
+  "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af",
+  "key": "2383d5c07d1d765d74a847af38d5eb12a3376f463bea29ea1b44b159cbe9e91b",
+  "manifest": {
+    "backend": {
+      "api": "AssetTools.import_asset_tasks/AssetImportTask/FbxImportUI",
+      "fbx_cvar_readback": 1,
+      "loaded_code": {
+        "_observed_import": "167649bdc5402b5fd892f2bc3c970866e83b5b47da350a53fbd5de5e62fffed3",
+        "_tags": "783eb2319099196fd0abf9a664307e305732a57f6d724c2f94df96a97d512ecf",
+        "_verify": "c65eb78077c9b4e470cecb3642d9f57d8c9a0a58f742b3fe6a63c65fa28b5807",
+        "import_all": "3e1c93cbf9cdbb078d46216b44247fbd0f4073b8a9b4e0e1889d985f52a5641e"
+      },
+      "loaded_receipt_code": {
+        "daedalus_codex_ingestion._manifest": "de8064199eac48220444cf1d0e92438637e25d9db4a09c60d6c0c2109b001848",
+        "daedalus_codex_ingestion._require_manifest": "07d342a06de872850d79872fca1bce46c1da69d1c54f0a02c98780ead4271350",
+        "daedalus_codex_ingestion._verify_saved": "9674dd75359bb3805e6494f63b9a224ef7123ade20bfbbcfa99967d679b5e9a7",
+        "daedalus_codex_ingestion.import_steps": "430c645b0ec8cf33ef31b07cbaf3927ff756550d660f6a47d01c4f008849ceb6",
+        "daedalus_ingestion_receipts.loaded_code_fingerprint": "5893a6ca15a357520f97d6442478dcaa941d6230e2d500ce1dcae998c3fee683",
+        "daedalus_ingestion_receipts.manifest": "bb1350e5b3ebd57b891d84e939e8b3df80260181c55cae3127571ba5f5534fdc",
+        "daedalus_ingestion_receipts.may_skip": "519532bbba58cd3e24cd759493611ea2e10b7d0bdab1c77a99ae5e3e992e051b",
+        "daedalus_ingestion_receipts.require_retry_permission": "a0b4b632d781c6e3d4d99aedcf77fc782afd35527aeda0144b12902c625e1158",
+        "daedalus_ingestion_receipts.validate_receipt": "b36821d96d6c1d5db40a834ceca896bcf863f785789be1e6613749fc92b1aad9",
+        "daedalus_ingestion_receipts.verified_snapshot": "893ca5138f11f12339188b2700c04c0bfd657f6aedd4f1d2a0dae8b7f0ebb3b7",
+        "daedalus_ingestion_receipts.write_receipt": "c9502d92986551a21606bd19dd2ab5b2fc480ee94ad002e785b0a720d81a3249"
+      },
+      "selected_preset": "codex_prepared_existing_options_v1"
+    },
+    "dependencies": {
+      "C:\\Unreal\\DaedalusRealm\\Config\\DefaultEngine.ini": {
+        "bytes": 995,
+        "sha256": "32e7917b6cbdda424e49461222b03314714168a665360e3f838d0e788bb61b35"
+      },
+      "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\ClaudeIslands\\M_VoxelVertexColour.uasset": {
+        "bytes": 9801,
+        "sha256": "5da5a09f183424869300bac051e32da589328a63b28c2dbd8d61714faf3bbd58"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py": {
+        "bytes": 15632,
+        "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py": {
+        "bytes": 9627,
+        "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\codex-garden-gate-r1.delivery.json": {
+        "bytes": 35726,
+        "sha256": "cd38894b650b91292fd053409426444a27c9fdf69c9faeb177472984edb3af85"
+      },
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_prepared_assets.py": {
+        "bytes": 13679,
+        "sha256": "dfac57ce929686dc1bca400da4a258405f0a1bd1cb783fa673793ba8f28de982"
+      }
+    },
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+    "engine": "5.8.3-58210709+++UE5+Release-5.8",
+    "schema": "daedalus.ingestion-receipt.v1",
+    "settings": {
+      "config_sha256": "d427416421dd462cf97eb6d5ffc5a7e98dccf7919aa6deb109281a445ca9d09f",
+      "kind": "island",
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+      "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "namespace": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion",
+      "objects": [
+        {
+          "dims": [
+            92.0,
+            86.0,
+            51.0
+          ],
+          "materials": [
+            "CodexVoxel_dirt",
+            "CodexVoxel_dirt2",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_grass",
+            "CodexVoxel_grass2",
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+          "triangles": 90588
+        },
+        {
+          "dims": [
+            28.0,
+            24.0,
+            10.0
+          ],
+          "materials": [
+            "CodexVoxel_foam",
+            "CodexVoxel_water"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+          "triangles": 1012
+        },
+        {
+          "dims": [
+            68.0,
+            66.0,
+            24.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_blossom2",
+            "CodexVoxel_leaf",
+            "CodexVoxel_leaf2",
+            "CodexVoxel_trunk"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+          "triangles": 3000
+        },
+        {
+          "dims": [
+            9.0,
+            9.0,
+            8.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_door",
+            "CodexVoxel_sand",
+            "CodexVoxel_window"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+          "triangles": 948
+        },
+        {
+          "dims": [
+            78.0,
+            73.0,
+            19.0
+          ],
+          "materials": [
+            "CodexVoxel_flower_r",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_flower_y"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+          "triangles": 576
+        },
+        {
+          "dims": [
+            78.0,
+            47.0,
+            20.0
+          ],
+          "materials": [
+            "CodexVoxel_rock",
+            "CodexVoxel_rock2"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+          "triangles": 140
+        },
+        {
+          "dims": [
+            33.0,
+            27.0,
+            13.0
+          ],
+          "materials": [
+            "CodexVoxel_crystal",
+            "CodexVoxel_crystal2"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+          "triangles": 176
+        },
+        {
+          "dims": [
+            127.0,
+            16.0,
+            6.0
+          ],
+          "materials": [
+            "CodexVoxel_cloud"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+          "triangles": 1224
+        },
+        {
+          "dims": [
+            31.0,
+            29.0,
+            13.0
+          ],
+          "materials": [
+            "CodexVoxel_blossom",
+            "CodexVoxel_crystal2",
+            "CodexVoxel_dirt",
+            "CodexVoxel_flower_w",
+            "CodexVoxel_rock2",
+            "CodexVoxel_sand"
+          ],
+          "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+          "triangles": 1756
+        }
+      ],
+      "placement": false,
+      "preset": "codex_prepared_existing_options_v1",
+      "requested_import_options": {
+        "auto_generate_collision": false,
+        "build_nanite": false,
+        "combine_meshes": false,
+        "generate_lightmap_u_vs": false,
+        "import_materials": false,
+        "import_textures": false,
+        "vertex_color_import_option": "REPLACE"
+      },
+      "seed": 84022,
+      "shared_material_policy": "read-only reuse"
+    },
+    "source": {
+      "bytes": 2060764,
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\GardenGateR1\\Final\\h84022\\CodexIsland_cliff_garden_84022_GardenGateR1.fbx",
+      "sha256": "3c2bf700adc07b0425565cf85c983c6ac45ed75be4a01e057065b5716c94290c"
+    }
+  },
+  "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "native_report": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\2383d5c07d1d765d74a847af\\native.json",
+  "native_result": {
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af",
+    "elapsed_s": {
+      "import": 6.543432
+    },
+    "import_skipped": false,
+    "imported_object_paths": [
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water"
+    ],
+    "kind": "island",
+    "meshes": [
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "save_return": true,
+        "save_s": 0.148282,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "save_return": true,
+        "save_s": 0.135172,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "save_return": true,
+        "save_s": 0.14637,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "save_return": true,
+        "save_s": 0.145741,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "save_return": true,
+        "save_s": 0.181482,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_island"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "save_return": true,
+        "save_s": 0.146217,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "save_return": true,
+        "save_s": 0.126725,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "save_return": true,
+        "save_s": 0.120654,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees"
+      },
+      {
+        "material_paths": [
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+          "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+        ],
+        "observed_import": {
+          "auto_generate_collision": "unavailable",
+          "build_nanite": "unavailable",
+          "combine_meshes": "unavailable",
+          "generate_lightmap_u_vs": "unavailable",
+          "import_data_class": "InterchangeAssetImportData",
+          "nanite_enabled": false,
+          "vertex_color_import_option": "unavailable"
+        },
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "save_return": true,
+        "save_s": 0.128723,
+        "source_name": "CodexIsland_cliff_garden_84022_GardenGateR1_water"
+      }
+    ],
+    "name": "CodexIsland_cliff_garden_84022_GardenGateR1",
+    "stage": "assets_saved_held_from_world"
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds": {
+      "bytes": 89475,
+      "sha256": "f68fa0a34da010741da4d197c56a7deefa0084ebf1a5ef57f9b0b43aaa7dc64d"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage": {
+      "bytes": 91065,
+      "sha256": "16c8a7a30efca82fa98a263b845b18863b9d8a2ec6e6a001f89c7297a3f1249d"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals": {
+      "bytes": 76732,
+      "sha256": "46b753377dc534966d7d7af70e0e937637e57b2a10bc955e40c9deefe356c337"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers": {
+      "bytes": 83658,
+      "sha256": "754ae73bb047e678e95db55cb30f4020146dd3881c0fe3ab295434fe6ee56613"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island": {
+      "bytes": 1183529,
+      "sha256": "92111cad61027a8eab077e118a82c44140959e30ef7d06de2997bad2818dff58"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks": {
+      "bytes": 106661,
+      "sha256": "c36654bf0734602482cef627215e88ada47f27b67c7c61bcc732c3e5a0d14e3e"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks": {
+      "bytes": 75807,
+      "sha256": "56685a220f35caab9c8ca242cefe35bc81c5d040d79939ec94799c2e06a071ef"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees": {
+      "bytes": 124958,
+      "sha256": "9189b321f955ec680cf9432b9bb5c4b3060648698c70b208a6e90fcf0625c7c2"
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water": {
+      "bytes": 88126,
+      "sha256": "45384f5cfa220738449119b22ec0d5ea4d65fe95a3b5eab8c613f8830eb8bd53"
+    }
+  },
+  "save_call_completed": true,
+  "save_confirmed": true,
+  "saved_utc": "2026-10-14T21:44:07.213963+00:00",
+  "schema": "daedalus.ingestion-receipt.v1",
+  "snapshot": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\native\\2383d5c07d1d765d74a847af\\input\\CodexIsland_cliff_garden_84022_GardenGateR1.fbx",
+  "started_utc": "2026-10-14T21:43:57.597053+00:00",
+  "state": "saved",
+  "updated_utc": "2026-10-14T21:44:07.213963+00:00",
+  "world_placed": 0
+}

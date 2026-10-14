@@ -1,0 +1,109 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "8195054a37c2b6813f8993db6004c79157eb66e1710b93cadc5de6a72c65c6e7",
+  "views": [
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.garden-gate-r1-native-2130-overview.png",
+      "camera": {
+        "location": {
+          "x": -337050,
+          "y": 331300,
+          "z": 26215.324
+        },
+        "rotation": {
+          "pitch": -38.84165276939331,
+          "yaw": -129.09385888622944,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "c7cb8df40a7a585a2d009c1f23847ec52fe33e59a0cebf6a97e8112a66cc02d4",
+      "bytes": 1350734,
+      "when_utc": "2026-10-14T21:58:25.883547+00:00"
+    },
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "gate_full",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.garden-gate-r1-native-2130-gate_full.png",
+      "camera": {
+        "location": {
+          "x": -343550,
+          "y": 325000,
+          "z": 19015.324
+        },
+        "rotation": {
+          "pitch": -3.179830119864237,
+          "yaw": 90.00000000000004,
+          "roll": 1.9909119771586363e-16
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "e1edd83adf9fbc384bd4175cbd5f3499a7390d4cbd9897a1ab8b694bccedb229",
+      "bytes": 1091857,
+      "when_utc": "2026-10-14T21:58:26.494193+00:00"
+    },
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "courtyard_player",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.garden-gate-r1-native-2130-courtyard_player.png",
+      "camera": {
+        "location": {
+          "x": -343550,
+          "y": 325900,
+          "z": 18485.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": -90.00000000000003,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "2f96f48d50f50deb2f03531eb9d239e25d472ab81803a34ef3b7f9f9e8a91f15",
+      "bytes": 1201802,
+      "when_utc": "2026-10-14T21:58:27.039140+00:00"
+    },
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "crops",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.garden-gate-r1-native-2130-crops.png",
+      "camera": {
+        "location": {
+          "x": -341150,
+          "y": 325800,
+          "z": 20615.324
+        },
+        "rotation": {
+          "pitch": -56.13331936490721,
+          "yaw": -118.30075576600625,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "d30895c719532321696b325984a57227ceacd72e47bf27a97740911aadcaceaf",
+      "bytes": 1418537,
+      "when_utc": "2026-10-14T21:58:27.495034+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-gate-native-local-views.json",
+  "projection": "existing native viewport projection/FOV unchanged"
+}

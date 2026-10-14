@@ -1,0 +1,40 @@
+{
+  "reply": {
+    "stdout": "",
+    "result": {
+      "observed_utc": "2026-10-14T21:38:18.885995+00:00",
+      "bridge_file": "C:\\Unreal/DaedalusRealm/Plugins/ClaudeUnrealBridge/Content/Python\\claude_unreal_bridge.py",
+      "bridge_source_sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+      "queued_jobs": [],
+      "running_generators": [
+        {
+          "type": "execute_python",
+          "label": null
+        }
+      ],
+      "unfinished_async_job_boxes": 0,
+      "remote_execution_lock_locked": false,
+      "scope": "existing bridge queue snapshot only; this synchronous read is not a queued generator",
+      "background_compilation": "not_queried",
+      "epic_mcp_other_sessions": "not_queried"
+    },
+    "unattended": false
+  },
+  "observed": {
+    "observed_utc": "2026-10-14T21:38:18.885995+00:00",
+    "bridge_file": "C:\\Unreal/DaedalusRealm/Plugins/ClaudeUnrealBridge/Content/Python\\claude_unreal_bridge.py",
+    "bridge_source_sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+    "queued_jobs": [],
+    "running_generators": [
+      {
+        "type": "execute_python",
+        "label": null
+      }
+    ],
+    "unfinished_async_job_boxes": 0,
+    "remote_execution_lock_locked": false,
+    "scope": "existing bridge queue snapshot only; this synchronous read is not a queued generator",
+    "background_compilation": "not_queried",
+    "epic_mcp_other_sessions": "not_queried"
+  }
+}

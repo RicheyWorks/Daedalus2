@@ -1,0 +1,99 @@
+{
+  "steps": 4,
+  "yielded": [
+    "{'name': 'CodexIsland_summit_rim_84011_HeroR4', 'state': 'saved', 'unchanged_skipped': False, 'receipt': '..\\\\..\\\\..\\\\..\\\\..\\\\..\\\\Unreal\\\\DaedalusRealm\\\\Saved\\\\Daedalus\\\\Ingestion\\\\CodexContest\\\\receipts\\\\4baeb945202507ea41b225c2.json', 'assets': {'CodexIsland_summit_rim_84011_HeroR4_clouds': '/Game",
+    "production_import",
+    "{'name': 'CodexIsland_summit_rim_84011_HeroR4', 'state': 'saved', 'unchanged_skipped': True, 'receipt': '..\\\\..\\\\..\\\\..\\\\..\\\\..\\\\Unreal\\\\DaedalusRealm\\\\Saved\\\\Daedalus\\\\Ingestion\\\\CodexContest\\\\receipts\\\\4baeb945202507ea41b225c2.json', 'assets': {'CodexIsland_summit_rim_84011_HeroR4_clouds': '/Game/",
+    "identical_input_reuse"
+  ],
+  "result": {
+    "stage": "production_saved_and_unchanged_reused",
+    "reviewed_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+    "runtime_head": "05fc3c2521c62e06de88bf85106eee0dd55086ab",
+    "loaded": [
+      {
+        "name": "daedalus_ingestion_receipts",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_ingestion_receipts.py",
+        "sha256": "04d21db0cd1352d9ca16abbaeeade702e924bd689cee5ea499c0b0a408f219a3"
+      },
+      {
+        "name": "daedalus_codex_ingestion",
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\ingestion-upgrade-audit\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_ingestion.py",
+        "sha256": "986d49d34cbbf1d79cbdd2e822c33eff6c6033a6e2ccb1712bfd0e2874748711"
+      }
+    ],
+    "candidate": "CodexIsland_summit_rim_84011_HeroR4",
+    "prepared_manifest_sha256": "2e69980702cd12d3d1e7cbfc98b347aa2858374970ceb1f444774791ca5becbd",
+    "deadline_epoch": 1792014731.0,
+    "editor_preflight": {
+      "server": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "resources": {},
+          "tools": {
+            "listChanged": true
+          }
+        },
+        "serverInfo": {
+          "name": "",
+          "title": "",
+          "version": ""
+        }
+      },
+      "pie_running": false,
+      "current_map": "/Game/Daedalus/DaedalusWorld"
+    },
+    "passes": [
+      {
+        "phase": "production_import",
+        "elapsed_s": 10.198029,
+        "results": [
+          {
+            "name": "CodexIsland_summit_rim_84011_HeroR4",
+            "state": "saved",
+            "unchanged_skipped": false,
+            "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\4baeb945202507ea41b225c2.json",
+            "assets": {
+              "CodexIsland_summit_rim_84011_HeroR4_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_clouds.CodexIsland_summit_rim_84011_HeroR4_clouds",
+              "CodexIsland_summit_rim_84011_HeroR4_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_cottage.CodexIsland_summit_rim_84011_HeroR4_cottage",
+              "CodexIsland_summit_rim_84011_HeroR4_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_crystals.CodexIsland_summit_rim_84011_HeroR4_crystals",
+              "CodexIsland_summit_rim_84011_HeroR4_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_flowers.CodexIsland_summit_rim_84011_HeroR4_flowers",
+              "CodexIsland_summit_rim_84011_HeroR4_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_island.CodexIsland_summit_rim_84011_HeroR4_island",
+              "CodexIsland_summit_rim_84011_HeroR4_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_landmarks.CodexIsland_summit_rim_84011_HeroR4_landmarks",
+              "CodexIsland_summit_rim_84011_HeroR4_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_rocks.CodexIsland_summit_rim_84011_HeroR4_rocks",
+              "CodexIsland_summit_rim_84011_HeroR4_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_route_steps.CodexIsland_summit_rim_84011_HeroR4_route_steps",
+              "CodexIsland_summit_rim_84011_HeroR4_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_trees.CodexIsland_summit_rim_84011_HeroR4_trees",
+              "CodexIsland_summit_rim_84011_HeroR4_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_water.CodexIsland_summit_rim_84011_HeroR4_water"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "identical_input_reuse",
+        "elapsed_s": 0.074766,
+        "results": [
+          {
+            "name": "CodexIsland_summit_rim_84011_HeroR4",
+            "state": "saved",
+            "unchanged_skipped": true,
+            "receipt": "..\\..\\..\\..\\..\\..\\Unreal\\DaedalusRealm\\Saved\\Daedalus\\Ingestion\\CodexContest\\receipts\\4baeb945202507ea41b225c2.json",
+            "assets": {
+              "CodexIsland_summit_rim_84011_HeroR4_clouds": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_clouds.CodexIsland_summit_rim_84011_HeroR4_clouds",
+              "CodexIsland_summit_rim_84011_HeroR4_cottage": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_cottage.CodexIsland_summit_rim_84011_HeroR4_cottage",
+              "CodexIsland_summit_rim_84011_HeroR4_crystals": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_crystals.CodexIsland_summit_rim_84011_HeroR4_crystals",
+              "CodexIsland_summit_rim_84011_HeroR4_flowers": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_flowers.CodexIsland_summit_rim_84011_HeroR4_flowers",
+              "CodexIsland_summit_rim_84011_HeroR4_island": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_island.CodexIsland_summit_rim_84011_HeroR4_island",
+              "CodexIsland_summit_rim_84011_HeroR4_landmarks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_landmarks.CodexIsland_summit_rim_84011_HeroR4_landmarks",
+              "CodexIsland_summit_rim_84011_HeroR4_rocks": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_rocks.CodexIsland_summit_rim_84011_HeroR4_rocks",
+              "CodexIsland_summit_rim_84011_HeroR4_route_steps": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_route_steps.CodexIsland_summit_rim_84011_HeroR4_route_steps",
+              "CodexIsland_summit_rim_84011_HeroR4_trees": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_trees.CodexIsland_summit_rim_84011_HeroR4_trees",
+              "CodexIsland_summit_rim_84011_HeroR4_water": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_water.CodexIsland_summit_rim_84011_HeroR4_water"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "seconds": 10.3
+}

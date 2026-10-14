@@ -1,0 +1,916 @@
+{
+  "actors": [
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3967"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3968"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3969"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3970"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3971"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3972"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3973"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3974"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "actor": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3975"
+      },
+      "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "label": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water",
+      "transform": {
+        "location": {
+          "x": -343550.0,
+          "y": 323300.0,
+          "z": 18215.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "roll": 0,
+          "yaw": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "assembly_s": 2.618201,
+  "created_actors": 9,
+  "folder": "CodexContest/Staging",
+  "map_after": {
+    "bytes": 209281107,
+    "sha256": "84ceb6f728077285e7d5cad7847681f1fab4093e96e192ee62a63d304f00d730"
+  },
+  "map_before": {
+    "bytes": 209260328,
+    "sha256": "bd76af9f146404effd1f52a3fed28e3ab73ba06e71bc858027d18c0dc9fdc19d"
+  },
+  "map_save_s": 24.627979,
+  "native_mutations": [
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3967"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3967"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3968"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3968"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3969"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3969"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3970"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3970"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3971"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3971"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3972"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3972"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3973"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3973"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3974"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3974"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "name": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "snap_to_ground": false,
+        "xform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "result": {
+        "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3975"
+      },
+      "state": "responded",
+      "tool": "add_to_scene_from_asset",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "actor": {
+          "refPath": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3975"
+        },
+        "folder_path": "CodexContest/Staging"
+      },
+      "result": null,
+      "state": "responded",
+      "tool": "set_actor_folder",
+      "toolset": "editor_toolset.toolsets.scene.SceneTools"
+    },
+    {
+      "arguments": {
+        "asset_paths": [
+          "/Game/Daedalus/DaedalusWorld"
+        ]
+      },
+      "result": true,
+      "state": "responded",
+      "tool": "save_assets",
+      "toolset": "editor_toolset.toolsets.asset.AssetTools"
+    }
+  ],
+  "ownership_tags_added": false,
+  "plan": {
+    "config_sha256": "d427416421dd462cf97eb6d5ffc5a7e98dccf7919aa6deb109281a445ca9d09f",
+    "entries": [
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "group": "CodexIsland_cliff_garden_84022_GardenGateR1",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "transform": {
+          "location": {
+            "x": -343550.0,
+            "y": 323300.0,
+            "z": 18215.324
+          },
+          "rotation": {
+            "pitch": 0,
+            "roll": 0,
+            "yaw": 0
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "manifest": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts2130\\codex-ingestion-2383d5c07d1d765d74a847af.json",
+    "manifest_embedded": true,
+    "manifest_fingerprint": {
+      "bytes": 26967,
+      "sha256": "82c17afe7afc924aed67533b3d3ca8eca56e1a2c0fcac32b32abc7369b884f2e"
+    },
+    "manifest_key": "2383d5c07d1d765d74a847af38d5eb12a3376f463bea29ea1b44b159cbe9e91b",
+    "map_file": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "map_package": "/Game/Daedalus/DaedalusWorld",
+    "native_output_fingerprints": {
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds": {
+        "bytes": 89475,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_clouds.uasset",
+        "sha256": "f68fa0a34da010741da4d197c56a7deefa0084ebf1a5ef57f9b0b43aaa7dc64d"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage": {
+        "bytes": 91065,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_cottage.uasset",
+        "sha256": "16c8a7a30efca82fa98a263b845b18863b9d8a2ec6e6a001f89c7297a3f1249d"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals": {
+        "bytes": 76732,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_crystals.uasset",
+        "sha256": "46b753377dc534966d7d7af70e0e937637e57b2a10bc955e40c9deefe356c337"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers": {
+        "bytes": 83658,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_flowers.uasset",
+        "sha256": "754ae73bb047e678e95db55cb30f4020146dd3881c0fe3ab295434fe6ee56613"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island": {
+        "bytes": 1183529,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_island.uasset",
+        "sha256": "92111cad61027a8eab077e118a82c44140959e30ef7d06de2997bad2818dff58"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks": {
+        "bytes": 106661,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.uasset",
+        "sha256": "c36654bf0734602482cef627215e88ada47f27b67c7c61bcc732c3e5a0d14e3e"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks": {
+        "bytes": 75807,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_rocks.uasset",
+        "sha256": "56685a220f35caab9c8ca242cefe35bc81c5d040d79939ec94799c2e06a071ef"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees": {
+        "bytes": 124958,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_trees.uasset",
+        "sha256": "9189b321f955ec680cf9432b9bb5c4b3060648698c70b208a6e90fcf0625c7c2"
+      },
+      "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water": {
+        "bytes": 88126,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Ingestion\\2383d5c07d1d765d74a847af\\CodexIsland_cliff_garden_84022_GardenGateR1_water.uasset",
+        "sha256": "45384f5cfa220738449119b22ec0d5ea4d65fe95a3b5eab8c613f8830eb8bd53"
+      }
+    },
+    "placements_cm": {
+      "CodexIsland_cliff_garden_84022_GardenGateR1": [
+        -343550.0,
+        323300.0,
+        18215.324
+      ]
+    },
+    "saved_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\NativeReceipts2130\\codex-ingestion-2383d5c07d1d765d74a847af.json",
+    "saved_receipt_fingerprint": {
+      "bytes": 26967,
+      "sha256": "82c17afe7afc924aed67533b3d3ca8eca56e1a2c0fcac32b32abc7369b884f2e"
+    },
+    "schema": "daedalus.codex-admitted-assembly.v1",
+    "seed": 84022,
+    "source_fingerprint": {
+      "bytes": 2060764,
+      "sha256": "3c2bf700adc07b0425565cf85c983c6ac45ed75be4a01e057065b5716c94290c"
+    },
+    "validated_saved_meshes": 9
+  },
+  "reused_actors": 0,
+  "save_return": true,
+  "saved_unreal": true,
+  "stage": "placed_and_saved",
+  "staging_only": true
+}

@@ -16,6 +16,7 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'connectors/claude-asset-pipeline'))
 from asset_pipeline import wire
 from codex_contest_island_delivery import ASSET,Mcp,fingerprint,package
+from codex_admitted_asset_assembly import _retained_contract
 from codex_workshop_terrain import _islands
 APP='EditorToolset.EditorAppToolset'
 
@@ -24,9 +25,41 @@ def _linear(value):
     return value/12.92 if value<=.04045 else ((value+.055)/1.055)**2.4
 
 
-def apply(folder,islands,journal,repair_empty_base=False):
+def apply(folder,islands,journal,repair_empty_base=False,assembly=None,source_receipt=None):
     folder,journal=Path(folder).resolve(),Path(journal).resolve()
     if journal.exists():raise RuntimeError('retain existing palette journal; inspect it before another native run')
+    if (assembly is None)!=(source_receipt is None):raise ValueError('additional assembly requires its exact exported source receipt')
+    candidate=None
+    candidate_inputs={}
+    if assembly is not None:
+        assembly,source_receipt=Path(assembly).resolve(),Path(source_receipt).resolve()
+        placed=json.loads(assembly.read_text())
+        candidate=json.loads(source_receipt.read_text())
+        config=candidate.get('config',{})
+        settings={'name':candidate.get('name'),'seed':config.get('seed'),'config_sha256':candidate.get('config_sha256'),'config':config}
+        expected=_retained_contract(settings,{})
+        name=candidate['name']
+        plan=placed.get('plan',{})
+        if islands!={name} or candidate.get('stage')!='exported' or candidate.get('schema')!='daedalus.codex-island.v1':
+            raise ValueError('select one exact exported retained candidate for its own palette')
+        if placed.get('stage')!='placed_and_saved' or placed.get('save_return') is not True or plan.get('schema')!='daedalus.codex-admitted-assembly.v1':
+            raise ValueError('additional retained candidate must have a saved admitted assembly')
+        if plan.get('config_sha256')!=candidate['config_sha256'] or plan.get('seed')!=config['seed'] or set(plan.get('placements_cm',{}))!={name}:
+            raise ValueError('saved assembly identity differs from its source palette receipt')
+        source_objects=candidate.get('blender',{}).get('objects',[])
+        actors=placed.get('actors',[])
+        entries=plan.get('entries',[])
+        if len(source_objects)!=len(expected) or {row.get('name') for row in source_objects}!=expected or len(actors)!=len(expected) or {row.get('label') for row in actors}!=expected:
+            raise ValueError('candidate source/actor roles differ from the exact retained contract')
+        if len(entries)!=len(expected) or {row.get('label') for row in entries}!=expected or any(row.get('group')!=name for row in actors+entries):
+            raise ValueError('saved assembly entries leave the exact retained island')
+        if {(row['label'],row['mesh_path']) for row in actors}!={(row['label'],row['mesh_path']) for row in entries}:
+            raise ValueError('saved actor mesh mapping differs from the admitted assembly plan')
+        fbx=candidate.get('artifacts',{}).get('fbx',{})
+        if fbx.get('fingerprint')!=plan.get('source_fingerprint') or fingerprint(fbx['path'])!=plan['source_fingerprint']:
+            raise ValueError('candidate source FBX differs from its saved assembly witness')
+        candidate_inputs={'assembly':str(assembly),'assembly_fingerprint':fingerprint(assembly),
+                          'source_receipt':str(source_receipt),'source_receipt_fingerprint':fingerprint(source_receipt)}
     groups=[]
     for name in ('codex-cliff-staging.world.json','codex-remaining-staging.world.json','codex-workshop.world.json'):
         report=json.loads((folder/name).read_text())
@@ -34,12 +67,14 @@ def apply(folder,islands,journal,repair_empty_base=False):
             raise ValueError('require saved staging actors before material polish')
         groups+=report['actors']
     hero='CodexIsland_summit_rim_84011_HeroR3'
-    if hero in islands:
+    if hero in islands and candidate is None:
         report=json.loads((folder/'codex-hero-r3.world.json').read_text())
         if report.get('stage')!='placed_and_saved' or report.get('save_return') is not True:raise ValueError('require saved admitted hero actors')
         groups+=report['actors']
+    if candidate is not None:groups+=placed['actors']
     selected=[r for r in groups if r.get('group',r.get('island')) in islands]
     counts={'CodexIsland_cliff_garden_84022':18,'CodexIsland_river_canyon_84033':18,'CodexIsland_summit_rim_84011':17,hero:10}
+    if candidate is not None:counts[candidate['name']]=len(expected)
     if not islands.issubset(counts) or len(selected)!=sum(counts[n] for n in islands):
         raise ValueError('staging selection differs from the exact island plus workshop actors')
     saved=json.loads((folder/'codex-prepared.unreal.json').read_text())
@@ -51,9 +86,19 @@ def apply(folder,islands,journal,repair_empty_base=False):
         for mesh_path,witness in admitted['outputs'].items():
             if fingerprint(Path('C:/Unreal/DaedalusRealm/Content')/(package(mesh_path)[6:]+'.uasset'))!=witness:raise ValueError('admitted saved mesh changed before polish')
             additional[mesh_path]=witness
+    if candidate is not None:
+        outputs=plan.get('native_output_fingerprints',{})
+        if set(outputs)!={row['mesh_path'] for row in placed['actors']}:raise ValueError('candidate output witnesses differ from its saved actors')
+        for mesh_path,output in outputs.items():
+            witness={key:output[key] for key in ('sha256','bytes')}
+            if fingerprint(Path('C:/Unreal/DaedalusRealm/Content')/(package(mesh_path)[6:]+'.uasset'))!=witness:
+                raise ValueError('candidate saved mesh changed before polish')
+            if mesh_path in additional and additional[mesh_path]!=witness:raise ValueError('candidate and retained native witnesses disagree')
+            additional[mesh_path]=witness
     shared=Path('C:/Unreal/DaedalusRealm/Content/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.uasset')
     record={'stage':'preflight','actors':selected,'prepared_meshes_before':witnesses,'additional_meshes_before':additional,'shared_material_before':fingerprint(shared),
             'map_before':fingerprint('C:/Unreal/DaedalusRealm/Content/Daedalus/DaedalusWorld.umap'),'ownership_tags_added':False,'world_placed_new':0}
+    if candidate_inputs:record['candidate_inputs']=candidate_inputs
     def write():journal.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
     write()
     code='''import unreal,json
@@ -82,7 +127,8 @@ for row in rows:
     palette,surfaces={},{}
     profile=_islands().SURFACES
     record['surface_profile_source_sha256']=hashlib.sha256((ROOT/'tools/blender/codex_contest_island.py').read_bytes()).hexdigest()
-    for row in json.loads((folder/'codex-islands.batch.json').read_text())+json.loads((folder/'SkyHarborModules/skyharbor-modules.batch.json').read_text()):
+    palette_rows=([candidate] if candidate is not None else json.loads((folder/'codex-islands.batch.json').read_text())+json.loads((folder/'SkyHarborModules/skyharbor-modules.batch.json').read_text()))
+    for row in palette_rows:
         for key,rgb in row['palette_rgb'].items():
             if key in palette and palette[key]!=rgb:raise ValueError('source palette differs')
             palette[key]=rgb
@@ -165,5 +211,7 @@ if __name__=='__main__':
     parser.add_argument('--island',action='append',required=True)
     parser.add_argument('--journal',type=Path,required=True)
     parser.add_argument('--repair-inspected-empty-base',action='store_true',help='only after native inspection confirms the known failed owned stub has zero expressions')
+    parser.add_argument('--assembly',type=Path,help='saved admitted HeroR3/HeroR4/GardenGateR1 assembly journal; pair with --source-receipt')
+    parser.add_argument('--source-receipt',type=Path,help='exact exported candidate receipt supplying its own palette/config/FBX witnesses')
     args=parser.parse_args()
-    print(json.dumps(apply(args.folder,set(args.island),args.journal,args.repair_inspected_empty_base),indent=2))
+    print(json.dumps(apply(args.folder,set(args.island),args.journal,args.repair_inspected_empty_base,args.assembly,args.source_receipt),indent=2))

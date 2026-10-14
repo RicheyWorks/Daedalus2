@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Assemble a guarded, saved ten-layer Codex island receipt additively.
+"""Assemble an exact guarded, saved Codex island revision additively.
 
 Local planning verifies admission identity and disk witnesses. Actual placement
 uses the existing journaled saved-asset execution body during the root operator's
@@ -15,6 +15,36 @@ from codex_contest_island_delivery import DEST, _transform, fingerprint, package
 from codex_saved_asset_assembly import _object_path, _read, execute_plan
 
 NAMESPACE = DEST + "/Ingestion"
+ISLAND_LAYERS = ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds", "landmarks")
+RETAINED_ISLANDS = {
+    "CodexIsland_summit_rim_84011_HeroR3": ("summit-rim", "HeroR3", 84011, ISLAND_LAYERS + ("route_steps",)),
+    "CodexIsland_summit_rim_84011_HeroR4": ("summit-rim", "HeroR4", 84011, ISLAND_LAYERS + ("route_steps",)),
+    "CodexIsland_cliff_garden_84022_GardenGateR1": ("cliff-garden", "GardenGateR1", 84022, ISLAND_LAYERS),
+}
+
+
+def _retained_contract(settings, manifest):
+    """Select a fixed name/seed/role contract, never an arbitrary mesh count."""
+    name = settings.get("name")
+    if name not in RETAINED_ISLANDS:
+        raise ValueError("require the exact retained HeroR3, HeroR4 or GardenGateR1 island")
+    preset, revision, seed, layers = RETAINED_ISLANDS[name]
+    if type(settings.get("seed")) is not int or settings["seed"] != seed:
+        raise ValueError("retained island seed differs from its exact identity")
+    # PR146 settings.preset names the selected IMPORTER preset, not the biome.
+    # Biome/revision belong to the source config, when that config is exposed.
+    if "preset" in settings and settings["preset"] != "codex_prepared_existing_options_v1":
+        raise ValueError("admitted importer preset differs from the proven existing options")
+    for container in (settings, manifest):
+        if "config" in container:
+            config = container["config"]
+            if not isinstance(config, dict) or any(config.get(field) != expected for field, expected in
+                                                  (("preset", preset), ("revision", revision), ("seed", seed))):
+                raise ValueError("exposed retained island config identity differs")
+            digest = hashlib.sha256(json.dumps(config, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+            if digest != settings.get("config_sha256"):
+                raise ValueError("exposed retained island config hash differs")
+    return {name + "_" + layer for layer in layers}
 
 
 def _witness(value):
@@ -26,7 +56,7 @@ def _witness(value):
 def plan_admitted(receipt_path, placement_cm, map_path, map_file):
     """Produce the existing execution-plan shape from a genuine single receipt.
 
-    No fabricated batch summary is used. The manifest's ten source names must
+    No fabricated batch summary is used. The manifest's exact source names must
     match native_result, assets, imported_object_paths and on-disk outputs.
     The explicit map file identifies the Content root for /Game disk witnesses.
     """
@@ -52,19 +82,21 @@ def plan_admitted(receipt_path, placement_cm, map_path, map_file):
         raise ValueError("native saved identity differs from its admission settings")
     if re.fullmatch("[0-9a-f]{64}", str(settings.get("config_sha256", ""))) is None or type(settings.get("seed")) is not int:
         raise ValueError("receipt lacks the config/seed witness")
+    expected_names = _retained_contract(settings, manifest)
+    expected_count = len(expected_names)
     source = manifest.get("source", {})
     source_fp = _witness(source)
     if fingerprint(source["path"]) != source_fp:
         raise ValueError("admitted source FBX bytes changed after the saved receipt")
     objects = settings.get("objects", [])
-    if not isinstance(objects, list) or len(objects) != 10:
-        raise ValueError("this guarded island plan requires ten recorded source objects")
+    if not isinstance(objects, list) or len(objects) != expected_count or any(not isinstance(row, dict) for row in objects):
+        raise ValueError("retained island source-object count differs from its exact role contract")
     names = [row.get("name") for row in objects]
-    if len(set(names)) != 10 or any(not isinstance(value, str) or not value.startswith(name + "_") or re.fullmatch("[A-Za-z0-9_]+", value) is None for value in names):
-        raise ValueError("source object names are duplicated or leave the admitted island identity")
+    if any(not isinstance(value, str) for value in names) or len(set(names)) != expected_count or set(names) != expected_names:
+        raise ValueError("source object names differ from the exact retained island roles")
     meshes = native.get("meshes", [])
-    if not isinstance(meshes, list) or len(meshes) != 10 or {row.get("source_name") for row in meshes} != set(names):
-        raise ValueError("native source-name set differs from its ten admitted objects")
+    if not isinstance(meshes, list) or len(meshes) != expected_count or any(not isinstance(row, dict) for row in meshes) or {row.get("source_name") for row in meshes} != expected_names:
+        raise ValueError("native source-name set differs from its exact admitted objects")
     transform = _transform(placement_cm)
     if not isinstance(map_path, str) or not map_path.startswith("/Game/") or ":" in map_path:
         raise ValueError("supply the explicitly agreed /Game map package")
@@ -95,7 +127,7 @@ def plan_admitted(receipt_path, placement_cm, map_path, map_file):
         disk_outputs[path] = dict(path=str(disk_path), **witness)
         entries.append({"label": source_name, "mesh_path": path, "group": name, "transform": transform})
     imported = native.get("imported_object_paths", [])
-    if set(outputs) != paths or not isinstance(imported, list) or len(imported) != 10 or {_object_path(path) for path in imported} != paths:
+    if set(outputs) != paths or not isinstance(imported, list) or len(imported) != expected_count or {_object_path(path) for path in imported} != paths:
         raise ValueError("native returned/output path sets differ from the admitted source mapping")
     if fingerprint(receipt_path) != receipt_fp:
         raise ValueError("admission receipt changed during local planning")

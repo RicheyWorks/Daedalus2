@@ -1,0 +1,84 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "8195054a37c2b6813f8993db6004c79157eb66e1710b93cadc5de6a72c65c6e7",
+  "views": [
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "overview",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.hero-r4-native-2130-overview.png",
+      "camera": {
+        "location": {
+          "x": -311450,
+          "y": 289700,
+          "z": 22515.324
+        },
+        "rotation": {
+          "pitch": -27.211118508284937,
+          "yaw": 129.0938588862295,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "0e5215fdc724890e8360d1b899050b33dfea78b90b7f4d82df3a128ce0ca2447",
+      "bytes": 1290306,
+      "when_utc": "2026-10-14T21:58:10.090568+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "route",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.hero-r4-native-2130-route.png",
+      "camera": {
+        "location": {
+          "x": -315150,
+          "y": 302600,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 3.955881023629843,
+          "yaw": -115.97439396243138,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "a5d87236b9523740848a635ebc5251b5c1f34d8ab518124f6af06b655275490e",
+      "bytes": 1297629,
+      "when_utc": "2026-10-14T21:58:10.631293+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "crown_full",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.hero-r4-native-2130-crown_full.png",
+      "camera": {
+        "location": {
+          "x": -321350,
+          "y": 301900,
+          "z": 21715.324
+        },
+        "rotation": {
+          "pitch": -23.947917670318077,
+          "yaw": -51.00900595749453,
+          "roll": 1.7400717533106543e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "501b1dbcedf927344919cbefb5ab674ba16ed46d55b6b7f740dfbedb229a0877",
+      "bytes": 1358769,
+      "when_utc": "2026-10-14T21:58:11.079430+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\hero-r4-native-local-views.json",
+  "projection": "existing native viewport projection/FOV unchanged"
+}

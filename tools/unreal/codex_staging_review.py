@@ -23,7 +23,7 @@ APP='EditorToolset.EditorAppToolset'
 SCENE='editor_toolset.toolsets.scene.SceneTools'
 
 
-def capture(folder, names, revision='native', assembly=None, three_views=False):
+def capture(folder, names, revision='native', assembly=None, three_views=False, local_views=None):
     folder=Path(folder).resolve()
     patches=json.loads((folder/'codex-workshop-source-plan.json').read_text())
     world=json.loads((folder/'codex-workshop.world.json').read_text())
@@ -43,12 +43,25 @@ def capture(folder, names, revision='native', assembly=None, three_views=False):
     if report.exists():raise ValueError('retain existing native review receipt')
     views=[('overview',[6500,-8000,5000],[0,0,-300])]
     if three_views:views += [('route',[2800,4900,800],[900,1000,1100]),('crown',[-2200,2600,3300],[0,0,1800])]
+    if local_views is not None:
+        if three_views:raise ValueError('choose a retained local camera recipe or the default three views')
+        views=json.loads(Path(local_views).read_text())
+        if not isinstance(views,list) or not 1<=len(views)<=6:raise ValueError('require one to six local centimetre camera rows')
+        seen=set()
+        for row in views:
+            if not isinstance(row,list) or len(row)!=3:raise ValueError('camera row requires name, eye and target offsets')
+            name,eye,target=row
+            if not isinstance(name,str) or not name.replace('_','').isalnum() or name in seen:raise ValueError('camera names must be unique filename-safe identifiers')
+            if any(not isinstance(v,list) or len(v)!=3 or any(type(x) not in (int,float) or not math.isfinite(x) for x in v) for v in (eye,target)) or eye==target:raise ValueError('camera offsets require distinct finite vectors')
+            seen.add(name)
     for row in patches:
         if row['island'] in names:
             for view,_,_ in views:
                 if (out/(row['island']+'.'+revision+'-'+view+'.png')).exists():raise ValueError('retain existing capture; choose a new revision')
     result={'stage':'native_still_views','map_sha256_at_capture':fingerprint(world['plan']['map_file'])['sha256'],'views':[],
-            'acceptance':'appearance only; no movement/collision/final quality acceptance'}
+            'acceptance':'appearance only; no movement/collision/final quality acceptance',
+            'local_camera_recipe':str(Path(local_views).resolve()) if local_views else 'default',
+            'projection':'existing native viewport projection/FOV unchanged'}
     for row,view,eye_offset,target_offset in ((row,view,eye,target) for row in patches for view,eye,target in views):
         if row['island'] not in names:continue
         origin=list(row['island_origin_cm'])
@@ -79,5 +92,6 @@ if __name__=='__main__':
     parser.add_argument('--revision',default='native')
     parser.add_argument('--assembly',type=Path,help='optional additional saved assembly journal')
     parser.add_argument('--three-views',action='store_true')
+    parser.add_argument('--local-views',type=Path,help='retained name/eye/target offsets in native centimetres; viewport projection unchanged')
     args=parser.parse_args()
-    print(json.dumps(capture(args.folder,set(args.island),args.revision,args.assembly,args.three_views),indent=2))
+    print(json.dumps(capture(args.folder,set(args.island),args.revision,args.assembly,args.three_views,args.local_views),indent=2))

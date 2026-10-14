@@ -1,0 +1,10 @@
+{
+  "stage": "local_preflight_failed_no_native_dispatch",
+  "candidate": "CodexIsland_summit_rim_84011_HeroR4",
+  "error": "ValueError: exposed retained island preset differs",
+  "observed_native_receipt_preset": "codex_prepared_existing_options_v1",
+  "actual_semantics": "PR146 adapter _manifest sets settings.preset to the importer preset; biome is config.preset",
+  "world_journal_existed": false,
+  "new_actor_mutations": 0,
+  "resolution": "Owned placement helper now verifies exact importer preset; exact name/seed/role/key/source/output/save guards preserved. Frozen importer and PR146 source unchanged."
+}
