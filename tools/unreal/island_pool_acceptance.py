@@ -16,7 +16,7 @@ import urllib.request
 # Reuse only the existing file-identity helpers; all engine calls below remain
 # on the new Epic MCP client, never asset_pipeline's legacy TCP transport.
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'connectors/claude-asset-pipeline'))
-from asset_pipeline.ship import fingerprint, import_snapshot
+from asset_pipeline.ship import fingerprint, import_snapshot, write_report
 
 
 def main():
@@ -87,8 +87,7 @@ def main():
                 snapshot = import_snapshot(str(source / asset['fbx']), artifacts[asset['id']])
                 row['importPath'] = snapshot
                 row['importArtifact'] = artifacts[asset['id']]
-                output.write_text(json.dumps(rows + [{**row, 'status': 'dispatching-outcome-unknown'}],
-                                             indent=2), encoding='utf-8')
+                write_report(str(output), rows + [{**row, 'status': 'dispatching-outcome-unknown'}])
                 row['importResult'] = mcp.call(mesh_ts, 'import_file', folder_path=folder,
                     asset_name=asset['id'], source_file=snapshot,
                     import_materials=True, import_textures=False, combine_meshes=True)
@@ -124,7 +123,7 @@ def main():
             row['status'], row['error'] = 'failed-or-unknown', str(error)
         row['elapsedSeconds'] = round(time.monotonic() - started, 3)
         rows.append(row)
-        output.write_text(json.dumps(rows, indent=2), encoding='utf-8')
+        write_report(str(output), rows)
         print(asset['id'], row['status'], flush=True)
         if row['status'] != 'verified':
             return 1
@@ -133,8 +132,17 @@ def main():
             locks = json.load(response)
         if locks.get('unreal', {}).get('holder') != args.owner:
             raise ValueError('explicit current editor owner lease required for save')
-        saved = mcp.call('editor_toolset.toolsets.asset.AssetTools', 'save_assets', asset_paths=sorted(saves))
-        output.with_suffix('.save.json').write_text(json.dumps({'saved': saved, 'paths': sorted(saves)}))
+        save_report = output.with_suffix('.save.json')
+        save_state = {'saved': None, 'paths': sorted(saves), 'status': 'dispatching-outcome-unknown'}
+        write_report(str(save_report), save_state)
+        try:
+            saved = mcp.call('editor_toolset.toolsets.asset.AssetTools', 'save_assets', asset_paths=sorted(saves))
+        except Exception as error:
+            save_state['error'] = str(error)
+            write_report(str(save_report), save_state)
+            raise
+        save_state.update(saved=saved, status='saved' if saved is True else 'save-not-confirmed')
+        write_report(str(save_report), save_state)
         if saved is not True:
             return 1
     return 0

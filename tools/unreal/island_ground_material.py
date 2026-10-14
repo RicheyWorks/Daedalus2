@@ -14,6 +14,9 @@ import shutil
 import sys
 import urllib.request
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'connectors/claude-asset-pipeline'))
+from asset_pipeline.ship import write_report
+
 
 MAT = 'editor_toolset.toolsets.material.MaterialTools'
 OBJ = 'editor_toolset.toolsets.object.ObjectTools'
@@ -45,7 +48,7 @@ def create_instance(args):
     m = importlib.import_module('client').Mcp(timeout=45)
 
     def checkpoint():
-        output.write_text(json.dumps(report, indent=2), encoding='utf-8')
+        write_report(str(output), report)
 
     def call(toolset, tool, **arguments):
         with urllib.request.urlopen('http://127.0.0.1:9890/locks', timeout=5) as response:
@@ -139,7 +142,7 @@ def main():
         report['resumedUtc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
     def checkpoint():
-        output.write_text(json.dumps(report, indent=2), encoding='utf-8')
+        write_report(str(output), report)
 
     def call(toolset, tool, **arguments):
         with urllib.request.urlopen('http://127.0.0.1:9890/locks', timeout=5) as response:
@@ -294,6 +297,6 @@ if __name__ == '__main__':
                     if state.get('status') not in ('outcome-unknown', 'material-and-pilot-saved'):
                         state['status'] = 'validation-failed'
                     state['error'] = str(error)
-                    journal.write_text(json.dumps(state, indent=2), encoding='utf-8')
+                    write_report(str(journal), state)
         print(str(error), file=sys.stderr)
         sys.exit(1)
