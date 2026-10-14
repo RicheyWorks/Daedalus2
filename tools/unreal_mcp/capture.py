@@ -40,6 +40,7 @@ def main(argv):
     with open(out, "wb") as f:
         f.write(base64.b64decode(data))
     print("%s %d bytes cam=%s" % (out, os.path.getsize(out), r.get("cameraLocation")))
+    sys.stderr.write(json.dumps({"transfer": getattr(m, "last_transfer", {})}) + "\n")
     return 0
 
 

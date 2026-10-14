@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+name: Diagnostics providers
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/pc/diagnostics.py'
+      - 'tools/pc/test_diagnostics_provider_regressions.py'
+      - '.github/workflows/diagnostics-provider.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostics:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: Provider uncertainty and import regressions
+        run: python -m unittest tools.pc.test_diagnostics_provider_regressions -v

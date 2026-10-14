@@ -540,6 +540,27 @@ became code and the PC build failed with C3927/C2146 after a 2-minute job. Prefl
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
 
+## Editor text-file loading does not prove cooked data is staged (2026-10-13)
+Hero/Talker loaded DIC, DCS and DRR from the plugin Content tree, but Build.cs declared none of those custom
+files as runtime dependencies. Add explicit UFS families and include optional existing DSP sprite packs.
+Evaluate the actual Shipping target rules in an isolated exact-head host with UBT JsonExport; compare every
+expected source hash to covered runtime declarations. Keep that evidence separate from an actual cook,
+staged archive and launch. Do not ship editor Python or developer saves to make a missing-data error disappear.
+
+### Optional runtime-family enumeration (2026-10-14)
+Check Directory.Exists before enumerating optional DSP packs in Unreal module rules; a missing optional directory must not crash rule evaluation. Mandatory DIC/DCS/DRR declarations remain intact. Runtime-declaration verification now rejects duplicate JSON fields, nonfinite values and malformed SHA256s rather than silently accepting collapsed manifest data. Six offline checks pass; the earlier UBT proof remains tied to its earlier head, not this follow-up.
+
+
+### Bind and atomically publish runtime declaration proofs (2026-10-14)
+Record SHA256/length for the exact manifest and UBT export bytes parsed by the verifier, with bounded strict JSON input. Publish proof via fsync-and-replace so serialization/write failure preserves the prior file. Six declaration checks and failed-serialization preservation smoke pass. These are declaration/source proofs, never cook, staged archive or packaged launch acceptance.
+
+
+### Recheck runtime snapshot stability before proof publication (2026-10-14)
+After evaluating staging declarations, rehash all manifest-bound plugin sources and re-read manifest/export identities. Refuse normal file edits/replacements during verification. This finite observation is not an atomicfilesystem snapshot or producer lock; packaged/cook/runtime claims remain separate. Six offline declaration checks passed on this follow-up.
+
+
+### Build/cook staging lessons from the actual native project (2026-10-14)
+A genericUnrealGame target can return0 after one metadata action; it is not proof of plugincompilation. Use the generated projecttarget and verify actual compile/link actions and executable. Blueprintproject packaging may require an editorreceipt; use the supported explicit-unrealexe path to the existing commandlet when appropriate, not a fabricatedreceipt or unneedededitorrebuild. GameFeatureData requires nondefaultAssetManager rules; use the engine's normal additive AlwaysCook repair and preserve existing scans. Include that fix in the project generator. A rule-declaration proof is not a payloadproof: extract the actualPAK rawfiles and compare current hashes/lengths. Existing native data can be newer than an isolated branch snapshot; preserve it and pinprovenance rather than overwrite it. Check each nativecommand exit: a later0 can hide an earlierfailed assertion/lease command. Current archive/payload success does not prove runtime launch or ownership.
 ## A passing production-profile test can still open real world files (2026-10-13)
 The Labyrinth reactor was green but ArkHarbor warned that it could not persist ecology in the developer's
 .daedalus directory. Five prod-profile Spring test contexts inherited the production world-file default;
@@ -1218,3 +1239,79 @@ Production UI warns EMPTY NEXT CYCLE when valid food/energy stock plus negative 
 Host snapshot helper now emits a minimal primary game module with DaedalusLink dependency and named HostProject/HostProjectEditor targets; hashes of generated host scaffolding are separate from pinned plugininputs. Actual HostProjectEditor build of b1a33bcf completed66actions296.30s, bothDLLs linked and receipt verified under temporary project Binaries/Win64, all198plugin+4scaffold inputs rehashed. This covers current readback/header/UI source; no liveinstall/cook/runtime or Game-target build proof. Explicit target names reduce ambiguity with generic engine targets/metadata-only successes. Existing three real-Git snapshot tests stillpass.
 
 Explicit Game target acceptance: same frozen b1a33bcf host actually compiled/linked HostProject Win64 Shipping67actions280.81s; executable and target receipt under temporary project Binaries/Win64, all198plugin+4scaffold inputs rehashed. This is real Game compile/link, unlike earlier genericUnrealGame metadata-only observation. Separate native-project-shipping-proof.json preserves artifact hashes. No cook/staging/runtime/installation claim, and source packaging rules still require PR94 integration before eventual source sync.
+## Preserve both consumers when resolving CI integration conflicts (2026-10-14)
+
+PR94 integration overlapped newer realm workflow triggers and appended Unreal lessons. Keep both runtime-data and tools/realm trigger paths, both focused verifier and realm jobs, and both sets of lessons. A successful native archive does not merge its reproducible source setup into main; confirm branch integration separately. No live installer, data overwrite, editor restart or gameplay launch is needed for this source resolution.
+
+## Read existing Unreal config independently of PowerShell ANSI defaults (2026-10-14)
+Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.
+
+Encoding follow-up: use strict UTF8 decoding for BOM-less config input. Unsupported ANSI or damaged byte sequences must fail before any additive write, preserving original bytes rather than replacing them with Unicode replacement characters. Added actual invalid-UTF8 unchanged-bytes regression; PS7/PS5.1 pass while valid UTF16 BOM detection remains supported.
+
+## 2026-10-14 08:45 — morning: the mesh pool landed, streaming started, and what the night's /goal run produced
+
+Overnight (03:06-08:27) with Richey asleep: Poot's seat delivered PR141 (job snapshots), PR142 (diagnostics
+providers), PR143 (doctor read-back gate), PR144 (capture transfer measurement) — all tools-only, CI green, merged
+at 08:30 after their tests ran here. Sol's seat delivered the island mesh pool (PR140: 12 fragments + 6 pads, Blender
+4.3, imported natively through the connector into /Game/Daedalus/Art/Islands/NativePool with convex collision and
+bounds read back), a World-Zero deed-1 pilot (rock underside, trees, world-position ground shader), PR139 (Minesweeper
++ Shardstead), and a Shipping package. The hub carried it all; nobody waited on a human.
+
+Morning slices (08:30-08:45):
+- Editor was closed by the packaging run: relaunched by Start-Process (setup-unreal.ps1 needs -Project), StartServer
+  by console, doctor --fix green, map loaded in ~2.5 min.
+- mesh_pool_steps: every Lands_ district actor's Plots ISM now uses a pool mesh — WZ fragments Z-scaled to each
+  deed's thickness (top-centre origin: translation = slab top), realm pads at unit scale. 500 districts in 43 s.
+  First look: faceted asteroid fragments at their own heights; realms are green terrace pads on the ground.
+- District streaming (ADR-063) finally run: LABYRINTH 100 sublevels, 560 actors, 106 s; hub content kept in the
+  persistent level (districts_only) so LandAt/portals never miss their markers. Other realms running.
+- RAM 96.8% / 1 GB free at 08:35 (editor 11 GB, the rest other apps): Play refused until < 90%; vitals --watch 60
+  --alarm 92 is a standing job (job-1014-083542).
+
+Engine facts added: ULevelStreaming in 5.8 Python exposes get_world_asset_package_f_name (no _name variant);
+mesh swap on an ISM keeps instances but their transforms must be re-derived for the new origin convention (cube
+centre -> pool top-centre) in the same step, or every island drops by half its thickness.
+
+### 08:45 — asks to Poot after the morning run (Richey: "let poot know what you would like")
+P1. Editor relaunch is still three manual steps (Start-Process with the .uproject, console StartServer, doctor --fix):
+    one `unreal-job.ps1 -Open` that does all three and posts EDITOR UP on the hub. (H2/H3, highest.)
+P2. The desktop-app proxy still runs the pre-fix code until the app restarts; after any editor restart the
+    in-chat connector is dead until then. Either the app's server entry points at a tiny launcher that execs the
+    current main proxy, or Richey restarts the app once per day — say which.
+P3. RAM: the editor is 11 GB and the box runs at 96%; Play is refused by rule. Standing vitals job is running
+    (job-1014-083542); please own the "what else is resident" question and the play-guard RAM refusal.
+P4. The 60 s bridge cap makes every long job a tail-polling loop; PR141's job_status is the right shape — wire
+    pc-job -Tail to it so a tail never blocks.
+P5. CI on main cancels itself on every push (five pushes in ten minutes this morning); a merge queue or a
+    "run on the newest head only, don't cancel the reactor/examples jobs" rule.
+What works and should not change: the hub protocol, budgeted steps, proven saves, the doctor read-back, pc-jobs.
+
+## 2026-10-14 08:58 — two GPU-driver crashes in 11 minutes: what they were and the rule that follows
+
+08:41:31 and 08:52 local: DXGI_ERROR_DRIVER_INTERNAL_ERROR / DEVICE_REMOVED (DRED: no page fault, VRAM 4.5 of
+23 GB), both while district streaming was saving sublevels with system RAM at 96-97% and the editor at 11-12.5 GB.
+The driver, not the engine, gave up; the common factor is the box out of RAM. The team's crashguard relaunched the
+editor the second time (good); Crash Reporter windows were closed by me (the dialog table says: alarm, close, log).
+
+What survived: every sublevel save is atomic and the persistent level is saved only at the end of a realm, so a
+crash mid-realm leaves either (a) sublevels registered + duplicate actors in the persistent level (Gallery: 224
+removed by reconcile_steps) or (b) orphan .umap files and an untouched persistent level (Parcels: 79 orphans, no
+data loss). Both are recoverable without a human. Labyrinth and Gallery are fully streamed; Parcels, Bricks and
+World Zero are not.
+
+Rules:
+1. No sublevel-save batches, Play, or rebuilds above 90% system RAM (vitals --alarm 90 gates every job).
+2. The editor's own footprint is the lever: unloading far sublevels in the editor, Zen/shader worker limits and
+   the transaction buffer are Poot's investigation; until then, big saves run with the viewport not realtime.
+3. Streaming jobs save the persistent level every 25 districts, not only at the end (smaller loss window).
+4. reconcile_steps after any crash before any new move.
+
+## 2026-10-14 09:04 — unreal.Rotator is (roll, pitch, yaw)
+
+Every `unreal.Rotator(0.0, yaw, 0.0)` written since last night set PITCH, not yaw. Fragments came out tumbled
+or upside-down (the first "great detail" look at deed 240 showed the faceted underside on top), terraces and rocks
+were pitched, markers and portals pitched, and the airship's `set_control_rotation(Rotator(0, heading, 0))` pitched
+the camera instead of steering — which is why the tour "flew" so badly. Found by writing three rotators into one
+instance and reading them back: (0,300,0) read back as pitch -60. Fix: keyword args or (roll, pitch, yaw) order,
+everywhere (13 sites); re-dress all realms. Rule: any new engine constructor gets a one-instance write/read-back
+before it is used in a loop — the connector's ObjectTools or a 3-line execute_python does it in a second.

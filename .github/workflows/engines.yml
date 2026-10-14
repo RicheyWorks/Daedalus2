@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "tools/unreal/full_plugin_host.py", "tools/unreal/test_full_plugin_host.py", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -57,6 +57,8 @@ jobs:
         run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardstead_save_test.cpp -o shardstead_save_test && ./shardstead_save_test
       - name: exact native storage revision and commit receipt checks
         run: g++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public record_receipt_test.cpp -o record_receipt_test && ./record_receipt_test
+      - name: runtime data verifier refuses incomplete staging evidence
+        run: python3 ../../../tools/unreal/test_runtime_data.py
       - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
         run: |
           for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do
@@ -95,6 +97,10 @@ jobs:
       - name: plan only
         shell: pwsh
         run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly
+      - name: preserve GameFeatureData config arrays
+        # Config helper tests do not invoke the installer or touch an editor.
+        shell: powershell
+        run: .\engines\unreal\core-test\game_feature_config_test.ps1
       - name: project and plugin, for real
         shell: powershell
         run: |

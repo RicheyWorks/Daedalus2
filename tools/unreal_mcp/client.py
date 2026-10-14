@@ -22,6 +22,7 @@ URL = "http://127.0.0.1:8000/mcp"
 class Mcp:
     def __init__(self, url=URL, timeout=60):
         self.url, self.timeout, self.sid, self._id = url, timeout, None, 0
+        self.last_transfer = {}
         r = self._post({"jsonrpc": "2.0", "id": self._next(), "method": "initialize",
                         "params": {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "daedalus", "version": "1"}}})
         self.server = r.get("result", {})
@@ -33,8 +34,10 @@ class Mcp:
 
     def _post(self, body):
         session = {"id": self.sid}
+        self.last_transfer = {}
         try:
-            return post_json(self.url, body, session, timeout=self.timeout) or {}
+            return post_json(self.url, body, session, timeout=self.timeout,
+                             observation=self.last_transfer) or {}
         finally:
             self.sid = session["id"]
 
