@@ -1,0 +1,172 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 19660,
+        "sha256": "b58f07137ee2545c830ba13f6eefb991a76d871db5e618f358658896405ba4f6"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 15128,
+        "sha256": "f6666d5bd480646e7439ae4681689791e47afc667aafd0aa1f8f552dfc4014c4"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 15128,
+    "objects": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexModule_DawnCrimson_GearboxHousing_85105_part",
+        "triangles": 336
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85105\\CodexModule_DawnCrimson_GearboxHousing_85105.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "GearboxHousing",
+    "preset": "DawnCrimson",
+    "seed": 85105,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "c8878bd1b918311473c8d3805e9b9b5ed11c219a5b2adb0100dfa87a33150f4f",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "input",
+      "position_metres": [
+        0,
+        -0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "output",
+      "position_metres": [
+        0,
+        0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.00459,
+    "generation": 0.000981,
+    "glb_export": 0.015971,
+    "mesh": 0.001581
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand",
+      "CodexVoxel_window"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1
+        ],
+        "extent": [
+          1.5,
+          1,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexModule_DawnCrimson_GearboxHousing_85105_part",
+        "triangles": 336
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "mesh": 0,
+        "name": "CodexModule_DawnCrimson_GearboxHousing_85105_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_DawnCrimson_GearboxHousing_85105",
+  "palette_rgb": {
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "1b8a87332c51ea56c44c510f2bc97820eb1e75e607816fd609ee8a86e9ec85cd"
+}

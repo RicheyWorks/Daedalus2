@@ -1,0 +1,84 @@
+{
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "BridgeCoupler",
+    "preset": "CopperPatina",
+    "seed": 85000,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "ab6385bca9d38775bfadab7559e83d66fabab909b432cbdb6e55d8728c372a7a",
+  "connection_points": [
+    {
+      "forward": [
+        -1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "near",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        1,
+        0,
+        0
+      ],
+      "kind": "bridge-beam",
+      "name": "far",
+      "position_metres": [
+        4,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "implemented_gameplay": false,
+  "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+  "palette_rgb": {
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "planned",
+  "voxel_sha256": "9a47fa0746e847c6aaa2fa77812cfd9ddeb62b9ca4462358114a5afd3eca4e68"
+}

@@ -1,0 +1,69 @@
+{
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "WagonWheel",
+    "preset": "CopperPatina",
+    "seed": 85002,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "aa6f1dcf4d2f76f6b46b6d9c6fa00fab48f0ee568719b21348b5fc8a35c3f02f",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "axle",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "implemented_gameplay": false,
+  "name": "CodexModule_CopperPatina_WagonWheel_85002",
+  "palette_rgb": {
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": [
+    0,
+    1,
+    0
+  ],
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "planned",
+  "voxel_sha256": "6ecaf8d7de61fd02d743c20ed74a2f0e0b7e566181d9ffc9905e1b08577ee76f"
+}

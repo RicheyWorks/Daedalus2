@@ -1,0 +1,366 @@
+{
+  "47_save_elapsed_sum_s": 1.602452,
+  "assets": [
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "bytes": 80863,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\d09d0b1aaacea5d4\\CodexModule_CopperPatina_BridgeCoupler_85000.uasset",
+      "mtime_ns": 1792002562399404200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+      "bytes": 82324,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\9f571185388bc082\\CodexModule_CopperPatina_CrystalBattery_85004.uasset",
+      "mtime_ns": 1792002562572771400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006",
+      "bytes": 79493,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\d25f7e7d89422a6b\\CodexModule_CopperPatina_DriveShaft_85006.uasset",
+      "mtime_ns": 1792002562683230300,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+      "bytes": 80697,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\990d332407308049\\CodexModule_CopperPatina_GearboxHousing_85005.uasset",
+      "mtime_ns": 1792002562794319200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001",
+      "bytes": 83779,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\956c0286fde7f7db\\CodexModule_CopperPatina_SailPanel_85001.uasset",
+      "mtime_ns": 1792002562947590500,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003",
+      "bytes": 91844,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\7f2992a907d20886\\CodexModule_CopperPatina_TurbineRotor_85003.uasset",
+      "mtime_ns": 1792002563101574400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002",
+      "bytes": 84837,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\c4950bb2cbdf3abe\\CodexModule_CopperPatina_WagonWheel_85002.uasset",
+      "mtime_ns": 1792002563371914400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+      "bytes": 80874,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\3019aaa06df6f379\\CodexModule_DawnCrimson_BridgeCoupler_85100.uasset",
+      "mtime_ns": 1792002563820043700,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+      "bytes": 82436,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\6dfbaa8194bbe921\\CodexModule_DawnCrimson_CrystalBattery_85104.uasset",
+      "mtime_ns": 1792002563974875100,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106",
+      "bytes": 79501,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\1c52ebfc34c1c389\\CodexModule_DawnCrimson_DriveShaft_85106.uasset",
+      "mtime_ns": 1792002564091732000,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105",
+      "bytes": 80714,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\b58f07137ee2545c\\CodexModule_DawnCrimson_GearboxHousing_85105.uasset",
+      "mtime_ns": 1792002564211634900,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101",
+      "bytes": 83954,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\11ffdda61a11dcbf\\CodexModule_DawnCrimson_SailPanel_85101.uasset",
+      "mtime_ns": 1792002564336768400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103",
+      "bytes": 89587,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\10358ac734efd6cf\\CodexModule_DawnCrimson_TurbineRotor_85103.uasset",
+      "mtime_ns": 1792002564591444600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102",
+      "bytes": 84862,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\c859c181e1efd94e\\CodexModule_DawnCrimson_WagonWheel_85102.uasset",
+      "mtime_ns": 1792002565082854800,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+      "bytes": 80936,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\a4ddbcc9e9dd167f\\CodexModule_StormAmethyst_BridgeCoupler_85200.uasset",
+      "mtime_ns": 1792002565221227200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204",
+      "bytes": 82403,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\47ee7222bd45c30d\\CodexModule_StormAmethyst_CrystalBattery_85204.uasset",
+      "mtime_ns": 1792002565358601100,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206",
+      "bytes": 79499,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\0248ed0a300ef009\\CodexModule_StormAmethyst_DriveShaft_85206.uasset",
+      "mtime_ns": 1792002565493939600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205",
+      "bytes": 80754,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\f903dda8bd30a315\\CodexModule_StormAmethyst_GearboxHousing_85205.uasset",
+      "mtime_ns": 1792002565637518800,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201",
+      "bytes": 83872,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\28d587c9231e7d86\\CodexModule_StormAmethyst_SailPanel_85201.uasset",
+      "mtime_ns": 1792002565927808200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203",
+      "bytes": 91779,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\76ac7373b7624515\\CodexModule_StormAmethyst_TurbineRotor_85203.uasset",
+      "mtime_ns": 1792002566405520300,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202",
+      "bytes": 84832,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\module\\6650da60f6be3fb7\\CodexModule_StormAmethyst_WagonWheel_85202.uasset",
+      "mtime_ns": 1792002566559127200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_clouds.CodexIsland_cliff_garden_84022_clouds",
+      "bytes": 89358,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_clouds.uasset",
+      "mtime_ns": 1792002571551070100,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_cottage.CodexIsland_cliff_garden_84022_cottage",
+      "bytes": 90895,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_cottage.uasset",
+      "mtime_ns": 1792002571632269700,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_crystals.CodexIsland_cliff_garden_84022_crystals",
+      "bytes": 76585,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_crystals.uasset",
+      "mtime_ns": 1792002571704447900,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_flowers.CodexIsland_cliff_garden_84022_flowers",
+      "bytes": 83774,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_flowers.uasset",
+      "mtime_ns": 1792002571761738600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_island.CodexIsland_cliff_garden_84022_island",
+      "bytes": 1159654,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_island.uasset",
+      "mtime_ns": 1792002572761752800,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_landmarks.CodexIsland_cliff_garden_84022_landmarks",
+      "bytes": 91665,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_landmarks.uasset",
+      "mtime_ns": 1792002572783662900,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_rocks.CodexIsland_cliff_garden_84022_rocks",
+      "bytes": 75813,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_rocks.uasset",
+      "mtime_ns": 1792002572798679800,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_trees.CodexIsland_cliff_garden_84022_trees",
+      "bytes": 124868,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_trees.uasset",
+      "mtime_ns": 1792002572834204600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_water.CodexIsland_cliff_garden_84022_water",
+      "bytes": 87986,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\2053cd40f71a735c\\CodexIsland_cliff_garden_84022_water.uasset",
+      "mtime_ns": 1792002572855727600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_clouds.CodexIsland_river_canyon_84033_clouds",
+      "bytes": 85035,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_clouds.uasset",
+      "mtime_ns": 1792002577379363200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_cottage.CodexIsland_river_canyon_84033_cottage",
+      "bytes": 90906,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_cottage.uasset",
+      "mtime_ns": 1792002577467964100,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_crystals.CodexIsland_river_canyon_84033_crystals",
+      "bytes": 76063,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_crystals.uasset",
+      "mtime_ns": 1792002577543588200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_flowers.CodexIsland_river_canyon_84033_flowers",
+      "bytes": 83520,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_flowers.uasset",
+      "mtime_ns": 1792002577561603600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_island.CodexIsland_river_canyon_84033_island",
+      "bytes": 1171970,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_island.uasset",
+      "mtime_ns": 1792002578390980900,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_landmarks.CodexIsland_river_canyon_84033_landmarks",
+      "bytes": 80452,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_landmarks.uasset",
+      "mtime_ns": 1792002578411464400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_rocks.CodexIsland_river_canyon_84033_rocks",
+      "bytes": 77212,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_rocks.uasset",
+      "mtime_ns": 1792002578430607400,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_trees.CodexIsland_river_canyon_84033_trees",
+      "bytes": 126032,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_trees.uasset",
+      "mtime_ns": 1792002578467989600,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_water.CodexIsland_river_canyon_84033_water",
+      "bytes": 121565,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\eff77fd4050b4f56\\CodexIsland_river_canyon_84033_water.uasset",
+      "mtime_ns": 1792002578487716300,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_clouds.CodexIsland_summit_rim_84011_clouds",
+      "bytes": 89979,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_clouds.uasset",
+      "mtime_ns": 1792002582588005500,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_cottage.CodexIsland_summit_rim_84011_cottage",
+      "bytes": 90873,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_cottage.uasset",
+      "mtime_ns": 1792002582666264500,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_crystals.CodexIsland_summit_rim_84011_crystals",
+      "bytes": 80138,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_crystals.uasset",
+      "mtime_ns": 1792002582736969800,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_flowers.CodexIsland_summit_rim_84011_flowers",
+      "bytes": 83764,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_flowers.uasset",
+      "mtime_ns": 1792002582753993100,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_island.CodexIsland_summit_rim_84011_island",
+      "bytes": 1079105,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_island.uasset",
+      "mtime_ns": 1792002583695582700,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_rocks.CodexIsland_summit_rim_84011_rocks",
+      "bytes": 75572,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_rocks.uasset",
+      "mtime_ns": 1792002583710673700,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_trees.CodexIsland_summit_rim_84011_trees",
+      "bytes": 133643,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_trees.uasset",
+      "mtime_ns": 1792002583756717200,
+      "save_return": true
+    },
+    {
+      "asset_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_water.CodexIsland_summit_rim_84011_water",
+      "bytes": 134661,
+      "disk_path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\Prepared\\island\\5cef78b0fcfdb286\\CodexIsland_summit_rim_84011_water.uasset",
+      "mtime_ns": 1792002583793722500,
+      "save_return": true
+    }
+  ],
+  "disk_present": 47,
+  "engine_version": "5.8.3-58210709+++UE5+Release-5.8",
+  "gameplay_tests": "deferred by user",
+  "hero_revision": {
+    "name": "CodexIsland_summit_rim_84011_HeroR2",
+    "next_gap": "one-metre route steps; native movement/collision not verified",
+    "saved_unreal": false,
+    "stage": "exported_source_multiview_reviewed",
+    "world_placement": "held"
+  },
+  "import_data_classes": {
+    "InterchangeAssetImportData": 47
+  },
+  "known_23_new_task_import_elapsed_sum_s": 14.454402,
+  "map_saved": false,
+  "native_meshes": 47,
+  "native_receipt_sha256": "4579ccd32d42619ab6639cc805ec47a7be3024517aab9125cb5728e8d786891f",
+  "observed_nanite_enabled": {
+    "False": 47
+  },
+  "prepared_files": 48,
+  "prepared_payloads": 24,
+  "resumed_batch_seconds": 21.6,
+  "resumed_batch_steps": 24,
+  "save_true": 47,
+  "saved_payloads": 24,
+  "source_import_flags": "requested FbxImportUI flags; unavailable from InterchangeAssetImportData; not proof of applied options",
+  "stage": "assets_saved",
+  "timing_limit": "first module import/name-recovery is separate; no total wall-time speedup claim",
+  "window_open_hub": 30667,
+  "window_released_hub": 30681,
+  "world_placed": 0
+}

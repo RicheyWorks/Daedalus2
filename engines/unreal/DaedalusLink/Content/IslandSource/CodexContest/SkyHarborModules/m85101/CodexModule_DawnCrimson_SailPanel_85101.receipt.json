@@ -1,0 +1,145 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 20892,
+        "sha256": "11ffdda61a11dcbfd8efb8bf4f5179750a7458fded0d86a5c5f8d39973c792f6"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 26792,
+        "sha256": "6df1d52ab36c92e23c6be6021dd5da078b6fb496e5c629df4b528147a150f56e"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 26792,
+    "objects": [
+      {
+        "dims": [
+          4.0,
+          3.0,
+          0.25
+        ],
+        "materials": [
+          "CodexVoxel_cloud",
+          "CodexVoxel_flower_r"
+        ],
+        "name": "CodexModule_DawnCrimson_SailPanel_85101_part",
+        "triangles": 656
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85101\\CodexModule_DawnCrimson_SailPanel_85101.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "SailPanel",
+    "preset": "DawnCrimson",
+    "seed": 85101,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "949f53d2b56c2db70edcbcac3fb7b814589ae6a6129205a8ce78f4fff393d5af",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "sail-mast",
+      "name": "mast-seat",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.011521,
+    "generation": 0.00143,
+    "glb_export": 0.016774,
+    "mesh": 0.004262
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_cloud",
+      "CodexVoxel_flower_r"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          4,
+          3,
+          0.25
+        ],
+        "extent": [
+          3,
+          4,
+          0.25
+        ],
+        "materials": [
+          "CodexVoxel_cloud",
+          "CodexVoxel_flower_r"
+        ],
+        "name": "CodexModule_DawnCrimson_SailPanel_85101_part",
+        "triangles": 656
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          4.0,
+          3.0,
+          0.25
+        ],
+        "mesh": 0,
+        "name": "CodexModule_DawnCrimson_SailPanel_85101_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_DawnCrimson_SailPanel_85101",
+  "palette_rgb": {
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "ab91141565c12cb980e4d23f08cce2a718c315153eb934a61fb16cd0b3056847"
+}

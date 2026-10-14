@@ -1,0 +1,65 @@
+{
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "SailPanel",
+    "preset": "CopperPatina",
+    "seed": 85001,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "8ddd030839f6753db52561033ddde9a9015fa4f2f9d07f9c202ad542d8b7aac1",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "sail-mast",
+      "name": "mast-seat",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "implemented_gameplay": false,
+  "name": "CodexModule_CopperPatina_SailPanel_85001",
+  "palette_rgb": {
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "leaf2": [
+      0.29,
+      0.82,
+      0.73
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "planned",
+  "voxel_sha256": "c9bc313385c4b866752ec5b10745f22dedc7c364417c77711896a98d0a3ffa3f"
+}

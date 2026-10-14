@@ -1,0 +1,89 @@
+{
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "CrystalBattery",
+    "preset": "DawnCrimson",
+    "seed": 85104,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "63d62d21f1339bfb47cdcad008f2f4ce16e14f7af84d418d9c7be90c1bdddab3",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "kind": "battery-base",
+      "name": "battery-seat",
+      "position_metres": [
+        0,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "power-port",
+      "name": "power",
+      "position_metres": [
+        0,
+        -0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "implemented_gameplay": false,
+  "name": "CodexModule_DawnCrimson_CrystalBattery_85104",
+  "palette_rgb": {
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "planned",
+  "voxel_sha256": "dddee646a201b6121b2476e8b1524ded11088a4fafbcf05b2b16045ef3df6cce"
+}

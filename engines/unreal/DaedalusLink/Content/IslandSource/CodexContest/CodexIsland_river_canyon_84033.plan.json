@@ -1,0 +1,198 @@
+{
+  "bounds_metres": {
+    "max": [
+      68,
+      44,
+      20
+    ],
+    "min": [
+      -46,
+      -46,
+      -37
+    ]
+  },
+  "config": {
+    "depth": 26,
+    "features": [
+      "branching river canyon",
+      "gold-green plateaus",
+      "white pillar ring"
+    ],
+    "original": "prometheus",
+    "preset": "river-canyon",
+    "radius": 46,
+    "reference": {
+      "author": "prometheus",
+      "id": "prometheus",
+      "image": "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/shots/PI_hero_blender.png",
+      "inspection": "historical image and original source catalog; not current native acceptance",
+      "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+      "manifest": null,
+      "name": "Prometheus Island",
+      "provenance": "Original competition Grok slot; Prometheus registered as Grok bot",
+      "sources": [
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/island.json",
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/heights.json",
+        "C:/Users/730ri/projects/Daedalus2/data/islands/prometheus/ue_transforms.json",
+        "C:/Users/730ri/projects/Daedalus2/engines/unreal/prometheus-island/terrain_gs.py"
+      ],
+      "team": "Grok"
+    },
+    "relief": 15,
+    "seed": 84033,
+    "source_sha256": "547d3ec7238ca381699b17fb8e2f2ab9c0a90275e9d72aa1f2a5672654fbb48f",
+    "terrace": 3,
+    "version": 1,
+    "voxel_metres": 1.0
+  },
+  "config_sha256": "a3e7bf8071ac97bd7a10581e8fdd2fbf17353a6692b1611fedc5d4c71bf43655",
+  "elapsed_s": {
+    "generation": 0.373393
+  },
+  "name": "CodexIsland_river_canyon_84033",
+  "palette": [
+    "blossom",
+    "blossom2",
+    "cloud",
+    "crystal2",
+    "dirt",
+    "dirt2",
+    "door",
+    "flower_r",
+    "flower_w",
+    "flower_y",
+    "grass2",
+    "leaf",
+    "leaf2",
+    "rock",
+    "rock2",
+    "roof",
+    "sand",
+    "trunk",
+    "wall",
+    "water",
+    "window"
+  ],
+  "palette_rgb": {
+    "blossom": [
+      0.9,
+      0.38,
+      0.77
+    ],
+    "blossom2": [
+      0.98,
+      0.67,
+      0.89
+    ],
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "crystal2": [
+      0.55,
+      0.85,
+      0.95
+    ],
+    "dirt": [
+      0.45,
+      0.31,
+      0.19
+    ],
+    "dirt2": [
+      0.52,
+      0.37,
+      0.22
+    ],
+    "door": [
+      0.35,
+      0.22,
+      0.12
+    ],
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "flower_w": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "flower_y": [
+      0.95,
+      0.85,
+      0.25
+    ],
+    "grass2": [
+      0.67,
+      0.83,
+      0.32
+    ],
+    "leaf": [
+      0.27,
+      0.73,
+      0.43
+    ],
+    "leaf2": [
+      0.29,
+      0.82,
+      0.73
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ],
+    "wall": [
+      0.82,
+      0.72,
+      0.55
+    ],
+    "water": [
+      0.14,
+      0.74,
+      0.93
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "saved_unreal": false,
+  "schema": "daedalus.codex-island.v1",
+  "stage": "planned",
+  "voxel_sha256": "70a3705bd6207a5fc8867d40fcefd1261133dcd5683679a745ec4739efe27934",
+  "voxels": {
+    "clouds": 228,
+    "cottage": 312,
+    "crystals": 27,
+    "flowers": 50,
+    "island": 100515,
+    "landmarks": 50,
+    "rocks": 29,
+    "trees": 882,
+    "water": 622
+  }
+}

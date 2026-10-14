@@ -1,0 +1,615 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 1844780,
+        "sha256": "5cef78b0fcfdb2861c0e2913ff3647ab9863c273100c48b19944af36a86d653c"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 5439096,
+        "sha256": "fe057ea62b867114eccb5300675c1c0ef3ef25b1cf8a36064a6197118272aef7"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 5439096,
+    "objects": [
+      {
+        "dims": [
+          92.0,
+          89.0,
+          43.0
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_island",
+        "triangles": 80708
+      },
+      {
+        "dims": [
+          89.0,
+          87.0,
+          10.0
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_summit_rim_84011_water",
+        "triangles": 3956
+      },
+      {
+        "dims": [
+          74.0,
+          54.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_summit_rim_84011_trees",
+        "triangles": 3608
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_summit_rim_84011_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78.0,
+          78.0,
+          19.0
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_summit_rim_84011_flowers",
+        "triangles": 612
+      },
+      {
+        "dims": [
+          44.0,
+          19.0,
+          17.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_rocks",
+        "triangles": 124
+      },
+      {
+        "dims": [
+          38.0,
+          37.0,
+          15.0
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_crystals",
+        "triangles": 420
+      },
+      {
+        "dims": [
+          107.0,
+          80.0,
+          7.0
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_summit_rim_84011_clouds",
+        "triangles": 1248
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CodexIsland_summit_rim_84011\\CodexIsland_summit_rim_84011.glb"
+  },
+  "bounds_metres": {
+    "max": [
+      46,
+      46,
+      21
+    ],
+    "min": [
+      -68,
+      -66,
+      -25
+    ]
+  },
+  "collision_hulls": 599,
+  "config": {
+    "depth": 22,
+    "features": [
+      "circular water rim",
+      "stepped central summit",
+      "pastel block trees"
+    ],
+    "original": "blender-boss",
+    "preset": "summit-rim",
+    "radius": 46,
+    "reference": {
+      "author": "blender-team",
+      "id": "blender-boss",
+      "image": "C:/Users/730ri/projects/bot-team/art/flagship/contest_island_v4.png",
+      "inspection": "historical image and original source catalog; not current native acceptance",
+      "inventory_sha256": "a7e6a3eef28add8a7705d2ea39ffbb971a1ce55b0c8486b42df05d782bb0e36a",
+      "manifest": "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/manifest.json",
+      "name": "Blender Boss Island",
+      "provenance": "Original tracker assigns Blender Boss to blender-team; retain per-asset creator fields rather than guessing a team",
+      "sources": [
+        "C:/Users/730ri/projects/Daedalus2/data/islands/blenderboss/layout.json"
+      ],
+      "team": null
+    },
+    "relief": 21,
+    "seed": 84011,
+    "source_sha256": "547d3ec7238ca381699b17fb8e2f2ab9c0a90275e9d72aa1f2a5672654fbb48f",
+    "terrace": 3,
+    "version": 1,
+    "voxel_metres": 1.0
+  },
+  "config_sha256": "5d20648964618296354238092725ca7c6c24a71606ad84835940a8e05bf3477f",
+  "elapsed_s": {
+    "fbx_export": 0.553915,
+    "generation": 0.246018,
+    "glb_export": 0.904279,
+    "mesh": 0.736664
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_dirt",
+      "CodexVoxel_dirt2",
+      "CodexVoxel_flower_w",
+      "CodexVoxel_grass",
+      "CodexVoxel_grass2",
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2",
+      "CodexVoxel_sand",
+      "CodexVoxel_foam",
+      "CodexVoxel_water",
+      "CodexVoxel_blossom",
+      "CodexVoxel_blossom2",
+      "CodexVoxel_leaf",
+      "CodexVoxel_leaf2",
+      "CodexVoxel_trunk",
+      "CodexVoxel_door",
+      "CodexVoxel_roof",
+      "CodexVoxel_wall",
+      "CodexVoxel_window",
+      "CodexVoxel_flower_r",
+      "CodexVoxel_flower_y",
+      "CodexVoxel_crystal",
+      "CodexVoxel_crystal2",
+      "CodexVoxel_cloud"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          92,
+          89,
+          43
+        ],
+        "extent": [
+          89,
+          43,
+          92
+        ],
+        "materials": [
+          "CodexVoxel_dirt",
+          "CodexVoxel_dirt2",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_grass",
+          "CodexVoxel_grass2",
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_sand"
+        ],
+        "name": "CodexIsland_summit_rim_84011_island",
+        "triangles": 80708
+      },
+      {
+        "dims": [
+          89,
+          87,
+          10
+        ],
+        "extent": [
+          87,
+          10,
+          89
+        ],
+        "materials": [
+          "CodexVoxel_foam",
+          "CodexVoxel_water"
+        ],
+        "name": "CodexIsland_summit_rim_84011_water",
+        "triangles": 3956
+      },
+      {
+        "dims": [
+          74,
+          54,
+          19
+        ],
+        "extent": [
+          54,
+          19,
+          74
+        ],
+        "materials": [
+          "CodexVoxel_blossom",
+          "CodexVoxel_blossom2",
+          "CodexVoxel_leaf",
+          "CodexVoxel_leaf2",
+          "CodexVoxel_trunk"
+        ],
+        "name": "CodexIsland_summit_rim_84011_trees",
+        "triangles": 3608
+      },
+      {
+        "dims": [
+          9,
+          9,
+          8
+        ],
+        "extent": [
+          9,
+          8,
+          9
+        ],
+        "materials": [
+          "CodexVoxel_door",
+          "CodexVoxel_roof",
+          "CodexVoxel_wall",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexIsland_summit_rim_84011_cottage",
+        "triangles": 948
+      },
+      {
+        "dims": [
+          78,
+          78,
+          19
+        ],
+        "extent": [
+          78,
+          19,
+          78
+        ],
+        "materials": [
+          "CodexVoxel_flower_r",
+          "CodexVoxel_flower_w",
+          "CodexVoxel_flower_y"
+        ],
+        "name": "CodexIsland_summit_rim_84011_flowers",
+        "triangles": 612
+      },
+      {
+        "dims": [
+          44,
+          19,
+          17
+        ],
+        "extent": [
+          19,
+          17,
+          44
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_rocks",
+        "triangles": 124
+      },
+      {
+        "dims": [
+          38,
+          37,
+          15
+        ],
+        "extent": [
+          38,
+          15,
+          37
+        ],
+        "materials": [
+          "CodexVoxel_crystal",
+          "CodexVoxel_crystal2"
+        ],
+        "name": "CodexIsland_summit_rim_84011_crystals",
+        "triangles": 420
+      },
+      {
+        "dims": [
+          107,
+          80,
+          7
+        ],
+        "extent": [
+          80,
+          7,
+          107
+        ],
+        "materials": [
+          "CodexVoxel_cloud"
+        ],
+        "name": "CodexIsland_summit_rim_84011_clouds",
+        "triangles": 1248
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          92.0,
+          89.0,
+          43.0
+        ],
+        "mesh": 0,
+        "name": "CodexIsland_summit_rim_84011_island"
+      },
+      {
+        "dims": [
+          89.0,
+          87.0,
+          10.0
+        ],
+        "mesh": 1,
+        "name": "CodexIsland_summit_rim_84011_water"
+      },
+      {
+        "dims": [
+          74.0,
+          54.0,
+          19.0
+        ],
+        "mesh": 2,
+        "name": "CodexIsland_summit_rim_84011_trees"
+      },
+      {
+        "dims": [
+          9.0,
+          9.0,
+          8.0
+        ],
+        "mesh": 3,
+        "name": "CodexIsland_summit_rim_84011_cottage"
+      },
+      {
+        "dims": [
+          78.0,
+          78.0,
+          19.0
+        ],
+        "mesh": 4,
+        "name": "CodexIsland_summit_rim_84011_flowers"
+      },
+      {
+        "dims": [
+          44.0,
+          19.0,
+          17.0
+        ],
+        "mesh": 5,
+        "name": "CodexIsland_summit_rim_84011_rocks"
+      },
+      {
+        "dims": [
+          38.0,
+          37.0,
+          15.0
+        ],
+        "mesh": 6,
+        "name": "CodexIsland_summit_rim_84011_crystals"
+      },
+      {
+        "dims": [
+          107.0,
+          80.0,
+          7.0
+        ],
+        "mesh": 7,
+        "name": "CodexIsland_summit_rim_84011_clouds"
+      }
+    ]
+  },
+  "name": "CodexIsland_summit_rim_84011",
+  "palette": [
+    "blossom",
+    "blossom2",
+    "cloud",
+    "crystal",
+    "crystal2",
+    "dirt",
+    "dirt2",
+    "door",
+    "flower_r",
+    "flower_w",
+    "flower_y",
+    "foam",
+    "grass",
+    "grass2",
+    "leaf",
+    "leaf2",
+    "rock",
+    "rock2",
+    "roof",
+    "sand",
+    "trunk",
+    "wall",
+    "water",
+    "window"
+  ],
+  "palette_rgb": {
+    "blossom": [
+      0.9,
+      0.38,
+      0.77
+    ],
+    "blossom2": [
+      0.98,
+      0.67,
+      0.89
+    ],
+    "cloud": [
+      0.97,
+      0.97,
+      0.99
+    ],
+    "crystal": [
+      0.7,
+      0.42,
+      0.96
+    ],
+    "crystal2": [
+      0.55,
+      0.85,
+      0.95
+    ],
+    "dirt": [
+      0.45,
+      0.31,
+      0.19
+    ],
+    "dirt2": [
+      0.52,
+      0.37,
+      0.22
+    ],
+    "door": [
+      0.35,
+      0.22,
+      0.12
+    ],
+    "flower_r": [
+      0.9,
+      0.25,
+      0.3
+    ],
+    "flower_w": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "flower_y": [
+      0.95,
+      0.85,
+      0.25
+    ],
+    "foam": [
+      0.8,
+      0.9,
+      1.0
+    ],
+    "grass": [
+      0.4,
+      0.76,
+      0.28
+    ],
+    "grass2": [
+      0.67,
+      0.83,
+      0.32
+    ],
+    "leaf": [
+      0.27,
+      0.73,
+      0.43
+    ],
+    "leaf2": [
+      0.29,
+      0.82,
+      0.73
+    ],
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "roof": [
+      0.7,
+      0.22,
+      0.2
+    ],
+    "sand": [
+      0.95,
+      0.79,
+      0.38
+    ],
+    "trunk": [
+      0.4,
+      0.26,
+      0.15
+    ],
+    "wall": [
+      0.82,
+      0.72,
+      0.55
+    ],
+    "water": [
+      0.14,
+      0.74,
+      0.93
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "saved_unreal": false,
+  "schema": "daedalus.codex-island.v1",
+  "stage": "exported",
+  "voxel_sha256": "44778211ae799c559d2086e571f01174f8205782f68099f17b0feaa1d2fd6687",
+  "voxels": {
+    "clouds": 333,
+    "cottage": 312,
+    "crystals": 50,
+    "flowers": 51,
+    "island": 88738,
+    "landmarks": 0,
+    "rocks": 13,
+    "trees": 1019,
+    "water": 629
+  }
+}

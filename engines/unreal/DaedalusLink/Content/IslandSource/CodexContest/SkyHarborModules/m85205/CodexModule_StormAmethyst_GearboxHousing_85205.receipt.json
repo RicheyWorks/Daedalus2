@@ -1,0 +1,172 @@
+{
+  "artifacts": {
+    "fbx": {
+      "fingerprint": {
+        "bytes": 19676,
+        "sha256": "f903dda8bd30a3158ab8b5db44ab90b9e8a89037dba4fcf244d5fe5adbbd3f57"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.fbx"
+    },
+    "glb": {
+      "fingerprint": {
+        "bytes": 15128,
+        "sha256": "9edaf9f62e524c1b5cb705e0e78eed48e0d54ca313a0e57b6f21a672ec72a18b"
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.glb"
+    }
+  },
+  "blender": {
+    "blender": "4.3.1",
+    "bytes": 15128,
+    "objects": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexModule_StormAmethyst_GearboxHousing_85205_part",
+        "triangles": 336
+      }
+    ],
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\SkyHarborModules\\m85205\\CodexModule_StormAmethyst_GearboxHousing_85205.glb"
+  },
+  "collision": "native automatic import behavior unverified; no authored dynamic physics",
+  "config": {
+    "part": "GearboxHousing",
+    "preset": "StormAmethyst",
+    "seed": 85205,
+    "source_sha256": "b1a295494b865780cfc0026b32b210fbffb12b4ddb6d85c7e6aa76aa3ed8406a",
+    "version": 1,
+    "voxel_metres": 0.25
+  },
+  "config_sha256": "7b260fd8d3cdb5df9ece84a711fc976675767c50bce6319e9f184dbc98085338",
+  "connection_points": [
+    {
+      "forward": [
+        0,
+        -1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "input",
+      "position_metres": [
+        0,
+        -0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "forward": [
+        0,
+        1,
+        0
+      ],
+      "kind": "shaft-0.5m",
+      "name": "output",
+      "position_metres": [
+        0,
+        0.75,
+        0.5
+      ],
+      "up": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "elapsed_s": {
+    "fbx_export": 0.005749,
+    "generation": 0.002155,
+    "glb_export": 0.013713,
+    "mesh": 0.001623
+  },
+  "export_skipped": false,
+  "file": {
+    "materials": [
+      "CodexVoxel_rock",
+      "CodexVoxel_rock2",
+      "CodexVoxel_window"
+    ],
+    "meshes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1
+        ],
+        "extent": [
+          1.5,
+          1,
+          1.5
+        ],
+        "materials": [
+          "CodexVoxel_rock",
+          "CodexVoxel_rock2",
+          "CodexVoxel_window"
+        ],
+        "name": "CodexModule_StormAmethyst_GearboxHousing_85205_part",
+        "triangles": 336
+      }
+    ],
+    "nodes": [
+      {
+        "dims": [
+          1.5,
+          1.5,
+          1.0
+        ],
+        "mesh": 0,
+        "name": "CodexModule_StormAmethyst_GearboxHousing_85205_part"
+      }
+    ]
+  },
+  "implemented_gameplay": false,
+  "name": "CodexModule_StormAmethyst_GearboxHousing_85205",
+  "palette_rgb": {
+    "rock": [
+      0.37,
+      0.42,
+      0.61
+    ],
+    "rock2": [
+      0.2,
+      0.24,
+      0.39
+    ],
+    "window": [
+      1.0,
+      0.9,
+      0.55
+    ]
+  },
+  "pivot_metres": [
+    0,
+    0,
+    0
+  ],
+  "proposed_loop": "salvage parts -> restore bridges/lighthouse power -> assemble vehicle -> reach next island",
+  "provenance": {
+    "author": "team-codex",
+    "complements": "Sol harbor kit da716327; no duplicate Dock/Beacon/Boathouse geometry",
+    "design_request_hub": 30513
+  },
+  "rotation_axis": null,
+  "runtime_snapping_implemented": false,
+  "saved_unreal": false,
+  "schema": "daedalus.codex-module.v1",
+  "snap_grid_metres": 0.25,
+  "stage": "exported",
+  "voxel_sha256": "a74a7036a9b0db68ec30be4d1e67ff85a84e89f94c6de0de04ac82a7b3bce87d"
+}

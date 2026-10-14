@@ -1,0 +1,213 @@
+{
+  "deadline_epoch": 1792003440.0,
+  "imported_groups": 1,
+  "manifest_sha256": "3770b329e26fb8d7c24b769dbeb7cb3513d3bd8b2dea1ebd768c6d41e3f0df79",
+  "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+  "prepared_groups": 24,
+  "prepared_islands": 3,
+  "prepared_modules": 21,
+  "requested_import_options": {
+    "auto_generate_collision": false,
+    "build_nanite": false,
+    "combine_meshes": false,
+    "generate_lightmap_u_vs": false,
+    "import_materials": false,
+    "import_textures": false,
+    "vertex_color_import_option": "REPLACE"
+  },
+  "results": [
+    {
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286",
+      "elapsed_s": {
+        "import": 3.971329
+      },
+      "import_skipped": false,
+      "imported_object_paths": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_clouds.CodexIsland_summit_rim_84011_clouds",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_cottage.CodexIsland_summit_rim_84011_cottage",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_crystals.CodexIsland_summit_rim_84011_crystals",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_flowers.CodexIsland_summit_rim_84011_flowers",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_island.CodexIsland_summit_rim_84011_island",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_rocks.CodexIsland_summit_rim_84011_rocks",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_trees.CodexIsland_summit_rim_84011_trees",
+        "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_water.CodexIsland_summit_rim_84011_water"
+      ],
+      "kind": "island",
+      "meshes": [
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_clouds.CodexIsland_summit_rim_84011_clouds",
+          "save_return": true,
+          "save_s": 0.067541,
+          "source_name": "CodexIsland_summit_rim_84011_clouds"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_cottage.CodexIsland_summit_rim_84011_cottage",
+          "save_return": true,
+          "save_s": 0.069964,
+          "source_name": "CodexIsland_summit_rim_84011_cottage"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_crystals.CodexIsland_summit_rim_84011_crystals",
+          "save_return": true,
+          "save_s": 0.065426,
+          "source_name": "CodexIsland_summit_rim_84011_crystals"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_flowers.CodexIsland_summit_rim_84011_flowers",
+          "save_return": true,
+          "save_s": 0.010877,
+          "source_name": "CodexIsland_summit_rim_84011_flowers"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_island.CodexIsland_summit_rim_84011_island",
+          "save_return": true,
+          "save_s": 0.021235,
+          "source_name": "CodexIsland_summit_rim_84011_island"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_rocks.CodexIsland_summit_rim_84011_rocks",
+          "save_return": true,
+          "save_s": 0.010722,
+          "source_name": "CodexIsland_summit_rim_84011_rocks"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_trees.CodexIsland_summit_rim_84011_trees",
+          "save_return": true,
+          "save_s": 0.018172,
+          "source_name": "CodexIsland_summit_rim_84011_trees"
+        },
+        {
+          "material_paths": [
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+            "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          ],
+          "observed_import": {
+            "auto_generate_collision": "unavailable",
+            "build_nanite": "unavailable",
+            "combine_meshes": "unavailable",
+            "generate_lightmap_u_vs": "unavailable",
+            "import_data_class": "InterchangeAssetImportData",
+            "nanite_enabled": false,
+            "vertex_color_import_option": "unavailable"
+          },
+          "path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_water.CodexIsland_summit_rim_84011_water",
+          "save_return": true,
+          "save_s": 0.017208,
+          "source_name": "CodexIsland_summit_rim_84011_water"
+        }
+      ],
+      "name": "CodexIsland_summit_rim_84011",
+      "stage": "assets_saved_held_from_world"
+    }
+  ],
+  "saved_groups": 1,
+  "saved_meshes": 8,
+  "selected_groups": 1,
+  "selected_names": [
+    "CodexIsland_summit_rim_84011"
+  ],
+  "stage": "assets_saved",
+  "world_placed": 0
+}
