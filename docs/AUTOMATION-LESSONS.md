@@ -529,3 +529,10 @@ persistent level for now; streaming them by district is the polish step, not the
 became code and the PC build failed with C3927/C2146 after a 2-minute job. Preflight (0 errors) had let it
 through. Fix: preflight rule P9 (a block comment whose next line still starts with ` *` closed early), proven on
 the offending text; write "x or y", never "x/y", after a star in a comment.
+
+## Maven can package a container without its shared runtime resources (2026-10-13)
+Dockerfile copied Java modules but not core's external Inventory DIC directory or server's kennel tonics.json.
+Maven skips absent resource directories, so a package command can succeed while startup fails in the catalog
+or tonic-book constructor. Copy both shared inputs explicitly. Validate the real image's embedded bytes and
+production HTTP, using only a disposable loopback container and generated test credentials. A local CLI with
+no running Docker daemon is not a successful image test; report actual CI/container evidence separately.

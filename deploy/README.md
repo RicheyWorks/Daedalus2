@@ -8,6 +8,32 @@ Status (2026-10-13):
 - It has not yet been run end to end on a cloud host. That needs a host, which is a spend and needs Richey's yes.
 - Sharding (realm or district servers) comes from Astra's shard directory (ADR-065 follow-up).
 
+## Image resource check
+
+The build stage must copy the shared Unreal inventory catalogs and kennel tonic
+book as well as the Java modules. Maven can skip a missing resource directory
+without failing the package step; the resulting server then fails initialization.
+The Dockerfile now includes both external resource inputs.
+
+The `Container runtime resources` workflow builds the actual image and runs a
+disposable production-profile container. It compares the embedded catalogs and
+tonic book byte-for-byte with source, checks authenticated catalog reads and
+anonymous refusal, and removes only its own container and anonymous volumes.
+The test binds an ephemeral port on loopback and uses generated test credentials.
+It does not use the deployment volumes, a public domain, Redis or wallet keys.
+
+```sh
+docker build -t daedalus-resource-smoke .
+python3 tools/deploy/container_smoke.py --image daedalus-resource-smoke --output container-proof
+```
+
+Run those commands from the repository root. Successful runs write image/JAR
+identities, resource hashes, HTTP results and elapsed seconds to `proof.json`.
+Four verifier unit tests run locally without Docker. The initial Windows
+development host has a Docker CLI but no running Linux daemon, so local image
+startup is unverified until an actual container run reports success. CI and
+production acceptance must be reported separately.
+
 ## What you need
 - A Linux VM with Docker. 4 vCPU and 16 GB is a reasonable start for testnet. Size it again from Astra's benchmarks
   before launch.
