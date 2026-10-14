@@ -174,6 +174,46 @@ def lay_ground(realm, d, sub=None, cube=None, labels=None):
     return a
 
 
+def remove_ground_steps(realms):
+    """Take the district ground slabs out again (00:17 Richey: the island realm is floating islands with gaps;
+    'add ground' meant every island is solid, not a floor under the sky). One realm per step."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    gone = 0
+    for realm in realms:
+        for a in list(sub.get_all_level_actors()):
+            if a.get_actor_label().startswith("Ground_%s_D" % realm.replace("-", "")):
+                sub.destroy_actor(a)
+                gone += 1
+        yield "%s ground slabs removed" % realm
+    P.save_world()
+    return {"removed": gone}
+
+
+def thicken_plots_steps(realms):
+    """The hub-ring plots laid as 2 m sheets become 12 m slabs of ground (SLAB_M): a plot you cannot fall through."""
+    import unreal
+    import daedalus_plots as P
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    n = 0
+    for realm in realms:
+        pre = P._prefix(realm)
+        for a in sub.get_all_level_actors():
+            l = a.get_actor_label()
+            if l.startswith(pre) and not l.endswith("_Sign") and l[len(pre):].isdigit():
+                sc = a.get_actor_scale3d()
+                if abs(sc.z - P.SLAB_M) > 0.01:
+                    top = a.get_actor_location().z + sc.z * 50.0
+                    a.modify(True)
+                    a.set_actor_scale3d(unreal.Vector(sc.x, sc.y, P.SLAB_M))
+                    a.set_actor_location(unreal.Vector(a.get_actor_location().x, a.get_actor_location().y, top - P.SLAB_M * 50.0), False, False)
+                    n += 1
+        yield "%s plots thickened" % realm
+    P.save_world()
+    return {"thickened": n}
+
+
 def lay_ground_steps(realm, districts):
     """Ground under existing districts (the hub rings laid before ground existed): one per tick, into the
     district's sublevel when it exists, else the persistent level."""
@@ -219,9 +259,7 @@ def lay_district_steps(realm, districts, taken=frozenset(), save_every=10, suble
     labels = P._labels_cache(sub)   # scanned ONCE (00:05: a scan per district plus a sublevel create + move per
     for d in districts:             # district made each step ~60 s; one instanced actor in the persistent level is ~0.1 s)
         made = []
-        g = lay_ground(realm, d, sub=sub, cube=cube, labels=labels)
-        if g is not None:
-            made.append(g)
+        g = None   # no district-wide ground: World Zero is broken ground (the asteroid), the realms have terrain (00:17)
         label = "Lands_%s_D%02d" % (realm.replace("-", ""), d)
         n_inst = 0
         if label not in labels:

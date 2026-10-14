@@ -17,7 +17,7 @@ import math
 import daedalus_land_grid as G
 
 LAND_M = 92.0        # launch size of a land (ADR-065 rule 8)
-SLAB_M = 2.0
+SLAB_M = 12.0        # a plot is a solid floating slab of ground (the asteroid's pieces), not a sheet
 CUBE = "/Engine/BasicShapes/Cube.Cube"        # 100 cm a side
 FOLDER = "Lands"
 

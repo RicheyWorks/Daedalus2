@@ -31,8 +31,8 @@ def main(argv):
         wire.call(wire.UNREAL, "stop", timeout=60)
         time.sleep(3)
     t0 = time.time()
-    for realm in ["WORLD-ZERO"] + realms:
-        steps("daedalus_districts.lay_ground_steps(%r, %r)" % (realm, HUB), "ground " + realm, 1800)
+    steps("daedalus_districts.remove_ground_steps(%r)" % (["WORLD-ZERO"] + realms), "remove ground", 600)
+    steps("daedalus_districts.thicken_plots_steps(%r)" % (["WORLD-ZERO"] + realms), "thicken plots", 600)
     for realm in realms:
         rest = [d for d in range(100) if d not in HUB]
         steps("daedalus_districts.lay_district_steps(%r, %r)" % (realm, rest), "districts " + realm, 7200)
