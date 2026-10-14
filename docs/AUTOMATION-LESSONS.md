@@ -851,3 +851,7 @@ import_cast.py --plan validates uniqueIDs, SHA256 agreement, skinnedGLB document
 ### Pin the handoff before import (2026-10-14)
 Night-run keeps the file-only preflight result and passes it as --expected-plan to the importer. A changed asset set/hash/path/clip document refuses before bridge setup/import. After subprocess completion, validate the retained receipt against that original plan and require counts to agree with stdout before layout. The pinned plan is retained beside the import receipt. This detects handoff drift but still does not make files immutable during the native read.
 
+
+### Keep run identity through handoff publication (2026-10-14)
+A run ID identifies the orchestration; an archive ID identifies a published snapshot. Preserve the run ID from stage checkpoints into final receipts, while allocating unique archive IDs so multiple publications cannot overwrite history. Final reports must retain build/dependency job identity, progress path and every pinned import-plan path, not just the final scenario totals.
+

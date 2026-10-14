@@ -177,8 +177,10 @@ def assess_run(text, returncode, report):
 def publish_receipt(receipt,out_dir,latest_path):
     """Use the existing atomic report writer; archive first, then update latest."""
     os.makedirs(out_dir,exist_ok=True)
-    receipt=dict(receipt,run_id=uuid.uuid4().hex)
-    path=os.path.join(out_dir,'night-run-%s-%s.json' % (time.strftime('%m%d-%H%M%S'),receipt['run_id']))
+    receipt=dict(receipt)
+    receipt.setdefault('run_id',uuid.uuid4().hex)
+    receipt['archive_id']=uuid.uuid4().hex
+    path=os.path.join(out_dir,'night-run-%s-%s.json' % (time.strftime('%m%d-%H%M%S'),receipt['archive_id']))
     write_report(path,receipt)
     write_report(latest_path,receipt)
     return path
@@ -287,6 +289,7 @@ def run_options(options,progress):
         pinned_plan=import_receipt+'.plan.json'
         write_report(pinned_plan,options.import_plans[os.path.abspath(folder)])
         progress.setdefault('import_receipts',[]).append(import_receipt)
+        progress.setdefault('import_expected_plans',[]).append(pinned_plan)
         checkpoint_run(progress,'import',import_folder=folder,import_receipt=import_receipt,import_expected_plan=pinned_plan)
         out = subprocess.run([sys.executable, os.path.join(HERE, "import_cast.py"), folder,'--report',import_receipt,'--expected-plan',pinned_plan], capture_output=True, text=True, timeout=1800, cwd=REPO)
         last = [l for l in (out.stdout or "").splitlines() if l.startswith("import:")]
@@ -356,7 +359,12 @@ def run_options(options,progress):
                "total": total, "log_report": ew, "fails": fails, "interrupted": interrupted}
     receipt['outcome'] = outcome
     receipt['import_receipts']=progress.get('import_receipts',[])
+    receipt['import_expected_plans']=progress.get('import_expected_plans',[])
     receipt['checkpoint_run_id']=progress['run_id']
+    receipt.update(run_id=progress['run_id'],started_when=progress['when'],phase='completed',
+                   progress_receipt=progress['_checkpoint_path'],realms=options.realms,
+                   build_job=progress.get('build_job'),build_pid=progress.get('build_pid'),
+                   dependency_job=progress.get('dependency_job'))
     out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
     try:
         path=publish_receipt(receipt,out_dir,os.path.join(REPO,'docs','production','night-run-latest.json'))

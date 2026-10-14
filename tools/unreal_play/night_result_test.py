@@ -29,6 +29,16 @@ class OutcomeTest(unittest.TestCase):
             self.assertEqual(json.loads(Path(one).read_text())['total'],'TOTAL 1/1')
             self.assertEqual(json.loads(latest.read_text()),json.loads(Path(two).read_text()))
 
+    def test_multiple_archives_keep_one_run_identity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            latest=str(Path(folder)/'latest.json')
+            one=night_run.publish_receipt({'run_id':'shared-run','phase':'stopped'},folder,latest)
+            two=night_run.publish_receipt({'run_id':'shared-run','phase':'completed'},folder,latest)
+            a=json.loads(Path(one).read_text());b=json.loads(Path(two).read_text())
+            self.assertEqual(a['run_id'],b['run_id'])
+            self.assertNotEqual(a['archive_id'],b['archive_id'])
+            self.assertNotEqual(one,two)
+
     def test_powershell_failure_cannot_be_read_as_successful_output(self):
         with patch.object(night_run.subprocess,'run',return_value=subprocess.CompletedProcess([],7,'BUILD OK stale','failed')):
             with self.assertRaises(RuntimeError):night_run.ps('fixture')
