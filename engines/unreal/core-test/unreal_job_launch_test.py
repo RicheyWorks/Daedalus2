@@ -28,7 +28,7 @@ class UnrealLaunchTest(unittest.TestCase):
             wrapper = root / "fixture.ps1"
             wrapper.write_text(r'''param($Harness, $Root, [int]$GitCode)
 $env:LOCALAPPDATA = Join-Path $Root "data"
-function git { $global:LASTEXITCODE = $GitCode; "synthetic pull" }
+function git { Write-Error "synthetic git progress stderr"; $global:LASTEXITCODE = $GitCode; "synthetic pull" }
 & $Harness -Run -Id "build-prepare" -Project (Join-Path $Root "project\Realm.uproject")
 exit $LASTEXITCODE
 ''', encoding="utf-8")
@@ -48,6 +48,9 @@ exit $LASTEXITCODE
                     self.assertIn("JOB STOPPED", log)
                     if git_code:
                         self.assertIn("git pull failed", log)
+                    else:
+                        self.assertNotIn("git pull failed", log)
+                        self.assertIn("synthetic git progress stderr", log)
                     self.assertFalse(sentinel.exists())
                     self.assertFalse((project / "Config").exists())
 

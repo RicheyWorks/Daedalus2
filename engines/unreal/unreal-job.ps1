@@ -96,8 +96,14 @@ if ($Run) {
     Set-Location $Repo
     # Preflight (tools/unreal_preflight): catch the mistakes that cost a whole build slot (a shadowed actor member, a
     # missing Category, a bare Error, a saved component array) BEFORE the editor is closed. Fails = no build, editor stays up.
-    git pull --ff-only *>&1 | Out-File -FilePath $log -Append -Encoding utf8
-    if ($LASTEXITCODE -ne 0) { throw "git pull failed (exit $LASTEXITCODE); build not started" }
+    # Git legitimately writes progress to stderr on successful pulls. Preserve it
+    # in the log and judge the native exit code, not PowerShell's stderr policy.
+    try {
+        $ErrorActionPreference = "Continue"
+        git pull --ff-only *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+        $pullCode = $LASTEXITCODE
+    } finally { $ErrorActionPreference = "Stop" }
+    if ($pullCode -ne 0) { throw "git pull failed (exit $pullCode); build not started" }
     Set-FullSpeedDefault
     $py = (Get-Command python -ErrorAction SilentlyContinue)
     if ($py) {
