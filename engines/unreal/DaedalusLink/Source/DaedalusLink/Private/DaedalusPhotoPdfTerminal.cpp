@@ -93,8 +93,8 @@ bool ADaedalusPhotoPdfTerminal::Use(ADaedalusHero* Hero)
     SAssignNew(PanelHost, SWeakWidget).PossiblyNullContent(Panel.ToSharedRef());
     Viewport->AddViewportWidgetContent(PanelHost.ToSharedRef(), 180);
     bPanelOpen = true;
-    Controller->SetIgnoreMoveInput(true);
-    Controller->SetIgnoreLookInput(true);
+    // UIOnly owns viewport input. Controller restart can reset ignore-input counters;
+    // taking/decrementing them could consume a later pawn/overlay owner's state.
     bCaptureOwned = true;
     Controller->bShowMouseCursor = true;
     FInputModeUIOnly Mode;
@@ -135,9 +135,6 @@ void ADaedalusPhotoPdfTerminal::ClosePanel()
     APlayerController* Controller = PanelController.Get();
     if (Controller && bCaptureOwned)
     {
-        // Undo exactly our increments; do not reset another overlay's input suppression counts.
-        Controller->SetIgnoreMoveInput(false);
-        Controller->SetIgnoreLookInput(false);
         if (bOwnedFocus || bNoOtherFocus)
         {
             Controller->bShowMouseCursor = bPreviousCursor;
@@ -158,16 +155,20 @@ void ADaedalusPhotoPdfTerminal::ClosePanel()
                 }
                 else Controller->SetInputMode(FInputModeGameOnly());
             }
-            if (Viewport)
-            {
-                Viewport->SetIgnoreInput(bPreviousIgnoreInput);
-                Viewport->SetHideCursorDuringCapture(bPreviousHideCursorDuringCapture);
-                Viewport->SetMouseCaptureMode(static_cast<EMouseCaptureMode>(PreviousCaptureMode));
-                Viewport->SetMouseLockMode(static_cast<EMouseLockMode>(PreviousLockMode));
-            }
-            if (PreviousFocus.IsValid() && FSlateApplication::IsInitialized())
-                FSlateApplication::Get().SetUserFocus(SlateUserIndex, PreviousFocus.Pin(), EFocusCause::SetDirectly);
         }
+    }
+    // The opening controller may disappear while its viewport survives for a replacement player.
+    if (bCaptureOwned && (bOwnedFocus || bNoOtherFocus))
+    {
+        if (Viewport)
+        {
+            Viewport->SetIgnoreInput(bPreviousIgnoreInput);
+            Viewport->SetHideCursorDuringCapture(bPreviousHideCursorDuringCapture);
+            Viewport->SetMouseCaptureMode(static_cast<EMouseCaptureMode>(PreviousCaptureMode));
+            Viewport->SetMouseLockMode(static_cast<EMouseLockMode>(PreviousLockMode));
+        }
+        if (PreviousFocus.IsValid() && FSlateApplication::IsInitialized())
+            FSlateApplication::Get().SetUserFocus(SlateUserIndex, PreviousFocus.Pin(), EFocusCause::SetDirectly);
     }
     bCaptureOwned = false;
     Panel.Reset(); PanelHost.Reset(); PreviousFocus.Reset();

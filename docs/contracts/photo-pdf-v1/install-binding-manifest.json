@@ -28,7 +28,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
-      "sha256": "37900e2b43f5a11d2bcf6e4c1d4962320f2d2cb928abd388c426f3a45c3f93de"
+      "sha256": "adca1095fb1d44c334a230d75720542f551a01927a88850cb0ad1419c957d92b"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.h",
@@ -154,5 +154,16 @@
     "nativeBound": false,
     "nativeRuntimeVerified": false,
     "overall": "UNVERIFIED source delivery; test/build/runtime deferral is an instruction, not a passing result."
-  }
+  },
+  "sourceCorrections": [
+    {
+      "defect": "Controller restart invalidates ignore counters; close could decrement another owner. Destroyed controller could leave viewport state behind.",
+      "stage": "source_corrected_unverified",
+      "runtimeVerified": false,
+      "source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
+      "correction": "UIOnly viewport owns input without controller counts. Restore owned opening viewport even if controller is destroyed; retain focus/viewport ownership guards.",
+      "claim": 31157,
+      "focusedSourceReview": "complete_source_only; independent review found no remaining concrete P1/P2 in the scoped patch"
+    }
+  ]
 }
