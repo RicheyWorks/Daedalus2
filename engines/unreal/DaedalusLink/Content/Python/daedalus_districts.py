@@ -815,6 +815,9 @@ def detail_plan(n, x, y, top, yaw, realm, pools):
     return out
 
 
+TARGET_M = {"tree": 12.0, "boulder": 4.0, "bush": 2.5, "grass": 1.5, "fern": 1.2, "flower": 0.8, "mushroom": 1.6, "crystal": 3.5}
+
+
 def _species_pools(limit_per_species=6):
     """{species: [asset paths]} from the asset registry, a bounded, sorted (stable) pick per species."""
     import re
@@ -841,9 +844,11 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
     import daedalus_plots as P
     sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     pools = _species_pools()
-    meshes = {}
+    meshes, fit = {}, {}
     for s, paths in pools.items():
         meshes[s] = [unreal.load_asset(p) for p in paths]
+        # 09:15: the library is voxel-scale (40 cm grass, 30 cm boulders): scale every mesh to its species' target height
+        fit[s] = [(TARGET_M[s] * 100.0) / max(2.0 * m.get_bounds().box_extent.z, 1.0) if m else 1.0 for m in meshes[s]]
     mat = unreal.load_asset(ground_material) if ground_material else None
     # islands in deed order from the Lands_ actors (instance i = cell i)
     lands = []
@@ -867,7 +872,8 @@ def detail_islands_steps(realm, limit=10, start=0, ground_material=None):
         for species, k, px, py, pz, pyaw, sc in detail_plan(n, x, y, top, yaw, realm, pools):
             label = "Detail_%s_D%02d_%s%d" % (realm.replace("-", ""), d, species, k)
             row = per_actor.setdefault(label, (d, meshes[species][k], [], []))
-            row[2].append(unreal.Transform(unreal.Vector(px, py, pz), unreal.Rotator(0.0, 0.0, pyaw), unreal.Vector(sc, sc, sc)))
+            f = sc * fit[species][k]
+            row[2].append(unreal.Transform(unreal.Vector(px, py, pz), unreal.Rotator(0.0, 0.0, pyaw), unreal.Vector(f, f, f)))
             row[3].append(n)
             placed += 1
         yield "%s deed %d (%s): %d props" % (realm, n, biome_of(n), placed)
