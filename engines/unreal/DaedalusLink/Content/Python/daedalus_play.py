@@ -1276,6 +1276,39 @@ def scenario_stage(p):
     ]}
 
 
+def scenario_realm_ground(p):
+    """Every 3D realm is laid down (BASE-LAYER.md, Richey 2026-10-13): a gate lands the hero at the realm's gate
+    marker on its hub, the realm's cast stands there bound to its art, its creatures idle in the outer ring, the
+    kit is on the ground and the first rings of lands are down; home by gate at the end."""
+    h = hero()
+    w = world()
+    checks = []
+    for realm in ("GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH"):
+        if h.realm_now() != "WORLD-ZERO":
+            h.switch_realm("world-zero", "gate", "")
+            yield from _frames(2)
+        r = h.switch_realm(realm.lower(), "gate", "")
+        yield from _frames(3)
+        tag = "Realm:" + realm
+        mine = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.Actor) if any(str(t) == tag for t in a.tags)]
+        kinds = {}
+        for a in mine:
+            k = "Talker" if a.get_class().get_name().startswith("DaedalusTalker") else next((str(t) for t in a.tags if str(t) in ("Hub", "Gate", "Spawn", "Dock", "SubDock", "Mount", "Kit", "Land", "Creature")), "other")
+            kinds[k] = kinds.get(k, 0) + 1
+        talkers = [a for a in mine if a.get_class().get_name().startswith("DaedalusTalker")]
+        with_art = sum(1 for t in talkers if t.state().endswith(":1"))
+        gate = next((a for a in mine if a.get_actor_label() == "Gate_" + realm), None)
+        dist = (h.get_actor_location() - gate.get_actor_location()).length() if gate else -1
+        landed = str(h.get_editor_property("landed_at"))
+        checks.append(_check("%s: the gate lands the hero at Gate_%s" % (realm, realm), r.startswith("ok") and landed == "Gate_" + realm and 0 <= dist < 600, "%s landed=%s dist=%.0f" % (r, landed, dist)))
+        checks.append(_check("%s: hub, 5 markers, 24 kit props, 160 lands are down" % realm, kinds.get("Hub", 0) == 1 and sum(kinds.get(k, 0) for k in ("Gate", "Spawn", "Dock", "SubDock", "Mount")) == 5 and kinds.get("Kit", 0) >= 24 and kinds.get("Land", 0) >= 160, str(kinds)))
+        checks.append(_check("%s: 12 talkers stand at the hub, every one wearing its art" % realm, len(talkers) == 12 and with_art == 12, "talkers=%d art=%d" % (len(talkers), with_art)))
+        checks.append(_check("%s: the bestiary idles in the outer ring" % realm, kinds.get("Creature", 0) >= 12, "creatures=%d" % kinds.get("Creature", 0)))
+    home = h.switch_realm("world-zero", "gate", "")
+    checks.append(_check("home by gate", home.startswith("ok"), home))
+    return {"checks": checks}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1297,6 +1330,7 @@ SCENARIOS = {
     "dialogue": scenario_dialogue,
     "cast": scenario_cast,
     "realm_switch": scenario_realm_switch,
+    "realm_ground": scenario_realm_ground,
     "control": scenario_control,
     "stage": scenario_stage,
 }
