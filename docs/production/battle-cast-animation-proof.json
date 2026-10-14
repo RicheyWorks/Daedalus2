@@ -1,5 +1,5 @@
 {
-  "source_head": "c419b8b45fb2dbcff278c1431d573a9887b32883",
+  "source_head": "36adcecc7f8afabd2166894cb1eeb1455b855d4a",
   "files": {
     "engines/unreal/DaedalusLink/Content/Casts/bricks.dcs": "787b2b77bc1ff6ed8458973612c6341b99e868e49a4b326dff1b08cad6564e03",
     "engines/unreal/DaedalusLink/Content/Casts/gallery-city.dcs": "cc8284aea2ecf29baaf5fe7a5264b5f0b1650b33cd11d8e210a07391efcfccaf",
@@ -35,7 +35,7 @@
     "engines/unreal/DaedalusLink/Content/Realm/realm-7.drr": "cb584995ecf43c7029a8b5f7ed4d41ca896c5dd09c57a8e54522b462cb698d44",
     "engines/unreal/DaedalusLink/DaedalusLink.uplugin": "02727987041d51d4af37f0b77c80f3d5adc2ab4e1b5f56764e75f0692343951c",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs": "b325af339217c470ce65fbef6e6cf4f592013ec7053e48e5baf15e786b5cfc89",
-    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusBattlePresentation.cpp": "f06d0aa039ef48db0794aba0bb30de05cf6a285ff2ff3e196d59533a2d8a16c6",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusBattlePresentation.cpp": "92c0f26aedea0629a62b519ae85ef2cbee9725ab46a0d6b2f49262b817b8f83e",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusCritter.cpp": "57a2a137752c5aca830c5c6cb6ae423b106cf17b570ca1ac4a8a8709efdb9ca3",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDresser.cpp": "440cb4350af662ea61e39d07dc5de81fe2823f58902d44147903323b381a397b",
@@ -47,16 +47,20 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusHero.cpp": "bb7977d183658670046718eb3e47cdfa2147f0453b1f88a4343c4d63852272a1",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusHomestead.cpp": "9a806436c60df8d700c51b6acaf805333f2a477f30ef2bdbf374f562b1a17403",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLinkModule.cpp": "4702b6edb1d6d8dc8032588bc55307475dcf28ae023845de4c9bdb77042737bb",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalAppLauncher.cpp": "f6295506acb156d49184641bfe5feb4b0eeca6c8dd5475a72fa88eb0e4126687",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalAppLauncher.h": "7ce20207d318e790707dece9f67ce6709ea0d4716149962c02f75daa2c6664c6",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalAppMachine.cpp": "ab97c41002b2649cdbf9b29a242444561fdb45c66d26bee68d3d4c31dca273a0",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMob.cpp": "1142e16b8f5cf8b4456e5cbce6f207b11f0acc38197f368ad9df73ebaf6420fc",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMoodVolume.cpp": "1a947d1b98b1c9e20e1ed816b3af64024fd268d242f6239a46267932c37ab387",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusNav.cpp": "06f038a1d938263d42443968599ecd01bb69ea5bda14f1a42e72810a219e036f",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanDock.cpp": "8123589d60640557ab11253ddefca05026d94b3308c15061e358e545b5c62ff2",
-    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanHostClient.cpp": "ad40988b63fd5c7677ceafa0f2345cbe7e7f7842951430c9cbb6bc74328505b8",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanHostClient.cpp": "1a502da0d0776de5691c5419688fb2ccae8ed05b2d4ed7da88d13e39391543f7",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanInteractor.cpp": "f1bf51952c07d01d9ecfea2fe520922ceccb8ad40009694437f2d50fd4996c3e",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanPalette.inl": "ad1ff4ba51fd0e236252eb566f11da66341e784492978d10f519b5e072f7e51b",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanSectorView.cpp": "79c9a3a7931bad8620806408d3ab835e3df44c6cef44ae4594ff9d639e853c6f",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanTravelComponent.cpp": "32ec5004810a0648de3c5cd65d148633fc8dd6b28e854141813cb488c5eb4869",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOrrery.cpp": "9542a444d21f92ce601dfc0fb8605034c8b85cffa288164d8dc3d3b23be0bfd4",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfMachine.cpp": "2ae74fee9698e2fc617be21eeef13e1a0c332d4f66e82aa8e63d8e71b00251ba",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPickup.cpp": "2f83e899e13a77a3c7b946b858863814eb5c73d51713042351c03b0df13ce01e",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSettings.cpp": "b251a91ad193859775579093ae8ac4ddcf4d4dd8d315928de039938430803940",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusShiny.cpp": "880fafd05d5f5a3fcfc76cea75607e35089dc886ba83d89d5519a6ba73f71a91",
@@ -83,7 +87,7 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusRealm.h": "8344fc42399a1cc073cc75d7a129190a5945b80b4896c4c9ef9cf2d9577bb2dc",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSettingsMenu.cpp": "064137e6d7aa657a6075730260f090d79f345386d43060e63e82602dcccb1bb3",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSettingsMenu.h": "51ffe1b24159b5118ec0de1870aa47740fe28061bef6b9308b09404e28898b35",
-    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusBattleCastTest.cpp": "59fa3a05ab4fc23cb419a810e88c1016fbb9e7d1c4b7bc5ccf7d47899f9842d3",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusBattleCastTest.cpp": "76d641f6ac39a688e8cfa7b018fdc9f8ce71ccd75df09312725afea82002c940",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusOceanClientTest.cpp": "1c0a4d7bfdc0e6c649d171ebe191a503f1ef8e87f4f730e8712ee7f68fe6fc68",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusOceanDockTest.cpp": "4d7a97ba2e06a0976a9d6045f85d37f5c578a9a87c3cf871671537da0645c070",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusOceanHullTest.cpp": "8fecf66a43e761ee12c9b661956532e7a575a9878931893243ddafe0e807793f",
@@ -109,6 +113,8 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusInventoryCore.h": "b0ff4bf115b3e9a43453451dfe765f0062f527a3e3a1f51a82619cfe8dc989ae",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLandGrid.h": "1483e59d9fe35cf706391d1c826d46480ec15b37349b94140726ad758db31c3e",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLinkModule.h": "8cab6b4a9ab8fd4ce5e9af6f0f5545d6dd047773d8cb3eab52d6894f2c0348da",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLocalAppCore.h": "9b0cac30349f7b65915419141483d0812e3e04dead5af84703fd6b94d576928a",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLocalAppMachine.h": "2c660a2406d28d904ea98b46d0c03c35b1f2a6949b6ac92ce31aa6f46bda4248",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMeshCore.h": "0f0b6de54cad1a75d11cb10a36d3c2c9cf0207b517cfcaa5b8d4ff2af49bdf03",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMob.h": "16c6d99267a53b801176d46ebbf00c7ecb6b6715343a018ee5530429acd7cf48",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMoodVolume.h": "f45f4a4b5876c6ce65f95efe9c0a63f9162aaea43352f679936af38ff1dc3ea4",
@@ -121,6 +127,8 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h": "5f679c238981495228935b755edae30bb6d5e181e9bf1270852a1d015812ea40",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOrrery.h": "712fa49f121a007262076fb214c25f9bcb1733b1d935d949794d21236a9bf381",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOrreryCore.h": "ddd9c5a7001e972cc097040e835c700ca5efb3602a32ef4b89a4d19a4e3c85f9",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfCore.h": "27ed3263743d0e539cd9096d3e980bbf0ee501b4401fd693f834e431e930e02a",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPhotoPdfMachine.h": "58d64ce14a5f10a2018d75db78a23e0da8771c769656b1db8d4c61d8d8354faf",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPickup.h": "e296c3c7e6bb1508b55a2f5e3ecedb91a20b50b9b39224a59b9427c29119f691",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPortalQuestCore.h": "b0a17ae24c7d72f03d7da6341483bda9ad82154b61883ac6c845fb584114b310",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmCore.h": "e9cfc753e1f6a967c266b99a2dadaae9544ab1bf8642cc7836b618f0609f2498",
@@ -153,10 +161,10 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d"
   },
-  "tracked_file_count": 151,
+  "tracked_file_count": 159,
   "overlays": [],
-  "seconds": 236.33,
-  "actions": 52,
+  "seconds": 242.56,
+  "actions": 55,
   "tests": [
     {
       "testDisplayName": "CastAnimations",
@@ -164,18 +172,24 @@
       "tags": [],
       "state": "Success",
       "deviceInstance": [
-        "F1F35A134DC122063ADDBDB60DBA9807"
+        "34B6948C434CAFC69C182BB9FA2C83F1"
       ],
-      "duration": 0.03842709958553314,
-      "dateTime": "2026.10.14-01.50.14",
+      "duration": 0.02282389998435974,
+      "dateTime": "2026.10.14-02.00.00",
       "entries": [],
       "warnings": 0,
       "errors": 0,
       "artifacts": []
     }
   ],
-  "production_dll_sha256": "0245fb595309431dca2e3f2aab0641a1e99367c54e2d4889e76acff5ddf69424",
-  "build_log_sha256": "a802f7212b12803cdb15a8ef5426c59337b3f595030524e825e52b2a150213d6",
-  "automation_report_sha256": "1ba27b19c23b131ba319b2aac70b4e106956494612be8266b78378f649ea55c4",
+  "production_dll_sha256": "17b774d935d6b6c5cd682ef91a1fb0d2223ae076ed071a3364cc1ba95dd86b6f",
+  "build_log_sha256": "25b65bc85efd01e5ce25e17ae28fa136c6d7c451d89f5610f3c28f408166344e",
+  "automation_report_sha256": "b4df16256848d459f621c1454625904115c28b053ffecb22b5d3345aab2bd55f",
+  "editor_log_diagnostics": {
+    "errors": 0,
+    "warnings": 1,
+    "details": "errors=0 warnings=1\n  W    1x LogLayoutService: Warning: While key \"UnrealEd_Layout_v1.5\" was not found, and older version exists (key \"UnrealEd_Layout_v1.6\"). This means section \"EditorLayo",
+    "reporter_sha256": "fe426186e5db60a3f8a1c2fe75b5e59c62fceab1ab29b9a3fb69752d6ee101cb"
+  },
   "scope": "Full tracked plugin build and synthetic native clip selection. No imported art or rendered battle claim."
 }

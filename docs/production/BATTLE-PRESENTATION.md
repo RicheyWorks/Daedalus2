@@ -41,11 +41,23 @@ plugin, not the full shared plugin or live world. Director subscription in
 Hero/Realm, cast placement, animation assets, camera/FX/audio, deterministic
 functional scenarios and live Play comparison still need integration with Claude.
 
-The per-mesh update built the complete 151-file tracked plugin snapshot c419b8b4
-in 236.33 seconds. Native Daedalus.Battle.CastAnimations passed in 0.038427
+The per-mesh update built the complete 159-file tracked plugin snapshot 36adcecc
+in 242.56 seconds. Native Daedalus.Battle.CastAnimations passed in 0.022824
 seconds with no test warnings/errors: two synthetic skeletons, folder-local
 attack/hurt selection, wrong-skeleton refusal, compatible override retention,
 fallback from an incompatible override, and missing/null/component refusal.
-See battle-cast-animation-proof.json. This is synthetic engine verification;
-actual imported clip naming, director subscription, animation playback, return
-to idle, camera/FX/audio and rendered battle acceptance remain open.
+See battle-cast-animation-proof.json. The whole native-test editor log had
+errors=0 warnings=1 (an editor layout-version notice), distinct from the clean
+test result. Later main changes and Java cabinets are outside this snapshot.
+
+A private Python commandlet copied Claude's existing 13 Gallery casts (152 native
+art files), verified every copied hash, and resolved all 26 Attack/Hurt clips
+through the native stage API. Its editor log had errors=0 warnings=0; the
+commandlet body took 0.68 seconds, excluding startup. Art hashes remained intact
+afterward. Meshes reside below a repeated cast-ID/SkeletalMeshes subfolder, and
+clip names concatenate the mesh name and role without an underscore. The probe
+discovers the actual package paths rather than assuming a flat import.
+See battle-cast-imported-proof.json for all paths and input hashes. No assets
+or maps were saved and the shared editor was not contacted. Director subscription,
+other realm casts, animation playback, return to idle, camera/FX/audio, cooking
+and rendered battle acceptance remain open.
