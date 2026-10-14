@@ -43,8 +43,10 @@ except ImportError:  # pragma: no cover - tests install a stand-in module first
 
 DEFAULT_PORT = 9877
 _jobs = queue.Queue()
-_running = []          # generators in progress: (generator, reply box)
-_server = {"sock": None, "thread": None, "port": None, "tick": None}
+_running = []          # generators in progress: (generator, request, reply box)
+_lifecycle_lock = threading.Lock()  # admission and shutdown; never held while running command code
+_server = {"sock": None, "thread": None, "port": None, "tick": None,
+           "generation": None, "owner": None, "stopping": False}
 
 
 # ---------------------------------------------------------------- helpers
@@ -398,13 +400,17 @@ def cmd_batch(p):
             try:
                 out = COMMANDS[it["type"]](it.get("params") or {})
                 if isinstance(out, types.GeneratorType):
-                    while True:
-                        try:
-                            next(out)
-                        except StopIteration as stop:
-                            out = stop.value
-                            break
-                        yield
+                    child = out
+                    try:
+                        while True:
+                            try:
+                                next(child)
+                            except StopIteration as stop:
+                                out = stop.value
+                                break
+                            yield
+                    finally:
+                        child.close()
                 results.append({"type": it["type"], "status": "ok", "result": out})
             except Exception as e:
                 results.append({"type": it["type"], "status": "error", "message": "%s: %s" % (type(e).__name__, e)})
@@ -514,8 +520,8 @@ def register(name, fn, description="", params=None, risk="MUTATE"):
     RISK_OF[name] = risk
 
 
-# request_id replay: a client that retries after a timeout sends the same request_id and gets the first answer
-# back (marked replayed), instead of running the command twice. Kept for the last REPLAY_KEEP requests.
+# request_id replay: successful replies and shutdown interruptions after dispatch are kept for the last
+# REPLAY_KEEP requests. An interrupted request's partial changes must not silently run again on retry.
 REPLAY_KEEP = 256
 _replies = {}
 _replay_order = []
@@ -597,13 +603,17 @@ def pump(_delta=0.0, max_jobs=8):
     command is mid-step. That nested tick does nothing: the outer pump is still running, so the generator
     cannot be stepped again ("generator already executing") and no new command may start inside another.
     """
-    if _pumping:
+    if _pumping or _server["stopping"]:
         return
     _pumping.append(True)
     try:
         for gen, req, box in list(_running):
+            if _server["stopping"]:
+                break
             _step(gen, req, box)
         for _ in range(max_jobs):
+            if _server["stopping"]:
+                break
             try:
                 req, box = _jobs.get_nowait()
             except queue.Empty:
@@ -611,11 +621,13 @@ def pump(_delta=0.0, max_jobs=8):
             _start(req, box)
     finally:
         _pumping.clear()
+        if _server["stopping"]:
+            _stop_jobs()
 
 
 # ---------------------------------------------------------------- the socket side (never touches unreal)
 
-def _client(conn):
+def _client(conn, generation):
     with conn:
         conn.settimeout(3600)
         data = b""
@@ -635,51 +647,85 @@ def _client(conn):
             conn.sendall((json.dumps(_job_result(req, params)) + "\n").encode("utf-8"))
             return
         box = {"done": threading.Event(), "reply": None}
-        if params.get("async"):
+        admitted, jid = _admit(req, box, generation)
+        if not admitted:
+            conn.sendall((json.dumps(box["reply"]) + "\n").encode("utf-8"))
+            return
+        if jid is not None:
             # Answer now with a job id; the command runs on the game thread as usual and job_result fetches it.
             # A long import then never meets a client timeout, so a client never resends it.
-            jid = "job-%d-%d" % (int(time.time() * 1000), len(_job_boxes))
-            _job_boxes[jid] = (box, time.time())
-            _jobs.put((req, box))
             conn.sendall((json.dumps({"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "running"}})
                           + "\n").encode("utf-8"))
             return
-        _jobs.put((req, box))
         if not box["done"].wait(timeout=float((req.get("params") or {}).get("bridge_timeout", 1800))):
-            box["reply"] = {"id": req.get("id"), "status": "error",
-                            "message": "the editor did not run the command in time (is a modal dialog open?)"}
-        conn.sendall((json.dumps(box["reply"]) + "\n").encode("utf-8"))
+            reply = {"id": req.get("id"), "status": "error",
+                     "message": "the editor did not run the command in time (is a modal dialog open?)"}
+        else:
+            reply = box["reply"]
+        conn.sendall((json.dumps(reply) + "\n").encode("utf-8"))
 
 
 _job_boxes = {}
 JOB_KEEP_S = 3600
 
 
+def _stopped_reply(req, dispatched):
+    return {"id": req.get("id"), "status": "error", "code": "BRIDGE_STOPPED",
+            "dispatched": dispatched, "effects": "unknown" if dispatched else "none",
+            "message": ("bridge stopped after dispatch; earlier changes or remote work may remain; "
+                        "inspect the editor before retrying (no rollback)" if dispatched else
+                        "bridge stopped before dispatch; this command did not run")}
+
+
+def _admit(req, box, generation):
+    """Fence socket clients from an old listener, including across a stop/start cycle."""
+    with _lifecycle_lock:
+        if (_server["stopping"] or _server["sock"] is None or
+                generation is not _server["generation"]):
+            _finish(box, _stopped_reply(req, False))
+            return False, None
+        jid = None
+        if (req.get("params") or {}).get("async"):
+            jid = "job-%d-%d" % (int(time.time() * 1000), len(_job_boxes))
+            # Polling may expire older jobs in this same millisecond. Do not reuse a live id.
+            while jid in _job_boxes:
+                jid += "-1"
+            _job_boxes[jid] = (box, time.time())
+        _jobs.put((req, box))
+        return True, jid
+
+
 def _job_result(req, params):
     """Socket-thread side of async jobs: no unreal calls, so it answers even while the game thread is busy."""
-    now = time.time()
-    for k in [k for k, (_b, t) in _job_boxes.items() if now - t > JOB_KEEP_S]:
-        _job_boxes.pop(k, None)
-    jid = params.get("job_id")
-    if jid not in _job_boxes:
-        return {"id": req.get("id"), "status": "error", "code": "UNKNOWN_JOB", "message": "no job %r (or it expired)" % jid}
-    box, _t = _job_boxes[jid]
+    with _lifecycle_lock:
+        now = time.time()
+        for k in [k for k, (_b, t) in _job_boxes.items() if now - t > JOB_KEEP_S]:
+            _job_boxes.pop(k, None)
+        jid = params.get("job_id")
+        if jid not in _job_boxes:
+            return {"id": req.get("id"), "status": "error", "code": "UNKNOWN_JOB", "message": "no job %r (or it expired)" % jid}
+        box, _t = _job_boxes[jid]
     if not box["done"].is_set():
         return {"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "running"}}
     return {"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "done", "reply": box["reply"]}}
 
 
-def _accept(sock):
+def _accept(sock, generation):
     while True:
         try:
             conn, _ = sock.accept()
         except OSError:
             return  # closed by stop()
-        threading.Thread(target=_client, args=(conn,), name="claude-unreal-client", daemon=True).start()
+        threading.Thread(target=_client, args=(conn, generation), name="claude-unreal-client", daemon=True).start()
 
 
 def start(port=None, register_tick=True):
-    """Listen on 127.0.0.1:port and pump commands on the editor's ticks. Returns the port."""
+    """On the editor thread, listen and pump commands on its ticks. Returns the port."""
+    if _server["stopping"]:
+        raise RuntimeError("bridge shutdown is still unwinding; start it after the current pump returns")
+    if (_server["generation"] is None and
+            (_server["sock"] is not None or _server["tick"] is not None)):
+        raise RuntimeError("bridge shutdown left a listener or tick callback; retry stop() before start()")
     if _server["sock"] is not None:
         return _server["port"]
     port = int(port or os.environ.get("CLAUDE_UNREAL_PORT") or os.environ.get("DAEDALUS_BRIDGE_PORT") or DEFAULT_PORT)
@@ -687,19 +733,82 @@ def start(port=None, register_tick=True):
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(("127.0.0.1", port))
     sock.listen(8)
-    _server.update(sock=sock, port=sock.getsockname()[1])
-    _server["thread"] = threading.Thread(target=_accept, args=(sock,), name="claude-unreal-accept", daemon=True)
-    _server["thread"].start()
-    if register_tick and unreal is not None:
-        _server["tick"] = unreal.register_slate_post_tick_callback(pump)
+    generation = object()
+    with _lifecycle_lock:
+        _server.update(sock=sock, port=sock.getsockname()[1], generation=generation,
+                       owner=threading.get_ident())
+    _server["thread"] = threading.Thread(target=_accept, args=(sock, generation), name="claude-unreal-accept", daemon=True)
+    try:
+        _server["thread"].start()
+        if register_tick and unreal is not None:
+            _server["tick"] = unreal.register_slate_post_tick_callback(pump)
+    except Exception:
+        stop()
+        raise
     if unreal is not None:
         unreal.log("Claude Unreal Bridge: listening on 127.0.0.1:%d" % _server["port"])
     return _server["port"]
 
 
 def stop():
-    if _server["tick"] is not None and unreal is not None:
-        unreal.unregister_slate_post_tick_callback(_server["tick"])
-    if _server["sock"] is not None:
-        _server["sock"].close()
-    _server.update(sock=None, thread=None, port=None, tick=None)
+    """Stop on the editor thread. Cleanup is cooperative, not cancellation or rollback of native work.
+
+    If called inside a command, its executing generator is closed only after the pump unwinds.
+    Completed async replies remain available in this module when the listener is restarted.
+    """
+    owner = _server["owner"]
+    if owner is not None and owner != threading.get_ident():
+        raise RuntimeError("bridge.stop() must run on the thread that started the bridge")
+    if _server["stopping"]:
+        return  # including stop() called again from a generator's cleanup
+    with _lifecycle_lock:
+        sock, tick = _server["sock"], _server["tick"]
+        _server.update(sock=None, thread=None, port=None, tick=None, generation=None, stopping=True)
+    try:
+        if tick is not None and unreal is not None:
+            unreal.unregister_slate_post_tick_callback(tick)
+    except BaseException:
+        _server["tick"] = tick  # Keep failed cleanup handles for an owner-thread stop() retry.
+        raise
+    finally:
+        try:
+            if sock is not None:
+                sock.close()
+        except BaseException:
+            _server["sock"] = sock
+            raise
+        finally:
+            if not _pumping:
+                _stop_jobs()
+
+
+def _stop_jobs():
+    """Editor-thread boundary: close suspended generators, settle waiters, then finish shutdown."""
+    # Detach first: a generator's finally may call stop() again or tick Slate.
+    running = list(_running)
+    _running.clear()
+    interrupt = None
+    try:
+        for gen, req, box in running:
+            reply = _stopped_reply(req, True)
+            try:
+                gen.close()
+            except BaseException as e:
+                reply["cleanup_error"] = "%s: %s" % (type(e).__name__, e)
+                if not isinstance(e, Exception) and interrupt is None:
+                    interrupt = e  # Preserve control interrupts, after settling every accepted job.
+            # A retry of an interrupted dispatched request must not silently repeat partial changes.
+            _remember(box.get("request_id"), dict(reply))
+            _finish(box, reply)
+        while True:
+            try:
+                req, box = _jobs.get_nowait()
+            except queue.Empty:
+                break
+            _finish(box, _stopped_reply(req, False))
+    finally:
+        if _server["sock"] is None and _server["tick"] is None:
+            _server["owner"] = None
+        _server["stopping"] = False
+    if interrupt is not None:
+        raise interrupt
