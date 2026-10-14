@@ -1,0 +1,16 @@
+{
+  "source_head": "06865b07e194e08125cc0fe99e2668af2c1d940f",
+  "scope": "Compile-only isolated plugin and portable policy. Engine runtime tests, transfer and deployment not verified.",
+  "tracked_plugin_files": 171,
+  "build_actions": 57,
+  "build_seconds": 249.34,
+  "portable_checks": 112,
+  "compiler_errors": 0,
+  "compiler_warnings": 0,
+  "existing_rawinput_deprecation_notices": 2,
+  "engine_runtime_tests_executed": false,
+  "live_editor_changed": false,
+  "source_manifest_sha256": "60b3b8cdeef2c43dab24362186cfa0f4d7451d9a0c6d635727a0d444953157df",
+  "build_log_sha256": "8ec0fcca48f99e87795edf080379508086db07d993ca0cb3f9f88b4dda6ac5be",
+  "plugin_dll_sha256": "263bc3c70c7fdaf3523c328721bc5d4bde7e2ead86dcef07b1050301f9369b39"
+}

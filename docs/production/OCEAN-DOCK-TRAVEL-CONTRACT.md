@@ -30,11 +30,22 @@ session planner. The expanded test fails with exit 1 against the previous header
 the fix. No Hero, session, possession or live editor code was changed. Registered directed routes,
 underwater/boat restrictions and dock identifiers remain enforced.
 
-Remaining gap: the vessel policy's ordinary non-underwater destination remains Portal-only,
-whereas the session allows returning to its recorded departure realm. Returning to a different
-departure realm needs an authority-bound departure record in the vessel/transaction adapter,
-not permission for an arbitrary shore destination. Neither this fix nor its tests prove that
-transaction, actual possession, rollback, streaming or rendered cross-realm travel.
+The departure-return follow-up captures the validated boarding dock's realm in the component's
+existing server-only boarding state, after possession succeeds. Shore resolution uses that
+record; a missing record fails closed and a configured wrong shore is refused. No request can
+supply the origin. Ending the boarding session clears it. Legacy portable callers retain their
+Portal-only default; the native component always supplies its actual captured value explicitly.
+
+This follow-up is **parked for first-base-layer priority**, not installed in the active editor.
+Its complete isolated 171-file plugin snapshot (`06865b07`) builds in 249.34 seconds /57 actions,
+with 112 portable checks passing. Engine boarding-origin test source compiles but was not run:
+no second editor or commandlet was launched. The build retains two existing RawInput deprecation
+notices; no compiler errors/warnings. See `ocean-departure-build-proof.json`.
+
+Remaining gap: destination host loading and commit/rollback must be coordinated with the
+Hero/session owner. A multi-realm voyage that continues without disembarking needs its departure
+record advanced only after a successful new departure transaction. The current record is scoped
+to one boarding session. Reconnect/death recovery and rendered cross-realm travel remain unproven.
 
 Integration lesson: use exact IDs from the consuming session in route tests, in addition to
 human-readable test names. Legacy fixtures alone could not catch canonical destinations being refused.
