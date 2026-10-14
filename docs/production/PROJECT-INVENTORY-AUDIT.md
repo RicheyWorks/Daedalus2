@@ -2,6 +2,8 @@
 
 This supersedes stale status entries in the earlier local PROJECT-AUDIT.md. The audit is read-only with respect to shared source, Blender, Unreal and game saves. Existing modified connector, economy, story and lesson files in the shared checkout were preserved.
 
+**08:30 PT update:** PR94 is now independently verified MERGED at7afb6c44740738787bc2cb147eeed842ff839b38; the earlier open/approval-pending row below is historical. Poot owns resulting main CI. Claude claimed editor30306/30307 and observed PID41828; native MCP initialization was refused during startup, not yet a readiness receipt. PR139 has since added the production clock, host-input verifier and pending payload hash binding at2800e3dc. Its isolated binding compile68196 is terminal0, six actions/21.35 s; lease released30312. Shared transport scope remains unaccepted30300. See the existing realm handoff and firsthand lessons for exact data/package provenance and next consumers.
+
 ## Scope and limits
 
 Refreshed every registered Git worktree, the shared checkout, canonical bot-team architecture/component registry, editor queue, handoff guidance, lessons, production documents, GitHub PR identities and native Content/land-ledger inventory. Read the operational handoff, base-layer, code-first and realm discovery contracts and inspected the source seams behind the next priorities.

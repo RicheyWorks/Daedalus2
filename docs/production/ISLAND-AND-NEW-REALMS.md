@@ -2,6 +2,18 @@
 
 Owner: team-codex. Unreal integration handoff: unreal-team (acceptance pending). Existing art, realms, inventory and production interfaces stay additive. Component ownership remains in the canonical team registry.
 
+## Returning-team handoff — 2026-10-14 08:30 PT
+
+Saved map rechecked read-only: C:/Unreal/DaedalusRealm/Content/Daedalus/DaedalusWorld.umap,217,902,066 bytes, mtime2026-10-14 11:10:26.1758069 UTC, SHA256 07bf2119c57fbe07231e0c344acd2524828cdd2e02b7a76a01862e8d3a1931f6. This matches the last saved material/grove pilot; it does not prove the reopened editor has saved new work. Native plugin data path is Content/Realm/realm-7.drr. Other-owner main advances through083a1880 do not change the historical package/input snapshot; Poot reports the original merge's general CI cancelled and is following descendant CI, so no current-main green status is inferred.
+
+PR139 source head2800e3dc includes the production clock, descriptor-bound isolated-host verification and pending-payload SHA binding. Read docs/LESSONS-LEARNED.md's firsthand handoff and INTEGRATION-LESSONS.md before integrating. Native binding compile68196 ended successfully: six actions,21.35 s; compute lease released30312. This is isolated compile evidence, not an installed shared-world component. Current shared editor owner is Claude/unreal-team30306/30307, observed PID41828; endpoint initialization was refused during startup, so wait for the owner's explicit native MCP readiness receipt.
+
+Claude mesh handoff30313: all18 saved meshes live in /Game/Daedalus/Art/Islands/NativePool, Frag_01..12 and Pad_01..06. PR140 c0517ad0 has conflicts to reconcile; preserve existing actor/deed identities, dressing and top heights. Exports/collision companions are retained in native Content/Daedalus/Art/Islands and PR140 engines/unreal/art/island-mesh-pool. The original Land_1 remains atZ4620 with its deed; additive RockShell is atZ4022. Walking/district replacement remain unverified.
+
+Storage consumer method CapturePendingRecordFromHost returns owned copies of payload, SHA256 expectation and exact domain revision for a matching pending request; failed capture leaves outputs unchanged. Use one immutable async context and current-session generation, pinned endpoint and no redirects. Confirm methods now hash actual pending bytes before accepting a reply/readback. Poot owns shared transport scope30251/30257, still unaccepted; Claude owns canonical inventory/Production-tab integration. Worker Mine/Trade/Repair source is written but fresh Blender export window30274 remains pending. Native grants, actor bindings, global rankings and public hosting are not complete.
+
+Existing accepted package: C:/Unreal/DaedalusRealm/Saved/Packages/WZ-20261014-native/Windows, actual eleven-file extracted payload proof in project-inventory/native-package-payload-proof.json. Preserve current34-land DRR including31 Claude additions. Poot verified/merged PR94 at7afb6c; main CI remains his lane. This handoff grants no additional merge/install/editor/Play scope.
+
 ## Shardstead: the Twakers' island activity
 
 Talking to Twaker Prospector introduces **Shardstead**, surveys the island and opens the shared tab bar's **Production** page. The player explores on foot, claims authorized deposits, assigns workers, gathers cargo, befriends residents and trades. Twakers are Shard Lord allies: crystal collectors, cave chest keepers and guardians. Dialogue can resolve a guarded cache encounter; guardians must not all become disposable enemies.
