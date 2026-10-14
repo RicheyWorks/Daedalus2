@@ -50,17 +50,30 @@ def import_island(seed, force=False, save=False):
             paths = cand
             break
     if force or not paths:
+        # FBX through the classic importer with Nanite OFF: the Interchange GLB path built Nanite for every island
+        # (10-19 s and ~250 MB of editor memory each). The FBX carries body + clouds + UCX hull (simple collision).
         t = unreal.AssetImportTask()
-        t.filename = os.path.join(GLB_DIR, name + ".glb")
-        t.destination_path = ROOT
-        t.destination_name = name
+        t.filename = os.path.join(GLB_DIR, name + ".fbx")
+        t.destination_path = dest
         t.automated = True
         t.replace_existing = True
         t.save = False
+        o = unreal.FbxImportUI()
+        o.import_materials = False
+        o.import_textures = False
+        o.import_as_skeletal = False
+        o.import_mesh = True
+        d = o.static_mesh_import_data
+        d.set_editor_property("combine_meshes", False)
+        d.set_editor_property("generate_lightmap_u_vs", False)
+        d.set_editor_property("auto_generate_collision", False)
+        d.set_editor_property("build_nanite", False)
+        d.set_editor_property("vertex_color_import_option", unreal.VertexColorImportOption.REPLACE)
+        t.options = o
         unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([t])
         made = [str(p) for p in t.imported_object_paths]
         paths = {}
-        for p in made:                      # the GLB decides the layer set (2 for v2, 8 for the first batches)
+        for p in made:
             tail = p.rsplit(".", 1)[-1]
             if tail.startswith(name + "_"):
                 paths[tail[len(name) + 1:]] = p
@@ -72,8 +85,8 @@ def import_island(seed, force=False, save=False):
         sm = unreal.EditorAssetLibrary.load_asset(p)
         for i in range(sm.get_num_sections(0)):
             sm.set_material(i, m)
-        if l in ("island", "body"):
-            bs = sm.get_editor_property("body_setup")
+        if l in ("island", "body") and sm.get_num_sections(0) and not str(p).endswith("_body"):
+            bs = sm.get_editor_property("body_setup")      # GLB islands (no UCX) walk on complex collision
             if bs is not None:
                 bs.set_editor_property("collision_trace_flag", unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)
         if save:

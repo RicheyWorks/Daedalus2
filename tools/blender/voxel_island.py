@@ -305,8 +305,9 @@ def build(seed, out, size=46, thick=22, keep=False):
         bpy.ops.mesh.select_all(action="SELECT")
         bpy.ops.mesh.convex_hull()
         bpy.ops.object.mode_set(mode="OBJECT")
+        clouds = bpy.data.objects.get("%s_clouds" % name)
         for ob in bpy.data.objects:
-            ob.select_set(ob is hull or ob is body)
+            ob.select_set(ob is hull or ob is body or ob is clouds)
         bpy.ops.export_scene.fbx(filepath=out[:-4] + ".fbx", use_selection=True, apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z")
         if not keep:
             bpy.data.objects.remove(hull, do_unlink=True)
