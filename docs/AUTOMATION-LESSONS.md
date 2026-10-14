@@ -881,3 +881,31 @@ so a new connector is the first line of the next turn; (2) every connector we ow
 command/function catalog (console commands, Python-exposed subsystems, CallInEditor functions) as data, so the
 harness explores the engine instead of us guessing API names (five AttributeErrors tonight: streaming_levels,
 register_component, add_component_by_class, looping, is_game_world). Owner: Sol for (1)(2), Fable for (3).
+
+### Count discovered actions without claiming execution (2026-10-14)
+Saved MCPdescriptions can form a reproducible unique toolset/name catalog with preservedschemas/annotations. AbsentreadOnly hints stayunknown; Get names do notestablish effects. Initializeexecutionstate not-executed, captureSHA recorded. The exposedcatalog is not everyUnrealfunction or proof of benchmarkcompletion.
+
+
+### Bind action attempts without inventing effect proof (2026-10-14)
+Saved benchmarkattempts must match the catalogcaptureSHA and an exposedtoolset/name pair, with uniqueattemptIDs andfinitenonnegative timings. Referenced evidencefiles stayinside explicitroot and theirhashes mustmatch. Count recordedattempts separately; returnedcalls andhashedfiles do notverify in-worldeffects. This consumer executesnothing and doesn'toverlap Pootnativeadapter/discovery ownership.
+
+
+### Preserve unresolved action attempts and complete catalog artifacts (2026-10-14)
+A later recordedreturn cannotsettle an earlierunknownattempt; count unresolvedattempts peraction andglobally. Publish a fullyserialized/fsynced catalog via no-clobber hardlink, thenremove only itsown temporaryfile. Unsupportedfilesystem fails withoutreplacement. NativeWindows smoke confirmsunknownretention andprioroutputpreservation. Evidencepresence stillnot effectverification.
+
+
+### Compare recorded timings by outcome (2026-10-14)
+Actioncatalog benchmarksummary groups returned/failed/unknown attempts separately, globally andpertoolset, with finite sums/means andnearest-rank p50/p95. Emptygroups remainexplicit. Duration sums are notwalltime; returnedstatus is not effectproof. Keep failed/unknown performance separate ratherthan presenting fasterincomplete runs asimprovement.
+
+
+### Make action coverage explicit (2026-10-14)
+Count actionswith noattempt, recordedreturns, failures andunknowns separately pertoolset/overall. Outcome categories overlap acrossattempts; recordedattemptcoverage percentage doesnotmean verifiedeffects. Keep effectsverified0/allEffectsVerifiedfalse without effectvalidators, includingemptycatalogs. This prevents a mixedreturned/unknown history lookingcomplete.
+
+
+### Preserve full action identity despite short-name calls (2026-10-14)
+Catalog IDs hash exacttoolset/fullname; schemahashes areseparate so changesstayvisible. Flag multiplefullnames mapping to oneclientshortname within a toolset ratherthan silently collapse/invoke them. Optionalattempt actionIDs mustmatch. This is metadataambiguity evidence, not a newadapter or runtimecall; Pootgenericadapter ownership remainsseparate.
+
+
+### Compare captured action metadata before repeat benchmarks (2026-10-14)
+--baseline-capture reports added/removed/stable actions plus schema,annotation,description andshortnameambiguity changes. Bind bothcaptureSHA values; metadataequality is not unchangedruntimebehavior. Keep benchmarkscope changes visible instead of comparing counts orspeeds against adifferent exposedactionset.
+
