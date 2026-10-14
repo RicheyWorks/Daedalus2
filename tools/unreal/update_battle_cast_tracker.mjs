@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises';
 import {SpreadsheetFile,FileBlob} from '@oai/artifact-tool';
-const [repo,out]=process.argv.slice(2);await fs.mkdir(out,{recursive:true});
+const [repo,out,input=repo+'/docs/production/Realm-production-2026-10-13.xlsx']=process.argv.slice(2);await fs.mkdir(out,{recursive:true});
 const proof=JSON.parse(await fs.readFile(repo+'/docs/production/battle-cast-animation-proof.json','utf8'));
 const test=proof.tests.find(t=>t.fullTestPath==='Daedalus.Battle.CastAnimations');
 if(!test||test.state!=='Success'||test.errors||test.warnings)throw Error('Missing native proof');
-const wb=await SpreadsheetFile.importXlsx(await FileBlob.load(repo+'/docs/production/Realm-production-2026-10-13.xlsx'));
+const wb=await SpreadsheetFile.importXlsx(await FileBlob.load(input));
 const norm=v=>JSON.stringify(v.map(r=>r.map(c=>c===null?'':c)));
 const prior=[['Assets','A1:Q348'],['Production','A1:H24'],['Mechanics','A1:E52'],['Unreal verification','A8:H36']].map(([s,r])=>[s,r,norm(wb.worksheets.getItem(s).getRange(r).values),JSON.stringify(wb.worksheets.getItem(s).getRange(r).formulas)]);
 const runs=wb.worksheets.getItem('Unreal verification'),mechanics=wb.worksheets.getItem('Mechanics');
+runs.getRange('A2').values=[['Native runtime verification runs']];
 if(runs.getRange('A37').values[0][0]||mechanics.getRange('A53').values[0][0])throw Error('Expected unused rows');
 for(let row=37;row<=38;row++){const r=runs.getRange(`A${row}:H${row}`);r.copyFrom(runs.getRange('A36:H36'),'all');r.format.rowHeight=80;}
 runs.getRange('A37:H38').values=[
