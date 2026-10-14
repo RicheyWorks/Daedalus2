@@ -1217,3 +1217,13 @@ Rules:
    the transaction buffer are Poot's investigation; until then, big saves run with the viewport not realtime.
 3. Streaming jobs save the persistent level every 25 districts, not only at the end (smaller loss window).
 4. reconcile_steps after any crash before any new move.
+
+## 2026-10-14 09:04 — unreal.Rotator is (roll, pitch, yaw)
+
+Every `unreal.Rotator(0.0, yaw, 0.0)` written since last night set PITCH, not yaw. Fragments came out tumbled
+or upside-down (the first "great detail" look at deed 240 showed the faceted underside on top), terraces and rocks
+were pitched, markers and portals pitched, and the airship's `set_control_rotation(Rotator(0, heading, 0))` pitched
+the camera instead of steering — which is why the tour "flew" so badly. Found by writing three rotators into one
+instance and reading them back: (0,300,0) read back as pitch -60. Fix: keyword args or (roll, pitch, yaw) order,
+everywhere (13 sites); re-dress all realms. Rule: any new engine constructor gets a one-instance write/read-back
+before it is used in a loop — the connector's ObjectTools or a 3-line execute_python does it in a second.
