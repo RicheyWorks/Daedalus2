@@ -81,6 +81,7 @@ private:
     void ClearCycleClock();
     void NotifyCycleDue();
     bool Ready=false;
+    bool Ended=false;
     int64 BoundSeed=0;
     daedalus::shardstead::Economy Rules{0};
     std::optional<daedalus::shardstead::Ledger> Durable;

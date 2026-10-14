@@ -1,5 +1,9 @@
 # Integration lessons
 
+## Reject callbacks after host teardown — 2026-10-14
+
+The owned Shardstead component now marks its lifetime ended before EndPlay/destruction cleanup and refuses every host-gated operation afterward. An actor can still be valid/authoritative in a game world during teardown, so those checks alone do not prove its storage session remains active. This component already has a one-initialization lifetime: use a fresh manager and restore committed storage when starting another session, rather than reviving an ended object. Capture shutdown state before EndPlay; a timed-out in-flight write remains unknown and requires storage reconciliation, not cancellation or rewards. This is source-only delivery; the previous isolated compilation proof belongs to the earlier head and does not verify this new lifecycle change. No additional native build/Play was launched during the reported memory/recovery hold.
+
 ## Recheck isolated host inputs around builds — 2026-10-14
 
 The full_plugin_host helper now records the project descriptor digest and exposes `python tools/unreal/full_plugin_host.py --verify HOST`. Run it before dispatch and after a terminal build. It checks every recorded plugin input, the four fixed generated source/target files and the project descriptor, and refuses changed/missing inputs, extra source/content, unsafe paths and overlays. Build output folders are excluded explicitly. It verifies the recorded manifest, not a signed source attestation, a filesystem lock or protection against edits after the check. Older manifests without a descriptor digest require a fresh snapshot; do not invent a historical digest. The clock incremental build's two explicit overlays retain their separate proof and cannot pass this exact-source command.

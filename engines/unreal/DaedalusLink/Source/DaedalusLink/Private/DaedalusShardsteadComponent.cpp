@@ -31,10 +31,10 @@ void UDaedalusShardsteadComponent::ClearCycleClock(){
     CycleTimer.Invalidate();
 }
 void UDaedalusShardsteadComponent::EndPlay(const EEndPlayReason::Type EndPlayReason){
-    ClearCycleClock();Super::EndPlay(EndPlayReason);
+    Ended=true;ClearCycleClock();Super::EndPlay(EndPlayReason);
 }
 void UDaedalusShardsteadComponent::OnComponentDestroyed(bool bDestroyingHierarchy){
-    ClearCycleClock();Super::OnComponentDestroyed(bDestroyingHierarchy);
+    Ended=true;ClearCycleClock();Super::OnComponentDestroyed(bDestroyingHierarchy);
 }
 void UDaedalusShardsteadComponent::NotifyCycleDue(){
     if(!Ready||!Host()){ClearCycleClock();return;}
@@ -47,6 +47,7 @@ void UDaedalusShardsteadComponent::NotifyCycleDue(){
 }
 bool UDaedalusShardsteadComponent::Host() const {
     if(!IsInGameThread())return false;
+    if(Ended)return false;
     const AActor* Owner=GetOwner();const UWorld* World=GetWorld();
     return IsValid(Owner)&&!Owner->IsActorBeingDestroyed()&&Owner->HasAuthority()&&World&&World->IsGameWorld();
 }
