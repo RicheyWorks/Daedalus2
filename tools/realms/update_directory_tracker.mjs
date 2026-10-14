@@ -1,0 +1,24 @@
+import fs from 'node:fs/promises';
+import {SpreadsheetFile,FileBlob} from '@oai/artifact-tool';
+const [repo,out]=process.argv.slice(2);await fs.mkdir(out,{recursive:true});
+const proof=JSON.parse(await fs.readFile(repo+'/docs/production/realm-directory-proof.json','utf8'));
+if(!proof.focused.test_summary_counts[0]||!proof.verify.test_summary_counts.at(-1))throw Error('Missing directory verification');
+const wb=await SpreadsheetFile.importXlsx(await FileBlob.load(repo+'/docs/production/Realm-production-2026-10-13.xlsx'));
+const norm=v=>JSON.stringify(v.map(r=>r.map(c=>c===null?'':c)));
+const prior=[['Assets','A1:Q348'],['Production','A1:H24'],['Mechanics','A1:E53'],['Unreal verification','A8:H39']].map(([s,r])=>[s,r,norm(wb.worksheets.getItem(s).getRange(r).values),JSON.stringify(wb.worksheets.getItem(s).getRange(r).formulas)]);
+const runs=wb.worksheets.getItem('Unreal verification'),mechanics=wb.worksheets.getItem('Mechanics');
+if(runs.getRange('A40').values[0][0]||mechanics.getRange('A54').values[0][0])throw Error('Expected unused rows');
+runs.getRange('A2').values=[['Runtime verification runs']];
+runs.getRange('A40:H40').copyFrom(runs.getRange('A39:H39'),'all');runs.getRange('A40:H40').format.rowHeight=96;
+runs.getRange('A40:H40').values=[['REALM-DIR','Authenticated provider discovery and advertised Ocean read','WorldHub + Ocean','Verified',proof.verify.seconds,`Full server reactor verify. ${proof.verify.test_summary_counts[0]} core / ${proof.verify.test_summary_counts.at(-1)} server tests.`,'realm-directory-proof.json',`${proof.focused.test_summary_counts[0]} focused checks also pass in ${proof.focused.seconds}s. No travel, Unreal loading or hosting claim.`]];
+runs.getRange('B5').formulas=[['=COUNTIF(D8:D40,"Verified")']];runs.getRange('E5').formulas=[['=COUNTIF(D8:D40,"Pending")']];
+mechanics.getRange('A54:E54').copyFrom(mechanics.getRange('A53:E53'),'all');mechanics.getRange('A54:E54').format.rowHeight=96;
+mechanics.getRange('A54:E54').values=[['SYS01','Clients discover each realm data provider','Canonical identity, protocol and same-origin routes without duplicating terrain','Production JWT HTTP discovery to Ocean chunk read verified','Player transfer, district routing, Unreal subscription and hosting still pending.']];
+wb.recalculate();if(runs.getRange('B5').values[0][0]!==28||runs.getRange('E5').values[0][0]!==5)throw Error('Summary mismatch');
+runs.getRange('D40').values=[['Pending']];wb.recalculate();if(runs.getRange('B5').values[0][0]!==27||runs.getRange('E5').values[0][0]!==6)throw Error('Counter dependency mismatch');
+runs.getRange('D40').values=[['Verified']];wb.recalculate();
+for(const[s,r,v,f]of prior){const c=wb.worksheets.getItem(s).getRange(r);if(norm(c.values)!==v||JSON.stringify(c.formulas)!==f)throw Error('Prior records changed: '+s);}
+console.log((await wb.inspect({kind:'match',searchTerm:'#REF!|#DIV/0!|#VALUE!|#NAME\\?|#NUM!|#SPILL!',options:{useRegex:true,maxResults:10},maxChars:500})).ndjson);
+for(const[s,r,n]of [['Unreal verification','A40:H40','directory-run'],['Unreal verification','A2:H5','counts'],['Mechanics','A54:E54','directory-mechanic']])await fs.writeFile(out+'/'+n+'.png',new Uint8Array(await(await wb.render({sheetName:s,range:r,scale:1,format:'png'})).arrayBuffer()));
+await(await SpreadsheetFile.exportXlsx(wb)).save(out+'/Realm-production.xlsx');
+console.log('DIRECTORY_TRACKER_PASS 28 scoped verifications / 5 pending; prior records preserved.');
