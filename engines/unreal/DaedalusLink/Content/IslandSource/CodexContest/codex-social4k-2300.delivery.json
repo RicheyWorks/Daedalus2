@@ -1,0 +1,204 @@
+{
+  "schema": "daedalus.codex-native-presentation-delivery.v1",
+  "created_utc": "2026-10-14T23:06:13.883030+00:00",
+  "stage": "four_native4k_pngs_captured_reviewed_local_delivery_ready",
+  "views": [
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "hero_route",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-hero_route.png",
+      "camera": {
+        "location": {
+          "x": -315150,
+          "y": 302600,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 3.955881023629843,
+          "yaw": -115.97439396243138,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "2b6cceb5fb69a2f42aeda21f18859b1441e692e2e5d64a8237d8dad86ecf8163",
+      "bytes": 9441487,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:01:24.799527+00:00",
+      "personally_inspected": true,
+      "ui_private_information_observed": false,
+      "blank_partial_output_observed": false
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "island_wide",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-island_wide.png",
+      "camera": {
+        "location": {
+          "x": -312750,
+          "y": 291300,
+          "z": 21515.324
+        },
+        "rotation": {
+          "pitch": -26.4364745019962,
+          "yaw": 129.09385888622944,
+          "roll": 3.551991696084703e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "1e1f8670afe226716e1a6c518dada37a7ce99c87d22e79b3f882f432bcf0fca7",
+      "bytes": 9638064,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:01:26.292455+00:00",
+      "personally_inspected": true,
+      "ui_private_information_observed": false,
+      "blank_partial_output_observed": false
+    },
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "courtyard",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.social4k-2300-garden-courtyard.png",
+      "camera": {
+        "location": {
+          "x": -343550,
+          "y": 325900,
+          "z": 18485.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": -90.00000000000003,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "c2d57bf3c4e1bdfdc1d29b527983f1264c74f51d653b2c8609b011d0f08774e3",
+      "bytes": 8963125,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:02:18.519792+00:00",
+      "personally_inspected": true,
+      "ui_private_information_observed": false,
+      "blank_partial_output_observed": false
+    },
+    {
+      "island": "CodexIsland_cliff_garden_84022_GardenGateR1",
+      "view": "crops_detail",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_cliff_garden_84022_GardenGateR1.social4k-2300-garden-crops_detail.png",
+      "camera": {
+        "location": {
+          "x": -341150,
+          "y": 325800,
+          "z": 20615.324
+        },
+        "rotation": {
+          "pitch": -56.13331936490721,
+          "yaw": -118.30075576600625,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "26d183f7a8a777473488c82bf70e34989dc7e1280f911a1593fcb261c4513829",
+      "bytes": 9800844,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:02:19.755003+00:00",
+      "personally_inspected": true,
+      "ui_private_information_observed": false,
+      "blank_partial_output_observed": false
+    }
+  ],
+  "capture_reviews": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\staging.social4k-2300-hero-review.json",
+      "bytes": 5327,
+      "sha256": "f2d6a78c316769de433b72ff3c4cd8846103f58e3b044482a199b2107165d371"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\staging.social4k-2300-garden-review.json",
+      "bytes": 5337,
+      "sha256": "98a3be748b4ea0f24409dd06d58f224dfd06f306fa03dafe4db00eee7b7c28c3"
+    }
+  ],
+  "saved_map_sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+  "map_unchanged": true,
+  "pie": "stopped",
+  "upscaled": false,
+  "settings": "Inherited lighting/exposure/Lit mode/FOV90; no new tuning; game view temporarily forced by native screenshot API and restoredfalse; original camera restored",
+  "native_settings_readback": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-inherited-visual-settings-2255.json",
+    "bytes": 87569,
+    "sha256": "9d8a52d7fd522c4169b63ab0232960ecfadd520fc98fffaf5321cf0491b56893"
+  },
+  "source_revisions": {
+    "HeroR4": {
+      "geometry_seed": 84011,
+      "palette_seed": 91022
+    },
+    "GardenGateR1": {
+      "geometry_seed": 84022,
+      "palette_seed": 92022
+    }
+  },
+  "operating_guide": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\docs\\production\\CODEX-ISLAND-VISUAL-RECIPE-20261014.md",
+    "bytes": 25213,
+    "sha256": "8008d6f6a97a1a07fae3b49e3c6f3233eb46180b03bfa3312ee7598e4b143f8b"
+  },
+  "composition_limits": [
+    "physical gray staging plots visible in whole-island and hero backgrounds",
+    "bright inherited highlights in court",
+    "foreground rim at crop right edge"
+  ],
+  "library_reference": {
+    "library_file_id": "libfile_2fcbd70f8ea88191baa11a80907b8192",
+    "metadata_pixels": [
+      2041,
+      766
+    ],
+    "visually_inspected": false,
+    "materialization": "failed Windows os.setxattr AttributeError"
+  },
+  "library_upload": {
+    "status": "pending",
+    "attempt": "official prepared helper stopped before preparation: Library prepare_uploads is not available",
+    "confirmed_creates": 0,
+    "uncertain_native_capture": false,
+    "retry_or_fallback_attempted": false
+  },
+  "posted_to_x": false,
+  "tests_build_gameplay": "deferred_by_user",
+  "limits": "Appearance only; no new collision,walkability,motion or BAR acceptance"
+}

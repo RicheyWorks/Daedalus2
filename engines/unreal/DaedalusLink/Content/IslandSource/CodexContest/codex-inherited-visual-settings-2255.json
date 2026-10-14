@@ -1,0 +1,1951 @@
+{
+  "source_code_sha256": "50abcead9097d023c6833f9085d648616bd934875d15784b26ad87d66c13cf87",
+  "readback": {
+    "viewport_config_key": "FourPanes2x2.Viewport 1.Viewport1",
+    "game_view": false,
+    "horizontal_fov": 90.0,
+    "view_mode": "<ViewModeIndex.VMI_LIT: 3>",
+    "lights": [
+      {
+        "label": "Daedalus Sun",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DirectionalLight_0",
+        "class": "DirectionalLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613850) {pitch: -51.000031, yaw: -60.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 10.0,
+          "light_color": "<Struct 'Color' (0x00000231BDA9B6B8) {b: 239, g: 250, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": true,
+          "mobility": "<ComponentMobility.MOVABLE: 2>"
+        }
+      },
+      {
+        "label": "LampLight_00",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_0",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B59DB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_01",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_1",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5A7B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_02",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_2",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF16B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_03",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_3",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF84B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_04",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_4",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFF2B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_05",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_5",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C04DB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_06",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_6",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0BBB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_07",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_7",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C102B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_08",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_8",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C10CB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_09",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_9",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C116B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_10",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_10",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5B1B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_11",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_11",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5BBB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_12",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_12",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5C5B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_13",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_13",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5CFB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_14",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_14",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5D9B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_15",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_15",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5E3B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_16",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_16",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5EDB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_17",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_17",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6B5F7B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_18",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_18",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF02B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_19",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_19",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF0CB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_20",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_20",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF20B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_21",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_21",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF2AB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_22",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_22",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF34B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_23",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_23",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF3EB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_24",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_24",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF48B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_25",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_25",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF52B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_26",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_26",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF5CB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_27",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_27",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF66B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_28",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_28",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF70B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_29",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_29",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF7AB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_30",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_30",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF8EB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_31",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_31",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BF98B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_32",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_32",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFA2B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_33",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_33",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFACB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_34",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_34",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFB6B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_35",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_35",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFC0B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_36",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_36",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFCAB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_37",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_37",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFD4B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_38",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_38",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFDEB8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "LampLight_39",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_39",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 50.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFE8B8) {b: 162, g: 215, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_00",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_42",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6BFFCB8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_01",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_43",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C007B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_02",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_44",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C011B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_03",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_45",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C01BB8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_04",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_46",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C025B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_05",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_47",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C02FB8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_06",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_48",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C039B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_07",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_49",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C043B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_08",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_50",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C057B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_09",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_51",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C061B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_10",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_52",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C06BB8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_11",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_53",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C075B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_12",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_54",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C07FB8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_13",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_55",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C089B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_14",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_56",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C093B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_15",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_57",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C09DB8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_16",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_58",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0A7B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_17",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_59",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0B1B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_18",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_60",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0C5B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_19",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_61",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0CFB8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_20",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_62",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0D9B8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_21",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_63",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0E3B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_22",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_64",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0EDB8) {b: 160, g: 218, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Show_Light_23",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PointLight_65",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x00000231C6C0F7B8) {b: 255, g: 255, r: 149, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "Daedalus Moon",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DirectionalLight_1",
+        "class": "DirectionalLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612EA0) {pitch: 51.000031, yaw: 140.000000, roll: 180.000000}>",
+        "component": {
+          "intensity": 0.0,
+          "light_color": "<Struct 'Color' (0x00000231BDA9BCB8) {b: 255, g: 218, r: 203, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": true,
+          "mobility": "<ComponentMobility.MOVABLE: 2>"
+        }
+      },
+      {
+        "label": "Hephaestus Forge Glow",
+        "path": "/Game/Hephaestus/Maps/HephaestusIsland.HephaestusIsland:PersistentLevel.PointLight_1",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 500.0,
+          "light_color": "<Struct 'Color' (0x0000023317FF3EB8) {b: 97, g: 173, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_0",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACD7AB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight2",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_1",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACD84B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight3",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_2",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDB6B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight4",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_3",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDC0B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight5",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_4",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDCAB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight6",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_5",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDD4B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight7",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_6",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDDEB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight8",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_7",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDE8B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight9",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_8",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDF2B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight10",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_9",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDFCB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight11",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_10",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACD8EB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight12",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_11",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACD98B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight13",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_12",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDA2B8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PointLight14",
+        "path": "/Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.PointLight_13",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 25.0,
+          "light_color": "<Struct 'Color' (0x000002333ACDACB8) {b: 166, g: 221, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkIsle_Fill_0",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_3",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 400.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E3EB8) {b: 225, g: 243, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkIsle_Fill_1",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_4",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 400.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E48B8) {b: 225, g: 243, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkIsle_Fill_2",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_5",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613990) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 400.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E52B8) {b: 225, g: 243, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_00",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_6",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613D50) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E5CB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_00",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_7",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF6106A0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E66B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_03",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_8",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF613AD0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E70B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_03",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_9",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF610600) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E7AB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_06",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_10",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF6138A0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x000002339CEECFB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_06",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_11",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF610560) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x000002339CEED9B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_09",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_12",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612310) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x000002339CEEE3B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_09",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_13",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612A90) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x000002339CEEEDB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_12",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_14",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000230AF612BD0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x000002339CEEF7B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_12",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_15",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFFA680) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E02B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_15",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_16",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFFB9E0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E0CB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_15",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_17",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFF87E0) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E16B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_18",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_18",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0D30) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E20B8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PierLight_18",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_19",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0880) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 30.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E2AB8) {b: 179, g: 225, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_SmelterGlow",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.PointLight_20",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 120.0,
+          "light_color": "<Struct 'Color' (0x00000233A05E34B8) {b: 108, g: 179, r: 255, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "ArkDock_PadSpot",
+        "path": "/Game/Grok/Maps/ArkDock_2hot2trot.ArkDock_2hot2trot:PersistentLevel.SpotLight_0",
+        "class": "SpotLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: -90.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 800.0,
+          "light_color": "<Struct 'Color' (0x000002339CEEACB8) {b: 255, g: 237, r: 218, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Heart",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_0",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 80.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD34B8) {b: 255, g: 190, r: 120, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": true,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Warm_0",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_1",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 4000.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD3EB8) {b: 255, g: 196, r: 140, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Warm_1",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_2",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 4000.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD48B8) {b: 255, g: 196, r: 140, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Warm_2",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_3",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 4000.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD52B8) {b: 255, g: 196, r: 140, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Warm_3",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_4",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 4000.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD5CB8) {b: 255, g: 196, r: 140, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      },
+      {
+        "label": "PI_Light_Warm_4",
+        "path": "/Game/Prometheus/Maps/PrometheusIsland.PrometheusIsland:PersistentLevel.PointLight_5",
+        "class": "PointLight",
+        "rotation": "<Struct 'Rotator' (0x00000231DCFB0790) {pitch: 0.000000, yaw: 0.000000, roll: 0.000000}>",
+        "component": {
+          "intensity": 4000.0,
+          "light_color": "<Struct 'Color' (0x00000233B1DD66B8) {b: 255, g: 196, r: 140, a: 255}>",
+          "indirect_lighting_intensity": 1.0,
+          "volumetric_scattering_intensity": 1.0,
+          "cast_shadows": false,
+          "temperature": 6500.0,
+          "use_temperature": false,
+          "source_angle": "unexposed",
+          "atmosphere_sun_light": "unexposed",
+          "mobility": "<ComponentMobility.STATIONARY: 1>"
+        }
+      }
+    ],
+    "post_process_volumes": [
+      {
+        "label": "Daedalus_PostFX",
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PostProcessVolume_0",
+        "volume": {
+          "enabled": true,
+          "unbound": true,
+          "priority": 0.0,
+          "blend_radius": 100.0,
+          "blend_weight": 1.0
+        },
+        "exposure": {
+          "override_auto_exposure_method": true,
+          "auto_exposure_method": "<AutoExposureMethod.AEM_MANUAL: 2>",
+          "override_auto_exposure_bias": true,
+          "auto_exposure_bias": 10.5,
+          "override_auto_exposure_min_brightness": false,
+          "auto_exposure_min_brightness": 0.029999999329447746,
+          "override_auto_exposure_max_brightness": false,
+          "auto_exposure_max_brightness": 8.0,
+          "auto_exposure_apply_physical_camera_exposure": true,
+          "override_auto_exposure_apply_physical_camera_exposure": false,
+          "override_bloom_intensity": true,
+          "bloom_intensity": 0.675000011920929,
+          "override_color_saturation": false,
+          "color_saturation": "<Struct 'Vector4' (0x00000231BA94BB10) {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}>"
+        }
+      }
+    ],
+    "dirty_maps": [],
+    "dirty_content": [],
+    "claim": "current inherited readbacks; no lighting/exposure/FOV setting modified by this request"
+  }
+}

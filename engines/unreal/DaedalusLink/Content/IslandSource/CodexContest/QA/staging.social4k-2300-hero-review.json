@@ -1,0 +1,181 @@
+{
+  "stage": "native_still_views",
+  "map_sha256_at_capture": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+  "views": [
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "hero_route",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-hero_route.png",
+      "camera": {
+        "location": {
+          "x": -315150,
+          "y": 302600,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 3.955881023629843,
+          "yaw": -115.97439396243138,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "2b6cceb5fb69a2f42aeda21f18859b1441e692e2e5d64a8237d8dad86ecf8163",
+      "bytes": 9441487,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:01:24.799527+00:00"
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "island_wide",
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-island_wide.png",
+      "camera": {
+        "location": {
+          "x": -312750,
+          "y": 291300,
+          "z": 21515.324
+        },
+        "rotation": {
+          "pitch": -26.4364745019962,
+          "yaw": 129.09385888622944,
+          "roll": 3.551991696084703e-15
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "sha256": "1e1f8670afe226716e1a6c518dada37a7ce99c87d22e79b3f882f432bcf0fca7",
+      "bytes": 9638064,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "native_render": true,
+      "upscaled": false,
+      "when_utc": "2026-10-14T23:01:26.292455+00:00"
+    }
+  ],
+  "acceptance": "appearance only; no movement/collision/final quality acceptance",
+  "local_camera_recipe": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\social4k-hero-cameras.json",
+  "projection": "existing native viewport projection/FOV unchanged",
+  "requested_pixels": [
+    3840,
+    2160
+  ],
+  "initial_camera": {
+    "location": {
+      "x": -370400,
+      "y": 350850,
+      "z": 18715.324
+    },
+    "rotation": {
+      "pitch": -26.28314469513713,
+      "yaw": -147.09475707701216,
+      "roll": 8.868211352184005e-16
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "initial_view": {
+    "key": "FourPanes2x2.Viewport 1.Viewport1",
+    "game_view": false,
+    "horizontal_fov": 90.0,
+    "dirty_maps": [],
+    "dirty_content": []
+  },
+  "capture_calls": [
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "hero_route",
+      "state": "responded",
+      "pose": {
+        "location": {
+          "x": -315150.0,
+          "y": 302600.0,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 3.9558810236298414,
+          "yaw": -115.97439396243132,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-hero_route.png",
+      "pixels": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "island": "CodexIsland_summit_rim_84011_HeroR4",
+      "view": "island_wide",
+      "state": "responded",
+      "pose": {
+        "location": {
+          "x": -312750.0,
+          "y": 291300.0,
+          "z": 21515.324
+        },
+        "rotation": {
+          "pitch": -26.436474501996216,
+          "yaw": 129.0938588862295,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\CodexIsland_summit_rim_84011_HeroR4.social4k-2300-hero-island_wide.png",
+      "pixels": [
+        3840,
+        2160
+      ]
+    }
+  ],
+  "capture_route": "existing viewport_screenshot -> AutomationLibrary.take_high_res_screenshot; native force_game_view default=true",
+  "restored_camera": {
+    "location": {
+      "x": -370400,
+      "y": 350850,
+      "z": 18715.324
+    },
+    "rotation": {
+      "pitch": -26.283144695137143,
+      "yaw": -147.0947570770122,
+      "roll": 1.773642270436801e-15
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "restored_view": {
+    "key": "FourPanes2x2.Viewport 1.Viewport1",
+    "game_view": false,
+    "horizontal_fov": 90.0,
+    "dirty_maps": [],
+    "dirty_content": []
+  },
+  "map_unchanged": true
+}
