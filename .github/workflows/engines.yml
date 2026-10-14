@@ -9,11 +9,11 @@ name: Engines
 on:
   push:
     branches: [ main ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "connectors/claude-unreal-connector/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
     # Match the approved cabinet dependency stack as well as main.
     branches: [ main, codex/realm-production-queue ]
-    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+    paths: [ "engines/**", "connectors/claude-unreal-connector/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
   group: engines-${{ github.ref }}
@@ -49,6 +49,7 @@ jobs:
         run: |
           C=../../../connectors/claude-unreal-connector
           python3 -m py_compile $C/plugin/ClaudeUnrealBridge/Content/Python/*.py $C/clients/python/unreal_client.py
+          python3 $C/tests/capture_view_test.py
           (python3 $C/tests/host.py 9911 60 &) ; sleep 2
           node $C/tests/client.js 9911
       - name: DaedalusLink adds its commands through the connector's register()
