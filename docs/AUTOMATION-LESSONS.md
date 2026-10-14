@@ -1227,3 +1227,15 @@ the camera instead of steering — which is why the tour "flew" so badly. Found 
 instance and reading them back: (0,300,0) read back as pitch -60. Fix: keyword args or (roll, pitch, yaw) order,
 everywhere (13 sites); re-dress all realms. Rule: any new engine constructor gets a one-instance write/read-back
 before it is used in a loop — the connector's ObjectTools or a 3-line execute_python does it in a second.
+
+## 2026-10-14 09:20 — "RAM %" was the wrong number: the commit limit is the crash line
+
+Vitals reported RAM 93-98%, but the crash condition is Windows' COMMIT limit (physical + pagefile): 60.7 of 61.4 GB
+at 09:17, with the editor at 13.4 GB working set after 50 minutes of edits (it was 11 GB fresh; every batch grows
+the transaction buffer and loaded sublevels — 200 streamed districts are all loaded in the editor). When commit is
+exhausted, allocations fail and the GPU driver reports DXGI_ERROR_DRIVER_INTERNAL_ERROR: that is both crashes.
+
+Rules: vitals reports committed/limit (added) and jobs gate on commit > 95% as well as RAM; the editor is recycled
+(graceful close + reopen via unreal-job -Fast) after any session of heavy edits before the next batch; streamed
+districts should be unloaded in the editor when not being edited (next slice: EditorLevelUtils unload per realm);
+the pagefile size is Richey's setting, not the bots'.
