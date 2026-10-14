@@ -43,7 +43,7 @@ plots2, extras2, _ = D.dress_plan(cells33, xy, "PARCELS", 5220.0)
 check("a realm's plots keep the ground plane (no floating, no turning) and its extras sit on or above the ground", all(abs(p[2] + p[6] * 50.0 - 5220.0) < 1.0 and p[3] == 0.0 for p in plots2) and all(e[2] - e[6] * 50.0 >= 5220.0 - 101.0 for e in extras2))
 shapes = {tuple(round(v) for e in D.island_plan(n, 0.0, 0.0, 5220.0, 12.0, "WORLD-ZERO") for v in e) for n in cells33}
 check("every island is unique: 100 deeds give 100 different terrace/rock layouts, deterministically", len(shapes) >= 95 and D.island_plan(7, 0.0, 0.0, 1.0, 1.0, "PARCELS") == D.island_plan(7, 0.0, 0.0, 1.0, 1.0, "PARCELS"), len(shapes))
-check("terraces stay on the slab and rocks stay inside the cell", all(abs(e[0]) + e[4] * 50.0 <= 12800.0 and abs(e[1]) + e[5] * 50.0 <= 12800.0 for n in cells33 for e in D.island_plan(n, 0.0, 0.0, 5220.0, 12.0, "WORLD-ZERO")))
+check("terraces stay on the slab and rocks stay inside the cell", all(abs(e[0]) + e[4] * 50.0 <= 11500.0 and abs(e[1]) + e[5] * 50.0 <= 11500.0 for n in cells33 for e in D.island_plan(n, 0.0, 0.0, 5220.0, 12.0, "WORLD-ZERO")))
 check("a realm district gets one 2,560 m ground slab, World Zero none", len(D.district_ground("PARCELS", 33)) == 1 and D.district_ground("PARCELS", 33)[0][4] == 2560.0 and D.district_ground("WORLD-ZERO", 33) == [])
 rows = D.ledger_rows("PARCELS", [(33, cells33[:3], [(100.0, 200.0, 4620.0, 12.0), (356.0, 200.0, 4720.0, 10.0), (612.0, 200.0, 4420.0, 16.0)], {cells33[1]: 2}), (0, [5], [(0.0, 0.0, 0.0, 12.0)], {})])
 check("the ledger has one row per land, sorted by deed, with top height, thickness and prop count",

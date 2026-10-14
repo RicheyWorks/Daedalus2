@@ -290,7 +290,7 @@ def island_plan(n, x, y, top, thick, realm):
     for k in range(sats):
         r = 10.0 + 15.0 * _h(n, 27 + k)
         ang = _h(n, 30 + k) * 6.283185
-        dist = (P.LAND_M / 2.0 + r / 2.0 + 15.0 + 40.0 * _h(n, 33 + k)) * 100.0
+        dist = (P.LAND_M / 2.0 + r / 2.0 + 10.0 + 20.0 * _h(n, 33 + k)) * 100.0   # <= 101 m from the centre: never past the cell's half-pitch (128 m), so no overlap with a neighbour or a team estate (02:23)
         import math
         sx, sy = x + math.cos(ang) * dist, y + math.sin(ang) * dist
         if realm == "WORLD-ZERO":
