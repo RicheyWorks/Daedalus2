@@ -63,8 +63,12 @@ def configuration(preset, seed=None, hero=False):
     if hero:
         if preset != "summit-rim":
             raise ValueError("hero revision currently uses the inspected summit-rim original")
-        config["revision"] = "HeroR2"
+        config["revision"] = "HeroR3" if hero is True else str(hero)
+        if config["revision"] not in ("HeroR2", "HeroR3"):
+            raise ValueError("unknown retained hero revision")
         config["features"] = config["features"] + ["winding pale summit route", "crystal summit crown", "fitted flowering groves"]
+        if config["revision"] == "HeroR3":
+            config["features"] += ["quarter-metre fitted summit treads"]
     catalog = json.loads(INVENTORY.read_text(encoding="utf-8"))
     original = next(entry for entry in catalog["entries"] if entry["id"] == config["original"])
     config["reference"] = {key: original.get(key) for key in ("id", "name", "author", "team", "provenance", "image", "sources", "manifest")}
@@ -152,6 +156,27 @@ def plan(preset="summit-rim", seed=None, hero=False):
         wet.discard(xy)
         route.discard(xy)
 
+    route_steps = {}
+    if hero and config["revision"] == "HeroR3":
+        # Quarter-metre exposed-face geometry rests on the metre terrain. Keep
+        # the dense grid confined to the route rather than subdividing the island.
+        deck, low = {}, {}
+        for yq in range(-160, -11):
+            t = min(1.0, max(0.0, (yq / 4 + 40) / 37))
+            cxq = round((8 + 5 * math.sin(t * math.pi * 1.4)) * 4)
+            zq = math.floor(18 * t * 4) + 4
+            for xq in range(cxq - 8, cxq + 9):
+                xy = math.floor(xq / 4), math.floor(yq / 4)
+                if xy in route:
+                    deck[xq, yq] = zq
+                    low[xy] = min(low.get(xy, zq), zq)
+        for xy, zq in low.items():
+            heights[xy] = math.floor(zq / 4) - 1
+        for (xq, yq), zq in deck.items():
+            xy = math.floor(xq / 4), math.floor(yq / 4)
+            for heightq in range((heights[xy] + 1) * 4, zq + 1):
+                route_steps[xq, yq, heightq] = "flower_w" if (yq // 12) % 5 else "sand"
+
     voxels = {layer: [] for layer in original}
     for x, y, z, colour in original["island"]:
         xy = x, y
@@ -160,7 +185,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
         dz = heights[xy] - old_top[xy]
         if z == old_top[xy]:
             if xy in route:
-                colour = "flower_w" if (x + y) % 7 else "sand"
+                colour = "rock2" if route_steps else ("flower_w" if (x + y) % 7 else "sand")
             elif xy in wet:
                 colour = "sand"
             elif preset == "cliff-garden" and heights[xy] >= 9:
@@ -225,6 +250,8 @@ def plan(preset="summit-rim", seed=None, hero=False):
             voxels[layer].append((x, y, z + shift, colour))
 
     voxels["landmarks"] = []
+    if route_steps:
+        voxels["route_steps"] = [(x,y,z,colour) for (x,y,z),colour in sorted(route_steps.items())]
     if hero:
         # Repeated fitted pedestals make a readable crown, clear of the cottage.
         for index in range(7):
@@ -265,6 +292,7 @@ def plan(preset="summit-rim", seed=None, hero=False):
 
 def receipt(config, voxels):
     all_cells = [cell for cells in voxels.values() for cell in cells]
+    scaled_cells = [(cell, .25 if layer == "route_steps" else 1.0) for layer,cells in voxels.items() for cell in cells]
     return {
         "schema": "daedalus.codex-island.v1", "name": identity(config), "config": config,
         "config_sha256": hashlib.sha256(_json(config).encode()).hexdigest(),
@@ -272,8 +300,9 @@ def receipt(config, voxels):
         "voxels": BASE.stats(voxels), "palette": sorted({c[3] for c in all_cells}),
         "palette_rgb": {key: list(PALETTE[key]) for key in sorted({c[3] for c in all_cells})},
         "palette_surface": {key: SURFACES[key] for key in sorted({c[3] for c in all_cells})},
-        "bounds_metres": {"min": [min(c[i] for c in all_cells) for i in range(3)],
-                          "max": [max(c[i] + 1 for c in all_cells) for i in range(3)]},
+        "layer_voxel_metres": {layer: .25 if layer == "route_steps" else 1.0 for layer in voxels},
+        "bounds_metres": {"min": [min(c[i] * scale for c,scale in scaled_cells) for i in range(3)],
+                          "max": [max((c[i] + 1) * scale for c,scale in scaled_cells) for i in range(3)]},
         "stage": "planned", "saved_unreal": False,
     }
 
@@ -339,7 +368,7 @@ def build(out_folder, preset="summit-rim", seed=None, keep=False, hero=False):
         started = time.perf_counter()
         for layer, cells in voxels.items():
             if cells:
-                obj = BASE._mesh_from_voxels(name + "_" + layer, cells, scale=1.0)
+                obj = BASE._mesh_from_voxels(name + "_" + layer, cells, scale=.25 if layer == "route_steps" else 1.0)
                 _palette_slots(bpy, obj, cells)
                 obj["daedalus_owner"] = OWNER
                 obj["daedalus_config_sha256"] = report["config_sha256"]
@@ -471,6 +500,7 @@ def main():
     parser.add_argument("--seed", type=int)
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--hero", action="store_true", help="retained summit-rim HeroR2 revision; preserve prepared exports")
+    parser.add_argument("--hero-revision", choices=("HeroR2", "HeroR3"), default="HeroR3")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--out", type=Path, default=ROOT / "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None
@@ -483,13 +513,13 @@ def main():
         results = []
         for preset in PRESETS if args.all else [args.preset]:
             started = time.perf_counter()
-            config, voxels = plan(preset, args.seed, args.hero)
+            config, voxels = plan(preset, args.seed, args.hero_revision if args.hero else False)
             value = receipt(config, voxels)
             value["elapsed_s"] = {"generation": round(time.perf_counter() - started, 6)}
             _write(args.out / (identity(config) + ".plan.json"), value)
             results.append(value)
     else:
-        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed, hero=args.hero)]
+        results = build_batch(args.out) if args.all else [build(args.out, args.preset, args.seed, hero=args.hero_revision if args.hero else False)]
     print(json.dumps(results, indent=2))
 
 

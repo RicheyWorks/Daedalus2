@@ -49,6 +49,8 @@ The first single-mesh module was renamed to the task's destination name. Exact s
 
 HeroR2 seed84011 is a separate retained export in `HeroR2/h84011`, with overview/route/crown renders in `HeroR2/QA`. It adds a pale summit route, fitted crystal crown and Blender surface recipes. It remains held from native import and world placement; one-metre route steps are a known refinement gap, and stills do not prove movement. Reproduce into a new output revision with `--hero --preset summit-rim --seed 84011 --out NEW_FOLDER`; existing mismatched export revisions now refuse overwrite. `review_codex_hero.py --receipt RECEIPT --out QA_FOLDER` reproduces the three source views in an isolated factory Blender process.
 
+HeroR3 is retained separately in `HeroR3/h84011`, with the same three camera views inspected in `HeroR3/QA`. The route alone uses quarter-metre exposed-face geometry fitted onto the metre terrain; the whole island is not subdivided. Recipe: `--hero --hero-revision HeroR3 --preset summit-rim --seed 84011 --out NEW_FOLDER`. It exported ten meshes, GLB SHA `56c6b939a326b7474e9cd96d8b4a38f9a69ccf88b2b41556315a4238d4c807f9` and FBX SHA `47d14ae998b1e6a28c51404fc81e722a4f21795acf4f4654ed13357e01b5a987`. HeroR2 remains intact for comparison. Both hero revisions are source/export/appearance evidence and remain held from Unreal import, placement and movement acceptance.
+
 ## Reusable production lessons
 
 1. UE 5.8's configured FBX default ignores vertex colours; the existing native `import_file` does not override it. Named palette slots preserve colour through reusable owned material instances without changing shared import settings. One parameterized base and colour-hash instances are shared across islands.
