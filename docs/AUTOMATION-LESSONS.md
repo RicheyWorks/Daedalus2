@@ -1159,3 +1159,27 @@ PR94 integration overlapped newer realm workflow triggers and appended Unreal le
 Poot review found that WindowsPowerShell5.1 Get-Content without Encoding can corrupt BOM-less UTF8 custom values on non-UTF8 locales during additive GameFeatureData repair. Both helper reads now use .NET ReadAllLines, which defaults to UTF8 and recognizes Unicode BOMs. Regression preserves accented and CJK values in BOM-less UTF8 and UTF16 input, plus idempotent second-pass bytes; actual PS7 and WindowsPS5.1 pass. No live installer/config changed. Existing ANSI-without-BOM files are not claimed supported by this UTF8/Unicode contract.
 
 Encoding follow-up: use strict UTF8 decoding for BOM-less config input. Unsupported ANSI or damaged byte sequences must fail before any additive write, preserving original bytes rather than replacing them with Unicode replacement characters. Added actual invalid-UTF8 unchanged-bytes regression; PS7/PS5.1 pass while valid UTF16 BOM detection remains supported.
+
+## 2026-10-14 08:45 — morning: the mesh pool landed, streaming started, and what the night's /goal run produced
+
+Overnight (03:06-08:27) with Richey asleep: Poot's seat delivered PR141 (job snapshots), PR142 (diagnostics
+providers), PR143 (doctor read-back gate), PR144 (capture transfer measurement) — all tools-only, CI green, merged
+at 08:30 after their tests ran here. Sol's seat delivered the island mesh pool (PR140: 12 fragments + 6 pads, Blender
+4.3, imported natively through the connector into /Game/Daedalus/Art/Islands/NativePool with convex collision and
+bounds read back), a World-Zero deed-1 pilot (rock underside, trees, world-position ground shader), PR139 (Minesweeper
++ Shardstead), and a Shipping package. The hub carried it all; nobody waited on a human.
+
+Morning slices (08:30-08:45):
+- Editor was closed by the packaging run: relaunched by Start-Process (setup-unreal.ps1 needs -Project), StartServer
+  by console, doctor --fix green, map loaded in ~2.5 min.
+- mesh_pool_steps: every Lands_ district actor's Plots ISM now uses a pool mesh — WZ fragments Z-scaled to each
+  deed's thickness (top-centre origin: translation = slab top), realm pads at unit scale. 500 districts in 43 s.
+  First look: faceted asteroid fragments at their own heights; realms are green terrace pads on the ground.
+- District streaming (ADR-063) finally run: LABYRINTH 100 sublevels, 560 actors, 106 s; hub content kept in the
+  persistent level (districts_only) so LandAt/portals never miss their markers. Other realms running.
+- RAM 96.8% / 1 GB free at 08:35 (editor 11 GB, the rest other apps): Play refused until < 90%; vitals --watch 60
+  --alarm 92 is a standing job (job-1014-083542).
+
+Engine facts added: ULevelStreaming in 5.8 Python exposes get_world_asset_package_f_name (no _name variant);
+mesh swap on an ISM keeps instances but their transforms must be re-derived for the new origin convention (cube
+centre -> pool top-centre) in the same step, or every island drops by half its thickness.
