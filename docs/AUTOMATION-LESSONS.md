@@ -901,3 +901,7 @@ Preflight --probe is opt-in and reuses tools/unreal_mcp/client.py for initialize
 ### Timestamp readiness observations (2026-10-14)
 Optional MCPprobe records UTC observationtime, monotonicelapsed, per-requesttimeout and ownerclient sourceSHA. Dependencyimport failures become structured unknownreadiness. Validatefinitepositive timeout and expectedloopback default. Initializationusesmultiple HTTPrequests, so per-requesttimeout is not a hardtotaldeadline or proof of editorquiescence.
 
+
+### Bound MCP initialization claims (2026-10-14)
+Probe checks the exact2025-11-25 version requested by the inspectedclient. Othernegotiated versions are observed but not validated bythisprobe; readinessstaysunknown. Require typedserver metadata and boundedprintable sessionheader, report emptyname/version as metadatafinding and advertisedtools separately. No native tooldiscovery or toolhealth claim is inferred from initialize.
+

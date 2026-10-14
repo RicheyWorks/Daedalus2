@@ -14,6 +14,7 @@ DESCRIPTORS={
     'ModelContextProtocol':'Experimental/ModelContextProtocol/ModelContextProtocol.uplugin',
     'ToolsetRegistry':'Experimental/ToolsetRegistry/ToolsetRegistry.uplugin',
     'AllToolsets':'Experimental/Toolsets/AllToolsets/AllToolsets.uplugin'}
+PROBE_PROTOCOL='2025-11-25'  # Exact version requested by the inspected owner client.
 
 
 def document(path):
@@ -75,13 +76,22 @@ def probe_initialization(timeout=5):
         valid=(isinstance(server,dict) and isinstance(server.get('protocolVersion'),str) and
                bool(server['protocolVersion']) and isinstance(server.get('capabilities'),dict) and
                isinstance(server.get('serverInfo'),dict) and isinstance(server['serverInfo'].get('name'),str) and
-               isinstance(client.sid,str) and bool(client.sid))
+               isinstance(server['serverInfo'].get('version'),str) and
+               isinstance(client.sid,str) and 1<=len(client.sid)<=1024 and
+               all(33<=ord(character)<=126 for character in client.sid))
         if not valid:raise ValueError('Initialization response/session evidence incomplete')
+        protocol_matches=server['protocolVersion']==PROBE_PROTOCOL
+        findings=[]
+        if not protocol_matches:findings.append({'code':'PROTOCOL_NOT_VALIDATED_BY_THIS_PROBE','observed':server['protocolVersion'],'checked':PROBE_PROTOCOL})
+        metadata_complete=bool(server['serverInfo']['name'] and server['serverInfo']['version'])
+        if not metadata_complete:findings.append({'code':'SERVER_METADATA_INCOMPLETE'})
         return dict(observation,initialization_observed=True,protocol_version=server['protocolVersion'],
                 elapsed_seconds=round(time.monotonic()-started,6),
                 server_name=server['serverInfo']['name'],session_id_observed=True,
-                server_metadata_complete=bool(server['serverInfo']['name'] and server['serverInfo'].get('version')),
-                server_ready=True)
+                server_metadata_complete=metadata_complete,findings=findings,
+                protocol_matches_probe_contract=protocol_matches,
+                tools_advertised=isinstance(server['capabilities'].get('tools'),dict),
+                native_tools_discovered=False,server_ready=True if protocol_matches else None)
     except Exception as error:
         return dict(observation,initialization_observed=False,server_ready=None,
                     elapsed_seconds=round(time.monotonic()-started,6),
