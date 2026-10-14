@@ -27,6 +27,39 @@ def text(value,label):
     return value
 
 
+def finite_seconds(value):
+    try:return type(value) in (int,float) and math.isfinite(value) and value>=0
+    except (TypeError,OverflowError):return False
+
+
+def timing_metrics(values):
+    if any(not finite_seconds(value) for value in values):raise ValueError('Invalid timing observation')
+    if not values:return {'attempts':0,'recorded_sum_seconds':0,'mean_seconds':None,'p50_seconds':None,'p95_seconds':None}
+    ordered=sorted(float(value) for value in values)
+    try:total=math.fsum(ordered)
+    except OverflowError as error:raise ValueError('Timing sum exceeds finite range') from error
+    if not math.isfinite(total):raise ValueError('Timing sum is nonfinite')
+    return {'attempts':len(ordered),'recorded_sum_seconds':total,'mean_seconds':total/len(ordered),
+            'p50_seconds':ordered[max(0,math.ceil(len(ordered)*0.5)-1)],
+            'p95_seconds':ordered[max(0,math.ceil(len(ordered)*0.95)-1)],
+            'min_seconds':ordered[0],'max_seconds':ordered[-1]}
+
+
+def benchmark_summary(result):
+    states=('returned','failed','outcome-unknown')
+    grouped={state:[] for state in states};toolsets={}
+    for row in result['actions']:
+        for attempt in row.get('recorded_attempts',[]):
+            state=attempt['state'];seconds=attempt['elapsed_seconds']
+            grouped[state].append(seconds)
+            toolsets.setdefault(row['toolset'],{key:[] for key in states})[state].append(seconds)
+    return {'by_state':{state:timing_metrics(values) for state,values in grouped.items()},
+            'per_toolset':{name:{state:timing_metrics(values) for state,values in groups.items()}
+                           for name,groups in sorted(toolsets.items())},
+            'percentile_method':'nearest rank',
+            'scope':'Recorded attempt durations; sums are not run wall time and returned calls are not verified effects'}
+
+
 def catalog(capture):
     if not isinstance(capture,dict) or type(capture.get('schema_version')) is not int or capture['schema_version']!=1:
         raise ValueError('Expected saved-description wrapper schema1')
@@ -83,7 +116,7 @@ def attach_attempts(result,attempts,evidence_root):
         state=attempt.get('state')
         if state not in ('returned','failed','outcome-unknown'):raise ValueError('Unsupported attempt state')
         seconds=attempt.get('elapsed_seconds')
-        if type(seconds) not in (int,float) or not math.isfinite(seconds) or seconds<0:
+        if not finite_seconds(seconds):
             raise ValueError('Attempt timing must be finite/nonnegative')
         evidence=attempt.get('evidence',[])
         if not isinstance(evidence,list) or len(evidence)>32:raise ValueError('Evidence list invalid')
@@ -108,6 +141,7 @@ def attach_attempts(result,attempts,evidence_root):
     result['unresolved_attempts']=sum(row['unresolved_attempts'] for row in result['actions'])
     result['effects_verified']=0
     result['attempt_scope']='Recorded attempt/timing claims and hash-bound files; artifact presence does not prove an in-world effect'
+    result['benchmark_summary']=benchmark_summary(result)
     return result
 
 

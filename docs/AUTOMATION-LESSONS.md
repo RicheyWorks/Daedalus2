@@ -893,3 +893,7 @@ Saved benchmarkattempts must match the catalogcaptureSHA and an exposedtoolset/n
 ### Preserve unresolved action attempts and complete catalog artifacts (2026-10-14)
 A later recordedreturn cannotsettle an earlierunknownattempt; count unresolvedattempts peraction andglobally. Publish a fullyserialized/fsynced catalog via no-clobber hardlink, thenremove only itsown temporaryfile. Unsupportedfilesystem fails withoutreplacement. NativeWindows smoke confirmsunknownretention andprioroutputpreservation. Evidencepresence stillnot effectverification.
 
+
+### Compare recorded timings by outcome (2026-10-14)
+Actioncatalog benchmarksummary groups returned/failed/unknown attempts separately, globally andpertoolset, with finite sums/means andnearest-rank p50/p95. Emptygroups remainexplicit. Duration sums are notwalltime; returnedstatus is not effectproof. Keep failed/unknown performance separate ratherthan presenting fasterincomplete runs asimprovement.
+
