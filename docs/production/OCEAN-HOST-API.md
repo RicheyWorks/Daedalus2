@@ -45,6 +45,10 @@ sector is not automatically registered in /worlds, and no player is moved into
 it by these routes. Native authenticated client binding, server realm registration
 and actual dock-to-realm transition/visible Play acceptance remain open.
 
+The authenticated `/api/v1/realms` directory advertises this provider's manifest and
+chunk routes when enabled. See REALM-DIRECTORY.md; discovery reuses this provider
+without mounting another terrain store in WorldHub. Actual travel is still open.
+
 Operator settings are listed under `daedalus.ocean` in application.yml. The
 `DAEDALUS_OCEAN_ENABLED` environment flag defaults to false. When enabling it,
 provide `DAEDALUS_OCEAN_DIRECTORY` and `DAEDALUS_OCEAN_SEED` explicitly. Optional

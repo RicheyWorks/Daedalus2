@@ -88,3 +88,9 @@
 - Check the actual listener and health endpoint when delivery fails. Port 9890 had no listener during this check. Restarting the existing deployed broker against its original log restored last ID 28979; retrying the saved request envelope delivered ID 28980. No history reset or alternate broker was needed.
 - Preserve request UUIDs before network calls. A response batch can be interrupted after its first delivery; tests must prove replay creates exactly one event per request and invalid batch members prevent any send.
 - Durable receipt is not live agent participation. Poll during active tool/job loops, report authoritative terminal job results promptly, and keep agent acceptance separate from transport recovery. Claude's correlated rollout acceptance remains outstanding at this checkpoint.
+
+### Discover providers without duplicating terrain
+- The same chunk DTO does not make two storage providers interchangeable. WorldHub mounts WorldService files; Ocean owns its own persistent window. Advertise each provider's existing routes rather than mounting a second copy of its data for discovery.
+- Refuse duplicate canonical realm IDs instead of selecting whichever provider was listed last. Keep protocol and write capability explicit; a supported operation still requires the caller's permissions.
+- A metadata request must not generate chunks or mutate the world registry. Test that invariant before following a discovered route in a real authenticated HTTP test.
+- Add new endpoints to the production matcher, independent authentication table and published README together. A passing default authentication rule alone does not document the intended decision.
