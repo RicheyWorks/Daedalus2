@@ -29,7 +29,38 @@ PAL = {
     "blossom": (0.93, 0.60, 0.78), "blossom2": (0.98, 0.75, 0.86), "wall": (0.82, 0.72, 0.55), "roof": (0.70, 0.22, 0.20),
     "window": (1.00, 0.90, 0.55), "door": (0.35, 0.22, 0.12), "flower_r": (0.90, 0.25, 0.30), "flower_y": (0.95, 0.85, 0.25),
     "flower_w": (0.95, 0.95, 0.95), "crystal": (0.75, 0.55, 0.95), "crystal2": (0.55, 0.85, 0.95), "cloud": (0.97, 0.97, 0.99),
+    "path": (0.62, 0.55, 0.42),
 }
+# v2 biomes (09:36 "whoever comes up with seeds and algorithms to produce mass work at high quality will win"): a seed
+# picks a biome, which remaps the palette keys so every island reads differently from the air.
+BIOMES = {
+    "meadow": {},
+    "autumn": {"grass": (0.62, 0.55, 0.22), "grass2": (0.70, 0.62, 0.26), "leaf": (0.85, 0.42, 0.12), "leaf2": (0.92, 0.60, 0.15),
+               "blossom": (0.80, 0.20, 0.12), "blossom2": (0.95, 0.45, 0.20), "roof": (0.35, 0.25, 0.18)},
+    "snow": {"grass": (0.92, 0.94, 0.97), "grass2": (0.86, 0.90, 0.95), "leaf": (0.20, 0.40, 0.30), "leaf2": (0.80, 0.88, 0.92),
+             "blossom": (0.90, 0.92, 0.95), "blossom2": (0.70, 0.80, 0.90), "sand": (0.80, 0.84, 0.90), "water": (0.55, 0.75, 0.95),
+             "roof": (0.30, 0.35, 0.50), "flower_r": (0.70, 0.30, 0.40)},
+    "cherry": {"leaf": (0.93, 0.60, 0.78), "leaf2": (0.98, 0.75, 0.86), "blossom": (0.98, 0.85, 0.92), "blossom2": (0.90, 0.50, 0.70),
+               "grass": (0.45, 0.68, 0.38), "roof": (0.55, 0.20, 0.30), "wall": (0.92, 0.88, 0.80)},
+    "volcanic": {"grass": (0.25, 0.22, 0.22), "grass2": (0.32, 0.26, 0.24), "dirt": (0.20, 0.14, 0.12), "dirt2": (0.28, 0.18, 0.14),
+                 "rock": (0.18, 0.16, 0.18), "rock2": (0.26, 0.22, 0.24), "sand": (0.35, 0.30, 0.28), "water": (1.00, 0.45, 0.10),
+                 "foam": (1.00, 0.80, 0.30), "leaf": (0.30, 0.30, 0.22), "leaf2": (0.45, 0.40, 0.25), "blossom": (0.95, 0.35, 0.10),
+                 "blossom2": (1.00, 0.60, 0.15), "crystal": (1.00, 0.55, 0.15), "crystal2": (1.00, 0.80, 0.30), "roof": (0.25, 0.22, 0.24)},
+    "tropical": {"grass": (0.30, 0.70, 0.35), "grass2": (0.40, 0.78, 0.40), "sand": (0.95, 0.88, 0.65), "water": (0.25, 0.80, 0.85),
+                 "leaf": (0.15, 0.55, 0.25), "leaf2": (0.30, 0.70, 0.30), "blossom": (0.95, 0.40, 0.55), "blossom2": (0.98, 0.65, 0.30),
+                 "roof": (0.75, 0.60, 0.35), "wall": (0.90, 0.85, 0.70)},
+}
+BIOME_NAMES = tuple(BIOMES)
+
+
+def biome_of(seed):
+    return BIOME_NAMES[seed % len(BIOME_NAMES)]
+
+
+def palette(seed):
+    pal = dict(PAL)
+    pal.update(BIOMES[biome_of(seed)])
+    return pal
 
 
 def plan(seed, size=46, thick=22):
@@ -56,17 +87,28 @@ def plan(seed, size=46, thick=22):
     pond = {(x, y) for (x, y) in top if math.hypot(x - pcx, y - pcy) <= 5.5}
     notch_dir = (math.cos(pang), math.sin(pang))
     notch = {(x, y) for (x, y) in top if 0 <= ((x - pcx) * notch_dir[0] + (y - pcy) * notch_dir[1]) and abs((x - pcx) * -notch_dir[1] + (y - pcy) * notch_dir[0]) <= 1.5}
+    # v2: a gentle hill under the cottage side (0-4 m), so the island has a profile from the air and a slope to walk
+    hang = pang + math.pi
+    hcx, hcy = int(size * 0.35 * math.cos(hang)), int(size * 0.35 * math.sin(hang))
+    hr = size * 0.55
+
+    def hill(x, y):
+        d = math.hypot(x - hcx, y - hcy)
+        return int(round(4.0 * max(0.0, 1.0 - (d / hr) ** 2))) if d < hr else 0
+
     # 2. the body: top grass layer, dirt band, rock narrowing to a jagged keel
     for (x, y), r in top.items():
         edge = radius(math.atan2(y + 0.5, x + 0.5)) - r
         rim = edge < 2.0
         in_pond = (x, y) in pond
         in_notch = (x, y) in notch and not in_pond and edge < 6
-        ztop = -1 if rim else 0
+        ztop = (-1 if rim else 0) + (0 if (rim or in_pond or in_notch) else hill(x, y))
         if in_pond:
             ztop = -2
         if in_notch:
             ztop = -2
+        for z in range(0, ztop):      # fill the hill down to the plateau
+            vox["island"].append((x, y, z, "dirt" if rng.random() < 0.7 else "dirt2"))
         colour = "sand" if rim else ("grass" if rng.random() < 0.7 else "grass2")
         if in_pond or in_notch:
             colour = "dirt2"
@@ -87,30 +129,38 @@ def plan(seed, size=46, thick=22):
         vox["water"].append((fx, fy, z, "water" if z % 3 else "foam"))
         vox["water"].append((fx + int(round(-notch_dir[1])), fy + int(round(notch_dir[0])), z, "water"))
     # 4. cottage on the high side opposite the pond
-    cx, cy = int(-pr * 0.6 * math.cos(pang)), int(-pr * 0.6 * math.sin(pang))
+    cx, cy = hcx, hcy
+    hz = hill(cx, cy)
     w, d, h = 7, 6, 4
     for x in range(cx - w // 2, cx + w // 2 + 1):
         for y in range(cy - d // 2, cy + d // 2 + 1):
-            for z in range(1, h + 1):
+            for z in range(hz + 1, hz + h + 1):
                 shell = x in (cx - w // 2, cx + w // 2) or y in (cy - d // 2, cy + d // 2)
                 if shell:
                     c = "wall"
-                    if z in (2, 3) and ((x - cx) % 3 == 0) and y == cy - d // 2:
+                    if z - hz in (2, 3) and ((x - cx) % 3 == 0) and y == cy - d // 2:
                         c = "window"
-                    if z in (1, 2) and x == cx and y == cy + d // 2:
+                    if z - hz in (1, 2) and x == cx and y == cy + d // 2:
                         c = "door"
                     vox["cottage"].append((x, y, z, c))
     for k in range(4):   # gable roof
         for x in range(cx - w // 2 - 1 + k, cx + w // 2 + 2 - k):
             for y in range(cy - d // 2 - 1, cy + d // 2 + 2):
-                vox["cottage"].append((x, y, h + 1 + k, "roof"))
+                vox["cottage"].append((x, y, hz + h + 1 + k, "roof"))
+    # a path from the door down to the pond
+    steps_n = int(math.hypot(pcx - cx, pcy - cy))
+    for i in range(d // 2 + 1, steps_n - 6):
+        px, py = int(round(cx + (pcx - cx) * i / steps_n)), int(round(cy + (pcy - cy) * i / steps_n))
+        for (qx, qy) in ((px, py), (px + 1, py)):
+            if (qx, qy) in top and (qx, qy) not in pond:
+                vox["island"].append((qx, qy, hill(qx, qy), "path"))
     # 5. trees: 3 clusters of 3-5 round-canopy trees + 2-3 blossom trees, away from pond/cottage
     def free(x, y, m=3):
         return (x, y) in top and top[(x, y)] < radius(math.atan2(y, x)) - 4 and math.hypot(x - pcx, y - pcy) > 8 and (abs(x - cx) > w // 2 + m or abs(y - cy) > d // 2 + m)
 
     def tree(x, y, kind):
-        hgt = rng.randint(4, 7)
-        for z in range(1, hgt + 1):
+        hgt = rng.randint(4, 7) + hill(x, y)
+        for z in range(hill(x, y) + 1, hgt + 1):
             vox["trees"].append((x, y, z, "trunk"))
         rad = rng.randint(2, 3)
         for dx in range(-rad, rad + 1):
@@ -138,14 +188,14 @@ def plan(seed, size=46, thick=22):
     for _ in range(rng.randint(60, 110)):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if free(x, y, 1):
-            vox["flowers"].append((x, y, 1, rng.choice(("flower_r", "flower_y", "flower_w"))))
+            vox["flowers"].append((x, y, hill(x, y) + 1, rng.choice(("flower_r", "flower_y", "flower_w"))))
     for _ in range(rng.randint(4, 8)):
         x, y = rng.randint(-size, size), rng.randint(-size, size)
         if free(x, y, 2):
             for dx in range(0, rng.randint(1, 3)):
                 for dy in range(0, rng.randint(1, 2)):
                     for dz in range(1, rng.randint(2, 3)):
-                        vox["rocks"].append((x + dx, y + dy, dz, "rock" if rng.random() < 0.5 else "rock2"))
+                        vox["rocks"].append((x + dx, y + dy, hill(x, y) + dz, "rock" if rng.random() < 0.5 else "rock2"))
     # 7. crystals hanging below the keel, clouds beside
     for _ in range(rng.randint(3, 6)):
         x, y = rng.randint(-size // 2, size // 2), rng.randint(-size // 2, size // 2)
@@ -172,7 +222,7 @@ def stats(vox):
 
 # ---- Blender side ---------------------------------------------------------------------------------------------
 
-def _mesh_from_voxels(name, voxels, scale=100.0):
+def _mesh_from_voxels(name, voxels, scale=100.0, pal=PAL):
     """One mesh: a unit cube per voxel (only outer faces), vertex colours from the palette. scale: cm per voxel."""
     occupied = {(x, y, z) for x, y, z, _ in voxels}
     colour = {(x, y, z): c for x, y, z, c in voxels}
@@ -183,7 +233,7 @@ def _mesh_from_voxels(name, voxels, scale=100.0):
              ((0, 0, 1), ((0, 0, 1), (1, 0, 1), (1, 1, 1), (0, 1, 1))), ((0, 0, -1), ((0, 0, 0), (0, 1, 0), (1, 1, 0), (1, 0, 0)))]
     cache = {}
     for (x, y, z) in occupied:
-        col = PAL[colour[(x, y, z)]] + (1.0,)
+        col = pal[colour[(x, y, z)]] + (1.0,)
         for (nx, ny, nz), quad in faces:
             if (x + nx, y + ny, z + nz) in occupied:
                 continue
@@ -235,7 +285,7 @@ def build(seed, out, size=46, thick=22, keep=False):
     for layer, members in GROUPS.items():      # two meshes per island: Unreal's importer costs ~2 s per mesh
         voxels = [v for m in members for v in vox.get(m, [])]
         if voxels:
-            objs.append(_mesh_from_voxels("%s_%s" % (name, layer), voxels))
+            objs.append(_mesh_from_voxels("%s_%s" % (name, layer), voxels, pal=palette(seed)))
     for ob in bpy.data.objects:
         ob.select_set(ob in objs)
     bpy.context.view_layer.objects.active = objs[0]
