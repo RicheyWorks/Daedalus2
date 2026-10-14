@@ -14,6 +14,9 @@ The build stage must copy the shared Unreal inventory catalogs and kennel tonic
 book as well as the Java modules. Maven can skip a missing resource directory
 without failing the package step; the resulting server then fails initialization.
 The Dockerfile now includes both external resource inputs.
+The first actual image CI run also exposed missing `config/checkstyle.xml`;
+the shared Checkstyle/SpotBugs configuration is now copied into the build stage
+so the normal Maven gates remain enabled.
 
 The `Container runtime resources` workflow builds the actual image and runs a
 disposable production-profile container. It compares the embedded catalogs and

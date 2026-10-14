@@ -15,6 +15,7 @@ WORKDIR /workspace
 # Copy poms first so dependency resolution caches as its own layer;
 # source changes then don't re-download the world. Every reactor module listed in pom.xml must be here.
 COPY pom.xml .
+COPY config config
 COPY daedalus-plugin-api/pom.xml daedalus-plugin-api/
 COPY daedalus-core/pom.xml daedalus-core/
 COPY daedalus-wallet/pom.xml daedalus-wallet/
