@@ -611,3 +611,37 @@ Harness
 13. Hub protocol gaps: notes were invisible (fixed), reply_to missing (fixed), two bots nearly restarted the hub
     (protocol). Research: one `teamlink doctor` command that prints lock table, unacked inbox, last id, broker
     pid and age, so every bot starts a turn with the same one-screen picture.
+
+## Throughput: how to operate Unreal at high speed and use all of it (2026-10-13, 22:45, Richey: "speed up the ability to get great output from unreal... use the full capability... speed up the code writing to feed unreal")
+Measured tonight: 22 heavy imports through `daedalus.steps` = 1 round trip, 7.3 s, editor ticking between
+items (the same 22 as 22 separate calls took ~65 s, and as ONE blocking call killed the GPU). The rules that
+follow, each one a concrete change to make or keep:
+
+1. One round trip per job, one editor tick per item. `daedalus.steps` (generator command) is the shape for every
+   bulk operation: imports, spawns, saves, material fixes. Host scripts send the plan, the editor yields per item.
+   Never N calls, never one blocking call. Next: convert fix_materials and the plot/kit layers to steps().
+2. Idempotent by identity, proven by the file. Every actor has a label and tags; every asset a SHA stamp; every
+   save checks the .umap mtime. A re-run costs seconds and reports "0 made" — so we run tools freely and often.
+3. Hot-copy, reload, re-register; never restart the editor for Python. The bridge commands are re-registered by
+   `daedalus_bridge_commands.install()` after a reload (done live tonight). A C++ change is the only reason
+   for a 4-minute rebuild; batch C++ work so builds happen a few times a day, not per edit.
+4. Preflight before the PC build (0 errors in <1 s) — a 2-minute build failure for a comment typo (P9) is the
+   expensive mistake; add a rule for every build failure class we meet.
+5. Scenarios are the acceptance, not screenshots. A Play scenario walks all four realms in 40 s and gives n/m;
+   editor_windows gives the picture when one is wanted. Keep adding one check per feature, run the suite per
+   job end, post n/m to the hub.
+6. Use the engine's own batch machinery, not per-actor Python: ScopedSlowTask + save_packages for saves,
+   AssetImportTask lists for imports, EditorLevelUtils for sublevels, PCG for scatter, World Partition / level
+   streaming for districts (ADR-063). Python decides, the engine does the loop.
+7. Pure cores first, engine last. Every system today has a C++17 header + headless test (grid, registry,
+   session, cast, dialogue, inventory, stage): the design is proven in milliseconds before the editor is touched,
+   and the Python twin lets the editor-side tool be tested without Unreal. This is what makes code-writing fast:
+   the engine is only the last 10% of each slice.
+8. One persistent level per realm set, folders per realm, labels per thing: the editor layout is data we can
+   diff, dump (editor-lands JSON) and reconcile against the server. Keep it that way; sublevels come with
+   streaming, not before.
+9. Two bots, two lanes, one hub: producer posts the artefact (sha/file/job id), consumer reviews the seam, one
+   request per topic, reply_to + ack. Capacity doubles when neither waits on the other's editor turn: Sol builds
+   Blender/Java while I hold `unreal`, and the lock changes hands at job ends, not mid-job.
+10. Measure everything in the status line: items, seconds, errors=/warnings= from log_report, n/m. A number
+    that is not posted did not happen.
