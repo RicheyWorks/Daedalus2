@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 THIRD_PARTY_INCLUDES_START
-#include "DaedalusShardsteadCore.h"
+#include "DaedalusShardsteadLedger.h"
 THIRD_PARTY_INCLUDES_END
 #include "DaedalusShardsteadComponent.generated.h"
 
@@ -43,10 +43,18 @@ public:
     UFUNCTION(BlueprintCallable,BlueprintAuthorityOnly,Category="Daedalus|Shardstead") bool AdvanceCycleFromHost(int64 Cycle);
     UFUNCTION(BlueprintPure,Category="Daedalus|Shardstead") FDaedalusIslandStats GetCrewStats(const FString& PlayerKey) const;
     UFUNCTION(BlueprintPure,Category="Daedalus|Shardstead") TArray<FDaedalusIslandClaimRow> GetClaimRows(const FString& PlayerKey) const;
+    // Trusted native storage adapter only; these are deliberately not client RPCs.
+    bool InitializeLedgerFromHost(int64 RealmSeed,const daedalus::shardstead::LedgerSnapshot* Saved=nullptr);
+    daedalus::shardstead::PrepareResult PrepareFromHost(const FString& Request,uint64 ExpectedRevision,const daedalus::shardstead::Command& Command);
+    const daedalus::shardstead::LedgerSnapshot* PendingFromHost() const;
+    bool ConfirmPersistedFromHost(const FString& Request,uint64 CommittedRevision);
+    bool CancelConfirmedUncommittedFromHost(const FString& Request,uint64 ExpectedRevision);
 private:
     bool Ready=false;
     int64 BoundSeed=0;
     daedalus::shardstead::Economy Rules{0};
+    std::optional<daedalus::shardstead::Ledger> Durable;
+    const daedalus::shardstead::Economy& ReadRules() const;
     bool Host() const;
     static std::string Key(const FString& Value);
 };

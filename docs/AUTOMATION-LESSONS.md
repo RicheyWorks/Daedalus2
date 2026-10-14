@@ -1143,3 +1143,6 @@ reparent (5,940/11,000), Blender mesh pool (Sol PR140 in progress), BASE-LAYER r
 
 ## Keep GCC warning gates in the native arcade handoff (2026-10-14)
 PR139 GCC CI rejected Minesweeper Step for misleading indentation: Repeat reset and unconditional WasMoving update shared a line. Split the statements with behavior preserved. Actual local MSVC /W4 /WX CMake build and six existing desktop tests pass. GCC acceptance requires the new-head CI result; MSVC success alone did not establish it. Source preflight and portable compiler warnings cover different failure classes.
+
+## Attach the existing ledger without exposing prepared balances (2026-10-14)
+The Unreal host component now supports the existing prepare/persist/confirm ledger as an explicit fresh-instance mode. Legacy prototype writes reject in that mode, and Production stats/claims use committed ledger state. Keep storage callbacks on the game thread; copy component-owned pending snapshots before async work. An unknown write outcome remains pending until storage reconciliation. Calling Confirm is trusted adapter input, not evidence of persistence; canonical inventory and native compile remain separate work.
