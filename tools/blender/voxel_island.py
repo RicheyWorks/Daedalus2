@@ -71,6 +71,8 @@ def plan(seed, size=46, thick=22):
     vox = {k: [] for k in ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds")}
     # 1. footprint: a blobby disc (3 harmonics), the rim 2 m below the top so the top is a plateau
     harm = [(rng.uniform(0.04, 0.10), rng.randint(2, 5), rng.uniform(0, 6.28)) for _ in range(3)]
+    if seed % 4 == 1:      # v4: every fourth island is two-lobed (a strong 2nd harmonic) for silhouette variety
+        harm.append((rng.uniform(0.18, 0.26), 2, rng.uniform(0, 6.28)))
 
     def radius(ang):
         return size * (1.0 + sum(a * math.sin(n * ang + p) for a, n, p in harm))
@@ -168,17 +170,43 @@ def plan(seed, size=46, thick=22):
     def free(x, y, m=3):
         return (x, y) in top and top[(x, y)] < radius(math.atan2(y, x)) - 4 and math.hypot(x - pcx, y - pcy) > 8 and (abs(x - cx) > w // 2 + m or abs(y - cy) > d // 2 + m)
 
+    biome = biome_of(seed)
+
     def tree(x, y, kind):
-        hgt = rng.randint(4, 7) + hill(x, y)
-        for z in range(hill(x, y) + 1, hgt + 1):
+        """v4 (11:40): the canopy shape follows the biome - pines in snow, palms in the tropics, bare dead trees on
+        volcanic rock, round canopies elsewhere; blossom trees stay round everywhere."""
+        base = hill(x, y)
+        hgt = rng.randint(4, 7) + base
+        shape = "round" if kind == "blossom" else {"snow": "pine", "tropical": "palm", "volcanic": "dead"}.get(biome, "round")
+        if shape == "palm":
+            hgt += 3
+        for z in range(base + 1, hgt + 1):
             vox["trees"].append((x, y, z, "trunk"))
-        rad = rng.randint(2, 3)
-        for dx in range(-rad, rad + 1):
-            for dy in range(-rad, rad + 1):
-                for dz in range(-rad + 1, rad + 1):
-                    if dx * dx + dy * dy + dz * dz <= rad * rad + 1:
-                        c = ("blossom" if rng.random() < 0.7 else "blossom2") if kind == "blossom" else ("leaf" if rng.random() < 0.6 else "leaf2")
-                        vox["trees"].append((x + dx, y + dy, hgt + dz, c))
+        leafc = lambda: ("blossom" if rng.random() < 0.7 else "blossom2") if kind == "blossom" else ("leaf" if rng.random() < 0.6 else "leaf2")
+        if shape == "round":
+            rad = rng.randint(2, 3)
+            for dx in range(-rad, rad + 1):
+                for dy in range(-rad, rad + 1):
+                    for dz in range(-rad + 1, rad + 1):
+                        if dx * dx + dy * dy + dz * dz <= rad * rad + 1:
+                            vox["trees"].append((x + dx, y + dy, hgt + dz, leafc()))
+        elif shape == "pine":
+            for i, rad in enumerate((3, 2, 2, 1, 1, 0)):
+                z = hgt - 3 + i
+                for dx in range(-rad, rad + 1):
+                    for dy in range(-rad, rad + 1):
+                        if abs(dx) + abs(dy) <= rad:
+                            vox["trees"].append((x + dx, y + dy, z, leafc()))
+            vox["trees"].append((x, y, hgt + 3, "leaf"))
+        elif shape == "palm":
+            for ddx, ddy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                for i in range(1, 5):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, hgt + (1 if i < 2 else 0) - (i // 3), leafc()))
+            vox["trees"].append((x, y, hgt + 1, "leaf"))
+        else:   # dead: bare forked branches
+            for ddx, ddy in ((1, 0), (-1, 1), (0, -1)):
+                for i in range(1, 4):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, hgt - 2 + i, "trunk"))
     for _ in range(3):
         for _try in range(40):
             ax, ay = rng.randint(-size, size), rng.randint(-size, size)
