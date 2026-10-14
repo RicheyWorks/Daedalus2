@@ -20,11 +20,13 @@ import re
 import subprocess
 import sys
 import time
+import uuid
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 from asset_pipeline import wire  # noqa: E402
+from asset_pipeline.ship import write_report  # noqa: E402
 
 LIVE = r"C:\Unreal\DaedalusRealm\Plugins\DaedalusLink\Content"
 PS = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
@@ -135,6 +137,16 @@ def assess_run(text, returncode, report):
             'scenario_returncode': returncode, 'counts': counts, 'reasons': reasons,
             'editor_errors': report['errors'] if log_valid else None,
             'editor_warnings': report['warnings'] if log_valid else None}
+
+
+def publish_receipt(receipt,out_dir,latest_path):
+    """Use the existing atomic report writer; archive first, then update latest."""
+    os.makedirs(out_dir,exist_ok=True)
+    receipt=dict(receipt,run_id=uuid.uuid4().hex)
+    path=os.path.join(out_dir,'night-run-%s-%s.json' % (time.strftime('%m%d-%H%M%S'),receipt['run_id']))
+    write_report(path,receipt)
+    write_report(latest_path,receipt)
+    return path
 
 
 def parse_options(argv):
@@ -264,15 +276,12 @@ def main(argv):
     receipt['outcome'] = outcome
     out_dir = os.path.join(os.environ.get("LOCALAPPDATA", REPO), "Daedalus", "jobs")
     try:
-        os.makedirs(out_dir, exist_ok=True)
-        path = os.path.join(out_dir, "night-run-%s.json" % time.strftime("%m%d-%H%M%S"))
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(receipt, f, indent=1)
-        with open(os.path.join(REPO, "docs", "production", "night-run-latest.json"), "w", encoding="utf-8") as f:
-            json.dump(receipt, f, indent=1)
+        path=publish_receipt(receipt,out_dir,os.path.join(REPO,'docs','production','night-run-latest.json'))
         say("receipt " + path)
     except OSError as e:
         say("receipt not written: %s" % e)
+        hub('status','NIGHT RUN receipt publication failed on %s: %s; result evidence incomplete' % (sha,e))
+        return outcome['exit_code'] or 2
     return outcome['exit_code']
 
 

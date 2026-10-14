@@ -3,11 +3,22 @@ import unittest
 import tempfile
 from unittest.mock import patch
 import subprocess
+import json
+from pathlib import Path
 import night_run
 from night_run import assess_run, require_stage, parse_options
 
 
 class OutcomeTest(unittest.TestCase):
+    def test_receipt_archives_do_not_collide_and_latest_matches(self):
+        with tempfile.TemporaryDirectory() as folder:
+            latest=Path(folder)/'latest.json'
+            one=night_run.publish_receipt({'total':'TOTAL 1/1'},folder,str(latest))
+            two=night_run.publish_receipt({'total':'TOTAL 2/2'},folder,str(latest))
+            self.assertNotEqual(one,two)
+            self.assertEqual(json.loads(Path(one).read_text())['total'],'TOTAL 1/1')
+            self.assertEqual(json.loads(latest.read_text()),json.loads(Path(two).read_text()))
+
     def test_powershell_failure_cannot_be_read_as_successful_output(self):
         with patch.object(night_run.subprocess,'run',return_value=subprocess.CompletedProcess([],7,'BUILD OK stale','failed')):
             with self.assertRaises(RuntimeError):night_run.ps('fixture')

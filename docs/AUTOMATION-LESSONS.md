@@ -821,3 +821,7 @@ Collecting every non-flag string after --import also collected later option valu
 ### Content synchronization failures must stop orchestration (2026-10-14)
 A captured PowerShell error string is not a successful command result. Enable terminating cmdlet errors and inspect subprocess exit codes. Copy failure must prevent Python reload; reload must return its explicit completion marker without diagnostics before layout/Play. This detects failure but does not make the multi-file copy atomic or roll back partially copied content. Keep that limitation separate from binary rollback125.
 
+
+### Atomic night-run receipt publication (2026-10-14)
+Reuse the pipeline's fsync-and-replace report writer for night receipts. Archive under a unique run ID before updating latest, so runs finishing within one second cannot overwrite each other. Each file is atomically published; the archive/latest pair is not a transaction. Publication failure makes evidence incomplete and returns nonzero instead of a successful receipt claim.
+
