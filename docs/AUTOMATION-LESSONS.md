@@ -554,3 +554,7 @@ output as terminal. Read a validated atomic completion marker: return its nonzer
 reject malformed markers, and keep compiler errors without a marker as RUNNING diagnostics.
 A success phrase in a stale log must not override a failed marker. Publish .exit through
 same-directory .tmp rename. Native fixtures cover failures without launching any engine.
+
+Poot review29305 caught an inherited WarningPreference=Stop edge: even the warning can
+abort an accepted-launch response. Explicit -WarningAction Continue preserves the receipt;
+the blocked-receipt regression now runs with strict warnings to cover that exact failure.
