@@ -369,6 +369,9 @@ def portal_plan(realm):
     if realm == "WORLD-ZERO":
         for to, (ex, ny) in HUB_GATES.items():
             out.append(("Portal_WORLD-ZERO_to_%s" % to, to, "gate", "", (ex * 4000.0, ny * 4000.0, 0.0, 0.0)))
+        # the hub's docks (Session: WORLD-ZERO HasDocks): a boat pier and a sub airlock south-east of the spawn
+        out.append(("Portal_WORLD-ZERO_Dock", "OCEAN", "dock", "boat:world-zero-dock", (3000.0, -3000.0, 0.0, 0.0)))
+        out.append(("Portal_WORLD-ZERO_SubDock", "OCEAN", "dock", "sub:world-zero-airlock", (3000.0, -4200.0, 0.0, 0.0)))
         return out
     m = markers(ORIGINS[realm])
     for name, (target, via, detail) in PORTALS.items():
@@ -403,6 +406,32 @@ def lay_portals(realm):
     return {"realm": realm, "made": made, "portals": len(portal_plan(realm))}
 
 
+def lay_ocean_markers():
+    """The Ocean is Sol's/Poot's host (harbor at the +E/-N corner): give it the markers the hero lands on
+    (Spawn/Dock/SubDock tagged Realm:OCEAN) at Poot's dock actors, so a boat from any realm arrives on the pier
+    and a shore landing returns home. Idempotent by label."""
+    sub = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    have = _labels()
+    docks = [a for a in sub.get_all_level_actors() if any(str(t) == "Realm:OCEAN" for t in a.tags) and "Docks" in str(a.get_folder_path())]
+    if not docks:
+        return {"realm": "OCEAN", "made": 0, "why": "no Realm:OCEAN actors in a Docks folder"}
+    docks.sort(key=lambda a: a.get_actor_label())
+    made = 0
+    spots = {"Dock": docks[0], "SubDock": docks[-1], "Spawn": docks[0]}
+    for name, a in spots.items():
+        label = "%s_OCEAN" % name
+        if label in have:
+            continue
+        l = a.get_actor_location()
+        m = sub.spawn_actor_from_class(unreal.TargetPoint, unreal.Vector(l.x, l.y + (400.0 if name == "Spawn" else 0.0), l.z + 150.0), unreal.Rotator(0.0, 0.0, 0.0))
+        m.set_actor_label(label)
+        m.set_folder_path("Realms/OCEAN/Markers")
+        m.tags = [unreal.Name(name), unreal.Name("Realm:OCEAN")]
+        made += 1
+    __import__('daedalus_plots').save_world()
+    return {"realm": "OCEAN", "made": made, "at": [d.get_actor_label() for d in docks][:3]}
+
+
 def lay_cast_steps(realms):
     """One realm per editor tick: lay_cast for each (daedalus.steps shape)."""
     out = {}
@@ -418,6 +447,8 @@ def lay_portals_steps(realms):
     for r in realms:
         out[r] = lay_portals(r)
         yield "%s portals: %s" % (r, out[r])
+    out["OCEAN"] = lay_ocean_markers()
+    yield "OCEAN markers: %s" % out["OCEAN"]
     return out
 
 
