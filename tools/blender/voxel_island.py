@@ -260,3 +260,16 @@ def build(seed, out, size=46, thick=22, keep=False):
         for ob in objs:
             bpy.data.objects.remove(ob, do_unlink=True)
     return {"seed": seed, "out": out, "voxels": stats(vox)}
+
+
+def build_many(seeds, out_dir, size=46, thick=22):
+    """Contest batches (Richey 09:36 "chunks of 10 then scale up"): one GLB per seed into out_dir. Returns
+    {seed: stats}; a seed whose GLB already exists is skipped so a re-run only fills gaps."""
+    done = {}
+    for seed in seeds:
+        out = os.path.join(out_dir, "Island_C%d.glb" % seed)
+        if os.path.exists(out):
+            done[seed] = "exists"
+            continue
+        done[seed] = build(seed, out, size=size, thick=thick)
+    return done
