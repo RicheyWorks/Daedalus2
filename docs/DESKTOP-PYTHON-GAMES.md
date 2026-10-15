@@ -1,6 +1,53 @@
 # Desktop Python games into Daedalus
 
-## Native polish cycle 4: remaining six games — source only, 2026-10-15
+## Current checkpoint: source gap closed and portable checks passed, 2026-10-15
+
+Code commit `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` closes the confirmed
+Contra title/input gap and corrects Shadow Ninja's catalog controls. All seven
+portable C++ suites pass serially with MSVC 19.44.35229.0, C++17, `/W4 /WX
+/permissive-`: 394,774 reported assertions, including 162 new polish checks,
+78 Driver/registry checks and the existing pinned-source fixtures/replays. Python
+originals and fixtures were not changed; Python oracles were not rerun.
+The initial maze failure was its old 280-pixel Dungeon frame expectation; it now
+checks the documented 344-pixel frame including the 64-pixel objective footer.
+The final complete CTest run passed 7/7 in 10.75 seconds.
+
+This verifies portable game cores and Driver. **This revision's Unreal actor,
+Slate, UHT/module compilation, native load, visible Hero Use, rendering/focus,
+physical-controller Play, game feel and E2E acceptance remain unverified.**
+The exact commands, source/test/binary pins, results and limitations are recorded
+in [the version 5 install packet](desktop-games-polish-install.json).
+
+Team-codex explicitly transferred only the Contra input seam and Shadow controls
+changes in `DaedalusDesktopGameTypes.h`, `DaedalusDesktopGameRegistry.h`,
+`DaedalusDesktopArcade.h/.cpp` and `SDaedalusDesktopArcade.cpp`. Comparison with
+PR139 source `0582c27a7fe3ad1f92da836f087efface618a8b6` found four identical
+shared files; the registry differs only by PR139's Minesweeper include/catalog/
+factory additions. Those additions were not copied or duplicated and must be
+retained when integrating both PRs. Minesweeper remains team-codex's lane.
+
+Contra now opens a frozen source title through `Driver::Select -> EnterTitle`.
+Each non-repeat keyboard keydown goes through Slate -> actor -> Driver ->
+`SourceKeyDown` immediately, before held input mapping. The literal arrow/B/A
+sequence sets 30 lives; final keyboard A stays on the title. Enter/Space starts
+with those lives. Separate `SourceControllerButton` dispatch lets controller A
+start while preserving an unfinished keyboard sequence; controller events never
+advance or reset that sequence. A/Start retries terminal results; Start otherwise
+keeps generic pause. Transitions discard old pending semantic edges, then Slate
+rebuilds held controls. Sticky raw mode prevents duplicate cheat submission.
+Terminal Space does not retry; W is a movement/jump alias, not a title start.
+Direct core Reset/host Restart still starts a standard run, and terminal retries
+retain the native two-enemy initializer; both are documented host adaptations.
+
+The bounded source audit found no additional missing Python gameplay capability
+in the claimed core headers. Java original-app gaps remain in their separate
+PR152 map. Star's existing five-second failed-save retry is implemented; native
+failure/recovery and process-loss durability remain unverified. New shooter
+polish checks use real seeded sessions; exact private-container saturation is
+not forced. Characters, audio and new online/profile/reward features require
+their own scope. Only `codex-play-guard` operates Unreal.
+
+## Historical native polish cycle 4: remaining six games — source only
 
 Claims hub 31229/31230 cover `ContraGame`, `DodgeBallGame`, `ZeldaGame` and the
 three shooter classes in their existing core headers, plus the existing family
@@ -166,17 +213,17 @@ No new adapter is proposed or required for these eleven feedback passes.
 
 | Implemented feature | Exact core interface/source path | Existing Daedalus UI/service binding | Missing code or scope | End-to-end evidence |
 |---|---|---|---|---|
-| Dungeon ordered lanterns, exit, completion/replay | `Public/DesktopGames/DaedalusDesktopMazeCore.h::DungeonGame::Step/Render/GetStatus` | Catalog `dungeon`; frame/footer and actor status; existing Action/R reset | No server quest/reward or durable run save; those are separate scope | Source written/reviewed; build/load/Hero Use/route/replay pending |
-| Pong point preparation, early serve, rally/contact cues | `Public/DesktopGames/DaedalusDesktopPongCore.h::PongGame::Step/Render/GetStatus` | Catalog `pong`; existing digital/analog/hat actions and frame | No match-win rule or persistence added | Source written/reviewed; timing/controller/native rendering pending |
-| Pac-Man lethal respawn guard, dot/power counts, fresh retry | `Public/DesktopGames/DaedalusDesktopMazeCore.h::PacmanGame::Step/Render/GetStatus/RespawnFramesRemaining` | Catalog `pacman`; existing merged hat/stick input, terminal press edges and host R/Restart | No profile/save/inventory backend for this source game; no new adapter | Source written; exact 90/91 boundary, fright capture, reset/terminal and native play pending |
-| Shadow Ninja periodic strike/readiness feedback | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange`; `ShadowNinjaGame::Step/Render/GetStatus` | Catalog `shadow_ninja`; existing separate hat/axes and sword/star/spin edges; host R/Restart | No character mesh/audio/progression invented; source level remains 1 | Source written; timer/range/invincibility receipt boundaries and native readability pending |
-| Football scorer/kick receipts, ready/cooldown and direct Pad control | `Public/DesktopGames/DaedalusDesktopSportsCore.h::FootballGame::MovePlayer/Step/Render/GetStatus/IsKickReady` | Catalog `football`; existing merged hat/axes, Fire/Action edges, Frame/Note and host R/Restart | No new physics, timed kickoff pause, possession, save/network/reward or service added | Cycle 3 source written; cue lifetimes, Pad precedence, goal/cooldown/clock/result and native readability pending |
-| Contra distance/weapon/readiness/protection and direct Pad | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::ContraGame::Step/Render/GetStatus` | Catalog `contra`; existing held jump/fire, merged hats, cheat edges and host restart | Title 30-lives UI binding remains; no durable checkpoint/profile/rewards | Cycle 4 source reviewed; strict finish, cap/power expiry, held/mixed input and native layout pending |
-| Dodge roster/country/throw/catch/round feedback | `Public/DesktopGames/DaedalusDesktopSportsCore.h::DodgeBallGame::Render/GetStatus/LivingPlayers/IsHumanThrowReady/HumanCatchRadius` | Catalog `dodge_ball`; existing separate hat/axes, held catch/rethrow versus fresh throw, round confirm | No new bracket, teammate switch or persistence | Cycle 4 source reviewed; strict charge/catch/cooldown, KO/round transitions and readability pending |
-| Asteroids wave/rock/UFO/protection/fire feedback | `Public/DesktopGames/DaedalusDesktopShootersCore.h::AsteroidsGame::Render/GetStatus/IsFireReady/GetProtectionFrames` | Catalog `asteroids`; existing independent hat fields, held fire and host restart | No new physics, respawn rule, profile or asset binding | Cycle 4 source reviewed; timer 0/1/60, bullet cap, additive hats/wave transitions and native view pending |
-| Sega pickup/shot/boss/protection feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::SegaShooterGame::Player::Update`; `SegaShooterGame::Render/GetStatus/IsFireReady/GetBossHealth` | Catalog `sega_shooter`; existing merged movement/held fire and host restart | No enemy bullets invented; no new save/network/service | Cycle 4 source reviewed; caps, reserved slots, boss/result flags, mixed input and native view pending |
-| Zelda roster/key/sword/hurt feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopMazeCore.h::ZeldaGame::Player::Update`; `ZeldaGame::Render/GetStatus/LivingEnemyCount/HasGroundKey/IsSwordReady` | Catalog `zelda`; existing merged movement and fresh sword/retry edges | Decorative shield stays decorative; no new inventory or service | Cycle 4 source reviewed; attack/facing order, key/drop/death transitions, timers and native view pending |
-| Star wave/shot/boss/shield/pause/result feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::StarShooterGame::Player::Update`; `StarShooterGame::Render/GetStatus/GetWaveFramesRemaining/IsFireReady` | Catalog `star_shooter`; existing difficulty, core pause/menu, DGS1 and actor persistence/top-ten contracts | Host retry is implemented in `ADaedalusDesktopArcade::ProcessSourceRequests`; current-head failure/recovery acceptance pending; no durable replay claim | Cycle 4 source reviewed; pause/quit/save flags, wave/boss phases, slot caps/input and native view pending |
+| Dungeon ordered lanterns, exit, completion/replay | `Public/DesktopGames/DaedalusDesktopMazeCore.h::DungeonGame::Step/Render/GetStatus` | Catalog `dungeon`; frame/footer and actor status; existing Action/R reset | No server quest/reward or durable run save; those are separate scope | Portable checks pass, including all six reachable routes/completion/reset; native Hero Use/route/replay pending |
+| Pong point preparation, early serve, rally/contact cues | `Public/DesktopGames/DaedalusDesktopPongCore.h::PongGame::Step/Render/GetStatus` | Catalog `pong`; existing digital/analog/hat actions and frame | No match-win rule or persistence added | Portable serve45/early edge/rally checks pass; physical controller/native rendering pending |
+| Pac-Man lethal respawn guard, dot/power counts, fresh retry | `Public/DesktopGames/DaedalusDesktopMazeCore.h::PacmanGame::Step/Render/GetStatus/RespawnFramesRemaining` | Catalog `pacman`; existing merged hat/stick input, terminal press edges and host R/Restart | No profile/save/inventory backend for this source game; no new adapter | Portable90/91, fright capture, reset/terminal checks pass; native play pending |
+| Shadow Ninja periodic strike/readiness feedback | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange`; `ShadowNinjaGame::Step/Render/GetStatus` | Catalog `shadow_ninja`; corrected B/X sword, Y/RB star, LB spin hint; separate hat/axes and host R | No character mesh/audio/progression invented; source level remains 1 | Portable timer/receipt/invincibility/terminal checks pass; native readability pending |
+| Football scorer/kick receipts, ready/cooldown and direct Pad control | `Public/DesktopGames/DaedalusDesktopSportsCore.h::FootballGame::MovePlayer/Step/Render/GetStatus/IsKickReady` | Catalog `football`; existing merged hat/axes, Fire/Action edges, Frame/Note and host R/Restart | No new physics, timed kickoff pause, possession, save/network/reward or service added | Portable cue lifetimes, immediate goal reset/cooldown/clock/replay checks pass; native readability pending |
+| Contra title30, ordered keyboard/controller dispatch, distance/weapon/readiness/protection and direct Pad | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::ContraGame::EnterTitle/SourceKeyDown/SourceControllerButton/Step/Render/GetStatus` | Catalog `contra`; Game virtuals -> Driver dispatch/Refresh -> actor SubmitArcadeSourceKey/SubmitArcadeSourceControllerButton -> Slate OnKeyDown before held mapping | Confirmed title gap source-closed; no durable checkpoint/profile/rewards | Portable title freeze, finalA/30/start, prefix/controller/retry, pending-edge cleanup, strict finish and spread/cap checks pass; Unreal host and native input/layout pending |
+| Dodge roster/country/throw/catch/round feedback | `Public/DesktopGames/DaedalusDesktopSportsCore.h::DodgeBallGame::Render/GetStatus/LivingPlayers/IsHumanThrowReady/HumanCatchRadius` | Catalog `dodge_ball`; existing separate hat/axes, held catch/rethrow versus fresh throw, round confirm | No new bracket, teammate switch or persistence | Portable charge30/31, hat behavior, catch/rethrow and round4 checks pass; native readability pending |
+| Asteroids wave/rock/UFO/protection/fire feedback | `Public/DesktopGames/DaedalusDesktopShootersCore.h::AsteroidsGame::Render/GetStatus/IsFireReady/GetProtectionFrames` | Catalog `asteroids`; existing independent hat fields, held fire and host restart | No new physics, respawn rule, profile or asset binding | Portable seeded loss/protection/fire/bounded replay checks pass; new checks do not force private saturation; native view pending |
+| Sega pickup/shot/boss/protection feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::SegaShooterGame::Player::Update`; `SegaShooterGame::Render/GetStatus/IsFireReady/GetBossHealth` | Catalog `sega_shooter`; existing merged movement/held fire and host restart | No enemy bullets invented; no new save/network/service | Portable source fixtures, direct Pad/cooldown/protection and seeded winning bot pass; native view pending |
+| Zelda roster/key/sword/hurt feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopMazeCore.h::ZeldaGame::Player::Update`; `ZeldaGame::Render/GetStatus/LivingEnemyCount/HasGroundKey/IsSwordReady` | Catalog `zelda`; existing merged movement and fresh sword/retry edges | Decorative shield stays decorative; no new inventory or service | Portable old-facing sword, key/win/replay, cooldown/grace/death checks pass; native view pending |
+| Star wave/shot/boss/shield/pause/result feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::StarShooterGame::Player::Update`; `StarShooterGame::Render/GetStatus/GetWaveFramesRemaining/IsFireReady` | Catalog `star_shooter`; existing difficulty, core pause/menu, DGS1 and actor persistence/top-ten contracts | Host retry is implemented in `ADaedalusDesktopArcade::ProcessSourceRequests`; native failure/recovery acceptance pending; no process-loss durability claim | Portable wave1200/boss, paused freeze, save/quit flags, restore atomicity and replay checks pass; host disk/native view pending |
 
 Later authorized validation must distinguish source, committed, connected, native
 and accepted stages. Exact commit/blobs/SHA256 and pending operator observations
@@ -265,17 +312,17 @@ game or an endless documentation pass. Native gameplay proof is a separate stage
 
 | Order / game | Code-supported next increment | Identity/rules to retain | Current stage / remaining validation |
 |---|---|---|---|
-| 1 Dungeon | Lantern objective/input/completion/replay, above | Original room, movement, reset; new goal explicitly native | Source written; compile, target reachability and Play pending |
-| 2 Pong | Serve/rally/contact feedback, above | Endless source scores, speeds/collision, immediate opening | Source written; timing, controller and rendering Play pending |
-| 3 Pac-Man | 90-step lethal respawn guard, remaining-dot/power feedback, fresh retry | Map, speeds, ghosts, scores and win rules; guard explicitly new native rule | Cycle 2 source written; 90/91 boundary, reset, captures and Play pending |
-| 4 Shadow Ninja | Telegraph existing boss attack; jump/spin/attack readiness and pulse receipt | Existing attack timing/damage and platform movement | Cycle 2 source written; timer/range boundaries and native readability pending |
-| 5 Football | Live scorer/kick receipts, actual readiness, direct Pad and result/replay cues | Immediate source resets, remote kicks, cooldown, physics and floating 90-second match | Cycle 3 source written; cue/Pad/clock/result boundaries and native Play pending |
-| 6 Contra | Distance/weapon/pickup/readiness/control/replay feedback | Source distance victory, held-jump behavior, cheat distinctions | Cycle 4 source reviewed; title bonus remains a separate gap; native validation pending |
-| 7 Dodge Ball | Country/roster/round and throw/catch/charge/jump feedback | Simultaneous trio control and held rethrow | Cycle 4 source reviewed; no bracket/persistence claim; native validation pending |
-| 8 Asteroids | Wave/rock/UFO/protection/fire and run feedback | Wrap/inertia, progressive rocks/lives and independent hats | Cycle 4 source reviewed; native validation pending |
-| 9 Sega Shooter | Boss/pickup/shot/protection/terminal feedback | Source powers/boss victory; unused timers are not enemy bullets | Cycle 4 source reviewed; native validation pending |
-| 10 Zelda | Roster/key/sword/hurt/win and retry feedback | Source key goal and decorative shield | Cycle 4 source reviewed; native validation pending |
-| 11 Star Shooter | Wave/boss/shot/shield/pause/reset readability | Existing difficulty, patterns, save/top-ten ownership | Cycle 4 source reviewed; existing failed-save retry retained; native validation pending |
+| 1 Dungeon | Lantern objective/input/completion/replay, above | Original room, movement, reset; new goal explicitly native | Portable six-route/completion/reset checks pass; native Play pending |
+| 2 Pong | Serve/rally/contact feedback, above | Endless source scores, speeds/collision, immediate opening | Portable timing/rally checks pass; physical-controller/rendering Play pending |
+| 3 Pac-Man | 90-step lethal respawn guard, remaining-dot/power feedback, fresh retry | Map, speeds, ghosts, scores and win rules; guard explicitly new native rule | Portable90/91, reset/capture checks pass; native Play pending |
+| 4 Shadow Ninja | Telegraph existing boss attack; jump/spin/attack readiness and pulse receipt | Existing attack timing/damage and platform movement | Portable timer/receipt/damage checks pass; native readability pending |
+| 5 Football | Live scorer/kick receipts, actual readiness, direct Pad and result/replay cues | Immediate source resets, remote kicks, cooldown, physics and floating 90-second match | Portable cue/Pad/clock/result checks pass; native Play pending |
+| 6 Contra | Distance/weapon/pickup/readiness/control/replay feedback | Source distance victory, held-jump behavior, cheat distinctions | Title/raw-key/controller seam source-closed; portable checks pass; native validation pending |
+| 7 Dodge Ball | Country/roster/round and throw/catch/charge/jump feedback | Simultaneous trio control and held rethrow | Portable charge/catch/round checks pass; no bracket/persistence claim; native validation pending |
+| 8 Asteroids | Wave/rock/UFO/protection/fire and run feedback | Wrap/inertia, progressive rocks/lives and independent hats | Portable suites pass; native validation pending |
+| 9 Sega Shooter | Boss/pickup/shot/protection/terminal feedback | Source powers/boss victory; unused timers are not enemy bullets | Portable suites pass; native validation pending |
+| 10 Zelda | Roster/key/sword/hurt/win and retry feedback | Source key goal and decorative shield | Portable suites pass; native validation pending |
+| 11 Star Shooter | Wave/boss/shot/shield/pause/reset readability | Existing difficulty, patterns, save/top-ten ownership | Portable save/quit/restore checks pass; host retry/native acceptance pending |
 | Java Sudoku | Existing API/native capability gaps in PR152 map | Java rules/clock/score/account/inventory authority | Separate C++ integration lane; no rule port |
 | Java Blackjack | PR152 settings/full visible metadata checkpoint | Java rules, revisions, simulated credits and hidden-state boundary | Draft source `89ece418`; no current connection/native/E2E |
 | Minesweeper | Existing owner's menu/persistence/feedback follow-up | PR139 original game distinct from PR49 Java-rule pilot | Owned by team-codex; no edits in this cycle |

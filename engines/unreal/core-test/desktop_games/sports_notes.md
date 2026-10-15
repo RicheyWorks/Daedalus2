@@ -1,5 +1,21 @@
 # Desktop sports ports
 
+## Current portable verification, 2026-10-15
+
+Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
+MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish
+checks across all eleven families. Existing source fixtures remain unchanged;
+Python oracles were not rerun. Exact source/test/binary pins and commands are in
+[the v5 install packet](../../../../docs/desktop-games-polish-install.json).
+
+This compiles game cores and Driver only. Current Unreal actor/Slate/UHT/module,
+native load/rendering/focus, physical-controller gameplay and E2E acceptance are
+unverified. Earlier cycle sections below retain their historical source-only
+stage; their uncompiled/untested statements do not describe this checkpoint.
+New shooter polish checks use public seeded sessions, not forced private-vector
+saturation. Star host disk-write failure/recovery remains unexecuted.
+
+
 ## Native polish cycle 4: Dodge Ball — source only, 2026-10-15
 
 Claims 31229/31230 cover derived `DodgeBallGame` feedback only and existing notes/

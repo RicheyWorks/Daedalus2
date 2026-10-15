@@ -1,5 +1,21 @@
 # Desktop platformer ports: CONTRA and Shadow Ninja
 
+## Current portable verification, 2026-10-15
+
+Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
+MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish
+checks across all eleven families. Existing source fixtures remain unchanged;
+Python oracles were not rerun. Exact source/test/binary pins and commands are in
+[the v5 install packet](../../../../docs/desktop-games-polish-install.json).
+
+This compiles game cores and Driver only. Current Unreal actor/Slate/UHT/module,
+native load/rendering/focus, physical-controller gameplay and E2E acceptance are
+unverified. Earlier cycle sections below retain their historical source-only
+stage; their uncompiled/untested statements do not describe this checkpoint.
+New shooter polish checks use public seeded sessions, not forced private-vector
+saturation. Star host disk-write failure/recovery remains unexecuted.
+
+
 ## Native polish cycle 4: Contra — source only, 2026-10-15
 
 Claims 31229/31230 cover only `ContraGame` in this header plus existing notes and
@@ -53,7 +69,7 @@ must inspect timer 13/12/1/50, strict range edges, invincibility, moving boss an
 receipt on hit/miss/protected pulses. The old oracle receipts below do not prove
 the new cues. No new Blender assets or character imports were created.
 
-These are ports of the actual user's Desktop scripts into the existing `daedalus::desktop::Game` contract. The Python originals are preserved. Both native cores start a playable session immediately; the Daedalus launcher owns opening, closing and restarting the minigame.
+These are ports of the actual user's Desktop scripts into the existing `daedalus::desktop::Game` contract. The Python originals are preserved. Direct core Reset starts play immediately; the Driver's optional EnterTitle call opens Contra's source title when selecting it in the cabinet. The launcher owns opening, closing and host Restart.
 
 ## Canonical source selection
 
@@ -84,7 +100,9 @@ Call one `Step` per 1/60-second simulation step. The Unreal adapter should cap a
 
 For Shadow Ninja, keyboard directions, stick axes and D-pad directions remain separate. `ShadowNinjaGame::Step` passes `PadRight-PadLeft` and `PadUp-PadDown` into the player's explicit hat parameters. The source's horizontal hat wins over keyboard and stick input, including opposing directions; both D-pad flags cancel to neutral. Vertical wall-climb conditions preserve the source's independent up/down checks, so opposing keyboard/stick/hat climb requests can cancel. The wrapper should retain these independent fields rather than merging D-pad into keyboard directions or clearing stick axes. Controller connection/hotplug and physical mappings belong to the adapter.
 
-CONTRA `SubmitCheatKey(key, titleScreen=false)` accepts `0=up, 1=down, 2=left, 3=right, 4=B, 5=A`. The source sequence U,U,D,D,L,R,L,R,B,A gives +5 lives, capped at 99, and 600 steps of spread in play; passing `titleScreen=true` gives the source's 30-lives title bonus. Normal gameplay feeds digital direction/action/jump edges automatically. A title-screen-specific binding is optional UI work; native `Reset` starts play directly.
+CONTRA now uses ordered `SourceKeyDown`: `0=Up,1=Down,2=Left,3=Right,4=literal B,5=literal A,6=Enter,7=Space,8=R,9=other`. Slate sends every non-repeat keyboard key before held mapping. The source sequence gives 30 lives on title and stays there after final A; in play it adds5 capped99 and600 spread, before the next Step decrements to599. Any wrong keyboard key resets the prefix. Controller events use separate `SourceControllerButton(0=A,1=Start)` and never track/reset the keyboard code. A starts the title preserving an unfinished prefix; A/Start retries a terminal result; Start otherwise keeps generic pause. Keyboard Enter/Space starts title, terminal Enter/R retries, terminal Space is ignored. Semantic Jump/W cannot start title. Transitions clear stale Driver pressed edges before held input is rebuilt. Raw mode stays through Reset, preventing duplicate semantic cheat submission. The old semantic-edge helper remains for direct legacy core callers only; cabinet selection always uses raw mode.
+
+Core `SourceKeyDown` returns true only on a run transition; the Driver uses that result to clear pre-transition pending input. Other games inherit no-op/false defaults for all optional title/key/controller hooks. Direct Reset/host Restart starts a standard run; native retries retain two grunts at450/650 with spread620,350, while the original terminal retry uses three at400/580/760 and spread550,380. Those reset adaptations remain explicit. The existing actor/Slate/save/focus cleanup path is preserved. These source bindings and portable checks do not verify Unreal compilation or native/physical-controller acceptance.
 
 `GetStatus().Lives` is lives for CONTRA and health for Shadow Ninja. `Over` stops subsequent simulation; `Won` distinguishes success. The port does not grant Daedalus currencies or persistence rewards: the session owner must consume terminal state once if those are added.
 
