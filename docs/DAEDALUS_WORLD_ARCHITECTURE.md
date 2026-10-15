@@ -1212,3 +1212,53 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
     manifest records a `bake_policy` and lists each role's collision.
   - **Walkway.** Rope rails run post to post, with no long spans over the water. The walk detours behind the repair
     pad when a leg passes within 8 m of the wheel.
+
+### 14.37 Sky to Sea: World-Zero's rim dock, the Ocean Tide-Pen, and the settled-care gate
+
+PootScoot 32475 asked for one neighbour-realm connection. This is the design and source slice only. Nothing new runs
+in a host or in Unreal yet.
+
+**What it reuses.**
+- The session core already allows `WORLD-ZERO --dock(boat)--> OCEAN`.
+- `OceanTerrain` gives the pier berths.
+- `DaedalusOceanTravelComponent` takes docks and connections.
+- `voxel_creatures` SEA and `voxel_aquatic` sea plants supply the residents.
+
+**`data/ocean/links.json` (`daedalus.ocean-links/v1`)** holds the docks and connections in data, using session realm
+ids. Today docks only exist in code.
+- `wz-rim-tidepen` is anchored to an island manifest's dock terrace.
+- The two Ocean pier berths are copied from `OceanTerrain`.
+- The new `ocean-tidepen-landing` is on the tide-pool shelf beside the pier.
+
+**`data/ocean/tidepen.json` (`daedalus.tidepen/v1`)** describes the Tide-Pen.
+- **Residents:** sea turtle, seahorse, crab and starfish, each with its own food and habitat plants.
+- **Rule:** enclose or capture is refused until the actor has a verified `settled_care` fact for that creature.
+  - The creature was fed its own food at least 3 times, on at least 2 days.
+  - It was never harmed.
+  - At least one of its habitat plants was planted in the pen.
+- Leaving a creature wild is always allowed.
+- The fact is written only by a trusted host, using the LivingWorld receipt pattern. That store does not exist yet;
+  this slice adds none.
+
+**`TidePenGate` (daedalus-core)** is the pure decision for that rule, with no state, store or authority. It
+deduplicates replayed request ids and returns a reason a player can read. `TidePenGateTest` passes 8/8, and the core
+suite passes 727/727.
+
+**`tools/ocean/links_check.py`** reads every rule from source rather than copying it:
+- RealmDefs from the session header
+- the berths from `OceanTerrain`
+- species from voxel_creatures and plants from voxel_aquatic
+- the thresholds from `TidePenGate.Rule.DEFAULT`
+
+It passes 31/31. `--self-test` breaks the data five ways, and every canary fails (5/5).
+
+**Found: OceanTravelCore (team-codex) disagrees with the session core in two places.** The check reports these as
+WARN; this slice does not change them.
+1. It compares realm names to "Ocean Realm" and "Portal Realm", while the session core uses OCEAN and PORTAL.
+2. `Land` allows an ordinary shore landing only into Portal, while the session core says
+   `OCEAN --shore--> the realm you sailed from`. A World-Zero boat could not come home by shore.
+
+**Next, owner by owner:**
+- team-codex: a `ConfigureHost` loader for `links.json`, and the two mismatches above.
+- A host: the `settled_care` fact store and the capture/enclose actions.
+- Blender: the tide-pool shelf and pen art.
