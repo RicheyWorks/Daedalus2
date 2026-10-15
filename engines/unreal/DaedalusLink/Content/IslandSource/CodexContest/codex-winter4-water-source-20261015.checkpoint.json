@@ -1,0 +1,135 @@
+{
+  "schema": "daedalus.codex-winter4-water-source-checkpoint.v1",
+  "utc": "2026-10-15T22:35:53.080645+00:00",
+  "stage": "SOURCE_REVIEWED_NATIVE_PARTIAL_REMAINING_PHASE_HELD",
+  "source_team": "Team Claude",
+  "original_creator": "unknown",
+  "seed": 4,
+  "source_original": {
+    "bytes": 348216,
+    "sha256": "ad06dd2b3b95da8bc98ee07bcd7ff59fadbbc2d08af98cb74c4582b56c1ed5cd"
+  },
+  "source_payload": {
+    "bytes": 46156,
+    "sha256": "d78739e457ed32bb4f06c99607b17e2f93567af58970d2add87f5074a141e492"
+  },
+  "selected_nodes": [
+    "Octet_Winter_4_Canal_Stream1",
+    "Octet_Winter_4_Canal_Stream1_Core"
+  ],
+  "triangles": 2912,
+  "material_policy": "owned_factor_alpha_parent_v1",
+  "source_files": {
+    "engines/unreal/DaedalusLink/Content/Python/daedalus_codex_canal_water.py": {
+      "bytes": 21899,
+      "sha256": "363ed4b0f777a4f1f5d27221cba74af81c8c63187baeed7a435afb960ca910ee"
+    },
+    "engines/unreal/DaedalusLink/Content/Python/daedalus_codex_canal_material.py": {
+      "bytes": 47565,
+      "sha256": "75c6d1eecef4d2c42d47db0b3a52033024f8bc7ac67efa58aeff83ad00f62000"
+    },
+    "tools/unreal/codex_canal_water_delivery.py": {
+      "bytes": 24446,
+      "sha256": "332a06e4212acdfdfbaa7d07eb9e350ccad5596c57b5963cb39f34cdf396a539"
+    },
+    "tools/unreal/codex_canal_water_recovery.py": {
+      "bytes": 52794,
+      "sha256": "e51468673949fff20cbb51d8a5371b15680bb331dd80c6671f19c9a2efe6cb8b"
+    }
+  },
+  "reused_queue_source": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_qualified_static.py",
+    "bytes": 28818,
+    "sha256": "ff67f266fa45b276d287d69d5fa750b445353960d7213234dede15bc1f135df0"
+  },
+  "source_review": "independent source reviews passed; no automated tests run",
+  "native_actual": {
+    "imports": 4,
+    "import_classes": {
+      "StaticMesh": 2,
+      "MaterialInstanceConstant": 2
+    },
+    "import_seconds": 3.99628,
+    "native_parents_created": 1,
+    "native_parameter_nodes_created": 4,
+    "last_failed_dispatch_intents": 22,
+    "mic_bindings": 0,
+    "first_saved_packages": 0,
+    "world_placed": 0,
+    "map_save_calls": 0,
+    "reimports": 0,
+    "stage": "exact five-object partial Water graph qualified read-only; remaining suffix unexecuted",
+    "observed_flags": {
+      "nanite_enabled": false,
+      "generate_lightmap_uvs": false,
+      "simple_collision_count": 0,
+      "build_scale": [
+        1,
+        1,
+        1
+      ],
+      "unit_policy": "gltf_authored_root_world_XZY_cm100_baked_build1_future_actor1_v1"
+    },
+    "partial_readback_utc": "2026-10-15T22:27:34.582715+00:00"
+  },
+  "saved_boundary": {
+    "protected_packages": 211,
+    "tracked_codex_actors": 143,
+    "accepted_cpp_sources": 184,
+    "map_bytes": 209408537,
+    "map_sha256": "72cb0c195975afa4b272417f67181f09774b95e7d5b061d7438ec2e70a85cd44",
+    "camera": "saved Copperfall close view preserved; no camera change in water work"
+  },
+  "receipts": {
+    "handoff.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\handoff.json",
+      "bytes": 2511,
+      "sha256": "b53dbd8d35296720334f75e9e5f5870ad39c915af7f9cb6d92ed018024e0d3c7"
+    },
+    "source-admission.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\source-admission.json",
+      "bytes": 6175,
+      "sha256": "5463d7f1810f0e49e20f932cd91b3c4284371b55bf83f37a4f4a79cae5205282"
+    },
+    "naming-reconciliation.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\naming-reconciliation.json",
+      "bytes": 192153,
+      "sha256": "e7172ea7a2399ba4bf60d3de6b509cefc08f745235f852fc76499a98c52a23cf"
+    },
+    "RecoveryObservedAliasR4/native.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\RecoveryObservedAliasR4\\native.json",
+      "bytes": 19296,
+      "sha256": "56cc9e73749b9ae98c418580d33259e1a0b4935554b17769ab9fdb6576fcdde8"
+    },
+    "RecoveryObservedAliasR4/guard-rejection.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\RecoveryObservedAliasR4\\guard-rejection.json",
+      "bytes": 1468,
+      "sha256": "7bb76c1ddd141fc0c0cd051b252bfaaa5f38539d46095768e612b6574040f920"
+    },
+    "RecoveryObservedAliasR4/terminal-file-closeout.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\RecoveryObservedAliasR4\\terminal-file-closeout.json",
+      "bytes": 5861,
+      "sha256": "c26b8b74302f5ee5fae843737536eedcbba10bdc27300d7dbec6ea9f3111d83d"
+    },
+    "PartialParentQualificationR1/receipt.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PartialParentQualificationR1\\receipt.json",
+      "bytes": 379462,
+      "sha256": "7dfe6b75cb5bb39d73e5c62e71672f7039425173c98624a6bf2581c950e9ec50"
+    }
+  },
+  "remaining_authorized_work": [
+    "Wait for actual full intervening compute grant terminal and owner release",
+    "Take explicit fresh bounded compute claim after resources and current ownership checks",
+    "Resume only unfinished Water operations; create and bind Foam once",
+    "Validate all six complete geometry/material/provenance objects before six first saves",
+    "Independent native readback, exact package backups and no-native-mutation finalization"
+  ],
+  "guard_contract": "Original queue/deadline/resource/PIE/world/dirty checks preserved; existing qualified READ-ping cooperation has at most three yields per admission; no queued mutator ignored or consumed",
+  "limitations": [
+    "Full six-object native construction and saves pending at this source checkpoint",
+    "Source/text/default proofs do not establish native appearance or final visual BAR",
+    "No whole 46-mesh original intake, world placement, flow/fluid mechanics, collision/navigation or gameplay acceptance",
+    "No new tests, editor restart, extra editor, global settings, pagefile, credentials or security changes"
+  ],
+  "draft_pr": "https://github.com/RicheyWorks/Daedalus2/pull/147"
+}
