@@ -18,6 +18,7 @@ namespace
     constexpr int32 MaxImageBytes = 8 * 1024 * 1024;
     constexpr int64 MaxFrameBytes = 24LL * 1024 * 1024;
     constexpr int32 MaxPdfBytes = 64 * 1024 * 1024; // Matches the native client's bounded download cap.
+    constexpr int32 MaxPreparedFaxPdfBytes = 25 * 1024 * 1024;
     constexpr int32 DialogCharacters = 32768;
     constexpr int32 MaxPathCharacters = 4096;
     constexpr int32 MaxAncestorDirectories = 128;
@@ -306,6 +307,90 @@ namespace
         Out.DisplayName = DisplayName(Path);
         return true;
     }
+
+    // Callers select a generated label, never a destination path or a suggested server filename.
+    enum class EGeneratedPdfName { Photo, PreparedFax };
+
+    bool SaveGeneratedPdf(const TArray<uint8>& Bytes, EGeneratedPdfName Name, int32 PhotoIndex, FString& Error,
+        TFunctionRef<bool()> IsStillAllowed)
+    {
+        const auto StillAllowed = [&Error, IsStillAllowed]()
+        {
+            if (IsStillAllowed()) return true;
+            Error = TEXT("Export no longer belongs to the open terminal.");
+            return false;
+        };
+        if (!StillAllowed()) return false;
+        if (Name != EGeneratedPdfName::Photo && Name != EGeneratedPdfName::PreparedFax)
+        { Error = TEXT("A generated PDF export name is required."); return false; }
+        const bool bPreparedFax = Name == EGeneratedPdfName::PreparedFax;
+        const HWND Owner = DialogOwner();
+        if (!Owner)
+        {
+            Error = bPreparedFax ? TEXT("Open the fax terminal in a game window before exporting.")
+                : TEXT("Open the photo terminal in a game window before exporting.");
+            return false;
+        }
+        TArray<WCHAR> Buffer;
+        Buffer.SetNumZeroed(DialogCharacters);
+        FString Suggested;
+        if (bPreparedFax) Suggested = TEXT("prepared-fax-review.pdf");
+        else Suggested = FString::Printf(TEXT("photo-%d.pdf"), PhotoIndex);
+        FMemory::Memcpy(Buffer.GetData(), *Suggested, Suggested.Len() * sizeof(WCHAR));
+        OPENFILENAMEW Dialog = {};
+        Dialog.lStructSize = static_cast<DWORD>(sizeof(Dialog));
+        Dialog.hwndOwner = Owner;
+        Dialog.lpstrFilter = L"PDF document\0*.pdf\0\0";
+        Dialog.lpstrDefExt = L"pdf";
+        Dialog.lpstrFile = Buffer.GetData();
+        Dialog.nMaxFile = static_cast<DWORD>(Buffer.Num());
+        Dialog.lpstrTitle = L"Export PDF to a new file";
+        Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
+        const bool bSelected = ::GetSaveFileNameW(&Dialog) != FALSE;
+        // The modal Windows chooser may dispatch lifecycle events. Recheck the caller before any file creation.
+        if (!StillAllowed()) return false;
+        if (!bSelected)
+        {
+            if (::CommDlgExtendedError() != 0) Error = TEXT("The save chooser could not complete. Choose a shorter local filename.");
+            return false;
+        }
+        int32 At = 0;
+        FString Destination;
+        if (!TakeDialogString(Buffer, At, Destination) || !LocalPath(Destination) || !FPaths::GetExtension(Destination).Equals(TEXT("pdf"), ESearchCase::IgnoreCase))
+        { Error = TEXT("Choose a new PDF filename on a local drive."); return false; }
+        FDirectoryLocks Parents; // Declared before the temporary so cleanup runs under all retained locks.
+        if (!Parents.AcquireParent(Destination)) { Error = TEXT("Choose a local folder without links or mount points and with a shorter directory chain."); return false; }
+        const FString Leaf = FPaths::GetCleanFilename(Destination);
+        const FString TemporaryLeaf = TEXT(".daedalus-") + FGuid::NewGuid().ToString(EGuidFormats::Digits) + TEXT(".tmp");
+        const FString TemporaryPath = Parents.StableChild(TemporaryLeaf);
+        if (!StillAllowed()) return false;
+        FNewSibling Temporary(::CreateFileW(*TemporaryPath, GENERIC_WRITE | DELETE | FILE_READ_ATTRIBUTES, 0, nullptr, CREATE_NEW,
+            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OPEN_REPARSE_POINT, nullptr));
+        if (!Temporary.Valid()) { Error = TEXT("A new PDF file could not be created in that location."); return false; }
+        if (!Parents.StillValid() || !Parents.OwnsRegularLeaf(Temporary.Get(), TemporaryLeaf) || !Temporary.ArmCleanup())
+        { Error = TEXT("A private local PDF file could not be prepared safely. Nothing was exported."); return false; }
+        int32 Written = 0;
+        while (Written < Bytes.Num())
+        {
+            if (!StillAllowed()) return false;
+            const DWORD Wanted = static_cast<DWORD>(FMath::Min(1024 * 1024, Bytes.Num() - Written));
+            DWORD Count = 0;
+            if (!::WriteFile(Temporary.Get(), Bytes.GetData() + Written, Wanted, &Count, nullptr) || Count != Wanted)
+            { Error = TEXT("The PDF could not be fully saved. No existing file was replaced."); return false; }
+            Written += static_cast<int32>(Count);
+        }
+        if (!StillAllowed()) return false;
+        if (!::FlushFileBuffers(Temporary.Get())) { Error = TEXT("The PDF could not be fully saved. No existing file was replaced."); return false; }
+        if (!StillAllowed()) return false;
+        // Rename the still-owned identity relative to its pinned parent. ReplaceIfExists remains false;
+        // a destination created after the dialog survives, and cleanup never follows a reused temp name.
+        if (!Parents.StillValid())
+        { Error = TEXT("The PDF could not be committed. Choose a new filename; existing files are never replaced."); return false; }
+        if (!StillAllowed()) return false;
+        if (!Temporary.Commit(Parents.ParentHandle(), Leaf))
+        { Error = TEXT("The PDF could not be committed. Choose a new filename; existing files are never replaced."); return false; }
+        return true;
+    }
 }
 #endif
 
@@ -367,58 +452,26 @@ bool DaedalusPhotoPdfFiles::SavePdf(const TArray<uint8>& Bytes, int32 Index, FSt
     // This is a cheap envelope check, not a PDF parser or a claim of document validation.
     if (Index < 1 || Index > MaxImages || Bytes.Num() < 5 || Bytes.Num() > MaxPdfBytes || FMemory::Memcmp(Bytes.GetData(), "%PDF-", 5) != 0)
     { Error = TEXT("The companion did not return a PDF output within the 64 MiB export limit."); return false; }
-    const HWND Owner = DialogOwner();
-    if (!Owner) { Error = TEXT("Open the photo terminal in a game window before exporting."); return false; }
-    TArray<WCHAR> Buffer;
-    Buffer.SetNumZeroed(DialogCharacters);
-    const FString Suggested = FString::Printf(TEXT("photo-%d.pdf"), Index);
-    FMemory::Memcpy(Buffer.GetData(), *Suggested, Suggested.Len() * sizeof(WCHAR));
-    OPENFILENAMEW Dialog = {};
-    Dialog.lStructSize = static_cast<DWORD>(sizeof(Dialog));
-    Dialog.hwndOwner = Owner;
-    Dialog.lpstrFilter = L"PDF document\0*.pdf\0\0";
-    Dialog.lpstrDefExt = L"pdf";
-    Dialog.lpstrFile = Buffer.GetData();
-    Dialog.nMaxFile = static_cast<DWORD>(Buffer.Num());
-    Dialog.lpstrTitle = L"Export PDF to a new file";
-    Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-    if (!::GetSaveFileNameW(&Dialog))
-    {
-        if (::CommDlgExtendedError() != 0) Error = TEXT("The save chooser could not complete. Choose a shorter local filename.");
-        return false;
-    }
-    int32 At = 0;
-    FString Destination;
-    if (!TakeDialogString(Buffer, At, Destination) || !LocalPath(Destination) || !FPaths::GetExtension(Destination).Equals(TEXT("pdf"), ESearchCase::IgnoreCase))
-    { Error = TEXT("Choose a new PDF filename on a local drive."); return false; }
-    FDirectoryLocks Parents; // Declared before the temporary so cleanup runs under all retained locks.
-    if (!Parents.AcquireParent(Destination)) { Error = TEXT("Choose a local folder without links or mount points and with a shorter directory chain."); return false; }
-    const FString Leaf = FPaths::GetCleanFilename(Destination);
-    const FString TemporaryLeaf = TEXT(".daedalus-") + FGuid::NewGuid().ToString(EGuidFormats::Digits) + TEXT(".tmp");
-    const FString TemporaryPath = Parents.StableChild(TemporaryLeaf);
-    FNewSibling Temporary(::CreateFileW(*TemporaryPath, GENERIC_WRITE | DELETE | FILE_READ_ATTRIBUTES, 0, nullptr, CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OPEN_REPARSE_POINT, nullptr));
-    if (!Temporary.Valid()) { Error = TEXT("A new PDF file could not be created in that location."); return false; }
-    if (!Parents.StillValid() || !Parents.OwnsRegularLeaf(Temporary.Get(), TemporaryLeaf) || !Temporary.ArmCleanup())
-    { Error = TEXT("A private local PDF file could not be prepared safely. Nothing was exported."); return false; }
-    int32 Written = 0;
-    while (Written < Bytes.Num())
-    {
-        const DWORD Wanted = static_cast<DWORD>(FMath::Min(1024 * 1024, Bytes.Num() - Written));
-        DWORD Count = 0;
-        if (!::WriteFile(Temporary.Get(), Bytes.GetData() + Written, Wanted, &Count, nullptr) || Count != Wanted)
-        { Error = TEXT("The PDF could not be fully saved. No existing file was replaced."); return false; }
-        Written += static_cast<int32>(Count);
-    }
-    if (!::FlushFileBuffers(Temporary.Get())) { Error = TEXT("The PDF could not be fully saved. No existing file was replaced."); return false; }
-    // Rename the still-owned identity relative to its pinned parent. ReplaceIfExists remains false;
-    // a destination created after the dialog survives, and cleanup never follows a reused temp name.
-    if (!Parents.StillValid() || !Temporary.Commit(Parents.ParentHandle(), Leaf))
-    { Error = TEXT("The PDF could not be committed. Choose a new filename; existing files are never replaced."); return false; }
-    return true;
+    return SaveGeneratedPdf(Bytes, EGeneratedPdfName::Photo, Index, Error, []() { return true; });
 #else
     (void)Bytes;
     (void)Index;
+    Error = TEXT("PDF export is available on Windows only.");
+    return false;
+#endif
+}
+
+bool DaedalusPhotoPdfFiles::SavePreparedFaxPdf(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+{
+    Error.Reset();
+#if PLATFORM_WINDOWS
+    // The fax companion owns structural/page/digest validation. This is only a bounded export envelope.
+    if (Bytes.Num() < 5 || Bytes.Num() > MaxPreparedFaxPdfBytes || FMemory::Memcmp(Bytes.GetData(), "%PDF-", 5) != 0)
+    { Error = TEXT("The companion did not return a prepared fax PDF within the 25 MiB export limit."); return false; }
+    return SaveGeneratedPdf(Bytes, EGeneratedPdfName::PreparedFax, 0, Error, IsStillAllowed);
+#else
+    (void)Bytes;
+    (void)IsStillAllowed;
     Error = TEXT("PDF export is available on Windows only.");
     return false;
 #endif

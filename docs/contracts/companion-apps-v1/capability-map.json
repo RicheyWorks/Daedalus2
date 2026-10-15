@@ -33,10 +33,11 @@
     "interactionSeam": "ADaedalusUsable.Use / existing local Hero interaction",
     "claim": { "hubMessage": 31050, "scope": "Additive photo native client, terminal, panel and selected-file/export helpers plus these inventory documents", "acceptedByCoordinator": true },
     "previousIncrements": [
-      { "id": "synapse-selected-track-terminal", "baselineCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "baselinePullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/154", "branch": "codex/synapse-study-terminal-20261014", "retainedOwnerLaneHubMessage": 31050, "exactClaimHubMessage": 31102, "directUserContinuationHubMessage": 31109, "coordinatorAcknowledgmentHubMessage": 31115, "scopeAccepted": true, "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true },
-      { "id": "image-optimizer-native-workbench", "baselineCommit": "c3f842214e921c9597dcd5400dd52028e440f0c2", "inheritedPhotoCorrectionCommit": "5e14c374de794a4bc78bf44ae0e80884f600664c", "branch": "codex/image-optimizer-terminal-20261014", "retainedLaneHubMessages": [31050, 31115], "exactClaimHubMessage": 31169, "semanticFollowUpHubMessage": 31174, "authorization": "direct user continuation and root-owner acceptance of exact source scope", "rootOwnerAccepted": true, "additionalCoordinatorAcknowledgmentHubMessage": 31188, "additionalCoordinatorAcknowledgmentState": "no overlap confirmed; retained direct-user source scope, no added publication/native authority", "runtimeAcceptance": false, "stage": "source_written_unverified", "sourceOnly": true }
+      {"id":"synapse-selected-track-terminal","baselineCommit":"5e14c374de794a4bc78bf44ae0e80884f600664c","baselinePullRequest":"https://github.com/RicheyWorks/Daedalus2/pull/154","branch":"codex/synapse-study-terminal-20261014","retainedOwnerLaneHubMessage":31050,"exactClaimHubMessage":31102,"directUserContinuationHubMessage":31109,"coordinatorAcknowledgmentHubMessage":31115,"scopeAccepted":true,"runtimeAcceptance":false,"stage":"source_written_unverified","sourceOnly":true},
+      {"id":"image-optimizer-native-workbench","baselineCommit":"c3f842214e921c9597dcd5400dd52028e440f0c2","inheritedPhotoCorrectionCommit":"5e14c374de794a4bc78bf44ae0e80884f600664c","branch":"codex/image-optimizer-terminal-20261014","retainedLaneHubMessages":[31050,31115],"exactClaimHubMessage":31169,"semanticFollowUpHubMessage":31174,"authorization":"direct user continuation and root-owner acceptance of exact source scope","rootOwnerAccepted":true,"additionalCoordinatorAcknowledgmentHubMessage":31188,"additionalCoordinatorAcknowledgmentState":"no overlap confirmed; retained direct-user source scope, no added publication/native authority","runtimeAcceptance":false,"stage":"source_written_unverified","sourceOnly":true},
+      {"id":"fax-preparation-local-bridge","baselineCommit":"4f82f339470ca61947263e4e09380f20ff231ee1","baselinePullRequest":"https://github.com/RicheyWorks/Daedalus2/pull/158","branch":"codex/fax-preparation-contract-20261015","companionSourceBaseCommit":"b5e999f93e92135be510bb2a42157cd88ba5fc5f","companionBranch":"codex/realm-fax-preparation-20261015","companionSourceHead":"9e37b26aaaa812108c43a407cef4dc4e43975a2c","claimHubMessages":[31237,31241],"authorization":"existing user continuation and root-accepted coordinated exact source scope","rootOwnerAccepted":true,"additionalCoordinatorAcknowledgmentHubMessage":null,"additionalCoordinatorAcknowledgmentState":"pending; not an added gate on already-authorized source work","stage":"companion_bridge_source_written_unverified","nativeChanges":false,"faxNativeStage":"native_unbound","runtimeAcceptance":false,"sourceOnly":true}
     ],
-    "currentIncrement": { "id": "fax-preparation-local-bridge", "baselineCommit": "4f82f339470ca61947263e4e09380f20ff231ee1", "baselinePullRequest": "https://github.com/RicheyWorks/Daedalus2/pull/158", "branch": "codex/fax-preparation-contract-20261015", "companionSourceBaseCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f", "companionBranch": "codex/realm-fax-preparation-20261015", "companionSourceHead": "9e37b26aaaa812108c43a407cef4dc4e43975a2c", "claimHubMessages": [31237, 31241], "authorization": "existing user continuation and root-accepted coordinated exact source scope", "rootOwnerAccepted": true, "additionalCoordinatorAcknowledgmentHubMessage": null, "additionalCoordinatorAcknowledgmentState": "pending; not an added gate on already-authorized source work", "stage": "companion_bridge_source_written_unverified", "nativeChanges": false, "faxNativeStage": "native_unbound", "runtimeAcceptance": false, "sourceOnly": true },
+    "currentIncrement": {"id":"fax-preparation-native-terminal","baselineCommit":"ceef882fef943acd60b3c6cb8d16f5dae18c993a","branch":"codex/fax-preparation-terminal-20261015","claimHubMessage":31265,"rootOwnerAccepted":true,"companionSource":"9e37b26aaaa812108c43a407cef4dc4e43975a2c","stage":"source_written_unverified","runtimeAcceptance":false,"nativeOperator":"codex-play-guard"},
     "operatorReceipt": { "hubMessage": 31215, "scope": "earlier corrected Photo/PDF, Synapse and Image source packets", "meaning": "receipt only; no source executed, compile/load/service/placement/runtime remains deferred", "executionAccepted": false },
     "runtimeOperator": "codex-play-guard",
     "installationAcceptance": "pending; a delivered handoff is not acceptance",
@@ -134,6 +135,69 @@
         "privacy": "transient nonreplicated local capabilities, selected bytes and action settings; no folder scanning, source filenames on the wire, arbitrary export paths on the server or third-party uploads",
         "notAdded": ["desktop folder planner", "duplicate detection", "existing-output skip heuristic", "guaranteed file-size reduction", "original-file overwrite"],
         "verification": { "built": false, "tested": false, "installed": false, "playAccepted": false }
+      },
+      {
+        "id": "fax-native-terminal",
+        "stage": "source_written_unverified",
+        "sourceFiles": [
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxPreparationClient.h",
+            "sha256": "0e4b70434e3928c00bb4583dba6b535fbbdf0a5e9dcc1472522cf8866939d2d5"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxPreparationClient.cpp",
+            "sha256": "80ec7bf9d5192226e0b7582bbfcc503e50dd2e695dc853e51dbecf6e4351d9f6"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxPreparationTerminal.h",
+            "sha256": "704d4850f9131c814faf5f0290e3146a658c027434b3092a4d9413f9e64e12e3"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxPreparationTerminal.cpp",
+            "sha256": "48ef26dd642c03588fb11e9311d774866236e66cecd6f0ea351bad81ad778c7a"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusFaxPreparationPanel.h",
+            "sha256": "9536559a83fe68e0f09c09d2c63f8c8619d0a114198c51f333837bf3cd3ea4a9"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusFaxPreparationPanel.cpp",
+            "sha256": "c6716ac23175c99b5908108b2a2d54f3ad534b70fee770a9d3c350b84ddab208"
+          }
+        ],
+        "sharedSources": [
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
+            "sha256": "49422a5b1a693dc47a8bd72e7c04275d1cc1a935cca5861a8f2fe20c7128fa5b"
+          },
+          {
+            "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+            "sha256": "47a7363e5992a95a06f8e6c903d2cf92a18518cf2db08d5e41d72809c3b0e245"
+          }
+        ],
+        "contracts": [
+          "docs/contracts/fax-v1/native-terminal.md",
+          "docs/contracts/fax-v1/native-install-binding-manifest.json"
+        ],
+        "implementedWork": [
+          "exact private prepared-job pairing",
+          "immutable approved metadata/status",
+          "SHA256-verified exact PDF download and new local export",
+          "explicit same-job pre-submission cancellation",
+          "local grant revoke and guarded lifecycle"
+        ],
+        "notAdded": [
+          "native upload/prepare or backend login",
+          "confirm/send/provider routes",
+          "old typed browser enum extension"
+        ],
+        "sourceReview": "All eight source hashes independently reviewed; no remaining concrete P1/P2 in new fax scope",
+        "verification": {
+          "installed": false,
+          "runtime": false,
+          "built": false,
+          "playAccepted": false
+        }
       }
     ],
     "relevantInfrastructure": {
@@ -498,7 +562,7 @@
         "implementedWork": ["desktop explicitly selects/uploads/prepares a bounded PDF using its existing authenticated local backend", "retain upload and request identity through preparation uncertainty", "desktop explicitly approves one immutable prepared job", "private-loopback capability grants only that job's status and verified PDF", "explicit pre-submission cancellation and local grant revocation"],
         "realmCallersMayUploadOrPrepare": false,
         "realmCallersMayConfirmOrSend": false,
-        "nativeSupport": { "actor": null, "panel": null, "typedLocalAppEnumSupportsFax": false, "stage": "native_unbound" },
+        "nativeSupport": {"actor":"/Script/DaedalusLink.DaedalusFaxPreparationTerminal","panel":"SDaedalusFaxPreparationPanel","typedLocalAppEnumSupportsFax":false,"stage":"source_written_unverified"},
         "retentionBoundary": "Local grant expiry/revocation does not imply upstream upload/job deletion. Existing upload lease is one hour, job snapshot lease is 24 hours, and cancellation can fail after a separate desktop submission attempt.",
         "verification": { "built": false, "tested": false, "desktopExecuted": false, "serviceStarted": false, "personalPdfRead": false, "installed": false, "nativeExecuted": false, "playAccepted": false }
       },
@@ -527,37 +591,105 @@
           "id": "prepare-review-private-pdf",
           "behavior": "Upload selected bounded PDF, prepare immutable recipient/digest/page tuple, retrieve exact snapshot for review; preparation performs no provider transmission.",
           "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/upload/FaxUploadService.java", "symbols": ["resolveOwned"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["prepare", "preview"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDocuments.java", "symbols": ["copy", "read", "sha256"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "symbols": ["uploadPdf", "prepareFax", "reviewPdf"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java", "symbols": ["sendFax"] }
+            {
+              "path": "fax-trident-server/src/main/java/com/xai/trident/upload/FaxUploadService.java",
+              "symbols": [
+                "resolveOwned"
+              ]
+            },
+            {
+              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
+              "symbols": [
+                "prepare",
+                "preview"
+              ]
+            },
+            {
+              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDocuments.java",
+              "symbols": [
+                "copy",
+                "read",
+                "sha256"
+              ]
+            },
+            {
+              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+              "symbols": [
+                "uploadPdf",
+                "prepareFax",
+                "reviewPdf"
+              ]
+            },
+            {
+              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java",
+              "symbols": [
+                "sendFax"
+              ]
+            }
           ],
-          "existingInterface": "Existing JavaFX and authenticated REST; companion one-job preparation handoff source is in progress, with no native actor/panel.",
-          "nativeBindings": [],
-          "bindingStage": "native_unbound",
-          "companionBridgeBindings": ["fax-preparation-local-bridge"],
+          "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
+          "nativeBindings": [
+            "fax-native-terminal"
+          ],
+          "bindingStage": "source_written_unverified",
+          "companionBridgeBindings": [
+            "fax-preparation-local-bridge"
+          ],
           "companionBridgeStage": "companion_bridge_source_written_unverified",
-          "missingCode": ["native fax client/actor/panel, supported native app type and install binding remain absent"],
-          "remainingVerification": ["independent companion source review", "later approved local-backend/desktop/grant/PDF behavior verification; no runtime result currently established"],
-          "evidenceStage": "source_inspected"
+          "missingCode": [],
+          "evidenceStage": "source_inspected",
+          "remainingVerification": [
+            "Exact native compile/UHT/link/load",
+            "Synthetic connected PDF/action tests and Windows modal lifecycle",
+            "Physical fax art/placement/Play by sole operator"
+          ]
         },
         {
           "id": "status-recovery-cancel-retention",
           "behavior": "Owner-scoped durable job status, unresolved-job recovery, safe pre-submission cancellation, snapshot expiry and managed cleanup; uncertain submission is not silently resent.",
           "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["get", "pending", "cancel", "observe"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java", "symbols": ["status", "pending", "cancel"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "symbols": ["faxJob", "pendingFaxJobs", "cancelFax"] }
+            {
+              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
+              "symbols": [
+                "get",
+                "pending",
+                "cancel",
+                "observe"
+              ]
+            },
+            {
+              "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java",
+              "symbols": [
+                "status",
+                "pending",
+                "cancel"
+              ]
+            },
+            {
+              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+              "symbols": [
+                "faxJob",
+                "pendingFaxJobs",
+                "cancelFax"
+              ]
+            }
           ],
-          "existingInterface": "JavaFX Refresh Fax and private REST jobs.",
-          "nativeBindings": [],
-          "bindingStage": "native_unbound",
-          "companionBridgeBindings": ["fax-preparation-local-bridge"],
+          "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
+          "nativeBindings": [
+            "fax-native-terminal"
+          ],
+          "bindingStage": "source_written_unverified",
+          "companionBridgeBindings": [
+            "fax-preparation-local-bridge"
+          ],
           "companionBridgeStage": "companion_bridge_source_written_unverified",
-          "missingCode": ["native status/recovery UI preserving real uncertainty and cancellation limits remains absent"],
-          "remainingVerification": ["independent companion source review", "later approved local grant, stale response, revocation and separate backend retention verification"],
-          "evidenceStage": "source_inspected"
+          "missingCode": [],
+          "evidenceStage": "source_inspected",
+          "remainingVerification": [
+            "Exact native compile/UHT/link/load",
+            "Synthetic connected PDF/action tests and Windows modal lifecycle",
+            "Physical fax art/placement/Play by sole operator"
+          ]
         },
         {
           "id": "real-provider-transmission",
@@ -649,6 +781,6 @@
     "nftMintingOrEntitlementImplementation": false,
     "licenseChanges": false,
     "completionEvidence": "App job SUCCEEDED plus real authenticated output export, a matching persisted Synapse receipt, or a separately verified approved-job fax preparation/status/PDF operation. Preparation is not transmission. Native installation/placement/Play must be independently accepted by codex-play-guard.",
-    "remainingPortfolioWork": "Finish and review the preparation-only Fax companion bridge, keeping native fax explicitly unbound. Operator builds, verifies and installs written photo/Synapse/image sources only when authorized; Photo5e14, Synapsec3 and Image4f82 remain source packets without native acceptance. Preserve all intentionally unexposed desktop groups and account for their future permission/workflow gaps before claiming full capability coverage."
+    "remainingPortfolioWork": "Primary photo/image/study/fax sources are written; native installation/runtime remain pending. Existing photo/image modal export guard correction is queued next. Photo/Image approved workspaces and full Synapse workbench are active source claims; wider fax privacy/role/extraction and unavailable external transport remain explicit gaps."
   }
 }
