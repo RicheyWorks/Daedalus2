@@ -1,0 +1,175 @@
+{
+  "schema": "daedalus.codex-hud-terminal-build.v1",
+  "utc": "2026-10-15T07:23:04.078811+00:00",
+  "stage": "isolated_hud_module_built_not_installed_not_loaded",
+  "actual_terminal": {
+    "stage": "serial_hud_build_terminal",
+    "exit_code": 0,
+    "started_utc": "2026-10-15T07:16:37.7749248Z",
+    "completed_utc": "2026-10-15T07:22:28.7088763Z",
+    "elapsed_s": 350.9339515,
+    "launcher_pid": 36936,
+    "log": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\build-hud-bcfb.log",
+    "arguments": [
+      "UnrealEditor",
+      "Win64",
+      "Development",
+      "-Project=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\HostProject.uproject",
+      "-Plugin=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Plugins\\DaedalusLink\\DaedalusLink.uplugin",
+      "-Module=DaedalusLink",
+      "-NoUBTMakefiles",
+      "-NoHotReload",
+      "-MaxParallelActions=1",
+      "-NoEngineChanges",
+      "-Manifest=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\Manifest-hud-bcfb.xml",
+      "-Log=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\build-hud-bcfb.log"
+    ],
+    "installed": false,
+    "loaded": false
+  },
+  "terminal_result": "Succeeded",
+  "retained": {
+    "build.log": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\build.log",
+      "bytes": 205717,
+      "sha256": "def82aae02d09b545aeeb1b7b623435b61a3453a0c0647cd8b481c5cc532f27e"
+    },
+    "launch.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\launch.json",
+      "bytes": 1862,
+      "sha256": "5fee5d24d6812b6e229cf0c3aed7ef85a55c5c85ee247cffaf79a2a04fa5e6eb"
+    },
+    "terminal.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\terminal.json",
+      "bytes": 1050,
+      "sha256": "18270ca69b89de43b857b7ae28f2a20ad701b320a894c467c059aa97f9dec884"
+    },
+    "preflight.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\preflight.json",
+      "bytes": 232897,
+      "sha256": "ddb416932e112fff0b929289171a51989736beb37f1122748ef4024a01a7f222"
+    }
+  },
+  "actions": [
+    "[1/58] Compile [x64] SharedPCH.UnrealEd.Cpp20.cpp",
+    "[2/58] Compile [x64] DaedalusBattleCastTest.cpp",
+    "[3/58] Compile [x64] DaedalusBattlePresentation.cpp",
+    "[4/58] Compile [x64] DaedalusCritter.cpp",
+    "[5/58] Compile [x64] DaedalusDesktopArcade.cpp",
+    "[6/58] Compile [x64] DaedalusDresser.cpp",
+    "[7/58] Compile [x64] DaedalusEcology.cpp",
+    "[8/58] Compile [x64] DaedalusEncounters.cpp",
+    "[9/58] Compile [x64] DaedalusExplorationTerrain.cpp",
+    "[10/58] Compile [x64] DaedalusFilm.cpp",
+    "[11/58] Compile [x64] DaedalusGhost.cpp",
+    "[12/58] Compile [x64] DaedalusHero.cpp",
+    "[13/58] Compile [x64] DaedalusHomestead.cpp",
+    "[14/58] Compile [x64] DaedalusJavaArcade.cpp",
+    "[15/58] Compile [x64] DaedalusLandDistrict.cpp",
+    "[16/58] Compile [x64] DaedalusLinkModule.cpp",
+    "[17/58] Compile [x64] DaedalusLocalAppLauncher.cpp",
+    "[18/58] Compile [x64] DaedalusLocalAppMachine.cpp",
+    "[19/58] Compile [x64] DaedalusMob.cpp",
+    "[20/58] Compile [x64] DaedalusMoodVolume.cpp",
+    "[21/58] Compile [x64] DaedalusNav.cpp",
+    "[22/58] Compile [x64] DaedalusOceanClientTest.cpp",
+    "[23/58] Compile [x64] DaedalusOceanDock.cpp",
+    "[24/58] Compile [x64] DaedalusOceanDockTest.cpp",
+    "[25/58] Compile [x64] DaedalusOceanHostClient.cpp",
+    "[26/58] Compile [x64] DaedalusOceanHullTest.cpp",
+    "[27/58] Compile [x64] DaedalusOceanInteractor.cpp",
+    "[28/58] Compile [x64] DaedalusOceanSectorView.cpp",
+    "[29/58] Compile [x64] DaedalusOceanTravelComponent.cpp",
+    "[30/58] Compile [x64] DaedalusOceanTravelTest.cpp",
+    "[31/58] Compile [x64] DaedalusOceanViewTest.cpp",
+    "[32/58] Compile [x64] DaedalusOrrery.cpp",
+    "[33/58] Compile [x64] DaedalusPhotoPdfMachine.cpp",
+    "[34/58] Compile [x64] DaedalusPickup.cpp",
+    "[35/58] Compile [x64] DaedalusRealmPortal.cpp",
+    "[36/58] Compile [x64] DaedalusSettings.cpp",
+    "[37/58] Compile [x64] DaedalusShiny.cpp",
+    "[38/58] Compile [x64] DaedalusSkyBridge.cpp",
+    "[39/58] Compile [x64] DaedalusSkyDirector.cpp",
+    "[40/58] Compile [x64] DaedalusSolReachJournal.cpp",
+    "[41/58] Compile [x64] DaedalusStreamer.cpp",
+    "[42/58] Compile [x64] DaedalusTactics.cpp",
+    "[43/58] Compile [x64] DaedalusTalker.cpp",
+    "[44/58] Compile [x64] DaedalusTarget.cpp",
+    "[45/58] Compile [x64] DaedalusVoxelIsle.cpp",
+    "[46/58] Compile [x64] DaedalusWorldActor.cpp",
+    "[47/58] Compile [x64] Module.DaedalusLink.cpp",
+    "[48/58] Compile [x64] SDaedalusDesktopArcade.cpp",
+    "[49/58] Compile [x64] SDaedalusDialogue.cpp",
+    "[50/58] Compile [x64] SDaedalusFieldMenu.cpp",
+    "[51/58] Compile [x64] SDaedalusHud.cpp",
+    "[52/58] Compile [x64] SDaedalusInventory.cpp",
+    "[53/58] Compile [x64] SDaedalusJavaArcade.cpp",
+    "[54/58] Compile [x64] SDaedalusRealm.cpp",
+    "[55/58] Compile [x64] SDaedalusSettingsMenu.cpp",
+    "[56/58] Link [x64] UnrealEditor-DaedalusLink.lib",
+    "[57/58] Compile Resource [x64] Default.rc2",
+    "[58/58] Link [x64] UnrealEditor-DaedalusLink.dll"
+  ],
+  "error_lines": [],
+  "timing_lines": [
+    "UHT processed UnrealEditor in 3.5826707 seconds (70 generated files written)",
+    "Total time in Unreal Build Accelerator local executor: 338.22 seconds",
+    "Total execution time: 350.13 seconds"
+  ],
+  "artifacts": {
+    "Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll": {
+      "bytes": 8283136,
+      "sha256": "e2b00824589b97a2795abb686614b28868d38bcd77b7535de64ee3adf61e8680"
+    },
+    "Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.pdb": {
+      "bytes": 98856960,
+      "sha256": "8eaa89c8f5cf1aefaba11fb1f688a015a5f61a4482f15e38d9f0405e1ff8f74a"
+    }
+  },
+  "candidate_metadata": {
+    "target_metadata": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Intermediate\\Build\\Win64\\x64\\UnrealEditor\\Development\\TargetMetadata.json",
+      "bytes": 1431027,
+      "sha256": "aa83a3079ee4b6f1bac06b74af200c6f250484f8f5e7e0178dfe2c7645f0ff50"
+    },
+    "target": "UnrealEditor",
+    "platform": "Win64",
+    "configuration": "Development",
+    "version": {
+      "EffectiveCompatibleChangelist": 55116800,
+      "MajorVersion": 5,
+      "MinorVersion": 8,
+      "PatchVersion": 3,
+      "Changelist": 58210709,
+      "CompatibleChangelist": 55116800,
+      "IsLicenseeVersion": false,
+      "IsPromotedBuild": false,
+      "BranchName": "++UE5+Release-5.8",
+      "BuildId": "55116800",
+      "BuildVersionString": null,
+      "BuildURL": null
+    },
+    "prepared_module_mapping": {
+      "BuildId": "",
+      "ModuleNameToFileName": {
+        "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+      },
+      "LibraryDependencies": {}
+    },
+    "retained_installed_modules": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules",
+      "bytes": 102,
+      "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+    }
+  },
+  "canonical_source_files_preserved": 140,
+  "canonical_binary_and_modules_unchanged": true,
+  "protected_packages_and_backups_verified": 120,
+  "saved_map": {
+    "bytes": 209329457,
+    "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933"
+  },
+  "native_install_performed": false,
+  "tests_or_play_performed_by_build": false,
+  "issues": []
+}

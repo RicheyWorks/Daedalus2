@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-15T07:30:34.825073+00:00",
+  "phase": "start-pie",
+  "stage": "returned",
+  "replay_permitted": false,
+  "result": {
+    "start_return": null,
+    "pie_running": true
+  },
+  "returned_utc": "2026-10-15T07:30:36.056921+00:00"
+}

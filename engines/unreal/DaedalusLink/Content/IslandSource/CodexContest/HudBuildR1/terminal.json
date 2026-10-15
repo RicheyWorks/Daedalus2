@@ -1,0 +1,25 @@
+{
+  "stage": "serial_hud_build_terminal",
+  "exit_code": 0,
+  "started_utc": "2026-10-15T07:16:37.7749248Z",
+  "completed_utc": "2026-10-15T07:22:28.7088763Z",
+  "elapsed_s": 350.9339515,
+  "launcher_pid": 36936,
+  "log": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\build-hud-bcfb.log",
+  "arguments": [
+    "UnrealEditor",
+    "Win64",
+    "Development",
+    "-Project=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\HostProject.uproject",
+    "-Plugin=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Plugins\\DaedalusLink\\DaedalusLink.uplugin",
+    "-Module=DaedalusLink",
+    "-NoUBTMakefiles",
+    "-NoHotReload",
+    "-MaxParallelActions=1",
+    "-NoEngineChanges",
+    "-Manifest=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\Manifest-hud-bcfb.xml",
+    "-Log=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\build-hud-bcfb.log"
+  ],
+  "installed": false,
+  "loaded": false
+}

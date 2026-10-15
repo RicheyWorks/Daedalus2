@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-15T07:26:51.606584+00:00",
+  "stage": "new_hud_dll_loaded_from_canonical_path",
+  "editor_pid": 52492,
+  "loaded_modules": [
+    {
+      "ModuleName": "UnrealEditor-DaedalusLink.dll",
+      "FileName": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "ModuleMemorySize": 8327168
+    }
+  ],
+  "backing_file_fingerprint": {
+    "bytes": 8283136,
+    "sha256": "e2b00824589b97a2795abb686614b28868d38bcd77b7535de64ee3adf61e8680"
+  },
+  "candidate_matches_installed_backing_file": true,
+  "scope": "OS module mapping plus backing-file hash; no relocated in-memory hash claim",
+  "issues": []
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "daedalus.codex-hud-foreground-source-diagnosis.v1",
+  "method": "Read installed UE5.8.3 primary source and the exact candidate source only; no diagnostic native mutation or second build.",
+  "facts": [
+    "SGameLayerManager.cpp:272-281 returns default FGeometry if player-layer lookup fails; default geometry has zero size.",
+    "Candidate SDaedalusDesktopArcade.cpp:53-58 arranges no children for invalid/nonpositive player extents.",
+    "Engine normal Tick/UpdateLayout creates and sizes player layers for all GamePlayers even when their per-player widget list is empty.",
+    "Foreign Slate focus can make OtherOverlayOwnsInput true, cause MaintainOpenSession to close, and cause ReleaseOverlay to leave pause/cursor for the foreign owner."
+  ],
+  "unproven": [
+    "Moving the arcade to the global layer does not inherently prove its player layer stays absent.",
+    "The actual player geometry, focus path/result, and close branch were not captured.",
+    "Zero arrangement does not invariably prevent SetUserFocus: Slate also has a parent-pointer path.",
+    "The effect of the capture helper selecting the main window is not distinguished from the candidate lifecycle."
+  ],
+  "conclusion": "Targeted acceptance failed; runtime cause remains unknown. Keep candidate rejected and retain its exact source, binary and receipts for its owner.",
+  "source_roots": [
+    "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Private/Slate/SGameLayerManager.cpp",
+    "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/SlateCore/Private/Application/SlateWindowHelper.cpp",
+    "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-hud157/Plugins/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+    "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-hud157/Plugins/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp"
+  ]
+}

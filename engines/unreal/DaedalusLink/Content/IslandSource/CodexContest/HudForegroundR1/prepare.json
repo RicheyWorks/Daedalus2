@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-15T07:30:09.262809+00:00",
+  "phase": "prepare",
+  "stage": "returned",
+  "replay_permitted": false,
+  "result": {
+    "world": "/Temp/Untitled_1.Untitled",
+    "arcade": "/Temp/Untitled_1.Untitled:PersistentLevel.DaedalusDesktopArcade_0",
+    "cabinet_id": "F26F57214F3AF6B44C9660934D5737B4",
+    "game_mode": "<Object '/Script/DaedalusLink.DaedalusGameMode' (0x000001A6F0896680) Class 'Class'>",
+    "owned_actor_labels": [
+      "CodexTransientHudForeground_Floor",
+      "CodexTransientHudForeground_PlayerStart",
+      "CodexTransientHudForeground_Arcade"
+    ],
+    "auto_advance": false
+  },
+  "returned_utc": "2026-10-15T07:30:12.501890+00:00"
+}

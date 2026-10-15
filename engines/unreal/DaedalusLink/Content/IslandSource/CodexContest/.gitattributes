@@ -11,3 +11,5 @@ codex-native-mcp-restored-os.json -text -eol
 codex-native-mcp-runtime-restore.json -text -eol
 codex-native-startup-memory-audit.json -text -eol
 codex-resume-native-activation-preflight.json -text -eol
+# HUD activation/rollback receipts retain exact on-host BOM/newline bytes.
+codex-hud-*.json -text -eol

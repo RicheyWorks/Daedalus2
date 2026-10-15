@@ -1,0 +1,68 @@
+{
+  "schema": "daedalus.codex-hud-compute-release.v1",
+  "utc": "2026-10-15T07:43:57.680421+00:00",
+  "stage": "compute_explicitly_released_app_compile_next_after_fresh_resource_check",
+  "resources": {
+    "utc": "2026-10-15T07:43:57.5938597Z",
+    "free_physical_KiB": 1142312,
+    "free_virtual_KiB": 2669216,
+    "heavy_processes": []
+  },
+  "leases_before": {
+    "compute": {
+      "holder": "codex-play-guard",
+      "note": "HUD build terminal0; rejected acceptance cleanup and NORMAL known-baseline rollback in progress. No second build. Explicit app release follows verified normal reload.",
+      "at": 1792049853.4264152,
+      "ttl": 1800.0,
+      "age_s": 384.3,
+      "left_s": 1415.7
+    },
+    "unreal": {
+      "holder": "codex-play-guard",
+      "note": "Sole operator preserving120packages/101actors/map5690 during rejectedHUD normal rollback",
+      "at": 1792049853.447415,
+      "ttl": 1800.0,
+      "age_s": 384.2,
+      "left_s": 1415.8
+    }
+  },
+  "build_exit_code": 0,
+  "hud_candidate_accepted": false,
+  "known_prior_binary_loaded": true,
+  "next_owner": "pootscoot-practical-apps",
+  "app_compile_dispatched": false,
+  "app_precondition": "Fresh app-owner resource and no-conflict preflight; release is not a current RAM safety claim.",
+  "unreal_custody_transferred": false,
+  "unlock_reply": {
+    "ok": true,
+    "lock": null
+  },
+  "leases_after": {
+    "unreal": {
+      "holder": "codex-play-guard",
+      "note": "Sole operator preserving120packages/101actors/map5690 during rejectedHUD normal rollback",
+      "at": 1792049853.447415,
+      "ttl": 1800.0,
+      "age_s": 384.2,
+      "left_s": 1415.8
+    }
+  },
+  "messages": [
+    {
+      "recipient": "pootscoot-coordination",
+      "reply": {
+        "id": 31573
+      }
+    },
+    {
+      "recipient": "pootscoot-practical-apps",
+      "reply": {
+        "id": 31574
+      }
+    }
+  ],
+  "request_ack": {
+    "ok": true,
+    "new": true
+  }
+}

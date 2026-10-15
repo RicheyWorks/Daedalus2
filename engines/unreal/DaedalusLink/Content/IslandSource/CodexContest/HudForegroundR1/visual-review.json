@@ -1,0 +1,20 @@
+{
+  "schema": "daedalus.codex-hud-foreground-visual-review.v1",
+  "image": "QA/pong.png",
+  "image_sha256": "652b370710c48e90ce0d9259ea528c65e25474c6f86d0c35a679f75a737b0790",
+  "pixels": [2560, 1392],
+  "personally_inspected": true,
+  "observed": [
+    "The actual main editor window shows the running owned temporary PIE.",
+    "Hero logbook, interaction prompt, character information and weapon HUD are visible.",
+    "The arcade title, controls and game canvas are absent."
+  ],
+  "acceptance": "failed; intended foreground arcade was not visible",
+  "related_native_evidence": {
+    "open-pong.json": "Hero interaction initially returned true with Pong open and world paused.",
+    "keys.json": "Precheck found arcade closed before any keyboard key was sent.",
+    "closed-overlay-readback.json": "Arcade closed, world pause and cursor remained true; same Hero/controller and no other Hero menu open."
+  },
+  "cause": "unknown; capture selected the actual main window before Snapshot/Screenshot, so focus/geometry/lifecycle causes are not distinguished",
+  "limits": "No HUD overlap fix, final visual pass, keyboard/focus restoration or physical controller acceptance is established."
+}

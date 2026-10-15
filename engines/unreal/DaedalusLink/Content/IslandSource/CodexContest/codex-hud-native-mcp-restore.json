@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-15T07:29:25.419741+00:00",
+  "stage": "existing_mcp_restored_fresh_native_response_verified",
+  "target": "127.0.0.1:8000/mcp",
+  "listener_present_before": false,
+  "configuration_changes": false,
+  "editor_restarted_by_this_step": false,
+  "command": "ModelContextProtocol.StartServer 8000",
+  "native": {
+    "runtime_command_dispatched": true,
+    "pie": false,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "other_running": [],
+    "queued": 0,
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+  },
+  "mcp_pie_running": false
+}

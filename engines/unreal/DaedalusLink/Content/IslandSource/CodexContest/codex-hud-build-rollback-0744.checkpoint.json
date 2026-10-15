@@ -1,0 +1,382 @@
+{
+  "schema": "daedalus.codex-hud-build-rejection-rollback-checkpoint.v1",
+  "utc": "2026-10-15T07:45:30.298331+00:00",
+  "stage": "one_hud_build_succeeded_candidate_acceptance_failed_prior_binary_restored_compute_released",
+  "source_pr": 157,
+  "source_head": "4b911de6bf201092f7982778fd91ce88ebf84284",
+  "source_code": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+  "build_exit_code": 0,
+  "ubt_seconds": 350.13,
+  "launcher_wall_seconds": 350.9339515,
+  "uht_generated_files": 70,
+  "compile_link_actions": 58,
+  "second_build_performed": false,
+  "candidate_dll": {
+    "bytes": 8283136,
+    "sha256": "e2b00824589b97a2795abb686614b28868d38bcd77b7535de64ee3adf61e8680"
+  },
+  "candidate_loaded_pid": 52492,
+  "candidate_accepted": false,
+  "acceptance": {
+    "actual_hero_interact_opened_pong": true,
+    "subsequent_native_open": false,
+    "keys_sent_by_failed_keyboard_phase": 0,
+    "visual_pass": false,
+    "failure": "Canvas absent; arcade closed before keyboard phase while world pause/cursor stayed true.",
+    "cause": "unknown; actual geometry/focus/close branch not captured",
+    "image": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\QA\\pong.png",
+      "bytes": 170138,
+      "sha256": "652b370710c48e90ce0d9259ea528c65e25474c6f86d0c35a679f75a737b0790"
+    },
+    "personally_inspected": true
+  },
+  "cleanup": {
+    "owned_pie_stopped_normally": true,
+    "save_bytes_and_arcade_absence_restored": true,
+    "production_load_count": 1,
+    "load_response_timeout_seconds": 90,
+    "load_replayed": false,
+    "load_readonly_reconciled": true,
+    "rollback_normal_close": true,
+    "zero_editor_verified": true,
+    "exact_leaves_restored": 5
+  },
+  "current_editor_pid": 67184,
+  "current_loaded_backing_file": {
+    "bytes": 8272384,
+    "sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d"
+  },
+  "canonical_source_files_restored": 140,
+  "preserved_package_files_and_backups": 120,
+  "preserved_actor_records": 101,
+  "map": {
+    "bytes": 209329457,
+    "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933"
+  },
+  "camera_restored": true,
+  "module_receipt": {
+    "bytes": 102,
+    "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+  },
+  "world_saved": false,
+  "compute_explicitly_released": true,
+  "compute_release": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-compute-release.json",
+    "bytes": 1936,
+    "sha256": "0cec67e893e9ddda56a3a6f70357702f8b45c987f77002678c586e280ec3617f"
+  },
+  "app_compile_next": "Separate owner, after its fresh resource/no-conflict check; not launched by this operator.",
+  "release_resources": {
+    "utc": "2026-10-15T07:43:57.5938597Z",
+    "free_physical_KiB": 1142312,
+    "free_virtual_KiB": 2669216,
+    "heavy_processes": []
+  },
+  "unreal_custody": "codex-play-guard",
+  "receipts": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-normal-activation.json",
+      "bytes": 232629,
+      "sha256": "9d02e8f075adaa8b6fe2fce8c13ae70c567d2276c150b65f29de2ba961729693"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-loaded-image-os.json",
+      "bytes": 666,
+      "sha256": "894fb2c0fb794a5cefeb4bd2217c3dafb960345b077c0a10b76317332f0c70ed"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-loaded-readback.json",
+      "bytes": 131107,
+      "sha256": "21a947e1b32109fd28510b5a5a209e520888306435a7f112d58d37957683b2af"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-native-mcp-restore.json",
+      "bytes": 567,
+      "sha256": "7259e54d78fabb3926632752ed9bd61303ce3860daf80419a2db62fb63bc1bdb"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-rejected-rollback.json",
+      "bytes": 229876,
+      "sha256": "ae413c1f2e524846a584fbc73e776d56b08d2ae039d6d0179b0e80c773adc107"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-restored-readback.json",
+      "bytes": 131672,
+      "sha256": "4104219b1e5a3fa886b54d8f588fb3aad03f81a29a7bd4da3ecf6ba06b0ab213"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-restored-mcp.json",
+      "bytes": 567,
+      "sha256": "e3185f1ae4b8735270ba0a550d3af1dba458a1d945dad5fb56eb47ee14cebd9b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-compute-release.json",
+      "bytes": 1936,
+      "sha256": "0cec67e893e9ddda56a3a6f70357702f8b45c987f77002678c586e280ec3617f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\build-result.json",
+      "bytes": 7982,
+      "sha256": "b03f3eb111e2a5786c67eee6124e2128f15922ab1878a63c42c900c0f42a9e20"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\launch.json",
+      "bytes": 1862,
+      "sha256": "5fee5d24d6812b6e229cf0c3aed7ef85a55c5c85ee247cffaf79a2a04fa5e6eb"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\preflight.json",
+      "bytes": 232897,
+      "sha256": "ddb416932e112fff0b929289171a51989736beb37f1122748ef4024a01a7f222"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\terminal.json",
+      "bytes": 1050,
+      "sha256": "18270ca69b89de43b857b7ae28f2a20ad701b320a894c467c059aa97f9dec884"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\capture-pong.json",
+      "bytes": 9629,
+      "sha256": "fee923fd773d1b028d695ed46d8473f56fc6a9f18fe3acc422d8bc85c68473e8"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\check-restore-after-timeout.json",
+      "bytes": 130590,
+      "sha256": "befd02793e651f24fdcec67ab66a2964c305d39640d48389163ac9901668f90d"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\closed-overlay-readback.json",
+      "bytes": 871,
+      "sha256": "52258921ab4ce14ac1cefa723649022072b6a70537ae7e7bbaf184391e90eeb4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\failed-candidate-stop.json",
+      "bytes": 1121,
+      "sha256": "b154c7382ff37c89f035c56fc845a1a896103194536ed5b30b7b8844a7e7357d"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\journal.json",
+      "bytes": 128207,
+      "sha256": "8fa8df3a73f7c29537945a82f5c45b9200ef72af506be16f926fdcd6abd5511c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\keys.json",
+      "bytes": 188,
+      "sha256": "d1435246f75c38f27a810c6e639958a296f5b6c744f15900ecbe430807dfc5ef"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\open-pong.json",
+      "bytes": 900,
+      "sha256": "bea0b8ad24269e700b073b98d6c9971a58a9d79badc910ae412face743f8f497"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\prepare.json",
+      "bytes": 674,
+      "sha256": "4159e44a3ac83d6e45abeba26e84cb84155fd53b22eeb4f72be1e8b31b04c82e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\restore.json",
+      "bytes": 246,
+      "sha256": "9ea22dc642c9bc9f23b1748402b108ed1ae53f54e8d048b60f9d5b385e4a0d4a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\slate-observer.json",
+      "bytes": 106,
+      "sha256": "3e8dbe78ddf2e24c9efbf28974bbe419620dd9f5e8962695244fca38d669017c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\source-diagnosis.json",
+      "bytes": 1905,
+      "sha256": "e7d40c7671b4d60c929302b4509e38abcbc358021e36fbebb6fe09e6c70aad3e"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\start-pie.json",
+      "bytes": 247,
+      "sha256": "6f5e01bc1358db5d5a03430671bf936d1eed5307a87f6aa9811bd78699f3696c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\visual-review.json",
+      "bytes": 1192,
+      "sha256": "09d8bb849ed50a4a89abc78c8d2ffc80bd0d687d0ced54e97a38e055a9f0e830"
+    }
+  ],
+  "operator_source_witnesses": {
+    "prepare_hud_build_now.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\prepare_hud_build_now.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\prepare_hud_build_now.py",
+        "bytes": 5428,
+        "sha256": "d7c4a42d5f0b2da1565c7c4ba34a74b50a4cc3fc8b4d9ab4109b47e2e2ab56d4"
+      }
+    },
+    "run_hud_build.ps1": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\run_hud_build.ps1",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\run_hud_build.ps1",
+        "bytes": 2932,
+        "sha256": "91f77a4e103bafba5534f7cfb7825a8428031d5f68820f30edee1b084694cf24"
+      }
+    },
+    "record_hud_build_result.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\record_hud_build_result.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\record_hud_build_result.py",
+        "bytes": 3816,
+        "sha256": "ad3e713b8c77187ad7eb62ce6a0972926892e379caa89b5c3acb01d9d8891e80"
+      }
+    },
+    "activate_hud_native.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\activate_hud_native.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\activate_hud_native.py",
+        "bytes": 21916,
+        "sha256": "30b9757ddebaa1eba739c4e4b0df1f769ca28ed31c371563b10f477c241319f1"
+      }
+    },
+    "reopen_hud_editor.ps1": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\reopen_hud_editor.ps1",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\reopen_hud_editor.ps1",
+        "bytes": 1523,
+        "sha256": "297b78c4a8ca5f42d652c7dc37e8f4b247e5b59edbbc3755d8242040a384f68f"
+      }
+    },
+    "record_hud_loaded_os.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\record_hud_loaded_os.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\record_hud_loaded_os.py",
+        "bytes": 1634,
+        "sha256": "5aad7088d671e4f40db07848d0228138946ddc3efd35e720f8a9afbb7947030a"
+      }
+    },
+    "read_hud_native.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\read_hud_native.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\read_hud_native.py",
+        "bytes": 4660,
+        "sha256": "498523d5db269f30df92b03bdefbe5f4c512cd7dca54164373ccb3669e9f6560"
+      }
+    },
+    "restore_hud_mcp.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\restore_hud_mcp.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\restore_hud_mcp.py",
+        "bytes": 2169,
+        "sha256": "df9f309e71dc83453103426656bf085d498ff8186701bbe8f31ef1cf87c7063c"
+      }
+    },
+    "hud_targeted_acceptance.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\hud_targeted_acceptance.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\hud_targeted_acceptance.py",
+        "bytes": 18262,
+        "sha256": "9015334466348cbe9f7ba45cc75c137a0d075206cbb3fd33a72a2aa01c853e3a"
+      }
+    },
+    "arcade_acceptance_steps.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade_acceptance_steps.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\arcade_acceptance_steps.py",
+        "bytes": 12298,
+        "sha256": "06405e841f6f9b5b983e32701b506e6aa008d785f9c7611ec0a7529b2f87cc9c"
+      }
+    },
+    "prepare_bounded_arcade_level.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\prepare_bounded_arcade_level.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\prepare_bounded_arcade_level.py",
+        "bytes": 6689,
+        "sha256": "758ad16a8a5353402b994767a4097b05d85b895146e077d42666b044c78f8ae9"
+      }
+    },
+    "inspect_hud_overlay_lifecycle.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\inspect_hud_overlay_lifecycle.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\inspect_hud_overlay_lifecycle.py",
+        "bytes": 823,
+        "sha256": "fcefbb7024f5731eef024c7c811e1a9408013db1bc5ccfe4011976d3cd2ec885"
+      }
+    },
+    "stop_failed_hud_acceptance.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\stop_failed_hud_acceptance.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\stop_failed_hud_acceptance.py",
+        "bytes": 1140,
+        "sha256": "61fe2e7c9580a920d9c8b383adee1d4f60afeb6649e9cc82c837e9f830513c7b"
+      }
+    },
+    "rollback_rejected_hud.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\rollback_rejected_hud.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\rollback_rejected_hud.py",
+        "bytes": 10129,
+        "sha256": "903eb7b75785f2d926b1e79f9affe03fc6fea83feba7a69094c1d0b62c60a886"
+      }
+    },
+    "reopen_restored_hud.ps1": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\reopen_restored_hud.ps1",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\reopen_restored_hud.ps1",
+        "bytes": 1552,
+        "sha256": "9719a06d9a036cf9a327567e3d4b9231066c30722c154d9f19ff89dbc214aa1b"
+      }
+    },
+    "read_restored_hud.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\read_restored_hud.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\read_restored_hud.py",
+        "bytes": 4607,
+        "sha256": "96f7fa3cfdeedfca45f6a05ce7911b1104fd80b09d8c966ef5886178a5a225e1"
+      }
+    },
+    "restore_restored_hud_mcp.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\restore_restored_hud_mcp.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\restore_restored_hud_mcp.py",
+        "bytes": 2165,
+        "sha256": "9daf04df0c1a4f2db629605b2a939421e3cfb82f03796e86ed79d496a2545d22"
+      }
+    },
+    "release_hud_compute.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\release_hud_compute.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\release_hud_compute.py",
+        "bytes": 5073,
+        "sha256": "a4e4dc21ad47c9d5397b5573b2eeac661df38d20dedce11a7093f10a0f646831"
+      }
+    },
+    "read_activated_arcade_native.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\read_activated_arcade_native.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\read_activated_arcade_native.py",
+        "bytes": 19190,
+        "sha256": "df19b9ac63a20730b307be690b686e6a28775319961f206949c41619c1ed7b69"
+      }
+    },
+    "restore_existing_native_mcp.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\restore_existing_native_mcp.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\restore_existing_native_mcp.py",
+        "bytes": 2678,
+        "sha256": "e9d2dc085c0ba334343959c5e21c58e2fcd9095b3dc52758fb3594b64d562acf"
+      }
+    },
+    "build_visible_garden_landing.py": {
+      "executed_or_read_on_host": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\build_visible_garden_landing.py",
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\operator-source\\build_visible_garden_landing.py",
+        "bytes": 7664,
+        "sha256": "6b1201dc3c6796ae6e71c0f94166a5d381271f8a5ca80fdf4eec48627e992043"
+      }
+    }
+  },
+  "remaining_blocker": "HUD foreground candidate needs source-owner diagnosis/correction and a separately coordinated native rebuild/acceptance. Original overlap remains unresolved on restored baseline.",
+  "limits": [
+    "No second build, broad automation suite, cook or physical-controller run.",
+    "Source candidate remains reviewable in draft PR147 and retained shadow; it is not the active production binary.",
+    "Compute release does not assert enough memory for the app build; fresh release resources were low.",
+    "No forced close, concurrent editor, new dependencies or resource/security/configuration changes."
+  ],
+  "issues": []
+}

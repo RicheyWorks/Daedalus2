@@ -1,0 +1,3 @@
+# Exact on-host operator source witnesses.
+*.py -text -eol
+*.ps1 -text -eol

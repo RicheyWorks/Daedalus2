@@ -1,0 +1,29 @@
+{
+  "state": {
+    "initialized": true,
+    "open": false,
+    "paused": true,
+    "over": false,
+    "won": false,
+    "save_pending": false,
+    "has_saved_run": false,
+    "id": "pong",
+    "title": "Twinwake Volley",
+    "note": "CPU 0; rally 0; best 0",
+    "persistence_message": "",
+    "score": 0,
+    "lives": 0,
+    "seed": 730,
+    "steps": 0,
+    "option": -1
+  },
+  "world_paused": true,
+  "hero": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusHero_0",
+  "controller": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.PlayerController_0",
+  "cursor": true,
+  "hero_location": "<Struct 'Vector' (0x000001A6A9489050) {x: 330.000000, y: 0.000000, z: 100.000000}>",
+  "cabinet_location": "<Struct 'Vector' (0x000001A6A9489050) {x: 180.000000, y: 0.000000, z: 0.000000}>",
+  "hero_settings": false,
+  "hero_field": false,
+  "hero_realm": false
+}

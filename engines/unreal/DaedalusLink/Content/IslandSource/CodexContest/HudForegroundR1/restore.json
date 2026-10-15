@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-15T07:34:05.670513+00:00",
+  "phase": "restore",
+  "stage": "failed_or_uncertain_inspect_before_replay",
+  "replay_permitted": false,
+  "error": "Unreal: the editor did not run the command in time (is a modal dialog open?)"
+}

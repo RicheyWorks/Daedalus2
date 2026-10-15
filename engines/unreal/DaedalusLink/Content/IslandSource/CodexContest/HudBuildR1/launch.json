@@ -1,0 +1,43 @@
+{
+  "stage": "serial_hud_build_dispatching",
+  "started_utc": "2026-10-15T07:16:37.7749248Z",
+  "launcher_pid": 36936,
+  "engine": "C:/Program Files/Epic Games/UE_5.8/Engine/Build/BatchFiles/Build.bat",
+  "arguments": [
+    "UnrealEditor",
+    "Win64",
+    "Development",
+    "-Project=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\HostProject.uproject",
+    "-Plugin=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Plugins\\DaedalusLink\\DaedalusLink.uplugin",
+    "-Module=DaedalusLink",
+    "-NoUBTMakefiles",
+    "-NoHotReload",
+    "-MaxParallelActions=1",
+    "-NoEngineChanges",
+    "-Manifest=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\Manifest-hud-bcfb.xml",
+    "-Log=C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\build-hud-bcfb.log"
+  ],
+  "preflight": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-hud157\\Saved\\hud-build-preflight.json",
+  "free_physical_KiB": 6921568,
+  "free_virtual_KiB": 7435044,
+  "compute_lease": {
+    "holder": "codex-play-guard",
+    "note": "ONE authorized HUD serial UHT/module build, normal SharedPCH/defaultmutex MaxParallelActions1; no simultaneous app build/render/export; release after terminal HUD activation acceptance",
+    "at": 1792048441.6538515,
+    "ttl": 1800.0,
+    "age_s": 155.1,
+    "left_s": 1644.9
+  },
+  "unreal_lease": {
+    "holder": "codex-play-guard",
+    "note": "User-designated sole operator; HUD normal activation and targeted acceptance, preserve120packages/101actors/map5690",
+    "at": 1792048441.6763847,
+    "ttl": 1800.0,
+    "age_s": 155.1,
+    "left_s": 1644.9
+  },
+  "no_conflicting_heavy_processes": true,
+  "normal_shared_pch": true,
+  "max_parallel_actions": 1,
+  "canonical_install_performed": false
+}
