@@ -1,0 +1,22 @@
+{
+ "name": "Prop_Aquatic_Marsh_Bulrush_1",
+ "species": "Bulrush",
+ "family": "marsh",
+ "stage": "Sprout",
+ "stage_index": 1,
+ "voxel_cm": 5.0,
+ "voxels": 14,
+ "pivot": "mud line (stand in 0-0.5 m water)",
+ "height_m": 0.25,
+ "depth_below_pivot_m": 0.0,
+ "uses": {
+  "purity": 0.06,
+  "goods": [
+   "basket@craft"
+  ],
+  "islands": [
+   "mire"
+  ]
+ },
+ "source": "tools/blender/voxel_aquatic.py"
+}

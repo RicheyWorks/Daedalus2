@@ -1,0 +1,9 @@
+{
+  "steps": 1,
+  "yielded": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1"
+  ],
+  "result": null,
+  "error": "Traceback (most recent call last):\n  File \"C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_bridge_commands.py\", line 149, in run_steps\n    v = next(gen)\n        ^^^^^^^^^\n  File \"<daedalus.steps:Codex qualified one-static asset-only import-save>\", line 10, in steps\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_static_intake.py\", line 199, in steps\n    row['post_save_preflight'] = shared['_preflight']()\n                                 ^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_catalogue.py\", line 63, in _preflight\n    raise RuntimeError('conflicting/unfinished bridge operation; preserve work')\nRuntimeError: conflicting/unfinished bridge operation; preserve work\n",
+  "seconds": 1.7
+}

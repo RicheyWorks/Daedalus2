@@ -1,0 +1,3325 @@
+{
+  "schema": "daedalus.codex-one-static-dispatch.v1",
+  "stage": "outcome_requires_inspection_no_replay",
+  "observed_utc": "2026-10-15T05:02:31.908096+00:00",
+  "operator": "codex-play-guard",
+  "operator_no_inflight_declaration": true,
+  "lease": {
+    "holder": "codex-play-guard",
+    "note": "Sole user-designated operator; bounded ONE Bulrush asset-only intake, no placement/map save; HUD then app build sequence preserved",
+    "at": 1792040294.7015111,
+    "ttl": 1800.0,
+    "age_s": 257.2,
+    "left_s": 1542.8
+  },
+  "resources": {
+    "length": 64,
+    "load": 88,
+    "total_physical": 34047680512,
+    "available_physical": 4063150080,
+    "total_commit_limit": 72851955712,
+    "available_commit": 2573066240,
+    "total_virtual": 140737488224256,
+    "available_virtual": 140733057486848,
+    "reserved": 0,
+    "observed_utc": "2026-10-15T05:02:30.817864+00:00",
+    "available_commit_note": "OS ullAvailPageFile; process virtual address space is separately recorded",
+    "minimum_free_physical_mib": 0,
+    "minimum_free_commit_mib": 0,
+    "safety_limit": "Measured data only; optional floors are explicit operator choices, not a measured general safe ceiling."
+  },
+  "native_preflight": {
+    "guard": {
+      "dirty_map_packages": [],
+      "dirty_content_packages": [],
+      "other_running_generators": [],
+      "queued_jobs": 0,
+      "unfinished_async_job_boxes": 0,
+      "pie_running": false,
+      "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "remote_execution_lock_locked": false,
+      "background_compilation": "not_queried",
+      "epic_mcp_other_sessions": "not_queried"
+    },
+    "source": {
+      "name": "Prop_Aquatic_Marsh_Bulrush_1",
+      "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+      "fingerprint": {
+        "bytes": 15100,
+        "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+      },
+      "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.json",
+      "sidecar_fingerprint": {
+        "bytes": 417,
+        "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+      },
+      "triangles": 36,
+      "quads": 18,
+      "polygon_sizes": [
+        4
+      ],
+      "source_bounds": {
+        "min": [
+          -15.0,
+          -15.0,
+          0.0
+        ],
+        "max": [
+          20.0,
+          20.0,
+          25.0
+        ]
+      },
+      "source_dimensions_cm": [
+        35.0,
+        35.0,
+        25.0
+      ],
+      "rgba_bytes": [
+        [
+          111,
+          168,
+          117,
+          255
+        ]
+      ],
+      "raw_rgba_float": [
+        [
+          0.43529412,
+          0.65882355,
+          0.45882353,
+          1.0
+        ]
+      ],
+      "source_colour_layer": "Col / ByPolygonVertex / IndexToDirect",
+      "source_material_names": [
+        "VoxelVertexColour"
+      ],
+      "source_unit_scale_factor": 100.0,
+      "source_original_unit_scale_factor": 100.0,
+      "source_fbx_axes": {
+        "UpAxis": 2,
+        "UpAxisSign": 1,
+        "FrontAxis": 1,
+        "FrontAxisSign": 1,
+        "CoordAxis": 0,
+        "CoordAxisSign": -1
+      },
+      "fbx_version": 7400,
+      "mesh_geometry_count": 1,
+      "mesh_model_count": 1,
+      "animations": 0,
+      "animation_curves": 0,
+      "deformers": 0,
+      "textures": 0,
+      "videos": 0,
+      "authored_ucx": 0,
+      "pivot": "mud line (stand in 0-0.5 m water)",
+      "depth_below_pivot_m": 0.0,
+      "source_geometry_static": true,
+      "provenance": {
+        "owner": "Team Claude / unreal-team",
+        "catalogue_manifest": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+          "bytes": 9405,
+          "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+        },
+        "owner_handoff_id": 31500,
+        "source_recipe": [
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+            "bytes": 35748,
+            "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+            "bytes": 25198,
+            "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+            "bytes": 58540,
+            "sha256": "32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+            "bytes": 4684,
+            "sha256": "e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760"
+          }
+        ],
+        "historical_exporter_author": "unverified"
+      },
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6"
+    },
+    "destination_absent": true,
+    "global_name_collisions": [],
+    "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+    "shared_helpers": {
+      "bytes": 22414,
+      "sha256": "00e48d8a86cd377250c439d6992a5bec6deb09b0f77e9607bf7beebd324d1d03"
+    },
+    "shared_guard_label_scope": "private fresh namespace only; old module unchanged"
+  },
+  "scene_before": {
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "pie": false,
+    "actors": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DaedalusDesktopArcade_1",
+        "label": "CodexAcceptance_Pong",
+        "folder": "Codex/DeferredAcceptance",
+        "location": [
+          910.0,
+          -8800.0,
+          4794.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.800000011920929,
+          0.5,
+          1.100000023841858
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DaedalusDesktopArcade_1.Body",
+            "mesh": "/Engine/BasicShapes/Cube.Cube",
+            "materials": [
+              "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_935",
+        "label": "CodexIsland_cliff_garden_84022_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_935.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_clouds.CodexIsland_cliff_garden_84022_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_936",
+        "label": "CodexIsland_cliff_garden_84022_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_936.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_cottage.CodexIsland_cliff_garden_84022_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_937",
+        "label": "CodexIsland_cliff_garden_84022_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_937.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_crystals.CodexIsland_cliff_garden_84022_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_938",
+        "label": "CodexIsland_cliff_garden_84022_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_938.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_flowers.CodexIsland_cliff_garden_84022_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_939",
+        "label": "CodexIsland_cliff_garden_84022_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_939.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_island.CodexIsland_cliff_garden_84022_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ff6e0e2b002f.MI_Codex_dirt2_ff6e0e2b002f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_3171c11520db.MI_Codex_grass_3171c11520db",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_7e0cc2d93aea.MI_Codex_grass2_7e0cc2d93aea",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_940",
+        "label": "CodexIsland_cliff_garden_84022_landmarks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_940.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_landmarks.CodexIsland_cliff_garden_84022_landmarks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_941",
+        "label": "CodexIsland_cliff_garden_84022_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_941.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_rocks.CodexIsland_cliff_garden_84022_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_942",
+        "label": "CodexIsland_cliff_garden_84022_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_942.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_trees.CodexIsland_cliff_garden_84022_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_c805001eae0f.MI_Codex_blossom2_c805001eae0f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_f1f960fcb6bf.MI_Codex_leaf_f1f960fcb6bf",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_943",
+        "label": "CodexIsland_cliff_garden_84022_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          348900.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_943.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/2053cd40f71a735c/CodexIsland_cliff_garden_84022_water.CodexIsland_cliff_garden_84022_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_b0adb320d32d.MI_Codex_foam_b0adb320d32d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_910847e52ff6.MI_Codex_water_910847e52ff6"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_944",
+        "label": "CodexIsland_river_canyon_84033_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_944.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_clouds.CodexIsland_river_canyon_84033_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_945",
+        "label": "CodexIsland_river_canyon_84033_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_945.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_cottage.CodexIsland_river_canyon_84033_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_wall_f8c4ec0b2541.MI_Codex_wall_f8c4ec0b2541",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_946",
+        "label": "CodexIsland_river_canyon_84033_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_946.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_crystals.CodexIsland_river_canyon_84033_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_947",
+        "label": "CodexIsland_river_canyon_84033_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_947.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_flowers.CodexIsland_river_canyon_84033_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_948",
+        "label": "CodexIsland_river_canyon_84033_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_948.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_island.CodexIsland_river_canyon_84033_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ff6e0e2b002f.MI_Codex_dirt2_ff6e0e2b002f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_7e0cc2d93aea.MI_Codex_grass2_7e0cc2d93aea",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_949",
+        "label": "CodexIsland_river_canyon_84033_landmarks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_949.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_landmarks.CodexIsland_river_canyon_84033_landmarks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_950",
+        "label": "CodexIsland_river_canyon_84033_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_950.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_rocks.CodexIsland_river_canyon_84033_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_951",
+        "label": "CodexIsland_river_canyon_84033_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_951.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_trees.CodexIsland_river_canyon_84033_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_c805001eae0f.MI_Codex_blossom2_c805001eae0f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_f1f960fcb6bf.MI_Codex_leaf_f1f960fcb6bf",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_952",
+        "label": "CodexIsland_river_canyon_84033_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          323300.0,
+          18715.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_952.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/eff77fd4050b4f56/CodexIsland_river_canyon_84033_water.CodexIsland_river_canyon_84033_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_910847e52ff6.MI_Codex_water_910847e52ff6"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_953",
+        "label": "CodexIsland_summit_rim_84011_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_953.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_clouds.CodexIsland_summit_rim_84011_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_954",
+        "label": "CodexIsland_summit_rim_84011_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_954.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_cottage.CodexIsland_summit_rim_84011_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_wall_f8c4ec0b2541.MI_Codex_wall_f8c4ec0b2541",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_955",
+        "label": "CodexIsland_summit_rim_84011_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_955.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_crystals.CodexIsland_summit_rim_84011_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_956",
+        "label": "CodexIsland_summit_rim_84011_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_956.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_flowers.CodexIsland_summit_rim_84011_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_957",
+        "label": "CodexIsland_summit_rim_84011_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_957.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_island.CodexIsland_summit_rim_84011_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ff6e0e2b002f.MI_Codex_dirt2_ff6e0e2b002f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_3171c11520db.MI_Codex_grass_3171c11520db",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_7e0cc2d93aea.MI_Codex_grass2_7e0cc2d93aea",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_958",
+        "label": "CodexIsland_summit_rim_84011_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_958.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_rocks.CodexIsland_summit_rim_84011_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_959",
+        "label": "CodexIsland_summit_rim_84011_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_959.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_trees.CodexIsland_summit_rim_84011_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_c805001eae0f.MI_Codex_blossom2_c805001eae0f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_f1f960fcb6bf.MI_Codex_leaf_f1f960fcb6bf",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_960",
+        "label": "CodexIsland_summit_rim_84011_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -369150.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_960.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/island/5cef78b0fcfdb286/CodexIsland_summit_rim_84011_water.CodexIsland_summit_rim_84011_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_b0adb320d32d.MI_Codex_foam_b0adb320d32d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_910847e52ff6.MI_Codex_water_910847e52ff6"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_961",
+        "label": "CodexDress_CopperPatina_housing",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368150.0,
+          346900.0,
+          18465.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_961.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_962",
+        "label": "CodexDress_CopperPatina_shaft",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368150.0,
+          347125.0,
+          18515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_962.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d25f7e7d89422a6b/CodexModule_CopperPatina_DriveShaft_85006.CodexModule_CopperPatina_DriveShaft_85006",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_963",
+        "label": "CodexDress_CopperPatina_rotor",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368150.0,
+          347275.0,
+          18515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_963.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/7f2992a907d20886/CodexModule_CopperPatina_TurbineRotor_85003.CodexModule_CopperPatina_TurbineRotor_85003",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_964",
+        "label": "CodexDress_CopperPatina_crossbeam",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368350.0,
+          346900.0,
+          18440.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_964.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_965",
+        "label": "CodexDress_CopperPatina_west_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368300.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_965.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_966",
+        "label": "CodexDress_CopperPatina_east_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368000.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_966.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3926",
+        "label": "CodexDress_CopperPatina_battery",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -367950.0,
+          346800.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3926.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3927",
+        "label": "CodexDress_CopperPatina_spare_wheel",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -367800.0,
+          346750.0,
+          18440.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3927.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c4950bb2cbdf3abe/CodexModule_CopperPatina_WagonWheel_85002.CodexModule_CopperPatina_WagonWheel_85002",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3928",
+        "label": "CodexDress_CopperPatina_signal_sail",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368000.0,
+          346600.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3928.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/956c0286fde7f7db/CodexModule_CopperPatina_SailPanel_85001.CodexModule_CopperPatina_SailPanel_85001",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3929",
+        "label": "CodexDress_DawnCrimson_housing",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369150.0,
+          321800.0,
+          20165.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3929.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/b58f07137ee2545c/CodexModule_DawnCrimson_GearboxHousing_85105.CodexModule_DawnCrimson_GearboxHousing_85105",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3930",
+        "label": "CodexDress_DawnCrimson_shaft",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369150.0,
+          322025.0,
+          20215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3930.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/1c52ebfc34c1c389/CodexModule_DawnCrimson_DriveShaft_85106.CodexModule_DawnCrimson_DriveShaft_85106",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3931",
+        "label": "CodexDress_DawnCrimson_rotor",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369150.0,
+          322175.0,
+          20215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3931.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/10358ac734efd6cf/CodexModule_DawnCrimson_TurbineRotor_85103.CodexModule_DawnCrimson_TurbineRotor_85103",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3932",
+        "label": "CodexDress_DawnCrimson_crossbeam",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369350.0,
+          321800.0,
+          20140.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3932.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3933",
+        "label": "CodexDress_DawnCrimson_west_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369300.0,
+          321800.0,
+          20015.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3933.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3934",
+        "label": "CodexDress_DawnCrimson_east_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369000.0,
+          321800.0,
+          20015.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3934.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/3019aaa06df6f379/CodexModule_DawnCrimson_BridgeCoupler_85100.CodexModule_DawnCrimson_BridgeCoupler_85100",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3935",
+        "label": "CodexDress_DawnCrimson_battery",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368950.0,
+          321700.0,
+          20015.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3935.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6dfbaa8194bbe921/CodexModule_DawnCrimson_CrystalBattery_85104.CodexModule_DawnCrimson_CrystalBattery_85104",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3936",
+        "label": "CodexDress_DawnCrimson_spare_wheel",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -368800.0,
+          321650.0,
+          20140.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3936.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/c859c181e1efd94e/CodexModule_DawnCrimson_WagonWheel_85102.CodexModule_DawnCrimson_WagonWheel_85102",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3937",
+        "label": "CodexDress_DawnCrimson_signal_sail",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -369000.0,
+          321500.0,
+          20015.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3937.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/11ffdda61a11dcbf/CodexModule_DawnCrimson_SailPanel_85101.CodexModule_DawnCrimson_SailPanel_85101",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3938",
+        "label": "CodexDress_StormAmethyst_housing",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366150.0,
+          298200.0,
+          17765.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3938.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/f903dda8bd30a315/CodexModule_StormAmethyst_GearboxHousing_85205.CodexModule_StormAmethyst_GearboxHousing_85205",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3939",
+        "label": "CodexDress_StormAmethyst_shaft",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366150.0,
+          298425.0,
+          17815.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3939.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/0248ed0a300ef009/CodexModule_StormAmethyst_DriveShaft_85206.CodexModule_StormAmethyst_DriveShaft_85206",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3940",
+        "label": "CodexDress_StormAmethyst_rotor",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366150.0,
+          298575.0,
+          17815.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3940.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/76ac7373b7624515/CodexModule_StormAmethyst_TurbineRotor_85203.CodexModule_StormAmethyst_TurbineRotor_85203",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3941",
+        "label": "CodexDress_StormAmethyst_crossbeam",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366350.0,
+          298200.0,
+          17740.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3941.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3942",
+        "label": "CodexDress_StormAmethyst_west_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366300.0,
+          298200.0,
+          17615.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3942.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3943",
+        "label": "CodexDress_StormAmethyst_east_leg",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366000.0,
+          298200.0,
+          17615.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.3125,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3943.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/a4ddbcc9e9dd167f/CodexModule_StormAmethyst_BridgeCoupler_85200.CodexModule_StormAmethyst_BridgeCoupler_85200",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3944",
+        "label": "CodexDress_StormAmethyst_battery",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -365950.0,
+          298100.0,
+          17615.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3944.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/47ee7222bd45c30d/CodexModule_StormAmethyst_CrystalBattery_85204.CodexModule_StormAmethyst_CrystalBattery_85204",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3945",
+        "label": "CodexDress_StormAmethyst_spare_wheel",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -365800.0,
+          298050.0,
+          17740.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3945.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/6650da60f6be3fb7/CodexModule_StormAmethyst_WagonWheel_85202.CodexModule_StormAmethyst_WagonWheel_85202",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3946",
+        "label": "CodexDress_StormAmethyst_signal_sail",
+        "folder": "CodexContest/Staging/Workshops",
+        "location": [
+          -366000.0,
+          297900.0,
+          17615.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3946.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/28d587c9231e7d86/CodexModule_StormAmethyst_SailPanel_85201.CodexModule_StormAmethyst_SailPanel_85201",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3947",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3947.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_clouds.CodexIsland_summit_rim_84011_HeroR3_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3948",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3948.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_cottage.CodexIsland_summit_rim_84011_HeroR3_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_wall_f8c4ec0b2541.MI_Codex_wall_f8c4ec0b2541",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3949",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3949.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_crystals.CodexIsland_summit_rim_84011_HeroR3_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3950",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3950.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_flowers.CodexIsland_summit_rim_84011_HeroR3_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3951",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3951.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_island.CodexIsland_summit_rim_84011_HeroR3_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_282374474647.MI_Codex_dirt_282374474647",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ff6e0e2b002f.MI_Codex_dirt2_ff6e0e2b002f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_3171c11520db.MI_Codex_grass_3171c11520db",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_7e0cc2d93aea.MI_Codex_grass2_7e0cc2d93aea",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3952",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_landmarks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3952.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_landmarks.CodexIsland_summit_rim_84011_HeroR3_landmarks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_4d55194bd876.MI_Codex_crystal_4d55194bd876",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_75c8f5a8ab91.MI_Codex_crystal2_75c8f5a8ab91",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3953",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3953.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_rocks.CodexIsland_summit_rim_84011_HeroR3_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_019a7a9d187d.MI_Codex_rock_019a7a9d187d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3954",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_route_steps",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3954.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_route_steps.CodexIsland_summit_rim_84011_HeroR3_route_steps",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_dbd8e169420b.MI_Codex_flower_w_dbd8e169420b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_098d3f55e06e.MI_Codex_sand_098d3f55e06e"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3955",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3955.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_trees.CodexIsland_summit_rim_84011_HeroR3_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_eef77035750d.MI_Codex_blossom_eef77035750d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_c805001eae0f.MI_Codex_blossom2_c805001eae0f",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_f1f960fcb6bf.MI_Codex_leaf_f1f960fcb6bf",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3956",
+        "label": "CodexIsland_summit_rim_84011_HeroR3_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3956.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/f0499dd9dad812f597cf54dd/CodexIsland_summit_rim_84011_HeroR3_water.CodexIsland_summit_rim_84011_HeroR3_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_b0adb320d32d.MI_Codex_foam_b0adb320d32d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_910847e52ff6.MI_Codex_water_910847e52ff6"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3957",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3957.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_clouds.CodexIsland_summit_rim_84011_HeroR4_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3958",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3958.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_cottage.CodexIsland_summit_rim_84011_HeroR4_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_758eea645725.MI_Codex_roof_758eea645725",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_wall_f8c4ec0b2541.MI_Codex_wall_f8c4ec0b2541",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3959",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3959.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_crystals.CodexIsland_summit_rim_84011_HeroR4_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_010599a1b76d.MI_Codex_crystal_010599a1b76d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_94281243549b.MI_Codex_crystal2_94281243549b"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3960",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3960.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_flowers.CodexIsland_summit_rim_84011_HeroR4_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_6418fb3d01df.MI_Codex_flower_w_6418fb3d01df",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3961",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3961.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_island.CodexIsland_summit_rim_84011_HeroR4_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_6418fb3d01df.MI_Codex_flower_w_6418fb3d01df",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_9bfac4b50d64.MI_Codex_dirt_9bfac4b50d64",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_ac68ed45e2e0.MI_Codex_dirt2_ac68ed45e2e0",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_1c368d5a6e5b.MI_Codex_grass_1c368d5a6e5b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_9eb9f13da75a.MI_Codex_grass2_9eb9f13da75a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_d6b81af5785c.MI_Codex_rock_d6b81af5785c",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_04a2f229caba.MI_Codex_rock2_04a2f229caba",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_05702cf4441c.MI_Codex_sand_05702cf4441c"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3962",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_landmarks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3962.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_landmarks.CodexIsland_summit_rim_84011_HeroR4_landmarks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_010599a1b76d.MI_Codex_crystal_010599a1b76d",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_94281243549b.MI_Codex_crystal2_94281243549b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_04a2f229caba.MI_Codex_rock2_04a2f229caba"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3963",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3963.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_rocks.CodexIsland_summit_rim_84011_HeroR4_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_d6b81af5785c.MI_Codex_rock_d6b81af5785c",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_04a2f229caba.MI_Codex_rock2_04a2f229caba"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3964",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_route_steps",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3964.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_route_steps.CodexIsland_summit_rim_84011_HeroR4_route_steps",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_6418fb3d01df.MI_Codex_flower_w_6418fb3d01df",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_05702cf4441c.MI_Codex_sand_05702cf4441c"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3965",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3965.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_trees.CodexIsland_summit_rim_84011_HeroR4_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_8a7b0d683948.MI_Codex_blossom_8a7b0d683948",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_f398dda13d17.MI_Codex_blossom2_f398dda13d17",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_187f133807a5.MI_Codex_leaf_187f133807a5",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_4df855c36022.MI_Codex_leaf2_4df855c36022",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3966",
+        "label": "CodexIsland_summit_rim_84011_HeroR4_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -317950.0,
+          297700.0,
+          17515.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3966.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/4baeb945202507ea41b225c2/CodexIsland_summit_rim_84011_HeroR4_water.CodexIsland_summit_rim_84011_HeroR4_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_8efa73f3e96c.MI_Codex_foam_8efa73f3e96c",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_18f305ad3d7f.MI_Codex_water_18f305ad3d7f"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3967",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3967.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_clouds.CodexIsland_cliff_garden_84022_GardenGateR1_clouds",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_cloud_ce8b0896d9a4.MI_Codex_cloud_ce8b0896d9a4"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3968",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3968.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_cottage.CodexIsland_cliff_garden_84022_GardenGateR1_cottage",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_b0ace6b8ac27.MI_Codex_crystal_b0ace6b8ac27",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_door_9000d2c4996a.MI_Codex_door_9000d2c4996a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_cf98825d2768.MI_Codex_sand_cf98825d2768",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3969",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3969.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_crystals.CodexIsland_cliff_garden_84022_GardenGateR1_crystals",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal_b0ace6b8ac27.MI_Codex_crystal_b0ace6b8ac27",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_658bd225be69.MI_Codex_crystal2_658bd225be69"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3970",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3970.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_flowers.CodexIsland_cliff_garden_84022_GardenGateR1_flowers",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_r_d36531d5f9d3.MI_Codex_flower_r_d36531d5f9d3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_13a7fe624e5a.MI_Codex_flower_w_13a7fe624e5a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_y_8d4490ced853.MI_Codex_flower_y_8d4490ced853"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3971",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_island",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3971.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_island.CodexIsland_cliff_garden_84022_GardenGateR1_island",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_cf98825d2768.MI_Codex_sand_cf98825d2768",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_13a7fe624e5a.MI_Codex_flower_w_13a7fe624e5a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_3860c49004ab.MI_Codex_dirt_3860c49004ab",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt2_bac3c1f93cea.MI_Codex_dirt2_bac3c1f93cea",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass_716d4eb8a591.MI_Codex_grass_716d4eb8a591",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_grass2_ff3acc1d6f9a.MI_Codex_grass2_ff3acc1d6f9a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_d15614274abc.MI_Codex_rock_d15614274abc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_ca85b1ce6e61.MI_Codex_rock2_ca85b1ce6e61"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3972",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3972.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_landmarks.CodexIsland_cliff_garden_84022_GardenGateR1_landmarks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_sand_cf98825d2768.MI_Codex_sand_cf98825d2768",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_crystal2_658bd225be69.MI_Codex_crystal2_658bd225be69",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_flower_w_13a7fe624e5a.MI_Codex_flower_w_13a7fe624e5a",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_dirt_3860c49004ab.MI_Codex_dirt_3860c49004ab",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_ca85b1ce6e61.MI_Codex_rock2_ca85b1ce6e61",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_9be2870903dd.MI_Codex_blossom_9be2870903dd"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3973",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3973.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_rocks.CodexIsland_cliff_garden_84022_GardenGateR1_rocks",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock_d15614274abc.MI_Codex_rock_d15614274abc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_ca85b1ce6e61.MI_Codex_rock2_ca85b1ce6e61"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3974",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3974.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_trees.CodexIsland_cliff_garden_84022_GardenGateR1_trees",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom_9be2870903dd.MI_Codex_blossom_9be2870903dd",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_blossom2_9faffb1ae502.MI_Codex_blossom2_9faffb1ae502",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf_22c54c45bd52.MI_Codex_leaf_22c54c45bd52",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_9dbf72890df3.MI_Codex_leaf2_9dbf72890df3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3975",
+        "label": "CodexIsland_cliff_garden_84022_GardenGateR1_water",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -343550.0,
+          323300.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3975.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/2383d5c07d1d765d74a847af/CodexIsland_cliff_garden_84022_GardenGateR1_water.CodexIsland_cliff_garden_84022_GardenGateR1_water",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_foam_df9792714915.MI_Codex_foam_df9792714915",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_water_a75f11a2c970.MI_Codex_water_a75f11a2c970"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3976",
+        "label": "CodexSalvage_PowerUnit_86100_battery",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -367350.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3976.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_battery.CodexSalvage_PowerUnit_86100_battery",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3977",
+        "label": "CodexSalvage_PowerUnit_86100_gearbox",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -367350.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3977.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_gearbox.CodexSalvage_PowerUnit_86100_gearbox",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3978",
+        "label": "CodexSalvage_PowerUnit_86100_rotor",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -367350.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3978.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_rotor.CodexSalvage_PowerUnit_86100_rotor",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3979",
+        "label": "CodexSalvage_PowerUnit_86100_shaft",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -367350.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3979.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_shaft.CodexSalvage_PowerUnit_86100_shaft",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3980",
+        "label": "CodexSalvage_PowerUnit_86100_support",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -367350.0,
+          346900.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3980.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/e3f098e65a1dc4ddb1129b79/CodexSalvage_PowerUnit_86100_support.CodexSalvage_PowerUnit_86100_support",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981",
+        "label": "CodexAetherflow_ribbon_reeds_617024",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -371550.0,
+          350700.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3981.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/d8c672752101e94807fc2be5/CodexAetherflow_ribbon_reeds_617024.CodexAetherflow_ribbon_reeds_617024",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982",
+        "label": "CodexAetherflow_star_lilies_617024",
+        "folder": "CodexContest/Staging",
+        "location": [
+          -371050.0,
+          350100.0,
+          18215.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3982.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/cd8a88ba64e2e4c0da04c799/CodexAetherflow_star_lilies_617024.CodexAetherflow_star_lilies_617024",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Gold_83df028d72b3.MI_Aetherflow_SW_Life_Gold_83df028d72b3",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc.MI_Aetherflow_SW_Life_Turquoise_049bfd448cdc",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Petrol_dac6745110eb.MI_Aetherflow_SW_Life_Petrol_dac6745110eb",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Coral_8615d50f95b1.MI_Aetherflow_SW_Life_Coral_8615d50f95b1",
+              "/Game/Daedalus/Art/Islands/CodexContest/Aetherflow/Palette/MI_Aetherflow_SW_Life_Ice_38a60de46f0b.MI_Aetherflow_SW_Life_Ice_38a60de46f0b"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3983",
+        "label": "CodexBuild_GardenLandingR1_deck_1",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343700.0,
+          325000.0,
+          18290.324
+        ],
+        "rotation": [
+          0.0,
+          89.99999999999999,
+          -0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3983.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3984",
+        "label": "CodexBuild_GardenLandingR1_deck_2",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343600.0,
+          325000.0,
+          18290.324
+        ],
+        "rotation": [
+          0.0,
+          89.99999999999999,
+          -0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3984.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3985",
+        "label": "CodexBuild_GardenLandingR1_deck_3",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343500.0,
+          325000.0,
+          18290.324
+        ],
+        "rotation": [
+          0.0,
+          89.99999999999999,
+          -0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3985.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3986",
+        "label": "CodexBuild_GardenLandingR1_deck_4",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343400.0,
+          325000.0,
+          18290.324
+        ],
+        "rotation": [
+          0.0,
+          89.99999999999999,
+          -0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3986.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3987",
+        "label": "CodexBuild_GardenLandingR1_west_housing",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343675.0,
+          325200.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3987.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3988",
+        "label": "CodexBuild_GardenLandingR1_west_crystal",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343675.0,
+          325200.0,
+          18415.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3988.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3989",
+        "label": "CodexBuild_GardenLandingR1_east_housing",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343425.0,
+          325200.0,
+          18315.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3989.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3990",
+        "label": "CodexBuild_GardenLandingR1_east_crystal",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343425.0,
+          325200.0,
+          18415.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3990.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3991",
+        "label": "CodexBuild_GardenLandingR1_west_column",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343750.0,
+          325200.0,
+          18315.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.875,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3991.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3992",
+        "label": "CodexBuild_GardenLandingR1_east_column",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343350.0,
+          325200.0,
+          18315.324
+        ],
+        "rotation": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.875,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3992.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3993",
+        "label": "CodexBuild_GardenLandingR1_arch_beam",
+        "folder": "CodexContest/Staging/GardenLandingR1",
+        "location": [
+          -343750.0,
+          325200.0,
+          18690.324
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "components": [
+          {
+            "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_3993.StaticMeshComponent0",
+            "mesh": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+            "materials": [
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+              "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+            ]
+          }
+        ]
+      }
+    ],
+    "dirty_maps": [],
+    "dirty_content": [],
+    "queued": 0,
+    "remote_locked": false,
+    "running": [
+      {
+        "type": "execute_python",
+        "code_sha256": "c410c37b7fd84480276bb18973183fd4a05f2fbce3f4d71ee5d95ca5d5b7a5f6"
+      }
+    ],
+    "unfinished_async_job_boxes": 0,
+    "camera": {
+      "location": {
+        "x": -343550.0,
+        "y": 326150.0,
+        "z": 18615.324
+      },
+      "rotation": {
+        "pitch": -9.0,
+        "yaw": -90.0,
+        "roll": -8.050501827401146e-16
+      }
+    }
+  },
+  "map_before": {
+    "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933",
+    "bytes": 209329457
+  },
+  "prepared_fingerprint": {
+    "sha256": "ac683c00f682c11f214cd5d766d914d5694b09afb117b4d88a83efc9e598d45a",
+    "bytes": 165351
+  },
+  "code_sha256": "3c27c37a3e109994488aeb596e81205f4e80898e22895db642d55353443816d0",
+  "replay_permitted": false,
+  "reply_fingerprint": {
+    "sha256": "ea4a15c5f9a1800d6b57b5a4b1fb183c4636c5b742954276a9984d33ad1d5ad0",
+    "bytes": 1201
+  },
+  "error_type": "RuntimeError",
+  "error": "exact one native save not confirmed; inspect retained journal",
+  "protected119_and_map_unchanged_at_error_read": true
+}

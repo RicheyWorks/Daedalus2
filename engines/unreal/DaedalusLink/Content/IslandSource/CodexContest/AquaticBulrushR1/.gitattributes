@@ -1,0 +1,3 @@
+# Exact copied source witnesses retain their original CRLF bytes and hashes.
+Prop_Aquatic_Marsh_Bulrush_1.json -text -eol
+source-qualification.json -text -eol

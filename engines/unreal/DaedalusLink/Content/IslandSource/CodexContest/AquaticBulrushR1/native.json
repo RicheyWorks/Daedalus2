@@ -1,0 +1,646 @@
+{
+  "schema": "daedalus.codex-qualified-one-static-native.v1",
+  "stage": "halted_preserve_partial",
+  "initial_preflight": {
+    "guard": {
+      "dirty_map_packages": [],
+      "dirty_content_packages": [],
+      "other_running_generators": [],
+      "queued_jobs": 0,
+      "unfinished_async_job_boxes": 0,
+      "pie_running": false,
+      "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "remote_execution_lock_locked": false,
+      "background_compilation": "not_queried",
+      "epic_mcp_other_sessions": "not_queried"
+    },
+    "source": {
+      "name": "Prop_Aquatic_Marsh_Bulrush_1",
+      "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+      "fingerprint": {
+        "bytes": 15100,
+        "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+      },
+      "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.json",
+      "sidecar_fingerprint": {
+        "bytes": 417,
+        "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+      },
+      "triangles": 36,
+      "quads": 18,
+      "polygon_sizes": [
+        4
+      ],
+      "source_bounds": {
+        "min": [
+          -15.0,
+          -15.0,
+          0.0
+        ],
+        "max": [
+          20.0,
+          20.0,
+          25.0
+        ]
+      },
+      "source_dimensions_cm": [
+        35.0,
+        35.0,
+        25.0
+      ],
+      "rgba_bytes": [
+        [
+          111,
+          168,
+          117,
+          255
+        ]
+      ],
+      "raw_rgba_float": [
+        [
+          0.43529412,
+          0.65882355,
+          0.45882353,
+          1.0
+        ]
+      ],
+      "source_colour_layer": "Col / ByPolygonVertex / IndexToDirect",
+      "source_material_names": [
+        "VoxelVertexColour"
+      ],
+      "source_unit_scale_factor": 100.0,
+      "source_original_unit_scale_factor": 100.0,
+      "source_fbx_axes": {
+        "UpAxis": 2,
+        "UpAxisSign": 1,
+        "FrontAxis": 1,
+        "FrontAxisSign": 1,
+        "CoordAxis": 0,
+        "CoordAxisSign": -1
+      },
+      "fbx_version": 7400,
+      "mesh_geometry_count": 1,
+      "mesh_model_count": 1,
+      "animations": 0,
+      "animation_curves": 0,
+      "deformers": 0,
+      "textures": 0,
+      "videos": 0,
+      "authored_ucx": 0,
+      "pivot": "mud line (stand in 0-0.5 m water)",
+      "depth_below_pivot_m": 0.0,
+      "source_geometry_static": true,
+      "provenance": {
+        "owner": "Team Claude / unreal-team",
+        "catalogue_manifest": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+          "bytes": 9405,
+          "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+        },
+        "owner_handoff_id": 31500,
+        "source_recipe": [
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+            "bytes": 35748,
+            "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+            "bytes": 25198,
+            "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+            "bytes": 58540,
+            "sha256": "32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a"
+          },
+          {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+            "bytes": 4684,
+            "sha256": "e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760"
+          }
+        ],
+        "historical_exporter_author": "unverified"
+      },
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6"
+    },
+    "destination_absent": true,
+    "global_name_collisions": [],
+    "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+    "shared_helpers": {
+      "bytes": 22414,
+      "sha256": "00e48d8a86cd377250c439d6992a5bec6deb09b0f77e9607bf7beebd324d1d03"
+    },
+    "shared_guard_label_scope": "private fresh namespace only; old module unchanged"
+  },
+  "requested_options": {
+    "backend": "explicit_InterchangePipelineStackOverride",
+    "build_scale3d": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "vertex_colors": "REPLACE",
+    "bake_meshes": true,
+    "build_nanite": false,
+    "generate_lightmap_u_vs": false,
+    "collision": false,
+    "import_materials": false,
+    "replace_existing": false,
+    "task_save": false
+  },
+  "unexposed_options": "Animation/texture flags not explicitly set; exact one static output required",
+  "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+  "required_future_actor_scale": [
+    0.01,
+    0.01,
+    0.01
+  ],
+  "world_placed": 0,
+  "world_saved": false,
+  "shared_material_modified": false,
+  "completed_count": 1,
+  "items": [
+    {
+      "name": "Prop_Aquatic_Marsh_Bulrush_1",
+      "source": {
+        "name": "Prop_Aquatic_Marsh_Bulrush_1",
+        "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+        "fingerprint": {
+          "bytes": 15100,
+          "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+        },
+        "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.json",
+        "sidecar_fingerprint": {
+          "bytes": 417,
+          "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+        },
+        "triangles": 36,
+        "quads": 18,
+        "polygon_sizes": [
+          4
+        ],
+        "source_bounds": {
+          "min": [
+            -15.0,
+            -15.0,
+            0.0
+          ],
+          "max": [
+            20.0,
+            20.0,
+            25.0
+          ]
+        },
+        "source_dimensions_cm": [
+          35.0,
+          35.0,
+          25.0
+        ],
+        "rgba_bytes": [
+          [
+            111,
+            168,
+            117,
+            255
+          ]
+        ],
+        "raw_rgba_float": [
+          [
+            0.43529412,
+            0.65882355,
+            0.45882353,
+            1.0
+          ]
+        ],
+        "source_colour_layer": "Col / ByPolygonVertex / IndexToDirect",
+        "source_material_names": [
+          "VoxelVertexColour"
+        ],
+        "source_unit_scale_factor": 100.0,
+        "source_original_unit_scale_factor": 100.0,
+        "source_fbx_axes": {
+          "UpAxis": 2,
+          "UpAxisSign": 1,
+          "FrontAxis": 1,
+          "FrontAxisSign": 1,
+          "CoordAxis": 0,
+          "CoordAxisSign": -1
+        },
+        "fbx_version": 7400,
+        "mesh_geometry_count": 1,
+        "mesh_model_count": 1,
+        "animations": 0,
+        "animation_curves": 0,
+        "deformers": 0,
+        "textures": 0,
+        "videos": 0,
+        "authored_ucx": 0,
+        "pivot": "mud line (stand in 0-0.5 m water)",
+        "depth_below_pivot_m": 0.0,
+        "source_geometry_static": true,
+        "provenance": {
+          "owner": "Team Claude / unreal-team",
+          "catalogue_manifest": {
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+            "bytes": 9405,
+            "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+          },
+          "owner_handoff_id": 31500,
+          "source_recipe": [
+            {
+              "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+              "bytes": 35748,
+              "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+            },
+            {
+              "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+              "bytes": 25198,
+              "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+            },
+            {
+              "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+              "bytes": 58540,
+              "sha256": "32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a"
+            },
+            {
+              "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+              "bytes": 4684,
+              "sha256": "e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760"
+            }
+          ],
+          "historical_exporter_author": "unverified"
+        },
+        "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6"
+      },
+      "stage": "asset_saved_world_held",
+      "save_return": true,
+      "import_s": 0.415584,
+      "imported_object_paths": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1"
+      ],
+      "destination_asset_paths": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1"
+      ],
+      "observed_before_binding": {
+        "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1",
+        "native_class": "StaticMesh",
+        "native_bounds_cm": {
+          "min": [
+            -1500.0001220703125,
+            -2000.0001220703125,
+            0.0
+          ],
+          "max": [
+            1999.9998779296875,
+            1500.0001220703125,
+            2500.0
+          ]
+        },
+        "native_dimensions_cm": [
+          3500.0,
+          3500.000244140625,
+          2500.0
+        ],
+        "source_bounds": {
+          "min": [
+            -15.0,
+            -15.0,
+            0.0
+          ],
+          "max": [
+            20.0,
+            20.0,
+            25.0
+          ]
+        },
+        "expected_native_bounds_cm": {
+          "min": [
+            -1500.0,
+            -1500.0,
+            0.0
+          ],
+          "max": [
+            2000.0,
+            2000.0,
+            2500.0
+          ]
+        },
+        "matching_fbx_axis_conversions": [
+          {
+            "native_x_source_axis": "x",
+            "native_x_sign": 1,
+            "native_y_source_axis": "y",
+            "native_y_sign": -1,
+            "native_z_source_axis": "z",
+            "native_z_sign": 1,
+            "unit_multiplier": 100,
+            "expected_native_bounds_cm": {
+              "min": [
+                -1500.0,
+                -2000.0,
+                0.0
+              ],
+              "max": [
+                2000.0,
+                1500.0,
+                2500.0
+              ]
+            }
+          },
+          {
+            "native_x_source_axis": "y",
+            "native_x_sign": 1,
+            "native_y_source_axis": "x",
+            "native_y_sign": -1,
+            "native_z_source_axis": "z",
+            "native_z_sign": 1,
+            "unit_multiplier": 100,
+            "expected_native_bounds_cm": {
+              "min": [
+                -1500.0,
+                -2000.0,
+                0.0
+              ],
+              "max": [
+                2000.0,
+                1500.0,
+                2500.0
+              ]
+            }
+          }
+        ],
+        "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+        "projected_dimensions_cm_at_required_actor_scale": [
+          35.0,
+          35.00000244140625,
+          25.0
+        ],
+        "required_future_actor_scale": [
+          0.01,
+          0.01,
+          0.01
+        ],
+        "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+        "import_data_class": "InterchangeAssetImportData",
+        "observed_build_scale3d": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "observed_generate_lightmap_u_vs": false,
+        "nanite_enabled": false,
+        "simple_collision_count": 0,
+        "slots": [
+          {
+            "slot": "VoxelVertexColour",
+            "material": "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+          }
+        ],
+        "metadata": {
+          "codex_owner": "",
+          "codex_sha256": "",
+          "codex_source_fbx": "",
+          "codex_author": "",
+          "codex_source_provenance": "",
+          "codex_unit_contract": "",
+          "codex_required_actor_scale": "",
+          "codex_intended_dimensions_cm": "",
+          "codex_world_placement": ""
+        },
+        "persistent_mesh_modified": false,
+        "native_appearance": "unverified; source vertex readback is not a screenshot",
+        "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+        "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+        "triangles": 36,
+        "vertex_colours": {
+          "triangles": 36,
+          "all_triangle_corners_valid": true,
+          "all_triangle_faces_flat": true,
+          "unique_rgba": [
+            [
+              0.4352941,
+              0.6588235,
+              0.4588235,
+              1.0
+            ]
+          ],
+          "direct_rgba_bytes": [
+            [
+              111,
+              168,
+              117,
+              255
+            ]
+          ],
+          "expected_rgba_bytes": [
+            [
+              111,
+              168,
+              117,
+              255
+            ]
+          ],
+          "source_match": "direct_rgba_bytes",
+          "persistent_mesh_modified": false
+        },
+        "native_source_bounds_with_build_scale": {
+          "min": [
+            -1500.0001220703125,
+            -2000.0001220703125,
+            0.0
+          ],
+          "max": [
+            1999.9998779296875,
+            1500.0001220703125,
+            2500.0
+          ]
+        },
+        "issues": []
+      },
+      "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1",
+      "observed": {
+        "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Aquatic_Bulrush_Sprout_1035e10dfad9afc6/Prop_Aquatic_Marsh_Bulrush_1.Prop_Aquatic_Marsh_Bulrush_1",
+        "native_class": "StaticMesh",
+        "native_bounds_cm": {
+          "min": [
+            -1500.0001220703125,
+            -2000.0001220703125,
+            0.0
+          ],
+          "max": [
+            1999.9998779296875,
+            1500.0001220703125,
+            2500.0
+          ]
+        },
+        "native_dimensions_cm": [
+          3500.0,
+          3500.000244140625,
+          2500.0
+        ],
+        "source_bounds": {
+          "min": [
+            -15.0,
+            -15.0,
+            0.0
+          ],
+          "max": [
+            20.0,
+            20.0,
+            25.0
+          ]
+        },
+        "expected_native_bounds_cm": {
+          "min": [
+            -1500.0,
+            -1500.0,
+            0.0
+          ],
+          "max": [
+            2000.0,
+            2000.0,
+            2500.0
+          ]
+        },
+        "matching_fbx_axis_conversions": [
+          {
+            "native_x_source_axis": "x",
+            "native_x_sign": 1,
+            "native_y_source_axis": "y",
+            "native_y_sign": -1,
+            "native_z_source_axis": "z",
+            "native_z_sign": 1,
+            "unit_multiplier": 100,
+            "expected_native_bounds_cm": {
+              "min": [
+                -1500.0,
+                -2000.0,
+                0.0
+              ],
+              "max": [
+                2000.0,
+                1500.0,
+                2500.0
+              ]
+            }
+          },
+          {
+            "native_x_source_axis": "y",
+            "native_x_sign": 1,
+            "native_y_source_axis": "x",
+            "native_y_sign": -1,
+            "native_z_source_axis": "z",
+            "native_z_sign": 1,
+            "unit_multiplier": 100,
+            "expected_native_bounds_cm": {
+              "min": [
+                -1500.0,
+                -2000.0,
+                0.0
+              ],
+              "max": [
+                2000.0,
+                1500.0,
+                2500.0
+              ]
+            }
+          }
+        ],
+        "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+        "projected_dimensions_cm_at_required_actor_scale": [
+          35.0,
+          35.00000244140625,
+          25.0
+        ],
+        "required_future_actor_scale": [
+          0.01,
+          0.01,
+          0.01
+        ],
+        "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+        "import_data_class": "InterchangeAssetImportData",
+        "observed_build_scale3d": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "observed_generate_lightmap_u_vs": false,
+        "nanite_enabled": false,
+        "simple_collision_count": 0,
+        "slots": [
+          {
+            "slot": "VoxelVertexColour",
+            "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+          }
+        ],
+        "metadata": {
+          "codex_owner": "codex-contest",
+          "codex_sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd",
+          "codex_source_fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+          "codex_author": "Team Claude current producer; historical exporter author unverified",
+          "codex_source_provenance": "{\"catalogue_manifest\": {\"bytes\": 9405, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\engines\\\\unreal\\\\art\\\\claude-aquatic\\\\aquatic.manifest.json\", \"sha256\": \"cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87\"}, \"historical_exporter_author\": \"unverified\", \"owner\": \"Team Claude / unreal-team\", \"owner_handoff_id\": 31500, \"source_recipe\": [{\"bytes\": 35748, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\tools\\\\blender\\\\voxel_aquatic.py\", \"sha256\": \"8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1\"}, {\"bytes\": 25198, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\tools\\\\blender\\\\voxel_island.py\", \"sha256\": \"e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006\"}, {\"bytes\": 58540, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\tools\\\\blender\\\\voxel_creatures.py\", \"sha256\": \"32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a\"}, {\"bytes\": 4684, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\tools\\\\blender\\\\export_catalog.py\", \"sha256\": \"e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760\"}]}",
+          "codex_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "codex_required_actor_scale": "0.01,0.01,0.01",
+          "codex_intended_dimensions_cm": "35,35,25",
+          "codex_world_placement": "held; asset-only save; native appearance, collision and ecosystem acceptance unverified"
+        },
+        "persistent_mesh_modified": false,
+        "native_appearance": "unverified; source vertex readback is not a screenshot",
+        "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+        "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+        "triangles": 36,
+        "vertex_colours": {
+          "triangles": 36,
+          "all_triangle_corners_valid": true,
+          "all_triangle_faces_flat": true,
+          "unique_rgba": [
+            [
+              0.4352941,
+              0.6588235,
+              0.4588235,
+              1.0
+            ]
+          ],
+          "direct_rgba_bytes": [
+            [
+              111,
+              168,
+              117,
+              255
+            ]
+          ],
+          "expected_rgba_bytes": [
+            [
+              111,
+              168,
+              117,
+              255
+            ]
+          ],
+          "source_match": "direct_rgba_bytes",
+          "persistent_mesh_modified": false
+        },
+        "native_source_bounds_with_build_scale": {
+          "min": [
+            -1500.0001220703125,
+            -2000.0001220703125,
+            0.0
+          ],
+          "max": [
+            1999.9998779296875,
+            1500.0001220703125,
+            2500.0
+          ]
+        },
+        "issues": []
+      },
+      "save_s": 0.229938
+    }
+  ],
+  "save_return": null,
+  "limits": "Saved static asset only; source family sheet is not native visual, motion, collision or ecosystem acceptance.",
+  "error_type": "RuntimeError",
+  "error": "conflicting/unfinished bridge operation; preserve work",
+  "replay_permitted": false
+}

@@ -1,0 +1,286 @@
+{
+  "schema": "daedalus.codex-aquatic-bulrush-source-qualification.v1",
+  "created_utc": "2026-10-15T04:55:06.643833+00:00",
+  "stage": "exact_static_source_retained_for_authorized_bounded_native_intake",
+  "source_owner": "Team Claude / unreal-team, retained catalogue current producer; historical exporter authorship unverified",
+  "source_owner_handoff": {
+    "id": 31500,
+    "topic": "wildlife-done",
+    "reported_source_commit": "0c871347",
+    "limit": "Source-export report only; no native acceptance transferred"
+  },
+  "scope": "Source qualification and exact copies only. No Blender/Unreal calls, tests, builds, source importer edits, world operations or native saves by this preparation.",
+  "copies": [
+    {
+      "original": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+        "bytes": 15100,
+        "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+      },
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+        "bytes": 15100,
+        "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+      },
+      "matches": true
+    },
+    {
+      "original": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Marsh_Bulrush_1.json",
+        "bytes": 417,
+        "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+      },
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.json",
+        "bytes": 417,
+        "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+      },
+      "matches": true
+    },
+    {
+      "original": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\sheet-marsh.png",
+        "bytes": 2508960,
+        "sha256": "40695b7d6bfc08459deca786b26667140b6e383b855f0c846bad4fb54979d8b6"
+      },
+      "retained": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\sheet-marsh.png",
+        "bytes": 2508960,
+        "sha256": "40695b7d6bfc08459deca786b26667140b6e383b855f0c846bad4fb54979d8b6"
+      },
+      "matches": true
+    }
+  ],
+  "copied_file_count": 3,
+  "copied_payload_bytes": 2524477,
+  "item": {
+    "name": "Prop_Aquatic_Marsh_Bulrush_1",
+    "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.fbx",
+    "fingerprint": {
+      "bytes": 15100,
+      "sha256": "1035e10dfad9afc65a5b442a530b2163c82d57cbfefbbf59973751e005ef6cbd"
+    },
+    "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\Prop_Aquatic_Marsh_Bulrush_1.json",
+    "sidecar_fingerprint": {
+      "bytes": 417,
+      "sha256": "c493d98b4d87b4fddfddc98070cddd18fdb68c0a98ce114267318fab56d8e870"
+    },
+    "triangles": 36,
+    "quads": 18,
+    "polygon_sizes": [
+      4
+    ],
+    "source_bounds": {
+      "min": [
+        -15.0,
+        -15.0,
+        0.0
+      ],
+      "max": [
+        20.0,
+        20.0,
+        25.0
+      ]
+    },
+    "source_dimensions_cm": [
+      35.0,
+      35.0,
+      25.0
+    ],
+    "rgba_bytes": [
+      [
+        111,
+        168,
+        117,
+        255
+      ]
+    ],
+    "raw_rgba_float": [
+      [
+        0.43529412,
+        0.65882355,
+        0.45882353,
+        1.0
+      ]
+    ],
+    "source_colour_layer": "Col / ByPolygonVertex / IndexToDirect",
+    "source_material_names": [
+      "VoxelVertexColour"
+    ],
+    "source_unit_scale_factor": 100.0,
+    "source_original_unit_scale_factor": 100.0,
+    "source_fbx_axes": {
+      "UpAxis": 2,
+      "UpAxisSign": 1,
+      "FrontAxis": 1,
+      "FrontAxisSign": 1,
+      "CoordAxis": 0,
+      "CoordAxisSign": -1
+    },
+    "fbx_version": 7400,
+    "mesh_geometry_count": 1,
+    "mesh_model_count": 1,
+    "animations": 0,
+    "animation_curves": 0,
+    "deformers": 0,
+    "textures": 0,
+    "videos": 0,
+    "authored_ucx": 0,
+    "pivot": "mud line (stand in 0-0.5 m water)",
+    "depth_below_pivot_m": 0.0,
+    "source_geometry_static": true,
+    "provenance": {
+      "owner": "Team Claude / unreal-team",
+      "catalogue_manifest": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+        "bytes": 9405,
+        "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+      },
+      "owner_handoff_id": 31500,
+      "source_recipe": [
+        {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+          "bytes": 35748,
+          "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+        },
+        {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+          "bytes": 25198,
+          "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+        },
+        {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+          "bytes": 58540,
+          "sha256": "32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a"
+        },
+        {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+          "bytes": 4684,
+          "sha256": "e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760"
+        }
+      ],
+      "historical_exporter_author": "unverified"
+    }
+  },
+  "native_contract": {
+    "profile": "Reuse proven explicit AssetImportTask/Interchange static vertex-colour route in a narrowly bounded one-asset native adapter owned by main operator.",
+    "absolute_build_scale3d": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+    "required_future_actor_scale": [
+      0.01,
+      0.01,
+      0.01
+    ],
+    "expected_raw_native_dimensions_cm": [
+      3500.0,
+      3500.0,
+      2500.0
+    ],
+    "intended_physical_dimensions_cm": [
+      35.0,
+      35.0,
+      25.0
+    ],
+    "xy_conversion": "Installed FBX XY permutation/sign conversion only; sourceZ0..25cm unchanged; no arbitrary translation or rescale.",
+    "vertex_colour_import": "REPLACE, compare all36 native triangle corners to exact directRGBA before saving",
+    "material_binding": "Existing /Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour; bind owned mesh only, no material edits",
+    "nanite": false,
+    "generate_lightmap_uvs": false,
+    "generate_collision": false,
+    "import_materials": false,
+    "replace_existing": false,
+    "asset_import_task_save": false,
+    "save_policy": "Main operator preflights lease/queue/PIE/dirty state, duplicate destination/name and current saved-map witness; imports once, checks native source data, then saves only new owned asset once.",
+    "placement": "asset-only; world placement held"
+  },
+  "source_view": {
+    "retained": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\AquaticBulrushR1\\sheet-marsh.png",
+      "bytes": 2508960,
+      "sha256": "40695b7d6bfc08459deca786b26667140b6e383b855f0c846bad4fb54979d8b6"
+    },
+    "original": {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\sheet-marsh.png",
+      "bytes": 2508960,
+      "sha256": "40695b7d6bfc08459deca786b26667140b6e383b855f0c846bad4fb54979d8b6"
+    },
+    "dimensions": [
+      2000,
+      1250
+    ],
+    "review": "Parent /root personally inspected the full marsh family sheet during the prior source audit. No individual-crop or native screenshot review is claimed.",
+    "catalogue_index_zero_based": 18,
+    "grid_columns": 10,
+    "grid_row_zero_based": 1,
+    "grid_column_zero_based": 8,
+    "mapping_limit": "Insertion-order mapping from10marshspecies x6stages and export_catalog ceil(sqrt60*1.6); no embedded per-item image labels."
+  },
+  "source_sidecar_metadata": {
+    "name": "Prop_Aquatic_Marsh_Bulrush_1",
+    "species": "Bulrush",
+    "family": "marsh",
+    "stage": "Sprout",
+    "stage_index": 1,
+    "voxel_cm": 5.0,
+    "voxels": 14,
+    "pivot": "mud line (stand in 0-0.5 m water)",
+    "height_m": 0.25,
+    "depth_below_pivot_m": 0.0,
+    "uses": {
+      "purity": 0.06,
+      "goods": [
+        "basket@craft"
+      ],
+      "islands": [
+        "mire"
+      ]
+    },
+    "source": "tools/blender/voxel_aquatic.py"
+  },
+  "source_recipe_pins": [
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+      "bytes": 35748,
+      "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+      "bytes": 25198,
+      "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+      "bytes": 58540,
+      "sha256": "32275e7239f16703baf7840cb2e216c0723424538b3bbbaef62ebdd77c7f120a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+      "bytes": 4684,
+      "sha256": "e54924183ff086d8d64c1c7f7d18b38c8d46a5d4935fbfa19f68f566183f1760"
+    }
+  ],
+  "catalogue_manifest": {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+    "bytes": 9405,
+    "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+  },
+  "prior_raw_fbx_audit": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\ingestion-queue-evidence-0444.json",
+    "bytes": 130174,
+    "sha256": "fb8b2f23d6b06ac99d55dc0bdcad6d94613744f9b7c36171ba0b1613840e5e20"
+  },
+  "raw_fbx_inspection_method": "Prior audit used installed Blender4.3 pure-data parse_fbx.py with bytecode writing disabled; no bpy/project code/Blender process executed. Exact FBX fingerprint rechecked before this copy.",
+  "limits": [
+    "Source-stage purity/goods/island uses are metadata, not implemented or accepted runtime ecology.",
+    "Static opaque voxel plant: no source water-surface transmission/IOR/optics or motion contract.",
+    "No authored UCX; collision acceptance unverified.",
+    "Source family sheet is not an individual crop or native appearance pass.",
+    "No native import/save/readback/world-placement acceptance by this preparation.",
+    "Existing three-egg native importer remains unchanged and is not eligible for this plant. Main owns one-asset native profile and actual dispatch.",
+    "All original source files and all existing prepared/native assets preserved."
+  ]
+}
