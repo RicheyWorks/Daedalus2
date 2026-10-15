@@ -1,0 +1,396 @@
+{
+  "schema": "daedalus.codex.saved-visual-checkpoint.v1",
+  "utc": "2026-10-15T23:43:14.643264+00:00",
+  "stage": "saved_native_readback_complete_compute_released",
+  "name": "Team Claude Winter4 Canal two-role Codex staging local foam readability R1",
+  "source_provenance": {
+    "team": "Team Claude",
+    "individual_original_author": "unknown",
+    "original_seed": 4,
+    "original_glb_sha256": "ad06dd2b3b95da8bc98ee07bcd7ff59fadbbc2d08af98cb74c4582b56c1ed5cd",
+    "subset_sha256": "d78739e457ed32bb4f06c99607b17e2f93567af58970d2add87f5074a141e492",
+    "source_semantics_confirmed_hub": 32545,
+    "original_creator_assets_modified": false
+  },
+  "native_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+  "staging_folder": "CodexContest/Staging/Winter4Stream1CoreR1",
+  "components": [
+    {
+      "actor": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4018",
+      "component": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4018.StaticMeshComponent0",
+      "material": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/Materials/HD_SkyWater_frost.HD_SkyWater_frost",
+      "owned_parent": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/OwnedParents/M_Codex_Winter4_Water_RawAlpha_R1.M_Codex_Winter4_Water_RawAlpha_R1",
+      "translucency_sort_priority": 0,
+      "translucency_sort_distance_offset": 0.0,
+      "material_override_count": 0,
+      "collision_enabled": "<CollisionEnabled.NO_COLLISION: 0>",
+      "simulate_physics": false,
+      "world_basis_cm": [
+        [
+          -312377.806640625,
+          366021.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312376.806640625,
+          366021.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312377.806640625,
+          366022.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312377.806640625,
+          366021.96923828125,
+          22942.667510986328
+        ]
+      ]
+    },
+    {
+      "actor": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4019",
+      "component": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4019.StaticMeshComponent0",
+      "material": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/Materials/HD_SkyFoam.HD_SkyFoam",
+      "owned_parent": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/OwnedParents/M_Codex_Winter4_Foam_RawAlpha_R1.M_Codex_Winter4_Foam_RawAlpha_R1",
+      "translucency_sort_priority": 1,
+      "translucency_sort_distance_offset": 0.0,
+      "material_override_count": 0,
+      "collision_enabled": "<CollisionEnabled.NO_COLLISION: 0>",
+      "simulate_physics": false,
+      "world_basis_cm": [
+        [
+          -312377.806640625,
+          366021.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312376.806640625,
+          366021.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312377.806640625,
+          366022.96923828125,
+          22941.667510986328
+        ],
+        [
+          -312377.806640625,
+          366021.96923828125,
+          22942.667510986328
+        ]
+      ]
+    }
+  ],
+  "preservation": {
+    "all_tracked_actor_records": 145,
+    "protected_packages": 217,
+    "accepted_Cpp_sources": 184,
+    "all_world_digest": {
+      "actor_count": 22869,
+      "sha256": "c0b3d150b91a44a84162e9d0798f7394999c88116291a762e3a7472d75423602",
+      "counts": {
+        "actors": 22869,
+        "static_components": 17944,
+        "instanced_components": 5644,
+        "instances": 208100
+      },
+      "excluded_paths": [
+        "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4018",
+        "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4019"
+      ],
+      "native_mutations": 0,
+      "scope": "Sorted ALL-world actor path/class/label/pose/scale/attach-parent plus static component path/class/mesh/materials/affine world transform/ISMcount.",
+      "limits": "No per-instance transforms or complete serialized actor properties; those are not claimed preserved by this digest."
+    },
+    "all_six_original_material_mesh_packages_unchanged": true,
+    "camera_restored": {
+      "location": {
+        "x": -314250.0,
+        "y": 300200.0,
+        "z": 18080.324
+      },
+      "rotation": {
+        "pitch": -21.74091339111328,
+        "yaw": -141.8427734375,
+        "roll": -4.069941041962011e-07
+      }
+    },
+    "camera_tolerance_degrees": 1e-05,
+    "raw_factor_graph_readback_issues": []
+  },
+  "saved_map": {
+    "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "sha256": "f77f83a221ea456f82b09cadf7866f8388b2b406dba9f5f62e3198e30f08ce38",
+    "bytes": 209412518
+  },
+  "map_save_return": true,
+  "map_save_elapsed_s": 20.260071,
+  "cycle_metrics": {
+    "imports": 0,
+    "created_assets": 0,
+    "new_actors": 0,
+    "map_save_calls": 1
+  },
+  "actual_views": {
+    "before-forward": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\before-forward.png",
+      "sha256": "1dec574f1c71804b93a871a4b2476fa9bb67db387bbb2dd1bbb17f039401399f",
+      "bytes": 1192256
+    },
+    "after-forward": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\after-forward.png",
+      "sha256": "ebe40c6a4e600507bee5b1043dbd09a38067f6bfa0251571d43ed1eeb247cd0c",
+      "bytes": 1199116
+    },
+    "before-reverse": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\before-reverse.png",
+      "sha256": "102e7a67d534afed158dc4c25fcc9b2c0921a53785074eb4a0d4e0f757b26596",
+      "bytes": 1103927
+    },
+    "after-reverse": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\after-reverse.png",
+      "sha256": "4fbf689089fedb85a78956c2e7029e432a8fba87574104493aab738d0111e2e7",
+      "bytes": 1118778
+    }
+  },
+  "visual_observations": {
+    "forward": "Narrow brighter inner ribbon is slightly more legible toward foreground; overall outer tube remains pale luminous with faint cyan edge. Improvement is modest.",
+    "reverse": "After view shows a more distinct white inner strip within the cyan-edged outer shell; before view had weaker internal separation. Segment rings remain visible.",
+    "depth_order": "No gross new crossing/occlusion artifact observed in these two fixed views; whole-component forced ordering is not proven correct at all camera angles."
+  },
+  "decision_reason": "Retain bounded local foam readability improvement for these exact two decorative staging actors; no raw colour/emission/alpha/lighting/global renderer adjustment.",
+  "evidence": {
+    "completion": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\completion.json",
+      "sha256": "eddecb5527d560d9bbab94ac4446be5b286761de2fc1653d9b43abc342470c2f",
+      "bytes": 1787
+    },
+    "baseline": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\saved-production-baseline.json",
+      "sha256": "abe95ef34ccb75b2a2e757d29923558fb0b42655307aa592de9b4315c6e08b2e",
+      "bytes": 511879
+    },
+    "independent_readback": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\readback-return.json",
+      "sha256": "ef63328bc0022e2b3057ed4395fca214e60905b54d90b66c33a43beebd63f456",
+      "bytes": 221734
+    },
+    "map_save": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\native-finish.json",
+      "sha256": "fbfec7d6c429da4e48d2c086f609389d13fbd788686198d99f26aea6028c82ee",
+      "bytes": 187114
+    },
+    "visual_review": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\operator-visual-review.json",
+      "sha256": "2bcdb9437bb7e5ee9d87203b4653b535c9bee209d2d2d4004b7dd5044511337d",
+      "bytes": 2993
+    },
+    "compute_release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\compute-release-file-only.json",
+      "sha256": "e0c2d9fd82b8291d512c56d6d846836bb5bfcc4e47c729f13b501ac211a73bea",
+      "bytes": 2510
+    },
+    "size_value_continuation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\VisualPolishR1\\viewport-size-value-continuation.json",
+      "sha256": "75293b2aa4a6d2490c555c11ee014314d4cf02c41c9c1e18b43bb9a382b67e11",
+      "bytes": 2612
+    }
+  },
+  "recipes": {
+    "codex_canal_visual_delivery.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_canal_visual_delivery.py",
+      "sha256": "7780f710fdd2e14899d2e611fb8b9cb3909c85d7119567815c8242bbd9db405c",
+      "bytes": 23471
+    },
+    "codex_canal_visual_native.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_canal_visual_native.py",
+      "sha256": "15b0a65a38409cc29cf765753776b10cc18486b0f0116a72e8720d64f1c0f464",
+      "bytes": 16652
+    },
+    "codex_canal_visual_native_size_r2.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_canal_visual_native_size_r2.py",
+      "sha256": "39378e0af555e45018aadf2c963e17201fb930c98328ff127219e27b09263293",
+      "bytes": 16695
+    },
+    "codex_canal_visual_size_resume.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_canal_visual_size_resume.py",
+      "sha256": "6ba36f07619605b2651f17eeb44f8c2c8957659985fa51cd75f261d18abd19dc",
+      "bytes": 5617
+    },
+    "codex_canal_visual_release.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_canal_visual_release.py",
+      "sha256": "abd3e953ba4686844ac36c72303eea599ac1a7c71976ff6af6c0fa72d4cd5f95",
+      "bytes": 2672
+    }
+  },
+  "renderer_observations": {
+    "cvars": {
+      "r.DefaultFeature.AutoExposure": {
+        "available": true,
+        "value": "1"
+      },
+      "r.DefaultFeature.AutoExposure.Method": {
+        "available": true,
+        "value": "0"
+      },
+      "r.DefaultFeature.AutoExposure.ExtendDefaultLuminanceRange": {
+        "available": true,
+        "value": "0"
+      },
+      "r.TonemapperGamma": {
+        "available": true,
+        "value": "0"
+      },
+      "r.HDR.Display.OutputDevice": {
+        "available": true,
+        "value": "0"
+      },
+      "r.HDR.Display.ColorGamut": {
+        "available": true,
+        "value": "0"
+      },
+      "r.TranslucentSortPolicy": {
+        "available": true,
+        "value": "0"
+      }
+    },
+    "postprocess": {
+      "volume_count": 1,
+      "component_count": 0,
+      "volumes": [
+        {
+          "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PostProcessVolume_0",
+          "class": "/Script/Engine.PostProcessVolume",
+          "enabled": {
+            "available": true,
+            "value": true
+          },
+          "unbound": {
+            "available": true,
+            "value": true
+          },
+          "priority": {
+            "available": true,
+            "value": 0.0
+          },
+          "blend_weight": {
+            "available": true,
+            "value": 1.0
+          },
+          "blend_radius": {
+            "available": true,
+            "value": 100.0
+          },
+          "settings": {
+            "available": true,
+            "fields": {
+              "auto_exposure_method": {
+                "available": true,
+                "value": "<AutoExposureMethod.AEM_MANUAL: 2>"
+              },
+              "reflection_method": {
+                "available": true,
+                "value": "<ReflectionMethod.LUMEN: 1>"
+              },
+              "translucency_type": {
+                "available": true,
+                "value": "<TranslucencyType.RASTER: 0>"
+              },
+              "auto_exposure_bias": {
+                "available": true,
+                "value": 10.5
+              },
+              "auto_exposure_min_brightness": {
+                "available": true,
+                "value": 0.029999999329447746
+              },
+              "auto_exposure_max_brightness": {
+                "available": true,
+                "value": 8.0
+              },
+              "film_white_clip": {
+                "available": true,
+                "value": 0.03999999910593033
+              },
+              "override_auto_exposure_method": {
+                "available": true,
+                "value": true
+              },
+              "override_auto_exposure_bias": {
+                "available": true,
+                "value": true
+              },
+              "override_auto_exposure_min_brightness": {
+                "available": true,
+                "value": false
+              },
+              "override_auto_exposure_max_brightness": {
+                "available": true,
+                "value": false
+              },
+              "override_auto_exposure_apply_physical_camera_exposure": {
+                "available": true,
+                "value": false
+              },
+              "override_color_gamma": {
+                "available": true,
+                "value": false
+              },
+              "override_film_white_clip": {
+                "available": true,
+                "value": false
+              },
+              "override_reflection_method": {
+                "available": true,
+                "value": false
+              },
+              "override_translucency_type": {
+                "available": true,
+                "value": false
+              },
+              "auto_exposure_apply_physical_camera_exposure": {
+                "available": true,
+                "value": true
+              },
+              "color_gamma": {
+                "available": true,
+                "value": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              }
+            },
+            "scope": "Contributing settings only; effective blended viewport exposure is not measured."
+          }
+        }
+      ],
+      "components": [],
+      "truncated": false,
+      "errors": []
+    },
+    "optional_unavailable": {
+      "renderer_config": {
+        "unavailable": {
+          "error_type": "AttributeError",
+          "error": "module 'unreal' has no attribute 'RendererSettings'"
+        },
+        "scope": "Project config/CDO; restart-required working-space setting is not proof of active final output."
+      },
+      "effective_final_view_exposure_ev": "No verified public Python getter",
+      "live_tonemapper_showflags": "No verified public Python getter"
+    },
+    "global_settings_changed": false
+  },
+  "limits": [
+    "Pale overall water colour remains unresolved; no gamma or import mismatch established.",
+    "Observed enabled unbound postprocess volume contributes manual exposure method and bias10.5 with override flags true; effective final viewport exposure/showflags unsupported. Global configuration untouched.",
+    "No full Winter4 terrain/receiving realm, fluid simulation/navigation/gameplay or final BAR acceptance.",
+    "First camera attempt failed resource floor before dispatch; subsequent known-unexecuted step continued only after fresh recovery above unchanged floor.",
+    "First capture qualification falsely differed only in IntPoint debug address; raw receipts/PNG retained and numeric2033x1216 equivalence explicitly reconciled. No capture or native mutation replay.",
+    "Saved static staging display; the two matching views are limited visual evidence, not universal translucent sorting or final BAR acceptance.",
+    "These completed recipes/receipts are retained evidence, not instructions to replay imports, actor creation, component writes or saves."
+  ]
+}
