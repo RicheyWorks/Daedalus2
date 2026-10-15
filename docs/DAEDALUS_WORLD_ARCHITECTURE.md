@@ -798,3 +798,15 @@ pauses a worker while available RAM/commit < 1.5 GB (shared PC). ~1 island/s wit
 Lake, hills and terraces are `fit()` inside the outline, the dock sits on the rim. Cluster plots (`prefix` given)
 keep the classic 220 m rounded square so Ultra's 256 m pitch still holds. The json `outline` field records it.
 Batch seeds 10000–~12060 were built before v3 (classic outline); everything after is varied.
+
+### 14.16 RPG realm casts (`realm_rpg_cast.py`, `realm_prism_props.py`) — Portal Realm + Prismheart Realm
+Original names only (REALMS.md rule 4). Archetype builders on the shared 8-bone rig: `slime`, `wisp`, `orb`,
+`mushroom`, `humanoid` (cloth/trim/hat style cap·wide·point·helm·crown·hood·band, hair, beard, cape, armor, shield,
+tool sword·staff·lance·dagger·bow·tool·book·lantern), `golem`, `mimic`, `crab`, `serpent`, `turtle`, plus every
+voxel_creatures body (quadrupeds, birds, insects at 30 cm voxels for giant bugs, sea, dinos) recoloured. `vary()`
+gives each individual its own tint/size; `scale_plan()` doubles bosses and summons; `add_crown`/`add_horn` dress them.
+- **Portal Realm**: one rig per `art_status: Planned` row of `data/art/portal/population-plan.json` — 990
+  individuals (49 enemy types, 46 townsfolk + 4 unicorn roles × 10) and the 5 proposal bosses; jsons carry
+  `plan_id` + `variant_seed`. BLIGHT_SLIME left to Codex's validated polish. Out: `claude-portal-cast/`.
+- **Prismheart Realm** (ADR-067): 8 jobs × 6 heroes, 30 monsters × 5, 8 summons, 12 townsfolk roles × 4, 4 Duneback
+  mounts → `claude-prism-cast/`; 12 structures + 24 items → `claude-prism-props/` (`export_catalog.py prism`).

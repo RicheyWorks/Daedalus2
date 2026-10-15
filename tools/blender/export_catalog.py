@@ -35,7 +35,7 @@ elif module == "props":
         return p if isinstance(p, list) else [v for vs in p.values() for v in vs]
 elif module == "prism":
     import realm_prism_props as M
-    PITCH = {"structure": 14.0, "item": 1.6}
+    PITCH = {"structure": 14.0, "item": 2.4}
 
     def voxels_of(name):
         return M.plan(name)

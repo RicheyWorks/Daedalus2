@@ -115,3 +115,10 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
   farm (Ultra's island_farm) and defense plans read either.
 - `hd_cluster.py`: 10 eight-island octets (Super Island standard, 14 bridges, 7 ring sky-streams, seasonal themes).
   Row WZ30. §14.14.
+
+## RPG realms — 20:00
+- Portal Realm (ADR-052): Team Claude cast for all Planned population rows (990 + 5 bosses). Codex keeps
+  portal_cast/portal_monsters/slime polish and native import. Row WZ32.
+- Prismheart Realm (ADR-067, new, original): PRISM01 job classes, PRISM02 waystones, PRISM03 shards + summons,
+  PRISM04 airship travel; chemistry `REALMS["PRISMHEART"]` (sunroot → Mana Draught brew, peach → waystone offering,
+  barley → Skyfarer ration, duneback → stable mount). Row WZ33.
