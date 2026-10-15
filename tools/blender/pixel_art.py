@@ -36,7 +36,7 @@ def _limit(rgb, mask, n, lattice=7):
     return top[np.argmin(d, axis=-1)]
 
 
-GAMMA = float(os.environ.get("PIXEL_GAMMA", "1.0"))   # extra correction applied before quantising (Standard view transform already fixes most of AgX's wash-out)
+GAMMA = float(os.environ.get("PIXEL_GAMMA", "0.85"))   # extra correction applied before quantising (Standard view transform already fixes most of AgX's wash-out)
 
 
 def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.12, gamma=GAMMA):
