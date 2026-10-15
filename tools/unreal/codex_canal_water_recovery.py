@@ -525,13 +525,44 @@ def scene(value, args, claim, paths):
     cfg = h.configuration(value, args, claim)
     code = d.module_code(value) + '\nimport unreal\n' + _snap_definition() + '\n'
     code += 'cfg=' + repr(cfg) + '\nallowed=' + repr([path.split('.')[0] for path in paths]) + '\n'
-    code += "def steps():\n    if False:yield\n    packet,nodes,scopes=scope['_config'](cfg)\n    guard=scopes['catalogue_source']\n    guard['_deadline'](cfg);guard['_preflight'](allowed)\n    editor=unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)\n    p,r=editor.get_level_viewport_camera_info()\n    result={'world':editor.get_editor_world().get_path_name(),'actors':[snap(a) for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors() if a.get_actor_label().startswith('Codex')],'camera':{'location':{'x':p.x,'y':p.y,'z':p.z},'rotation':{'pitch':r.pitch,'yaw':r.yaw,'roll':r.roll}}}\n    guard['_deadline'](cfg);guard['_preflight'](allowed)\n    return result\n"
-    result = d.wire.obj(d.wire.call(d.wire.UNREAL, 'daedalus.steps', code=code,
-        label=value['label'], budget_ms=1, timeout=60, side='Unreal'),
-        side='Unreal', what='Canal known-partial-dirty read-only scene preservation')
-    if not isinstance(result, dict) or len(result.get('actors', [])) != 143:
+    code += textwrap.dedent('''\
+        def steps():
+            result={'stage':'read_only_scene_started','native_mutations':0,'guard_waits':[]}
+            try:
+                packet,nodes,scopes=scope['_config'](cfg)
+                guard=scopes['catalogue_source'];queue=scopes['queue_source']
+                result['pre']=yield from queue['_preflight_steps'](guard,cfg,allowed,on_wait=result['guard_waits'].append)
+                editor=unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
+                p,r=editor.get_level_viewport_camera_info()
+                result['scene']={'world':editor.get_editor_world().get_path_name(),'actors':[snap(a) for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors() if a.get_actor_label().startswith('Codex')],'camera':{'location':{'x':p.x,'y':p.y,'z':p.z},'rotation':{'pitch':r.pitch,'yaw':r.yaw,'roll':r.roll}}}
+                result['post']=yield from queue['_preflight_steps'](guard,cfg,allowed,on_wait=result['guard_waits'].append)
+                result['stage']='read_only_scene_verified'
+            except Exception as exc:
+                result.update(stage='read_only_scene_failed',error=str(exc),error_type=type(exc).__name__)
+                if 'queue' in locals():result['guard_diagnostic']=queue['_guard_snapshot']()
+            return result
+        ''')
+    # run_steps can return {result: None, error: traceback}. Preserve the entire
+    # envelope before obj() unwraps it; every attempt is exclusive and read-only.
+    attempt = args.folder.parent / (args.folder.name + '-preparation-attempts') / str(time.time_ns())
+    attempt.mkdir(parents=True)
+    d.write_new(attempt / 'executed-code.json', code)
+    d.write_new(attempt / 'dispatch.json', {'utc':d._utc(), 'stage':'read_only_scene_dispatch_pending',
+        'source':d.pin(__file__), 'code':d.pin(attempt / 'executed-code.json'),
+        'compute_claim':claim, 'native_mutations':0})
+    try:
+        raw = d.wire.call(d.wire.UNREAL, 'daedalus.steps', code=code,
+            label=value['label'], budget_ms=1, timeout=60, side='Unreal')
+    except Exception as exc:
+        d.write_new(attempt / 'transport-error.json', {'utc':d._utc(),
+            'error':str(exc), 'error_type':type(exc).__name__, 'outcome':'reconcile_before_retry'})
+        raise
+    d.write_new(attempt / 'raw-envelope.json', raw)
+    result = d.wire.obj(raw, side='Unreal', what='Canal known-partial-dirty read-only scene preservation')
+    if (result.get('stage') != 'read_only_scene_verified' or result.get('native_mutations') != 0
+            or result.get('error') or len(result.get('scene', {}).get('actors', [])) != 143):
         raise RuntimeError('explicit exact143-actor scene witness required; no mutation')
-    return result
+    return result['scene']
 
 
 def reviewed_sources(value, qualification):

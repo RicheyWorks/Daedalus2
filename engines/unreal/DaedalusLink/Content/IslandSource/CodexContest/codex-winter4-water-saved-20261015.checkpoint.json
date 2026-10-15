@@ -1,0 +1,173 @@
+{
+  "schema": "daedalus.codex-winter4-water-saved-source-checkpoint.v1",
+  "utc": "2026-10-15T22:47:54.799956+00:00",
+  "stage": "SIX_NATIVE_PACKAGES_SAVED_AND_INDEPENDENTLY_VERIFIED_WORLD_HELD",
+  "source_predecessor_commit": "ebcd60a7371ec4247b4e324d382fc9fbde23b172",
+  "pr": "https://github.com/RicheyWorks/Daedalus2/pull/147",
+  "source_files": {
+    "tools/unreal/codex_canal_water_recovery.py": {
+      "bytes": 54450,
+      "sha256": "88f020ab477e7200568062b1ef68d05243fc045c1e4b55089f94de922ee9b720"
+    },
+    "tools/unreal/codex_canal_water_delivery.py": {
+      "bytes": 24446,
+      "sha256": "332a06e4212acdfdfbaa7d07eb9e350ccad5596c57b5963cb39f34cdf396a539"
+    },
+    "engines/unreal/DaedalusLink/Content/Python/daedalus_codex_canal_water.py": {
+      "bytes": 21899,
+      "sha256": "363ed4b0f777a4f1f5d27221cba74af81c8c63187baeed7a435afb960ca910ee"
+    },
+    "engines/unreal/DaedalusLink/Content/Python/daedalus_codex_canal_material.py": {
+      "bytes": 47565,
+      "sha256": "75c6d1eecef4d2c42d47db0b3a52033024f8bc7ac67efa58aeff83ad00f62000"
+    }
+  },
+  "source_packet": {
+    "producer_release_hub": 32367,
+    "original_glb_sha256": "ad06dd2b3b95da8bc98ee07bcd7ff59fadbbc2d08af98cb74c4582b56c1ed5cd",
+    "derived_glb": {
+      "sha256": "d78739e457ed32bb4f06c99607b17e2f93567af58970d2add87f5074a141e492",
+      "bytes": 46156
+    },
+    "source_roles": [
+      "Octet_Winter_4_Canal_Stream1",
+      "Octet_Winter_4_Canal_Stream1_Core"
+    ],
+    "source_team": "Claude",
+    "individual_original_author": "UNKNOWN",
+    "whole_original_nodes": 46,
+    "admitted_nodes": 2,
+    "triangles": 2912
+  },
+  "native": {
+    "stage": "canal_two_role_six_assets_saved_world_held",
+    "cycle_metrics": {
+      "imported_assets": 4,
+      "native_created_assets": 2,
+      "new_saved_packages": 6,
+      "world_placed": 0,
+      "map_save_calls": 0,
+      "new_island_versions": 0
+    },
+    "r5_imports": 0,
+    "r5_mutation_intents": 88,
+    "r5_bounded_verified_read_ping_yields": 2,
+    "outputs": [
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/OwnedParents/M_Codex_Winter4_Foam_RawAlpha_R1.M_Codex_Winter4_Foam_RawAlpha_R1",
+        "class": "Material",
+        "save_return": true,
+        "save_s": 0.331993
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/OwnedParents/M_Codex_Winter4_Water_RawAlpha_R1.M_Codex_Winter4_Water_RawAlpha_R1",
+        "class": "Material",
+        "save_return": true,
+        "save_s": 0.070059
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/Materials/HD_SkyFoam.HD_SkyFoam",
+        "class": "MaterialInstanceConstant",
+        "save_return": true,
+        "save_s": 0.006051
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/Materials/HD_SkyWater_frost.HD_SkyWater_frost",
+        "class": "MaterialInstanceConstant",
+        "save_return": true,
+        "save_s": 0.07261
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/StaticMeshes/Octet_Winter_4_Canal_Stream1.Octet_Winter_4_Canal_Stream1",
+        "class": "StaticMesh",
+        "save_return": true,
+        "save_s": 0.00789
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Winter4CanalWaterR1_ad06dd2b3b95da8b/Winter4_Canal_Stream1_Core_R1/StaticMeshes/Octet_Winter_4__al_Stream1_Core.Octet_Winter_4__al_Stream1_Core",
+        "class": "StaticMesh",
+        "save_return": true,
+        "save_s": 0.005907
+      }
+    ],
+    "options_actual_readbacks": {
+      "import_data_class": "InterchangeAssetImportData",
+      "nanite_enabled": false,
+      "generate_lightmap_u_vs": false,
+      "simple_collision_count": 0,
+      "build_scale3d": [
+        1,
+        1,
+        1
+      ],
+      "root_translation_baked_into_vertices": true
+    },
+    "material_graphs": {
+      "owned_parents": 2,
+      "nodes_per_parent": 6,
+      "full_root_inputs_proved": 30,
+      "disconnected_root_inputs": 25,
+      "inactive_customized_uvs": 8,
+      "policy": "Raw-linear source RGBA/PBR/emission, owned translucent two-sided per-pixel-lighting parents; shared parents unchanged"
+    },
+    "independent_native_readback_issues": []
+  },
+  "preservation": {
+    "packages": 217,
+    "actors": 143,
+    "accepted_cpp_sources": 184,
+    "previous_packages_preserved": 211,
+    "new_packages_with_verified_backups": 6,
+    "saved_map": {
+      "sha256": "72cb0c195975afa4b272417f67181f09774b95e7d5b061d7438ec2e70a85cd44",
+      "bytes": 209408537
+    },
+    "camera": "unchanged from Copperfall viewport baseline",
+    "other_sources_binaries_catalogues_saves": "preserved"
+  },
+  "receipts": {
+    "native.json": {
+      "bytes": 178746,
+      "sha256": "e0e7768a9b400b5fc0976a9648a910fcbe88ed97ec6e1dfef07243dd494554f9"
+    },
+    "readback-attempt-1792104309824066200.json": {
+      "bytes": 197651,
+      "sha256": "b2774f5c2a32ecf95d28f8b02bda284edb75009a97817f08007326bb7198ec91"
+    },
+    "readback.json": {
+      "bytes": 34608,
+      "sha256": "45ed4341b2c3f9d2b13ff1d3e4322e878855f0f58a7d9ecdf42eb590bf5356cf"
+    },
+    "saved-production-baseline.json": {
+      "bytes": 509524,
+      "sha256": "f0b8cd56a858d99dfd35176ab05f314fe5712530fd3661ca8729c2d0cec2efd3"
+    },
+    "compute-release.json": {
+      "bytes": 99,
+      "sha256": "1e29f3f3304a827c1f51d8d21b5d7a5e8ebd42504185c4fa737622ee2304dba2"
+    },
+    "intake-completion.json": {
+      "bytes": 11771,
+      "sha256": "ba319bbc76e2a020bdb4c45e76daf4d81dc25236357accb3291ba08f62ac714c"
+    }
+  },
+  "compute": {
+    "release": {
+      "utc": "2026-10-15T22:45:22.424945+00:00",
+      "reply": {
+        "ok": true,
+        "lock": null
+      }
+    },
+    "sole_unreal_custody": "codex-play-guard retained"
+  },
+  "production_fix": "A synchronous preparation guard failure previously lost its native traceback when wire.obj discarded the outer steps envelope. The exact first cause remains unknown. The executed fix retains every raw envelope and uses the same existing bounded queue pre/post checks; successful read-only preparation and six-save production follow separately.",
+  "validation": "Independent source peer review, staged whitespace check and actual guarded production/readback; no automated tests or harness suites run per user direction.",
+  "limits": [
+    "Asset intake complete; no Winter4 actor placement or map save",
+    "No native appearance/BAR acceptance",
+    "No fluid simulation, collision, navigation, ecology or gameplay acceptance",
+    "Only two of 46 original nodes admitted; no whole-original readiness",
+    "Measured individual save durations retained; no benchmark or speedup claim"
+  ]
+}
