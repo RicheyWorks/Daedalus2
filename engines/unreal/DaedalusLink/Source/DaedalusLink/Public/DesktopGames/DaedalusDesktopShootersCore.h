@@ -98,6 +98,10 @@ public:
     }
     const Ship& GetShip() const { return Player; }
     int GetLevel() const { return Level; }
+    std::size_t GetRockCount() const { return Rocks.size(); }
+    std::size_t GetUfoCount() const { return Ufos.size(); }
+    int GetProtectionFrames() const { return RespawnGrace; }
+    bool IsFireReady() const { return !Over && Bullets.size()<MaxBullets && Player.Cooldown==0; }
     std::size_t EntityCount() const { return Rocks.size()+Bullets.size()+Ufos.size(); }
     void Reset(std::uint32_t Seed) override {
         Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; RespawnGrace=0; UfoTimer=300;
@@ -181,13 +185,40 @@ public:
         for(const auto& U:Ufos) { const Color UfoGreen{80,255,80,255};Ellipse(F,U.X,U.Y,15,6,UfoGreen);Outline(F,{{U.X-8,U.Y-12},{U.X+8,U.Y-12},{U.X+8,U.Y-4},{U.X-8,U.Y-4}},UfoGreen); }
         F.AddText(30,15,"SCORE: "+std::to_string(Score)); F.AddText(660,15,"LIVES: "+std::to_string(Lives));
         F.AddText(355,15,"LEVEL: "+std::to_string(Level),Yellow,18);
-        if(Over) F.AddText(285,250,"GAME OVER",Red,40);
+        F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
+        F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
+        if(!Over) {
+            F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
+            if(RespawnGrace>0) Ellipse(F,Player.X,Player.Y,23,23,Cyan);
+        }
+        F.AddText(30,548,"Clear all rocks to advance; larger rocks split into two.",White,15);
+        F.AddText(30,572,"Left/Right: turn   Up: thrust   Space/J/Z or pad: hold fire",White,15);
+        if(Over) {
+            F.AddRect(170,225,460,115,{15,20,35,235});
+            F.AddText(285,238,"GAME OVER",Red,40);
+            F.AddText(200,290,"Wave "+std::to_string(Level)+"   Final score "+std::to_string(Score),White,18);
+            F.AddText(200,315,"Fresh R press or cabinet Restart to retry",Cyan,17);
+        }
     }
-    Status GetStatus() const override { return {Score,Lives,Over,false,"Rotate / thrust / fire; UFOs target the ship"}; }
+    Status GetStatus() const override {
+        if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; fresh R press or cabinet Restart to retry"};
+        return {Score,Lives,false,false,"Wave "+std::to_string(Level)+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
+            "; "+ProtectionNote()+"; fire "+FireNote()+"; turn / thrust / hold fire"};
+    }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0; bool Over=false;
+    std::string ProtectionNote() const {
+        // The source-style timer decrements before the next collision pass.
+        if(RespawnGrace==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
+        return RespawnGrace>1?"PROTECTION TIMER: "+std::to_string(RespawnGrace):"COLLISIONS ACTIVE";
+    }
+    std::string FireNote() const {
+        if(Over) return "RUN ENDED";
+        if(Bullets.size()>=MaxBullets) return "SHOT LIMIT";
+        return Player.Cooldown>0?"COOLDOWN "+std::to_string(Player.Cooldown)+" STEPS":"READY";
+    }
     void Fire() {
         if(Bullets.size()>=MaxBullets) return;
         Bullet B;
@@ -223,10 +254,11 @@ public:
         int Cooldown=0,Power=1,Lives=3,Invincible=0;
         void Update(const Input& I) {
             double Dx=0,Dy=0;
-            if(I.Left) Dx=-1;
-            if(I.Right) Dx=1;
-            if(I.Up) Dy=-1;
-            if(I.Down) Dy=1;
+            // Match the existing cabinet's merged directions for direct core input.
+            if(I.Left || I.PadLeft) Dx=-1;
+            if(I.Right || I.PadRight) Dx=1;
+            if(I.Up || I.PadUp) Dy=-1;
+            if(I.Down || I.PadDown) Dy=1;
             const double Sx=shooter_detail::DeadAxis(I.AxisX),Sy=shooter_detail::DeadAxis(I.AxisY);
             if(std::abs(Sx)>0.2 || std::abs(Sy)>0.2) {Dx=Sx;Dy=Sy;}
             X=Clamp(X+Dx*Speed,30,750); Y=Clamp(Y+Dy*Speed,20,580);
@@ -259,6 +291,10 @@ public:
     }
     const Player& GetPlayer() const { return Pilot; }
     bool HasBoss() const { return BossActive; }
+    int GetBossHealth() const { return BossActive?std::max(0,Boss.Health):0; }
+    std::size_t GetEnemyCount() const { return Enemies.size(); }
+    std::size_t GetPickupCount() const { return Powerups.size(); }
+    bool IsFireReady() const { return !Over && !Won && Bullets.size()+3<=MaxBullets && Pilot.Cooldown==0; }
     std::size_t EntityCount() const { return Bullets.size()+Enemies.size()+Powerups.size()+(BossActive?1:0); }
     void Reset(std::uint32_t Seed) override {
         Rng.Seed(Seed); Pilot=Player{}; Score=0; SpawnTimer=0; Over=false; Won=false; BossActive=false; Boss=Enemy{};
@@ -318,18 +354,52 @@ public:
         for(const auto& P:Powerups) {
             if(P.Kind==PowerKind::Speed) Polygon(F,{{P.X,P.Y-8},{P.X+8,P.Y},{P.X,P.Y+8},{P.X-8,P.Y}},Green);
             else { F.AddCircle(P.X,P.Y,P.Kind==PowerKind::Power?8:7,P.Kind==PowerKind::Power?Yellow:Red);F.AddCircle(P.X,P.Y,3,White); }
+            F.AddText(Clamp(P.X-18,4,748),Clamp(P.Y+10,42,532),PickupName(P.Kind),White,13);
         }
         if(BossActive) {DrawEnemy(Boss);F.AddRect(Boss.X-30,Boss.Y-40,60,6,Red);F.AddRect(Boss.X-30,Boss.Y-40,60*Clamp(Boss.Health/20.0,0,1),6,Green);}
         F.AddText(30,20,"SCORE: "+std::to_string(Score)); F.AddText(660,20,"LIVES: "+std::to_string(Pilot.Lives),Red);
         F.AddText(350,20,"POWER: "+std::to_string(Pilot.Power),Yellow,18);
-        if(Over) F.AddText(285,250,"GAME OVER",Red,40);
-        if(Won) F.AddText(230,250,"BOSS DEFEATED!",Green,40);
+        F.AddText(30,45,"ENEMIES: "+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
+        F.AddText(420,45,BossNote(),BossActive?Red:Yellow,15);
+        F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
+        F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
+        F.AddText(30,548,"POWER +1 (max 3)   SPEED +1 (max 8)   LIFE +1 (max 5)",White,15);
+        F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
+        if(Over || Won) {
+            F.AddRect(145,225,510,120,{15,20,40,235});
+            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":"GAME OVER"):"BOSS DEFEATED!";
+            F.AddText(175,238,Result,Over?Red:Green,30);
+            F.AddText(175,285,"Final score: "+std::to_string(Score),White,20);
+            F.AddText(175,315,"Fresh R press or cabinet Restart to retry",Cyan,17);
+        }
     }
-    Status GetStatus() const override {return {Score,Pilot.Lives,Over,Won,"Move / hold fire; power, speed and life pickups"};}
+    Status GetStatus() const override {
+        if(Over || Won) return {Score,Pilot.Lives,Over,Won,(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
+            std::string("; final score ")+std::to_string(Score)+"; fresh R press or cabinet Restart to retry"};
+        return {Score,Pilot.Lives,false,false,BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
+            "; "+ShotName()+"; speed "+std::to_string(static_cast<int>(Pilot.Speed))+"/8; "+ProtectionNote()+"; fire "+FireNote()};
+    }
 private:
     Random Rng; Player Pilot; Enemy Boss; std::vector<Bullet> Bullets; std::vector<Enemy> Enemies; std::vector<Powerup> Powerups;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int SpawnTimer=0; bool Over=false,Won=false,BossActive=false;
+    static const char* PickupName(PowerKind Kind) { return Kind==PowerKind::Power?"POWER":(Kind==PowerKind::Speed?"SPEED":"LIFE"); }
+    std::string ShotName() const { return Pilot.Power==1?"NORMAL":(Pilot.Power==2?"DOUBLE":"SPREAD"); }
+    std::string ProtectionNote() const {
+        if(Over || Won) return "RUN ENDED";
+        if(Pilot.Invincible==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
+        return Pilot.Invincible>1?"PROTECTION TIMER: "+std::to_string(Pilot.Invincible):"COLLISIONS ACTIVE";
+    }
+    std::string BossNote() const {
+        if(BossActive) return "BOSS HP: "+std::to_string(GetBossHealth())+"/20";
+        if(Won) return "BOSS DEFEATED";
+        return "BOSS AT 1500: "+std::to_string(std::max<std::int64_t>(0,1500-Score))+" TO GO";
+    }
+    std::string FireNote() const {
+        if(Over || Won) return "RUN ENDED";
+        if(Bullets.size()+3>MaxBullets) return "SHOT LIMIT";
+        return Pilot.Cooldown>0?"COOLDOWN "+std::to_string(Pilot.Cooldown)+" STEPS":"READY";
+    }
     void Fire() {
         if(Bullets.size()+3>MaxBullets) return;
         for(const auto& B:Pilot.Shoot()) Bullets.push_back(B);
@@ -360,10 +430,11 @@ public:
         bool Shield=false,Triple=false,SpeedBoost=false;
         void Update(const Input& I) {
             double Dx=shooter_detail::DeadAxis(I.AxisX),Dy=shooter_detail::DeadAxis(I.AxisY);
-            if(I.Left) Dx=-1;
-            if(I.Right) Dx=1;
-            if(I.Up) Dy=-1;
-            if(I.Down) Dy=1;
+            // Match the existing cabinet merge; digital directions still override the stick.
+            if(I.Left || I.PadLeft) Dx=-1;
+            if(I.Right || I.PadRight) Dx=1;
+            if(I.Up || I.PadUp) Dy=-1;
+            if(I.Down || I.PadDown) Dy=1;
             const double Speed=6*(SpeedBoost?1.6:1.0); X=Clamp(X+Dx*Speed,20,780);Y=Clamp(Y+Dy*Speed,20,580);
             if(Cooldown>0) --Cooldown;
             if(Invincible>0) --Invincible;
@@ -509,6 +580,11 @@ public:
     int GetWave() const {return Wave;}
     int GetSpawnRate() const {return SpawnRate;}
     bool HasBoss() const {return BossActive;}
+    const Boss& GetBoss() const {return BossActor;}
+    std::size_t GetEnemyCount() const {return Enemies.size();}
+    std::size_t GetPickupCount() const {return Powerups.size();}
+    int GetWaveFramesRemaining() const {return std::max(0,1200-WaveTimer);}
+    bool IsFireReady() const {return !Over && !QuitRequested && !Paused && Bullets.size()+3<=MaxBullets && Pilot.Cooldown==0;}
     bool IsPaused() const {return Paused;}
     bool WantsQuit() const {return QuitRequested;}
     bool HasSaveRequest() const {return SaveRequested;}
@@ -626,20 +702,39 @@ public:
         for(const auto& P:Popups) F.AddText(P.X,P.Y,P.Label,P.Tint,17);
         F.AddText(15,40,"SCORE "+std::to_string(Score)); F.AddText(345,40,"WAVE "+std::to_string(Wave),Yellow);
         F.AddText(655,40,"LIVES "+std::to_string(Pilot.Lives),Cyan);
+        F.AddText(15,65,"ENEMIES "+std::to_string(GetEnemyCount())+"   PICKUPS "+std::to_string(GetPickupCount())+
+            "   WAVE SHIFT IN "+std::to_string(GetWaveFramesRemaining())+" STEPS",White,15);
+        F.AddText(15,88,std::string(Pilot.Triple?"TRIPLE":"TWIN")+" SHOT   FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
+        F.AddText(420,88,ProtectionNote(),Cyan,15);
+        F.AddText(15,110,BossNote(),BossActive?BossActor.Tint:Yellow,15);
+        F.AddText(15,548,"Move: WASD/arrows, D-pad or stick   Hold Space/J/X/RT: fire   P/Start: pause",White,14);
         F.AddText(15,572,DifficultyName(Mode),Mode==Difficulty::Easy?Green:(Mode==Difficulty::Medium?Yellow:Red),17);
         double BadgeX=135;
         if(Pilot.Triple) {F.AddText(BadgeX,572,"[ 3X SHOT ]",LightBlue,17);BadgeX+=135;}
         if(Pilot.Shield) {F.AddText(BadgeX,572,"[ SHIELD ]",Green,17);BadgeX+=125;}
         if(Pilot.SpeedBoost) F.AddText(BadgeX,572,"[ SPEED ]",Yellow,17);
         if(BossActive && BossActor.State==BossState::Entering) F.AddText(270,280,"BOSS INCOMING!",DarkRed,28);
-        if(Over) F.AddText(280,250,"GAME OVER",Red,40);
+        if(Over) {
+            F.AddRect(170,225,460,120,{15,20,40,235});
+            F.AddText(280,238,"GAME OVER",Red,40);
+            F.AddText(200,288,"Final score "+std::to_string(Score)+"   Wave "+std::to_string(Wave),White,18);
+            F.AddText(200,318,"Fresh R press or cabinet Restart to retry",Cyan,17);
+        }
         if(Paused) {
             F.AddRect(200,180,400,250,{15,20,40,235});F.AddText(330,195,"PAUSED",White,32);
             const char* Labels[3]={"Resume","Save & Quit","Quit to Menu"};
             for(int N=0;N<3;++N) F.AddText(265,260+N*45,std::string(PauseSelection==N?"> ":"  ")+Labels[N],PauseSelection==N?Cyan:White,22);
+            F.AddText(225,400,"Up/Down: select   J/X or Space/A: confirm",White,14);
         }
     }
-    Status GetStatus() const override {return {Score,std::max(0,Pilot.Lives),Over,false,QuitRequested?"Quit requested":(Paused?"Paused: resume / save and quit / menu":std::string(DifficultyName(Mode))+"; move / fire / pause")};}
+    Status GetStatus() const override {
+        if(QuitRequested) return {Score,std::max(0,Pilot.Lives),Over,false,SaveRequested?"Save & Quit requested; host persistence pending":"Quit requested"};
+        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh R press or cabinet Restart to retry"};
+        if(Paused) return {Score,std::max(0,Pilot.Lives),false,false,"Paused: Up/Down select; J/X or Space/A confirm; Shift/Y resume"};
+        return {Score,std::max(0,Pilot.Lives),false,false,std::string(DifficultyName(Mode))+"; wave "+std::to_string(Wave)+"; shift in "+std::to_string(GetWaveFramesRemaining())+
+            " steps; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+"; "+BossNote()+"; "+
+            (Pilot.Triple?"triple":"twin")+" shot; fire "+FireNote()+"; "+ProtectionNote()+"; speed "+(Pilot.SpeedBoost?"boosted":"normal")};
+    }
     static const char* DifficultyName(Difficulty D) {return D==Difficulty::Easy?"Easy":(D==Difficulty::Medium?"Medium":"Hard");}
 private:
     struct Effect {double X,Y,Dx,Dy;int Life;Color Tint;};
@@ -650,6 +745,24 @@ private:
     std::int64_t Score=0;std::uint64_t NextId=1;int Wave=1,WaveTimer=0,SpawnTimer=0,SpawnRate=110,PauseSelection=0,PauseNavCooldown=0;
     bool Over=false,BossActive=false,BossKilledThisWave=false,Paused=false,QuitRequested=false,SaveRequested=false;
     RunSnapshot PendingSave;
+    std::string FireNote() const {
+        if(Over || QuitRequested) return "RUN ENDED";
+        if(Paused) return "PAUSED";
+        if(Bullets.size()+3>MaxBullets) return "SHOT LIMIT";
+        return Pilot.Cooldown>0?"COOLDOWN "+std::to_string(Pilot.Cooldown)+" STEPS":"READY";
+    }
+    std::string ProtectionNote() const {
+        if(Over || QuitRequested) return "RUN ENDED";
+        if(Pilot.Invincible==1) return std::string("PROTECTION EXPIRES NEXT LIVE STEP")+(Pilot.Shield?" + SHIELD":"");
+        if(Pilot.Invincible>1) return "PROTECTION TIMER: "+std::to_string(Pilot.Invincible)+(Pilot.Shield?" + SHIELD":"");
+        return Pilot.Shield?"SHIELD READY":"COLLISIONS ACTIVE";
+    }
+    std::string BossNote() const {
+        if(!BossActive) return BossKilledThisWave?"LAST BOSS CLEARED; POWERUPS RESET ON DEFEAT":"BOSSES ARRIVE EVERY FIFTH WAVE";
+        const char* State=BossActor.State==BossState::Entering?"ENTERING":(BossActor.State==BossState::Pacing?"PACING":(BossActor.State==BossState::Charging?"CHARGING":"RETURNING"));
+        const char* Phase=BossActor.Phase33?"BERSERK":(BossActor.Phase66?"ENRAGED":"NORMAL");
+        return "BOSS HP "+std::to_string(std::max(0,BossActor.Hp))+"/"+std::to_string(BossActor.MaxHp)+"   "+State+"   "+Phase;
+    }
     static bool ValidDifficulty(Difficulty D) {return D==Difficulty::Easy || D==Difficulty::Medium || D==Difficulty::Hard;}
     static Color PowerColor(PowerKind K) {return K==PowerKind::Triple?shooter_detail::LightBlue:(K==PowerKind::Shield?shooter_detail::Green:shooter_detail::Yellow);}
     static const char* PowerLabel(PowerKind K) {return K==PowerKind::Triple?"3X":(K==PowerKind::Shield?"SH":">>");}

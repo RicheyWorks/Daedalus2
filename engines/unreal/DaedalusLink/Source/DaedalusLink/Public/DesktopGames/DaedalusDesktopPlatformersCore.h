@@ -223,8 +223,33 @@ class ContraGame final : public Game {
         }
         return false;
     }
+    std::string GoalText() const {
+        if(Won) return "DISTANCE GOAL CROSSED";
+        const int Remaining=static_cast<int>(std::ceil(std::max(0.0,FinishX-Player.X)));
+        return Remaining>0 ? "PASS X 2800: "+std::to_string(Remaining)+" px left" : "PASS X 2800: cross the line";
+    }
+    std::string WeaponText() const {
+        const std::string Shot=Player.Spread ? "SPREAD: "+std::to_string(Player.SpreadTimer)+" steps" : "NORMAL SHOT";
+        return Shot+(Player.FireRate<8 ? " | RAPID: 4-step fire, until restart" : " | 8-step fire");
+    }
+    std::string FireReadiness() const {
+        if(Over) return "FIRE: run ended";
+        if(Player.Cooldown>0) return "FIRE: cooldown "+std::to_string(Player.Cooldown)+" steps";
+        if(Bullets.size()+(Player.Spread?3u:1u)>MaxBullets) return "FIRE: bullet limit; wait for shots to clear";
+        return "FIRE: ready (hold to repeat)";
+    }
+    std::string JumpReadiness() const {
+        if(Over) return "JUMP: run ended";
+        if(Player.Crouching) return "JUMP: release crouch";
+        return Player.OnGround ? "JUMP: ready (hold repeats on landing)" : "JUMP: airborne; land to jump again";
+    }
+    std::string ProtectionText() const {
+        if(Player.Invincible==1) return "PROTECTION expires next live step";
+        return "PROTECTION TIMER "+std::to_string(Player.Invincible);
+    }
 public:
     static constexpr std::size_t MaxBullets=96,MaxEnemies=6,MaxParticles=160;
+    static constexpr double FinishX=2800;
     ContraGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         Player={}; Bullets.clear(); EnemyBullets.clear(); Enemies.clear(); Powerups.clear(); Particles.clear();
@@ -253,16 +278,21 @@ public:
     }
     void Step(const Input& I) override {
         if(Over) return;
-        if(I.Up && !Previous.Up) SubmitCheatKey(0);
-        if(I.Down && !Previous.Down) SubmitCheatKey(1);
-        if(I.Left && !Previous.Left) SubmitCheatKey(2);
-        if(I.Right && !Previous.Right) SubmitCheatKey(3);
-        if(I.ActionPressed || (I.Action && !Previous.Action)) SubmitCheatKey(4);
-        if(I.JumpPressed || (I.Jump && !Previous.Jump)) SubmitCheatKey(5);
-        Previous=I;
-        if(I.FirePressed) Player.Shoot(Bullets);
-        Player.Update(I,platformers::ContraPlatforms(),CameraX);
-        if(I.Fire || I.FirePressed) Player.Shoot(Bullets);
+        // Mirror the existing Slate merge for direct callers; source stick
+        // precedence, right-key precedence and held jump/fire stay in Player.
+        Input Controls=I;
+        Controls.Left=Controls.Left || I.PadLeft; Controls.Right=Controls.Right || I.PadRight;
+        Controls.Up=Controls.Up || I.PadUp; Controls.Down=Controls.Down || I.PadDown;
+        if(Controls.Up && !Previous.Up) SubmitCheatKey(0);
+        if(Controls.Down && !Previous.Down) SubmitCheatKey(1);
+        if(Controls.Left && !Previous.Left) SubmitCheatKey(2);
+        if(Controls.Right && !Previous.Right) SubmitCheatKey(3);
+        if(Controls.ActionPressed || (Controls.Action && !Previous.Action)) SubmitCheatKey(4);
+        if(Controls.JumpPressed || (Controls.Jump && !Previous.Jump)) SubmitCheatKey(5);
+        Previous=Controls;
+        if(Controls.FirePressed) Player.Shoot(Bullets);
+        Player.Update(Controls,platformers::ContraPlatforms(),CameraX);
+        if(Controls.Fire || Controls.FirePressed) Player.Shoot(Bullets);
         const double Target=std::max(0.0,Player.X-350);
         CameraX=CameraX*.85+Target*.15;
         for(auto& B:Bullets) B.Update();
@@ -317,7 +347,7 @@ public:
         if(Player.X>2200 && !HasBoss() && !FinalBossSpawned) {
             Spawn(Player.X+300,420,2); FinalBossSpawned=true;
         }
-        if(Player.X>2800) { Won=true; Over=true; }
+        if(Player.X>FinishX) { Won=true; Over=true; }
         for(auto& P:Particles) { P.X+=P.VX; P.Y+=P.VY; P.VY+=.2; --P.Life; }
         Particles.erase(std::remove_if(Particles.begin(),Particles.end(),[](const auto& P){return P.Life<=0;}),Particles.end());
         if(Player.Y>650) {
@@ -325,7 +355,9 @@ public:
         }
     }
     Status GetStatus() const override {
-        return {Player.Score,Player.Lives,Over,Won,Won?"MISSION COMPLETE":(Over?"GAME OVER":"CONTRA: move, jump, crouch, hold fire")};
+        const std::string Note=Over ? (Won?"MISSION COMPLETE | R / Restart: play again":"GAME OVER | R / Restart: try again")
+            : "CONTRA | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
+        return {Player.Score,Player.Lives,Over,Won,Note};
     }
     const platformers::ContraPlayer& GetPlayer() const { return Player; }
     double GetCameraX() const { return CameraX; }
@@ -348,6 +380,13 @@ public:
             const double X=P.X-CameraX;
             if(X>-150 && X<900) { F.AddRect(X,P.Y,P.W,P.H,{101,67,33,255}); F.AddRect(X,P.Y,P.W,6,{34,139,34,255}); }
         }
+        // This line represents the original world-X victory check, not a
+        // checkpoint or a boss prerequisite. Crossing requires X strictly >2800.
+        const double GoalX=FinishX-CameraX;
+        if(GoalX>=0 && GoalX<=800) {
+            F.AddLine(GoalX,180,GoalX,520,{50,255,100,255},3);
+            F.AddText(Clamp(GoalX-65,20,630),185,"PASS TO FINISH",{10,60,20,255},16);
+        }
         const double X=Player.X-CameraX,Y=Player.Y,H=Player.Crouching?24:48;
         F.AddRect(X,Y+12,32,H-20,Player.Crouching?Color{100,100,100,255}:Color{70,130,180,255});
         const double HeadY=Y+(Player.Crouching?8:4);
@@ -365,6 +404,7 @@ public:
                 F.AddCircle(EX+30,E.Y+35,35,{100,0,150,255});
                 F.AddCircle(EX+30,E.Y+25,20,{200,50,200,255}); F.AddCircle(EX+25,E.Y+22,8,{255,0,0,255});
                 for(int K=0;K<5;++K) F.AddTriangle({EX+K*12+5,E.Y},{EX+K*12,E.Y-15},{EX+K*12+10,E.Y-15},{150,0,200,255});
+                F.AddText(EX-5,E.Y-38,"BOSS HP: "+std::to_string(E.Health),{50,0,70,255},16);
             } else {
                 F.AddRect(EX,E.Y+8,28,28,{220,20,60,255}); F.AddCircle(EX+14,E.Y+9,10,{255,200,150,255});
                 F.AddRect(EX+2,E.Y+2,24,5,{30,30,30,255}); F.AddRect(EX+(E.VX<=0?23:-5),E.Y+18,14,4,{40,40,40,255});
@@ -376,13 +416,32 @@ public:
             const double PY=P.Y+std::sin(P.Bob)*4;
             F.AddCircle(P.X-CameraX+12,PY+12,12,P.Rapid?Color{0,255,255,255}:Color{255,215,0,255});
             F.AddText(P.X-CameraX+7,PY+2,P.Rapid?"R":"S",Black,18);
+            F.AddText(P.X-CameraX-30,PY-22,P.Rapid?"RAPID: 4-step fire":"SPREAD: 900 steps",{25,35,45,255},14);
         }
         for(const auto& P:Particles) F.AddCircle(P.X-CameraX,P.Y,3,P.Tint);
+        // Keep the HUD above the reachable upper-platform jump arc. Remaining
+        // readiness/control text lives below the source ground at Y=520.
+        F.AddRect(16,12,768,86,{0,0,0,205});
         F.AddText(30,20,"SCORE: "+std::to_string(Player.Score)); F.AddText(660,20,"LIVES: "+std::to_string(Player.Lives));
-        F.AddText(650,55,"STAGE 1-"+std::to_string(static_cast<int>(Progress/20)+1),{220,220,220,255},18);
-        if(Player.Spread || Player.FireRate<8) F.AddText(320,50,"POWER UP!",{255,215,0,255});
-        F.AddText(100,575,"Move: arrows/stick  Jump: A/Space  Fire: RT/X  Crouch: down",White,16);
-        if(Over) { F.AddRect(160,240,480,130,{0,0,0,220}); F.AddText(235,275,Won?"MISSION COMPLETE!":"GAME OVER",Won?Color{50,255,50,255}:Color{255,50,50,255},32); }
+        F.AddText(30,48,GoalText(),{150,255,180,255},14);
+        F.AddText(650,48,"STAGE 1-"+std::to_string(static_cast<int>(Progress/20)+1),{220,220,220,255},14);
+        F.AddRect(30,70,420,4,{65,75,70,255});
+        F.AddRect(30,70,420*Clamp((Player.X-100)/(FinishX-100),0,1),4,{50,235,120,255});
+        F.AddText(30,80,WeaponText(),{255,225,120,255},14);
+        F.AddRect(16,526,768,68,{0,0,0,205});
+        F.AddText(30,529,FireReadiness(),White,13);
+        if(!Over && Player.Invincible>0) F.AddText(480,529,ProtectionText(),{100,245,255,255},13);
+        F.AddText(30,545,JumpReadiness(),White,13);
+        if(!Over && HasBoss()) F.AddText(500,545,"BOSS LIVE; distance goal unchanged",{245,180,255,255},12);
+        F.AddText(25,562,"Move: WASD/arrows, stick/D-pad | Crouch: down | Jump: Space/W or pad A",White,13);
+        F.AddText(25,581,"Hold fire: J/Z/X/Ctrl or pad X/RB/RT | R / Restart: new run",White,13);
+        if(Over) {
+            F.AddRect(140,220,520,210,{0,0,0,230});
+            F.AddText(235,250,Won?"MISSION COMPLETE!":"GAME OVER",Won?Color{50,255,50,255}:Color{255,50,50,255},32);
+            F.AddText(190,303,"FINAL SCORE: "+std::to_string(Player.Score),White,22);
+            F.AddText(190,341,Won?"Passed the original distance goal.":GoalText(),{200,225,205,255},18);
+            F.AddText(190,382,"R / Restart: new run with the same seed",White,18);
+        }
     }
 };
 

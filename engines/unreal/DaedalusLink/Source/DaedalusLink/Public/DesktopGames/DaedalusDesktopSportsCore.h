@@ -464,12 +464,69 @@ public:
         Data.Particles.erase(std::remove_if(Data.Particles.begin(),Data.Particles.end(),
             [](const Particle& P){return P.Life<=0;}),Data.Particles.end());
     }
+    // Read-only feedback derives from the source state. These helpers never
+    // gate throws, catches, movement, RNG draws or tournament transitions.
+    int LivingPlayers(bool Cpu=false) const {
+        int Count=0;const int Start=Cpu?3:0;
+        for(int N=Start;N<Start+3;++N) if(Data.Players[N].Health>0) ++Count;
+        return Count;
+    }
+    int TeamHealth(bool Cpu=false) const {
+        int Health=0;const int Start=Cpu?3:0;
+        for(int N=Start;N<Start+3;++N) Health+=Data.Players[N].Health;
+        return Health;
+    }
+    int HumanBallHolder() const {
+        const int Owner=Data.DodgeBall.Owner;
+        return Owner>=0 && Owner<3 && Data.Players[Owner].Health>0 && Data.Players[Owner].HasBall?Owner:-1;
+    }
+    bool IsHumanThrowReady() const {
+        const int Owner=HumanBallHolder();
+        return Data.Mode==Phase::Playing && Owner>=0 && Data.Players[Owner].ThrowCooldown==0 && Nearest(Owner)>=0;
+    }
+    bool IsHumanSuperCharged() const {
+        const int Owner=HumanBallHolder();
+        return Data.Mode==Phase::Playing && Owner>=0 && Data.Players[Owner].Charge>30;
+    }
+    int JumpReadyPlayers() const {
+        if(Data.Mode!=Phase::Playing) return 0;
+        int Count=0;
+        for(int N=0;N<3;++N) { const Player& P=Data.Players[N];
+            if(P.Health>0 && P.OnGround && P.JumpCooldown<=0) ++Count;
+        }
+        return Count;
+    }
+    int AirbornePlayers() const {
+        int Count=0;for(int N=0;N<3;++N) if(Data.Players[N].Health>0 && !Data.Players[N].OnGround) ++Count;
+        return Count;
+    }
+    double HumanCatchRadius(int Index) const {
+        if(Index<0 || Index>=3 || Data.Mode!=Phase::Playing || !Data.DodgeBall.InAir) return 0;
+        const Player& P=Data.Players[Index];
+        if(P.Health<=0 || P.HasBall) return 0;
+        // Both Step's gate and Catch's radius apply: <22 normal, <18 super,
+        // <34 airborne. Ground catches still require held Fire; airborne is automatic.
+        return !P.OnGround?34.0:(Data.DodgeBall.PowerBall?18.0:22.0);
+    }
     Status GetStatus() const override {
-        int Lives=0;for(int N=0;N<3;++N) if(Data.Players[N].Health>0) ++Lives;
         const bool End=Data.Mode==Phase::Won || Data.Mode==Phase::Lost;
-        return {Data.HumanScore,Lives,End,Data.Mode==Phase::Won,
-            Data.Mode==Phase::Playing ? "Move trio; Fire throw/catch; Up charges; Jump evades" :
-            (Data.Mode==Phase::CountrySelect ? "Up/Down select country; Fire/Action confirms" : "Fire/Action continues")};
+        std::string Text;
+        if(Data.Mode==Phase::Title) Text="Dodge Ball: Space/Enter/pad A chooses a country for four rounds. All three living humans share movement and jump. Host R/Restart clears the tournament.";
+        else if(Data.Mode==Phase::CountrySelect) Text=std::string("Selected ")+Countries[Data.SelectedCountry].Name
+            +" | "+CountryStats()+" | Up/Down or hat selects; fresh Fire/Action confirms. Random opponents may repeat.";
+        else {
+            Text="Round "+std::to_string(Data.Round)+"/4 | "+Countries[Data.SelectedCountry].Name+" vs "+Countries[Data.OpponentCountry].Name
+                +" | Match wins "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore)
+                +" | YOU "+std::to_string(LivingPlayers())+" alive / "+std::to_string(TeamHealth())+" HP, CPU "
+                +std::to_string(LivingPlayers(true))+" alive / "+std::to_string(TeamHealth(true))+" HP. ";
+            if(End) Text+=(Data.Mode==Phase::Won?"YOU won this match. ":"CPU won this match. ")+ContinueText()
+                +" Host R/Restart clears the tournament.";
+            else Text+=BallReadiness()+" | "+JumpReadiness()
+                +". Move the trio together. Held Space/Z/J/pad A catches and can immediately rethrow; pad X/RB throws on fresh press. "
+                +"Charge: keyboard Up/W or original stick up beyond 0.5; hat movement alone does not charge. "
+                +"Ground catch requires held Fire at <22 normal / <18 super pixels; airborne catch is automatic at <34. Friendly hits remain possible.";
+        }
+        return {Data.HumanScore,LivingPlayers(),End,Data.Mode==Phase::Won,Text};
     }
     void DrawPlayer(Frame& F,const Player& P) const {
         constexpr Color Yellow{255,220,50,255},Red{220,50,50,255};
@@ -507,31 +564,92 @@ public:
             F.AddLine(400,40,400,560,White,4);sports_detail::Ring(F,400,300,50,White,3);
             F.AddText(165,50,Countries[Data.SelectedCountry].Name,White,16);
             F.AddText(565,50,Countries[Data.OpponentCountry].Name,White,16);
-            for(const Player& P:Data.Players) DrawPlayer(F,P);
+            for(int N=0;N<6;++N) {
+                const Player& P=Data.Players[N];DrawPlayer(F,P);
+                const double Y=std::trunc(P.Y)-std::trunc(P.OnGround?0:std::abs(P.JumpVelocity)*0.3);
+                F.AddText(P.X-9,Y+(P.Health>0?29:15),std::string(N<3?"P":"C")+std::to_string(N%3+1),White,11);
+            }
             const Ball& B=Data.DodgeBall;F.AddCircle(B.X,B.Y,11,B.PowerBall ? Red : B.ThrowColor);
             sports_detail::Ring(F,B.X,B.Y,11,B.PowerBall ? Yellow : White,3);
             if(B.PowerBall) F.AddCircle(B.X,B.Y,5,Yellow);
             for(const Particle& P:Data.Particles) F.AddCircle(P.X,P.Y,std::trunc(P.Size),P.Tint);
-            F.AddText(60,5,std::string("YOU (")+Countries[Data.SelectedCountry].Name+"): "+std::to_string(Data.HumanScore),Blue,22);
-            F.AddText(535,5,std::string("CPU (")+Countries[Data.OpponentCountry].Name+"): "+std::to_string(Data.CpuScore),Red,22);
-            F.AddText(350,10,"ROUND "+std::to_string(Data.Round),Yellow,16);
-            F.AddText(155,575,"Move trio; Fire throw/catch; Up charge; Jump",White,17);
+            F.AddText(16,5,std::string("YOU ")+Countries[Data.SelectedCountry].Name+": "+std::to_string(Data.HumanScore),Blue,18);
+            F.AddText(535,5,std::string("CPU ")+Countries[Data.OpponentCountry].Name+": "+std::to_string(Data.CpuScore),Red,18);
+            F.AddText(347,6,"ROUND "+std::to_string(Data.Round)+" / 4",Yellow,15);
+            F.AddText(16,25,RosterText(false),White,10);F.AddText(535,25,RosterText(true),White,10);
+            F.AddText(12,563,"Move ALL 3: keys/stick/hat | Jump: Shift/pad B | "+JumpReadiness(),White,11);
+            F.AddText(12,576,BallReadiness(),IsHumanSuperCharged()?Yellow:White,11);
+            F.AddText(12,589,"Fire: Space/Z/J/A hold catches + rethrows; X/RB fresh throw | Charge: Up/W or stick up; hat alone does not charge",White,11);
         } else if(Data.Mode==Phase::CountrySelect) {
             F.AddText(135,65,"CHOOSE YOUR COUNTRY",White,38);
-            for(int N=0;N<8;++N) F.AddText(310,135+N*42,std::string(N==Data.SelectedCountry ? "> " : "  ")+Countries[N].Name,Countries[N].Tint,24);
-            F.AddText(200,510,"Up / Down selects; Fire / Action confirms",White,20);
+            for(int N=0;N<8;++N) F.AddText(125,135+N*42,std::string(N==Data.SelectedCountry ? "> " : "  ")+Countries[N].Name,Countries[N].Tint,24);
+            F.AddText(450,145,Countries[Data.SelectedCountry].Name,Countries[Data.SelectedCountry].Tint,26);
+            F.AddText(450,190,CountryStats(),White,15);
+            F.AddText(450,225,"3 players; each starts with 3 HP",White,15);
+            F.AddText(450,265,CountrySuperText(),Yellow,14);
+            F.AddText(450,305,"Four rounds; cumulative match wins",White,14);
+            F.AddText(450,335,"Random opponents can repeat",White,14);
+            F.AddText(125,495,"Select: Up/Down, W/S or hat | Confirm: Space/Enter/pad A",White,17);
+            F.AddText(125,530,"All three living teammates share your movement and jump.",White,15);
+            F.AddText(125,555,"Friendly hits: normal 1 HP, super 2 HP. Host R clears the tournament.",White,14);
         } else if(Data.Mode==Phase::Title) {
             F.AddText(160,145,"SUPER DODGE BALL",Yellow,42);F.AddText(250,205,"TOURNAMENT EDITION",White,24);
             F.AddText(190,265,"8 countries - 3 vs 3 - four rounds",White,20);
-            F.AddText(195,340,"Fire / Action to choose country",White,26);
-            F.AddText(170,405,"Move: arrows / stick; Fire: throw / catch",White,20);
-            F.AddText(230,445,"Jump evades; Up charges throw",White,20);
+            F.AddText(150,340,"Space / Enter / pad A: choose country",White,24);
+            F.AddText(120,400,"Move ALL 3: WASD/arrows, left stick or hat | Jump: Shift/pad B",White,16);
+            F.AddText(120,435,"Throw/catch: Space/Z/J/pad A held | X/RB: fresh throw only",White,16);
+            F.AddText(120,470,"Charge: hold keyboard Up/W or stick up; super at charge 31/60",White,16);
+            F.AddText(120,505,"Hat moves independently; jumping catches automatically in range.",White,16);
+            F.AddText(195,545,"Friendly hits are possible. Host R/Restart clears the session.",White,14);
         } else {
             F.AddText(145,230,Data.Mode==Phase::Won ? "YOU WIN THE MATCH!" : "YOU LOSE THE MATCH!",Data.Mode==Phase::Won ? Yellow : Red,40);
-            F.AddText(280,310,"Score: "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore),White,26);
-            F.AddText(220,360,"Round "+std::to_string(Data.Round)+" of 4",White,24);
-            F.AddText(190,410,"Fire / Action to continue tournament",White,22);
+            F.AddText(260,285,std::string(Countries[Data.SelectedCountry].Name)+" vs "+Countries[Data.OpponentCountry].Name,White,22);
+            F.AddText(250,325,"Match wins: "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore),White,24);
+            F.AddText(225,370,"Round "+std::to_string(Data.Round)+" of 4 complete",White,24);
+            F.AddText(120,425,ContinueText(),White,18);
+            F.AddText(150,465,Data.Round<4?"Next opponent is random; repeats are allowed.":"New country confirmation starts a fresh four-round score.",White,16);
+            F.AddText(120,510,"Space/Enter/A/X/RB/B continues | Host R/Restart clears the tournament",White,14);
         }
+    }
+private:
+    std::string RosterText(bool Cpu) const {
+        const int Start=Cpu?3:0;std::string Text;
+        for(int N=0;N<3;++N) Text+=(N?"  ":"")+std::string(Cpu?"C":"P")+std::to_string(N+1)+":"
+            +std::to_string(Data.Players[Start+N].Health);
+        return Text+" | "+std::to_string(LivingPlayers(Cpu))+"/3 alive, "+std::to_string(TeamHealth(Cpu))+" HP";
+    }
+    std::string CountryStats() const {
+        const Country& C=Countries[Data.SelectedCountry];
+        return "Power "+std::to_string(static_cast<int>(std::lround(C.Power*100)))+"% | Speed "
+            +std::to_string(static_cast<int>(std::lround(C.Speed*100)))+"%";
+    }
+    std::string CountrySuperText() const {
+        constexpr const char* Text[8]={"Super: flatter throw","Super: two angle variants","Super: upward throw",
+            "Super: 28-step recovery","Super: flatter throw","Super: 32-step recovery","Super: upward throw","Super: two angle variants"};
+        return Text[Data.SelectedCountry];
+    }
+    std::string BallReadiness() const {
+        const int Owner=HumanBallHolder();
+        if(Owner>=0) {
+            const Player& P=Data.Players[Owner];
+            const std::string Ready=IsHumanThrowReady()?"throw READY":(P.ThrowCooldown>0?
+                "throw wait "+std::to_string(P.ThrowCooldown)+" steps":"no living target");
+            return "P"+std::to_string(Owner+1)+": "+Ready+" | charge "+std::to_string(P.Charge)+"/60"
+                +(IsHumanSuperCharged()?" SUPER charged":"; SUPER at 31")+" | held Fire rethrows when ready";
+        }
+        const Ball& B=Data.DodgeBall;
+        if(B.Owner>=3 && B.Owner<6) return "C"+std::to_string(B.Owner-2)+" holds ball | Ground catch: hold Fire; airborne catch: automatic";
+        if(B.InAir) return std::string(B.PowerBall?"SUPER ball flying (2 HP)":"Normal ball flying (1 HP)")
+            +" | Ground catch: hold Fire (<"+(B.PowerBall?"18":"22")+"px); airborne: automatic (<34px)";
+        return "Loose ball: approach to pick up (<24px) | Friendly hits remain possible";
+    }
+    std::string JumpReadiness() const {
+        return "Jump READY "+std::to_string(JumpReadyPlayers())+"/"+std::to_string(LivingPlayers())
+            +"; airborne "+std::to_string(AirbornePlayers());
+    }
+    std::string ContinueText() const {
+        return Data.Round<4?"Fresh throw/confirm/jump: start round "+std::to_string(Data.Round+1)+" of 4."
+            :"Four rounds complete. Fresh throw/confirm/jump: return to title.";
     }
 };
 }} // daedalus::desktop

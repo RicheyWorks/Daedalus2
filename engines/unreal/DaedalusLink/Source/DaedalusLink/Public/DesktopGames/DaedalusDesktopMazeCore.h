@@ -360,10 +360,12 @@ public:
         }
         void Update(const Input& I) {
             double Dx=0, Dy=0;
-            if(I.Left) { Dx=-1; Face=Facing::Left; }
-            if(I.Right) { Dx=1; Face=Facing::Right; }
-            if(I.Up) { Dy=-1; Face=Facing::Up; }
-            if(I.Down) { Dy=1; Face=Facing::Down; }
+            // Direct Pad input mirrors the existing Slate merge; preserve the
+            // source's direction/facing precedence, then its analog override.
+            if(I.Left || I.PadLeft) { Dx=-1; Face=Facing::Left; }
+            if(I.Right || I.PadRight) { Dx=1; Face=Facing::Right; }
+            if(I.Up || I.PadUp) { Dy=-1; Face=Facing::Up; }
+            if(I.Down || I.PadDown) { Dy=1; Face=Facing::Down; }
             const double RawX=Axis(I.AxisX), RawY=Axis(I.AxisY);
             const double Sx=std::abs(RawX)>0.15 ? RawX : 0, Sy=std::abs(RawY)>0.15 ? RawY : 0;
             if(std::abs(Sx)>0.2 || std::abs(Sy)>0.2) {
@@ -474,6 +476,13 @@ public:
     const std::vector<Projectile>& GetProjectiles() const { return Projectiles; }
     const std::vector<Collectible>& GetCollectibles() const { return Collectibles; }
     int GetKeys() const { return Keys; }
+    int LivingEnemyCount() const {
+        return static_cast<int>(std::count_if(Enemies.begin(),Enemies.end(),[](const Enemy& E){return E.Alive;}));
+    }
+    bool HasGroundKey() const {
+        return std::any_of(Collectibles.begin(),Collectibles.end(),[](const Collectible& C){return C.Kind==PickupKind::Key;});
+    }
+    bool IsSwordReady() const { return !Over && !Won && Hero.AttackTimer==0; }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
         Out.AddRect(100,200,600,80,{210,180,140,255}); Out.AddRect(350,100,80,400,{210,180,140,255});
@@ -496,15 +505,29 @@ public:
             } else if(C.Kind==PickupKind::Heart) {
                 Out.AddCircle(X-4,Y-3,5,{255,50,50,255}); Out.AddCircle(X+4,Y-3,5,{255,50,50,255});
                 Out.AddTriangle({X-9,Y-2},{X+9,Y-2},{X,Y+8},{255,50,50,255});
-            } else { Out.AddCircle(X,Y,6,{255,215,0,255}); Out.AddRect(X+3,Y-3,12,6,{255,215,0,255}); }
+            } else {
+                Out.AddCircle(X,Y,6,{255,215,0,255}); Out.AddRect(X+3,Y-3,12,6,{255,215,0,255});
+                Out.AddText(X-10,Y+11,"KEY",maze::Yellow,12);
+            }
         }
         DrawPlayer(Out,Hero);
-        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/6  RUPEES "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
-        Out.AddText(10,570,"SCORE "+std::to_string(Score)+"  Move: arrows / WASD / stick; Fire / Action: sword",White,16);
-        if(MessageTimer>0) Out.AddText(330,45,Message,maze::Yellow,18);
-        if(Over || Won) { Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38); Out.AddText(270,320,"Fire / Action: restart",White,20); }
+        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  RUPEES "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
+        Out.AddText(10,35,ObjectiveText(),White,15);
+        if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
+        Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
+        Out.AddText(10,582,(Over || Won)?"Run ended. Fresh Fire/Action/Jump or host R: replay."
+            :"Move: WASD/arrows/stick/hat. Fresh Fire/Action/Jump: sword. Host R: restart.",White,12);
+        if(Over || Won) {
+            Out.AddRect(170,245,470,125,{0,55,0,230});
+            Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
+            Out.AddText(195,325,"Fresh Fire / Action / Jump or host R: replay",White,17);
+        }
     }
-    Status GetStatus() const override { return {Score,Hero.Health,Over,Won,"Zelda prototype: sword; defeat all four enemies and collect the key. Shield is decorative as in source."}; }
+    Status GetStatus() const override {
+        const std::string Text=Won?"Victory: roster defeated and key collected. Fresh Fire/Action/Jump or host R replays."
+            :(Over?"Defeated. Fresh Fire/Action/Jump or host R replays.":ObjectiveText()+" "+CombatText());
+        return {Score,Hero.Health,Over,Won,Text};
+    }
 private:
     friend struct MazeTestAccess;
     std::uint32_t SessionSeed=730;
@@ -517,6 +540,19 @@ private:
     int Keys=0, MessageTimer=0;
     bool KeySpawned=false, Over=false, Won=false;
     std::string Message;
+    std::string ObjectiveText() const {
+        const int Living=LivingEnemyCount();
+        if(Living>0) return "Enemies left: "+std::to_string(Living)+"/4. Defeat the roster to reveal its key.";
+        if(Keys>0) return "Key collected; roster cleared.";
+        return HasGroundKey()?"Roster cleared. Collect the gold KEY to finish.":"Roster cleared; no key on the ground.";
+    }
+    std::string CombatText() const {
+        if(Over || Won) return "Run ended | Shield decorative";
+        std::string Text=Hero.AttackTimer==0?"Sword READY":"Sword wait "+std::to_string(Hero.AttackTimer)+" steps";
+        if(Hero.Invincible==1) Text+=" | Hurt grace expires next live step";
+        else if(Hero.Invincible>1) Text+=" | Hurt grace timer "+std::to_string(Hero.Invincible);
+        return Text+" | Shield decorative";
+    }
     bool AllEnemiesDead() const { return std::all_of(Enemies.begin(),Enemies.end(),[](const Enemy& E){return !E.Alive;}); }
     void AddPickup(double X,double Y,PickupKind Kind) {
         if(Collectibles.size()<MaxCollectibles) Collectibles.push_back({X,Y,Kind,Rng.Unit()*6.283185307179586});
@@ -535,6 +571,7 @@ private:
             F.AddCircle(E.X,E.Y-4,5,{220,220,220,255});
         }
         if(E.HitFlash>0) { F.AddLine(E.X-14,E.Y-16,E.X+14,E.Y-16,White,2); F.AddLine(E.X-14,E.Y+16,E.X+14,E.Y+16,White,2); }
+        if(E.Kind==EnemyKind::Moblin) F.AddText(E.X-15,E.Y-33,"HP "+std::to_string(E.Health),White,12);
     }
     static void DrawPlayer(Frame& F,const Player& P) {
         const Color Tunic{50,150,50,255}, Gold{255,215,0,255}, Steel{200,200,220,255};
