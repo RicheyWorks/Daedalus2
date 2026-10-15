@@ -1,0 +1,123 @@
+{
+  "schema": "daedalus.synapse.workbench.native-install.v1",
+  "productId": "synapse",
+  "protocol": "synapse.workbench.local.v1",
+  "nativeBaseCommit": "456a682e9e6507b1e56d5c670ef370b51d381278",
+  "nativeSourceCommit": null,
+  "companionBaselineCommit": "03273e1e81080b1343e84791b6d6b4233e437963",
+  "companionNativeFacadeCommit": "645fbe760a7cff54e4f44c32f39e2bfa9c8a4cca",
+  "actorClass": "/Script/DaedalusLink.DaedalusSynapseWorkbenchTerminal",
+  "bindingClass": "/Script/DaedalusLink.DaedalusSynapseWorkbenchBridge",
+  "worldPlacement": null,
+  "objectArt": "source_placeholder_cube",
+  "moduleDependency": {
+    "name": "WebBrowser",
+    "visibility": "public",
+    "owner": "root_coordinator",
+    "status": "explicit_source_handoff_pending"
+  },
+  "permissions": [
+    "read",
+    "authoring",
+    "images",
+    "settings",
+    "analytics",
+    "graph",
+    "backup",
+    "review"
+  ],
+  "browser": {
+    "literalHost": "127.0.0.1",
+    "scheme": "http",
+    "documentPath": "/realm/synapse-workbench/",
+    "singleUseFragmentTokenCharacters": 43,
+    "contexts": "fresh_uuid_memory_only",
+    "persistentCookies": false,
+    "maxOpenWorkbenchBrowsers": 1,
+    "frameRate": 24,
+    "popups": false,
+    "subframes": false,
+    "externalNavigation": false,
+    "redirects": false,
+    "consoleForwarding": false,
+    "defaultErrorPages": false,
+    "resourcePolicy": "fixed_local_routes_plus_server_CSP; public_CEF_readonly_interception_limitation_disclosed"
+  },
+  "fileBinding": {
+    "object": "window.ue.workspace",
+    "methods": [
+      "pickimage",
+      "pickimport",
+      "savejson"
+    ],
+    "promiseTransport": "FWebJSResponse_JSON_string",
+    "pathsReturned": false,
+    "originalFilenamesReturned": false,
+    "maxRawBytes": 8388608,
+    "maxBase64Characters": 11184812,
+    "maxOperationsPerPanel": 64,
+    "minimumStartIntervalSeconds": 0.5,
+    "maxConcurrentOperations": 1,
+    "maxJsonContainerDepth": 64,
+    "maxMemoryObjects": 1000,
+    "saveSuggestedName": "synapse-memories.json",
+    "replaceExisting": false,
+    "cleanup": "owned_handle_RAII_before_commit",
+    "lifecycleFence": "weak_owner_generation_and_approved_document"
+  },
+  "backupFormat": "memory_json_only_without_image_bytes_or_settings",
+  "verification": {
+    "sourceApiInspection": "installed_UE_5.8_WebBrowser_headers_and_CEF_implementation",
+    "frontendTypecheck": "passed_separately",
+    "frontendBuild": "passed_separately",
+    "nativeCompile": "unverified",
+    "uht": "unverified",
+    "cefLoad": "unverified",
+    "nativeFileDialogs": "unverified",
+    "nativeJsonPublication": "unverified",
+    "cookedPackage": "unverified",
+    "liveInstallation": "unverified",
+    "playtest": "unverified"
+  },
+  "sourceFiles": [
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchTerminal.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchTerminal.cpp",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp"
+  ],
+  "sourceHashes": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchTerminal.h",
+      "normalizedSha256": "dde4e22229a2bfb07cf8deba34788743903ac571eb2b4d421acec9d713ac23bf"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchTerminal.cpp",
+      "normalizedSha256": "cc0c180050e78f4638e27e62de29d6d1914a59e80972eb1eeaf6cc8c21c591e1"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+      "normalizedSha256": "34a14229cb68b52e586565cbe5faf2a03154a237e9b750411e0ea89876e8b30c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+      "normalizedSha256": "b75a25f41f040544325d5ec71e654adf17bea9473d6777172bc1e6d0e7e7a6ca"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+      "normalizedSha256": "1439103917bb283b093ac9fdb08ba98be03e50996d186eedfd612576a1bb562c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "6d151c9b97494084d4d4cc3a8e0f5051051b5e6a7c4fc630633e7f8bfa9fb3b0"
+    }
+  ],
+  "companionPullRequest": "https://github.com/RicheyWorks/synapse/pull/4",
+  "companionValidation": {
+    "baseline": "73Rusttests+frontendcheck/build+offlineWindowsTauri checkpassed at03273e1",
+    "facade": "frontendcheck/build+finalembeddedUIHTTP2/2 at645fbe76",
+    "finalBundle": "assets/index-C0fz5rPt.js",
+    "nativeExecution": false
+  }
+}
