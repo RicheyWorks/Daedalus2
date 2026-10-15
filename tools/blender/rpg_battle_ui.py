@@ -238,25 +238,25 @@ def mockup(realm, root, st, win, cursor):
             rx = np.linspace(0, b.shape[1] - 1, W).astype(int)
             scr[:144] = b[ry][:, rx]
     sp = sorted(glob.glob(os.path.join(root, "claude-battle-sprites", realm, "Battle_*_1x.png")))[:40:9]
-    x = 12
+    x = 16
     for p in sp[:3]:
         s = load_png_1x(p)
         if s is None:
             continue
-        if s.shape[0] > 72:
-            k = s.shape[0] // 64
+        if s.shape[0] > 60:                                                     # enemies ~1/4 of the screen height
+            k = -(-s.shape[0] // 56)
             s = s[::k, ::k]
         blit(scr, s, x, 130 - s.shape[0])
         x += s.shape[1] + 4
-    party = sorted(glob.glob(os.path.join(root, "claude-battle-kit", realm, "party", "*_1x.png")))[:4]
+    party = sorted(glob.glob(os.path.join(root, "claude-battle-kit", realm, "Party_*_1x.png")))[:4]
     for i, p in enumerate(party):
         s = load_png_1x(p)
         if s is None:
             continue
-        if s.shape[0] > 40:
-            k = max(1, s.shape[0] // 32)
+        if s.shape[0] > 34:
+            k = -(-s.shape[0] // 32)
             s = s[::k, ::k]
-        blit(scr, s, W - 60 + (i % 2) * 8, 20 + i * 28)
+        blit(scr, s, W - 56 + (i % 2) * 10, 8 + i * 32)
     blit(scr, stretch_window(win, W // 2 - 4, 80), 2, H - 82)
     blit(scr, stretch_window(win, W // 2 - 4, 80), W // 2 + 2, H - 82)
     blit(scr, cursor[:, :8], 10, H - 70)
