@@ -56,8 +56,13 @@ public final class TidePenGate {
         }
     }
 
-    /** A species' needs, as listed in tidepen.json residents. */
-    public record Species(String id, Set<String> food, Set<String> habitat) { }
+    /** A species' needs, as listed in tidepen.json residents. Sets are copied in and are unmodifiable. */
+    public record Species(String id, Set<String> food, Set<String> habitat) {
+        public Species {
+            food = Set.copyOf(Objects.requireNonNull(food, "food"));
+            habitat = Set.copyOf(Objects.requireNonNull(habitat, "habitat"));
+        }
+    }
 
     /** Thresholds (tidepen.json settled_care.requires, owner-proposed). Ranges are checked here. */
     public record Rule(int feedingsMin, int distinctDaysMin, int harmEventsMax, int habitatPlantedMin) {

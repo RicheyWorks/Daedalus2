@@ -130,6 +130,20 @@ class TidePenGateTest {
     }
 
     @Test
+    void speciesSetsAreDefensiveCopies() {
+        var food = new java.util.HashSet<>(Set.of("Seagrass"));
+        var habitat = new java.util.HashSet<>(Set.of("Seagrass"));
+        var sp = new Species("sea_turtle", food, habitat);
+        food.add("RedDulse");
+        habitat.clear();
+        assertThat(sp.food()).containsExactly("Seagrass");
+        assertThat(sp.habitat()).containsExactly("Seagrass");
+        assertThatThrownBy(() -> sp.food().add("x")).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> sp.habitat().add("x")).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> new Species("s", null, Set.of())).isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
     void ruleRangesAreChecked() {
         assertThatThrownBy(() -> new Rule(0, 1, 0, 1)).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Rule(3, 4, 0, 1)).isInstanceOf(IllegalArgumentException.class);
