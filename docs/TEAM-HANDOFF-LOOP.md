@@ -28,3 +28,120 @@ Operational handoff: poll before starting a job, at every job boundary, and betw
 The shared `teamlink claim/release/locks` commands remain authoritative for editor and merge leases. Keep branches until all children are merged. For a merge handoff, include PR number, exact head SHA, review scope and current checks; the receiver reports the resulting merge SHA. Distinguish draft state, missing/deleted base, conflict and CI failures from an approval-tool rejection. Address the concrete cause once and continue unblocked work.
 
 Validation: the HTTP harness covers explicit acceptance versus receipt, long-poll wakeup, restart recovery, bounded backlog, uncertain-send deduplication, response retries/resume, logical reply routing and actual CLI round trips. Broker tests remain separate. Passing transport tests does not prove a live Claude response; record the real exchange separately when it occurs.
+
+## Sudoku create-mode source handoff — 2026-10-15
+
+Owner pootscoot-desktop-games, source4d5577dc, existing PR152. Exactly Java actor
+public h/private cpp and Java Slate private h/cpp, mode-create/UI regions only.
+Original PR152 Blackjack settings/metadata remain preserved; old PR55 worktree and
+the unrelated dirty full-link checkout were not changed. Owner reconciliation
+32159–32161 and claim32167–32169 precede edits; no competing claim found.
+Current root and java_gap_scan completed source review, not a full-team audit.
+Existing integration manifest has four before/after pins and the deferred cases.
+77 static checks pass,61 existing methods unchanged; new UFUNCTION needs later
+UHT/module build. Nothing is installed/native accepted. Preserve accepted184,
+Mines, R2 and other owners; no whole-plugin replacement or immediate runtime slot.
+Ingestion remains first. Web controller39fa remains reusable for web consumers;
+normal Slate controls need no web bridge or duplicate input framework here.
+
+## Java cabinet extended source package — 2026-10-15
+
+Parent's longer-task direction continues existing PR152 rather than creating a
+duplicate. Saved mode source4d5577dc/documentation0dff5841, then sourcec7b3f3e2
+completed supported original Blackjack keys, Sudoku Open/keyboard confirmation
+and status gaps in the same two owned Slate files. Extension claims32190–32192
+and saved-source status32201 are recorded; no conflicting Java-client claim was
+observed, and no explicit owner clearance response is claimed. Exact four-file
+final source pins, full coverage, remaining app gaps and later acceptance are in
+docs/java-arcade/blackjack-capabilities.integration.json and
+docs/java-arcade/cabinet-source-package.md. Review and 110 static source invariants
+pass, 56 baseline methods unchanged; dedicated compiler/tests/native stay deferred.
+Preserve the original PR152 Blackjack implementation and current accepted native
+source; no whole-plugin overwrite, service traffic, credentials or editor action.
+Only the sole operator may later integrate/build/load/accept after ingestion.
+
+## Sudoku local editing source continuation — 2026-10-15
+
+Source da2b4a84 continues the same PR152 from published9fad7509, exactly the two
+private Java Slate files +207/-20. Reconciliation32213–32216, claims32218–32220
+and saved-source status32227 are recorded; no overlapping claim/interface change
+was observed, and no explicit other-owner acceptance is claimed. Local-only
+notes, single-path typed/pad entry, wrapping/first-empty selection, 3x3 display
+and cosmetic confirmed-board feedback reuse original JavaFX/web implementation.
+Actor/public API/transport/guard/protocol/build/persistence remain unchanged.
+Current review and57 static source invariants pass (14 unchanged Slate methods),
+with no compiler/tests/services/editor/native action. Manifest final source pins
+and cabinet-source-package.md record explicit note reset/failure/Blueprint limits,
+historical versus current checks, remaining full-app gaps and deferred acceptance.
+No note endpoint/cache/durable save, controller bridge, native installation or
+runtime slot is created. Preserve accepted native owners; ingestion remains first.
+
+## Java cabinet received-session/recovery source continuation — 2026-10-15
+
+Assignment32249, actual START32308 at20:12:09UTC; source6e287066 continues
+existing PR152 published c0cacb26, only private Java Slate h/cpp +207/-8.
+Received versus entered identity, local field fill, existing guarded recovery
+candidates/bool feedback, and selected-cell answer/clue/note inspection complete
+the finite source package. The previous ID row already existed; Sudoku has no
+projected revision. Unknown versus definite Blackjack create failure remains an
+actor-private decision; fresh Start behavior is preserved. Existing notes/hints/
+input, actor/public API/transport/guard/protocol/build/saves/rules stay intact.
+Existing java_package_gap_review worker reviewed final source and guard branches:
+no blocking defect; three source corrections applied. Manual branch matrix and
+four final file pins are in cabinet-source-package.md/manifestv5. Historical
+57/14,110/56,77/61 counts are not current behavioral proof; no current suite,
+tests/builds/services/credentials/editor/native action. Native focus/layout/typing/
+recovery/persistence and full original apps remain open. Only codex-play-guard
+may later reconcile/build/load/accept; no operator slot or whole-plugin overwrite.
+
+## Blackjack explicit existing-table reopen — 2026-10-15
+
+Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues existing PR152 published3c89e767. Exact existing four
+Java actor/Slate lane files; ownership request32318 and START32320 at20:35UTC
+(minute precision). Latest direct parent continuation and bounded hub read found
+no competing owner; no separate owner-confirmation reply is claimed. Open/CanOpen
+reuse real Java GET query with canonical ID, shared eligibility, private stable
+query target, existing ticket generation/read budget/visible parser/error path.
+No reset on refused pending/uncertain/live-table cases, no new POST/DELETE/replay,
+provider, service, controller, persistence or rules. Close still forgets bearer
+and received state; ID must be recorded and Java table still alive. Shared bearer
+is not user isolation or durable round resume. Existing packet manifestv6/guide/
+coverage pin all final/prior files, manual branches and source/native limits.
+No tests/build/UHT/services/credentials/editor/native or compute reservation.
+Only codex-play-guard later integrates against actual accepted source and preserves
+all owners; no whole-plugin replacement. Full original applications remain open.
+
+## Authenticated local-profile resume prerequisite — 2026-10-15
+
+Backend PR62 code `a75241bd01e149df3b34c7dfdac1b9be93811939` / published draft head `7b6410c2fccbbeed974eda18e4efd717cf70424a` continues8a4dccfb.
+Ownership check32335, START32339 at20:51UTC minute precision; no competing backend
+claim found or separate confirmation claimed. Four facade runtime files+154/-32,
+two test files+189:9 authored methods, unexecuted. Profile principal comes only
+from trusted immutable bearer configuration, session owner checked before private
+state/caches/activity, create replay scoped by typed owner/requestId. Legacy shared
+mode and existing native header/routes/DTO/recovery remain compatible. Native
+source7c4 is unchanged from d2625374; current increment there is docs only.
+Backend/native packets include exact pins,11manualbranches, source/packet review,
+original SaveManager/RoundSeal/Engine/GDX/Android/AtomicFiles findings and future
+provider/key/storage/decision-ledger/expiry proposal explicitly UNIMPLEMENTED.
+Local profile isolation is not durable resume or Daedalus account integration.
+No tests/build/service/real credentials/editor/native ran or slot requested.
+Only codex-play-guard later integrates approved exact source preserving all owners.
+
+
+## Retained replay decision source contract — 2026-10-15
+
+Backend code `8b5a5c217889fcdf11392b359a6569dba651b112`, PR62 draft head `abb5a1e051989df2185f822705370976e6718fd4`; ownership32354,
+START32356 at21:14:06UTC. Existing service now provides trusted package-private,
+owner-gated immutable capture of originalcreate201 and actual FIFO command/reply/
+observed-revision decisions. Three runtime files+180/-74, one six-method test class
+and four synthetic fixtures; authored/unrun. Thirteen manual source branches and
+fifteen protected pins are in backend packetv2 and native linked manifestv8.
+Capture has no clock/expiry/engine/activity effects and no native/API binding.
+Eviction permits reevaluation; equal stamps cannot authenticate order; oversized
+direct Java maps can refuse capture. No codec/import/restore/disk/provider/keys or
+hidden state; global create refusals/occupancy absent. Full original apps and actual
+account/key/storage/atomic commit/restart policy remain open. Native7c4 unchanged
+from `cc4aa0996f8866debdd7d313cbad70f8ae27408a`; this PR152 increment is five documents only.
+No tests/build/UHT/service/credentials/editor/native or compute allocation. Existing
+sole operator alone owns later native acceptance; no runtime readiness is claimed.

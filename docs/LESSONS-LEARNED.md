@@ -235,4 +235,128 @@ names differ. Unreal removes type prefixes when deriving reflected names. Name
 new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
+### Capture new-game configuration before asynchronous authentication
 
+2026-10-15, pootscoot-desktop-games; java_gap_scan source review.
+Sudoku4d5577dc binds existing Java chaos/mirror/timeAttack flags instead of
+hardcoding false. Capture accepted options after request gates and before async
+bootstrap; build the eventual request from that snapshot. Keep next-game choices
+separate from Java-confirmed current modes, and preserve the old ordinary entry
+point. Open/resume must not recreate a game or extend its authoritative clock.
+Source review and77 static checks (61 unchanged methods) pass; compiler/tests,
+services and native operations remain deferred. No measured gameplay benefit.
+Harness idea, benefit ESTIMATED: extend the existing Java cabinet harness with
+eight option combinations, UI changes during bootstrap, failed/replaced requests
+and timed save/resume. Proposed owner desktop-games at its next validation slot;
+no new framework/job. Reviewer has no new firsthand native/Blender/queue evidence.
+
+### Bind source shortcuts through the existing guarded action interface
+
+2026-10-15, pootscoot-desktop-games; java_package_gap_review source review.
+PR152 package source c7b3f3e2 adds original Blackjack TableKeys through the same
+IsBlackjackActionLegal/SubmitBlackjackAction path as buttons, with the separate
+insurance affordability flag. Consume recognized disabled keys, require direct
+board/table and opening-user focus, and exclude repeats/modifiers/controllers so
+typing and button activation do not dispatch twice. Sudoku H only asks: consume
+the confirmation target and recheck current game/canAct before the existing hint
+request. Preserve the explicit labeled Hint button's source behavior. Clear old
+prompts on create/open/resume/configure. Keep authoritative status visible beside
+local form errors; a validation message must not conceal later service failure.
+Source review and 110 static checks (56 unchanged baseline methods) pass; compiler,
+behavioral tests/services/native remain deferred. No measured native benefit.
+Harness proposal, benefit ESTIMATED: extend the existing Java cabinet acceptance
+cases with focused forms/buttons, repeats/other user/controller edges, illegal
+actions, H/Cancel/Buy and replaced IDs, plus invalid Configure followed by service
+failure. Proposed owner desktop-games at its later validation slot; no new job
+framework or runtime queue claim. No fresh Blender/native evidence from reviewer.
+
+### Explicit local note overrides must represent an empty result
+
+2026-10-15, pootscoot-desktop-games; sudoku_editing_source_trace source review.
+Sudoku source da2b4a84 keeps local notes outside the Java answer snapshot. Preserve
+untouched snapshot masks, but let each local toggle/erase establish an override,
+including zero; falling back when the mask is empty would restore erased notes
+on the next resync. Hide notes behind answers without deleting them, and clear
+them before the unchanged-value early return on erase. Bind context to an accepted
+board identity/shape, keep same-ID updates, and describe exact UI entry/configure/
+close resets without promising durable saves. Route typed characters and pad
+through one guarded entry helper; remove overlapping physical-digit dispatch.
+Cosmetic counts/duplicates must never become local legality or completion rules.
+Source review/57 static checks pass;14 existing Slate methods and entire actor,
+public API/protocol/build files unchanged. Compiler/behavioral tests/native remain
+deferred; no measured visual or performance benefit. Existing-harness proposal,
+benefit ESTIMATED: exercise zero-mask resync, hidden notes/undo/refusal, refused vs
+accepted same-ID entry, Shift/numpad/form focus and counted one-command dispatch.
+Proposed owner desktop-games at a later authorized slot; no new framework/queue.
+
+
+
+### Separate requested input, local acceptance and received identity
+
+2026-10-15, pootscoot-desktop-games; existing java_package_gap_review worker.
+Source6e287066 extends PR152 from c0cacb26 in only the private Java Slate pair.
+An existing received-ID row needs clearer provenance, not a duplicate state store.
+Editable/requested IDs, actor bool acceptance and received snapshots are distinct.
+State-derived enabled recovery is only a candidate: private pending/unknown-create
+branches remain actor authority. Preserve fresh Start after definite Blackjack
+refusal; NeedsSync alone cannot distinguish that case from unknown creation.
+Local Use current ID fills/focuses only. Show received answers separately from
+local/received pencil masks, including explicit zero and hidden notes. Never
+display Sudoku's unpopulated Revision as a server version. Independent manual
+branch/source review passes; no counted suite/tests/builds/services/native ran.
+Existing-harness proposal: use the documented identity/recovery/focus/cell matrix
+at a later authorized slot. Benefit ESTIMATED, owner desktop-games; no new service,
+framework, worker or runtime queue reservation. No firsthand native/Blender proof.
+
+### Reopen through the existing read contract without bypassing uncertainty
+
+2026-10-15, pootscoot-desktop-games, existing independent Java reviewer.
+Blackjack already had a query route but no cabinet entry after close forgot the
+received ID and bearer. Explicit Open now captures a private query target and
+shares its CanOpen predicate with Slate. Refuse pending work, unknown creation,
+uncertain mutations and live-table replacement before any reset. Bind all reads/
+retries and atomic acceptance to that target; never seed accepted state from text.
+Reuse existing generation, read budget, strict visible DTO and closed error path.
+Local ID fill is not a request. New endpoints, controllers, durable storage and
+per-player authority are unnecessary and not supplied by shared-bearer GET.
+Source product impact: a recorded still-active table becomes reachable again;
+no measured gameplay/performance benefit or runtime acceptance. Existing-harness
+idea is the reopen branch matrix at a later authorized slot, benefit ESTIMATED;
+no new framework/worker/job or editor/compute slot. No tests/build/services ran.
+
+### Establish authenticated ownership before designing durable resume
+
+2026-10-15, pootscoot-desktop-games; existing Java source/packet reviewer.
+Backend code `a75241bd01e149df3b34c7dfdac1b9be93811939` scopes the existing bearer/routes, session ownership
+and typed create-replay key to trusted immutable local profile credentials.
+Check owner before caches/activity/engine; do not let legacy overloads or caller
+body identity bypass it. Preserve nullable constructors using a named factory.
+Legacy mode stays shared; opt-in local profiles are not Daedalus account mapping.
+Actual storage trace matters: live-round bytes contain dealer/future shoe/rules;
+SaveManager books live losses; RoundSeal needs a protected key supplied by Android,
+not desktop. Single-file rename is not an atomic durable state/ledger transaction.
+No bearer-derived encryption, plaintext export or invented resume adapter.
+Product impact is a source authorization prerequisite;9 tests authored/unrun,
+manual review only, no measured native/performance/security certification. Next
+existing-harness cases are profile/refusal/replay/idle/capacity and legacy mode,
+then actual provider/key/storage crash/restart work; benefit ESTIMATED, no new
+framework/worker/editor or compute slot. Native7c4 source and saves unchanged.
+
+
+### Capture decisions from the actual ledger before designing a store
+
+2026-10-15, pootscoot-desktop-games; backend source `8b5a5c217889fcdf11392b359a6569dba651b112`.
+Use one immutable grammar for live command equality and owner-gated inspection.
+Capture actual historical creation bytes and FIFO cached replies with revision at
+decision insertion, not expected/capture-time revision. Do not observe expiry or
+renew activity during inspection. A future-revision refusal is valid; equal stamps
+cannot prove order; evicted IDs can be reevaluated. Original create and command
+namespaces differ. Strict HTTP inputs fit bounds but oversized trusted direct maps
+can refuse capture. A frame without hidden state, clocks, global create refusals/
+occupancy, authenticated codec and atomic protected storage cannot restore service
+semantics. Structural validation is not authenticated import. Source impact is an
+inspectable reusable decision boundary; no measured runtime/performance gain.
+Six tests/four synthetic fixtures authored/unrun,13manualsourcecases,15protected
+source pins. Existing reviewer only; no new framework/worker/service/build/compute.
+Full app parity remains required. Native7c4 and original saves/keys unchanged;
+actual account/key/storage/crash-restart and sole-operator native acceptance remain.
