@@ -288,7 +288,9 @@ FText SDaedalusDesktopArcade::ControlText() const
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot. Asteroids Left/Right: turn, Up: thrust.");
+	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
+		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
+		: TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);

@@ -390,9 +390,9 @@ public:
         }
     }
     Status GetStatus() const override {
-        if(AtTitle) return {0,Player.Lives,false,false,"CONTRA TITLE | Arrows, B, A: source keyboard code; Enter/Space or pad A starts. Lives: "+std::to_string(Player.Lives)};
+        if(AtTitle) return {0,Player.Lives,false,false,"IRONWAKE ADVANCE TITLE | Arrows, B, A: keyboard bonus code; Enter/Space or pad A starts. Lives: "+std::to_string(Player.Lives)};
         const std::string Note=Over ? (Won?"MISSION COMPLETE | R / Restart: play again":"GAME OVER | R / Restart: try again")
-            : "CONTRA | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
+            : "IRONWAKE ADVANCE | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
         return {Player.Score,Player.Lives,Over,Won,Note};
     }
     const platformers::ContraPlayer& GetPlayer() const { return Player; }
@@ -404,7 +404,7 @@ public:
         F.Clear(800,600,{135,206,235,255});
         if(AtTitle) {
             F.AddRect(90,105,620,400,{15,25,40,245});
-            F.AddText(285,135,"CONTRA",{255,80,80,255},44);
+            F.AddText(210,135,"IRONWAKE ADVANCE",{255,80,80,255},36);
             F.AddText(150,215,"Enter / Space or controller A: start",White,24);
             F.AddText(130,275,"Keyboard: Up Up Down Down Left Right Left Right B A",{255,225,100,255},17);
             F.AddText(170,315,"Final keyboard A completes the code; it does not start.",White,16);

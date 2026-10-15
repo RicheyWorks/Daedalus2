@@ -307,7 +307,8 @@ public:
             Out.AddCircle(G.X-4,G.Y-3,1,Black); Out.AddCircle(G.X+4,G.Y-3,1,Black);
         }
         Out.AddText(10,630,"SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level));
-        Out.AddText(580,140,"PAC-MAN",maze::Yellow,28);
+        Out.AddText(580,136,"GLOWTRAIL",maze::Yellow,22);
+        Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
         Out.AddText(580,225,"Dots left: "+std::to_string(Remaining),White,16);
         Out.AddText(580,250,"Power: "+std::to_string(PowerPelletsLeft())+" (300-step fright)",White,13);
@@ -320,7 +321,7 @@ public:
     Status GetStatus() const override {
         std::string Text=Won?"All dots cleared. Fresh Action/Fire/Jump or host R replays."
             :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
-                :"Pac-Man: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
+                :"Glowtrail Chase: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
         if(RespawnFrames>0 && !Over && !Won) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
         return {Score,Lives,Over,Won,Text};
     }
@@ -460,7 +461,7 @@ public:
         for(auto It=Collectibles.begin();It!=Collectibles.end();) {
             It->Bob=std::fmod(It->Bob+0.1,6.283185307179586); // bounded animation phase
             if(It->GetRect().Overlaps(Hero.GetRect())) {
-                if(It->Kind==PickupKind::Rupee) { ++Hero.Rupees; Score+=10; Message="+1 Rupee"; }
+                if(It->Kind==PickupKind::Rupee) { ++Hero.Rupees; Score+=10; Message="+1 Trinket"; }
                 else if(It->Kind==PickupKind::Heart) { Hero.Health=std::min(Hero.MaxHealth,Hero.Health+2); Message="+1 Heart"; }
                 else { ++Keys; Message="Key Found!"; }
                 MessageTimer=40; It=Collectibles.erase(It);
@@ -511,7 +512,7 @@ public:
             }
         }
         DrawPlayer(Out,Hero);
-        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  RUPEES "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
+        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  TRINKETS "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
         Out.AddText(10,35,ObjectiveText(),White,15);
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);

@@ -3,23 +3,41 @@
 #include <iostream>
 #include <limits>
 #include <set>
+#include <cctype>
 using namespace daedalus::desktop;
 int main() {
     int checks=0,failed=0;
     auto check=[&](bool ok,const char* what) {++checks; if(!ok) {++failed;std::cerr<<"FAIL "<<what<<'\n';}};
+    auto brandFree=[](std::string text) {
+        for(char& c:text) c=static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        for(const char* word:{"pong","asteroids","pac-man","pacman","contra","zelda","sega","super dodge ball","rupee"})
+            if(text.find(word)!=std::string::npos) return false;
+        return true;
+    };
+    auto visibleFrameFree=[&](const Frame& frame) {
+        for(const auto& command:frame.Commands) if(command.Kind==Shape::Text && !brandFree(command.Label)) return false;
+        return true;
+    };
     std::set<std::string> ids;
     check(Catalog().size()==11,"all eleven canonical game families registered");
     for(const Entry& e:Catalog()) {
         check(ids.insert(e.Id).second,"catalog IDs unique");
+        check(brandFree(e.Title) && brandFree(e.Controls),"catalog title and description use current player-facing names");
         auto game=CreateGame(e.Id); check(bool(game),"registered factory exists");
         if(!game) continue;
         game->Reset(730); Frame frame; game->Render(frame);
         check(!frame.Commands.empty() && frame.Commands.size()<=Frame::MaxCommands,"registered game renders bounded frame");
+        check(visibleFrameFree(frame) && brandFree(game->GetStatus().Note),"initial frame/status excludes retired branding");
+        game->EnterTitle();game->Render(frame);
+        check(visibleFrameFree(frame) && brandFree(game->GetStatus().Note),"optional title frame/status excludes retired branding");
+        game->Reset(730);
         Input input; input.Right=true;input.Fire=true; input.JumpPressed=true;
         for(int i=0;i<1200;++i) { game->Step(input);input.JumpPressed=false; }
         game->Render(frame); check(frame.Commands.size()<=Frame::MaxCommands,"long-run rendering remains bounded");
+        check(visibleFrameFree(frame) && brandFree(game->GetStatus().Note),"active/result frame/status excludes retired branding");
         game->Reset(730); check(!game->GetStatus().Over,"restart clears terminal state");
     }
+    check(ids==std::set<std::string>{"pong","dungeon","asteroids","football","pacman","sega_shooter","shadow_ninja","star_shooter","dodge_ball","contra","zelda"},"all stable factory IDs retained despite display renaming");
     Driver d; check(d.Select("pong",730),"driver selects source Pong");
     check(d.Advance(0.1)==6 && d.Ticks()==6,"fixed-step cadence");
     const auto ticks=d.Ticks();check(d.Advance(1000)==8 && d.Ticks()==ticks+8,"hitch catch-up bounded");

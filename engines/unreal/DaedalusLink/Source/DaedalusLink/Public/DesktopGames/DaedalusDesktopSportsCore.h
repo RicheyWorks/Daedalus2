@@ -511,7 +511,7 @@ public:
     Status GetStatus() const override {
         const bool End=Data.Mode==Phase::Won || Data.Mode==Phase::Lost;
         std::string Text;
-        if(Data.Mode==Phase::Title) Text="Dodge Ball: Space/Enter/pad A chooses a country for four rounds. All three living humans share movement and jump. Host R/Restart clears the tournament.";
+        if(Data.Mode==Phase::Title) Text="Courtyard Clash: Space/Enter/pad A chooses a country for four rounds. All three living humans share movement and jump. Host R/Restart clears the tournament.";
         else if(Data.Mode==Phase::CountrySelect) Text=std::string("Selected ")+Countries[Data.SelectedCountry].Name
             +" | "+CountryStats()+" | Up/Down or hat selects; fresh Fire/Action confirms. Random opponents may repeat.";
         else {
@@ -593,7 +593,7 @@ public:
             F.AddText(125,530,"All three living teammates share your movement and jump.",White,15);
             F.AddText(125,555,"Friendly hits: normal 1 HP, super 2 HP. Host R clears the tournament.",White,14);
         } else if(Data.Mode==Phase::Title) {
-            F.AddText(160,145,"SUPER DODGE BALL",Yellow,42);F.AddText(250,205,"TOURNAMENT EDITION",White,24);
+            F.AddText(160,145,"COURTYARD CLASH",Yellow,42);F.AddText(250,205,"TOURNAMENT EDITION",White,24);
             F.AddText(190,265,"8 countries - 3 vs 3 - four rounds",White,20);
             F.AddText(150,340,"Space / Enter / pad A: choose country",White,24);
             F.AddText(120,400,"Move ALL 3: WASD/arrows, left stick or hat | Jump: Shift/pad B",White,16);
