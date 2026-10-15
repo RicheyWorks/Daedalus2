@@ -1387,3 +1387,12 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   lattice) → 1 px outline → nearest ×4. One shared module: `tools/blender/pixel_art.py`.
 - A shaded "sky" plane renders grey under studio light — render transparent and composite the gradient in numpy.
 - A gamma sweep on one sheet (1.0 vs 1.6) settled the setting in one render each; do that before batch re-renders.
+
+## Long-lived Blender workers: purge every datablock type, and recycle the process (2026-10-14)
+- The 10k HD-island run fell from ~45 to ~4 islands/min around island 8,000 while each island still built in 6-9 s:
+  the time went *between* islands. `purge()` removed objects/meshes/materials/curves but not the ThumbCam camera made
+  per island, images, actions, node groups, textures, stray collections/worlds — thousands of orphans per worker.
+- Fix (`hd_batch.py`): remove every datablock collection the build touches + `bpy.data.orphans_purge(do_recursive=True)`,
+  and `--max-items 150` so a wrapper loop restarts a fresh Blender (resume skips finished islands). After the restart:
+  ~3.5 s per island, ~60 islands/min on 4 workers.
+- Watch the gap between log lines, not the per-item time the script prints.
