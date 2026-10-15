@@ -217,7 +217,7 @@ def author(seed, kind):
     path = [terraces[1][:2], (lx + lake[2] + 8, ly), terraces[0][:2], (lx - lake[2] - 8, ly), terraces[2][:2], terraces[3][:2]]
     # source islet for the sky river: off the rim, opposite the waterfall, 40 m up
     ia = ang + math.pi + rng.uniform(-.4, .4)
-    islet = (1.55 * R * math.cos(ia), 1.55 * R * math.sin(ia), 40.0, 34.0)
+    islet = (1.42 * R * math.cos(ia), 1.42 * R * math.sin(ia), 40.0, 22.0)
     return {"lake": lake, "hills": hills, "terraces": terraces, "stream": stream, "lip": lip, "spring": spring, "path": path,
             "islet": islet, "ang": ang}
 
@@ -299,17 +299,18 @@ def strata(name, h, kind, r, seed, chem):
     _, _, cliff, _, _, accent, _ = KINDS[kind]
     rng = random.Random(seed)
     n = 96
-    layers = [(1.0, 0), (.985, -5), (.92, -16), (.80, -30), (.62, -44), (.38, -56)]
+    k = r / R                                                     # the keel's depth scales with the plateau
+    layers = [(1.0, 0), (.985, -5 * k), (.92, -16 * k), (.80, -30 * k), (.62, -44 * k), (.38, -56 * k)]
     verts, faces, slots = [], [], []
     for li, (fac, depth) in enumerate(layers):
         for i in range(n):
             a = i * math.tau / n
             rr = rim_radius(a, r)
             x, y = rr * math.cos(a), rr * math.sin(a)
-            z = h(x, y) if li == 0 else depth + 2.5 * math.sin(i * 1.7 + li) + rng.uniform(-1.5, 1.5)
+            z = h(x, y) if li == 0 else h(0, 0) - DECK + depth + (2.5 * math.sin(i * 1.7 + li) + rng.uniform(-1.5, 1.5)) * k
             jag = 1 + (0 if li == 0 else .035 * math.sin(i * 2.3 + li * 1.1))
             verts.append((x * fac * jag, y * fac * jag, z))
-    tip = (rng.uniform(-6, 6), rng.uniform(-6, 6), -68)
+    tip = (rng.uniform(-6, 6) * k, rng.uniform(-6, 6) * k, -68 * k)
     verts.append(tip)
     for li in range(len(layers) - 1):
         for i in range(n):
@@ -331,7 +332,7 @@ def strata(name, h, kind, r, seed, chem):
     heart = material("Heartstone", accent, .3, 0, 2.5)
     for i in range(5):
         a = i * math.tau / 5
-        c = cone(name + "_Heart%d" % i, (tip[0] + 3 * math.cos(a), tip[1] + 3 * math.sin(a), tip[2] + 8), 1.6, .2, 9, heart, 6)
+        c = cone(name + "_Heart%d" % i, (tip[0] + 3 * k * math.cos(a), tip[1] + 3 * k * math.sin(a), h(0, 0) - DECK + tip[2] + 8 * k), 1.6 * k, .2, 9 * k, heart, 6)
         c.rotation_euler = (.35 * math.sin(a), .35 * math.cos(a), 0)
     return sh
 
@@ -426,8 +427,8 @@ def sky_river(name, A, h, hi, kind, islet_z):
 def tree_bases(kind, seed):
     """One shared mesh per species/variant; instances are placed by scatter()."""
     g, gl, cliff, sand, water, accent, shape = KINDS[kind]
-    leaf = material("Leaf_" + kind, g, .93)
-    leaf2 = material("Leaf2_" + kind, gl, .93)
+    leaf = material("Leaf_" + kind, tuple(c * .8 for c in g), .93)
+    leaf2 = material("Leaf2_" + kind, tuple(c * .85 for c in gl), .93)
     bark = material("Bark", (.28, .14, .07), .85)
     bases = []
     for v in range(3):
@@ -608,10 +609,10 @@ def collision(prefix, A, name_terrain):
     """UCX_ boxes: one per terrace (walkable) + a deck slab under the plateau + the dock planks."""
     hid = material("Collision", (1, 0, 1), 1)
     for i, (tx, ty, tr, tz, role) in enumerate(A["terraces"]):
-        ob = box("UCX_%s_%02d" % (name_terrain, i), (tx, ty, tz - 1), (tr * 1.8, tr * 1.8, 2), hid, 0)
-        ob.display_type = "WIRE"
-    ob = box("UCX_%s_%02d" % (name_terrain, 9), (0, 0, DECK - 3), (R * 1.4, R * 1.4, 2), hid, 0)
-    ob.display_type = "WIRE"
+        ob = box("UCX_%s_%02d" % (name_terrain, i), (tx, ty, tz - 1.02), (tr * 1.8, tr * 1.8, 2), hid, 0)
+        ob.display_type, ob.hide_render = "WIRE", True
+    ob = box("UCX_%s_%02d" % (name_terrain, 9), (0, 0, DECK - 8), (R * 1.4, R * 1.4, 4), hid, 0)   # safety floor under the lake bed
+    ob.display_type, ob.hide_render = "WIRE", True
 
 
 def lods(top, name):
