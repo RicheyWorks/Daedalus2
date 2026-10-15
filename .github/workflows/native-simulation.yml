@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Native simulation adapter
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/**/DaedalusSimulation*'
+      - 'engines/unreal/core-test/simulation_*'
+      - 'engines/unreal/core-test/CMakeLists.txt'
+      - 'engines/unreal/core-test/fixtures/simulation-v1/**'
+      - '.github/workflows/native-simulation.yml'
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: cmake -S engines/unreal/core-test -B native-build -DCMAKE_BUILD_TYPE=Debug
+      - run: cmake --build native-build --config Debug
+      - run: ctest --test-dir native-build -C Debug --output-on-failure
