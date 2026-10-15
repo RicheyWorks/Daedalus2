@@ -765,3 +765,31 @@ lanterns, snowmen, eggs, gifts + tree + star, hearts, aurora ribbon, fireworks).
 Plot seeds = seed × 100 + i, so any plot rebuilds alone with `hd_island.py OUT <seed*100+i> <kind>`.
 Run it as 8 fresh processes (`hd_cluster.py OUT SEED --plot I`, I = 0..7) then `--links --render` — one process
 for all eight slowed from 17 s to 65 s per plot as the scene filled; per-plot processes hold ~16 s (≈3 min/octet).
+
+### 14.15 HD island v2 + the 10,000-island run (`hd_island.py`, `hd_batch.py`)
+**Built from the mechanics, not decorated.** `gameplay()` places every hook from its source and writes it to the
+island json (`gameplay` rows with `local`/`world` positions and a `source`, plus `mechanics_sources`):
+spawn overlook (data/spawn/spawn.json) · six NPC homes (data/npcs/npcs.json) · ark deck + latch range
+(data/ark/travel.json) · well / spring (purity) / rain catch / lake + filter hut when `water.filter_needed`
+(data/water/water.json + chemistry) · fishing pier with the fish list (chemistry `water.fish`) · herb ring coloured
+by essence + brew trough (chemistry `flora.herbs`, data/herbs, RingInfusion.md) · orchard trees with their fruit and
+uses (chemistry `flora.orchard`) · livestock pen (chemistry `fauna.livestock`, data/livestock) · crop rows (chemistry
+`soil`, Ultra's island_farm.py) · ore nodes `Prop_OreNode_<Ore>_Small` (data/spawn/ore_nodes.json density ×
+`geology.ore_mult`, `ores_here`) · caves (`geology.caves`) · starmetal crater only when LEGENDARY · Power Unit sited by
+its `drive` (stream → water wheel) · shop crates (`economy.shop_stock`, data/trade) and inn (`economy.inn_menu`,
+data/food) · Colony Ledger goods/surplus/need · watch post + carnivorous guard beds (Ultra LIVING-ISLAND-DEFENSE,
+ledger `settle_wave`) · egg nests (voxel_eggs) · quest steps whose targets are on the island (data/quests).
+Exported hooks are small posts named `MKR_<island>_<kind>_<id>`.
+**Kind landmarks** (`kind_features`): volcano crater + lava flows + smoke + obsidian + hot spring; frost ice spires +
+frozen lake + drifts + icicles; mesa banded buttes + cacti + vineyard; mire lily pads + boardwalk + cattails +
+glowshrooms; crystal giant crystal clusters + floating shards; meadow windmill + hives + standing stones.
+`rim_details`: hanging roots and drifting keel rocks on every island.
+**Speed** (measured on the PC): v1/v2 with `bpy.ops` primitives took 17 s → 70 s per island (operators re-evaluate
+the scene; cost grows with object count). Now: bmesh primitives (`_obj`, no operators), Catmull-Rom tubes, a
+bmesh `join_parts` for tree templates, LODs resampled from the height function on 4 m / 8 m grids, and
+`merge_static` joining single-material props into one mesh per material → **3.2–4 s per island**, ~550 objects
+(mostly shared-mesh instances), 60–100 k tris, ~6 MB GLB+FBX.
+**The run:** `hd_batch.py OUT 10000 10000 --workers 4 --worker I` × 4 processes → seeds 10000–19999, kind = seed % 6,
+`OUT/<thousands>/HDIsland_<Kind>_<seed>.{glb,fbx,json,thumb.png}`, `index-worker<I>.jsonl` (seed, kind, tris, grade,
+surplus, need, hooks, secs). Purges the scene after every island; resume-safe (skips existing json); memory guard
+pauses a worker while available RAM/commit < 1.5 GB (shared PC). ~1 island/s with 4 workers.

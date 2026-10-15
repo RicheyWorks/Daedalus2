@@ -1368,3 +1368,14 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   the mean vertex colour for vertex-coloured terrain) before rendering an imported overview.
 - Killing my own jobs by command-line match: exclude `$PID` — a pattern that appears in the command text also
   matches the bridge shell running the kill, which cut that call short.
+
+## 2026-10-14 19:10 — 20× faster islands
+- `bpy.ops.mesh.primitive_*`, `transform_apply`, `modifier_apply`, `object.convert`, `object.join` each re-evaluate
+  the scene: an 860-object island took 70 s. Writing meshes with bmesh (`create_cube/cone/uvsphere`, `bevel`),
+  sweeping tubes along a Catmull-Rom spline, joining with `bm.from_mesh` after `me.transform(matrix_basis)`, and
+  resampling LODs from the height function brought it to 3.2 s. Use `matrix_basis` when nothing is parented —
+  `matrix_world` is stale until a depsgraph update.
+- Mass runs: one Blender process per worker, purge (`bpy.data.batch_remove`) objects/meshes/materials after every
+  item and clear module caches (material dict) — no slowdown over hundreds of items; resume by skipping existing json.
+- Shared PC memory: 4 workers + Unreal editor + another team's Cycles render took free RAM to 0.4 GB. Workers now
+  check `GlobalMemoryStatusEx` and pause below 1.5 GB.
