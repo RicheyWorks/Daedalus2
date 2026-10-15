@@ -21,7 +21,6 @@
 #include "Misc/Guid.h"
 #include "Misc/Paths.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Widgets/SWeakWidget.h"
 
 namespace DD = daedalus::desktop;
 
@@ -398,8 +397,10 @@ bool ADaedalusDesktopArcade::Use(ADaedalusHero* Hero)
 	SlateUserIndex = FSlateApplication::Get().GetUserIndexForController(LocalPlayer->GetControllerId());
 	Session.ClearInput();
 	ArcadeWidget = SNew(SDaedalusDesktopArcade).Game(this);
-	ArcadeHost = SNew(SWeakWidget).PossiblyNullContent(ArcadeWidget.ToSharedRef());
-	Viewport->AddViewportWidgetForPlayer(LocalPlayer, ArcadeHost.ToSharedRef(), 100);
+	// The engine's global viewport overlay paints above its per-player layer,
+	// regardless of each layer's child Z. The host retains the player's rect/user.
+	ArcadeHost = SDaedalusDesktopArcade::MakeForegroundHost(LocalPlayer, Viewport, ArcadeWidget.ToSharedRef());
+	Viewport->AddViewportWidgetContent(ArcadeHost.ToSharedRef(), 100);
 	FInputModeUIOnly Mode;
 	Mode.SetWidgetToFocus(ArcadeWidget);
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
@@ -461,7 +462,7 @@ void ADaedalusDesktopArcade::ReleaseOverlay()
 	UGameViewportClient* Viewport = OpenViewport.Get();
 	Session.ClearInput();
 	if (ArcadeHost.IsValid() && Viewport)
-		Viewport->RemoveViewportWidgetForPlayer(OpenLocalPlayer.Get(), ArcadeHost.ToSharedRef());
+		Viewport->RemoveViewportWidgetContent(ArcadeHost.ToSharedRef());
 	ArcadeHost.Reset(); ArcadeWidget.Reset();
 	if (bRestore && PC)
 	{
