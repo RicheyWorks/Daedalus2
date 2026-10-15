@@ -303,11 +303,11 @@
       }
     }
     const FALLBACK_LABELS = {
-      xbox: { south: "A", east: "B", west: "X", north: "Y", start: "Menu", back: "View", confirm: "south" },
-      nintendo: { south: "B", east: "A", west: "Y", north: "X", start: "+", back: "-", confirm: "east" },
+      xbox: { south: "A", east: "B", west: "X", north: "Y", l: "LB", r: "RB", zl: "LT", zr: "RT", start: "Menu", back: "View", confirm: "south" },
+      nintendo: { south: "B", east: "A", west: "Y", north: "X", l: "L", r: "R", zl: "ZL", zr: "ZR", start: "+", back: "-", confirm: "east" },
       n64: { south: "A", east: "B", west: "C-Left", north: "C-Up", start: "Start", back: "C-Down", confirm: "south" },
-      playstation: { south: "Cross", east: "Circle", west: "Square", north: "Triangle", start: "Options", back: "Create", confirm: "south" },
-      generic: { south: "1", east: "2", west: "3", north: "4", start: "Start", back: "Select", confirm: "south" },
+      playstation: { south: "Cross", east: "Circle", west: "Square", north: "Triangle", l: "L1", r: "R1", zl: "L2", zr: "R2", start: "Options", back: "Create", confirm: "south" },
+      generic: { south: "1", east: "2", west: "3", north: "4", l: "L1", r: "R1", zl: "L2", zr: "R2", start: "Start", back: "Select", confirm: "south" },
     };
     function describe(rec) {
       return { index: rec.index, id: rec.id, name: rec.name, vid: rec.vid, pid: rec.pid, family: rec.family, source: rec.source,
