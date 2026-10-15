@@ -122,3 +122,6 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
 - Prismheart Realm (ADR-067, new, original): PRISM01 job classes, PRISM02 waystones, PRISM03 shards + summons,
   PRISM04 airship travel; chemistry `REALMS["PRISMHEART"]` (sunroot → Mana Draught brew, peach → waystone offering,
   barley → Skyfarer ration, duneback → stable mount). Row WZ33.
+- 20:15 Random encounters (both RPG realms): `data/rpg/{portal,prism}-bestiary.json` (160 types each) and
+  `-encounters.json` (zone step rates + formations) from `tools/blender/rpg_bestiary.py`; battle sprites for every
+  enemy. Row WZ34. Owner: Team Claude for the data + art; battle runtime/rules not claimed.

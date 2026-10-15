@@ -810,3 +810,21 @@ gives each individual its own tint/size; `scale_plan()` doubles bosses and summo
   `plan_id` + `variant_seed`. BLIGHT_SLIME left to Codex's validated polish. Out: `claude-portal-cast/`.
 - **Prismheart Realm** (ADR-067): 8 jobs × 6 heroes, 30 monsters × 5, 8 summons, 12 townsfolk roles × 4, 4 Duneback
   mounts → `claude-prism-cast/`; 12 structures + 24 items → `claude-prism-props/` (`export_catalog.py prism`).
+
+### 14.17 Random encounters: bestiaries, encounter tables, battle sprites (`rpg_bestiary.py`, `render_battle_sprites.py`)
+Richey (20:00): "in that style game you get randomly attacked … it's important we have a whole bunch of enemies
+rendered for that screen." Each RPG realm gets **40 enemy lines × 4 palette-swap tiers = 160 types** (320 total),
+original names (e.g. Drip → Mire Drip → Moss Drip → Brass Drip; Gelfin → Frost/Lava/Prism Gelfin), each with level,
+HP, attack, defence, speed, EXP, gold, behaviour (simple, swarm, pack, caster, caster_heal, status_sleep/poison/bind/
+paralyze/stone/burn/confuse/blind, armored, heavy, charge, ambush, steal, undead, guard, multi_hit, breath_*) and element.
+Tier stats scale ×(1+0.55t) (HP squared); deep zones (`<zone>_deep`) hold tiers 3–4.
+**Encounter tables** `data/rpg/<realm>-encounters.json`: per zone a mean step count (caves/crypts 12–14, plains 30),
+level band, preemptive/ambush chances, and weighted formations — swarm/pack lines come 3–6, normals 1–4 with a same-tier
+zone-mate, heavies/guards 1–2, ambushers alone. Portal 27 zones / 1,762 formations; Prismheart 37 zones / 1,568.
+**Battle sprites** `engines/unreal/art/claude-battle-sprites/<realm>/Battle_<Name>.png` (+ `_1x`), one per enemy type
+(bestiary + population-plan enemies/bosses + Prismheart cast monsters/summons = 214 Portal, 198 Prismheart):
+orthographic Workbench render on a transparent film → numpy pixelation inside Blender (Portal 64 px grid, ≤ 7
+colours, black outline, ×4; Prismheart 112 px, ≤ 24 colours, shaded outline, ×4, 3/4 view facing the party's side).
+Read the render with `colorspace = Non-Color` or the colours come out linearised (muddy). `sprites.json` links
+every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged → `claude-bestiary/<realm>/`.
+412 sprites render in ~45 s.
