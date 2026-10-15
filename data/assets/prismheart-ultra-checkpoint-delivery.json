@@ -1,0 +1,10 @@
+{
+  "schema": "daedalus.prismheart.source-checkpoint-delivery/v1",
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-saved-checkpoint-20261015T2145Z-v1",
+  "deliveryId": 32398,
+  "sentAtUtc": "2026-10-15T21:45:32.2255332+00:00",
+  "payload": "data/assets/prismheart-ultra-checkpoint.json",
+  "exactPayloadMatched": true,
+  "sourceOnly": true
+}

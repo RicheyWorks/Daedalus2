@@ -1,0 +1,187 @@
+{
+  "schema": "daedalus.prismheart.visual-preflight/v1",
+  "owner": "buckwild-sol",
+  "package": "prismheart-visual-r3",
+  "gameSuccessor": "11-ultra-controller-r2",
+  "stage": "INPUTS_PRESERVED_MISSING_TITLE_NO_EXECUTION",
+  "recordedAtUtc": "2026-10-15T22:12:54.8029594+00:00",
+  "startUtc": "2026-10-15T22:04:36Z",
+  "directionHubIds": [
+    32420,
+    32438
+  ],
+  "startHubId": 32431,
+  "missingInputReportHubId": 32435,
+  "gameplayEdited": false,
+  "successorCommitted": false,
+  "originalsChanged": false,
+  "publishedDemoChanged": false,
+  "inventory": {
+    "art": {
+      "root": "artifacts/prismheart-visual-r3/input-art",
+      "files": 595,
+      "bytes": 18158359,
+      "pngFiles": 530,
+      "mp3Files": 10,
+      "wavFiles": 54,
+      "cueMetadataFiles": 1,
+      "pinFile": "data/assets/prismheart-visual-r3-art-pins.json",
+      "sourceCopyHashesMatch": true,
+      "scope": "Existing1x art/audio superset; not packed output or decoded-image acceptance"
+    },
+    "baseline": {
+      "root": "artifacts/prismheart-visual-r3/input-source/v10",
+      "files": 32,
+      "demoSourceFiles": 13,
+      "dependencyFiles": 19,
+      "commit": "9175723ad200b05558a2ea12470763c3b9432152",
+      "label": "v10 source reconstruction on common pinned art"
+    },
+    "successor": {
+      "root": "artifacts/prismheart-visual-r3/input-source/r2",
+      "files": 32,
+      "demoSourceFiles": 13,
+      "dependencyFiles": 19,
+      "version": "11-ultra-controller-r2",
+      "engineSha256": "0c4ed03f9c66b38df28eaae45205e82de8b11bac002a2168ada01e526c91220f",
+      "builderSha256": "8dba79c338d5f3f886eb3acb41dacf639da589af708c0f99fb1b247ebb9e7008"
+    },
+    "sourcePinFile": "data/assets/prismheart-visual-r3-source-pins.json"
+  },
+  "missingInputs": [
+    {
+      "name": "TitleBg_1x.png",
+      "state": "ABSENT_IN_CURRENT_BUILDER_SEARCH_PATHS",
+      "requiredBy": [
+        "originalv10builder",
+        "r2builder"
+      ],
+      "expectedDimensions": [
+        2560,
+        224
+      ],
+      "frames": 8,
+      "frameDimensions": [
+        320,
+        224
+      ],
+      "semantic": "Menu-free backdrop; existing Title_1x.png has baked menu and is not a substitute",
+      "recoveryGenerated": false
+    }
+  ],
+  "titleRecipe": {
+    "root": "artifacts/prismheart-visual-r3/title-recipe",
+    "archive": "artifacts/prismheart-visual-r3/title-recipe-9175723ad.tar",
+    "bytes": 61440,
+    "sha256": "9443e6cdc3e7030843fc672a44bb1f71aa46de0b34ee72df2767a3ac60646370",
+    "files": 5,
+    "sourceCommit": "9175723ad200b05558a2ea12470763c3b9432152",
+    "pinFile": "data/assets/prismheart-visual-r3-title-recipe-pins.json",
+    "externalDependency": "NumPy plus standard library",
+    "importsExecuted": false,
+    "recoveryPreference": "Exact retained v10 file; otherwise later permitted narrow original title_backdrop generation to new owned overlay",
+    "hazards": [
+      "Original CLI/build writes both realms/multiple files",
+      "data_root writes title.json",
+      "Original PNG writer uses wb; reject existing destination",
+      "Do not mutate frozen inputs or use baked title as backdrop"
+    ]
+  },
+  "baselinePublishedArtifact": {
+    "name": "Prismheart Playable Demo, version10",
+    "localPlayableOutputLocated": false,
+    "localGameplayScreenshotsLocated": false,
+    "scopeOfSearch": "Bounded project/workspace/D2-build/bot-team paths, including ignored files",
+    "historicalArtifactRetrieved": false
+  },
+  "capture": {
+    "plan": "data/assets/prismheart-visual-r3-shot-plan.json",
+    "matchedSourcePairsPlanned": 4,
+    "newContentScenesPlanned": 2,
+    "coreImagesPlanned": 10,
+    "actualImages": 0,
+    "actualPairs": 0,
+    "renderer": "Future permitted web canvas; not Blender/Unreal",
+    "timingControlEstablished": false,
+    "fxAgeOrResultPublicHookAvailable": false
+  },
+  "execution": {
+    "granted": false,
+    "currentGrant": null,
+    "buildRun": false,
+    "syntaxChecksRun": false,
+    "testsRun": false,
+    "importsRun": false,
+    "browserRun": false,
+    "renderRun": false,
+    "blenderRun": false,
+    "nativeRun": false,
+    "published": false
+  },
+  "sourceReview": {
+    "inputInventoryIndependentlyReviewed": true,
+    "capturePlanIndependentlyReviewed": true,
+    "runtimeAccepted": false
+  },
+  "futureBuilds": [
+    {
+      "label": "v10 source reconstruction",
+      "script": "artifacts/prismheart-visual-r3/input-source/v10/tools/rpg_demo/build_demo.py",
+      "artRoot": "artifacts/prismheart-visual-r3/input-art",
+      "output": "artifacts/prismheart-visual-r3/build-v10-reconstruction",
+      "spritesOverride": "<NEW_PINNED_TITLE_ONLY_OVERLAY>",
+      "sourceRoot": "Own copied root inferred by originalbuilder",
+      "run": false
+    },
+    {
+      "label": "current successor",
+      "script": "artifacts/prismheart-visual-r3/input-source/r2/tools/rpg_demo/build_demo.py",
+      "artRoot": "artifacts/prismheart-visual-r3/input-art",
+      "output": "artifacts/prismheart-visual-r3/build-r2",
+      "spritesOverride": "<SAME_NEW_PINNED_TITLE_ONLY_OVERLAY>",
+      "sourceRoot": "artifacts/prismheart-visual-r3/input-source/r2",
+      "run": false
+    }
+  ],
+  "remaining": [
+    "Recover menu-free title backdrop with exact provenance",
+    "Receive applicable fresh execution scope and resource window",
+    "Select/confirm runtime dependencies without treating historical environment as current",
+    "Build each version only to new outputs in a later permitted stage",
+    "Establish observed FX timing before claiming matched animation pairs",
+    "Capture and inspect actual images; retain explicit reconstruction/new-content labels",
+    "No PNG evidence of FPS, devices, accessibility, save/reload, networking or native/NFT acceptance"
+  ],
+  "deliverables": [
+    {
+      "path": "docs/production/PRISMHEART-VISUAL-R3-PREFLIGHT.md",
+      "bytes": 8788,
+      "sha256": "2a1bd6066ca9146c07407161b978e71676ef7ba6ff727c2d1d90e133429e135e"
+    },
+    {
+      "path": "data/assets/prismheart-visual-r3-art-pins.json",
+      "bytes": 190974,
+      "sha256": "ac556fe3a6ec697dbbdd51db3e2143754c4d78d55344d6dfd3871dc5f5617d90"
+    },
+    {
+      "path": "data/assets/prismheart-visual-r3-source-pins.json",
+      "bytes": 20835,
+      "sha256": "c049b8432a5c1c0cdbd0f8e9a44fa35ee2013ec95d9d906032331770be47bb28"
+    },
+    {
+      "path": "data/assets/prismheart-visual-r3-title-recipe-pins.json",
+      "bytes": 793,
+      "sha256": "780dc4ec0b003fa55dffa7abe087889de51d7da72127cc437eb1469e49c4b410"
+    },
+    {
+      "path": "data/assets/prismheart-visual-r3-shot-plan.json",
+      "bytes": 6450,
+      "sha256": "316459a99f281f81834c7b43777b9c04d210e83c815b64e294f7a5b6024a991b"
+    },
+    {
+      "path": "artifacts/prismheart-visual-r3/title-recipe-9175723ad.tar",
+      "bytes": 61440,
+      "sha256": "9443e6cdc3e7030843fc672a44bb1f71aa46de0b34ee72df2767a3ac60646370"
+    }
+  ]
+}

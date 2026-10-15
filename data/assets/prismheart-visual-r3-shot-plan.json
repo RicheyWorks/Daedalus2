@@ -1,0 +1,213 @@
+{
+  "schema": "daedalus.prismheart.visual-shot-plan/v1",
+  "stage": "SPECIFIED_NOT_CAPTURED",
+  "owner": "buckwild-sol",
+  "renderer": "Future authorized web browser canvas; not Blender or Unreal",
+  "baselineLabel": "v10 source reconstruction on common pinned art; not the recovered published v10 artifact",
+  "successorVersion": "11-ultra-controller-r2",
+  "sourceRoots": {
+    "baseline": "artifacts/prismheart-visual-r3/input-source/v10",
+    "successor": "artifacts/prismheart-visual-r3/input-source/r2",
+    "art": "artifacts/prismheart-visual-r3/input-art"
+  },
+  "targetCapture": {
+    "canvas": [
+      320,
+      224
+    ],
+    "viewport": [
+      1280,
+      896
+    ],
+    "deviceScaleFactor": 1,
+    "integerScale": 4,
+    "actualBrowser": null,
+    "actualFonts": null,
+    "captured": false,
+    "settings": "Same browser, fonts, viewport, DPR, touch setting, saved fixture and art hashes for each pair; record actual values, do not infer them."
+  },
+  "staging": "Existing PRISM_DEMO hooks/menu inputs only if later explicitly permitted; label staged scenes. Existing bot.py remains unexecuted. No harness or capture framework authored.",
+  "sharedState": {
+    "leadName": "ABCDEFGHI",
+    "lineup": [
+      "lead hero",
+      "Fennick",
+      "Quill",
+      "Ysolde"
+    ],
+    "fixtureCaptured": false,
+    "randomSeed": null,
+    "gameTime": null
+  },
+  "timingLimit": "FX age/statusLanded are internal and not exposed by current state hooks. Exact phase targets below need later approved observed timing control; a fixed sleep or speed(0) alone is insufficient. Cursor and flash rendering have additional clocks.",
+  "shots": [
+    {
+      "id": "hud-readability",
+      "comparison": "MATCHED_SOURCE_RECONSTRUCTION",
+      "state": "Command phase, no spell/pop/fade; identical HP/MP, status insertion order, healthy/low-HP/KO rows; same four-member lineup.",
+      "hooks": [
+        "roster",
+        "hurt",
+        "ko",
+        "spend",
+        "inflict",
+        "ORDER menu"
+      ],
+      "region": [
+        150,
+        144,
+        170,
+        80
+      ],
+      "inspect": [
+        "Nine-character name visible",
+        "Four HP/MP rows readable",
+        "Dark status pills distinct on bright backdrops",
+        "No name/status/number collisions"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    },
+    {
+      "id": "drowse-landed",
+      "comparison": "MATCHED_SOURCE_RECONSTRUCTION",
+      "foes": [
+        "prism_best_gelfin",
+        "prism_best_gelfin",
+        "prism_best_gelfin",
+        "prism_best_gelfin"
+      ],
+      "state": "Quill casts Drowse on foe0; others DEFEND. Confirm actually landed sleep. Also inspect failed recast/immune controls before accepting symbol meaning.",
+      "targetFxAgeSeconds": 0.325,
+      "atlasFrame": 5,
+      "targetCenter": [
+        52,
+        54
+      ],
+      "pillRectangle": [
+        40,
+        75,
+        24,
+        9
+      ],
+      "inspect": [
+        "Sleep status agrees with displayed symbol",
+        "Pill survives overlapping foe drawing",
+        "MISS/IMMUNE never presented as a new success"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    },
+    {
+      "id": "lull-landed",
+      "comparison": "MATCHED_SOURCE_RECONSTRUCTION",
+      "foes": [
+        "prism_best_gelfin",
+        "prism_best_gelfin",
+        "prism_best_gelfin",
+        "prism_best_gelfin"
+      ],
+      "state": "Fresh identical fixture without existing slow; Quill casts Lull on foe0; others DEFEND. Confirm actual slow.",
+      "targetFxAgeSeconds": 0.325,
+      "atlasFrame": 5,
+      "targetCenter": [
+        52,
+        54
+      ],
+      "inspect": [
+        "Original atlas retained",
+        "Hourglass uses actual cast result",
+        "SLW pill readable"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    },
+    {
+      "id": "gust",
+      "comparison": "MATCHED_SOURCE_RECONSTRUCTION",
+      "state": "Fennick slot1, same Pyre Warden fixture and surviving target in both versions.",
+      "hooks": [
+        "warp('town',11,10)",
+        "battle('volcano',true)"
+      ],
+      "targetFxAgeSeconds": 0.455,
+      "atlasFrame": 7,
+      "casterAnchor": [
+        279,
+        55
+      ],
+      "targetCenter": [
+        86,
+        66
+      ],
+      "region": [
+        0,
+        0,
+        320,
+        144
+      ],
+      "inspect": [
+        "Wind ribbons read from caster to target",
+        "Original atlas/damage pop retained",
+        "Overlay stays above HUD"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    },
+    {
+      "id": "folly",
+      "comparison": "NEW_CONTENT_NO_BASELINE_EQUIVALENT",
+      "state": "Optional dungeon4 through AirshipPad; use actual built data floor-entry coordinates. Capture route/boss with no fade.",
+      "boss": "ClockworkColossus",
+      "bossCenter": [
+        86,
+        66
+      ],
+      "inspect": [
+        "Real route/boss identity",
+        "No fourth shard",
+        "Canonical castle/ruins art mapping"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    },
+    {
+      "id": "workshop",
+      "comparison": "NEW_CONTENT_NO_BASELINE_EQUIVALENT",
+      "state": "Post-Folly fixture; re-enter Inn, player11,7 faces up toward Brannoc11,6. Fully reveal a calibration reading and its choices; record completed-run count that rotates questions.",
+      "dialogueRectangle": [
+        4,
+        162,
+        312,
+        58
+      ],
+      "choiceRectangle": [
+        246,
+        120,
+        70,
+        40
+      ],
+      "inspect": [
+        "Reading and choices fit",
+        "Merchant field art labeled reused",
+        "Score/reward/persistence are gameplay observations, not inferred from one screenshot"
+      ],
+      "before": null,
+      "after": null,
+      "captured": false
+    }
+  ],
+  "additionalAcceptance": [
+    "Settings opened during queued battle action/fade/mid-step: record state before and after a permitted interval; do not call one still image proof of pause.",
+    "Focus/visibility, aliases, controller disconnect/teaching, reward limits and save/reload need actual interaction observation on a later permitted turn.",
+    "PNG captures do not establish FPS, network/native behavior, device feel, accessibility or NFT/token sale readiness."
+  ],
+  "actualImages": [],
+  "actualBeforeAfterPairs": 0,
+  "executionGranted": false
+}

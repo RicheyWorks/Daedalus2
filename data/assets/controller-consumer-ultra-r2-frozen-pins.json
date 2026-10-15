@@ -1,0 +1,107 @@
+[
+  {
+    "path": "daedalus-explore/src/main/java/com/daedalus/explore/PadMappings.java",
+    "bytes": 1640,
+    "sha256": "1a793f6f65dde10dd66ab136363c4e683f6a271e91f6287d6c153560c12da6f2"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/controllers/controller-bundle.json",
+    "bytes": 465736,
+    "sha256": "34149cfe06ebe02b466a24e5190f96cc18c2473599cd46eeb8ab2b5fbbdd5f9f"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+    "bytes": 26287,
+    "sha256": "48ec77f4c9c9ab1f373cd4734f2a038356c625da480d8a42bd40c4417eb3fb64"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/settings/daedalus-settings.js",
+    "bytes": 39921,
+    "sha256": "9d18b15ce935912103a4147ecfaed278ea5ed6109c93510f885397fa170fa3e1"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/settings/settings-schema.json",
+    "bytes": 20127,
+    "sha256": "4711b31a7bd261522cbcd27941190d2d73ca951d0e50c00436667395d2d63e3b"
+  },
+  {
+    "path": "data/controllers/controller-bundle.json",
+    "bytes": 465736,
+    "sha256": "34149cfe06ebe02b466a24e5190f96cc18c2473599cd46eeb8ab2b5fbbdd5f9f"
+  },
+  {
+    "path": "data/controllers/controller-contract.json",
+    "bytes": 8223,
+    "sha256": "1bac3a88fa71f1436894c740695f03adc9a58fc064e5fcee879a7581f6f3b57f"
+  },
+  {
+    "path": "data/controllers/curated.json",
+    "bytes": 39242,
+    "sha256": "9a483ced1ddf00cdc7bc6f7e7989420e9964cdb665b087dae1fa1cb41a8dc078"
+  },
+  {
+    "path": "data/controllers/gamecontrollerdb.txt",
+    "bytes": 609830,
+    "sha256": "e606134678e6b3fdbdec9081289a1f0ba3e25d53b59b2aa3cdfe69bf491ad18f"
+  },
+  {
+    "path": "data/controllers/LICENSE-SDL_GameControllerDB.txt",
+    "bytes": 884,
+    "sha256": "97f35b302b361680ec1e891e95d2d52097bb95abff361434916d99dc1305f127"
+  },
+  {
+    "path": "data/controllers/SOURCE.md",
+    "bytes": 646,
+    "sha256": "9b9509a5a863e8c055a76d67c339041393ccac33b1d55a03d46de6abc5989778"
+  },
+  {
+    "path": "docs/controller-contract.md",
+    "bytes": 2404,
+    "sha256": "3d3e967cb5c75efcc72cf54452a39eab04a26ac5f01f88244c3f0f1494df74da"
+  },
+  {
+    "path": "docs/controllers.md",
+    "bytes": 11456,
+    "sha256": "14e5a8c01230d7ffd688a07b7ce42f2e501fda6483a2eaac58a31d5cccf3093e"
+  },
+  {
+    "path": "docs/settings.md",
+    "bytes": 6951,
+    "sha256": "838c5423914cd0c7f0c85fa91a906915a67232b6125ddc1c863eb39fb7cd8d01"
+  },
+  {
+    "path": "tools/controllers/build_bundle.py",
+    "bytes": 7420,
+    "sha256": "5ac343cef99bb8e8e29633c437071bd30fe46cd6423c9b3523497571013faf57"
+  },
+  {
+    "path": "tools/controllers/contract_check.py",
+    "bytes": 8240,
+    "sha256": "04a872f0f014ad1f064124ed5f72885d76144e7e2e1530cb1ae693801d4d1a79"
+  },
+  {
+    "path": "tools/controllers/contract_source.py",
+    "bytes": 6292,
+    "sha256": "e48e8b892b1bf7ac05bacbec81540815f28ee4cf1fcccf7f0cc179474264d392"
+  },
+  {
+    "path": "tools/controllers/contract_web.js",
+    "bytes": 4324,
+    "sha256": "2429d99db93c18c8eab6d1f322a879493f664c767881001acf8f1a53decc2937"
+  },
+  {
+    "path": "tools/controllers/curated_source.py",
+    "bytes": 18839,
+    "sha256": "bc1d71eb26e1885be9aecac3b75fdc6100b26a946dd4ef6225a727dcf5f3686c"
+  },
+  {
+    "path": "tools/controllers/portal_controls_check.cpp",
+    "bytes": 2827,
+    "sha256": "ab35ad5702c3a0164f1acaf4b06a8b7c7b235dea25aecbf5d343213fa3146518"
+  },
+  {
+    "path": "tools/controllers/realm_pad_test.py",
+    "bytes": 4914,
+    "sha256": "2bd8c9841980f95d5a4c4e2873023f61a412fcbf8b176bdfeaeaeb165558eabd"
+  }
+]

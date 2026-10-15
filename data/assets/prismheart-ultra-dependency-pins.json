@@ -1,0 +1,97 @@
+[
+  {
+    "path": "daedalus-server/src/main/resources/static/controllers/controller-bundle.json",
+    "bytes": 465736,
+    "sha256": "34149cfe06ebe02b466a24e5190f96cc18c2473599cd46eeb8ab2b5fbbdd5f9f"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+    "bytes": 26287,
+    "sha256": "48ec77f4c9c9ab1f373cd4734f2a038356c625da480d8a42bd40c4417eb3fb64"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/settings/daedalus-settings.js",
+    "bytes": 39921,
+    "sha256": "9d18b15ce935912103a4147ecfaed278ea5ed6109c93510f885397fa170fa3e1"
+  },
+  {
+    "path": "daedalus-server/src/main/resources/static/settings/settings-schema.json",
+    "bytes": 20127,
+    "sha256": "4711b31a7bd261522cbcd27941190d2d73ca951d0e50c00436667395d2d63e3b"
+  },
+  {
+    "path": "data/rpg/audio.json",
+    "bytes": 27073,
+    "sha256": "6765ff2ab28fcdbc40317a61751744086a85ad3d74a7f6c654777968b1b65f9c"
+  },
+  {
+    "path": "data/rpg/dungeons.json",
+    "bytes": 969760,
+    "sha256": "8c1f1243274c2d4f76937ee421a23e9f6ea24273d3e066453dc1dca9b37f8474"
+  },
+  {
+    "path": "data/rpg/interiors.json",
+    "bytes": 40366,
+    "sha256": "c6655b7b7aa6d54351a803314cb837df3272e336c92977cc82dc722bcbcf5c54"
+  },
+  {
+    "path": "data/rpg/jukebox.json",
+    "bytes": 7412,
+    "sha256": "09f6f13a8b5c7d4fd8edcd5e77e799565bd96c72c389ea961b27ab39a3e19938"
+  },
+  {
+    "path": "data/rpg/menus.json",
+    "bytes": 9284,
+    "sha256": "1af262f9f7105317cdb3238322bfe1aab4623390dec2c53a40195b4176f6e470"
+  },
+  {
+    "path": "data/rpg/party.json",
+    "bytes": 8507,
+    "sha256": "7641a1b970ca554eb9590ed46a1584368cdf167e2ad077502622243d85c74b05"
+  },
+  {
+    "path": "data/rpg/portal-bestiary.json",
+    "bytes": 78223,
+    "sha256": "7b5f935b33c549fedf0a7bdf40a91b86a02ad46db9e739b3d04ffe298b639091"
+  },
+  {
+    "path": "data/rpg/portal-encounters.json",
+    "bytes": 261396,
+    "sha256": "27359d76db6154e02892863666cd57736ef903317c95caf6dda1f8172b182408"
+  },
+  {
+    "path": "data/rpg/prism-bestiary.json",
+    "bytes": 78688,
+    "sha256": "ce23c4767cd3b9334f1e87c9f2132283b417b426df01daf1bda374b8854b3601"
+  },
+  {
+    "path": "data/rpg/prism-bosses.json",
+    "bytes": 5180,
+    "sha256": "8641da018d9c62d2ae1bca54a6d73249d24296a38d9cf262aedbd2863d54f21b"
+  },
+  {
+    "path": "data/rpg/prism-encounters.json",
+    "bytes": 229266,
+    "sha256": "d94468ea5890f540dea5439cdea76e28e530201bc46d7525af5fee471c9c16b8"
+  },
+  {
+    "path": "data/rpg/spells.json",
+    "bytes": 32241,
+    "sha256": "ba8485ccf6311367ea920086bed49981737eada2c1f1b31724cbd33c92ae7510"
+  },
+  {
+    "path": "data/rpg/title.json",
+    "bytes": 2083,
+    "sha256": "58f72d3c1dd3024f55d6d7ba52a12715496f2732501ada56881b267207362b85"
+  },
+  {
+    "path": "data/rpg/town-tiles.json",
+    "bytes": 31569,
+    "sha256": "09d6e5729a05db4cc6b6d814e9154d5ead095ababee5f6402ecc175f0d44d33a"
+  },
+  {
+    "path": "data/rpg/worldmap-tiles.json",
+    "bytes": 41633,
+    "sha256": "90bb0c7ee1ad0df9769b2e1c691a9b3ab78ceae6bf2021862abe471739ffcbc4"
+  }
+]

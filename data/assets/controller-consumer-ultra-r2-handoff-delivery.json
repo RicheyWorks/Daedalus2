@@ -1,0 +1,9 @@
+{
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-controller-consumer-r2-handoff-20261015T2201Z-v1",
+  "deliveryId": 32422,
+  "sentAtUtc": "2026-10-15T22:01:20.2417240+00:00",
+  "payload": "data/assets/controller-consumer-ultra-r2-handoff.json",
+  "exactPayloadMatched": true,
+  "sourceOnly": true
+}

@@ -1,0 +1,8 @@
+{
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-title-input-gap-20261015T2211Z-v1",
+  "deliveryId": 32435,
+  "sentAtUtc": "2026-10-15T22:08:45.1342306+00:00",
+  "payload": "data/assets/prismheart-visual-r3-title-gap.json",
+  "exactPayloadMatched": true
+}

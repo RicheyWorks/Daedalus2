@@ -1,0 +1,11 @@
+{
+  "schema": "daedalus.prismheart.source-handoff-delivery/v1",
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-source-handoff-20261015T2150Z-v1",
+  "deliveryId": 32412,
+  "sentAtUtc": "2026-10-15T21:50:19.5439483+00:00",
+  "to": "pootscoot-coordination",
+  "payload": "data/assets/prismheart-ultra-handoff.json",
+  "exactPayloadMatched": true,
+  "sourceOnly": true
+}

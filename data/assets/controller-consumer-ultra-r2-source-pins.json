@@ -1,0 +1,106 @@
+[
+  {
+    "path": "tools/rpg_demo/behaviour_test.py",
+    "bytes": 7509,
+    "sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+    "previousR1Sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+    "originalV10Sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/bestiary_test.py",
+    "bytes": 5142,
+    "sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+    "previousR1Sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+    "originalV10Sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/bot.py",
+    "bytes": 13346,
+    "sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+    "previousR1Sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+    "originalV10Sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/build_demo.py",
+    "bytes": 14146,
+    "sha256": "8dba79c338d5f3f886eb3acb41dacf639da589af708c0f99fb1b247ebb9e7008",
+    "previousR1Sha256": "ef26f890978a12b6959208ef3d172d3b9ce0563dab8eeaeb2ad5447a0c686483",
+    "originalV10Sha256": "2187ad917e3262f6bd4124156ced3508d38fc9ee530ac59582fa7381113a2654",
+    "unchangedFromR1": false
+  },
+  {
+    "path": "tools/rpg_demo/index.html",
+    "bytes": 121012,
+    "sha256": "0c4ed03f9c66b38df28eaae45205e82de8b11bac002a2168ada01e526c91220f",
+    "previousR1Sha256": "94a3dd5d0564d68f7b02933d27572e4c09b104ea92604d59aa6245f0d7f00ba4",
+    "originalV10Sha256": "5114a5aedfe414a29894e642a2cc0bd48078160f4cb3ba1b9bffa82358aaec0b",
+    "unchangedFromR1": false
+  },
+  {
+    "path": "tools/rpg_demo/item_test.py",
+    "bytes": 7282,
+    "sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+    "previousR1Sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+    "originalV10Sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/menu_test.py",
+    "bytes": 6038,
+    "sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+    "previousR1Sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+    "originalV10Sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/pad_test.py",
+    "bytes": 13006,
+    "sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+    "previousR1Sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+    "originalV10Sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/play_test.py",
+    "bytes": 7314,
+    "sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+    "previousR1Sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+    "originalV10Sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/quest_test.py",
+    "bytes": 7431,
+    "sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+    "previousR1Sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+    "originalV10Sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/recruit_test.py",
+    "bytes": 8562,
+    "sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+    "previousR1Sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+    "originalV10Sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/status_test.py",
+    "bytes": 9035,
+    "sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+    "previousR1Sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+    "originalV10Sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+    "unchangedFromR1": true
+  },
+  {
+    "path": "tools/rpg_demo/title_test.py",
+    "bytes": 7985,
+    "sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+    "previousR1Sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+    "originalV10Sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+    "unchangedFromR1": true
+  }
+]

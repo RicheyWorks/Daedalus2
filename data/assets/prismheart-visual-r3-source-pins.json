@@ -1,0 +1,450 @@
+[
+  {
+    "version": "v10",
+    "path": "daedalus-server/src/main/resources/static/controllers/controller-bundle.json",
+    "bytes": 465736,
+    "sha256": "34149cfe06ebe02b466a24e5190f96cc18c2473599cd46eeb8ab2b5fbbdd5f9f",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\controllers\\controller-bundle.json"
+  },
+  {
+    "version": "v10",
+    "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+    "bytes": 26287,
+    "sha256": "48ec77f4c9c9ab1f373cd4734f2a038356c625da480d8a42bd40c4417eb3fb64",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\controllers\\daedalus-pad.js"
+  },
+  {
+    "version": "v10",
+    "path": "daedalus-server/src/main/resources/static/settings/daedalus-settings.js",
+    "bytes": 39921,
+    "sha256": "9d18b15ce935912103a4147ecfaed278ea5ed6109c93510f885397fa170fa3e1",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\settings\\daedalus-settings.js"
+  },
+  {
+    "version": "v10",
+    "path": "daedalus-server/src/main/resources/static/settings/settings-schema.json",
+    "bytes": 20127,
+    "sha256": "4711b31a7bd261522cbcd27941190d2d73ca951d0e50c00436667395d2d63e3b",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\settings\\settings-schema.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/audio.json",
+    "bytes": 27073,
+    "sha256": "6765ff2ab28fcdbc40317a61751744086a85ad3d74a7f6c654777968b1b65f9c",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\audio.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/dungeons.json",
+    "bytes": 969760,
+    "sha256": "8c1f1243274c2d4f76937ee421a23e9f6ea24273d3e066453dc1dca9b37f8474",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\dungeons.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/interiors.json",
+    "bytes": 40366,
+    "sha256": "c6655b7b7aa6d54351a803314cb837df3272e336c92977cc82dc722bcbcf5c54",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\interiors.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/jukebox.json",
+    "bytes": 7412,
+    "sha256": "09f6f13a8b5c7d4fd8edcd5e77e799565bd96c72c389ea961b27ab39a3e19938",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\jukebox.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/menus.json",
+    "bytes": 9284,
+    "sha256": "1af262f9f7105317cdb3238322bfe1aab4623390dec2c53a40195b4176f6e470",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\menus.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/party.json",
+    "bytes": 8507,
+    "sha256": "7641a1b970ca554eb9590ed46a1584368cdf167e2ad077502622243d85c74b05",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\party.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/portal-bestiary.json",
+    "bytes": 78223,
+    "sha256": "7b5f935b33c549fedf0a7bdf40a91b86a02ad46db9e739b3d04ffe298b639091",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\portal-bestiary.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/portal-encounters.json",
+    "bytes": 261396,
+    "sha256": "27359d76db6154e02892863666cd57736ef903317c95caf6dda1f8172b182408",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\portal-encounters.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/prism-bestiary.json",
+    "bytes": 78688,
+    "sha256": "ce23c4767cd3b9334f1e87c9f2132283b417b426df01daf1bda374b8854b3601",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-bestiary.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/prism-bosses.json",
+    "bytes": 5180,
+    "sha256": "8641da018d9c62d2ae1bca54a6d73249d24296a38d9cf262aedbd2863d54f21b",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-bosses.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/prism-encounters.json",
+    "bytes": 229266,
+    "sha256": "d94468ea5890f540dea5439cdea76e28e530201bc46d7525af5fee471c9c16b8",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-encounters.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/spells.json",
+    "bytes": 32241,
+    "sha256": "ba8485ccf6311367ea920086bed49981737eada2c1f1b31724cbd33c92ae7510",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\spells.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/title.json",
+    "bytes": 2083,
+    "sha256": "58f72d3c1dd3024f55d6d7ba52a12715496f2732501ada56881b267207362b85",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\title.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/town-tiles.json",
+    "bytes": 31569,
+    "sha256": "09d6e5729a05db4cc6b6d814e9154d5ead095ababee5f6402ecc175f0d44d33a",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\town-tiles.json"
+  },
+  {
+    "version": "v10",
+    "path": "data/rpg/worldmap-tiles.json",
+    "bytes": 41633,
+    "sha256": "90bb0c7ee1ad0df9769b2e1c691a9b3ab78ceae6bf2021862abe471739ffcbc4",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\worldmap-tiles.json"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/behaviour_test.py",
+    "bytes": 7509,
+    "sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\behaviour_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/bestiary_test.py",
+    "bytes": 5142,
+    "sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\bestiary_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/bot.py",
+    "bytes": 13346,
+    "sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\bot.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/build_demo.py",
+    "bytes": 13484,
+    "sha256": "2187ad917e3262f6bd4124156ced3508d38fc9ee530ac59582fa7381113a2654",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\build_demo.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/index.html",
+    "bytes": 107990,
+    "sha256": "5114a5aedfe414a29894e642a2cc0bd48078160f4cb3ba1b9bffa82358aaec0b",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\index.html"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/item_test.py",
+    "bytes": 7282,
+    "sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\item_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/menu_test.py",
+    "bytes": 6038,
+    "sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\menu_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/pad_test.py",
+    "bytes": 13006,
+    "sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\pad_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/play_test.py",
+    "bytes": 7314,
+    "sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\play_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/quest_test.py",
+    "bytes": 7431,
+    "sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\quest_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/recruit_test.py",
+    "bytes": 8562,
+    "sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\recruit_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/status_test.py",
+    "bytes": 9035,
+    "sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\status_test.py"
+  },
+  {
+    "version": "v10",
+    "path": "tools/rpg_demo/title_test.py",
+    "bytes": 7985,
+    "sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-source\\tools\\rpg_demo\\title_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "daedalus-server/src/main/resources/static/controllers/controller-bundle.json",
+    "bytes": 465736,
+    "sha256": "34149cfe06ebe02b466a24e5190f96cc18c2473599cd46eeb8ab2b5fbbdd5f9f",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\controllers\\controller-bundle.json"
+  },
+  {
+    "version": "r2",
+    "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+    "bytes": 26287,
+    "sha256": "48ec77f4c9c9ab1f373cd4734f2a038356c625da480d8a42bd40c4417eb3fb64",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\controllers\\daedalus-pad.js"
+  },
+  {
+    "version": "r2",
+    "path": "daedalus-server/src/main/resources/static/settings/daedalus-settings.js",
+    "bytes": 39921,
+    "sha256": "9d18b15ce935912103a4147ecfaed278ea5ed6109c93510f885397fa170fa3e1",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\settings\\daedalus-settings.js"
+  },
+  {
+    "version": "r2",
+    "path": "daedalus-server/src/main/resources/static/settings/settings-schema.json",
+    "bytes": 20127,
+    "sha256": "4711b31a7bd261522cbcd27941190d2d73ca951d0e50c00436667395d2d63e3b",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\daedalus-server\\src\\main\\resources\\static\\settings\\settings-schema.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/audio.json",
+    "bytes": 27073,
+    "sha256": "6765ff2ab28fcdbc40317a61751744086a85ad3d74a7f6c654777968b1b65f9c",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\audio.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/dungeons.json",
+    "bytes": 969760,
+    "sha256": "8c1f1243274c2d4f76937ee421a23e9f6ea24273d3e066453dc1dca9b37f8474",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\dungeons.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/interiors.json",
+    "bytes": 40366,
+    "sha256": "c6655b7b7aa6d54351a803314cb837df3272e336c92977cc82dc722bcbcf5c54",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\interiors.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/jukebox.json",
+    "bytes": 7412,
+    "sha256": "09f6f13a8b5c7d4fd8edcd5e77e799565bd96c72c389ea961b27ab39a3e19938",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\jukebox.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/menus.json",
+    "bytes": 9284,
+    "sha256": "1af262f9f7105317cdb3238322bfe1aab4623390dec2c53a40195b4176f6e470",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\menus.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/party.json",
+    "bytes": 8507,
+    "sha256": "7641a1b970ca554eb9590ed46a1584368cdf167e2ad077502622243d85c74b05",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\party.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/portal-bestiary.json",
+    "bytes": 78223,
+    "sha256": "7b5f935b33c549fedf0a7bdf40a91b86a02ad46db9e739b3d04ffe298b639091",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\portal-bestiary.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/portal-encounters.json",
+    "bytes": 261396,
+    "sha256": "27359d76db6154e02892863666cd57736ef903317c95caf6dda1f8172b182408",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\portal-encounters.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/prism-bestiary.json",
+    "bytes": 78688,
+    "sha256": "ce23c4767cd3b9334f1e87c9f2132283b417b426df01daf1bda374b8854b3601",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-bestiary.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/prism-bosses.json",
+    "bytes": 5180,
+    "sha256": "8641da018d9c62d2ae1bca54a6d73249d24296a38d9cf262aedbd2863d54f21b",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-bosses.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/prism-encounters.json",
+    "bytes": 229266,
+    "sha256": "d94468ea5890f540dea5439cdea76e28e530201bc46d7525af5fee471c9c16b8",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\prism-encounters.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/spells.json",
+    "bytes": 32241,
+    "sha256": "ba8485ccf6311367ea920086bed49981737eada2c1f1b31724cbd33c92ae7510",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\spells.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/title.json",
+    "bytes": 2083,
+    "sha256": "58f72d3c1dd3024f55d6d7ba52a12715496f2732501ada56881b267207362b85",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\title.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/town-tiles.json",
+    "bytes": 31569,
+    "sha256": "09d6e5729a05db4cc6b6d814e9154d5ead095ababee5f6402ecc175f0d44d33a",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\town-tiles.json"
+  },
+  {
+    "version": "r2",
+    "path": "data/rpg/worldmap-tiles.json",
+    "bytes": 41633,
+    "sha256": "90bb0c7ee1ad0df9769b2e1c691a9b3ab78ceae6bf2021862abe471739ffcbc4",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\source-snapshots\\prismheart-v10-dependencies\\data\\rpg\\worldmap-tiles.json"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/behaviour_test.py",
+    "bytes": 7509,
+    "sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\behaviour_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/bestiary_test.py",
+    "bytes": 5142,
+    "sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\bestiary_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/bot.py",
+    "bytes": 13346,
+    "sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\bot.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/build_demo.py",
+    "bytes": 14146,
+    "sha256": "8dba79c338d5f3f886eb3acb41dacf639da589af708c0f99fb1b247ebb9e7008",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\build_demo.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/index.html",
+    "bytes": 121012,
+    "sha256": "0c4ed03f9c66b38df28eaae45205e82de8b11bac002a2168ada01e526c91220f",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\index.html"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/item_test.py",
+    "bytes": 7282,
+    "sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\item_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/menu_test.py",
+    "bytes": 6038,
+    "sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\menu_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/pad_test.py",
+    "bytes": 13006,
+    "sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\pad_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/play_test.py",
+    "bytes": 7314,
+    "sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\play_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/quest_test.py",
+    "bytes": 7431,
+    "sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\quest_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/recruit_test.py",
+    "bytes": 8562,
+    "sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\recruit_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/status_test.py",
+    "bytes": 9035,
+    "sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\status_test.py"
+  },
+  {
+    "version": "r2",
+    "path": "tools/rpg_demo/title_test.py",
+    "bytes": 7985,
+    "sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+    "sourcePath": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\rpg_demo\\title_test.py"
+  }
+]

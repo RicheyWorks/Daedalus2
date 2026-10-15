@@ -1,0 +1,41 @@
+{
+  "schema": "daedalus.prismheart.title-recovery-plan/v1",
+  "status": "SOURCE_AUTHORED_UNEXECUTED",
+  "source": "tools/rpg_demo/recover_title.py",
+  "sourceSha256": "47cb5fa24a9186285b67cc46cccb622376d7ca01d9b706502ec806634446a8b2",
+  "sourceBytes": 4971,
+  "command": [
+    "python",
+    "tools/rpg_demo/recover_title.py"
+  ],
+  "argsAccepted": false,
+  "recipeRoot": "artifacts/prismheart-visual-r3/title-recipe",
+  "recipePinFile": "data/assets/prismheart-visual-r3-title-recipe-pins.json",
+  "recipePinFileSha256": "780dc4ec0b003fa55dffa7abe087889de51d7da72127cc437eb1469e49c4b410",
+  "sourceRevision": "9175723ad200b05558a2ea12470763c3b9432152",
+  "requiredRecipeFiles": 5,
+  "externalDependency": "NumPy",
+  "runtimeDependencyVerified": false,
+  "outputDirectory": "artifacts/prismheart-visual-r3/title-recovery-r1",
+  "outputImage": "TitleBg_1x.png",
+  "expectedHeader": {
+    "width": 2560,
+    "height": 224,
+    "bitDepth": 8,
+    "colorType": 6
+  },
+  "receipt": "recovery-receipt.json",
+  "existingOutputPolicy": "Refuse entire existing output directory; preserve partial failure and receipt; no retry/overwrite",
+  "generationCalls": "Eight original title_backdrop prism frames, concatenate axis1, one original PNG writer",
+  "canonicalWrites": false,
+  "otherRealmGeneration": false,
+  "sourceReviewed": true,
+  "syntaxChecked": false,
+  "executed": false,
+  "generationGranted": false,
+  "imageExists": false,
+  "buildRun": false,
+  "browserRun": false,
+  "nativeRun": false,
+  "checkpointRequest": 32441
+}

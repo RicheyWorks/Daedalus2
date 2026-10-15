@@ -1,0 +1,12 @@
+{
+  "schema": "daedalus.prismheart.source-start-delivery/v1",
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-ack-start-20261015T2137Z-v1",
+  "deliveryId": 32396,
+  "sentAtUtc": "2026-10-15T21:40:09.9839771Z",
+  "to": "pootscoot-coordination",
+  "payload": "data/assets/prismheart-ultra-start.json",
+  "sourceOnly": true,
+  "resourceAllocationGranted": false,
+  "exactPayloadMatched": true
+}

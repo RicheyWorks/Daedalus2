@@ -1,0 +1,224 @@
+{
+  "schema": "daedalus.controller-consumer.ultra-polish/v1",
+  "version": "11-ultra-controller-r2",
+  "owner": "buckwild-sol",
+  "status": "SOURCE_IMPLEMENTED_REVIEWED_UNEXECUTED",
+  "sourceCommit": "9175723ad200b05558a2ea12470763c3b9432152",
+  "previousVersion": "11-ultra-folly-r1",
+  "startUtc": "2026-10-15T21:54:33Z",
+  "firstSourceSavedUtc": "2026-10-15T21:57:50Z",
+  "recordedAtUtc": "2026-10-15T22:00:47.6639325+00:00",
+  "authorizationHubIds": [
+    32378,
+    32388
+  ],
+  "startDeliveryHubId": 32418,
+  "originalPublishedVersion": 10,
+  "publishedVersionChanged": false,
+  "gitCommitted": false,
+  "sourceFiles": [
+    {
+      "path": "tools/rpg_demo/behaviour_test.py",
+      "bytes": 7509,
+      "sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+      "previousR1Sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+      "originalV10Sha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/bestiary_test.py",
+      "bytes": 5142,
+      "sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+      "previousR1Sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+      "originalV10Sha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/bot.py",
+      "bytes": 13346,
+      "sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+      "previousR1Sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+      "originalV10Sha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/build_demo.py",
+      "bytes": 14146,
+      "sha256": "8dba79c338d5f3f886eb3acb41dacf639da589af708c0f99fb1b247ebb9e7008",
+      "previousR1Sha256": "ef26f890978a12b6959208ef3d172d3b9ce0563dab8eeaeb2ad5447a0c686483",
+      "originalV10Sha256": "2187ad917e3262f6bd4124156ced3508d38fc9ee530ac59582fa7381113a2654",
+      "unchangedFromR1": false
+    },
+    {
+      "path": "tools/rpg_demo/index.html",
+      "bytes": 121012,
+      "sha256": "0c4ed03f9c66b38df28eaae45205e82de8b11bac002a2168ada01e526c91220f",
+      "previousR1Sha256": "94a3dd5d0564d68f7b02933d27572e4c09b104ea92604d59aa6245f0d7f00ba4",
+      "originalV10Sha256": "5114a5aedfe414a29894e642a2cc0bd48078160f4cb3ba1b9bffa82358aaec0b",
+      "unchangedFromR1": false
+    },
+    {
+      "path": "tools/rpg_demo/item_test.py",
+      "bytes": 7282,
+      "sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+      "previousR1Sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+      "originalV10Sha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/menu_test.py",
+      "bytes": 6038,
+      "sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+      "previousR1Sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+      "originalV10Sha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/pad_test.py",
+      "bytes": 13006,
+      "sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+      "previousR1Sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+      "originalV10Sha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/play_test.py",
+      "bytes": 7314,
+      "sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+      "previousR1Sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+      "originalV10Sha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/quest_test.py",
+      "bytes": 7431,
+      "sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+      "previousR1Sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+      "originalV10Sha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/recruit_test.py",
+      "bytes": 8562,
+      "sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+      "previousR1Sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+      "originalV10Sha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/status_test.py",
+      "bytes": 9035,
+      "sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+      "previousR1Sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+      "originalV10Sha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+      "unchangedFromR1": true
+    },
+    {
+      "path": "tools/rpg_demo/title_test.py",
+      "bytes": 7985,
+      "sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+      "previousR1Sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+      "originalV10Sha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+      "unchangedFromR1": true
+    }
+  ],
+  "deliverables": [
+    {
+      "path": "artifacts/source-snapshots/controller-consumer-ultra-r2-source.tar",
+      "bytes": 270848,
+      "sha256": "8f3fab7be640e7470bf0cb5933d7abb165147d31b7097667195a5e41ddcbde45"
+    },
+    {
+      "path": "docs/production/CONTROLLER-CONSUMER-ULTRA-R2.md",
+      "bytes": 7027,
+      "sha256": "1a8a7097bd6c5abd1e07ee82e6361dfe2f76da05dae6688819b677aa1a38010e"
+    },
+    {
+      "path": "data/assets/controller-consumer-ultra-r2-source-pins.json",
+      "bytes": 4882,
+      "sha256": "6e671102160d495a112445e239fc65281761645aad32158f7980f1064ce48808"
+    },
+    {
+      "path": "data/assets/controller-consumer-ultra-r2-frozen-pins.json",
+      "bytes": 3633,
+      "sha256": "2900293b17f05ccc25b0be64c085371e65e8b7cf4e8baca83723569815bdb117"
+    },
+    {
+      "path": "artifacts/source-snapshots/controller-consumer-ultra-r2.patch",
+      "bytes": 12636,
+      "sha256": "11af63dd45fe0c57cb39818c4b90930134f2e4fdb7ac1529100f1bca5de7b9c9"
+    }
+  ],
+  "sourceArchive": "artifacts/source-snapshots/controller-consumer-ultra-r2-source.tar",
+  "frozenReference": {
+    "path": "artifacts/source-snapshots/controller-v1-9175723ad",
+    "archive": "artifacts/source-snapshots/controller-v1-9175723ad.tar",
+    "bytes": 1781760,
+    "sha256": "aef361abf3518b3d5b5141f057c3dee36dcf0b56a7c86cf8d517dcdce200ee6b",
+    "inventoryCount": 21,
+    "allFilesReviewed": false,
+    "contract": "v1",
+    "contractChanged": false,
+    "sharedPadChanged": false,
+    "sharedSettingsChanged": false,
+    "nativeChanged": false
+  },
+  "previousSourceArchive": {
+    "path": "artifacts/source-snapshots/prismheart-v11-ultra-folly-r1-source.tar",
+    "sha256": "eaf7bde2cd739e5bce5b86034addc992dd935a50bfdeb74979b39e9c8c9b0f1d"
+  },
+  "futureBuildSourceRoot": "artifacts/source-snapshots/prismheart-v10-dependencies",
+  "implemented": [
+    "Consumer simulation pauses for Settings, teaching, hidden document and inactive window without changing game mode",
+    "Pad polling, shared Settings navigation and existing audio handling remain active",
+    "Consumer held inputs, buffered edges, timestamps, repeats and touch highlights cleared at modal/focus/binding boundaries",
+    "Existing releaseAll plus clearEdges neutral-rearms pads at gameplay boundaries",
+    "Gameplay downs blocked while suspended; releases still accepted",
+    "Per-physical keyboard alias aggregation preserves existing SRC.kb and cross-source OR semantics",
+    "Active teaching canceled on disconnect, Settings closure or focus loss; ordinary disconnect preserves unrelated sources",
+    "App-local Settings Control Help documents seven-step-teaching keyboard/mouse/touch fallbacks"
+  ],
+  "preserved": [
+    "Frozen shared pad/settings/contracts/vectors/bundle/native/global Hero untouched",
+    "R1 optional Folly quest, Brannoc, calibration workshop and battle graphics",
+    "Original genre, routes, shard progression, save format and existing systems",
+    "One persistent pad instance and all existing action semantics",
+    "Ten test scripts and bot.py unchanged",
+    "Published v10 and D2-build originals unchanged"
+  ],
+  "reviews": {
+    "mode": "SOURCE_ONLY",
+    "independentConsumerIntegration": true,
+    "independentControllerLifecycle": true,
+    "remainingConcreteBlockersFound": false,
+    "executionAcceptance": false
+  },
+  "deferredFrozenLimitations": [
+    "releaseAll does not clear edges or suppress analog values; consumers must clear/gate",
+    "destroy retains global listeners and asynchronous completion; no replacement lifecycle introduced",
+    "Shared drop does not cancel captured binding index; consumer interruption recovery provided here",
+    "Seven-step custom teaching does not retain unmapped X/Y/LB/RB; fallback explained, no v2 remapping",
+    "Other realm consumers, native mapping and generator behavior not comprehensively audited"
+  ],
+  "stages": {
+    "sourceImplemented": true,
+    "sourceReviewed": true,
+    "hashInventoried": true,
+    "syntaxCheckRun": false,
+    "testsRun": false,
+    "buildRun": false,
+    "browserRun": false,
+    "played": false,
+    "blenderRun": false,
+    "rendered": false,
+    "unrealRun": false,
+    "published": false
+  },
+  "remaining": [
+    "No runtime pause/resume, physical-device, short-tap, binding-interruption, alias or save/reload acceptance",
+    "Historical v10 suite counts not transferred",
+    "R1 quest_test literal four-route assertion unchanged; future owner must account for optional fifth",
+    "Future build must use r1 RPG snapshot; full controller reference is not an RPG source root",
+    "No new art/native/resource allocation or expired-grant reuse"
+  ]
+}

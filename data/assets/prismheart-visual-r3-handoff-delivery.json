@@ -1,0 +1,9 @@
+{
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-visual-r3-preflight-handoff-20261015T2213Z-v1",
+  "deliveryId": 32442,
+  "sentAtUtc": "2026-10-15T22:13:27.1494448+00:00",
+  "payload": "data/assets/prismheart-visual-r3-handoff.json",
+  "exactPayloadMatched": true,
+  "executionGranted": false
+}

@@ -1,0 +1,9 @@
+{
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-prismheart-visual-prep-start-20261015T2204Z-v1",
+  "deliveryId": 32431,
+  "sentAtUtc": "2026-10-15T22:06:07.9603907+00:00",
+  "payload": "data/assets/prismheart-visual-r3-start.json",
+  "exactPayloadMatched": true,
+  "executionGranted": false
+}

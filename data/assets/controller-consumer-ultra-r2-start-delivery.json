@@ -1,0 +1,8 @@
+{
+  "stage": "DELIVERED_VERIFIED_IN_HUB_LOG",
+  "requestId": "ultra-controller-consumer-start-20261015T2154Z-v1",
+  "deliveryId": 32418,
+  "sentAtUtc": "2026-10-15T21:56:24.9186554+00:00",
+  "payload": "data/assets/controller-consumer-ultra-r2-start.json",
+  "exactPayloadMatched": true
+}

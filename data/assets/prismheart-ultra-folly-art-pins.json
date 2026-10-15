@@ -1,0 +1,77 @@
+[
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_BossGate_1x.png",
+    "bytes": 165,
+    "sha256": "1bab302ccb29054ccc5112e46cccba21ce83eda24442daff0221b54a028c3dae"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Chest_1x.png",
+    "bytes": 152,
+    "sha256": "420e2cfc642c7e21f6e5f5bfc19e1bc575336bb6ed1b79223e0212e7c98213b6"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_ChestOpen_1x.png",
+    "bytes": 137,
+    "sha256": "18ee1987bf2592a6978e5d1705cce128c03c1d4a97477b4530ea0f1828972ae9"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Door_1x.png",
+    "bytes": 154,
+    "sha256": "60a4d1eeaf6dd98c39c73d57582cc76d38ad5197669e1f8f676a39f4a7908e2f"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Floor_1x.png",
+    "bytes": 135,
+    "sha256": "c04a0ba1c9a40dac2b80abd348a92b067146d384ff72f669d891b25098d50f96"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_FloorAlt_1x.png",
+    "bytes": 172,
+    "sha256": "f1353c01c303b288bdbb44eec21c80014bb1c3375acbd9c35ebc3d7e3bc564d4"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Hazard_1x.png",
+    "bytes": 211,
+    "sha256": "053fce6ae97b8bba6cfb0d611a6f8777b528d6b6b7ec2dbbe78616af1e60837e"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Pillar_1x.png",
+    "bytes": 157,
+    "sha256": "9f68f0bb076e724f9095ff54e76d94559520a371f1157598b4743ca792b6a0ba"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Rubble_1x.png",
+    "bytes": 185,
+    "sha256": "de6a59d730e152bc57a17dca1d4c4913db7eda0ebf921a8d4c6d1826da2e13e1"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_StairsDown_1x.png",
+    "bytes": 145,
+    "sha256": "348d853b60cb3c37c5ffcf5ec7394f6a1179cc34620789b18bba67214ed76fe2"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_StairsUp_1x.png",
+    "bytes": 149,
+    "sha256": "cb8aa86b61f655fcfd8f2654fcabd67c9edbaa9d4239bd6b391e6ea8fc3cd013"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallFace_1x.png",
+    "bytes": 114,
+    "sha256": "6d8c9ebfee3323b906205dd4858776d58a2b998738f69289393371f5f28c2a5b"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallTop_1x.png",
+    "bytes": 144,
+    "sha256": "80b6c07b3db1430642bdedd1bbd97afc3fca7c0693a6354684305514dd0e6aa5"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallTorch_1x.png",
+    "bytes": 174,
+    "sha256": "ebb84ce9c547fb34aae07b46c294222d573deec3fde004d23e6c243b8571d866"
+  },
+  {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_ClockworkColossus_1x.png",
+    "bytes": 2647,
+    "sha256": "343a4c2f2bd9008863dc5482fb95bbf482169cce7cc3f7810f51ad0761af9d7d"
+  }
+]

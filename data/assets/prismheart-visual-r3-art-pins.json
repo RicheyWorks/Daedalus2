@@ -1,0 +1,3572 @@
+[
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-battle.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-battle.mp3",
+    "bytes": 1203326,
+    "sha256": "c9d8fe90d55e939e66bfa3f2aef05a26c198cc8da5711ef5b33d2c538f01e57a"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-boss.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-boss.mp3",
+    "bytes": 1118654,
+    "sha256": "f7f09f69233914c6f6b4090c79868fe44f110ce78ccf1d73e3ed45d20f785309"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-castle.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-castle.mp3",
+    "bytes": 2215934,
+    "sha256": "a7e1b48436bebb5758c9dac7e31dab7967158533cc4ba32f93a89b318ee12bfa"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-cave.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-cave.mp3",
+    "bytes": 2325662,
+    "sha256": "7e19dc41bafcd216336e37c122d05d65359b7876181fd357fbfb5f2b0d13c949"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-defeat.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-defeat.mp3",
+    "bytes": 544958,
+    "sha256": "0067d6f6463252cf2e0431060ee3957856958ec3aeff843b43b13a97b737ca37"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-field.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-field.mp3",
+    "bytes": 1508318,
+    "sha256": "98e7bbaf35ca1f76c2dc9a66089ba1c10af922bf380dd40abf2af14a3446e54f"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-inn.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-inn.mp3",
+    "bytes": 261566,
+    "sha256": "a8632ce57e1c3b2bc14393397c1304b450da925f36eecf27241077363b70127a"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-title.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-title.mp3",
+    "bytes": 2024990,
+    "sha256": "cfece4523625558ba3989db666f2517cdd8a73da234e645c118ede2839fc3a16"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-town.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-town.mp3",
+    "bytes": 1864286,
+    "sha256": "668c547145a0c28d9c5c00061707b2ae3c72b3e12872443f0d3730e585af7e8b"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/prismheart-victory.mp3",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\prismheart-victory.mp3",
+    "bytes": 698750,
+    "sha256": "de7ee63add80b03438ba1ad4d9aa17dfea8154e45397b59a2b0c0689663fc9b5"
+  },
+  {
+    "path": "claude-audio/jukebox-seeds/realm-cues.json",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\jukebox-seeds\\realm-cues.json",
+    "bytes": 3549,
+    "sha256": "536b9d8b0e4ffdd9016ff651a56b836083603686ae4c9d78d868990ea2dc74bd"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Ambush.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Ambush.wav",
+    "bytes": 79404,
+    "sha256": "3b196a793e00a907ec1d0334b9bb508b95a884b5cada4227b56011334cc4d3be"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Bless.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Bless.wav",
+    "bytes": 73004,
+    "sha256": "dfaed6adcf3bf1898e2284d8e993cce97428565bdffc26b24eedcae887aa5633"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_0.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_0.wav",
+    "bytes": 39084,
+    "sha256": "23150f855f4cbf909c18fb89d6c1744d392107127e0e7f618a7b43447775599c"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_1.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_1.wav",
+    "bytes": 39084,
+    "sha256": "b111711fac9e748efb789bece5023f33fc6604eef8cb97ccb7077241a2be94e2"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_10.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_10.wav",
+    "bytes": 39084,
+    "sha256": "ee08a824e1a4dd8e44c91afc5fd495537652400f51820c00512422e92855c5f5"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_11.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_11.wav",
+    "bytes": 39084,
+    "sha256": "5abba120a40c5ea2655104fa94508a273a1aad7eb4b801ae5251a27ad7e92019"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_2.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_2.wav",
+    "bytes": 39084,
+    "sha256": "684f262f13df4a6ba6f8dd4835ec9294356c360d2a4e934913c43994c9e19aa1"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_3.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_3.wav",
+    "bytes": 39084,
+    "sha256": "36a28b36df640d8ef92dffee467d5e181a30cd5a881eca99cc67798c764e52b3"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_4.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_4.wav",
+    "bytes": 39084,
+    "sha256": "9ff07a0935778e8c8ae557794ce8c8f6f5c9cab8f0f2791b152b0543eaf1ae17"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_5.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_5.wav",
+    "bytes": 39084,
+    "sha256": "828e0475959cf0c7a935fc502505d53630fb7faf56357dae6d5302ba87884817"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_6.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_6.wav",
+    "bytes": 39084,
+    "sha256": "1d69b175f183b528c5271156efbe6604a62fe7626144795f2c90be93987b09ba"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_7.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_7.wav",
+    "bytes": 39084,
+    "sha256": "f94a52f64931bd1d4711f2b7ac2eb1e089f2eec8905e45fdf670b97460db53c0"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_8.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_8.wav",
+    "bytes": 39084,
+    "sha256": "520d1629236b326f1f096f23ca29d223d5480186407d65fd3f20803b629d6c8c"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Blip_9.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Blip_9.wav",
+    "bytes": 39084,
+    "sha256": "b6730cb18da2668801cc1863814fcda0dee962ee6aa07f111b7cdc3e2b262f7e"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Bump.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Bump.wav",
+    "bytes": 46124,
+    "sha256": "6c131f735f3a8e1987261621d600c95b52aee85d43948b8b5d42a138b77a9d94"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Call.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Call.wav",
+    "bytes": 93484,
+    "sha256": "42e4d3fd36be24d2e1720b8a1487178f3ecd3cd8db65024d91f1f54cd458d6dd"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Cancel.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Cancel.wav",
+    "bytes": 49964,
+    "sha256": "8344ae6e4f556630f8905f81b2a2e12ca21e5e77d27b94ee4745602c29811b0a"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Cast.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Cast.wav",
+    "bytes": 98604,
+    "sha256": "3eea461754e064e964bb0a7e4546fdb2966af137e1f759252201bac0ed813f28"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Chest.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Chest.wav",
+    "bytes": 79404,
+    "sha256": "e59ced9b01ed1dacd25e9eabdbd9096200dd8a9101f646fcaa6ad427f08708fb"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Coin.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Coin.wav",
+    "bytes": 52524,
+    "sha256": "34ecf0a32b0d0e7a82bbb915d3bf083d793534c6858cdd1d3141998b9a2f665d"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Confirm.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Confirm.wav",
+    "bytes": 49964,
+    "sha256": "e8873da947ec0408c02a689eb12020037d32b04ab8e1a51508abee2677c4d09e"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Critical.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Critical.wav",
+    "bytes": 79404,
+    "sha256": "0844625ae05cd3f288e5bbf9c91ae8869a4ec46d16450bc480f548b6b69356d9"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Cursor.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Cursor.wav",
+    "bytes": 39724,
+    "sha256": "ff7411b01eb42431563bd565b1d131a6d81378ddd0397b967834a9791076b087"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Deed.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Deed.wav",
+    "bytes": 98604,
+    "sha256": "0bb09228cec683e3f2b22ecf7d4d9f2a4e6be2cf1437b77e90afb8f2f77dca07"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Door.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Door.wav",
+    "bytes": 65324,
+    "sha256": "aaec6969d1d7efd8d08f414c8b9d97581ca21d6c0cd86cb9d75389622e5eee62"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Down.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Down.wav",
+    "bytes": 116524,
+    "sha256": "fdd94f556d0573a33670028844fadd2d5b4edefe3d01a2108b25368c44a0df44"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Egg.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Egg.wav",
+    "bytes": 52524,
+    "sha256": "81d769b879b74be5783d31663f114bc4424b1cde32c57c0a8f3acdfe106c8db0"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Encounter.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Encounter.wav",
+    "bytes": 92204,
+    "sha256": "938dcc6777e8f946c6852cb4832d11ed2cc02fc0cb540473e79dc564643e47e1"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Enter.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Enter.wav",
+    "bytes": 55084,
+    "sha256": "2469eec0d0907b1135bc89f9e7a2ac3fe2ff9ca79c54503e77ff712d268960be"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Equip.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Equip.wav",
+    "bytes": 51244,
+    "sha256": "e15a78014758b872645074d6419eab19db9f77e78d9b0d4f18ba0af5347b0208"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Escape.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Escape.wav",
+    "bytes": 92204,
+    "sha256": "4db68889efc0086c9fda44f54266841b52595a1a696f3b99431a72f6c62ce2a0"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Fall.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Fall.wav",
+    "bytes": 137004,
+    "sha256": "360ab5b43c988dfbc5a8997d719ce4c0bebd71e1110c567516cc547d868dc0fb"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Hatch.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Hatch.wav",
+    "bytes": 78124,
+    "sha256": "682c0915424fd4b9f9d5a5f2a523cb1b0161f15ac98d599dee5c06f2aabefb41"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Heal.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Heal.wav",
+    "bytes": 79404,
+    "sha256": "b3eb73d70ef3eefc6a262a7516c7c95e601048bf6196e9626c150b62d089d4a5"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Hit.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Hit.wav",
+    "bytes": 57644,
+    "sha256": "19ceb38e31543eacc1061f3209a5871dbff6acd922e177716ce092d722b2849f"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Hurt.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Hurt.wav",
+    "bytes": 49964,
+    "sha256": "f94eae3dedaef9df0917d4558b8c35a80a9c4b3cd9e7fb733ff86a9029d528b5"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Item.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Item.wav",
+    "bytes": 52524,
+    "sha256": "63ede6a08ff1736b7d74ccccdeaf2c237f6e1bc0f14cdf7c3c543df503d62356"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Land.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Land.wav",
+    "bytes": 67884,
+    "sha256": "8947cdb0dde5f97b94d98d8f4343471fe4ae8433e65acb36c8f5354d1000f1cd"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_LevelUp.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_LevelUp.wav",
+    "bytes": 116524,
+    "sha256": "7900ad876153d65e4cc80d8bac2401a82637f96e732181d8d4f2866c90fd6c9c"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Locked.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Locked.wav",
+    "bytes": 58924,
+    "sha256": "f0d7b3e3c793a552dd6726b28cac606d52df2a5563fcb09f52a3d04f27f7a147"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Miss.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Miss.wav",
+    "bytes": 60204,
+    "sha256": "0577c7a580d4963eebc5f2829f1cd67ec3d44b6f111b7b2d00f06ff1db1a4b29"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Open.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Open.wav",
+    "bytes": 47404,
+    "sha256": "8826f446042d5211df7221faf30924c6cde70d44b8dd00e194dc786578a0da5b"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Page.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Page.wav",
+    "bytes": 38444,
+    "sha256": "fa74f20f829d1796c50f22eb97b3bd7725d9330c424090eac4b431bd27c2fac8"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Poison.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Poison.wav",
+    "bytes": 85804,
+    "sha256": "c362678f2fd8f2ee8171443aa49e658c9daf1f8486fcda54cff9b7cced2dbbc8"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Portal.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Portal.wav",
+    "bytes": 124204,
+    "sha256": "fb2afe00e45d50df9b6138a74de92857511d1bca76e5d2c88a3feee87a272da2"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Rest.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Rest.wav",
+    "bytes": 96044,
+    "sha256": "d677fb2e4ce2cf4c733c7caac2b90b668ca84a5a498ceb7885854a7ed4224421"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Shiny.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Shiny.wav",
+    "bytes": 63404,
+    "sha256": "634e36ef6fa50e048402a3c714cb892102cd4e3c117de01d07f81bda87362630"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Spores.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Spores.wav",
+    "bytes": 73004,
+    "sha256": "a3be48d63579f1d3f6292e622221eaa131a92a550c01d83296473a8a3298b34a"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Stairs.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Stairs.wav",
+    "bytes": 79404,
+    "sha256": "510e5eb74d22fab31080375aed536a03dd04e3e48fa24023befaf42a59448622"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Swing.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Swing.wav",
+    "bytes": 47404,
+    "sha256": "533180f52d88f0caba55e7d7dac49f8451272da1bdc78ead295f07e6c8b7473e"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Torch.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Torch.wav",
+    "bytes": 79404,
+    "sha256": "3e1e4443c25884bb99cec0a71a5f5a3b29211f81d304caacc6401bae13cfb59f"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Win.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Win.wav",
+    "bytes": 80684,
+    "sha256": "f1edd807a2b4990d9bf10adbd31dce0503a146b516e817e5659c73f420a77218"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Wings.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Wings.wav",
+    "bytes": 97324,
+    "sha256": "1d7348659ea4079f9bc10748d7748c094c492ef19d96aaf362bed2568c43c2e8"
+  },
+  {
+    "path": "claude-audio/prism/Sfx_Zap.wav",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-audio\\prism\\Sfx_Zap.wav",
+    "bytes": 55084,
+    "sha256": "dde2defecd034a4dccd356bdb81ab867f6cf8cd797452447857d367cba4edd30"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_airship_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_airship_1x.png",
+    "bytes": 6559,
+    "sha256": "6905d57a8db9dcb7d4b842a09258b30d8f9c72733923e9d0f367f6afa51a81e4"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_castle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_castle_1x.png",
+    "bytes": 9267,
+    "sha256": "ed460e31b7709b4292768cb594d4301a20d140f6ef84d963ecf00f3e1d0bec2b"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_cave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_cave_1x.png",
+    "bytes": 9707,
+    "sha256": "f8c1eaae296f38661e54d53d522aacb0a9c5a1ff35d180f81efa4c0f99b6f3fa"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_coast_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_coast_1x.png",
+    "bytes": 10037,
+    "sha256": "e41866ae73778b837784f11162aa16814417722b144ee8464c82002a223606cb"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_crypt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_crypt_1x.png",
+    "bytes": 5377,
+    "sha256": "5b894939c54f673e23e91d27fc4d59d36353a513a84a37231b29f48f1a30a72f"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_crystal_cave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_crystal_cave_1x.png",
+    "bytes": 15268,
+    "sha256": "5247b691c892a86932b331d23739fe7c73dd208827e0606dc04e2fe5bbeaa9ca"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_desert_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_desert_1x.png",
+    "bytes": 16947,
+    "sha256": "7351af299646852c72f0c9e439a4285441fd0a0cf6c542581085cd27c876d158"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_forest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_forest_1x.png",
+    "bytes": 7568,
+    "sha256": "b2a50adc66f8581df9ec81361d5f1f6b2f77aa962f01db3a36708e5a16972ab9"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_mountain_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_mountain_1x.png",
+    "bytes": 14935,
+    "sha256": "7312a5cd9b2e29082d080cafaa0d65585bd0e8f34f42a8798bc395fc98190ec8"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_plains_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_plains_1x.png",
+    "bytes": 7235,
+    "sha256": "430949e27af904c2987877c7eeae80c6539d4441a497e413b23ec4aab4a6c506"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_plains_far_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_plains_far_1x.png",
+    "bytes": 5718,
+    "sha256": "548b97b2409146d1fc3d03fd72ffeb18e356dcd89e94e56c4d8a1494032b4db9"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_ruins_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_ruins_1x.png",
+    "bytes": 7459,
+    "sha256": "77d173d63a8f6d0fb4150cf1f5890e33262a477e84fd1b60d2ab7c265880d9f9"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_sea_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_sea_1x.png",
+    "bytes": 4180,
+    "sha256": "93f6b1248fa2271a5ad1e229b9b6c596ec4e9a3d51abe399ad64c30558ff02b7"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_sea_cave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_sea_cave_1x.png",
+    "bytes": 12638,
+    "sha256": "f483f4123f361cf9d38c2569b38cd23443a721f5517bef5a41207054ff9af275"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_sewer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_sewer_1x.png",
+    "bytes": 5366,
+    "sha256": "fcba28c8aa150206add60503b1aa6598f1fac0b1219a71e16204ab51826b9540"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_snow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_snow_1x.png",
+    "bytes": 6300,
+    "sha256": "b98adb3f508801e21a037b86412abb1a8110016076c5ddb8631c87e530901a3f"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_swamp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_swamp_1x.png",
+    "bytes": 10770,
+    "sha256": "ecc21f517cc9de7c76cbd4cb96f707bc53438ee2dfbded6e6b234d4601de415b"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_tower_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_tower_1x.png",
+    "bytes": 9068,
+    "sha256": "38558913a6dc00cd861b58aea05b5e6ab7b04564124761cfa6483963aa04ae43"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_town_ruins_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_town_ruins_1x.png",
+    "bytes": 7457,
+    "sha256": "80478e4dca18bb3c7092fd9e3e8fe55e20895f4ef1dfd8682d64336f469de917"
+  },
+  {
+    "path": "claude-battle-kit/prism/Backdrop_Prism_volcano_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Backdrop_Prism_volcano_1x.png",
+    "bytes": 6690,
+    "sha256": "55d5a16188138e839a71c4acbbc6e91724c6a1de9faadba88c69a605aeb06480"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_BossGate_1x.png",
+    "bytes": 165,
+    "sha256": "1bab302ccb29054ccc5112e46cccba21ce83eda24442daff0221b54a028c3dae"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Chest_1x.png",
+    "bytes": 152,
+    "sha256": "420e2cfc642c7e21f6e5f5bfc19e1bc575336bb6ed1b79223e0212e7c98213b6"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_ChestOpen_1x.png",
+    "bytes": 137,
+    "sha256": "18ee1987bf2592a6978e5d1705cce128c03c1d4a97477b4530ea0f1828972ae9"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Door_1x.png",
+    "bytes": 154,
+    "sha256": "60a4d1eeaf6dd98c39c73d57582cc76d38ad5197669e1f8f676a39f4a7908e2f"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Floor_1x.png",
+    "bytes": 135,
+    "sha256": "c04a0ba1c9a40dac2b80abd348a92b067146d384ff72f669d891b25098d50f96"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_FloorAlt_1x.png",
+    "bytes": 172,
+    "sha256": "f1353c01c303b288bdbb44eec21c80014bb1c3375acbd9c35ebc3d7e3bc564d4"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Hazard_1x.png",
+    "bytes": 211,
+    "sha256": "053fce6ae97b8bba6cfb0d611a6f8777b528d6b6b7ec2dbbe78616af1e60837e"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Pillar_1x.png",
+    "bytes": 157,
+    "sha256": "9f68f0bb076e724f9095ff54e76d94559520a371f1157598b4743ca792b6a0ba"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_Rubble_1x.png",
+    "bytes": 185,
+    "sha256": "de6a59d730e152bc57a17dca1d4c4913db7eda0ebf921a8d4c6d1826da2e13e1"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_StairsDown_1x.png",
+    "bytes": 145,
+    "sha256": "348d853b60cb3c37c5ffcf5ec7394f6a1179cc34620789b18bba67214ed76fe2"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_StairsUp_1x.png",
+    "bytes": 149,
+    "sha256": "cb8aa86b61f655fcfd8f2654fcabd67c9edbaa9d4239bd6b391e6ea8fc3cd013"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallFace_1x.png",
+    "bytes": 114,
+    "sha256": "6d8c9ebfee3323b906205dd4858776d58a2b998738f69289393371f5f28c2a5b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallTop_1x.png",
+    "bytes": 144,
+    "sha256": "80b6c07b3db1430642bdedd1bbd97afc3fca7c0693a6354684305514dd0e6aa5"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Castle_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Castle_WallTorch_1x.png",
+    "bytes": 174,
+    "sha256": "ebb84ce9c547fb34aae07b46c294222d573deec3fde004d23e6c243b8571d866"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_BossGate_1x.png",
+    "bytes": 183,
+    "sha256": "1500791c4d76c015f474cf349d0e070705a517322119f60fc8f61e4db6ed1f93"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Chest_1x.png",
+    "bytes": 156,
+    "sha256": "3ad44893a2fce43f2b9a9aec30f95abc7130d54ec9db355ff6b8b821e38e2be6"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_ChestOpen_1x.png",
+    "bytes": 143,
+    "sha256": "5f1c2ac329571d09df0acc9dfe912e0de67dbbc09fb0068de7bc06ba81200e94"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Door_1x.png",
+    "bytes": 173,
+    "sha256": "c432a71503051c60e34ef630d2348e7ed79fba2c6208d001963c58abc8e5101b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Floor_1x.png",
+    "bytes": 139,
+    "sha256": "fffbd253364cbb4c011fc98421d8c4d7be844a62cd1e32906d4d57c23476408c"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_FloorAlt_1x.png",
+    "bytes": 171,
+    "sha256": "766a60df580e173898e261c41d3050909dd7aa8c04f22181c72c2a2c561e1e63"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Hazard_1x.png",
+    "bytes": 171,
+    "sha256": "7b7dd7a591ff27443608003d4f8c0a475332a1ae80d1e2c427f076ec7e15e55c"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Pillar_1x.png",
+    "bytes": 148,
+    "sha256": "51427a6f6a4367abc2ac6f978ec1fa38cc477393aa66e090d126035bdfe50f1d"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_Rubble_1x.png",
+    "bytes": 189,
+    "sha256": "5b77e267b8a3b91d268da43fa1fa7e71ce1ce1ebe934d973bbd58db20142938f"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_StairsDown_1x.png",
+    "bytes": 151,
+    "sha256": "94d92c128f7e87f39ca5374083dfa00b7fc59fa9df80e3c3427999f803cfb791"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_StairsUp_1x.png",
+    "bytes": 152,
+    "sha256": "7f8bc1c8676d3fb270a6a6aa7e9121aa5c8594736a62fcce0c84e243f7da91ec"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_WallFace_1x.png",
+    "bytes": 165,
+    "sha256": "5ccaeb6811b4b7f8040086857b642fb39784d723dc6a898ec1cd243d0388caba"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_WallTop_1x.png",
+    "bytes": 144,
+    "sha256": "f3826c18504c846857f4af38cd80fbf0bd1cd18f33d36a7a960d492762b5546b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Cave_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Cave_WallTorch_1x.png",
+    "bytes": 242,
+    "sha256": "7901f601a15a9921379e1cf74b539623f0d55ad09debdd23f8ace35b3155c157"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_BossGate_1x.png",
+    "bytes": 163,
+    "sha256": "315fa8718ca73cc6b34816ceca3b20be2d9a3d9e3ac2065cab02cfc2479089d3"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Chest_1x.png",
+    "bytes": 175,
+    "sha256": "56e57b11a4c478e001222015e1a37cc4acb9fb1fa70933239645e14f58e5951f"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_ChestOpen_1x.png",
+    "bytes": 147,
+    "sha256": "ba3b243bcfc633d5c50741066c0c78d8b5e471b1dfc165d4a0aea6529b6792d7"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Door_1x.png",
+    "bytes": 153,
+    "sha256": "66f2ef8b4fb6a54de33fa1d225b34d42dc3192cf6b33cfb39c8f0138458c37be"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Floor_1x.png",
+    "bytes": 129,
+    "sha256": "955484c76bc0608dba37cb3a746c0f213608f72697b2f4d86c9c1d414fc105fd"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_FloorAlt_1x.png",
+    "bytes": 155,
+    "sha256": "9620f1885cd63195d48d4b40044b19668cdfa47adeeb675f49c9029c64367726"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Hazard_1x.png",
+    "bytes": 159,
+    "sha256": "f3c9466193a5dac23f48576f7c60047e7b0e44b2a64129a13ba634a7ac8e9540"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Pillar_1x.png",
+    "bytes": 156,
+    "sha256": "3db3fd5049bb05f85fa241d033b040fc8828d50c1830ed18e3a1f9edc611d274"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_Rubble_1x.png",
+    "bytes": 191,
+    "sha256": "2a48e134eb316efb8f1ae1c83a513323174a1b638046ad1242767473c5a63108"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_StairsDown_1x.png",
+    "bytes": 156,
+    "sha256": "8aff58417dc44963592cf0647453f5443f2420433b95addb19ba380ac9785fd1"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_StairsUp_1x.png",
+    "bytes": 155,
+    "sha256": "8a2eb27ba80db3ef04d94ec23afac3ffc3ad892af21f6dc0e3261700f2153a33"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_WallFace_1x.png",
+    "bytes": 114,
+    "sha256": "b76f45b2a2e8e454e360dd251df611fb1b6faec2a0e90f529564924fd0af2234"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_WallTop_1x.png",
+    "bytes": 141,
+    "sha256": "65248f6ba0acb4a7433e4915502b9a5260a4b0e8bfe14b9f9951dfef1465e316"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crypt_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crypt_WallTorch_1x.png",
+    "bytes": 173,
+    "sha256": "9cec73dec31c49a8ec7b1fb9aff350e3aa838e9210977b640ff774dd0dd8d4f3"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_BossGate_1x.png",
+    "bytes": 185,
+    "sha256": "b6df0ec115cfa883735abec0843567dd456b632337cfdb1fd61703b22fc68eaf"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Chest_1x.png",
+    "bytes": 147,
+    "sha256": "c343393048566881c4194d543d2c73a7c14fa9f09d3e9d62fa1b8ce866244d46"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_ChestOpen_1x.png",
+    "bytes": 136,
+    "sha256": "d119db92beb88dd293b0d7af5d571da7f57c53b1095282b9975edd37da52bbf3"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Door_1x.png",
+    "bytes": 171,
+    "sha256": "71b29d6246a74f7c09b220d89be82f1e80c0ec7da736b4542cd5d8cf2367ca58"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Floor_1x.png",
+    "bytes": 129,
+    "sha256": "e3204ec44ea9639346d8be09288a3e315fb80d4bde2a115cf10dd5b6e8c38d7e"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_FloorAlt_1x.png",
+    "bytes": 166,
+    "sha256": "0bbecbaa19d8b537425861027b6c81b2b1d3cf07b161716a35ae12cc12102656"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Hazard_1x.png",
+    "bytes": 216,
+    "sha256": "7c0146ab9414592d5a63ead843a2db68872b5cfdaeaac4233daf843abe4f6392"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Pillar_1x.png",
+    "bytes": 128,
+    "sha256": "7b6194dbfdecdb4755b162868a173468c70b1f1b9fcb3ad5111c7d05c3d7d4cc"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_Rubble_1x.png",
+    "bytes": 175,
+    "sha256": "1e0525cad8a46c46a30008aff9ae076315d02c2871b101f69ed838907ce5aa5d"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_StairsDown_1x.png",
+    "bytes": 146,
+    "sha256": "129c928132ecedd10fdd8cb4cbf44f4e1f6d752df6fc7c894588164dc230c0e6"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_StairsUp_1x.png",
+    "bytes": 146,
+    "sha256": "28385933fb42ca197ca5303e3e19f5cc52af63e964f07dd059e21d70914b56b7"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_WallFace_1x.png",
+    "bytes": 187,
+    "sha256": "f51c0c08ffdc8439f9b7f1849ca16f4962d7bdf0aaaf170aa1911916ad1c2b02"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_WallTop_1x.png",
+    "bytes": 151,
+    "sha256": "195d59cc0c378ca14a703eecdfb9ea602ca693baeee31aa25b348b909e22f2c5"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Crystal_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Crystal_WallTorch_1x.png",
+    "bytes": 262,
+    "sha256": "b0008f653b00b4b8e9c51f19a68239af8c2c1613d43bf63055712609c0004ca4"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_BossGate_1x.png",
+    "bytes": 171,
+    "sha256": "0cdb0ed6cde01e7122cf93ec08a2721b57e0d25c9e48d40f56cb8afd853abc7f"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Chest_1x.png",
+    "bytes": 160,
+    "sha256": "065440d3bb767c6224f5f3cefc851b10fa5dcfaf52296fc9f3ce07b2010be217"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_ChestOpen_1x.png",
+    "bytes": 150,
+    "sha256": "dabab86294767f9e2fc0668036fc604b541ec2d1e5b83cc9774e306709996044"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Door_1x.png",
+    "bytes": 163,
+    "sha256": "9a7aeb4b9f6238355a293a9bb936d8433b93c9d3a83ab983afc102bce31e2efe"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Floor_1x.png",
+    "bytes": 137,
+    "sha256": "ca9f29e84dbe5f6c0904cc831e7d5d79ba15a2267c779f47564752940069f87e"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_FloorAlt_1x.png",
+    "bytes": 165,
+    "sha256": "8fea37ab5f148bc9529b644e55465c264a877f96f26af0bdcc5602a775d16a01"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Hazard_1x.png",
+    "bytes": 171,
+    "sha256": "7f9f068dde13e013fcecc22abbaecc5b47d74a13e2e864df3b601749a5c9943b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Pillar_1x.png",
+    "bytes": 155,
+    "sha256": "9252df41182674175d579056b7295f9b4e42e33dee6e5244ddc4c901bb4ab3a0"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_Rubble_1x.png",
+    "bytes": 183,
+    "sha256": "6b055320b4941a3da2b2bdf3accdde6ab498df6df315e5753777e27a7aca162b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_StairsDown_1x.png",
+    "bytes": 155,
+    "sha256": "6bc9346998fb394dc5e62172023f6d1d820f44c08c546ec14e50ec63501ceff4"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_StairsUp_1x.png",
+    "bytes": 156,
+    "sha256": "b3747d6ec0f7e0f720eefdd1f2403af230b01ca002c3bead22ad4fa4e29af526"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_WallFace_1x.png",
+    "bytes": 166,
+    "sha256": "37df814badef6a06a7ef84f5498601591c12d37617d441b49be8b1b0a008f331"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_WallTop_1x.png",
+    "bytes": 126,
+    "sha256": "445bce65c2b10e04dfc1c76e48bbe99b692c4a87065971596b2143a64ee39f4a"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Sea_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Sea_WallTorch_1x.png",
+    "bytes": 232,
+    "sha256": "3f1436abbc38731f5b70b36033b192f0133fcb70de0db40f50f35bfe3da3d5a8"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_BossGate_1x.png",
+    "bytes": 164,
+    "sha256": "3acd88400c11009dbd0a06f63996c3b83e4f0774cd026bf02cb0f9ae5daf4ed0"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Chest_1x.png",
+    "bytes": 168,
+    "sha256": "3bda67c65edc79473d21e336accbaea70238028e438d20a25ca14e697bac5802"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_ChestOpen_1x.png",
+    "bytes": 144,
+    "sha256": "0fcbc7ee46c373c7836cd0d65f60a79669722d8568d7148d029fe1eced84b9e5"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Door_1x.png",
+    "bytes": 154,
+    "sha256": "dc482367fab70aaf6f529c8446feae840cc2fe3465a34cd8cf689761597d4fd7"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Floor_1x.png",
+    "bytes": 130,
+    "sha256": "db076889d72f73304d047ea8a8006545e8d77f3a89cecf8c83e3e90ca804c9f3"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_FloorAlt_1x.png",
+    "bytes": 174,
+    "sha256": "7455c0643366d5aad2f0a45711a608024b3eb9c4ed37d47c120ebccc327ca13d"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Hazard_1x.png",
+    "bytes": 159,
+    "sha256": "8391a28bdfb84a648b349202f37ce3b396a4ed1aa150a9f99696d52411869693"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Pillar_1x.png",
+    "bytes": 151,
+    "sha256": "46baa0b4b66d5990802d55685df9e01e23fb5e337cb1fad6b2cb28e80c3d42a7"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_Rubble_1x.png",
+    "bytes": 191,
+    "sha256": "62882e3043ac59dc508041325445464e9daf770c8458f236315aabe52421aba5"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_StairsDown_1x.png",
+    "bytes": 154,
+    "sha256": "679b9fb9df172de4ecb84c578de4eef8ab78d816dd9cf691202a3a45e057998c"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_StairsUp_1x.png",
+    "bytes": 154,
+    "sha256": "13095f26c1c3f367337424739d7f2b24a51b0d7a0dac02728da9c87aaed3a052"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_WallFace_1x.png",
+    "bytes": 114,
+    "sha256": "936d394b8b3cc3cd5a9db9f77ecca0607397cfede9806b9d114e26566e537ae3"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_WallTop_1x.png",
+    "bytes": 146,
+    "sha256": "a7a2638b5eb95caccf66e630791a78da61e04761091f8511c9cc71a09860bf2c"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Tower_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Tower_WallTorch_1x.png",
+    "bytes": 173,
+    "sha256": "f3c83638f7fc3eae474d9bf80a495b49d5c4349d69cff897277d1c7b34293a98"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_BossGate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_BossGate_1x.png",
+    "bytes": 163,
+    "sha256": "fe2213143c66a7b0a2e6cc5c925048c93f31d155281a23674995ca5247eb0895"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Chest_1x.png",
+    "bytes": 153,
+    "sha256": "e31621ab57e64b406742f54053ba30921ab2526480c25aa1b75919ffce9c013b"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_ChestOpen_1x.png",
+    "bytes": 143,
+    "sha256": "f95ec3370ce0c6b63bd51700ee5edcaa4a8172f70bd7cb249f35e76b4e36f9ff"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Door_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Door_1x.png",
+    "bytes": 155,
+    "sha256": "ae2bc923f012c150c2118485f3f845ef6cc99676bad07508d481022b76361f08"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Floor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Floor_1x.png",
+    "bytes": 131,
+    "sha256": "0fe2363185469b82454bbfab2298d870a91ac67b0c97f7f88c7f54fc39e7be7d"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_FloorAlt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_FloorAlt_1x.png",
+    "bytes": 168,
+    "sha256": "0614871923dc97eaf6af39ee5db9725aeeb58695129f1c715def576b7e82ffed"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Hazard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Hazard_1x.png",
+    "bytes": 171,
+    "sha256": "9f170eb27f1a68d3ecaedec4b22cf5e19eaeacc4a0a994b909e72a3d47d51509"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Pillar_1x.png",
+    "bytes": 137,
+    "sha256": "03523b8b04632b47d1a1585e332a5073d609163f4477ccb1cc3e4725e1e23056"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_Rubble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_Rubble_1x.png",
+    "bytes": 182,
+    "sha256": "add524eed80654f76f258edf0403bc6ed0277b688685f8b3e97390dec2ebf102"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_StairsDown_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_StairsDown_1x.png",
+    "bytes": 152,
+    "sha256": "945cbe057ee8a0c85a1d0ee88909ec71e76c515b5cad40e810eb6e8a6b5cff86"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_StairsUp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_StairsUp_1x.png",
+    "bytes": 155,
+    "sha256": "c2f1cb4ff8ebfa1421741a6193b5de0ee81521b4ab71db14995e742e955dc5f2"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_WallFace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_WallFace_1x.png",
+    "bytes": 162,
+    "sha256": "b885adda452ebfe0c8564c44f8a95af495c459b834b6f0c98e00143ad348765f"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_WallTop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_WallTop_1x.png",
+    "bytes": 141,
+    "sha256": "dbdb15309b386a130de88d9f6832d0b41256caeab8050b214adebc069439273d"
+  },
+  {
+    "path": "claude-battle-kit/prism/dungeons/Tile_Volcano_WallTorch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\dungeons\\Tile_Volcano_WallTorch_1x.png",
+    "bytes": 229,
+    "sha256": "060c389f0ea7335ec1dd1f0ddd75047e0ce98353b7255af2282e928e0717ae47"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Gilded_Closed_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Gilded_Closed_1x.png",
+    "bytes": 718,
+    "sha256": "6318808f6bfadbbbaa961d8b3d7d6f2f1dfaa87b547a6168ae9b5943f97966b7"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Gilded_Open_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Gilded_Open_1x.png",
+    "bytes": 763,
+    "sha256": "2d4f808e0a839217aa7fc96c16b8335954966b1e133231d15d06d936be012d6c"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Iron_Closed_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Iron_Closed_1x.png",
+    "bytes": 570,
+    "sha256": "a28bc15414c551dd518f495e43b840e5028bdc05c28813d7b0cac0c08e340924"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Iron_Open_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Iron_Open_1x.png",
+    "bytes": 707,
+    "sha256": "12fabaf169443a4c00d19e1a213b4858ec39611cb02547d9cc4533c4d753fbec"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Wood_Closed_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Wood_Closed_1x.png",
+    "bytes": 674,
+    "sha256": "65dbb1a027cdb4adcd1aedae1791414a0c03d3c1b3a2d9a5f5348902631738c5"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Chest_Wood_Open_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Chest_Wood_Open_1x.png",
+    "bytes": 776,
+    "sha256": "c4f688da4a2e986dbb4831b7c0178effd19fbe32be12f2de8df8f752dd206806"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Potion_Clearwater_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Potion_Clearwater_1x.png",
+    "bytes": 723,
+    "sha256": "f5667b8869ed6ac4b189fa72c3541f7c1f6b8dd6c9868231f2771eb30e095959"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Potion_EmberPlume_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Potion_EmberPlume_1x.png",
+    "bytes": 538,
+    "sha256": "4dcf3909c5ff22925fe2c02c8c704a93ac2c6f32efd3dd3da921e78c0691475c"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Potion_ManaDraught_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Potion_ManaDraught_1x.png",
+    "bytes": 719,
+    "sha256": "53339bb031515772282f56bffa7246a950553cf0826c2edeef104df6ced3694d"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Potion_Mendwater_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Potion_Mendwater_1x.png",
+    "bytes": 736,
+    "sha256": "e90bccf857e54f0dd3378671d596fdef631756ceb4876b09b2744526a9a8bc56"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Fire_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Fire_1x.png",
+    "bytes": 692,
+    "sha256": "88904aadde90dacda64f21aee78550d53284f0d92b8dae0dd11d0e4858efb5c9"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Gale_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Gale_1x.png",
+    "bytes": 703,
+    "sha256": "390cd26f7306767b07cbdf77565002971b9a4dbf71ed44acde14d746184f5ec9"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Light_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Light_1x.png",
+    "bytes": 658,
+    "sha256": "f5aaefe1f52d0722fe15356ee4f2f6a59a72f3f5d69be33c8001967cdd256700"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Shade_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Shade_1x.png",
+    "bytes": 699,
+    "sha256": "bfee8968dd2da4464f0c94f1010d679f58d1d44ad1eb859e766ea4b579198d33"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Stone_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Stone_1x.png",
+    "bytes": 668,
+    "sha256": "d1160df6463dcca1d3ab39671c2e68d8b9ccba08e2abe23e3a1ec46bf041ff73"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Shard_Tide_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Shard_Tide_1x.png",
+    "bytes": 700,
+    "sha256": "4217a43dd0756adf070561cae65f7087dc4eb731b15587b05e8d039ad558fc7b"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_BeastcallerBow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_BeastcallerBow_1x.png",
+    "bytes": 337,
+    "sha256": "723d9d7bc2e74321c4690554d013d1a1e300d954cf4acefa0d98651f6f3a1de1"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_BladewardSword_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_BladewardSword_1x.png",
+    "bytes": 402,
+    "sha256": "767c1104a3e7a9d0e7f53cad9b32d7b497c44a78d589b06aeb036a15366fee78"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_ChronoseerStaff_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_ChronoseerStaff_1x.png",
+    "bytes": 431,
+    "sha256": "d90577d4ca0566709c5a478ab1df5106a2f7dbc67a18511b883a9f9986c41aa2"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_GearwrightWrench_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_GearwrightWrench_1x.png",
+    "bytes": 443,
+    "sha256": "97cf7a726c032c43de3ac18bd23461bca66675124e64fda5a722332c192a55d0"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_LightmenderRod_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_LightmenderRod_1x.png",
+    "bytes": 431,
+    "sha256": "03efb62ec280de31feccae148eb6078227b42b50f44e45410235db57e6664aca"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_RunecasterStaff_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_RunecasterStaff_1x.png",
+    "bytes": 360,
+    "sha256": "ace1c9a26a6070ac0ac3f23399e06601d83d39c7ef865e89824266f114c8f995"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_ShadowstepDaggers_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_ShadowstepDaggers_1x.png",
+    "bytes": 397,
+    "sha256": "e56998f9bff2d6a07837a7a6a0fabe6dbb922422ee275d7052233fc5b2579a6d"
+  },
+  {
+    "path": "claude-battle-kit/prism/icons/Icon_Prism_Weapon_StarlancerLance_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\icons\\Icon_Prism_Weapon_StarlancerLance_1x.png",
+    "bytes": 395,
+    "sha256": "be50e0a433f9ef5dde5ff693d61591e84377a755f0f131171e773c809e86bd2a"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/NPC_Ruler_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\NPC_Ruler_1x.png",
+    "bytes": 375,
+    "sha256": "d22c09d2b6b9fad0fa58eea4c5d7e5061cc3485f0590300df89071519e8826cb"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_ArmorStand_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_ArmorStand_1x.png",
+    "bytes": 163,
+    "sha256": "e40d01d6d794fcdb40291e5db5c563c6597bb89a87573201ba849aeece367741"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Banner_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Banner_1x.png",
+    "bytes": 162,
+    "sha256": "c66724b42fc6e3e25ce85c2eec54c3cee1ef27928b3e5c470afbcf70b4216a27"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Bookcase_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Bookcase_1x.png",
+    "bytes": 151,
+    "sha256": "91dd076a98d6bab613c477fd78c95ad0ed4d2e40496595f57dbb0dab6d46ec5e"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_ExitMat_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_ExitMat_1x.png",
+    "bytes": 144,
+    "sha256": "740f8722b492e40c0ced5b02fd3580f88d9feb0566670efca92d2a038ed47829"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Fireplace_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Fireplace_1x.png",
+    "bytes": 230,
+    "sha256": "1c6f74e532f7daf44b74ef8a2c22c69c3a441aede6206a41e2301dd823ab8eb2"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Pillar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Pillar_1x.png",
+    "bytes": 139,
+    "sha256": "8b24f51b67a43c22f86a140f85cee34d4bff39ff46a06d23a94de5f48cde7538"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Stool_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Stool_1x.png",
+    "bytes": 131,
+    "sha256": "f46374f26d746b5025bed93e231e7d42c72c26ad97ca7780a7316ce5050f3362"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Throne_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Throne_1x.png",
+    "bytes": 139,
+    "sha256": "4f4bed711a792ae5ffd4a416ae76ca3ca8c40ad9924d04a53dfdff4a301f2fff"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Torch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Torch_1x.png",
+    "bytes": 188,
+    "sha256": "132f79bd9f262db6d65b7a4c7a46f7400589cfaacc32a205ac95df250aa338f5"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_Void_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_Void_1x.png",
+    "bytes": 82,
+    "sha256": "b1c67ea0b5170ff61df4e26deabb6b83a58125d1e2c3b9b59c3afe45b67525a0"
+  },
+  {
+    "path": "claude-battle-kit/prism/interiors/Tile_WeaponRack_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\interiors\\Tile_WeaponRack_1x.png",
+    "bytes": 133,
+    "sha256": "1b4ef24a4b7f111a7c7140cabf0fe9d7e98a4258b7139b4da379167061cdc4b9"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Armor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Armor_1x.png",
+    "bytes": 113,
+    "sha256": "fc301b9829f6286f94c768605dc62d1c37bffb0b35135dc903cf218416b763dd"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Axe_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Axe_1x.png",
+    "bytes": 100,
+    "sha256": "2c1c33748834e422900eb8b6ff39e6ce5a34cd796db31189ea0e12b2cadbc8a6"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Bow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Bow_1x.png",
+    "bytes": 101,
+    "sha256": "2a21f68c2b557c92a63429fbc8e51bf6586871bc93a8984c382d7b0821e02e76"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Feather_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Feather_1x.png",
+    "bytes": 95,
+    "sha256": "25885006602090d32da4f9300524e08579b7ee4091f7f531b16a9e056aabdd13"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Helm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Helm_1x.png",
+    "bytes": 114,
+    "sha256": "7e2887517ca86251d5dae3e612f117061201b52ddd1142357c8a656fd7abb083"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Herb_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Herb_1x.png",
+    "bytes": 105,
+    "sha256": "dc432519e0cdd3f0044ada65a790dd53f6e0bb2818efd01e7bef763c81060d6b"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Key_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Key_1x.png",
+    "bytes": 100,
+    "sha256": "bc1db73364bb1ec4658b722b0ce665ddf75714f041f3b7d134eed8ce9cd5a1a2"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Lance_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Lance_1x.png",
+    "bytes": 86,
+    "sha256": "6e1cdbc04dee18737e2bd0c977281d7ada74ce914aab94bfec14e08285642deb"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Potion_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Potion_1x.png",
+    "bytes": 105,
+    "sha256": "4616ca84ff41b500f32c69ca85d066ec702c7d2defe5fcae33745c1fe5e6b33d"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Pouch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Pouch_1x.png",
+    "bytes": 109,
+    "sha256": "10202d7ffa75663e71e1100ac4241764740c8e007610551da540d98492e76cd1"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Ring_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Ring_1x.png",
+    "bytes": 104,
+    "sha256": "18bb56ca233d19e3cfc175a31a5f16370c63d8ecb71467a4d8eb178d10960a1f"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Scroll_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Scroll_1x.png",
+    "bytes": 103,
+    "sha256": "f837c12b686cc4cec0644b72873388eff8765d791f93ac020e677e4302fd1ba8"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Shield_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Shield_1x.png",
+    "bytes": 106,
+    "sha256": "6a54adc64bb1519496da43d3e80eb788f9c9339020cbed18f93c6c8d23d7851e"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Staff_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Staff_1x.png",
+    "bytes": 89,
+    "sha256": "37d720b25b49bcd65210f90355db69f7e7f89a40daaa91e1fac094a69104b6b0"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Sword_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Sword_1x.png",
+    "bytes": 93,
+    "sha256": "7590d1db5abe8c7d00595a5a90b0c756a2dc8ff49cb32e9b63f152a4ef75f5ff"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Icon_Tent_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Icon_Tent_1x.png",
+    "bytes": 112,
+    "sha256": "4df716248de4f46ea8b7a86dcd59d4f06da3bd15290a85409c69d257805ada13"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Equip_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Equip_1x.png",
+    "bytes": 4495,
+    "sha256": "17246f5182b55b1f7bd22ec55c7ffaeb0b2804d5b81cc9b59e9295dc8f69511e"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Items_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Items_1x.png",
+    "bytes": 3938,
+    "sha256": "9b881fbad27305256ea40fa840a95a825a60f870df5b98bed82b42b264c5130a"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Menu_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Menu_1x.png",
+    "bytes": 5696,
+    "sha256": "894403507943474fba11976875e25d8820adba52dca8feed8e328fbca495ea53"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Save_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Save_1x.png",
+    "bytes": 4644,
+    "sha256": "b766d23d290ef9e85d914af32c7f158eeff41da606b7c4350ffb03923da11dd6"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Shop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Shop_1x.png",
+    "bytes": 4198,
+    "sha256": "9bfdfadb9e17be3f028d17a5c0df90060bb45d9c29713cb690385272e552cfe8"
+  },
+  {
+    "path": "claude-battle-kit/prism/menus/Menu_Status_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\menus\\Menu_Status_1x.png",
+    "bytes": 4586,
+    "sha256": "a6ad52d1de6713fa3eb3bc910a3449caaa058d24a99d126852369f068af3f71f"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Beastcaller_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Beastcaller_1x.png",
+    "bytes": 2401,
+    "sha256": "6592e56d7c0ef98283dd7a3ce589910a90fd5967041a636c55f99b0d8474e9a2"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Bladeward_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Bladeward_1x.png",
+    "bytes": 2823,
+    "sha256": "bdaed4037ffc51ced16687fba16c70654d28b082709af942599d9d37f41b28fa"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Chronoseer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Chronoseer_1x.png",
+    "bytes": 2492,
+    "sha256": "ea814e3f4c8771277257aeb0bfa216c0039ae40a9fdca7833056b2b4f618b6f0"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Gearwright_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Gearwright_1x.png",
+    "bytes": 2180,
+    "sha256": "a3a3dd00a2fb74b1ba630ed663c1574daa3905f250279cbc2671cbdba9ea5c7b"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Lightmender_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Lightmender_1x.png",
+    "bytes": 2227,
+    "sha256": "2fa81c63b75a6b9bba07253db9304d520d9b1e07e5a367a4508cace623e4b186"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Runecaster_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Runecaster_1x.png",
+    "bytes": 2298,
+    "sha256": "2cd51f575903b4745b4e2a257c5ec493b4f4a0b012d37b25d75fceb8ca26ff3e"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Shadowstep_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Shadowstep_1x.png",
+    "bytes": 2154,
+    "sha256": "9ab81623d0c44dc99da50d20040abbd6717b179ca8d5b64d85bc19beb0396636"
+  },
+  {
+    "path": "claude-battle-kit/prism/Party_Prism_Starlancer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\Party_Prism_Starlancer_1x.png",
+    "bytes": 2117,
+    "sha256": "b0b523621f0d70211f42aa3d0016326c6dfeebfde3dfa8523e3e2bcf44e32b58"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Aegis_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Aegis_1x.png",
+    "bytes": 2619,
+    "sha256": "c14bb6a39991f5af302dfb715a662a28480be13ee17c738eb4dcb61bf006c21d"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Blaze_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Blaze_1x.png",
+    "bytes": 2273,
+    "sha256": "e4355ad5d7c8d3a05627b765de2b4f5e23b09fc8413192d3d3ff693c3a59117b"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Blight_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Blight_1x.png",
+    "bytes": 1652,
+    "sha256": "61f784f5153e36b761ce00491c164b0a460b21ca592106716187b95e0e39c4ed"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Bulwark_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Bulwark_1x.png",
+    "bytes": 1735,
+    "sha256": "cf0d2d7a6a7c279781108b6bc6b90db0413c4525c628a591e64275b0a7d60dbf"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Cataclysm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Cataclysm_1x.png",
+    "bytes": 2464,
+    "sha256": "fa0253edf4a0c138c0a38b6758baae5709500ff9de02fd9cc4fe62cd5330e552"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Comet_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Comet_1x.png",
+    "bytes": 1965,
+    "sha256": "d8617266e3a67803e278dca21cfcb980190de263bbe5631f6493ac180bb3ff34"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Cyclone_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Cyclone_1x.png",
+    "bytes": 7879,
+    "sha256": "33a389420991776cd558d887d9c72ce1dea3280194054ea9fd15ea988e364ca1"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Dawnbreak_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Dawnbreak_1x.png",
+    "bytes": 3366,
+    "sha256": "39c180740e479c0ecbaf4049788265d736404f2f7438c2be55716940499cf437"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Devour_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Devour_1x.png",
+    "bytes": 3261,
+    "sha256": "51176d150fdc725c42d300551a637b4e42a8988362d58e859319a51baac7c5d6"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Dreamfall_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Dreamfall_1x.png",
+    "bytes": 3645,
+    "sha256": "adff9e37f7ea42be2c6508e701ccd5d86afe597cdd74bc800327986421ae5687"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Drowse_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Drowse_1x.png",
+    "bytes": 881,
+    "sha256": "d08811daac138aae6740d7331b36cd9acb5cb60745e31e31ec1a2f668046753e"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Eclipse_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Eclipse_1x.png",
+    "bytes": 5665,
+    "sha256": "81c4c114e2dde4dbdd93d74db949117c417f5b2357c442c4c427be11730fee4d"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Ember_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Ember_1x.png",
+    "bytes": 867,
+    "sha256": "983f189b28ed0aecceb24d8437e02abee8e0aa78e19cee32e9e14ab7bd5c5ef9"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Frost_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Frost_1x.png",
+    "bytes": 876,
+    "sha256": "1628068301082b09d29f1a629565c247c27c419d433d240884ca1473568dd0c6"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Gale_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Gale_1x.png",
+    "bytes": 4058,
+    "sha256": "dd2ec50e64e2ac8b4f14353e828df755119f6c6a9d0c6d5e3989b705aedb0d9d"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Glacier_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Glacier_1x.png",
+    "bytes": 2222,
+    "sha256": "5dda0e1eefdaf318c5630daaf8414a35171059294e7339d116ce694acafa2083"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Glint_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Glint_1x.png",
+    "bytes": 6484,
+    "sha256": "77401378e73c04ade12c42cb54ab4c7a1cd95de167b9725ba5aebd230713c5f8"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Gloom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Gloom_1x.png",
+    "bytes": 1764,
+    "sha256": "7c0c5d68eb7af3e17a762cffcaf681c3ef862e2796a8e6bf4cab0109c1b3ae66"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Gust_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Gust_1x.png",
+    "bytes": 1554,
+    "sha256": "b0eee705932f60564ecdac872752b108a23f8bef50bfdb71d74210b3d6939c2c"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Hasten_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Hasten_1x.png",
+    "bytes": 1475,
+    "sha256": "c7249b9b6351b0b227180c317734fc1427bc1b31443c89dd7a2ac5e539883796"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Heartlight_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Heartlight_1x.png",
+    "bytes": 12186,
+    "sha256": "d076449a57538c3ae53487bdda858ec181c458c77d9f713086bf01aa5933fa83"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Inferno_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Inferno_1x.png",
+    "bytes": 3666,
+    "sha256": "5a772758c20dd9efe6423fdaff9df40a59240c91327e2545fcb9126ba120a06a"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Leech_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Leech_1x.png",
+    "bytes": 1881,
+    "sha256": "381e39aa9391051ac0b4be96a725d38c44077eed6a7eff5d2179b9ed4730f58f"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Lull_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Lull_1x.png",
+    "bytes": 2174,
+    "sha256": "39ca1b61007dbda6165c253621823e91965a7ab921b321ec7d73be3073305508"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Maelstrom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Maelstrom_1x.png",
+    "bytes": 2356,
+    "sha256": "492f1b260669ad30582ba35d7642d09d27828498a6decbf53a1d3a37d40f4334"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Mend_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Mend_1x.png",
+    "bytes": 1044,
+    "sha256": "f6cf574ad628367c172c923fb55994a6dfaa2bcf6027cbde1d9bc9255add7e96"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Overdrive_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Overdrive_1x.png",
+    "bytes": 2455,
+    "sha256": "16d53d68b0a49a636f6871061edf2f23f5d0c2cc35164ab87b2575592e81b82e"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Plague_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Plague_1x.png",
+    "bytes": 6723,
+    "sha256": "e8d8607cf0e4bcfdbbc77773c429299292d0dbd3bb73328d6c20a4cc4db1ce57"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Prismatic_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Prismatic_1x.png",
+    "bytes": 9659,
+    "sha256": "83d09fb14c6966e455f4efbec3f49e85a50a7b4134c643ad5f16558abbe4a90f"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Quake_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Quake_1x.png",
+    "bytes": 2198,
+    "sha256": "f6e5cf5a071736400f99b95037187ef61a3dadb7a1308a4abd4cec33311f01b0"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Quicken_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Quicken_1x.png",
+    "bytes": 718,
+    "sha256": "4c4904eff3bcb3e66e7c2efce64e6c749eede87539114e82060b2597cc0b1c1c"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Radiance_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Radiance_1x.png",
+    "bytes": 1240,
+    "sha256": "1621edb91a45894b52c7c7977fb71e7ed3e4966086230f60be768f4f474e2203"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Renewal_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Renewal_1x.png",
+    "bytes": 3985,
+    "sha256": "4633fa3fd25cc2372adbb1121c2fee5d9cec875d1142ab4a983ef1cc5744a30e"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Restore_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Restore_1x.png",
+    "bytes": 2368,
+    "sha256": "121ce4b209baaddd50099213a5c7fbae6e52e8ea3c4882ba246a126377087ab9"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Rockfall_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Rockfall_1x.png",
+    "bytes": 991,
+    "sha256": "abe34755ac3321da1426b882237cc8dd7bd77a816ea71578fea2015f727b33a9"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Siphon_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Siphon_1x.png",
+    "bytes": 849,
+    "sha256": "e904be7a596f2854f7036a13f479d8bb7d56dd1d74e300afdd03e08207bdfdca"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Skybreaker_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Skybreaker_1x.png",
+    "bytes": 2562,
+    "sha256": "b3ae0df91e98eeec4835a000981e655b9dd8589f47a099380c03cbe1b9369429"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Skyfall_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Skyfall_1x.png",
+    "bytes": 4036,
+    "sha256": "98d160efdb652bd293d545c813a085c920e31dd9f69a5d653eb565d71f78ebc3"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Slow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Slow_1x.png",
+    "bytes": 3281,
+    "sha256": "8f03dc9baef34fb1c97c1e299c35411e954b30665192782c9ff4232073f4f8a2"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Slumber_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Slumber_1x.png",
+    "bytes": 2084,
+    "sha256": "47930b9d568b72c21cb16b331a3ea0b4c02e3d3beb06061b096527769973d73e"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Spark_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Spark_1x.png",
+    "bytes": 1144,
+    "sha256": "e7d71fb61aa7558de335e8aad9f6b1407bce458b416b5dc3057db6dffbbafc0f"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Splash_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Splash_1x.png",
+    "bytes": 940,
+    "sha256": "ce6b1ad23fe9034cb764371b0c98618a0f016b3d447b0e1824b68c5c53015e86"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Stasis_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Stasis_1x.png",
+    "bytes": 2928,
+    "sha256": "ae0948dad92b972c8d0c17a73f41e708e17abd989fccf439723172051fcd1968"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Sunlance_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Sunlance_1x.png",
+    "bytes": 2456,
+    "sha256": "2817cd4cb81a0f8a6ae53b0c69f57f0257e7390821ec39627fab1f44f15365b8"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Thunderhead_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Thunderhead_1x.png",
+    "bytes": 2542,
+    "sha256": "cbaf80af6d62a8a2d62a16b9d8214017ad5a1323ff90f3798a1349ee7c690db2"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Torrent_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Torrent_1x.png",
+    "bytes": 1781,
+    "sha256": "f65847898342102e8300fbb50c9057274987237c6962c2d21922eccf72ef6fd9"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Tremor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Tremor_1x.png",
+    "bytes": 1737,
+    "sha256": "87fd087e5fa16b69de6c8ef1b8fdf6665e8d454b39d1512989329aa58845cb6a"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Umbra_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Umbra_1x.png",
+    "bytes": 3699,
+    "sha256": "1c96d61de2ac7ddf230c7e347c1c9134f9a661eb1c56981dbe45102809c5c896"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Venom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Venom_1x.png",
+    "bytes": 4074,
+    "sha256": "f6c89c7979ba20efea982ce8466ce812b4adc36b87ffd2fec807fba3c671354c"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Ward_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Ward_1x.png",
+    "bytes": 725,
+    "sha256": "83b969557028dcdfbc18c6d7dc01e7b44701ce946eb4de4783200419b874c335"
+  },
+  {
+    "path": "claude-battle-kit/prism/spells/Spell_Whiteout_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\spells\\Spell_Whiteout_1x.png",
+    "bytes": 4007,
+    "sha256": "3d8b293b3898f059f695d7dcd2b63362e50d4c7f388f8a385093e47be378c0c3"
+  },
+  {
+    "path": "claude-battle-kit/prism/title/Title_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\title\\Title_1x.png",
+    "bytes": 13920,
+    "sha256": "e5aed50faafd343037aa03e2e51bf524b01e83786ac8d56695e2829acfb19c1a"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Child_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Child_1x.png",
+    "bytes": 323,
+    "sha256": "171604b6b950d6e37e7f75e2f9d7468efe761c93f6cd6e622f2093be358feee4"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Elder_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Elder_1x.png",
+    "bytes": 359,
+    "sha256": "7aa694e44c53df9d22ce6a413912c58ee47ece380d13b893b64105b685e2bdaf"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Farmer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Farmer_1x.png",
+    "bytes": 361,
+    "sha256": "cbf731aaa16dbe4cfe1a7761f0f8311e9ac223108b9046e404732c61dbd7eb39"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Guard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Guard_1x.png",
+    "bytes": 350,
+    "sha256": "49371d2192f9201ddcf7a23aa1678347c534ac8f5019d82c94ef6fd3c48ccfdb"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Innkeeper_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Innkeeper_1x.png",
+    "bytes": 358,
+    "sha256": "e06c6792e6679abe025dfb5537a4599a119c78bf86880f0a9de2d312cc21b57d"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Mage_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Mage_1x.png",
+    "bytes": 364,
+    "sha256": "2d8a7ad1b7636e04338915be106d6700261d6c7b4648e8655f04548acbf3e78e"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Merchant_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Merchant_1x.png",
+    "bytes": 350,
+    "sha256": "3a81cfe85b141465397df592f04c9e966dd769394affefc108a14ed3f9aa5a96"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/NPC_Sailor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\NPC_Sailor_1x.png",
+    "bytes": 352,
+    "sha256": "54f7fe691cc421646baf0f834bbcc70c2a3793d969cc4551376a9cbc79c33abc"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Barrel_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Barrel_1x.png",
+    "bytes": 137,
+    "sha256": "7b974f5ef4d1237027f6c38bc8d05fbe6fe303162122180feafcdce641894dec"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Bed_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Bed_1x.png",
+    "bytes": 139,
+    "sha256": "f1e620e4308d3b82dfbb51609f2edd54626ef12fb97e00f9f180310aebe467f9"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_BrickDoor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_BrickDoor_1x.png",
+    "bytes": 150,
+    "sha256": "a0b4dee537d2bf5258a918a88e7c073f0e72840cf8b065a4903349330232de6e"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_BrickWindow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_BrickWindow_1x.png",
+    "bytes": 153,
+    "sha256": "b794ff3a27d50f3b6535eb7c325f8ee03e243e1b91e13a1cf213246b9767ec2a"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Carpet_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Carpet_1x.png",
+    "bytes": 106,
+    "sha256": "05e19823c64891d061fbbebc2c34251d11f015a17198c12f3a27f7e5ad8f06f7"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Chest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Chest_1x.png",
+    "bytes": 166,
+    "sha256": "d1cef831c45191fde95a74e3711e93cc74d20b0ebfff905cb500b36e75e69759"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_ChestOpen_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_ChestOpen_1x.png",
+    "bytes": 152,
+    "sha256": "ba6b8f47b0b1a9c4ea8908af8afd1c392db4f1f00237c3b1b210c1ac0d74b43b"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Cobble_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Cobble_1x.png",
+    "bytes": 117,
+    "sha256": "afb9f09436d70d4075d908e038b5b6fd77fc26c134102e56ec4bf2b391b6e496"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Counter_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Counter_1x.png",
+    "bytes": 116,
+    "sha256": "56a7301797e241b20c7f538a1751ec9ce89fb32169d68ecd760df6e1a5afce1a"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Crate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Crate_1x.png",
+    "bytes": 144,
+    "sha256": "8cfe46a9001833855608aa8ec5ea4b1cf318497fe1cd2fbe7ca07eeb742e6593"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Fence_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Fence_1x.png",
+    "bytes": 198,
+    "sha256": "4d19ad401cb9802b092f73b99e43ea98db9a0af26801d989b28be2b80c5785ba"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Flowers_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Flowers_1x.png",
+    "bytes": 213,
+    "sha256": "63e9f89e1f6193fea122b9183af8f69a01fe7b6d90bfbf7a92b6140f6704156f"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Fountain_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Fountain_1x.png",
+    "bytes": 229,
+    "sha256": "4af46863bfc6d461328ebc587ebf815c5e2e75aaa4bf35ae13eb09844f9dfa14"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Grass_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Grass_1x.png",
+    "bytes": 185,
+    "sha256": "3ac5e9cd2ece1f2eb8619bfb587730faab0b7d9b3a129e0943c703d482dbf8ea"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Lamp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Lamp_1x.png",
+    "bytes": 125,
+    "sha256": "18afbe88cf166ead95840b626dbcaacb35072ff32f603a6bdcfcd1f4ba73f2eb"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Path_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Path_1x.png",
+    "bytes": 148,
+    "sha256": "13f980c7e5a3c435f6cbeacf81400d482b741db77ee8894ac32303218d13c49d"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Plaza_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Plaza_1x.png",
+    "bytes": 92,
+    "sha256": "e5c1da5b0968c5690803e20fbcc0a10696ff0e5ea6ada167ef0068ce55c7c34f"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Pot_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Pot_1x.png",
+    "bytes": 154,
+    "sha256": "38c2ce1f244f8b46fa8f56b822598621b9cd329cb5cfa7a2118fafe00af0edd2"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofBlue_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofBlue_1x.png",
+    "bytes": 104,
+    "sha256": "c89dc756564d5bfe0a9ac35ad886dadde9e2949402cc974f58d6061aa7cd712b"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofBlueEave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofBlueEave_1x.png",
+    "bytes": 112,
+    "sha256": "645177237c3005b3f04aa1d92066792a5f0d12da81b39dd192f72cd09705769a"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofBlueRidge_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofBlueRidge_1x.png",
+    "bytes": 116,
+    "sha256": "872f6c00e88702d1b1c269ecc4d703d05580c95903dcd3a212b4268654a850bf"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofRed_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofRed_1x.png",
+    "bytes": 104,
+    "sha256": "e3ca1943ffa03de47e733018ec4d8e96b93001dee021ad63cc19fb4ea8ad87c9"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofRedEave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofRedEave_1x.png",
+    "bytes": 112,
+    "sha256": "9f760bd54effbb43dd8c2e4d353061107ec9b2dbc3d55b4b6d63bfd89acec6ec"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_RoofRedRidge_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_RoofRedRidge_1x.png",
+    "bytes": 116,
+    "sha256": "b3006db92a730d06a448a9be8c212985f3afd03c8007828a2a7dee578b878250"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Shelf_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Shelf_1x.png",
+    "bytes": 128,
+    "sha256": "58e64d29f6bce06fc425cef2906c126c975584b91ea564312dc7ee3bdfe1a915"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_SignArmor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_SignArmor_1x.png",
+    "bytes": 142,
+    "sha256": "af8c8b86de8d43d0d4b2fbdf872d14d4c9b9b0b66b43eda8587bd5ed958e5fa7"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_SignInn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_SignInn_1x.png",
+    "bytes": 129,
+    "sha256": "0b13363293f9e21540b86dc095b30968e5e1f2566c7bf7908f5d2fa2c20f938b"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_SignItem_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_SignItem_1x.png",
+    "bytes": 137,
+    "sha256": "3e2e8a68a2cd7d55ec6830aa325263e663efc16629617d2f4642378de4f66172"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_SignMagic_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_SignMagic_1x.png",
+    "bytes": 146,
+    "sha256": "5ac163ab147fcfefdb547e575c72fd9f8247eae66acfe0bd13fde45071517e8d"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_SignWeapon_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_SignWeapon_1x.png",
+    "bytes": 140,
+    "sha256": "6bf3290bfe32252c9171568c115700ad9466718bdc8e6e934722b74ee9bf6d0f"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Stairs_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Stairs_1x.png",
+    "bytes": 119,
+    "sha256": "5923c696cfaa03a6ee3458cd6737a8984c293d3d8543873e8a059eb694ead1cc"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_StoneFloor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_StoneFloor_1x.png",
+    "bytes": 140,
+    "sha256": "6ad095a7a58a4a2548307f1cb0d10db8d6eea302ad0b0f90edf267bfb8ef9d95"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Table_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Table_1x.png",
+    "bytes": 130,
+    "sha256": "a28bccb5b981fa7be958fe358e7dfc48c65b2492d14855ada2718802dc3934b6"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Tree_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Tree_1x.png",
+    "bytes": 200,
+    "sha256": "c394dfd96407cc518024df5eab0a79116a9c07b273f8b70835eb344383dd9d25"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WallBrick_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WallBrick_1x.png",
+    "bytes": 106,
+    "sha256": "c5a5b79c3b335dfc0dd9ae7786a288925950bb7ec6fd1fbed9dae59492565fd5"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WallDoor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WallDoor_1x.png",
+    "bytes": 120,
+    "sha256": "2e11661cc18f9916e0f949b2dab83abbce6e5949d75cf4dee7ec716796ba9e12"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WallPlaster_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WallPlaster_1x.png",
+    "bytes": 91,
+    "sha256": "0ca91efc6b30d92a78103b5a70cc44f673171ebe051562c888828c2998b0ec0b"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WallTimber_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WallTimber_1x.png",
+    "bytes": 137,
+    "sha256": "2ea85099af049f1c603050ca8906688398186586effa6a970b4f1799f2cdcf8f"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WallWindow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WallWindow_1x.png",
+    "bytes": 118,
+    "sha256": "eb0acb010c66c69f8899e3619f7c903ba983701f7530277203749afe7cb69db5"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Water_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Water_1x.png",
+    "bytes": 137,
+    "sha256": "b96a23ac8a3736ad5cd9b5e731e7fe7e93183339a582f3f60a3c9b67467ba392"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_Well_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_Well_1x.png",
+    "bytes": 201,
+    "sha256": "44530d9ccd64c6b476663843e18c0ada34226886cfd5d0088126702de96978ed"
+  },
+  {
+    "path": "claude-battle-kit/prism/town/Tile_WoodFloor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\town\\Tile_WoodFloor_1x.png",
+    "bytes": 105,
+    "sha256": "cc4c3c0833179bc4db9a641e644eab6749847f8a2b440b8c64783b4bc3dd8222"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Bar_ATB_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Bar_ATB_1x.png",
+    "bytes": 106,
+    "sha256": "8c9bd34afab432642fe67fc6930befbce902215750d50569cf83c163c97ac2c3"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Bar_HP_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Bar_HP_1x.png",
+    "bytes": 104,
+    "sha256": "c4594de3cd4940a539e57e95c15a80d22289dfc630c09da511653563fecb2db0"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Bar_MP_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Bar_MP_1x.png",
+    "bytes": 105,
+    "sha256": "11e9c6f94b5e92bc266436774bfb2652f57d933a19aa1e99dedae21b9eac1539"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Cursor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Cursor_1x.png",
+    "bytes": 113,
+    "sha256": "3f853a83018efbc3094497f1bd4bb78a8c2df89d7b0a7ed260bfec5b0e464091"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Digits_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Digits_1x.png",
+    "bytes": 256,
+    "sha256": "173c3f0b0b4bceb838eaa526c4ec27ba0ae1e33d0660e5ec607c10ae03dc1327"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Digits_Heal_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Digits_Heal_1x.png",
+    "bytes": 264,
+    "sha256": "f8c85d08b2381ae5b9c3d61decb1c0161164e3874d4909f9fda3771aace55937"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Font_5x7_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Font_5x7_1x.png",
+    "bytes": 452,
+    "sha256": "a2d0c04fdad3d731d31905b4b079a8f093b6e0a01a54c160217b67c43052595a"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Miss_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Miss_1x.png",
+    "bytes": 150,
+    "sha256": "7d45e95d7fa4bca2fe61b72dbae98b2328b829d3ca4b8b62cd5d2d414d79404c"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Blind_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Blind_1x.png",
+    "bytes": 125,
+    "sha256": "ae5d7dcd2b8c11b629d4bdea7e143a50ffb78f1a015385c6c488a3b20d62abaa"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Haste_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Haste_1x.png",
+    "bytes": 120,
+    "sha256": "6372c5f99bee1923ee53f0eeecedf6a6063873ebe713ee4a0025acaf4de5757f"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_KO_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_KO_1x.png",
+    "bytes": 125,
+    "sha256": "bc094dbac5399ea40eafb0de338dc01d664ef50a75075e01e7a6e59cfe5841c3"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Poison_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Poison_1x.png",
+    "bytes": 124,
+    "sha256": "02eedfa2afc4090b5f2eda33be22bb010e97dfb7ebf209afeef991ee8f0d6c46"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Protect_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Protect_1x.png",
+    "bytes": 125,
+    "sha256": "45e85e694a14b31c8200a29493a206fe6e3cd8b3da5896fe57dd3ec9b45309c9"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Silence_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Silence_1x.png",
+    "bytes": 118,
+    "sha256": "cd227b8cbaf15fb18ff17fda30fc28072fe5b66cdead97371b188972272ab2e1"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Sleep_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Sleep_1x.png",
+    "bytes": 124,
+    "sha256": "33ec2068e231cfba4ff5c050ff776396f963bfb2b8e5acdcc772e486191cb3ef"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Status_Slow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Status_Slow_1x.png",
+    "bytes": 127,
+    "sha256": "04146decb5d92b93065ff735bc420ec0a2323291e3f2f7237295a0b6add2d773"
+  },
+  {
+    "path": "claude-battle-kit/prism/ui/Window_9slice_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\ui\\Window_9slice_1x.png",
+    "bytes": 178,
+    "sha256": "0cbccb85169d8db1f76ed672c6ad7e8c7718cbdfa3dffdafc2476c148a13ef43"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_AirshipPad_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_AirshipPad_1x.png",
+    "bytes": 241,
+    "sha256": "a5fd33d806c5e6e03fbb7f2dbe47d604ee7d1bd8498b0777da38c9d4af2d7b67"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Bridge_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Bridge_1x.png",
+    "bytes": 137,
+    "sha256": "003ca1f5be37103f7d1bc754a5918af84205a703dd2549cefa8889caf25019d0"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_BridgeV_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_BridgeV_1x.png",
+    "bytes": 145,
+    "sha256": "c0d3cdc5236a649c1513fd93e412bf889f73b17fac55751b516843e758b3a3fe"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Castle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Castle_1x.png",
+    "bytes": 238,
+    "sha256": "e513d0ffc8816fa5f793af53b42b3f140c0ba184411d33e202d2f01e35c14a95"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Cave_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Cave_1x.png",
+    "bytes": 244,
+    "sha256": "80a2a787d6bb3cbc724517fd170b2c445ae2eacc1c0e0674a9f4b62f9985b6c3"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Coast_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Coast_1x.png",
+    "bytes": 199,
+    "sha256": "7fc6fbc12e3106a4d6934ba33635844760ea0988cef5b2fe4befc3ff570baf15"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CoastE_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CoastE_1x.png",
+    "bytes": 186,
+    "sha256": "98575b6d16a8f4d8744634728c5a989ad518cdfeddf2b7fa29b169f12134195b"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CoastN_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CoastN_1x.png",
+    "bytes": 195,
+    "sha256": "ae8f767a228d5c216f9f56fb60c30fc4e54a8f04fec9e6e9eccd5a206d10594f"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CoastS_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CoastS_1x.png",
+    "bytes": 199,
+    "sha256": "7fc6fbc12e3106a4d6934ba33635844760ea0988cef5b2fe4befc3ff570baf15"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CoastW_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CoastW_1x.png",
+    "bytes": 189,
+    "sha256": "ccf7e08d825fa1ab4958d57e771c8ee40bac76dc7cc7e8bb6cd3e1f032a14b4c"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CrystalField_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CrystalField_1x.png",
+    "bytes": 217,
+    "sha256": "763d3e6967b3aea0d98bd6686105ba4a7ddfc53a750c7b4b0405bacb661fd23f"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_CrystalShrine_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_CrystalShrine_1x.png",
+    "bytes": 270,
+    "sha256": "71ac9a239912c305f816b5c50380f74509314d33146e694ae79f46cd46f2bae1"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_DeepSea_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_DeepSea_1x.png",
+    "bytes": 137,
+    "sha256": "32e10552afcff238dc29565950019b558db1467cea5ea8c4519a114265d975f9"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Desert_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Desert_1x.png",
+    "bytes": 132,
+    "sha256": "9795e5b551ddba05bdc2448b83c5b3c720fb9519962a00065e3f2b84352c7e93"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Dock_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Dock_1x.png",
+    "bytes": 244,
+    "sha256": "b688a01857e9895aa9dda5a1bfc230824cd4944ef2a9cb486252d40f86c43b17"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Flowers_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Flowers_1x.png",
+    "bytes": 197,
+    "sha256": "99603f9e3e2a4f167692af453df5498d74bac0877639958cbfac3df50d4cd8f7"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Forest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Forest_1x.png",
+    "bytes": 217,
+    "sha256": "0c427394035307c502d88da39709e8f01821aaf7cc58d11846686752b6d22e78"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Grass_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Grass_1x.png",
+    "bytes": 185,
+    "sha256": "3ac5e9cd2ece1f2eb8619bfb587730faab0b7d9b3a129e0943c703d482dbf8ea"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Graveyard_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Graveyard_1x.png",
+    "bytes": 241,
+    "sha256": "0621cc490a89d4cf817d5dad090c8ae4daccebc4e9415903d6b15cc8e222889d"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Hills_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Hills_1x.png",
+    "bytes": 197,
+    "sha256": "53d6abe6879e4cb34354b8c2e7afbda423ae401a89c4e170714a0648c929895f"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Inn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Inn_1x.png",
+    "bytes": 240,
+    "sha256": "b26832b665a7de7471c30b13a96c1510bf769c0a1caf89c27b9e0119e9ab0777"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Lava_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Lava_1x.png",
+    "bytes": 245,
+    "sha256": "d28cf1579772b8dc3dc0bc1388fb240f7e7a7f3186c15ac99ac531b5d256fb32"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Lighthouse_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Lighthouse_1x.png",
+    "bytes": 335,
+    "sha256": "158912d014d676b16ea2eeaf182f26d52cbaea85dc2c8474ab04079ab0517071"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Mountain_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Mountain_1x.png",
+    "bytes": 219,
+    "sha256": "951ae3f6626c05583b0428537bdb5e3625c8da5d91351ffcb3569c7c64c47c70"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_PineForest_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_PineForest_1x.png",
+    "bytes": 230,
+    "sha256": "a79e36bc50cab5d6599a527f1d3e510db448a25a6834945608249bf18d8f0542"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Road_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Road_1x.png",
+    "bytes": 179,
+    "sha256": "1d2c83eeb0444fce112f8a11d1ce684c14bcd174f3199b3cdcc46fce88ec7901"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_RoadV_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_RoadV_1x.png",
+    "bytes": 187,
+    "sha256": "2c500f83e421120b4825f9fc992476b87f755582ecdd13a10034fa7390f4560d"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Ruins_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Ruins_1x.png",
+    "bytes": 253,
+    "sha256": "00f03387f8114e2ee91a366e8febce9719de05a525e38c3e43c4fce40751be6c"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Shrine_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Shrine_1x.png",
+    "bytes": 251,
+    "sha256": "3d8ce66c0f1b509222a8641107d8f18b1530db3635bb4c78902ba592da638d89"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Snow_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Snow_1x.png",
+    "bytes": 152,
+    "sha256": "d525a3f9d14411d1d479ef7604fd80f0d331163fc11ee44497bfc47a3d5d15cc"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_SnowPeak_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_SnowPeak_1x.png",
+    "bytes": 237,
+    "sha256": "316cf5d05b4d2a5bf6b831b1962d7c864a9a9314cd8852afb930a7488d3faaeb"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Swamp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Swamp_1x.png",
+    "bytes": 136,
+    "sha256": "29de2a648a66f096b6b9ef65d1e84dc1af2f5474a5f4161502637d9f59acfffc"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Tower_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Tower_1x.png",
+    "bytes": 240,
+    "sha256": "97015a333a832a27ff525655ce516147de03980dbbc1b9798a5a8f84c2e7080f"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Town_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Town_1x.png",
+    "bytes": 268,
+    "sha256": "f0bd1b1509d6a5f109751a933169fc95683f04db7fee42649fc0359927d280c3"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Village_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Village_1x.png",
+    "bytes": 285,
+    "sha256": "b533faf16064f81f06756b4c59b46da0eac7c65e3f96ca4630a3765daa760389"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Volcano_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Volcano_1x.png",
+    "bytes": 312,
+    "sha256": "fc72766b322554b35313579aad02b68ec5945dc9c693d4ea366a58c39c7073cb"
+  },
+  {
+    "path": "claude-battle-kit/prism/worldmap/Tile_Water_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-kit\\prism\\worldmap\\Tile_Water_1x.png",
+    "bytes": 137,
+    "sha256": "b96a23ac8a3736ad5cd9b5e731e7fe7e93183339a582f3f60a3c9b67467ba392"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AbyssGolem_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AbyssGolem_1x.png",
+    "bytes": 2009,
+    "sha256": "c306efdc783f1ad6c06d4b8579c346af1e93db1af4534850ee320d067e749487"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AbyssLure_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AbyssLure_1x.png",
+    "bytes": 1725,
+    "sha256": "182b7246d3412ba4cb5f5b489823b66626d60ddf71cec667ea3e245105a2eb1e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AcidBloom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AcidBloom_1x.png",
+    "bytes": 3460,
+    "sha256": "86f54e47b7a7ba99c243e7716d88ae5a3b4899063763e82eb33cd2fff6352df8"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AshBruin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AshBruin_1x.png",
+    "bytes": 1707,
+    "sha256": "70b629f48523ad01542c28d79d680278b007d9b25fb0d6d41619d7bac8f92def"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AshHarpy_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AshHarpy_1x.png",
+    "bytes": 1958,
+    "sha256": "43ede2d8ea8e762f9c4ddd8f90f4526cb95788191500cc1975fd40a66f1c1d44"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AshHound_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AshHound_1x.png",
+    "bytes": 1995,
+    "sha256": "9130fb1ba17d5bd6a11a69c115b74109db20353536ce2621f85bcfb489f4ca76"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AshStrider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AshStrider_1x.png",
+    "bytes": 1550,
+    "sha256": "200a262f13d5f13cc588648c4114b503aed8bdf643f19f41fc76948d7ff3068a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AshTreant_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AshTreant_1x.png",
+    "bytes": 2279,
+    "sha256": "7a6ad4dca117ae8889518b6d44185e30338b62e305cf7467657393035f4ada8d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_AuroraDrake_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_AuroraDrake_1x.png",
+    "bytes": 2480,
+    "sha256": "1aed0c92c6c3eb16ff6e8789dd9f3d8457d6694089093ddd76939dc4b40adfb4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BlackArmor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BlackArmor_1x.png",
+    "bytes": 2087,
+    "sha256": "9e7094fe6bf4a49dade302a0baebc8a58d48660e8eac7f489aa5a9cd2184d7af"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BlackStalker_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BlackStalker_1x.png",
+    "bytes": 2127,
+    "sha256": "ef3a1e5b590c2475c446a52e8099bc833f1922bc794da812bf2250780d5ce7b5"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BloodPanther_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BloodPanther_1x.png",
+    "bytes": 1821,
+    "sha256": "a5a563a7605d29b4ce8bf96cc191a58cb36d3c7bb939038a5c8b7b7b697c786a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BloodSnaptrap_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BloodSnaptrap_1x.png",
+    "bytes": 2482,
+    "sha256": "c44938490c609a5d3545092560e350221b6b899d658ab95d61fdde6817977ced"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BloodWyvern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BloodWyvern_1x.png",
+    "bytes": 1768,
+    "sha256": "da10073121511c6e7ef49432a6232a4ec1f44380e59b308e83c904658a32cd73"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BogGhoul_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BogGhoul_1x.png",
+    "bytes": 1876,
+    "sha256": "5dd10b0b8d42237fc3765e4623062921dec6834a432aba24da548378aa49d1be"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BogLantern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BogLantern_1x.png",
+    "bytes": 2437,
+    "sha256": "9fbfd4f26ed9293791e088655eb1bf54f5ee9403059de71f9afa2f57a37ab0df"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BogSnaptrap_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BogSnaptrap_1x.png",
+    "bytes": 2170,
+    "sha256": "004d115197d6b9402b80d47e4cd05a5257f2a76b3932e245fcb3a8a83a1b2638"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BoneLancer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BoneLancer_1x.png",
+    "bytes": 2075,
+    "sha256": "e7cd56781f899aa6d87cfa32d8e476ba0ce1c36a28f5d0db3e71eec1fd42ebd0"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_ClockworkColossus_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_ClockworkColossus_1x.png",
+    "bytes": 2647,
+    "sha256": "343a4c2f2bd9008863dc5482fb95bbf482169cce7cc3f7810f51ad0761af9d7d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_GaleWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_GaleWarden_1x.png",
+    "bytes": 2018,
+    "sha256": "25e4c481e5bd462b92ef9bf39557997e8e021ffaf74740eecf2f7ab7725a9f92"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_HollowKing_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_HollowKing_1x.png",
+    "bytes": 2168,
+    "sha256": "ec98ca4d081cedb40e693894dfc66b556fa89b8bcbb6eec4893f5ac67a58b61c"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_LightWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_LightWarden_1x.png",
+    "bytes": 2262,
+    "sha256": "49f6424a0018b8e62d0855b235d6dfea1567fe22f2c9b8eea19847bffe34724d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_PrismDevourer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_PrismDevourer_1x.png",
+    "bytes": 1887,
+    "sha256": "d74970bab9c4e63600abc28f8ae9d9558ba061ff75b5324a5f813693936c853b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_PyreWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_PyreWarden_1x.png",
+    "bytes": 2593,
+    "sha256": "6370d702cb7d530e5f010f018f248a6447cf75278a664bfe6bf640b6bc6bb78c"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_ShadeWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_ShadeWarden_1x.png",
+    "bytes": 1717,
+    "sha256": "b37a2b2b3c6650344458196035dbc2f983b9dacfe9046f7f66c4c8a99139e7b5"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_StoneWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_StoneWarden_1x.png",
+    "bytes": 2000,
+    "sha256": "3829cc03fcf658f7fefe8257292f69a3790ff7a7d8ce148fdf65cdaf852631e3"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Boss_TideWarden_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Boss_TideWarden_1x.png",
+    "bytes": 2419,
+    "sha256": "779363aaf89c9785f726190118eafe1796e319d18d925295dde103cb0eb3f2fd"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_BrassSentry_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_BrassSentry_1x.png",
+    "bytes": 2248,
+    "sha256": "098d8050d0c52467a18bfda90728b6bfee7ed25e1e620a8c88c8341fbd8edf1b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_CaveSkreel_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_CaveSkreel_1x.png",
+    "bytes": 1648,
+    "sha256": "beccdff8d7ecdeafddb99223514a81bb2255a8a7ca96550c37e895e6b5b4e78c"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_CinderHound_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_CinderHound_1x.png",
+    "bytes": 1661,
+    "sha256": "c9058e2545e6416c182886c467f1b3b78f72c2ebcec737b1efdc502be9166292"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Clawstrider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Clawstrider_1x.png",
+    "bytes": 1671,
+    "sha256": "9fa1e8e9074cc182213793553c9f2d006674050ca7727a630cd8ad3478527bef"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ClockworkSentry_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ClockworkSentry_1x.png",
+    "bytes": 2206,
+    "sha256": "43f5899956642e641546c755d3ee9810b7c0b92e2cdad0e0134f6101fcd15ed0"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_CogSentry_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_CogSentry_1x.png",
+    "bytes": 2088,
+    "sha256": "1f6616af0c01adf42242eee178b22ce759972445fb2c1a324a731e2d44e6c7e3"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_CoralGolem_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_CoralGolem_1x.png",
+    "bytes": 1876,
+    "sha256": "2fcb7d995a0f013d57b5e1f0703cadd431420d6214e5da35ff3d4d8b21d2cf3e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_CrystalMantis_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_CrystalMantis_1x.png",
+    "bytes": 2004,
+    "sha256": "a2867ca95fe3b051287a10657f1563314c3a63553a5dab85372679a4172112eb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Cutthroat_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Cutthroat_1x.png",
+    "bytes": 2376,
+    "sha256": "394b0a3e768bf3d6da8d40421dc34f5f25669e0457e095043d6510918cdb05d2"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DeepKraken_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DeepKraken_1x.png",
+    "bytes": 1772,
+    "sha256": "58d3be3d8dc30d97eeeb68c87e42fb52f4c7c1c6a75fece967a846dd0d7f7dce"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DeepLure_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DeepLure_1x.png",
+    "bytes": 1483,
+    "sha256": "9bc27cd8589b5262dfc0dbd69ca13b29323b8fd27e24d914a2cd6927d96e494a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DoomBloom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DoomBloom_1x.png",
+    "bytes": 3062,
+    "sha256": "899387a606574d31a7283b616ba4b95f637fd7be9f0a7b2a6e16edc45ae16549"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DoomEye_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DoomEye_1x.png",
+    "bytes": 2011,
+    "sha256": "f85c473c73721c6a14260a9a9560b31ba4f09040445e4667aa488d1d6ff9769c"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DoomFangking_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DoomFangking_1x.png",
+    "bytes": 1482,
+    "sha256": "57b741f8e815065ce12bcd7d45d8af9ebba77aaaf85f0441dd5387f4d3a9bda5"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DoomLancer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DoomLancer_1x.png",
+    "bytes": 2118,
+    "sha256": "9f2534f5696638c4572e453c0543ff23b0f7fe1f80f766804fdefdad5bdf38a4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Drinkbloom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Drinkbloom_1x.png",
+    "bytes": 3126,
+    "sha256": "d0da6c5f2c7754105101fb720c167b4c530e103c782e02a3cc5687024e203bac"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DuneScorpion_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DuneScorpion_1x.png",
+    "bytes": 1963,
+    "sha256": "82116b4d0ee66ee2d5384787e06f30bb16c1b496808a2b65bea48699e3da20c4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DuneStalker_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DuneStalker_1x.png",
+    "bytes": 1883,
+    "sha256": "f7e9e393c5ac308824478f1f8fe2522c8a5f06baa93970f9e5809e724c623677"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DuskWyvern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DuskWyvern_1x.png",
+    "bytes": 1826,
+    "sha256": "3591fa7819b01cb61791a16a195f5a1b5d171e6bb5008a964a65819a5157a01f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_DustMoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_DustMoth_1x.png",
+    "bytes": 1906,
+    "sha256": "a98c1db6e622eb7d0a917c103bad73c186deb8c7e8473f780d5eb90bf60f61ab"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_EmberGargoyle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_EmberGargoyle_1x.png",
+    "bytes": 1756,
+    "sha256": "bc518deafd24cc82802a06310d05b3bbc03e0a8330a2e844b97eb6817de191f1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_EmberGhoul_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_EmberGhoul_1x.png",
+    "bytes": 1746,
+    "sha256": "d32062585ff64f5c39a63c0a4956f61188f6bf39dab45e3a623925ba8b931c9d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_EmberNewt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_EmberNewt_1x.png",
+    "bytes": 1787,
+    "sha256": "ff7f6c8cc394d6665c26aef6c42816b75592170a4620418935315f76552b9efb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_EmberRam_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_EmberRam_1x.png",
+    "bytes": 2221,
+    "sha256": "c5a1427e369a0988b5d05eb9779215d5a450a32453f8fdca47ef103e0eb4e5cb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_EmberSalamander_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_EmberSalamander_1x.png",
+    "bytes": 1951,
+    "sha256": "ab0827f052e9d5393c71e866b55022be4aeff6e63fab08033f6e26eca43de25e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Fangking_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Fangking_1x.png",
+    "bytes": 1659,
+    "sha256": "f04d2e3d9b2af212a9348db14827db519181eb529b20d6b4b5d8fc24bc00c45d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FlameNewt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FlameNewt_1x.png",
+    "bytes": 1867,
+    "sha256": "76784fe389ca45766b83e7188273485191cde95b37636fd29d9ae3c9ee55552b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostBruin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostBruin_1x.png",
+    "bytes": 1920,
+    "sha256": "2a8cdd373a004dac6f91a3593b3a3d6da952f48fbebef01e14d7532aa2a0e152"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostDrake_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostDrake_1x.png",
+    "bytes": 2489,
+    "sha256": "3c596e0695f1cb93aaece7a0467471807ace5c1e6ad2a7776e0d29ca3b31278a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostGelfin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostGelfin_1x.png",
+    "bytes": 2055,
+    "sha256": "e0021a0a73ab48ff84e53e4ac8ddb801a2f2d46cf1dc79b84a73f5727d5697b8"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostGhoul_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostGhoul_1x.png",
+    "bytes": 2214,
+    "sha256": "caf2254243a2db28d1acef99e538b00cded06f6f08f2f5f8761d7d9669ae591a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostHound_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostHound_1x.png",
+    "bytes": 1793,
+    "sha256": "83f7b436ae925b52bc463fae46783a71e13dbb9f2f5517e2cafc6a135bd36f68"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostPuddle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostPuddle_1x.png",
+    "bytes": 2028,
+    "sha256": "14897bb9ca46424a76adf6e2c0677b201822c36e7a8329be7a73ec755190ee99"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostRam_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostRam_1x.png",
+    "bytes": 2347,
+    "sha256": "95f42c2f9ec2b569c99e13a5912de76d04ae46bdcae58dac4fce3cfb3701c641"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_FrostSkreel_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_FrostSkreel_1x.png",
+    "bytes": 1572,
+    "sha256": "a7e5eab6ff7ca81a1fefb328d7c162cd38f96e036cf9fcdde320ab671a4408f9"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GaleHarpy_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GaleHarpy_1x.png",
+    "bytes": 2010,
+    "sha256": "e34881ab60650c7efc178aae6001865a912fa315bcc58f901ea21050554e53c8"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GateGargoyle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GateGargoyle_1x.png",
+    "bytes": 2102,
+    "sha256": "5d11c43443fbbe8ab5632bafbf2eb0c83c00362668da4fc02f8fa555d5ab2f94"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GazeEye_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GazeEye_1x.png",
+    "bytes": 1822,
+    "sha256": "b64aa0d5030582d26390c0de2217efc0b2d066392a2ff9ce25ffee75ef2b1c9d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Gelfin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Gelfin_1x.png",
+    "bytes": 1932,
+    "sha256": "fd17fb594858c13b4309a591ecc7594515a1880aa213c0c1c63eaab5a479f065"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GiltGreedmaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GiltGreedmaw_1x.png",
+    "bytes": 2086,
+    "sha256": "9ef3704947f3a9c76110715797f3be28ff56b73277fc4e87029485d1c86a1a9a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GlacierDrake_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GlacierDrake_1x.png",
+    "bytes": 2381,
+    "sha256": "89f12a0705b5aaa197b7f4aa211363acfb749a96dc4b94effd6c34ce5f7f2b41"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GlassSerpent_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GlassSerpent_1x.png",
+    "bytes": 2036,
+    "sha256": "ff126716eac58bebdc6aa28c06fd9806e7d817cafa68f33aef9ef78c1a171301"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GlassWyrm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GlassWyrm_1x.png",
+    "bytes": 1953,
+    "sha256": "9551f47aa159bb7b5618d5c7607885e23bd3a0f688b3e039e0ad8123e548f327"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GlideRay_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GlideRay_1x.png",
+    "bytes": 982,
+    "sha256": "8fb07e8fa5835135c76e0a10d9e240933434cd947335be8f3e08766059e78641"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GlimmerImp_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GlimmerImp_1x.png",
+    "bytes": 2512,
+    "sha256": "7dbfffb1f2e8bd31aba75bf7ad031bf07e74bb9268abc01acfd47809a32d6506"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Glimmerkin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Glimmerkin_1x.png",
+    "bytes": 2508,
+    "sha256": "007507f0d4055264590803e9e975623bc9bb97ccd31b09b3151db37b9cb2862b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GloomLure_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GloomLure_1x.png",
+    "bytes": 1703,
+    "sha256": "2e939572019864ce4a5abb02253b06c4f818e810e253dfc9525ca19c5955f95a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Gloomspore_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Gloomspore_1x.png",
+    "bytes": 2655,
+    "sha256": "477535da67ce16012fc075fc23e7f5a5868985edb5cac4af493441896797693e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GoldShardclaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GoldShardclaw_1x.png",
+    "bytes": 1736,
+    "sha256": "95314cb207777011b6e57cf3f740794a07df4460b1f64cacd7bad2b300937aa7"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GraveLancer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GraveLancer_1x.png",
+    "bytes": 2305,
+    "sha256": "3bfa06e3974767ccdf4e0463aaed4ff6d2b9f3e418b807b2b29f043f11f921d3"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GraveLantern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GraveLantern_1x.png",
+    "bytes": 2087,
+    "sha256": "c4494a32f3aa174d0018b0e9dc90e761846482f2335d1e75e44ba359decbf431"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_GraveWyrm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_GraveWyrm_1x.png",
+    "bytes": 2144,
+    "sha256": "eb2cfcac7a84bd00ab04b94b275de9a0f5da055df5e3fca550244574b993bfc5"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Greedmaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Greedmaw_1x.png",
+    "bytes": 2979,
+    "sha256": "6133d217fb0b73048eb53d621a184e4dccfe72db32a6df949451dc276ca11ed0"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Hexkin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Hexkin_1x.png",
+    "bytes": 2422,
+    "sha256": "d862807dafd9914879ccda92eae80f37c63b5e9f9c5fee1586b8f286703b2b38"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_HollowArmor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_HollowArmor_1x.png",
+    "bytes": 1990,
+    "sha256": "7ccb7f19da8fb2f26f241c1067eb24671e0634e254e15bc40c8b6f5526f3e626"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IceGargoyle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IceGargoyle_1x.png",
+    "bytes": 1900,
+    "sha256": "2fb1a6bab09bb09ae380ab8c2e1a146b4d9e2057d4dbcd0d2606a95a9f159daa"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IceHop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IceHop_1x.png",
+    "bytes": 2073,
+    "sha256": "6e30d170edfe2a865093f16eced49401e02287f5179ebc92b4b220bb84a580f8"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IceLancer_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IceLancer_1x.png",
+    "bytes": 2289,
+    "sha256": "774e5b84d4e64955de9aa64e5b73b09cc6a777a42c010a45f11ad92b04613f42"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IceNewt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IceNewt_1x.png",
+    "bytes": 1963,
+    "sha256": "b42fc51d74fa880df2ca91bba14537619b63997a2209a1a1ed33fe55da311ef3"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_InkKraken_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_InkKraken_1x.png",
+    "bytes": 1804,
+    "sha256": "2be21dd081f899a6a1370cd874cad3bd61e18162790f7b84af9798ebca8dab8a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_InkRay_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_InkRay_1x.png",
+    "bytes": 997,
+    "sha256": "84ca7f341e4d60fcc7b10b14292929e65bdbf37ba8fe77a33409fb94367c2c08"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IronGreedmaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IronGreedmaw_1x.png",
+    "bytes": 3801,
+    "sha256": "f95c95c77f65fba345c45e629699c5a67f04e55b9337d2a5df2724f147006d8a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Ironshell_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Ironshell_1x.png",
+    "bytes": 2264,
+    "sha256": "cefc1d6ed214568d0df6d0b97bd0baf4bc364404d3905c1ffee024534f24c844"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IronshellTortoise_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IronshellTortoise_1x.png",
+    "bytes": 2434,
+    "sha256": "e01e46bfd2d05a79efb6be5781964ad167f01ebb11d891bda7e10d237a0d4290"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_IronTricorn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_IronTricorn_1x.png",
+    "bytes": 1669,
+    "sha256": "a3b07e29183885d381a22011437e089be11ac7e266254ad71e7041499d8b84d0"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_JadeShardclaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_JadeShardclaw_1x.png",
+    "bytes": 1660,
+    "sha256": "cde7fd9b90c8a133ff441ad68b21450947f8065c1fd325450ae7179b31ecc9a6"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_KingHop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_KingHop_1x.png",
+    "bytes": 2003,
+    "sha256": "82f3b2a10590ee5ee72b6e83d47c8e615326d2fc9c6451a85e350b17545c0b5e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Kingspore_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Kingspore_1x.png",
+    "bytes": 2432,
+    "sha256": "41917ffdd35b1371fb5434802956ce3b8f68885d1e05c7ef9f65bdc8e983ed02"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_LanternGhoul_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_LanternGhoul_1x.png",
+    "bytes": 1804,
+    "sha256": "c3e099e83010f617e34ffcaa34edbae026f7dc260762e5c8cd6e4d2032025507"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_LavaGelfin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_LavaGelfin_1x.png",
+    "bytes": 1882,
+    "sha256": "3d676b2e7ecf553847603fbeb5f036e9d3aa4fbc4108af3b4dbf97414e2446c9"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_LavaShell_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_LavaShell_1x.png",
+    "bytes": 2392,
+    "sha256": "19e74d3491a1208b33669c72d3a6c0dbe4b777ba374e898926c9b9130f2f3424"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_LureFish_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_LureFish_1x.png",
+    "bytes": 1456,
+    "sha256": "7febdc1b981b15617a67d8f9e8154af48bc69cb0f3d0971bf123d542301b7ec1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MagmaTricorn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MagmaTricorn_1x.png",
+    "bytes": 1647,
+    "sha256": "d8e2b6589cd19f83bff5f57c7db13e77b22a7819b9f0350e270afba1703c1155"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MireHydra_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MireHydra_1x.png",
+    "bytes": 2054,
+    "sha256": "fcbf18649ca92591aa0ed2cb1996bd5a7793f502ada3cf177a372eceba408e62"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MireWyrm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MireWyrm_1x.png",
+    "bytes": 1909,
+    "sha256": "a05595202138baad27673c2896205f18360316f420fd833bdcc0a8429c0881c8"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MirrorMoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MirrorMoth_1x.png",
+    "bytes": 1793,
+    "sha256": "62ec3ebc321a40bc3c60af47c588d35c9bfe18111943ccd49a41369f107449a4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MoonJelly_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MoonJelly_1x.png",
+    "bytes": 1858,
+    "sha256": "ed9ae1457048e9560997521884d3b7ddc3063a2c27fc707c6614c3dbbbc2ec21"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MoonMoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MoonMoth_1x.png",
+    "bytes": 1796,
+    "sha256": "13ea2ec5f94bdea99d4f2b5fdd34fa2b3cd674bf2de3ff04f95c0e5a53bc2393"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MossBehemoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MossBehemoth_1x.png",
+    "bytes": 1855,
+    "sha256": "f2771365d911b246ce40365d6ad60001fce8f4a921a33490c86e60713067cdd1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MossBruin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MossBruin_1x.png",
+    "bytes": 2075,
+    "sha256": "32a4817cde3b49d5ed5dd3d074f84aebd7830e4b448a6261a3bac0bee4806668"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Mosspuff_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Mosspuff_1x.png",
+    "bytes": 2616,
+    "sha256": "9b9c68bca61e86d473c473cfbd96418f140c0407dd7a1fba5da12609453d097e"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MossShell_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MossShell_1x.png",
+    "bytes": 2171,
+    "sha256": "828e631216c1c076c062c276a21b4a5cafdb6e37ee8db9572e70f21e842fc3a6"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_MossTricorn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_MossTricorn_1x.png",
+    "bytes": 1790,
+    "sha256": "f4bee3997deb08a4ad8afecb912d0aa58e5f019861d675460f1bf90eab425155"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_NightEye_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_NightEye_1x.png",
+    "bytes": 1827,
+    "sha256": "34aacdc40b3da4a48f4b275dc5ef0b2d28920419dc4b1ee27261ee0894d08457"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_NightWyvern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_NightWyvern_1x.png",
+    "bytes": 1843,
+    "sha256": "a74e7e18a23b4152b5b3e014194d5f4719bbf97a349b218d5665ef43e741060f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_OnyxScarab_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_OnyxScarab_1x.png",
+    "bytes": 1495,
+    "sha256": "98f34b547dadcedfdeed640ed616624f36518ee403ca8c42a3718e0d284dee3b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PearlGolem_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PearlGolem_1x.png",
+    "bytes": 2031,
+    "sha256": "b56989a3a5d72c06dba612745a035c8bb1c7a217be06100a9227308bf78ccd01"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PlagueScrabbler_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PlagueScrabbler_1x.png",
+    "bytes": 2047,
+    "sha256": "cbd72c9fb9591c356e30ec58401d346e181afb0bdfef84559489da545a04043d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PrismGelfin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PrismGelfin_1x.png",
+    "bytes": 1875,
+    "sha256": "2aca0f900cc3ca4a0599a87d3a68557fcc663deb8fd5741dea311bf24f958779"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PrismGreedmaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PrismGreedmaw_1x.png",
+    "bytes": 2312,
+    "sha256": "6125b2ca2999b8ed40c2e9d7bc9427d759c55a42ae4e0e19fa10b73396b833fb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PrismMoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PrismMoth_1x.png",
+    "bytes": 2128,
+    "sha256": "86422da9b2eccd265a9e4cd2bf1e525c8fc3aadd6368627f1d83098f6b5fc158"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_PrismSentry_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_PrismSentry_1x.png",
+    "bytes": 2074,
+    "sha256": "ea3fd488e88afb691f5a0da808eaf0bee67271c9f79e210ac5e1bd1cd9abf47d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Puddlehop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Puddlehop_1x.png",
+    "bytes": 2144,
+    "sha256": "8f71f5a606cfd6043482e6eb1e192350d58f7d154964c52b584cd59cd35c1469"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Pyrekin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Pyrekin_1x.png",
+    "bytes": 2215,
+    "sha256": "d5fc4e8796885da0c044bd27a7215ec889a3eecbf2859058ac280af4989c4466"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_QuartzScarab_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_QuartzScarab_1x.png",
+    "bytes": 1499,
+    "sha256": "f6e07b63ae845e86170900d463f2a39e4448f1686506407738ca097b65e5ce91"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RatKing_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RatKing_1x.png",
+    "bytes": 2391,
+    "sha256": "6002327e55937eadeba3c387a90197d65440d3a99e0b1dc23f7a494b5ed09053"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RatMonarch_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RatMonarch_1x.png",
+    "bytes": 1939,
+    "sha256": "e762a29bb289b3544ae9b0d6d5a3ddeaa37cbee5465543f47342845f8458d1eb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RedStalker_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RedStalker_1x.png",
+    "bytes": 1892,
+    "sha256": "fc71a8532ca93069cae80297fa9a95ca4f2e747247ad333ce1aac8e0c2af0742"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ReefKraken_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ReefKraken_1x.png",
+    "bytes": 1891,
+    "sha256": "b30d347827a57f74492c022cd553974cad4da5af916e9354fc52666103a82e2d"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RimeDrakeling_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RimeDrakeling_1x.png",
+    "bytes": 2462,
+    "sha256": "c156d5e249bbe0e45bd94e50551c46b5804a4502e58b5e31dda80f14d1a956a2"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RockBruin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RockBruin_1x.png",
+    "bytes": 1924,
+    "sha256": "8ba1d6dd41b96c11ff96a34797b4e955ffaa5329f47c8a316ef124d8c4cb604a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RoyalScarab_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RoyalScarab_1x.png",
+    "bytes": 1446,
+    "sha256": "3f183871dbcebdb1ff93886e4ddc773c0ca9ea3bb82e33866ae8e6852831aa76"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RubyShardclaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RubyShardclaw_1x.png",
+    "bytes": 1684,
+    "sha256": "c44a4cd9125cf7a01f29088af9a9b6e7b8597aad32fc9988a67800d9aa31bf5b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RuinBehemoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RuinBehemoth_1x.png",
+    "bytes": 1826,
+    "sha256": "c8f609a9b68116a7801adb2055ef9536d110740f7c352c9a82c3de89484b4426"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RuinFangking_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RuinFangking_1x.png",
+    "bytes": 1494,
+    "sha256": "437e2ab60efba4f12d481d72372a766efba6ea98cc9ed2354994208808dfca70"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RuneArmor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RuneArmor_1x.png",
+    "bytes": 2184,
+    "sha256": "521880b41b3ec88aa3cca189428dcd688d5a11317ee6d3e432f6a6f11e1579ca"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RuneGargoyle_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RuneGargoyle_1x.png",
+    "bytes": 2468,
+    "sha256": "af3ca8aa624c32d05cd0d81c74835807c25101deffb38a8112df5d014ab08c01"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_RustArmor_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_RustArmor_1x.png",
+    "bytes": 2288,
+    "sha256": "7c85404ec15b74900ff2fceecf61e6028ae33d3cfc89891e29a5ce7bd5b05bb7"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SandRaider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SandRaider_1x.png",
+    "bytes": 2182,
+    "sha256": "89689bf5614027d44f9b29d96dbd05a1646ad81b3800082f6c147fca6252e984"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SandStrider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SandStrider_1x.png",
+    "bytes": 1566,
+    "sha256": "9da38deaa777d61649170800df1b461e8d72914c22382d4c83b86dc0d3685f2f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SandWyrm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SandWyrm_1x.png",
+    "bytes": 2027,
+    "sha256": "c24c0689cf4d38c8c952355905cbd50fe4a3d45e19f889133302d500ca9cc0e1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Scrabbler_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Scrabbler_1x.png",
+    "bytes": 1948,
+    "sha256": "3e7a45fcb4e6efb270c1f4da90fd85e0dafbedc43a0f5b6a963382940ae0761b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SewerScrabbler_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SewerScrabbler_1x.png",
+    "bytes": 1978,
+    "sha256": "043bb598b890d9a8fc46aa8603e782ffe7503890399974a545c60917c2820288"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ShadePanther_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ShadePanther_1x.png",
+    "bytes": 1920,
+    "sha256": "bd2e64afb9bdd4649b295fac4f397f555f4a56e9d2e7ab71a0938bf69a65e37a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ShadowRaider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ShadowRaider_1x.png",
+    "bytes": 1845,
+    "sha256": "261bfd0e46d0597ba5defac553023f74cb0b7e00e42065b111bcf1d7545e9f34"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Shardclaw_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Shardclaw_1x.png",
+    "bytes": 1764,
+    "sha256": "3955782bf912534c50b2c5708091b4bf9d00a02ffc013e3fe8eebc56a63c82be"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Skreel_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Skreel_1x.png",
+    "bytes": 1745,
+    "sha256": "a027e07f3026cabbf398d2647f75ea42cd4b45090327b6e18c370565012d5552"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SkyPirate_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SkyPirate_1x.png",
+    "bytes": 2209,
+    "sha256": "e11c4289d62828a3b5b122c6a78e69a3f4fae33460cb896891870dc9312e90db"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SleepBloom_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SleepBloom_1x.png",
+    "bytes": 3454,
+    "sha256": "d6bf5b13a9407777069d56934e0b388a1ce0661dca4fad28fec60e9675b1c7e4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SleepHop_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SleepHop_1x.png",
+    "bytes": 2278,
+    "sha256": "e22adea62c727b6e8dcc504eb257dbe5e9d95e27488585f53633abfd3bff862f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Sleepspore_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Sleepspore_1x.png",
+    "bytes": 2500,
+    "sha256": "a66b8d9b1e2fafdb59b5d7e32d0828deb10f2e41e97d2193bc8411e446e79057"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SmokePanther_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SmokePanther_1x.png",
+    "bytes": 1983,
+    "sha256": "11916d409d432b79201ddb7b96b3b7d9a117c052e7a043d4e02c8da372d3d380"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Snaptrap_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Snaptrap_1x.png",
+    "bytes": 2072,
+    "sha256": "9c8e7cc86855cecd1d19815c08436ec7492693d6e43a34e9aa293b900d7f5c97"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StarJelly_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StarJelly_1x.png",
+    "bytes": 1809,
+    "sha256": "2191990441aee72476df5ad363afd9c63eea9011b5786ebe53f754f10267c793"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StarLantern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StarLantern_1x.png",
+    "bytes": 2253,
+    "sha256": "b074a78c201360517249612af949ef59438390fd54b539ff9a0ff1e30596c748"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StarPanther_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StarPanther_1x.png",
+    "bytes": 1927,
+    "sha256": "53fd7ca08e695288be8bbae1c0ed08a74f52129b7924784ea5315a6f801a5620"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StarShell_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StarShell_1x.png",
+    "bytes": 2440,
+    "sha256": "e263c4dd5ebaaea8bff95822ee90b880954fb39b8e7d720e0508d6bc887acca1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SteamSentry_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SteamSentry_1x.png",
+    "bytes": 2549,
+    "sha256": "e5fee79538c1ed8dce203b41f5982b86e6969246731c30b8b3c0bc6ee9466462"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormBehemoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormBehemoth_1x.png",
+    "bytes": 1758,
+    "sha256": "4a65737ee2726efe57ac2a7a54c8760679e592f3329352f0ad43f047543cba22"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormFangking_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormFangking_1x.png",
+    "bytes": 1426,
+    "sha256": "ae763151d7b20f7c6bd2cfeadab1dd82128e8c89b7dae208ce625e7ee3de1818"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormHarpy_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormHarpy_1x.png",
+    "bytes": 2023,
+    "sha256": "455354e4ea4f1a224c11269cfcc40a71166072c2938cf6741a34dcfb9b0e037f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormHound_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormHound_1x.png",
+    "bytes": 1949,
+    "sha256": "c9cb5d3ef46a0b039e4b3438d3d33afc88ee900055832fa95358b5f97a1a1a02"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormJelly_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormJelly_1x.png",
+    "bytes": 1837,
+    "sha256": "15c0d0f558492f75b101503c552a828a5294b0f93f08a5c36f1c2e53350a9be1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormNewt_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormNewt_1x.png",
+    "bytes": 1918,
+    "sha256": "8431b9e39152eb885ee43085dfcbe7f393d230fc8aeb55f8e59afbe6bfa7e9fb"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormRam_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormRam_1x.png",
+    "bytes": 2208,
+    "sha256": "d5c8cc1b155d3dc3330ed901503f041ac2242b5e48cd7ed055d93a2df8211acf"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormRay_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormRay_1x.png",
+    "bytes": 1108,
+    "sha256": "2f6f1312e119ba55d8f3c8fbf42ddc8ed8dc6a1cbdfb9785fe14f599aad2ef95"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_StormRoc_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_StormRoc_1x.png",
+    "bytes": 1991,
+    "sha256": "23a67cc4d083d258398517a622b703f1000455b2f84fefd14625fd5fac097b8f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Aurorawyrm_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Aurorawyrm_1x.png",
+    "bytes": 1994,
+    "sha256": "58e16f74c83b809f1be492c9adfd128461f8df444e5015b83e38066bfc6744b3"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_EmberforgeTitan_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_EmberforgeTitan_1x.png",
+    "bytes": 2208,
+    "sha256": "04e43c23a6af466eba3a5dcdbd6a01ceb6216ee7eec52c28936367273cdb7912"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Galewing_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Galewing_1x.png",
+    "bytes": 1888,
+    "sha256": "cb043cd04abe27cda17a07079383e534248cdad96bd378771e4fc6288de65d66"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_GlacierStag_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_GlacierStag_1x.png",
+    "bytes": 3858,
+    "sha256": "3f21792252f5a8370232f9f0c683c6024481f2df065add3f441e820714e8dd3b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Rootfather_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Rootfather_1x.png",
+    "bytes": 2223,
+    "sha256": "49dbfa0e51339c9fe2af0ec10e2014691efe5b14edde59a5b7e7b8eabb8857e4"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Starfall_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Starfall_1x.png",
+    "bytes": 2439,
+    "sha256": "28ae689b956e2904eb43c50edc1e9610bfa57002eeeb903d5522c533ef4187b6"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Stormmane_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Stormmane_1x.png",
+    "bytes": 1679,
+    "sha256": "062cb4967c284104ecadc7d71095223032b2bb21e8e334e03dd2d5243e51036f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Summon_Tidecoil_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Summon_Tidecoil_1x.png",
+    "bytes": 2314,
+    "sha256": "f302651565b3382ad54f0eac4353b56aab31e63cb35f56630da0b823c66b0427"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SunHarpy_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SunHarpy_1x.png",
+    "bytes": 2046,
+    "sha256": "d884926dad9ebcc1abac5f863ca3b7daee6510455646e746b89381b7c3b4b1fe"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SunRay_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SunRay_1x.png",
+    "bytes": 1068,
+    "sha256": "12940cbefd0b50252c9e0e4799405fe21f76142a066d77137c8806f6edb6f4af"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_SunStalker_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_SunStalker_1x.png",
+    "bytes": 1752,
+    "sha256": "b2cbd605f61140ae00db82f041cd27146a4242b5a8abf62af31e0e251c044930"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ThornbackBoar_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ThornbackBoar_1x.png",
+    "bytes": 2083,
+    "sha256": "dae33ad7077d7e47016063f788c84b5740bcaed81c43bbb2a92c940f97fda591"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ThornSnaptrap_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ThornSnaptrap_1x.png",
+    "bytes": 2175,
+    "sha256": "43c7d7727cbb6c4108deea100b3fe49d77a9a8c2529cba43e892f424b796357f"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ThunderRam_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ThunderRam_1x.png",
+    "bytes": 3265,
+    "sha256": "1339b869ddb3aa29d14b9029cb0d0eb515697f6101bc5feb52657cf3d31a02e7"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_ThunderStrider_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_ThunderStrider_1x.png",
+    "bytes": 1561,
+    "sha256": "5bd48b24b3dc0acea6ffc98bc0230cfb05d74e1924061f17fa314585a0b0af0b"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_TideGolem_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_TideGolem_1x.png",
+    "bytes": 2029,
+    "sha256": "7c1937d35ed1e5a94ffc928b870c733853fde17a0ca97e8736639225ec5a7f4a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_TideKraken_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_TideKraken_1x.png",
+    "bytes": 1889,
+    "sha256": "cd224bd26044e5712526881e18766c1f5314c0255dfcf8bc9d6927a35fbf1a90"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_TopazScarab_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_TopazScarab_1x.png",
+    "bytes": 1474,
+    "sha256": "876e6ce181f63a6d9b93f5777efc0e987cd00ec9d8f2f8bc8738a394b59526e1"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Tricorn_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Tricorn_1x.png",
+    "bytes": 1626,
+    "sha256": "c87b127ca1eb39dbdea8532588bef4a0e73af7bb292cc10cbac915d010bc0609"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_VampSkreel_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_VampSkreel_1x.png",
+    "bytes": 1635,
+    "sha256": "98468729ba3a3c9dff4ef90553e3f00bcd2227ce4eeb8e757e8500e6341d8c8a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_VoidBehemoth_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_VoidBehemoth_1x.png",
+    "bytes": 1862,
+    "sha256": "217a8407353c9f8aa6e05ef5baa5220fe8960263f1379b75da4737c884cf56ea"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_VoidEye_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_VoidEye_1x.png",
+    "bytes": 1889,
+    "sha256": "5e7b35e0fb1e983c1002da475197338cf8c978e8b74979ccf0d6bca6aad44906"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_VoidJelly_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_VoidJelly_1x.png",
+    "bytes": 1835,
+    "sha256": "7a2b2be32fc369f860f2ba8466a32f49ae7a4534cbf81f92d3835a4d7f544127"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_Voidkin_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_Voidkin_1x.png",
+    "bytes": 2208,
+    "sha256": "b4dab777fb2de8e2d02c509e90fd86845154e0479d343a607ec1d199af4a530a"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_VoidWyvern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_VoidWyvern_1x.png",
+    "bytes": 1695,
+    "sha256": "b079348945859614196877d0db8372fe1379af0accf17c97ad2d4b648a11cd74"
+  },
+  {
+    "path": "claude-battle-sprites/prism/Battle_Prism_WillLantern_1x.png",
+    "sourcePath": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-battle-sprites\\prism\\Battle_Prism_WillLantern_1x.png",
+    "bytes": 2400,
+    "sha256": "97a096c57bf551012c9ab5e77d3cec9ec9911297d61f4c8b12d0780014277be9"
+  }
+]

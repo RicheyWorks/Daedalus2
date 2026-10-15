@@ -1,0 +1,212 @@
+{
+  "schema": "daedalus.prismheart.ultra-source-polish/v1",
+  "version": "11-ultra-folly-r1",
+  "owner": "buckwild-sol",
+  "status": "SOURCE_IMPLEMENTED_REVIEWED_UNEXECUTED",
+  "recordedAtUtc": "2026-10-15T21:49:29.2061276+00:00",
+  "startUtc": "2026-10-15T21:37:13Z",
+  "firstGameplaySourceSavedUtc": "2026-10-15T21:42:53Z",
+  "sourceCommit": "9175723ad200b05558a2ea12470763c3b9432152",
+  "originalPublishedVersion": 10,
+  "publishedVersionChanged": false,
+  "originalCheckout": "C:/Users/730ri/projects/D2-build",
+  "originalFilesChanged": false,
+  "authorizationHubIds": [
+    32378,
+    32380,
+    32388
+  ],
+  "deliveryHubIds": [
+    32396,
+    32398
+  ],
+  "sourceArchive": "artifacts/source-snapshots/prismheart-v11-ultra-folly-r1-source.tar",
+  "dependencySnapshot": "artifacts/source-snapshots/prismheart-v10-dependencies",
+  "dependencyArchiveSha256": "fb852b2436c18d8378a7e8878135cbdaff518daa7239f158a66a00820ee451d2",
+  "baselineArchiveSha256": "d4441ee9c092888b45896be9830fdb026607b570e717e226f6806293dd7329d5",
+  "sourceFiles": [
+    {
+      "name": "behaviour_test.py",
+      "baselineSha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+      "currentSha256": "e5835a35b098c6b3766d3eca8edd421536e8043fe96e162bb41f77b573a11aac",
+      "unchanged": true,
+      "bytes": 7509
+    },
+    {
+      "name": "bestiary_test.py",
+      "baselineSha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+      "currentSha256": "a0aff43aeb74a64b8c0da5da04a83e1da863fbb20fb4ced867213f3e222616cc",
+      "unchanged": true,
+      "bytes": 5142
+    },
+    {
+      "name": "bot.py",
+      "baselineSha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+      "currentSha256": "e0d80184507c6ff0ccd9255372d2547581a0b7363779e5ed454afa630b9cf177",
+      "unchanged": true,
+      "bytes": 13346
+    },
+    {
+      "name": "build_demo.py",
+      "baselineSha256": "2187ad917e3262f6bd4124156ced3508d38fc9ee530ac59582fa7381113a2654",
+      "currentSha256": "ef26f890978a12b6959208ef3d172d3b9ce0563dab8eeaeb2ad5447a0c686483",
+      "unchanged": false,
+      "bytes": 14141
+    },
+    {
+      "name": "index.html",
+      "baselineSha256": "5114a5aedfe414a29894e642a2cc0bd48078160f4cb3ba1b9bffa82358aaec0b",
+      "currentSha256": "94a3dd5d0564d68f7b02933d27572e4c09b104ea92604d59aa6245f0d7f00ba4",
+      "unchanged": false,
+      "bytes": 118846
+    },
+    {
+      "name": "item_test.py",
+      "baselineSha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+      "currentSha256": "1d49ec8be9b450d0565f5f3940d9cea30cdb90b76dc3866270b0a31f8ec4d410",
+      "unchanged": true,
+      "bytes": 7282
+    },
+    {
+      "name": "menu_test.py",
+      "baselineSha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+      "currentSha256": "4d633fbcf1d6ce5af1763b2b5aa8ea64d4b2cca047c307590c6a2b99bc68425e",
+      "unchanged": true,
+      "bytes": 6038
+    },
+    {
+      "name": "pad_test.py",
+      "baselineSha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+      "currentSha256": "779ca24013bbb0ca36933630efa362165317b1d5c5c4150b372fcc38912b06c7",
+      "unchanged": true,
+      "bytes": 13006
+    },
+    {
+      "name": "play_test.py",
+      "baselineSha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+      "currentSha256": "22d59c783ad3007421eeb4d261abcfbc0c776ce151cddb04272eef27ede0c014",
+      "unchanged": true,
+      "bytes": 7314
+    },
+    {
+      "name": "quest_test.py",
+      "baselineSha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+      "currentSha256": "130f4496771491e8a84b73b1e5e2fd79ba21611f822c22d77e10cf3220b4ed8e",
+      "unchanged": true,
+      "bytes": 7431
+    },
+    {
+      "name": "recruit_test.py",
+      "baselineSha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+      "currentSha256": "6b689bf740dc0c24e49bcb84243f189ec1f6510ab674a8fa748f0ab940e5b827",
+      "unchanged": true,
+      "bytes": 8562
+    },
+    {
+      "name": "status_test.py",
+      "baselineSha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+      "currentSha256": "090507b729f366d2e3ba4899fe28c9af931b85f21800fc96de4f5ff902e58360",
+      "unchanged": true,
+      "bytes": 9035
+    },
+    {
+      "name": "title_test.py",
+      "baselineSha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+      "currentSha256": "fafbab8b5cc3e44c6410df6172f9b9bb8033ecbaa736768e15fe2c25990cadf4",
+      "unchanged": true,
+      "bytes": 7985
+    }
+  ],
+  "deliverables": [
+    {
+      "path": "artifacts/source-snapshots/prismheart-v11-ultra-folly-r1-source.tar",
+      "bytes": 294912,
+      "sha256": "eaf7bde2cd739e5bce5b86034addc992dd935a50bfdeb74979b39e9c8c9b0f1d"
+    },
+    {
+      "path": "docs/production/PRISMHEART-ULTRA-POLISH.md",
+      "bytes": 8030,
+      "sha256": "0f31033cfee5c63ce49347cf79a4bbc37348c1ca9b084fdff86ad685e5ed71fd"
+    },
+    {
+      "path": "artifacts/source-snapshots/prismheart-v11-ultra-folly-r1.patch",
+      "bytes": 35083,
+      "sha256": "41777eb0d10b8570d19cbf38264ca7bacbc4dca3aecdf65b331dc9ba9030b6d1"
+    },
+    {
+      "path": "data/assets/prismheart-ultra-source-pins.json",
+      "bytes": 3452,
+      "sha256": "36dbdec7c7092c38ff52d9ca6977b0ef05d8cb514b859ff648dccdeb7b2299d2"
+    },
+    {
+      "path": "data/assets/prismheart-ultra-dependency-pins.json",
+      "bytes": 3138,
+      "sha256": "b2ee6f62df8a3956e006844d41906721099113e70dfaac78cbd2d7e06bf8171c"
+    },
+    {
+      "path": "data/assets/prismheart-ultra-folly-art-pins.json",
+      "bytes": 3782,
+      "sha256": "1aea84a91f85659fb7dc78b4251edad5ed1b3576bde9166bd1390ff250aa527a"
+    }
+  ],
+  "implemented": [
+    "Optional Gearwright's Folly appended as dungeon index4 from canonical three floors, encounters and Colossus data",
+    "Existing Elder discovery, three-shard optional gate and no fourth shard",
+    "Canonical Brannoc recruitment, reserve/ORDER/save restoration and Inn workshop NPC",
+    "Repeatable three-reading calibration with feedback, bounded saved run/best counters, choice cancellation and first-perfect-only two existing Herb Tonics",
+    "Battle status pills, separate name/HP/MP columns, deterministic Drowse/Lull/Gust overlays gated by actual cast result",
+    "Journey reset and guarded welcome timers, accurate optional boss lore",
+    "Builder --source-root for immutable RPG/controller/settings dependency snapshots"
+  ],
+  "preserved": [
+    "Current pixel JRPG genre and320x224 composition",
+    "Original first four route indices, shard quest and half-Devourer scaling",
+    "Existing menus/items/equipment/statuses/foe behaviours/bestiary and recruitment systems",
+    "Existing bag/opened/save format and combat randomness",
+    "Controller v1/settings source unchanged",
+    "Ten test scripts plus bot.py byte-identical",
+    "Published v10, D2-build originals and other owners' work untouched"
+  ],
+  "sourceReview": {
+    "independentStorySaveReview": true,
+    "independentBuilderDependencyReview": true,
+    "independentVisualReview": true,
+    "findingsClosed": [
+      "Total bosses no longer mislabeled Wardens",
+      "Delayed welcomes require same journey, field mode and no dialogue",
+      "FX success uses current cast statusLanded result",
+      "Optional Colossus bestiary/retreat/immunity/save lore"
+    ]
+  },
+  "stages": {
+    "sourceImplemented": true,
+    "sourceReviewed": true,
+    "hashInventoried": true,
+    "syntaxCheckRun": false,
+    "testsRun": false,
+    "buildRun": false,
+    "browserRun": false,
+    "played": false,
+    "rendered": false,
+    "blenderRun": false,
+    "unrealRun": false,
+    "published": false
+  },
+  "limits": [
+    "Not a built or playable v11; no runtime, render or quality acceptance inferred",
+    "Historical owner-reported v10 greens are not successor results",
+    "Preserved quest_test.py:46 expects exactly4routes; future validation owner must distinguish original4main routes plus optional5th",
+    "Packing, gameplay reachability, balance, rendering, controllers and save/reload unobserved",
+    "Folly uses existing generic boss combat, not unimplemented canonical phases or special drops",
+    "Inn Brannoc reuses Merchant field art; no new character art generated",
+    "Added castle/Colossus art subset pinned, not all art frozen",
+    "Hearthjaw old grant expired; no author attempt/output/PID; new native/Blender slot not allocated"
+  ],
+  "deferred": [
+    "Later authorized versioned build and serial runtime acceptance",
+    "Remaining shared-controller source review package",
+    "Versioned polish backlog of all100claude-octets parts",
+    "Source-ready flora/Hearthjaw and other Blender production awaiting appropriate fresh allocation",
+    "Approved traversal, realm evolution and six aquatic groups of500 backlog"
+  ]
+}

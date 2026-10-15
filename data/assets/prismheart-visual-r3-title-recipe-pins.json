@@ -1,0 +1,27 @@
+[
+  {
+    "path": "tools/blender/pixel_font.py",
+    "bytes": 5214,
+    "sha256": "0f08fa38593e3bd5031d9d113ef63df13f6531909d134c40e3a03d0054bef0a1"
+  },
+  {
+    "path": "tools/blender/pixel_png.py",
+    "bytes": 1875,
+    "sha256": "154c598e84d67058d9a44c247d835ea9e72eebf602d23d3ac5c96f858e951b4c"
+  },
+  {
+    "path": "tools/blender/rpg_battle_ui.py",
+    "bytes": 13487,
+    "sha256": "725ee78ad6fea6b0c944b0d47784af3e2302e80b259265b9db79bed7856342e6"
+  },
+  {
+    "path": "tools/blender/rpg_menus.py",
+    "bytes": 20746,
+    "sha256": "84b092334e084935646a08c52566517031a43fb5ee9a4c0c64e97caf28177b0f"
+  },
+  {
+    "path": "tools/blender/rpg_title.py",
+    "bytes": 11832,
+    "sha256": "690abb600dd2704d2b06e16421580cbdd78950ca2813fe403fbc423e82c90284"
+  }
+]
