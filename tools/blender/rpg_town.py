@@ -254,12 +254,18 @@ def prop_on(base, r, draw):
 
 
 def d_barrel(a, r):
-    for y in range(2, 15):
-        w = 5 if y in (2, 14) else 6
-        rect(a, 8 - w, y, w * 2, 1, C(r, "wd1"))
-    for y in (4, 12):
-        rect(a, 2, y, 12, 1, C(r, "out"))
-    rect(a, 3, 2, 10, 1, C(r, "wd2"))
+    """A dark-stave barrel with iron hoops and a lighter lid, so it reads on any wood floor."""
+    body, lid, hoop = C(r, "wd2"), C(r, "wd1"), C(r, "out")
+    for y in range(3, 15):
+        w = 5 if y in (3, 14) else 6
+        rect(a, 8 - w, y, w * 2, 1, body)
+        put(a, 8 - w + 2, y, lid)                                           # stave highlight
+    for y in (5, 12):
+        rect(a, 2, y, 12, 1, hoop)
+    for y in range(1, 4):
+        w = (4, 5, 4)[y - 1]
+        rect(a, 8 - w, y, w * 2, 1, lid)
+    rect(a, 4, 1, 8, 1, hoop)
 
 
 def d_crate(a, r):
@@ -367,7 +373,7 @@ TILES = {   # name: (builder, frames, walkable, interact)
     "SignMagic": (lambda r, f=0: t_sign(r, kind="magic"), 1, False, "shop:magic"),
     "Counter": (t_counter, 1, False, "talk_across"), "Shelf": (t_shelf, 1, False, None), "Bed": (t_bed, 1, False, "rest"), "Table": (t_table, 1, False, None),
     "Barrel": (lambda r, f=0: prop_on(t_wood, r, d_barrel), 1, False, "search"), "Crate": (lambda r, f=0: prop_on(t_wood, r, d_crate), 1, False, "search"),
-    "Pot": (lambda r, f=0: prop_on(t_stone, r, d_pot), 1, False, "search"), "Fountain": (t_fountain, 2, False, "save"),
+    "Pot": (lambda r, f=0: prop_on(t_wood, r, d_pot), 1, False, "search"), "Fountain": (t_fountain, 2, False, "save"),
     "Well": (lambda r, f=0: prop_on(t_cobble, r, d_well), 1, False, "search"), "Tree": (lambda r, f=0: prop_on(lambda q: WM.t_grass(q), r, d_tree), 1, False, None),
     "Flowers": (lambda r, f=0: prop_on(lambda q: WM.t_grass(q), r, d_flowers), 1, True, None),
     "Fence": (lambda r, f=0: prop_on(lambda q: WM.t_grass(q), r, d_fence), 1, False, None), "Stairs": (lambda r, f=0: prop_on(canvas_stone, r, d_stairs), 1, True, "stairs"),
