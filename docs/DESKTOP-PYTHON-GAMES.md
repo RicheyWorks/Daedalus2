@@ -1,6 +1,55 @@
 # Desktop Python games into Daedalus
 
-## Native polish cycle 3: Football — source only, 2026-10-14
+## Native polish cycle 4: remaining six games — source only, 2026-10-15
+
+Claims hub 31229/31230 cover `ContraGame`, `DodgeBallGame`, `ZeldaGame` and the
+three shooter classes in their existing core headers, plus the existing family
+notes and install packet. The batch resumes from published PR157 checkpoint
+`81ffdd840aa75c5b67fed81609d398b08295d120`. All six original Python SHA256 pins
+were rechecked unchanged. The earlier five passes, shared helpers, original
+files/fixtures, registry/actor/Slate, Java PR152 and team-codex's PR139 remain
+preserved. Work interrupted by capacity limits was reconciled before resuming.
+
+All eleven native game families now have a bounded source polish pass. This
+means **source implemented and reviewed**, with full-app completion, compilation,
+tests, native load, controller/Play/game-feel and E2E acceptance still pending.
+No editor, game/oracle execution, build or test ran in this batch. No new game,
+character asset, audio, reward, profile save or multiplayer service is introduced.
+
+| Game | Concrete source change | Preserved rules and exact limitations |
+|---|---|---|
+| Contra | Current-position distance bar/finish marker; remaining pixels; boss HP; spread/rapid pickup effects and timers; shot-cap/cooldown, jump/crouch and protection feedback; actual controls/result/replay; direct Pad merge | Victory remains strictly `X>2800` without a boss prerequisite. Held jump/fire, in-play cheat +5/600-step spread, 900-step spread pickups and rapid-until-reset remain. Title-screen 30-lives binding is still a separate gap. No checkpoint or persistent progress added. |
+| Dodge Ball | Country stats/super traits, numbered rosters and HP/alive totals; possession/flight/throw/charge/jump readiness; exact catch/control hints; four-round match-win/result/continuation feedback | All three living humans share movement/jump. Hat movement does not charge; only keyboard Up/W or original stick up does. Super is strictly `Charge>30`; effective catch ranges are `<22` normal, `<18` super and `<34` airborne. Held A/Space/Z/J can catch/rethrow; X/RB is fresh throw only. No bracket or new rules. |
+| Asteroids | Rock/UFO counts, shot-cap/cooldown and protection timer/halo; wave-clear objective; final score/wave and host replay | Independent hat input remains additive with keyboard/stick. Ship physics, wrapping, splitting, UFO behavior and existing 60-step native protection remain. This pass adds no respawn rule or timer. |
+| Sega Shooter | Labelled power/speed/life pickups and caps, actual shot mode, enemies/pickups/protection, boss-score distance/20 HP, combined result/replay, direct Pad merge | 1500-point boss threshold, power/speed/life caps 3/8/5, six-step fire, source physics and prior boss repair remain. Fire still reserves three bullet slots even for weaker modes. Unused shot timers do not become enemy bullets. |
+| Zelda | Remaining roster/key objective, KEY label, Moblin HP, sword readiness/hurt timer, distinct result/fresh replay and direct Pad merge | Sword still hits before movement/facing update; cooldown 18, hurt timer 45, scores/drop RNG, prior key repair and death-before-win remain. The shield is decorative. No new shield, enemy or inventory mechanic. |
+| Star Shooter | Wave-shift countdown, enemy/pickup counts, twin/triple/shot-cap readiness, shield/protection, boss health/state/phase, controls/pause confirmation/result/replay and direct Pad movement | `1200-WaveTimer` predicts a wave shift, not an exact boss arrival. Difficulty, boss thresholds/patterns and source powers remain. DGS1/save/restore/snapshot/resume/options/request and pause timing blocks are unchanged; existing host failed-save retry code remains unchanged and its current-head acceptance is pending. |
+
+This batch derives feedback from existing state. No new authoritative timers,
+health, scores, AI, spawn, damage, balance or RNG calls are added. Direct Pad support
+for Contra/Zelda/Sega/Star mirrors the existing Slate merge; each keeps its own
+keyboard/stick precedence. Asteroids and Dodge retain their independent hat rules.
+Protection labels report the current source-style timer: at 1 it expires before
+the next **live** collision pass. Paused Star steps do not tick it. These labels
+do not copy Pac-Man's separately designed 90-subsequent-step grace policy.
+
+Independent read-only review found and corrected one Contra presentation issue:
+an initial HUD overlapped the source's reachable upper-platform jump. The top
+panel now ends at Y=98, with readiness/controls in Y=526..594 below ground Y=520;
+source field/collision geometry is unchanged. Actual font fit, rendering and game
+feel remain unmeasured. Source review also verified unchanged simulation blocks,
+shared/peer sections and Star persistence/pause contracts; it is not a compiler.
+
+The existing `CreateGame -> Driver -> Arcade frame/state -> Slate` bindings carry
+all eleven passes. The current feature/interface/UI/gap/evidence table below and
+[exact install/deferred-validation packet](desktop-games-polish-install.json)
+remain canonical for this delivery. The separate
+[full original-app map](https://github.com/RicheyWorks/Daedalus2/blob/89ece41824b9132403ac0bfffae15343b08b13f8/docs/java-arcade/capability-coverage.md)
+continues to track source/host gaps beyond polish. Next work is owner-scoped gap
+integration and separately authorized validation, not a claim of eleven installed
+or accepted games. Only `codex-play-guard` operates Unreal.
+
+## Native polish cycle 3 checkpoint: Football — source only, 2026-10-14
 
 Exact continuation claims: hub 31211/31212. Only `FootballGame` in
 `DesktopGames/DaedalusDesktopSportsCore.h` changes, plus these existing canonical
@@ -52,10 +101,10 @@ deferred boundary/visual observations are in
 
 No player mesh, Blender asset, audio, profile save, multiplayer, reward or new game
 ID is introduced. The bounded pass does not complete full original-app E2E
-coverage. Contra is next queued and requires an exact claim/source trace before
-editing. Only `codex-play-guard` operates Unreal after separately authorized work.
+coverage. Contra was next queued at this checkpoint; cycle 4 above completes its
+bounded source pass. Only `codex-play-guard` operates Unreal after separately authorized work.
 
-## Native polish cycle 2 — source only, 2026-10-14
+## Native polish cycle 2 checkpoint — source only, 2026-10-14
 
 Continuation claims: hub 31185/31186; scope/PR139 acknowledgment 31193. This pass
 uses the actual existing `Game::Reset/Step/Render/GetStatus` interface and catalog
@@ -105,7 +154,7 @@ and a host R/Restart terminal hint use the original 1,200 threshold and host API
 No damage, timing, movement, RNG, spawn, score, level or attack-input rule changes.
 No replacement character, Blender asset or audio work is included.
 
-### Existing-interface coverage and remaining evidence
+## Current existing-interface coverage and remaining evidence
 
 The paths below are relative to
 `engines/unreal/DaedalusLink/Source/DaedalusLink/`. All bindings already exist:
@@ -113,7 +162,7 @@ The paths below are relative to
 `Driver::Advance` calls bounded fixed `Step` updates and refreshes `Render`,
 `Private/DaedalusDesktopArcade.cpp::GetState` exposes `Status`, and
 `Private/SDaedalusDesktopArcade.cpp` paints frame commands and routes input/restart.
-No new adapter is proposed or required for these five feedback passes.
+No new adapter is proposed or required for these eleven feedback passes.
 
 | Implemented feature | Exact core interface/source path | Existing Daedalus UI/service binding | Missing code or scope | End-to-end evidence |
 |---|---|---|---|---|
@@ -122,6 +171,12 @@ No new adapter is proposed or required for these five feedback passes.
 | Pac-Man lethal respawn guard, dot/power counts, fresh retry | `Public/DesktopGames/DaedalusDesktopMazeCore.h::PacmanGame::Step/Render/GetStatus/RespawnFramesRemaining` | Catalog `pacman`; existing merged hat/stick input, terminal press edges and host R/Restart | No profile/save/inventory backend for this source game; no new adapter | Source written; exact 90/91 boundary, fright capture, reset/terminal and native play pending |
 | Shadow Ninja periodic strike/readiness feedback | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::platformers::NinjaBoss::Update/IsTelegraphing/InStrikeRange`; `ShadowNinjaGame::Step/Render/GetStatus` | Catalog `shadow_ninja`; existing separate hat/axes and sword/star/spin edges; host R/Restart | No character mesh/audio/progression invented; source level remains 1 | Source written; timer/range/invincibility receipt boundaries and native readability pending |
 | Football scorer/kick receipts, ready/cooldown and direct Pad control | `Public/DesktopGames/DaedalusDesktopSportsCore.h::FootballGame::MovePlayer/Step/Render/GetStatus/IsKickReady` | Catalog `football`; existing merged hat/axes, Fire/Action edges, Frame/Note and host R/Restart | No new physics, timed kickoff pause, possession, save/network/reward or service added | Cycle 3 source written; cue lifetimes, Pad precedence, goal/cooldown/clock/result and native readability pending |
+| Contra distance/weapon/readiness/protection and direct Pad | `Public/DesktopGames/DaedalusDesktopPlatformersCore.h::ContraGame::Step/Render/GetStatus` | Catalog `contra`; existing held jump/fire, merged hats, cheat edges and host restart | Title 30-lives UI binding remains; no durable checkpoint/profile/rewards | Cycle 4 source reviewed; strict finish, cap/power expiry, held/mixed input and native layout pending |
+| Dodge roster/country/throw/catch/round feedback | `Public/DesktopGames/DaedalusDesktopSportsCore.h::DodgeBallGame::Render/GetStatus/LivingPlayers/IsHumanThrowReady/HumanCatchRadius` | Catalog `dodge_ball`; existing separate hat/axes, held catch/rethrow versus fresh throw, round confirm | No new bracket, teammate switch or persistence | Cycle 4 source reviewed; strict charge/catch/cooldown, KO/round transitions and readability pending |
+| Asteroids wave/rock/UFO/protection/fire feedback | `Public/DesktopGames/DaedalusDesktopShootersCore.h::AsteroidsGame::Render/GetStatus/IsFireReady/GetProtectionFrames` | Catalog `asteroids`; existing independent hat fields, held fire and host restart | No new physics, respawn rule, profile or asset binding | Cycle 4 source reviewed; timer 0/1/60, bullet cap, additive hats/wave transitions and native view pending |
+| Sega pickup/shot/boss/protection feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::SegaShooterGame::Player::Update`; `SegaShooterGame::Render/GetStatus/IsFireReady/GetBossHealth` | Catalog `sega_shooter`; existing merged movement/held fire and host restart | No enemy bullets invented; no new save/network/service | Cycle 4 source reviewed; caps, reserved slots, boss/result flags, mixed input and native view pending |
+| Zelda roster/key/sword/hurt feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopMazeCore.h::ZeldaGame::Player::Update`; `ZeldaGame::Render/GetStatus/LivingEnemyCount/HasGroundKey/IsSwordReady` | Catalog `zelda`; existing merged movement and fresh sword/retry edges | Decorative shield stays decorative; no new inventory or service | Cycle 4 source reviewed; attack/facing order, key/drop/death transitions, timers and native view pending |
+| Star wave/shot/boss/shield/pause/result feedback and direct Pad | `Public/DesktopGames/DaedalusDesktopShootersCore.h::StarShooterGame::Player::Update`; `StarShooterGame::Render/GetStatus/GetWaveFramesRemaining/IsFireReady` | Catalog `star_shooter`; existing difficulty, core pause/menu, DGS1 and actor persistence/top-ten contracts | Host retry is implemented in `ADaedalusDesktopArcade::ProcessSourceRequests`; current-head failure/recovery acceptance pending; no durable replay claim | Cycle 4 source reviewed; pause/quit/save flags, wave/boss phases, slot caps/input and native view pending |
 
 Later authorized validation must distinguish source, committed, connected, native
 and accepted stages. Exact commit/blobs/SHA256 and pending operator observations
@@ -215,12 +270,12 @@ game or an endless documentation pass. Native gameplay proof is a separate stage
 | 3 Pac-Man | 90-step lethal respawn guard, remaining-dot/power feedback, fresh retry | Map, speeds, ghosts, scores and win rules; guard explicitly new native rule | Cycle 2 source written; 90/91 boundary, reset, captures and Play pending |
 | 4 Shadow Ninja | Telegraph existing boss attack; jump/spin/attack readiness and pulse receipt | Existing attack timing/damage and platform movement | Cycle 2 source written; timer/range boundaries and native readability pending |
 | 5 Football | Live scorer/kick receipts, actual readiness, direct Pad and result/replay cues | Immediate source resets, remote kicks, cooldown, physics and floating 90-second match | Cycle 3 source written; cue/Pad/clock/result boundaries and native Play pending |
-| 6 Contra | Stage distance/checkpoint and pickup readiness cues | Source distance victory, held-jump behavior, cheat distinctions | Next queued game; title bonus binding remains a separate gap; exact claim required |
-| 7 Dodge Ball | Tournament/round summary, throw/catch/charge readiness | Simultaneous trio control and existing held rethrow | Queued; no new bracket/persistence claim |
-| 8 Asteroids | Wave-ready/protection countdown and local run feedback | Wrap/inertia, progressive rock counts and lives | Queued; no ship physics replacement |
-| 9 Sega Shooter | Boss entry/pickup/terminal cues | Source powers/boss victory; unused timers are not enemy bullets | Queued; no invented shooting feature |
-| 10 Zelda | Enemy/key/sword readiness and distinct hurt/win cues | Source key goal and decorative shield | Queued; shield gameplay would require an explicit extension |
-| 11 Star Shooter | Wave/boss/pickup/reset readability | Existing difficulty, patterns, native save/top-ten ownership | Queued; failed-save handling unchanged |
+| 6 Contra | Distance/weapon/pickup/readiness/control/replay feedback | Source distance victory, held-jump behavior, cheat distinctions | Cycle 4 source reviewed; title bonus remains a separate gap; native validation pending |
+| 7 Dodge Ball | Country/roster/round and throw/catch/charge/jump feedback | Simultaneous trio control and held rethrow | Cycle 4 source reviewed; no bracket/persistence claim; native validation pending |
+| 8 Asteroids | Wave/rock/UFO/protection/fire and run feedback | Wrap/inertia, progressive rocks/lives and independent hats | Cycle 4 source reviewed; native validation pending |
+| 9 Sega Shooter | Boss/pickup/shot/protection/terminal feedback | Source powers/boss victory; unused timers are not enemy bullets | Cycle 4 source reviewed; native validation pending |
+| 10 Zelda | Roster/key/sword/hurt/win and retry feedback | Source key goal and decorative shield | Cycle 4 source reviewed; native validation pending |
+| 11 Star Shooter | Wave/boss/shot/shield/pause/reset readability | Existing difficulty, patterns, save/top-ten ownership | Cycle 4 source reviewed; existing failed-save retry retained; native validation pending |
 | Java Sudoku | Existing API/native capability gaps in PR152 map | Java rules/clock/score/account/inventory authority | Separate C++ integration lane; no rule port |
 | Java Blackjack | PR152 settings/full visible metadata checkpoint | Java rules, revisions, simulated credits and hidden-state boundary | Draft source `89ece418`; no current connection/native/E2E |
 | Minesweeper | Existing owner's menu/persistence/feedback follow-up | PR139 original game distinct from PR49 Java-rule pilot | Owned by team-codex; no edits in this cycle |

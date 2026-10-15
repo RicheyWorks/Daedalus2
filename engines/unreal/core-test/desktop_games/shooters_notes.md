@@ -1,5 +1,40 @@
 # Desktop shooter ports
 
+## Native polish cycle 4 — source only, 2026-10-15
+
+Claims 31229/31230 cover the three game classes only, preserving `shooter_detail`.
+All original hashes below match. Asteroids now reports rocks/UFOs, fire capacity/
+cooldown, current protection timer/halo, wave objective and final score/replay.
+Ship/Step/input remain unchanged, including additive independent hat rotation
+and existing 60-step native protection. Sega labels pickups/caps 3/8/5, shot mode,
+enemies/pickups, protection, 1500-point boss entry/20 HP and combined result flags.
+Star reports wave shift `1200-WaveTimer`, enemy/pickup counts, shot/power/protection,
+boss health/state/phase and controls/pause confirmation/result/replay. Wave shift
+does not promise an exact boss entry; every-fifth-wave rules and live boss/wave
+timing remain. All new feedback is derived, with no new state/timers/RNG calls.
+
+Direct Pad directions for Sega/Star mirror existing Slate merging: Sega's stick
+override and Star's digital-over-stick priority remain. Asteroids' additive hat
+rules remain separate. Fire readiness matches actual capacity: Asteroids <128;
+Sega/Star reserve three slots even for normal/twin modes. Protection at timer 1
+expires before the next LIVE collision step; Star pause freezes it. All Reset,
+Step, fire/damage, enemy bullets/patterns, scores, waves, spawns and boss rules are
+unchanged. Sega's unused enemy shot timers do not create projectiles.
+
+Star DGS1/save/restore/CaptureRun/ResumeRun/SaveAndQuit/options/request and pause
+timing blocks remain bytewise unchanged at checkpoint 81ffdd84. New status says
+host persistence is pending for Save & Quit; it does not claim a successful write.
+Existing host on-disk/top-ten ownership remains separate. `ADaedalusDesktopArcade::ProcessSourceRequests` already retains failed pending saves, retries after five seconds and acknowledges only success; current-head native failure/recovery acceptance is pending.
+No editor/save file, asset, audio or character was touched.
+
+**Uncompiled/untested.** Independent source review is the current evidence.
+Later checks include caps/cooldown, timers 0/1/60 and paused Star, independent/mixed
+inputs, pickup caps, Sega boss/results, Star wave/boss phases/power reset, menu/
+save-request/quit flags and native rendering/readability. Existing fixtures and
+compiler/replay/pilot receipts below are historical baseline; no game/oracle,
+editor, build or tests ran in this pass. Exact coverage/install/deferred record
+is in DESKTOP-PYTHON-GAMES.md and docs/desktop-games-polish-install.json.
+
 These three cores port the user's selected latest Desktop revisions. The original files remain on `C:\Users\730ri\OneDrive\Desktop`; no source script is launched or imported as a module. The source oracle selects reviewed AST rule classes into a small stub namespace, with controlled random values and no Pygame import/display, home-directory file access or script startup.
 
 | Core | Canonical source | SHA256 |
@@ -40,7 +75,7 @@ Polymorphic host bindings avoid Unreal RTTI: `OwnPause`, `IsCorePaused`, `SaveSt
 
 Polish changes: dead enemies cannot score more than once, consumed bullets hit only one target, and invulnerability is rechecked between hit categories so overlapping hits cannot consume several lives/shield plus life in one source frame. Entities/effects/popups are bounded. Boss thresholds can summon once per threshold, and boss rewards occur once. Source rules for escaped cruiser escorts remain conservative: an escort disappearing offscreen does not count as a kill for the bonus.
 
-## Evidence and owner acceptance
+## Historical baseline evidence and owner acceptance
 
 `shooters_parity.txt` contains 635 executed-source cases across 21 rule categories, with original SHA pins and numeric schemas. The oracle supplies deterministic random fragments; it does not claim Pygame runtime behavior or full-screen script parity. The rectangle stub explicitly models integer construction; real Unreal input, rendering, audio, save integration and live gameplay remain separate verification stages.
 

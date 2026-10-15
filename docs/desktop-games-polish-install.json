@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 4,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
   "status": "UNCOMPILED_UNTESTED_SOURCE",
@@ -12,18 +12,20 @@
     31186,
     31193,
     31211,
-    31212
+    31212,
+    31229,
+    31230
   ],
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "a05bcf88de8477aeca8ecbbd05510ba2da4cb6df",
+    "code_commit": "1fe4a2477345c669ce15a0214cb600ed4b7d1e26",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
-        "git_blob": "89500a3960ee9d26c4a503518686b21e680bd578",
-        "sha256": "C852F9A7CB843D6977BCDE285444B8D3EA88C6AD95A0AEC6B41B08046553FF3E"
+        "git_blob": "83d927eff30111edfce9c73ceebf440eba26cbbc",
+        "sha256": "B923E2B14B75FFAC5C5FDE86C494F7A71FF53DD8ABFBB105BFC4F6F128FED370"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
@@ -32,13 +34,18 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
-        "git_blob": "2bd4d68f76848cdae7605ce06139039ffcb84e0f",
-        "sha256": "E4A09BAB5E1F721C9E797005AC0527793DB689D048B09BDE4FCEEB189092B5D1"
+        "git_blob": "b10ca15e2db98edb7aa295b64f320dc790f17b47",
+        "sha256": "BD21DD22888F6ECE16B30EE5BDB55A269F22A9186CE3EE35A2BD3EE273934C3B"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
-        "git_blob": "461d6dd20a0d16ee47507039b083f243af560258",
-        "sha256": "5E93004382E96BBF0C69A6B8568DB33E87CC92EB90401BD60C3F028FC21017F5"
+        "git_blob": "5251ae5ea9bb3b819322e5b0e6dba88d9c44c31f",
+        "sha256": "91B5174802DA0EE9964CA8C6E63861C54F3401B08E771F14F4D5732662455BFA"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+        "git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7",
+        "sha256": "10B64B7493066E0FEADCCB08320A5C3595ADD2DFFA84F1E87BC85D118B057C05"
       }
     ],
     "peer_sections_preserved": [
@@ -46,15 +53,13 @@
       "PongCore cycle1",
       "PacmanGame cycle2",
       "ShadowNinjaGame and NinjaBoss cycle2",
-      "ZeldaGame",
-      "ContraGame",
-      "NinjaPlayer/NinjaAttack/NinjaEnemy",
-      "sports_detail shared helpers",
-      "DodgeBallGame exact bytes"
+      "FootballGame cycle3",
+      "all platformers/sports/maze/shooter shared helpers",
+      "Star pause/save/snapshot/restore/options/request timing and DGS1 payload blocks"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "6a7052c7bb3dd5eff20e1317664c1c8bb476cc21",
-    "prior_runtime_commit": "d98c6b780af6a13857f1aa395a56b85cf7938cd2",
+    "prior_checkpoint_commit": "81ffdd840aa75c5b67fed81609d398b08295d120",
+    "prior_runtime_commit": "a05bcf88de8477aeca8ecbbd05510ba2da4cb6df",
     "preserved_checkpoints": [
       {
         "cycle": 1,
@@ -73,7 +78,61 @@
           "pacman",
           "shadow_ninja"
         ]
+      },
+      {
+        "cycle": 3,
+        "head": "81ffdd840aa75c5b67fed81609d398b08295d120",
+        "code_commit": "a05bcf88de8477aeca8ecbbd05510ba2da4cb6df",
+        "games": [
+          "football"
+        ]
       }
+    ],
+    "cycle4_original_sources": [
+      {
+        "id": "contra",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\contra.py",
+        "sha256": "2E845D67754FC81FEEEA881B7C6D3068A60042C3371E9F8FDEAE5A8616D09107",
+        "read_only_verified": true
+      },
+      {
+        "id": "dodge_ball",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\super_dodge_ball_fixed.py",
+        "sha256": "359B4BC045B00186E9D3EE915863DE214453B22DF8B81A881402EE6B49D21CB6",
+        "read_only_verified": true
+      },
+      {
+        "id": "asteroids",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\asteroids_pygame_ce.py",
+        "sha256": "8A46338B4D93D9447DF7FEAB40DFF21B99BFA0CE7614698681B8A5C91F0FC20B",
+        "read_only_verified": true
+      },
+      {
+        "id": "sega_shooter",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\sega_space_shooter.py",
+        "sha256": "5108B3065FA91332570445ADACCBB8C5BB77E437BC0BD8E37213737E931AD0DB",
+        "read_only_verified": true
+      },
+      {
+        "id": "zelda",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\zelda.py",
+        "sha256": "713F6DE7C27A92D65FDEDD77A6C15A7E80A964D098D5BA209DBF32E648CC9BDD",
+        "read_only_verified": true
+      },
+      {
+        "id": "star_shooter",
+        "path": "C:\\Users\\730ri\\OneDrive\\Desktop\\star_shootergpt1_fixed.py",
+        "sha256": "05AC3A0FABDDAB94ADB3D3A7B2C6EB9F7E1543390A48805DB247A3FFD40D8281",
+        "read_only_verified": true
+      }
+    ],
+    "cycle4_changed_sections": [
+      "PlatformersCore::ContraGame",
+      "SportsCore::DodgeBallGame feedback only",
+      "MazeCore::ZeldaGame",
+      "ShootersCore::AsteroidsGame feedback only",
+      "ShootersCore::SegaShooterGame",
+      "ShootersCore::StarShooterGame live movement input and derived feedback"
     ]
   },
   "registration": {
@@ -85,7 +144,13 @@
       "pong",
       "pacman",
       "shadow_ninja",
-      "football"
+      "football",
+      "contra",
+      "dodge_ball",
+      "asteroids",
+      "sega_shooter",
+      "zelda",
+      "star_shooter"
     ],
     "registry_actor_slate_changed": false,
     "pr139_minesweeper_changed": false,
@@ -319,6 +384,236 @@
         "character assets/audio",
         "profile/save/network features not invented"
       ]
+    },
+    {
+      "id": "contra",
+      "InitialGameId": "contra",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "feedback": [
+        "current-position distance and strict finish marker",
+        "boss HP",
+        "spread/rapid effects and real timer policy",
+        "one/three-slot shot cooldown/cap readiness",
+        "jump/crouch/held-repeat state",
+        "current protection timer and result/replay",
+        "mapped controls"
+      ],
+      "direct_input_extension": "Pad OR into copied digital controls mirrors Slate, including cheat direction edges; source stick and right precedence remain.",
+      "preserved_rules": [
+        "strict Player.X>2800 victory without boss prerequisite",
+        "held jump/fire and fire-before/after-update ordering",
+        "900-step spread pickup, 600-step in-play cheat",
+        "rapid FireRate4 until reset versus normal8",
+        "96 bullets with one/three-slot eligibility",
+        "90-step protection decrement before collision",
+        "source physics/spawns/scores/RNG/cheat distinctions"
+      ],
+      "interfaces": [
+        "ContraGame::Step/Render/GetStatus",
+        "existing GetPlayer/GetCameraX and entity getters"
+      ],
+      "hud_geometry": "Top panel Y12..98; lower readiness/control band Y526..594 below source ground520; upper jump arc source-reviewed, actual readability unverified.",
+      "source_gap": "SubmitCheatKey with titleScreen=true grants the source 30 lives; its title UI binding remains separate. No checkpoint or persistent progress created.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\contra.py",
+      "original_sha256": "2E845D67754FC81FEEEA881B7C6D3068A60042C3371E9F8FDEAE5A8616D09107",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "protection_display_policy": "Current source-style timer only;1 expires before next LIVE collision pass. Not the separate Pac-Man90-subsequent-step guard.",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+    },
+    {
+      "id": "dodge_ball",
+      "InitialGameId": "dodge_ball",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "feedback": [
+        "country base power/speed/super traits",
+        "P1/P2/P3 and C1/C2/C3 roster labels/HP/alive totals",
+        "possession/flight/throw cooldown and charge state",
+        "jump/airborne counts and strict catch hints",
+        "four-round cumulative match results/continue/reset",
+        "exact held versus fresh control guidance"
+      ],
+      "preserved_rules": [
+        "simultaneous living trio movement/jump",
+        "independent hat movement does not charge",
+        "keyboard Up/W or original stick up charges",
+        "strict Charge>30",
+        "effective strict catch22 normal/18 super/34 airborne, loose pickup24",
+        "held A/Space/Z/J catch/rethrow versus X/RB edge throw",
+        "friendly hits, source country values/physics/RNG, repeated random opponents",
+        "four rounds, final confirm returns title; new country confirmation clears scores"
+      ],
+      "interfaces": [
+        "DodgeBallGame::Render/GetStatus",
+        "LivingPlayers/TeamHealth/HumanBallHolder",
+        "IsHumanThrowReady/IsHumanSuperCharged",
+        "JumpReadyPlayers/AirbornePlayers/HumanCatchRadius"
+      ],
+      "simulation_and_controls_unchanged": true,
+      "source_gap": "No bracket, teammate switch, profile/save or rewards invented.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\super_dodge_ball_fixed.py",
+      "original_sha256": "359B4BC045B00186E9D3EE915863DE214453B22DF8B81A881402EE6B49D21CB6",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+    },
+    {
+      "id": "asteroids",
+      "InitialGameId": "asteroids",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "feedback": [
+        "rock/UFO counts and wave-clear objective",
+        "actual fire cooldown and128-shot limit",
+        "existing protection timer/halo",
+        "final score/wave and host restart"
+      ],
+      "preserved_rules": [
+        "Ship and Step unchanged",
+        "additive independent keyboard/stick/hat rotation",
+        "source wrap/inertia/thrust/split/UFO/scoring/RNG",
+        "existing60-step native respawn/wave protection",
+        "bullet gate size<128"
+      ],
+      "interfaces": [
+        "AsteroidsGame::Render/GetStatus",
+        "GetRockCount/GetUfoCount/GetProtectionFrames/IsFireReady"
+      ],
+      "simulation_and_controls_unchanged": true,
+      "source_gap": "No new ship physics, protection rule, persistence or assets.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\asteroids_pygame_ce.py",
+      "original_sha256": "8A46338B4D93D9447DF7FEAB40DFF21B99BFA0CE7614698681B8A5C91F0FC20B",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "protection_display_policy": "Current source-style timer only;1 expires before next LIVE collision pass. Not the separate Pac-Man90-subsequent-step guard.",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+    },
+    {
+      "id": "sega_shooter",
+      "InitialGameId": "sega_shooter",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "feedback": [
+        "labelled power/speed/life pickups and caps3/8/5",
+        "normal/double/spread shot and fire readiness",
+        "enemy/pickup/protection counts",
+        "1500-score boss distance and20HP",
+        "truthful combined Over/Won results and host replay"
+      ],
+      "direct_input_extension": "Pad OR mirrors Slate while original stick override/right-down precedence remain.",
+      "preserved_rules": [
+        "all Reset/Step/fire/damage/spawn/RNG/scoring unchanged",
+        "six-step shooting and three-slot reservation even weak modes",
+        "pickup caps3/8/5 and60-step protection",
+        "prior native boss repair and1500 threshold",
+        "unused enemy shot timers remain unused for projectiles"
+      ],
+      "interfaces": [
+        "SegaShooterGame::Player::Update; SegaShooterGame::Render/GetStatus",
+        "GetBossHealth/GetEnemyCount/GetPickupCount/IsFireReady"
+      ],
+      "source_gap": "No invented enemy bullets, save/network/rewards or character assets.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\sega_space_shooter.py",
+      "original_sha256": "5108B3065FA91332570445ADACCBB8C5BB77E437BC0BD8E37213737E931AD0DB",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "protection_display_policy": "Current source-style timer only;1 expires before next LIVE collision pass. Not the separate Pac-Man90-subsequent-step guard.",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+    },
+    {
+      "id": "zelda",
+      "InitialGameId": "zelda",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "feedback": [
+        "living roster/ground-key objective and KEY label",
+        "Moblin HP",
+        "sword ready/current hurt timer",
+        "distinct victory/defeat and fresh controls/replay"
+      ],
+      "direct_input_extension": "Pad OR mirrors Slate before original analog/facing precedence and0.707 diagonal scale.",
+      "preserved_rules": [
+        "sword collision before movement/facing update",
+        "18-step attack and45-step hurt timer",
+        "source health/AI/scores/drop RNG",
+        "existing four-roster key repair and death-before-win",
+        "decorative shield stays decorative"
+      ],
+      "interfaces": [
+        "ZeldaGame::Player::Update; ZeldaGame::Render/GetStatus",
+        "LivingEnemyCount/HasGroundKey/IsSwordReady"
+      ],
+      "source_gap": "No new shield, enemy, inventory, profile/save or service.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\zelda.py",
+      "original_sha256": "713F6DE7C27A92D65FDEDD77A6C15A7E80A964D098D5BA209DBF32E648CC9BDD",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "protection_display_policy": "Current source-style timer only;1 expires before next LIVE collision pass. Not the separate Pac-Man90-subsequent-step guard.",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+    },
+    {
+      "id": "star_shooter",
+      "InitialGameId": "star_shooter",
+      "InitialSeed": 730,
+      "gameplay_rule_changes": false,
+      "difficulty_default": "Medium via existing option1; existing SetOption/GetOption authority unchanged.",
+      "feedback": [
+        "wave SHIFT countdown1200-WaveTimer",
+        "enemy/pickup counts",
+        "twin/triple/shot-cap readiness",
+        "shield/protection timer",
+        "boss health/state/normal-enraged-berserk phase",
+        "controls/pause confirmation/final score/replay",
+        "Save & Quit host persistence pending note"
+      ],
+      "direct_input_extension": "Pad OR mirrors Slate; original digital-over-stick movement remains. No pause-menu control/timing change.",
+      "preserved_rules": [
+        "all Reset/Step/fire/damage/spawn/RNG/scores/waves/boss behavior",
+        "three-slot fire reservation for twin/triple",
+        "wave shift is not exact boss-entry prediction",
+        "difficulty and source powers/shield behavior",
+        "pause/save/request flags, DGS1 and snapshot/restore/resume/options blocks identical"
+      ],
+      "interfaces": [
+        "StarShooterGame::Player::Update; StarShooterGame::Render/GetStatus",
+        "GetBoss/GetEnemyCount/GetPickupCount/GetWaveFramesRemaining/IsFireReady",
+        "existing pause/save/DGS1 host contracts preserved"
+      ],
+      "persistence_claim": "Existing actor owns on-disk/top-ten and already implements failed-save retention/five-second retry in ProcessSourceRequests. No current-head write/connection/native recovery proof; host source unchanged.",
+      "original_source": "C:\\Users\\730ri\\OneDrive\\Desktop\\star_shootergpt1_fixed.py",
+      "original_sha256": "05AC3A0FABDDAB94ADB3D3A7B2C6EB9F7E1543390A48805DB247A3FFD40D8281",
+      "new_authoritative_state_or_timers": false,
+      "inventory_or_server_rewards": false,
+      "protection_display_policy": "Current source-style timer only;1 expires before next LIVE collision pass. Not the separate Pac-Man90-subsequent-step guard.",
+      "frame_size_px": [
+        800,
+        600
+      ],
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
+      "preserved_host_retry_source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp::ADaedalusDesktopArcade::ProcessSourceRequests",
+      "preserved_host_retry_seconds": 5
     }
   ],
   "presentation": {
@@ -350,6 +645,15 @@
       "Kick READY/wait steps",
       "accepted/ignored press receipt",
       "mapped controls and result/replay instruction"
+    ],
+    "cycle4_noncolour_cues": [
+      "distance/finish labels",
+      "country/roster/HP/round labels",
+      "ready/wait/shot-cap/protection words",
+      "pickup types/caps",
+      "boss HP/state/phase",
+      "key/objective words",
+      "terminal/pause/control instructions"
     ]
   },
   "placement": {
@@ -364,7 +668,7 @@
     "saved": false
   },
   "stages": {
-    "source": "Five bounded native source passes implemented and independently read-only reviewed; source facts only",
+    "source": "All eleven native families have bounded source polish implemented and independently read-only reviewed; not full-app or native/E2E completion.",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -374,7 +678,8 @@
     "play_verified": false,
     "game_feel_verified": false,
     "existing_bindings_source_traced": true,
-    "connected_current_build": false
+    "connected_current_build": false,
+    "first_polish_source_passes_written": 11
   },
   "pending_operator_steps": [
     "Read exact runtime source commit/blobs/SHA256 and canonical coverage docs; this packet does not authorize tests/build/install while deferral remains.",
@@ -387,7 +692,13 @@
     "Football: observe fresh kickoff/replay confirm without a same-step kick, source immediate movement and truncated89 HUD; hold Fire does not auto-kick; host R returns to title.",
     "Football: goal cue90 frames event+89, kick receipt12 event+11, terminal freeze/reset clears; accepted/ignored at cooldown0/1, same-step accepted display11, remote/overlap kicks and later deflection; goal reset retains cooldown and live clock.",
     "Football: compare no-Pad physics/clock/state against prior source; direct Pad opposing directions retain right/down precedence and analog override. Check strict goal boundaries, last-step scoring and win/loss/draw.",
-    "Check all five frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review supplies no current play evidence.",
+    "Contra: X2800/above with live boss, current-position progress, upper-platform jump/HUD, spread expiry/rapid reset, one/three-shot capacity, held jump/fire/crouch, mixed Pad/stick and cheat edges; title30 binding remains separate.",
+    "Dodge: all countries and four rounds, KO/alive totals, charge30/31/60, cooldown1/0, catch/pickup strict22/18/34/24, held catch/rethrow versus fresh throw and hat-versus-charge controls; verify roster/text fit.",
+    "Asteroids: original additive keyboard/stick/hat rotation, bullet128 cap/cooldown, protection0/1/60, wave/split/UFO/terminal transitions and actual halo/HUD readability.",
+    "Sega: pickup caps3/8/5, reserved-three-slot readiness, cooldown/protection0/1/60, 1500-score boss/20HP, combined Over/Won states, mixed Pad/stick and actual pickup/shot/boss layout.",
+    "Zelda: sword/facing-before-move, mixed Pad/stick, attack18/1/0 and hurt45/1/0, roster/key/drop/death ordering, decorative shield, terminal/fresh reset and native layout.",
+    "Star: wave shift while boss active, boss states/phases and power reset, slot caps, digital-over-stick Pad, protection1 and paused freeze, pause/quit/save-request flags, DGS1/resume behavior and current host save failure separately.",
+    "Check all eleven frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review is not current native play evidence.",
     "Return exact source/binary/map/actor/input/transform/save and redacted play observations only after authorized execution."
   ],
   "backlog_order": [
@@ -396,12 +707,12 @@
     "pacman source-pass2",
     "shadow_ninja source-pass2",
     "football source-pass3",
-    "contra next",
-    "dodge_ball",
-    "asteroids",
-    "sega_shooter",
-    "zelda",
-    "star_shooter"
+    "contra source-pass4",
+    "dodge_ball source-pass4",
+    "asteroids source-pass4",
+    "sega_shooter source-pass4",
+    "zelda source-pass4",
+    "star_shooter source-pass4"
   ],
   "java_policy": "Sudoku/Blackjack retain Java authority, C++ integration only; no changes in this packet",
   "restrictions": [
@@ -414,8 +725,15 @@
   ],
   "capability_coverage": {
     "canonical_full_app_map": "https://github.com/RicheyWorks/Daedalus2/blob/89ece41824b9132403ac0bfffae15343b08b13f8/docs/java-arcade/capability-coverage.md",
-    "current_feature_source_binding_gaps_evidence": "docs/DESKTOP-PYTHON-GAMES.md: Existing-interface coverage and remaining evidence",
+    "current_feature_source_binding_gaps_evidence": "docs/DESKTOP-PYTHON-GAMES.md: Current existing-interface coverage and remaining evidence",
     "full_original_app_integration_complete": false,
     "current_connected_or_native_e2e_evidence": false
-  }
+  },
+  "post_polish_open_work": [
+    "Owner-scoped full original-app gaps in canonical PR152 map",
+    "Contra title-screen30-lives binding remains unimplemented",
+    "Star existing host failed-save retry needs current-head native failure/recovery acceptance; code is already implemented",
+    "Characters/assets/audio and profile/network/reward scope not invented",
+    "All current-head compilation/tests/connection/native/controller/Play/game-feel/E2E validation deferred"
+  ]
 }

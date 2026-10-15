@@ -1,5 +1,23 @@
 # Desktop maze and adventure ports
 
+Native polish cycle 4 (2026-10-15, claims 31229/31230): `ZeldaGame` now derives
+remaining roster/key objective, labelled ground key, Moblin HP, sword readiness,
+current hurt timer and distinct victory/defeat/fresh retry text. Direct Pad flags
+mirror the existing Slate merge before source analog/facing precedence. All sword
+collision still occurs before movement, cooldown 18/hurt timer 45 remain, and
+enemy AI, scores, drop/key RNG and prior loss-before-win/key repair are unchanged.
+The shield remains decorative. At hurt timer 1 the new label says it expires
+before the next live collision pass; terminal controls/ready labels are gated.
+No gameplay state/timers or new shield/inventory behavior were added. Dungeon,
+Pac-Man and shared helper bytes match prior checkpoint 81ffdd84 exactly.
+
+Uncompiled/untested: no game/oracle/editor, test or build execution. Later checks
+include opposing/mixed Pad/stick/facing, sword-before-move and timer 18/1/0,
+hurt timer 45/1/0, four-roster/key pickup/death transitions, no duplicate drops,
+terminal/fresh reset and actual frame readability. Current canonical coverage and
+exact install/deferred-validation packet are the existing DESKTOP-PYTHON-GAMES.md
+and docs/desktop-games-polish-install.json; old receipts below are historical.
+
 Native polish cycle 2 (2026-10-14, claims hub 31185/31186): Pac-Man now guards only
 lethal unfrightened-ghost collisions for exactly 90 subsequent live steps after a
 nonterminal death. This explicit native rule extension leaves movement, ghost

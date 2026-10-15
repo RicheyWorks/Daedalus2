@@ -1,6 +1,33 @@
 # Desktop platformer ports: CONTRA and Shadow Ninja
 
-## Native polish cycle 2 — source only, 2026-10-14
+## Native polish cycle 4: Contra — source only, 2026-10-15
+
+Claims 31229/31230 cover only `ContraGame` in this header plus existing notes and
+the install packet. The original hash below was rechecked unchanged. New derived
+feedback shows current-position distance/finish marker, boss HP, spread timer,
+rapid-until-reset, real shot-cap/cooldown, jump/crouch, protection and mapped host
+controls/result/replay. No checkpoint/save, balance, AI, scores, spawns, particles
+or RNG calls were added. Victory stays strictly `X>2800` without a boss prerequisite.
+Held jump/fire and the fire-before/after-update ordering remain. Spread pickups
+remain 900 steps, in-play cheat spread 600, fire 8/4 and bullet capacity 96 with
+one or three slots as actual shooting requires. Title cheat 30-lives binding is
+still a separate host gap. Direct Pad input mirrors the existing Slate merge,
+including cheat direction edges; source stick/right precedence remain.
+
+The protection label describes current timer state; at 1 it expires before the
+next live collision pass. Read-only review corrected a reachable upper-jump/HUD
+overlap: top panel now ends at Y=98 and lower feedback occupies Y=526..594 below
+the source ground at Y=520. All helpers/NinjaBoss/ShadowNinjaGame bytes remain
+unchanged from checkpoint 81ffdd84. No new gameplay state or timers were added.
+
+**Uncompiled/untested.** Later checks include strict X=2800/above with a living
+boss, spread/rapid expiry/reset, capacity/cooldown, held jumping/crouching, mixed
+Pad/stick/cheat edges and actual upper-jump/HUD readability. Existing canonical
+docs/install packet pin this source and deferred validation; the historical
+oracle/compiler evidence below does not validate it. No editor/game execution,
+assets, builds or tests occurred in this pass.
+
+## Native polish cycle 2 checkpoint — source only, 2026-10-14
 
 Claims hub 31185/31186 cover only `NinjaBoss` cue constants/read-only helpers and
 `ShadowNinjaGame` feedback. CONTRA, `NinjaPlayer`, attack/enemy helpers and all

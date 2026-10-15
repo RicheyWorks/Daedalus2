@@ -1,6 +1,32 @@
 # Desktop sports ports
 
-## Native polish cycle 3: Football — source only, 2026-10-14
+## Native polish cycle 4: Dodge Ball — source only, 2026-10-15
+
+Claims 31229/31230 cover derived `DodgeBallGame` feedback only and existing notes/
+packet. Country base power/speed/super traits, numbered rosters, individual HP/
+alive totals, possession/flight/throw cooldown, charge/jump and four-round result/
+continue text now use existing state. No authoritative state/timers or input,
+simulation, reset, RNG, country values, throw/catch/hit or character-draw logic
+changed. Exact Football/shared helper bytes remain at checkpoint 81ffdd84.
+
+Controls explain actual source/host distinctions: all living humans move/jump
+together; hat controls movement while only keyboard Up/W or original stick up
+charges. Super remains strictly `Charge>30` (31/60). Held Space/Z/J/pad A can catch
+and rethrow; X/RB is fresh throw only. Nested source gates give effective strict
+catch distances <22 normal, <18 super and <34 airborne; ground requires held Fire,
+airborne catch is automatic. Loose pickup remains <24 and friendly hits remain.
+Four match results accumulate wins and randomly repeated opponents; no bracket,
+teammate switch or persistence was invented. Fourth-round confirm returns to
+title; country confirmation starts a fresh tournament score. Host R clears it.
+
+**Uncompiled/untested.** Later checks include exact controls, charge 30/31/60,
+cooldown 1/0, strict catch/pickup edges, KO/alive totals, all countries/rounds and
+actual text/roster/frame readability. Family oracle/tests below remain historical
+baseline; no editor/game/oracle, tests or builds ran in this source pass. Current
+canonical coverage/source pins/deferred checks are in DESKTOP-PYTHON-GAMES.md and
+docs/desktop-games-polish-install.json.
+
+## Native polish cycle 3 checkpoint: Football — source only, 2026-10-14
 
 Claims hub 31211/31212 cover `FootballGame` only and the existing canonical
 docs/install packet. Shared `sports_detail` helpers and all `DodgeBallGame` bytes
