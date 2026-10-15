@@ -470,7 +470,7 @@ function interact() {
   if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
   if (t === "BossGate") return bossGate();
   if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
-  if (t === "Fountain") { roster().forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
+  if (t === "Fountain") { roster().forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); clearAll(roster()); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
   if (t === "Bookcase") return say(["A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
   if (t === "Throne") return say(["AN EMPTY GOLD SEAT, STILL WARM."]);
 }
@@ -480,7 +480,7 @@ function innPrompt() {
     if (i === 1) return say(["COME BACK ANY TIME."], null, 6);
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
-    roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; });
+    roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster());
     fade = 1; fadeCb = () => { cue(map.cue); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
   });
 }
@@ -554,7 +554,7 @@ function drawShop() {
 /* ---------- field ---------- */
 function stepDone() {
   const t = at(P.x, P.y);
-  state.steps++; state.sinceBattle++;
+  state.steps++; state.sinceBattle++; fieldPoison();
   if (map.kind === "town" && P.y === map.grid.length - 1) {                    /* the south road leaves town */
     const p = find(D.world, "Town"); return goto(worldMap(), p[0], p[1] + 1, "down");
   }
@@ -576,7 +576,7 @@ function stepDone() {
       if (dg.final && shardCount() < 3) { sfx("LOCKED"); return say(["THE SHRINE IS SEALED BY A HEART-SHAPED LOCK WITH THREE EMPTY HOLLOWS. (" + shardCount() + " OF 3 SHARDS.)"]); }
       sfx("STAIRS"); const f = dg.floors[0]; return goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down");
     }
-    if (t === "Shrine") { roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
+    if (t === "Shrine") { roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster()); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
     if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
   }
   if (map.kind === "dungeon") {
@@ -758,7 +758,8 @@ const atkWith = (m, w) => m.st.str * 2 + ((GEAR[w] || {}).attack || 0);
 const defWith = (m, eq) => SLOTS.slice(1).reduce((a, k) => a + ((GEAR[eq[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
 function useItem(name, m) {
   const e = (GEAR[name] || {}).effect || "";
-  if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); }
+  if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); m.status = {}; }
+  else if (/cure (\w+)/.test(e)) { const k = e.match(/cure (\w+)/)[1]; if (m.hp <= 0) return "TOO LATE FOR THAT."; if (!cure(m, k)) return m.name + " IS NOT " + (STATUS[k] ? STATUS[k].word : k.toUpperCase()) + "."; }
   else if (/heal (\d+)/.test(e)) { if (m.hp <= 0) return "TOO LATE FOR A TONIC."; m.hp = Math.min(m.max, m.hp + +e.match(/heal (\d+)/)[1] * 4); }
   else if (/restore (\d+) MP/.test(e)) { m.mp = Math.min(m.mmax, m.mp + +e.match(/(\d+)/)[1] * 3); }
   else return "NOTHING HAPPENS HERE.";
@@ -773,12 +774,13 @@ function drawPartyRows(mark) {
     const y = rowY(i), back = i >= ACTIVE, dim = back ? "#a0a8c0" : "#ffffff";
     if (!compact) {
       spr("sprites", m.sprite, 6, y, 0, null, null, 0.3);
-      text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(m.job, 46, y + 12, "#a0a8c0");
+      const st0 = tags(m)[0];
+      text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(st0 ? STATUS[st0].word : m.job, 46, y + 12, st0 ? STATUS[st0].color : "#a0a8c0");
       text("HP", 46, y + 24); text(m.hp + "/" + m.max, 238 - tw(m.hp + "/" + m.max), y + 24); gauge(64, y + 34, 80, m.hp / m.max, "#58d058");
       if (m.mmax) { text("MP", 152, y + 36); text(m.mp, 238 - tw(m.mp), y + 36); }
     } else {
       spr("sprites", m.sprite, 14, y, 0, null, null, 0.17);
-      text(m.name, 40, y + 2, dim); text(back ? "RESERVE" : m.job, 108, y + 2, "#a0a8c0"); text("LV " + m.lv, 238 - tw("LV " + m.lv), y + 2, dim);
+      text(m.name, 40, y + 2, dim); const st0 = tags(m)[0]; text(st0 ? STATUS[st0].word : back ? "RESERVE" : m.job, 108, y + 2, st0 ? STATUS[st0].color : "#a0a8c0"); text("LV " + m.lv, 238 - tw("LV " + m.lv), y + 2, dim);
       text(m.hp + "/" + m.max, 40, y + 14, dim); gauge(110, y + 17, 60, m.hp / m.max, back ? "#3c8c3c" : "#58d058");
       if (m.mmax) text("MP " + m.mp, 238 - tw("MP " + m.mp), y + 14, dim);
     }
@@ -821,6 +823,7 @@ function drawStatus() {
   const r = D.rects.sprites[m.sprite]; if (r) spr("sprites", m.sprite, 10, 6, 0, null, null, 44 / r[3]);
   text(m.name, 56, 10); text(m.job, 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
   text("HP " + m.hp + "/" + m.max, 200, 10); if (m.mmax) text("MP " + m.mp + "/" + m.mmax, 200, 22);
+  tags(m).forEach((k, i) => text(STATUS[k].word, 200 + i * 56, 36, STATUS[k].color));
   const rows = [["STR", m.st.str], ["AGI", m.st.agi], ["VIT", m.st.vit], ["INT", m.st.int], ["SPR", m.st.spr], ["ATK", atkOf(m)], ["DEF", defOf(m)]];
   rows.forEach(([k, v], i) => { text(k, 12, 68 + i * 20); text(v, 140 - tw(v), 68 + i * 20); });
   SLOTS.forEach((s, i) => { text(s.toUpperCase(), 172, 68 + i * 34, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 22), 172, 80 + i * 34); });
@@ -846,6 +849,56 @@ function drawEquip() {
   if (menu.msg) text(menu.msg.slice(0, 50), 14, H - 14, "#fff070");
 }
 
+/* ---------- statuses (spells.json status field; foes' status_* behaviours) ----------
+   POISON bites at the end of each round (never below 1 HP for the party) and stays after battle: it nips every few
+   steps on the field until an Antidote Leaf, an inn, a fountain or a shrine clears it. SLEEP skips turns until it wears
+   off or a blow lands. WARD (protect) softens hits; QUICKEN (haste) and LULL (slow) change turn speed. Wardens shrug
+   off sleep and resist the rest. Every status but poison ends with the battle. */
+const STATUS = {
+  poison: { tag: "PSN", word: "POISONED", color: "#a0e070" }, sleep: { tag: "SLP", word: "ASLEEP", color: "#a0a8ff" },
+  protect: { tag: "WRD", word: "WARDED", color: "#a0d8f8" }, haste: { tag: "HST", word: "HASTED", color: "#f8d878" },
+  slow: { tag: "SLW", word: "SLOWED", color: "#d0a0f8" },
+};
+const ROUNDS = { sleep: 3, protect: 4, haste: 4, slow: 4 };
+const stat = x => x.status || (x.status = {});
+const has = (x, k) => !!(x.status && x.status[k]);
+const tags = x => Object.keys(x.status || {}).filter(k => x.status[k] && STATUS[k]);
+function inflict(t, k) {
+  if (has(t, k)) return false;
+  stat(t)[k] = k === "poison" ? true : ROUNDS[k] || 3;
+  if (k === "haste") delete t.status.slow; if (k === "slow") delete t.status.haste;
+  if (B) pop(t, STATUS[k].word, STATUS[k].color);
+  sfx(k === "poison" ? "POISON" : k === "sleep" ? "SPORES" : "BLESS");
+  return true;
+}
+function cure(t, k) { if (!has(t, k)) return false; delete t.status[k]; return true; }
+function landHit(t, dmg) {                                     /* any blow wakes a sleeper */
+  if (has(t, "sleep")) { delete t.status.sleep; if (B) pop(t, "AWAKE", STATUS.sleep.color); }
+  if (t.hp <= 0) t.status = {};
+  return dmg;
+}
+const wardMul = m => has(m, "protect") ? 0.6 : 1;
+function statusChance(f, k) { if (!f.boss) return 0.75; return k === "sleep" ? 0 : 0.4; }
+function roundStatuses() {                                    /* end of a round: poison bites, timers run down */
+  for (const x of party.concat(B.foes)) {
+    if (x.hp <= 0 || !x.status) continue;
+    if (x.status.poison) {
+      const isFoe = B.foes.includes(x), d = Math.max(1, Math.round(x.max / 16));
+      x.hp = isFoe ? Math.max(0, x.hp - d) : Math.max(1, x.hp - d); pop(x, d, STATUS.poison.color);
+      if (isFoe && x.hp <= 0) B.flash[x.key + x.x] = 0.2;
+    }
+    for (const k of ["sleep", "protect", "haste", "slow"]) if (x.status[k] && --x.status[k] <= 0) { delete x.status[k]; if (k === "sleep") pop(x, "AWAKE", STATUS.sleep.color); }
+  }
+}
+function fieldPoison() {                                      /* every 4th step, poison nips (never below 1 HP) */
+  if (state.steps % 4) return;
+  let any = false;
+  roster().forEach(m => { if (m.hp > 1 && has(m, "poison")) { m.hp = Math.max(1, m.hp - Math.max(1, Math.round(m.max / 50))); any = true; } });
+  if (any) { sfx("POISON"); poisonFlash = 0.25; }
+}
+let poisonFlash = 0;
+const clearAll = l => l.forEach(m => { if (m.status) delete m.status.poison; });
+
 /* ---------- battle ---------- */
 let B = null;
 function pickFormation(zone) {
@@ -865,14 +918,14 @@ function bossOf(boss) {                                   /* true = the boss of 
   const dg = D.dungeons[map && map.kind === "dungeon" ? map.dungeon : 0];
   return dg.boss_data;
 }
-function startBattle(zone, boss) {
+function startBattle(zone, boss, only) {
   state.sinceBattle = 0;
-  const keys = boss ? null : pickFormation(zone);
+  const keys = boss ? null : only || pickFormation(zone);
   const bd0 = boss ? bossOf(boss) : null, dg = bd0 && D.dungeons.find(d => d.boss_data.name === bd0.name);
   const foes = boss ? [{ key: "boss", name: pretty(bd0.name), hp: bd0.hp, max: bd0.hp, atk: bd0.attack, def: bd0.defence, spd: bd0.speed,
     exp: bd0.level * 150, gold: bd0.level * 80, el: ELEM[bd0.element] || bd0.element, weak: bd0.weakness && bd0.weakness !== "none" ? ELEM[bd0.weakness] || bd0.weakness : null, img: "Boss_" + bd0.name,
     boss: true, bossName: bd0.name, shard: bd0.shard, final: !!(dg && dg.final), elem: bd0.element, size: 112 }] :
-    keys.map(k => { const f = D.foes[k]; return { key: k, name: f.name, hp: f.hp, max: f.hp, atk: f.attack, def: f.defence, spd: f.speed, exp: f.exp, gold: f.gold, img: "Foe_" + k, size: 56, el: f.element }; });
+    keys.map(k => { const f = D.foes[k]; return { key: k, name: f.name, hp: f.hp, max: f.hp, atk: f.attack, def: f.defence, spd: f.speed, exp: f.exp, gold: f.gold, img: "Foe_" + k, size: 56, el: f.element, beh: f.behaviour || null }; });
   foes.forEach((f, i) => { if (!f.boss) { f.x = 24 + (i % 2) * 70 + (i > 1 ? 18 : 0); f.y = 26 + Math.floor(i / 2) * 52 + (i % 2) * 8; } else { f.x = 30; f.y = 10; } });
   const bd = D.backdrop_for_zone[boss ? (dg ? dg.boss_backdrop : "volcano") : zone] || Object.values(D.backdrop_for_zone)[0];
   B = { foes, bd, phase: "intro", who: 0, cmd: 0, target: 0, sub: null, list: [], acts: [], msg: boss ? "THE " + pretty(bd0.name) + " " + flavour(bd0)[0] : foes.length > 1 ? foes[0].name.toUpperCase() + " AND FRIENDS APPEAR!" : "A " + foes[0].name.toUpperCase() + " APPEARS!",
@@ -882,7 +935,7 @@ function startBattle(zone, boss) {
 }
 const ELEM = { tide: "water", gale: "air", stone: "earth", shade: "dark", flame: "fire" };   /* boss data names elements by realm lore */
 const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
-function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0) return i; return -1; }
+function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !has(party[i], "sleep")) return i; return -1; }
 function battleTick(dt) {
   B.t += dt;
   B.pops = B.pops.filter(p => (p.t += dt) < 0.9);
@@ -950,7 +1003,7 @@ function advanceChooser() {
   B.queue = B.acts.concat(foeActs).sort((a, b) => spdOf(b) - spdOf(a));
   B.phase = "act"; B.wait = 0;
 }
-const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0);
+const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) * (has(a.who, "haste") ? 1.5 : has(a.who, "slow") ? 0.6 : 1) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0);
 function pop(target, txt, color) {
   const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: 268, y: 22 + party.indexOf(target) * 30 };
   B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
@@ -962,6 +1015,7 @@ function doAction(a) {
   if (a.kind !== "foe" && who.hp <= 0) { B.wait = 0; return; }
   if (a.kind === "foe" && who.hp <= 0) { B.wait = 0; return; }
   if (!alive(B.foes).length || !alive(party).length) { B.wait = 0; B.queue = []; return; }
+  if (has(who, "sleep")) { B.msg = (a.kind === "foe" ? "THE " + who.name.toUpperCase() : who.name) + " IS ASLEEP."; B.wait = 0.45; return; }
   if (a.kind === "defend") { who.defend = true; B.msg = who.name + " DEFENDS."; B.wait = 0.4; return; }
   if (a.kind === "run") {
     if (B.boss) { B.msg = "THERE IS NO ESCAPE FROM A WARDEN!"; sfx("LOCKED"); return; }
@@ -974,7 +1028,7 @@ function doAction(a) {
     if (Math.random() < 0.05) { B.msg = who.name + " MISSES!"; sfx("MISS"); pop(f, "MISS", "#c0c0c0"); return; }
     const crit = Math.random() < 0.07;
     const dmg = Math.max(1, Math.round((atkOf(who) * rnd(0.85, 1.15) - f.def * 0.75) * (crit ? 1.8 : 1)));
-    hurtFoe(f, dmg); sfx(crit ? "CRIT" : "HIT");
+    hurtFoe(f, landHit(f, dmg)); sfx(crit ? "CRIT" : "HIT");
     B.msg = (crit ? "CRITICAL! " : "") + who.name + " HITS " + f.name + " FOR " + dmg + ".";
     if (f.hp <= 0) B.msg += " " + f.name + " FALLS!";
     return;
@@ -987,9 +1041,17 @@ function doAction(a) {
     if (s.target === "ally") {
       targets.forEach(m => {
         if (s.status === "heal" || s.effect === "heal") { const amt = Math.round(s.power * 1.5 + who.st.spr * 3); m.hp = Math.min(m.max, m.hp + amt); pop(m, amt, "#78f8a0"); sfx("HEAL"); }
-        else { m.buff = s.status; pop(m, (s.status || "UP").toUpperCase(), "#a0d8f8"); }
+        else if (STATUS[s.status]) { if (!inflict(m, s.status)) pop(m, "NO EFFECT", "#c0c0c0"); }
       });
       B.msg = who.name + " CASTS " + s.name.toUpperCase() + "."; return;
+    }
+    if (STATUS[s.status] && !s.power) {                       /* Blight, Drowse, Lull...: a status, no damage */
+      const f = targets[0];
+      if (!f || f.hp <= 0) { B.msg = who.name + " CASTS " + s.name.toUpperCase() + " AT NOTHING."; return; }
+      const ok = !has(f, s.status) && Math.random() < statusChance(f, s.status) && inflict(f, s.status);
+      if (!ok) pop(f, f.boss && s.status === "sleep" ? "IMMUNE" : "MISS", "#c0c0c0");
+      B.msg = who.name + " CASTS " + s.name.toUpperCase() + (ok ? "! THE " + f.name.toUpperCase() + " IS " + STATUS[s.status].word + "." : (f.boss && s.status === "sleep" ? ". A WARDEN DOES NOT SLEEP." : ". IT DOES NOT TAKE."));
+      return;
     }
     let total = 0, weakHit = false;
     targets.forEach(f => {
@@ -997,7 +1059,8 @@ function doAction(a) {
       const resist = f.weak && f.weak === s.element ? 2 : f.el && f.el === s.element ? 0.5 : 1;
       if (resist > 1) weakHit = true;
       const dmg = Math.max(1, Math.round((s.power * 1.4 + who.st.int * 3 - f.def * 0.4) * resist * rnd(0.9, 1.1)));
-      hurtFoe(f, dmg); total += dmg;
+      hurtFoe(f, landHit(f, dmg)); total += dmg;
+      if (s.status === "drain_hp") { const h = Math.min(who.max - who.hp, Math.round(dmg / 2)); who.hp += h; if (h) pop(who, h, "#78f8a0"); }
     });
     B.msg = who.name + " CASTS " + s.name.toUpperCase() + "!" + (weakHit ? " A WEAK SPOT!" : "") + (targets.length > 1 ? " " + total + " DAMAGE IN ALL." : "");
     return;
@@ -1013,17 +1076,20 @@ function doAction(a) {
     B.turn++;
     if (f.boss && B.turn % (f.final ? 2 : 3) === 0) {
       B.msg = "THE " + f.name.toUpperCase() + " " + flavour({ element: f.elem })[1]; sfx("ZAP");
-      tg.forEach(m => { const d = Math.max(1, Math.round((f.atk * 1.1 - defOf(m) * 0.6) * rnd(0.85, 1.1) * (m.defend ? 0.5 : 1))); m.hp = Math.max(0, m.hp - d); pop(m, d, "#ff8868"); });
+      tg.forEach(m => { const d = Math.max(1, Math.round((f.atk * 1.1 - defOf(m) * 0.6) * rnd(0.85, 1.1) * (m.defend ? 0.5 : 1) * wardMul(m))); m.hp = Math.max(0, m.hp - d); landHit(m, d); pop(m, d, "#ff8868"); });
       sfx("HURT"); return;
     }
     const m = tg[ri(0, tg.length - 1)];
     if (Math.random() < 0.06) { B.msg = f.name + " ATTACKS " + m.name + " BUT MISSES."; sfx("MISS"); pop(m, "MISS", "#c0c0c0"); return; }
-    const d = Math.max(1, Math.round((f.atk * 1.5 * rnd(0.85, 1.15) - defOf(m) * 0.7) * (m.defend ? 0.5 : 1)));
-    m.hp = Math.max(0, m.hp - d); sfx("HURT"); pop(m, d, "#ff8868");
+    const d = Math.max(1, Math.round((f.atk * 1.5 * rnd(0.85, 1.15) - defOf(m) * 0.7) * (m.defend ? 0.5 : 1) * wardMul(m)));
+    m.hp = Math.max(0, m.hp - d); landHit(m, d); sfx("HURT"); pop(m, d, "#ff8868");
     B.msg = f.name + " HITS " + m.name + " FOR " + d + "." + (m.hp <= 0 ? " " + m.name + " IS DOWN!" : "");
+    const sk = { status_poison: "poison", status_sleep: "sleep" }[f.beh];
+    if (sk && m.hp > 0 && Math.random() < 0.3 && inflict(m, sk)) B.msg += " " + m.name + " IS " + STATUS[sk].word + "!";
   }
 }
 function endRound() {
+  if (alive(B.foes).length && alive(party).length) roundStatuses();
   if (!alive(B.foes).length) {
     const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0);
     gold += gd; cue("VICTORY"); sfx("VICTORY");
@@ -1038,10 +1104,12 @@ function endRound() {
   }
   if (!alive(party).length) { cue("DEFEAT"); sfx("DEFEAT"); B.msg = "THE PARTY HAS FALLEN..."; B.phase = "end"; B.result = "lose"; B.wait = 1.2; return; }
   B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; B.cmd = 0; party.forEach(m => m.defend = false);
+  if (B.who < 0) advanceChooser();                           /* everyone standing is asleep: the round plays itself */
 }
 function finishBattle() {
   if (B.endLines && B.endLines.length) { B.msg = B.endLines.shift(); return; }
   const r = B.result, wasBoss = B.boss, prev = B.prevCue, bf = B.foes.find(f => f.boss);
+  party.forEach(m => { if (m.status) for (const k of Object.keys(m.status)) if (k !== "poison") delete m.status[k]; });
   if (r === "lose") { B = null; mode = "gameover"; goT = 0; return; }
   B.phase = "out";
   fade = 1; fadeCb = () => {
@@ -1070,6 +1138,7 @@ function drawBattle() {
     const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
     if (fl > 0 && Math.floor(fl * 30) % 2) continue;
     spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
+    const ft = f.hp > 0 ? tags(f) : []; if (ft.length) { const k = ft[Math.floor(B.t / 1.2) % ft.length]; text(STATUS[k].tag, f.x + f.size / 2 - tw(STATUS[k].tag) / 2, f.y + f.size - 6, STATUS[k].color, "#000000"); }
     if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
   }
   party.forEach((m, i) => {
@@ -1086,6 +1155,7 @@ function drawBattle() {
   party.forEach((m, i) => {
     const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
     text(m.name, 158, y, c); text(m.hp, 262 - tw(m.hp), y, c); text(m.mp, 308 - tw(m.mp), y, "#a0c8ff");
+    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, 216, y, STATUS[k].color); }
     gauge(158, y + 9, 104, m.hp / m.max, "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
@@ -1302,7 +1372,7 @@ function frame(now) {
   if (mode === "title") drawTitle();
   else if (mode === "name" && nameEntry) drawName();
   else if (mode === "ending" && ending) drawEnding();
-  else if (mode === "field") { drawField(); if (dlg) drawDialog(); }
+  else if (mode === "field") { drawField(); if (poisonFlash > 0) { g.fillStyle = "rgba(96,200,64," + (poisonFlash * 1.2).toFixed(2) + ")"; g.fillRect(0, 0, W, H); poisonFlash -= dt; } if (dlg) drawDialog(); }
   else if (mode === "menu") drawMenu();
   else if (mode === "shop") drawShop();
   else if (mode === "battle") { drawBattle(); if (dlg) drawDialog(); }
@@ -1328,9 +1398,12 @@ window.PRISM_DEMO = {
   hurt: (i, n) => { const m = roster()[i]; m.hp = Math.max(1, m.hp - n); },
   ko: i => { roster()[i].hp = 0; },
   foes: hp => { if (B) B.foes.forEach(f => { f.hp = Math.min(f.hp, hp); }); },
-  roster: () => roster().map((m, i) => ({ name: m.name, job: m.job, lv: m.lv, exp: m.exp, next: m.next, hp: m.hp, max: m.max, front: i < ACTIVE })),
+  roster: () => roster().map((m, i) => ({ name: m.name, job: m.job, lv: m.lv, exp: m.exp, next: m.next, hp: m.hp, max: m.max, mp: m.mp, front: i < ACTIVE, status: tags(m) })),
+  foeStatus: () => B ? B.foes.map(f => ({ name: f.name, hp: f.hp, max: f.max, status: tags(f), beh: f.beh })) : [],
+  inflict: (i, k) => { const m = roster()[i]; stat(m)[k] = k === "poison" ? true : ROUNDS[k] || 3; },
+  teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
-  battle: (zone, boss) => startBattle(zone, boss),
+  battle: (zone, boss, keys) => startBattle(zone, boss, keys),
 };
 
 /* ---------- boot ---------- */

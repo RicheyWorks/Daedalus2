@@ -90,6 +90,48 @@ class Bot:
                 self.press("a", 50); continue
         return last
 
+    def round(self, plans, default=("DEFEND", None, None), limit=600):
+        """Play exactly one battle round by the menus. plans maps a hero's name to (CMD, what, target): CMD is
+        ATTACK / MAGIC / ITEM / DEFEND, what is a spell or item name, target is a name in the target list or an index.
+        Returns the state once the round has played out (back at the command menu) or the battle is over."""
+        acted = False; self.choosers = []
+        for _ in range(limit):
+            s = self.st()
+            if s["mode"] != "battle":
+                return s
+            b = s["battle"]
+            if b["phase"] in ("intro", "act", "end"):
+                if b["phase"] == "act":
+                    acted = True
+                if b["phase"] == "end":
+                    return s
+                self.press("a", 60); continue
+            if acted:
+                return s
+            me = s["party"][b["who"]]
+            if not self.choosers or self.choosers[-1] != me[0]:
+                self.choosers.append(me[0])
+            cmd, what, target = plans.get(me[0], default)
+            if b["sub"] is None:
+                if b["cmd"] != CM.index(cmd):
+                    self.press("down", 40); continue
+                self.press("a", 60); continue
+            if b["sub"] in ("magic", "item"):
+                if b["sub"] == "magic":
+                    opts = [n for n in me[6] if n in self.spells]
+                else:
+                    opts = [k for k, n in s["bag"].items() if n > 0 and (self.D.get("gear", {}).get(k) or {}).get("effect")]
+                want = opts.index(what) if what in opts else 0
+                if b["oi"] != want:
+                    self.press("down", 40); continue
+                self.press("a", 60); continue
+            if b["sub"] == "target":
+                want = target if isinstance(target, int) else (b["list"].index(target) if target in b["list"] else b["target"])
+                if b["target"] != want:
+                    self.press("down", 40); continue
+                self.press("a", 60); continue
+        return self.st()
+
     def shop(self, kind, buys):
         """Walk into an interior shop (Magic, Item, ...), buy each name in buys once, in order, and walk out."""
         stock = [x["name"] for x in self.D["interiors"][kind]["stock"]]

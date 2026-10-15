@@ -1027,3 +1027,31 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - **Saves** carry `reserve`. A save written before this change gets its owed recruits on CONTINUE (`recruitBeaten`).
 - **Tests:** `recruit_test.py` (21 checks), with test hooks `roster()`, `ko(i)` and `foes(hp)`. `hurt(i)` now indexes
   the whole roster; front indexes are unchanged.
+
+### 14.31 The Prismheart demo: battle statuses
+
+- **Statuses come from the data.** A spell's status comes from `spells.json` `status`: poison, sleep, protect, haste,
+  slow, drain_hp. A foe's comes from its `behaviour` in `foes.json` (`status_poison`, `status_sleep`).
+  - Before this, Drowse, Lull and Blight did chip damage like attack spells, and Ward and Quicken only set an unused
+    `buff`. The Antidote Leaf and the Wake Bell said "NOTHING HAPPENS HERE."
+- **Rules:**
+
+| Status | Effect | How it ends |
+|---|---|---|
+| Poison | Bites 1/16 of max HP at the end of each round. It never takes a hero below 1 HP, but it can kill a foe. On the field it nips every 4th step, never below 1. | It outlasts the battle. Cured by an Antidote Leaf, an inn, a fountain or a shrine. |
+| Sleep | Skips turns. The command menu passes over a sleeping hero. | 3 rounds, or any blow, or a Wake Bell. |
+| Ward (protect) | Hits deal 60% damage. | 4 rounds. |
+| Quicken (haste) | Turn speed ×1.5. Cancels slow. | 4 rounds. |
+| Lull (slow) | Turn speed ×0.6. Cancels haste. | 4 rounds. |
+| Siphon / Leech (drain_hp) | Heals the caster half the damage dealt. | — |
+
+- **Foes and Wardens:**
+  - Status-only spells land 75% of the time on field foes.
+  - Wardens never sleep, and other statuses land on them 40% of the time.
+  - `status_poison` and `status_sleep` foes inflict their status on 30% of their hits.
+  - Every status except poison ends with the battle.
+- **Display:** a tag (PSN, SLP, WRD, HST, SLW) shows under each foe and beside each hero in the battle window. The field
+  menu rows and STATUS show the status in words. The screen flashes green when poison nips on the field.
+- **Tests:** `status_test.py` (26 checks). `bot.round(plans)` plays one battle round by the menus and is reused by the
+  tests. New hooks: `battle(zone, boss, keys)` picks the formation, plus `foeStatus()`, `inflict(i, k)` and
+  `teach(i, spell)`.
