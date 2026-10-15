@@ -305,10 +305,11 @@
   ],
   "implementation": "Shared original desktop workbench page; separate two-method bytes-only PNG/plaintext SaveAs bridge with UTC/monotonic and owner/document fences",
   "moduleDependency": {
-    "acceptancePending": true,
-    "written": false,
+    "acceptancePending": false,
+    "written": true,
     "visibility": "public",
-    "name": "WebBrowser"
+    "name": "WebBrowser",
+    "acceptedBy": "team-codex"
   },
   "validation": {
     "compiledPageHttpSmoke": true,
@@ -324,6 +325,13 @@
     "built": false,
     "cef": false,
     "win32Dialogs": false
+  },
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "change": "onePUBLICWebBrowserentryonly; existingruntime/dependenciesunchanged",
+    "nativeCompile": "unverified"
   }
 }
 ],
@@ -1457,9 +1465,7 @@
         "fax-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": [
-        "Required PUBLIC WebBrowser dependency remains pending exact source-owner handoff; native packet is not build-ready"
-      ],
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/fax-v1/full-workbench-native.md",
@@ -1506,9 +1512,7 @@
         "fax-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": [
-        "Required PUBLIC WebBrowser dependency remains pending exact source-owner handoff; native packet is not build-ready"
-      ],
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/fax-v1/full-workbench-native.md",
@@ -1551,9 +1555,7 @@
         "fax-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": [
-        "Required PUBLIC WebBrowser dependency remains pending exact source-owner handoff; native packet is not build-ready"
-      ],
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/fax-v1/full-workbench-native.md",
@@ -1690,12 +1692,12 @@
 }
 ,
   "faxFullWorkbenchContinuation": {
-  "baseCommit": "1b97a8b9be19a2067a9039ab634415c26cab6c3c",
+  "baseCommit": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
   "branch": "codex/fax-workbench-native-20261015",
   "companionCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
   "stage": "source_written_unverified",
   "sourceOwnerAccepted": true,
-  "publicDependencyAcceptance": false,
+  "publicDependencyAcceptance": true,
   "runtimeAccepted": false,
   "sourceFiles": [
     {
@@ -1731,6 +1733,6 @@
       "normalizedSha256": "4427470d62f909deb19e91db38da36ef001a8a182e640cf3b49db1d2eeecb2e7"
     }
   ],
-  "remaining": "PUBLIC WebBrowser dependency handoff, operator build/install/CEF/Win32/physical art/Play; no real transmission/provider/inbound claim; known Photo offline distribution gaps unchanged"
+  "remaining": "Operator serial UHT/compile/link/install/CEF/Win32/physical art/Play; no real transmission/provider/inbound claim; Photo packaging reconciliation recorded separately"
 }
 }

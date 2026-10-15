@@ -2,18 +2,30 @@
   "schema": "daedalus.fax.workbench.native-install.v1",
   "productId": "fax-trident",
   "protocol": "faxworkbench.local.v1",
-  "nativeBaseCommit": "1b97a8b9be19a2067a9039ab634415c26cab6c3c",
+  "nativeBaseCommit": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
   "nativeSourceCommit": null,
   "companionBaselineCommit": "4e3e4f50d3c7253fcf137a4b1593ecff0153a45d",
   "companionNativeAdapterCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
   "companionNativeAdapterStage": "published_source_app_fixtures_passed_native_runtime_unverified",
-  "companionValidation": { "offlineJavaPassed": 62, "packagedScriptNodePassed": 25, "syntheticProductionHttpPageSmoke": "passed_exact_marker_and_three_argument_contract", "nativeRuntimeVerified": false },
+  "companionValidation": {
+    "offlineJavaPassed": 62,
+    "packagedScriptNodePassed": 25,
+    "syntheticProductionHttpPageSmoke": "passed_exact_marker_and_three_argument_contract",
+    "nativeRuntimeVerified": false
+  },
   "stage": "source_written_unverified",
   "actorClass": "/Script/DaedalusLink.DaedalusFaxWorkbenchTerminal",
   "bindingClass": "/Script/DaedalusLink.DaedalusFaxWorkbenchBridge",
   "objectArt": "source_placeholder_cube",
   "worldPlacement": null,
-  "moduleDependency": { "name": "WebBrowser", "visibility": "public", "owner": "root_coordinator", "status": "owner_handoff_pending_baseline_not_build_ready" },
+  "moduleDependency": {
+    "name": "WebBrowser",
+    "visibility": "public",
+    "owner": "root_coordinator",
+    "status": "written_source_compile_pending",
+    "sourceClaimAcceptedBy": "team-codex",
+    "sourceClaimRequest": 31439
+  },
   "pairing": {
     "scheme": "http",
     "literalHost": "127.0.0.1",
@@ -21,7 +33,10 @@
     "tokenCharacters": 43,
     "pastedExtraFragmentFields": false,
     "internalNativeFragmentSuffix": "&host=daedalus-fax-v1",
-    "immutableModes": ["USER", "ADMIN"],
+    "immutableModes": [
+      "USER",
+      "ADMIN"
+    ],
     "nativeRoleSwitch": false
   },
   "browser": {
@@ -38,14 +53,37 @@
     "consoleForwarding": false,
     "resourceInterceptor": "fixed_routes_plus_server_CSP; CEF_readonly_bypass_limit_disclosed",
     "routes": {
-      "GET": ["/realm/fax-workbench/", "/v1/capabilities", "same-origin_UUID_image_blob"],
-      "POST": ["/v1/contacts/search", "/v1/history/by-number", "/v1/history/recent", "/v1/status", "/v1/metadata", "/v1/suggestions", "/v1/selected-text", "/v1/admin/stats", "/v1/qr"],
-      "DELETE": ["/v1/grant"]
+      "GET": [
+        "/realm/fax-workbench/",
+        "/v1/capabilities",
+        "same-origin_UUID_image_blob"
+      ],
+      "POST": [
+        "/v1/contacts/search",
+        "/v1/history/by-number",
+        "/v1/history/recent",
+        "/v1/status",
+        "/v1/metadata",
+        "/v1/suggestions",
+        "/v1/selected-text",
+        "/v1/admin/stats",
+        "/v1/qr"
+      ],
+      "DELETE": [
+        "/v1/grant"
+      ]
     }
   },
   "fileBinding": {
-    "methods": ["savepng", "savetext"],
-    "arguments": ["Base64Bytes:string", "GrantExpiresAt:string", "RemainingLeaseMillis:int32"],
+    "methods": [
+      "savepng",
+      "savetext"
+    ],
+    "arguments": [
+      "Base64Bytes:string",
+      "GrantExpiresAt:string",
+      "RemainingLeaseMillis:int32"
+    ],
     "promiseResult": "JSON_string_exact_canceled_boolean",
     "nativeSelectors": false,
     "pathsOrFilenamesReturned": false,
@@ -58,7 +96,10 @@
     "maxTextUtf16Units": 131072,
     "textEncoding": "strict_UTF8",
     "emptyTextValid": true,
-    "suggestedNames": ["fax-qr.png", "fax-selected-text.txt"],
+    "suggestedNames": [
+      "fax-qr.png",
+      "fax-selected-text.txt"
+    ],
     "maxOperationsPerPanel": 64,
     "minimumStartIntervalSeconds": 0.5,
     "maxConcurrentOperations": 1,
@@ -71,7 +112,11 @@
     "revokeBoundary": "observed_exact_DELETE_disables_native_exports; desktop_role_or_grant_loss_cannot_recall_already_supplied_authorized_bytes_or_committed_copies"
   },
   "synapsePreservation": {
-    "UFUNCTIONs": ["PickImage", "PickImport", "SaveJson"],
+    "UFUNCTIONs": [
+      "PickImage",
+      "PickImport",
+      "SaveJson"
+    ],
     "maxJsonBytes": 8388608,
     "maxMemoryObjects": 1000,
     "imageAndJsonSelectionValidators": "preserved"
@@ -100,5 +145,12 @@
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
     "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp"
-  ]
+  ],
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "change": "onePUBLICWebBrowserentryonly; existingruntime/dependenciesunchanged",
+    "nativeCompile": "unverified"
+  }
 }
