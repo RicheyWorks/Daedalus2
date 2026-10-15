@@ -199,7 +199,66 @@
           "playAccepted": false
         }
       }
-    ],
+    ,
+{
+  "id": "synapse-full-workbench-native",
+  "stage": "source_written_unverified",
+  "actorClass": "/Script/DaedalusLink.DaedalusSynapseWorkbenchTerminal",
+  "companionCommit": "645fbe760a7cff54e4f44c32f39e2bfa9c8a4cca",
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchTerminal.h",
+      "normalizedSha256": "dde4e22229a2bfb07cf8deba34788743903ac571eb2b4d421acec9d713ac23bf"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchTerminal.cpp",
+      "normalizedSha256": "cc0c180050e78f4638e27e62de29d6d1914a59e80972eb1eeaf6cc8c21c591e1"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+      "normalizedSha256": "34a14229cb68b52e586565cbe5faf2a03154a237e9b750411e0ea89876e8b30c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+      "normalizedSha256": "b75a25f41f040544325d5ec71e654adf17bea9473d6777172bc1e6d0e7e7a6ca"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+      "normalizedSha256": "1439103917bb283b093ac9fdb08ba98be03e50996d186eedfd612576a1bb562c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
+    }
+  ],
+  "contracts": [
+    "docs/contracts/synapse-v1/full-workbench-native.md",
+    "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+  ],
+  "moduleDependency": {
+    "name": "WebBrowser",
+    "acceptanceMessage": 31439,
+    "written": true,
+    "visibility": "public",
+    "acceptanceEvidence": "Direct semantic owner acceptance of request31439; request ID is not itself an ACK"
+  },
+  "implementation": "Hosts the compiled original Synapse UI; three narrow bytes-only file methods reuse handle-owned local selection and no-replace JSON publication. No generic UObject/command/path bridge.",
+  "verification": {
+    "uht": false,
+    "built": false,
+    "installed": false,
+    "sourceReviewed": true,
+    "playAccepted": false
+  },
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "change": "one PUBLIC WebBrowser entry only; all other dependencies/staging preserved",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "nativeCompile": "unverified"
+  }
+}
+],
     "relevantInfrastructure": {
       "nativePlugin": "engines/unreal/DaedalusLink/DaedalusLink.uplugin",
       "connectorsFound": [
@@ -496,142 +555,451 @@
       ]
     },
     {
-      "id": "synapse",
-      "repository": "RicheyWorks/synapse",
-      "sourceCommit": "793de9fb005648efbb72ef018b71ee300f802522",
-      "draftPullRequest": "https://github.com/RicheyWorks/synapse/pull/3",
-      "modules": [
-        { "path": "synapse-core", "role": "Existing domain, schedulers, statistics, persistence and transactional StudyService authority." },
-        { "path": "src-tauri", "role": "Tauri desktop shell/commands using the same Arc<StudyService>." },
-        { "path": "src", "role": "Svelte desktop interface including opt-in StudyDesk component." },
-        { "path": "synapse-desk", "role": "Private Axum loopback interface and browser desk, not another vault." }
-      ],
-      "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "implementedConnector": "synapse-desk/src/lib.rs" },
-      "prerequisites": ["running existing Tauri desktop", "Rust/Node 22.12+ and Tauri v1 toolchain for source launch", "desktop explicitly chooses a supported track and enables Study desk", "off on every startup"],
-      "launch": { "sourceDevelopmentCommands": ["npm run dev", "cargo tauri dev"], "pairingControl": "Study desk: choose track, Enable selected track, Show pairing link for realm" },
-      "protocol": {
-        "contract": "docs/STUDY_DESK.md",
-        "pairingUri": "http://127.0.0.1:<ephemeral-port>/realm/synapse/#token=<43-character-base64url-capability>",
-        "capabilities": { "route": "GET /v1/capabilities", "productId": "synapse", "version": 1, "actions": ["due", "reveal", "review", "revoke"], "localOnly": true },
-        "authorization": "Authorization: Bearer <pairing-capability>; X-Desk-Session after claim",
-        "origin": "Exact literal-loopback Host required; every mutation requires Origin equal to http://127.0.0.1:<port>, including native requests. Cross-site fetch metadata denied; no CORS permission.",
-        "session": { "create": "POST /v1/session", "responseFields": ["session", "selected_count", "expires_in_seconds"], "maxClaims": 1, "duplicateClaimStatus": 409, "absoluteTtlSeconds": 900, "revoke": "POST /v1/revoke" },
-        "routes": [
-          { "route": "GET /v1/due", "response": "due_count and at most one selected due card: id, prompt, kind, revision and optional masked cloze context; no answer/history/settings/links" },
-          { "route": "POST /v1/reveal", "requestFields": ["card_id", "revision"], "response": "card tagged type=basic/cloze/code with answer/text/language+code only after explicit reveal" },
-          { "route": "POST /v1/review", "requestFields": ["card_id", "revision", "score", "action_id"], "response": "action_id, card_id, score, reviewed_at, next_review, interval_days, persisted" },
-          { "route": "POST /v1/revoke", "response": "revoked=true; closes listener, preserves already committed reviews" }
-        ],
-        "retry": "score 0..5, UUID action_id, exact card revision; reveal required for new review; same receipt can be recovered without scheduling twice; freeze action identity after uncertain save.",
-        "limits": { "selectedCardsMin": 1, "selectedCardsMax": 100, "promptBytesMax": 32768, "answerTextBytesMax": 32768, "jsonBodyBytesMax": 4096 },
-        "privacy": "Frozen selected ID allowlist, basic/cloze/code only; later additions/image paths/remote URLs/whole vault enumeration excluded. Token and session memory-only."
-      },
-      "features": [
-        {
-          "id": "real-scheduled-reviews",
-          "behavior": "Due-card recall, explicit reveal and score update the existing SM-2/FSRS scheduler, vault and review history with an atomic durable receipt; no parallel gameplay schedule.",
-          "source": [
-            { "path": "synapse-core/src/service.rs", "symbols": ["StudyService::review", "review_once", "receipt", "ReviewReceipt", "revision"] },
-            { "path": "synapse-core/src/scheduler.rs", "symbols": ["Scheduler", "Sm2Scheduler"] },
-            { "path": "synapse-core/src/fsrs.rs", "symbols": ["FsrsScheduler"] },
-            { "path": "synapse-desk/src/lib.rs", "symbols": ["due", "reveal", "review", "masked_cloze"] },
-            { "path": "src-tauri/src/main.rs", "symbols": ["review_memory", "start_review_session"] }
-          ],
-          "existingInterface": "Desktop review UI and private browser due/reveal/review endpoints.",
-          "nativeBindings": ["typed-browser", "synapse-native-terminal"],
-          "bindingStage": "source_written_unverified",
-          "missingCode": [],
-          "nativeContractTargets": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
-          "remainingVerification": ["final client static review after written receipt fix", "operator builds, installs and binds the source, then exercises real due/reveal/review and persisted receipt behavior"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "selected-track-permission",
-          "behavior": "Desktop chooses current basic/cloze/code IDs; replace/revoke pairing; fixed expiry; no implicit whole-vault or future-card grant.",
-          "source": [
-            { "path": "src/lib/components/StudyDesk.svelte", "symbols": ["enable", "revoke", "openDesk"] },
-            { "path": "src-tauri/src/main.rs", "symbols": ["enable_study_desk", "revoke_study_desk", "study_desk_active"] },
-            { "path": "synapse-desk/src/lib.rs", "symbols": ["select_track", "DeskServer::start", "pairing", "revoke", "session"] }
-          ],
-          "existingInterface": "Desktop grants permission; private browser claims and revokes it.",
-          "nativeBindings": ["typed-browser", "synapse-native-terminal"],
-          "bindingStage": "source_written_unverified",
-          "missingCode": [],
-          "nativeContractTargets": ["docs/contracts/synapse-study-v1/native-terminal.md", "docs/contracts/synapse-study-v1/install-binding-manifest.json"],
-          "remainingVerification": ["final client static review after written receipt fix", "operator verifies expiry/revocation, replacement pairing and absence of unintended card or vault access"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "card-authoring-tracks-and-images",
-          "behavior": "Create memories; list tracks/vault; import picked image into managed assets; basic/cloze/code/image card types.",
-          "source": [
-            { "path": "src-tauri/src/main.rs", "symbols": ["add_memory", "get_all_memories", "get_due_memories", "list_all_tracks", "import_image_asset"] },
-            { "path": "synapse-core/src/assets.rs", "symbols": ["import_asset"] },
-            { "path": "synapse-core/src/domain.rs", "symbols": ["CardContent", "MemoryItem"] }
-          ],
-          "existingInterface": "Tauri desktop commands only; desk does not author/list the vault or serve image paths.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["separate explicit permissions and bounded APIs before native authoring/image support"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "settings-and-themes",
-          "behavior": "Select scheduler/daily review settings and desktop themes; existing cards retain scheduling history.",
-          "source": [
-            { "path": "src-tauri/src/main.rs", "symbols": ["get_settings", "update_settings"] },
-            { "path": "synapse-core/src/service.rs", "symbols": ["update_settings"] },
-            { "path": "synapse-core/src/settings.rs", "symbols": ["Settings", "SettingsStore"] }
-          ],
-          "existingInterface": "Tauri desktop settings, no desk settings endpoint.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["permission/product design before any native vault settings mutation"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "analytics-and-gamification",
-          "behavior": "Statistics, tracks, heatmap, retention/forgetting projections, hardest cards, lapses/leeches, XP/levels/achievements derived from real review history.",
-          "source": [
-            { "path": "src-tauri/src/main.rs", "symbols": ["get_stats", "get_review_heatmap", "get_retention_curve", "get_forgetting_curve", "get_hardest_items", "get_gamification"] },
-            { "path": "synapse-core/src/stats.rs", "symbols": ["compute_stats", "review_heatmap", "retention_over_time", "forgetting_curve", "hardest_items"] },
-            { "path": "synapse-core/src/gamification.rs", "symbols": ["compute_gamification"] }
-          ],
-          "existingInterface": "Desktop analytics only; bridge receipt is not an analytics/history grant.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["selected-scope aggregate endpoint and native views if authorized later"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "knowledge-graph",
-          "behavior": "Link/unlink memories and explore related memory graph.",
-          "source": [
-            { "path": "src-tauri/src/main.rs", "symbols": ["get_knowledge_graph", "link_memories", "unlink_memories"] },
-            { "path": "synapse-core/src/graph.rs", "symbols": ["build_graph", "link", "unlink"] }
-          ],
-          "existingInterface": "Tauri desktop graph; no desk links/graph endpoint.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["explicit graph subset permissions and native graph interaction"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "backup-import-export",
-          "behavior": "Local JSON import/export, manual/rotating backups, pre-import/pre-restore safety snapshots and restore.",
-          "source": [
-            { "path": "src-tauri/src/main.rs", "symbols": ["export_memories", "import_memories", "create_manual_backup", "list_backups", "restore_backup"] },
-            { "path": "synapse-core/src/backup.rs", "symbols": ["create_backup", "list_backups", "restore_backup", "rotate_backups"] },
-            { "path": "synapse-core/src/store.rs", "symbols": ["import_from_path", "export_to_path", "JsonFileStore"] }
-          ],
-          "existingInterface": "Tauri desktop with local file choices; no desk filesystem/import/export/restore endpoint.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["separately scoped local file UX and destructive restore consent before extending native interface"],
-          "evidenceStage": "source_inspected"
-        }
-      ]
+  "id": "synapse",
+  "repository": "RicheyWorks/synapse",
+  "sourceCommit": "645fbe760a7cff54e4f44c32f39e2bfa9c8a4cca",
+  "draftPullRequest": "https://github.com/RicheyWorks/synapse/pull/4",
+  "modules": [
+    {
+      "path": "synapse-core",
+      "role": "Existing domain, schedulers, statistics, persistence and transactional StudyService authority."
     },
+    {
+      "path": "src-tauri",
+      "role": "Tauri desktop shell/commands using the same Arc<StudyService>."
+    },
+    {
+      "path": "src",
+      "role": "Svelte desktop interface including opt-in StudyDesk component."
+    },
+    {
+      "path": "synapse-desk",
+      "role": "Private Axum loopback interface and browser desk, not another vault."
+    }
+  ],
+  "extensionInventory": {
+    "scope": "tracked paths and top-level directory inventory at sourceCommit",
+    "dedicatedConnectorDirectoryFound": false,
+    "dedicatedPluginDirectoryFound": false,
+    "dedicatedExamplesDirectoryFound": false,
+    "implementedConnector": "synapse-desk/src/lib.rs"
+  },
+  "prerequisites": [
+    "running existing Tauri desktop",
+    "Rust/Node 22.12+ and Tauri v1 toolchain for source launch",
+    "desktop explicitly chooses a supported track and enables Study desk",
+    "off on every startup",
+    "Full-workbench actor additionally requires an explicit whole-vault read and optional scope checklist in the original desktop app."
+  ],
+  "launch": {
+    "sourceDevelopmentCommands": [
+      "npm run dev",
+      "cargo tauri dev"
+    ],
+    "pairingControl": "Study desk: choose track, Enable selected track, Show pairing link for realm"
+  },
+  "protocol": {
+    "contract": "docs/STUDY_DESK.md",
+    "pairingUri": "http://127.0.0.1:<ephemeral-port>/realm/synapse/#token=<43-character-base64url-capability>",
+    "capabilities": {
+      "route": "GET /v1/capabilities",
+      "productId": "synapse",
+      "version": 1,
+      "actions": [
+        "due",
+        "reveal",
+        "review",
+        "revoke"
+      ],
+      "localOnly": true
+    },
+    "authorization": "Authorization: Bearer <pairing-capability>; X-Desk-Session after claim",
+    "origin": "Exact literal-loopback Host required; every mutation requires Origin equal to http://127.0.0.1:<port>, including native requests. Cross-site fetch metadata denied; no CORS permission.",
+    "session": {
+      "create": "POST /v1/session",
+      "responseFields": [
+        "session",
+        "selected_count",
+        "expires_in_seconds"
+      ],
+      "maxClaims": 1,
+      "duplicateClaimStatus": 409,
+      "absoluteTtlSeconds": 900,
+      "revoke": "POST /v1/revoke"
+    },
+    "routes": [
+      {
+        "route": "GET /v1/due",
+        "response": "due_count and at most one selected due card: id, prompt, kind, revision and optional masked cloze context; no answer/history/settings/links"
+      },
+      {
+        "route": "POST /v1/reveal",
+        "requestFields": [
+          "card_id",
+          "revision"
+        ],
+        "response": "card tagged type=basic/cloze/code with answer/text/language+code only after explicit reveal"
+      },
+      {
+        "route": "POST /v1/review",
+        "requestFields": [
+          "card_id",
+          "revision",
+          "score",
+          "action_id"
+        ],
+        "response": "action_id, card_id, score, reviewed_at, next_review, interval_days, persisted"
+      },
+      {
+        "route": "POST /v1/revoke",
+        "response": "revoked=true; closes listener, preserves already committed reviews"
+      }
+    ],
+    "retry": "score 0..5, UUID action_id, exact card revision; reveal required for new review; same receipt can be recovered without scheduling twice; freeze action identity after uncertain save.",
+    "limits": {
+      "selectedCardsMin": 1,
+      "selectedCardsMax": 100,
+      "promptBytesMax": 32768,
+      "answerTextBytesMax": 32768,
+      "jsonBodyBytesMax": 4096
+    },
+    "privacy": "Frozen selected ID allowlist, basic/cloze/code only; later additions/image paths/remote URLs/whole vault enumeration excluded. Token and session memory-only."
+  },
+  "features": [
+    {
+      "id": "real-scheduled-reviews",
+      "behavior": "Due-card recall, explicit reveal and score update the existing SM-2/FSRS scheduler, vault and review history with an atomic durable receipt; no parallel gameplay schedule.",
+      "source": [
+        {
+          "path": "synapse-core/src/service.rs",
+          "symbols": [
+            "StudyService::review",
+            "review_once",
+            "receipt",
+            "ReviewReceipt",
+            "revision"
+          ]
+        },
+        {
+          "path": "synapse-core/src/scheduler.rs",
+          "symbols": [
+            "Scheduler",
+            "Sm2Scheduler"
+          ]
+        },
+        {
+          "path": "synapse-core/src/fsrs.rs",
+          "symbols": [
+            "FsrsScheduler"
+          ]
+        },
+        {
+          "path": "synapse-desk/src/lib.rs",
+          "symbols": [
+            "due",
+            "reveal",
+            "review",
+            "masked_cloze"
+          ]
+        },
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "review_memory",
+            "start_review_session"
+          ]
+        }
+      ],
+      "existingInterface": "Desktop review UI and private browser due/reveal/review endpoints.",
+      "nativeBindings": [
+        "typed-browser",
+        "synapse-native-terminal"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "nativeContractTargets": [
+        "docs/contracts/synapse-study-v1/native-terminal.md",
+        "docs/contracts/synapse-study-v1/install-binding-manifest.json"
+      ],
+      "remainingVerification": [
+        "final client static review after written receipt fix",
+        "operator builds, installs and binds the source, then exercises real due/reveal/review and persisted receipt behavior"
+      ],
+      "evidenceStage": "source_inspected"
+    },
+    {
+      "id": "selected-track-permission",
+      "behavior": "Desktop chooses current basic/cloze/code IDs; replace/revoke pairing; fixed expiry; no implicit whole-vault or future-card grant.",
+      "source": [
+        {
+          "path": "src/lib/components/StudyDesk.svelte",
+          "symbols": [
+            "enable",
+            "revoke",
+            "openDesk"
+          ]
+        },
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "enable_study_desk",
+            "revoke_study_desk",
+            "study_desk_active"
+          ]
+        },
+        {
+          "path": "synapse-desk/src/lib.rs",
+          "symbols": [
+            "select_track",
+            "DeskServer::start",
+            "pairing",
+            "revoke",
+            "session"
+          ]
+        }
+      ],
+      "existingInterface": "Desktop grants permission; private browser claims and revokes it.",
+      "nativeBindings": [
+        "typed-browser",
+        "synapse-native-terminal"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "nativeContractTargets": [
+        "docs/contracts/synapse-study-v1/native-terminal.md",
+        "docs/contracts/synapse-study-v1/install-binding-manifest.json"
+      ],
+      "remainingVerification": [
+        "final client static review after written receipt fix",
+        "operator verifies expiry/revocation, replacement pairing and absence of unintended card or vault access"
+      ],
+      "evidenceStage": "source_inspected"
+    },
+    {
+      "id": "card-authoring-tracks-and-images",
+      "behavior": "Create memories; list tracks/vault; import picked image into managed assets; basic/cloze/code/image card types.",
+      "source": [
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "add_memory",
+            "get_all_memories",
+            "get_due_memories",
+            "list_all_tracks",
+            "import_image_asset"
+          ]
+        },
+        {
+          "path": "synapse-core/src/assets.rs",
+          "symbols": [
+            "import_asset"
+          ]
+        },
+        {
+          "path": "synapse-core/src/domain.rs",
+          "symbols": [
+            "CardContent",
+            "MemoryItem"
+          ]
+        }
+      ],
+      "existingInterface": "Original Svelte forms and Rust StudyService through the separate fixed-command full-workbench grant; selected-track desk stays separate.",
+      "nativeBindings": [
+        "synapse-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/synapse-v1/full-workbench-native.md",
+        "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/load/install and actual CEF/file-dialog permission/lifecycle exercise with synthetic fixtures",
+        "Physical art binding and Play remain unverified"
+      ],
+      "companionValidation": "73 Rust fixture tests and offline Windows/Tauri check on baseline; final native facade frontend check/build and real embedded-UI HTTP2/2 passed separately. No engine execution."
+    },
+    {
+      "id": "settings-and-themes",
+      "behavior": "Select scheduler/daily review settings and desktop themes; existing cards retain scheduling history.",
+      "source": [
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "get_settings",
+            "update_settings"
+          ]
+        },
+        {
+          "path": "synapse-core/src/service.rs",
+          "symbols": [
+            "update_settings"
+          ]
+        },
+        {
+          "path": "synapse-core/src/settings.rs",
+          "symbols": [
+            "Settings",
+            "SettingsStore"
+          ]
+        }
+      ],
+      "existingInterface": "Original Svelte forms and Rust StudyService through the separate fixed-command full-workbench grant; selected-track desk stays separate.",
+      "nativeBindings": [
+        "synapse-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/synapse-v1/full-workbench-native.md",
+        "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/load/install and actual CEF/file-dialog permission/lifecycle exercise with synthetic fixtures",
+        "Physical art binding and Play remain unverified"
+      ],
+      "companionValidation": "73 Rust fixture tests and offline Windows/Tauri check on baseline; final native facade frontend check/build and real embedded-UI HTTP2/2 passed separately. No engine execution."
+    },
+    {
+      "id": "analytics-and-gamification",
+      "behavior": "Statistics, tracks, heatmap, retention/forgetting projections, hardest cards, lapses/leeches, XP/levels/achievements derived from real review history.",
+      "source": [
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "get_stats",
+            "get_review_heatmap",
+            "get_retention_curve",
+            "get_forgetting_curve",
+            "get_hardest_items",
+            "get_gamification"
+          ]
+        },
+        {
+          "path": "synapse-core/src/stats.rs",
+          "symbols": [
+            "compute_stats",
+            "review_heatmap",
+            "retention_over_time",
+            "forgetting_curve",
+            "hardest_items"
+          ]
+        },
+        {
+          "path": "synapse-core/src/gamification.rs",
+          "symbols": [
+            "compute_gamification"
+          ]
+        }
+      ],
+      "existingInterface": "Original Svelte forms and Rust StudyService through the separate fixed-command full-workbench grant; selected-track desk stays separate.",
+      "nativeBindings": [
+        "synapse-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/synapse-v1/full-workbench-native.md",
+        "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/load/install and actual CEF/file-dialog permission/lifecycle exercise with synthetic fixtures",
+        "Physical art binding and Play remain unverified"
+      ],
+      "companionValidation": "73 Rust fixture tests and offline Windows/Tauri check on baseline; final native facade frontend check/build and real embedded-UI HTTP2/2 passed separately. No engine execution."
+    },
+    {
+      "id": "knowledge-graph",
+      "behavior": "Link/unlink memories and explore related memory graph.",
+      "source": [
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "get_knowledge_graph",
+            "link_memories",
+            "unlink_memories"
+          ]
+        },
+        {
+          "path": "synapse-core/src/graph.rs",
+          "symbols": [
+            "build_graph",
+            "link",
+            "unlink"
+          ]
+        }
+      ],
+      "existingInterface": "Original Svelte forms and Rust StudyService through the separate fixed-command full-workbench grant; selected-track desk stays separate.",
+      "nativeBindings": [
+        "synapse-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/synapse-v1/full-workbench-native.md",
+        "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/load/install and actual CEF/file-dialog permission/lifecycle exercise with synthetic fixtures",
+        "Physical art binding and Play remain unverified"
+      ],
+      "companionValidation": "73 Rust fixture tests and offline Windows/Tauri check on baseline; final native facade frontend check/build and real embedded-UI HTTP2/2 passed separately. No engine execution."
+    },
+    {
+      "id": "backup-import-export",
+      "behavior": "Local JSON import/export, manual/rotating backups, pre-import/pre-restore safety snapshots and restore.",
+      "source": [
+        {
+          "path": "src-tauri/src/main.rs",
+          "symbols": [
+            "export_memories",
+            "import_memories",
+            "create_manual_backup",
+            "list_backups",
+            "restore_backup"
+          ]
+        },
+        {
+          "path": "synapse-core/src/backup.rs",
+          "symbols": [
+            "create_backup",
+            "list_backups",
+            "restore_backup",
+            "rotate_backups"
+          ]
+        },
+        {
+          "path": "synapse-core/src/store.rs",
+          "symbols": [
+            "import_from_path",
+            "export_to_path",
+            "JsonFileStore"
+          ]
+        }
+      ],
+      "existingInterface": "Original Svelte forms and Rust StudyService through the separate fixed-command full-workbench grant; selected-track desk stays separate.",
+      "nativeBindings": [
+        "synapse-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/synapse-v1/full-workbench-native.md",
+        "docs/contracts/synapse-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/load/install and actual CEF/file-dialog permission/lifecycle exercise with synthetic fixtures",
+        "Physical art binding and Play remain unverified"
+      ],
+      "companionValidation": "73 Rust fixture tests and offline Windows/Tauri check on baseline; final native facade frontend check/build and real embedded-UI HTTP2/2 passed separately. No engine execution."
+    }
+  ]
+},
     {
       "id": "fax-trident",
       "repository": "RicheyWorks/fax-trident",
@@ -935,4 +1303,38 @@
   "baseCommit": "758cfd44f917684a840a034953980e21092899b0",
   "stage": "source_written_unverified"
 }
+,
+  "synapseFullWorkbenchContinuation": {
+  "baseCommit": "456a682e9e6507b1e56d5c670ef370b51d381278",
+  "branch": "codex/synapse-workbench-native-20261015",
+  "companionCommit": "645fbe760a7cff54e4f44c32f39e2bfa9c8a4cca",
+  "stage": "source_written_unverified",
+  "dependencyAcceptance": 31439,
+  "runtimeAccepted": false,
+  "remaining": "Operator build/install/CEF/native-file/lifecycle/physical binding/Play; wider fax desktop/native work active; original Photo codec/media/packaging gaps remain documented.",
+  "dependencyStatus": "written_source_compile_pending"
+},
+  "win32FileHelperCompileCorrection": {
+    "sourceCommit": "c3625e189d68eec798c19bef0b9158718d51832e",
+    "supersedesSource": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
+    "sourceFiles": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
+        "normalizedSha256": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+        "normalizedSha256": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+        "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
+      }
+    ],
+    "correction": "Aggregate-initialize the one-BOOLEAN disposition struct; compare WinAPI BOOL with zero after wrapper cleanup",
+    "behavior": "Same deletion marker and chooser truth values; cleanup, lifecycle, no-replace and all unrelated source preserved",
+    "nativeRebuild": "pending_for_corrected_source",
+    "runtimeVerified": false,
+    "contract": "docs/contracts/companion-apps-v1/win32-file-helper-compile-fix.md"
+  }
 }

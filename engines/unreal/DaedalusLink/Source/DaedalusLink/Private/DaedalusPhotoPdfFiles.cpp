@@ -74,8 +74,7 @@ namespace
     private:
         bool SetDisposition(bool bDelete)
         {
-            FILE_DISPOSITION_INFO Disposition = {};
-            Disposition.DeleteFile = bDelete ? 1 : 0;
+            FILE_DISPOSITION_INFO Disposition = { static_cast<BOOLEAN>(bDelete) };
             return ::SetFileInformationByHandle(File.Get(), FileDispositionInfo, &Disposition, static_cast<DWORD>(sizeof(Disposition))) != 0;
         }
         FLocalHandle File;
@@ -346,7 +345,7 @@ namespace
         Dialog.nMaxFile = static_cast<DWORD>(Buffer.Num());
         Dialog.lpstrTitle = L"Export PDF to a new file";
         Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-        const bool bSelected = ::GetSaveFileNameW(&Dialog) != FALSE;
+        const bool bSelected = ::GetSaveFileNameW(&Dialog) != 0;
         // The modal Windows chooser may dispatch lifecycle events. Recheck the caller before any file creation.
         if (!StillAllowed()) return false;
         if (!bSelected)
