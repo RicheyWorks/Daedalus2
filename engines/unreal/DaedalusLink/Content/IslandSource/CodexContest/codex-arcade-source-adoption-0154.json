@@ -1,0 +1,101 @@
+{
+  "stage": "owned_source_adopted_eleven_files_native_build_pending",
+  "utc": "2026-10-15T01:53:42.189906+00:00",
+  "pr157_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+  "pr139_head": "0582c27a7fe3ad1f92da836f087efface618a8b6",
+  "items_fingerprint": {
+    "bytes": 19212,
+    "sha256": "df2426e5ed4fa2ead7aa77fec1ab3d058e1de05a80ba2590d71476c22b0fcd56"
+  },
+  "before": {
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h": {
+      "bytes": 25220,
+      "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h": {
+      "bytes": 2385,
+      "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h": {
+      "bytes": 27092,
+      "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h": {
+      "bytes": 25223,
+      "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h": {
+      "bytes": 46562,
+      "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h": {
+      "bytes": 4865,
+      "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h": {
+      "bytes": 5871,
+      "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h": {
+      "bytes": 10397,
+      "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp": {
+      "bytes": 19865,
+      "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp": {
+      "bytes": 26287,
+      "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h": null
+  },
+  "after": {
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h": {
+      "bytes": 34177,
+      "sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h": {
+      "bytes": 4628,
+      "sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h": {
+      "bytes": 37416,
+      "sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h": {
+      "bytes": 37344,
+      "sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h": {
+      "bytes": 54849,
+      "sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h": {
+      "bytes": 5326,
+      "sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h": {
+      "bytes": 7013,
+      "sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h": {
+      "bytes": 10801,
+      "sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp": {
+      "bytes": 20232,
+      "sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp": {
+      "bytes": 27345,
+      "sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf"
+    },
+    "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h": {
+      "bytes": 4773,
+      "sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582"
+    }
+  },
+  "installed_source_mutated": false,
+  "binary_loaded": false
+}

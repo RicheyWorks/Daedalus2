@@ -118,6 +118,18 @@ void ADaedalusDesktopArcade::ClearArcadeInput()
 	Session.ClearInput();
 }
 
+void ADaedalusDesktopArcade::SubmitArcadeSourceKey(int32 Key)
+{
+	if (bClosing || bCloseScheduled || Key < 0 || Key > 9) return;
+	Session.SourceKeyDown(Key);
+}
+
+bool ADaedalusDesktopArcade::SubmitArcadeSourceControllerButton(int32 Button)
+{
+	if (bClosing || bCloseScheduled || Button < 0 || Button > 1) return false;
+	return Session.SourceControllerButton(Button);
+}
+
 void ADaedalusDesktopArcade::ResetPresentationInput()
 {
 	Session.ClearInput();

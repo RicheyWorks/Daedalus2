@@ -1,0 +1,14 @@
+{
+  "mutation": false,
+  "compile_dispatched": false,
+  "settings_class_present": false,
+  "settings": {},
+  "unsupported": {},
+  "loaded_arcade_new_methods": {
+    "submit_arcade_source_key": false,
+    "submit_arcade_source_controller_button": false
+  },
+  "pie_running": false,
+  "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+  "read_code_sha256": "c1fff384cd9ec627953d3a738c88e98d298fab49971f799157825334748b06c0"
+}

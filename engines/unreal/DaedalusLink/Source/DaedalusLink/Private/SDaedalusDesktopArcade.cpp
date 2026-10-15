@@ -286,9 +286,11 @@ FText SDaedalusDesktopArcade::ControlText() const
 	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
-	else if (Id == TEXT("contra")) Text += TEXT("Space/W/A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch; K/B: cheat B action.");
+	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot. Asteroids Left/Right: turn, Up: thrust.");
+	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
+		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
+		: TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);
@@ -429,6 +431,20 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 	{
 		if (ADaedalusDesktopArcade* Actor = Game.Get())
 		{
+			// Preserve every keyboard keydown in event order before held mapping.
+			// Controllers use a separate seam and never enter/reset the keyboard code.
+			if (!Key.IsGamepadKey())
+			{
+				const int32 SourceKey = Key == EKeys::Up ? 0 : Key == EKeys::Down ? 1 : Key == EKeys::Left ? 2 : Key == EKeys::Right ? 3
+					: Key == EKeys::B ? 4 : Key == EKeys::A ? 5 : Key == EKeys::Enter ? 6 : Key == EKeys::SpaceBar ? 7 : Key == EKeys::R ? 8 : 9;
+				Actor->SubmitArcadeSourceKey(SourceKey);
+			}
+			else if (Key == EKeys::Gamepad_FaceButton_Bottom || Key == EKeys::Gamepad_Special_Right)
+			{
+				const bool bConsumed = Actor->SubmitArcadeSourceControllerButton(Key == EKeys::Gamepad_FaceButton_Bottom ? 0 : 1);
+				if (bConsumed && Key == EKeys::Gamepad_Special_Right) { PushInput(); return FReply::Handled(); }
+				// A still enters held jump mapping after its immediate source start.
+			}
 			if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Actor->CloseArcade(); return FReply::Handled(); }
 			if (Key == EKeys::P || Key == EKeys::Gamepad_Special_Right) { Actor->PauseGame(!Actor->GetState().bPaused); return FReply::Handled(); }
 			if (Key == EKeys::R) { Actor->RestartGame(); return FReply::Handled(); }
