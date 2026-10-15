@@ -911,3 +911,13 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   stairs and gate are reachable from the entrance and every chamber is sealed.
 - `data/rpg/dungeons.json`: per floor grid, stair links (overworld ↔ floor n), chests + loot, hazard tiles + effect,
   encounter zone (`*_deep` below floor 1 when the realm has one) with step rate, and the boss (name, tile, gate).
+
+### 14.24 Field menus and the starting party (`rpg_menus.py`)
+- `data/rpg/party.json`: Prismheart heroes Corin (Bladeward), Ysolde (Lightmender), Tamsin (Runecaster), Rook
+  (Shadowstep) from the start; Fennick (Beastcaller), Brannoc (Gearwright), Aveline (Starlancer) and Quill
+  (Chronoseer) join after their boss dungeons. Portal: Arden (Hero), Mirel (Sage), Pike (Scout). Base HP/MP and five
+  stats, growth per level, starting gear from the shop stock, tier-1 spells by job, start gold and items.
+- Six screens per realm, drawn from the UI kit (9-slice window, 5×7 font, cursor, gauges) with the party sprites:
+  Menu, Status, Equip (with +/- stat change), Items (with 16 item-type icons), Shop (price, gold, who can equip),
+  Save (3 slots). `data/rpg/menus.json` records every window rectangle and text field per screen so the engine can
+  build them natively. `claude-battle-kit/<realm>/menus/`.
