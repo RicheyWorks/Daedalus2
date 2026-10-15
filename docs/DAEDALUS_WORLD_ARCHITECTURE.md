@@ -871,3 +871,7 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged â†
   plus `map-demo.png`. `data/rpg/worldmap-tiles.json`: walkable / ship / airship, the encounter-zone key each tile rolls
   on, and what entering a landmark opens.
 - Pure numpy (own PNG writer), runs with plain Python in ~5 s.
+- **Battle UI** (`rpg_battle_ui.py`): 9-slice window (Portal black box / white border; Prismheart banded blue
+  gradient / bevelled border), 2-frame hand cursor, 0-9 damage and heal digits + Miss, 8 status icons (Poison, Sleep,
+  Haste, Slow, Protect, KO, Blind, Silence), HP/MP/ATB gauges (16-bit), and `mockup.png` composing backdrop + enemy
+  sprites + party + windows from the kit. `claude-battle-kit/<realm>/ui/`.
