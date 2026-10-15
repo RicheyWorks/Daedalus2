@@ -107,9 +107,9 @@ in browser DTOs, and no remote image is fetched by the native adapter.
 
 ## Integration and remaining verification
 
-The root coordinator owns the single public WebBrowser module dependency,
-commit/push, source pins and handoff. It is required because the public bridge
-header exposes the engine's FWebJSResponse USTRUCT. No plugin enablement,
+The root coordinator added the single public WebBrowser module dependency after explicit Team Codex source-claim acceptance,
+and owns commit/push, source pins and handoff. It is required because the public bridge
+header exposes the engine's FWebJSResponse USTRUCT. The one-entry Build.cs change preserves all other dependencies and runtime staging. Source wiring is complete; native compilation remains unverified. No plugin enablement,
 engine build, binary installation or level edit is part of this source slice.
 
 The app's narrow src/lib/platform.ts extension must be rebuilt into its

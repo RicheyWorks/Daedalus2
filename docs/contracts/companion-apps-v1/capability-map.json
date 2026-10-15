@@ -237,9 +237,10 @@
   ],
   "moduleDependency": {
     "name": "WebBrowser",
-    "acceptanceMessage": 0,
-    "written": false,
-    "visibility": "public"
+    "acceptanceMessage": 31439,
+    "written": true,
+    "visibility": "public",
+    "acceptanceEvidence": "Direct semantic owner acceptance of request31439; request ID is not itself an ACK"
   },
   "implementation": "Hosts the compiled original Synapse UI; three narrow bytes-only file methods reuse handle-owned local selection and no-replace JSON publication. No generic UObject/command/path bridge.",
   "verification": {
@@ -248,6 +249,13 @@
     "installed": false,
     "sourceReviewed": true,
     "playAccepted": false
+  },
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "change": "one PUBLIC WebBrowser entry only; all other dependencies/staging preserved",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "nativeCompile": "unverified"
   }
 }
 ],
@@ -800,7 +808,7 @@
         "synapse-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": "Public WebBrowser module entry pending exact source-owner handoff",
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/synapse-v1/full-workbench-native.md",
@@ -842,7 +850,7 @@
         "synapse-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": "Public WebBrowser module entry pending exact source-owner handoff",
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/synapse-v1/full-workbench-native.md",
@@ -891,7 +899,7 @@
         "synapse-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": "Public WebBrowser module entry pending exact source-owner handoff",
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/synapse-v1/full-workbench-native.md",
@@ -929,7 +937,7 @@
         "synapse-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": "Public WebBrowser module entry pending exact source-owner handoff",
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/synapse-v1/full-workbench-native.md",
@@ -978,7 +986,7 @@
         "synapse-full-workbench-native"
       ],
       "bindingStage": "source_written_unverified",
-      "missingCode": "Public WebBrowser module entry pending exact source-owner handoff",
+      "missingCode": [],
       "evidenceStage": "source_inspected",
       "nativeContractTargets": [
         "docs/contracts/synapse-v1/full-workbench-native.md",
@@ -1301,8 +1309,9 @@
   "branch": "codex/synapse-workbench-native-20261015",
   "companionCommit": "645fbe760a7cff54e4f44c32f39e2bfa9c8a4cca",
   "stage": "source_written_unverified",
-  "dependencyAcceptance": 0,
+  "dependencyAcceptance": 31439,
   "runtimeAccepted": false,
-  "remaining": "Operator build/install/CEF/native-file/lifecycle/physical binding/Play; wider fax desktop/native work active; original Photo codec/media/packaging gaps remain documented."
+  "remaining": "Operator build/install/CEF/native-file/lifecycle/physical binding/Play; wider fax desktop/native work active; original Photo codec/media/packaging gaps remain documented.",
+  "dependencyStatus": "written_source_compile_pending"
 }
 }

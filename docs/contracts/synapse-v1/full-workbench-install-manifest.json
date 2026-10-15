@@ -14,7 +14,9 @@
     "name": "WebBrowser",
     "visibility": "public",
     "owner": "root_coordinator",
-    "status": "explicit_source_handoff_pending"
+    "status": "written_source_compile_pending",
+    "sourceClaimAcceptedBy": "team-codex",
+    "sourceClaimRequest": 31439
   },
   "permissions": [
     "read",
@@ -119,5 +121,12 @@
     "facade": "frontendcheck/build+finalembeddedUIHTTP2/2 at645fbe76",
     "finalBundle": "assets/index-C0fz5rPt.js",
     "nativeExecution": false
+  },
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "change": "one PUBLIC WebBrowser entry only; all other dependencies/staging preserved",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "nativeCompile": "unverified"
   }
 }
