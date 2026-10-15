@@ -1,0 +1,182 @@
+{
+  "schema": "daedalus.fax.preparation-local.v1",
+  "stage": "companion_bridge_source_written_unverified",
+  "repository": "RicheyWorks/Daedalus2",
+  "branch": "codex/fax-preparation-contract-20261015",
+  "baselineCommit": "4f82f339470ca61947263e4e09380f20ff231ee1",
+  "nativeBinding": {
+    "implemented": false,
+    "placementOrPlayAccepted": false,
+    "soleNativeOperator": "codex-play-guard",
+    "class": null,
+    "existingTypedAppEnumSupportsFax": false,
+    "physicalArt": "pending separate owner"
+  },
+  "owner": {
+    "coordinatorAcknowledgment": null,
+    "retainedAcknowledgments": [
+      31050,
+      31115
+    ],
+    "directUserContinuation": true,
+    "lane": "pootscoot-practical-apps",
+    "claim": 31241,
+    "operatorNoOverlapAcknowledgment": 31248,
+    "packagingScopeFollowUp": 31249
+  },
+  "companion": {
+    "authority": "Existing authenticated FaxApiClient -> owner-scoped upload/FaxDeliveryService/PDFBox; no replacement fax backend",
+    "sourceFiles": [
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+        "sha256": "d5e27e7d322416a3a03e5f4ad5c5501bc53919ef5be41351602db82934b1642d"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxGrant.java",
+        "sha256": "b33addfac16f85a4e258c84494133a42190c6173e76b6c121dc97a246bca86e4"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxBridge.java",
+        "sha256": "ecf8ba264d9c8116678427e366e5782b6b43d0f27b96da8af5d42a65c5740469"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxPage.java",
+        "sha256": "223e4d9cd1808fc7501bcf99487b457ced1e812a48ec240247082acc97541fa5"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/RealmFaxDialog.java",
+        "sha256": "cd3f3a2c5f6baee432e1edb40e9443ad20d9992541491f1d1e9ba5924b629588"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java",
+        "sha256": "aa2fbfa85435163296704e0968caaf22c86810697bbb5ae41a1c41f8c606b3c7"
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/FaxTridentDesktop.java",
+        "sha256": "ff6cbfdd500f03b554ebd6a5ce263411d52dacd7195d704c889c01c7cfe741c8"
+      }
+    ],
+    "baseCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f",
+    "branch": "codex/realm-fax-preparation-20261015",
+    "repository": "RicheyWorks/fax-trident",
+    "pullRequest": "https://github.com/RicheyWorks/fax-trident/pull/4",
+    "sourceCommit": "9e37b26aaaa812108c43a407cef4dc4e43975a2c",
+    "guide": "docs/realm-fax-preparation.md",
+    "hashNormalization": "SHA256 over UTF-8 without BOM, CRLF normalized to LF, all other bytes/final newline preserved",
+    "configurationFiles": [
+      ".github/workflows/package-desktop.yml"
+    ],
+    "documentationFiles": [
+      "docs/realm-fax-preparation.md",
+      "docs/confirmed-fax-transport.md"
+    ]
+  },
+  "binding": {
+    "outputMode": "selected_prepared_pdf",
+    "start": "Explicit desktop Realm preparation control after existing login",
+    "capability": "Fresh 256-bit local Bearer capability",
+    "productId": "fax-trident",
+    "pairingGrammar": "http://127.0.0.1:<port>/realm/fax-preparation/#token=<43-base64url-characters>",
+    "protocol": "faxprep.local.v1",
+    "auth": "Opaque original authentication generation retained in desktop; backend JWT never returned to local client",
+    "permission": "One explicitly approved immutable prepared-job tuple; no owner-wide list or future-job grant",
+    "capabilities": [
+      "fax.prepared.read",
+      "fax.prepared.cancel"
+    ],
+    "server": "Existing configured literal http://127.0.0.1:<port> only, explicit port; local authentication and relay direct/no proxy; localhost and IPv6 unsupported",
+    "origin": "Exact literal Host required; Origin if supplied exact; mutations require exact Origin even for native"
+  },
+  "routes": [
+    {
+      "path": "/v1/capabilities",
+      "meaning": "Authenticated protocol/scope/limits",
+      "method": "GET"
+    },
+    {
+      "path": "/v1/job",
+      "meaning": "One approved job, immutable tuple plus current state",
+      "method": "GET"
+    },
+    {
+      "path": "/v1/document",
+      "meaning": "Exact approved bounded PDF bytes",
+      "method": "GET"
+    },
+    {
+      "path": "/v1/cancel",
+      "meaning": "Only existing server permitted pre-submission cancellation",
+      "body": "empty",
+      "method": "POST"
+    },
+    {
+      "path": "/v1/grant",
+      "meaning": "Revoke local permission only",
+      "body": "empty",
+      "method": "DELETE"
+    }
+  ],
+  "limits": {
+    "maxPdfBytes": 26214400,
+    "backendUploadLeaseSeconds": 3600,
+    "selectedJobs": 1,
+    "grantTtlSeconds": 900,
+    "maxPages": 100,
+    "backendJobLeaseSeconds": 86400,
+    "maxPageDimensionPoints": 14400,
+    "localJsonBytes": 8192,
+    "upstreamJsonBytes": 65536,
+    "applicationValidatedHeaderBytes": 8192,
+    "activeExchangeDeadlineSeconds": 40,
+    "limitsMeaning": "Configured source limits; JDK pre-handler/parser/queue time, PDF parsing and total heap are not qualified hard budgets"
+  },
+  "immutableTuple": [
+    "faxId",
+    "recipient",
+    "documentSha256",
+    "pageCount",
+    "byteCount",
+    "expiresAt"
+  ],
+  "exclusions": [
+    "confirm/send/auto-send/provider/admin/history/login/list/general proxy routes",
+    "backend JWT or credentials in capability/assets/logs",
+    "automatic photo-to-fax transfer",
+    "arbitrary local/server paths or supplied document URLs",
+    "remote configured backend relay",
+    "real fax or external service activation"
+  ],
+  "lifecycle": {
+    "revocation": "Local only; not backend cancellation/logout/upload deletion",
+    "preparation": "Freeze selected bytes, recipient, upload ID and request key; explicit uncertain retry uses original identity",
+    "lostUpload": "Response loss may leave leased inaccessible source upload; no false cleanup",
+    "lostPrepare": "Same known upload ID and request key reconcile; transient recovery loss requires deliberate existing desktop/server checking",
+    "lateResults": "Closed dialog/replaced account/grant cannot publish a new local capability or document response",
+    "cancel": "Current server state/row locking authoritative; cannot recall attempted transmission",
+    "download": "Explicit exact snapshot; saved copies remain user files",
+    "retention": "Source upload and job snapshot have separate existing leases; no secure-erase receipt"
+  },
+  "verification": {
+    "testsRun": false,
+    "nativeSourceModified": false,
+    "personalDocumentsRead": false,
+    "ciInvoked": false,
+    "realFaxSent": false,
+    "servicesStarted": false,
+    "runtimeVerified": false,
+    "nativeInstalled": false,
+    "buildsRun": false,
+    "sourceReviewed": true
+  },
+  "sourceReview": {
+    "closedFindings": [
+      "Lifecycle/socket writes and startup under UI locks",
+      "Late export/revoke continuations",
+      "Account-generation invalidation and stale UI",
+      "Login/relay authority mismatch, literal127 and conditional NO_PROXY"
+    ],
+    "scope": "All seven frozen Java files",
+    "meaning": "Source inspection only, no runtime/compile/package evidence",
+    "result": "Independent final hashes match; no remaining concrete P1/P2 in scope"
+  }
+}
