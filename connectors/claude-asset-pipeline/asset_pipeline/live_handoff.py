@@ -190,6 +190,8 @@ def main(argv=None):
     send = sub.add_parser('request'); send.add_argument('--to', required=True)
     send.add_argument('--key', required=True); send.add_argument('--text', required=True)
     send.add_argument('--ack-within', type=int, default=30)
+    send.add_argument('--allow-unregistered', action='store_true',
+                      help='Explicitly allow a new bot address not yet registered in this hub')
     reply = sub.add_parser('respond'); reply.add_argument('--id', type=int, required=True, action='append',
         help='Request ID; repeat to send a separately correlated response for each request')
     reply.add_argument('--status', choices=STATES, required=True); reply.add_argument('--text', required=True)
@@ -204,6 +206,12 @@ def main(argv=None):
     if a.command == 'request':
         # Save the UUID before the network call so process death cannot duplicate a request.
         with locked_state(a.state, a.me, a.start_after) as state:
+            if a.key not in state['outgoing'] and not a.allow_unregistered:
+                bots = link._call('GET', '/bots')
+                if not isinstance(bots, dict):
+                    raise ConnectionError('Cannot verify recipient registration; no request saved or sent')
+                if a.to not in bots:
+                    raise ValueError('Unknown recipient %r; check /bots or explicitly use --allow-unregistered' % a.to)
             request(state, link, a.key, a.to, a.text, a.ack_within)
     elif a.command == 'respond':
         with locked_state(a.state, a.me, a.start_after) as state:

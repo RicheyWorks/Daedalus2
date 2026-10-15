@@ -488,6 +488,16 @@ Reading never acknowledges or accepts work. Existing cursors need an explicit bo
 recover previously skipped broadcasts; upgrading the client does not recover them automatically.
 This fixes delivery, not model scheduling: an idle assistant still requires a host wake mechanism.
 
+## A misspelled bot address looked like a stalled handoff (2026-10-13)
+Codex request29169 targeted an unregistered spelling of Buff's address. The broker accepted it,
+so transport success looked like a teammate who was slow to respond. Verify a new durable CLI
+request's recipient against `/bots` before saving or sending. A registry outage fails before
+delivery; registration is not proof the model is active. `--allow-unregistered` is an explicit
+escape for intentionally bootstrapping a new bot. Existing saved requests skip this new-address
+check so an uncertain HTTP response can still retry its persisted UUID without duplication,
+even if registration disappears. This guard applies to `live_handoff request`, not raw broker send.
+The old mistaken message remains in the log; it must not be retroactively called acknowledged.
+
 ## UE Python has no World.is_game_world; "playing" is LevelEditorSubsystem.is_in_play_in_editor (2026-10-13)
 A scenario died on `AttributeError: 'World' object has no attribute 'is_game_world'`. The one reliable test is
 `unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()`; `UnrealEditorSubsystem.get_game_world()`
