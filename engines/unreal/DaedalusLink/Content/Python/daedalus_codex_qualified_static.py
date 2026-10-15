@@ -76,7 +76,7 @@ def _guard_snapshot():
     if bridge is None:
         return {**report, 'snapshot_error': 'bridge_module_unavailable'}
     try:
-        report['queued_jobs'] = bridge._jobs.qsize()
+        report['queued_jobs'] = None
         report['remote_execution_lock_locked'] = bridge._remote_lock.locked()
         # Capture request identity without exposing code or changing queue order.
         queued = []
@@ -84,6 +84,7 @@ def _guard_snapshot():
         report['queued_request_snapshot_available'] = locked
         if locked:
             try:
+                report['queued_jobs'] = len(bridge._jobs.queue)
                 iterator = iter(bridge._jobs.queue)
                 for _ in range(32):
                     try:
@@ -98,7 +99,8 @@ def _guard_snapshot():
              'code_sha256': hashlib.sha256(str((req.get('params') or {}).get('code', '')).encode()).hexdigest(),
              'box_identity': hex(id(box))}
             for req, box in queued]
-        report['queued_request_rows_truncated'] = report['queued_jobs'] > len(queued)
+        report['queued_request_rows_truncated'] = (report['queued_jobs'] > len(queued)
+                                                  if locked else None)
         # The executing bridge frame is authoritative; a reused label is not.
         expected_gen = expected_req = expected_box = None
         frame = sys._getframe(1)
