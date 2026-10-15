@@ -1206,10 +1206,17 @@ def export_group(path, objs):
                              mesh_smooth_type="FACE", use_mesh_modifiers=True, path_mode="AUTO")
     for o in objs:
         if o.type == "MESH" and o.data.color_attributes:
-            o.data.color_attributes.active_color = o.data.color_attributes[0]
+            ca = o.data.color_attributes
+            ca.active_color = ca[0]
+            if hasattr(ca, "render_color_index"):
+                ca.render_color_index = 0                # Blender 5.x writes COLOR_0 from the RENDER colour, not the active one
     try:                                            # Blender 4.2+: write COLOR_0 from the active colour attribute
-        bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
-                                  export_vertex_color="ACTIVE")
+        try:
+            bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
+                                      export_vertex_color="ACTIVE", export_all_vertex_colors=False)
+        except TypeError:
+            bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
+                                      export_vertex_color="ACTIVE")
     except TypeError:
         bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True)
 

@@ -1278,3 +1278,26 @@ WARN; this slice does not change them.
     `view_layer.update()` runs, so the first measurement compared un-placed meshes. Lesson filed.
   - **Adapters:** every design and data row now names its `required_adapter`: repair station, reed harvest,
     reed-bed purity, wheel, refuge.
+- **Tide-Pen shelf art r1 (`tools/blender/tidepen_shelf.py`):**
+  - **What it is:** a tide-pool rock shelf at the `ocean-tidepen-landing` anchor. Ocean blocks (24, 1, 24) with Y up
+    become Blender (24, -24, 1) with Z up; the conversion is recorded in the manifest.
+  - **What's on it:**
+    - The PEN pool inside a dry-stone wall, with a shut gate and a teal keeper lantern (enclose waits on
+      `TidePenGate`).
+    - A care station: feed trough, keeper post, and a drying rack of every resident's food.
+    - A landing walk with mooring posts and a moored sky-sea skiff.
+    - A pennant at the sea edge, where creatures may be left wild.
+  - **Residents and plants come from `tidepen.json` (sha pinned in the manifest).** Each resident is placed in its
+    pool with three of each of its habitat plants. Bodies are the voxel_creatures meshes at 2.5x stylised scale;
+    plants are voxel_aquatic sea props.
+  - **Roles:** Shelf (terrain + sea + pool water), Pen, CareStation, Landing, Residents, Habitat. Each pivots at its
+    anchor. Collision: `UCX_TidePen_r1_Landing_NN` and `UCX_..._Shelf_Role_00`.
+  - **Gameplay rows:** the dock row is `data`; the pen gate, care, release and resident rows are `design`, each
+    with its `required_adapter`.
+  - **Checked on final placement:** no resident may come within 1.0 m of the pen wall. The first pass put the crab
+    0.95 m from it, and the build failed. It now measures 3.206 m.
+  - **Found: Blender 5.x glTF export wrote a blank white COLOR_0.** With the default "all vertex colours", it
+    exported a white layer as COLOR_0 and the real colours as COLOR_1, so voxel props imported white.
+    `hd_island.export_group` now sets the render colour index and exports only the active layer. Verified: one
+    COLOR_0 that carries the real colours.
+  - Pennants are single faces now; the doubled face made the meshes invalid.

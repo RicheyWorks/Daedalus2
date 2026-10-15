@@ -64,14 +64,15 @@ def main(argv):
     for tag, glbs in (("after", after), ("before", before), ("reference", reference)):
         if not glbs:
             continue
-        for view, frame in (("hero", hero), ("detail", detail), ("top", TOP)):
+        top = tuple(sc["top"]) if "top" in sc else TOP
+        for view, frame in (("hero", hero), ("detail", detail), ("top", top)):
             if tag == "reference" and view == "detail":
                 continue                                  # inspiration only: a different land, so no matched close-up
             m = SR.render(out, glbs, tag, view, focus=detail[:3] if view == "detail" else None, frame=frame, res=res, samples=samples, name=R.NAME)
             shots.append(m)
     card = {"land": layout.get("land_id"), "name": R.NAME, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",
             "comparable": "before and after share camera numbers, light, sky, samples and resolution per view",
-            "cameras": {"hero": hero, "detail": detail, "top": TOP}, "res": list(res), "samples": samples, "quick": quick,
+            "cameras": {"hero": hero, "detail": detail, "top": tuple(sc.get("top", TOP))}, "res": list(res), "samples": samples, "quick": quick,
             "before_sources": [os.path.basename(b) for b in before], "reference_sources": [os.path.basename(b) for b in reference],
             "reference_note": "inspiration/source reference only - a different seed and geometry, NOT the same land", "shots": shots, "seconds": round(time.time() - t0, 1)}
     with open(os.path.join(out, R.NAME + ".showcase.json"), "w", encoding="utf-8") as f:

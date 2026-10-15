@@ -288,7 +288,7 @@ def banner(H, name, x, y, z, key, height=4.2):
     out = [H.beam(name + "_Pole", (x, y, z), (x, y, z + height), .07, M["dark"], 6)]
     top = z + height - .2
     verts = [(x, y, top), (x, y, top - 1.1), (x + 1.7, y, top - .55)]
-    out.append(H.mesh(name + "_Pennant_" + key, verts, [(0, 1, 2), (0, 2, 1)], H.material("Cloth_" + key, CHOICE_RGB[key], .8)))
+    out.append(H.mesh(name + "_Pennant_" + key, verts, [(0, 1, 2)], H.material("Cloth_" + key, CHOICE_RGB[key], .8)))   # one face; cloth reads two-sided
     return out
 
 
