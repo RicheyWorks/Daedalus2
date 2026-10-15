@@ -12,6 +12,7 @@ import math
 import os
 from pathlib import Path
 import re
+import sys
 import time
 
 import unreal
@@ -67,6 +68,93 @@ def _write(path, value):
     os.replace(pending, path)
 
 
+def _guard_snapshot():
+    """Bounded Python-only rejection evidence; never changes queue/guard state."""
+    report = {'schema': 'daedalus.qualified-static-guard-diagnostics.v1', 'utc': _utc(),
+              'diagnostic_only': True, 'atomic_snapshot': False, 'row_limit': 32}
+    bridge = sys.modules.get('claude_unreal_bridge')
+    if bridge is None:
+        return {**report, 'snapshot_error': 'bridge_module_unavailable'}
+    try:
+        report['queued_jobs'] = bridge._jobs.qsize()
+        report['remote_execution_lock_locked'] = bridge._remote_lock.locked()
+        # Capture request identity without exposing code or changing queue order.
+        queued = []
+        locked = bridge._jobs.mutex.acquire(False)
+        report['queued_request_snapshot_available'] = locked
+        if locked:
+            try:
+                iterator = iter(bridge._jobs.queue)
+                for _ in range(32):
+                    try:
+                        queued.append(next(iterator))
+                    except StopIteration:
+                        break
+            finally:
+                bridge._jobs.mutex.release()
+        report['queued_request_rows'] = [
+            {'type': str(req.get('type'))[:200],
+             'label': str((req.get('params') or {}).get('label'))[:200],
+             'code_sha256': hashlib.sha256(str((req.get('params') or {}).get('code', '')).encode()).hexdigest(),
+             'box_identity': hex(id(box))}
+            for req, box in queued]
+        report['queued_request_rows_truncated'] = report['queued_jobs'] > len(queued)
+        # The executing bridge frame is authoritative; a reused label is not.
+        expected_gen = expected_req = expected_box = None
+        frame = sys._getframe(1)
+        try:
+            step_code = getattr(getattr(bridge, '_step', None), '__code__', None)
+            for _ in range(32):
+                if frame is None:
+                    break
+                if frame.f_globals is bridge.__dict__ and frame.f_code is step_code:
+                    expected_gen = frame.f_locals.get('gen')
+                    expected_req = frame.f_locals.get('req')
+                    expected_box = frame.f_locals.get('box')
+                    break
+                frame = frame.f_back
+        finally:
+            del frame
+        expected_params = expected_req.get('params') if isinstance(expected_req, dict) else None
+        expected = (expected_gen is not None and expected_box is not None
+                    and isinstance(expected_req, dict) and expected_req.get('type') == 'daedalus.steps'
+                    and isinstance(expected_params, dict) and expected_params.get('label') == LABEL)
+        report.update(expected_step_frame_found=expected_box is not None,
+                      expected_type_label_match=bool(expected),
+                      expected_box_identity=hex(id(expected_box)) if expected_box is not None else None)
+
+        def text(value):
+            return value[:200] if isinstance(value, str) else None
+
+        running = bridge._running
+        report['running_total'] = len(running)
+        report['running_rows_truncated'] = len(running) > 32
+        report['running'] = []
+        for gen, req, box in running[:32]:
+            params = req.get('params') or {}
+            report['running'].append({'type': text(req.get('type')), 'label': text(params.get('label')),
+                'box_identity': hex(id(box)), 'label_matches_expected': params.get('label') == LABEL,
+                'is_exact_expected_running': bool(expected and gen is expected_gen
+                                                  and req is expected_req and box is expected_box)})
+        boxes = bridge._job_boxes
+        report.update(async_job_boxes_total=len(boxes), async_job_boxes_examined=0,
+                      async_job_boxes_sample_order='newest_first', unfinished_async_job_boxes=[])
+        for index, key in enumerate(reversed(boxes)):
+            if index >= 32:
+                break
+            box, stamp = boxes[key]
+            report['async_job_boxes_examined'] += 1
+            if not box['done'].is_set():
+                report['unfinished_async_job_boxes'].append({'job_key': text(key),
+                    'box_identity': hex(id(box)),
+                    'is_exact_expected_box': bool(expected and box is expected_box)})
+        report['async_job_boxes_rows_truncated'] = len(boxes) > report['async_job_boxes_examined']
+    except Exception as error:
+        # Concurrent bookkeeping changes or unavailable fields must not mask rejection.
+        report['snapshot_error_type'] = type(error).__name__
+    return report
+
+
 def _shared(cfg):
     source = Path(cfg['shared_source'])
     raw = source.read_bytes()
@@ -78,6 +166,19 @@ def _shared(cfg):
     scope = {'__name__': '_codex_qualified_static_private_catalogue_helpers'}
     exec(compile(raw, str(source), 'exec'), scope)
     scope['LABEL'] = LABEL
+    original_preflight = scope['_preflight']
+
+    def observed_preflight(*args, **kwargs):
+        try:
+            return original_preflight(*args, **kwargs)
+        except Exception as error:
+            try:
+                error.codex_guard_diagnostics = _guard_snapshot()
+            except Exception:
+                pass  # The original guard exception and every refusal remain authoritative.
+            raise
+
+    scope['_preflight'] = observed_preflight
     return scope
 
 
@@ -326,6 +427,9 @@ def steps(cfg):
     except Exception as exc:
         if row is not None and isinstance(exc, shared['NativeContractError']):
             row['failed_observation'] = exc.observed
+        diagnostics = getattr(exc, 'codex_guard_diagnostics', None)
+        if isinstance(diagnostics, dict):
+            report['guard_diagnostics'] = diagnostics
         report.update(stage='halted_preserve_partial', error_type=type(exc).__name__, error=str(exc),
                       replay_permitted=False, failure_utc=_utc())
         # Never erase a complete prior receipt or a pending write after an uncertain write.
