@@ -18,7 +18,7 @@ inline const std::vector<Entry>& Catalog() {
         {"football","Football / Soccer","Move: WASD/arrows or left stick; J/X: kick"},
         {"pacman","Pac-Man source maze","Move: WASD/arrows or left stick"},
         {"sega_shooter","Sega Space Shooter","Move: WASD/arrows or left stick; J/X: shoot"},
-        {"shadow_ninja","Shadow Ninja","Space/A: jump; J/X: sword; K/B: star; Shift/Y: spin; Up/Down: climb"},
+        {"shadow_ninja","Shadow Ninja","Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb"},
         {"star_shooter","Star Shooter","Move: WASD/arrows or left stick; J/X: shoot; P/Start: source pause/save menu"},
         {"dodge_ball","Super Dodge Ball Tournament","Move: WASD/arrows or left stick; source throw/catch/jump actions"},
         {"contra","CONTRA source platformer","Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/A: jump"},
@@ -57,7 +57,7 @@ public:
     bool Select(const std::string& NewId,std::uint32_t NewSeed) {
         auto Candidate=CreateGame(NewId);
         if(!Candidate) return false;
-        Candidate->Reset(NewSeed); Active=std::move(Candidate); Id=NewId; Seed=NewSeed;
+        Candidate->Reset(NewSeed); Candidate->EnterTitle(); Active=std::move(Candidate); Id=NewId; Seed=NewSeed;
         Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh(); return true;
     }
     void Restart() {
@@ -73,6 +73,15 @@ public:
         Next.DashPressed=Next.DashPressed||Controls.DashPressed; Controls=Next;
     }
     void ClearInput() { Controls={}; }
+    void SourceKeyDown(int Key) {
+        if(!Active || Paused) return;
+        if(Active->SourceKeyDown(Key)) Controls={};
+        Refresh();
+    }
+    bool SourceControllerButton(int Button) {
+        if(!Active || Paused || !Active->SourceControllerButton(Button)) return false;
+        Controls={}; Refresh(); return true;
+    }
     void SetPaused(bool Value) { Paused=Active && Active->OwnPause(Value) ? false : Value; Controls={}; PendingSeconds=0; }
     bool IsPaused() const { return Paused || (Active && Active->IsCorePaused()); }
     int Advance(double DeltaSeconds) {

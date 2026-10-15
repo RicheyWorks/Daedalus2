@@ -197,7 +197,8 @@ class ContraGame final : public Game {
     std::vector<platformers::Particle> Particles;
     Random Rng,CosmeticRng;
     double CameraX=0,Progress=0;
-    bool Over=false,Won=false,FinalBossSpawned=false;
+    bool Over=false,Won=false,FinalBossSpawned=false,AtTitle=false,NamedKeyInput=false;
+    std::uint32_t SessionSeed=730;
     int CheatIndex=0;
     Input Previous;
     void Explode(double X,double Y,Color Tint={255,165,0,255}) {
@@ -252,6 +253,7 @@ public:
     static constexpr double FinishX=2800;
     ContraGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed;AtTitle=false;
         Player={}; Bullets.clear(); EnemyBullets.clear(); Enemies.clear(); Powerups.clear(); Particles.clear();
         Rng.Seed(Seed); CosmeticRng.Seed(Seed^0x38f01a25u);
         CameraX=0; Progress=0; Over=false; Won=false; FinalBossSpawned=false; CheatIndex=0; Previous={};
@@ -260,17 +262,41 @@ public:
         // inconsistent three-enemy initializer.
         Spawn(450,470,0); Spawn(650,470,0); Powerups.push_back({620,350,0,false});
     }
+    // Optional cabinet lifecycle/key seam. The host dispatches ordered raw
+    // keyboard events before its next fixed Step; held input remains movement.
+    // Keys: 0..5 = Up,Down,Left,Right,B,A; 6 Enter; 7 Space; 8 R; 9 other.
+    void EnterTitle() override {
+        Reset(SessionSeed);AtTitle=true;NamedKeyInput=true;
+    }
+    bool IsAtTitle() const { return AtTitle; }
+    int GetCheatProgress() const { return CheatIndex; }
+    bool SourceKeyDown(int Key) override {
+        NamedKeyInput=true;
+        SubmitCheatKey(Key>=0 && Key<=5?Key:-1,AtTitle);
+        if(AtTitle && (Key==6 || Key==7)) { StartFromTitle(); return true; }
+        if(Over && (Key==6 || Key==8)) { Reset(SessionSeed); return true; }
+        return false;
+    }
+    bool SourceControllerButton(int Button) override {
+        // Controller events never advance or reset an unfinished keyboard code.
+        if(AtTitle && Button==0) { StartFromTitle(true); return true; }
+        if(Over && (Button==0 || Button==1)) {
+            const int Prefix=CheatIndex;
+            Reset(SessionSeed);CheatIndex=Prefix;return true;
+        }
+        return false;
+    }
     // Optional named-key binding for the source cheat: U,U,D,D,L,R,L,R,B,A.
     // 0=up, 1=down, 2=left, 3=right, 4=B/action, 5=A/jump. The common adapter
     // feeds digital edges below; a full keyboard adapter may call this directly.
     void SubmitCheatKey(int Key,bool TitleScreen=false) {
         static constexpr int Code[10]={0,0,1,1,2,3,2,3,4,5};
-        if(Key<0 || Key>5 || Over) { CheatIndex=0; return; }
+        if(Key<0 || Key>5) { CheatIndex=0; return; }
         if(Key==Code[CheatIndex]) ++CheatIndex; else CheatIndex=0;
         if(CheatIndex==10) {
             CheatIndex=0;
             if(TitleScreen) Player.Lives=30;
-            else {
+            else if(!Over) {
                 Player.Lives=std::min(Player.Lives+5,99);
                 Player.Spread=true; Player.SpreadTimer=600; Explode(Player.X,Player.Y,{0,255,255,255});
             }
@@ -278,17 +304,26 @@ public:
     }
     void Step(const Input& I) override {
         if(Over) return;
+        if(AtTitle) {
+            // Title transitions require the ordered keyboard/controller seams;
+            // a semantic Jump may also be W, which is not a source start key.
+            return;
+        }
         // Mirror the existing Slate merge for direct callers; source stick
         // precedence, right-key precedence and held jump/fire stay in Player.
         Input Controls=I;
         Controls.Left=Controls.Left || I.PadLeft; Controls.Right=Controls.Right || I.PadRight;
         Controls.Up=Controls.Up || I.PadUp; Controls.Down=Controls.Down || I.PadDown;
-        if(Controls.Up && !Previous.Up) SubmitCheatKey(0);
-        if(Controls.Down && !Previous.Down) SubmitCheatKey(1);
-        if(Controls.Left && !Previous.Left) SubmitCheatKey(2);
-        if(Controls.Right && !Previous.Right) SubmitCheatKey(3);
-        if(Controls.ActionPressed || (Controls.Action && !Previous.Action)) SubmitCheatKey(4);
-        if(Controls.JumpPressed || (Controls.Jump && !Previous.Jump)) SubmitCheatKey(5);
+        // Legacy portable callers can still use semantic edges. Once a cabinet
+        // uses raw keys, never submit those same arrows a second time here.
+        if(!NamedKeyInput) {
+            if(Controls.Up && !Previous.Up) SubmitCheatKey(0);
+            if(Controls.Down && !Previous.Down) SubmitCheatKey(1);
+            if(Controls.Left && !Previous.Left) SubmitCheatKey(2);
+            if(Controls.Right && !Previous.Right) SubmitCheatKey(3);
+            if(Controls.ActionPressed || (Controls.Action && !Previous.Action)) SubmitCheatKey(4);
+            if(Controls.JumpPressed || (Controls.Jump && !Previous.Jump)) SubmitCheatKey(5);
+        }
         Previous=Controls;
         if(Controls.FirePressed) Player.Shoot(Bullets);
         Player.Update(Controls,platformers::ContraPlatforms(),CameraX);
@@ -355,6 +390,7 @@ public:
         }
     }
     Status GetStatus() const override {
+        if(AtTitle) return {0,Player.Lives,false,false,"CONTRA TITLE | Arrows, B, A: source keyboard code; Enter/Space or pad A starts. Lives: "+std::to_string(Player.Lives)};
         const std::string Note=Over ? (Won?"MISSION COMPLETE | R / Restart: play again":"GAME OVER | R / Restart: try again")
             : "CONTRA | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
         return {Player.Score,Player.Lives,Over,Won,Note};
@@ -366,6 +402,17 @@ public:
     std::size_t ParticleCount() const { return Particles.size(); }
     void Render(Frame& F) const override {
         F.Clear(800,600,{135,206,235,255});
+        if(AtTitle) {
+            F.AddRect(90,105,620,400,{15,25,40,245});
+            F.AddText(285,135,"CONTRA",{255,80,80,255},44);
+            F.AddText(150,215,"Enter / Space or controller A: start",White,24);
+            F.AddText(130,275,"Keyboard: Up Up Down Down Left Right Left Right B A",{255,225,100,255},17);
+            F.AddText(170,315,"Final keyboard A completes the code; it does not start.",White,16);
+            F.AddText(220,360,Player.Lives==30?"30 LIVES ARMED":"STANDARD: 3 LIVES",{120,255,160,255},28);
+            F.AddText(245,410,"Code progress: "+std::to_string(CheatIndex)+" / 10",White,18);
+            F.AddText(155,460,"Play starts fresh with the selected lives. R/Restart: standard run.",White,15);
+            return;
+        }
         for(int I=-2;I<5;++I) {
             const double X=I*300-std::fmod(CameraX*.2,300);
             F.AddTriangle({X,400},{X+150,280},{X+300,400},{0,100,0,255});
@@ -442,6 +489,13 @@ public:
             F.AddText(190,341,Won?"Passed the original distance goal.":GoalText(),{200,225,205,255},18);
             F.AddText(190,382,"R / Restart: new run with the same seed",White,18);
         }
+    }
+private:
+    void StartFromTitle(bool PreserveCode=false) {
+        const int StartingLives=std::max(3,Player.Lives);
+        const int Prefix=CheatIndex;
+        Reset(SessionSeed);Player.Lives=StartingLives;
+        if(PreserveCode) CheatIndex=Prefix;
     }
 };
 
