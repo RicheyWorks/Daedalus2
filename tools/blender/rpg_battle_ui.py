@@ -270,11 +270,11 @@ def mockup(realm, root, st, win, cursor):
     names = [os.path.basename(p)[len("Party_"):-len("_1x.png")].split("_")[-1] for p in party] or ["HERO", "SAGE", "SCOUT"]
     for i, (nm, n) in enumerate(zip(names[:3], (412, 96, 1280))):
         y = H - 72 + i * 16
-        blit(scr, PF.render(nm[:6 if realm == "portal" else 10], tcol, sh), W // 2 + 8, y)
+        blit(scr, PF.render(nm[:6 if realm == "portal" else 9], tcol, sh), W // 2 + 8, y)
         num = text_number(n, tc, st["shade"])
         blit(scr, num, W - 10 - num.shape[1], y)                                 # right-aligned inside the frame
         if st["gauges"]:
-            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 40), W - 82, y + 1)
+            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 30), W - 72, y + 1)
     blit(scr, text_number(999, "#ffffff" if realm == "portal" else "#fff070", st["shade"]), 40, 70)
     return scr
 
