@@ -230,6 +230,17 @@
     "Pirate flavor"
    ],
    "note": "Eden-growth maze generator, coral-like branching; pirate is comment flavor only, not crews. Candidate seam for a reef/wreck interior layout"
+  },
+  {
+   "id": "habitat-tidepool",
+   "area": "creatures",
+   "status": "data-only",
+   "path": "data/ocean/habitat-tidepool-r1.json",
+   "symbols": [
+    "\"refuge\"",
+    "\"low\""
+   ],
+   "note": "bounded habitat proposal: 3 zones x 3 water states, canon-bound residents; checked by habitat_check.py"
   }
  ],
  "absent": [
