@@ -3,7 +3,7 @@
 
     python tools/rpg_demo/menu_test.py DEMO_DIR
 
-START opens ITEM / MAGIC / EQUIP / STATUS / ORDER / SAVE / OPTIONS. Checks: armour counts toward DEF (the gear table
+START opens ITEM / MAGIC / EQUIP / STATUS / ORDER / BESTIARY / SAVE / OPTIONS. Checks: armour counts toward DEF (the gear table
 reaches the Prism party); a chest weapon in the bag can be equipped and ATK rises, the old one goes back to the bag;
 a weapon nobody can wield is never offered; taking armour off lowers DEF; MAGIC heals a hurt member with MP;
 battle-only spells refuse; STATUS opens; ORDER swaps; SAVE works in town and refuses in a dungeon; OPTIONS opens
@@ -45,7 +45,7 @@ with sync_playwright() as p:
         m = mn()
         while mn()["idx"] != m["cmds"].index(cmd): bot.press("down", 70)
         bot.press("a", 150)
-    check("START opens the field menu with the seven commands", open_menu() and mn()["cmds"] == ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "SAVE", "OPTIONS"], mn())
+    check("START opens the field menu with the eight commands", open_menu() and mn()["cmds"] == ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "BESTIARY", "SAVE", "OPTIONS"], mn())
     ev("PRISM_DEMO.give('Steel Saber'); PRISM_DEMO.give('Silver Lance')")
     pick("EQUIP")
     check("EQUIP opens on Corin's slots", mn()["sub"] == "equip" and mn()["who"] == 0)

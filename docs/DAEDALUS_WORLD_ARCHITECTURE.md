@@ -1127,3 +1127,15 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
   chance-based checks got a single fight, and a fight can end before the behaviour shows: a foe can fall to a
   confused swing, or an undead foe may simply not rise (35%). `until()` now starts a fresh fight up to 4 times, and
   25 times for the undead rise.
+
+### 14.35 The Prismheart demo: bestiary
+
+- **What it is:** BESTIARY in the field menu (now eight commands) lists every foe met, Wardens included, ordered by
+  level. The header shows "MET n / 136" (132 foes + 4 Wardens).
+- **What an entry shows:** the foe's sprite, level, HP, ATK and DEF, its element and (for Wardens) its weakness, a line
+  on its behaviour, and how many times it was met and felled.
+- **Where the words come from:** `BEHAVIOUR_TEXT` uses the same words as the `foeTurn` doc (14.32), one line per
+  behaviour plus one for Wardens. `bestiary_test` fails if a behaviour in the data has no words.
+- **Saving:** `state.seen` (met and felled counts) is saved at the inn and restored on CONTINUE. NEW GAME starts it
+  empty.
+- **Tests:** `bestiary_test.py` (14 checks). `menu_test` now expects the eight commands.
