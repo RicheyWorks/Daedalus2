@@ -318,7 +318,7 @@ def build(out_root, data_root=None):
         for k in kinds:
             g, ex, npcs, meta = shop(k, realm)
             if k == "Magic":
-                meta["stock"] = magic_stock(data_root or out_root, realm)
+                meta["stock"] = magic_stock(data_root or os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")), realm)
             img = render(realm, g, npcs)
             P.save_png(P.upscale(img, 2), os.path.join(od, "Interior_%s.png" % k))
             thumbs.append(P.upscale(img, 1))

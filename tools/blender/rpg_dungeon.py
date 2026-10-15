@@ -410,8 +410,11 @@ def boss_sprite(root, realm, boss):
     return s
 
 
+REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+
+
 def build(out_root, data_root=None):
-    root = data_root or out_root
+    root = data_root or REPO                                                       # bosses / encounters / shop stock live in the repo
     enc = {r: (load(root, "%s-encounters.json" % r) or {}).get("zones", {}) for r in ("portal", "prism")}
     bosses = (load(root, "prism-bosses.json") or {}).get("bosses", [])
     data = {}
@@ -463,7 +466,8 @@ def build(out_root, data_root=None):
                 })
             data[realm].append({"name": dname, "theme": theme, "floors": floors, "boss": boss["name"] if boss else None,
                                 "shard": boss.get("shard") if boss else None, "level": boss.get("level") if boss else None})
-        P.save_png(P.grid_sheet(thumbs, 3), os.path.join(od, "sheet-floors.png"))
+        if thumbs:
+            P.save_png(P.grid_sheet(thumbs, 3), os.path.join(od, "sheet-floors.png"))
     if data_root:
         d = os.path.join(data_root, "data", "rpg")
         with open(os.path.join(d, "dungeons.json"), "w", encoding="utf-8") as f:
