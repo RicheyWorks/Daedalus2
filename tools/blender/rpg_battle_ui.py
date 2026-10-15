@@ -274,7 +274,7 @@ def mockup(realm, root, st, win, cursor):
         num = text_number(n, tc, st["shade"])
         blit(scr, num, W - 10 - num.shape[1], y)                                 # right-aligned inside the frame
         if st["gauges"]:
-            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 30), W - 72, y + 1)
+            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 28), W - 80, y + 1)
     blit(scr, text_number(999, "#ffffff" if realm == "portal" else "#fff070", st["shade"]), 40, 70)
     return scr
 
