@@ -1360,3 +1360,11 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
 - Keel depth must scale with the plateau radius, or a small islet hangs a full-size keel and reads as a pillar.
 - Contact-sheet cameras look from −Y; creatures face +Y — rotate subjects 155–180° in the sheet only.
 - HD island timing (PC, Blender 4.3.1 headless): 17 s build+export per island, ~91 k tris, 612 objects (instances).
+- One Blender process building 8 HD islands slowed 17 s → 65 s per plot (scene accumulation). Fix: one fresh
+  process per plot (`--plot I`), then a links pass that re-imports the 8 GLBs to render. ~16 s per plot, flat.
+- Ring layouts: Ultra's 256 m pitch is neighbour-to-neighbour. For 7 around a hub the ring radius is
+  256 / (2·sin(π/7)) = 295 m; using 256 m as the radius left ring islands only ~2 m apart.
+- glTF re-import leaves `diffuse_color` white, so Workbench MATERIAL renders go grey — copy Base Color back (and
+  the mean vertex colour for vertex-coloured terrain) before rendering an imported overview.
+- Killing my own jobs by command-line match: exclude `$PID` — a pattern that appears in the command text also
+  matches the bridge shell running the kill, which cut that call short.

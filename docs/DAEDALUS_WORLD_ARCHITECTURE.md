@@ -754,7 +754,8 @@ plateau, clipped water, strata shell), rebuilt original. Recipe, in order (`buil
 Kinds: meadow, volcano, frost, mesa, mire, crystal (palette + tree shape per kind).
 
 ### 14.14 Octets — eight connected islands (`tools/blender/hd_cluster.py`, 10 themes)
-Hub island + seven on a 256 m ring (Ultra's pitch); 14 sagging rope-plank bridges (hub↔each, ring neighbours) with
+Hub island + seven on a 295 m ring, so ring neighbours sit exactly one 256 m pitch apart (Ultra's standard; hub gap
+75 m, ring gap 36 m); each islet points away from the hub. 14 sagging rope-plank bridges (hub↔each, ring neighbours) with
 gate posts and lanterns at the sockets; seven ring sky-streams carry water lake-to-lake through the air around the
 octet. Themes by seed 1–10: Spring, Summer, Harvest, Winter, Easter, Halloween, Christmas, Valentine, Midsummer,
 NewYear — kinds per plot, accent colour and a signature prop per island (blossoms, sunflowers, pumpkins/jack-o'-
@@ -762,3 +763,5 @@ lanterns, snowmen, eggs, gifts + tree + star, hearts, aurora ribbon, fireworks).
 `engines/unreal/art/claude-octets/`: 8 plot GLB/FBX/json (`Octet_<Theme>_<seed>_Plot<i>_<Kind>`), `_Bridges`, `_Canal`
 (sky streams + theme props), `.layout.json` (centres, sockets, bridge and stream graph), hero + top renders.
 Plot seeds = seed × 100 + i, so any plot rebuilds alone with `hd_island.py OUT <seed*100+i> <kind>`.
+Run it as 8 fresh processes (`hd_cluster.py OUT SEED --plot I`, I = 0..7) then `--links --render` — one process
+for all eight slowed from 17 s to 65 s per plot as the scene filled; per-plot processes hold ~16 s (≈3 min/octet).
