@@ -112,7 +112,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "6d151c9b97494084d4d4cc3a8e0f5051051b5e6a7c4fc630633e7f8bfa9fb3b0"
+      "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
     }
   ],
   "companionPullRequest": "https://github.com/RicheyWorks/synapse/pull/4",
