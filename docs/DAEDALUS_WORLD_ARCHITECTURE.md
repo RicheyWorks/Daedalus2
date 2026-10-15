@@ -951,3 +951,12 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   Taglines: "A Tale of the Sky Isles" / "The Shattered Crystal".
 - Name entry: the lead hero's sprite, the name with a blinking caret, a letter grid (A–Z, 0–9, space, - .), BACK / END.
 - `data/rpg/title.json`: logo, menu, frames/fps, music cue TITLE (→ the `*-title` jukebox seed), name grid and length.
+
+### 14.27 Playable Prismheart demo (`tools/rpg_demo/`)
+
+The first end-to-end play of a realm, in the browser, made only from the realm's own outputs.
+- `build_demo.py ART_ROOT OUT_DIR [--sprites DIR]` packs 123 tile frames, 179 sprites (128 foes, the Pyre Warden, party, NPCs, icons, UI), 11 backdrops, 34 spell strips and the title into atlases, and merges the realm data into `data.json` (town, interiors, demo world map, Cinder Forge, zones, bestiary, spells, party, jukebox cues + loop lengths). It refuses to build if a named tile is missing or the Cave, Castle or Shrine can't be reached on foot from the Town.
+- `index.html` is the engine: title, town, five interiors (item/weapon/magic shops, inn, castle), world map with encounters, three forge floors with chests, lava and stairs, and the boss gate. Battles use ATTACK/MAGIC/ITEM/DEFEND/RUN with the spell strips. Music and sound go through the ADR-052 contract: each frame it builds the `{cue, changed, sfx}` body `SDaedalusRealm` would POST to `daedalus.Jukebox`, logs it, and plays it locally (same cue never restarts, music ducks under effects).
+- `play_test.py OUT_DIR` is a Playwright play-through: title → town → buy → learn a spell → field battle → chest → boss gate → Pyre Warden → gate falls. It fails on any page error, an unbeaten boss or a silent jukebox.
+- Its first runs found: battle teardown nulled state mid-fade (crash on every victory); the boss's `weakness: tide` never matched the spells' `water` element (bosses name elements by lore: tide/gale/stone/shade now map to water/air/earth/dark); the magic shop showed only 8 of 34 spells; the empty-magic message always said the bag was empty.
+- Balance check: a party that only presses ATTACK loses to the Warden with about 1,450 of 2,200 HP left; one that heals under half and casts Splash on the weakness wins.
