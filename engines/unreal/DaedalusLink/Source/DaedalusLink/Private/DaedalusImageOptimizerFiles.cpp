@@ -73,8 +73,7 @@ namespace
     private:
         bool SetDisposition(bool bDelete)
         {
-            FILE_DISPOSITION_INFO Disposition = {};
-            Disposition.DeleteFile = bDelete ? 1 : 0;
+            FILE_DISPOSITION_INFO Disposition = { static_cast<BOOLEAN>(bDelete) };
             return ::SetFileInformationByHandle(File.Get(), FileDispositionInfo, &Disposition, static_cast<DWORD>(sizeof(Disposition))) != 0;
         }
         FLocalHandle File;
@@ -396,7 +395,7 @@ bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Ty
     Dialog.nMaxFile = static_cast<DWORD>(Buffer.Num());
     Dialog.lpstrTitle = L"Export optimized image to a new file";
     Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-    const bool bSelected = ::GetSaveFileNameW(&Dialog) != FALSE;
+    const bool bSelected = ::GetSaveFileNameW(&Dialog) != 0;
     // Modal dialogs may dispatch ownership/close events before returning to this stack.
     if (!StillAllowed()) return false;
     if (!bSelected)

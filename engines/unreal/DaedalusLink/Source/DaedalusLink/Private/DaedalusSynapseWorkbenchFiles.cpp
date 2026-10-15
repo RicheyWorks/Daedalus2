@@ -123,8 +123,7 @@ namespace
     private:
         bool SetDisposition(bool bDelete)
         {
-            FILE_DISPOSITION_INFO Disposition = {};
-            Disposition.DeleteFile = bDelete ? 1 : 0;
+            FILE_DISPOSITION_INFO Disposition = { static_cast<BOOLEAN>(bDelete) };
             return ::SetFileInformationByHandle(File.Get(), FileDispositionInfo, &Disposition, static_cast<DWORD>(sizeof(Disposition))) != 0;
         }
         FLocalHandle File;
@@ -319,7 +318,7 @@ bool DaedalusSynapseWorkbenchFiles::Select(ESelection Kind, FSelectedBytes& Out,
     Dialog.lpstrTitle = Kind == ESelection::Image ? L"Choose one image for Synapse" : L"Choose memory JSON to review before importing";
     Dialog.lpstrFile = Buffer.GetData(); Dialog.nMaxFile = Buffer.Num();
     Dialog.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-    const bool Selected = ::GetOpenFileNameW(&Dialog) != FALSE;
+    const bool Selected = ::GetOpenFileNameW(&Dialog) != 0;
     if (!Allowed()) return false;
     if (!Selected) { if (::CommDlgExtendedError()) Error = TEXT("The file chooser could not complete."); return false; }
     FString Path;
@@ -381,7 +380,7 @@ bool DaedalusSynapseWorkbenchFiles::SaveMemoryJson(const TArray<uint8>& Bytes, F
     Dialog.lpstrTitle = L"Export Synapse memories to a new JSON file";
     Dialog.lpstrFile = Buffer.GetData(); Dialog.nMaxFile = Buffer.Num();
     Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-    const bool Selected = ::GetSaveFileNameW(&Dialog) != FALSE;
+    const bool Selected = ::GetSaveFileNameW(&Dialog) != 0;
     if (!Allowed()) return false;
     if (!Selected) { if (::CommDlgExtendedError()) Error = TEXT("The save chooser could not complete."); return false; }
     FString Destination;
