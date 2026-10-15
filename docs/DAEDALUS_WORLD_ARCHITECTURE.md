@@ -875,3 +875,15 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged â†
   gradient / bevelled border), 2-frame hand cursor, 0-9 damage and heal digits + Miss, 8 status icons (Poison, Sleep,
   Haste, Slow, Protect, KO, Blind, Silence), HP/MP/ATB gauges (16-bit), and `mockup.png` composing backdrop + enemy
   sprites + party + windows from the kit. `claude-battle-kit/<realm>/ui/`.
+
+### 14.21 Walkable towns (`rpg_town.py`)
+- 42 town tiles per realm (8-bit Portal / 16-bit Prismheart): cobble, path, plaza, wood/stone floors, carpet; brick,
+  plaster and timber walls with windows and doors; red and blue roofs in three rows (ridge, body, eave); shop signs
+  (weapon, armour, item, inn, magic); counter, shelf, bed, table, barrel, crate, pot, fountain (2 frames), well, tree,
+  flowers, fence, stairs, chest closed/open, lamp, water.
+- 8 villager types (farmer, merchant, guard, elder, child, innkeeper, mage, sailor), each a strip of 8 frames
+  (down, up, left, right Ã— 2 walk frames), procedurally drawn with an auto outline.
+- `town-demo.png`: a fenced town with four buildings (shop signs on the doors), a fountain plaza, roads, lamps, a
+  well, a chest and nine villagers. `data/rpg/town-tiles.json`: walkable + interact (door, shop:<kind>, inn, rest,
+  search, save, chest, stairs, talk_across) per tile, plus the demo grid and NPC placements so a level can be laid
+  out from data. `claude-battle-kit/<realm>/town/`.
