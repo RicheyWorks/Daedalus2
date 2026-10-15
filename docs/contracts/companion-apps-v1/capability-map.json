@@ -228,7 +228,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "4427470d62f909deb19e91db38da36ef001a8a182e640cf3b49db1d2eeecb2e7"
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
     }
   ],
   "contracts": [
@@ -296,7 +296,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "4427470d62f909deb19e91db38da36ef001a8a182e640cf3b49db1d2eeecb2e7"
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
     }
   ],
   "contracts": [
@@ -1730,9 +1730,32 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "4427470d62f909deb19e91db38da36ef001a8a182e640cf3b49db1d2eeecb2e7"
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
     }
   ],
   "remaining": "Operator serial UHT/compile/link/install/CEF/Win32/physical art/Play; no real transmission/provider/inbound claim; Photo packaging reconciliation recorded separately"
+},
+  "win32FileHelperCompileCorrection": {
+  "sourceCommit": "c3625e189d68eec798c19bef0b9158718d51832e",
+  "supersedesSource": "f4983b977df1fef8fd96f2003e2a55154b21100f",
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
+      "normalizedSha256": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+      "normalizedSha256": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
+    }
+  ],
+  "correction": "Aggregate-initialize the one-BOOLEAN disposition struct; compare WinAPI BOOL with zero after wrapper cleanup",
+  "behavior": "Same deletion marker and chooser truth values; cleanup, lifecycle, no-replace and all unrelated source preserved",
+  "nativeRebuild": "pending_for_corrected_source",
+  "runtimeVerified": false,
+  "contract": "docs/contracts/companion-apps-v1/win32-file-helper-compile-fix.md"
 }
 }

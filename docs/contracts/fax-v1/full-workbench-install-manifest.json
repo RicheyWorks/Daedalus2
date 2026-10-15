@@ -2,7 +2,7 @@
   "schema": "daedalus.fax.workbench.native-install.v1",
   "productId": "fax-trident",
   "protocol": "faxworkbench.local.v1",
-  "nativeBaseCommit": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
+  "nativeBaseCommit": "7047188836a7cbb9e7ca2b1d2fd82cc5071baf99",
   "nativeSourceCommit": null,
   "companionBaselineCommit": "4e3e4f50d3c7253fcf137a4b1593ecff0153a45d",
   "companionNativeAdapterCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
