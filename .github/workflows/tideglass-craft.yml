@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: Tideglass crafting core
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/**/DaedalusTideglass*'
+      - 'engines/unreal/core-test/tideglass_craft_test.cpp'
+      - '.github/workflows/tideglass-craft.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/**/DaedalusTideglass*'
+      - 'engines/unreal/core-test/tideglass_craft_test.cpp'
+      - '.github/workflows/tideglass-craft.yml'
+permissions:
+  contents: read
+jobs:
+  portable-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test the portable Tideglass core
+        working-directory: engines/unreal/core-test
+        run: |
+          ${{ matrix.compiler }} -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public tideglass_craft_test.cpp -o tideglass_craft_test
+          ./tideglass_craft_test
