@@ -52,6 +52,7 @@ if "--no-sheet" not in argv:
             for v in ob.data.vertices:
                 v.co /= 100.0
             ob.data.color_attributes.active_color = ob.data.color_attributes["Col"]
+            ob.rotation_euler.z = 3.14159 * (0.85 if "owl" in "export_owls.py" else 1.0) if True else 0   # face the camera
             obs.append(ob)
         scene = bpy.context.scene
         scene.render.engine = "BLENDER_WORKBENCH"
