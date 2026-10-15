@@ -1,0 +1,852 @@
+<title>Prismheart Playable Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one arcade cabinet column - marquee, the 320x224 screen at an integer scale, then the pad and the jukebox log. Single dark look by design. */
+:root {
+  --cab: #120f22; --cab-2: #1c1834; --bezel: #07060f; --line: #2e2852;
+  --text: #e8e4ff; --dim: #9a93c4; --crystal: #c890f8; --ember: #f0a048; --ok: #78f8a0;
+  --display: "Pixelify Sans", "Courier New", monospace; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--cab); color: var(--text); font: 14px/1.45 var(--mono);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px 24px; }
+.cabinet { max-width: 1000px; margin: 0 auto; display: grid; gap: 14px; }
+.marquee { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.marquee h1 { margin: 0; font: 700 clamp(22px, 4vw, 32px)/1 var(--display); letter-spacing: .04em; color: var(--crystal); text-wrap: balance; }
+.marquee p { margin: 0; color: var(--dim); font-size: 12.5px; }
+.screen-wrap { background: var(--bezel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; place-items: center; overflow: hidden; }
+canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; display: block; max-width: 100%; height: auto; background: #000; outline: none; }
+canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 720px) { .row { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--cab-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+.panel h2 { margin: 0 0 8px; font: 500 15px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--ember); }
+.pad { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; touch-action: none; user-select: none; -webkit-user-select: none; }
+.dpad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 52px); gap: 4px; }
+.dpad button[data-k="up"] { grid-area: 1 / 2; } .dpad button[data-k="left"] { grid-area: 2 / 1; }
+.dpad button[data-k="right"] { grid-area: 2 / 3; } .dpad button[data-k="down"] { grid-area: 3 / 2; }
+.ab { display: flex; gap: 12px; align-items: center; }
+.pad button { font: 700 15px var(--display); color: var(--text); background: var(--line); border: 1px solid #463e78; border-radius: 10px; min-width: 52px; min-height: 52px; cursor: pointer; }
+.pad button.round { border-radius: 50%; width: 60px; height: 60px; }
+.pad button.a { background: #5a2f7a; } .pad button.b { background: #3a2f5a; }
+.pad button:active, .pad button.held { filter: brightness(1.5); }
+.pad button:focus-visible { outline: 2px solid var(--crystal); outline-offset: 2px; }
+.keys { color: var(--dim); font-size: 12.5px; margin: 8px 0 0; }
+.keys kbd { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--text); }
+#log { margin: 0; max-height: 210px; overflow: auto; font: 12px/1.5 var(--mono); color: var(--dim); white-space: pre-wrap; word-break: break-word; }
+#log b { color: var(--ok); font-weight: 500; }
+.note { color: var(--dim); font-size: 12.5px; margin: 6px 0 0; }
+@media (prefers-reduced-motion: reduce) { .pad button { transition: none; } }
+</style>
+
+<div class="cabinet">
+  <div class="marquee">
+    <h1>PRISMHEART</h1>
+    <p>Playable slice of the 16-bit realm, built from the realm's own tiles, sprites, data and music.</p>
+  </div>
+  <div class="screen-wrap"><canvas id="screen" width="320" height="224" tabindex="0" aria-label="Game screen"></canvas></div>
+  <div class="row">
+    <div class="panel">
+      <h2>Controls</h2>
+      <div class="pad" id="pad">
+        <div class="dpad">
+          <button data-k="up" aria-label="Up">&#9650;</button><button data-k="left" aria-label="Left">&#9664;</button>
+          <button data-k="right" aria-label="Right">&#9654;</button><button data-k="down" aria-label="Down">&#9660;</button>
+        </div>
+        <div class="ab">
+          <button data-k="start" aria-label="Start / menu">START</button>
+          <button class="round b" data-k="b" aria-label="B, cancel">B</button>
+          <button class="round a" data-k="a" aria-label="A, confirm">A</button>
+        </div>
+      </div>
+      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu)</p>
+    </div>
+    <div class="panel">
+      <h2>Jukebox cues</h2>
+      <pre id="log">The realm posts {cue, changed, sfx} here, the same body SDaedalusRealm sends to daedalus.Jukebox. Press START on the title to begin (sound starts then).</pre>
+      <p class="note" id="status">Loading&hellip;</p>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+(() => {
+const cv = document.getElementById("screen"), g = cv.getContext("2d");
+g.imageSmoothingEnabled = false;
+const W = 320, H = 224, T = 16;
+const statusEl = document.getElementById("status"), logEl = document.getElementById("log");
+let D, IM = {};
+const rnd = (a, b) => a + Math.random() * (b - a);
+const ri = (a, b) => Math.floor(rnd(a, b + 1));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ---------- scaling ---------- */
+function fit() {
+  const avail = Math.min(cv.parentElement.clientWidth - 24, (window.innerHeight || 800) * 0.68 / H * W);
+  const k = Math.max(1, Math.floor(avail / W));
+  cv.style.width = W * k + "px"; cv.style.height = H * k + "px";
+}
+window.addEventListener("resize", fit);
+
+/* ---------- input ---------- */
+const held = {}, pressed = {};
+const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
+  KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
+window.addEventListener("keydown", e => { const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!held[k]) pressed[k] = true; held[k] = true; unlockAudio(); });
+window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) held[k] = false; });
+document.querySelectorAll("#pad button").forEach(b => {
+  const k = b.dataset.k;
+  const down = e => { e.preventDefault(); if (!held[k]) pressed[k] = true; held[k] = true; b.classList.add("held"); unlockAudio(); };
+  const up = e => { e.preventDefault(); held[k] = false; b.classList.remove("held"); };
+  b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
+});
+cv.addEventListener("pointerdown", () => { cv.focus(); unlockAudio(); });
+const hit = k => { const v = pressed[k]; pressed[k] = false; return !!v; };
+
+/* ---------- jukebox (ADR-052 cue contract) ---------- */
+const AC = window.AudioContext || window.webkitAudioContext;
+let actx = null, master, musicGain, sfxGain, musicSrc = null, curBufCue = null;
+const bufs = {};
+const juke = { cue: null, lastPosted: null, sfx: [], posts: 0 };
+function unlockAudio() {
+  if (actx || !AC) return;
+  try {
+    actx = new AC();
+    const lim = actx.createDynamicsCompressor();          /* ear-safety limiter, like rd-jukebox's fixed chain */
+    lim.threshold.value = -10; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.12;
+    master = actx.createGain(); master.gain.value = 0.85;
+    musicGain = actx.createGain(); musicGain.gain.value = 0.7;
+    sfxGain = actx.createGain(); sfxGain.gain.value = 0.9;
+    musicGain.connect(lim); sfxGain.connect(lim); lim.connect(master); master.connect(actx.destination);
+    if (juke.cue) startMusic(juke.cue);
+  } catch (e) { actx = null; }
+}
+async function buffer(url) {
+  if (!actx) return null;
+  if (bufs[url]) return bufs[url];
+  bufs[url] = fetch(url).then(r => r.arrayBuffer()).then(a => new Promise((ok, bad) => actx.decodeAudioData(a, ok, bad))).catch(() => null);
+  return bufs[url];
+}
+async function startMusic(cue) {
+  if (!actx) return;
+  const url = D.audio.cues[cue]; if (!url) return;
+  const want = cue; curBufCue = cue;
+  const b = await buffer(url);
+  if (!b || curBufCue !== want) return;
+  const now = actx.currentTime;
+  if (musicSrc) { const old = musicSrc; old.gainNode.gain.setTargetAtTime(0, now, 0.15); setTimeout(() => { try { old.stop(); } catch (e) {} }, 900); }
+  const src = actx.createBufferSource(); src.buffer = b;
+  const loop = D.audio.loops[cue];
+  if (loop) { src.loop = true; src.loopStart = 0; src.loopEnd = Math.min(loop, b.duration); }
+  const gn = actx.createGain(); gn.gain.setValueAtTime(0, now); gn.gain.setTargetAtTime(1, now, 0.12);
+  src.connect(gn); gn.connect(musicGain); src.gainNode = gn; src.start(); musicSrc = src;
+}
+async function playSfx(ev) {
+  if (!actx) return;
+  const url = D.audio.events[ev]; if (!url) return;
+  const b = await buffer(url); if (!b) return;
+  const s = actx.createBufferSource(); s.buffer = b; s.connect(sfxGain); s.start();
+  if (!ev.startsWith("BLIP:")) {                         /* duck the music under effects */
+    const t = actx.currentTime; musicGain.gain.cancelScheduledValues(t);
+    musicGain.gain.setTargetAtTime(0.42, t, 0.02); musicGain.gain.setTargetAtTime(0.7, t + b.duration, 0.12);
+  }
+}
+function cue(c) { juke.cue = c; }
+function sfx(e) { juke.sfx.push(e); }
+function jukeTick() {
+  const changed = juke.cue !== juke.lastPosted;
+  if (!changed && !juke.sfx.length) return;
+  const body = { cue: juke.cue, changed, sfx: juke.sfx.splice(0) };
+  juke.posts++;
+  if (changed) { juke.lastPosted = juke.cue; startMusic(juke.cue); }
+  body.sfx.forEach(playSfx);
+  const line = document.createElement("div");
+  line.innerHTML = "<b>POST</b> " + JSON.stringify(body).replace(/</g, "&lt;");
+  logEl.prepend(line); while (logEl.childNodes.length > 40) logEl.removeChild(logEl.lastChild);
+}
+
+/* ---------- drawing helpers ---------- */
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,:!?/-'>+_";
+const fontCache = {};
+function fontFor(color) {
+  if (fontCache[color]) return fontCache[color];
+  const r = D.rects.sprites["ui:Font_5x7"], c = document.createElement("canvas");
+  c.width = r[2]; c.height = r[3]; const x = c.getContext("2d");
+  x.drawImage(IM.sprites, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]);
+  x.globalCompositeOperation = "source-in"; x.fillStyle = color; x.fillRect(0, 0, r[2], r[3]);
+  return (fontCache[color] = c);
+}
+function text(s, x, y, color = "#ffffff", shadow = "#202040") {
+  s = String(s).toUpperCase();
+  for (const [col, dx] of shadow ? [[shadow, 1], [color, 0]] : [[color, 0]]) {
+    const f = fontFor(col);
+    for (let i = 0; i < s.length; i++) {
+      const k = CHARS.indexOf(s[i]); if (k < 0 || s[i] === " ") continue;
+      g.drawImage(f, (k % 16) * 6, Math.floor(k / 16) * 8, 5, 7, x + i * 6 + dx, y + dx, 5, 7);
+    }
+  }
+}
+const tw = s => String(s).length * 6;
+function spr(sheet, name, x, y, sx = 0, sw, sh, scale = 1) {
+  const r = D.rects[sheet][name]; if (!r) return;
+  sw = sw || r[2]; sh = sh || r[3];
+  g.drawImage(IM[sheet], r[0] + sx, r[1], sw, sh, Math.round(x), Math.round(y), Math.round(sw * scale), Math.round(sh * scale));
+}
+function win(x, y, w, h) {
+  const r = D.rects.sprites["ui:Window_9slice"], c = 8, s = r[2];
+  const parts = [[0, 0, c, c, x, y, c, c], [c, 0, s - 2 * c, c, x + c, y, w - 2 * c, c], [s - c, 0, c, c, x + w - c, y, c, c],
+    [0, c, c, s - 2 * c, x, y + c, c, h - 2 * c], [c, c, s - 2 * c, s - 2 * c, x + c, y + c, w - 2 * c, h - 2 * c], [s - c, c, c, s - 2 * c, x + w - c, y + c, c, h - 2 * c],
+    [0, s - c, c, c, x, y + h - c, c, c], [c, s - c, s - 2 * c, c, x + c, y + h - c, w - 2 * c, c], [s - c, s - c, c, c, x + w - c, y + h - c, c, c]];
+  for (const p of parts) g.drawImage(IM.sprites, r[0] + p[0], r[1] + p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+}
+function cursor(x, y) { const f = Math.floor(performance.now() / 300) % 2; spr("sprites", "ui:Cursor", x + f, y, f * 8, 8, 8); }
+function tileImg(key, x, y) {
+  const n = D.frames[key]; if (!n) return false;
+  const f = n > 1 ? Math.floor(performance.now() / 500) % n : 0;
+  const r = D.rects.tiles[key + "#" + f]; if (!r) return false;
+  g.drawImage(IM.tiles, r[0], r[1], 16, 16, x, y, 16, 16); return true;
+}
+function gauge(x, y, w, frac, color) {
+  g.fillStyle = "#f0f0f8"; g.fillRect(x, y, w, 5); g.fillStyle = "#181828"; g.fillRect(x + 1, y + 1, w - 2, 3);
+  g.fillStyle = color; g.fillRect(x + 1, y + 1, Math.round((w - 2) * clamp(frac, 0, 1)), 3);
+}
+
+/* ---------- party ---------- */
+const START_LEVEL = 15;                                   /* the demo hands you a seasoned party so the first Warden is beatable */
+const GEAR = {};
+let bag = {}, gold = 0;
+function buildParty() {
+  for (const k of ["Item", "Weapon", "Armor"]) for (const s of (D.interiors[k] || {}).stock || []) GEAR[s.name] = s;
+  for (const s of (D.interiors.Weapon || {}).stock || []) GEAR[s.name] = s;
+  const P = D.party.members.filter(m => m.joins === "start").map(m => {
+    const L = START_LEVEL, st = {};
+    for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
+    const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
+    return { name: m.name, job: m.job, lv: L, exp: 0, next: 400, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
+      kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
+  });
+  bag = Object.assign({}, D.party.start_items, { "Herb Tonic": 8, "Clear Draught": 3, "Feather of Waking": 1 });
+  gold = D.party.start_gold;
+  return P;
+}
+let party = [];
+const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
+const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
+const spellOf = n => D.spells.find(s => s.name === n);
+const alive = l => l.filter(x => x.hp > 0);
+
+/* ---------- maps ---------- */
+let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
+const opened = new Set(), state = { bossBeaten: false, steps: 0, sinceBattle: 0, returnTo: null };
+const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+const DIR_ROW = { down: 0, up: 1, left: 2, right: 3 };
+function townMap() {
+  const tt = D.town_tiles;
+  return { kind: "town", grid: D.town.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
+    walk: c => !!(tt[c] && tt[c].walkable), npcs: D.town.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing })) };
+}
+function interiorMap(name) {
+  const it = D.interiors[name], ti = D.interior_tiles, tt = D.town_tiles;
+  return { kind: "interior", name, info: it, grid: it.grid.map(r => r.slice()), cue: name === "Castle" ? "CASTLE" : name === "Inn" ? "TOWN" : "TOWN",
+    key: c => (D.frames["int:" + c] ? "int:" : "town:") + c, walk: c => !!((ti[c] || tt[c] || {}).walkable),
+    npcs: it.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing })) };
+}
+function worldMap() {
+  const wt = D.world_tiles;
+  return { kind: "world", grid: D.world, cue: "FIELD", key: c => "wm:" + c, npcs: [],
+    walk: c => !!(wt[c] && (wt[c].walkable || wt[c].kind === "landmark")), zone: c => (wt[c] || {}).encounter_zone };
+}
+function dungeonMap(i) {
+  const fl = D.dungeon.floors[i], wk = new Set(D.dungeon_walkable.concat(["Hazard", "StairsUp", "StairsDown"]));
+  if (!fl.grid._copy) { fl.grid = fl.grid.map(r => r.slice()); fl.grid._copy = true; }
+  return { kind: "dungeon", floor: i, info: fl, grid: fl.grid, cue: fl.boss && !state.bossBeaten ? "CAVE" : "CAVE", npcs: [],
+    key: c => "dg:" + c, walk: c => wk.has(c), zone: () => fl.encounters.zone, stepsMean: fl.encounters.steps_mean };
+}
+function goto(m, x, y, dir) {
+  fade = 1; fadeCb = () => { map = m; P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; if (dir) P.dir = dir; mode = "field"; cue(m.cue); };
+}
+const find = (grid, name) => { for (let y = 0; y < grid.length; y++) { const x = grid[y].indexOf(name); if (x >= 0) return [x, y]; } return null; };
+const at = (x, y) => map.grid[y] && map.grid[y][x];
+const npcAt = (x, y) => map.npcs.find(n => n.x === x && n.y === y);
+
+/* ---------- dialog ---------- */
+let dlg = null;
+function say(lines, then, voice = 6) { dlg = { pages: [].concat(lines), i: 0, shown: 0, then, voice, choice: null }; }
+function ask(question, options, then) { dlg = { pages: [question], i: 0, shown: 0, voice: 4, choice: { options, idx: 0, then } }; }
+function dialogTick(dt) {
+  const page = dlg.pages[dlg.i];
+  if (dlg.shown < page.length) {
+    const before = Math.floor(dlg.shown);
+    dlg.shown = Math.min(page.length, dlg.shown + dt * 45);
+    if (Math.floor(dlg.shown / 3) > Math.floor(before / 3)) sfx("BLIP:" + ((dlg.voice + Math.floor(dlg.shown) % 3) % 12));
+    if (hit("a")) dlg.shown = page.length;
+    return;
+  }
+  if (dlg.choice) {
+    if (hit("up") || hit("down")) { dlg.choice.idx = 1 - dlg.choice.idx; sfx("TICK"); }
+    if (hit("a")) { sfx("PICK"); const c = dlg.choice, i = c.idx; dlg = null; c.then(i); }
+    else if (hit("b")) { sfx("TICK"); const c = dlg.choice; dlg = null; c.then(1); }
+    return;
+  }
+  if (hit("a") || hit("b")) {
+    if (dlg.i < dlg.pages.length - 1) { dlg.i++; dlg.shown = 0; sfx("PAGE"); }
+    else { const t = dlg.then; dlg = null; t && t(); }
+  }
+}
+function wrap(s, n) { const out = []; let l = ""; for (const w of s.split(" ")) { if ((l + " " + w).trim().length > n) { out.push(l); l = w; } else l = (l + " " + w).trim(); } if (l) out.push(l); return out; }
+function drawDialog() {
+  win(4, H - 62, W - 8, 58);
+  const page = dlg.pages[dlg.i].slice(0, Math.floor(dlg.shown));
+  wrap(page, 48).slice(0, 4).forEach((l, i) => text(l, 14, H - 52 + i * 11));
+  if (dlg.choice && dlg.shown >= dlg.pages[dlg.i].length) {
+    win(W - 74, H - 104, 70, 40);
+    dlg.choice.options.forEach((o, i) => text(o, W - 54, H - 94 + i * 13));
+    cursor(W - 66, H - 94 + dlg.choice.idx * 13);
+  } else if (dlg.shown >= dlg.pages[dlg.i].length && Math.floor(performance.now() / 400) % 2) text(">", W - 20, H - 16, "#fff070");
+}
+
+/* ---------- NPC talk ---------- */
+const LINES = {
+  Guard: ["THE FORGE TO THE EAST OF THE MOUNTAINS BURNS AGAIN. THE CAVE ROAD LEADS THERE.", "MIND THE LAVA ON THE LOWER FLOORS."],
+  Merchant: ["FINE GOODS! STEP UP TO THE COUNTER."], Child: ["I DREAMT OF A CRYSTAL HEART. IT WAS CRYING."],
+  Elder: ["FOUR SHARDS HOLD THE HEART TOGETHER. THE PYRE WARDEN GUARDS THE SHARD OF FIRE IN THE CINDER FORGE.", "REST AT THE INN BEFORE YOU GO."],
+  Farmer: ["RABBITS ATE MY TURNIPS AGAIN. THE WOLVES ARE NO HELP."], Innkeeper: ["WELCOME, TRAVELLERS."], Sailor: ["THE SEA PAST THE COAST IS NO PLACE FOR A ROWBOAT."],
+  Mage: ["SPELLS FOR SALE. FIRE, FROST AND STRANGER THINGS."],
+  Ruler: ["BRING BACK THE SHARD OF FIRE FROM THE CINDER FORGE, AND THE REALM WILL REMEMBER YOUR NAMES."],
+};
+const VOICE = { Guard: 2, Merchant: 7, Child: 11, Elder: 0, Farmer: 4, Innkeeper: 6, Sailor: 3, Mage: 9, Ruler: 1 };
+function interact() {
+  const [dx, dy] = DIRS[P.dir], tx = P.x + dx, ty = P.y + dy;
+  let n = npcAt(tx, ty), t = at(tx, ty);
+  if (!n && t === "Counter") n = npcAt(tx + dx, ty + dy);
+  if (n) {
+    n.dir = { up: "down", down: "up", left: "right", right: "left" }[P.dir];
+    const svc = map.kind === "interior" ? (map.info.service || "") : "";
+    if (svc.startsWith("shop:") && n === map.npcs[0]) return say(LINES[n.type] || ["HELLO."], () => openShop(), VOICE[n.type]);
+    if (svc === "inn" && n.type === "Innkeeper") return innPrompt();
+    if (n.type === "Ruler" && state.bossBeaten) return say(["THE SHARD OF FIRE! THE HEART BURNS A LITTLE BRIGHTER TONIGHT.", "THREE SHARDS REMAIN. THAT IS WHERE THIS DEMO ENDS. THANK YOU FOR PLAYING."], null, 1);
+    return say(LINES[n.type] || ["..."], null, VOICE[n.type]);
+  }
+  if (t === "Chest" || t === "Chest") return openChest(tx, ty);
+  if (t === "BossGate") return bossGate();
+  if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
+  if (t === "Fountain") { party.forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
+  if (t === "Bookcase") return say(["A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
+  if (t === "Throne") return say(["AN EMPTY GOLD SEAT, STILL WARM."]);
+}
+function innPrompt() {
+  const price = (D.interiors.Inn || {}).rest_price || 10;
+  ask("ONE NIGHT IS " + price + " GOLD. WILL YOU REST?", ["YES", "NO"], i => {
+    if (i === 1) return say(["COME BACK ANY TIME."], null, 6);
+    if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
+    gold -= price; sfx("INN"); cue("INN");
+    party.forEach(m => { m.hp = m.max; m.mp = m.mmax; });
+    fade = 1; fadeCb = () => { cue(map.cue); say(["GOOD MORNING! YOUR PARTY IS RESTED."], null, 6); };
+  });
+}
+function openChest(x, y) {
+  const k = map.kind + (map.floor || 0) + ":" + x + "," + y;
+  if (opened.has(k)) return say(["IT'S EMPTY."]);
+  opened.add(k); map.grid[y][x] = "ChestOpen"; sfx("CHEST");
+  let loot = { gold: 100 };
+  if (map.kind === "dungeon") loot = (map.info.chests || []).find(c => c.x === x && c.y === y) || loot;
+  if (loot.item) { bag[loot.item] = (bag[loot.item] || 0) + 1; return say(["FOUND " + loot.item.toUpperCase() + "!"]); }
+  gold += loot.gold || 50; return say(["FOUND " + (loot.gold || 50) + " GOLD!"]);
+}
+
+/* ---------- shops ---------- */
+let shop = null;
+function openShop() {
+  const svc = map.info.service, kind = svc.split(":")[1];
+  const stock = (map.info.stock || []).slice();
+  shop = { kind, stock, idx: 0, top: 0, msg: "WHAT WOULD YOU LIKE?" }; mode = "shop";
+}
+function buy(it) {
+  if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
+  if (shop.kind === "magic") {
+    const sp = spellOf(it.name); if (!sp) return;
+    const caster = sp.target === "ally" ? party.find(m => m.job === "Lightmender") : party.find(m => m.job === "Runecaster");
+    if (!caster || caster.spells.includes(sp.name)) { shop.msg = "YOU ALREADY KNOW THAT."; return; }
+    gold -= it.price; caster.spells.push(sp.name); sfx("BUY"); shop.msg = caster.name + " LEARNS " + sp.name.toUpperCase() + "."; return;
+  }
+  gold -= it.price; sfx("BUY");
+  if (it.attack) {
+    const kind = { "Copper Blade": "sword", "Oak Staff": "staff", "Hunter Bow": "bow", "Iron Axe": "axe", "Steel Saber": "sword", "Silver Lance": "lance" }[it.name];
+    const who = party.find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
+    if (who) { who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
+    else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "NO ONE NEEDS IT. INTO THE BAG."; }
+  } else if (it.defence) {
+    const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
+    const who = party.find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor"));
+    if (who) { who.equip[slot] = it.name; sfx("EQUIP"); shop.msg = who.name + " PUTS ON THE " + it.name.toUpperCase() + "."; }
+    else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "INTO THE BAG."; }
+  } else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "THANK YOU!"; }
+}
+function shopTick() {
+  const n = shop.stock.length;
+  if (hit("up")) { shop.idx = (shop.idx + n - 1) % n; sfx("TICK"); }
+  if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
+  shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
+  if (hit("a")) buy(shop.stock[shop.idx]);
+  if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
+}
+function drawShop() {
+  drawField();
+  win(0, 0, W, 26); text(({ item: "ITEM SHOP", weapon: "WEAPONS", armor: "ARMOUR", magic: "MAGIC" })[shop.kind] + " - BUY", 12, 9, "#fff070");
+  win(0, 26, W - 92, 150); win(W - 92, 26, 92, 30);
+  text("G", W - 82, 37); text(gold, W - 10 - tw(gold), 37);
+  shop.stock.slice(shop.top, shop.top + 8).forEach((it, i) => {
+    const y = 38 + i * 16;
+    text(it.name.slice(0, 18), 24, y, it.price > gold ? "#808090" : "#ffffff");
+    text(it.price, W - 102 - tw(it.price), y);
+  });
+  cursor(10, 38 + (shop.idx - shop.top) * 16);
+  g.fillStyle = "#fff070";                                                   /* scroll arrows */
+  for (let i = 0; i < 4; i++) {
+    if (shop.top > 0) g.fillRect(112 - i, 30 + i, 1 + 2 * i, 1);
+    if (shop.top + 8 < shop.stock.length) g.fillRect(112 - i, 170 - i, 1 + 2 * i, 1);
+  }
+  win(0, 176, W, 48); text(shop.msg, 12, 190);
+  const it = shop.stock[shop.idx], d = it.effect || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  text(d, 12, 204, "#a0a8c0");
+}
+
+/* ---------- field ---------- */
+function stepDone() {
+  const t = at(P.x, P.y);
+  state.steps++; state.sinceBattle++;
+  if (map.kind === "town" && P.y === map.grid.length - 1) {                    /* the south road leaves town */
+    const p = find(D.world, "Town"); return goto(worldMap(), p[0], p[1] + 1, "down");
+  }
+  if (map.kind === "town" && (t === "WallDoor" || t === "BrickDoor")) {
+    const name = Object.keys(D.interiors).find(k => { const o = D.interiors[k].opened_by; return o && o.door && o.door.x === P.x && o.door.y === P.y; });
+    if (name) { sfx("DOOR"); state.returnTo = { kind: "town", x: P.x, y: P.y + 1 }; const it = D.interiors[name]; return goto(interiorMap(name), it.spawn.x, it.spawn.y, "up"); }
+  }
+  if (map.kind === "interior" && t === "ExitMat") {
+    sfx("DOOR");
+    if (map.name === "Castle") { const p = find(D.world, "Castle"); return goto(worldMap(), p[0], p[1] + 1, "down"); }
+    const r = state.returnTo || { x: 11, y: 15 }; return goto(townMap(), r.x, r.y, "down");
+  }
+  if (map.kind === "world") {
+    if (t === "Town") { sfx("ENTER"); return goto(townMap(), 11, 16, "up"); }
+    if (t === "Castle") { sfx("ENTER"); const it = D.interiors.Castle; return goto(interiorMap("Castle"), it.spawn.x, it.spawn.y, "up"); }
+    if (t === "Cave") { sfx("STAIRS"); const f = D.dungeon.floors[0]; return goto(dungeonMap(0), f.stairs_up.x, f.stairs_up.y, "down"); }
+    if (t === "Shrine") { party.forEach(m => { m.hp = m.max; m.mp = m.mmax; }); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
+    if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
+  }
+  if (map.kind === "dungeon") {
+    const fl = map.info;
+    if (t === "StairsUp") {
+      sfx("STAIRS");
+      if (map.floor === 0) { const p = find(D.world, "Cave"); return goto(worldMap(), p[0], p[1] + 1, "down"); }
+      const prev = D.dungeon.floors[map.floor - 1]; return goto(dungeonMap(map.floor - 1), prev.stairs_down.x, prev.stairs_down.y, "down");
+    }
+    if (t === "StairsDown") { sfx("STAIRS"); const nx = D.dungeon.floors[map.floor + 1]; return goto(dungeonMap(map.floor + 1), nx.stairs_up.x, nx.stairs_up.y, "down"); }
+    if (t === "Hazard") { sfx("HURT"); party.forEach(m => { if (m.hp > 1) m.hp = Math.max(1, m.hp - Math.ceil(m.max * 0.05)); }); }
+  }
+  const zone = map.zone && map.zone(t);
+  if (zone && D.zones[zone] && state.sinceBattle > 4) {
+    const mean = map.stepsMean || D.zones[zone].steps_mean || 24;
+    if (Math.random() < 1 / mean) startBattle(zone);
+  }
+}
+function fieldTick(dt) {
+  if (dlg) return dialogTick(dt);
+  if (P.moving > 0) {
+    P.moving -= dt * 7.5;
+    const [dx, dy] = DIRS[P.dir];
+    P.fx = (P.x - dx * Math.max(0, P.moving)) * T; P.fy = (P.y - dy * Math.max(0, P.moving)) * T;
+    if (P.moving <= 0) { P.moving = 0; P.fx = P.x * T; P.fy = P.y * T; P.step++; stepDone(); }
+    return;
+  }
+  if (hit("start")) { sfx("OPEN"); menu = { idx: 0, sub: null }; mode = "menu"; return; }
+  if (hit("a")) return interact();
+  for (const d of ["up", "down", "left", "right"]) {
+    if (!held[d]) continue;
+    P.dir = d;
+    const [dx, dy] = DIRS[d], nx = P.x + dx, ny = P.y + dy, t = at(nx, ny);
+    if (t === undefined || !map.walk(t) || npcAt(nx, ny)) { if (!P.bumped) { sfx("BUMP"); P.bumped = true; } return; }
+    P.bumped = false; P.x = nx; P.y = ny; P.moving = 1; return;
+  }
+  P.bumped = false;
+}
+function drawField() {
+  const gw = map.grid[0].length, gh = map.grid.length;
+  const cx = clamp(P.fx + 8 - W / 2, 0, Math.max(0, gw * T - W)), cy = clamp(P.fy + 8 - H / 2, 0, Math.max(0, gh * T - H));
+  const ox = gw * T < W ? (W - gw * T) / 2 : -cx, oy = gh * T < H ? (H - gh * T) / 2 : -cy;
+  g.fillStyle = "#06050c"; g.fillRect(0, 0, W, H);
+  const x0 = Math.max(0, Math.floor(-ox / T)), y0 = Math.max(0, Math.floor(-oy / T));
+  for (let y = y0; y < Math.min(gh, y0 + 16); y++) for (let x = x0; x < Math.min(gw, x0 + 22); x++) {
+    const c = map.grid[y][x];
+    if (c !== "Void" && !tileImg(map.key(c), Math.round(ox + x * T), Math.round(oy + y * T))) { g.fillStyle = "#000"; g.fillRect(Math.round(ox + x * T), Math.round(oy + y * T), T, T); }
+  }
+  const walkF = Math.floor(performance.now() / 260) % 2;
+  for (const n of map.npcs) {
+    const name = n.type === "Ruler" ? "NPC_Ruler" : "NPC_" + n.type;
+    spr("sprites", name, ox + n.x * T, oy + n.y * T, (DIR_ROW[n.dir] * 2 + walkF) * 16, 16, 16);
+  }
+  const pf = P.moving > 0 ? (P.step % 2) : 0;
+  spr("sprites", "NPC_Guard", ox + P.fx, oy + P.fy, (DIR_ROW[P.dir] * 2 + pf) * 16, 16, 16);
+}
+
+/* ---------- field menu ---------- */
+let menu = null;
+function menuTick() {
+  if (menu.sub === "item") {
+    const items = Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+    if (!items.length) { menu.sub = null; return; }
+    menu.ii = clamp(menu.ii || 0, 0, items.length - 1);
+    if (hit("up")) { menu.ii = (menu.ii + items.length - 1) % items.length; sfx("TICK"); }
+    if (hit("down")) { menu.ii = (menu.ii + 1) % items.length; sfx("TICK"); }
+    if (hit("left") || hit("right")) { menu.who = ((menu.who || 0) + (pressed.left ? -1 : 1) + party.length) % party.length; sfx("TICK"); }
+    if (hit("a")) { const r = useItem(items[menu.ii], party[menu.who || 0]); menu.msg = r; }
+    if (hit("b")) { menu.sub = null; sfx("TICK"); }
+    return;
+  }
+  if (hit("up")) { menu.idx = (menu.idx + 1) % 2; sfx("TICK"); }
+  if (hit("down")) { menu.idx = (menu.idx + 1) % 2; sfx("TICK"); }
+  if (hit("a")) { sfx("PICK"); if (menu.idx === 0) { menu.sub = "item"; menu.ii = 0; menu.who = 0; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; } else { mode = "field"; menu = null; } }
+  if (hit("b") || hit("start")) { sfx("TICK"); mode = "field"; menu = null; }
+}
+function useItem(name, m) {
+  const e = (GEAR[name] || {}).effect || "";
+  if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); }
+  else if (/heal (\d+)/.test(e)) { if (m.hp <= 0) return "TOO LATE FOR A TONIC."; m.hp = Math.min(m.max, m.hp + +e.match(/heal (\d+)/)[1] * 4); }
+  else if (/restore (\d+) MP/.test(e)) { m.mp = Math.min(m.mmax, m.mp + +e.match(/(\d+)/)[1] * 3); }
+  else return "NOTHING HAPPENS HERE.";
+  bag[name]--; sfx("ITEM"); sfx("HEAL"); return name.toUpperCase() + " ON " + m.name + ".";
+}
+function drawMenu() {
+  drawField();
+  win(0, 0, 248, H); win(248, 0, 72, 60); win(248, H - 44, 72, 44);
+  party.forEach((m, i) => {
+    const y = 8 + i * 52;
+    spr("sprites", m.sprite, 6, y, 0, null, null, 0.3);
+    text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(m.job, 46, y + 12, "#a0a8c0");
+    text("HP", 46, y + 24); text(m.hp + "/" + m.max, 238 - tw(m.hp + "/" + m.max), y + 24); gauge(64, y + 34, 80, m.hp / m.max, "#58d058");
+    if (m.mmax) { text("MP", 152, y + 36); text(m.mp, 238 - tw(m.mp), y + 36); }
+    if (menu.sub === "item" && (menu.who || 0) === i) text(">", 0, y + 2, "#fff070");
+  });
+  ["ITEM", "CLOSE"].forEach((c, i) => text(c, 268, 12 + i * 16)); if (!menu.sub) cursor(256, 12 + menu.idx * 16);
+  text("G", 256, H - 34); text(gold, W - 10 - tw(gold), H - 34); text("STEPS", 256, H - 20); text(state.steps, W - 10 - tw(state.steps), H - 20);
+  if (menu.sub === "item") {
+    const items = Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+    win(20, 60, 220, 112);
+    items.forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
+    cursor(28, 72 + menu.ii * 13);
+    win(20, 172, 220, 26); text(menu.msg || "", 28, 181);
+  }
+}
+
+/* ---------- battle ---------- */
+let B = null;
+function pickFormation(zone) {
+  const fs = D.zones[zone].formations, tot = fs.reduce((a, f) => a + f.weight, 0);
+  let r = Math.random() * tot; for (const f of fs) { r -= f.weight; if (r <= 0) return f.enemies.slice(0, 4); } return fs[0].enemies.slice(0, 4);
+}
+function startBattle(zone, boss) {
+  state.sinceBattle = 0;
+  const keys = boss ? null : pickFormation(zone);
+  const foes = boss ? [{ key: "boss", name: D.boss.name.replace(/([a-z])([A-Z])/g, "$1 $2"), hp: D.boss.hp, max: D.boss.hp, atk: D.boss.attack, def: D.boss.defence,
+    spd: D.boss.speed, exp: 3000, gold: 2000, el: ELEM[D.boss.element] || D.boss.element, weak: ELEM[D.boss.weakness] || D.boss.weakness, img: "Boss_" + D.boss.name, boss: true, size: 112 }] :
+    keys.map(k => { const f = D.foes[k]; return { key: k, name: f.name, hp: f.hp, max: f.hp, atk: f.attack, def: f.defence, spd: f.speed, exp: f.exp, gold: f.gold, img: "Foe_" + k, size: 56, el: f.element }; });
+  foes.forEach((f, i) => { if (!f.boss) { f.x = 24 + (i % 2) * 70 + (i > 1 ? 18 : 0); f.y = 26 + Math.floor(i / 2) * 52 + (i % 2) * 8; } else { f.x = 30; f.y = 10; } });
+  const bd = D.backdrop_for_zone[boss ? "volcano" : zone] || Object.values(D.backdrop_for_zone)[0];
+  B = { foes, bd, phase: "intro", who: 0, cmd: 0, target: 0, sub: null, list: [], acts: [], msg: boss ? "THE PYRE WARDEN RISES FROM THE MAGMA!" : foes.length > 1 ? foes[0].name.toUpperCase() + " AND FRIENDS APPEAR!" : "A " + foes[0].name.toUpperCase() + " APPEARS!",
+    t: 0, fx: null, pops: [], flash: {}, boss: !!boss, turn: 0, prevCue: map.cue };
+  cue(boss ? "BOSS" : "BATTLE"); sfx(boss ? "CALL" : "AMBUSH");
+  fade = 1; fadeCb = () => { mode = "battle"; };
+}
+const ELEM = { tide: "water", gale: "air", stone: "earth", shade: "dark", flame: "fire" };   /* boss data names elements by realm lore */
+const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
+function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0) return i; return -1; }
+function battleTick(dt) {
+  B.t += dt;
+  B.pops = B.pops.filter(p => (p.t += dt) < 0.9);
+  if (B.fx) { B.fx.t += dt; if (B.fx.t > 0.65) B.fx = null; }
+  if (B.phase === "intro") { if (B.t > 1.0 || hit("a")) { B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; party.forEach(m => m.defend = false); } return; }
+  if (B.phase === "cmd") {
+    const m = party[B.who];
+    if (B.sub === "target") {
+      const tg = B.list;
+      if (hit("left") || hit("up")) { B.target = (B.target + tg.length - 1) % tg.length; sfx("TICK"); }
+      if (hit("right") || hit("down")) { B.target = (B.target + 1) % tg.length; sfx("TICK"); }
+      if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; sfx("TICK"); return; }
+      if (hit("a")) { sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser(); }
+      return;
+    }
+    if (B.sub === "magic" || B.sub === "item") {
+      const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+      if (!opts.length) { B.msg = B.sub === "magic" ? m.name + " KNOWS NO SPELLS." : "THE BAG IS EMPTY."; B.sub = null; sfx("LOCKED"); return; }
+      B.oi = clamp(B.oi || 0, 0, opts.length - 1);
+      if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
+      if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
+      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
+      if (hit("a")) {
+        const o = opts[B.oi];
+        if (B.sub === "magic") {
+          if (m.mp < o.mp) { sfx("LOCKED"); return; }
+          sfx("PICK"); B.pending = { kind: "magic", who: m, spell: o };
+          if (o.target === "all_enemies") { B.pending.target = "all"; B.acts.push(B.pending); B.sub = null; return advanceChooser(); }
+          B.list = o.target === "ally" ? party.filter(p => p.hp > 0 || /revive/.test(o.status || "")) : alive(B.foes); B.target = 0; B.sub = "target";
+        } else {
+          sfx("PICK"); B.pending = { kind: "item", who: m, item: o };
+          if (/escape/.test(GEAR[o].effect)) { B.pending.target = null; B.acts.push(B.pending); B.sub = null; return advanceChooser(); }
+          B.list = party.slice(); B.target = 0; B.sub = "target";
+        }
+      }
+      return;
+    }
+    if (hit("up")) { B.cmd = (B.cmd + CMDS.length - 1) % CMDS.length; sfx("TICK"); }
+    if (hit("down")) { B.cmd = (B.cmd + 1) % CMDS.length; sfx("TICK"); }
+    if (hit("b") && B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); return; }
+    if (hit("a")) {
+      sfx("PICK");
+      const c = CMDS[B.cmd];
+      if (c === "ATTACK") { B.pending = { kind: "attack", who: m }; B.list = alive(B.foes); B.target = 0; B.sub = "target"; }
+      else if (c === "MAGIC") { B.sub = "magic"; B.oi = 0; }
+      else if (c === "ITEM") { B.sub = "item"; B.oi = 0; }
+      else if (c === "DEFEND") { B.acts.push({ kind: "defend", who: m }); advanceChooser(); }
+      else if (c === "RUN") { B.acts.push({ kind: "run", who: m }); advanceChooser(); }
+    }
+    return;
+  }
+  if (B.phase === "act") {
+    if (B.wait > 0) { B.wait -= dt; if (hit("a")) B.wait = Math.min(B.wait, 0.05); return; }
+    if (!B.queue.length) return endRound();
+    doAction(B.queue.shift());
+    return;
+  }
+  if (B.phase === "end") { if (B.wait > 0) { B.wait -= dt; return; } if (hit("a")) finishBattle(); }
+}
+function advanceChooser() {
+  const n = nextChooser(B.who + 1);
+  B.cmd = 0;
+  if (n >= 0) { B.who = n; return; }
+  const foeActs = alive(B.foes).map(f => ({ kind: "foe", who: f }));
+  B.queue = B.acts.concat(foeActs).sort((a, b) => spdOf(b) - spdOf(a));
+  B.phase = "act"; B.wait = 0;
+}
+const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0);
+function pop(target, txt, color) {
+  const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: 268, y: 22 + party.indexOf(target) * 30 };
+  B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
+}
+function hurtFoe(f, dmg) { f.hp = Math.max(0, f.hp - dmg); B.flash[f.key + f.x] = 0.2; pop(f, dmg, "#ffffff"); }
+function doAction(a) {
+  B.wait = 0.75;
+  const who = a.who;
+  if (a.kind !== "foe" && who.hp <= 0) { B.wait = 0; return; }
+  if (a.kind === "foe" && who.hp <= 0) { B.wait = 0; return; }
+  if (!alive(B.foes).length || !alive(party).length) { B.wait = 0; B.queue = []; return; }
+  if (a.kind === "defend") { who.defend = true; B.msg = who.name + " DEFENDS."; B.wait = 0.4; return; }
+  if (a.kind === "run") {
+    if (B.boss) { B.msg = "THERE IS NO ESCAPE FROM A WARDEN!"; sfx("LOCKED"); return; }
+    if (Math.random() < 0.65) { sfx("RUN"); B.msg = "THE PARTY GETS AWAY!"; B.phase = "end"; B.result = "run"; B.wait = 0.6; return; }
+    B.msg = "COULDN'T GET AWAY!"; sfx("MISS"); return;
+  }
+  if (a.kind === "attack") {
+    let f = a.target; if (!f || f.hp <= 0) f = alive(B.foes)[0];
+    sfx("SWING");
+    if (Math.random() < 0.05) { B.msg = who.name + " MISSES!"; sfx("MISS"); pop(f, "MISS", "#c0c0c0"); return; }
+    const crit = Math.random() < 0.07;
+    const dmg = Math.max(1, Math.round((atkOf(who) * rnd(0.85, 1.15) - f.def * 0.75) * (crit ? 1.8 : 1)));
+    hurtFoe(f, dmg); sfx(crit ? "CRIT" : "HIT");
+    B.msg = (crit ? "CRITICAL! " : "") + who.name + " HITS " + f.name + " FOR " + dmg + ".";
+    if (f.hp <= 0) B.msg += " " + f.name + " FALLS!";
+    return;
+  }
+  if (a.kind === "magic") {
+    const s = a.spell; if (who.mp < s.mp) { B.msg = who.name + " IS OUT OF MP."; return; }
+    who.mp -= s.mp; sfx("SPELL");
+    const targets = a.target === "all" ? alive(B.foes) : [a.target && (a.target.hp > 0 || s.target === "ally") ? a.target : alive(B.foes)[0]];
+    B.fx = { name: s.name, t: 0, targets };
+    if (s.target === "ally") {
+      targets.forEach(m => {
+        if (s.status === "heal" || s.effect === "heal") { const amt = Math.round(s.power * 1.5 + who.st.spr * 3); m.hp = Math.min(m.max, m.hp + amt); pop(m, amt, "#78f8a0"); sfx("HEAL"); }
+        else { m.buff = s.status; pop(m, (s.status || "UP").toUpperCase(), "#a0d8f8"); }
+      });
+      B.msg = who.name + " CASTS " + s.name.toUpperCase() + "."; return;
+    }
+    let total = 0, weakHit = false;
+    targets.forEach(f => {
+      if (!f || f.hp <= 0) return;
+      const resist = f.weak && f.weak === s.element ? 2 : f.el && f.el === s.element ? 0.5 : 1;
+      if (resist > 1) weakHit = true;
+      const dmg = Math.max(1, Math.round((s.power * 1.4 + who.st.int * 3 - f.def * 0.4) * resist * rnd(0.9, 1.1)));
+      hurtFoe(f, dmg); total += dmg;
+    });
+    B.msg = who.name + " CASTS " + s.name.toUpperCase() + "!" + (weakHit ? " A WEAK SPOT!" : "") + (targets.length > 1 ? " " + total + " DAMAGE IN ALL." : "");
+    return;
+  }
+  if (a.kind === "item") {
+    const name = a.item, e = GEAR[name].effect;
+    if (/escape/.test(e)) { if (B.boss) { B.msg = "THE SMOKE DOES NOTHING HERE."; return; } bag[name]--; sfx("RUN"); B.msg = "A PUFF OF SMOKE AND THE PARTY IS GONE."; B.phase = "end"; B.result = "run"; B.wait = 0.6; return; }
+    const r = useItem(name, a.target || who); B.msg = r; return;
+  }
+  if (a.kind === "foe") {
+    const f = who, tg = alive(party);
+    if (!tg.length) return;
+    B.turn++;
+    if (f.boss && B.turn % 3 === 0) {
+      B.msg = "THE WARDEN ERUPTS! MAGMA RAINS ON EVERYONE!"; sfx("ZAP");
+      tg.forEach(m => { const d = Math.max(1, Math.round((f.atk * 1.1 - defOf(m) * 0.6) * rnd(0.85, 1.1) * (m.defend ? 0.5 : 1))); m.hp = Math.max(0, m.hp - d); pop(m, d, "#ff8868"); });
+      sfx("HURT"); return;
+    }
+    const m = tg[ri(0, tg.length - 1)];
+    if (Math.random() < 0.06) { B.msg = f.name + " ATTACKS " + m.name + " BUT MISSES."; sfx("MISS"); pop(m, "MISS", "#c0c0c0"); return; }
+    const d = Math.max(1, Math.round((f.atk * 1.5 * rnd(0.85, 1.15) - defOf(m) * 0.7) * (m.defend ? 0.5 : 1)));
+    m.hp = Math.max(0, m.hp - d); sfx("HURT"); pop(m, d, "#ff8868");
+    B.msg = f.name + " HITS " + m.name + " FOR " + d + "." + (m.hp <= 0 ? " " + m.name + " IS DOWN!" : "");
+  }
+}
+function endRound() {
+  if (!alive(B.foes).length) {
+    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0);
+    gold += gd; cue("VICTORY"); sfx("VICTORY");
+    const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."];
+    party.forEach(m => { if (m.hp <= 0) return; m.exp += exp; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } });
+    if (B.boss) lines.push("THE SHARD OF FIRE IS YOURS. THE FORGE FALLS QUIET.");
+    B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
+  }
+  if (!alive(party).length) { cue("DEFEAT"); sfx("DEFEAT"); B.msg = "THE PARTY HAS FALLEN..."; B.phase = "end"; B.result = "lose"; B.wait = 1.2; return; }
+  B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; B.cmd = 0; party.forEach(m => m.defend = false);
+}
+function finishBattle() {
+  if (B.endLines && B.endLines.length) { B.msg = B.endLines.shift(); return; }
+  const r = B.result, wasBoss = B.boss, prev = B.prevCue;
+  if (r === "lose") { B = null; mode = "gameover"; goT = 0; return; }
+  B.phase = "out";
+  fade = 1; fadeCb = () => {
+    B = null; mode = "field"; cue(prev);
+    if (wasBoss && r === "win") {
+      state.bossBeaten = true;
+      const fl = map.info; if (fl && fl.boss) map.grid[fl.boss.gate.y][fl.boss.gate.x] = "Floor";
+      say(["THE GATE CRUMBLES. THE PYRE WARDEN IS GONE.", "TAKE THE SHARD BACK TO THE CASTLE NORTH OF TOWN."], null, 1);
+    }
+  };
+}
+function bossGate() {
+  if (state.bossBeaten) return;
+  ask("HEAT POURS THROUGH THE GATE. FACE THE PYRE WARDEN?", ["YES", "NO"], i => { if (i === 0) startBattle("cave_deep", true); });
+}
+function drawBattle() {
+  const r = D.rects.backdrops[B.bd];
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, 320, 180);
+  for (const f of B.foes) {
+    if (f.hp <= 0 && !(B.flash[f.key + f.x] > 0)) continue;
+    const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
+    if (fl > 0 && Math.floor(fl * 30) % 2) continue;
+    spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
+    if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
+  }
+  party.forEach((m, i) => {
+    const x = m.hp > 0 ? 262 - (B.phase === "cmd" && B.who === i ? 10 : 0) : 270, y = 8 + i * 30;
+    spr("sprites", m.sprite, x, y, 0, null, null, 0.3);
+    if (B.sub === "target" && B.list[B.target] === m) cursor(x - 12, y + 12);
+  });
+  if (B.fx) {
+    const fr = D.rects.spells["fx:" + B.fx.name];
+    if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [258, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
+  }
+  for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
+  win(0, 144, 150, 80); win(150, 144, 170, 80);
+  party.forEach((m, i) => {
+    const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
+    text(m.name, 158, y, c); text(m.hp, 262 - tw(m.hp), y, c); text(m.mp, 308 - tw(m.mp), y, "#a0c8ff");
+    gauge(158, y + 9, 104, m.hp / m.max, "#58d058");
+  });
+  if (B.phase === "cmd" && !B.sub) {
+    CMDS.forEach((c, i) => text(c, 22, 152 + i * 13)); cursor(10, 152 + B.cmd * 13);
+    text(party[B.who].name, 86, 152, "#fff070");
+  } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item")) {
+    const m = party[B.who];
+    const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect).map(k => [k, ":" + bag[k], true]);
+    const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
+    opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], 144 - tw(o[1]), 152 + i * 13); });
+    cursor(10, 152 + ((B.oi || 0) - from) * 13);
+  } else {
+    wrap(B.msg || "", 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
+    if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", 138, 210, "#fff070");
+  }
+}
+
+/* ---------- title / game over ---------- */
+let titleT = 0, goT = 0, titleIdx = 0;
+function titleTick(dt) {
+  titleT += dt;
+  if (hit("up") || hit("down")) { titleIdx = 1 - titleIdx; sfx("TICK"); }
+  if (hit("start") || hit("a")) {
+    unlockAudio(); sfx("PICK");
+    party = buildParty(); state.bossBeaten = false; opened.clear();
+    D.dungeon.floors.forEach(f => { delete f.grid._copy; });
+    goto(townMap(), 11, 15, "up");
+    setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+  }
+}
+function drawTitle() {
+  const f = Math.floor(titleT * 6) % 8;
+  g.drawImage(IM.title, f * 320, 0, 320, 224, 0, 0, 320, 224);
+}
+function drawGameOver() {
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
+  g.globalAlpha = a; text(s, (W - tw(s)) / 2, 96, "#f87878", "#300010"); text("PRESS START", (W - tw("PRESS START")) / 2, 130, "#c0c0d0"); g.globalAlpha = 1;
+}
+
+/* ---------- loop ---------- */
+let last = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (fade > 0) {
+    fade -= dt * 3;
+    if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
+    if (fade < 0) fade = 0;
+  } else if (mode === "title") titleTick(dt);
+  else if (mode === "field") fieldTick(dt);
+  else if (mode === "menu") menuTick();
+  else if (mode === "shop") shopTick();
+  else if (mode === "battle") battleTick(dt);
+  else if (mode === "gameover") { goT += dt; if (goT > 1 && (hit("start") || hit("a"))) { mode = "title"; titleT = 0; cue("TITLE"); } }
+  for (const k in pressed) if (fade > 0) pressed[k] = false;
+  if (mode === "title") drawTitle();
+  else if (mode === "field") { drawField(); if (dlg) drawDialog(); }
+  else if (mode === "menu") drawMenu();
+  else if (mode === "shop") drawShop();
+  else if (mode === "battle") { drawBattle(); if (dlg) drawDialog(); }
+  else if (mode === "gameover") drawGameOver();
+  if (fade > 0) { g.fillStyle = "rgba(0,0,0," + (1 - Math.abs(fade - 0.5) * 2) + ")"; g.fillRect(0, 0, W, H); }
+  jukeTick();
+}
+
+/* ---------- harness hooks (scripted play-throughs) ---------- */
+window.PRISM_DEMO = {
+  state: () => ({ mode, map: map && map.kind, floor: map && map.floor, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
+    dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp]), boss: B.boss },
+    party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.bossBeaten }),
+  press: k => { pressed[k] = true; }, hold: (k, v) => { held[k] = v; },
+  warp: (kind, x, y, floor) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
+  battle: (zone, boss) => startBattle(zone, boss),
+};
+
+/* ---------- boot ---------- */
+function img(src) { return new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => bad(new Error("could not load " + src)); i.src = src; }); }
+async function boot() {
+  fit();
+  try {
+    D = await (await fetch("data.json")).json();
+    [IM.tiles, IM.sprites, IM.backdrops, IM.spells, IM.title] = await Promise.all(["tiles.png", "sprites.png", "backdrops.png", "spells.png", "title.png"].map(img));
+  } catch (e) { statusEl.textContent = "The demo files did not load: " + e.message; return; }
+  statusEl.textContent = "Ready. " + Object.keys(D.foes).length + " monsters, " + D.dungeon.floors.length + " forge floors, " + Object.keys(D.audio.cues).length + " jukebox cues.";
+  cue("TITLE"); fit(); cv.focus({ preventScroll: true });
+  requestAnimationFrame(frame);
+}
+boot();
+})();
+</script>

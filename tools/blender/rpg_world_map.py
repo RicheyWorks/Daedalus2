@@ -538,6 +538,16 @@ def tile(realm, name, f=0):
 
 
 def demo_map(realm, W=32, H=20, seed=7):
+    names = demo_layout(realm, W, H, seed)
+    img = np.zeros((H * T, W * T, 4), np.float32)
+    for y in range(H):
+        for x in range(W):
+            img[y * T:(y + 1) * T, x * T:(x + 1) * T] = tile(realm, names[y][x])
+    return img
+
+
+def demo_layout(realm, W=32, H=20, seed=7):
+    """The demo island as a grid of tile names (rows of strings), shared by map-demo.png and the playable demo."""
     rng = np.random.default_rng(seed)
     yy, xx = np.mgrid[0:H, 0:W]
     d = np.hypot((xx - W / 2) / (W * 0.42), (yy - H / 2) / (H * 0.42))
@@ -576,11 +586,7 @@ def demo_map(realm, W=32, H=20, seed=7):
     for p, (y, x) in zip(places, spots):
         if 0 <= y < H and 0 <= x < W and land(names[y, x]) and not names[y, x].startswith("Coast"):
             names[y, x] = p
-    img = np.zeros((H * T, W * T, 4), np.float32)
-    for y in range(H):
-        for x in range(W):
-            img[y * T:(y + 1) * T, x * T:(x + 1) * T] = tile(realm, names[y, x])
-    return img
+    return [[str(names[y, x]) for x in range(W)] for y in range(H)]
 
 
 def build(out_root, data_root=None):
@@ -611,6 +617,7 @@ def build(out_root, data_root=None):
         os.makedirs(d, exist_ok=True)
         with open(os.path.join(d, "worldmap-tiles.json"), "w", encoding="utf-8") as f:
             json.dump({"schema": "daedalus.worldmap/v1", "source": "tools/blender/rpg_world_map.py", "tile_size": T, "scale": 4,
+                       "demo_maps": {r: demo_layout(r) for r in PAL},
                        "note": "encounter_zone keys index data/rpg/<realm>-encounters.json; null = no random battles (roads, bridges, peaks)",
                        "tiles": rows}, f, indent=1)
     return rows
