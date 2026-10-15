@@ -16,6 +16,8 @@ public:
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
+	/** Foreground viewport host, clipped and hit-tested for the opening local player. */
+	static TSharedRef<SWidget> MakeForegroundHost(ULocalPlayer* Player, UGameViewportClient* Viewport, const TSharedRef<SWidget>& Content);
 	virtual ~SDaedalusDesktopArcade() override;
 	virtual bool SupportsKeyboardFocus() const override { return true; }
 	virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;

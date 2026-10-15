@@ -111,6 +111,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool StartGame(const FString& Id, int32 Seed);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void SetArcadeInput(const FDaedalusDesktopArcadeInput& Input);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void ClearArcadeInput();
+	/** Ordered non-repeat keyboard dispatch; 0..9 follow Game::SourceKeyDown. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void SubmitArcadeSourceKey(int32 Key);
+	/** Source controller A=0 / Start=1; true consumes the source action before generic pause. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SubmitArcadeSourceControllerButton(int32 Button);
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();

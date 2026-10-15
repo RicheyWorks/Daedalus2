@@ -209,6 +209,49 @@ void RunFixture(const std::string& Line) {
     }
     std::string Extra;Check(!(R.S>>Extra),"no trailing fixture fields");
 }
+void ContraTitle() {
+    Context="CONTRA ordered title and source events";
+    ContraGame C;C.Reset(42);C.EnterTitle();Frame F;
+    const auto Before=C.GetPlayer();const auto Enemies=C.EnemyCount();
+    Input Held;Held.Right=true;Held.Fire=true;Held.Jump=true;Held.JumpPressed=true;
+    for(int K=0;K<120;++K) C.Step(Held);
+    Check(C.IsAtTitle() && C.GetPlayer().X==Before.X && C.GetPlayer().Y==Before.Y,"title freezes held movement/fire/jump");
+    Check(C.EnemyCount()==Enemies && C.BulletCount()==0 && C.ParticleCount()==0,"title does not simulate encounters");
+    C.SourceKeyDown(0);C.Step(Held);Check(C.GetCheatProgress()==1,"held input cannot duplicate raw keyboard edge");
+    C.SourceKeyDown(9);Check(C.GetCheatProgress()==0,"any other keyboard key resets prefix");
+    for(int Key:{0,0,1,1,2,3,2,3,4,5}) C.SourceKeyDown(Key);
+    Check(C.IsAtTitle() && C.GetPlayer().Lives==30 && !C.GetPlayer().Spread,"ordered repeated arrows and literal final A arm30 without starting");
+    C.Render(F);Check(F.Commands.size()<Frame::MaxCommands && !F.Commands.empty(),"title renders bounded frame");
+    C.SourceKeyDown(6);Check(!C.IsAtTitle() && C.GetPlayer().Lives==30 && C.EnemyCount()==2,"Enter starts fresh source title initializer preserving30");
+    C.Step({});Check(C.GetPlayer().Y==472 && C.GetPlayer().OnGround,"first live step resolves source ground only after start");
+    C.EnterTitle();for(int Key:{0,0,1,1,2,3,2,3,4,5}) C.SourceKeyDown(Key);
+    C.SourceKeyDown(7);Check(!C.IsAtTitle() && C.GetPlayer().Lives==30,"Space starts preserving30");
+    C.EnterTitle();C.SourceKeyDown(0);C.SourceKeyDown(0);
+    Check(!C.SourceControllerButton(1) && C.GetCheatProgress()==2 && C.IsAtTitle(),"title Start not consumed and never changes keyboard prefix");
+    Check(C.SourceControllerButton(0) && !C.IsAtTitle() && C.GetCheatProgress()==2,"controller A starts immediately preserving unfinished keyboard prefix");
+    for(int Key:{1,1,2,3,2,3,4,5}) C.SourceKeyDown(Key);
+    Check(C.GetPlayer().Lives==8 && C.GetPlayer().SpreadTimer==600,"prefix completed after controller start receives in-play award");
+    C.Step({});Check(C.GetPlayer().SpreadTimer==599,"keyboard event precedes source timer update");
+    TestAccess::PlayerOf(C).Lives=98;
+    for(int Key:{0,0,1,1,2,3,2,3,4,5}) C.SourceKeyDown(Key);
+    Check(C.GetPlayer().Lives==99 && C.GetPlayer().SpreadTimer==600,"in-play award caps at99");
+    C.Reset(42);
+    const Input Events[10]={[](){Input I;I.Up=true;return I;}(),[](){Input I;I.Up=true;return I;}(),
+        [](){Input I;I.Down=true;return I;}(),[](){Input I;I.Down=true;return I;}(),
+        [](){Input I;I.Left=true;return I;}(),[](){Input I;I.Right=true;return I;}(),
+        [](){Input I;I.Left=true;return I;}(),[](){Input I;I.Right=true;return I;}(),
+        [](){Input I;I.ActionPressed=true;return I;}(),[](){Input I;I.JumpPressed=true;return I;}()};
+    for(const auto& I:Events) { C.Step(I);C.Step({}); }
+    Check(C.GetCheatProgress()==0 && C.GetPlayer().Lives==3,"raw mode survives Reset and suppresses semantic/controller code awards");
+    auto Finish=[&C](){ auto& P=TestAccess::PlayerOf(C);P.X=2801;P.Invincible=900;C.Step({}); };
+    Finish();C.SourceKeyDown(7);Check(C.GetStatus().Over,"terminal Space does not retry");
+    C.SourceKeyDown(6);Check(!C.GetStatus().Over && C.GetPlayer().Lives==3,"terminal Enter retries standard run");
+    Finish();Check(C.SourceControllerButton(0) && !C.GetStatus().Over,"terminal controller A retries");
+    Finish();Check(C.SourceControllerButton(1) && !C.GetStatus().Over,"terminal controller Start consumes retry");
+    Finish();C.SourceKeyDown(0);C.SourceKeyDown(0);C.SourceControllerButton(0);
+    Check(C.GetCheatProgress()==2,"controller retry preserves unfinished keyboard prefix");
+    Finish();C.SourceKeyDown(8);Check(!C.GetStatus().Over && C.GetCheatProgress()==0,"terminal R retries and resets wrong-key prefix");
+}
 void Integration() {
     Context="CONTRA integration";ContraGame C;Input I;Frame F;
     Check(C.EnemyCount()==2,"latest start has two enemies");
@@ -305,7 +348,7 @@ int main(int Argc,char** Argv) {
                 RunFixture(Line);
             }
         }
-        Check(Fixtures>20,"meaningful source fixture coverage");Integration();
+        Check(Fixtures>20,"meaningful source fixture coverage");ContraTitle();Integration();
         std::cout<<"Platformers: "<<Checks<<" checks passed; "<<Fixtures<<" executed-source fixtures; 20000 deterministic lifecycle steps per game\n";return 0;
     } catch(const std::exception& E) { std::cerr<<"FAIL "<<E.what()<<"\n";return 1; }
 }

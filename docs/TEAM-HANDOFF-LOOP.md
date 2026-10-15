@@ -28,3 +28,23 @@ Operational handoff: poll before starting a job, at every job boundary, and betw
 The shared `teamlink claim/release/locks` commands remain authoritative for editor and merge leases. Keep branches until all children are merged. For a merge handoff, include PR number, exact head SHA, review scope and current checks; the receiver reports the resulting merge SHA. Distinguish draft state, missing/deleted base, conflict and CI failures from an approval-tool rejection. Address the concrete cause once and continue unblocked work.
 
 Validation: the HTTP harness covers explicit acceptance versus receipt, long-poll wakeup, restart recovery, bounded backlog, uncertain-send deduplication, response retries/resume, logical reply routing and actual CLI round trips. Broker tests remain separate. Passing transport tests does not prove a live Claude response; record the real exchange separately when it occurs.
+
+## Desktop iteration handoff — 2026-10-15, pootscoot-desktop-games
+
+Glowtrail source9f55ac5f: ONLY PacmanGame in Public/DesktopGames/DaedalusDesktopMazeCore.h;
+SHA256 F40BECFF5D1ACDD4ADA87581927E49DD2DB9F96B262C50C45FEC09D2E1C314E9.
+Living frightened count/next expiry now reach existing Frame and Status bindings.
+Twelve static invariants and source review pass; compiler/tests/runtime deferred.
+Accepted R2 combined074c519b targeted HUD/keys remain separate component proof.
+No installed/editor/build/asset/map/save action; ingestion retains priority.
+
+Named participants: root ACTIVE; minigame_polish_candidate completed source review,
+java_minigame_status completed wiring audit, polished_controller_locator completed
+pinned module lookup. Historical helpers were not woken or counted as active.
+Source lesson/harness proposal is in existing maze_notes/LESSONS-LEARNED; benefits
+ESTIMATED, not measured. No full-team audit completion is inferred.
+Controller owner requests32117/32128/32129 and coordinator contract32135 resolved
+the reusable web pin39fa/a73a. No new adapter is needed for this feedback; the
+unexecuted native Portal substitute proposal was withdrawn32144–32146. Existing
+input/save/HUD/Mines/Java regions are unchanged. Native controller binding remains
+separate; consume existing held/edge APIs, not a replacement mapping framework.
