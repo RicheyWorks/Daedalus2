@@ -83,7 +83,11 @@ public class ProdSecurityConfig {
      */
     public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb",
             "/reach.html", "/reach.js", "/reach-core.js", "/orrery-core.js",
-            "/tactics.html", "/tactics.js", "/tactics-core.js", "/realm-mesh.js");
+            "/tactics.html", "/tactics.js", "/tactics-core.js", "/realm-mesh.js",
+            // The shared controller and settings modules every web client imports (docs/controllers.md,
+            // docs/settings.md); realm.js imports both, so refusing them breaks the realm page in prod.
+            "/controllers/daedalus-pad.js", "/controllers/controller-bundle.json",
+            "/settings/daedalus-settings.js", "/settings/settings-schema.json");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",

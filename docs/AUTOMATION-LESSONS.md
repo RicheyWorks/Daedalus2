@@ -1396,3 +1396,13 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   and `--max-items 150` so a wrapper loop restarts a fresh Blender (resume skips finished islands). After the restart:
   ~3.5 s per island, ~60 islands/min on 4 workers.
 - Watch the gap between log lines, not the per-item time the script prints.
+
+## A new file under `static/` is a production decision (2026-10-15)
+
+Production serves only the files listed in `ProdSecurityConfig.STATIC_PAGES` / `STATIC_SCRIPTS` and answers 401 to
+the rest; `ProdStaticSurfacePostureTest` fails the build while any static file has no recorded posture. The
+controller and settings modules (`/controllers/*`, `/settings/*`) shipped without rows: the realm page imports them,
+so prod would have refused them and the realm would not have loaded. It went unseen because the realm checks ran
+against a dev-profile server, and because `mvn -pl daedalus-server test` without `-am` compiled against a stale core
+jar, failed to compile, and left an old passing surefire report on disk. Rules: list every new static file in
+`ProdSecurityConfig`; run the server tests with `-am`; read the BUILD line, never a leftover report.
