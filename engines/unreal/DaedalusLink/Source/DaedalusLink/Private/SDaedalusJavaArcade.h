@@ -2,6 +2,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "DaedalusJavaArcade.h"
+#include "InputCoreTypes.h"
 #include "Widgets/SCompoundWidget.h"
 
 class SEditableTextBox;
@@ -32,6 +33,8 @@ private:
     FText StatusText() const;
     FText TableText() const;
     FText BlackjackDetailsText() const;
+    FReply HandleBlackjackKey(const FKey& Key);
+    void ConfirmSudokuHint();
     FReply Configure();
     void FocusBoard();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;
@@ -43,4 +46,5 @@ private:
     bool bNewSudokuMirror = false;
     bool bNewSudokuTimeAttack = false;
     FString LocalMessage;
+    FString HintConfirmationGameId;
 };

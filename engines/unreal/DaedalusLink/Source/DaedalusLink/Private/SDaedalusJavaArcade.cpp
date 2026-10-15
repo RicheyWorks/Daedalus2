@@ -70,6 +70,7 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
 }
 FReply SDaedalusJavaArcade::Configure()
 {
+    HintConfirmationGameId.Reset();
     if (!Game.IsValid() || !SecretBox.IsValid()) return FReply::Handled();
     const FString Secret = SecretBox->GetText().ToString();
     const bool Success = Game->Game == EDaedalusJavaGame::Sudoku
@@ -84,7 +85,8 @@ FReply SDaedalusJavaArcade::Configure()
 FText SDaedalusJavaArcade::StatusText() const
 {
     const auto S = State();
-    const FString Text = LocalMessage.IsEmpty() ? S.Status + TEXT(" — ") + S.Message : LocalMessage;
+    FString Text = S.Status + TEXT(" — ") + S.Message;
+    if (!LocalMessage.IsEmpty()) Text += TEXT("\n") + LocalMessage;
     return FText::FromString(Text + (S.HintText.IsEmpty() ? FString() : TEXT("\nHint: ") + S.HintText));
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
@@ -94,7 +96,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
     {
         const FString Label = FString::Printf(TEXT("New %d"), Difficulty);
         Starts->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
-        [Button(*Label, [this, Difficulty] { if (Game.IsValid()) Game->StartSudokuGameWithModes(Difficulty, bNewSudokuChaos, bNewSudokuMirror, bNewSudokuTimeAttack); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
+        [Button(*Label, [this, Difficulty] { HintConfirmationGameId.Reset(); if (Game.IsValid()) Game->StartSudokuGameWithModes(Difficulty, bNewSudokuChaos, bNewSudokuMirror, bNewSudokuTimeAttack); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
     }
     auto Grid = SNew(SGridPanel);
     for (int32 Index = 0; Index < 81; ++Index)
@@ -136,7 +138,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             return FText::FromString(TEXT("Current game: ") + (Modes.IsEmpty() ? FString(TEXT("Ordinary")) : FString::Join(Modes, TEXT(" / "))));
         }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
-        [SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(FString::Printf(TEXT("Difficulty %d  ·  Score %lld  ·  Lives %d  ·  Moves %lld  ·  Elapsed %lld s%s"), S.Difficulty, S.Score, S.Lives, S.MoveCount, S.ElapsedSeconds, S.TimeLimitSeconds > 0 ? *FString::Printf(TEXT("  ·  Remaining %lld s"), S.SecondsLeft) : TEXT(""))); }).AutoWrapText(true)]
+        [SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(FString::Printf(TEXT("Difficulty %d  ·  Score %lld  ·  Lives %d  ·  Moves %lld  ·  Hints %lld  ·  Elapsed %lld s%s"), S.Difficulty, S.Score, S.Lives, S.MoveCount, S.HintCount, S.ElapsedSeconds, S.TimeLimitSeconds > 0 ? *FString::Printf(TEXT("  ·  Remaining %lld s"), S.SecondsLeft) : TEXT(""))); }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Grid]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Digits]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
@@ -144,16 +146,37 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             SNew(SHorizontalBox)
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Undo"), [this] { if (Game.IsValid()) Game->SudokuUndo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Redo"), [this] { if (Game.IsValid()) Game->SudokuRedo(); }, [this] { return State().bCanAct; })]
-            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
-            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { return State().bReady && State().bOwner; })]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { const auto S = State(); return S.bReady && S.bOwner && !S.bBusy; })]
+        ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
+        [
+            SNew(SVerticalBox).Visibility_Lambda([this]
+            {
+                const auto S = State();
+                return !HintConfirmationGameId.IsEmpty() && HintConfirmationGameId == S.SessionId && S.bCanAct
+                    ? EVisibility::Visible : EVisibility::Collapsed;
+            })
+            + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+            [SNew(STextBlock).Text(FText::FromString(TEXT("Buy a hint for this game? Hints cost gems at the Java service's current price."))).AutoWrapText(true)]
+            + SVerticalBox::Slot().AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+                [Button(TEXT("Buy hint"), [this] { ConfirmSudokuHint(); }, [this] { const auto S = State(); return S.bCanAct && !HintConfirmationGameId.IsEmpty() && HintConfirmationGameId == S.SessionId; })]
+                + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Cancel hint"), [this] { HintConfirmationGameId.Reset(); })]
+            ]
         ]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
         [
             SNew(SHorizontalBox)
-            + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)[SAssignNew(ResumeBox, SEditableTextBox).HintText(FText::FromString(TEXT("Saved Java game ID")))]
-            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { if (Game.IsValid() && ResumeBox.IsValid()) Game->ResumeSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
+            + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)[SAssignNew(ResumeBox, SEditableTextBox).HintText(FText::FromString(TEXT("Java game ID to open or resume")))]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Open"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid() && ResumeBox.IsValid()) Game->OpenSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid() && ResumeBox.IsValid()) Game->ResumeSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
         ]
-        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)];
+        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 6, 0, 0)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Board keys: arrows select; 0–9 / numpad enter; Backspace / Delete erase; Home / End and Page Up / Down select row or column ends; Ctrl+Z / Ctrl+Y undo / redo; H asks before buying a hint; Escape closes the cabinet."))).AutoWrapText(true)];
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuMode(const TCHAR* Label, bool SDaedalusJavaArcade::* Field)
 {
@@ -200,13 +223,15 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
                 .IsEnabled_Lambda([this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")) && State().bInsuranceAcceptAllowed; })
                 .OnClicked_Lambda([this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, true); FocusBoard(); return FReply::Handled(); })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Decline insurance"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, false); }, [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")); })]
-            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("End Java session"), [this] { if (Game.IsValid()) Game->CloseRemoteBlackjackSession(); }, [this] { return State().bReady && !State().bRemoteClosed; })]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("End Java session"), [this] { if (Game.IsValid()) Game->CloseRemoteBlackjackSession(); }, [this] { const auto S = State(); return S.bReady && !S.bBusy && !S.bRemoteClosed; })]
         ]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [Button(TEXT("Reset table and stats (1000 simulated credits)"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("newSession")); },
             [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("newSession")); })]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
         [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::BlackjackDetailsText).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Table keys: Enter deal; R rebet; H hit; S stand; D double; P split; U surrender; C clear; I accept insurance / even money; N decline; 1–5 / numpad bet 1 / 5 / 25 / 100 / 500; L reload. Disabled actions stay unavailable. Escape closes the cabinet."))).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(FText::FromString(TEXT("Java hides the dealer hole card and future shoe. Closing this cabinet cancels local work; end the Java session first when ready. Unreached sessions expire in Java."))).AutoWrapText(true)];
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackRule(const TCHAR* Label, const TCHAR* Rule, bool FDaedalusJavaBlackjackRules::* Field)
@@ -288,6 +313,10 @@ FText SDaedalusJavaArcade::TableText() const
     Text += TEXT("Dealer: ") + Cards(S.DealerCards);
     for (int32 I = 0; I < S.HiddenDealerCards; ++I) Text += TEXT("   [hidden]");
     Text += TEXT("\n") + S.DealerCaption;
+    if (S.Phase == TEXT("INSURANCE"))
+        Text += S.PlayerHands.IsValidIndex(0) && S.PlayerHands[0].bBlackjack
+            ? TEXT("\nDealer shows Ace. You have blackjack: take even money?")
+            : TEXT("\nDealer shows Ace. Insurance?");
     if (S.bDealerValueAvailable)
         Text += FString::Printf(TEXT(" · Total %d%s%s%s"), S.DealerValue, S.bDealerSoft ? TEXT(" · soft") : TEXT(""), S.bDealerBust ? TEXT(" · bust") : TEXT(""), S.bDealerBlackjack ? TEXT(" · blackjack") : TEXT(""));
     if (S.InsuranceBet > 0) Text += FString::Printf(TEXT("\nInsurance stake %lld"), S.InsuranceBet);
@@ -333,12 +362,34 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     if (!Game.IsValid()) return FReply::Unhandled();
     const FKey Key = Event.GetKey();
     if (Key == EKeys::Escape) { Game->CloseArcade(); return FReply::Handled(); }
-    if (State().Game != EDaedalusJavaGame::Sudoku || Event.IsRepeat()) return FReply::Unhandled();
+    // Only the focused board/table owns shortcuts. Text fields and Slate buttons keep
+    // their own editing/activation behavior; another local user cannot submit actions.
+    if (Event.IsRepeat() || Key.IsGamepadKey() || Event.GetUserIndex() != Game->GetSlateUserIndex()
+        || !HasUserFocus(Event.GetUserIndex()).IsSet() || Event.IsAltDown() || Event.IsCommandDown()) return FReply::Unhandled();
+    if (State().Game == EDaedalusJavaGame::Blackjack)
+        return Event.IsControlDown() || Event.IsShiftDown() ? FReply::Unhandled() : HandleBlackjackKey(Key);
+    if (Event.IsControlDown())
+    {
+        if (Key == EKeys::Z) { HintConfirmationGameId.Reset(); Game->SudokuUndo(); return FReply::Handled(); }
+        if (Key == EKeys::Y) { HintConfirmationGameId.Reset(); Game->SudokuRedo(); return FReply::Handled(); }
+        return FReply::Unhandled();
+    }
+    if (Key == EKeys::H)
+    {
+        const auto S = State();
+        if (S.bCanAct) HintConfirmationGameId = S.SessionId; // No purchase until explicit confirmation.
+        return FReply::Handled();
+    }
+    HintConfirmationGameId.Reset();
     int32 Row = SelectedCell / 9, Col = SelectedCell % 9;
     if (Key == EKeys::Left) --Col;
     else if (Key == EKeys::Right) ++Col;
     else if (Key == EKeys::Up) --Row;
     else if (Key == EKeys::Down) ++Row;
+    else if (Key == EKeys::Home) Col = 0;
+    else if (Key == EKeys::End) Col = 8;
+    else if (Key == EKeys::PageUp) Row = 0;
+    else if (Key == EKeys::PageDown) Row = 8;
     else
     {
         const FKey Keys[] = { EKeys::Zero, EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine };
@@ -350,4 +401,43 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     SelectedCell = FMath::Clamp(Row, 0, 8) * 9 + FMath::Clamp(Col, 0, 8);
     Invalidate(EInvalidateWidgetReason::Paint);
     return FReply::Handled();
+}
+
+void SDaedalusJavaArcade::ConfirmSudokuHint()
+{
+    const FString ConfirmedGameId = MoveTemp(HintConfirmationGameId);
+    HintConfirmationGameId.Reset();
+    const auto S = State();
+    if (Game.IsValid() && S.Game == EDaedalusJavaGame::Sudoku && S.bCanAct
+        && !ConfirmedGameId.IsEmpty() && ConfirmedGameId == S.SessionId) Game->RequestSudokuHint();
+}
+
+FReply SDaedalusJavaArcade::HandleBlackjackKey(const FKey& Key)
+{
+    // Original Swing/GDX TableKeys call the same enabled controls; Java owns legality.
+    FString Action;
+    int32 Amount = 0;
+    bool bAcceptInsurance = false;
+    if (Key == EKeys::Enter) Action = TEXT("deal");
+    else if (Key == EKeys::R) Action = TEXT("rebet");
+    else if (Key == EKeys::H) Action = TEXT("hit");
+    else if (Key == EKeys::S) Action = TEXT("stand");
+    else if (Key == EKeys::D) Action = TEXT("double");
+    else if (Key == EKeys::P) Action = TEXT("split");
+    else if (Key == EKeys::U) Action = TEXT("surrender");
+    else if (Key == EKeys::C) Action = TEXT("clearBet");
+    else if (Key == EKeys::I) { Action = TEXT("insurance"); bAcceptInsurance = true; }
+    else if (Key == EKeys::N) Action = TEXT("insurance");
+    else if (Key == EKeys::L) Action = TEXT("reload");
+    else
+    {
+        const FKey Keys[] = { EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five };
+        const FKey Pads[] = { EKeys::NumPadOne, EKeys::NumPadTwo, EKeys::NumPadThree, EKeys::NumPadFour, EKeys::NumPadFive };
+        const int32 Chips[] = { 1, 5, 25, 100, 500 };
+        for (int32 I = 0; I < 5; ++I) if (Key == Keys[I] || Key == Pads[I]) { Action = TEXT("bet"); Amount = Chips[I]; break; }
+    }
+    if (Action.IsEmpty()) return FReply::Unhandled();
+    if (Game.IsValid() && Game->IsBlackjackActionLegal(Action, Amount)
+        && (!bAcceptInsurance || State().bInsuranceAcceptAllowed)) Game->SubmitBlackjackAction(Action, Amount, bAcceptInsurance);
+    return FReply::Handled(); // Recognized disabled actions are inert and consumed.
 }
