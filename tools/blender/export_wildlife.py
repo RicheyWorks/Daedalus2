@@ -85,7 +85,8 @@ def sheet(names, path):
     cam.data.lens, cam.data.clip_end = 35, 100000
     rows = int(math.ceil(len(names) / cols))
     span = max(cols, rows) * pitch
-    cam.location = (0, -(rows * pitch) / 2 - span * 0.62, span * 0.5)
+    far = 0.62 if len(names) <= 48 else 0.95
+    cam.location = (0, -(rows * pitch) / 2 - span * far, span * far * 0.8)
     cam.rotation_euler = (math.radians(57), 0, 0)
     scene.render.filepath = path
     bpy.ops.render.render(write_still=True)
