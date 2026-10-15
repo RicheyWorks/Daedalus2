@@ -11,7 +11,9 @@ Prismheart Realm (16-bit): 32,000 Hz stereo, six voices - soft lead (filtered sa
 Every track is composed by rule, not copied: a mode and chord progression per mood, a two-bar melodic motif built
 from chord tones on strong beats and steps between them, repeated / varied / transposed in an A A' B A form with a
 cadence home, bass and arpeggio patterns by style, and drums by style. Seeds are fixed so a rebuild is identical.
-Tracks: Title, Overworld, Town, Dungeon, Battle, Boss, Victory, Inn (jingle), GameOver.
+Tracks: Title, Overworld, Town, Dungeon, Battle, Boss, Victory, Inn (jingle), GameOver, Castle - one per touring
+jukebox cue (CUES). Effects: one per sound event the realm core emits (EVENTS), plus BLIP:0..11 voice blips.
+Also writes the jukebox cue pack (claude-audio/jukebox-pack.json, data/rpg/jukebox.json) that tools/audio/realm_jukebox.py plays.
 Effects (both realms): Cursor, Confirm, Cancel, Hit, Critical, Miss, Cast, Heal, LevelUp, Chest, Door, Stairs,
 Encounter, Escape, Coin.
 Outputs OUT_ROOT/claude-audio/<realm>/Music_<Track>.wav, Sfx_<Name>.wav, spectrogram sheet; data/rpg/audio.json:
@@ -43,7 +45,19 @@ TRACKS = {
     "Victory":   ("major", 67, 136, 8, [1, 1, 4, 5, 1, 4, 5, 1], "fanfare", True, ["after a won battle"]),
     "Inn":       ("major", 67, 96, 4, [1, 4, 5, 1], "jingle", False, ["rest at an inn"]),
     "GameOver":  ("minor", 57, 66, 6, [1, 6, 4, 5, 1, 1], "sparse", False, ["party defeated"]),
+    "Castle":    ("dorian", 62, 84, 16, [1, 4, 1, 5, 6, 4, 5, 1, 1, 4, 7, 4, 6, 5, 4, 1], "anthem", True, ["castles", "throne rooms"]),
 }
+# The touring jukebox's cue vocabulary (ADR-052; SDaedalusRealm posts {cue, changed, sfx}) -> our tracks.
+CUES = {"FIELD": "Overworld", "TOWN": "Town", "CASTLE": "Castle", "CAVE": "Dungeon", "BATTLE": "Battle", "BOSS": "Boss",
+        "VICTORY": "Victory", "DEFEAT": "GameOver", "INN": "Inn", "TITLE": "Title"}
+# Every sound event DaedalusRealmCore / DaedalusDialogueCore emit -> an effect name (BLIP:0..11 added in effects()).
+EVENTS = {"TICK": "Cursor", "PICK": "Confirm", "PAGE": "Page", "OPEN": "Open", "BUMP": "Bump", "CHEST": "Chest", "LOCKED": "Locked",
+          "DOOR": "Door", "STAIRS": "Stairs", "ENTER": "Enter", "PORTAL": "Portal", "HURT": "Hurt", "BLESS": "Bless", "BUY": "Coin",
+          "INN": "Rest", "TORCH": "Torch", "WINGS": "Wings", "ITEM": "Item", "SPELL": "Cast", "EQUIP": "Equip", "AMBUSH": "Ambush",
+          "SHINY": "Shiny", "LAND": "Land", "DEED": "Deed", "EGG": "Egg", "HATCH": "Hatch", "CALL": "Call", "CRIT": "Critical",
+          "DEFEAT": "Down", "FALL": "Fall", "LEVEL": "LevelUp", "MISS": "Miss", "POISON": "Poison", "RUN": "Escape",
+          "SPORES": "Spores", "SWING": "Swing", "VICTORY": "Win", "ZAP": "Zap", "HIT": "Hit", "HEAL": "Heal", "ENCOUNTER": "Encounter",
+          "CANCEL": "Cancel"}
 
 
 def mtof(m):
@@ -323,7 +337,36 @@ def effects(realm):
         "Encounter": np.concatenate([sweep(sr, 200 + 120 * k, 1400, 0.09, "pulse", 0.25, 4) for k in range(5)]),
         "Escape": sweep(sr, 1200, 150, 0.45, "pulse", 0.5, 3),
         "Coin": notes_seq(sr, [83, 88], 0.07, kind, duty=0.5),
+        "Page": sweep(sr, 1200, 1200, 0.03, "pulse", 0.25, 60),
+        "Open": np.concatenate([sweep(sr, 600, 900, 0.05, "pulse", 0.5, 20), sweep(sr, 900, 1300, 0.05, "pulse", 0.5, 20)]),
+        "Bump": sweep(sr, 140, 70, 0.09, "tri", decay=25),
+        "Locked": np.concatenate([sweep(sr, 180, 170, 0.07, "pulse", 0.5, 12), np.zeros(int(0.03 * sr)), sweep(sr, 150, 140, 0.09, "pulse", 0.5, 12)]),
+        "Enter": sweep(sr, 300, 700, 0.16, "pulse", 0.125, 9),
+        "Portal": sweep(sr, 200, 2200, 0.7, "sine", decay=2) * (0.6 + 0.4 * np.sin(np.arange(int(0.7 * sr)) / sr * 2 * np.pi * 18)),
+        "Hurt": noise_burst(sr, 0.12, 25, cr, rng) * 0.7 + 0.6 * sweep(sr, 400, 120, 0.12, "pulse", 0.5, 15),
+        "Bless": notes_seq(sr, [79, 84, 88, 91, 96], 0.06, kind),
+        "Rest": notes_seq(sr, [84, 79, 76, 72], 0.12, kind),
+        "Torch": noise_burst(sr, 0.35, 4, cr, rng) * (0.5 + 0.5 * np.abs(np.sin(np.arange(int(0.35 * sr)) / sr * 2 * np.pi * 9))),
+        "Wings": np.concatenate([noise_burst(sr, 0.06, 30, cr, rng) for _ in range(4)] + [sweep(sr, 500, 1500, 0.25, "pulse", 0.25, 5)]),
+        "Item": notes_seq(sr, [74, 81], 0.07, kind),
+        "Equip": np.concatenate([sweep(sr, 2400, 2200, 0.05, "pulse", 0.125, 35), sweep(sr, 3000, 2800, 0.08, "pulse", 0.125, 30)]),
+        "Ambush": np.concatenate([sweep(sr, 1400 - 200 * k, 200, 0.07, "pulse", 0.5, 5) for k in range(5)]),
+        "Shiny": notes_seq(sr, [91, 96, 100, 103, 108], 0.045, kind, duty=0.125),
+        "Land": np.concatenate([sweep(sr, 120, 60, 0.1, "tri", decay=20), notes_seq(sr, [79, 84], 0.08, kind)]),
+        "Deed": notes_seq(sr, [72, 76, 79, 84, 84], 0.1, kind),
+        "Egg": np.concatenate([sweep(sr, 900, 850, 0.03, "pulse", 0.5, 60), np.zeros(int(0.08 * sr)), sweep(sr, 950, 900, 0.03, "pulse", 0.5, 60)]),
+        "Hatch": np.concatenate([noise_burst(sr, 0.1, 30, cr, rng), notes_seq(sr, [76, 81, 88], 0.08, kind)]),
+        "Call": np.concatenate([notes_seq(sr, [67], 0.18, "pulse", 0.5), notes_seq(sr, [74], 0.28, "pulse", 0.5)]),
+        "Down": notes_seq(sr, [64, 60, 57, 52], 0.16, kind),
+        "Fall": sweep(sr, 1600, 80, 0.8, "pulse", 0.5, 1.5),
+        "Poison": sweep(sr, 200, 160, 0.4, "sine", decay=3) * (0.5 + 0.5 * np.sin(np.arange(int(0.4 * sr)) / sr * 2 * np.pi * 14)),
+        "Spores": np.concatenate([noise_burst(sr, 0.1, 18, max(1, cr // 2), rng) * 0.6 for _ in range(3)]),
+        "Swing": noise_burst(sr, 0.1, 30, cr, rng) * np.linspace(0.3, 1, int(0.1 * sr)),
+        "Win": notes_seq(sr, [72, 76, 79, 84], 0.09, kind),
+        "Zap": np.concatenate([sweep(sr, 2000, 300, 0.08, "pulse", 0.25, 8), sweep(sr, 300, 2000, 0.08, "pulse", 0.25, 8)]),
     }
+    for k in range(12):                                                             # NPC voice blips (DaedalusDialogueCore "BLIP:<pitch>")
+        fx["Blip_%d" % k] = osc("pulse", mtof(72 + k), int(0.035 * sr), sr, duty=0.25) * env(int(0.035 * sr), sr, 0.001, 0.01, 0.6, 0.01) * 0.6
     out = {}
     for k, w in fx.items():
         w = w / (np.max(np.abs(w)) or 1) * 0.85
@@ -396,7 +439,25 @@ def build(out_root, data_root=None):
             rows.append({"realm": realm, "kind": "sfx", "name": name, "file": "engines/unreal/art/claude-audio/%s/%s" % (realm, fn),
                          "sample_rate": sr, "seconds": round(len(w) / sr, 3)})
         spectro_sheet(spec, os.path.join(od, "spectrograms.png"))
+    pack = {"schema": "daedalus.jukebox-cues/v1", "source": "tools/blender/rpg_audio.py",
+            "contract": "SDaedalusRealm POSTs {cue, changed, sfx} to the daedalus.Jukebox URL (ADR-052); this pack maps them to files",
+            "root": "engines/unreal/art/claude-audio", "realms": {}}
+    for realm in ("portal", "prism"):
+        music = {r["name"]: r for r in rows if r["realm"] == realm and r["kind"] == "music"}
+        pack["realms"][realm] = {
+            "sample_rate": SR[realm], "channels": 2 if realm == "prism" else 1,
+            "cues": {cue: {"file": "%s/Music_%s.wav" % (realm, t), "loop": music[t]["loop"], "loop_start": 0, "loop_end": music[t]["loop_end"],
+                           "bpm": music[t]["bpm"]} for cue, t in CUES.items()},
+            "events": dict({ev: "%s/Sfx_%s.wav" % (realm, fx) for ev, fx in EVENTS.items()},
+                           **{"BLIP:%d" % k: "%s/Sfx_Blip_%d.wav" % (realm, k) for k in range(12)}),
+            "touring_cues": ["FIELD", "TOWN", "INN"],
+        }
+    os.makedirs(os.path.join(out_root, "claude-audio"), exist_ok=True)
+    with open(os.path.join(out_root, "claude-audio", "jukebox-pack.json"), "w", encoding="utf-8") as f:
+        json.dump(pack, f, indent=1)
     if data_root:
+        with open(os.path.join(data_root, "data", "rpg", "jukebox.json"), "w", encoding="utf-8") as f:
+            json.dump(pack, f, indent=1)
         with open(os.path.join(data_root, "data", "rpg", "audio.json"), "w", encoding="utf-8") as f:
             json.dump({"schema": "daedalus.audio/v1", "source": "tools/blender/rpg_audio.py", "note": "original compositions generated by rule; "
                        "loop_end is in samples; music and sfx are 16-bit PCM WAV", "tracks": rows}, f, indent=1)

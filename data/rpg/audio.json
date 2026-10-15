@@ -177,6 +177,26 @@
   },
   {
    "realm": "portal",
+   "kind": "music",
+   "name": "Castle",
+   "file": "engines/unreal/art/claude-audio/portal/Music_Castle.wav",
+   "sample_rate": 22050,
+   "channels": 1,
+   "bpm": 84,
+   "key": "D",
+   "mode": "dorian",
+   "bars": 16,
+   "loop": true,
+   "loop_start": 0,
+   "loop_end": 1008000,
+   "seconds": 46.31,
+   "used_by": [
+    "castles",
+    "throne rooms"
+   ]
+  },
+  {
+   "realm": "portal",
    "kind": "sfx",
    "name": "Cursor",
    "file": "engines/unreal/art/claude-audio/portal/Sfx_Cursor.wav",
@@ -294,6 +314,318 @@
    "file": "engines/unreal/art/claude-audio/portal/Sfx_Coin.wav",
    "sample_rate": 22050,
    "seconds": 0.14
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Page",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Page.wav",
+   "sample_rate": 22050,
+   "seconds": 0.03
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Open",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Open.wav",
+   "sample_rate": 22050,
+   "seconds": 0.1
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Bump",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Bump.wav",
+   "sample_rate": 22050,
+   "seconds": 0.09
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Locked",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Locked.wav",
+   "sample_rate": 22050,
+   "seconds": 0.19
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Enter",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Enter.wav",
+   "sample_rate": 22050,
+   "seconds": 0.16
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Portal",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Portal.wav",
+   "sample_rate": 22050,
+   "seconds": 0.7
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Hurt",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Hurt.wav",
+   "sample_rate": 22050,
+   "seconds": 0.12
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Bless",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Bless.wav",
+   "sample_rate": 22050,
+   "seconds": 0.3
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Rest",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Rest.wav",
+   "sample_rate": 22050,
+   "seconds": 0.48
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Torch",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Torch.wav",
+   "sample_rate": 22050,
+   "seconds": 0.35
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Wings",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Wings.wav",
+   "sample_rate": 22050,
+   "seconds": 0.49
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Item",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Item.wav",
+   "sample_rate": 22050,
+   "seconds": 0.14
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Equip",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Equip.wav",
+   "sample_rate": 22050,
+   "seconds": 0.13
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Ambush",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Ambush.wav",
+   "sample_rate": 22050,
+   "seconds": 0.35
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Shiny",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Shiny.wav",
+   "sample_rate": 22050,
+   "seconds": 0.225
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Land",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Land.wav",
+   "sample_rate": 22050,
+   "seconds": 0.26
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Deed",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Deed.wav",
+   "sample_rate": 22050,
+   "seconds": 0.5
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Egg",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Egg.wav",
+   "sample_rate": 22050,
+   "seconds": 0.14
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Hatch",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Hatch.wav",
+   "sample_rate": 22050,
+   "seconds": 0.34
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Call",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Call.wav",
+   "sample_rate": 22050,
+   "seconds": 0.46
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Down",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Down.wav",
+   "sample_rate": 22050,
+   "seconds": 0.64
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Fall",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Fall.wav",
+   "sample_rate": 22050,
+   "seconds": 0.8
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Poison",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Poison.wav",
+   "sample_rate": 22050,
+   "seconds": 0.4
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Spores",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Spores.wav",
+   "sample_rate": 22050,
+   "seconds": 0.3
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Swing",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Swing.wav",
+   "sample_rate": 22050,
+   "seconds": 0.1
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Win",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Win.wav",
+   "sample_rate": 22050,
+   "seconds": 0.36
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Zap",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Zap.wav",
+   "sample_rate": 22050,
+   "seconds": 0.16
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_0",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_0.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_1",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_1.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_2",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_2.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_3",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_3.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_4",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_4.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_5",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_5.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_6",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_6.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_7",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_7.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_8",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_8.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_9",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_9.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_10",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_10.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
+  },
+  {
+   "realm": "portal",
+   "kind": "sfx",
+   "name": "Blip_11",
+   "file": "engines/unreal/art/claude-audio/portal/Sfx_Blip_11.wav",
+   "sample_rate": 22050,
+   "seconds": 0.035
   },
   {
    "realm": "prism",
@@ -469,6 +801,26 @@
   },
   {
    "realm": "prism",
+   "kind": "music",
+   "name": "Castle",
+   "file": "engines/unreal/art/claude-audio/prism/Music_Castle.wav",
+   "sample_rate": 32000,
+   "channels": 2,
+   "bpm": 84,
+   "key": "D",
+   "mode": "dorian",
+   "bars": 16,
+   "loop": true,
+   "loop_start": 0,
+   "loop_end": 1462857,
+   "seconds": 46.31,
+   "used_by": [
+    "castles",
+    "throne rooms"
+   ]
+  },
+  {
+   "realm": "prism",
    "kind": "sfx",
    "name": "Cursor",
    "file": "engines/unreal/art/claude-audio/prism/Sfx_Cursor.wav",
@@ -586,6 +938,318 @@
    "file": "engines/unreal/art/claude-audio/prism/Sfx_Coin.wav",
    "sample_rate": 32000,
    "seconds": 0.41
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Page",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Page.wav",
+   "sample_rate": 32000,
+   "seconds": 0.3
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Open",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Open.wav",
+   "sample_rate": 32000,
+   "seconds": 0.37
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Bump",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Bump.wav",
+   "sample_rate": 32000,
+   "seconds": 0.36
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Locked",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Locked.wav",
+   "sample_rate": 32000,
+   "seconds": 0.46
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Enter",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Enter.wav",
+   "sample_rate": 32000,
+   "seconds": 0.43
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Portal",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Portal.wav",
+   "sample_rate": 32000,
+   "seconds": 0.97
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Hurt",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Hurt.wav",
+   "sample_rate": 32000,
+   "seconds": 0.39
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Bless",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Bless.wav",
+   "sample_rate": 32000,
+   "seconds": 0.57
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Rest",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Rest.wav",
+   "sample_rate": 32000,
+   "seconds": 0.75
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Torch",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Torch.wav",
+   "sample_rate": 32000,
+   "seconds": 0.62
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Wings",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Wings.wav",
+   "sample_rate": 32000,
+   "seconds": 0.76
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Item",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Item.wav",
+   "sample_rate": 32000,
+   "seconds": 0.41
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Equip",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Equip.wav",
+   "sample_rate": 32000,
+   "seconds": 0.4
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Ambush",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Ambush.wav",
+   "sample_rate": 32000,
+   "seconds": 0.62
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Shiny",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Shiny.wav",
+   "sample_rate": 32000,
+   "seconds": 0.495
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Land",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Land.wav",
+   "sample_rate": 32000,
+   "seconds": 0.53
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Deed",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Deed.wav",
+   "sample_rate": 32000,
+   "seconds": 0.77
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Egg",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Egg.wav",
+   "sample_rate": 32000,
+   "seconds": 0.41
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Hatch",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Hatch.wav",
+   "sample_rate": 32000,
+   "seconds": 0.61
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Call",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Call.wav",
+   "sample_rate": 32000,
+   "seconds": 0.73
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Down",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Down.wav",
+   "sample_rate": 32000,
+   "seconds": 0.91
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Fall",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Fall.wav",
+   "sample_rate": 32000,
+   "seconds": 1.07
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Poison",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Poison.wav",
+   "sample_rate": 32000,
+   "seconds": 0.67
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Spores",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Spores.wav",
+   "sample_rate": 32000,
+   "seconds": 0.57
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Swing",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Swing.wav",
+   "sample_rate": 32000,
+   "seconds": 0.37
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Win",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Win.wav",
+   "sample_rate": 32000,
+   "seconds": 0.63
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Zap",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Zap.wav",
+   "sample_rate": 32000,
+   "seconds": 0.43
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_0",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_0.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_1",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_1.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_2",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_2.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_3",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_3.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_4",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_4.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_5",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_5.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_6",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_6.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_7",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_7.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_8",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_8.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_9",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_9.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_10",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_10.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
+  },
+  {
+   "realm": "prism",
+   "kind": "sfx",
+   "name": "Blip_11",
+   "file": "engines/unreal/art/claude-audio/prism/Sfx_Blip_11.wav",
+   "sample_rate": 32000,
+   "seconds": 0.305
   }
  ]
 }
