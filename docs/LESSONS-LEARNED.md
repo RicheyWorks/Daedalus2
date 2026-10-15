@@ -323,3 +323,21 @@ Source product impact: a recorded still-active table becomes reachable again;
 no measured gameplay/performance benefit or runtime acceptance. Existing-harness
 idea is the reopen branch matrix at a later authorized slot, benefit ESTIMATED;
 no new framework/worker/job or editor/compute slot. No tests/build/services ran.
+
+### Establish authenticated ownership before designing durable resume
+
+2026-10-15, pootscoot-desktop-games; existing Java source/packet reviewer.
+Backend code `a75241bd01e149df3b34c7dfdac1b9be93811939` scopes the existing bearer/routes, session ownership
+and typed create-replay key to trusted immutable local profile credentials.
+Check owner before caches/activity/engine; do not let legacy overloads or caller
+body identity bypass it. Preserve nullable constructors using a named factory.
+Legacy mode stays shared; opt-in local profiles are not Daedalus account mapping.
+Actual storage trace matters: live-round bytes contain dealer/future shoe/rules;
+SaveManager books live losses; RoundSeal needs a protected key supplied by Android,
+not desktop. Single-file rename is not an atomic durable state/ledger transaction.
+No bearer-derived encryption, plaintext export or invented resume adapter.
+Product impact is a source authorization prerequisite;9 tests authored/unrun,
+manual review only, no measured native/performance/security certification. Next
+existing-harness cases are profile/refusal/replay/idle/capacity and legacy mode,
+then actual provider/key/storage crash/restart work; benefit ESTIMATED, no new
+framework/worker/editor or compute slot. Native7c4 source and saves unchanged.

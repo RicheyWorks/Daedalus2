@@ -110,3 +110,20 @@ coverage pin all final/prior files, manual branches and source/native limits.
 No tests/build/UHT/services/credentials/editor/native or compute reservation.
 Only codex-play-guard later integrates against actual accepted source and preserves
 all owners; no whole-plugin replacement. Full original applications remain open.
+
+## Authenticated local-profile resume prerequisite — 2026-10-15
+
+Backend PR62 code `a75241bd01e149df3b34c7dfdac1b9be93811939` / published draft head `7b6410c2fccbbeed974eda18e4efd717cf70424a` continues8a4dccfb.
+Ownership check32335, START32339 at20:51UTC minute precision; no competing backend
+claim found or separate confirmation claimed. Four facade runtime files+154/-32,
+two test files+189:9 authored methods, unexecuted. Profile principal comes only
+from trusted immutable bearer configuration, session owner checked before private
+state/caches/activity, create replay scoped by typed owner/requestId. Legacy shared
+mode and existing native header/routes/DTO/recovery remain compatible. Native
+source7c4 is unchanged from d2625374; current increment there is docs only.
+Backend/native packets include exact pins,11manualbranches, source/packet review,
+original SaveManager/RoundSeal/Engine/GDX/Android/AtomicFiles findings and future
+provider/key/storage/decision-ledger/expiry proposal explicitly UNIMPLEMENTED.
+Local profile isolation is not durable resume or Daedalus account integration.
+No tests/build/service/real credentials/editor/native ran or slot requested.
+Only codex-play-guard later integrates approved exact source preserving all owners.

@@ -4,7 +4,66 @@ This completes the selected source package in existing [PR152](https://github.co
 It does not complete either original application or establish installed/native play.
 Owner: pootscoot-desktop-games. Only codex-play-guard operates Unreal.
 
-## Current continuation: deliberate Blackjack table reopen
+## Current backend prerequisite: authenticated local profile isolation
+
+BlackJackPro draft PR62 source `a75241bd01e149df3b34c7dfdac1b9be93811939`, published head `7b6410c2fccbbeed974eda18e4efd717cf70424a`, now provides
+opt-in local profile isolation through the real existing facade. Native code
+remains `7c4ae40d027bd6e17f80c08661297b28d6571db2`, byte-identical to prior
+documentation head `d2625374ba22dca3d7c85a057c6a9ff7367d542d`; this native PR
+increment changes existing packet/coverage/lesson docs only.
+
+Ownership check32335/START32339 (20:51UTC, minute precision) scoped the existing
+backend lane. Bounded hub reconciliation found no competing owner; no separate
+owner-confirmation reply is claimed. Four facade runtime and two security-test
+files implement/review this prerequisite. No original core/GDX/Android save,
+key provider, native code, controller, Hero, Mines or other owner changed.
+
+| Actual capability | Exact backend source/interface | Existing native binding | Remaining limit |
+|---|---|---|---|
+| Trusted immutable profile credentials | `BridgeProfiles.fromConfiguration/scoped/principal`, `BridgeMain.main` | Existing ConfigureBlackjackToken and bearer header, no caller profile field | Operator-defined local profiles; actual Daedalus account/provider mapping absent |
+| Session ownership and reopen | `BridgeServer.authenticatedPrincipal/route`; `BridgeService.find(principal,id)` | Existing OpenBlackjackSession/Refresh query and visible DTO | Foreign well-formed reads/mutations/close return missing-session404 before cache/idle/engine; native adoption/behavior unverified |
+| Owner-scoped create replay | `BridgeService.CreateKey(principal,requestId)` and `create` | Existing stable request-ID creation/recovery, no payload change | Decisions remain process memory; profile scoping does not make retries durable across restart |
+| Compatible shared mode and health | Existing String constructors; named forProfiles factory; `profileScopedSessions` health boolean | Existing transport unchanged; no native health binding added | Legacy single bearer remains shared; exactly one launch mode; no live credential rotation/enrollment |
+
+The launcher's optional private `DAEDALUS_BLACKJACK_PROFILE_TOKENS` map is mutually
+exclusive with legacy `DAEDALUS_BLACKJACK_TOKEN`. Names/tokens are validated and
+never returned as identity metadata. No credentials belong in this packet. The
+backend contract documents 1..16 bounds, unique tokens, generic private errors,
+fixed-digest comparisons and unchanged global limits. This reduces some timing
+differences; it is not a constant-time security certification.
+
+Independent source and packet reviews pass. Nine meaningful security test methods
+are authored, **unexecuted**. Eleven branches are manually reviewed; no compilation,
+HTTP/service/real-credential/editor/native operation ran. Exact runtime/test/protected
+pins and deferred cases are in the [backend packet](https://github.com/RicheyWorks/BlackJackPro/blob/7b6410c2fccbbeed974eda18e4efd717cf70424a/docs/BLACKJACK-PROFILE-ISOLATION.integration.json); the complete
+mode, caller, lifecycle and durability contract is [here](https://github.com/RicheyWorks/BlackJackPro/blob/7b6410c2fccbbeed974eda18e4efd717cf70424a/docs/BLACKJACK-ARCADE-BRIDGE.md). Earlier counted
+Java/native checks are historical and do not validate this new source.
+
+The original persistence trace prevents an unsupported resume claim: SaveManager
+books live hands lost, GameSession optionally restores a RoundSeal-authenticated
+round bound to exact save bytes, Engine exports hidden dealer/future shoe data,
+and protected key support is Android-only while desktop defaults to none.
+AtomicFiles is a single-file rename with fallback, not a flushed multi-file
+transaction. The facade lacks durable sessions/revisions/decision ledgers and a
+trusted account/key/storage provider. This package writes no hidden state or saves,
+creates no encryption key/provider and does not derive keys from bearers.
+
+Future owner-interface proposal is documented only: an authenticated atomic
+owner/session/engine/rules/revision/create+command-decision/closure/expiry envelope,
+protected key/root provider, restart-safe expiry and uncertain-commit recovery.
+Do not persist raw process-local nanoTime or replay unconfirmed mutations. Existing
+native Configure/close still clears secrets/request context as before; no automatic
+retained profile/round resume is supplied. Durable and Daedalus per-player resume
+remain incomplete. Source product impact is profile isolation before a future
+store; no runtime or performance benefit is measured.
+
+At a later authorized slot, build/test the Java companion, then use disposable
+profile tokens to verify same-owner replay, cross-profile404/no revision/no activity
+renewal, invalid launch modes, forged body identity and legacy compatibility. The
+sole operator later adopts exact companion/native pins and checks actual reopen,
+secrecy, input and lifecycle behavior. Ingestion stays first; no slot is requested.
+
+## Current native source: deliberate Blackjack table reopen
 
 Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues published `3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93` in existing draft PR152.
 The gap was independently traced before editing: Java already implements

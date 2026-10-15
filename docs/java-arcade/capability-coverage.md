@@ -1,6 +1,29 @@
 # Arcade capability coverage — source checkpoint, 2026-10-15
 
-## Current continuation: existing Blackjack table reopen
+## Current backend prerequisite: local profile session isolation
+
+BlackJackPro source `a75241bd01e149df3b34c7dfdac1b9be93811939` / draft PR62 head `7b6410c2fccbbeed974eda18e4efd717cf70424a` implements opt-in
+trusted profile-token isolation. All existing session HTTP routes use the
+server-resolved principal. Session ownership is checked before caches/activity/
+engine access; structured principal/requestId create keys preserve same-owner
+replay and separate profiles. Legacy shared mode remains compatible. No new
+endpoint, caller identity field, native API or save format is introduced.
+
+Native code remains7c4ae40d unchanged from d2625374. Existing token configuration,
+create/recovery and explicit Open/Refresh use the same header/DTO. This supplies
+operator-defined local authorization, not a Daedalus account/provider or durable
+resume. Original desktop sealed round support is absent without a protected key;
+Android's existing key path and all original saves remain unchanged. No hidden
+state is written or exported. Persistent owner/state/revision/decision/expiry
+commit and key/storage providers remain proposed dependencies.
+
+Source and packet review pass;9 tests authored/unexecuted,11 manually reviewed
+branches, no build/service/credentials/editor/native execution. Current backend
+pins, native unchanged pins, source evidence, learning and future acceptance are
+in manifestv7 and [cabinet-source-package.md](cabinet-source-package.md). Backend
+adoption and actual profile/native isolation remain unverified.
+
+## Current native source: existing Blackjack table reopen
 
 Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues published `3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93` in the existing four PR152 actor/
 Slate files. Java's existing GET session route now has additive OpenBlackjackSession
@@ -136,12 +159,13 @@ Play was performed. Only `codex-play-guard` operates Unreal. The operator packet
   `ADaedalusHero::Interact` uses `ADaedalusUsable::Nearest` and `Use`. The Java
   actor mounts a standalone local-player Slate overlay and refuses network worlds.
   Class registration and hooks do not establish installation or world placement.
-- Blackjack current main and unchanged core:
+- Blackjack unchanged core baseline:
   [`1ec1801ac635e62945072974cbe8c78398a17849`](https://github.com/RicheyWorks/BlackJackPro/tree/1ec1801ac635e62945072974cbe8c78398a17849).
-  Current main was independently read and matches this pin. The dirty Buff
+  This was independently read at the original source checkpoint. The dirty Buff
   checkout is a separate source selection dependency and remains untouched.
 - Existing additive facade: [BlackJackPro PR62](https://github.com/RicheyWorks/BlackJackPro/pull/62),
-  head `8a4dccfbc359be628b5766ea1b7082410baefe1c`, still draft. Its application
+  original checkpoint `8a4dccfbc359be628b5766ea1b7082410baefe1c`; profile source
+  `a75241bd01e149df3b34c7dfdac1b9be93811939`, published draft head `7b6410c2fccbbeed974eda18e4efd717cf70424a`. Its application
   entry is `arcade-bridge/build.gradle.kts` → `BridgeMain.main`; `BridgeServer`
   registers `/v1/blackjack/health`, `/sessions`, session GET/DELETE and commands.
   It depends only on `:core`. `BridgeService` calls the unchanged `Engine`;
@@ -178,9 +202,9 @@ reconciliation remain unchanged. Controls do not decide outcomes or credits.
 | Implemented app feature | Exact existing interface/source | Daedalus UI/service binding | Missing code / remaining boundary | End-to-end evidence |
 |---|---|---|---|---|
 | Authenticated health | `B/BridgeServer.route`, `GET /v1/blackjack/health` | No native health operation | Readiness probe still absent; this change does not edit Poot-owned transport | H; E0 |
-| Local bearer | `B/BridgeMain.main`, `BridgeServer.authorized` | `ConfigureBlackjackToken`, masked secret field | No per-player account/provider authorization; one local bearer authorizes all sessions | H; E0 |
+| Local bearer / opt-in profile isolation | `B/BridgeMain.main`, `BridgeProfiles`, `BridgeServer.authenticatedPrincipal/route`, `BridgeService.find/CreateKey` | Existing ConfigureBlackjackToken/header; every backend session route owner-scoped in opt-in mode, unchanged native Open/Refresh/creation APIs | Legacy mode remains shared; actual Daedalus account/provider and durable resume absent. New profile source/9 authored tests unexecuted | Historical H; new manual source review only; E0 |
 | Create / uncertain-create recovery | `B/BridgeService.create`, `POST /sessions` | `StartBlackjackSession`, `RetryBlackjackCreate`, candidate recovery guidance and actor bool feedback | Companion delivery/adoption pending; retained create ID is lost on local close | H, U; E0 |
-| Current session read / explicit reopen | `B/BridgeService.query`, `GET /sessions/{id}`; `BridgeServer:131–144` lowercase UUID route | `OpenBlackjackSession`/`CanOpenBlackjackSession`, captured query target, Reopen control; existing Refresh and bounded retry share read routing | Still process-local/expiring, no durable resume or per-player provider. Current reopened gameplay unverified | Historical H; current source review only; E0 |
+| Current session read / explicit reopen | `B/BridgeService.query`, `GET /sessions/{id}`; `BridgeServer.route` canonical lowercase UUID route | `OpenBlackjackSession`/`CanOpenBlackjackSession`, captured query target, Reopen control; existing Refresh and bounded retry share read routing | Still process-local/expiring, no durable resume or Daedalus account/provider. Current reopened gameplay unverified | Historical H; current source review only; E0 |
 | Chips 1/5/25/100/500 | `BridgeService.Session.apply("bet")`, `C/engine/Engine.canBet/addBet` | Five existing legality-gated buttons | No side-bet command in facade | H, J; E0 |
 | Clear / rebet / deal | `Session.apply`, `Engine.clearBet/rebet/deal` | Existing `SubmitBlackjackAction` controls | Current native execution remains unverified | J, H subset; E0 |
 | Hit / stand / double / split / surrender | `Session.apply`, `Engine.can*` and mutations | Existing gated controls; this checkpoint adds all visible hand flags | No local rules/payout calculation | J, H subset; E0 |
@@ -209,7 +233,7 @@ They must not be replaced with invented Unreal payouts, storage or achievements.
 |---|---|---|---|---|
 | 21+3 side bet | `C/sidebet/SideBetManager`, `TwentyOnePlusThree`; `S/ui/swing/BlackJackProApp.placeSideBet/resolveSideBet`; `G/TableScreen` | None | Java command/projection plus native controls/results | E0 |
 | Strategy advice / Hi-Lo | `C/engine/BasicStrategy.recommend`, `C/strategy/HiLoCounter`, `TableObservation.sync`; Swing `HiLoCounterAi` | None | Java visible observation/advice projection and UI | E0 |
-| Saved bankroll/stats and round resume | `C/persist/SaveManager.save/load`, `RoundSeal.seal/open`; `G/GameSession.persist/saveRound/resumeRound` | Facade memory only | Per-player storage/resume contract preserving sealed hidden state in Java | E0 |
+| Saved bankroll/stats and protected round resume | `C/persist/SaveManager.save/load`, `RoundSeal.seal/open`; `G/GameSession.persist/saveRound/resumeRound`; AndroidLauncher key provider, desktop default null | Facade still memory only; optional profile ownership is a prerequisite, not storage | Protected account/key/storage provider and crash-consistent state/revision/decision/expiry commit; no hidden export or bearer-derived key | E0 |
 | Persistent preferences | `C/settings/GameSettings.load/save`; `S/ui/swing/SettingsDialog`; `G/GameSession` | Transient facade settings only | Existing preferences adapter/provider and save semantics | E0 |
 | Twelve achievements | `C/achievement/AchievementService`, `RoundAchievements`; original achievement dialogs/toasts | None | Java event/projection, achievement UI; no fabricated rewards | E0 |
 | 24 themes/card backs | `C/table/Palettes.all`; `ThemeGalleryDialog`, GDX palette/renderers | Basic Slate table | Existing presentation selection and native theme/art binding | E0 |
@@ -300,8 +324,8 @@ Neither variant is a Java Minesweeper backend or full `minesweeper-pro` integrat
 
 | Stage | This checkpoint |
 |---|---|
-| Source | Claimed four Java actor/Slate files and this coverage/manifest only; source review, unverified |
-| Committed | Current editing source `da2b4a84e357114181cbdb65093628d595cda2a7`, preserving package source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b`, mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece` and prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
+| Source | Current backend profile source and preserved native actor/Slate package reviewed; native code unchanged this iteration;9 security tests authored/unrun |
+| Committed | Native code `7c4ae40d027bd6e17f80c08661297b28d6571db2`; backend profile code `a75241bd01e149df3b34c7dfdac1b9be93811939` / published PR62 head `7b6410c2fccbbeed974eda18e4efd717cf70424a`; prior Sudoku/Blackjack history retained; exact native documentation tip in draft/handoff |
 | Connected | No connection established or observed by this lane; companion PR62 adoption/runtime/provider pending |
 | Native | No current-head UHT/UBT/DLL/load/placement; historical evidence stays pinned |
 | End-to-end | No Unreal settings/action/recovery proof; original app coverage remains open |
