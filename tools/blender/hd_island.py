@@ -620,13 +620,13 @@ def scatter(prefix, A, h, kind, seed, bases, lake, inner=None):
             continue
         instance("%s_Tree%03d" % (prefix, n), rng.choice(bases), (x, y, h(x, y) - .2), rng.uniform(.7, 1.35), rng.uniform(0, 6.3))
         n += 1
-    for i in range(55):
+    for i in range(85):
         x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if inside(x, y, inner * .97) and free(x, y, 1):
             s = rng.uniform(.6, 2.6)
             ob = instance("%s_Rock%03d" % (prefix, i), rock, (x, y, h(x, y) - .3 * s), s, rng.uniform(0, 6.3))
             ob.scale = (s, s * rng.uniform(.6, 1.2), s * .7)
-    for i in range(16):                         # flower drifts near the water and the path
+    for i in range(24):                         # flower drifts near the water and the path
         cx, cy = rng.uniform(-inner * .8, inner * .8), rng.uniform(-inner * .8, inner * .8)
         if not free(cx, cy, 2):
             continue
@@ -634,7 +634,7 @@ def scatter(prefix, A, h, kind, seed, bases, lake, inner=None):
             x, y = cx + rng.gauss(0, 3), cy + rng.gauss(0, 3)
             if free(x, y, 1.5):
                 instance("%s_Flower%03d_%02d" % (prefix, i, k), flower, (x, y, h(x, y) + .15), rng.uniform(.7, 1.4))
-    for i in range(140):
+    for i in range(210):
         x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if free(x, y, 1):
             instance("%s_Tuft%03d" % (prefix, i), tuft, (x, y, h(x, y) + .3), rng.uniform(.8, 1.6), rng.uniform(0, 6.3))
