@@ -39,7 +39,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerTerminal.cpp",
-      "sha256": "0ddf3ecff27ca2b675051cec37b96f7c8848beccf709fc2733cd912c67018b75"
+      "sha256": "9d0f981d6c0a0845b71cef8db182ed693c81e7a2e7e02f9140772ee892f7e8d1"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.h",
@@ -51,11 +51,11 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.h",
-      "sha256": "c14d260acc0e4edd48dcb134b298212d021a30b191133ec12ac22529b8c7ae4c"
+      "sha256": "9b2993034c436c89bb14b952ecb9c4cc85e7f7a7bb11f3e73cef317a266216dd"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
-      "sha256": "5fa7e7d0c9cc564963307222dd8b870a2373a6f6844479340d800f9194c9849e"
+      "sha256": "0621fc26559fe2d70698bffffb00406a35c5f9f171e05cb07b22601254c8dc14"
     }
   ],
   "documentationFiles": [
@@ -197,5 +197,6 @@
     "nativeBound": false,
     "nativeRuntimeVerified": false,
     "overall": "UNVERIFIED source increment; deferred checks are not passing results"
-  }
+  },
+  "modalExportCorrection": {"claim":31288,"stage":"source_corrected_unverified","baseCommit":"3f5e9a6d730cb703ec9b52adcb2db67eb6d09625","defect":"A modal save chooser could dispatch terminal close or ownership changes after the actor check, before an export was created.","correction":"Photo and Image actors pass weak-owner/panel-generation/local-owner predicates into their export helpers. The helpers check before and after the chooser, before temporary creation, each bounded write, flush and non-replacing commit. Invalidated work cleans its owned temporary. Compatibility overloads remain for callers without a terminal lifecycle policy. Photo image selection also re-acquires the weak owner after its modal chooser before dereferencing terminal state.","nativeCompiled":false,"runtimeVerified":false,"sourceReview":"independent six-file source review complete; adjacent Photo chooser weak-owner reacquisition rechecked separately"}
 }

@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "DaedalusImageOptimizerClient.h"
+#include "Templates/Function.h"
 
 /** Explicit, local user file choices only. Paths never leave this helper. */
 namespace DaedalusImageOptimizerFiles
@@ -15,4 +16,6 @@ namespace DaedalusImageOptimizerFiles
      * and aggregate job bytes. A successful save always creates a new file.
      */
     bool SaveImage(const TArray<uint8>& Bytes, uint8 Type, int32 Index, FString& Error);
+    /** Retains the caller's ownership/generation policy through the modal chooser and file commit. */
+    bool SaveImage(const TArray<uint8>& Bytes, uint8 Type, int32 Index, FString& Error, TFunctionRef<bool()> IsStillAllowed);
 }

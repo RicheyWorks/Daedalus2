@@ -28,7 +28,7 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
-      "sha256": "adca1095fb1d44c334a230d75720542f551a01927a88850cb0ad1419c957d92b"
+      "sha256": "1d42287ea3e24f8ad518f6fca6b71486fa0f05f9f5d0f81aa22a1f63c2e3bb0f"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.h",
@@ -40,11 +40,11 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
-      "sha256": "49422a5b1a693dc47a8bd72e7c04275d1cc1a935cca5861a8f2fe20c7128fa5b"
+      "sha256": "95cdf8948e8db404712bbbcbdeef151ef8d88a41e89c72b907fa8074eed58564"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
-      "sha256": "47a7363e5992a95a06f8e6c903d2cf92a18518cf2db08d5e41d72809c3b0e245"
+      "sha256": "0191ed2e5268006006824ff496d1d55f3898d4d668306c847e3748e44214789f"
     }
   ],
   "documentationFiles": [
@@ -175,7 +175,8 @@
         "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp"
       ],
       "correction": "SavePdf retains photo index 1..8, its 64 MiB/header check, photo-N.pdf default and errors. SavePreparedFaxPdf adds a 25 MiB/header check and prepared-fax-review.pdf default. Both call one private generated-label export engine. Prepared-fax export now requires a caller lifecycle predicate, rechecked before and after the modal chooser, before owned temporary creation, each bounded write, flush and non-replacing commit; invalidation returns the terminal-ownership error and cleans the owned temporary. The photo entry point supplies an always-true predicate to preserve existing behavior. Retained parent locks, owned temporary cleanup and non-replacing commit remain in the shared engine. Source-only change; no build, test, dialog or native operation was run.",
-      "focusedSourceReview": "complete_source_only; independent guard/path/temp/no-replace review found no remaining concrete P1/P2 in the new fax entry; old photo modal caller guard remains a separate queued correction"
+      "focusedSourceReview": "complete_source_only; independent guard/path/temp/no-replace review found no remaining concrete P1/P2 in the new fax entry; the prior photo modal caller gap is corrected in the later claim31288 record below"
     }
+, {"claim":31288,"stage":"source_corrected_unverified","baseCommit":"3f5e9a6d730cb703ec9b52adcb2db67eb6d09625","defect":"A modal save chooser could dispatch terminal close or ownership changes after the actor check, before an export was created.","correction":"Photo and Image actors pass weak-owner/panel-generation/local-owner predicates into their export helpers. The helpers check before and after the chooser, before temporary creation, each bounded write, flush and non-replacing commit. Invalidated work cleans its owned temporary. Compatibility overloads remain for callers without a terminal lifecycle policy. Photo image selection also re-acquires the weak owner after its modal chooser before dereferencing terminal state.","nativeCompiled":false,"runtimeVerified":false,"sourceReview":"independent six-file source review complete; adjacent Photo chooser weak-owner reacquisition rechecked separately"}
   ]
 }
