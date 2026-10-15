@@ -44,6 +44,8 @@ KINDS = {
     "crystal": ((.55, .45, .75), (.75, .65, .95), (.40, .35, .55), (.70, .62, .85), (.40, .80, 1.0), (.90, .60, 1.0), "crystal"),
 }
 MATS = {}
+EXTERNAL_WHEEL = False    # a recipe that builds its own stream wheel (kit_waterworks) sets this so gameplay() skips the inline one
+LAST = {}                 # build() leaves its layout A, height h, chemistry and gameplay rows here for recipes that add on top
 
 
 def smooth(t):
@@ -1072,7 +1074,7 @@ def gameplay(prefix, A, h, kind, seed, chem):
         x, y = tx + 12, ty + 10
     marker(GP, prefix, "power_unit", "PowerUnit", x, y, h(x, y), "chemistry power_unit (Codex PowerUnit 86100 parts)",
            {"drive": drive, "parts": list(pu.get("parts", {}).keys()), "energy_per_unit": pu.get("energy_per_unit")})
-    if "stream" in drive:
+    if "stream" in drive and not EXTERNAL_WHEEL:
         wheel = material("Steel", (.6, .64, .7), .4, .9)
         cone(prefix + "_PowerUnit_WaterWheel", (x, y, WATER + 1.6), 2.6, 2.6, .8, wheel, 16, (math.pi / 2, 0, 0))
         box(prefix + "_PowerUnit_Housing", (x + 3.5, y, h(x + 3.5, y) + 1.4), (2.6, 2.2, 2.8), material("Brass", (.72, .50, .15), .35, .8), .1)
@@ -1165,6 +1167,8 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
     buildings(name, A, h, kind, chem)
     kind_features(name, A, h, kind, seed)
     GP = gameplay(name, A, h, kind, seed, chem)
+    LAST.clear()
+    LAST.update(A=A, h=h, chem=chem, GP=GP, name=name)
     rim_details(name, h, kind, seed)
     collision(name, A, name + "_Terrain")
     lod = lods(top, name + "_Terrain", h, kind)

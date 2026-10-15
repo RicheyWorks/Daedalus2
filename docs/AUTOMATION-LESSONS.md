@@ -1406,3 +1406,12 @@ so prod would have refused them and the realm would not have loaded. It went uns
 against a dev-profile server, and because `mvn -pl daedalus-server test` without `-am` compiled against a stale core
 jar, failed to compile, and left an old passing surefire report on disk. Rules: list every new static file in
 `ProdSecurityConfig`; run the server tests with `-am`; read the BUILD line, never a leftover report.
+
+## Never seed from hash() of a string (2026-10-15)
+- **The bug:** `island_chemistry.profile()` used `hash(realm)` in its RNG seed. Python salts str hashes per process
+  (PYTHONHASHSEED), so every island's "seeded" chemistry differed on every run, and nothing ever flagged it.
+- **The fix:** `zlib.crc32(realm.encode())`.
+- **The rule:** derive seeds from stable digests (crc32/sha) only, and test determinism by building twice in two
+  processes and diffing the manifests.
+- **Cloud builds:** Blender work can run headless in the cloud with `pip install bpy` (5.2.2, cp313) in a venv. That
+  frees the shared PC for native work.

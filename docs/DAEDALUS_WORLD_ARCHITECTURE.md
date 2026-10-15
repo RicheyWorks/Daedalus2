@@ -1139,3 +1139,39 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - **Saving:** `state.seen` (met and felled counts) is saved at the inn and restored on CONTINUE. NEW GAME starts it
   empty.
 - **Tests:** `bestiary_test.py` (14 checks). `menu_test` now expects the eight commands.
+
+### 14.36 Reedwheel Haven r1 (Blender source package, PootScoot assignment 32381)
+
+- **What it is:** one new spring-water land built by `tools/blender/reedwheel_haven.py` on top of
+  `hd_island.build(841025, "meadow")`. The land id is `reedwheel-haven-841025-r1`, an authoring id, not a deed.
+  - Octet_Spring_1 is the BEFORE reference. It is read only and its hashes are pinned in the layout json.
+  - The new pieces come from a reusable module, `tools/blender/kit_waterworks.py`: waterwheel, boardwalk, footbridge,
+    repair_station, reed_bed, refuge, keeper_post and signpost. Each builder takes the hd_island module, so it reuses
+    the same primitives, materials and export.
+- **How the seed was chosen:** 841025 is the first seed from 841024 up whose rolled chemistry agrees with the story,
+  so no chemistry is invented. It rolls:
+  - a water_wheel driven by the stream, salvageable, so the wheel starts broken (4 paddles out)
+  - filter_needed with spring purity 0.40
+  - glassfin and rillperch (rillperch is a spring fish)
+- **Outputs:**
+  - one Island GLB/FBX
+  - seven role meshes: WheelRotor (pivot on the axle, so Unreal can spin it), WheelFrame, RepairStation, Walkway
+    (with UCX_ collision), ReedBed, Refuge and KeeperPost
+  - a layout json carrying the anchors, story, gameplay rows, chemistry, provenance and hashes
+- **Mechanic rows carry a status:**
+
+| Status | Rows |
+|---|---|
+| implemented | repair = `Ledger.outfit(ENERGY, power_unit)`; refuge = `Ledger.settle_wave(held)`; reedbed habitat = Java `world/ecology` |
+| data | spring purity / filter_needed; walkway |
+| design | repair station UI, reed harvest (no reed item exists), Reed Keeper NPC, `q_reedwheel_balance` |
+
+- **Site picker:** pieces are kept off the farm, town, landmark and dock terraces and the lake. The first pass put the
+  refuge hut inside the farm barn.
+- **Found: island chemistry was not deterministic.** `island_chemistry.profile()` seeded with `hash(realm)`, which
+  Python salts per process. Every island's chemistry (purity, herbs, power source) changed from run to run: the same
+  seed rolled purity 0.94, 0.32 and 0.61 in three processes. It now uses `zlib.crc32`. Gameplay rows are identical
+  across rebuilds. GLB vertex data is identical too, but the exporter's triangle index order and FBX timestamps differ
+  between runs, so byte hashes pin one export.
+- **Cloud builds:** the package builds and renders headless in the cloud with the `bpy` 5.2.2 module
+  (`python reedwheel_haven.py OUT [--render]`, about 4 s) without touching the shared PC.
