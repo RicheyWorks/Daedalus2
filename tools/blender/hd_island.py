@@ -24,6 +24,7 @@ import os
 import random
 import sys
 
+import bmesh
 import bpy
 from mathutils import Vector, noise
 
@@ -100,75 +101,148 @@ def mesh(name, verts, faces, mat, smooth_shade=True):
     return ob
 
 
-def box(name, loc, size, mat, bevel=.12, rot=(0, 0, 0)):
-    bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
-    ob = bpy.context.object
-    ob.name = name
-    ob.scale = size
+def _obj(name, bm, mat, loc=(0, 0, 0), rot=(0, 0, 0), smooth_shade=True):
+    """bmesh -> object without bpy.ops (operators re-evaluate the whole scene; this does not)."""
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    if smooth_shade:
+        me.shade_smooth() if hasattr(me, "shade_smooth") else [setattr(f, "use_smooth", True) for f in me.polygons]
+    ob = bpy.data.objects.new(name, me)
+    ob.location = loc
     ob.rotation_euler = rot
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    if bevel:
-        mod = ob.modifiers.new("Crafted edge", "BEVEL")
-        mod.width, mod.segments = bevel, 2
-        bpy.ops.object.modifier_apply(modifier=mod.name)
-    ob.data.materials.append(mat)
+    bpy.context.scene.collection.objects.link(ob)
+    if mat:
+        me.materials.append(mat)
     GROUP.append(ob)
     return ob
+
+
+def box(name, loc, size, mat, bevel=.12, rot=(0, 0, 0)):
+    bm = bmesh.new()
+    bmesh.ops.create_cube(bm, size=1.0)
+    bmesh.ops.scale(bm, vec=Vector(size), verts=bm.verts)
+    if bevel and min(size) > 2.5 * bevel:
+        bmesh.ops.bevel(bm, geom=list(bm.edges) + list(bm.verts), offset=bevel, segments=2, affect="EDGES", profile=.5)
+    return _obj(name, bm, mat, loc, rot, smooth_shade=False)
 
 
 def sphere(name, loc, size, mat, seg=16, rings=8):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=rings, radius=1, location=loc)
-    ob = bpy.context.object
-    ob.name = name
-    ob.scale = size
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    for f in ob.data.polygons:
-        f.use_smooth = True
-    ob.data.materials.append(mat)
-    GROUP.append(ob)
-    return ob
+    bm = bmesh.new()
+    bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=rings, radius=1.0)
+    bmesh.ops.scale(bm, vec=Vector(size), verts=bm.verts)
+    return _obj(name, bm, mat, loc)
 
 
 def cone(name, loc, r1, r2, depth, mat, n=12, rot=(0, 0, 0)):
-    bpy.ops.mesh.primitive_cone_add(vertices=n, radius1=r1, radius2=r2, depth=depth, location=loc)
-    ob = bpy.context.object
-    ob.name = name
-    ob.rotation_euler = rot
-    for f in ob.data.polygons:
-        f.use_smooth = True
-    ob.data.materials.append(mat)
-    GROUP.append(ob)
-    return ob
+    bm = bmesh.new()
+    bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=n, radius1=r1, radius2=max(r2, 1e-4), depth=depth)
+    return _obj(name, bm, mat, loc, rot)
 
 
 def beam(name, a, b, r, mat, n=8):
     a, b = Vector(a), Vector(b)
-    ob = cone(name, (a + b) / 2, r, r, (b - a).length, mat, n)
+    ob = cone(name, (a + b) / 2, r, r, max((b - a).length, 1e-3), mat, n)
     ob.rotation_euler = (b - a).to_track_quat("Z", "Y").to_euler()
     return ob
 
 
-def tube(name, points, radius, mat, res=24):
-    """A bevelled bezier curve through `points` (3D), converted to a mesh — the sky river / rope bridges."""
-    cu = bpy.data.curves.new(name, "CURVE")
-    cu.dimensions = "3D"
-    cu.bevel_depth, cu.bevel_resolution, cu.resolution_u = radius, 4, res
-    sp = cu.splines.new("BEZIER")
-    sp.bezier_points.add(len(points) - 1)
-    for bp, p in zip(sp.bezier_points, points):
-        bp.co = p
-        bp.handle_left_type = bp.handle_right_type = "AUTO"
-    ob = bpy.data.objects.new(name, cu)
+def _spline(points, res):
+    """Catmull-Rom through the points (the curve passes through every control point, like AUTO bezier handles)."""
+    P = [Vector(p) for p in points]
+    P = [P[0] * 2 - P[1]] + P + [P[-1] * 2 - P[-2]]
+    out = []
+    for i in range(1, len(P) - 2):
+        p0, p1, p2, p3 = P[i - 1], P[i], P[i + 1], P[i + 2]
+        for k in range(res):
+            t = k / res
+            t2, t3 = t * t, t * t * t
+            out.append(.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3))
+    out.append(P[-2])
+    return out
+
+
+def tube(name, points, radius, mat, res=24, sides=10):
+    """A round tube swept along a smooth spline through `points` — sky rivers, streams, ropes, roots. Pure bmesh."""
+    pts = _spline(points, max(4, res // 2))
+    bm = bmesh.new()
+    rings = []
+    up = Vector((0, 0, 1))
+    for i, p in enumerate(pts):
+        t = (pts[min(i + 1, len(pts) - 1)] - pts[max(i - 1, 0)])
+        t = t.normalized() if t.length > 1e-6 else Vector((1, 0, 0))
+        side = t.cross(up)
+        side = side.normalized() if side.length > 1e-6 else Vector((1, 0, 0))
+        nrm = side.cross(t).normalized()
+        rings.append([bm.verts.new(p + (side * math.cos(a) + nrm * math.sin(a)) * radius) for a in (k * math.tau / sides for k in range(sides))])
+    for r0, r1 in zip(rings, rings[1:]):
+        for k in range(sides):
+            bm.faces.new((r0[k], r0[(k + 1) % sides], r1[(k + 1) % sides], r1[k]))
+    for ring in (rings[0], rings[-1]):
+        bm.faces.new(ring if ring is rings[-1] else list(reversed(ring)))
+    return _obj(name, bm, mat)
+
+
+def join_parts(name, parts):
+    """Join parts (each one material) into one multi-material mesh, baking their transforms. No bpy.ops."""
+    bm = bmesh.new()
+    mats = []
+    for o in parts:
+        GROUP.remove(o)
+        m = o.data.materials[0] if o.data.materials else None
+        if m not in mats:
+            mats.append(m)
+        o.data.transform(o.matrix_basis)
+        n0 = len(bm.faces)
+        bm.from_mesh(o.data)
+        bm.faces.ensure_lookup_table()
+        for f in bm.faces[n0:]:
+            f.material_index = mats.index(m)
+        me = o.data
+        bpy.data.objects.remove(o, do_unlink=True)
+        bpy.data.meshes.remove(me)
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    for m in mats:
+        me.materials.append(m)
+    ob = bpy.data.objects.new(name, me)
     bpy.context.scene.collection.objects.link(ob)
-    bpy.context.view_layer.objects.active = ob
-    ob.select_set(True)
-    bpy.ops.object.convert(target="MESH")
-    ob = bpy.context.object
-    ob.data.materials.append(mat)
-    for f in ob.data.polygons:
-        f.use_smooth = True
-    GROUP.append(ob)
     return ob
+
+
+def merge_static(name, objs, keep):
+    """Join every single-material object (not in `keep`, not instanced) into one mesh per material, baking transforms.
+    One island goes from ~860 objects to a few dozen: faster export, fewer draw calls in Unreal."""
+    by_mat, gone = {}, []
+    users = {}
+    for o in objs:
+        if o.type == "MESH":
+            users[o.data.name] = users.get(o.data.name, 0) + 1
+    for o in objs:
+        if keep(o) or o.type != "MESH" or users.get(o.data.name, 0) > 1 or len(o.data.materials) != 1 or o.name.startswith(("UCX_", "MKR_")):
+            continue
+        m = o.data.materials[0]
+        o.data.transform(o.matrix_basis)                 # no parents in these scenes, so basis == world
+        bm = by_mat.setdefault(m.name, (bmesh.new(), m))[0]
+        bm.from_mesh(o.data)
+        gone.append(o)
+    survivors = [o for o in objs if o not in gone]
+    merged = []
+    for mname, (bm, m) in by_mat.items():
+        me = bpy.data.meshes.new(name + "_" + mname.replace("HD_", ""))
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(m)
+        ob = bpy.data.objects.new(me.name, me)
+        bpy.context.scene.collection.objects.link(ob)
+        merged.append(ob)
+    for o in gone:
+        me = o.data
+        bpy.data.objects.remove(o, do_unlink=True)
+        if me.users == 0:
+            bpy.data.meshes.remove(me)
+    return survivors + merged
 
 
 def instance(name, base, loc, scale=1.0, rot_z=0.0):
@@ -251,7 +325,7 @@ def make_height(A, seed, kind, r=R, base=DECK, islet=False):
     return h
 
 
-def ground(name, h, kind, r, vcol_name, grid=2.0):
+def ground(name, h, kind, r, vcol_name, grid=2.0, crest=True):
     g, gl, cliff, sand, water, accent, _ = KINDS[kind]
     verts, faces, lookup = [], [], {}
     n = int(r / grid) + 1
@@ -290,7 +364,8 @@ def ground(name, h, kind, r, vcol_name, grid=2.0):
     for i in range(96):
         j = (i + 1) % 96
         rf.append((i, 96 + i, 96 + j, j))
-    mesh(name + "_Crest", rv, rf, material("Crest_" + kind, g, .9))
+    if crest:
+        mesh(name + "_Crest", rv, rf, material("Crest_" + kind, g, .9))
     return top, verts, faces
 
 
@@ -470,14 +545,7 @@ def tree_bases(kind, seed):
                 c = cone("x", (.8 * math.cos(a), .8 * math.sin(a), 2.5 + k * .3), .7, .05, 5 + k, cm, 6)
                 c.rotation_euler = (.25 * math.sin(a), .25 * math.cos(a), 0)
                 parts.append(c)
-        bpy.ops.object.select_all(action="DESELECT")
-        for p in parts:
-            p.select_set(True)
-            GROUP.remove(p)
-        bpy.context.view_layer.objects.active = parts[0]
-        bpy.ops.object.join()
-        base = bpy.context.object
-        base.name = "Tree_%s_%d" % (shape, v)
+        base = join_parts("Tree_%s_%d" % (shape, v), parts)
         base.location = (0, 0, -500)      # the template lives below the world; only instances show
         bases.append(base)
     return bases
@@ -1020,22 +1088,13 @@ def collision(prefix, A, name_terrain):
     ob.display_type, ob.hide_render = "WIRE", True
 
 
-def lods(top, name):
+def lods(top, name, h, kind):
+    """LOD1/LOD2 = the same height function sampled on 4 m / 8 m grids (no decimation operator needed)."""
     out = []
-    for level, ratio in ((1, .35), (2, .12)):
-        c = top.copy()
-        c.data = top.data.copy()
-        c.name = name + "_LOD%d" % level
-        bpy.context.scene.collection.objects.link(c)
-        bpy.ops.object.select_all(action="DESELECT")
-        c.select_set(True)
-        bpy.context.view_layer.objects.active = c
-        m = c.modifiers.new("LOD", "DECIMATE")
-        m.ratio = ratio
-        bpy.ops.object.modifier_apply(modifier=m.name)
+    for level, grid in ((1, 4.0), (2, 8.0)):
+        c, _, _ = ground(name + "_LOD%d" % level, h, kind, R, "HD_terrain", grid=grid, crest=False)
         c.location.z = -600 - level * 100          # parked below; the json says which is which
-        GROUP.append(c)
-        out.append({"name": c.name, "ratio": ratio, "triangles": len(c.data.polygons)})
+        out.append({"name": c.name, "grid_m": grid, "triangles": len(c.data.polygons)})
     return out
 
 
@@ -1070,12 +1129,15 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
     GP = gameplay(name, A, h, kind, seed, chem)
     rim_details(name, h, kind, seed)
     collision(name, A, name + "_Terrain")
-    lod = lods(top, name + "_Terrain")
+    lod = lods(top, name + "_Terrain", h, kind)
     # move the whole island to its cluster offset and pivot so the deck sits at z=0
     for ob in GROUP:
         if ob.name.startswith("Tree_") or ob.name.endswith("_base"):
             continue
         ob.location = (ob.location.x + offset[0], ob.location.y + offset[1], ob.location.z + offset[2] - DECK)
+    KEEP = ("_Terrain", "_Crest", "_Strata", "_Lake", "_Waterfall", "_SkyRiver", "_Path", "_Islet", "_Pond", "_LOD")
+    GROUP = merge_static(name, GROUP, lambda o: any(t in o.name for t in KEEP))
+    globals()["GROUP"] = GROUP
     man = {"name": name, "seed": seed, "kind": kind, "realm": realm, "offset": list(offset), "deck_m": DECK, "water_m": WATER,
            "plateau_half_width_m": R, "sockets": {"E": [R + 10, 0, 0], "N": [0, R + 10, 0], "W": [-R - 10, 0, 0], "S": [0, -R - 10, 0]},
            "terraces": [{"x": t[0], "y": t[1], "r": t[2], "z": t[3] - DECK, "role": t[4]} for t in A["terraces"]],
