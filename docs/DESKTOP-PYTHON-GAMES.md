@@ -1,6 +1,53 @@
 # Desktop Python games into Daedalus
 
-## Current names and identity checkpoint, 2026-10-15
+## Current HUD overlap fix, 2026-10-15
+
+The sole operator's native checkpoint `codex-arcade-gameplay-0344.checkpoint.json`
+records 39 passing bounded checks on the installed names/input version plus
+Minesweeper: twelve-game start/one-step/restart, real Hero interaction, selected
+Slate/raw/controller-method actions and Star run-save failure/retry/Continue.
+Its three 2560x1392 screenshots show a concrete failure: Hero/logbook/clock,
+interaction prompt, crosshair and lower stats paint over the opaque arcade.
+Physical controllers, whole-game progression and multiple local users remain
+unverified. That baseline proof does not validate a later UI patch.
+
+UE 5.8.3 source confirms the cause. The per-player canvas is root layer100;
+the global viewport overlay is root layer200. The arcade's per-player child Z100
+cannot cover Hero/Sky global child Z10. The patch hosts only the arcade at global
+Z100, above those unchanged HUDs. A foreground wrapper uses the engine's current
+player-host geometry, transforms both corners through absolute space, clips the
+child and retains per-user hit-testing/navigation. It respects the engine's
+existing hit-test setting, including PIE, without changing it. Missing/zero
+player geometry stays empty; it never falls back to covering all players.
+
+Code `bcfb1403289416aa6a6a3a9df61c1793aa2d3053` changes only the three private
+presentation files `DaedalusDesktopArcade.cpp`, `SDaedalusDesktopArcade.cpp` and
+`SDaedalusDesktopArcade.h`. Team-codex explicitly transferred this modal fix.
+Close and EndPlay remove the same foreground host; pause/cursor/focus, ordered
+input, saves, core rules, IDs, art, Hero/Sky/HUD code and Minesweeper are unchanged.
+No reflected declarations or UObject layout changed.
+
+[The bounded three-file patch](desktop-games-hud-foreground.patch) passes
+`git apply --check` and application against owned copies of the exact installed
+baseline; all three after-hashes match. Use explicit
+`git -c core.autocrlf=false -c core.eol=lf apply` for the raw LF pins. The first
+staging probe caught global Git CRLF conversion, and a fresh LF stage passed.
+The unchanged portable core/Driver regression rerun passed123/123. **Those
+portable checks do not compile the new UE wrapper.** Independent source review
+passed against installed engine APIs; build/load and post-patch pixels remain
+pending with the sole operator. No installed source, DLL, editor, map or save was
+changed by this source lane.
+
+[Install packet v7](desktop-games-polish-install.json) contains exact before/
+after/source/patch hashes, the pre-fix native checkpoint/images and safe staging
+instructions. Apply only these hunks after a fresh baseline check; preserve other
+integrated source. Only `codex-play-guard` performs serial module build/load and
+native acceptance. Repeat the three captured states, verify HUD occlusion while
+open and reappearance after close, then check reopen/Escape/focus/EndPlay, input
+and save behavior, resize/DPI and local-user bounds. No corrected-pixel claim is
+made until that operator recheck succeeds.
+
+## Display names and identity checkpoint, 2026-10-15
 
 The user described the old franchise names as quick references to mechanics,
 asked for identities of their own, and then explicitly requested keeping generic

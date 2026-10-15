@@ -1,0 +1,148 @@
+diff --git a/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp b/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp
+index cc44fbe59e857f64cd551ccc62f4f8d7580841b2..6ec1e190ed6068f220f35d59769c023bedddaf7d 100644
+--- a/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp
++++ b/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp
+@@ -21,7 +21,6 @@
+ #include "Misc/Guid.h"
+ #include "Misc/Paths.h"
+ #include "UObject/ConstructorHelpers.h"
+-#include "Widgets/SWeakWidget.h"
+ 
+ namespace DD = daedalus::desktop;
+ 
+@@ -398,8 +397,10 @@ bool ADaedalusDesktopArcade::Use(ADaedalusHero* Hero)
+ 	SlateUserIndex = FSlateApplication::Get().GetUserIndexForController(LocalPlayer->GetControllerId());
+ 	Session.ClearInput();
+ 	ArcadeWidget = SNew(SDaedalusDesktopArcade).Game(this);
+-	ArcadeHost = SNew(SWeakWidget).PossiblyNullContent(ArcadeWidget.ToSharedRef());
+-	Viewport->AddViewportWidgetForPlayer(LocalPlayer, ArcadeHost.ToSharedRef(), 100);
++	// The engine's global viewport overlay paints above its per-player layer,
++	// regardless of each layer's child Z. The host retains the player's rect/user.
++	ArcadeHost = SDaedalusDesktopArcade::MakeForegroundHost(LocalPlayer, Viewport, ArcadeWidget.ToSharedRef());
++	Viewport->AddViewportWidgetContent(ArcadeHost.ToSharedRef(), 100);
+ 	FInputModeUIOnly Mode;
+ 	Mode.SetWidgetToFocus(ArcadeWidget);
+ 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+@@ -461,7 +462,7 @@ void ADaedalusDesktopArcade::ReleaseOverlay()
+ 	UGameViewportClient* Viewport = OpenViewport.Get();
+ 	Session.ClearInput();
+ 	if (ArcadeHost.IsValid() && Viewport)
+-		Viewport->RemoveViewportWidgetForPlayer(OpenLocalPlayer.Get(), ArcadeHost.ToSharedRef());
++		Viewport->RemoveViewportWidgetContent(ArcadeHost.ToSharedRef());
+ 	ArcadeHost.Reset(); ArcadeWidget.Reset();
+ 	if (bRestore && PC)
+ 	{
+diff --git a/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp b/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp
+index 0df53c9d0b1a309afe74981c0009776e45542c4e..7a02f2e034e482713a294b5d64c7b7d117ac63e5 100644
+--- a/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp
++++ b/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp
+@@ -1,21 +1,81 @@
+ // SPDX-License-Identifier: MIT
+ #include "SDaedalusDesktopArcade.h"
+ 
++#include "Engine/GameViewportClient.h"
++#include "Engine/LocalPlayer.h"
+ #include "Framework/Application/SlateApplication.h"
++#include "HAL/IConsoleManager.h"
++#include "Input/HittestGrid.h"
+ #include "InputCoreTypes.h"
++#include "Layout/ArrangedChildren.h"
+ #include "Layout/WidgetPath.h"
+ #include "Rendering/DrawElements.h"
+ #include "Rendering/SlateRenderer.h"
++#include "Slate/SGameLayerManager.h"
+ #include "Styling/CoreStyle.h"
++#include "Types/NavigationMetaData.h"
++#include "Types/PaintArgs.h"
+ #include "Widgets/Input/SButton.h"
+ #include "Widgets/Layout/SBorder.h"
+ #include "Widgets/Layout/SBox.h"
+ #include "Widgets/SBoxPanel.h"
+ #include "Widgets/SLeafWidget.h"
++#include "Widgets/SWeakWidget.h"
+ #include "Widgets/Text/STextBlock.h"
+ 
+ namespace DesktopArcadeUI
+ {
++	/** Above the global HUD while retaining the engine's local-player view rectangle. */
++	class SForegroundPlayerHost : public SCompoundWidget
++	{
++	public:
++		SLATE_BEGIN_ARGS(SForegroundPlayerHost) {}
++			SLATE_ARGUMENT(TWeakObjectPtr<ULocalPlayer>, Player)
++			SLATE_ARGUMENT(TWeakObjectPtr<UGameViewportClient>, Viewport)
++			SLATE_DEFAULT_SLOT(FArguments, Content)
++		SLATE_END_ARGS()
++		void Construct(const FArguments& Args)
++		{
++			Player = Args._Player; Viewport = Args._Viewport;
++			SetVisibility(EVisibility::SelfHitTestInvisible);
++			ChildSlot
++			[
++				SNew(SWeakWidget).PossiblyNullContent(Args._Content.Widget)
++				.Clipping(EWidgetClipping::ClipToBoundsAlways)
++			];
++		}
++		virtual void OnArrangeChildren(const FGeometry& Geometry, FArrangedChildren& Children) const override
++		{
++			UGameViewportClient* Client = Viewport.Get();
++			ULocalPlayer* LocalPlayer = Player.Get();
++			const TSharedPtr<IGameLayerManager> Layers = Client ? Client->GetGameLayerManager() : nullptr;
++			if (!Layers.IsValid() || !LocalPlayer) return;
++			const FGeometry PlayerGeometry = Layers->GetPlayerWidgetHostGeometry(LocalPlayer);
++			const FVector2D Origin = Geometry.AbsoluteToLocal(PlayerGeometry.LocalToAbsolute(FVector2D::ZeroVector));
++			const FVector2D Extent = Geometry.AbsoluteToLocal(PlayerGeometry.LocalToAbsolute(PlayerGeometry.GetLocalSize())) - Origin;
++			if (Origin.ContainsNaN() || Extent.ContainsNaN() || Extent.X <= 0.0 || Extent.Y <= 0.0) return;
++			// Zero/unknown geometry stays empty until the engine supplies a valid player rect.
++			Children.AddWidget(Geometry.MakeChild(ChildSlot.GetWidget(), Extent, FSlateLayoutTransform(Origin)));
++		}
++		virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& Geometry, const FSlateRect& CullRect,
++			FSlateWindowElementList& Elements, int32 LayerId, const FWidgetStyle& Style, bool bParentEnabled) const override
++		{
++			const ULocalPlayer* LocalPlayer = Player.Get();
++			if (!LocalPlayer || !FSlateApplication::IsInitialized()) return LayerId;
++			FHittestGrid& Grid = Args.GetHittestGrid();
++			const int32 PreviousUser = Grid.GetUserIndex();
++			static const IConsoleVariable* PerUserHits = IConsoleManager::Get().FindConsoleVariable(TEXT("Slate.AllowPerUserHitTesting"));
++			const bool bPerUserHits = !PerUserHits || PerUserHits->GetBool();
++			Grid.SetUserIndex(bPerUserHits ? FSlateApplication::Get().GetUserIndexForController(LocalPlayer->GetControllerId()) : INDEX_NONE);
++			const int32 Result = SCompoundWidget::OnPaint(Args, Geometry, CullRect, Elements, LayerId, Style, bParentEnabled);
++			Grid.SetUserIndex(PreviousUser);
++			return Result;
++		}
++	private:
++		TWeakObjectPtr<ULocalPlayer> Player;
++		TWeakObjectPtr<UGameViewportClient> Viewport;
++	};
++
+ 	const FSlateBrush* WhiteBrush() { return FCoreStyle::Get().GetBrush("GenericWhiteBox"); }
+ 	FSlateFontInfo Font(int32 Size, bool bBold = false) { return FCoreStyle::GetDefaultFontStyle(bBold ? "Bold" : "Regular", Size); }
+ 	FLinearColor Tint(daedalus::desktop::Color C) { return FLinearColor::FromSRGBColor(FColor(C.R, C.G, C.B, C.A)); }
+@@ -124,6 +184,14 @@ namespace DesktopArcadeUI
+ 
+ namespace DAUI = DesktopArcadeUI;
+ 
++TSharedRef<SWidget> SDaedalusDesktopArcade::MakeForegroundHost(ULocalPlayer* Player, UGameViewportClient* Viewport, const TSharedRef<SWidget>& Content)
++{
++	TSharedRef<FNavigationMetaData> Boundary = MakeShared<FNavigationMetaData>();
++	for (EUINavigation Direction : {EUINavigation::Up, EUINavigation::Down, EUINavigation::Left, EUINavigation::Right, EUINavigation::Next, EUINavigation::Previous})
++		Boundary->SetNavigationStop(Direction);
++	return SNew(DAUI::SForegroundPlayerHost).Player(Player).Viewport(Viewport).AddMetaData(Boundary)[Content];
++}
++
+ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
+ {
+ 	Game = InArgs._Game;
+diff --git a/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h b/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h
+index c1b3d7b49b1a5d9a33630f276936f49eb8259c41..8ebf617621c6ba6ace1374c34d0c835283fbd470 100644
+--- a/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h
++++ b/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h
+@@ -16,6 +16,8 @@ public:
+ 	SLATE_END_ARGS()
+ 
+ 	void Construct(const FArguments& InArgs);
++	/** Foreground viewport host, clipped and hit-tested for the opening local player. */
++	static TSharedRef<SWidget> MakeForegroundHost(ULocalPlayer* Player, UGameViewportClient* Viewport, const TSharedRef<SWidget>& Content);
+ 	virtual ~SDaedalusDesktopArcade() override;
+ 	virtual bool SupportsKeyboardFocus() const override { return true; }
+ 	virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;

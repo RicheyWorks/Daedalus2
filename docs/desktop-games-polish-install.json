@@ -1,8 +1,8 @@
 {
-  "manifest_version": 6,
+  "manifest_version": 7,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
-  "status": "DISPLAY_NAMES_REVIEWED_FOCUSED_PORTABLE_PASS_NATIVE_UNVERIFIED",
+  "status": "HUD_FOREGROUND_SOURCE_READY_NATIVE_RECHECK_PENDING",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_messages": [
@@ -23,7 +23,7 @@
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
+    "code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
@@ -68,13 +68,18 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
-        "git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
-        "sha256": "30D74179F72F32F46CD44528787338FE7E69785FDD69D4607959952AC87A4180"
+        "git_blob": "6ec1e190ed6068f220f35d59769c023bedddaf7d",
+        "sha256": "600BF1D5186F5154FEE10F038F758D5959399D6F779E93E8CCDC0629A8384132"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
-        "git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
-        "sha256": "C135F7BCC3B3B830A3368E5548C730AEC46927D3854E2B17D6A49284A2BB4CCF"
+        "git_blob": "7a02f2e034e482713a294b5d64c7b7d117ac63e5",
+        "sha256": "DE7AB6EE612243993535BA61B638150C5CC673DC4111DC2D87AF334EE8B4DAAF"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h",
+        "git_blob": "8ebf617621c6ba6ace1374c34d0c835283fbd470",
+        "sha256": "D5B0E0D513BC4AF9B04A94C001B992FD6D588AB15B0986B712D52402C7D6D1FD"
       }
     ],
     "peer_sections_preserved": [
@@ -87,8 +92,8 @@
       "Star pause/save/snapshot/restore/options/request timing and DGS1 payload blocks"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "6bd82d5021460fc9040ceca45b43e66e8f626015",
-    "prior_runtime_commit": "fe6d0ec6f6fb19671f244cdaca73c707b2bb3630",
+    "prior_checkpoint_commit": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+    "prior_runtime_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
     "preserved_checkpoints": [
       {
         "cycle": 1,
@@ -756,7 +761,7 @@
     "saved": false
   },
   "stages": {
-    "source": "Eleven bounded source passes plus confirmed Contra title/input gap and Shadow catalog correction implemented/reviewed; portable cores/Driver checks passed, not full native/E2E completion.",
+    "source": "HUD foreground host implemented and independently source-reviewed. Existing portable cores/tests remain unchanged and123-check regression rerun passed. New UE actor/Slate patch has no build/native visual acceptance yet.",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -773,26 +778,14 @@
     "compiled_scope": "Legacy compiled/tested booleans below remain false for complete Unreal host/module; portable result is explicitly separate"
   },
   "pending_operator_steps": [
-    "Read exact code_commit/blobs/SHA256 and portable_validation. Root serial non-editor checks are complete; sole operator reconciles native adoption/acceptance under its existing ownership.",
-    "After separately authorized adoption/build/load, record exact installed module source/binary revision; preserve other owners and PR139.",
-    "Use an approved existing Desktop Arcade or approved owned staging placement with normal Hero Use, one fixed-step clock and the listed InitialGameId/seed.",
-    "Dungeon seed0: Hall -> Watch -> Root -> EXIT; wrong order retains progress, fresh input progresses, completion freezes, Action/R resets; seed1 changes only route.",
-    "Pong: scored point, live bounded paddles during 45-step preparation, fresh early serve, original velocities/scores and rally/contact cues.",
-    "Pac-Man: nonterminal death sets90, exactly90 subsequent live steps protect lethal collisions, step91 vulnerable; frightened captures remain active; verify Reset, terminal freeze and last-dot/lethal ordering.",
-    "Shadow Ninja: timer13/12/1/50, moving boss, strict absX300/absY100 boundaries, invincibility0/1; receipt appears for hit/miss/protected pulse and never extends damage; ordinary contact/enemies remain independent.",
-    "Football: observe fresh kickoff/replay confirm without a same-step kick, source immediate movement and truncated89 HUD; hold Fire does not auto-kick; host R returns to title.",
-    "Football: goal cue90 frames event+89, kick receipt12 event+11, terminal freeze/reset clears; accepted/ignored at cooldown0/1, same-step accepted display11, remote/overlap kicks and later deflection; goal reset retains cooldown and live clock.",
-    "Football: compare no-Pad physics/clock/state against prior source; direct Pad opposing directions retain right/down precedence and analog override. Check strict goal boundaries, last-step scoring and win/loss/draw.",
-    "Contra: X2800/above with live boss, current-position progress, upper-platform jump/HUD, spread expiry/rapid reset, one/three-shot capacity, held jump/fire/crouch, mixed Pad/stick and cheat edges; title30 ordered keyboard/controller seam is source-written and portable-checked.",
-    "Dodge: all countries and four rounds, KO/alive totals, charge30/31/60, cooldown1/0, catch/pickup strict22/18/34/24, held catch/rethrow versus fresh throw and hat-versus-charge controls; verify roster/text fit.",
-    "Asteroids: original additive keyboard/stick/hat rotation, bullet128 cap/cooldown, protection0/1/60, wave/split/UFO/terminal transitions and actual halo/HUD readability.",
-    "Sega: pickup caps3/8/5, reserved-three-slot readiness, cooldown/protection0/1/60, 1500-score boss/20HP, combined Over/Won states, mixed Pad/stick and actual pickup/shot/boss layout.",
-    "Zelda: sword/facing-before-move, mixed Pad/stick, attack18/1/0 and hurt45/1/0, roster/key/drop/death ordering, decorative shield, terminal/fresh reset and native layout.",
-    "Star: wave shift while boss active, boss states/phases and power reset, slot caps, digital-over-stick Pad, protection1 and paused freeze, pause/quit/save-request flags, DGS1/resume behavior and current host save failure separately.",
-    "Check all eleven frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review is not current native play evidence.",
-    "Return exact source/binary/map/actor/input/transform/save and redacted play observations only after authorized execution.",
-    "Contra title: repeat ordered Up Up Down Down Left Right Left Right B A before fixed tick; final A stays title with30; Enter/Space/pad A starts preserving lives. Wrong keys reset, controller start preserves prefix, W does not start. Terminal Enter/R/A/Start retry, Space does not; raw/held input never duplicates. Released title shot must not leak; held shot remains active.",
-    "Use current display_title metadata and new player catalog; stable game IDs remain unchanged. Verify new title/header text fit and no retired brand labels in visible menu/HUD/status/help. Preserve PR139 Mines additions on integration."
+    "Do not replace the whole plugin or apply blindly to installed/live source. Close any existing overlay at a normal safe boundary; retain all other integrated source and PR139 Mines changes.",
+    "Reconcile exact3before SHA256 hashes against the active integrated source. On drift stop/review/rebase only these presentation hunks; never overwrite unrelated edits.",
+    "In an OWNED staged plugin root with Source/DaedalusLink, git -c core.autocrlf=false -c core.eol=lf apply --check <docs/desktop-games-hud-foreground.patch>; then apply with the same flags. This has passed against read-only installed baseline copies.",
+    "Verify all3after SHA256 hashes, preserve LF. Root staging caught global core.autocrlf=true conversion; explicit-LF fresh staging matches all bytes.",
+    "Only codex-play-guard chooses/executes the existing supported serial integrated module build/load route at a safe resource boundary. No new UFUNCTION/UPROPERTY/UObject layout changes. No forced editor close/restart, DLL replacement or build-setting change is prescribed.",
+    "Repeat the three exact screenshot states at original2560x1392 and confirm no Hero/logbook/Eprompt/crosshair/lower-stat bleed. Confirm HUD reappears after close.",
+    "Recheck P/R/Enter/ordered bonus/controller-method input, Star failed-save retention/retry/Continue, Escape/close/reopen, focus loss and EndPlay pause/cursor/input restoration.",
+    "Check resize/DPI, constrained player rectangle and existing per-user hit-testing policy; physical hardware and multiple-local-player behavior remain unverified until actually exercised."
   ],
   "backlog_order": [
     "dungeon source-pass1",
@@ -822,11 +815,11 @@
     "current_connected_or_native_e2e_evidence": false
   },
   "post_polish_open_work": [
-    "Owner-scoped full original-app gaps in canonical PR152 map remain separate Java integration work",
-    "Current source Unreal UHT/module compilation/link/load and visible Hero Use/input/HUD/physical-controller/Play/game-feel/E2E acceptance",
-    "Star existing host failed-save retry current-head native failure/recovery acceptance and process-loss durability; retry code already implemented",
-    "Characters/assets/audio and profile/network/reward implementation require separate scope; none invented",
-    "Exact private shooter container saturation not forced by new public-session polish regression; existing family bounds/reservation checks retained"
+    "Compile/load/current-patch visual recheck by sole operator; source/staging success does not close observed native HUD issue",
+    "Physical-controller, multiple-local-user, resize/DPI/focus/close/EndPlay visual acceptance",
+    "Pre-fix39checks cover twelve-game start/one-step/restart and selected inputs/Star run failure-retry-Continue, not complete all-level/game-over acceptance",
+    "Leaderboard merge/write-failure recovery and process-loss durability remain outside exercised Star run-save proof",
+    "Separate Java original-app gap lane and character/art/audio/profile/network/reward scopes remain separate"
   ],
   "portable_validation": {
     "utc": "2026-10-15T00:58:04Z",
@@ -1077,5 +1070,151 @@
       "No imported minigame sprite/model/audio references or implemented audio playback found in bounded five-header/arcade audit; future asset exports need their own provenance",
       "New names selected for this project; availability/trademark clearance not asserted"
     ]
+  },
+  "hud_fix": {
+    "defect": "Global Hero/logbook/clock/E-prompt/crosshair/stats drawn over opaque per-player arcade canvas",
+    "source_code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+    "ownership": "team-codex explicit modal-presentation transfer in actor h/cpp and Slate h/cpp; only3private files changed",
+    "engine_evidence": [
+      "UE5.8.3 SGameLayerManager.cpp:107-174 Player root100 below Viewport root200",
+      "GameViewportClient.cpp:3376-3412 global overlay add/remove versus per-player container routing",
+      "SGameLayerManager.cpp:253-280 player tick geometry,545-556 hit-test owner,582-584 clipping/navigation,627-715 projected/DPI player rectangle"
+    ],
+    "implementation": [
+      "Global viewport overlay Z100, above unchanged global HUDZ10; same ArcadeHost removed from same global overlay on close/EndPlay",
+      "Foreground host arranges its weak content inside engine local-player-host geometry; both corners transformed through absolute space, no extra DPI scaling",
+      "Child ClipToBoundsAlways; outer SelfHitTestInvisible; empty until finite positive player geometry, never fullscreen fallback",
+      "Hit-test user saved/restored around paint and existing Slate.AllowPerUserHitTesting honored without changing it; six navigation-stop boundaries retained",
+      "No changes to actor raw-key/controller, input/pause/cursor/focus/save paths, core rules/IDs/branding, Hero/Sky/HUD ownership, assets or PR139 Mines registry/core"
+    ],
+    "baseline_native": {
+      "operator": "codex-play-guard",
+      "reported_pr": "PR147 a1bfd563",
+      "receipt_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-gameplay-0344.checkpoint.json",
+      "receipt_sha256": "20BBE284F767A99FAC1E5E6CBEAF69F3B494D00C98D6954339F2D1787EA1B90A",
+      "stage": "bounded_native_checks_passed_scene_and_saves_restored_visual_issue_open",
+      "passed_checks": 39,
+      "scope": "Actual installed PR157+Mines methods and Slate input/HUD in one owned minimal unsaved PIE level,22runtime actors; not whole-production-world PIE or physical hardware evidence.",
+      "source_commit_before_patch": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585 plus PR139 Mines",
+      "repro": "One local player, minimal unsaved PIE22actors, real Hero.interact opens arcade, world pause/UI ownership; open Twinwake, ordered Ironwake30+Enter, Star pending failed-save menu",
+      "images": [
+        {
+          "name": "pong-open",
+          "image": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-pong-open.png",
+            "bytes": 195196,
+            "sha256": "759581b9c96623fcbe6c933c522cebc5005048e0e5856f7bc8eaa01b48db1205"
+          },
+          "receipt": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-pong-open.json",
+            "bytes": 9221,
+            "sha256": "fb08dbc2230f2e347237efe988c3589e0c94d89e45b5b969c7e0aba485253bd4"
+          },
+          "pixels": [
+            2560,
+            1392
+          ],
+          "personally_inspected": true,
+          "observation": "Pong title, score and seed, paddles/ball/net, Pause/Restart/Close and controls are visible. Hero logbook, interaction prompt and lower HUD overlap the arcade."
+        },
+        {
+          "name": "contra-started",
+          "image": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-contra-started.png",
+            "bytes": 278750,
+            "sha256": "f274dfd113314b05198a04d095c7dc87d7b71ce599c0c334d21ed8bd01d4a55b"
+          },
+          "receipt": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-contra-started.json",
+            "bytes": 9271,
+            "sha256": "72328ed4d465464fad7e3ac320d21db0fca4c6ff687177943a3db192d01ce970"
+          },
+          "pixels": [
+            2560,
+            1392
+          ],
+          "personally_inspected": true,
+          "observation": "Actual Slate ordered keys then Enter produces LIVES30 with visible native level, source action/status hints and footer. Hero HUD still overlays; lower canvas instructions remain tight at its bottom edge."
+        },
+        {
+          "name": "star-save-failed",
+          "image": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-star-save-failed.png",
+            "bytes": 293754,
+            "sha256": "bbb3c21160c19578fc950403598ba41cdaa09c8d90d0cd3ebaedd6a50c894af0"
+          },
+          "receipt": {
+            "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-star-save-failed.json",
+            "bytes": 9225,
+            "sha256": "b7db7f24ccdd6313541e9fbd31dced1cfe2347a4f5648f39aad9b1d61cd80ca0"
+          },
+          "pixels": [
+            2560,
+            1392
+          ],
+          "personally_inspected": true,
+          "observation": "Actual pending Save and Quit displays PAUSED menu, pending text and disabled replacement controls. Hero/logbook/prompt HUD remains visible over the arcade."
+        }
+      ],
+      "visual_pass": false,
+      "production_and_saves_restored": true
+    },
+    "patch": {
+      "code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+      "baseline_commit": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+      "patch_path": "docs/desktop-games-hud-foreground.patch",
+      "patch_sha256": "96FBE9EF4437D95DBB75E76E7B534F73CE5535275C9619CAF4EB9FA4F0DACDA7",
+      "staging_root": "C:/Users/730ri/Documents/Codex/2026-10-13/task-4/hud-foreground-patch-check-bcfb1403-lf",
+      "patch_check_passed": true,
+      "staged_after_hashes_match": true,
+      "line_endings": "Explicit git -c core.autocrlf=false -c core.eol=lf; raw source SHA256 pins require LF",
+      "initial_probe": "Global core.autocrlf=true converted only line endings; exact-hash check caught it. Original failed stage retained; fresh explicit-LF stage passes.",
+      "files": [
+        {
+          "plugin_relative_path": "Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+          "expected_before_sha256": "30D74179F72F32F46CD44528787338FE7E69785FDD69D4607959952AC87A4180",
+          "before_git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
+          "after_sha256": "600BF1D5186F5154FEE10F038F758D5959399D6F779E93E8CCDC0629A8384132",
+          "after_git_blob": "6ec1e190ed6068f220f35d59769c023bedddaf7d"
+        },
+        {
+          "plugin_relative_path": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+          "expected_before_sha256": "C135F7BCC3B3B830A3368E5548C730AEC46927D3854E2B17D6A49284A2BB4CCF",
+          "before_git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+          "after_sha256": "DE7AB6EE612243993535BA61B638150C5CC673DC4111DC2D87AF334EE8B4DAAF",
+          "after_git_blob": "7a02f2e034e482713a294b5d64c7b7d117ac63e5"
+        },
+        {
+          "plugin_relative_path": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.h",
+          "expected_before_sha256": "BBEB1BA0191730B193E7361EF9131499A9F3DF8007E8680D578ADBFA7D670AB1",
+          "before_git_blob": "c1b3d7b49b1a5d9a33630f276936f49eb8259c41",
+          "after_sha256": "D5B0E0D513BC4AF9B04A94C001B992FD6D588AB15B0986B712D52402C7D6D1FD",
+          "after_git_blob": "8ebf617621c6ba6ace1374c34d0c835283fbd470"
+        }
+      ],
+      "installed_source_modified": false,
+      "unreal_build_run": false
+    },
+    "operator_instructions": [
+      "Do not replace the whole plugin or apply blindly to installed/live source. Close any existing overlay at a normal safe boundary; retain all other integrated source and PR139 Mines changes.",
+      "Reconcile exact3before SHA256 hashes against the active integrated source. On drift stop/review/rebase only these presentation hunks; never overwrite unrelated edits.",
+      "In an OWNED staged plugin root with Source/DaedalusLink, git -c core.autocrlf=false -c core.eol=lf apply --check <docs/desktop-games-hud-foreground.patch>; then apply with the same flags. This has passed against read-only installed baseline copies.",
+      "Verify all3after SHA256 hashes, preserve LF. Root staging caught global core.autocrlf=true conversion; explicit-LF fresh staging matches all bytes.",
+      "Only codex-play-guard chooses/executes the existing supported serial integrated module build/load route at a safe resource boundary. No new UFUNCTION/UPROPERTY/UObject layout changes. No forced editor close/restart, DLL replacement or build-setting change is prescribed.",
+      "Repeat the three exact screenshot states at original2560x1392 and confirm no Hero/logbook/Eprompt/crosshair/lower-stat bleed. Confirm HUD reappears after close.",
+      "Recheck P/R/Enter/ordered bonus/controller-method input, Star failed-save retention/retry/Continue, Escape/close/reopen, focus loss and EndPlay pause/cursor/input restoration.",
+      "Check resize/DPI, constrained player rectangle and existing per-user hit-testing policy; physical hardware and multiple-local-player behavior remain unverified until actually exercised."
+    ],
+    "portable_regression": {
+      "result": "desktop_registry123/123 PASS; no rebuild needed",
+      "unchanged_source_pin": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
+      "proof": "All7portable headers and registry_test.cpp byte/blob-identical to prior compiled proof; source diff only3Unreal presentation files",
+      "command": "ctest --test-dir ../native-polish-validation-20261015 -C Debug --output-on-failure -R ^desktop_registry$ -j 1",
+      "does_not_compile_or_validate_wrapper": true
+    },
+    "current_patch_unreal_compiled": false,
+    "current_patch_installed_or_loaded": false,
+    "current_patch_visible_acceptance": false,
+    "native_baseline_limit": "39pre-fix bounded native checks are not transferred to new wrapper; physical controller, all-level/game-over and multiple local users not proven"
   }
 }
