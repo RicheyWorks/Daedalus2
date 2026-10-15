@@ -41,6 +41,12 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
                     [SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Bold", 25)).Text_Lambda([this] { return FText::FromString(Game.IsValid() && Game->Game == EDaedalusJavaGame::Blackjack ? TEXT("Blackjack — simulated credits") : TEXT("Sudoku")); })]
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
                     [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::StatusText).AutoWrapText(true)]
+                    + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+                    [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SessionIdentityText).AutoWrapText(true)]
+                    + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+                    [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::RecoveryText).AutoWrapText(true)]
+                    + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+                    [SNew(STextBlock).Text_Lambda([this] { return FText::FromString(Game.IsValid() && Game->Game == LocalFeedbackGame ? LocalActionFeedback : FString()); }).AutoWrapText(true)]
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
                     [
                         SNew(SHorizontalBox)
@@ -55,9 +61,9 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
                     [
                         SNew(SHorizontalBox)
                         + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 8, 0)
-                        [Button(TEXT("Refresh"), [this] { if (Game.IsValid()) Game->RefreshSnapshot(); }, [this] { return Game.IsValid() && !State().bBusy && !State().SessionId.IsEmpty() && !State().bRemoteClosed; })]
+                        [Button(TEXT("Refresh game"), [this] { RefreshGame(); }, [this] { return CanRefreshGame(); })]
                         + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 8, 0)
-                        [Button(TEXT("Recover create"), [this] { if (Game.IsValid()) Game->RetryBlackjackCreate(); }, [this] { return Game.IsValid() && Game->Game == EDaedalusJavaGame::Blackjack && State().bNeedsSync && State().SessionId.IsEmpty() && !State().bBusy; })]
+                        [Button(TEXT("Recover session"), [this] { RecoverBlackjack(); }, [this] { return CanRecoverBlackjack(); })]
                         + SHorizontalBox::Slot().AutoWidth()
                         [Button(TEXT("Close cabinet"), [this] { if (Game.IsValid()) Game->CloseArcade(); })]
                     ]
@@ -80,6 +86,8 @@ FReply SDaedalusJavaArcade::Configure()
     SecretBox->SetText(FText::GetEmpty());
     if (UsernameBox.IsValid()) UsernameBox->SetText(FText::GetEmpty());
     LocalMessage = Success ? FString() : TEXT("Check the account fields. Passwords and service tokens are kept only in memory.");
+    LocalActionFeedback = Success ? TEXT("Account details updated locally. Choose a game to connect.") : TEXT("Account details were not changed. Check the fields and current game status.");
+    LocalFeedbackGame = Game->Game;
     if (Success) ResetSudokuPresentation();
     FocusBoard();
     return FReply::Handled();
@@ -91,6 +99,175 @@ FText SDaedalusJavaArcade::StatusText() const
     if (!LocalMessage.IsEmpty()) Text += TEXT("\n") + LocalMessage;
     return FText::FromString(Text + (S.HintText.IsEmpty() ? FString() : TEXT("\nHint: ") + S.HintText));
 }
+FText SDaedalusJavaArcade::SessionIdentityText() const
+{
+    const auto S = State();
+    if (!Game.IsValid() || Game->Game != S.Game) return FText::FromString(TEXT("Waiting for the selected game."));
+    if (S.SessionId.IsEmpty() || (S.Game == EDaedalusJavaGame::Sudoku && (S.Cells.Num() != 81 || S.Givens.Num() != 81)))
+        return FText::FromString(S.Game == EDaedalusJavaGame::Sudoku
+            ? TEXT("No board has been received. An entered ID is only a choice to open or resume.") : TEXT("No table has been received yet."));
+    const bool bCurrent = S.bReady && !S.bBusy && !S.bNeedsSync && S.bOwner && !S.bRemoteClosed;
+    FString Text = (bCurrent ? FString(TEXT("Current received game ID: ")) : FString(TEXT("Last received game ID: "))) + S.SessionId;
+    // Sudoku has no projected board revision; its default zero is not a server version.
+    if (S.Game == EDaedalusJavaGame::Blackjack) Text += FString::Printf(TEXT("  ·  Received revision %lld"), S.Revision);
+    if (!bCurrent) Text += TEXT("  ·  Check the status before acting on these values.");
+    return FText::FromString(Text);
+}
+bool SDaedalusJavaArcade::CanRefreshGame() const
+{
+    const auto S = State();
+    return Game.IsValid() && Game->Game == S.Game && Game->HasCredentials() && !S.bBusy
+        && !S.SessionId.IsEmpty() && !S.bRemoteClosed && S.Status != TEXT("Closed")
+        && (S.Game != EDaedalusJavaGame::Sudoku || S.bOwner);
+}
+bool SDaedalusJavaArcade::CanRecoverBlackjack() const
+{
+    const auto S = State();
+    // Public state identifies a candidate only; the actor checks its retained request.
+    return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Blackjack
+        && Game->HasCredentials() && !S.bBusy && S.bNeedsSync && S.SessionId.IsEmpty() && !S.bRemoteClosed;
+}
+bool SDaedalusJavaArcade::CanStartBlackjack() const
+{
+    const auto S = State();
+    return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Blackjack
+        && Game->HasCredentials() && !S.bBusy && (S.SessionId.IsEmpty() || S.bRemoteClosed);
+}
+bool SDaedalusJavaArcade::CanStartSudoku() const
+{
+    const auto S = State();
+    return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Sudoku && Game->HasCredentials() && !S.bBusy;
+}
+bool SDaedalusJavaArcade::CanOpenEnteredSudoku() const
+{
+    if (!CanStartSudoku() || !ResumeBox.IsValid()) return false;
+    const int32 Length = ResumeBox->GetText().ToString().Len();
+    return Length > 0 && Length <= 256;
+}
+bool SDaedalusJavaArcade::CanUseCurrentSudokuId() const
+{
+    const auto S = State();
+    return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Sudoku && ResumeBox.IsValid()
+        && S.bReady && !S.bBusy && !S.bNeedsSync && S.bOwner && !S.bRemoteClosed
+        && !S.SessionId.IsEmpty() && S.Cells.Num() == 81 && S.Givens.Num() == 81;
+}
+FReply SDaedalusJavaArcade::UseCurrentSudokuId()
+{
+    if (!CanUseCurrentSudokuId()) return FReply::Handled();
+    ResumeBox->SetText(FText::FromString(State().SessionId));
+    LocalFeedbackGame = EDaedalusJavaGame::Sudoku;
+    LocalActionFeedback = TEXT("ID filled locally. Review it, then choose Open or Resume if needed.");
+    // This local fill changes neither session, note context nor hint confirmation.
+    if (FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
+        FSlateApplication::Get().SetUserFocus(Game->GetSlateUserIndex(), ResumeBox, EFocusCause::SetDirectly);
+    return FReply::Handled();
+}
+void SDaedalusJavaArcade::StartSudoku(int32 Difficulty)
+{
+    HintConfirmationGameId.Reset();
+    const bool bAccepted = CanStartSudoku() && Game->StartSudokuGameWithModes(Difficulty, bNewSudokuChaos, bNewSudokuMirror, bNewSudokuTimeAttack);
+    if (bAccepted) ResetSudokuPresentation();
+    LocalFeedbackGame = EDaedalusJavaGame::Sudoku;
+    LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: new game requested. Check the received game above.")
+        : TEXT("New game could not start. Check the current status before trying again.");
+}
+void SDaedalusJavaArcade::OpenEnteredSudoku(bool bResume)
+{
+    const FString EnteredId = ResumeBox.IsValid() ? ResumeBox->GetText().ToString() : FString();
+    HintConfirmationGameId.Reset();
+    const bool bAccepted = CanOpenEnteredSudoku() && (bResume ? Game->ResumeSudokuGame(EnteredId) : Game->OpenSudokuGame(EnteredId));
+    if (bAccepted) ResetSudokuPresentation();
+    LocalFeedbackGame = EDaedalusJavaGame::Sudoku;
+    LocalActionFeedback = bAccepted ? FString::Printf(TEXT("Last cabinet action: %s requested for entered ID %s. Check the received game above."), bResume ? TEXT("Resume") : TEXT("Open"), *EnteredId)
+        : TEXT("Open or Resume could not start. Check the entered ID and current status.");
+}
+void SDaedalusJavaArcade::RefreshGame()
+{
+    const bool bAccepted = CanRefreshGame() && Game->RefreshSnapshot();
+    if (Game.IsValid()) LocalFeedbackGame = Game->Game;
+    LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: refresh requested. Read the game status before repeating an earlier action.")
+        : TEXT("Refresh could not start. Wait for any current action, then check the game or account details.");
+}
+void SDaedalusJavaArcade::RecoverBlackjack()
+{
+    const bool bAccepted = CanRecoverBlackjack() && Game->RetryBlackjackCreate();
+    LocalFeedbackGame = EDaedalusJavaGame::Blackjack;
+    LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: recovery requested for the earlier session start. Check the received table above.")
+        : TEXT("Recovery could not start. Wait for any current action or check the account details; no recovered table is confirmed.");
+}
+void SDaedalusJavaArcade::StartBlackjack()
+{
+    const bool bAccepted = CanStartBlackjack() && Game->StartBlackjackSession();
+    LocalFeedbackGame = EDaedalusJavaGame::Blackjack;
+    LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: table requested. Check the received table above.")
+        : TEXT("Table could not start. Check the current status; an earlier start may need recovery.");
+}
+FText SDaedalusJavaArcade::EnteredSudokuIdText() const
+{
+    const FString EnteredId = ResumeBox.IsValid() ? ResumeBox->GetText().ToString() : FString();
+    if (EnteredId.IsEmpty()) return FText::FromString(TEXT("Enter a game ID below, or fill it from the current received game."));
+    const auto S = State();
+    return FText::FromString(TEXT("Entered ID: ") + EnteredId + (S.Game == EDaedalusJavaGame::Sudoku && EnteredId == S.SessionId
+        ? TEXT("  ·  Matches the received game ID.") : TEXT("  ·  Choose Open or Resume to request this game.")));
+}
+FText SDaedalusJavaArcade::SelectedSudokuCellText() const
+{
+    const auto S = State();
+    if (!Game.IsValid() || Game->Game != S.Game || S.Game != EDaedalusJavaGame::Sudoku || S.SessionId.IsEmpty()
+        || S.Cells.Num() != 81 || S.Givens.Num() != 81 || !S.Cells.IsValidIndex(SelectedCell))
+        return FText::FromString(TEXT("Select a cell after a board is received."));
+    FString Text = FString::Printf(TEXT("Selected row %d, column %d. %s"), SelectedCell / 9 + 1, SelectedCell % 9 + 1,
+        S.bReady && !S.bBusy && !S.bNeedsSync ? TEXT("Received answer: ") : TEXT("Last received answer: "));
+    Text += S.Cells[SelectedCell] == 0 ? FString(TEXT("empty")) : FString::FromInt(S.Cells[SelectedCell]);
+    if (S.Givens[SelectedCell]) Text += TEXT(". Fixed clue; choose another cell to enter a value.");
+    else if (!CanEnterSudokuDigit(0)) Text += TEXT(". Entry is unavailable; check the game status.");
+    else if (bSudokuPencilMode && S.Cells[SelectedCell] != 0) Text += TEXT(". Pencil mode: erase the answer before adding notes.");
+    else Text += bSudokuPencilMode ? TEXT(". Pencil note entry is enabled.") : TEXT(". Answer entry and erase are enabled.");
+    const bool bLocalNotes = S.SessionId == NotesGameId && LocalPencilOverrides.IsValidIndex(SelectedCell) && LocalPencilOverrides[SelectedCell];
+    const int32 Mask = PencilMask(SelectedCell, S);
+    if (S.Cells[SelectedCell] == 0 && (Mask != 0 || bLocalNotes))
+    {
+        TArray<FString> Marks;
+        for (int32 Digit = 1; Digit <= 9; ++Digit) if (Mask & (1 << Digit)) Marks.Add(FString::FromInt(Digit));
+        Text += bLocalNotes ? TEXT(" Local pencil notes: ") : TEXT(" Received pencil notes: ");
+        Text += Marks.IsEmpty() ? FString(TEXT("none")) : FString::Join(Marks, TEXT(", "));
+    }
+    if (bLocalNotes) Text += S.Cells[SelectedCell] == 0 ? TEXT(". These note edits are not saved with the board.")
+        : TEXT(" Local note edits are hidden behind this answer and are not saved with the board.");
+    if (HintConfirmationGameId == S.SessionId) Text += TEXT(" A hint purchase awaits your confirmation.");
+    return FText::FromString(Text);
+}
+FText SDaedalusJavaArcade::RecoveryText() const
+{
+    const auto S = State();
+    if (!Game.IsValid() || Game->Game != S.Game) return FText::FromString(TEXT("Changing game selection. Wait for the current status."));
+    if (S.bBusy) return FText::FromString(TEXT("Waiting for the game. Let this action finish before trying another."));
+    if (S.bRemoteClosed) return FText::FromString(TEXT("This table is closed or unavailable. Choose Start to request a new table."));
+    if (!Game->HasCredentials()) return FText::FromString(TEXT("Enter your account details, then choose a game to connect."));
+    if (S.bNeedsSync)
+    {
+        if (!S.SessionId.IsEmpty())
+            return FText::FromString(CanRefreshGame() ? TEXT("Refresh this game, then inspect the received values before repeating an earlier action.")
+                : TEXT("The received game cannot be refreshed with these account details. Check the current status and account."));
+        if (CanRecoverBlackjack()) return FText::FromString(TEXT("The earlier table start needs checking. Try Recover session; it may still be waiting or unavailable."));
+        return FText::FromString(TEXT("No game has been received to refresh. Enter an existing game ID or check the account details before choosing another start."));
+    }
+    if (!S.SessionId.IsEmpty() && !S.bOwner) return FText::FromString(TEXT("This account cannot edit the received game. Check the account details."));
+    if (!S.bReady)
+        return FText::FromString(CanRefreshGame() ? TEXT("The connection is unavailable. Check the account details or try refreshing the received game.")
+            : S.Game == EDaedalusJavaGame::Sudoku ? TEXT("Choose New, or enter a game ID and choose Open or Resume. An entered ID alone does not load a game.")
+            : TEXT("Choose Start to request a table. Check the current status before repeating an earlier start."));
+    if (S.Game == EDaedalusJavaGame::Sudoku)
+    {
+        if (S.bSolved) return FText::FromString(TEXT("Puzzle complete. Choose New or open another game when ready."));
+        if (S.bTimeUp) return FText::FromString(TEXT("Time has expired. Choose a new game; reopening does not add time."));
+        if (!S.bCanAct) return FText::FromString(TEXT("The received board cannot take entries yet. Try Refresh game before continuing."));
+        return FText::FromString(TEXT("Select a cell to enter an answer or pencil notes. Save the board before leaving; local note edits are separate."));
+    }
+    return FText::FromString(S.Phase == TEXT("BETTING") ? TEXT("Choose chips or Rebet, then Deal when an action is enabled.")
+        : S.Phase == TEXT("INSURANCE") ? TEXT("Choose an enabled insurance option, or Decline to continue.")
+        : TEXT("Choose an enabled action for the current hand. Refresh game can check the received table."));
+}
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
 {
     auto Starts = SNew(SHorizontalBox);
@@ -98,7 +275,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
     {
         const FString Label = FString::Printf(TEXT("New %d"), Difficulty);
         Starts->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
-        [Button(*Label, [this, Difficulty] { HintConfirmationGameId.Reset(); if (Game.IsValid() && Game->StartSudokuGameWithModes(Difficulty, bNewSudokuChaos, bNewSudokuMirror, bNewSudokuTimeAttack)) ResetSudokuPresentation(); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
+        [Button(*Label, [this, Difficulty] { StartSudoku(Difficulty); }, [this] { return CanStartSudoku(); })];
     }
     auto Grid = SNew(SGridPanel);
     for (int32 Index = 0; Index < 81; ++Index)
@@ -170,7 +347,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Undo"), [this] { if (Game.IsValid()) Game->SudokuUndo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Redo"), [this] { if (Game.IsValid()) Game->SudokuRedo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
-            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { const auto S = State(); return S.bReady && S.bOwner && !S.bBusy; })]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { const auto S = State(); return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Sudoku && S.bReady && S.bOwner && !S.bBusy; })]
         ]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
@@ -191,13 +368,17 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             ]
         ]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::EnteredSudokuIdText).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
         [
             SNew(SHorizontalBox)
             + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)[SAssignNew(ResumeBox, SEditableTextBox).HintText(FText::FromString(TEXT("Java game ID to open or resume")))]
-            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Open"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid() && ResumeBox.IsValid() && Game->OpenSudokuGame(ResumeBox->GetText().ToString())) ResetSudokuPresentation(); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
-            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { HintConfirmationGameId.Reset(); if (Game.IsValid() && ResumeBox.IsValid() && Game->ResumeSudokuGame(ResumeBox->GetText().ToString())) ResetSudokuPresentation(); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [SNew(SButton).Text(FText::FromString(TEXT("Use current ID"))).IsEnabled(this, &SDaedalusJavaArcade::CanUseCurrentSudokuId).OnClicked(this, &SDaedalusJavaArcade::UseCurrentSudokuId)]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Open"), [this] { OpenEnteredSudoku(false); }, [this] { return CanOpenEnteredSudoku(); })]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { OpenEnteredSudoku(true); }, [this] { return CanOpenEnteredSudoku(); })]
         ]
-        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectedSudokuCellText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 6, 0, 0)
         [SNew(STextBlock).Text(FText::FromString(TEXT("Board keys: arrows wrap selection; type 0–9 / numpad to enter; N / Space toggles pencil notes; Backspace / Delete erases answer and notes; Home / End and Page Up / Down select row or column ends; Ctrl+Z / Ctrl+Y undo / redo; H asks before buying a hint; Escape closes the cabinet."))).AutoWrapText(true)];
 }
@@ -228,7 +409,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
         Actions->AddSlot().AutoWidth().Padding(0, 0, 6, 0)[Button(*Name, [this, Name] { if (Game.IsValid()) Game->SubmitBlackjackAction(Name); }, [this, Name] { return Game.IsValid() && Game->IsBlackjackActionLegal(Name); })];
     return SNew(SVerticalBox)
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
-        [Button(TEXT("Start Java session"), [this] { if (Game.IsValid()) Game->StartBlackjackSession(); }, [this] { const auto S = State(); return Game.IsValid() && Game->HasCredentials() && !S.bBusy && (S.SessionId.IsEmpty() || S.bRemoteClosed); })]
+        [Button(TEXT("Start Java session"), [this] { StartBlackjack(); }, [this] { return CanStartBlackjack(); })]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::TableText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Chips]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Actions]

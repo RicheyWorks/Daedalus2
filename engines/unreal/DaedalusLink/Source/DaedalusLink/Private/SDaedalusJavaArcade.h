@@ -46,6 +46,22 @@ private:
     int32 PencilMask(int32 Index, const FDaedalusJavaArcadeState& S) const;
     static bool VisibleDuplicate(int32 Index, const FDaedalusJavaArcadeState& S);
     FText StatusText() const;
+    FText SessionIdentityText() const;
+    FText RecoveryText() const;
+    FText EnteredSudokuIdText() const;
+    FText SelectedSudokuCellText() const;
+    bool CanRefreshGame() const;
+    bool CanRecoverBlackjack() const;
+    bool CanStartBlackjack() const;
+    bool CanStartSudoku() const;
+    bool CanOpenEnteredSudoku() const;
+    bool CanUseCurrentSudokuId() const;
+    FReply UseCurrentSudokuId();
+    void StartSudoku(int32 Difficulty);
+    void OpenEnteredSudoku(bool bResume);
+    void RefreshGame();
+    void RecoverBlackjack();
+    void StartBlackjack();
     FText TableText() const;
     FText BlackjackDetailsText() const;
     FReply HandleBlackjackKey(const FKey& Key);
@@ -61,6 +77,8 @@ private:
     bool bNewSudokuMirror = false;
     bool bNewSudokuTimeAttack = false;
     FString LocalMessage;
+    FString LocalActionFeedback;
+    EDaedalusJavaGame LocalFeedbackGame = EDaedalusJavaGame::Sudoku;
     FString HintConfirmationGameId;
     // View-local overrides, including explicit zero, survive same-board snapshots.
     FString NotesGameId;
