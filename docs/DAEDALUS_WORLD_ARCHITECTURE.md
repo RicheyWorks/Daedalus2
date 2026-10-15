@@ -858,3 +858,16 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   filter moss, glowkelp, skylily, ember lotus, frost fern) × 6 growth stages. Each json has its pivot (waterline,
   mud line, bed, seabed) and `uses`: which island_chemistry FISH it feeds, a spring-purity bonus (FilterMoss can lift
   a `filter_needed` island over 0.6), herbs, inn/craft goods, island kinds. `claude-aquatic/`.
+
+### 14.20 Spells and the overworld (`rpg_spell_fx.py`, `rpg_world_map.py`, `pixel_png.py`)
+- **51 spells** (17 effects × 3 tiers: fire, ice, bolt, water, wind, quake, meteor, holy, shade, drain, poison, sleep,
+  prism, heal, shield, haste, slow), original names (Ember/Blaze/Inferno …). Each effect is a procedural intensity
+  field per frame quantised onto an element ramp: Portal 32 px / 8 frames / 3 steps; Prismheart 48 px / 10 frames /
+  6 steps + white core; strips ×4 in `claude-battle-kit/<realm>/spells/`. `data/rpg/spells.json` carries element
+  (bestiary names), tier, MP, power, target, status, strip path, frames.
+- **Overworld tiles**: 23 terrain tiles (water, deep sea, lava and the four coasts animate in 2 frames) and 14
+  hand-pixeled 16×16 landmarks (town, village, castle, cave, tower, shrine, dock, ruins, graveyard, volcano,
+  lighthouse, inn; Prismheart adds crystal shrine and airship pad), ×4 in `claude-battle-kit/<realm>/worldmap/`,
+  plus `map-demo.png`. `data/rpg/worldmap-tiles.json`: walkable / ship / airship, the encounter-zone key each tile rolls
+  on, and what entering a landmark opens.
+- Pure numpy (own PNG writer), runs with plain Python in ~5 s.
