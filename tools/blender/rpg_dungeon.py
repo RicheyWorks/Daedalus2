@@ -239,17 +239,16 @@ def gen_floor(seed, theme, n_rooms=8, boss=False):
     grid = [["Void"] * W for _ in range(H)]
     rooms = []
     tries = 0
+    top = 12 if boss else 3                                                        # boss floors keep the top band for the chamber
     while len(rooms) < n_rooms and tries < 400:
         tries += 1
         w, h = rng.randint(4, 8), rng.randint(3, 6)
-        if boss and not rooms:
-            w, h = 10, 6
-        x, y = rng.randint(1, W - w - 2), rng.randint(3, H - h - 2)
+        x, y = rng.randint(1, W - w - 2), rng.randint(top, H - h - 2)
         if any(x - 2 < rx + rw and rx - 2 < x + w and y - 3 < ry + rh and ry - 3 < y + h for rx, ry, rw, rh in rooms):
             continue
         rooms.append((x, y, w, h))
-    if boss:                                                                       # boss chamber is room 0: move it last
-        rooms = rooms[1:] + rooms[:1]
+    if boss:                                                                       # the sealed chamber: top band, only reachable via the gate
+        rooms.append((W // 2 - 6, 3, 12, 5))
     for x, y, w, h in rooms:
         for yy in range(y, y + h):
             for xx in range(x, x + w):
@@ -278,10 +277,8 @@ def gen_floor(seed, theme, n_rooms=8, boss=False):
     if boss:                                                                       # one corridor to a gate on the chamber's top wall... from below
         bx, by, bw, bh = rooms[-1]
         j = min(linked, key=lambda k: abs(centers[k][0] - centers[-1][0]) + abs(centers[k][1] - centers[-1][1]))
-        gate = (bx + bw // 2, by + bh)
-        if gate[1] >= H - 1:
-            gate = (bx + bw // 2, by - 1)
-        carve(centers[j], (gate[0], gate[1] + (1 if gate[1] > by else -1)))
+        gate = (bx + bw // 2, by + bh)                                             # gate in the chamber's bottom wall
+        carve(centers[j], (gate[0], gate[1] + 1))
     # walls from floor
     floorish = lambda t: t not in ("Void", "WallTop", "WallFace")                  # noqa: E731
     for y in range(H):
@@ -405,7 +402,7 @@ def boss_sprite(root, realm, boss):
     import rpg_battle_ui as UI
     s = UI.load_png_1x(p)
     if s is not None and s.shape[0] > 40:
-        k = -(-s.shape[0] // 36)
+        k = -(-s.shape[0] // 48)
         s = s[::k, ::k]
     return s
 
