@@ -1,6 +1,29 @@
 # Arcade capability coverage — source checkpoint, 2026-10-15
 
-## Current continuation: local Sudoku editing
+## Current continuation: session identity, recovery and inspection
+
+Source `6e28706693319c53170dda3d545c12f8cf5f95c7` continues published `c0cacb261a960ea71de239f644be4db4f91310fb` in the same two private Java
+Slate files (+207/-8), assigned32249/started32308. Existing received-ID display
+is clarified as current/last received identity, separate from entered/requested
+text. Use current ID only fills and focuses the local field. No Sudoku board
+revision exists in the projected native state; only Blackjack shows one.
+
+Existing RefreshSnapshot/RetryBlackjackCreate and Start/Open/Resume methods now
+have state-derived guidance, candidate gates and truthful bool-result feedback.
+Private actor work may still refuse a public candidate; requested never means
+received or successful. Fresh Blackjack Start after a definite refusal remains
+available under its previous gate. Selected-cell inspection separates received
+answers/clues/editability from local and received pencil marks and pending hints.
+Actor/public API/transport/guard/protocol/build/saves/rules remain unchanged.
+
+Independent manual source/branch review found no blocker. The exact matrix and
+deferred acceptance are in [cabinet-source-package.md](cabinet-source-package.md),
+with final file/hash/blob pins in manifestv5. No new counted static suite or
+tests/builds/services/editor/native action ran. Earlier counts are historical;
+current focus, layout, typing, recovery and persistence remain unverified. This
+finite source package is complete; full original apps and native play remain open.
+
+## Historical continuation: local Sudoku editing
 
 Source `da2b4a84e357114181cbdb65093628d595cda2a7` completes the selected
 local editing package in the same two private Slate files (+207/-20), preserving
@@ -132,8 +155,8 @@ reconciliation remain unchanged. Controls do not decide outcomes or credits.
 |---|---|---|---|---|
 | Authenticated health | `B/BridgeServer.route`, `GET /v1/blackjack/health` | No native health operation | Readiness probe still absent; this change does not edit Poot-owned transport | H; E0 |
 | Local bearer | `B/BridgeMain.main`, `BridgeServer.authorized` | `ConfigureBlackjackToken`, masked secret field | No per-player account/provider authorization; one local bearer authorizes all sessions | H; E0 |
-| Create / uncertain-create recovery | `B/BridgeService.create`, `POST /sessions` | `StartBlackjackSession`, `RetryBlackjackCreate`, existing buttons | Companion delivery/adoption pending; retained create ID is lost on local close | H, U; E0 |
-| Current session read | `B/BridgeService.query`, `GET /sessions/{id}` | `RefreshSnapshot`, Refresh button | No reconnect/open-by-existing-session-ID control | H; E0 |
+| Create / uncertain-create recovery | `B/BridgeService.create`, `POST /sessions` | `StartBlackjackSession`, `RetryBlackjackCreate`, candidate recovery guidance and actor bool feedback | Companion delivery/adoption pending; retained create ID is lost on local close | H, U; E0 |
+| Current session read | `B/BridgeService.query`, `GET /sessions/{id}` | `RefreshSnapshot`, state-derived Refresh candidate and local-attempt feedback | No reconnect/open-by-existing-session-ID control | H; E0 |
 | Chips 1/5/25/100/500 | `BridgeService.Session.apply("bet")`, `C/engine/Engine.canBet/addBet` | Five existing legality-gated buttons | No side-bet command in facade | H, J; E0 |
 | Clear / rebet / deal | `Session.apply`, `Engine.clearBet/rebet/deal` | Existing `SubmitBlackjackAction` controls | Current native execution remains unverified | J, H subset; E0 |
 | Hit / stand / double / split / surrender | `Session.apply`, `Engine.can*` and mutations | Existing gated controls; this checkpoint adds all visible hand flags | No local rules/payout calculation | J, H subset; E0 |

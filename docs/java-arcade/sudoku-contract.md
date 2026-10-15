@@ -146,3 +146,35 @@ Filled/remaining counts and duplicate/peer/same-digit colors use confirmed cells
 as display-only feedback; no local calculation decides validity or completion.
 Server conflict metadata is still not projected. Source review and57 static
 checks pass; compiler, character routing, visuals and native behavior are deferred.
+
+## Received identity and recovery source package — 6e287066
+
+Source `6e28706693319c53170dda3d545c12f8cf5f95c7` changes only the existing private Java Slate pair. The received
+ID row already existed; it now distinguishes current/last received identity from
+the editable requested ID. Only a nonempty ID and complete 81-cell/given snapshot
+is presented as a received Sudoku board. Ready/nonbusy/nonsync/owner status gates
+the local Use current ID fill; it changes text/focus only and leaves note context,
+selection and pending hints intact. Entered text equality does not prove a load.
+Sudoku Revision is not populated by ApplySudoku; default zero is never displayed
+as an authoritative board version.
+
+Refresh uses the existing actor method and public owner/credential/mode/busy/
+closed candidate gate. Actor-private HTTP/request/guard state remains final, so
+an enabled candidate can return false. A true call only records a local request;
+no fresh board/command receipt is inferred. New/Open/Resume retain their previous
+accepted-local-call note resets and entry-attempt hint clearing. The captured
+entered ID remains an attempt record while later field edits or service outcomes
+can differ. Failed Open may retain an actor-private requested ID even while the
+received ID is empty; the UI does not invent recovery from editable text.
+
+Selected-cell inspection reads confirmed/last received answer and clue data plus
+the existing native entry gate. Local note overrides, zero overrides, received
+snapshot marks and notes hidden behind answers are separately described. Nothing
+here changes answer legality, the socket protocol, saves or hint cost/selection.
+Recommended difficulty, saved-list/End, wallet/price, server conflict/history and
+broader original app flows remain absent from this native contract.
+
+Independent manual source review found no blocking defect. The branch/acceptance
+matrix is in cabinet-source-package.md and manifestv5. No tests, build, UHT,
+service, credentials, editor or native action ran; focus/typing/readability,
+asynchronous recovery, lifecycle and persistence acceptance remain deferred.

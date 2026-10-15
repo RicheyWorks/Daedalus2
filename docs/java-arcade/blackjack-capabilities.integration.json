@@ -1,15 +1,15 @@
 {
-  "manifest_version": 4,
+  "manifest_version": 5,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "LOCAL_SUDOKU_EDITING_AND_PRIOR_CAPABILITIES_SOURCE_READY_UNVERIFIED_NATIVE",
+  "status": "RECEIVED_SESSION_RECOVERY_INSPECTION_SOURCE_READY_UNVERIFIED_NATIVE",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/blackjack-capability-binding-20261014",
-    "code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
+    "code_commit": "6e28706693319c53170dda3d545c12f8cf5f95c7",
     "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
     "files": [
       {
@@ -18,7 +18,10 @@
         "expected_prior_pr152_sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF",
         "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
         "mode_checkpoint_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
-        "previous_package_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6"
+        "previous_package_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "previous_published_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "previous_published_git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
+        "session_recovery_changed": false
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
@@ -26,23 +29,32 @@
         "expected_prior_pr152_sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900",
         "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
         "mode_checkpoint_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
-        "previous_package_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52"
+        "previous_package_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "previous_published_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "previous_published_git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
+        "session_recovery_changed": false
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
-        "sha256": "D3187DA35279C9D80736D66241DA8580B42A4F937A51C2C3963891B2F5B7A440",
+        "sha256": "7434CB0B50CF32D73F2DBB1E20000673D32F6A234395A08F98F5D0CC8B740461",
         "expected_prior_pr152_sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB",
-        "git_blob": "252e7210addf948cb7160e1ae50bc4b86b3ca2b0",
+        "git_blob": "969ee99c7a6bacfe1a64664a2d09f53a9cd4c958",
         "mode_checkpoint_sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5",
-        "previous_package_sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A"
+        "previous_package_sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A",
+        "previous_published_sha256": "D3187DA35279C9D80736D66241DA8580B42A4F937A51C2C3963891B2F5B7A440",
+        "previous_published_git_blob": "252e7210addf948cb7160e1ae50bc4b86b3ca2b0",
+        "session_recovery_changed": true
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
-        "sha256": "B44F8A03A786ACE32E86349D9C13EC25EA0205D0C1FE0065067B8D351FF5CB1D",
+        "sha256": "4DC9E55391F63F1EDD2A565F17009B904EF37FC59FB9FB536E430385C1EDE152",
         "expected_prior_pr152_sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7",
-        "git_blob": "67e0ae0f5474c89077a994f5c45c78ada7fe5cc2",
+        "git_blob": "3d1bacb57a58a518ebfac1225bbf8cc36afa4217",
         "mode_checkpoint_sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15",
-        "previous_package_sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365"
+        "previous_package_sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365",
+        "previous_published_sha256": "B44F8A03A786ACE32E86349D9C13EC25EA0205D0C1FE0065067B8D351FF5CB1D",
+        "previous_published_git_blob": "67e0ae0f5474c89077a994f5c45c78ada7fe5cc2",
+        "session_recovery_changed": true
       }
     ],
     "prior_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
@@ -50,7 +62,10 @@
     "mode_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
     "package_increment_base": "89ece41824b9132403ac0bfffae15343b08b13f8",
     "mode_documentation_checkpoint": "0dff5841862d993d2bbd4a96c884a22d698cf0dc",
-    "local_editing_base": "9fad7509b5e317807f2627d06807e6a8a1b73a2a"
+    "local_editing_base": "9fad7509b5e317807f2627d06807e6a8a1b73a2a",
+    "local_editing_code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
+    "session_recovery_base": "c0cacb261a960ea71de239f644be4db4f91310fb",
+    "file_pin_usage": "sha256/git_blob are final code6e287066 pins. previous_published_sha256/previous_published_git_blob refer to c0cacb26. Other per-file hash fields are retained historical checkpoints, not the current reconciliation baseline. Reconcile against the actual accepted operator source; these are not overwrite instructions."
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
@@ -158,7 +173,7 @@
     }
   },
   "stages": {
-    "source": "Selected local Sudoku editing package complete alongside preserved prior modes/Blackjack capabilities; full original apps remain incomplete.",
+    "source": "Selected received-session/recovery/inspection source package complete, preserving local editing, modes and prior Blackjack bindings. Full original apps remain incomplete.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
@@ -166,20 +181,17 @@
     "world_placed": false,
     "world_saved": false,
     "end_to_end": false,
-    "source_review": "PASS; no blocking source defect; note-lifetime copy corrected",
-    "static_checks_passed": 57,
+    "source_review": "PASS; independent manual actor-branch/contract and final Slate source review; no blocking defect. Three review corrections applied.",
     "tests_or_builds_run": false,
-    "unchanged_slate_methods": 14
+    "current_evidence": "Manual source branch matrix plus protected file pins and git diff --check. No current counted static suite or behavioral/compiler proof."
   },
   "pending_operator_steps": [
-    "Source packet only; do not reserve a native/build/editor slot ahead of ingestion. Dedicated tests and native acceptance remain deferred.",
-    "This increment expects existing PR15289ece418/4f63c5b0 source, whose Blackjack additions are not established installed. Reconcile the full four-file PR152 diff against current accepted184 source; never overwrite newer owners or whole plugin.",
-    "The new unique reflected function/private fields require generated-code/module integration. Only codex-play-guard selects and performs the later normal supported build/load route; no live DLL or LiveCoding assumption.",
-    "At the next owned source-validation slot exercise8flag combinations, ordinaryStart compatibility, invalid/busy gates, selections across async bootstrap and stale/replaced callbacks; preserve existing guard/secret/protocol constraints.",
-    "Later approved disposable Sudoku acceptance: normal HeroUse, modeCreate, compare confirmed flags/time limit, timed save/resume without clock extension, then close/reopen/disconnect recovery. No actual service or credentials used by source lane.",
-    "Retain prior Blackjack companion/rules/settings/metadata acceptance steps; they remain uncompiled/uninstalled/unaccepted at this source checkpoint. No equivalent nativeSudoku/Blackjack gameplay/persistence is inferred from other Mines/HUD checks.",
-    "After a separately authorized slot, follow cabinet-source-package.md for focused forms/buttons/keys, hint-confirmation identity lifecycle, status after invalid Configure, original Blackjack metadata and actual modal readability/close behavior. Source-only mappings are not native acceptance.",
-    "At a later authorized slot follow cabinet-source-package.md steps7-8 for local notes/erase/identity resets/typed input/visuals. New private Slate methods need module compilation; no new reflected declaration here, while prior mode UFUNCTION still requires its supported UHT/build route. No immediate runtime slot or native acceptance."
+    "Source packet only; no runtime/build/editor slot allocated. Existing sole operator selects later separately authorized integration and acceptance.",
+    "Reconcile the full four-file PR152 diff, including original Blackjack/mode additions, against the current accepted native source. Preserve desktop/Mines/R2/other owners; no whole-plugin replacement or rollback.",
+    "Earlier additive reflected mode API still requires supported UHT/generated-code/module integration. This increment adds private Slate methods only. No DLL/LiveCoding assumption.",
+    "Use cabinet-source-package.md current manual matrix for entered/received identity, local field fill/focus, busy/private-refusal recovery, definite-vs-unknown Blackjack create, mode mismatch/ownership, selected-cell/note provenance and lifecycle acceptance. All rows source-reviewed only.",
+    "Retain earlier mode combinations/capture/time-limit save-resume, local-note overrides/reset and one-entry typing, original shortcuts/hint confirmation/metadata, close/EndPlay and actual readability checks. No prior Mines/HUD/Java/DLL proof transfers.",
+    "Companion adoption/provider/account mapping and approved disposable service execution remain dependencies. Never put credentials in the packet; no production/financial services."
   ],
   "remaining_original_features": [
     "facade health/reopen binding",
@@ -235,7 +247,8 @@
       "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
       "sha256": "772C17EE4A519A70C1A79A16F5AE613AFBA629F2B6E4E926ADE72117DB9E1989",
       "applicability": "Verified web module, not a native Slate transport. Existing Slate checkbox/focus path reused; no new controller plumbing or native bindings."
-    }
+    },
+    "evidence_scope": "Historical checkpoint only; not rerun or current behavioral/compiler/native proof."
   },
   "ui_extension_claim_messages": [
     32190,
@@ -273,7 +286,8 @@
     },
     "lesson": "Use existing guarded action APIs for source shortcuts; scope keys to direct board focus; bind confirmations to current identity; local validation must not hide authoritative status.",
     "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot.",
-    "note": "Historical c7b3f3e2 source checkpoint; current local editing evidence is in local_sudoku_editing."
+    "note": "Historical c7b3f3e2 source checkpoint; local editing history is in local_sudoku_editing and current manual source evidence is in session_recovery.",
+    "evidence_scope": "Historical checkpoint only; not rerun or current behavioral/compiler/native proof."
   },
   "local_sudoku_editing": {
     "code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
@@ -370,6 +384,145 @@
     "compiler_behavior_tests_services_editor_run": false,
     "lesson": "Represent local note deletion with an explicit override; retain hidden marks without mutating answers; route typed and pad entry once; document exact reset semantics.",
     "harness_proposal": "Existing Java cabinet harness later: zero-override resync, hidden notes/undo/refusal, accepted/refused same-ID entries, Shift/numpad/forms/other users/repeats, single-command count, colors/counts and note legibility. Benefit ESTIMATED; owner desktop-games, deferred.",
-    "controller_reuse": "Existing native focus/Slate event contract only. Verified daedalus-pad/1 remains web-only; no controller bridge or duplicate framework added."
+    "controller_reuse": "Existing native focus/Slate event contract only. Verified daedalus-pad/1 remains web-only; no controller bridge or duplicate framework added.",
+    "evidence_scope": "Historical checkpoint only; not rerun or current behavioral/compiler/native proof."
+  },
+  "session_recovery": {
+    "code_commit": "6e28706693319c53170dda3d545c12f8cf5f95c7",
+    "baseline": "c0cacb261a960ea71de239f644be4db4f91310fb",
+    "assignment_message": 32249,
+    "actual_start_message": 32308,
+    "actual_start_utc": "2026-10-15 20:12:09 UTC",
+    "changed_runtime_files": [
+      "Private/SDaedalusJavaArcade.h",
+      "Private/SDaedalusJavaArcade.cpp"
+    ],
+    "runtime_diff": "207 insertions, 8 deletions; private Java Slate pair only",
+    "shared_reuse": "Existing Java actor/state/guard/RefreshSnapshot/RetryBlackjackCreate/Start/Open/Resume APIs; no new shared service or controller architecture.",
+    "identity": "Existing ID display clarified as current/last received, separate from entered text. Complete Sudoku 81-cell/given shape required. Empty received ID does not imply private requested ID absent.",
+    "revision_limit": "Sudoku has no projected board revision; default zero not displayed. Blackjack received revision only.",
+    "local_fill": "Use current ID changes only editable text/local feedback/local-user field focus. No network, clipboard, note/hint/selection reset.",
+    "candidate_gate_limit": "Public current-mode/credentials/busy/owner/closed/identity predicates cannot expose actor-private pending task, request and uncertain-create state. Actor false result is reported as could not start; true is requested only.",
+    "blackjack_start": "Preserves prior Start gate without a new NeedsSync restriction. Definite create refusal may permit fresh Start, while actor-private unknown-create blocks it safely.",
+    "cell_inspection": "Received answers/clues/native entry gate, local versus received pencil marks including zero/hidden notes, and same-game hint confirmation remain distinct.",
+    "lifecycle": "Refresh/recovery/local fill preserve notes, hint target and selection. Accepted-local UI New/Open/Resume clears notes immediately even on later failure; entry attempt clears hint as before. Existing keyboard handlers unchanged.",
+    "review": {
+      "worker": "java_package_gap_review (existing worker reused)",
+      "outcome": "PASS; no blocking source defect",
+      "packet_audit": "PASS; same existing reviewer verified all four final and c0 prior SHA/blob pins, four protected files, 15-row source matrix and current-versus-historical limits; no corrections found.",
+      "corrections": [
+        "Preserve fresh Blackjack Start after definite refusal",
+        "Game-specific no-ID guidance",
+        "Separate received answers from local notes"
+      ],
+      "focus_api": "Installed UE5.8 SetUserFocus declaration inspected; not compiled or executed",
+      "git_diff_check": "PASS",
+      "counted_static_suite_run": false,
+      "tests_builds_services_credentials_editor_runtime_run": false
+    },
+    "manual_branch_matrix_status": "Every row manually source-reviewed only; no behavioral/native execution",
+    "manual_branch_matrix": [
+      {
+        "branch": "No credentials / no received ID",
+        "source_result": "Account guidance; refresh/recovery/start candidates disabled. Entered ID cannot imply receipt.",
+        "deferred_acceptance": "Configure then connect using approved disposable credentials; no credentials exercised here."
+      },
+      {
+        "branch": "Configured but no received board/table",
+        "source_result": "Game-specific New/Open/Resume or Start guidance. Incomplete Sudoku shape does not become accepted identity.",
+        "deferred_acceptance": "Observe bootstrap and transport refusal without fabricated received ID."
+      },
+      {
+        "branch": "Busy with known or unknown ID",
+        "source_result": "Wait guidance; action candidates disabled. Known identity is last received, not a new receipt.",
+        "deferred_acceptance": "Delay callbacks and verify no duplicate operation or changed input target."
+      },
+      {
+        "branch": "Ready owned complete Sudoku; entered ID differs or matches",
+        "source_result": "Received ID and entered text remain separate. Matching text only reports equality. Use current ID requires ready/nonbusy/nonsync/owner/81-cell shape.",
+        "deferred_acceptance": "Check both text cases and absence of automatic Open/Resume."
+      },
+      {
+        "branch": "Use current ID",
+        "source_result": "Only SetText, local feedback and local-user field focus; no actor request, clipboard, note reset or hint reset.",
+        "deferred_acceptance": "Inspect field focus, keyboard typing and unchanged notes/selection/hint after fill."
+      },
+      {
+        "branch": "Empty / over-256-character ID; otherwise actor-refused Open/Resume",
+        "source_result": "UI length gate refuses empty/oversize. Actor remains final authority for private work/guard state. No accepted identity is inferred from editable text.",
+        "deferred_acceptance": "Check boundaries and actor false result; no remote side effect or note reset on local refusal."
+      },
+      {
+        "branch": "Accepted local New/Open/Resume then delayed success or failure",
+        "source_result": "Exact entered ID captured for local-attempt feedback. Accepted call resets presentation as before; later failure cannot restore prior notes or claim board acceptance. Hint target clears on entry attempt as before.",
+        "deferred_acceptance": "Check same/different IDs, later failure, and field edits while pending. Notes reset at local acceptance, not successful receipt."
+      },
+      {
+        "branch": "NeedsSync with known ID; hidden HTTP/request still active",
+        "source_result": "Refresh candidate follows current public identity/owner/credential/closed gates. RefreshSnapshot may still return false for private pending work. True feedback says requested only.",
+        "deferred_acceptance": "Exercise actor refusal and delayed acceptance; preserve notes and pending hint target."
+      },
+      {
+        "branch": "Blackjack NeedsSync with empty ID",
+        "source_result": "Recover is a candidate only. Unknown create with retained request may retry; definite create refusal can share this public shape and refuse recovery. Fresh Start keeps the previous supported gate; actor blocks unknown creates.",
+        "deferred_acceptance": "Exercise both private branches, recover true/false and fresh Start after definite 4xx; no automatic mutation replay."
+      },
+      {
+        "branch": "Closed or expired Blackjack table",
+        "source_result": "RemoteClosed disables refresh/recovery and permits existing Start candidate; status stays visible. Closed guard/private state can still refuse an attempted action.",
+        "deferred_acceptance": "Verify remote close/expiry and fresh Start through the existing actor."
+      },
+      {
+        "branch": "Wrong Sudoku owner / selected-mode mismatch",
+        "source_result": "Wrong owner disables refresh/fill/entry. Mode mismatch disables new common actions and Save gate, and suppresses mismatched local feedback. Actor APIs remain final.",
+        "deferred_acceptance": "Exercise local selection/state mismatch and wrong-owner reply; no stale action reaches another game."
+      },
+      {
+        "branch": "Selected clue / empty cell / filled answer / unavailable entry",
+        "source_result": "Inspection uses received Cells/Givens plus existing CanEnterSudokuDigit. Pencil/answer mode and gated states are described without changing legality.",
+        "deferred_acceptance": "Compare inspection with actor-enabled entry in ready, busy, solved, time-up and disconnected states."
+      },
+      {
+        "branch": "Local override / received snapshot notes / zero / hidden notes",
+        "source_result": "Received answer is independent of note origin. Local edits and received masks are labelled separately; explicit zero stays none; notes behind filled answers remain retained and described as hidden.",
+        "deferred_acceptance": "Check same-ID refresh/undo/refusal and all existing note reset boundaries."
+      },
+      {
+        "branch": "Hint pending / direct board focus / forms/buttons",
+        "source_result": "Refresh, recovery and local fill do not reset hint/selection/notes. Existing key handlers and direct-board/user gates remain unchanged; fill deliberately focuses the ID field for the owning Slate user.",
+        "deferred_acceptance": "Check H/Cancel/Buy identity lifecycle, direct keys versus typed text, another local user, repeats/modifiers/controllers and close cleanup."
+      },
+      {
+        "branch": "Revision and feedback freshness",
+        "source_result": "Only Blackjack displays the received Revision. Sudoku default zero is not a server version. Last local action remains an attempt record, separate from received status/identity.",
+        "deferred_acceptance": "Confirm layout and wording during all asynchronous transitions; no successful receipt inferred from queued action."
+      }
+    ],
+    "protected_files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+        "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+        "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h",
+        "sha256": "9B819430250B9386E2686EBB423121CA733C0111585E453A49CFAD557DB6CBA0",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+        "sha256": "1C457F9D144DA1707592F2AEE26D6F2916C6F21E414F6C026C41331F8B63A338",
+        "unchanged": true
+      }
+    ],
+    "full_original_application_complete": false,
+    "connected_native_end_to_end": false,
+    "lesson": "Distinguish requested input, accepted local operation and received identity; derive candidates from public state and let actor-private guards decide; label mixed-origin notes separately.",
+    "harness_proposal": "Extend existing Java cabinet acceptance later with this manual matrix; no new framework/job/controller. Benefit ESTIMATED; no measured runtime gain."
   }
 }

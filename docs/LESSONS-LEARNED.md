@@ -290,3 +290,20 @@ accepted same-ID entry, Shift/numpad/form focus and counted one-command dispatch
 Proposed owner desktop-games at a later authorized slot; no new framework/queue.
 
 
+
+### Separate requested input, local acceptance and received identity
+
+2026-10-15, pootscoot-desktop-games; existing java_package_gap_review worker.
+Source6e287066 extends PR152 from c0cacb26 in only the private Java Slate pair.
+An existing received-ID row needs clearer provenance, not a duplicate state store.
+Editable/requested IDs, actor bool acceptance and received snapshots are distinct.
+State-derived enabled recovery is only a candidate: private pending/unknown-create
+branches remain actor authority. Preserve fresh Start after definite Blackjack
+refusal; NeedsSync alone cannot distinguish that case from unknown creation.
+Local Use current ID fills/focuses only. Show received answers separately from
+local/received pencil masks, including explicit zero and hidden notes. Never
+display Sudoku's unpopulated Revision as a server version. Independent manual
+branch/source review passes; no counted suite/tests/builds/services/native ran.
+Existing-harness proposal: use the documented identity/recovery/focus/cell matrix
+at a later authorized slot. Benefit ESTIMATED, owner desktop-games; no new service,
+framework, worker or runtime queue reservation. No firsthand native/Blender proof.

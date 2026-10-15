@@ -4,9 +4,62 @@ This completes the selected source package in existing [PR152](https://github.co
 It does not complete either original application or establish installed/native play.
 Owner: pootscoot-desktop-games. Only codex-play-guard operates Unreal.
 
-## Local Sudoku editing continuation
+## Current continuation: received session identity and recovery
 
-Current source `da2b4a84e357114181cbdb65093628d595cda2a7` continues published
+Source `6e28706693319c53170dda3d545c12f8cf5f95c7` continues published head `c0cacb261a960ea71de239f644be4db4f91310fb` in the same draft PR152.
+Exactly the two private Java Slate files change (+207/-8). Assignment32249 and
+START32308 (2026-10-15 20:12:09 UTC) bound this work. The actor/public API,
+protocol, Build.cs, original games, transport, saves and rules remain unchanged.
+The previous cabinet already displayed a received game ID; this package clarifies
+that row and separates it from requested input rather than claiming it was absent.
+
+| Completed source deliverable | Existing interface reused | Source boundary |
+|---|---|---|
+| Received identity and entered-ID workspace | `State.SessionId`, `Cells/Givens`, `GetState`, existing editable ID field | Current/last received ID is separate from text; entered equality is not acceptance. Only Blackjack displays received Revision; Sudoku has no projected board version |
+| Deliberate Use current ID | Existing ready owned Sudoku state and `SEditableTextBox::SetText`; local-user `SetUserFocus` | Field fill only, no request/clipboard/reset. Requires ready, nonbusy, nonsync, owner and complete received board |
+| Refresh and create recovery | Existing `RefreshSnapshot` and `RetryBlackjackCreate` | Public predicates are candidates; actor private request/guard state decides. Bool true means locally requested, not receipt or success. No new endpoint or mutation replay |
+| Start/Open/Resume attempt feedback | Existing `StartSudokuGameWithModes`, `OpenSudokuGame`, `ResumeSudokuGame`, `StartBlackjackSession` | Captures entered ID before request; preserves prior note/hint reset semantics and supported Blackjack Start after definite create refusal |
+| Selected-cell inspection | Received `Cells/Givens`, existing `CanEnterSudokuDigit`, `PencilMask` and pending hint identity | Answers/clues and native entry availability are distinct from local pencil edits. Received notes, local overrides, explicit zero and hidden marks are labelled truthfully |
+| Shared state-derived guidance | Existing busy, Ready, NeedsSync, owner, remote-closed, solved/time-up and phase fields | Describes current recovery choices without inventing a server state, wallet, conflict receipt or persistent session history |
+
+Independent review by the existing `java_package_gap_review` worker found no
+blocking source defect. It read actor private guard branches and the public state
+contract, and verified corrections preserving fresh Blackjack Start after definite
+refusal, game-specific identity guidance and separation of received answers from
+local notes. The installed UE5.8 header supports the focus call; this is source
+evidence only. `git diff --check` passes. No new regex-count suite, tests, build,
+UHT, services, credentials, editor or native action ran. Earlier 57/14, 110/56 and
+77/61 counts below are historical checkpoints, not current behavioral evidence.
+
+### Manual source branch review and later acceptance matrix
+
+Every row below was manually reviewed in source; **none was executed as a
+behavioral/native test**. Public enabled state cannot expose every actor-private
+in-flight/recovery condition. Retained requested Sudoku IDs may also exist while
+the displayed received ID is empty. Source inspection cannot prove timing,
+rendered layout, actual focus, typing, network recovery or persistence.
+
+| Branch / combination | Manually reviewed source result | Deferred acceptance |
+|---|---|---|
+| No credentials / no received ID | Account guidance; refresh/recovery/start candidates disabled. Entered ID cannot imply receipt. | Configure then connect using approved disposable credentials; no credentials exercised here. |
+| Configured but no received board/table | Game-specific New/Open/Resume or Start guidance. Incomplete Sudoku shape does not become accepted identity. | Observe bootstrap and transport refusal without fabricated received ID. |
+| Busy with known or unknown ID | Wait guidance; action candidates disabled. Known identity is last received, not a new receipt. | Delay callbacks and verify no duplicate operation or changed input target. |
+| Ready owned complete Sudoku; entered ID differs or matches | Received ID and entered text remain separate. Matching text only reports equality. Use current ID requires ready/nonbusy/nonsync/owner/81-cell shape. | Check both text cases and absence of automatic Open/Resume. |
+| Use current ID | Only SetText, local feedback and local-user field focus; no actor request, clipboard, note reset or hint reset. | Inspect field focus, keyboard typing and unchanged notes/selection/hint after fill. |
+| Empty / over-256-character ID; otherwise actor-refused Open/Resume | UI length gate refuses empty/oversize. Actor remains final authority for private work/guard state. No accepted identity is inferred from editable text. | Check boundaries and actor false result; no remote side effect or note reset on local refusal. |
+| Accepted local New/Open/Resume then delayed success or failure | Exact entered ID captured for local-attempt feedback. Accepted call resets presentation as before; later failure cannot restore prior notes or claim board acceptance. Hint target clears on entry attempt as before. | Check same/different IDs, later failure, and field edits while pending. Notes reset at local acceptance, not successful receipt. |
+| NeedsSync with known ID; hidden HTTP/request still active | Refresh candidate follows current public identity/owner/credential/closed gates. RefreshSnapshot may still return false for private pending work. True feedback says requested only. | Exercise actor refusal and delayed acceptance; preserve notes and pending hint target. |
+| Blackjack NeedsSync with empty ID | Recover is a candidate only. Unknown create with retained request may retry; definite create refusal can share this public shape and refuse recovery. Fresh Start keeps the previous supported gate; actor blocks unknown creates. | Exercise both private branches, recover true/false and fresh Start after definite 4xx; no automatic mutation replay. |
+| Closed or expired Blackjack table | RemoteClosed disables refresh/recovery and permits existing Start candidate; status stays visible. Closed guard/private state can still refuse an attempted action. | Verify remote close/expiry and fresh Start through the existing actor. |
+| Wrong Sudoku owner / selected-mode mismatch | Wrong owner disables refresh/fill/entry. Mode mismatch disables new common actions and Save gate, and suppresses mismatched local feedback. Actor APIs remain final. | Exercise local selection/state mismatch and wrong-owner reply; no stale action reaches another game. |
+| Selected clue / empty cell / filled answer / unavailable entry | Inspection uses received Cells/Givens plus existing CanEnterSudokuDigit. Pencil/answer mode and gated states are described without changing legality. | Compare inspection with actor-enabled entry in ready, busy, solved, time-up and disconnected states. |
+| Local override / received snapshot notes / zero / hidden notes | Received answer is independent of note origin. Local edits and received masks are labelled separately; explicit zero stays none; notes behind filled answers remain retained and described as hidden. | Check same-ID refresh/undo/refusal and all existing note reset boundaries. |
+| Hint pending / direct board focus / forms/buttons | Refresh, recovery and local fill do not reset hint/selection/notes. Existing key handlers and direct-board/user gates remain unchanged; fill deliberately focuses the ID field for the owning Slate user. | Check H/Cancel/Buy identity lifecycle, direct keys versus typed text, another local user, repeats/modifiers/controllers and close cleanup. |
+| Revision and feedback freshness | Only Blackjack displays the received Revision. Sudoku default zero is not a server version. Last local action remains an attempt record, separate from received status/identity. | Confirm layout and wording during all asynchronous transitions; no successful receipt inferred from queued action. |
+
+## Historical local Sudoku editing continuation
+
+Historical source `da2b4a84e357114181cbdb65093628d595cda2a7` continues published
 head `9fad7509b5e317807f2627d06807e6a8a1b73a2a` in the same draft PR. Exactly
 the two existing private Slate files change (+207/-20). The actor, reflected
 public API, protocol, Build.cs, saves, clock and all Blackjack rules/commands are
@@ -97,8 +150,9 @@ are source checks, not compiled/behavioral tests. The first mode checkpoint's
 No compiler, UHT, behavioral tests, service traffic, credentials, editor, placement
 or native gameplay ran. The earlier added reflected mode function requires a
 later supported UHT/module build. Historical PR55, Java facade, portable DLL or
-Mines/HUD evidence does not transfer to this package. Current local-editing source
-has the separate 57-check preservation audit described above.
+Mines/HUD evidence does not transfer to this package. Historical local-editing source
+had the separate 57-check preservation audit described above; current recovery
+evidence is the manual review matrix, with no new behavioral suite.
 
 At a later separately authorized validation/intake slot, use the existing harness
 and approved disposable Java services. Do not reserve a slot ahead of ingestion.
@@ -123,7 +177,8 @@ and approved disposable Java services. Do not reserve a slot ahead of ingestion.
    the same authoritative snapshot. Verify no hidden dealer/future-shoe data.
 6. Record actual viewport readability/layering, local-player focus, close/EndPlay,
    save/recovery behavior and exact installed source. No source-only result counts
-   as visible or persistence acceptance.
+   as visible or persistence acceptance. Include the current manual matrix above
+   for received/entered IDs, local fill, hidden recovery refusals and cell inspection.
 7. For local editing, toggle each note twice; erase notes-only cells without a move;
    preserve notes behind answers and after refused entries/undo/redo/same-ID
    snapshots; ensure an explicit zero override cannot fall back to old snapshot
