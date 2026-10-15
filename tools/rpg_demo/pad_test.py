@@ -99,9 +99,9 @@ with sync_playwright() as p:
         if st()["mode"] == "shop": break
         tap(2, 1)
     tap(2, 0); W(300); check("switch B leaves the shop", st()["mode"] == "field")
-    pg.click("#padconfirm"); W(100)
-    check("confirm-by-position: bottom confirms", ev("PRISM_DEMO.padStore().confirm") == "position" and ev("PRISM_DEMO.padLabel('confirm',2)") == "B")
-    pg.click("#padconfirm"); W(100)
+    ev("PRISM_DEMO.settings().set('ConfirmButton', 1)"); W(100)
+    check("ConfirmButton = BOTTOM (Controller tab): bottom confirms", ev("PRISM_DEMO.padLabel('confirm',2)") == "B")
+    ev("PRISM_DEMO.settings().set('ConfirmButton', 0)"); W(100)
     ev("__pad.unplug(2)"); W(150)
 
     # Mayflash N64 adapter (community map: a:b1 b:b2 start:b9, d-pad on POV hat, stick a0/a1)

@@ -13,6 +13,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { meshChunk } from "/realm-mesh.js";
 import "/controllers/daedalus-pad.js";          // shared controller layer (window.DaedalusPad), see docs/controllers.md
+import "/settings/daedalus-settings.js";        // shared settings + Halo Infinite-style panel (window.DaedalusSettings)
 
 // Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
 const WORLD = (() => {
@@ -337,6 +338,12 @@ function resize() {
   renderer.setSize(w, h, false);
   if (typeof composer !== "undefined") composer.setSize(w, h);
   camera.aspect = w / h;
+  applyFov();
+}
+// Field of View is the native row (horizontal degrees, like Unreal); three.js wants the vertical angle.
+function applyFov() {
+  const h = (typeof SETTINGS !== "undefined" && SETTINGS.loaded() ? SETTINGS.get("FieldOfView") : 0) || 0;
+  if (h) camera.fov = 2 * Math.atan(Math.tan(h * Math.PI / 360) / Math.max(0.2, camera.aspect)) * 180 / Math.PI;
   camera.updateProjectionMatrix();
 }
 window.addEventListener("resize", resize);
@@ -2611,8 +2618,9 @@ function startPlay() {
   camera.position.copy(AVATAR.pos).add(new THREE.Vector3(0, 6, 11));
   AVATAR.last = AVATAR.pos.clone();
   document.body.classList.add("playing");
-  toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump"
-    : "WASD / arrows, Space jumps, J thrusts, hold C to crouch, H heals. Controller: stick moves, A jumps, X thrusts, hold B crouches, Y heals");
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials"))   // Gameplay tab: Tips & Tutorials
+    toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump"
+      : "WASD / arrows, Space jumps, J thrusts, hold C to crouch, H heals. Controller: your Button Layout (Menu = Settings, View = leave play)");
   startFight();
 }
 function stopPlay() {
@@ -2721,39 +2729,70 @@ function die() {
   placeAvatar(AVATAR.respawn);
   toast(AVATAR.reached >= 0 && state.bricks ? "Ouch! Back to your checkpoint" : "Ouch! Back to the start");
 }
-// ---------------------------------------------------------------- Controllers (shared DaedalusPad module)
-// Left stick / d-pad moves, right stick orbits the camera, A jumps, X or RT thrusts, hold B crouches, Y heals,
-// View goes back to look mode, Menu/Start enters or leaves play. Any pad the module knows (standard, community
-// mapped retro / arcade / adapter, or taught with BIND on the Prismheart page) works here with the same file.
+// ---------------------------------------------------------------- Settings and controllers (shared modules)
+// One settings schema for every client (data/settings/settings-schema.json, built from the Unreal settings code),
+// laid out like Halo Infinite. The pad follows the same Button Layout / Thumbstick Layout tables as the Unreal hero:
+// Jump, Attack and Melee (thrust), Aim (hold your ground), Interact (heal). Menu opens Settings; View enters or leaves
+// play. Look uses the hero's numbers: 200 deg/s at sensitivity 5, invert, and look acceleration.
+var SETTINGS = window.DaedalusSettings ? window.DaedalusSettings.create({ schema: "/settings/settings-schema.json" }) : null;
 const PAD = window.DaedalusPad ? window.DaedalusPad.create({
-  bundle: "/controllers/controller-bundle.json", digitalStick: false,
+  bundle: "/controllers/controller-bundle.json", digitalStick: false, settings: SETTINGS,
   onChange: e => {
     if (e.type === "connect") toast(`${e.pad.name} connected`);
     if (e.type !== "down" && e.type !== "up") return;
+    if (PANEL && PANEL.isOpen()) return;                      // the panel reads the pad itself
     const down = e.type === "down";
-    if (e.action === "menu" && down) { setMode(state.mode === "play" ? "look" : "play"); return; }
+    if (e.action === "menu" && down) { PANEL && PANEL.open(); return; }
+    if (e.action === "back" && down) { setMode(state.mode === "play" ? "look" : "play"); return; }
     if (state.mode !== "play") return;
-    if (e.action === "a") AVATAR.jump = down;
-    else if ((e.action === "x" || e.action === "zr") && down) heroThrust();
-    else if (e.action === "b") heroCrouch(down);
-    else if (e.action === "y" && down) heroHeal();
-    else if (e.action === "back" && down) setMode("look");
+    const is = name => PAD.heroInputs(name).includes(e.action);
+    if (is("Jump")) AVATAR.jump = down;
+    if ((is("Attack") || is("Melee")) && down) heroThrust();
+    if (is("Aim")) heroCrouch(down);
+    if (is("Interact") && down) heroHeal();
   },
 }) : null;
-state.pad = PAD;
+const PANEL = SETTINGS && window.DaedalusSettings ? window.DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
+  onOpen: () => { AVATAR.jump = false; heroCrouch(false); }, onClose: () => {} }) : null;
+state.pad = PAD; state.settings = SETTINGS; state.settingsPanel = PANEL;
+const FPS = { el: Object.assign(document.createElement("div"), { id: "fpsCounter" }), frames: 0, at: performance.now() };
+FPS.el.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:30;display:none;font:600 12px ui-monospace,monospace;color:#3ee08f;background:rgba(0,0,0,.45);padding:3px 7px;border-radius:4px;pointer-events:none";
+document.body.appendChild(FPS.el);
+function fpsTick(t) {
+  FPS.frames++;
+  if (t - FPS.at >= 500) { FPS.el.textContent = Math.round(FPS.frames * 1000 / (t - FPS.at)) + " FPS"; FPS.frames = 0; FPS.at = t; }
+}
+if (SETTINGS) {
+  SETTINGS.on("FieldOfView", () => applyFov());
+  SETTINGS.on("MouseSensH", v => { controls.rotateSpeed = v / 5; });
+  SETTINGS.on("FpsCounter", v => { FPS.el.style.display = v ? "block" : "none"; });
+}
+const settingsBtn = document.getElementById("settingsBtn");
+if (settingsBtn && PANEL) settingsBtn.onclick = () => PANEL.open();
+window.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || (PANEL && PANEL.isOpen())) return;
+  if (e.key === "F1" || e.key === "F10") { e.preventDefault(); PANEL && PANEL.open(); }
+});
+let lookHeld = 0;
 function padPlay(dtMs) {
   if (!PAD) return;
   PAD.poll();
-  const a = PAD.axes();
+  const dt = dtMs / 1000;
+  if (PANEL && PANEL.isOpen()) { AVATAR.pad.x = AVATAR.pad.y = 0; return; }
+  const m = PAD.move(), l = PAD.look();
   const dx = (PAD.held("right") ? 1 : 0) - (PAD.held("left") ? 1 : 0), dy = (PAD.held("up") ? 1 : 0) - (PAD.held("down") ? 1 : 0);
-  AVATAR.pad.x = a.lx + dx; AVATAR.pad.y = -a.ly + dy;
-  if (a.rx || a.ry) {                                       // right stick orbits around the avatar, rate-based like the hero
+  AVATAR.pad.x = m.x + dx; AVATAR.pad.y = m.y + dy;
+  if (l.x || l.y) {                                          // the hero's LookStick: a rate, with acceleration at full tilt
+    const g = id => (SETTINGS && SETTINGS.loaded() ? SETTINGS.get(id) : { LookSensH: 5, LookSensV: 5, LookAccel: 3, InvertLookX: 0, InvertLookY: 0 }[id]);
+    lookHeld = Math.hypot(l.x, l.y) > 0.92 ? Math.min(lookHeld + dt, 0.5) : 0;
+    const accel = 1 + g("LookAccel") * 0.08 * (lookHeld / 0.5);
+    const rate = 200 * Math.PI / 180 * dt * accel;
     const off = camera.position.clone().sub(controls.target);
     const sph = new THREE.Spherical().setFromVector3(off);
-    sph.theta -= a.rx * 2.6 * dtMs / 1000;
-    sph.phi = Math.min(Math.PI * 0.47, Math.max(0.15, sph.phi + a.ry * 1.8 * dtMs / 1000));
+    sph.theta -= l.x * rate * (g("LookSensH") / 5) * (g("InvertLookX") ? -1 : 1);
+    sph.phi = Math.min(Math.PI * 0.47, Math.max(0.15, sph.phi + l.y * rate * (g("LookSensV") / 5) * (g("InvertLookY") ? -1 : 1)));
     camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
-  }
+  } else lookHeld = 0;
 }
 function movePlay(t, dtMs) {
   if (!AVATAR.on) return;
@@ -2803,7 +2842,8 @@ function toast(text) {
   t.textContent = text;
   t.style.display = "block";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.style.display = "none"; }, 2600);
+  const secs = typeof SETTINGS !== "undefined" && SETTINGS && SETTINGS.loaded() ? SETTINGS.get("NotificationDuration") : 2.6;   // Accessibility tab
+  toastTimer = setTimeout(() => { t.style.display = "none"; }, secs * 1000);
 }
 
 function plural(n, word) { return `${n} ${word}${n === 1 ? "" : "s"}`; }
@@ -2852,6 +2892,7 @@ function frame(t) {
   const now = t || 0;
   const dtMs = lastFrame ? Math.min(250, now - lastFrame) : 16;
   lastFrame = now;
+  fpsTick(now);
   movePlay(now, dtMs);
   controls.update();
   moveArks(t || 0);

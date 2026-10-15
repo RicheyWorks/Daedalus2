@@ -186,12 +186,34 @@
         st.up = !!(m & 1) || btn(gp, 12); st.right = !!(m & 2) || btn(gp, 15); st.down = !!(m & 4) || btn(gp, 13); st.left = !!(m & 8) || btn(gp, 14);
         rec.hats.forEach(i => { if (i < 4) ax[["lx", "ly", "rx", "ry"][i]] = 0; });
       }
-      for (const k of ["lx", "ly", "rx", "ry"]) if (Math.abs(ax[k]) < opt.deadzone) ax[k] = 0;
+      rec.pre = { lx: ax.lx, ly: ax.ly };                  /* the digital stick reads raw values, like the native translator */
+      shapeStick(ax, "lx", "ly", "Left"); shapeStick(ax, "rx", "ry", "Right");
+      ax.lt = shapeTrigger(ax.lt); ax.rt = shapeTrigger(ax.rt);
+      if (rec.source === "standard") { st.zl = ax.lt > 0.5; st.zr = ax.rt > 0.5; }
       rec.ax = ax;
       return st;
     }
+    /* Sticks: radial center dead zone with rescale (no cross-shaped dead zone, diagonals stay diagonal), a max input
+       threshold, and an optional axial dead zone, per stick, from the Controller tab (Halo Infinite's three). */
+    const setting = (id, d) => (opt.settings && opt.settings.loaded() ? opt.settings.get(id) : d);
+    function shapeStick(ax, kx, ky, side) {
+      const dz = setting(side + "Deadzone", opt.deadzone * 100) / 100, mx = Math.max(dz + 0.01, setting(side + "MaxInput", 100) / 100);
+      const axial = setting(side + "AxialDeadzone", 0) / 100;
+      let x = ax[kx], y = ax[ky];
+      const m = Math.hypot(x, y);
+      if (m <= dz) { ax[kx] = ax[ky] = 0; return; }
+      const k = Math.min(1, (m - dz) / (mx - dz)) / m;
+      x *= k; y *= k;
+      if (axial > 0) { if (Math.abs(x) < axial) x = 0; if (Math.abs(y) < axial) y = 0; }
+      ax[kx] = x; ax[ky] = y;
+    }
+    function shapeTrigger(t) {
+      const lo = setting("TriggerInnerDeadzone", 5) / 100, hi = Math.max(lo + 0.01, setting("TriggerOuterDeadzone", 95) / 100);
+      return Math.min(1, Math.max(0, (t - lo) / (hi - lo)));
+    }
+    const confirmMode = () => (opt.settings && opt.settings.loaded() ? (opt.settings.get("ConfirmButton") === 1 ? "position" : "label") : store.confirm);
     function stickDir(rec) {                               /* one cardinal: press 0.55 / release 0.40 / switch bias 0.10 */
-      const x = rec.ax.lx, y = rec.ax.ly, axv = Math.abs(x), ayv = Math.abs(y), cur = rec.stick;
+      const src = rec.pre || rec.ax, x = src.lx, y = src.ly, axv = Math.abs(x), ayv = Math.abs(y), cur = rec.stick;
       const want = Math.max(axv, ayv) < 0.55 ? null : axv > ayv ? (x > 0 ? "right" : "left") : (y > 0 ? "down" : "up");
       if (cur) {
         const v = cur === "left" || cur === "right" ? axv : ayv;
@@ -207,7 +229,7 @@
       if (opt.digitalStick && !(rec.custom && ["up", "down", "left", "right"].some(k => rec.custom[k] && rec.custom[k].some(s => s.ax === 0 || s.ax === 1)))) {
         const d = stickDir(rec); if (d) out[d] = true;
       }
-      const east = store.confirm === "label" && rec.labels.confirm === "east";
+      const east = confirmMode() === "label" && rec.labels.confirm === "east";
       if (rec.custom) { out.confirm = !!st.confirm; out.cancel = !!st.cancel; out.menu = !!st.menu; }
       else { out.confirm = east ? out.b : out.a; out.cancel = east ? out.a : out.b; out.menu = out.start; }
       out.select = out.back;
@@ -298,10 +320,25 @@
       if (rec && rec.custom && rec.custom[action]) return rec.custom[action][0].name;
       if (rec && rec.oneButton && (action === "confirm" || action === "cancel" || action === "menu"))
         return { confirm: "tap " + L.south, cancel: "hold " + L.south, menu: "long-hold " + L.south }[action];   /* hold = released after 0.35 s */
-      const east = store.confirm === "label" && L.confirm === "east";
+      const east = confirmMode() === "label" && L.confirm === "east";
       const pos = { confirm: east ? "east" : "south", cancel: east ? "south" : "east", a: "south", b: "east", x: "west", y: "north",
         menu: "start", start: "start", select: "back", back: "back", l: "l", r: "r", zl: "zl", zr: "zr" }[action];
       return (pos && L[pos]) || action;
+    }
+    function layouts() { return opt.settings && opt.settings.loaded() ? opt.settings.layout() : null; }
+    function heroInputs(name) {
+      const L = layouts(); if (!L) return [];
+      const lay = L.buttons[opt.settings.choice("ButtonLayout")] || L.buttons.DEFAULT;
+      return (lay[name] || []).concat(L.fixed[name] ? [L.fixed[name]] : []);
+    }
+    function stickPair(kind, index) {
+      const a = api_axes(index), L = layouts();
+      const st = L ? (L.sticks[opt.settings.choice("ThumbstickLayout")] || L.sticks.DEFAULT) : { MoveX: "lx", MoveY: "ly", LookX: "rx", LookY: "ry" };
+      return { x: a[st[kind + "X"]] || 0, y: -(a[st[kind + "Y"]] || 0) };   /* y up = positive, like Unreal's stick Y */
+    }
+    function api_axes(index) {
+      const r = index !== undefined ? pads[index] : Object.values(pads).find(p => p.ax && (p.ax.lx || p.ax.ly || p.ax.rx || p.ax.ry)) || Object.values(pads)[0];
+      return r ? r.ax : { lx: 0, ly: 0, rx: 0, ry: 0, lt: 0, rt: 0 };
     }
     if (root.addEventListener) {
       root.addEventListener("gamepadconnected", e => { if (e.gamepad) connect(e.gamepad); sample(); });
@@ -331,18 +368,31 @@
         return r ? Object.assign({}, r.ax) : { lx: 0, ly: 0, rx: 0, ry: 0, lt: 0, rt: 0 }; },
       devices: () => Object.values(pads).map(describe),
       label,
-      confirmMode: () => store.confirm,
-      setConfirm: m => { store.confirm = m === "position" ? "position" : "label"; save(); emit({ type: "confirm", mode: store.confirm }); },
+      confirmMode,
+      setConfirm: m => {
+        if (opt.settings && opt.settings.loaded()) opt.settings.set("ConfirmButton", m === "position" ? 1 : 0);
+        store.confirm = m === "position" ? "position" : "label"; save(); emit({ type: "confirm", mode: confirmMode() });
+      },
       startBind: (index, steps) => { bind = { index, steps: steps || BIND_STEPS.slice(), i: 0, map: {}, names: [], wait: true }; for (const i in pads) pads[i].logical = {}; merge(); emit({ type: "bind", step: null, next: bind.steps[0] }); },
       cancelBind: () => { if (bind) { bind = null; emit({ type: "bindcancel" }); } },
       binding: () => bind ? bind.steps[bind.i] : null,
       resetBinds: index => { for (const i in pads) if (index === undefined || +i === index) { delete store.binds[pads[i].id]; resolve(pads[i]); } save(); emit({ type: "reset" }); },
       rumble: (strong, ms) => {
+        if (!setting("Vibration", 1)) return;
+        strong *= setting("VibrationStrength", 100) / 100;
+        if (strong <= 0) return;
         for (const gp of (root.navigator && navigator.getGamepads ? navigator.getGamepads() : [])) {
           const v = gp && gp.vibrationActuator;
           if (v && v.playEffect) v.playEffect("dual-rumble", { duration: ms || 120, strongMagnitude: strong, weakMagnitude: Math.min(1, strong + 0.2) }).catch(() => {});
         }
       },
+      /* The hero's controls, from the same layout tables the Unreal hero uses (settings-schema.json layouts):
+         heroHeld("Jump") follows the Button Layout row, move() / look() follow the Thumbstick Layout row. */
+      heroHeld: name => heroInputs(name).some(k => held[k]),
+      heroPressed: name => heroInputs(name).some(k => { const v = !!edges[k]; if (v) edges[k] = false; return v; }),
+      heroInputs: name => heroInputs(name),
+      move: index => stickPair("Move", index),
+      look: index => stickPair("Look", index),
       bundleInfo: () => bundle ? { devices: Object.keys(bundle.devices).length, models: bundle.models.length } : null,
       store: () => JSON.parse(JSON.stringify(store)),
       destroy: () => { if (timer) clearInterval(timer); },

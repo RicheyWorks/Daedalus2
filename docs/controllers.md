@@ -166,6 +166,13 @@ X-input/standard pads that need none, or new models; BIND covers both.
   5 Select (coin).
 - **High-polling pads (Razer 8K):** the module samples every 4 ms, so a tap shorter than a frame still lands. The
   browser itself samples at about 250 Hz. The Unreal hero reads the full rate natively.
+- **Dead zones are Halo Infinite's three per stick:** a radial center dead zone that rescales (so diagonals stay
+  diagonal), Max Input Threshold and Axial Deadzone. Triggers get inner and outer dead zones. All of these come from the
+  shared Settings, Controller tab (`docs/settings.md`). The first version of this module had a per-axis
+  ("cross") dead zone, the same flaw as the hero's 1D stick keys. The review caught it and
+  `tools/settings/settings_test.js` pins the fix.
+- **Hero layouts on the web:** `pad.heroHeld("Jump")`, `pad.move()` and `pad.look()` follow the Button Layout and
+  Thumbstick Layout rows through the same tables the Unreal hero uses.
 - **Stick to d-pad:** one cardinal direction, pressed at 0.55, released at 0.40, and switched only with a 0.10 lead.
   These are the same numbers as the native portal-controls translator. Disconnecting or losing focus releases
   everything held.

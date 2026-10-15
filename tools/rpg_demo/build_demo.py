@@ -205,6 +205,10 @@ def main(argv):
     os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
     for f in ("daedalus-pad.js", "controller-bundle.json"):
         shutil.copy(os.path.join(ctl, f), os.path.join(out, "controllers", f))
+    st = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "settings")      # the shared settings module
+    os.makedirs(os.path.join(out, "settings"), exist_ok=True)
+    for f in ("daedalus-settings.js", "settings-schema.json"):
+        shutil.copy(os.path.join(st, f), os.path.join(out, "settings", f))
     print("DEMO tiles=%d sprites=%d foes=%d backdrops=%d spells=%d cues=%d events=%d reach=%s" % (
         len(tile_rects), len(sprite_rects), len(foes), len(backdrop_rects), len(fx_rects), len(cue_files), len(ev_files), reach))
 

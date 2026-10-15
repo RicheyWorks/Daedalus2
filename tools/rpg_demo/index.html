@@ -67,11 +67,11 @@ canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
       </div>
       <div class="padrow">
         <button id="padbind" type="button">BIND CONTROLLER</button>
-        <button id="padconfirm" type="button">CONFIRM: BY LABEL</button>
+        <button id="padsettings" type="button">SETTINGS</button>
         <button id="padreset" type="button">RESET</button>
       </div>
       <p class="note" id="padstatus" aria-live="polite">No controller yet. Plug one in or pair it, then press any button.</p>
-      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu) &middot; arcade encoders: MAME keys (<kbd>Ctrl</kbd> A, <kbd>Alt</kbd> B, <kbd>1</kbd> Start)</p>
+      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu) &middot; <kbd>F1</kbd> or View/Select: Settings &middot; arcade encoders: MAME keys (<kbd>Ctrl</kbd> A, <kbd>Alt</kbd> B, <kbd>1</kbd> Start)</p>
     </div>
     <div class="panel">
       <h2>Jukebox cues</h2>
@@ -82,6 +82,7 @@ canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
 </div>
 
 <script src="controllers/daedalus-pad.js"></script>
+<script src="settings/daedalus-settings.js"></script>
 <script>
 "use strict";
 (() => {
@@ -118,6 +119,7 @@ function releaseSource(src) { if (SRC[src]) for (const k of LOGICAL) setHeld(src
 const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
   KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
 window.addEventListener("keydown", e => {
+  if (typeof PANEL !== "undefined" && PANEL && PANEL.isOpen()) return;
   if (PAD && PAD.binding() && e.code === "Escape") { e.preventDefault(); return PAD.cancelBind(); }
   const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) setHeld("kb", k, true); unlockAudio();
 });
@@ -139,17 +141,26 @@ function menuRepeat(now) {                                        /* held direct
 /* ---------- controllers: the shared DaedalusPad module (controllers/daedalus-pad.js + controller-bundle.json) ----------
    Standard pads, the community-mapped retro / arcade / adapter database, BIND for anything else, the one-button
    rule for Atari sticks, MAME keys for cabinet encoders. The demo only translates its logical actions. */
+/* ---------- settings: the shared DaedalusSettings module and its Halo Infinite-style panel ---------- */
+const SETTINGS = window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
+if (SETTINGS) SETTINGS.on("*", () => { applyAudio(); if (typeof padStatus === "function") padStatus(); });
 const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
 const PAD = window.DaedalusPad ? DaedalusPad.create({
-  bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2",
+  bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
-    if (e.type === "down" || e.type === "up") { const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return; }
+    if (e.type === "down" || e.type === "up") {
+      if (PANEL && PANEL.isOpen()) return;                  /* the panel reads the pad itself */
+      if (e.action === "select" && e.type === "down" && PANEL) { Object.keys(SRC).forEach(releaseSource); PANEL.open(); return; }
+      const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return;
+    }
     if (e.type === "bind" && e.step) sfx("TICK");
     if (e.type === "bound") sfx("PICK");
     padStatus(e.type === "bound" ? "SAVED: " + e.names.join("  ") : e.type === "bindcancel" ? "BIND CANCELLED." : e.type === "reset" ? "BINDINGS RESET." : "");
   },
 }) : null;
 let padNote = "", padNoteUntil = 0;
+const PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
+  onOpen: () => { Object.keys(SRC).forEach(releaseSource); }, onClose: () => { cv.focus({ preventScroll: true }); } }) : null;
 function padStatus(extra) {
   const el = document.getElementById("padstatus"); if (!el || !PAD) return;
   if (extra) { padNote = extra; padNoteUntil = performance.now() + 6000; }
@@ -161,13 +172,28 @@ function padStatus(extra) {
   const b = PAD.bundleInfo(); if (b && !list.length) t += "  (" + b.devices + " controllers known.)";
   const step = PAD.binding(); if (step) t = "BIND: press the button for " + step.toUpperCase() + " (Esc cancels).";
   el.textContent = extra ? extra + "  " + t : t;
-  const cb = document.getElementById("padconfirm"); if (cb) cb.textContent = PAD.confirmMode() === "label" ? "CONFIRM: BY LABEL" : "CONFIRM: BOTTOM";
 }
 if (PAD) setInterval(padStatus, 1000);
 
 /* ---------- jukebox (ADR-052 cue contract) ---------- */
 const AC = window.AudioContext || window.webkitAudioContext;
-let actx = null, master, musicGain, sfxGain, musicSrc = null, curBufCue = null;
+let actx = null, master, musicGain, sfxGain, voiceGain, lim = null, musicSrc = null, curBufCue = null;
+/* Audio tab (shared settings): Main, Voice (dialogue blips), Music, Menu Music (title), Sound Effects, Dynamic Range,
+   Inactive Mute. Levels are read every time they are applied, so the panel's sliders take effect at once. */
+const vol = id => (SETTINGS && SETTINGS.loaded() ? SETTINGS.get(id) : { MainVolume: 80, VoiceVolume: 100, MusicVolume: 60, MenuMusicVolume: 60, EffectsVolume: 80, InactiveMute: 1, DynamicRange: 0 }[id]) ;
+const musicLevel = () => 1.1 * vol(juke.cue === "TITLE" ? "MenuMusicVolume" : "MusicVolume") / 100;
+function applyAudio() {
+  if (!actx) return;
+  const t = actx.currentTime, hidden = vol("InactiveMute") && document.hidden;
+  master.gain.setTargetAtTime(hidden ? 0 : vol("MainVolume") / 100, t, 0.05);
+  musicGain.gain.setTargetAtTime(musicLevel(), t, 0.05);
+  sfxGain.gain.setTargetAtTime(vol("EffectsVolume") / 100, t, 0.05);
+  voiceGain.gain.setTargetAtTime(vol("VoiceVolume") / 100, t, 0.05);
+  const night = vol("DynamicRange") === 1;               /* Compressed: evens loud and quiet out (late nights, small speakers) */
+  lim.threshold.setTargetAtTime(night ? -28 : -10, t, 0.05); lim.ratio.setTargetAtTime(night ? 6 : 20, t, 0.05);
+  lim.knee.setTargetAtTime(night ? 18 : 0, t, 0.05);
+}
+document.addEventListener("visibilitychange", applyAudio);
 const bufs = {};
 const juke = { cue: null, lastPosted: null, sfx: [], posts: 0 };
 function unlockAudio() {
@@ -175,12 +201,11 @@ function unlockAudio() {
   if (actx || !AC) return;
   try {
     actx = new AC();
-    const lim = actx.createDynamicsCompressor();          /* ear-safety limiter, like rd-jukebox's fixed chain */
+    lim = actx.createDynamicsCompressor();                /* ear-safety limiter, like rd-jukebox's fixed chain */
     lim.threshold.value = -10; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.12;
-    master = actx.createGain(); master.gain.value = 0.85;
-    musicGain = actx.createGain(); musicGain.gain.value = 0.7;
-    sfxGain = actx.createGain(); sfxGain.gain.value = 0.9;
-    musicGain.connect(lim); sfxGain.connect(lim); lim.connect(master); master.connect(actx.destination);
+    master = actx.createGain(); musicGain = actx.createGain(); sfxGain = actx.createGain(); voiceGain = actx.createGain();
+    musicGain.connect(lim); sfxGain.connect(lim); voiceGain.connect(lim); lim.connect(master); master.connect(actx.destination);
+    applyAudio();
     if (juke.cue) startMusic(juke.cue);
   } catch (e) { actx = null; }
 }
@@ -208,10 +233,11 @@ async function playSfx(ev) {
   if (!actx) return;
   const url = D.audio.events[ev]; if (!url) return;
   const b = await buffer(url); if (!b) return;
-  const s = actx.createBufferSource(); s.buffer = b; s.connect(sfxGain); s.start();
-  if (!ev.startsWith("BLIP:")) {                         /* duck the music under effects */
-    const t = actx.currentTime; musicGain.gain.cancelScheduledValues(t);
-    musicGain.gain.setTargetAtTime(0.42, t, 0.02); musicGain.gain.setTargetAtTime(0.7, t + b.duration, 0.12);
+  const voice = ev.startsWith("BLIP:");                  /* dialogue blips are the realm's voices */
+  const s = actx.createBufferSource(); s.buffer = b; s.connect(voice ? voiceGain : sfxGain); s.start();
+  if (!voice) {                                          /* duck the music under effects */
+    const t = actx.currentTime, lv = musicLevel(); musicGain.gain.cancelScheduledValues(t);
+    musicGain.gain.setTargetAtTime(lv * 0.6, t, 0.02); musicGain.gain.setTargetAtTime(lv, t + b.duration, 0.12);
   }
 }
 function cue(c) { juke.cue = c; }
@@ -222,7 +248,7 @@ function jukeTick() {
   if (!changed && !juke.sfx.length) return;
   const body = { cue: juke.cue, changed, sfx: juke.sfx.splice(0) };
   juke.posts++;
-  if (changed) { juke.lastPosted = juke.cue; startMusic(juke.cue); }
+  if (changed) { juke.lastPosted = juke.cue; startMusic(juke.cue); applyAudio(); }
   body.sfx.forEach(playSfx);
   const line = document.createElement("div");
   line.innerHTML = "<b>POST</b> " + JSON.stringify(body).replace(/</g, "&lt;");
@@ -846,7 +872,7 @@ function titleTick(dt) {
     party = buildParty(); state.bossBeaten = false; opened.clear();
     D.dungeon.floors.forEach(f => { delete f.grid._copy; });
     goto(townMap(), 11, 15, "up");
-    setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+    if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
   }
 }
 function drawTitle() {
@@ -893,7 +919,9 @@ window.PRISM_DEMO = {
   state: () => ({ mode, map: map && map.kind, floor: map && map.floor, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp]), boss: B.boss },
     party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.bossBeaten }),
-  press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), pads: () => PAD ? PAD.devices() : [], padStore: () => PAD ? PAD.store() : {}, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
+  seed: n => { let x = n >>> 0; Math.random = () => { x = (x + 0x6D2B79F5) >>> 0; let t = Math.imul(x ^ (x >>> 15), 1 | x); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; },   /* tests: repeatable fights */
+  press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), pads: () => PAD ? PAD.devices() : [], padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
+  audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   warp: (kind, x, y, floor) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
 };
@@ -911,7 +939,8 @@ async function boot() {
   requestAnimationFrame(frame);
 }
 document.getElementById("padbind").addEventListener("click", () => { if (PAD) { PAD.startBind(); padStatus(); } });
-document.getElementById("padconfirm").addEventListener("click", () => { if (PAD) { PAD.setConfirm(PAD.confirmMode() === "label" ? "position" : "label"); padStatus(); } });
+document.getElementById("padsettings").addEventListener("click", () => { if (PANEL) PANEL.open(); });
+window.addEventListener("keydown", e => { if ((e.code === "F1" || e.code === "F10") && PANEL && !PANEL.isOpen()) { e.preventDefault(); Object.keys(SRC).forEach(releaseSource); PANEL.open(); } });
 document.getElementById("padreset").addEventListener("click", () => { if (PAD) PAD.resetBinds(); });
 padStatus();
 boot();

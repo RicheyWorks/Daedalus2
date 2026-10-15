@@ -1,0 +1,1072 @@
+{
+ "schema": "daedalus.settings-schema/v1",
+ "layout_of": "Halo Infinite (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility)",
+ "storage": {
+  "unreal": "Saved/Config/DaedalusSettings.json",
+  "web": "localStorage daedalus.settings",
+  "format": "flat {\"Id\": number}"
+ },
+ "tabs": [
+  {
+   "id": "CONTROLLER",
+   "sections": [
+    "General",
+    "Movement & Aiming",
+    "Sensitivity & Acceleration",
+    "Trigger Deadzone",
+    "Move Thumbstick",
+    "Look Thumbstick"
+   ]
+  },
+  {
+   "id": "KEYBOARD/MOUSE",
+   "sections": [
+    "Movement & Aiming",
+    "Sensitivity"
+   ]
+  },
+  {
+   "id": "VIDEO",
+   "sections": [
+    "Display",
+    "Camera"
+   ]
+  },
+  {
+   "id": "AUDIO",
+   "sections": [
+    "Volume",
+    "Hardware"
+   ]
+  },
+  {
+   "id": "GAMEPLAY",
+   "sections": [
+    "Combat",
+    "Heads-up Display (HUD)"
+   ]
+  },
+  {
+   "id": "ACCESSIBILITY",
+   "sections": [
+    "Menu Navigation",
+    "Camera"
+   ]
+  }
+ ],
+ "native_tabs": [
+  "CONTROLLER",
+  "KEYBOARD/MOUSE",
+  "VIDEO",
+  "GAMEPLAY",
+  "ACCESSIBILITY"
+ ],
+ "rows": [
+  {
+   "id": "ButtonLayout",
+   "tab": "CONTROLLER",
+   "section": "General",
+   "label": "Button Layout",
+   "help": "Which buttons do what. Bumper Jumper puts jump on LB so your thumb never leaves the look stick; Boxer puts melee on the left trigger; Recon puts melee on Y. The Field Menu's Controls tab shows the result.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 5.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "DEFAULT",
+    "BUMPER JUMPER",
+    "BUMPER NINJA",
+    "BOXER",
+    "GREEN THUMB",
+    "RECON"
+   ],
+   "native": true,
+   "native_place": [
+    "CONTROLLER",
+    "Layouts"
+   ],
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "ThumbstickLayout",
+   "tab": "CONTROLLER",
+   "section": "General",
+   "label": "Thumbstick Layout",
+   "help": "Southpaw swaps the sticks. Legacy moves forward and back and turns on the left stick, strafes and looks up and down on the right.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 3.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "DEFAULT",
+    "SOUTHPAW",
+    "LEGACY",
+    "LEGACY SOUTHPAW"
+   ],
+   "native": true,
+   "native_place": [
+    "CONTROLLER",
+    "Layouts"
+   ],
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "Vibration",
+   "tab": "CONTROLLER",
+   "section": "General",
+   "label": "Vibration",
+   "help": "Rumble on sword swings, down-thrust bounces, hard landings and respawns.",
+   "kind": "toggle",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "web-pad"
+   ]
+  },
+  {
+   "id": "VibrationStrength",
+   "tab": "CONTROLLER",
+   "section": "General",
+   "label": "Vibration Strength",
+   "help": "How strong the rumble is.",
+   "kind": "slider",
+   "default": 100.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Menu Confirm Button",
+   "help": "Which face button confirms in menus and the RPG realms. By Label follows the pad: Nintendo-style pads confirm with A, which sits on the right. Bottom confirms with the bottom button on every pad.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "BY LABEL",
+    "BOTTOM"
+   ],
+   "id": "ConfirmButton",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "General",
+   "consumers": [
+    "web-pad",
+    "demo",
+    "realm"
+   ]
+  },
+  {
+   "id": "InvertLookY",
+   "tab": "CONTROLLER",
+   "section": "Movement & Aiming",
+   "label": "Invert Look (Vertical)",
+   "help": "Push the right stick up to look down, like a flight stick.",
+   "kind": "toggle",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "InvertLookX",
+   "tab": "CONTROLLER",
+   "section": "Movement & Aiming",
+   "label": "Invert Look (Horizontal)",
+   "help": "Push the right stick right to turn left.",
+   "kind": "toggle",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "LookAccel",
+   "tab": "CONTROLLER",
+   "section": "Sensitivity & Acceleration",
+   "label": "Look Acceleration",
+   "help": "Holding the right stick all the way speeds the turn up over half a second. 0 turns it off.",
+   "kind": "slider",
+   "default": 3.0,
+   "min": 0.0,
+   "max": 10.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "LookSensH",
+   "tab": "CONTROLLER",
+   "section": "Sensitivity & Acceleration",
+   "label": "Look Sensitivity (Horizontal)",
+   "help": "How fast the right stick turns the camera left and right. 5 is the default turn rate.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 1.0,
+   "max": 10.0,
+   "step": 0.5,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "LookSensV",
+   "tab": "CONTROLLER",
+   "section": "Sensitivity & Acceleration",
+   "label": "Look Sensitivity (Vertical)",
+   "help": "How fast the right stick tilts the camera up and down.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 1.0,
+   "max": 10.0,
+   "step": 0.5,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "label": "Inner Deadzone",
+   "help": "How far a trigger must travel before it counts. Raise it if a resting trigger fires.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 0.0,
+   "max": 40.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "TriggerInnerDeadzone",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Trigger Deadzone",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Outer Deadzone",
+   "help": "How far a trigger must travel to count as fully pulled. Lower it for short-throw triggers (trigger stops on Elite and Razer pads).",
+   "kind": "slider",
+   "default": 95.0,
+   "min": 60.0,
+   "max": 100.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "TriggerOuterDeadzone",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Trigger Deadzone",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "id": "LeftDeadzone",
+   "tab": "CONTROLLER",
+   "section": "Move Thumbstick",
+   "label": "Center Dead Zone",
+   "help": "How far the left stick must move before the hero walks. Raise it if the hero drifts.",
+   "kind": "slider",
+   "default": 15.0,
+   "min": 0.0,
+   "max": 40.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Max Input Threshold",
+   "help": "How far the move stick must go to count as full speed. Lower it if your stick never quite reaches the edge.",
+   "kind": "slider",
+   "default": 100.0,
+   "min": 60.0,
+   "max": 100.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "LeftMaxInput",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Move Thumbstick",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Axial Deadzone",
+   "help": "Ignores small sideways drift while pushing straight. 0 keeps the stick fully round (radial).",
+   "kind": "slider",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 30.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "LeftAxialDeadzone",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Move Thumbstick",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "id": "RightDeadzone",
+   "tab": "CONTROLLER",
+   "section": "Look Thumbstick",
+   "label": "Center Dead Zone",
+   "help": "How far the right stick must move before the camera turns. Raise it if the camera drifts.",
+   "kind": "slider",
+   "default": 15.0,
+   "min": 0.0,
+   "max": 40.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Max Input Threshold",
+   "help": "How far the look stick must go to turn at full rate.",
+   "kind": "slider",
+   "default": 100.0,
+   "min": 60.0,
+   "max": 100.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "RightMaxInput",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Look Thumbstick",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "label": "Axial Deadzone",
+   "help": "Ignores small vertical drift while turning sideways, and the reverse. 0 keeps the stick fully round (radial).",
+   "kind": "slider",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 30.0,
+   "step": 1.0,
+   "unit": "%",
+   "choices": [],
+   "id": "RightAxialDeadzone",
+   "native": false,
+   "tab": "CONTROLLER",
+   "section": "Look Thumbstick",
+   "consumers": [
+    "web-pad"
+   ]
+  },
+  {
+   "id": "InvertMouseY",
+   "tab": "KEYBOARD/MOUSE",
+   "section": "Movement & Aiming",
+   "label": "Invert Look (Vertical)",
+   "help": "Move the mouse forward to look down.",
+   "kind": "toggle",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "id": "MouseSensH",
+   "tab": "KEYBOARD/MOUSE",
+   "section": "Sensitivity",
+   "label": "Mouse Sensitivity (Horizontal)",
+   "help": "Camera turn per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 0.5,
+   "max": 10.0,
+   "step": 0.1,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "MouseSensV",
+   "tab": "KEYBOARD/MOUSE",
+   "section": "Sensitivity",
+   "label": "Mouse Sensitivity (Vertical)",
+   "help": "The same for up and down.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 0.5,
+   "max": 10.0,
+   "step": 0.1,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "id": "FieldOfView",
+   "tab": "VIDEO",
+   "section": "Display",
+   "label": "Field of View",
+   "help": "How wide the camera sees. Wider shows more of the islands; narrower feels closer to the hero.",
+   "kind": "slider",
+   "default": 80.0,
+   "min": 70.0,
+   "max": 110.0,
+   "step": 1.0,
+   "unit": "\u00b0",
+   "choices": [],
+   "native": true,
+   "native_place": [
+    "VIDEO",
+    "Camera"
+   ],
+   "consumers": [
+    "unreal",
+    "realm"
+   ]
+  },
+  {
+   "id": "CameraView",
+   "tab": "VIDEO",
+   "section": "Camera",
+   "label": "Camera View",
+   "help": "First Person sees through the hero's eyes with a centred reticle, like Halo Infinite. Over the Shoulder sits behind one shoulder, like Gears of War. Classic follows from behind. R3, D-pad up or V switches in play.",
+   "kind": "choice",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 2.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "FIRST PERSON",
+    "OVER THE SHOULDER",
+    "CLASSIC"
+   ],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "id": "Shoulder",
+   "tab": "VIDEO",
+   "section": "Camera",
+   "label": "Shoulder",
+   "help": "Which shoulder the camera sits behind in Over the Shoulder. LB, D-pad down or C swaps it in play.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "RIGHT",
+    "LEFT"
+   ],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "id": "Reticle",
+   "tab": "VIDEO",
+   "section": "Camera",
+   "label": "Reticle",
+   "help": "The centred aiming reticle in First Person and Over the Shoulder, and with the blaster in any view.",
+   "kind": "toggle",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "id": "CameraDistance",
+   "tab": "VIDEO",
+   "section": "Camera",
+   "label": "Camera Distance",
+   "help": "How far behind the hero the camera sits.",
+   "kind": "slider",
+   "default": 650.0,
+   "min": 300.0,
+   "max": 1200.0,
+   "step": 25.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "label": "Main",
+   "help": "Everything you hear.",
+   "kind": "slider",
+   "default": 80.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "id": "MainVolume",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Voice",
+   "help": "Characters, announcers and the realm's voices.",
+   "kind": "slider",
+   "default": 100.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "id": "VoiceVolume",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Music",
+   "help": "Music while you play: field, town, dungeon and battle themes.",
+   "kind": "slider",
+   "default": 60.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "id": "MusicVolume",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Menu Music",
+   "help": "Music on title screens and menus.",
+   "kind": "slider",
+   "default": 60.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "id": "MenuMusicVolume",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Sound Effects",
+   "help": "Swings, hits, menus, doors and every other effect.",
+   "kind": "slider",
+   "default": 80.0,
+   "min": 0.0,
+   "max": 100.0,
+   "step": 5.0,
+   "unit": "%",
+   "choices": [],
+   "id": "EffectsVolume",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Inactive Mute",
+   "help": "Mute the game while its window or tab is in the background.",
+   "kind": "toggle",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "id": "InactiveMute",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Volume",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "label": "Dynamic Range",
+   "help": "Dynamic keeps loud moments loud. Compressed evens the volume out for late nights and small speakers.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "DYNAMIC",
+    "COMPRESSED"
+   ],
+   "id": "DynamicRange",
+   "native": false,
+   "tab": "AUDIO",
+   "section": "Hardware",
+   "consumers": [
+    "demo"
+   ]
+  },
+  {
+   "id": "ShieldMode",
+   "tab": "GAMEPLAY",
+   "section": "Combat",
+   "label": "Shield",
+   "help": "Hold: the shield is up while the button is held. Toggle: press once to raise it, again to lower it.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "HOLD",
+    "TOGGLE"
+   ],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  },
+  {
+   "label": "Tips & Tutorials",
+   "help": "Show control hints and first-time tips.",
+   "kind": "toggle",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "id": "TipsTutorials",
+   "native": false,
+   "tab": "GAMEPLAY",
+   "section": "Heads-up Display (HUD)",
+   "consumers": [
+    "realm",
+    "demo"
+   ]
+  },
+  {
+   "label": "FPS Counter",
+   "help": "Show frames per second in a corner.",
+   "kind": "toggle",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "id": "FpsCounter",
+   "native": false,
+   "tab": "GAMEPLAY",
+   "section": "Heads-up Display (HUD)",
+   "consumers": [
+    "realm"
+   ]
+  },
+  {
+   "label": "Text Size",
+   "help": "Size of menu and settings text.",
+   "kind": "choice",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 2.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [
+    "DEFAULT",
+    "LARGE",
+    "EXTRA LARGE"
+   ],
+   "id": "TextSize",
+   "native": false,
+   "tab": "ACCESSIBILITY",
+   "section": "Menu Navigation",
+   "consumers": [
+    "settings-panel"
+   ]
+  },
+  {
+   "label": "Notification Duration",
+   "help": "How long pop-up notices stay on screen.",
+   "kind": "slider",
+   "default": 5.0,
+   "min": 2.0,
+   "max": 20.0,
+   "step": 1.0,
+   "unit": " s",
+   "choices": [],
+   "id": "NotificationDuration",
+   "native": false,
+   "tab": "ACCESSIBILITY",
+   "section": "Menu Navigation",
+   "consumers": [
+    "realm"
+   ]
+  },
+  {
+   "id": "CameraLag",
+   "tab": "ACCESSIBILITY",
+   "section": "Camera",
+   "label": "Camera Smoothing",
+   "help": "The camera trails the hero slightly. Turn it off for a camera locked to the hero.",
+   "kind": "toggle",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "unit": "",
+   "choices": [],
+   "native": true,
+   "consumers": [
+    "unreal"
+   ]
+  }
+ ],
+ "layouts": {
+  "buttons": {
+   "DEFAULT": {
+    "Jump": [
+     "a"
+    ],
+    "Dash": [
+     "b"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "y"
+    ],
+    "Aim": [
+     "zl"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "r",
+     "r3"
+    ],
+    "Shoulder": [
+     "l",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   },
+   "BUMPER JUMPER": {
+    "Jump": [
+     "l"
+    ],
+    "Dash": [
+     "r"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "y"
+    ],
+    "Aim": [
+     "zl"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "b",
+     "r3"
+    ],
+    "Shoulder": [
+     "a",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   },
+   "BUMPER NINJA": {
+    "Jump": [
+     "l"
+    ],
+    "Dash": [
+     "a"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "y"
+    ],
+    "Aim": [
+     "zl"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "b",
+     "r3"
+    ],
+    "Shoulder": [
+     "r",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   },
+   "BOXER": {
+    "Jump": [
+     "a"
+    ],
+    "Dash": [
+     "b"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "y"
+    ],
+    "Aim": [
+     "l"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "zl",
+     "r3"
+    ],
+    "Shoulder": [
+     "r",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   },
+   "GREEN THUMB": {
+    "Jump": [
+     "a"
+    ],
+    "Dash": [
+     "r3"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "y"
+    ],
+    "Aim": [
+     "zl"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "b"
+    ],
+    "Shoulder": [
+     "r",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   },
+   "RECON": {
+    "Jump": [
+     "a"
+    ],
+    "Dash": [
+     "r"
+    ],
+    "Interact": [
+     "x"
+    ],
+    "Switch": [
+     "b"
+    ],
+    "Aim": [
+     "zl"
+    ],
+    "Attack": [
+     "zr"
+    ],
+    "Melee": [
+     "y",
+     "r3"
+    ],
+    "Shoulder": [
+     "l",
+     "down"
+    ],
+    "Sprint": [
+     "l3"
+    ],
+    "ViewCycle": [
+     "up"
+    ]
+   }
+  },
+  "sticks": {
+   "DEFAULT": {
+    "MoveX": "lx",
+    "MoveY": "ly",
+    "LookX": "rx",
+    "LookY": "ry"
+   },
+   "SOUTHPAW": {
+    "MoveX": "rx",
+    "MoveY": "ry",
+    "LookX": "lx",
+    "LookY": "ly"
+   },
+   "LEGACY": {
+    "MoveX": "rx",
+    "MoveY": "ly",
+    "LookX": "lx",
+    "LookY": "ry"
+   },
+   "LEGACY SOUTHPAW": {
+    "MoveX": "lx",
+    "MoveY": "ry",
+    "LookX": "rx",
+    "LookY": "ly"
+   }
+  },
+  "fixed": {
+   "CallVehicle": "right",
+   "NextCube": "left",
+   "Menu": "start",
+   "View": "back"
+  },
+  "source": "DaedalusHero.cpp PadButtons() and RebuildBindings()"
+ },
+ "research": [
+  "https://support.halowaypoint.com/hc/en-us/articles/4407649252116-Guide-to-Halo-Infinite-Game-Settings",
+  "https://support.halowaypoint.com/hc/en-us/articles/4408122295444-Accessibility-features-in-Halo-Infinite"
+ ]
+}

@@ -21,6 +21,7 @@ with sync_playwright() as p:
     pg.on("console", lambda m: m.type in ("error", "warning") and errs.append(m.text))
     pg.on("pageerror", lambda e: errs.append("PAGEERROR " + str(e)))
     pg.goto(URL); pg.wait_for_timeout(2500)
+    pg.evaluate("PRISM_DEMO.seed(20261015)")          # repeatable rolls: the boss bot's result can't depend on luck
     st = lambda: pg.evaluate("PRISM_DEMO.state()")
     def press(k, n=1, wait=120):
         for _ in range(n):
