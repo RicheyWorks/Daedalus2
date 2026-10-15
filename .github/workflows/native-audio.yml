@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: MIT
+name: Native audio
+on:
+  push:
+    branches: [main]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/*/Daedalus*Audio*", "engines/unreal/core-test/audio/**", "daedalus-core/src/main/java/com/daedalus/world/audio/**", "docs/contracts/aud-v1/**", ".github/workflows/native-audio.yml"]
+  pull_request:
+    branches: [main]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/*/Daedalus*Audio*", "engines/unreal/core-test/audio/**", "daedalus-core/src/main/java/com/daedalus/world/audio/**", "docs/contracts/aud-v1/**", ".github/workflows/native-audio.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: native-audio-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  parity:
+    name: AUD1 / Java PCM (${{ matrix.compiler }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-latest, compiler: g++}
+          - {os: ubuntu-latest, compiler: clang++}
+          - {os: windows-latest, compiler: MSVC}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Strict native checks, Java fixture reproduction, ASan and UBSan
+        if: runner.os != 'Windows'
+        run: python3 engines/unreal/core-test/audio/run_audio_core.py --compiler '${{ matrix.compiler }}' --sanitize --verify-java
+      - name: Strict MSVC checks and Java fixture reproduction
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $audioVs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $audioVs) { throw 'Visual Studio compiler installation not found' }
+          # vcvars64 initializes the default toolset. Select its matching compiler,
+          # rather than the first installed version (which may be much older).
+          $audioToolset = (Get-Content -LiteralPath "$audioVs\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt" -Raw).Trim()
+          $audioCompiler = "$audioVs\VC\Tools\MSVC\$audioToolset\bin\Hostx64\x64\cl.exe"
+          if (-not (Test-Path -LiteralPath $audioCompiler)) { throw 'MSVC compiler not found' }
+          python engines/unreal/core-test/audio/run_audio_core.py --compiler $audioCompiler --verify-java
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
