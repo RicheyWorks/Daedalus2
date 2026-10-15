@@ -1,0 +1,2112 @@
+{
+  "aetherflow": {
+    "delivery_receipt": {
+      "bytes": 12741,
+      "last_modified_utc": "2026-10-14T22:00:45.713579+00:00",
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\Delivery_Receipt.json",
+      "sha256": "13ca2e81f94a28228ee430146ddd54dd70bae9797c9f584b28024c5ad15ba142"
+    },
+    "eligible_as_current_static_plant_batch": false,
+    "excluded_already_delivered_plants": [
+      "Life_glasskelp.glb",
+      "Life_ribbon_reeds.glb",
+      "Life_star_lilies.glb"
+    ],
+    "existing_static_plant_converter_scope": [
+      "ribbon_reeds",
+      "star_lilies",
+      "glasskelp"
+    ],
+    "hub_handle": "buckwild-sol",
+    "native_swimming_collision_or_ecology_accepted": false,
+    "package_receipt": {
+      "bytes": 9940,
+      "last_modified_utc": "2026-10-14T22:02:08.136348+00:00",
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\Aetherflow_Package_Receipt.json",
+      "sha256": "47da61d38deccaf8ed84e1f077d11b131b6730426372b7e7629cd0a8672390c4"
+    },
+    "pending_owner_request": {
+      "basis": "Parent supplied coordination reference; no hub lookup or message by this intake.",
+      "hub_message_id": 31220,
+      "status": "PENDING"
+    },
+    "remaining_module_count": 10,
+    "remaining_modules": [
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "LW_Honey_cedar",
+            "SW_Water_Heartstone",
+            "LW_Old_brass",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 27,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 7984
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 268152,
+          "last_modified_utc": "2026-10-14T21:57:26.290342+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_silverglass.glb",
+          "sha256": "a515603814eaf5e4f16cd4332b34272bfbed0802436406d8562ba1c81c23e1cd"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5299999713897705,
+              0.28999999165534973,
+              0.11500000208616257,
+              1
+            ],
+            "metallic": 0,
+            "name": "LW_Honey_cedar",
+            "roughness": 0.699999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5699999928474426,
+              0.3400000035762787,
+              0.10499999672174454,
+              1
+            ],
+            "metallic": 0.6499999761581421,
+            "name": "LW_Old_brass",
+            "roughness": 0.33000001311302185,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 25,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "silverglass",
+            "body_kind": "LAKE",
+            "depth_m": 8,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 0.45,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_silverglass",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            -120,
+            90,
+            -35
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface",
+            "SW_Water_Heartstone"
+          ],
+          "mesh_count": 13,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 4060
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 108220,
+          "last_modified_utc": "2026-10-14T21:57:26.999416+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_glassreach.glb",
+          "sha256": "d0140d021fc52aff1b5390eafbfb70905d4f7290b0c1e85cfb1bdc75cf43500f"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          }
+        ],
+        "nodes_with_explicit_transforms": 6,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "glassreach",
+            "body_kind": "RIVER",
+            "depth_m": 4.2,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 2.4,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_glassreach",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            43,
+            89,
+            -29
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "LW_Honey_cedar",
+            "SW_Water_Heartstone",
+            "LW_Old_brass",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 27,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 7984
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 267876,
+          "last_modified_utc": "2026-10-14T21:57:27.950051+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_sunspill.glb",
+          "sha256": "80028ca7e2abfdacd9c0c183a9f55b07c05a1e3c6b40c1911e9fb01d81ea97c0"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5299999713897705,
+              0.28999999165534973,
+              0.11500000208616257,
+              1
+            ],
+            "metallic": 0,
+            "name": "LW_Honey_cedar",
+            "roughness": 0.699999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5699999928474426,
+              0.3400000035762787,
+              0.10499999672174454,
+              1
+            ],
+            "metallic": 0.6499999761581421,
+            "name": "LW_Old_brass",
+            "roughness": 0.33000001311302185,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 25,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "sunspill",
+            "body_kind": "LAKE",
+            "depth_m": 9,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 0.65,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_sunspill",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            210,
+            86,
+            -64
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Water_Heartstone",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 15,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 4932
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 129112,
+          "last_modified_utc": "2026-10-14T21:57:28.637982+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_willowdrift.glb",
+          "sha256": "3e49d528be1c156a6de022cd5f38979704f0f52aeda99f18a961999093c3bcf0"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 6,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "willowdrift",
+            "body_kind": "RIVER",
+            "depth_m": 3.8,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 1.8,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_willowdrift",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            8,
+            83,
+            64
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "LW_Honey_cedar",
+            "SW_Water_Heartstone",
+            "LW_Old_brass",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 27,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 7984
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 268708,
+          "last_modified_utc": "2026-10-14T21:57:29.655569+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_lantern-nursery.glb",
+          "sha256": "b8513ee6b2c381ce1292477ec33a97c1963bbfc527b05b73f9fb7d99a8941ea3"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5299999713897705,
+              0.28999999165534973,
+              0.11500000208616257,
+              1
+            ],
+            "metallic": 0,
+            "name": "LW_Honey_cedar",
+            "roughness": 0.699999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5699999928474426,
+              0.3400000035762787,
+              0.10499999672174454,
+              1
+            ],
+            "metallic": 0.6499999761581421,
+            "name": "LW_Old_brass",
+            "roughness": 0.33000001311302185,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 25,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "lantern-nursery",
+            "body_kind": "POND",
+            "depth_m": 5.5,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 0.3,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_lantern-nursery",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            174,
+            78,
+            56
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "LW_Honey_cedar",
+            "SW_Water_Heartstone",
+            "LW_Old_brass",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 27,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 7984
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 268300,
+          "last_modified_utc": "2026-10-14T21:57:30.630783+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_rainpearl.glb",
+          "sha256": "03bf37d0b210cc42fda15f1eca100dd87896056f9c91015f7c8ab89386d8c7ef"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5299999713897705,
+              0.28999999165534973,
+              0.11500000208616257,
+              1
+            ],
+            "metallic": 0,
+            "name": "LW_Honey_cedar",
+            "roughness": 0.699999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.5699999928474426,
+              0.3400000035762787,
+              0.10499999672174454,
+              1
+            ],
+            "metallic": 0.6499999761581421,
+            "name": "LW_Old_brass",
+            "roughness": 0.33000001311302185,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 25,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "rainpearl",
+            "body_kind": "POND",
+            "depth_m": 5,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 0.25,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_rainpearl",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            24,
+            103,
+            -125
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_transmission",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Water_Heartstone",
+            "SW_Ivory_Ripple",
+            "SW_Suspended_Liquid_Membrane",
+            "SW_Pearl_Water_Filament",
+            "SW_Living_Water_Surface"
+          ],
+          "mesh_count": 11,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 2540
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 73100,
+          "last_modified_utc": "2026-10-14T21:57:31.708820+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_rainthread.glb",
+          "sha256": "9021a89e3c3a55fb04db5e263eddd3be8855bfeece69026e448d13abf51ffade"
+        },
+        "kind": "static_waterbody",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.14000000059604645,
+              0.6600000262260437,
+              0.6100000143051147,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Water_Heartstone",
+            "roughness": 0.20999999344348907,
+            "transmission": 0.23999999463558197
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.7099999785423279,
+              0.9399999976158142,
+              0.8399999737739563,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Ivory_Ripple",
+            "roughness": 0.3400000035762787,
+            "transmission": 0.10000000149011612
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.4300000071525574,
+              0.5,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Suspended_Liquid_Membrane",
+            "roughness": 0.2199999988079071,
+            "transmission": 0.6600000262260437
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.38999998569488525,
+              0.8399999737739563,
+              0.7699999809265137,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Pearl_Water_Filament",
+            "roughness": 0.30000001192092896,
+            "transmission": 0.11999999731779099
+          },
+          {
+            "clearcoat": 0.3499999940395355,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": 1.3329999446868896,
+            "linear_base_color_rgba": [
+              0.03500000014901161,
+              0.3799999952316284,
+              0.4399999976158142,
+              1
+            ],
+            "metallic": 0,
+            "name": "SW_Living_Water_Surface",
+            "roughness": 0.17000000178813934,
+            "transmission": 0.36000001430511475
+          }
+        ],
+        "nodes_with_explicit_transforms": 6,
+        "pending_contract": "Preserve hierarchy/root translation, water transmission/IOR and clearcoat approximately .35; current plant PBR profile is insufficient. Native water/swim/placement binding remains pending.",
+        "root": {
+          "extras": {
+            "body_id": "rainthread",
+            "body_kind": "RIVER",
+            "depth_m": 3,
+            "ecology_authority": "LOCAL_AUTHORING_ONLY",
+            "flow_mps": 1.4,
+            "waterbody_root": true
+          },
+          "name": "SW_WaterbodyRoot_rainthread",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            -40,
+            97,
+            -84
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 4,
+          "extensions_used": [
+            "KHR_materials_clearcoat"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Life_Turquoise",
+            "SW_Life_Gold",
+            "SW_Life_Ice",
+            "SW_Life_Ink",
+            "SW_Life_Petrol",
+            "SW_Life_Coral"
+          ],
+          "mesh_count": 20,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 2270
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 57308,
+          "last_modified_utc": "2026-10-14T21:57:35.739386+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_sunscale_minnow.glb",
+          "sha256": "3b2160a3c97e0fe64e27ec1f0ffb67948425f63abdb3c64378674d9b95712ba8"
+        },
+        "kind": "animated_fish",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.04500000178813934,
+              0.5799999833106995,
+              0.5600000023841858,
+              1
+            ],
+            "metallic": 0.10000000149011612,
+            "name": "SW_Life_Turquoise",
+            "roughness": 0.30000001192092896,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              1,
+              0.5600000023841858,
+              0.11999999731779099,
+              1
+            ],
+            "metallic": 0.2800000011920929,
+            "name": "SW_Life_Gold",
+            "roughness": 0.28999999165534973,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.7200000286102295,
+              0.9399999976158142,
+              0.8799999952316284,
+              1
+            ],
+            "metallic": 0.05000000074505806,
+            "name": "SW_Life_Ice",
+            "roughness": 0.2199999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.00800000037997961,
+              0.02199999988079071,
+              0.03700000047683716,
+              1
+            ],
+            "metallic": 0.11999999731779099,
+            "name": "SW_Life_Ink",
+            "roughness": 0.18000000715255737,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.017999999225139618,
+              0.14000000059604645,
+              0.18000000715255737,
+              1
+            ],
+            "metallic": 0.18000000715255737,
+            "name": "SW_Life_Petrol",
+            "roughness": 0.3499999940395355,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.9599999785423279,
+              0.23000000417232513,
+              0.2800000011920929,
+              1
+            ],
+            "metallic": 0.03999999910593033,
+            "name": "SW_Life_Coral",
+            "roughness": 0.36000001430511475,
+            "transmission": 0
+          }
+        ],
+        "nodes_with_explicit_transforms": 4,
+        "pending_contract": "Retain authored node animation and fin/tail pivots, preserve SW_Life_Ink eye colour in addition to the five plant-profile slots; no silent static baking or colour removal.",
+        "root": {
+          "extras": {
+            "animation_first_frame": 1,
+            "animation_fps": 24,
+            "animation_repeat_frame": 49,
+            "asset_kind": "sunscale_minnow",
+            "ecology_role": "schooling_grazer",
+            "forward_axis": "+X",
+            "gameplay_hooks": "school_photo;current_follow;gentle_tag;habitat_count",
+            "habitat_preferences": "river_edge;pond;lily_roots",
+            "habitat_role": "floating_freshwater",
+            "integration_status": "authored_asset_gameplay_hooks_only",
+            "nominal_length_m": 1.1,
+            "seed": 617024,
+            "species_id": "daedalus.skywater.sunscale_minnow",
+            "units": "metres",
+            "up_axis": "+Z",
+            "waterline_local_z": 0.0
+          },
+          "name": "SW_sunscale_minnow_Root",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 5,
+          "extensions_used": [
+            "KHR_materials_clearcoat"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Life_Petrol",
+            "SW_Life_Coral",
+            "SW_Life_Ice",
+            "SW_Life_Gold",
+            "SW_Life_Turquoise",
+            "SW_Life_Ink"
+          ],
+          "mesh_count": 24,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 2496
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 63936,
+          "last_modified_utc": "2026-10-14T21:57:41.839110+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_veilfin.glb",
+          "sha256": "14d4e4216e5923e3ceb10a6883e16216393a6c567a2bbe5285faf0f8cc497b11"
+        },
+        "kind": "animated_fish",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.017999999225139618,
+              0.14000000059604645,
+              0.18000000715255737,
+              1
+            ],
+            "metallic": 0.18000000715255737,
+            "name": "SW_Life_Petrol",
+            "roughness": 0.3499999940395355,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.9599999785423279,
+              0.23000000417232513,
+              0.2800000011920929,
+              1
+            ],
+            "metallic": 0.03999999910593033,
+            "name": "SW_Life_Coral",
+            "roughness": 0.36000001430511475,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.7200000286102295,
+              0.9399999976158142,
+              0.8799999952316284,
+              1
+            ],
+            "metallic": 0.05000000074505806,
+            "name": "SW_Life_Ice",
+            "roughness": 0.2199999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              1,
+              0.5600000023841858,
+              0.11999999731779099,
+              1
+            ],
+            "metallic": 0.2800000011920929,
+            "name": "SW_Life_Gold",
+            "roughness": 0.28999999165534973,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.04500000178813934,
+              0.5799999833106995,
+              0.5600000023841858,
+              1
+            ],
+            "metallic": 0.10000000149011612,
+            "name": "SW_Life_Turquoise",
+            "roughness": 0.30000001192092896,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.00800000037997961,
+              0.02199999988079071,
+              0.03700000047683716,
+              1
+            ],
+            "metallic": 0.11999999731779099,
+            "name": "SW_Life_Ink",
+            "roughness": 0.18000000715255737,
+            "transmission": 0
+          }
+        ],
+        "nodes_with_explicit_transforms": 5,
+        "pending_contract": "Retain authored node animation and fin/tail pivots, preserve SW_Life_Ink eye colour in addition to the five plant-profile slots; no silent static baking or colour removal.",
+        "root": {
+          "extras": {
+            "animation_first_frame": 1,
+            "animation_fps": 24,
+            "animation_repeat_frame": 49,
+            "asset_kind": "veilfin",
+            "ecology_role": "small_fish_hunter",
+            "forward_axis": "+X",
+            "gameplay_hooks": "fin_pattern_photo;gentle_follow;ecology_observation",
+            "habitat_preferences": "lake;kelp_garden;slow_river",
+            "habitat_role": "floating_freshwater",
+            "integration_status": "authored_asset_gameplay_hooks_only",
+            "nominal_length_m": 2.2,
+            "seed": 617024,
+            "species_id": "daedalus.skywater.veilfin",
+            "units": "metres",
+            "up_axis": "+Z",
+            "waterline_local_z": 0.0
+          },
+          "name": "SW_veilfin_Root",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "actual_glb": {
+          "animation_count": 3,
+          "extensions_used": [
+            "KHR_materials_clearcoat"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "SW_Life_Turquoise",
+            "SW_Life_Ice",
+            "SW_Life_Gold",
+            "SW_Life_Petrol",
+            "SW_Life_Ink",
+            "SW_Life_Coral"
+          ],
+          "mesh_count": 28,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 2544
+        },
+        "fbx_present": false,
+        "glb": {
+          "bytes": 64412,
+          "last_modified_utc": "2026-10-14T21:57:47.617085+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_glassray.glb",
+          "sha256": "ecc6088a0c9af80a451cbd51cf68cccc8f252ada23d9b1b0b96e481197f3cea4"
+        },
+        "kind": "animated_fish",
+        "matches_delivery_receipt": true,
+        "material_contract": [
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.04500000178813934,
+              0.5799999833106995,
+              0.5600000023841858,
+              1
+            ],
+            "metallic": 0.10000000149011612,
+            "name": "SW_Life_Turquoise",
+            "roughness": 0.30000001192092896,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.7200000286102295,
+              0.9399999976158142,
+              0.8799999952316284,
+              1
+            ],
+            "metallic": 0.05000000074505806,
+            "name": "SW_Life_Ice",
+            "roughness": 0.2199999988079071,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              1,
+              0.5600000023841858,
+              0.11999999731779099,
+              1
+            ],
+            "metallic": 0.2800000011920929,
+            "name": "SW_Life_Gold",
+            "roughness": 0.28999999165534973,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.017999999225139618,
+              0.14000000059604645,
+              0.18000000715255737,
+              1
+            ],
+            "metallic": 0.18000000715255737,
+            "name": "SW_Life_Petrol",
+            "roughness": 0.3499999940395355,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.00800000037997961,
+              0.02199999988079071,
+              0.03700000047683716,
+              1
+            ],
+            "metallic": 0.11999999731779099,
+            "name": "SW_Life_Ink",
+            "roughness": 0.18000000715255737,
+            "transmission": 0
+          },
+          {
+            "clearcoat": 0.25,
+            "clearcoat_roughness": 0,
+            "double_sided": true,
+            "ior": null,
+            "linear_base_color_rgba": [
+              0.9599999785423279,
+              0.23000000417232513,
+              0.2800000011920929,
+              1
+            ],
+            "metallic": 0.03999999910593033,
+            "name": "SW_Life_Coral",
+            "roughness": 0.36000001430511475,
+            "transmission": 0
+          }
+        ],
+        "nodes_with_explicit_transforms": 3,
+        "pending_contract": "Retain authored node animation and fin/tail pivots, preserve SW_Life_Ink eye colour in addition to the five plant-profile slots; no silent static baking or colour removal.",
+        "root": {
+          "extras": {
+            "animation_first_frame": 1,
+            "animation_fps": 24,
+            "animation_repeat_frame": 49,
+            "asset_kind": "glassray",
+            "ecology_role": "gentle_filter_feeder",
+            "forward_axis": "+X",
+            "gameplay_hooks": "migration_follow;clean_current_coop;ray_photo;guide_route",
+            "habitat_preferences": "open_lake;wide_river;current_confluence",
+            "habitat_role": "floating_freshwater",
+            "integration_status": "authored_asset_gameplay_hooks_only",
+            "nominal_wingspan_m": 4.0,
+            "seed": 617024,
+            "species_id": "daedalus.skywater.glassray",
+            "units": "metres",
+            "up_axis": "+Z",
+            "waterline_local_z": 0.0
+          },
+          "name": "SW_glassray_Root",
+          "rotation_quaternion_default": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "translation_gltf_y_up_metres": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    ],
+    "source_commit": "44f0b1583162aeeebd6f4784b539022c0760c193",
+    "source_owner": "SolUltra",
+    "source_view_receipts": "Existing Delivery_Receipt.json records five source views. Those were inspected earlier by this worker; this intake does not regenerate or treat them as native views.",
+    "units": "Metres in source contract; glTF +Y up; source authoring +Z up. No native imported bounds established by this intake."
+  },
+  "excluded_other_recent_handoffs": "Ranching, gift-shop, farming, cave, defense and progression receipts describe portable/uncompiled/unexecuted code or design-source packages, not new finished mesh-delivery pairs.",
+  "legacy_queue": {
+    "bytes": 824178,
+    "last_modified_utc": "2026-10-13T13:04:38.175981+00:00",
+    "path": "C:\\Users\\730ri\\projects\\bot-team\\art\\QUEUE.md",
+    "qualification": "Legacy READY labels and Oct13 last modification do not establish new finished delivery, exact current exports or native save status.",
+    "sha256": "c43587056daba2851e06ab42034b0aabaecc556a714b33a0bc618ae9fda7eecd"
+  },
+  "native_checkpoint_context": {
+    "basis": "Parent-provided prior checkpoint only; this source intake performs no native verification or mutation.",
+    "owned_actor_checkpoint": 89,
+    "saved_static_mesh_files": 96
+  },
+  "rainlight": {
+    "coordinate_convention": {
+      "authoringForward": "-Y",
+      "authoringUnits": "metres",
+      "authoringUp": "+Z",
+      "gltfExportYUp": true,
+      "gltfForwardFromSource": "+Z",
+      "gltfUp": "+Y",
+      "moduleRootPosition": [
+        0,
+        0,
+        0
+      ],
+      "moduleRootRotationRadians": [
+        0,
+        0,
+        0
+      ],
+      "moduleRootScale": [
+        1,
+        1,
+        1
+      ],
+      "pivot": "evaluated geometry bottom centre"
+    },
+    "eligible_as_new_finished_fbx_glb_batch": false,
+    "export_font_policy": {
+      "bevel_resolution": 0,
+      "description": "Four outline samples per segment and single-chamfer bevel; all lettering retained",
+      "fidelityStatus": "EXPORT_FONT_FIDELITY_NOT_VISUALLY_VALIDATED",
+      "name": "export_only_font_outline4_chamfer0_v1",
+      "preserved": [
+        "body",
+        "font",
+        "font_bold",
+        "font_italic",
+        "font_bold_italic",
+        "size",
+        "space_character",
+        "space_word",
+        "space_line",
+        "align_x",
+        "align_y",
+        "offset_x",
+        "offset_y",
+        "shear",
+        "extrude",
+        "bevel_depth",
+        "fill_mode"
+      ],
+      "render_resolution_u": 4,
+      "resolution_u": 4,
+      "scope": "copied FONT datablocks in this export process only; no source blend save"
+    },
+    "manifest_native_status": "PENDING_IMPORT_AND_OWNER_REVIEW",
+    "material_review_hold": "Review exported Principled factors and optical/emissive extensions. Procedural showcase bump is not baked into glTF textures; scene-source renders do not validate changed export-only text geometry.",
+    "module_count": 6,
+    "module_manifest": {
+      "bytes": 254568,
+      "last_modified_utc": "2026-10-14T23:50:17.993790+00:00",
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\Module_Delivery_Manifest.json",
+      "sha256": "8eb8b6ecbaf7aa5108ec21fc01417386e7cec9284934d79ec505e49ac8b45acd"
+    },
+    "modules": [
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_emissive_strength"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_dark",
+            "RL_brass",
+            "RL_teal",
+            "RL_cyan",
+            "RL_coral",
+            "RL_glow",
+            "RL_ivory",
+            "RL_purple",
+            "RL_wood",
+            "RL_leaf",
+            "RL_leaflight"
+          ],
+          "mesh_count": 57,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 15852
+        },
+        "asset_id": "seed_song_jukebox",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 496688,
+          "last_modified_utc": "2026-10-14T23:50:17.987279+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\seed_song_jukebox.glb",
+          "sha256": "fd7a8fe63a2f92c8cca7d51dc59a827c16d40f450e956018bc61544689796ce9"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 31084,
+        "source_dimensions_metres": [
+          4.1931,
+          2.0,
+          3.17
+        ],
+        "source_world_bottom_centre_metres": [
+          8.05655,
+          2.0,
+          0.32
+        ]
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_clearcoat",
+            "KHR_materials_emissive_strength"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_teal",
+            "RL_brass",
+            "RL_leaf",
+            "RL_wood",
+            "RL_ivory",
+            "RL_glow",
+            "RL_glass",
+            "RL_coral",
+            "RL_cyan",
+            "RL_dark",
+            "RL_leaflight"
+          ],
+          "mesh_count": 79,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 20196
+        },
+        "asset_id": "lantern_egg_nursery",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 636528,
+          "last_modified_utc": "2026-10-14T23:50:17.988280+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\lantern_egg_nursery.glb",
+          "sha256": "b28f328a73fcad51a20f300f40d6b23cb4dab44576ceea03faf0212b715452f6"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 49956,
+        "source_dimensions_metres": [
+          5.202499,
+          2.051,
+          2.76625
+        ],
+        "source_world_bottom_centre_metres": [
+          -7.67375,
+          0.0195,
+          0.32375
+        ]
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_transmission",
+            "KHR_materials_emissive_strength",
+            "KHR_materials_ior"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_dark",
+            "RL_leaf",
+            "RL_brass",
+            "RL_water",
+            "RL_cyan",
+            "RL_teal",
+            "RL_ivory",
+            "RL_leaflight",
+            "RL_coral",
+            "RL_glow",
+            "RL_wood"
+          ],
+          "mesh_count": 49,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 15528
+        },
+        "asset_id": "mossglow_gel_habitat",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 466728,
+          "last_modified_utc": "2026-10-14T23:50:17.989280+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\mossglow_gel_habitat.glb",
+          "sha256": "b4fbf4cc408b8ff8b38ec846c0bbcb4f9fef7be42e0453a69be80ae663525c2b"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 29960,
+        "source_dimensions_metres": [
+          4.125,
+          3.46,
+          2.07
+        ],
+        "source_world_bottom_centre_metres": [
+          13.3325,
+          -5.0,
+          0.32
+        ]
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_emissive_strength"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_wood",
+            "RL_brass",
+            "RL_teal",
+            "RL_ivory",
+            "RL_coral",
+            "RL_glow",
+            "RL_purple",
+            "RL_dark",
+            "RL_leaf",
+            "RL_leaflight"
+          ],
+          "mesh_count": 77,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 10686
+        },
+        "asset_id": "cloud_pantry_market",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 421632,
+          "last_modified_utc": "2026-10-14T23:50:17.990280+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\cloud_pantry_market.glb",
+          "sha256": "6bc119741b1cea1bdef8546a107310ec26209c9f56db3ad729a94d3bd1f74254"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 21886,
+        "source_dimensions_metres": [
+          5.340841,
+          2.152308,
+          3.046
+        ],
+        "source_world_bottom_centre_metres": [
+          -11.890421,
+          -4.156154,
+          0.324
+        ]
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_emissive_strength"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_teal",
+            "RL_brass",
+            "RL_ivory",
+            "RL_wood",
+            "RL_cyan",
+            "RL_glow"
+          ],
+          "mesh_count": 28,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 4030
+        },
+        "asset_id": "pearlwing_sky_skiff",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 148180,
+          "last_modified_utc": "2026-10-14T23:50:17.991280+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\pearlwing_sky_skiff.glb",
+          "sha256": "ebe05eb21dd36ef186574b4b1967a7ba915451560aac8937bc33337b1514ab25"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 4030,
+        "source_dimensions_metres": [
+          4.477467,
+          6.628375,
+          5.005
+        ],
+        "source_world_bottom_centre_metres": [
+          -26.966267,
+          -10.131104,
+          -0.405
+        ]
+      },
+      {
+        "actual_glb": {
+          "animation_count": 0,
+          "extensions_used": [
+            "KHR_materials_emissive_strength"
+          ],
+          "image_count": 0,
+          "material_names": [
+            "RL_dark",
+            "RL_brass",
+            "RL_glow",
+            "RL_teal",
+            "RL_ivory",
+            "RL_coral"
+          ],
+          "mesh_count": 15,
+          "skin_count": 0,
+          "texture_count": 0,
+          "triangles": 5697
+        },
+        "asset_id": "quay_wayfinder",
+        "budget_approval": "UNASSIGNED; reference comparisons are not native asset approval",
+        "delivery_status": "EXPORTED_REFERENCE_MODULE; TEXT_DETAIL_REDUCED; NATIVE_ACCEPTANCE_PENDING",
+        "export_font_fidelity": "NOT_VISUALLY_VALIDATED",
+        "fbx_present": false,
+        "glb": {
+          "bytes": 206812,
+          "last_modified_utc": "2026-10-14T23:50:17.992785+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\modules\\quay_wayfinder.glb",
+          "sha256": "475765e55a626178dfc3a20fd08222e6412d94110bca51ad4c331cd1ec242c89"
+        },
+        "matches_module_manifest": true,
+        "original_evaluated_triangles": 37889,
+        "source_dimensions_metres": [
+          2.4,
+          0.860001,
+          3.93225
+        ],
+        "source_world_bottom_centre_metres": [
+          0.0,
+          -9.0,
+          0.32
+        ]
+      }
+    ],
+    "owner": null,
+    "owner_qualification": "Module manifest explicitly leaves native owner/budgets unassigned; no authorship guessed from a directory or primary checkout.",
+    "recorded_scene_source_views": [
+      {
+        "file": {
+          "bytes": 2049962,
+          "last_modified_utc": "2026-10-14T23:46:44.455377+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\Rainlight_Quay_hero.png",
+          "sha256": "8c04ca39bac4597b6830968ead949fd314920ce91cf2f9c5a7baa08c4328d6b1"
+        },
+        "intake_visual_review_of_exact_module_export": false,
+        "matches_scene_manifest": true
+      },
+      {
+        "file": {
+          "bytes": 1799255,
+          "last_modified_utc": "2026-10-14T23:48:20.605604+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\Rainlight_Quay_street.png",
+          "sha256": "5c7d2338ec81b71309d226475e25db0ffb5fe30d7e7e25745add1a5e88b6d8b7"
+        },
+        "intake_visual_review_of_exact_module_export": false,
+        "matches_scene_manifest": true
+      },
+      {
+        "file": {
+          "bytes": 2330651,
+          "last_modified_utc": "2026-10-14T23:49:45.321542+00:00",
+          "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\Rainlight_Quay_dawn.png",
+          "sha256": "cb13c8cad562b7b69edaf038ae765e2efccabc7bda6b92a232229c928827e645"
+        },
+        "intake_visual_review_of_exact_module_export": false,
+        "matches_scene_manifest": true
+      }
+    ],
+    "remaining_owner_work": [
+      "Assign native asset owners, target platforms and per-role triangle/material budgets",
+      "Author and approve LODs, collision meshes, interaction sockets and placement rules",
+      "Review exported Principled materials; procedural showcase bump is not a baked texture",
+      "Visually review export-only text outline/chamfer reduction before native acceptance",
+      "Bind native jukebox, nursery and ranch mechanics separately; visual props grant no NFT rights"
+    ],
+    "scene_manifest_observed": {
+      "bytes": 29191,
+      "last_modified_utc": "2026-10-14T23:49:45.347797+00:00",
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\visuals\\rainlight-v3\\Rainlight_Quay_manifest.json",
+      "sha256": "8485304c29a9a70079e4ad9bfcc86c99e6abacd62f9667c989ef3097a35ee099"
+    },
+    "source_review_status": "EXPORTED_REFERENCE_MODULE; exact text-reduced module export fidelity is NOT_VISUALLY_VALIDATED.",
+    "superseded_previews_excluded": [
+      "rainlight-v1",
+      "rainlight-v2"
+    ]
+  },
+  "recorded_utc": "2026-10-14T23:53:12.305357+00:00",
+  "result": {
+    "all_existing_saved_assets_and_map_untouched": true,
+    "native_imported_or_saved_by_this_intake": false,
+    "new_claim_made": false,
+    "new_finished_compatible_fbx_glb_batch_confirmed": 0,
+    "new_rainlight_reference_glbs": 6,
+    "remaining_aetherflow_glbs": 10
+  },
+  "root_manifest": {
+    "bytes": 59810,
+    "collected_utc": "2026-10-14T21:35:16.0999441Z",
+    "last_modified_utc": "2026-10-14T21:35:16.129777+00:00",
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\island-import-manifest-20261014.json",
+    "qualification": "Stale21:35 source-only snapshot. HeroR4/GardenGate are excluded from new intake because parent confirms later delivery.",
+    "queued_names": [
+      "CodexIsland_summit_rim_84011_HeroR4",
+      "CodexIsland_cliff_garden_84022_GardenGateR1"
+    ],
+    "sha256": "57285255cf168bd5e41eea1e77f94afe484ae8ead4d089ab78276e9efdd483f4"
+  },
+  "schema": "daedalus.ready-intake.source-status.v1",
+  "scope": "Read-only source intake plus this one new owned JSON artifact. No new source claim, generation, Blender, tests, native calls, Git or hub operations."
+}

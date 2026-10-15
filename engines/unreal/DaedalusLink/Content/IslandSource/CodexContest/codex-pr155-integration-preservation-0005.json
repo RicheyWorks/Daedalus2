@@ -1,0 +1,113 @@
+{
+  "schema": "daedalus.pr155-integration-preservation.v1",
+  "recorded_utc": "2026-10-15T00:06:22.819768+00:00",
+  "stage": "reviewed_source_integrated_existing_native_saves_preserved",
+  "native_mesh_files_verified": 96,
+  "all13original_aetherflow_glbs_verified": {
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_glasskelp.glb": {
+      "bytes": 91780,
+      "sha256": "97b6af850c377fb6b76b1499b6ceecd1091cd9244f03f7141242c4699ea6bf86"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_ribbon_reeds.glb": {
+      "bytes": 62472,
+      "sha256": "3124f31b2889f9610b79cdd582a03fdc40a13fc919ebcfb70d2065a966fa0695"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_star_lilies.glb": {
+      "bytes": 62204,
+      "sha256": "0cfa8be1dc9fc71f9efce89601b3d7e6a4286735bea55532f4fec24c23ffa209"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_silverglass.glb": {
+      "bytes": 268152,
+      "sha256": "a515603814eaf5e4f16cd4332b34272bfbed0802436406d8562ba1c81c23e1cd"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_glassreach.glb": {
+      "bytes": 108220,
+      "sha256": "d0140d021fc52aff1b5390eafbfb70905d4f7290b0c1e85cfb1bdc75cf43500f"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_sunspill.glb": {
+      "bytes": 267876,
+      "sha256": "80028ca7e2abfdacd9c0c183a9f55b07c05a1e3c6b40c1911e9fb01d81ea97c0"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_willowdrift.glb": {
+      "bytes": 129112,
+      "sha256": "3e49d528be1c156a6de022cd5f38979704f0f52aeda99f18a961999093c3bcf0"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_lantern-nursery.glb": {
+      "bytes": 268708,
+      "sha256": "b8513ee6b2c381ce1292477ec33a97c1963bbfc527b05b73f9fb7d99a8941ea3"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_rainpearl.glb": {
+      "bytes": 268300,
+      "sha256": "03bf37d0b210cc42fda15f1eca100dd87896056f9c91015f7c8ab89386d8c7ef"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\SW_rainthread.glb": {
+      "bytes": 73100,
+      "sha256": "9021a89e3c3a55fb04db5e263eddd3be8855bfeece69026e448d13abf51ffade"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_sunscale_minnow.glb": {
+      "bytes": 57308,
+      "sha256": "3b2160a3c97e0fe64e27ec1f0ffb67948425f63abdb3c64378674d9b95712ba8"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_veilfin.glb": {
+      "bytes": 63936,
+      "sha256": "14d4e4216e5923e3ceb10a6883e16216393a6c567a2bbe5285faf0f8cc497b11"
+    },
+    "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\waterways\\aetherflow-v2\\modules\\Life_glassray.glb": {
+      "bytes": 64412,
+      "sha256": "ecc6088a0c9af80a451cbd51cf68cccc8f252ada23d9b1b0b96e481197f3cea4"
+    }
+  },
+  "map_fingerprint": {
+    "bytes": 209306026,
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa"
+  },
+  "source": {
+    "tools/unreal/codex_admitted_palette_assembly.py": {
+      "bytes": 16618,
+      "sha256": "e29d867fc5b6d9c14f4ac8bee3cc26ec61439a3be34c3e2951b7894f4ef15efe"
+    },
+    "tools/unreal/codex_saved_asset_assembly.py": {
+      "bytes": 20380,
+      "sha256": "d7bf218b11dead1375934aa1d38c81ca81ffd4484d8d9a5fd7c968733ccd9bea"
+    }
+  },
+  "prior_native_actor_checkpoint": {
+    "count": 89,
+    "receipt": "ServerRackR1/readback.json",
+    "new_world_mutations": 0
+  },
+  "evidence": {
+    "codex-pr155-source-integration-2350.json": {
+      "bytes": 2582,
+      "sha256": "bcca3bdd629e21a457234038532dbcddc9c783d1fb2d778ceffd2043212932d6"
+    },
+    "codex-ready-intake-2355.json": {
+      "bytes": 69684,
+      "sha256": "56a7e20681b497e3aa29e9cc3187fc253942d03499519f053fb5b3027121757f"
+    },
+    "codex-aetherflow-acceptance-contract.json": {
+      "bytes": 236464,
+      "sha256": "bb77b25b9d462c6af1c99fd9a445ea8089821e5fcc0679250eda771fb4c68ec9"
+    },
+    "codex-dragon-classic-source-qualification-0005.json": {
+      "bytes": 143727,
+      "sha256": "a9518dfbe31403adeb3a771468bafebd26fb9436185395f924a62cd432a07aa7"
+    },
+    "codex-dragon-intake-controls-0000.json": {
+      "bytes": 12136,
+      "sha256": "0826b6bfc8e99ddc5f9eeb465ad1ab77146fd20bcfa8523b7e4d4662afc1f276"
+    }
+  },
+  "native_optimization_exercised": false,
+  "tests_build_play": "deferred",
+  "current_pending": [
+    "coordinator resolving existing Blender review/polish worker; exact ten-module contract supplied31240",
+    "additive fish animation-preserving and static water export/native material handoff",
+    "Rainlight post-export reduced-font/material review",
+    "Claude return: both dragon sample Walk clips have constant data"
+  ],
+  "new_native_mutations": 0,
+  "new_asset_saves": 0,
+  "new_map_saves": 0,
+  "uncertain_operation": null
+}

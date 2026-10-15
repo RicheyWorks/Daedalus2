@@ -1,0 +1,4601 @@
+{
+  "schema": "daedalus.dragon-source-qualification.v1",
+  "stage": "held_before_native_import_source_walk_constant",
+  "recorded_utc": "2026-10-15T00:04:37.581133+00:00",
+  "packets": [
+    {
+      "glb": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireClassic01.glb",
+        "fingerprint": {
+          "bytes": 164228,
+          "sha256": "14f05d7c58d7996649d5b96a95272da4a295346af0ba97cdd2b42626fbd2cbec"
+        }
+      },
+      "fbx": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireClassic01.fbx",
+        "fingerprint": {
+          "bytes": 759420,
+          "sha256": "f8d6cf69f920badbbe41436dc0dba0dbaeec3e4eafaa231353bba284e83bf612"
+        }
+      },
+      "sidecar": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireClassic01.json",
+        "fingerprint": {
+          "bytes": 455,
+          "sha256": "7d3bd53c9a968e4558e7d027b6188bba072f419e85cf81147b799cc0047342bf"
+        }
+      },
+      "mesh_count": 1,
+      "skins": [
+        [
+          "root",
+          "body",
+          "head",
+          "tail",
+          "leg.L",
+          "leg.R",
+          "wing.L",
+          "wing.R"
+        ]
+      ],
+      "positions_accessor": {
+        "min": [
+          -1.399999976158142,
+          0,
+          -1.7999999523162842
+        ],
+        "max": [
+          1.399999976158142,
+          2.0999999046325684,
+          2.4000000953674316
+        ],
+        "count": 1843
+      },
+      "vertex_colour_accessor": {
+        "component_type": 5123,
+        "normalized": true,
+        "unique_raw_rgba": [
+          [
+            6700,
+            5392,
+            5392,
+            65535
+          ],
+          [
+            45473,
+            9828,
+            6700,
+            65535
+          ],
+          [
+            51858,
+            48850,
+            38706,
+            65535
+          ],
+          [
+            55500,
+            22407,
+            9828,
+            65535
+          ],
+          [
+            58737,
+            58737,
+            51858,
+            65535
+          ],
+          [
+            62082,
+            42236,
+            12980,
+            65535
+          ],
+          [
+            64372,
+            64372,
+            60396,
+            65535
+          ],
+          [
+            65535,
+            28813,
+            3464,
+            65535
+          ],
+          [
+            65535,
+            55500,
+            6700,
+            65535
+          ]
+        ]
+      },
+      "material_definitions": [],
+      "image_count": 0,
+      "texture_count": 0,
+      "clips": [
+        {
+          "name": "Idle",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.12000000476837158,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.04997917264699936,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 1.4141905307769775,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.2017625868320465,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.2017625868320465,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 5
+        },
+        {
+          "name": "Walk",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 0
+        },
+        {
+          "name": "Run",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.15216904878616333,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0703439712524414,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.2843786031007767,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.2843786031007767,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        },
+        {
+          "name": "Attack",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.1599999964237213,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.19866932928562164,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 9.797173497192363e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 9.797173497192363e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 9.797173497192363e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 9.797173497192363e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 2
+        },
+        {
+          "name": "Hurt",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.07999999821186066,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 3.308722450212111e-24,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.959441316883373e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.5442165212145716e-24,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.5442165212145716e-24,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 2
+        },
+        {
+          "name": "Turn",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.03999999910593033,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.3445983901619911,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.4901161193847656e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.29552024602890015,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 5.960464477539063e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.0,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.0,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 5
+        },
+        {
+          "name": "Jump",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.2000000476837158,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.9594346994384726e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.34289786219596863,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.9594346994384726e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.34289786219596863,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.9594346994384726e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.9594346994384726e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        },
+        {
+          "name": "Action",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.29552027583122253,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.12487727403640747,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.12487727403640747,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        }
+      ],
+      "source_animation_acceptance": "held; Walk has no changing source channel, names alone are not motion proof"
+    },
+    {
+      "glb": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireWyvern02.glb",
+        "fingerprint": {
+          "bytes": 146464,
+          "sha256": "fd1fe2981a8186b085fa5745f2d2bc814f03bb48593ea0cbabe69259a74f7dfe"
+        }
+      },
+      "fbx": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireWyvern02.fbx",
+        "fingerprint": {
+          "bytes": 757804,
+          "sha256": "bf0eb80a268e8867c87b43ade0133154b9981489a833cff53bc8e725e5880d50"
+        }
+      },
+      "sidecar": {
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\Creature_DragonFireWyvern02.json",
+        "fingerprint": {
+          "bytes": 454,
+          "sha256": "11d3e44d41634f87fdf8feca20cde03219f7382679707faa528959a4b00bd239"
+        }
+      },
+      "mesh_count": 1,
+      "skins": [
+        [
+          "root",
+          "body",
+          "head",
+          "tail",
+          "leg.L",
+          "leg.R",
+          "wing.L",
+          "wing.R"
+        ]
+      ],
+      "positions_accessor": {
+        "min": [
+          -1.5,
+          0,
+          -1.399999976158142
+        ],
+        "max": [
+          1.5,
+          1.899999976158142,
+          1.600000023841858
+        ],
+        "count": 1525
+      },
+      "vertex_colour_accessor": {
+        "component_type": 5123,
+        "normalized": true,
+        "unique_raw_rgba": [
+          [
+            6700,
+            5392,
+            5392,
+            65535
+          ],
+          [
+            45473,
+            9828,
+            6700,
+            65535
+          ],
+          [
+            51858,
+            48850,
+            38706,
+            65535
+          ],
+          [
+            55500,
+            22407,
+            9828,
+            65535
+          ],
+          [
+            58737,
+            58737,
+            51858,
+            65535
+          ],
+          [
+            62082,
+            42236,
+            12980,
+            65535
+          ],
+          [
+            64372,
+            64372,
+            60396,
+            65535
+          ],
+          [
+            65535,
+            28813,
+            3464,
+            65535
+          ],
+          [
+            65535,
+            55500,
+            6700,
+            65535
+          ]
+        ]
+      },
+      "material_definitions": [],
+      "image_count": 0,
+      "texture_count": 0,
+      "clips": [
+        {
+          "name": "Idle",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.10800004005432129,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.04997917264699936,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 1.4141905307769775,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.2017625868320465,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 49,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.2017625868320465,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                2.0416667461395264
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 5
+        },
+        {
+          "name": "Walk",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 0
+        },
+        {
+          "name": "Run",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.13695216178894043,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0703439712524414,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.2843786031007767,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 16,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.2843786031007767,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                0.6666666865348816
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        },
+        {
+          "name": "Attack",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.14399999380111694,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.19866932928562164,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 8.817457470962107e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 8.817457470962107e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 8.817454162239656e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 8.817454162239656e-18,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 2
+        },
+        {
+          "name": "Hurt",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.07199999690055847,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.7634908324479313e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 3.308722450212111e-24,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 3.308722450212111e-24,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 2
+        },
+        {
+          "name": "Turn",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.035999998450279236,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.3445983901619911,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.29552024602890015,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 5.960464477539063e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.0,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.9802322387695312e-08,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 2.0,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 3.6771669591911544e-15,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 3.4106253842062497e-15,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 5
+        },
+        {
+          "name": "Jump",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.0800000429153442,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.7634914941924213e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.34289786219596863,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.7634914941924213e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 25,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.34289786219596863,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.7634914941924213e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 1.7634914941924213e-17,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.0416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        },
+        {
+          "name": "Action",
+          "channels": [
+            {
+              "node": "root",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "root",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "body",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0998333990573883,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "body",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "head",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.29552027583122253,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "head",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "tail",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "rotation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "leg.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.L",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.12487727403640747,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.L",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "translation",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            },
+            {
+              "node": "wing.R",
+              "path": "rotation",
+              "samples": 37,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.12487727403640747,
+              "changing_at_tolerance_1e_6": true
+            },
+            {
+              "node": "wing.R",
+              "path": "scale",
+              "samples": 2,
+              "range_s": [
+                0.0416666679084301,
+                1.5416666269302368
+              ],
+              "maximum_component_delta": 0.0,
+              "changing_at_tolerance_1e_6": false
+            }
+          ],
+          "changing_channels": 4
+        }
+      ],
+      "source_animation_acceptance": "held; Walk has no changing source channel, names alone are not motion proof"
+    }
+  ],
+  "classic_views_personally_inspected_by_operator": {
+    "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\views\\Creature_DragonFireClassic01.front.png": {
+      "bytes": 344885,
+      "sha256": "f6f69d8adb25d2ce025a9191893a4ed25d5f2ac549fb5f1f0d23961e0a5e1813"
+    },
+    "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\views\\Creature_DragonFireClassic01.side.png": {
+      "bytes": 349775,
+      "sha256": "2b17ff3edb7f8106abc37f1a5a02ee1a3a0c436696ef7a49859dc69234528e09"
+    },
+    "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\views\\Creature_DragonFireClassic01.back.png": {
+      "bytes": 351054,
+      "sha256": "b800d1264aaf108f451e57637aebc723970a1473323a2bdfaa7aba111ecfcb27"
+    },
+    "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-dragons\\views\\Creature_DragonFireClassic01.silhouette.png": {
+      "bytes": 332628,
+      "sha256": "877321d186c1b18e12484334f6d978621e3771edcc19f00d211a7bdfad795e00"
+    }
+  },
+  "view_limits": "Classic front/back/side/silhouette inspected; side/silhouette clip left tail. Static source appearance only.",
+  "source_explanation": {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+    "fingerprint": {
+      "bytes": 54087,
+      "sha256": "38b076a41c168693682a075df42331d9dbf548b582f7b687c03d6cefc2cf6618"
+    },
+    "sample_loop_line": 716,
+    "dragon_sine_lines": [
+      742,
+      744,
+      746
+    ],
+    "interpretation": "Walk samples every6frames over its24frame cycle, while dragon flapping uses sin(2*phase), a12frame oscillation. All authored samples land at zero crossings; retained GLB data confirms no channel changes above1e-6. Source-based explanation, no animation played or regenerated.",
+    "clip_table_line": 41,
+    "walk_cycle_frames": 24,
+    "sampling_step_frames": 6
+  },
+  "candidate_native_destination_empty_at_read": "/Game/Daedalus/Art/Islands/CodexContest/Creatures/DragonClassic01_14f05d7c58d79966",
+  "native_api_controls_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-dragon-intake-controls-0000.json",
+  "native_imports": 0,
+  "new_asset_saves": 0,
+  "world_mutations": 0,
+  "source_files_changed": false,
+  "owner_action": "Coordinator31232 queues source animation sampling fix for Claude return; do not ping during outage or silently discard Walk",
+  "tests": "not run; retained artifact/source data read only"
+}

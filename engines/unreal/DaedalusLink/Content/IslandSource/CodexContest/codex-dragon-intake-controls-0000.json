@@ -1,0 +1,62 @@
+{
+  "world_mutated": false,
+  "classes": {
+    "GeometryScript_AssetUtils": {
+      "methods": {
+        "copy_mesh_from_skeletal_mesh": "X.copy_mesh_from_skeletal_mesh(from_skeletal_mesh_asset, to_dynamic_mesh, asset_options, requested_lod, debug=None) -> (DynamicMesh, outcome=GeometryScriptOutcomePins)\r\nExtracts a Dynamic Mesh from a Skeletal Mesh Asset.\r\n\r\nArgs:\r\n    from_skeletal_mesh_asset (SkeletalMesh): \r\n    to_dynamic_mesh (DynamicMesh): \r\n    asset_options (GeometryScriptCopyMeshFromAssetOptions): \r\n    requested_lod (GeometryScriptMeshReadLOD): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    GeometryScriptOutcomePins: \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+        "copy_mesh_to_skeletal_mesh": "X.copy_mesh_to_skeletal_mesh(from_dynamic_mesh, to_skeletal_mesh_asset, options, target_lod, debug=None) -> (DynamicMesh, outcome=GeometryScriptOutcomePins)\r\nUpdates a Skeletal Mesh Asset with new geometry and bone weights data from a Dynamic Mesh.\r\n\r\nArgs:\r\n    from_dynamic_mesh (DynamicMesh): \r\n    to_skeletal_mesh_asset (SkeletalMesh): \r\n    options (GeometryScriptCopyMeshToAssetOptions): \r\n    target_lod (GeometryScriptMeshWriteLOD): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    GeometryScriptOutcomePins: \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+        "copy_morph_target_to_skeletal_mesh": "X.copy_morph_target_to_skeletal_mesh(from_morph_target, to_skeletal_mesh_asset, morph_target_name, options, target_lod, debug=None) -> (DynamicMesh, outcome=GeometryScriptOutcomePins)\r\nAdd a Dynamic Mesh morph target to a Skeletal Mesh Asset.\r\n\r\nArgs:\r\n    from_morph_target (DynamicMesh): the dynamic mesh representing the geometry of the morph target\r\n    to_skeletal_mesh_asset (SkeletalMesh): the asset we are writing the morph target into\r\n    morph_target_name (Name): the name of the morph target as it will appear in the UI\r\n    options (GeometryScriptCopyMorphTargetToAssetOptions): \r\n    target_lod (GeometryScriptMeshWriteLOD): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    GeometryScriptOutcomePins: \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+        "copy_skin_weight_profile_to_skeletal_mesh": "X.copy_skin_weight_profile_to_skeletal_mesh(from_dynamic_mesh, to_skeletal_mesh_asset, target_profile_name, source_profile_name, options, target_lod, debug=None) -> (DynamicMesh, outcome=GeometryScriptOutcomePins)\r\nAdd a Dynamic Mesh skin weight profile to a Skeletal Mesh Asset.\r\n\r\nArgs:\r\n    from_dynamic_mesh (DynamicMesh): the dynamic mesh representing the geometry of the morph target\r\n    to_skeletal_mesh_asset (SkeletalMesh): the asset we are writing the morph target into\r\n    target_profile_name (Name): the name of the skin weight profile as it will appear in the UI. Leave blank for the default profile.\r\n    source_profile_name (Name): The name of the skin weight profile to copy from the dynamic mesh. Leave blank for the default profile.\r\n    options (GeometryScriptCopySkinWeightProfileToAssetOptions): \r\n    target_lod (GeometryScriptMeshWriteLOD): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    GeometryScriptOutcomePins: \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+        "get_lod_material_list_from_skeletal_mesh": "X.get_lod_material_list_from_skeletal_mesh(from_skeletal_mesh_asset, requested_lod, debug=None) -> (material_list=Array[MaterialInterface], material_index=Array[int32], material_slot_names=Array[Name], outcome=GeometryScriptOutcomePins)\r\nExtracts the Material List and corresponding Material Indices from the specified LOD of the Skeletal Mesh Asset.\nIf Copy Mesh To Skeletal Mesh was used to create a Dynamic Mesh, then the returned Material List can be passed directly to a Dynamic Mesh Component.\r\n\r\nArgs:\r\n    from_skeletal_mesh_asset (SkeletalMesh): \r\n    requested_lod (GeometryScriptMeshReadLOD): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    tuple: \r\n\r\n    material_list (Array[MaterialInterface]): \r\n\r\n    material_index (Array[int32]): this returned array is the same size as MaterialList, with each value the index of that Material in the Skeletal Mesh's Material List\r\n\r\n    material_slot_names (Array[Name]): \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+        "get_material_list_from_skeletal_mesh": "X.get_material_list_from_skeletal_mesh(from_skeletal_mesh_asset, debug=None) -> (material_list=Array[MaterialInterface], material_slot_names=Array[Name])\r\nGet the asset materials from the skeletal mesh asset.\nNote: For LOD-specific materials, use GetLODMaterialListFromSkeletalMesh instead.\r\n\r\nArgs:\r\n    from_skeletal_mesh_asset (SkeletalMesh): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    tuple: \r\n\r\n    material_list (Array[MaterialInterface]): \r\n\r\n    material_slot_names (Array[Name]):"
+      }
+    },
+    "GeometryScriptCopyMeshFromAssetOptions": {
+      "methods": {}
+    },
+    "SkeletalMesh": {
+      "methods": {
+        "get_bone_children": "x.get_bone_children(bone_name) -> Array[Name]\r\nGet the direct children of a bone in a skeletal mesh.\r\n\r\nArgs:\r\n    bone_name (Name): The name of the bone to query.\r\n\r\nReturns:\r\n    Array[Name]: An array of bone names that are direct children of the given bone.",
+        "get_bone_parent": "x.get_bone_parent(bone_name) -> Name\r\nGet the parent bone name of a bone in a skeletal mesh.\r\n\r\nArgs:\r\n    bone_name (Name): The name of the bone to query.\r\n\r\nReturns:\r\n    Name: The name of the parent bone, or NAME_None if the bone is the root or does not exist.",
+        "get_bounds": "x.get_bounds() -> BoxSphereBounds\r\nGet the extended bounds of this mesh (imported bounds plus bounds extension). USkinnedAsset interface.\r\n\r\nReturns:\r\n    BoxSphereBounds:",
+        "get_imported_bounds": "x.get_imported_bounds() -> BoxSphereBounds\r\nGet the original imported bounds of the skel mesh\r\n\r\nReturns:\r\n    BoxSphereBounds:",
+        "get_overlay_material": "x.get_overlay_material() -> MaterialInterface\r\nGet the default overlay material used by this mesh\r\n\r\nReturns:\r\n    MaterialInterface:",
+        "get_overlay_material_max_draw_distance": "x.get_overlay_material_max_draw_distance() -> float\r\nGet the default overlay material max draw distance used by this mesh\r\n\r\nReturns:\r\n    float:",
+        "materials": "(Array[SkeletalMaterial]):  [Read-Write]",
+        "negative_bounds_extension": "(Vector):  [Read-Only]",
+        "overlay_material": "(MaterialInterface):  [Read-Only]",
+        "overlay_material_max_draw_distance": "(float):  [Read-Only]",
+        "positive_bounds_extension": "(Vector):  [Read-Only]",
+        "set_overlay_material": "x.set_overlay_material(new_overlay_material) -> None\r\nChange the default overlay material used by this mesh\r\n\r\nArgs:\r\n    new_overlay_material (MaterialInterface):",
+        "set_overlay_material_max_draw_distance": "x.set_overlay_material_max_draw_distance(max_draw_distance) -> None\r\nChange the default overlay material max draw distance used by this mesh\r\n\r\nArgs:\r\n    max_draw_distance (float):"
+      }
+    },
+    "SkeletalMeshEditorSubsystem": {
+      "methods": {
+        "get_bone_children": "X.get_bone_children(skeletal_mesh, bone_name) -> Array[Name]\r\nGet the direct children of a bone in a skeletal mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): The mesh to query.\r\n    bone_name (Name): The name of the bone to query.\r\n\r\nReturns:\r\n    Array[Name]: An array of bone names that are direct children of the given bone.",
+        "get_bone_parent": "X.get_bone_parent(skeletal_mesh, bone_name) -> Name\r\nGet the parent bone name of a bone in a skeletal mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): The mesh to query.\r\n    bone_name (Name): The name of the bone to query.\r\n\r\nReturns:\r\n    Name: The name of the parent bone, or NAME_None if the bone is the root or does not exist.",
+        "get_lod_material_slot": "x.get_lod_material_slot(skeletal_mesh, lod_index, section_index) -> int32\r\nGets the material slot used for a specific LOD section.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): SkeletalMesh to get the material index from.\r\n    lod_index (int32): Index of the StaticMesh LOD.\r\n    section_index (int32): Index of the StaticMesh Section.\r\n\r\nReturns:\r\n    int32: MaterialSlotIndex   Index of the material slot used by the section or INDEX_NONE in case of error.",
+        "get_material_slot_overlay_material": "x.get_material_slot_overlay_material(skeletal_mesh, slot_index) -> MaterialInterface\r\nGet the overlay material for a material slot in a Skeletal Mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): Mesh to get material overlay from.\r\n    slot_index (int32): Index of the skeletal mesh material slot.\r\n\r\nReturns:\r\n    MaterialInterface: the material interface or null if there is no overlay material.",
+        "get_skeletal_mesh_overlay_material": "x.get_skeletal_mesh_overlay_material(skeletal_mesh) -> MaterialInterface\r\nGet the overlay material for a Skeletal Mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): Mesh to get the material overlay from.\r\n\r\nReturns:\r\n    MaterialInterface: the material interface or null if there is no material.",
+        "set_material_slot_overlay_material": "x.set_material_slot_overlay_material(skeletal_mesh, slot_index, new_section_overlay_material) -> bool\r\nSet the overlay material for a material slot in a Skeletal Mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): Mesh to set material overlay to.\r\n    slot_index (int32): Index of the skeletal mesh material slot.\r\n    new_section_overlay_material (MaterialInterface): The function will set the OverlayMaterial used by the slot\r\n\r\nReturns:\r\n    bool: false if invalid mesh or material slot index is invalid.",
+        "set_skeletal_mesh_overlay_material": "x.set_skeletal_mesh_overlay_material(skeletal_mesh, new_overlay_material) -> bool\r\nSet the overlay material for a Skeletal Mesh.\r\n\r\nArgs:\r\n    skeletal_mesh (SkeletalMesh): Mesh to set material overlay to.\r\n    new_overlay_material (MaterialInterface): the OverlayMaterial we set for the skeletal mesh\r\n\r\nReturns:\r\n    bool: false if invalid mesh."
+      }
+    },
+    "Skeleton": {
+      "methods": {
+        "copy_bones_from_skeleton": "x.copy_bones_from_skeleton(target_mesh, options=[False, BonesToCopyFromSource.ALL_BONES], debug=None) -> DynamicMesh\r\nCopy the bone attributes (skeleton) from the SourceSkeleton to the TargetMesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): Mesh we are copying the bone attributes to.\r\n    options (GeometryScriptCopyBonesFromMeshOptions): An option object to control how the copying is performed.\r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:",
+        "get_curve_meta_data_material": "x.get_curve_meta_data_material(curve_name) -> bool\r\nGets the material flag for a curve's metadata\r\n\r\nArgs:\r\n    curve_name (Name): The name of the curve to check\r\n\r\nReturns:\r\n    bool: true if the flag has been set",
+        "get_reference_pose": "x.get_reference_pose() -> AnimPose\r\nPopulates an Anim Pose with the reference poses stored for the provided USkeleton\r\n\r\nReturns:\r\n    AnimPose: \r\n\r\n    out_pose (AnimPose): Anim pose to hold the reference pose",
+        "set_curve_meta_data_material": "x.set_curve_meta_data_material(curve_name, override_material) -> None\r\nSet the material flag for a curve's metadata\r\n\r\nArgs:\r\n    curve_name (Name): The name of the curve to set\r\n    override_material (bool): Whether to set the material flag"
+      }
+    },
+    "AnimSequence": {
+      "methods": {
+        "get_play_length": "x.get_play_length() -> float\r\nGet Play Length\r\n\r\nReturns:\r\n    float:"
+      }
+    }
+  },
+  "native_existing_candidate_paths": [],
+  "candidate_destination_exists": false,
+  "read_code_sha256": "05365e24418f9de913c8908665470a5f8c68372a7d34b47dea6768f07103b178"
+}

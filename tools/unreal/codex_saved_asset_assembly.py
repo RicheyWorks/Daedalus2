@@ -7,6 +7,7 @@ rotation zero and scale one. Root/operator supplies the placements and map.
 An unfinished journal requires inspection, never an automatic mutation retry.
 """
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -124,18 +125,23 @@ def execute_plan(plan, journal_path, timeout=120):
     pending journal deliberately blocks another run; inspect native outcomes
     before selecting a new journal. No actor is removed or moved to resolve it.
     """
+    run_started = time.perf_counter()
     journal_path = Path(journal_path).resolve()
     overrides = plan.get("component_overrides")
     if overrides is not None:
         labels = {entry["label"] for entry in plan["entries"]}
         if not isinstance(overrides, dict) or set(overrides) != labels:
             raise ValueError("component overrides must cover the exact additive actor set")
-        allowed_slots = {"SW_Life_" + key for key in ("Gold", "Turquoise", "Petrol", "Coral", "Ice")}
-        for slots in overrides.values():
-            if not isinstance(slots, dict) or not slots or not set(slots).issubset(allowed_slots):
-                raise ValueError("require the bounded Aetherflow source material slots")
-            if any(not isinstance(path, str) or not package(path).startswith(DEST + "/Aetherflow/Palette/") for path in slots.values()):
-                raise ValueError("component overrides leave the saved owned Aetherflow palette")
+        if plan.get("component_override_contract") is not None:
+            from codex_admitted_palette_assembly import validate_palette_plan
+            validate_palette_plan(plan, journal_path)
+        else:
+            allowed_slots = {"SW_Life_" + key for key in ("Gold", "Turquoise", "Petrol", "Coral", "Ice")}
+            for slots in overrides.values():
+                if not isinstance(slots, dict) or not slots or not set(slots).issubset(allowed_slots):
+                    raise ValueError("require the bounded Aetherflow source material slots")
+                if any(not isinstance(path, str) or not package(path).startswith(DEST + "/Aetherflow/Palette/") for path in slots.values()):
+                    raise ValueError("component overrides leave the saved owned Aetherflow palette")
     if journal_path in (Path(plan["manifest"]), Path(plan["saved_receipt"]), Path(plan["map_file"])):
         raise ValueError("assembly journal must not overwrite an input")
     previous = None
@@ -147,6 +153,7 @@ def execute_plan(plan, journal_path, timeout=120):
         raise ValueError("journal parent directory must already exist")
     before_map = fingerprint(plan["map_file"])
     report = {"plan": plan, "stage": "preflight", "map_before": before_map,
+              "started_utc": datetime.now(timezone.utc).isoformat(),
               "created_actors": 0, "reused_actors": 0, "actors": [], "native_mutations": [],
               "save_return": None, "saved_unreal": False, "staging_only": True,
               "ownership_tags_added": False, "folder": "CodexContest/Staging"}
@@ -174,18 +181,21 @@ def execute_plan(plan, journal_path, timeout=120):
             raise RuntimeError("actor transform differs; no movement permitted: " + entry["label"])
 
     def mutation(toolset, tool, **arguments):
-        action = {"toolset": toolset, "tool": tool, "arguments": arguments, "state": "pending"}
+        action = {"toolset": toolset, "tool": tool, "arguments": arguments, "state": "pending",
+                  "started_utc": datetime.now(timezone.utc).isoformat()}
         report["native_mutations"].append(action)
         report["stage"] = "native_mutation_pending"
         _write(journal_path, report)
+        call_started = time.perf_counter()
         try:
             result = mcp.call(toolset, tool, **arguments)
         except Exception as error:
-            action.update(state="uncertain", error=str(error))
+            action.update(state="uncertain", error=str(error), elapsed_s=round(time.perf_counter() - call_started, 6))
             report["stage"] = "native_outcome_uncertain"
             _write(journal_path, report)
             raise
-        action.update(state="responded", result=result)
+        action.update(state="responded", result=result, elapsed_s=round(time.perf_counter() - call_started, 6),
+                      finished_utc=datetime.now(timezone.utc).isoformat())
         report["stage"] = "native_response_received"
         _write(journal_path, report)
         return result
@@ -208,6 +218,7 @@ def execute_plan(plan, journal_path, timeout=120):
                 existing[entry["label"]] = found[0]
         if fingerprint(plan["map_file"]) != before_map:
             raise RuntimeError("map file changed during preflight; re-coordinate ownership")
+        report["preflight_s"] = round(time.perf_counter() - run_started, 6)
         started = time.perf_counter()
         for entry in plan["entries"]:
             require_map()
@@ -254,7 +265,8 @@ for row in rows:
     result.append({'label':row['label'],'slots':slots,'materials':actual})
 '''.replace("ROWS", repr(report["actors"]), 1).replace("OVERRIDES", repr(overrides), 1)
             action = {"toolset": "asset_pipeline.wire", "tool": "execute_python component overrides",
-                      "code_sha256": hashlib.sha256(code.encode()).hexdigest(), "state": "pending"}
+                      "code_sha256": hashlib.sha256(code.encode()).hexdigest(), "state": "pending",
+                      "started_utc": datetime.now(timezone.utc).isoformat()}
             report["native_mutations"].append(action)
             report["stage"] = "native_mutation_pending"
             _write(journal_path, report)
@@ -262,15 +274,18 @@ for row in rows:
             try:
                 reply = wire.call(wire.UNREAL, "execute_python", code=code, unattended=False, timeout=90, side="Unreal")
             except Exception as error:
-                action.update(state="uncertain", error=str(error))
+                action.update(state="uncertain", error=str(error), elapsed_s=round(time.perf_counter() - started, 6))
                 report["stage"] = "native_outcome_uncertain"
                 _write(journal_path, report)
                 raise
-            action.update(state="responded", result=reply)
+            action.update(state="responded", result=reply, elapsed_s=round(time.perf_counter() - started, 6),
+                          finished_utc=datetime.now(timezone.utc).isoformat())
             report["stage"] = "native_response_received"
             _write(journal_path, report)
-            applied = reply.get("result")
-            if reply.get("error") or not isinstance(applied, list) or len(applied) != len(report["actors"]) or {row.get("label") for row in applied} != set(overrides):
+            # execute_python may return the native list directly. Retain either
+            # response shape before interpreting it; parsing never retries it.
+            applied = reply if isinstance(reply, list) else reply.get("result") if isinstance(reply, dict) and not reply.get("error") else None
+            if not isinstance(applied, list) or len(applied) != len(report["actors"]) or {row.get("label") for row in applied} != set(overrides):
                 raise RuntimeError("inspect the retained component-override reply before replay")
             for row in applied:
                 slots = row.get("slots", [])
@@ -296,11 +311,14 @@ for row in rows:
         require_map()
         for row in report["actors"]:
             verified_actor(row["actor"], row)
-        report.update(stage="placed_and_saved", saved_unreal=True)
+        report.update(stage="placed_and_saved", saved_unreal=True,
+                      completed_utc=datetime.now(timezone.utc).isoformat(),
+                      total_elapsed_s=round(time.perf_counter() - run_started, 6))
         _write(journal_path, report)
         return report
     except Exception as error:
         report["error"] = str(error)
+        report["total_elapsed_s"] = round(time.perf_counter() - run_started, 6)
         if report["stage"] != "native_outcome_uncertain":
             report["stage"] = "inspection_required" if report["native_mutations"] else "preflight_failed"
         _write(journal_path, report)

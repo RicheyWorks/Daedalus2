@@ -1,0 +1,54 @@
+{
+  "schema": "daedalus.pr155-reviewed-source-integration.v1",
+  "stage": "exact_reviewed_source_integrated_native_use_pending",
+  "recorded_utc": "2026-10-14T23:49:43.404202+00:00",
+  "previous_own_head": "53aa2dacb6fe4fc6135ee210c75171eea868a7cc",
+  "reviewed_head": "98afbf8ba23c181d775035314ffabead74b4b58c",
+  "reviewed_base": "0075e19f",
+  "before": {
+    "tools/unreal/codex_admitted_palette_assembly.py": null,
+    "tools/unreal/codex_saved_asset_assembly.py": {
+      "bytes": 18884,
+      "sha256": "ad185cbecb13917f6b60f918b14b23b29110200285d35b18b844e1b6e09b3dd0"
+    }
+  },
+  "after": {
+    "tools/unreal/codex_admitted_palette_assembly.py": {
+      "bytes": 16618,
+      "sha256": "e29d867fc5b6d9c14f4ac8bee3cc26ec61439a3be34c3e2951b7894f4ef15efe"
+    },
+    "tools/unreal/codex_saved_asset_assembly.py": {
+      "bytes": 20380,
+      "sha256": "d7bf218b11dead1375934aa1d38c81ca81ffd4484d8d9a5fd7c968733ccd9bea"
+    }
+  },
+  "unchanged_dependencies": {
+    "tools/unreal/codex_admitted_asset_assembly.py": {
+      "bytes": 13595,
+      "sha256": "eed6718cdf40a84c66122b7cbab69a3bd4fd30ad884903a2e9281fd140a5cd0d"
+    },
+    "tools/unreal/codex_staging_palette.py": {
+      "bytes": 15720,
+      "sha256": "d1e3d88ac6718adfc1d3d4cd5c318bfa4e525e0ff580319887fc0d57e1db75ee"
+    },
+    "engines/unreal/DaedalusLink/Content/Python/daedalus_codex_staging_palette.py": {
+      "bytes": 15887,
+      "sha256": "68cde2f5fd05509d0c0fc6d37d315847da13c331ee23e7a22a49824288ccc661"
+    }
+  },
+  "saved_mesh_files_verified_unchanged": 96,
+  "staging_actor_checkpoint": 89,
+  "map_fingerprint_unchanged": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "native_calls_during_integration": 0,
+  "native_palette_runner_executed": false,
+  "native_world_mutations": 0,
+  "map_saves": 0,
+  "source_review": "independent exact-base/dependency/full-source compatibility review; completed reuse now shares live preflight and revalidates saved contract",
+  "pending_native_reason": "no new eligible retained voxel delivery: HeroR3/R4/GardenGateR1/Power already delivered; palette91011 schema excluded; rack requires actor.01 and is asset-only; Aetherflow uses its existing one-save fallback",
+  "normal_next_use": "new qualifying retained voxel packet may call prepare_palette then execute_plan with new durable journals; no replay of completed actors or palette writes to benchmark",
+  "speedup_claim": false,
+  "tests_build_play": "deferred; source/data checks only"
+}
