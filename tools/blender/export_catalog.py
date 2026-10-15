@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Headless: export one voxel catalogue (eggs | props | sims) as FBX + json, plus a contact sheet per family.
     blender -b --factory-startup --python-exit-code 1 --python tools/blender/export_catalog.py -- MODULE OUT_DIR [family ...] [--force] [--no-sheet]
-MODULE: eggs (voxel_eggs, 196 Prop_Egg_*), props (voxel_props: house | grave | sport), sims (voxel_sims: kit | machine | appliance | house).
+MODULE: eggs (voxel_eggs, 196 Prop_Egg_*), aquatic (voxel_aquatic: pond | marsh | submerged | sea | realm, 258), props (voxel_props: house | grave | sport), sims (voxel_sims: kit | machine | appliance | house).
 Same recipe as export_farm.py: build everything, free each object after export, then rebuild a family in a grid and render once with Workbench.
 """
 import math
@@ -36,6 +36,12 @@ elif module == "props":
 elif module == "prism":
     import realm_prism_props as M
     PITCH = {"structure": 14.0, "item": 2.4}
+
+    def voxels_of(name):
+        return M.plan(name)
+elif module == "aquatic":
+    import voxel_aquatic as M
+    PITCH = {"pond": 2.4, "marsh": 2.4, "submerged": 2.0, "sea": 6.0, "realm": 2.2}
 
     def voxels_of(name):
         return M.plan(name)

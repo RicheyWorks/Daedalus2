@@ -714,7 +714,7 @@ def build(species, out_dir, scale=10.0, keep=False):
         rig.animation_data_create()
         act = bpy.data.actions.new(name + "_" + clip)
         rig.animation_data.action = act
-        for f in range(1, n + 2, 6 if clip == "Walk" else 3):
+        for f in range(1, n + 2, 6 if (clip == "Walk" and fam != "rabbit") else 3):
             ph = (f - 1) / n * 2 * math.pi
             for p in rig.pose.bones:
                 p.location = (0, 0, 0)
@@ -731,6 +731,15 @@ def build(species, out_dir, scale=10.0, keep=False):
                     rig.pose.bones["head"].rotation_euler.z = 1.2 * math.sin(ph)
                     rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 3)
                     rig.pose.bones["body"].location.z = 0.01 * k * math.sin(ph * 2)
+                elif fam == "wolf":                                                 # ears-up watch: slow scan, low tail sway, breathing
+                    rig.pose.bones["head"].rotation_euler.z = 0.35 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.06 * math.sin(ph * 2)
+                    rig.pose.bones["tail"].rotation_euler.z = 0.2 * math.sin(ph * 2)
+                    rig.pose.bones["body"].location.z = 0.008 * k * math.sin(ph * 2)
+                elif fam == "rabbit":                                               # nose twitch, alert freeze, twitch again
+                    rig.pose.bones["head"].rotation_euler.x = 0.05 * math.sin(ph * 8) * (1 if math.sin(ph) > 0 else 0)
+                    rig.pose.bones["head"].rotation_euler.z = 0.25 * max(0.0, math.sin(ph - 1.0))
+                    rig.pose.bones["body"].location.z = 0.01 * k * math.sin(ph * 4)
                 elif fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.9 * math.sin(ph * 6) * (1 if side == "L" else -1)
@@ -750,6 +759,22 @@ def build(species, out_dir, scale=10.0, keep=False):
                 rig.pose.bones["body"].rotation_euler.x = 0.1 * fast
                 rig.pose.bones["tail"].rotation_euler.x = 0.2 * math.sin(ph * 2 * fast)
                 rig.pose.bones["head"].rotation_euler.x = -0.1 * fast
+            elif clip in ("Walk", "Run") and fam == "rabbit":                         # hops: push off the hind feet, land on the fore
+                hops = 2 if clip == "Walk" else 3
+                hp = (ph * hops) % (2 * math.pi)
+                up = max(0.0, math.sin(hp))
+                rig.pose.bones["body"].location.z = (0.35 if clip == "Walk" else 0.55) * k * up
+                rig.pose.bones["body"].rotation_euler.x = -0.25 * math.sin(hp)                    # nose up on take-off, down on landing
+                for side in ("L", "R"):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.7 * math.sin(hp)          # both hind feet together
+                rig.pose.bones["tail"].rotation_euler.x = 0.3 * up
+            elif clip == "Run" and fam == "wolf":                                      # gallop: big reach, back flexes, tail streams
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.95 * math.sin(ph + (0.5 if sgn < 0 else 0))
+                rig.pose.bones["body"].location.z = 0.08 * k * abs(math.sin(ph))
+                rig.pose.bones["body"].rotation_euler.x = 0.12 * math.sin(ph)
+                rig.pose.bones["head"].rotation_euler.x = 0.1 - 0.1 * math.sin(ph)
+                rig.pose.bones["tail"].rotation_euler.x = -0.35
             elif clip == "Run" and fam not in ("plant",):
                 for side, sgn in (("L", 1), ("R", -1)):
                     rig.pose.bones["leg." + side].rotation_euler.x = 0.8 * math.sin(ph) * sgn
@@ -797,6 +822,19 @@ def build(species, out_dir, scale=10.0, keep=False):
                     rig.pose.bones["body"].location.z = 0.25 * k
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.8 * (1 if side == "L" else -1) * (0.5 + 0.5 * rear)
+                elif fam == "wolf":                                                             # the howl: sit back, muzzle to the sky
+                    up = (1 - math.cos(ph)) / 2
+                    rig.pose.bones["body"].rotation_euler.x = -0.35 * up
+                    rig.pose.bones["head"].rotation_euler.x = -1.0 * up
+                    rig.pose.bones["tail"].rotation_euler.x = 0.3 * up
+                    for side in ("L", "R"):
+                        rig.pose.bones["leg." + side].rotation_euler.x = 0.25 * up
+                elif fam == "rabbit":                                                           # rear up on the hind feet to look
+                    up = (1 - math.cos(ph)) / 2
+                    rig.pose.bones["body"].rotation_euler.x = -0.7 * up
+                    rig.pose.bones["body"].location.z = 0.15 * k * up
+                    rig.pose.bones["head"].rotation_euler.x = 0.55 * up
+                    rig.pose.bones["head"].rotation_euler.z = 0.4 * math.sin(ph * 2) * up
                 elif fam == "dino":
                     rig.pose.bones["head"].rotation_euler.z = 0.5 * math.sin(ph)                    # roar sweep
                     rig.pose.bones["head"].rotation_euler.x = -0.4 * max(0.0, math.sin(ph))
@@ -828,7 +866,7 @@ def build(species, out_dir, scale=10.0, keep=False):
             for p in rig.pose.bones:
                 p.keyframe_insert(data_path="rotation_euler", frame=f)
                 p.keyframe_insert(data_path="location", frame=f)
-        if clip in ("Walk", "Run") and fam != "dragon":      # flyers glide smoothly; walkers keep the stepped feel
+        if clip in ("Walk", "Run") and fam not in ("dragon", "rabbit"):   # hops arc smoothly      # flyers glide smoothly; walkers keep the stepped feel
             for fc in act.fcurves:
                 for key in fc.keyframe_points:
                     key.interpolation = "CONSTANT"        # the stepped voxel feel, like the Portal creatures
