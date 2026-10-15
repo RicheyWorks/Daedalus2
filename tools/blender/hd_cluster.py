@@ -2,7 +2,12 @@
 """Eight connected HD islands = one "Octet" Super Island (Ultra's standard: distinct plots on a 256 m pitch, sockets
 at ±(R+10) m, 10 m deck datum, bridges 16 m wide at the deck). Ten themed octets, one per seed:
 
-    blender -b --factory-startup --python-exit-code 1 --python tools/blender/hd_cluster.py -- OUT_DIR SEED [--render] [--no-export]
+    blender -b --factory-startup --python-exit-code 1 --python tools/blender/hd_cluster.py -- OUT_DIR SEED [--plot I | --links] [--render]
+  --plot I : build + export only plot I (0 = hub) in this process — run 8 fresh processes, so the scene never fills up
+             (one process for all 8 slowed from 17 s to 65 s per plot as objects accumulated);
+  --links  : build bridges, sky streams and theme props, write the layout json; with --render, import the 8 plot GLBs
+             and render the whole octet.
+  (neither): all of it in one process (slow; fine for a single preview).
 
 Layout: a hub island at the centre and seven around it on a 256 m ring (neighbours ~222 m apart), so every island
 touches the hub and its two ring neighbours — 14 rope-plank bridges, and the hub's sky river feeds a ring canal:
@@ -141,18 +146,35 @@ def theme_props(name, prop, accent, centres, seed):
                 H.sphere(pre + "Head%d" % k, (px + k * 2.2, py, pz + 2.8), (.8, .3, .8), acc, 8, 5)
 
 
-def build(seed, out_dir, export=True):
+def theme(seed):
     tname, hub, ring, accent, prop = THEMES[(seed - 1) % len(THEMES)]
-    name = "Octet_%s_%d" % (tname, seed)
+    return "Octet_%s_%d" % (tname, seed), tname, [hub] + ring, accent, prop
+
+
+def build_plot(seed, i, out_dir):
+    name, _, kinds, _, _ = theme(seed)
+    pts, _ = layout()
+    t0 = time.time()
+    man = H.build(seed * 100 + i, kinds[i], out_dir, offset=(pts[i][0], pts[i][1], 0), prefix="%s_Plot%d_%s" % (name, i, kinds[i].title()))
+    print("PLOT %d %s %s tris=%d %.0fs" % (i, kinds[i], man["name"], man["triangles"], time.time() - t0), flush=True)
+    return man
+
+
+def build(seed, out_dir, export=True, plots=True):
+    name, tname, kinds, accent, prop = theme(seed)
+    hub = kinds[0]
     pts, edges = layout()
-    kinds = [hub] + ring
     mans, lakes = [], []
     t0 = time.time()
     for i, ((cx, cy), kind) in enumerate(zip(pts, kinds)):
-        man = H.build(seed * 100 + i, kind, out_dir, offset=(cx, cy, 0), prefix="%s_Plot%d_%s" % (name, i, kind.title()), export=export)
+        if plots:
+            man = H.build(seed * 100 + i, kind, out_dir, offset=(cx, cy, 0), prefix="%s_Plot%d_%s" % (name, i, kind.title()), export=export)
+            print("PLOT %d %s %s %.0fs" % (i, kind, man["name"], time.time() - t0), flush=True)
+        else:
+            jp = os.path.join(out_dir, "%s_Plot%d_%s.json" % (name, i, kind.title()))
+            man = json.load(open(jp, encoding="utf-8")) if os.path.exists(jp) else {"name": os.path.basename(jp)[:-5], "kind": kind, "seed": seed * 100 + i, "sockets": {}, "triangles": 0}
         mans.append(man)
         lakes.append(H.author(seed * 100 + i, kind)["lake"][:2])
-        print("PLOT %d %s %s %.0fs" % (i, kind, man["name"], time.time() - t0), flush=True)
     H.GROUP = []
     wood = H.material("Cedar", (.30, .14, .07), .7)
     rope = H.material("Rope", (.62, .52, .35), .9)
@@ -176,6 +198,15 @@ def build(seed, out_dir, export=True):
             json.dump(lay, f, indent=1)
     print("OCTET %s plots=8 tris=%d %.0fs" % (name, lay["triangles"], time.time() - t0), flush=True)
     return name, lay
+
+
+def import_plots(out_dir, name):
+    import glob
+    for g in sorted(glob.glob(os.path.join(out_dir, name + "_Plot*.glb"))):
+        bpy.ops.import_scene.gltf(filepath=g)
+    for o in bpy.data.objects:                         # the parked LODs and tree templates stay out of the picture
+        if o.name.startswith("UCX_") or "_LOD" in o.name or o.location.z < -400:
+            o.hide_render = True
 
 
 def render(out_dir, name):
@@ -207,6 +238,12 @@ if __name__ == "__main__":
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o, do_unlink=True)
     os.makedirs(out_dir, exist_ok=True)
-    name, lay = build(seed, out_dir, export="--no-export" not in argv)
-    if "--render" in argv:
-        render(out_dir, name)
+    if "--plot" in argv:
+        build_plot(seed, int(argv[argv.index("--plot") + 1]), out_dir)
+    else:
+        links = "--links" in argv
+        name, lay = build(seed, out_dir, export=True, plots=not links)
+        if "--render" in argv:
+            if links:
+                import_plots(out_dir, name)
+            render(out_dir, name)
