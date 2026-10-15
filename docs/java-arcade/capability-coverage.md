@@ -1,5 +1,27 @@
 # Arcade capability coverage — source checkpoint, 2026-10-15
 
+## Completed bounded source package
+
+Source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b` extends the same PR152,
+preserving the mode code below and prior Blackjack bindings. The two Slate files
+now expose existing Sudoku Open by ID, original Ctrl+Z/Y and row/column-end keys,
+and H-key hint confirmation. The explicit Hint button retains its original
+purchase behavior. Blackjack's supported original TableKeys actions and chips
+use existing legality/submission APIs; disabled actions are consumed, and
+insurance acceptance also requires the projected affordability flag. Shortcuts
+require direct board/table focus and the opening local user, and exclude repeats,
+controller events and editing modifiers. Escape keeps cabinet-close behavior.
+
+Service status/message and hints remain visible alongside local validation errors;
+Java's hint count and insurance decision prompt are shown. No actor, transport,
+guard, protocol, persistence or rule implementation changes in this second
+increment. Source review and 110 static checks pass, including 56 unchanged
+baseline method bodies. This is not compiler, behavior or native proof.
+
+The complete source-to-interface map, remaining boundaries and deferred install
+checklist are in [cabinet-source-package.md](cabinet-source-package.md). All four
+runtime files have final source pins in the existing integration manifest.
+
 ## Current iteration: existing Sudoku create modes
 
 Code `4d5577dc5659a9a26a9130e70cef68c2e5915ece` continues the existing PR152
@@ -126,7 +148,7 @@ They must not be replaced with invented Unreal payouts, storage or achievements.
 | 13 casts / chatter | `C/table/Casts.all/forPalette`, persona classes, `TableChatter.react` | None | Java persona/events, native dialogue/character binding | E0 |
 | Sound/music | `C/media/GameSounds`, `ToneSynth`; `S/media/SoundFx`, `MusicService`; `G/GdxSfx` | No source-specific cabinet audio | Coordinate existing audio owner; bind existing events/settings | E0 |
 | Plugins | `S/plugin/PluginRegistry.loadAll/themes/aiStrategies/sideBets`, `PluginManagerDialog`, SPI file above | Facade loads no plugins | Explicit Java plugin lifecycle/projection; no invented loader | E0 |
-| Keyboard/accessibility/mobile | Swing/GDX `TableKeys`, Swing `bindKeys`, GDX `TableScreen.keyDown`; `C/table/SpokenTable`, GDX `publishAccessibility`, Android `GlAccessibility` | Blackjack Slate keyboard only closes; ordinary Slate controls | Source action shortcuts, spoken table and platform lifecycle mapping | E0 |
+| Keyboard/accessibility/mobile | Swing/GDX `TableKeys`, Swing `bindKeys`, GDX `TableScreen.keyDown`; `C/table/SpokenTable`, GDX `publishAccessibility`, Android `GlAccessibility` | Supported source action/chip shortcuts now route through existing legality/submit APIs with direct-focus/user gates; ordinary Slate controls | B/21+3 has no facade command; M/menu stays unbound; spoken table, platform lifecycle and controller integration remain open | Source review only; E0 |
 | Optional Steam bridge | `S/steam/SteamBridge` reflective adapter | None | Optional SDK-specific binding; no-op path is not enabled capability | E0 |
 
 The separate `:platform` wallet/round/compliance/RNG classes are outside the
@@ -173,7 +195,7 @@ Sudoku source is [973c73a35f8659a17022232f0996d4ffb0095997](https://github.com/R
 In the next table, controller paths are
 `server/src/main/java/com/xai/sudokupro/controller/`, and client paths are
 `client/src/main/java/com/xai/sudokupro/`. Existing native bindings are the same
-Java actor/Slate, now extended only with the create-mode bindings above. **S27** means
+Java actor/Slate, now extended with the bounded source package above. **S27** means
 27 historical disposable HTTP/WS checkpoints with real authentication/JPA, H2
 and mocked Redis/Jedis/relay; it does not establish full platform or Unreal E2E.
 
@@ -181,8 +203,8 @@ and mocked Redis/Jedis/relay; it does not establish full platform or Unreal E2E.
 |---|---|---|---|---|
 | Session/CSRF, own-board moves/undo/redo/sync | `SessionController GET /api/session`; `SudokuGameController /new`; `WebSocketController` commands | Configure/start/move/undo/redo/refresh methods and Slate grid | Account/provider mapping absent; Java owns clock/score/legality | S27 subset; E0 |
 | Chaos/mirror/timed modes, recommended difficulty | `SudokuGameController.new` parameters and `/recommended-difficulty`; `net/ServerApi`, `ui/MainStage` | New three mode selectors → `StartSudokuGameWithModes` → captured bootstrap options → existing create URL; confirmed flags/time limit read from snapshots | Recommended difficulty still absent; current mode binding uncompiled/unplayed | E0 |
-| Save/list/resume/end | `SudokuGameController /save,/saved,/resume,/end`; `ui/MainStage` picker | Save and explicit-ID resume; Blueprint open | Saved-list picker and authoritative end absent; cabinet close cancels local work | S27 subset; E0 |
-| Hint price/confirmation | `SudokuGameController POST /hint`; `EconomyController /wallet`; `ui/BoardView` | Explicit hint action | Current wallet/price and original confirmation missing; no native currency grant | S27 hint subset; E0 |
+| Save/list/resume/end | `SudokuGameController /save,/saved,/resume,/end`; `ui/MainStage` picker | Save and explicit-ID Open/Resume buttons use the existing actor methods | Saved-list picker and authoritative end absent; cabinet close cancels local work | S27 subset; E0 |
+| Hint price/confirmation | `SudokuGameController POST /hint`; `EconomyController /wallet`; `ui/BoardView:342–345,477–503` | Explicit Hint action; H separately asks and confirms the same current game ID before calling that action; confirmed hint count shown | Current wallet/price is not fetched; uses source's unknown-price confirmation fallback, no native currency grant | Source review; S27 historical hint subset; E0 |
 | AI solve | `SudokuGameController POST /{id}/solve`; `GameClient`, `BoardView` | None | Service operation/UI absent | E0 |
 | Pencil/highlights/conflict clearing/history | `ui/BoardView`, `ui/BoardCell` | Snapshot pencil-mask display | Local note editor/highlights/filtered history absent; original notes have no server mutation API | E0 |
 | Replay | `GameClient`, `ReplaySession`, `ui/MainStage` | None | Display-only chronological log/replay; never replay mutations into Java | E0 |
@@ -211,7 +233,7 @@ Neither variant is a Java Minesweeper backend or full `minesweeper-pro` integrat
 | Stage | This checkpoint |
 |---|---|
 | Source | Claimed four Java actor/Slate files and this coverage/manifest only; source review, unverified |
-| Committed | Mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece`, preserving prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
+| Committed | Package source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b`, preserving mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece` and prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
 | Connected | No connection established or observed by this lane; companion PR62 adoption/runtime/provider pending |
 | Native | No current-head UHT/UBT/DLL/load/placement; historical evidence stays pinned |
 | End-to-end | No Unreal settings/action/recovery proof; original app coverage remains open |

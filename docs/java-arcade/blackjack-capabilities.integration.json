@@ -1,44 +1,51 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "SUDOKU_MODES_AND_BLACKJACK_CAPABILITIES_UNVERIFIED_SOURCE_ONLY",
+  "status": "JAVA_CABINET_SOURCE_PACKAGE_READY_UNVERIFIED_NATIVE",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/blackjack-capability-binding-20261014",
-    "code_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
+    "code_commit": "c7b3f3e28f759b5408a69ff00f2fde025b3d650b",
     "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
         "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
         "expected_prior_pr152_sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF",
-        "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d"
+        "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
+        "mode_checkpoint_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
         "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
         "expected_prior_pr152_sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900",
-        "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de"
+        "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
+        "mode_checkpoint_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
-        "sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5",
+        "sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A",
         "expected_prior_pr152_sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB",
-        "git_blob": "62af83ce50c8ce994c4c4988275d4a7edfdd594d"
+        "git_blob": "65c0caca765a66fca088269ee35bb426e0de74fb",
+        "mode_checkpoint_sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
-        "sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15",
+        "sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365",
         "expected_prior_pr152_sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7",
-        "git_blob": "961f5529859c3e69d4ad21ac775f8d2f24778353"
+        "git_blob": "3bb1e6c863393d536de4797091e1ee132f8c02c0",
+        "mode_checkpoint_sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15"
       }
     ],
     "prior_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
-    "prior_documentation_head": "89ece41824b9132403ac0bfffae15343b08b13f8"
+    "prior_documentation_head": "89ece41824b9132403ac0bfffae15343b08b13f8",
+    "mode_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
+    "package_increment_base": "89ece41824b9132403ac0bfffae15343b08b13f8",
+    "mode_documentation_checkpoint": "0dff5841862d993d2bbd4a96c884a22d698cf0dc"
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
@@ -121,10 +128,32 @@
       "capture": "Validated request captures booleans after existing gates and before asynchronous session bootstrap; URL reads captured actor fields only.",
       "confirmed_display": "State.bChaosMode,State.bMirrorMode and State.TimeLimitSeconds>0; no optimistic board/clock changes",
       "open_resume_save": "Existing methods/requests unchanged; no create options injected into open/resume or extra time granted."
+    },
+    "cabinet_source_ui": {
+      "source_commit": "c7b3f3e28f759b5408a69ff00f2fde025b3d650b",
+      "changed_files": [
+        "Private/SDaedalusJavaArcade.h",
+        "Private/SDaedalusJavaArcade.cpp"
+      ],
+      "sudoku": [
+        "Open by explicit game ID via existing OpenSudokuGame",
+        "Ctrl+Z/Y existing undo/redo; Home/End/PageUp/PageDown selection",
+        "H only asks; Buy/Cancel checks same current game ID/canAct; prompt cleared on create/open/resume/configure",
+        "Existing explicit Hint button retains direct purchase behavior; current hintCount displayed"
+      ],
+      "blackjack": [
+        "Original supported TableKeys actions and chip shortcuts via existing IsBlackjackActionLegal/SubmitBlackjackAction",
+        "Insurance I acceptance additionally requires insuranceAcceptAllowed; N decline",
+        "Recognized disabled keys consumed; B/sidebet and M/menu not invented",
+        "Insurance prompt uses visible phase and first-hand blackjack flag only"
+      ],
+      "focus": "Only direct board/table focus and opening local user; no repeats/controllers/Alt/Command; no Blackjack Ctrl/Shift dispatch. Existing Escape close preserved.",
+      "status": "Authoritative status/message and hint remain visible beside local credential validation; busy Save/End controls disabled.",
+      "transport_rules_persistence_modified": false
     }
   },
   "stages": {
-    "source": "Sudoku mode-create/UI binding implemented alongside preserved prior Blackjack capabilities; independent source review and static checks only.",
+    "source": "Selected bounded package complete: prior Blackjack settings/metadata, Sudoku create modes, supported original shortcut/Open/confirmation/status bindings. Full original applications remain incomplete.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
@@ -132,9 +161,9 @@
     "world_placed": false,
     "world_saved": false,
     "end_to_end": false,
-    "source_review": "PASS",
-    "static_checks_passed": 77,
-    "unchanged_methods": 61,
+    "source_review": "PASS; no blocking source defect, cleanup applied",
+    "static_checks_passed": 110,
+    "unchanged_methods": 56,
     "tests_or_builds_run": false
   },
   "pending_operator_steps": [
@@ -143,7 +172,8 @@
     "The new unique reflected function/private fields require generated-code/module integration. Only codex-play-guard selects and performs the later normal supported build/load route; no live DLL or LiveCoding assumption.",
     "At the next owned source-validation slot exercise8flag combinations, ordinaryStart compatibility, invalid/busy gates, selections across async bootstrap and stale/replaced callbacks; preserve existing guard/secret/protocol constraints.",
     "Later approved disposable Sudoku acceptance: normal HeroUse, modeCreate, compare confirmed flags/time limit, timed save/resume without clock extension, then close/reopen/disconnect recovery. No actual service or credentials used by source lane.",
-    "Retain prior Blackjack companion/rules/settings/metadata acceptance steps; they remain uncompiled/uninstalled/unaccepted at this source checkpoint. No equivalent nativeSudoku/Blackjack gameplay/persistence is inferred from other Mines/HUD checks."
+    "Retain prior Blackjack companion/rules/settings/metadata acceptance steps; they remain uncompiled/uninstalled/unaccepted at this source checkpoint. No equivalent nativeSudoku/Blackjack gameplay/persistence is inferred from other Mines/HUD checks.",
+    "After a separately authorized slot, follow cabinet-source-package.md for focused forms/buttons/keys, hint-confirmation identity lifecycle, status after invalid Configure, original Blackjack metadata and actual modal readability/close behavior. Source-only mappings are not native acceptance."
   ],
   "remaining_original_features": [
     "facade health/reopen binding",
@@ -200,5 +230,42 @@
       "sha256": "772C17EE4A519A70C1A79A16F5AE613AFBA629F2B6E4E926ADE72117DB9E1989",
       "applicability": "Verified web module, not a native Slate transport. Existing Slate checkbox/focus path reused; no new controller plumbing or native bindings."
     }
+  },
+  "ui_extension_claim_messages": [
+    32190,
+    32191,
+    32192
+  ],
+  "saved_extension_status_message": 32201,
+  "source_package": {
+    "guide": "docs/java-arcade/cabinet-source-package.md",
+    "code_commit": "c7b3f3e28f759b5408a69ff00f2fde025b3d650b",
+    "baseline": "89ece41824b9132403ac0bfffae15343b08b13f8",
+    "extension_baseline": "0dff5841862d993d2bbd4a96c884a22d698cf0dc",
+    "extension_runtime_diff": "Two Slate files,104 insertions10 deletions; actor/public header identical to mode checkpoint",
+    "static_report_sha256": "0BFE18228CADF30749B9887CBC6E05992E9A1945CCCF830731E5A229F75C2AD1",
+    "static_checks": 110,
+    "unchanged_baseline_methods": 56,
+    "compiler_behavior_tests_services_editor_run": false,
+    "original_sources": {
+      "sudoku": {
+        "revision": "973c73a35f8659a17022232f0996d4ffb0095997",
+        "paths": [
+          "client/src/main/java/com/xai/sudokupro/ui/BoardView.java:209-235,342-345,477-503",
+          "client/src/main/java/com/xai/sudokupro/client/net/ServerApi.java:157-183"
+        ]
+      },
+      "blackjack": {
+        "revision": "8a4dccfbc359be628b5766ea1b7082410baefe1c",
+        "paths": [
+          "swing/src/main/java/com/richeyworks/blackjack/ui/swing/TableKeys.java:30-60",
+          "gdx-core/src/main/java/com/richeyworks/blackjack/gdx/TableKeys.java:28-53",
+          "gdx-core/src/main/java/com/richeyworks/blackjack/gdx/TableScreen.java:1168-1188",
+          "core/src/main/java/com/richeyworks/blackjack/engine/TableLabels.java:105-108"
+        ]
+      }
+    },
+    "lesson": "Use existing guarded action APIs for source shortcuts; scope keys to direct board focus; bind confirmations to current identity; local validation must not hide authoritative status.",
+    "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot."
   }
 }

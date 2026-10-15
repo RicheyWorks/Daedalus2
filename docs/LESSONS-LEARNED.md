@@ -250,4 +250,24 @@ eight option combinations, UI changes during bootstrap, failed/replaced requests
 and timed save/resume. Proposed owner desktop-games at its next validation slot;
 no new framework/job. Reviewer has no new firsthand native/Blender/queue evidence.
 
+### Bind source shortcuts through the existing guarded action interface
+
+2026-10-15, pootscoot-desktop-games; java_package_gap_review source review.
+PR152 package source c7b3f3e2 adds original Blackjack TableKeys through the same
+IsBlackjackActionLegal/SubmitBlackjackAction path as buttons, with the separate
+insurance affordability flag. Consume recognized disabled keys, require direct
+board/table and opening-user focus, and exclude repeats/modifiers/controllers so
+typing and button activation do not dispatch twice. Sudoku H only asks: consume
+the confirmation target and recheck current game/canAct before the existing hint
+request. Preserve the explicit labeled Hint button's source behavior. Clear old
+prompts on create/open/resume/configure. Keep authoritative status visible beside
+local form errors; a validation message must not conceal later service failure.
+Source review and 110 static checks (56 unchanged baseline methods) pass; compiler,
+behavioral tests/services/native remain deferred. No measured native benefit.
+Harness proposal, benefit ESTIMATED: extend the existing Java cabinet acceptance
+cases with focused forms/buttons, repeats/other user/controller edges, illegal
+actions, H/Cancel/Buy and replaced IDs, plus invalid Configure followed by service
+failure. Proposed owner desktop-games at its later validation slot; no new job
+framework or runtime queue claim. No fresh Blender/native evidence from reviewer.
+
 

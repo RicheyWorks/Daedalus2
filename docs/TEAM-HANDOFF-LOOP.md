@@ -43,3 +43,19 @@ UHT/module build. Nothing is installed/native accepted. Preserve accepted184,
 Mines, R2 and other owners; no whole-plugin replacement or immediate runtime slot.
 Ingestion remains first. Web controller39fa remains reusable for web consumers;
 normal Slate controls need no web bridge or duplicate input framework here.
+
+## Java cabinet extended source package — 2026-10-15
+
+Parent's longer-task direction continues existing PR152 rather than creating a
+duplicate. Saved mode source4d5577dc/documentation0dff5841, then sourcec7b3f3e2
+completed supported original Blackjack keys, Sudoku Open/keyboard confirmation
+and status gaps in the same two owned Slate files. Extension claims32190–32192
+and saved-source status32201 are recorded; no conflicting Java-client claim was
+observed, and no explicit owner clearance response is claimed. Exact four-file
+final source pins, full coverage, remaining app gaps and later acceptance are in
+docs/java-arcade/blackjack-capabilities.integration.json and
+docs/java-arcade/cabinet-source-package.md. Review and 110 static source invariants
+pass, 56 baseline methods unchanged; dedicated compiler/tests/native stay deferred.
+Preserve the original PR152 Blackjack implementation and current accepted native
+source; no whole-plugin overwrite, service traffic, credentials or editor action.
+Only the sole operator may later integrate/build/load/accept after ingestion.

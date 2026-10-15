@@ -107,3 +107,18 @@ The current default-head GitHub CI run 38087377620 was reported failed before it
 Primary pinned references: [BoardState](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/api/BoardState.java), [game REST controller](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/SudokuGameController.java), [raw socket controller](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/WebSocketController.java), [existing client reconciliation](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/client/src/main/java/com/xai/sudokupro/client/GameClient.java).
 
 Unresolved integration acceptance: concrete service address, approved runtime account setup/Daedalus identity mapping, actual native parser/lifecycle tests, Unreal link/load, packaging and live acceptance. Cabinet identity and any future ownership system remain separate from Sudoku authentication and game rules.
+
+## Cabinet UI source package — c7b3f3e2
+
+The existing OpenSudokuGame API now has an explicit ID button beside Resume.
+Ctrl+Z/Y reuse undo/redo and Home/End/Page Up/Down select row/column ends. H only
+shows confirmation; Buy consumes its saved target, rechecks the current game ID
+and canAct, then calls the existing hint request. Cancel sends nothing. New,
+Open, Resume and Configure clear old prompts. The labeled Hint button remains
+the deliberate direct purchase used by the original BoardView. Wallet/price is
+not fetched, so the prompt uses that source's unknown-price fallback. Java's
+hintCount appears in the readout. No hints, save or socket protocol changed.
+Direct board focus and the opening user are required for game shortcuts; editing
+fields and focused buttons retain their own keys. Source review/static checks
+only: compiler, service and native acceptance remain deferred. Full evidence and
+later acceptance are in [cabinet-source-package.md](cabinet-source-package.md).
