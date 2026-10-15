@@ -27,7 +27,7 @@ with open(os.path.join(out_dir, "owls.manifest.json"), "w", encoding="utf-8") as
 t0 = time.time()
 done = 0
 for n in D.NAMES:
-    el = n.split("_")[1]
+    el = D.spec(n)["species"]
     if want and el not in want:
         continue
     name = "Creature_" + "".join(w.capitalize() for w in n.split("_"))
@@ -41,7 +41,7 @@ print("EXPORTED %d owls in %.0fs -> %s" % (done, time.time() - t0, out_dir), flu
 
 if "--no-sheet" not in argv:
     for el in (want or list(D.SPECIES)):
-        names = [n for n in D.NAMES if n.split("_")[1] == el]
+        names = [n for n in D.NAMES if D.spec(n)["species"] == el]
         cols = int(math.ceil(math.sqrt(len(names) * 1.6)))
         pitch = 2.6
         obs = []
