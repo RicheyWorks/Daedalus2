@@ -1,0 +1,88 @@
+{
+ "schema": "daedalus.title/v1",
+ "source": "tools/blender/rpg_title.py",
+ "realms": {
+  "portal": {
+   "logo": "PORTAL REALM",
+   "frames": 8,
+   "fps": 6,
+   "screen": [
+    256,
+    224
+   ],
+   "menu": [
+    "NEW GAME",
+    "CONTINUE",
+    "OPTIONS"
+   ],
+   "music_cue": "TITLE",
+   "strip": "engines/unreal/art/claude-battle-kit/portal/title/Title.png",
+   "name_entry": {
+    "grid": [
+     "ABCDEFGHIJ",
+     "KLMNOPQRST",
+     "UVWXYZ0123",
+     "456789 -. "
+    ],
+    "max_len": 6,
+    "windows": [
+     {
+      "name": "who",
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 48
+     },
+     {
+      "name": "grid",
+      "x": 0,
+      "y": 48,
+      "w": 256,
+      "h": 176
+     }
+    ]
+   }
+  },
+  "prism": {
+   "logo": "PRISMHEART",
+   "frames": 8,
+   "fps": 6,
+   "screen": [
+    320,
+    224
+   ],
+   "menu": [
+    "NEW GAME",
+    "CONTINUE",
+    "OPTIONS"
+   ],
+   "music_cue": "TITLE",
+   "strip": "engines/unreal/art/claude-battle-kit/prism/title/Title.png",
+   "name_entry": {
+    "grid": [
+     "ABCDEFGHIJ",
+     "KLMNOPQRST",
+     "UVWXYZ0123",
+     "456789 -. "
+    ],
+    "max_len": 9,
+    "windows": [
+     {
+      "name": "who",
+      "x": 0,
+      "y": 0,
+      "w": 320,
+      "h": 48
+     },
+     {
+      "name": "grid",
+      "x": 0,
+      "y": 48,
+      "w": 320,
+      "h": 176
+     }
+    ]
+   }
+  }
+ }
+}
