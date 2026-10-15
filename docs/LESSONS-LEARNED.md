@@ -341,3 +341,22 @@ manual review only, no measured native/performance/security certification. Next
 existing-harness cases are profile/refusal/replay/idle/capacity and legacy mode,
 then actual provider/key/storage crash/restart work; benefit ESTIMATED, no new
 framework/worker/editor or compute slot. Native7c4 source and saves unchanged.
+
+
+### Capture decisions from the actual ledger before designing a store
+
+2026-10-15, pootscoot-desktop-games; backend source `8b5a5c217889fcdf11392b359a6569dba651b112`.
+Use one immutable grammar for live command equality and owner-gated inspection.
+Capture actual historical creation bytes and FIFO cached replies with revision at
+decision insertion, not expected/capture-time revision. Do not observe expiry or
+renew activity during inspection. A future-revision refusal is valid; equal stamps
+cannot prove order; evicted IDs can be reevaluated. Original create and command
+namespaces differ. Strict HTTP inputs fit bounds but oversized trusted direct maps
+can refuse capture. A frame without hidden state, clocks, global create refusals/
+occupancy, authenticated codec and atomic protected storage cannot restore service
+semantics. Structural validation is not authenticated import. Source impact is an
+inspectable reusable decision boundary; no measured runtime/performance gain.
+Six tests/four synthetic fixtures authored/unrun,13manualsourcecases,15protected
+source pins. Existing reviewer only; no new framework/worker/service/build/compute.
+Full app parity remains required. Native7c4 and original saves/keys unchanged;
+actual account/key/storage/crash-restart and sole-operator native acceptance remain.

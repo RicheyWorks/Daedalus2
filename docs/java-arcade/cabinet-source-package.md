@@ -4,7 +4,54 @@ This completes the selected source package in existing [PR152](https://github.co
 It does not complete either original application or establish installed/native play.
 Owner: pootscoot-desktop-games. Only codex-play-guard operates Unreal.
 
-## Current backend prerequisite: authenticated local profile isolation
+## Current backend source: retained replay decision contract
+
+BlackJackPro draft [PR62](https://github.com/RicheyWorks/BlackJackPro/pull/62)
+code `8b5a5c217889fcdf11392b359a6569dba651b112`, published head `abb5a1e051989df2185f822705370976e6718fd4`, adds trusted Java inspection of the
+actual retained session decision ledger. Native code remains
+`7c4ae40d027bd6e17f80c08661297b28d6571db2`, byte-identical to documentation
+head `cc4aa0996f8866debdd7d313cbad70f8ae27408a`. This PR152 increment edits five existing documents only.
+
+Ownership check32354/START32356 at21:14:06UTC scoped the existing backend lane;
+no competing claim or separate owner-ACK was found. Runtime source changes are
+BridgeService plus BridgeCommand and BridgeReplayFrame; one test class contains
+six authored/unrun cases and four synthetic flat fixtures. Exact source/prior/
+protected pins and thirteen manual source cases are in [the backend packet](https://github.com/RicheyWorks/BlackJackPro/blob/abb5a1e051989df2185f822705370976e6718fd4/docs/BLACKJACK-PROFILE-ISOLATION.integration.json);
+[the contract](https://github.com/RicheyWorks/BlackJackPro/blob/abb5a1e051989df2185f822705370976e6718fd4/docs/BLACKJACK-ARCADE-BRIDGE.md) states deferred acceptance and provider requirements.
+
+| Implemented source capability | Exact interface/source | Daedalus binding | Missing code / evidence |
+|---|---|---|---|
+| Inspect real retained decisions | `BridgeService.captureReplay(principal,id)` -> `Session.captureReplay` | Module-private Java only; no native/HTTP binding added | Later protected Java storage/provider consumer; no restoration or E2E proof |
+| Reuse live grammar/equality | `BridgeCommand.parse`, private construction, copied scalar payload | Existing APIv1 requests unchanged | Compilation/execution deferred; no replacement adapter |
+| Preserve actual decided replies | `BridgeReplayFrame` v1 / `Decision`; insertion-time observed revision, original create201 | Existing native create/Open/Refresh/recovery unaffected | Whole-envelope authenticated state/ledger persistence absent |
+| Retain owner boundary | Existing `find(principal,id)` before create/cache inspection | Existing bearer/configuration routes remain unchanged | Trusted local profiles are not Daedalus account/provider integration; native adoption unverified |
+
+Capture copies the actual FIFO cache without calling clock/active/query/response/
+engine, renewing activity or observing expiry. Stored closed=false does not prove
+unexpired. Exact replay still precedes expiry/revision checks; collisions neither
+replace nor reorder, domain failures consume slots and eviction permits reevaluation.
+Future expected revisions can exceed observed state. Equal observed stamps cannot
+authenticate chronology. Create and command IDs are separate namespaces. HTTP-
+parsed requests fit bounds; oversized trusted direct maps can refuse frame capture.
+
+This is an immutable decision component, **not a durable checkpoint**. It excludes
+hidden engine/dealer/future-shoe/rules state, clocks/expiry, credentials, global
+create refusals/occupancy and has no codec/import/restore/disk/provider/API. Existing
+BridgeJson's flat parser/64-item writer is not a128-entry frame codec. Structural
+validation does not authenticate imported replies. Future protected whole-envelope
+account/key/storage/atomic-commit and restart policy remain unimplemented; all
+original saves/keys/rules and current native source are unchanged.
+
+Source and packet review pass for the backend; tests/build/services/credentials/
+editor/native were not run. Six current methods and nine prior profile methods are
+authored, not passing evidence. Full existing application capabilities remain the
+goal per team directive32362; this is an intermediate source increment. No new
+worker, framework, compute slot or native job is requested. Later acceptance must
+compile/run the Java source cases and existing suites, reconcile exact companion/
+native pins and let only codex-play-guard perform native checks. Durability requires
+actual provider/storage and crash/restart evidence beyond these fixtures.
+
+## Previous backend source checkpoint: authenticated local profile isolation
 
 BlackJackPro draft PR62 source `a75241bd01e149df3b34c7dfdac1b9be93811939`, published head `7b6410c2fccbbeed974eda18e4efd717cf70424a`, now provides
 opt-in local profile isolation through the real existing facade. Native code

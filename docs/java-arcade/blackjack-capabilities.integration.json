@@ -1,8 +1,8 @@
 {
-  "manifest_version": 7,
+  "manifest_version": 8,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "LOCAL_PROFILE_ISOLATION_COMPANION_SOURCE_READY_DURABILITY_UNIMPLEMENTED_NATIVE_UNVERIFIED",
+  "status": "REPLAY_DECISION_CONTRACT_COMPANION_SOURCE_READY_DURABILITY_UNIMPLEMENTED_NATIVE_UNVERIFIED",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
@@ -68,13 +68,13 @@
     "file_pin_usage": "sha256/git_blob are final 7c4ae40d027bd6e17f80c08661297b28d6571db2 pins. previous_published_sha256/previous_published_git_blob refer to3c89e767. Other hash fields are historical checkpoints. Reconcile against actual accepted operator source; no overwrite instruction.",
     "session_recovery_code_commit": "6e28706693319c53170dda3d545c12f8cf5f95c7",
     "blackjack_reopen_base": "3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93",
-    "native_code_unchanged_from": "d2625374ba22dca3d7c85a057c6a9ff7367d542d"
+    "native_code_unchanged_from": "cc4aa0996f8866debdd7d313cbad70f8ae27408a"
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
     "pr": 62,
     "pr_status": "draft",
-    "source_commit": "7b6410c2fccbbeed974eda18e4efd717cf70424a",
+    "source_commit": "abb5a1e051989df2185f822705370976e6718fd4",
     "unchanged_core": "1ec1801ac635e62945072974cbe8c78398a17849",
     "entry": "com.richeyworks.blackjack.arcade.BridgeMain",
     "contract": "docs/BLACKJACK-ARCADE-BRIDGE.md",
@@ -82,8 +82,10 @@
     "origin_format": "http://127.0.0.1:<approved-port>",
     "credentials": "private transient masked input or existing provider; no values in this packet",
     "identity_limit": "Legacy mode remains shared. Opt-in immutable trusted profile-token mapping isolates backend sessions, without Daedalus account/provider integration, durable resume, inventory or entitlements.",
-    "previous_source_commit": "8a4dccfbc359be628b5766ea1b7082410baefe1c",
-    "profile_isolation_code_commit": "a75241bd01e149df3b34c7dfdac1b9be93811939"
+    "previous_source_commit": "7b6410c2fccbbeed974eda18e4efd717cf70424a",
+    "profile_isolation_code_commit": "a75241bd01e149df3b34c7dfdac1b9be93811939",
+    "replay_decision_code_commit": "8b5a5c217889fcdf11392b359a6569dba651b112",
+    "replay_decision_boundary": "Module-private trusted Java capture only; no native transport/DTO/binding, codec/restore/storage/provider."
   },
   "registration": {
     "module": "DaedalusLink",
@@ -182,11 +184,11 @@
       "snapshot": "Existing strict visible ApplyBlackjack; private target correlation before atomic commit",
       "read_reuse": "ReadBlackjackSnapshot handles explicit Open, Refresh, existing create-follow-up and bounded CoreTick retries",
       "ui": "Entered ID, local Use received ID fill, deliberate Reopen table and requested/refused feedback",
-      "limit": "Process-local shared bearer, existing idle/absolute expiry; not durable saves or multiuser identity. No service runtime used."
+      "limit": "Existing idle/absolute expiry and bearer routes; opt-in companion profile scoping remains unadopted/unverified with native. No durable state/provider or restart restoration."
     }
   },
   "stages": {
-    "source": "Local-profile isolation prerequisite implemented in Java companion; existing native source unchanged. Full apps, Daedalus account/provider and durable resume remain incomplete.",
+    "source": "Immutable owner-gated retained replay decisions implemented in existing Java companion; native7c4 unchanged. Full app parity/account/provider/durability incomplete.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
@@ -194,11 +196,15 @@
     "world_placed": false,
     "world_saved": false,
     "end_to_end": false,
-    "source_review": "PASS; existing reviewer source and packet audit for backend plus unchanged native pins. Nine security test methods authored but unexecuted; no compiler/runtime proof.",
+    "source_review": "Backend source, backend packet and linked native packet reviews PASS; four unchanged native pins, eight current backend pins, fifteen protected pins, published manifest hash and thirteen manual cases verified. Six current tests/four fixtures authored/unrun; prior nine profile methods historical/unrun.",
     "tests_or_builds_run": false,
-    "current_evidence": "Manual backend security/compatibility/persistence trace, source/pin/packet review, preserved native file hashes and diff whitespace. Earlier native/Java counted results historical only."
+    "current_evidence": "Manual source/replay/ownership/locking/grammar/bounds review, current backend file pins and unchanged native hashes, diff whitespace. No tests/build/service/native. Earlier counted evidence historical.",
+    "full_original_application_parity": false,
+    "durable_resume": false,
+    "daedalus_account_provider": false
   },
   "pending_operator_steps": [
+    "Replay source only: later Java compilation and execution of six authored cases/four synthetic fixtures and existing profile/replay suites. Capture is not a restore API; durable/account provider acceptance separate. No slot requested now.",
     "Profile companion source only: later owned Java validation must execute authored config/auth/service/HTTP isolation/replay/expiry/capacity and legacy cases;9 methods are not passing evidence. No test/build/service slot requested now.",
     "Choose legacy shared or trusted isolated-profile launch deliberately; never infer account ownership from cabinet/session/body/profile text. Use only disposable approved credentials at acceptance and preserve native secret/uncertainty cleanup.",
     "Durability remains blocked on actual account/key/storage and crash-consistent state+decision ledger/expiry provider. No hidden state export, bearer-derived key or desktop save alteration. Future proposal is not implemented.",
@@ -303,7 +309,7 @@
     },
     "lesson": "Use existing guarded action APIs for source shortcuts; scope keys to direct board focus; bind confirmations to current identity; local validation must not hide authoritative status.",
     "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot.",
-    "note": "Historical c7b3f3e2 checkpoint; local editing and6e session review remain history. Current native source evidence is in blackjack_reopen; current companion profile prerequisite evidence is in blackjack_profile_isolation.",
+    "note": "Historical c7b3f3e2 source checkpoint; current native7c4 evidence is in blackjack_reopen, prior profile source in blackjack_profile_isolation, current backend decision evidence in blackjack_replay_decisions. Earlier checks not rerun.",
     "evidence_scope": "Historical checkpoint only; not rerun or current behavioral/compiler/native proof."
   },
   "local_sudoku_editing": {
@@ -876,6 +882,284 @@
       "end_to_end": false,
       "durable_resume": false,
       "daedalus_account_provider": false
-    }
+    },
+    "evidence_scope": "Historical a752/7b6410 profile checkpoint. Its BridgeService pin is historical; current runtime/test/protected pins are in blackjack_replay_decisions. Profile behavior preserved, no new execution."
+  },
+  "blackjack_replay_decisions": {
+    "repository": "RicheyWorks/BlackJackPro",
+    "pr": "https://github.com/RicheyWorks/BlackJackPro/pull/62",
+    "code_commit": "8b5a5c217889fcdf11392b359a6569dba651b112",
+    "baseline": "7b6410c2fccbbeed974eda18e4efd717cf70424a",
+    "ownership_check_message": 32354,
+    "start_message": 32356,
+    "start_utc": "2026-10-15 21:14:06 UTC",
+    "ownership": "Direct parent continuation of existing clean owned backend lane; bounded hub reconciliation found no competing owner. No separate owner-ACK claimed. Broadcast32362 full original parity remains required.",
+    "runtime_diff": "3 files changed, 180 insertions(+), 74 deletions(-)",
+    "authored_test_diff": "5 files changed, 183 insertions(+)",
+    "runtime_files": [
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeService.java",
+        "sha256": "5404ED8792D1747309B5F36BB6F256834E774496054F9A256F390D90A04FBE5A",
+        "git_blob": "41fdeeb26ad6c1c0cb7ad1eec2457985720d93aa",
+        "prior_git_blob": "75ccdf9672c71d42ee7755b356b45a107bf321ed"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeCommand.java",
+        "sha256": "45C9C0E0FD6711882EA4C18FCFF61BE251D90D688368259544EF491E78AC127B",
+        "git_blob": "76b1dd3d49d8e5ad43d30cbe3dafbd41a49579e4",
+        "prior_git_blob": null
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeReplayFrame.java",
+        "sha256": "643A9E80F9D4F34003026006AC6139FEFB3E869C4BBEC4E9FC4369F6430C2939",
+        "git_blob": "9ca751540ecfca028519077531c9b11df6ecfa60",
+        "prior_git_blob": null
+      }
+    ],
+    "test_files": [
+      {
+        "path": "arcade-bridge/src/test/java/com/richeyworks/blackjack/arcade/BridgeReplayFrameTest.java",
+        "sha256": "52C8CEA0BEE8537C537E1343668C86CBAEA933325E251F80EB527ED2E3F099B8",
+        "git_blob": "ab11bfba70351177f4b2a252e52a61867b014dcd",
+        "prior_git_blob": null
+      }
+    ],
+    "synthetic_fixtures": [
+      {
+        "path": "arcade-bridge/src/test/resources/replay/bet.json",
+        "sha256": "F24F2E41D93C84DF8948F27C8AE5DA45CF7421E2CB70457D7B7E3B150DC2B554",
+        "git_blob": "a0c2e9f15a7587e08b05182a92a4b4d3b0e476cd",
+        "prior_git_blob": null
+      },
+      {
+        "path": "arcade-bridge/src/test/resources/replay/future-revision.json",
+        "sha256": "135B45358C96F57D56FCE8D85848EEDBAA2AE106E983C0CBB46EC3C00D1A6409",
+        "git_blob": "2057e30e07bcd6581d02409dbda8af8036f044c6",
+        "prior_git_blob": null
+      },
+      {
+        "path": "arcade-bridge/src/test/resources/replay/illegal-hit.json",
+        "sha256": "EEA9C3F431866EBAF98D43FDF7B094E2517BBBF421727361E6DACEE5DDE2D5BF",
+        "git_blob": "bde439992d00586325a26f938eb581620468fc2c",
+        "prior_git_blob": null
+      },
+      {
+        "path": "arcade-bridge/src/test/resources/replay/close.json",
+        "sha256": "371D31F37B0EAFFDF0B62820C07DEF20CC2305DABAF077A9DB06B99D69BBC90B",
+        "git_blob": "2c1cff47f0ad9d8d20202308ff7933b0d82a82dc",
+        "prior_git_blob": null
+      }
+    ],
+    "protected_unchanged_files": [
+      {
+        "path": "core/src/main/java/com/richeyworks/blackjack/engine/Engine.java",
+        "sha256": "BBA339BB00B513E84C08C504FC7DCCAF097346835E4971C31D1833E15E335309",
+        "git_blob": "a6cd8fcb3cf216d69b7c87958a2146973edc4d11",
+        "prior_git_blob": "a6cd8fcb3cf216d69b7c87958a2146973edc4d11",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "core/src/main/java/com/richeyworks/blackjack/persist/SaveManager.java",
+        "sha256": "BCDFDC6820CA0C840913623D84DBBCF46F7E04C84B3285FA71E65611FB5EA71E",
+        "git_blob": "867f98adbf9103408a08be46e2cff9f5096f0635",
+        "prior_git_blob": "867f98adbf9103408a08be46e2cff9f5096f0635",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "core/src/main/java/com/richeyworks/blackjack/persist/RoundSeal.java",
+        "sha256": "4F410B17024FC4B3CDA45ED1C0CE9412F417EDB9902E7054DA0B4B6695950596",
+        "git_blob": "50a696144a45424454bc695a5100d0a53450db16",
+        "prior_git_blob": "50a696144a45424454bc695a5100d0a53450db16",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "core/src/main/java/com/richeyworks/blackjack/persist/AtomicFiles.java",
+        "sha256": "2CE6EE99664B7ED7E60D9DD7D857BE90F2F63AA63DAC6E678C75A8B37E7BC190",
+        "git_blob": "91ae308c5dca483e72eb14b4af2fe0776c50390c",
+        "prior_git_blob": "91ae308c5dca483e72eb14b4af2fe0776c50390c",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "gdx-core/src/main/java/com/richeyworks/blackjack/gdx/GameSession.java",
+        "sha256": "F841C4D32D9762C03EF861BF5309485F4545349AE22226099C34501387B1BD1C",
+        "git_blob": "7a3092bc92afbfe108754f2c8bcc35ef0e45b8b3",
+        "prior_git_blob": "7a3092bc92afbfe108754f2c8bcc35ef0e45b8b3",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "gdx-core/src/main/java/com/richeyworks/blackjack/gdx/BlackJackGame.java",
+        "sha256": "182DEB381003FCBAC9F1D3F3D798EB234A8BBF8F19C298F032DF676B7941BB42",
+        "git_blob": "19e3e034c36978c33e2f3e9ab8a1ac40c99098f6",
+        "prior_git_blob": "19e3e034c36978c33e2f3e9ab8a1ac40c99098f6",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "android/src/main/java/com/richeyworks/blackjack/gdx/android/AndroidLauncher.java",
+        "sha256": "8D605A8BBD3A4C2DE8B9A1BDEB83D28B468DA855F3A05581CED2485E860074E1",
+        "git_blob": "621163664cc211bb578fe614013b17b3ea90bf32",
+        "prior_git_blob": "621163664cc211bb578fe614013b17b3ea90bf32",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/VisibleSnapshot.java",
+        "sha256": "22C17412C393C12BA7B38C258364436DB4FFB7E4EB7D69FC8DEF737517970952",
+        "git_blob": "02087777f80b3d00416a95417c6268c95d75a9dc",
+        "prior_git_blob": "02087777f80b3d00416a95417c6268c95d75a9dc",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeJson.java",
+        "sha256": "43BD5D8FC3A4D459F55FFC7C75FCADEB0A8AFE26BB9B75905CE2151E342B4755",
+        "git_blob": "02293f769dd855cdf16bbd14ff6b8f874814431b",
+        "prior_git_blob": "02293f769dd855cdf16bbd14ff6b8f874814431b",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/build.gradle.kts",
+        "sha256": "738D8225F832239FBABDCB46FE005275020F0AA777F7718982B880A81F3B7F23",
+        "git_blob": "86ac08c6ce5de9ee066bc4d707f7062a4398ba6a",
+        "prior_git_blob": "86ac08c6ce5de9ee066bc4d707f7062a4398ba6a",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeMain.java",
+        "sha256": "62B308EE428B41632E68E48A31B22991F1557BC8F48C215ACAAEEC45ED5C6DBB",
+        "git_blob": "02db674146255ba1f6428aed34b7c518b0fdd8c6",
+        "prior_git_blob": "02db674146255ba1f6428aed34b7c518b0fdd8c6",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeServer.java",
+        "sha256": "7A26042F5BE96DD0EAD81AD4A593923611587A50AF211D98E0FAE1E4AD9DCDF5",
+        "git_blob": "ace3ec59de9bf02e0e0784898c1c26f1b63bf863",
+        "prior_git_blob": "ace3ec59de9bf02e0e0784898c1c26f1b63bf863",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeProfiles.java",
+        "sha256": "AA0A65EA682E7E4BE6B864AA5A074A6472D74FF66640CBDB98D3841E9686676F",
+        "git_blob": "fa0e969f6518d4e6d7cdd23c496539945adca0ae",
+        "prior_git_blob": "fa0e969f6518d4e6d7cdd23c496539945adca0ae",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/test/java/com/richeyworks/blackjack/arcade/BridgeProfilesTest.java",
+        "sha256": "4D874598EC20A9F814F6283A5C05373415A8897B84C2A1428EF579B7EC36BB9F",
+        "git_blob": "3f303a7c14b9f1276e93bba7c2ea9c509290fb6a",
+        "prior_git_blob": "3f303a7c14b9f1276e93bba7c2ea9c509290fb6a",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      },
+      {
+        "path": "arcade-bridge/src/test/java/com/richeyworks/blackjack/arcade/BridgeServerTest.java",
+        "sha256": "76279D218B890B53257E095D24A5991B55E5D6D2A905123C31868091850FA794",
+        "git_blob": "904bea3acb13a2c606c6fd20b8749326e6e4e37b",
+        "prior_git_blob": "904bea3acb13a2c606c6fd20b8749326e6e4e37b",
+        "unchanged_from": "7b6410c2fccbbeed974eda18e4efd717cf70424a"
+      }
+    ],
+    "manual_source_matrix": [
+      {
+        "case": "Actual live capture",
+        "boundary": "BridgeService.captureReplay -> Session.captureReplay",
+        "result": "Owner-gated copy of the actual FIFO cache; original 201 creation bytes, exact decided replies, stored revision/closure and insertion-time observed revisions."
+      },
+      {
+        "case": "Owner before state",
+        "boundary": "Existing find(principal,id)",
+        "result": "Foreign/missing session404 before cache/clock/engine. Legacy principal cannot capture profile-owned sessions. Trusted Java principal only; not an HTTP auth replacement."
+      },
+      {
+        "case": "Capture has no activity",
+        "boundary": "No query/active/response/clock call",
+        "result": "No idle renewal or expiry observation. Stored closed=false does not establish an unexpired session; later ordinary query retains expiry behavior."
+      },
+      {
+        "case": "Exact replay and collision",
+        "boundary": "Existing mutate cache-before-active/revision path",
+        "result": "Exact request equality replays before expiry/revision. Changed payload/revision refuses without replacing or reordering cached entry."
+      },
+      {
+        "case": "Decided domain failures",
+        "boundary": "Cached(command, observedRevision, reply)",
+        "result": "409/422/429 decisions retain exact reply and observed revision at insertion. Future expectedRevision can exceed observed/frame revision."
+      },
+      {
+        "case": "FIFO eviction",
+        "boundary": "Existing LinkedHashMap retention limit",
+        "result": "Replay/collision does not refresh FIFO. Evicted failures may be reevaluated successfully later; no lifetime idempotency promise."
+      },
+      {
+        "case": "Decision chronology",
+        "boundary": "Frame ordered defensive List copy",
+        "result": "Nondecreasing observed revisions cannot authenticate chronology for equal stamps; reordered equal-stamp imports are not rejected by this structural contract."
+      },
+      {
+        "case": "Immutable grammar/equality",
+        "boundary": "BridgeCommand.parse private construction and copied scalar map",
+        "result": "Previous field/type/action grammar and four-component equality preserved; no caller owner field; close grammar distinct."
+      },
+      {
+        "case": "Separate ID namespaces",
+        "boundary": "Original create ID versus command request IDs",
+        "result": "Same text may legally appear once in creation and once in command ledger. Duplicate command IDs rejected."
+      },
+      {
+        "case": "Structural bounds",
+        "boundary": "BridgeReplayFrame v1 and Decision constructors",
+        "result": "Version1, valid principal/canonical UUID/nonnegative revisions, 1..128 retention, unique IDs, bounded reply/payload UTF8 bytes and legal decided statuses. HTTP-parsed commands fit; trusted direct maps bypass HTTP bounds and an oversized cached command refuses capture. Opaque producer-owned reply bytes are not authenticated or semantically decoded."
+      },
+      {
+        "case": "Creation ledger completeness",
+        "boundary": "creates.get(CreateKey(owner, originalCreateId))",
+        "result": "Historical creation response is never regenerated from current engine. Frame omits global creation refusals, total ledger occupancy and capacity state."
+      },
+      {
+        "case": "Serialization and restoration",
+        "boundary": "No codec/import/restore/public route",
+        "result": "Existing flat BridgeJson parses fixtures only and writes individual command payloads; its collection bound is64, so it is not a128-entry replay-frame codec."
+      },
+      {
+        "case": "Durability and full app parity",
+        "boundary": "Existing provider/storage gap and PR152 native7c4",
+        "result": "No engine/hidden cards/future shoe/rules, clocks/expiry, credentials, disk, authenticated import or restoration. Account/key/storage/durable commit and full original application parity remain incomplete."
+      }
+    ],
+    "authored_test_methods": 6,
+    "synthetic_fixture_count": 4,
+    "test_execution": "NOT RUN; authored cases/manual review are not passing test evidence",
+    "source_review": "PASS; existing java_package_gap_review manually reviewed runtime, six authored test methods and four synthetic fixtures; no blocking source/test-logic defect. No compilation or execution.",
+    "packet_review": "PASS; existing independent reviewer verified all eight current source/test/fixture pins, fifteen protected pins, exact previous profile history and thirteen manual source cases against 8b5a5c21/baseline. No remaining corrections; tests/builds/runtime unrun.",
+    "stages": {
+      "source": true,
+      "compiled": false,
+      "tests_run": false,
+      "service_started": false,
+      "credentials_used": false,
+      "connected": false,
+      "native": false,
+      "end_to_end": false,
+      "durable_resume": false,
+      "daedalus_account_provider": false,
+      "full_original_application_parity": false
+    },
+    "capability": "Immutable version1 inspection of the real owner-scoped retained decision ledger, exact historical replies and insertion-time observed revisions; no restorable checkpoint.",
+    "preserved": "Original Engine/rules/persistence/keys/GDX/Android/saves, profile config/auth routing, visible DTO/JSON/dependencies, HTTP APIs, native source and existing replay-before-expiry/FIFO/collision/capacity/expiry semantics.",
+    "limits": [
+      "Historical creation response is never regenerated from current engine. Frame omits global creation refusals, total ledger occupancy and capacity state.",
+      "Existing flat BridgeJson parses fixtures only and writes individual command payloads; its collection bound is64, so it is not a128-entry replay-frame codec.",
+      "No engine/hidden cards/future shoe/rules, clocks/expiry, credentials, disk, authenticated import or restoration. Account/key/storage/durable commit and full original application parity remain incomplete."
+    ],
+    "next_interface_proposal": "Not implemented: trusted account/key/storage provider and crash-consistent authenticated owner/session/engine/rules/revision/create+command decisions/closure/expiry envelope; acknowledge only durable commit, preserve uncertain outcome on failure. No raw nanoTime persistence, bearer-derived key or hidden DTO export. Frame is only the retained per-session decision component; future authenticated whole envelope must also cover hidden state/rules, owner/revision, creation refusals/global occupancy, closure and restart-safe expiry. No bearer-derived encryption.",
+    "learning_product_impact": "Makes the actual retained decision boundary inspectable and reusable without a second request grammar or persistence adapter. Observed revision is decision-time state, not expected revision; eviction and equal-stamp chronology constrain recovery claims. No runtime/performance gain measured. Full included app capabilities remain the goal; this component is an intermediate source increment.",
+    "published_draft_head": "abb5a1e051989df2185f822705370976e6718fd4",
+    "backend_manifest": "docs/BLACKJACK-PROFILE-ISOLATION.integration.json",
+    "backend_manifest_sha256": "30C0A2ABF0D995C2C787507DF2D435549D9A7F6F1969FF8BFC299A145079F133",
+    "backend_manifest_hash_basis": "Canonical LF bytes from published Git blob abb5a1e:docs/BLACKJACK-PROFILE-ISOLATION.integration.json; local checkout CRLF bytes differ but JSON is identical.",
+    "backend_manifest_local_checkout_sha256": "2301CCF5724D7A942636F8CEADA32299894C45F6AD3FA878BF3C2F1050DA0582",
+    "contract": "https://github.com/RicheyWorks/BlackJackPro/blob/abb5a1e051989df2185f822705370976e6718fd4/docs/BLACKJACK-ARCADE-BRIDGE.md",
+    "native_code_commit": "7c4ae40d027bd6e17f80c08661297b28d6571db2",
+    "native_code_changed": false,
+    "native_documentation_baseline": "cc4aa0996f8866debdd7d313cbad70f8ae27408a",
+    "linked_native_packet_review": "PASS; existing independent reviewer verified four unchanged native pins, all eight backend current pins and fifteen protected pins, thirteen manual cases, canonical published manifest SHA and current-versus-history completion stages. Local CRLF hash separately labeled. No source or packet corrections remain; tests/builds/runtime/native unrun."
   }
 }

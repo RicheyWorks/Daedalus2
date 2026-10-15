@@ -127,3 +127,21 @@ provider/key/storage/decision-ledger/expiry proposal explicitly UNIMPLEMENTED.
 Local profile isolation is not durable resume or Daedalus account integration.
 No tests/build/service/real credentials/editor/native ran or slot requested.
 Only codex-play-guard later integrates approved exact source preserving all owners.
+
+
+## Retained replay decision source contract — 2026-10-15
+
+Backend code `8b5a5c217889fcdf11392b359a6569dba651b112`, PR62 draft head `abb5a1e051989df2185f822705370976e6718fd4`; ownership32354,
+START32356 at21:14:06UTC. Existing service now provides trusted package-private,
+owner-gated immutable capture of originalcreate201 and actual FIFO command/reply/
+observed-revision decisions. Three runtime files+180/-74, one six-method test class
+and four synthetic fixtures; authored/unrun. Thirteen manual source branches and
+fifteen protected pins are in backend packetv2 and native linked manifestv8.
+Capture has no clock/expiry/engine/activity effects and no native/API binding.
+Eviction permits reevaluation; equal stamps cannot authenticate order; oversized
+direct Java maps can refuse capture. No codec/import/restore/disk/provider/keys or
+hidden state; global create refusals/occupancy absent. Full original apps and actual
+account/key/storage/atomic commit/restart policy remain open. Native7c4 unchanged
+from `cc4aa0996f8866debdd7d313cbad70f8ae27408a`; this PR152 increment is five documents only.
+No tests/build/UHT/service/credentials/editor/native or compute allocation. Existing
+sole operator alone owns later native acceptance; no runtime readiness is claimed.
