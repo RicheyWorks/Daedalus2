@@ -1,0 +1,673 @@
+{
+  "catalogue_manifest": {
+    "bytes": 6574,
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\eggs.manifest.json",
+    "sha256": "bec156053b5e68399e72191a2225c6006939dbf4d1354206e1d9fa874f7b4437"
+  },
+  "colour_contract": {
+    "actual_witness": "Exact stored FBX float RGBA values are recorded per candidate; common nest hay/trunk colours plus each egg palette and optional white sparkle.",
+    "appearance_status": "Native appearance remains unverified.",
+    "ingestion_policy": "Reuse the delivered Rack per-task vertex-colour-preserving route and stable vertex-colour material; do not rely on native FbxFactory IGNORE default; compare native triangle colour data with the recorded FBX values before save.",
+    "source_attribute": "Col, BMesh loop colour, one VoxelVertexColour material",
+    "source_palette_provenance": "voxel_eggs.PAL extends voxel_creatures.PAL, which extends hero_island.PAL; voxel_island mesher encodes linear palette with q**(1/2.2) for FBX."
+  },
+  "contact_sheet_provenance": {
+    "bytes": 3198075,
+    "evidence_limit": "Contact sheet supports source appearance only, not the native imported material, scene placement or gameplay.",
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+    "png_dimensions": [
+      2000,
+      1250
+    ],
+    "renderer_from_source": "Blender Workbench, STUDIO light, VERTEX colour, shadows+cavity; export_catalog.py rebuilds each family into a grid at centimetres/100 for preview.",
+    "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145",
+    "view_method": "functions.view_image of existing PNG during this delegated source audit",
+    "visually_inspected": true
+  },
+  "created_by": "Codex production_scope_audit; qualification only, not original asset authorship",
+  "created_utc": "2026-10-15T00:37:09.584049+00:00",
+  "items": [
+    {
+      "catalogue_metadata": {
+        "hatch": {
+          "animal": 2,
+          "bird": 2,
+          "dino": 2
+        },
+        "pattern": "marble",
+        "rarity": "ultra"
+      },
+      "contact_sheet": {
+        "bytes": 3198075,
+        "catalogue_index_zero_based": 40,
+        "grid_column_zero_based": 4,
+        "grid_columns": 18,
+        "grid_row_zero_based": 2,
+        "mapping_basis": "Current export_catalog.py uses CATALOG order and ceil(sqrt(196*1.6))=18 columns; egg insertion order comes from the retained eggs.manifest.json and Intact/Cracked/Hatching/Shiny stage order. Image has no embedded per-item labels.",
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+        "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145"
+      },
+      "fbx": {
+        "bytes": 18956,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.fbx",
+        "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155"
+      },
+      "name": "Prop_Egg_Heartstone_Intact",
+      "not_qualified": [
+        "native bounds, vertex colours and package save for this egg have not been read back",
+        "world placement and native appearance have not been accepted",
+        "hatching, minting, ownership, rewards, hatch-pool odds and gameplay are not implemented or validated by this receipt",
+        "no UCX is authored by the source; no collision acceptance",
+        "no GLB is required or produced by this catalogue export contract"
+      ],
+      "original_producer": "Team Claude; existing canonical claude-eggs catalogue output, retained without modification",
+      "quads": 275,
+      "quads_basis": "Every PolygonVertexIndex polygon has four vertices, as recorded in polygon_sizes=[4].",
+      "qualified_scope": "finished existing static FBX and sidecar, viewed in completed catalogue contact sheet; candidate for retained owned-copy asset-only import/save",
+      "raw_fbx_witness": {
+        "authored_ucx_geometry_headers": [],
+        "fbx_creator_strings": [
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5",
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5"
+        ],
+        "fbx_version": 7400,
+        "geometry_headers": [
+          [
+            776567801,
+            "Prop_Egg_Heartstone_Intact\u0000\u0001Geometry",
+            "Mesh"
+          ]
+        ],
+        "global_settings": {
+          "CoordAxis": 0,
+          "CoordAxisSign": -1,
+          "FrontAxis": 1,
+          "FrontAxisSign": 1,
+          "OriginalUnitScaleFactor": 100.0,
+          "UnitScaleFactor": 100.0,
+          "UpAxis": 2,
+          "UpAxisSign": 1
+        },
+        "polygon_sizes": [
+          4
+        ],
+        "polygons": 275,
+        "raw_vertex_bounds": {
+          "dimensions": [
+            90.0,
+            90.0,
+            100.0
+          ],
+          "max": [
+            50.0,
+            50.0,
+            100.0
+          ],
+          "min": [
+            -40.0,
+            -40.0,
+            0.0
+          ]
+        },
+        "stored_vertex_colour_rgba": [
+          [
+            0.658823549747467,
+            0.5411764979362488,
+            0.42352941632270813,
+            1.0
+          ],
+          [
+            0.9450980424880981,
+            0.8784313797950745,
+            0.658823549747467,
+            1.0
+          ],
+          [
+            1.0,
+            0.6196078658103943,
+            0.6941176652908325,
+            1.0
+          ],
+          [
+            1.0,
+            0.7921568751335144,
+            0.8235294222831726,
+            1.0
+          ]
+        ],
+        "triangles_after_polygon_triangulation": 550,
+        "unique_rgba_count": 4,
+        "vertices": 307
+      },
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ],
+        [
+          255,
+          158,
+          177,
+          255
+        ],
+        [
+          255,
+          202,
+          210,
+          255
+        ]
+      ],
+      "rgba_bytes_conversion": "round(decoded stored FBX float channel * 255); actual float tuples remain in raw_fbx_witness for independent comparison",
+      "sidecar": {
+        "bytes": 217,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.json",
+        "sha256": "4d24da9e21a53b36515159533960eeae41e1bd8728d4fc48e51fccb927f3d43f"
+      },
+      "sidecar_data": {
+        "egg": "Heartstone",
+        "hatch": {
+          "animal": 2,
+          "bird": 2,
+          "dino": 2
+        },
+        "name": "Prop_Egg_Heartstone_Intact",
+        "pivot": "bottom-centre",
+        "rarity": "ultra",
+        "stage": "Intact",
+        "voxel_cm": 10.0
+      },
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "source_entry_points": {
+        "batch": "export_catalog.py eggs OUT_DIR",
+        "builder": "voxel_eggs.build(name, out_dir)",
+        "mesher": "voxel_island._mesh_from_voxels(name, voxels, scale=10.0, pal=voxel_eggs.PAL)",
+        "planner": "voxel_eggs.plan(egg, stage=\"Intact\", shiny=False)"
+      },
+      "source_view_index": 0,
+      "triangles": 550,
+      "vertices": 307
+    },
+    {
+      "catalogue_metadata": {
+        "hatch": {
+          "animal": 3,
+          "bird": 2,
+          "dino": 1
+        },
+        "pattern": "solid",
+        "rarity": "legendary"
+      },
+      "contact_sheet": {
+        "bytes": 3198075,
+        "catalogue_index_zero_based": 51,
+        "grid_column_zero_based": 15,
+        "grid_columns": 18,
+        "grid_row_zero_based": 2,
+        "mapping_basis": "Current export_catalog.py uses CATALOG order and ceil(sqrt(196*1.6))=18 columns; egg insertion order comes from the retained eggs.manifest.json and Intact/Cracked/Hatching/Shiny stage order. Image has no embedded per-item labels.",
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+        "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145"
+      },
+      "fbx": {
+        "bytes": 19116,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.fbx",
+        "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f"
+      },
+      "name": "Prop_Egg_Gold_Shiny",
+      "not_qualified": [
+        "native bounds, vertex colours and package save for this egg have not been read back",
+        "world placement and native appearance have not been accepted",
+        "hatching, minting, ownership, rewards, hatch-pool odds and gameplay are not implemented or validated by this receipt",
+        "no UCX is authored by the source; no collision acceptance",
+        "no GLB is required or produced by this catalogue export contract"
+      ],
+      "original_producer": "Team Claude; existing canonical claude-eggs catalogue output, retained without modification",
+      "quads": 290,
+      "quads_basis": "Every PolygonVertexIndex polygon has four vertices, as recorded in polygon_sizes=[4].",
+      "qualified_scope": "finished existing static FBX and sidecar, viewed in completed catalogue contact sheet; candidate for retained owned-copy asset-only import/save",
+      "raw_fbx_witness": {
+        "authored_ucx_geometry_headers": [],
+        "fbx_creator_strings": [
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5",
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5"
+        ],
+        "fbx_version": 7400,
+        "geometry_headers": [
+          [
+            803158134,
+            "Prop_Egg_Gold_Shiny\u0000\u0001Geometry",
+            "Mesh"
+          ]
+        ],
+        "global_settings": {
+          "CoordAxis": 0,
+          "CoordAxisSign": -1,
+          "FrontAxis": 1,
+          "FrontAxisSign": 1,
+          "OriginalUnitScaleFactor": 100.0,
+          "UnitScaleFactor": 100.0,
+          "UpAxis": 2,
+          "UpAxisSign": 1
+        },
+        "polygon_sizes": [
+          4
+        ],
+        "polygons": 290,
+        "raw_vertex_bounds": {
+          "dimensions": [
+            90.0,
+            90.0,
+            100.0
+          ],
+          "max": [
+            50.0,
+            50.0,
+            100.0
+          ],
+          "min": [
+            -40.0,
+            -40.0,
+            0.0
+          ]
+        },
+        "stored_vertex_colour_rgba": [
+          [
+            0.658823549747467,
+            0.5411764979362488,
+            0.42352941632270813,
+            1.0
+          ],
+          [
+            0.9450980424880981,
+            0.8784313797950745,
+            0.658823549747467,
+            1.0
+          ],
+          [
+            0.9764705896377563,
+            0.8941176533699036,
+            0.5333333611488342,
+            1.0
+          ],
+          [
+            1.0,
+            0.9529411792755127,
+            0.729411780834198,
+            1.0
+          ],
+          [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        ],
+        "triangles_after_polygon_triangulation": 580,
+        "unique_rgba_count": 5,
+        "vertices": 321
+      },
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ],
+        [
+          249,
+          228,
+          136,
+          255
+        ],
+        [
+          255,
+          243,
+          186,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255
+        ]
+      ],
+      "rgba_bytes_conversion": "round(decoded stored FBX float channel * 255); actual float tuples remain in raw_fbx_witness for independent comparison",
+      "sidecar": {
+        "bytes": 207,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.json",
+        "sha256": "f086c7721f67e69365991b15ddddff6bf23904ac46a7c0ab27bb56688392aca0"
+      },
+      "sidecar_data": {
+        "egg": "Gold",
+        "hatch": {
+          "animal": 3,
+          "bird": 2,
+          "dino": 1
+        },
+        "name": "Prop_Egg_Gold_Shiny",
+        "pivot": "bottom-centre",
+        "rarity": "legendary",
+        "stage": "Shiny",
+        "voxel_cm": 10.0
+      },
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "source_entry_points": {
+        "batch": "export_catalog.py eggs OUT_DIR",
+        "builder": "voxel_eggs.build(name, out_dir)",
+        "mesher": "voxel_island._mesh_from_voxels(name, voxels, scale=10.0, pal=voxel_eggs.PAL)",
+        "planner": "voxel_eggs.plan(egg, stage=\"Intact\", shiny=False)"
+      },
+      "source_view_index": 0,
+      "triangles": 580,
+      "vertices": 321
+    },
+    {
+      "catalogue_metadata": {
+        "hatch": {
+          "bee": 2,
+          "bird": 2,
+          "insect": 2
+        },
+        "pattern": "facet",
+        "rarity": "rare"
+      },
+      "contact_sheet": {
+        "bytes": 3198075,
+        "catalogue_index_zero_based": 12,
+        "grid_column_zero_based": 12,
+        "grid_columns": 18,
+        "grid_row_zero_based": 0,
+        "mapping_basis": "Current export_catalog.py uses CATALOG order and ceil(sqrt(196*1.6))=18 columns; egg insertion order comes from the retained eggs.manifest.json and Intact/Cracked/Hatching/Shiny stage order. Image has no embedded per-item labels.",
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+        "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145"
+      },
+      "fbx": {
+        "bytes": 19084,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.fbx",
+        "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104"
+      },
+      "name": "Prop_Egg_Amethyst_Intact",
+      "not_qualified": [
+        "native bounds, vertex colours and package save for this egg have not been read back",
+        "world placement and native appearance have not been accepted",
+        "hatching, minting, ownership, rewards, hatch-pool odds and gameplay are not implemented or validated by this receipt",
+        "no UCX is authored by the source; no collision acceptance",
+        "no GLB is required or produced by this catalogue export contract"
+      ],
+      "original_producer": "Team Claude; existing canonical claude-eggs catalogue output, retained without modification",
+      "quads": 284,
+      "quads_basis": "Every PolygonVertexIndex polygon has four vertices, as recorded in polygon_sizes=[4].",
+      "qualified_scope": "finished existing static FBX and sidecar, viewed in completed catalogue contact sheet; candidate for retained owned-copy asset-only import/save",
+      "raw_fbx_witness": {
+        "authored_ucx_geometry_headers": [],
+        "fbx_creator_strings": [
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5",
+          "Blender (stable FBX IO) - 4.3.1 - 5.12.5"
+        ],
+        "fbx_version": 7400,
+        "geometry_headers": [
+          [
+            329351803,
+            "Prop_Egg_Amethyst_Intact\u0000\u0001Geometry",
+            "Mesh"
+          ]
+        ],
+        "global_settings": {
+          "CoordAxis": 0,
+          "CoordAxisSign": -1,
+          "FrontAxis": 1,
+          "FrontAxisSign": 1,
+          "OriginalUnitScaleFactor": 100.0,
+          "UnitScaleFactor": 100.0,
+          "UpAxis": 2,
+          "UpAxisSign": 1
+        },
+        "polygon_sizes": [
+          4
+        ],
+        "polygons": 284,
+        "raw_vertex_bounds": {
+          "dimensions": [
+            90.0,
+            90.0,
+            100.0
+          ],
+          "max": [
+            50.0,
+            50.0,
+            100.0
+          ],
+          "min": [
+            -40.0,
+            -40.0,
+            0.0
+          ]
+        },
+        "stored_vertex_colour_rgba": [
+          [
+            0.658823549747467,
+            0.5411764979362488,
+            0.42352941632270813,
+            1.0
+          ],
+          [
+            0.7607843279838562,
+            0.5803921818733215,
+            0.9019607901573181,
+            1.0
+          ],
+          [
+            0.8784313797950745,
+            0.7607843279838562,
+            0.9764705896377563,
+            1.0
+          ],
+          [
+            0.9450980424880981,
+            0.8784313797950745,
+            0.658823549747467,
+            1.0
+          ]
+        ],
+        "triangles_after_polygon_triangulation": 568,
+        "unique_rgba_count": 4,
+        "vertices": 320
+      },
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          194,
+          148,
+          230,
+          255
+        ],
+        [
+          224,
+          194,
+          249,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ]
+      ],
+      "rgba_bytes_conversion": "round(decoded stored FBX float channel * 255); actual float tuples remain in raw_fbx_witness for independent comparison",
+      "sidecar": {
+        "bytes": 211,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.json",
+        "sha256": "75db372ee4bc98f8c9e042f5329002dd2629e717a6e0e48d3966693c8d76ef61"
+      },
+      "sidecar_data": {
+        "egg": "Amethyst",
+        "hatch": {
+          "bee": 2,
+          "bird": 2,
+          "insect": 2
+        },
+        "name": "Prop_Egg_Amethyst_Intact",
+        "pivot": "bottom-centre",
+        "rarity": "rare",
+        "stage": "Intact",
+        "voxel_cm": 10.0
+      },
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "source_entry_points": {
+        "batch": "export_catalog.py eggs OUT_DIR",
+        "builder": "voxel_eggs.build(name, out_dir)",
+        "mesher": "voxel_island._mesh_from_voxels(name, voxels, scale=10.0, pal=voxel_eggs.PAL)",
+        "planner": "voxel_eggs.plan(egg, stage=\"Intact\", shiny=False)"
+      },
+      "source_view_index": 0,
+      "triangles": 568,
+      "vertices": 320
+    }
+  ],
+  "limits": [
+    "Asset-only saves may proceed under the root operator accepted turn; this receipt itself authorizes no shared app takeover.",
+    "Preserve all three original FBX files, sidecars, manifests and preview images; ingest retained owned copies only.",
+    "Static source qualification is not a delivered/saved count; count only separately verified native package receipts.",
+    "Three static FBX assets only; original Team Claude attribution retained; Codex authored the qualification, not the artwork.",
+    "None of these three eggs has a native import/save, placement, collision or gameplay acceptance in this qualification.",
+    "All exact raw FBX witnesses were computed from each recorded FBX byte buffer; current source modules are supporting provenance, not signed export receipts."
+  ],
+  "raw_fbx_parse_recipe": {
+    "execution": "Pure standard-library read-only binary inspection; did not import or invoke any Blender/Unreal module or generator.",
+    "inputs": "Each FBX was read once as bytes; SHA256 and all mesh/colour witnesses derive from those same bytes.",
+    "reproducibility_limit": "Current source module hashes are recorded; these are not signed producer attestations or proof that the exact current source bytes generated the already-existing FBX. The actual FBX witnesses remain authoritative for ingestion.",
+    "steps": [
+      "Check Kaydara FBX Binary header; read little-endian version uint32 at byte 23.",
+      "Begin node records at byte 27. Use <IIIB node headers for FBX versions below 7500; <QQQB for 7500 and later.",
+      "Recursively decode nodes through absolute end offsets and null terminators. Decode scalar properties Y/C/I/F/D/L, raw/string R/S, and numeric arrays d/f/i/l/b/c.",
+      "For arrays read count/encoding/compressed-byte-length as three little-endian uint32 values; zlib-decompress when encoding is nonzero; unpack according to array type.",
+      "Collect Geometry headers, GlobalSettings/P unit+axis fields, Creator strings, Vertices arrays, PolygonVertexIndex arrays and Colors arrays.",
+      "For mesh bounds compute min/max of interleaved XYZ Vertices. A negative polygon index terminates each polygon; triangulated count is sum(polygon_vertex_count-2).",
+      "Group Colors into RGBA tuples, sort/deduplicate without colour-space conversion, and retain exact decoded float values.",
+      "Record authored UCX geometry headers if present. No UCX headers were present in these three files."
+    ]
+  },
+  "schema": "daedalus.catalogue-source-qualification.v1",
+  "scope": "Read source/artifact bytes and inspect the existing contact sheet; no apps/native execution/tests/Git/hub/original modifications.",
+  "source_views": [
+    {
+      "bytes": 3198075,
+      "evidence_limit": "Contact sheet supports source appearance only, not the native imported material, scene placement or gameplay.",
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+      "png_dimensions": [
+        2000,
+        1250
+      ],
+      "renderer_from_source": "Blender Workbench, STUDIO light, VERTEX colour, shadows+cavity; export_catalog.py rebuilds each family into a grid at centimetres/100 for preview.",
+      "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145",
+      "view_method": "functions.view_image of existing PNG during this delegated source audit",
+      "visually_inspected": true
+    }
+  ],
+  "source_witnesses": [
+    {
+      "bytes": 4263,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+      "sha256": "2cfa50709ea899e923c64816f7ac17d5e63ce320c22e739b12dd8923044bcf08"
+    },
+    {
+      "bytes": 43574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\hero_island.py",
+      "sha256": "0ad5cb1df156a39e3f88cd10ee6d123729e1bf8d658480f62ad9d2603e46f72f"
+    },
+    {
+      "bytes": 54087,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+      "sha256": "38b076a41c168693682a075df42331d9dbf548b582f7b687c03d6cefc2cf6618"
+    },
+    {
+      "bytes": 13642,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_eggs.py",
+      "sha256": "2c18e23593b168989c00d03ca9671a45d13d64f2acacefa63aa68120d5da16a9"
+    },
+    {
+      "bytes": 25198,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+      "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+    },
+    {
+      "bytes": 6574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\eggs.manifest.json",
+      "sha256": "bec156053b5e68399e72191a2225c6006939dbf4d1354206e1d9fa874f7b4437"
+    }
+  ],
+  "stage": "source_qualified_static_eggs_only",
+  "status": "three_existing_static_candidates_qualified_for_owned_copy_asset_ingestion",
+  "unit_contract": {
+    "compatible_existing_policy": "claude_raw_unit100_build1_actor001_v1 (delivered Rack); retain raw imported mesh and build scale 1, require actor scale [.01,.01,.01] if later placed",
+    "intended_display_dimensions_cm": [
+      90.0,
+      90.0,
+      100.0
+    ],
+    "native_unit_status": "Source/artifact-derived expectation only for these eggs; must require native bounds/build settings and explicit unit metadata readback before accepting saved assets.",
+    "raw_fbx_dimensions_all_three": [
+      90.0,
+      90.0,
+      100.0
+    ],
+    "sidecar_voxel_cm": 10.0,
+    "source_egg_lift_raw_z": 10.0,
+    "source_geometry_scale": 10.0,
+    "source_nest_z_before_lift": -1,
+    "source_pivot_claim": "bottom-centre; actual raw XY bounds [-40,50] have a +5 raw-unit midpoint offset"
+  }
+}

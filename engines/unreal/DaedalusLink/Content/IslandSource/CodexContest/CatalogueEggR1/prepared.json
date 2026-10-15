@@ -1,0 +1,277 @@
+{
+  "schema": "daedalus.codex-static-catalogue-prepared.v1",
+  "stage": "three_existing_static_eggs_prepared",
+  "items": [
+    {
+      "name": "Prop_Egg_Heartstone_Intact",
+      "triangles": 550,
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ],
+        [
+          255,
+          158,
+          177,
+          255
+        ],
+        [
+          255,
+          202,
+          210,
+          255
+        ]
+      ],
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Heartstone_Intact.fbx",
+      "fbx_fingerprint": {
+        "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155",
+        "bytes": 18956
+      },
+      "original_fbx": {
+        "bytes": 18956,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.fbx",
+        "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155"
+      },
+      "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Heartstone_Intact.json",
+      "sidecar_fingerprint": {
+        "sha256": "4d24da9e21a53b36515159533960eeae41e1bd8728d4fc48e51fccb927f3d43f",
+        "bytes": 217
+      },
+      "original_sidecar": {
+        "bytes": 217,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.json",
+        "sha256": "4d24da9e21a53b36515159533960eeae41e1bd8728d4fc48e51fccb927f3d43f"
+      },
+      "fingerprint": {
+        "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155",
+        "bytes": 18956
+      },
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651"
+    },
+    {
+      "name": "Prop_Egg_Gold_Shiny",
+      "triangles": 580,
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ],
+        [
+          249,
+          228,
+          136,
+          255
+        ],
+        [
+          255,
+          243,
+          186,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255
+        ]
+      ],
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Gold_Shiny.fbx",
+      "fbx_fingerprint": {
+        "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f",
+        "bytes": 19116
+      },
+      "original_fbx": {
+        "bytes": 19116,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.fbx",
+        "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f"
+      },
+      "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Gold_Shiny.json",
+      "sidecar_fingerprint": {
+        "sha256": "f086c7721f67e69365991b15ddddff6bf23904ac46a7c0ab27bb56688392aca0",
+        "bytes": 207
+      },
+      "original_sidecar": {
+        "bytes": 207,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.json",
+        "sha256": "f086c7721f67e69365991b15ddddff6bf23904ac46a7c0ab27bb56688392aca0"
+      },
+      "fingerprint": {
+        "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f",
+        "bytes": 19116
+      },
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06"
+    },
+    {
+      "name": "Prop_Egg_Amethyst_Intact",
+      "triangles": 568,
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          194,
+          148,
+          230,
+          255
+        ],
+        [
+          224,
+          194,
+          249,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ]
+      ],
+      "source_bounds": {
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ],
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ]
+      },
+      "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Amethyst_Intact.fbx",
+      "fbx_fingerprint": {
+        "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104",
+        "bytes": 19084
+      },
+      "original_fbx": {
+        "bytes": 19084,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.fbx",
+        "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104"
+      },
+      "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Amethyst_Intact.json",
+      "sidecar_fingerprint": {
+        "sha256": "75db372ee4bc98f8c9e042f5329002dd2629e717a6e0e48d3966693c8d76ef61",
+        "bytes": 211
+      },
+      "original_sidecar": {
+        "bytes": 211,
+        "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.json",
+        "sha256": "75db372ee4bc98f8c9e042f5329002dd2629e717a6e0e48d3966693c8d76ef61"
+      },
+      "fingerprint": {
+        "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104",
+        "bytes": 19084
+      },
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581"
+    }
+  ],
+  "source_qualification": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\source-qualification.json",
+  "source_qualification_fingerprint": {
+    "sha256": "635e313be835a1d967cdd1badfca4b2438d57b6b4991f555a8acd80dddbbbb27",
+    "bytes": 24182
+  },
+  "source_module": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_catalogue.py",
+  "source_module_fingerprint": {
+    "sha256": "00e48d8a86cd377250c439d6992a5bec6deb09b0f77e9607bf7beebd324d1d03",
+    "bytes": 22414
+  },
+  "source_witnesses": [
+    {
+      "bytes": 4263,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+      "sha256": "2cfa50709ea899e923c64816f7ac17d5e63ce320c22e739b12dd8923044bcf08"
+    },
+    {
+      "bytes": 43574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\hero_island.py",
+      "sha256": "0ad5cb1df156a39e3f88cd10ee6d123729e1bf8d658480f62ad9d2603e46f72f"
+    },
+    {
+      "bytes": 54087,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+      "sha256": "38b076a41c168693682a075df42331d9dbf548b582f7b687c03d6cefc2cf6618"
+    },
+    {
+      "bytes": 13642,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_eggs.py",
+      "sha256": "2c18e23593b168989c00d03ca9671a45d13d64f2acacefa63aa68120d5da16a9"
+    },
+    {
+      "bytes": 25198,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+      "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+    },
+    {
+      "bytes": 6574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\eggs.manifest.json",
+      "sha256": "bec156053b5e68399e72191a2225c6006939dbf4d1354206e1d9fa874f7b4437"
+    }
+  ],
+  "source_views": [
+    {
+      "bytes": 3198075,
+      "evidence_limit": "Contact sheet supports source appearance only, not the native imported material, scene placement or gameplay.",
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\sheet-egg.png",
+      "png_dimensions": [
+        2000,
+        1250
+      ],
+      "renderer_from_source": "Blender Workbench, STUDIO light, VERTEX colour, shadows+cavity; export_catalog.py rebuilds each family into a grid at centimetres/100 for preview.",
+      "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145",
+      "view_method": "functions.view_image of existing PNG during this delegated source audit",
+      "visually_inspected": true
+    }
+  ],
+  "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+  "required_future_actor_scale": [
+    0.01,
+    0.01,
+    0.01
+  ],
+  "limits": "Static asset delivery only; no actors, world save, hatching, economy, collision or native appearance acceptance."
+}

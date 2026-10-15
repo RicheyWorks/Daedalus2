@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Heartstone_Intact",
+ "egg": "Heartstone",
+ "stage": "Intact",
+ "rarity": "ultra",
+ "hatch": {
+  "animal": 2,
+  "bird": 2,
+  "dino": 2
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

@@ -1,0 +1,1759 @@
+{
+  "steps": 3,
+  "yielded": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact",
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny",
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact"
+  ],
+  "result": {
+    "schema": "daedalus.codex-retained-static-egg-catalogue-native.v1",
+    "stage": "three_assets_saved_world_held",
+    "initial_preflight": {
+      "dirty_map_packages": [],
+      "dirty_content_packages": [],
+      "other_running_generators": [],
+      "queued_jobs": 0,
+      "unfinished_async_job_boxes": 0,
+      "pie_running": false,
+      "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "remote_execution_lock_locked": false,
+      "background_compilation": "not_queried",
+      "epic_mcp_other_sessions": "not_queried"
+    },
+    "requested_options": {
+      "backend": "explicit_InterchangePipelineStackOverride",
+      "build_scale3d": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "vertex_colors": "REPLACE",
+      "bake_meshes": true,
+      "build_nanite": false,
+      "generate_lightmap_u_vs": false,
+      "collision": false,
+      "import_materials": false,
+      "replace_existing": false,
+      "task_save": false
+    },
+    "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+    "required_future_actor_scale": [
+      0.01,
+      0.01,
+      0.01
+    ],
+    "world_placed": 0,
+    "world_saved": false,
+    "shared_material_modified": false,
+    "completed_count": 3,
+    "items": [
+      {
+        "name": "Prop_Egg_Heartstone_Intact",
+        "source": {
+          "name": "Prop_Egg_Heartstone_Intact",
+          "triangles": 550,
+          "rgba_bytes": [
+            [
+              168,
+              138,
+              108,
+              255
+            ],
+            [
+              241,
+              224,
+              168,
+              255
+            ],
+            [
+              255,
+              158,
+              177,
+              255
+            ],
+            [
+              255,
+              202,
+              210,
+              255
+            ]
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Heartstone_Intact.fbx",
+          "fbx_fingerprint": {
+            "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155",
+            "bytes": 18956
+          },
+          "original_fbx": {
+            "bytes": 18956,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.fbx",
+            "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155"
+          },
+          "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Heartstone_Intact.json",
+          "sidecar_fingerprint": {
+            "sha256": "4d24da9e21a53b36515159533960eeae41e1bd8728d4fc48e51fccb927f3d43f",
+            "bytes": 217
+          },
+          "original_sidecar": {
+            "bytes": 217,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Heartstone_Intact.json",
+            "sha256": "4d24da9e21a53b36515159533960eeae41e1bd8728d4fc48e51fccb927f3d43f"
+          },
+          "fingerprint": {
+            "sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155",
+            "bytes": 18956
+          },
+          "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651"
+        },
+        "stage": "asset_saved_world_held",
+        "save_return": true,
+        "world_placed": 0,
+        "import_s": 0.150817,
+        "imported_object_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact"
+        ],
+        "destination_asset_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact"
+        ],
+        "observed_before_binding": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "",
+            "codex_sha256": "",
+            "codex_source_fbx": "",
+            "codex_author": "",
+            "codex_source_provenance": "",
+            "codex_unit_contract": "",
+            "codex_required_actor_scale": "",
+            "codex_intended_dimensions_cm": "",
+            "codex_world_placement": ""
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 550,
+          "vertex_colours": {
+            "triangles": 550,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.6196077,
+                0.6941176,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.7921568,
+                0.8235294,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                255,
+                158,
+                177,
+                255
+              ],
+              [
+                255,
+                202,
+                210,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                255,
+                158,
+                177,
+                255
+              ],
+              [
+                255,
+                202,
+                210,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact",
+        "observed": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "codex-contest",
+            "codex_sha256": "4e4e6ffefd7516514282de5ca0aa24390f94529f47e7eca65072d7cfa5637155",
+            "codex_source_fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Heartstone_Intact.fbx",
+            "codex_author": "historical author unverified; retained Claude catalogue recipe/current producer",
+            "codex_source_provenance": "{\"historical_author\": \"unverified\", \"recipe\": \"retained Claude catalogue recipe/current producer\", \"sidecar\": \"C:\\\\Users\\\\730ri\\\\Documents\\\\Codex\\\\2026-10-14\\\\task-2\\\\contest-island-production\\\\engines\\\\unreal\\\\DaedalusLink\\\\Content\\\\IslandSource\\\\CodexContest\\\\CatalogueEggR1\\\\Prop_Egg_Heartstone_Intact.json\"}",
+            "codex_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+            "codex_required_actor_scale": "0.01,0.01,0.01",
+            "codex_intended_dimensions_cm": "90,90,100",
+            "codex_world_placement": "held; scale1 island helper incompatible; appearance/collision/game acceptance unverified"
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 550,
+          "vertex_colours": {
+            "triangles": 550,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.6196077,
+                0.6941176,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.7921568,
+                0.8235294,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                255,
+                158,
+                177,
+                255
+              ],
+              [
+                255,
+                202,
+                210,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                255,
+                158,
+                177,
+                255
+              ],
+              [
+                255,
+                202,
+                210,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "save_s": 0.085196,
+        "post_save_preflight": {
+          "dirty_map_packages": [],
+          "dirty_content_packages": [],
+          "other_running_generators": [],
+          "queued_jobs": 0,
+          "unfinished_async_job_boxes": 0,
+          "pie_running": false,
+          "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+          "remote_execution_lock_locked": false,
+          "background_compilation": "not_queried",
+          "epic_mcp_other_sessions": "not_queried"
+        }
+      },
+      {
+        "name": "Prop_Egg_Gold_Shiny",
+        "source": {
+          "name": "Prop_Egg_Gold_Shiny",
+          "triangles": 580,
+          "rgba_bytes": [
+            [
+              168,
+              138,
+              108,
+              255
+            ],
+            [
+              241,
+              224,
+              168,
+              255
+            ],
+            [
+              249,
+              228,
+              136,
+              255
+            ],
+            [
+              255,
+              243,
+              186,
+              255
+            ],
+            [
+              255,
+              255,
+              255,
+              255
+            ]
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Gold_Shiny.fbx",
+          "fbx_fingerprint": {
+            "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f",
+            "bytes": 19116
+          },
+          "original_fbx": {
+            "bytes": 19116,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.fbx",
+            "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f"
+          },
+          "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Gold_Shiny.json",
+          "sidecar_fingerprint": {
+            "sha256": "f086c7721f67e69365991b15ddddff6bf23904ac46a7c0ab27bb56688392aca0",
+            "bytes": 207
+          },
+          "original_sidecar": {
+            "bytes": 207,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Gold_Shiny.json",
+            "sha256": "f086c7721f67e69365991b15ddddff6bf23904ac46a7c0ab27bb56688392aca0"
+          },
+          "fingerprint": {
+            "sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f",
+            "bytes": 19116
+          },
+          "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06"
+        },
+        "stage": "asset_saved_world_held",
+        "save_return": true,
+        "world_placed": 0,
+        "import_s": 0.090344,
+        "imported_object_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny"
+        ],
+        "destination_asset_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny"
+        ],
+        "observed_before_binding": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "",
+            "codex_sha256": "",
+            "codex_source_fbx": "",
+            "codex_author": "",
+            "codex_source_provenance": "",
+            "codex_unit_contract": "",
+            "codex_required_actor_scale": "",
+            "codex_intended_dimensions_cm": "",
+            "codex_world_placement": ""
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 580,
+          "vertex_colours": {
+            "triangles": 580,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ],
+              [
+                0.9764705,
+                0.8941176,
+                0.5333333,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.9529411,
+                0.7294118,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.9999999,
+                0.9999999,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                249,
+                228,
+                136,
+                255
+              ],
+              [
+                255,
+                243,
+                186,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                249,
+                228,
+                136,
+                255
+              ],
+              [
+                255,
+                243,
+                186,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny",
+        "observed": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "codex-contest",
+            "codex_sha256": "aeec0c0f9ffd9d06750b296073a17a8f5e90547d0f810c12927eef8a4390329f",
+            "codex_source_fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Gold_Shiny.fbx",
+            "codex_author": "historical author unverified; retained Claude catalogue recipe/current producer",
+            "codex_source_provenance": "{\"historical_author\": \"unverified\", \"recipe\": \"retained Claude catalogue recipe/current producer\", \"sidecar\": \"C:\\\\Users\\\\730ri\\\\Documents\\\\Codex\\\\2026-10-14\\\\task-2\\\\contest-island-production\\\\engines\\\\unreal\\\\DaedalusLink\\\\Content\\\\IslandSource\\\\CodexContest\\\\CatalogueEggR1\\\\Prop_Egg_Gold_Shiny.json\"}",
+            "codex_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+            "codex_required_actor_scale": "0.01,0.01,0.01",
+            "codex_intended_dimensions_cm": "90,90,100",
+            "codex_world_placement": "held; scale1 island helper incompatible; appearance/collision/game acceptance unverified"
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 580,
+          "vertex_colours": {
+            "triangles": 580,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ],
+              [
+                0.9764705,
+                0.8941176,
+                0.5333333,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.9529411,
+                0.7294118,
+                1.0
+              ],
+              [
+                0.9999999,
+                0.9999999,
+                0.9999999,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                249,
+                228,
+                136,
+                255
+              ],
+              [
+                255,
+                243,
+                186,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ],
+              [
+                249,
+                228,
+                136,
+                255
+              ],
+              [
+                255,
+                243,
+                186,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "save_s": 0.032168,
+        "post_save_preflight": {
+          "dirty_map_packages": [],
+          "dirty_content_packages": [],
+          "other_running_generators": [],
+          "queued_jobs": 0,
+          "unfinished_async_job_boxes": 0,
+          "pie_running": false,
+          "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+          "remote_execution_lock_locked": false,
+          "background_compilation": "not_queried",
+          "epic_mcp_other_sessions": "not_queried"
+        }
+      },
+      {
+        "name": "Prop_Egg_Amethyst_Intact",
+        "source": {
+          "name": "Prop_Egg_Amethyst_Intact",
+          "triangles": 568,
+          "rgba_bytes": [
+            [
+              168,
+              138,
+              108,
+              255
+            ],
+            [
+              194,
+              148,
+              230,
+              255
+            ],
+            [
+              224,
+              194,
+              249,
+              255
+            ],
+            [
+              241,
+              224,
+              168,
+              255
+            ]
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Amethyst_Intact.fbx",
+          "fbx_fingerprint": {
+            "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104",
+            "bytes": 19084
+          },
+          "original_fbx": {
+            "bytes": 19084,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.fbx",
+            "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104"
+          },
+          "sidecar": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Amethyst_Intact.json",
+          "sidecar_fingerprint": {
+            "sha256": "75db372ee4bc98f8c9e042f5329002dd2629e717a6e0e48d3966693c8d76ef61",
+            "bytes": 211
+          },
+          "original_sidecar": {
+            "bytes": 211,
+            "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\Prop_Egg_Amethyst_Intact.json",
+            "sha256": "75db372ee4bc98f8c9e042f5329002dd2629e717a6e0e48d3966693c8d76ef61"
+          },
+          "fingerprint": {
+            "sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104",
+            "bytes": 19084
+          },
+          "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581"
+        },
+        "stage": "asset_saved_world_held",
+        "save_return": true,
+        "world_placed": 0,
+        "import_s": 0.086353,
+        "imported_object_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact"
+        ],
+        "destination_asset_paths": [
+          "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact"
+        ],
+        "observed_before_binding": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "",
+            "codex_sha256": "",
+            "codex_source_fbx": "",
+            "codex_author": "",
+            "codex_source_provenance": "",
+            "codex_unit_contract": "",
+            "codex_required_actor_scale": "",
+            "codex_intended_dimensions_cm": "",
+            "codex_world_placement": ""
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 568,
+          "vertex_colours": {
+            "triangles": 568,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.7607843,
+                0.5803921,
+                0.9019607,
+                1.0
+              ],
+              [
+                0.8784313,
+                0.7607843,
+                0.9764705,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                194,
+                148,
+                230,
+                255
+              ],
+              [
+                224,
+                194,
+                249,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                194,
+                148,
+                230,
+                255
+              ],
+              [
+                224,
+                194,
+                249,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact",
+        "observed": {
+          "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact",
+          "native_class": "StaticMesh",
+          "native_bounds_cm": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "native_dimensions_cm": [
+            9000.000244140625,
+            9000.000732421875,
+            10000.0
+          ],
+          "source_bounds": {
+            "max": [
+              50.0,
+              50.0,
+              100.0
+            ],
+            "min": [
+              -40.0,
+              -40.0,
+              0.0
+            ]
+          },
+          "expected_native_bounds_cm": {
+            "min": [
+              -4000.0,
+              -4000.0,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              5000.0,
+              10000.0
+            ]
+          },
+          "matching_fbx_axis_conversions": [
+            {
+              "native_x_source_axis": "x",
+              "native_x_sign": 1,
+              "native_y_source_axis": "y",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            },
+            {
+              "native_x_source_axis": "y",
+              "native_x_sign": 1,
+              "native_y_source_axis": "x",
+              "native_y_sign": -1,
+              "native_z_source_axis": "z",
+              "native_z_sign": 1,
+              "unit_multiplier": 100,
+              "expected_native_bounds_cm": {
+                "min": [
+                  -4000.0,
+                  -5000.0,
+                  0.0
+                ],
+                "max": [
+                  5000.0,
+                  4000.0,
+                  10000.0
+                ]
+              }
+            }
+          ],
+          "axis_conversion_scope": "XY permutation/sign only, source Z unchanged, unit100; square XY cannot uniquely identify permutation",
+          "projected_dimensions_cm_at_required_actor_scale": [
+            90.00000244140625,
+            90.00000732421876,
+            100.0
+          ],
+          "required_future_actor_scale": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+          "import_data_class": "InterchangeAssetImportData",
+          "observed_build_scale3d": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "observed_generate_lightmap_u_vs": false,
+          "nanite_enabled": false,
+          "simple_collision_count": 0,
+          "slots": [
+            {
+              "slot": "VoxelVertexColour",
+              "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+            }
+          ],
+          "metadata": {
+            "codex_owner": "codex-contest",
+            "codex_sha256": "cd1e2cb9baacb5817bf550dd9f3d662a96e91c9598f81065d571489513b59104",
+            "codex_source_fbx": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\Prop_Egg_Amethyst_Intact.fbx",
+            "codex_author": "historical author unverified; retained Claude catalogue recipe/current producer",
+            "codex_source_provenance": "{\"historical_author\": \"unverified\", \"recipe\": \"retained Claude catalogue recipe/current producer\", \"sidecar\": \"C:\\\\Users\\\\730ri\\\\Documents\\\\Codex\\\\2026-10-14\\\\task-2\\\\contest-island-production\\\\engines\\\\unreal\\\\DaedalusLink\\\\Content\\\\IslandSource\\\\CodexContest\\\\CatalogueEggR1\\\\Prop_Egg_Amethyst_Intact.json\"}",
+            "codex_unit_contract": "claude_raw_unit100_build1_actor001_v1",
+            "codex_required_actor_scale": "0.01,0.01,0.01",
+            "codex_intended_dimensions_cm": "90,90,100",
+            "codex_world_placement": "held; scale1 island helper incompatible; appearance/collision/game acceptance unverified"
+          },
+          "persistent_mesh_modified": false,
+          "native_appearance": "unverified; source vertex readback is not a screenshot",
+          "collision_game_acceptance": "unverified; no authored UCX or gameplay run",
+          "source_copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+          "triangles": 568,
+          "vertex_colours": {
+            "triangles": 568,
+            "all_triangle_corners_valid": true,
+            "all_triangle_faces_flat": true,
+            "unique_rgba": [
+              [
+                0.6588235,
+                0.5411764,
+                0.4235294,
+                1.0
+              ],
+              [
+                0.7607843,
+                0.5803921,
+                0.9019607,
+                1.0
+              ],
+              [
+                0.8784313,
+                0.7607843,
+                0.9764705,
+                1.0
+              ],
+              [
+                0.945098,
+                0.8784313,
+                0.6588235,
+                1.0
+              ]
+            ],
+            "direct_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                194,
+                148,
+                230,
+                255
+              ],
+              [
+                224,
+                194,
+                249,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ]
+            ],
+            "expected_rgba_bytes": [
+              [
+                168,
+                138,
+                108,
+                255
+              ],
+              [
+                194,
+                148,
+                230,
+                255
+              ],
+              [
+                224,
+                194,
+                249,
+                255
+              ],
+              [
+                241,
+                224,
+                168,
+                255
+              ]
+            ],
+            "source_match": "direct_rgba_bytes",
+            "persistent_mesh_modified": false
+          },
+          "native_source_bounds_with_build_scale": {
+            "min": [
+              -4000.000244140625,
+              -5000.00048828125,
+              0.0
+            ],
+            "max": [
+              5000.0,
+              4000.000244140625,
+              10000.0
+            ]
+          },
+          "issues": []
+        },
+        "save_s": 0.03124,
+        "post_save_preflight": {
+          "dirty_map_packages": [],
+          "dirty_content_packages": [],
+          "other_running_generators": [],
+          "queued_jobs": 0,
+          "unfinished_async_job_boxes": 0,
+          "pie_running": false,
+          "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+          "remote_execution_lock_locked": false,
+          "background_compilation": "not_queried",
+          "epic_mcp_other_sessions": "not_queried"
+        }
+      }
+    ],
+    "save_return": true
+  },
+  "error": null,
+  "seconds": 1.7
+}

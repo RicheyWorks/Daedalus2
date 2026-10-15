@@ -1,0 +1,31 @@
+{
+  "stage": "three_assets_saved_world_held",
+  "observed_utc": "2026-10-15T00:40:28.324731+00:00",
+  "code_sha256": "01e55c4356abd26c1f1eede1873b20f19047b0db459a387500818e49864203f2",
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "prepared_fingerprint": {
+    "sha256": "87f1df3121cf43e9ce1ffb979f79333768bf0ae157af3e3e6471b35d6ca4bead",
+    "bytes": 9795
+  },
+  "reply_fingerprint": {
+    "sha256": "6e1b48c54ec2263439a644cc0e7685f060aba1cab6aacdcce3266b6aa4f6ec10",
+    "bytes": 55386
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Heartstone_Intact_4e4e6ffefd751651/Prop_Egg_Heartstone_Intact.Prop_Egg_Heartstone_Intact": {
+      "sha256": "af321d7e73a924b690156ae293844fb8e890bec629d271152b63f43575d0c201",
+      "bytes": 42177
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Gold_Shiny_aeec0c0f9ffd9d06/Prop_Egg_Gold_Shiny.Prop_Egg_Gold_Shiny": {
+      "sha256": "26e2a298f2d28f4293f7795b3ce446a80707c4ce2085a55983814e815cd56ed9",
+      "bytes": 42523
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Amethyst_Intact_cd1e2cb9baacb581/Prop_Egg_Amethyst_Intact.Prop_Egg_Amethyst_Intact": {
+      "sha256": "8bf9d9f38bcbdc55a240e1fb43b5c928ffc44783c563ff4cf98c6c8391802b0a",
+      "bytes": 42353
+    }
+  }
+}

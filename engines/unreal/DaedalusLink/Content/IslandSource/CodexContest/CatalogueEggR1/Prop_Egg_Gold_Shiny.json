@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Gold_Shiny",
+ "egg": "Gold",
+ "stage": "Shiny",
+ "rarity": "legendary",
+ "hatch": {
+  "animal": 3,
+  "bird": 2,
+  "dino": 1
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

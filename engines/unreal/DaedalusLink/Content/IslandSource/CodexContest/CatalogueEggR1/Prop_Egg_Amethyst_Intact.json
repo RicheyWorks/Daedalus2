@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Amethyst_Intact",
+ "egg": "Amethyst",
+ "stage": "Intact",
+ "rarity": "rare",
+ "hatch": {
+  "bee": 2,
+  "insect": 2,
+  "bird": 2
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

@@ -1,0 +1,58 @@
+{
+  "reply": {
+    "stdout": "",
+    "result": {
+      "observed_utc": "2026-10-15T00:36:13.275542+00:00",
+      "bridge_file": "C:\\Unreal/DaedalusRealm/Plugins/ClaudeUnrealBridge/Content/Python\\claude_unreal_bridge.py",
+      "bridge_source_sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+      "queued_jobs": [],
+      "running_generators": [
+        {
+          "type": "execute_python",
+          "label": null,
+          "code_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde"
+        }
+      ],
+      "unfinished_async_job_boxes": 0,
+      "remote_execution_lock_locked": false,
+      "scope": "existing bridge queue snapshot only; host compares code hashes to distinguish this read from other generators",
+      "background_compilation": "not_queried",
+      "epic_mcp_other_sessions": "not_queried",
+      "pie_running": false,
+      "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "dirty_map_packages": [],
+      "dirty_content_packages": [],
+      "read_command_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde",
+      "matching_read_generators": 1,
+      "other_running_generators": [],
+      "bridge_conflict_absent_at_snapshot": true
+    },
+    "unattended": false
+  },
+  "observed": {
+    "observed_utc": "2026-10-15T00:36:13.275542+00:00",
+    "bridge_file": "C:\\Unreal/DaedalusRealm/Plugins/ClaudeUnrealBridge/Content/Python\\claude_unreal_bridge.py",
+    "bridge_source_sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+    "queued_jobs": [],
+    "running_generators": [
+      {
+        "type": "execute_python",
+        "label": null,
+        "code_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde"
+      }
+    ],
+    "unfinished_async_job_boxes": 0,
+    "remote_execution_lock_locked": false,
+    "scope": "existing bridge queue snapshot only; host compares code hashes to distinguish this read from other generators",
+    "background_compilation": "not_queried",
+    "epic_mcp_other_sessions": "not_queried",
+    "pie_running": false,
+    "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "dirty_map_packages": [],
+    "dirty_content_packages": [],
+    "read_command_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde",
+    "matching_read_generators": 1,
+    "other_running_generators": [],
+    "bridge_conflict_absent_at_snapshot": true
+  }
+}
