@@ -32,6 +32,36 @@ thumb = "--no-thumb" not in argv
 KIND_ORDER = list(H.KINDS)
 
 
+def free_ram_gb():
+    """Windows: available physical memory (GlobalMemoryStatusEx); elsewhere None."""
+    try:
+        import ctypes
+
+        class MS(ctypes.Structure):
+            _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong), ("ullTotalPhys", ctypes.c_ulonglong),
+                        ("ullAvailPhys", ctypes.c_ulonglong), ("ullTotalPageFile", ctypes.c_ulonglong), ("ullAvailPageFile", ctypes.c_ulonglong),
+                        ("ullTotalVirtual", ctypes.c_ulonglong), ("ullAvailVirtual", ctypes.c_ulonglong), ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
+        m = MS()
+        m.dwLength = ctypes.sizeof(MS)
+        ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m))
+        return min(m.ullAvailPhys, m.ullAvailPageFile) / 2 ** 30
+    except Exception:
+        return None
+
+
+def wait_for_memory(floor_gb=1.5):
+    """Shared PC (Codex's Unreal editor, other teams' renders): pause while memory is tight instead of crowding them."""
+    waited = 0
+    while True:
+        g = free_ram_gb()
+        if g is None or g >= floor_gb or waited > 1800:
+            return waited
+        if waited % 60 == 0:
+            print("MEMWAIT %.1f GB free, pausing" % g, flush=True)
+        time.sleep(10)
+        waited += 10
+
+
 def purge():
     bpy.data.batch_remove(list(bpy.data.objects))
     bpy.data.batch_remove(list(bpy.data.meshes))
@@ -79,6 +109,7 @@ for seed in seeds:
     name = "HDIsland_%s_%d" % (kind.title(), seed)
     if os.path.exists(os.path.join(shard, name + ".json")):
         continue
+    wait_for_memory()
     t0 = time.time()
     try:
         man = H.build(seed, kind, shard)
