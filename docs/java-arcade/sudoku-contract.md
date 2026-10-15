@@ -19,7 +19,7 @@ Server authentication can fail after password changes, and revocation closes old
 | Method and path | Request body | Success response |
 |---|---|---|
 | `GET /api/session` | none | Direct session object |
-| `POST /api/game/new?difficulty=1..5&chaos=false&mirror=false&timeAttack=false` | none | Direct `BoardState` |
+| `POST /api/game/new?difficulty=1..5&chaos=<true/false>&mirror=<true/false>&timeAttack=<true/false>` | none | Direct `BoardState` |
 | `GET /api/game/{gameId}` | none | Direct `BoardState` |
 | `POST /api/game/{gameId}/save` | none | `{"status":"saved","gameId":"..."}` |
 | `GET /api/game/saved?limit=1..50` | none | Array of `BoardState` |
@@ -69,6 +69,20 @@ There is no aggregate given mask: derive the 81 clue flags from `isGiven`. The c
 The record deliberately excludes hidden solutions. A completed game's fully filled visible grid is legitimate; do not confuse that with a hidden `solution`/`solvedGrid` field. Pencil notes in the existing clients are local presentation; the wire can carry notes, but no pencil-toggle command exists in this contract.
 
 The server clock stays authoritative. Time attack is configured at five minutes per difficulty level by default. Local menu pause, cabinet close, reconnect or resume must not add time.
+
+### Native create-mode binding, source-only — 2026-10-15
+
+Code4d5577dc adds `StartSudokuGameWithModes(Difficulty,Chaos,Mirror,TimeAttack)`.
+The original `StartSudokuGame(Difficulty)` remains ordinary all-false creation.
+Checkbox choices are local next-game settings, captured by the actor before
+asynchronous session bootstrap. The POST reads only those captures; changing a
+later UI choice cannot change the in-flight create. No options are sent on
+open/resume. The readout uses confirmed `chaosMode`, `mirrorMode` and nonzero
+`timeLimitSeconds`; client choices never rewrite the current board or clock.
+Source review/static checks are not flag-combination or timed save/resume proof.
+Deferred cases: eight combinations at difficulties1/5; invalid/busy refusal;
+choices changed across bootstrap; ordinary API compatibility; rejected creation;
+Java-confirmed differing flags; timed save/resume without time extension.
 
 ## Authority and lifecycle constraints
 

@@ -235,4 +235,19 @@ names differ. Unreal removes type prefixes when deriving reflected names. Name
 new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
+### Capture new-game configuration before asynchronous authentication
+
+2026-10-15, pootscoot-desktop-games; java_gap_scan source review.
+Sudoku4d5577dc binds existing Java chaos/mirror/timeAttack flags instead of
+hardcoding false. Capture accepted options after request gates and before async
+bootstrap; build the eventual request from that snapshot. Keep next-game choices
+separate from Java-confirmed current modes, and preserve the old ordinary entry
+point. Open/resume must not recreate a game or extend its authoritative clock.
+Source review and77 static checks (61 unchanged methods) pass; compiler/tests,
+services and native operations remain deferred. No measured gameplay benefit.
+Harness idea, benefit ESTIMATED: extend the existing Java cabinet harness with
+eight option combinations, UI changes during bootstrap, failed/replaced requests
+and timed save/resume. Proposed owner desktop-games at its next validation slot;
+no new framework/job. Reviewer has no new firsthand native/Blender/queue evidence.
+
 

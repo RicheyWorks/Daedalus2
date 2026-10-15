@@ -1,4 +1,30 @@
-# Arcade capability coverage — source checkpoint, 2026-10-14
+# Arcade capability coverage — source checkpoint, 2026-10-15
+
+## Current iteration: existing Sudoku create modes
+
+Code `4d5577dc5659a9a26a9130e70cef68c2e5915ece` continues the existing PR152
+four-file actor/Slate lane. The cabinet previously hardcoded chaos, mirror and
+timeAttack false despite Java supporting them. Three New Game checkboxes now
+feed additive `StartSudokuGameWithModes`; request values are captured after
+existing gates and before asynchronous bootstrap. The creation URL uses those
+captures. Current-game text comes only from Java snapshot flags/timeLimitSeconds,
+separate from next-game choices. Old `StartSudokuGame(int32)` defaults, open,
+resume, saves, moves, guards and all prior Blackjack metadata/settings stay intact.
+
+Pinned existing implementation: Sudoku973c73a3 Controller65–81,
+ServerApi147–154 and GameService288–308. No new service/rules/clock is introduced.
+Source review plus77 static checks passed, including61 unchanged method bodies.
+No UHT/compiler, test, service, editor or native execution ran. The new reflected
+method needs later generated-code/module integration; current native acceptance
+and full original-app completion remain open. Ingestion keeps priority.
+
+Owner reconciliation32159–32161 and four-region claim32167–32169 were sent;
+no competing Java-client claim was found. Existing web DaedalusPad/1 at39fa5581
+is not a Slate transport. This uses ordinary existing Slate checkbox/focus
+interfaces; no controller adapter, mapping, database or native binding is added.
+Later targeted Mines/HUD acceptance does not transfer to Sudoku/Blackjack.
+
+The following earlier coverage remains scoped to its original source proof.
 
 The target is the full implemented applications, with their actual rules and
 existing interfaces preserved. A native cabinet, offline fixture or thin facade
@@ -147,14 +173,14 @@ Sudoku source is [973c73a35f8659a17022232f0996d4ffb0095997](https://github.com/R
 In the next table, controller paths are
 `server/src/main/java/com/xai/sudokupro/controller/`, and client paths are
 `client/src/main/java/com/xai/sudokupro/`. Existing native bindings are the same
-Java actor/Slate, whose Sudoku implementation is unchanged here. **S27** means
+Java actor/Slate, now extended only with the create-mode bindings above. **S27** means
 27 historical disposable HTTP/WS checkpoints with real authentication/JPA, H2
 and mocked Redis/Jedis/relay; it does not establish full platform or Unreal E2E.
 
 | Implemented app feature | Exact interface/source | Daedalus binding | Missing code | End-to-end evidence |
 |---|---|---|---|---|
 | Session/CSRF, own-board moves/undo/redo/sync | `SessionController GET /api/session`; `SudokuGameController /new`; `WebSocketController` commands | Configure/start/move/undo/redo/refresh methods and Slate grid | Account/provider mapping absent; Java owns clock/score/legality | S27 subset; E0 |
-| Chaos/mirror/timed modes, recommended difficulty | `SudokuGameController.new` parameters and `/recommended-difficulty`; `net/ServerApi`, `ui/MainStage` | Flags read in snapshots | Create currently hardcodes all three false; selectors/recommendation absent | E0 |
+| Chaos/mirror/timed modes, recommended difficulty | `SudokuGameController.new` parameters and `/recommended-difficulty`; `net/ServerApi`, `ui/MainStage` | New three mode selectors → `StartSudokuGameWithModes` → captured bootstrap options → existing create URL; confirmed flags/time limit read from snapshots | Recommended difficulty still absent; current mode binding uncompiled/unplayed | E0 |
 | Save/list/resume/end | `SudokuGameController /save,/saved,/resume,/end`; `ui/MainStage` picker | Save and explicit-ID resume; Blueprint open | Saved-list picker and authoritative end absent; cabinet close cancels local work | S27 subset; E0 |
 | Hint price/confirmation | `SudokuGameController POST /hint`; `EconomyController /wallet`; `ui/BoardView` | Explicit hint action | Current wallet/price and original confirmation missing; no native currency grant | S27 hint subset; E0 |
 | AI solve | `SudokuGameController POST /{id}/solve`; `GameClient`, `BoardView` | None | Service operation/UI absent | E0 |
@@ -185,7 +211,7 @@ Neither variant is a Java Minesweeper backend or full `minesweeper-pro` integrat
 | Stage | This checkpoint |
 |---|---|
 | Source | Claimed four Java actor/Slate files and this coverage/manifest only; source review, unverified |
-| Committed | Runtime source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact published documentation tip in draft PR/hub handoff |
+| Committed | Mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece`, preserving prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
 | Connected | No connection established or observed by this lane; companion PR62 adoption/runtime/provider pending |
 | Native | No current-head UHT/UBT/DLL/load/placement; historical evidence stays pinned |
 | End-to-end | No Unreal settings/action/recovery proof; original app coverage remains open |

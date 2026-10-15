@@ -28,3 +28,18 @@ Operational handoff: poll before starting a job, at every job boundary, and betw
 The shared `teamlink claim/release/locks` commands remain authoritative for editor and merge leases. Keep branches until all children are merged. For a merge handoff, include PR number, exact head SHA, review scope and current checks; the receiver reports the resulting merge SHA. Distinguish draft state, missing/deleted base, conflict and CI failures from an approval-tool rejection. Address the concrete cause once and continue unblocked work.
 
 Validation: the HTTP harness covers explicit acceptance versus receipt, long-poll wakeup, restart recovery, bounded backlog, uncertain-send deduplication, response retries/resume, logical reply routing and actual CLI round trips. Broker tests remain separate. Passing transport tests does not prove a live Claude response; record the real exchange separately when it occurs.
+
+## Sudoku create-mode source handoff — 2026-10-15
+
+Owner pootscoot-desktop-games, source4d5577dc, existing PR152. Exactly Java actor
+public h/private cpp and Java Slate private h/cpp, mode-create/UI regions only.
+Original PR152 Blackjack settings/metadata remain preserved; old PR55 worktree and
+the unrelated dirty full-link checkout were not changed. Owner reconciliation
+32159–32161 and claim32167–32169 precede edits; no competing claim found.
+Current root and java_gap_scan completed source review, not a full-team audit.
+Existing integration manifest has four before/after pins and the deferred cases.
+77 static checks pass,61 existing methods unchanged; new UFUNCTION needs later
+UHT/module build. Nothing is installed/native accepted. Preserve accepted184,
+Mines, R2 and other owners; no whole-plugin replacement or immediate runtime slot.
+Ingestion remains first. Web controller39fa remains reusable for web consumers;
+normal Slate controls need no web bridge or duplicate input framework here.

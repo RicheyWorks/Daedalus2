@@ -1,34 +1,44 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "UNVERIFIED_SOURCE_ONLY",
+  "status": "SUDOKU_MODES_AND_BLACKJACK_CAPABILITIES_UNVERIFIED_SOURCE_ONLY",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/blackjack-capability-binding-20261014",
-    "code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
+    "code_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
     "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
-        "sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF"
+        "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "expected_prior_pr152_sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF",
+        "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
-        "sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900"
+        "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "expected_prior_pr152_sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900",
+        "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
-        "sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB"
+        "sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5",
+        "expected_prior_pr152_sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB",
+        "git_blob": "62af83ce50c8ce994c4c4988275d4a7edfdd594d"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
-        "sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7"
+        "sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15",
+        "expected_prior_pr152_sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7",
+        "git_blob": "961f5529859c3e69d4ad21ac775f8d2f24778353"
       }
-    ]
+    ],
+    "prior_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
+    "prior_documentation_head": "89ece41824b9132403ac0bfffae15343b08b13f8"
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
@@ -102,27 +112,38 @@
       "dealer derived fields only when revealed"
     ],
     "commit": "all newly required fields validate before atomic View/Blackjack commit",
-    "gates": "existing Java legalActions plus Guard.CanMutate, revision, one operation in flight; no optimistic metadata update or automatic mutation replay"
+    "gates": "existing Java legalActions plus Guard.CanMutate, revision, one operation in flight; no optimistic metadata update or automatic mutation replay",
+    "sudoku_create_modes": {
+      "ordinary_entry_unchanged": "StartSudokuGame(int32 Difficulty=1), all flags defaultfalse",
+      "entry": "StartSudokuGameWithModes(int32 Difficulty,bool bChaos,bool bMirror,bool bTimeAttack)",
+      "ui": "Three local next-game Slate checkboxes,disabled busy; existing New1-5 buttons",
+      "request": "POST /api/game/new?difficulty=<1..5>&chaos=<true/false>&mirror=<true/false>&timeAttack=<true/false>",
+      "capture": "Validated request captures booleans after existing gates and before asynchronous session bootstrap; URL reads captured actor fields only.",
+      "confirmed_display": "State.bChaosMode,State.bMirrorMode and State.TimeLimitSeconds>0; no optimistic board/clock changes",
+      "open_resume_save": "Existing methods/requests unchanged; no create options injected into open/resume or extra time granted."
+    }
   },
   "stages": {
-    "source": "implemented; read-only review; unverified",
+    "source": "Sudoku mode-create/UI binding implemented alongside preserved prior Blackjack capabilities; independent source review and static checks only.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
     "native_loaded": false,
     "world_placed": false,
     "world_saved": false,
-    "end_to_end": false
+    "end_to_end": false,
+    "source_review": "PASS",
+    "static_checks_passed": 77,
+    "unchanged_methods": 61,
+    "tests_or_builds_run": false
   },
   "pending_operator_steps": [
-    "Read and source-review the exact code commit/file hashes; preserve PR139 Minesweeper and other owners.",
-    "After separately authorized adoption/build/load, confirm installed module contains this exact source revision. Current tests/builds/CI remain deferred.",
-    "Select or stage the one approved Blackjack actor with Game=Blackjack and generated unique CabinetId. Preserve other actors/deeds/materials and record actual transform/map save only if authorized.",
-    "Against an explicitly approved disposable Java companion, normal local Hero Use must open this overlay; root starts no service and provides no credentials.",
-    "After Java session creation, compare rules, long-string totals, safe shoe counts, flags and outcomes with the same accepted revision. Rule/deck/maxhand controls change only after accepted replies.",
-    "During a live hand, unknown mutation or disconnect, verify settings/reset remain gated by Java/legal guard and no command replays; refresh/reconciliation is explicit.",
-    "Confirm insurance/even-money wording follows visible natural flag, reset uses source newSession, dealer hole/derived live totals/future-shoe order stay absent, and closing restores local input.",
-    "Return actual native receipt with exact source/binary hash, companion pin, actor identity, map transform/save and redacted observations; no native/E2E completion assumed."
+    "Source packet only; do not reserve a native/build/editor slot ahead of ingestion. Dedicated tests and native acceptance remain deferred.",
+    "This increment expects existing PR15289ece418/4f63c5b0 source, whose Blackjack additions are not established installed. Reconcile the full four-file PR152 diff against current accepted184 source; never overwrite newer owners or whole plugin.",
+    "The new unique reflected function/private fields require generated-code/module integration. Only codex-play-guard selects and performs the later normal supported build/load route; no live DLL or LiveCoding assumption.",
+    "At the next owned source-validation slot exercise8flag combinations, ordinaryStart compatibility, invalid/busy gates, selections across async bootstrap and stale/replaced callbacks; preserve existing guard/secret/protocol constraints.",
+    "Later approved disposable Sudoku acceptance: normal HeroUse, modeCreate, compare confirmed flags/time limit, timed save/resume without clock extension, then close/reopen/disconnect recovery. No actual service or credentials used by source lane.",
+    "Retain prior Blackjack companion/rules/settings/metadata acceptance steps; they remain uncompiled/uninstalled/unaccepted at this source checkpoint. No equivalent nativeSudoku/Blackjack gameplay/persistence is inferred from other Mines/HUD checks."
   ],
   "remaining_original_features": [
     "facade health/reopen binding",
@@ -143,5 +164,41 @@
     "No production traffic, account provisioning, paid services or real credentials",
     "No financial deployment, wallet, entitlement, inventory grants or fabricated rewards",
     "No Minesweeper/PR139 files or shared HTTP transport changes"
-  ]
+  ],
+  "mode_claim_messages": [
+    32167,
+    32168,
+    32169
+  ],
+  "owner_reconciliation": "Existing PR152 owned branch/source reconciled; requests32159-32161 sent, no competing Java-client claim observed. No other owner files/backend changed.",
+  "sudoku_companion": {
+    "repository": "RicheyWorks/sudokupro",
+    "source_commit": "973c73a35f8659a17022232f0996d4ffb0095997",
+    "existing_sources": [
+      "server/src/main/java/com/xai/sudokupro/controller/SudokuGameController.java:65-81",
+      "client/src/main/java/com/xai/sudokupro/client/net/ServerApi.java:147-154",
+      "server/src/main/java/com/xai/sudokupro/service/GameService.java:288-308"
+    ],
+    "contract": "docs/java-arcade/sudoku-contract.md",
+    "backend_changed": false,
+    "service_or_credentials_used": false,
+    "full_original_application_complete": false
+  },
+  "sudoku_modes_iteration": {
+    "code_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
+    "baseline": "89ece41824b9132403ac0bfffae15343b08b13f8",
+    "changed_runtime_files": 4,
+    "runtime_diff": "56insertions4deletions; only mode create/request capture and Slate choices/display",
+    "static_report_sha256": "74CCA646EF021F0974E3C02E7F12B1B03E52F4EAA46C08B959301089A1761342",
+    "static_scope": "77text/body/order/declaration invariants;61 old methods equal baseline, protocol/Build.cs unchanged; not behavioral or compiler proof",
+    "lesson": "Capture accepted new-game options before asynchronous authentication, and display current modes only from authoritative replies.",
+    "harness_idea": "Existing Java cabinet harness:8modecombinations/difficulty1,5/ordinarycall/busy-refusal/UIchangesacrossbootstrap/replacedrequests/confirmedsnapshot/timedsave-resumewithoutclockextension. Proposed ownerdesktop-games, benefitESTIMATED, deferred.",
+    "controller_reuse": {
+      "module": "daedalus-pad/1",
+      "revision": "39fa558191f9ba283249e2067575cdf58336abee",
+      "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+      "sha256": "772C17EE4A519A70C1A79A16F5AE613AFBA629F2B6E4E926ADE72117DB9E1989",
+      "applicability": "Verified web module, not a native Slate transport. Existing Slate checkbox/focus path reused; no new controller plumbing or native bindings."
+    }
+  }
 }
