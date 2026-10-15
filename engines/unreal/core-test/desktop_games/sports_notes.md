@@ -1,6 +1,17 @@
 # Desktop sports ports
 
-## Current portable verification, 2026-10-15
+## Current display-name checkpoint, 2026-10-15
+
+Player-facing titles and descriptions are listed in [The Daedalus arcade](../../../../docs/DESKTOP-ARCADE.md).
+Code `4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585` makes display-only naming
+changes. The focused MSVC registry/UI/ID check passed123/123. Stable IDs/classes,
+originals, rules, input, saves, art and license notices are preserved. Historical
+franchise names below are technical source attribution, not current player copy.
+The earlier full-suite receipt remains pinned to its earlier commit; current
+Unreal/native/controller/text-fit and content provenance are unverified.
+
+
+## Previous portable verification, 2026-10-15
 
 Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
 MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish

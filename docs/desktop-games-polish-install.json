@@ -1,8 +1,8 @@
 {
-  "manifest_version": 5,
+  "manifest_version": 6,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
-  "status": "PORTABLE_CHECKS_PASSED_NATIVE_UNVERIFIED",
+  "status": "DISPLAY_NAMES_REVIEWED_FOCUSED_PORTABLE_PASS_NATIVE_UNVERIFIED",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_messages": [
@@ -16,18 +16,20 @@
     31229,
     31230,
     31270,
-    31271
+    31271,
+    31314,
+    31315
   ],
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "fe6d0ec6f6fb19671f244cdaca73c707b2bb3630",
+    "code_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
-        "git_blob": "83d927eff30111edfce9c73ceebf440eba26cbbc",
-        "sha256": "B923E2B14B75FFAC5C5FDE86C494F7A71FF53DD8ABFBB105BFC4F6F128FED370"
+        "git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
+        "sha256": "1881DC01C3F2CE1DA6C8FCD6E913F898764477B0DDAF0C493606CD8A14A90F34"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
@@ -36,13 +38,13 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
-        "git_blob": "c71b58930ed7f776b538b3ea146571333506d51b",
-        "sha256": "2F73D40EBF2CAF75EA0DBDCE8FED5EE0C2A8ACDC7976B7C03BBB8B11FC6A0B69"
+        "git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073",
+        "sha256": "5B4F666D36C04E6B3B19BA3ED608EBE30F207E26DE29E19985971515EE2BAC31"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
-        "git_blob": "5251ae5ea9bb3b819322e5b0e6dba88d9c44c31f",
-        "sha256": "91B5174802DA0EE9964CA8C6E63861C54F3401B08E771F14F4D5732662455BFA"
+        "git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97",
+        "sha256": "C93A54BDB1D954595BF0DB31BE8CB20269E47A46693C7CE50066A3A0131A3934"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
@@ -56,8 +58,8 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
-        "git_blob": "9acf61673fce060c024790c8d9f236858b917725",
-        "sha256": "25E605299B0361F75B349E556A658F888F37464D2F04B849E740F977CF7B360A"
+        "git_blob": "51b06638e524ddb40615fa069bada53f522919f3",
+        "sha256": "3E3B9EAB4BE9D56ABC5221B11777006905BA0AFCF1CE18B9F325E4E4056E791E"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
@@ -71,8 +73,8 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
-        "git_blob": "e3de2fc745267d80f2c77d03b326d6e5813c00c6",
-        "sha256": "4515B9AE088ED6AE4E5142F273C753737DB4A4BAEEBD88B4361ED6C85C62DD99"
+        "git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+        "sha256": "C135F7BCC3B3B830A3368E5548C730AEC46927D3854E2B17D6A49284A2BB4CCF"
       }
     ],
     "peer_sections_preserved": [
@@ -85,8 +87,8 @@
       "Star pause/save/snapshot/restore/options/request timing and DGS1 payload blocks"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "610c621b22559ece5e34cdfc6e24872a4d5a8d65",
-    "prior_runtime_commit": "1fe4a2477345c669ce15a0214cb600ed4b7d1e26",
+    "prior_checkpoint_commit": "6bd82d5021460fc9040ceca45b43e66e8f626015",
+    "prior_runtime_commit": "fe6d0ec6f6fb19671f244cdaca73c707b2bb3630",
     "preserved_checkpoints": [
       {
         "cycle": 1,
@@ -262,7 +264,10 @@
       "frame_size_px": [
         800,
         344
-      ]
+      ],
+      "display_title": "Dungeon Prototype",
+      "identity_description": "Light the Threadlight lanterns and unlock the exit.",
+      "naming_decision": "kept_generic"
     },
     {
       "id": "pong",
@@ -287,7 +292,10 @@
       "new_bounds": "both paddles stay within0..500",
       "early_serve": "fresh FirePressed/JumpPressed/ActionPressed; next fixed step launches",
       "new_hud": "event-only; Reset frame retains original6draw commands",
-      "inventory_or_server_rewards": false
+      "inventory_or_server_rewards": false,
+      "display_title": "Twinwake Volley",
+      "identity_description": "A fast duel across the twinwake court.",
+      "naming_decision": "renamed"
     },
     {
       "id": "pacman",
@@ -327,7 +335,10 @@
         "durable profile/run save",
         "character assets",
         "native acceptance"
-      ]
+      ],
+      "display_title": "Glowtrail Chase",
+      "identity_description": "Gather the glowtrail, evade pursuers, and clear the maze.",
+      "naming_decision": "renamed"
     },
     {
       "id": "shadow_ninja",
@@ -372,7 +383,10 @@
         "audio",
         "durable profile/run save",
         "native acceptance"
-      ]
+      ],
+      "display_title": "Shadow Ninja",
+      "identity_description": "Scale the ember terraces and face the sentinel.",
+      "naming_decision": "kept_generic"
     },
     {
       "id": "football",
@@ -426,7 +440,10 @@
         "native controller and HUD/game feel acceptance",
         "character assets/audio",
         "profile/save/network features not invented"
-      ]
+      ],
+      "display_title": "Football / Soccer",
+      "identity_description": "A ninety-second duel on the Daedalus pitch.",
+      "naming_decision": "kept_generic"
     },
     {
       "id": "contra",
@@ -477,7 +494,10 @@
         "Terminal Enter/R/A/Start retry; Space ignored; completed code on terminal awards nothing",
         "Source run transitions clear prior pending Driver input; Slate rebuilds held controls; raw mode stays through Reset to suppress semantic duplicate code",
         "Native terminal retry remains two grunts at450/650 and spread620,350; source inconsistent terminal initializer is three grunts400/580/760 and spread550,380"
-      ]
+      ],
+      "display_title": "Ironwake Advance",
+      "identity_description": "Run the ironwake route through platforms and enemy fire.",
+      "naming_decision": "renamed"
     },
     {
       "id": "dodge_ball",
@@ -518,7 +538,10 @@
         800,
         600
       ],
-      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
+      "display_title": "Courtyard Clash",
+      "identity_description": "Lead three teammates through four courtyard rounds.",
+      "naming_decision": "renamed"
     },
     {
       "id": "asteroids",
@@ -553,7 +576,10 @@
         800,
         600
       ],
-      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
+      "display_title": "Driftstone Patrol",
+      "identity_description": "Pilot the driftstone belt and clear the rocks.",
+      "naming_decision": "renamed"
     },
     {
       "id": "sega_shooter",
@@ -589,7 +615,10 @@
         800,
         600
       ],
-      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
+      "display_title": "Riftwing Vanguard",
+      "identity_description": "Push the rift frontier with a changing arsenal.",
+      "naming_decision": "renamed"
     },
     {
       "id": "zelda",
@@ -624,7 +653,10 @@
         800,
         600
       ],
-      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed."
+      "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
+      "display_title": "Lanternwild Quest",
+      "identity_description": "Explore Lanternwild, defeat the guardians, and recover the key.",
+      "naming_decision": "renamed"
     },
     {
       "id": "star_shooter",
@@ -666,7 +698,10 @@
       ],
       "existing_ui_binding": "Existing catalog ID -> Driver -> Arcade GetArcadeFrame/GetState -> Slate OnPaint/StatusText/PushInput; no host files changed.",
       "preserved_host_retry_source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp::ADaedalusDesktopArcade::ProcessSourceRequests",
-      "preserved_host_retry_seconds": 5
+      "preserved_host_retry_seconds": 5,
+      "display_title": "Star Shooter",
+      "identity_description": "Hold the starlanes through escalating waves.",
+      "naming_decision": "kept_generic"
     }
   ],
   "presentation": {
@@ -756,7 +791,8 @@
     "Star: wave shift while boss active, boss states/phases and power reset, slot caps, digital-over-stick Pad, protection1 and paused freeze, pause/quit/save-request flags, DGS1/resume behavior and current host save failure separately.",
     "Check all eleven frame layouts, pause/focus/controller lifecycle, readiness labels and actual game feel after authorization; source review is not current native play evidence.",
     "Return exact source/binary/map/actor/input/transform/save and redacted play observations only after authorized execution.",
-    "Contra title: repeat ordered Up Up Down Down Left Right Left Right B A before fixed tick; final A stays title with30; Enter/Space/pad A starts preserving lives. Wrong keys reset, controller start preserves prefix, W does not start. Terminal Enter/R/A/Start retry, Space does not; raw/held input never duplicates. Released title shot must not leak; held shot remains active."
+    "Contra title: repeat ordered Up Up Down Down Left Right Left Right B A before fixed tick; final A stays title with30; Enter/Space/pad A starts preserving lives. Wrong keys reset, controller start preserves prefix, W does not start. Terminal Enter/R/A/Start retry, Space does not; raw/held input never duplicates. Released title shot must not leak; held shot remains active.",
+    "Use current display_title metadata and new player catalog; stable game IDs remain unchanged. Verify new title/header text fit and no retired brand labels in visible menu/HUD/status/help. Preserve PR139 Mines additions on integration."
   ],
   "backlog_order": [
     "dungeon source-pass1",
@@ -793,9 +829,49 @@
     "Exact private shooter container saturation not forced by new public-session polish regression; existing family bounds/reservation checks retained"
   ],
   "portable_validation": {
+    "utc": "2026-10-15T00:58:04Z",
+    "source_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
+    "configuration": "Debug x64 C++17",
+    "compiler": "MSVC19.44.35229.0, VS2022 Community, Windows SDK10.0.26100.0",
+    "flags": [
+      "/W4",
+      "/WX",
+      "/permissive-"
+    ],
+    "build_command": "cmake --build ../native-polish-validation-20261015 --config Debug --target desktop_registry --parallel 1",
+    "test_command": "ctest --test-dir ../native-polish-validation-20261015 -C Debug --output-on-failure -R ^desktop_registry$ -j 1",
+    "result": "1/1 focused CTest passed;123/123 registry/UI/ID checks",
+    "scope": "Compiles all portable core headers and Driver; scans catalog title/descriptions and initial/title/active-result frame/status strings for retired brands, checks exact stable ID set and existing input transitions",
+    "serial_targets": [
+      "desktop_registry"
+    ],
+    "results": [
+      {
+        "target": "desktop_registry",
+        "checks_passed": 123,
+        "result": "PASS",
+        "binary_sha256": "7AFA483BBB8AD37B70A5E74FD94068D5BA812E0AF759970A07F37058CE693C2F"
+      }
+    ],
+    "changed_test_files": [
+      {
+        "path": "engines/unreal/core-test/desktop_games/registry_test.cpp",
+        "git_blob": "2954fb6c55449ca3375674514219f0dfe4d3085f",
+        "sha256": "C2B6E7871FDB31A91EC953209382AC021A87B3376A7F0F6F98A693F1972B5EB8"
+      }
+    ],
+    "python_oracles_rerun": false,
+    "fixtures_changed": false,
+    "limitations": [
+      "Previous full7-suite receipt is retained separately at its original source pin, not transferred to this copy-only revision",
+      "Current Unreal actor/Slate/UHT/module/native load/physical-controller/readability acceptance unverified",
+      "Rename does not resolve character/design/map/audio provenance or establish trademark clearance"
+    ]
+  },
+  "previous_portable_validation": {
     "utc": "2026-10-15T00:41:26Z",
     "source_commit": "fe6d0ec6f6fb19671f244cdaca73c707b2bb3630",
-    "source_pins": "source.files plus changed_test_files below; binaries built from these unchanged bytes",
+    "source_pins": "Historical fe6d0ec6f6fb19671f244cdaca73c707b2bb3630 only: runtime pins are retained in v5 manifest at6bd82d5021460fc9040ceca45b43e66e8f626015:docs/desktop-games-polish-install.json, not current v6 source.files; test pins and historical binary hashes below retain their original scope.",
     "configuration": "Debug x64 C++17",
     "compiler": "MSVC19.44.35229.0, VS2022 Community, Windows SDK10.0.26100.0",
     "cmake": "3.31.0-rc3",
@@ -898,6 +974,108 @@
       "No current native load/placement/rendering/focus/controller or visible gameplay acceptance",
       "New shooter public seeded sessions observe peaks22/16/50; exact private-container saturation not forced",
       "Star host disk-write failure/retry/process-loss behavior not executed"
+    ]
+  },
+  "identity_audit": {
+    "scope": "All eleven current player-visible names, catalog descriptions, HUD/title/status labels, Slate help, install display metadata and player catalog; seven renamed, four generic retained",
+    "player_catalog": "docs/DESKTOP-ARCADE.md",
+    "decisions": [
+      {
+        "id": "dungeon",
+        "historical_source_title": "Dungeon Prototype",
+        "display_title": "Dungeon Prototype",
+        "decision": "kept_generic",
+        "reason": "Descriptive generic wording retained under user instruction; no brand-clearance claim"
+      },
+      {
+        "id": "pong",
+        "historical_source_title": "Pong",
+        "display_title": "Twinwake Volley",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "pacman",
+        "historical_source_title": "Pac-Man",
+        "display_title": "Glowtrail Chase",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "shadow_ninja",
+        "historical_source_title": "Shadow Ninja",
+        "display_title": "Shadow Ninja",
+        "decision": "kept_generic",
+        "reason": "Descriptive generic wording retained under user instruction; no brand-clearance claim"
+      },
+      {
+        "id": "football",
+        "historical_source_title": "Football / Soccer",
+        "display_title": "Football / Soccer",
+        "decision": "kept_generic",
+        "reason": "Descriptive generic wording retained under user instruction; no brand-clearance claim"
+      },
+      {
+        "id": "contra",
+        "historical_source_title": "CONTRA",
+        "display_title": "Ironwake Advance",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "dodge_ball",
+        "historical_source_title": "Super Dodge Ball Tournament",
+        "display_title": "Courtyard Clash",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "asteroids",
+        "historical_source_title": "Asteroids",
+        "display_title": "Driftstone Patrol",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "sega_shooter",
+        "historical_source_title": "Sega Space Shooter",
+        "display_title": "Riftwing Vanguard",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "zelda",
+        "historical_source_title": "Zelda: A Link to the Past",
+        "display_title": "Lanternwild Quest",
+        "decision": "renamed",
+        "reason": "Recognizable franchise/brand wording; no applicable name-use grant established in assessed source/license evidence"
+      },
+      {
+        "id": "star_shooter",
+        "historical_source_title": "Star Shooter",
+        "display_title": "Star Shooter",
+        "decision": "kept_generic",
+        "reason": "Descriptive generic wording retained under user instruction; no brand-clearance claim"
+      }
+    ],
+    "source_provenance": "docs/desktop-games-sources.json remains unchanged; original paths/titles/hashes and historical receipts are technical provenance, not player branding",
+    "repository_license": "LICENSE: MIT, copyright2026 Richmond; SPDX/license/attribution notices preserved",
+    "name_permission": "No license, project URL, trademark/name-use grant or original project branding policy found in the eleven canonical loose Python scripts or assessed adjacent project files; repository MIT notice is not treated as third-party naming permission",
+    "official_brand_reference": "https://atari.com/pages/about identifies Pong and Asteroids as branded games; no reuse grant relied on",
+    "generic_titles_retained": [
+      "Dungeon Prototype",
+      "Football / Soccer",
+      "Shadow Ninja",
+      "Star Shooter"
+    ],
+    "legal_clearance_claimed": false,
+    "compatibility": "No ID/class/factory/save filename/payload, gameplay, input or art/audio change. Rupee/Rupees internal fields remain; visible local pickup label is Trinket/Trinkets; no realm inventory/currency introduced",
+    "shared_copy_transfer": "team-codex task01a13192-73df-7d32-8fae-49ff6efe1bee approved registry Title/Controls and actor/Slate branded labels only; only registry/Slate needed edits, actor h/cpp unchanged",
+    "content_concerns": [
+      "Existing procedural yellow mouth wedge, colored pursuers and maze arrangement in MazeCore remain; origin/design permission not established by a title change",
+      "Existing green pointed-cap sword/shield character and diamond pickup in MazeCore remain; provenance review separate, no infringement conclusion",
+      "No imported minigame sprite/model/audio references or implemented audio playback found in bounded five-header/arcade audit; future asset exports need their own provenance",
+      "New names selected for this project; availability/trademark clearance not asserted"
     ]
   }
 }
