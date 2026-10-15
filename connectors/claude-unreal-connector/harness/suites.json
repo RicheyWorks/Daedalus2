@@ -3,6 +3,7 @@
   "suites": [
     {"name": "e2e", "cmd": ["-m", "harness.e2e"], "floor": 23, "what": "the MCP extension over stdio, end to end, against the stand-in editor"},
     {"name": "contract", "cmd": ["-m", "harness.contract"], "floor": 14, "what": "risk ladder, policy refusals, request_id replay"},
-    {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"}
+    {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"},
+    {"name": "lifecycle", "cmd": ["tests/bridge_lifecycle_test.py"], "floor": 21, "what": "shutdown, cleanup failures, listener generations and interrupted replies without sockets"}
   ]
 }
