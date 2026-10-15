@@ -718,3 +718,47 @@ forward, wings flare). `voxel_creatures.EXTRA` is the registry other catalogues 
 Chemistry hook: an element's dragons roost on matching realms/kinds (fire~volcano, ice~frost, crystal~crystal,
 ocean~mire, earth/forest~meadow/mesa, gold only on LEGENDARY-grade islands); in the ledger a dragon is a `raid`
 event source and a mount once tamed (egg type `Prop_Egg_Dragon_*` hatches the fairy form).
+
+### 14.12 Owls (`tools/blender/voxel_owls.py`, 504 rigged)
+`owl_<species>_<plumage>_<nn>` → `Creature_Owl<Species><Plumage><nn>`. 14 species (barn heart-face, snowy, great
+horned + eagle + long-eared + screech with ear tufts, barred, elf, long-legged burrowing, short-eared, spectacled,
+great grey, tawny, pygmy) × 6 plumages (plain, speckled, barred, streaked, masked, dusted) × 6 variants (size ±15 %,
+eye colour, wings folded/spread, tail, brow, spectacles). Upright oval body, wide head with a facial disc, forward
+eyes, hooked beak, talons. Family "owl" clips: Idle = head swivel (±1.2 rad, the owl look), Walk/Run = flight,
+Action = silent swoop (wings wide, dip, talons forward). Night side of the ecology: hunts burrowers/insects, roosts
+in Ancient trees, scouts in Living Island Defense. `export_owls.py OUT [species…]`, `owls.manifest.json`.
+Note: species names contain underscores — split names with `spec(name)`, never `name.split("_")[1]`.
+
+### 14.13 High-end islands (`tools/blender/hd_island.py`) — the next-level path
+Learned from Codex's polish/cast tools (bevelled primitives, named Principled materials, smooth-shaded spheres,
+decimated LODs) and Ultra's Lumenwake craft (authored height function with smoothstep blends, superellipse
+plateau, clipped water, strata shell), rebuilt original. Recipe, in order (`build(seed, kind, out, offset)`):
+1. `author(seed)` — lake ellipse, 3 hills, 4 level terraces (landmark / town / farm / dock), a stream from the lake
+   to a waterfall lip on the rim, a spring from the big hill, a path, a source islet 40 m up off the rim.
+2. `make_height()` — base deck 10 m + Perlin, gaussian hills, littoral shelf, terraces blended flat, lake basin and
+   stream channel carved to 4.4 m, rim crest. One function = terrain, water, paths and scatter all agree.
+3. `ground()` — 2 m grid mesh inside the superellipse (R = 110 m), smooth-shaded, POINT colour attribute coloured
+   by sunlight / shore sand / slope rock through a VertexColor→Principled material; crest ring hides the grid edge.
+4. `strata()` — six jagged layers (depth scales with plateau radius) to a tip, slots: cliff / light band / ore vein
+   (first ore from the chemistry), emissive Heartstone crystal cluster at the tip.
+5. Water = terrain triangles clipped at 7.25 m (exact shores), translucent material; waterfall sheet + mist;
+   sky river = bevelled bezier tube (2.2 m) + foam core + droplets + apex cloud, from the islet pond into the lake.
+6. `tree_bases()` + `scatter()` — kind-shaped tree meshes (round/pine/palm/dead/mangrove/crystal) instanced (shared
+   mesh data) avoiding water, paths, terraces and steep slopes; rocks, flower drifts, grass tufts likewise.
+7. `buildings()` — landmark shrine with emissive beacon, town (4 houses with glowing windows, chimneys, well,
+   forge, anvil, PowerUnit frame/rotor/crystal), farm (barn, silo, chemistry crops in rows, pen), dock (planks,
+   posts, sky-sea boat with mast + sail, lantern), path lamps, stream bridge.
+8. `collision()` — `UCX_<terrain>_NN` box per terrace + a safety floor under the lake bed, hidden in renders.
+9. `lods()` — terrain LOD1 (35 %) / LOD2 (12 %) parked below; json lists them. Export GLB + FBX + json (chemistry,
+   sockets ±(R+10), terraces, islet, triangles, material list). Measured: seed 7 meadow = 612 objects, ~91 k tris, 17 s.
+Kinds: meadow, volcano, frost, mesa, mire, crystal (palette + tree shape per kind).
+
+### 14.14 Octets — eight connected islands (`tools/blender/hd_cluster.py`, 10 themes)
+Hub island + seven on a 256 m ring (Ultra's pitch); 14 sagging rope-plank bridges (hub↔each, ring neighbours) with
+gate posts and lanterns at the sockets; seven ring sky-streams carry water lake-to-lake through the air around the
+octet. Themes by seed 1–10: Spring, Summer, Harvest, Winter, Easter, Halloween, Christmas, Valentine, Midsummer,
+NewYear — kinds per plot, accent colour and a signature prop per island (blossoms, sunflowers, pumpkins/jack-o'-
+lanterns, snowmen, eggs, gifts + tree + star, hearts, aurora ribbon, fireworks). Output per octet in
+`engines/unreal/art/claude-octets/`: 8 plot GLB/FBX/json (`Octet_<Theme>_<seed>_Plot<i>_<Kind>`), `_Bridges`, `_Canal`
+(sky streams + theme props), `.layout.json` (centres, sockets, bridge and stream graph), hero + top renders.
+Plot seeds = seed × 100 + i, so any plot rebuilds alone with `hd_island.py OUT <seed*100+i> <kind>`.

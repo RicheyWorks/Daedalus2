@@ -1351,3 +1351,12 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
 - Roof lesson: a sloped voxel roof built as "edge rows per z" leaves see-through slats when the run per rise
   is > 1 voxel; fill `run` rows per step (voxel_sims starter house, 3-per-1 pitch) and add a ceiling slab.
 - Single-item contact sheets: centre with `(cols - 1) * pitch / 2`, not `cols * pitch / 2`.
+
+## 2026-10-14 18:45 — owls / HD islands
+- Names with underscores inside a field (`owl_great_horned_plain_01`) break `split("_")[i]`; parse with the module's
+  `spec()` — the owl sheets crashed after a clean 504 export because of this (exit 1, assets fine).
+- Collision boxes render unless `hide_render = True`; a deck-level UCX slab poked through the lake basin and turned
+  the lake magenta in Workbench. Keep the safety floor below the deepest carved basin.
+- Keel depth must scale with the plateau radius, or a small islet hangs a full-size keel and reads as a pillar.
+- Contact-sheet cameras look from −Y; creatures face +Y — rotate subjects 155–180° in the sheet only.
+- HD island timing (PC, Blender 4.3.1 headless): 17 s build+export per island, ~91 k tris, 612 objects (instances).

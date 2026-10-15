@@ -107,3 +107,11 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
   (element, form, variant) are the evolved-form axes. No XP curve chosen here (owner tuning stays null).
 - **Sky seed Farm** (Ultra, `tools/economy/island_farm.py`, `docs/mechanics/ISLAND-FARMING.md`): sits over the pinned
   Colony Ledger with managed FOOD suppression; no overlap with ledger core — ACKed on the hub.
+
+## Owls, HD islands, octets — 18:45
+- `voxel_owls.py`: 504 owls (14 species × 6 plumages × 6 variants); night hunters/scouts. Row WZ28. §14.12.
+- `hd_island.py`: high-end smooth islands (authored terrain, strata, clipped water, sky river, instanced foliage,
+  lit buildings, UCX, LODs). Row WZ29. §14.13. Same chemistry/terrace roles as the voxel islands, so the ledger,
+  farm (Ultra's island_farm) and defense plans read either.
+- `hd_cluster.py`: 10 eight-island octets (Super Island standard, 14 bridges, 7 ring sky-streams, seasonal themes).
+  Row WZ30. §14.14.

@@ -78,3 +78,12 @@
   tracker rows WZ24–WZ26.
 - 16:45: `voxel_dragons.py` + `export_dragons.py` → `engines/unreal/art/claude-dragons/` (504 GLB/FBX/json,
   `dragons.manifest.json`, `sheet-<element>.png`, `views/` for two quality-bar samples). Row WZ27, §14.11.
+
+### Addendum 18:45 — owls, next-level Blender, octets (model switched to Opus 5.5 mid-session)
+- Owls: `voxel_owls.py` + `export_owls.py` → `claude-owls/` (504 GLB/FBX/json in 379 s, `owls.manifest.json`, 14 sheets).
+- Codex check-in: read their craft (bevelled primitives + named Principled materials + LOD decimation in
+  portal_hero_polish/lods; Ultra's Lumenwake authored-height terrain). Our original take: `hd_island.py` (§14.13).
+- Octets: `hd_cluster.py` → `claude-octets/` (10 × 8 islands; chain log `projects\_to_delete\claude-octets.log`).
+- Hub: replied to 31231 (dragon contract facts: Col vertex colour, no UVs/materials by design, 8-bone rig, clips),
+  ACK 31090 (docs), ACK 31095 (PhotoPDF manifest deferred). Codex audit 31068 gaps (props vertex-colour only, no
+  UCX on props, H39 water binding) → the HD path carries named materials + translucent water slot + UCX.
