@@ -887,3 +887,13 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged â†
   well, a chest and nine villagers. `data/rpg/town-tiles.json`: walkable + interact (door, shop:<kind>, inn, rest,
   search, save, chest, stairs, talk_across) per tile, plus the demo grid and NPC placements so a level can be laid
   out from data. `claude-battle-kit/<realm>/town/`.
+
+### 14.22 Building interiors (`rpg_interiors.py`)
+- Five rooms per realm: Item Shop, Weapon Shop, Armour Shop (Portal) / Magic Shop (Prismheart), Inn, Castle Hall.
+  Extra tiles: void, pillar, throne, fireplace and wall torch (2 frames), banner, weapon rack, armour stand, stool,
+  bookcase, exit mat; a crowned ruler sprite (8-frame strip like the villagers).
+- `data/rpg/interiors.json` per room: tile grid, NPCs (keeper behind the counter), spawn one tile inside the exit mat,
+  the town door that opens it (read from the demo town's door + sign pairs; the castle opens from the overworld
+  Castle landmark), and the stock: original items (Herb Tonic, Clear Draught, Feather of Waking â€¦), weapons and
+  armour with prices and attack/defence; the magic shop sells the realm's tier-1/2 spells from `spells.json`.
+- `claude-battle-kit/<realm>/interiors/Interior_<Room>.png` + `sheet-interiors.png`.
