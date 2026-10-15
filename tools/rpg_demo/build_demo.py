@@ -208,7 +208,12 @@ def main(argv):
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
         "zones": {z: enc[z] for z in zones if z in enc},
         "foes": {k: {kk: types[k][kk] for kk in ("name", "level", "hp", "attack", "defence", "speed", "exp", "gold", "element", "behaviour")} for k in foes},
-        "spells": demo_spells, "party": party, "title": J("title.json")["realms"][REALM],
+        "spells": demo_spells,
+        # One gear table from every shop in interiors.json (both realms share gear names: Prism has no armour shop,
+        # so its party's Ring Mail / Kite Shield / Iron Helm take their numbers from the Portal armour shop).
+        "gear": {g["name"]: g for realm in ("portal", REALM) for shop in inter["interiors"][realm].values() for g in shop.get("stock", [])
+                 if g.get("attack") is not None or g.get("defence") is not None or g.get("effect")},
+        "menus": json.load(open(os.path.join(REPO, "data", "rpg", "menus.json"), encoding="utf-8"))["layouts"][REALM], "party": party, "title": J("title.json")["realms"][REALM],
         "audio": {"cues": cue_files, "events": ev_files,
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,

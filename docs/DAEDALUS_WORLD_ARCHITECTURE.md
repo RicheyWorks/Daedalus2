@@ -985,3 +985,26 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - **Bugs the quest work found:**
   - NEW GAME never reset the dungeons, because the floor grids were edited in place.
   - An opened chest said nothing when checked again: the code tested `"Chest"` twice instead of `"ChestOpen"`.
+
+### 14.29 The Prismheart demo: field menu and gear
+
+- **Field menu:** Start (Menu on a pad, Enter on a keyboard) in the field opens ITEM / MAGIC / EQUIP / STATUS / ORDER / SAVE / OPTIONS, laid out
+  from `menus.json` (shipped as `data.json` `menus`). The gold window also shows SHARDS. OPTIONS opens the shared
+  Settings tabs.
+- **Gear table:** `build_demo.py` merges every shop's stock in `interiors.json` (both realms) into `data.json` `gear`.
+  Before this, only weapons had numbers, so armor bought in shops added no defence. Now it does (Corin's DEF 23 → 28 with
+  the Kite Shield).
+- **EQUIP:** offers only what that hero can use. Weapons follow each class's weapon kinds; helm and shield need a
+  heavy-armor class. Swapping returns the old piece to the bag and previews the ATK/DEF change before confirming.
+- **SAVE** works anywhere outside a dungeon. Inside one it says "A WARDEN'S PRESENCE SCATTERS THE INK. SAVE OUTSIDE."
+  The inn still saves too.
+- **Tests:** `menu_test.py` (16 checks): armor counts; Steel Saber raises ATK 54 → 68 and returns the Copper Blade;
+  the Silver Lance is never offered to a hero who can't hold it; removing the Kite Shield drops DEF; Mend heals in the
+  field, Ward refuses there; STATUS, ORDER swap, SAVE in town and refused in a dungeon, OPTIONS opens Settings.
+- **What counting armor did to the quest test:** the bot lost the Light Warden on seeds 7 and 11. Its party went in at
+  the same level with the same bag as before. Less damage taken shifted the seeded rolls, and the Runecaster fell with
+  no one to bring her back. The fight had been won on luck. The bot now plays the way a careful player would: it
+  revives with a Feather of Waking (the Runecaster first) and spends boss gold before each boss (better blades first,
+  then Feathers and Tonics). The quest now has 26 checks and passes on seeds 7, 11 and 23, and the Devourer's
+  scaling is unchanged. Running three seeds at once once flaked the early chest check, so the suites run one after
+  another.

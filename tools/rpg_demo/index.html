@@ -320,8 +320,7 @@ const START_LEVEL = 15;                                   /* the demo hands you 
 const GEAR = {};
 let bag = {}, gold = 0;
 function buildParty() {
-  for (const k of ["Item", "Weapon", "Armor"]) for (const s of (D.interiors[k] || {}).stock || []) GEAR[s.name] = s;
-  for (const s of (D.interiors.Weapon || {}).stock || []) GEAR[s.name] = s;
+  Object.assign(GEAR, D.gear);                              /* every shop's gear (data.json gear) */
   const P = D.party.members.filter(m => m.joins === "start").map(m => {
     const L = START_LEVEL, st = {};
     for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
@@ -335,7 +334,7 @@ function buildParty() {
 }
 let party = [];
 const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
-const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
+const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);   /* armour counts now that the gear table has it */
 const spellOf = n => D.spells.find(s => s.name === n);
 const alive = l => l.filter(x => x.hp > 0);
 
@@ -492,7 +491,7 @@ function buy(it) {
   }
   gold -= it.price; sfx("BUY");
   if (it.attack) {
-    const kind = { "Copper Blade": "sword", "Oak Staff": "staff", "Hunter Bow": "bow", "Iron Axe": "axe", "Steel Saber": "sword", "Silver Lance": "lance" }[it.name];
+    const kind = WEAPON_KIND[it.name];
     const who = party.find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
     if (who) { who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "NO ONE NEEDS IT. INTO THE BAG."; }
@@ -586,7 +585,7 @@ function fieldTick(dt) {
     if (P.moving <= 0) { P.moving = 0; P.fx = P.x * T; P.fy = P.y * T; P.step++; stepDone(); }
     return;
   }
-  if (hit("start")) { sfx("OPEN"); menu = { idx: 0, sub: null }; mode = "menu"; return; }
+  if (hit("start")) { openMenu(); return; }
   if (hit("a")) return interact();
   for (const d of ["up", "down", "left", "right"]) {
     if (!held[d]) continue;
@@ -618,23 +617,121 @@ function drawField() {
 
 /* ---------- field menu ---------- */
 let menu = null;
+/* ---------- field menu: menus.json's Menu / Status / Equip / Save layouts ----------
+   ITEM, MAGIC (field healing), EQUIP (anything the bag holds that fits: chest weapons and armour included), STATUS,
+   ORDER (swap two members), SAVE (outside dungeons) and OPTIONS (the shared Settings tabs). B steps back. */
+const MENU_CMDS = ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "SAVE", "OPTIONS"];
+const WEAPON_KIND = { "Copper Blade": "sword", "Oak Staff": "staff", "Hunter Bow": "bow", "Iron Axe": "axe", "Steel Saber": "sword", "Silver Lance": "lance" };
+const SLOTS = ["weapon", "armor", "helm", "shield"];
+const slotOf = name => { const g = GEAR[name] || {}; return g.attack != null ? "weapon" : /Shield/.test(name) ? "shield" : /Helm/.test(name) ? "helm" : g.defence != null ? "armor" : null; };
+function canEquip(m, name) {
+  const slot = slotOf(name); if (!slot) return false;
+  if (slot === "weapon") { const k = WEAPON_KIND[name]; return m.kinds.includes(k) || (k === "sword" && m.kinds.includes("dagger")); }
+  return slot === "armor" || m.armor === "heavy";            /* helms and shields need heavy armour training */
+}
+const MENU_WIN = n => { const w = ((D.menus.screens.Menu || {}).windows || []).find(x => x.name === n); return w ? [w.x, w.y, w.w, w.h] : null; };
+function openMenu() { sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
+function closeMenu() { sfx("TICK"); mode = "field"; menu = null; }
+function menuMove(k, n) { if (hit("up")) { menu[k] = (menu[k] + n - 1) % n; sfx("TICK"); } if (hit("down")) { menu[k] = (menu[k] + 1) % n; sfx("TICK"); } }
+function menuWho() {
+  if (hit("left")) { menu.who = (menu.who + party.length - 1) % party.length; menu.ii = 0; sfx("TICK"); }
+  if (hit("right")) { menu.who = (menu.who + 1) % party.length; menu.ii = 0; sfx("TICK"); }
+}
+const fieldItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
 function menuTick() {
-  if (menu.sub === "item") {
-    const items = Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+  const sub = menu.sub;
+  if (!sub) {
+    menuMove("idx", MENU_CMDS.length);
+    if (hit("b") || hit("start")) return closeMenu();
+    if (!hit("a")) return;
+    const c = MENU_CMDS[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
+    if (c === "ITEM") { if (!fieldItems().length) { menu.msg = "THE BAG HOLDS NOTHING TO USE."; return; } menu.sub = "item"; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; }
+    else if (c === "MAGIC") { menu.sub = "magic-who"; menu.who = Math.max(0, party.findIndex(m => m.spells.length)); }
+    else if (c === "EQUIP") { menu.sub = "equip"; }
+    else if (c === "STATUS") { menu.sub = "status"; }
+    else if (c === "ORDER") { menu.sub = "order"; menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; }
+    else if (c === "SAVE") {
+      if (map.kind === "dungeon") { sfx("LOCKED"); menu.msg = "A WARDEN'S PRESENCE SCATTERS THE INK. SAVE OUTSIDE."; return; }
+      menu.msg = saveGame() ? "YOUR JOURNEY IS WRITTEN DOWN." : "THE JOURNEY COULD NOT BE WRITTEN."; if (menu.msg[0] === "Y") toast("Journey saved", saveSummary());
+    }
+    else if (c === "OPTIONS") { closeMenu(); openSettings(); }
+    return;
+  }
+  if (sub === "item") {
+    const items = fieldItems();
     if (!items.length) { menu.sub = null; return; }
-    menu.ii = clamp(menu.ii || 0, 0, items.length - 1);
-    if (hit("up")) { menu.ii = (menu.ii + items.length - 1) % items.length; sfx("TICK"); }
-    if (hit("down")) { menu.ii = (menu.ii + 1) % items.length; sfx("TICK"); }
-    if (hit("left") || hit("right")) { menu.who = ((menu.who || 0) + (pressed.left ? -1 : 1) + party.length) % party.length; sfx("TICK"); }
-    if (hit("a")) { const r = useItem(items[menu.ii], party[menu.who || 0]); menu.msg = r; }
+    menu.ii = clamp(menu.ii, 0, items.length - 1);
+    menuMove("ii", items.length); menuWho();
+    if (hit("a")) menu.msg = useItem(items[menu.ii], party[menu.who]);
+    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
+    return;
+  }
+  if (sub === "magic-who") {
+    menuWho();
+    if (hit("a")) { if (!fieldSpells(party[menu.who]).length) { sfx("LOCKED"); menu.msg = party[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
+    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
+    return;
+  }
+  if (sub === "magic") {
+    const caster = party[menu.who], list = fieldSpells(caster);
+    menuMove("ii", list.length);
+    if (hit("a")) {
+      const sp = list[menu.ii];
+      if (sp.target !== "ally" || !/heal/.test((sp.status || "") + (sp.effect || "")) && sp.power <= 0) { sfx("LOCKED"); menu.msg = sp.name.toUpperCase() + " IS FOR BATTLE."; return; }
+      if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
+      sfx("PICK"); menu.sub = "magic-target"; menu.spell = sp; menu.target = 0; menu.msg = "WHO?";
+    }
+    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; sfx("TICK"); }
+    return;
+  }
+  if (sub === "magic-target") {
+    menuMove("target", party.length);
+    if (hit("a")) {
+      const caster = party[menu.who], m = party[menu.target], sp = menu.spell;
+      if (m.hp <= 0) { sfx("LOCKED"); menu.msg = "TOO LATE FOR THAT SPELL."; return; }
+      if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
+      const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3);
+      caster.mp -= sp.mp; m.hp = Math.min(m.max, m.hp + amt); sfx("SPELL"); sfx("HEAL");
+      menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + amt + " HP.";
+    }
+    if (hit("b")) { menu.sub = "magic"; menu.msg = ""; sfx("TICK"); }
+    return;
+  }
+  if (sub === "equip") {
+    menuWho(); menuMove("ii", SLOTS.length);
+    if (hit("a")) { sfx("PICK"); menu.sub = "equip-pick"; menu.slot = SLOTS[menu.ii]; menu.ci = 0; }
     if (hit("b")) { menu.sub = null; sfx("TICK"); }
     return;
   }
-  if (hit("up")) { menu.idx = (menu.idx + 1) % 2; sfx("TICK"); }
-  if (hit("down")) { menu.idx = (menu.idx + 1) % 2; sfx("TICK"); }
-  if (hit("a")) { sfx("PICK"); if (menu.idx === 0) { menu.sub = "item"; menu.ii = 0; menu.who = 0; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; } else { mode = "field"; menu = null; } }
-  if (hit("b") || hit("start")) { sfx("TICK"); mode = "field"; menu = null; }
+  if (sub === "equip-pick") {
+    const m = party[menu.who], cands = equipCandidates(m, menu.slot);
+    menuMove("ci", cands.length);
+    if (hit("a")) {
+      const pick = cands[menu.ci], old = m.equip[menu.slot];
+      if (pick === null) { if (old) { bag[old] = (bag[old] || 0) + 1; m.equip[menu.slot] = null; sfx("EQUIP"); } }
+      else { if (old) bag[old] = (bag[old] || 0) + 1; bag[pick]--; if (!bag[pick]) delete bag[pick]; m.equip[menu.slot] = pick; sfx("EQUIP"); }
+      menu.sub = "equip"; menu.msg = m.name.toUpperCase() + (pick ? " EQUIPS THE " + pick.toUpperCase() + "." : " TAKES IT OFF.");
+    }
+    if (hit("b")) { menu.sub = "equip"; sfx("TICK"); }
+    return;
+  }
+  if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "order") {
+    menuMove("ii", party.length);
+    if (hit("a")) {
+      if (menu.pick < 0) { menu.pick = menu.ii; sfx("PICK"); menu.msg = "AND SWAP WITH?"; }
+      else { const a = menu.pick, b = menu.ii; [party[a], party[b]] = [party[b], party[a]]; menu.pick = -1; sfx("EQUIP"); menu.msg = "ORDER CHANGED."; }
+    }
+    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } sfx("TICK"); }
+  }
 }
+function equipCandidates(m, slot) {
+  const c = Object.keys(bag).filter(k => bag[k] > 0 && slotOf(k) === slot && canEquip(m, k));
+  return m.equip[slot] ? c.concat([null]) : c;                /* null = take it off */
+}
+const atkWith = (m, w) => m.st.str * 2 + ((GEAR[w] || {}).attack || 0);
+const defWith = (m, eq) => SLOTS.slice(1).reduce((a, k) => a + ((GEAR[eq[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
 function useItem(name, m) {
   const e = (GEAR[name] || {}).effect || "";
   if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); }
@@ -643,26 +740,74 @@ function useItem(name, m) {
   else return "NOTHING HAPPENS HERE.";
   bag[name]--; sfx("ITEM"); sfx("HEAL"); return name.toUpperCase() + " ON " + m.name + ".";
 }
-function drawMenu() {
-  drawField();
-  win(0, 0, 248, H); win(248, 0, 72, 60); win(248, H - 44, 72, 44);
+function drawPartyRows(mark) {
   party.forEach((m, i) => {
     const y = 8 + i * 52;
     spr("sprites", m.sprite, 6, y, 0, null, null, 0.3);
     text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(m.job, 46, y + 12, "#a0a8c0");
     text("HP", 46, y + 24); text(m.hp + "/" + m.max, 238 - tw(m.hp + "/" + m.max), y + 24); gauge(64, y + 34, 80, m.hp / m.max, "#58d058");
     if (m.mmax) { text("MP", 152, y + 36); text(m.mp, 238 - tw(m.mp), y + 36); }
-    if (menu.sub === "item" && (menu.who || 0) === i) text(">", 0, y + 2, "#fff070");
+    if (mark === i) cursor(0, y + 2);
   });
-  ["ITEM", "CLOSE"].forEach((c, i) => text(c, 268, 12 + i * 16)); if (!menu.sub) cursor(256, 12 + menu.idx * 16);
-  text("G", 256, H - 34); text(gold, W - 10 - tw(gold), H - 34); text("STEPS", 256, H - 20); text(state.steps, W - 10 - tw(state.steps), H - 20);
-  if (menu.sub === "item") {
-    const items = Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+}
+function drawMenu() {
+  drawField();
+  const pw = MENU_WIN("party") || [0, 0, 248, H], cw = MENU_WIN("commands") || [248, 0, 72, 160], gw = MENU_WIN("gold") || [248, 160, 72, 64];
+  const sub = menu.sub;
+  if (sub === "status") return drawStatus();
+  if (sub === "equip" || sub === "equip-pick") return drawEquip();
+  win(...pw); win(...cw); win(...gw);
+  const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
+  drawPartyRows(mark);
+  if (sub === "order" && menu.pick >= 0) text("*", 238, 8 + menu.pick * 52 + 2, "#fff070");
+  MENU_CMDS.forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
+  if (!sub) cursor(cw[0] + 6, cw[1] + 10 + menu.idx * 16);
+  text("G", gw[0] + 8, gw[1] + 14); text(gold, gw[0] + gw[2] - 10 - tw(gold), gw[1] + 14);
+  text("SHARDS", gw[0] + 8, gw[1] + 30); text(shardCount(), gw[0] + gw[2] - 10 - tw(shardCount()), gw[1] + 30);
+  if (sub === "item") {
+    const items = fieldItems();
     win(20, 60, 220, 112);
     items.forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
     cursor(28, 72 + menu.ii * 13);
-    win(20, 172, 220, 26); text(menu.msg || "", 28, 181);
   }
+  if (sub === "magic" || sub === "magic-target") {
+    const caster = party[menu.who], list = fieldSpells(caster);
+    win(20, 60, 220, 112);
+    list.forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
+    if (sub === "magic") cursor(28, 72 + menu.ii * 13);
+  }
+  if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
+}
+function drawStatus() {
+  const m = party[menu.who];
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 56); win(0, 56, 160, H - 56); win(160, 56, W - 160, H - 56);
+  const r = D.rects.sprites[m.sprite]; if (r) spr("sprites", m.sprite, 10, 6, 0, null, null, 44 / r[3]);
+  text(m.name, 56, 10); text(m.job, 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
+  text("HP " + m.hp + "/" + m.max, 200, 10); if (m.mmax) text("MP " + m.mp + "/" + m.mmax, 200, 22);
+  const rows = [["STR", m.st.str], ["AGI", m.st.agi], ["VIT", m.st.vit], ["INT", m.st.int], ["SPR", m.st.spr], ["ATK", atkOf(m)], ["DEF", defOf(m)]];
+  rows.forEach(([k, v], i) => { text(k, 12, 68 + i * 20); text(v, 140 - tw(v), 68 + i * 20); });
+  SLOTS.forEach((s, i) => { text(s.toUpperCase(), 172, 68 + i * 34, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 22), 172, 80 + i * 34); });
+  text("< " + (menu.who + 1) + "/" + party.length + " >", W - 70, H - 16, "#fff070");
+}
+function drawEquip() {
+  const m = party[menu.who];
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 36); win(0, 36, 170, 92); win(170, 36, W - 170, 92); win(0, 128, W, H - 128);
+  text(m.name + "  " + m.job, 12, 14); text("< " + (menu.who + 1) + "/" + party.length + " >", W - 70, 14, "#fff070");
+  SLOTS.forEach((s, i) => { text(s.toUpperCase(), 22, 46 + i * 20, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 14), 76, 46 + i * 20); });
+  if (menu.sub === "equip") cursor(10, 46 + menu.ii * 20);
+  const slot = menu.sub === "equip-pick" ? menu.slot : SLOTS[menu.ii];
+  const cands = equipCandidates(m, slot);
+  const pick = menu.sub === "equip-pick" ? cands[menu.ci] : undefined;
+  const after = Object.assign({}, m.equip); if (pick !== undefined) after[slot] = pick;
+  const a0 = atkOf(m), d0 = defOf(m), a1 = atkWith(m, after.weapon), d1 = defWith(m, after);
+  text("ATK", 182, 50); text(a0, 236 - tw(a0), 50); if (pick !== undefined) text("> " + a1, 248, 50, a1 > a0 ? "#78f8a0" : a1 < a0 ? "#f87878" : "#ffffff");
+  text("DEF", 182, 70); text(d0, 236 - tw(d0), 70); if (pick !== undefined) text("> " + d1, 248, 70, d1 > d0 ? "#78f8a0" : d1 < d0 ? "#f87878" : "#ffffff");
+  if (!cands.length) text("NOTHING IN THE BAG FITS THIS SLOT.", 14, 140, "#a0a8c0");
+  cands.forEach((c, i) => { const g0 = GEAR[c] || {}; text(c === null ? "(TAKE IT OFF)" : c, 26, 140 + i * 14); if (c) text(g0.attack != null ? "ATK " + g0.attack : "DEF " + g0.defence, W - 70, 140 + i * 14, "#a0a8c0"); });
+  if (menu.sub === "equip-pick" && cands.length) cursor(14, 140 + menu.ci * 14);
+  if (menu.msg) text(menu.msg.slice(0, 50), 14, H - 14, "#fff070");
 }
 
 /* ---------- battle ---------- */
@@ -1138,6 +1283,10 @@ window.PRISM_DEMO = {
   press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), name: () => nameEntry && nameEntry.name, pads: () => PAD ? PAD.devices() : [], bundle: () => PAD && PAD.bundleInfo(), toast: () => toastEl.classList.contains("on") ? toastEl.textContent : "", padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
   audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   beat: name => { state.beaten.add(name); },
+  menu: () => menu && { idx: menu.idx, sub: menu.sub, who: menu.who, ii: menu.ii, ci: menu.ci, msg: menu.msg, cmds: MENU_CMDS },
+  equip: () => party.map(m => Object.assign({ name: m.name, atk: atkOf(m), def: defOf(m) }, m.equip)),
+  give: (item, n) => { bag[item] = (bag[item] || 0) + (n || 1); },
+  hurt: (i, n) => { party[i].hp = Math.max(1, party[i].hp - n); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
 };
