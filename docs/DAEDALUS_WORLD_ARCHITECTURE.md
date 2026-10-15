@@ -1096,3 +1096,19 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - **Found on the way:** `recruit_test` drew its half-EXP field fight from the zone's random formations. When the foe
   turns changed, the seeded rolls changed with them: a bigger formation came up and the party levelled mid-check. That
   fight now uses a fixed formation (one Gelfin).
+
+### 14.33 The Prismheart demo: every item works
+
+- **Item kinds:** each item's effect line in `interiors.json` maps to one kind: revive, cure, heal, mp, camp or escape
+  (`ITEM_KINDS`). `item_test` fails if a new item arrives with a line no kind handles.
+- **Where items are offered:** the field ITEM list leaves out the Smoke Pouch, and the battle list leaves out the Camp
+  Tent. The Camp Tent rests the whole party, reserve included, but only on the world map. Elsewhere it says "PITCH THE
+  TENT OUT ON THE OPEN ROAD." The Smoke Pouch escapes a field battle and does nothing against a Warden.
+- **Found: item lines didn't match what the items did.** The shops said "heal 30 HP", but a Herb Tonic heals 120. The
+  demo scales item effects (×4 HP, ×3 MP) because the party starts at level 15.
+  - `itemLine()` now states the real number.
+  - The shop and the field ITEM window show it, and `item_test` checks the heal equals the stated number.
+- **Found: menu cursor reset.** Changing the hero with LEFT/RIGHT in ITEM sent the item cursor back to the top, so
+  picking an item and then a person used a Herb Tonic instead. ITEM and EQUIP now keep their cursor.
+- **Tests:** `item_test.py` (15 checks). New hooks: `itemKinds()`, `lists()`, `itemLine(name)` and `spend(i, n)`.
+  `bot.battle_items()` mirrors the battle list.

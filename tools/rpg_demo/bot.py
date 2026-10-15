@@ -79,7 +79,7 @@ class Bot:
                     self.press("down", 40); continue
                 self.press("a", 50); continue
             if b["sub"] == "item":
-                opts = [k for k, n in s["bag"].items() if n > 0 and (self.D.get("gear", {}).get(k) or {}).get("effect")]
+                opts = self.battle_items(s["bag"])
                 want = opts.index(plan[1]) if plan and plan[1] in opts else 0
                 if b["oi"] != want:
                     self.press("down", 40); continue
@@ -89,6 +89,11 @@ class Bot:
                     self.press("down", 40); continue
                 self.press("a", 50); continue
         return last
+
+    def battle_items(self, bag):
+        """The battle ITEM list, in bag order: usable items, less the Camp Tent (it only pitches on the world map)."""
+        eff = lambda k: (self.D.get("gear", {}).get(k) or {}).get("effect") or ""
+        return [k for k, n in bag.items() if n > 0 and eff(k) and "rest the party" not in eff(k)]
 
     def round(self, plans, default=("DEFEND", None, None), limit=600):
         """Play exactly one battle round by the menus. plans maps a hero's name to (CMD, what, target): CMD is
@@ -120,7 +125,7 @@ class Bot:
                 if b["sub"] == "magic":
                     opts = [n for n in me[6] if n in self.spells]
                 else:
-                    opts = [k for k, n in s["bag"].items() if n > 0 and (self.D.get("gear", {}).get(k) or {}).get("effect")]
+                    opts = self.battle_items(s["bag"])
                 want = opts.index(what) if what in opts else 0
                 if b["oi"] != want:
                     self.press("down", 40); continue

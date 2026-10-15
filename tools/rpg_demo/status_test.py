@@ -120,7 +120,7 @@ with sync_playwright() as p:
     mn = lambda: ev("PRISM_DEMO.menu()")
     while mn()["idx"] != 0: bot.press("up", 60)
     bot.press("a", 150)                                          # ITEM
-    items = [k for k, n in st()["bag"].items() if n > 0 and (D["gear"].get(k) or {}).get("effect")]
+    items = ev("PRISM_DEMO.lists()")["field"]
     for _ in range(items.index("Antidote Leaf")): bot.press("down", 60)
     bot.press("a", 200)                                          # on Corin (who = 0)
     check("an Antidote Leaf from the field menu cures Corin", "poison" not in roster()["Corin"]["status"], (roster()["Corin"], mn()["msg"]))

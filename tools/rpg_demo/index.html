@@ -547,7 +547,7 @@ function drawShop() {
     if (shop.top + 8 < shop.stock.length) g.fillRect(112 - i, 170 - i, 1 + 2 * i, 1);
   }
   win(0, 176, W, 48); text(shop.msg, 12, 190);
-  const it = shop.stock[shop.idx], d = it.effect || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  const it = shop.stock[shop.idx], d = (it.effect && GEAR[it.name] ? itemLine(it.name) : it.effect) || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
   text(d, 12, 204, "#a0a8c0");
 }
 
@@ -653,11 +653,24 @@ const MENU_WIN = n => { const w = ((D.menus.screens.Menu || {}).windows || []).f
 function openMenu() { sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
 function closeMenu() { sfx("TICK"); mode = "field"; menu = null; }
 function menuMove(k, n) { if (hit("up")) { menu[k] = (menu[k] + n - 1) % n; sfx("TICK"); } if (hit("down")) { menu[k] = (menu[k] + 1) % n; sfx("TICK"); } }
-function menuWho() {
-  if (hit("left")) { menu.who = (menu.who + roster().length - 1) % roster().length; menu.ii = 0; sfx("TICK"); }
-  if (hit("right")) { menu.who = (menu.who + 1) % roster().length; menu.ii = 0; sfx("TICK"); }
+function menuWho(keep) {                                   /* keep: the item / slot cursor stays put while you change who */
+  if (hit("left")) { menu.who = (menu.who + roster().length - 1) % roster().length; if (!keep) menu.ii = 0; sfx("TICK"); }
+  if (hit("right")) { menu.who = (menu.who + 1) % roster().length; if (!keep) menu.ii = 0; sfx("TICK"); }
 }
-const fieldItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+/* Every item's effect line (interiors.json) maps to one kind; the field and battle lists offer what can work there:
+   a Smoke Pouch only in battle, a Camp Tent only on the field (and it only pitches on the world map). */
+const ITEM_KINDS = [["revive", /revive/], ["cure", /cure (\w+)/], ["heal", /heal (\d+)/], ["mp", /restore (\d+) MP/], ["camp", /rest the party/], ["escape", /escape/]];
+const itemKind = name => { const e = (GEAR[name] || {}).effect || ""; const k = ITEM_KINDS.find(([, re]) => re.test(e)); return k ? k[0] : null; };
+const HEAL_X = 4, MP_X = 3;                                   /* the demo starts at level 15, so the shop's numbers are scaled */
+function itemLine(name) {                                     /* what the item really does, in the numbers it really uses */
+  const e = (GEAR[name] || {}).effect || "", k = itemKind(name);
+  if (k === "heal") return "HEALS " + +e.match(/heal (\d+)/)[1] * HEAL_X + " HP";
+  if (k === "mp") return "RESTORES " + +e.match(/restore (\d+) MP/)[1] * MP_X + " MP";
+  return e.toUpperCase();
+}
+const bagItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+const fieldItems = () => bagItems().filter(k => itemKind(k) !== "escape");
+const battleItems = () => bagItems().filter(k => itemKind(k) !== "camp");
 const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
 function menuTick() {
   const sub = menu.sub;
@@ -682,7 +695,7 @@ function menuTick() {
     const items = fieldItems();
     if (!items.length) { menu.sub = null; return; }
     menu.ii = clamp(menu.ii, 0, items.length - 1);
-    menuMove("ii", items.length); menuWho();
+    menuMove("ii", items.length); menuWho(true);
     if (hit("a")) menu.msg = useItem(items[menu.ii], roster()[menu.who]);
     if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
@@ -719,7 +732,7 @@ function menuTick() {
     return;
   }
   if (sub === "equip") {
-    menuWho(); menuMove("ii", SLOTS.length);
+    menuWho(true); menuMove("ii", SLOTS.length);
     if (hit("a")) { sfx("PICK"); menu.sub = "equip-pick"; menu.slot = SLOTS[menu.ii]; menu.ci = 0; }
     if (hit("b")) { menu.sub = null; sfx("TICK"); }
     return;
@@ -758,10 +771,15 @@ const atkWith = (m, w) => m.st.str * 2 + ((GEAR[w] || {}).attack || 0);
 const defWith = (m, eq) => SLOTS.slice(1).reduce((a, k) => a + ((GEAR[eq[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
 function useItem(name, m) {
   const e = (GEAR[name] || {}).effect || "";
+  if (itemKind(name) === "camp") {
+    if (B || !map || map.kind !== "world") return "PITCH THE TENT OUT ON THE OPEN ROAD.";
+    roster().forEach(x => { x.hp = x.max; x.mp = x.mmax; }); clearAll(roster());
+    bag[name]--; sfx("INN"); fade = 1; fadeCb = () => {}; return "THE PARTY CAMPS UNDER THE ISLES. ALL RESTED.";
+  }
   if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); m.status = {}; }
   else if (/cure (\w+)/.test(e)) { const k = e.match(/cure (\w+)/)[1]; if (m.hp <= 0) return "TOO LATE FOR THAT."; if (!cure(m, k)) return m.name + " IS NOT " + (STATUS[k] ? STATUS[k].word : k.toUpperCase()) + "."; }
-  else if (/heal (\d+)/.test(e)) { if (m.hp <= 0) return "TOO LATE FOR A TONIC."; m.hp = Math.min(m.max, m.hp + +e.match(/heal (\d+)/)[1] * 4); }
-  else if (/restore (\d+) MP/.test(e)) { m.mp = Math.min(m.mmax, m.mp + +e.match(/(\d+)/)[1] * 3); }
+  else if (/heal (\d+)/.test(e)) { if (m.hp <= 0) return "TOO LATE FOR A TONIC."; m.hp = Math.min(m.max, m.hp + +e.match(/heal (\d+)/)[1] * HEAL_X); }
+  else if (/restore (\d+) MP/.test(e)) { m.mp = Math.min(m.mmax, m.mp + +e.match(/(\d+)/)[1] * MP_X); }
   else return "NOTHING HAPPENS HERE.";
   bag[name]--; sfx("ITEM"); sfx("HEAL"); return name.toUpperCase() + " ON " + m.name + ".";
 }
@@ -807,6 +825,7 @@ function drawMenu() {
     win(20, 60, 220, 112);
     items.forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
     cursor(28, 72 + menu.ii * 13);
+    const sel = items[menu.ii]; if (sel) text(itemLine(sel).slice(0, 34), 28, 160, "#a0a8c0");
   }
   if (sub === "magic" || sub === "magic-target") {
     const caster = roster()[menu.who], list = fieldSpells(caster);
@@ -959,7 +978,7 @@ function battleTick(dt) {
       return;
     }
     if (B.sub === "magic" || B.sub === "item") {
-      const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
+      const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : battleItems();
       if (!opts.length) { B.msg = B.sub === "magic" ? m.name + " KNOWS NO SPELLS." : "THE BAG IS EMPTY."; B.sub = null; sfx("LOCKED"); return; }
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
@@ -1229,7 +1248,7 @@ function drawBattle() {
     text(party[B.who].name, 86, 152, "#fff070");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item")) {
     const m = party[B.who];
-    const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect).map(k => [k, ":" + bag[k], true]);
+    const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
     const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
     opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], 144 - tw(o[1]), 152 + i * 13); });
     cursor(10, 152 + ((B.oi || 0) - from) * 13);
@@ -1467,6 +1486,10 @@ window.PRISM_DEMO = {
   roster: () => roster().map((m, i) => ({ name: m.name, job: m.job, lv: m.lv, exp: m.exp, next: m.next, hp: m.hp, max: m.max, mp: m.mp, front: i < ACTIVE, status: tags(m) })),
   foeStatus: () => B ? B.foes.map(f => ({ name: f.name, hp: f.hp, max: f.max, status: tags(f), beh: f.beh, power: Math.round(foePower(f)), atk: f.atk, def: f.def, stolen: f.stolen || 0, rose: !!f.rose })) : [],
   inflict: (i, k) => { const m = roster()[i]; stat(m)[k] = k === "poison" ? true : ROUNDS[k] || 3; },
+  spend: (i, n) => { const m = roster()[i]; m.mp = Math.max(0, m.mp - n); },
+  itemKinds: () => Object.fromEntries(Object.keys(GEAR).filter(k => GEAR[k].effect).map(k => [k, itemKind(k)])),
+  lists: () => ({ field: fieldItems(), battle: battleItems() }),
+  itemLine: name => itemLine(name),
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
