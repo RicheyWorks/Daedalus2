@@ -828,3 +828,19 @@ colours, black outline, ×4; Prismheart 112 px, ≤ 24 colours, shaded outline, 
 Read the render with `colorspace = Non-Color` or the colours come out linearised (muddy). `sprites.json` links
 every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged → `claude-bestiary/<realm>/`.
 412 sprites render in ~45 s.
+
+### 14.18 Battle-screen kit (`rpg_battle_kit.py`, `pixel_art.py`, `rpg_bosses.py`)
+- **Backdrops** for every encounter zone of both realms (15 Portal, 20 Prismheart): a small voxel diorama (50 cm
+  terrain strip shaped per zone — hills, dunes, peaks, shallows, sea, lava; voxel_flora trees/clouds; interior walls
+  with pillars, torches, banners, crystals for caves/castles/towers/crypts/sewers; graves, ruins, airship rail),
+  rendered on a transparent film, the zone's sky gradient composited behind in numpy (a shaded sky plane renders
+  grey), pixelated: Portal 256×144 / ≤ 16 colours, Prismheart 320×180 / ≤ 40 colours, ×4.
+  `claude-battle-kit/<realm>/Backdrop_<Realm>_<zone>.png`.
+- **Party sprites**: 8 Prismheart jobs (3/4 facing left, toward the enemies) + Portal hero, sage, scout.
+- **Bosses**: 9 original Prismheart bosses (Pyre, Tide, Gale, Stone, Light and Shade Wardens, Clockwork Colossus,
+  Hollow King, Prism Devourer) — rigged in `claude-bestiary/prism-bosses/`, sprites in `claude-battle-sprites/prism/`,
+  stats/phases/weakness/drops in `data/rpg/prism-bosses.json`.
+- **Icons**: 24 Prismheart item icons at 32 px (`claude-battle-kit/prism/icons/`).
+- Colour lesson: Blender 4.x renders through **AgX** by default — set `view_transform = "Standard"` for pixel art;
+  `pixel_art.GAMMA` (env `PIXEL_GAMMA`, default 0.85) is the only extra correction (1.6+ crushes the image).
+- Whole kit renders in ~40 s; all 412 enemy sprites in ~40 s.

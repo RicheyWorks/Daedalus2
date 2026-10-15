@@ -1379,3 +1379,11 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   item and clear module caches (material dict) — no slowdown over hundreds of items; resume by skipping existing json.
 - Shared PC memory: 4 workers + Unreal editor + another team's Cycles render took free RAM to 0.4 GB. Workers now
   check `GlobalMemoryStatusEx` and pause below 1.5 GB.
+
+## 2026-10-14 20:25 — pixel art from Blender
+- Blender 4.x default view transform is AgX: Workbench renders come out desaturated and lifted. Use `Standard`.
+- Read renders back with `colorspace_settings.name = "Non-Color"` or pixels arrive linearised (muddy).
+- Pixelate inside Blender with numpy (no PIL there): alpha-weighted block average → colour limit (top-N of a coarse
+  lattice) → 1 px outline → nearest ×4. One shared module: `tools/blender/pixel_art.py`.
+- A shaded "sky" plane renders grey under studio light — render transparent and composite the gradient in numpy.
+- A gamma sweep on one sheet (1.0 vs 1.6) settled the setting in one render each; do that before batch re-renders.
