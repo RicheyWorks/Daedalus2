@@ -36,7 +36,7 @@ def _limit(rgb, mask, n, lattice=7):
     return top[np.argmin(d, axis=-1)]
 
 
-GAMMA = 3.5   # voxel colours are stored c**(1/2.2) for Unreal and the Standard view encodes again (net c**(1/4.84)); 3.5 undoes most of it and keeps some lift in the shading
+GAMMA = float(os.environ.get("PIXEL_GAMMA", "1.0"))   # extra correction applied before quantising (Standard view transform already fixes most of AgX's wash-out)
 
 
 def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.12, gamma=GAMMA):
