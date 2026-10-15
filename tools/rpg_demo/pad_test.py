@@ -174,7 +174,7 @@ with sync_playwright() as p:
 
     # rumble reaches the pad
     ev("__pad.plug(1,'Xbox Wireless Controller (STANDARD GAMEPAD Vendor: 045e Product: 0b13)','standard',17,4)"); W(150)
-    ev("PRISM_DEMO.battle('plains')"); W(1800)
+    ev("PRISM_DEMO.battle(null, true)"); W(1800)          # the Warden always lands hits, so rumble must fire
     for _ in range(80):
         if ev("(window.__rumble||[]).length"): break
         tap(1, 0, 60)
