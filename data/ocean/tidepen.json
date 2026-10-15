@@ -4,19 +4,84 @@
  "about": "The Tide-Pen: a coastal care pen on the Ocean's tide-pool shelf, reached by sky-sea boat from World-Zero's rim dock (data/ocean/links.json). Rule: a creature may be penned (enclosed or captured) only after a verified settled_care fact exists for that actor and that creature. Leaving a creature wild is always allowed. Fantasy rule, not biology. Nothing here runs yet: capture/enclose and a host fact store do not exist (audit 2026-10-15).",
  "landing": "ocean-tidepen-landing",
  "residents": [
-  {"species": "sea_turtle", "source": "tools/blender/voxel_creatures.py SEA", "food": ["Seagrass"], "habitat": ["Seagrass"]},
-  {"species": "seahorse", "source": "tools/blender/voxel_creatures.py SEA", "food": ["SeaLettuce"], "habitat": ["Seagrass", "SeaLettuce"]},
-  {"species": "crab", "source": "tools/blender/voxel_creatures.py SEA", "food": ["Bladderwrack"], "habitat": ["Bladderwrack", "RedDulse"]},
-  {"species": "starfish", "source": "tools/blender/voxel_creatures.py SEA", "food": ["RedDulse"], "habitat": ["RedDulse", "SeaLettuce"]}
+  {
+   "species": "sea_turtle",
+   "source": "tools/blender/voxel_creatures.py SEA",
+   "food": [
+    "Seagrass"
+   ],
+   "habitat": [
+    "Seagrass"
+   ]
+  },
+  {
+   "species": "seahorse",
+   "source": "tools/blender/voxel_creatures.py SEA",
+   "food": [
+    "SeaLettuce"
+   ],
+   "habitat": [
+    "Seagrass",
+    "SeaLettuce"
+   ]
+  },
+  {
+   "species": "crab",
+   "source": "tools/blender/voxel_creatures.py SEA",
+   "food": [
+    "Bladderwrack"
+   ],
+   "habitat": [
+    "Bladderwrack",
+    "RedDulse"
+   ]
+  },
+  {
+   "species": "starfish",
+   "source": "tools/blender/voxel_creatures.py SEA",
+   "food": [
+    "RedDulse"
+   ],
+   "habitat": [
+    "RedDulse",
+    "SeaLettuce"
+   ]
+  }
  ],
  "plants_source": "tools/blender/voxel_aquatic.py SPECIES (family sea)",
  "settled_care": {
   "fact": "settled_care",
-  "per": "actor + creature_id",
-  "requires": {"feedings_min": 3, "distinct_days_min": 2, "right_food": true, "harm_events_max": 0, "habitat_planted_min": 1},
+  "per": "subject: actor + individual creature + species + realm + season (bound by the trusted caller)",
+  "requires": {
+   "feedings_min": 3,
+   "distinct_days_min": 2,
+   "right_food": true,
+   "harm_events_max": 0,
+   "habitat_planted_min": 1
+  },
   "meaning": "fed the creature its own food on at least two different days, never harmed it, and planted at least one of its habitat plants in the pen",
   "issuer": "trusted host only (pattern: daedalus-core simulation/LivingWorld receipts: idempotent request id, server-written)",
-  "record": ["actor", "fact", "creature_id", "species", "tick", "revision", "request_id"]
+  "record": [
+   "actor",
+   "fact",
+   "creature_id",
+   "species",
+   "tick",
+   "revision",
+   "request_id"
+  ],
+  "requires_status": "owner-proposed thresholds (Claude), not an approved authority or time model (PootScoot 32519/32524)",
+  "caller_contract": [
+   "bind the subject; events naming another actor or individual are refused (a sheep's care is never this creature's)",
+   "pass only host-accepted events with receipt, revision, freshness and revocation already checked",
+   "persistent replay protection is the caller's; TidePenGate deduplicates identical replays within one call only",
+   "blank request ids and one request id with two different payloads are refused, never guessed"
+  ],
+  "alternative_route": {
+   "what": "a trusted scoped imported settled_care fact, or equivalently verified destination-local onboarding",
+   "source": "CREATURE-HANDLING-AND-FARM-BINDING.md + data/gameplay/adventures/herder-tide-pen-r1.json (proposed; Codex task folder C:/Users/730ri/Documents/Codex/2026-10-14/task/creature-handling-source, sha 90df1c49...)",
+   "status": "proposed; not modelled by TidePenGate; all live host ids null"
+  }
  },
  "actions": {
   "enclose": "REFUSE unless settled_care holds for this actor and creature",
@@ -25,7 +90,15 @@
   "feed": "ALLOW; the host records a care event",
   "harm": "the host records a harm event; settled_care can no longer be earned for that creature"
  },
- "decision_code": "daedalus-core com.daedalus.world.ocean.TidePenGate (pure; no store, no authority)",
- "quest_socket": {"id": "q_tidepen_settle", "status": "design (not in data/quests/quests.json)",
-  "steps": ["sail wz-rim-tidepen -> ocean-tidepen-landing", "plant a habitat plant", "feed a resident its food on two days", "choose: pen it (now allowed) or leave it wild"]}
+ "decision_code": "daedalus-core com.daedalus.world.ocean.TidePenGate (pure; no store, no authority; verified-caller contract in its javadoc)",
+ "quest_socket": {
+  "id": "q_tidepen_settle",
+  "status": "design (not in data/quests/quests.json)",
+  "steps": [
+   "sail wz-rim-tidepen -> ocean-tidepen-landing",
+   "plant a habitat plant",
+   "feed a resident its food on two days",
+   "choose: pen it (now allowed) or leave it wild"
+  ]
+ }
 }
