@@ -235,4 +235,20 @@ names differ. Unreal removes type prefixes when deriving reflected names. Name
 new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
+### Display individual gameplay windows without inventing shared state
+
+2026-10-15, pootscoot-desktop-games; minigame_polish_candidate source review.
+Glowtrail9f55ac5f reports earliest living frightened expiry. Observed source:
+captured pursuers freeze independent clocks and revival retains them; the old
+sidebar only showed fixed300-step duration. Derive one const frame/status snapshot,
+preserve simulation/RNG/input/save bodies, and state steps rather than wall time.
+Source comparison is not visual/gameplay acceptance. Twelve static invariants
+passed; new compiler/runtime checks were deferred.
+Harness proposal, benefit ESTIMATED: mixed-clock and repeated-presentation
+state/RNG checks in the existing maze harness, next owned validation slot.
+Proposed owner desktop-games; no new harness/runtime job started. Reviewer has
+no firsthand Blender/native/queue/crash evidence this slice. Pin existing web
+DaedalusPad39fa/SHA772c17ee and consuming edges; a separate Portal seven-button
+translator is not interchangeable with arcade's four actions/analog semantics.
+
 

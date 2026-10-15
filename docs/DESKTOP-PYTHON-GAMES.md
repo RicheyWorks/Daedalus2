@@ -1,5 +1,39 @@
 # Desktop Python games into Daedalus
 
+## Current source iteration: Glowtrail power window, 2026-10-15
+
+Code `9f55ac5f48be0263fe62fd322d026da753247e1c` adds nineteen lines inside
+`PacmanGame` in `Public/DesktopGames/DaedalusDesktopMazeCore.h`. Before: the
+sidebar showed remaining power pellets and a fixed300-step duration. After:
+active play also reports the living frightened count and earliest live expiry,
+using one private const helper for frame/status. Captured pursuers freeze their
+individual clocks; revival can leave unequal timers. This is not a global safety
+countdown. Terminal states suppress it. Simulation/RNG/scores/saves/inputs stay
+intact. Twelve static equality invariants and independent source review passed;
+no compiler, game execution, tests or editor ran for this iteration. Prior test
+results do not validate this changed core. Lessons/deferred cases are in existing
+maze_notes, LESSONS-LEARNED and TEAM-HANDOFF-LOOP; manifestv9 has exact pins.
+This follows the existing Labyrinth chapter's readable-clue/timing principle;
+it adds no quest, reward, realm binding, character or asset.
+
+**R2 update:** later combined source `074c519b70225b36e890531843bc55eb0fd3a363`
+built80/80 actions, exit0 in246.85s. Targeted visible Pong/Contra/Mines and focused
+P/R/Enter/Escape passed, with observed cursor/pause restoration. Detailed operator
+receipts remain local/internal. R2 editor focus-loss/reacquisition, hardware, DPI and multiuser
+remain unaccepted. Earlier pending-R2 prose below is its historical source handoff.
+This iteration does not change accepted actor/Slate code or installed files.
+
+**Controller reuse:** user-confirmed Opus module polished by Ultra is existing web
+`daedalus-pad/1`, `daedalus-server/src/main/resources/static/controllers/daedalus-pad.js`
+at `39fa558191f9ba283249e2067575cdf58336abee`, SHA256
+`772C17EE4A519A70C1A79A16F5AE613AFBA629F2B6E4E926ADE72117DB9E1989`.
+It provides logical/positional held actions, consuming press/release edges, axes,
+labels and settings-driven layouts/deadzones. It is separate from branch-only
+Portal075f73c1 and its seven realm buttons. This read-only feedback needs no input
+adapter and keeps existing Input/Game/Driver/Slate interfaces. No new controller
+plumbing, web-to-Slate transport or native/hardware acceptance is claimed.
+Coordinator32135 pins the contract; static-resource CI stays with its existing owner.
+
 ## HUD foreground R2: retain the modal across editor focus, 2026-10-15
 
 The first foreground candidate compiled and linked successfully, but failed native

@@ -1,8 +1,8 @@
 {
-  "manifest_version": 8,
+  "manifest_version": 9,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
-  "status": "HUD_FOCUS_R2_SOURCE_READY_R1_NATIVE_REJECTED_NEW_NATIVE_PENDING",
+  "status": "GLOWTRAIL_POWER_WINDOW_SOURCE_READY_BUILD_AND_TESTS_DEFERRED",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_messages": [
@@ -23,13 +23,13 @@
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
+    "code_commit": "9f55ac5f48be0263fe62fd322d026da753247e1c",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
-        "git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
-        "sha256": "1881DC01C3F2CE1DA6C8FCD6E913F898764477B0DDAF0C493606CD8A14A90F34"
+        "git_blob": "2f480ab19be00afb984c4dba3507dd640c747832",
+        "sha256": "F40BECFF5D1ACDD4ADA87581927E49DD2DB9F96B262C50C45FEC09D2E1C314E9"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
@@ -92,7 +92,7 @@
       "Star pause/save/snapshot/restore/options/request timing and DGS1 payload blocks"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "4b911de6bf201092f7982778fd91ce88ebf84284",
+    "prior_checkpoint_commit": "ed82f6cd9b4aa7262ce68f8beaa1934a912c3727",
     "prior_runtime_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
     "preserved_checkpoints": [
       {
@@ -313,7 +313,9 @@
       "feedback": [
         "cyan halo and remaining grace steps",
         "remaining dot and power-pellet counts",
-        "fresh Action/Fire/Jump or host R/Restart terminal hint"
+        "fresh Action/Fire/Jump or host R/Restart terminal hint",
+        "living frightened pursuer count",
+        "earliest positive live frightened expiry in simulation steps"
       ],
       "original_rules_preserved": [
         "map and repaired source coordinates",
@@ -761,7 +763,7 @@
     "saved": false
   },
   "stages": {
-    "source": "R2 corrects overbroad foreign-focus auto-close in actor cpp only.32/32 extracted-method fake-interface checks and123/123 unchanged portable registry checks pass. R1 Unreal build succeeded but native acceptance failed/rolled back; R2 Unreal compile/load/visual acceptance pending.",
+    "source": "Glowtrail living frightened count and next live expiry implemented in PacmanGame only; source review and12static equality invariants pass. New compile/tests/native proof deferred; accepted R2 targeted proof remains separately pinned.",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -773,17 +775,15 @@
     "existing_bindings_source_traced": true,
     "connected_current_build": false,
     "first_polish_source_passes_written": 11,
-    "portable_compiled": true,
-    "portable_tested": true,
-    "compiled_scope": "Legacy compiled/tested booleans below remain false for complete Unreal host/module; portable result is explicitly separate"
+    "portable_compiled": false,
+    "portable_tested": false,
+    "compiled_scope": "Current Glowtrail revision uncompiled/untested; older portable and targeted R2 native results are historical component evidence."
   },
   "pending_operator_steps": [
-    "Keep the restored known-working installed binary active until a separately coordinated safe native slot; this packet does not request an immediate build or editor action.",
-    "Reconcile exact baseline hashes; choose cumulative3file patch for restored baseline OR incremental1file patch for retained exactR1 source, never both or a whole-plugin replacement.",
-    "Only codex-play-guard stages/rebuilds/loads the integrated module in its existing serial queue; retain Mines, other apps, source/DLL rollback and preserved scene/saves.",
-    "Read open state, actual focused widget/path and arcade/player geometry before and after main-window selection and capture, before keyboard. Keep failed closure/visibility evidence instead of assuming a cause.",
-    "Verify visible foreground coverage, keyboard, pause, source raw/controller methods, pending-save guards, other Hero/game UI handoff, close/reopen/Escape/EndPlay and cursor/input/pause restoration.",
-    "Resize/DPI/local-player and physical hardware proof remain separate and unverified until exercised."
+    "No immediate native/build/editor slot requested: ingestion remains priority and heavy runtime tests are deferred.",
+    "Review only MazeCore::PacmanGame diff ed82f6cd..9f55ac5f; preserve accepted R2 actor/Slate, Mines and Java arcade source.",
+    "At a later owned validation slot reuse existing maze harness for mixed living/dead clocks,300/2/1-to0,refresh,revival,terminal suppression and repeated frame/status state/RNG invariance.",
+    "Only the sole operator may later compile/load and inspect actual power-window labels, input/gameplay/save behavior; source-layout estimates are not visible acceptance."
   ],
   "backlog_order": [
     "dungeon source-pass1",
@@ -857,7 +857,8 @@
       "Previous full7-suite receipt is retained separately at its original source pin, not transferred to this copy-only revision",
       "Current Unreal actor/Slate/UHT/module/native load/physical-controller/readability acceptance unverified",
       "Rename does not resolve character/design/map/audio provenance or establish trademark clearance"
-    ]
+    ],
+    "applies_to_current_gameplay_revision": false
   },
   "previous_portable_validation": {
     "utc": "2026-10-15T00:41:26Z",
@@ -1194,12 +1195,9 @@
       "unreal_build_run": false
     },
     "operator_instructions": [
-      "Keep the restored known-working installed binary active until a separately coordinated safe native slot; this packet does not request an immediate build or editor action.",
-      "Reconcile exact baseline hashes; choose cumulative3file patch for restored baseline OR incremental1file patch for retained exactR1 source, never both or a whole-plugin replacement.",
-      "Only codex-play-guard stages/rebuilds/loads the integrated module in its existing serial queue; retain Mines, other apps, source/DLL rollback and preserved scene/saves.",
-      "Read open state, actual focused widget/path and arcade/player geometry before and after main-window selection and capture, before keyboard. Keep failed closure/visibility evidence instead of assuming a cause.",
-      "Verify visible foreground coverage, keyboard, pause, source raw/controller methods, pending-save guards, other Hero/game UI handoff, close/reopen/Escape/EndPlay and cursor/input/pause restoration.",
-      "Resize/DPI/local-player and physical hardware proof remain separate and unverified until exercised."
+      "R2 is already part of the accepted combined source; preserve it. Historical R2 patches are retained provenance, not instructions to reapply them to the current installed184 baseline.",
+      "Generalized focus-loss/reacquisition remains a separately deferred check, owned by sole native operator.",
+      "New Glowtrail source follows current pending_operator_steps; no new build/editor slot requested."
     ],
     "portable_regression": {
       "result": "desktop_registry123/123 PASS on R2; no rebuild needed",
@@ -1208,9 +1206,9 @@
       "command": "ctest --test-dir ../native-polish-validation-20261015 -C Debug --output-on-failure -R ^desktop_registry$ -j 1",
       "does_not_compile_or_validate_wrapper": true
     },
-    "current_patch_unreal_compiled": false,
-    "current_patch_installed_or_loaded": false,
-    "current_patch_visible_acceptance": false,
+    "current_patch_unreal_compiled": true,
+    "current_patch_installed_or_loaded": true,
+    "current_patch_visible_acceptance": true,
     "native_baseline_limit": "39pre-fix bounded native checks are not transferred to new wrapper; physical controller, all-level/game-over and multiple local users not proven",
     "rejected_revision": {
       "head": "4b911de6bf201092f7982778fd91ce88ebf84284",
@@ -1354,11 +1352,57 @@
         ]
       },
       "limits": [
-        "R2 Unreal module has not been compiled/linked/loaded or seen; R1 build proof is not transferred.",
+        "R2 combined module build and targeted visible HUD/keys subsequently passed; generalized focus lifecycle and new Glowtrail revision are not covered.",
         "Cached positive geometry means prior arrangement, not current visibility; zero layout may retain an invisible modal, so native pixels remain required.",
         "Separately hosted foreign popup windows may be outside viewport ancestry; known Hero-menu guards remain.",
         "ReleaseOverlay is unchanged; explicit close/EndPlay with external editor focus may still preserve the prior foreign-focus lease. Generalized cleanup is not established."
       ]
+    },
+    "accepted_component_scope": {
+      "source_code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
+      "combined_revision": "074c519b70225b36e890531843bc55eb0fd3a363",
+      "module_build": "PASS",
+      "targeted_visible_hud_and_keys": "PASS",
+      "limits": "Editor focus-loss/reacquisition, physical controllers, DPI/resize/multiuser and full gameplay remain separately unaccepted; does not validate new Glowtrail core.",
+      "detailed_operator_receipts": "Retained locally/internally; not republished."
+    }
+  },
+  "gameplay_iteration": {
+    "name": "Glowtrail live power-window feedback",
+    "owner": "pootscoot-desktop-games",
+    "code_commit": "9f55ac5f48be0263fe62fd322d026da753247e1c",
+    "baseline": "ed82f6cd9b4aa7262ce68f8beaa1934a912c3727",
+    "source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+    "before_sha256": "1881DC01C3F2CE1DA6C8FCD6E913F898764477B0DDAF0C493606CD8A14A90F34",
+    "after_sha256": "F40BECFF5D1ACDD4ADA87581927E49DD2DB9F96B262C50C45FEC09D2E1C314E9",
+    "before": "Remaining pellets and fixed300-step duration only.",
+    "after": "Active living frightened count and earliest positive live expiry in both Frame and Status; hidden at terminal/none.",
+    "source_only": true,
+    "independent_source_review": "PASS",
+    "static_invariants_passed": 12,
+    "static_proof_sha256": "40239A86690432AF41516E242D8FB527E0199AD0F192F9AE99CC25F578970753",
+    "static_meaning": "Other maze classes, simulation/ghost/reset/state and6input/actor/Slate interface files equal baseline; no behavior or layout test.",
+    "compiled": false,
+    "tests_run": false,
+    "native_installed": false,
+    "native_visible": false,
+    "lesson": "Captured pursuers freeze separate clocks; revival can preserve unequal clocks. Count only living frightened positive timers and show earliest expiry, not a global safety period.",
+    "story_relation": "Applies existing Labyrinth readable-clue/timing principle; no realm quest/reward/assets binding added.",
+    "harness_idea": "Reuse existing maze harness for mixed clocks and repeated presentation vs deterministic state/RNG progression; benefit ESTIMATED, owner desktop-games, deferred.",
+    "controller_reuse": {
+      "module": "daedalus-pad/1",
+      "path": "daedalus-server/src/main/resources/static/controllers/daedalus-pad.js",
+      "revision": "39fa558191f9ba283249e2067575cdf58336abee",
+      "polish_revision": "a73a118bec4814c60be621ece473c936e7927725",
+      "git_blob": "d196653dfe4b0985b64e62dcb9a2e00dfd1ff0c1",
+      "sha256": "772C17EE4A519A70C1A79A16F5AE613AFBA629F2B6E4E926ADE72117DB9E1989",
+      "provenance": "User confirms Opus built/Ultra polished; pinned Git history confirms revisions, not a separate Ultra-named commit.",
+      "api": "DaedalusPad.create({bundle,settings,onChange}); logical/positional held, consuming pressed/released, axes, label, heroHeld/heroPressed, move/look, layouts/deadzones.",
+      "current_binding": "Existing desktop Input/Game/Driver/Slate unchanged; read-only feedback needs no input adapter. Web JS is not a native Slate transport.",
+      "native_and_hardware_acceptance": false,
+      "portal_native_module_is_separate": true,
+      "coordination": "32117/32128/32129 requests;32135 verified contract; unexecuted Portal substitute withdrawn32144-32146.",
+      "ci_gap": "Static resource inventory remains with existing controller/settings owner; not repaired or cleared by this lane."
     }
   }
 }

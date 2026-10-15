@@ -228,3 +228,19 @@ action with cooldown-driven attack state; ghost alive/frightened/color states;
 Link health/invincibility flash and enemy alive/hit-flash/kind states. There is
 no skeleton, rig, animation file, art license grant, Blender acceptance, Unreal
 compile result, or live playtest approval supplied by this core port.
+
+## Glowtrail power-window iteration — 2026-10-15, pootscoot-desktop-games
+
+Source9f55ac5f adds one private const snapshot shared by Render/GetStatus: count
+living frightened pursuers with positive timers and report their minimum timer.
+Labels580,304/327 sit below grace280; terminal result320 is mutually exclusive.
+This is source-layout reasoning, not native text-fit/screenshot evidence.
+Captured pursuers freeze clocks; revival preserves them. A maximum/global timer
+could suggest safety while another pursuer wakes. Timer1 expires in the next ghost
+update before collision. The cue uses simulation steps, not wall-clock seconds.
+Step/Reset/ghost/RNG/score/input/save bodies stay intact. Twelve static invariants
+and source review pass; new compile/tests/native checks are deferred.
+
+Deferred cases: none active; mixed living/dead/unequal clocks;300/2/1→0; pickup
+refresh; all-captured revival; terminal suppression; repeated Render/GetStatus
+versus identical state/RNG progression. Reuse existing maze access/Driver/input.
