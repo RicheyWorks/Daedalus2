@@ -793,3 +793,8 @@ bmesh `join_parts` for tree templates, LODs resampled from the height function o
 `OUT/<thousands>/HDIsland_<Kind>_<seed>.{glb,fbx,json,thumb.png}`, `index-worker<I>.jsonl` (seed, kind, tris, grade,
 surplus, need, hooks, secs). Purges the scene after every island; resume-safe (skips existing json); memory guard
 pauses a worker while available RAM/commit < 1.5 GB (shared PC). ~1 island/s with 4 workers.
+**Outline variety (v3, seeds built after 19:50 on 2026-10-14):** `set_shape(seed)` picks a superellipse exponent
+(2.3 round … 6 squarish), stretch (0.8–1.25), rotation, and a 2–5-lobe wobble (0–10 %); rim radii ~90–160 m.
+Lake, hills and terraces are `fit()` inside the outline, the dock sits on the rim. Cluster plots (`prefix` given)
+keep the classic 220 m rounded square so Ultra's 256 m pitch still holds. The json `outline` field records it.
+Batch seeds 10000–~12060 were built before v3 (classic outline); everything after is varied.

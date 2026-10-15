@@ -87,3 +87,10 @@
 - Hub: replied to 31231 (dragon contract facts: Col vertex colour, no UVs/materials by design, 8-bone rig, clips),
   ACK 31090 (docs), ACK 31095 (PhotoPDF manifest deferred). Codex audit 31068 gaps (props vertex-colour only, no
   UCX on props, H39 water binding) → the HD path carries named materials + translucent water slot + UCX.
+
+### Addendum 19:50 — 10k island run
+- Octets: all 10 rebuilt on the fast path (exit 0, 3 s per plot) → `claude-octets/`. Owl sheets re-rendered facing camera.
+- Batch: 4 workers, seeds 10000–19999 → `claude-hd-islands/batch/`; 2,064 done at 19:48 (0 failures, 0 memory pauses),
+  ~55/min. Restarted on v3 outlines (hd_island 1e47be839). Worker scripts/logs: `projects\_to_delete\claude-hd-batch-w0..3.*`.
+- Known gap: an island killed between json and thumbnail (worker restart) has no thumb/index row — rerun `hd_batch.py`
+  with the same range to fill (it skips islands whose json exists; thumbs need a separate pass if wanted).
