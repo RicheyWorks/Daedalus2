@@ -8,9 +8,9 @@ near hills; Prismheart adds a crystal glow on the horizon), the realm emblem (Po
 faceted crystal heart), the logo in the 5x7 font scaled x3 with an outline (16-bit: banded gradient fill and a shine
 sweep across the frames), a NEW GAME / CONTINUE / OPTIONS menu with the cursor, and a blinking PRESS START.
 Name entry: the lead hero's sprite, the name field with a blinking caret, a letter grid (A-Z, 0-9, space, - .),
-and BACK / END.
+and BACK / END. title.json's menu_geometry says where the baked menu sits so a live menu draws on the same pixels.
 Outputs OUT_ROOT/claude-battle-kit/<realm>/title/Title.png (8-frame strip, x3) + Title_1x.png, Title_F0.png,
-NameEntry.png; data/rpg/title.json: logo, menu items, frame count / fps, the music cue (TITLE) and the name grid.
+TitleBg_1x.png (the same frames without menu, prompt or credit, for a live title menu), NameEntry.png; data/rpg/title.json: logo, menu items, frame count / fps, the music cue (TITLE) and the name grid.
 """
 import json
 import math
@@ -146,7 +146,8 @@ def logo(realm, text, f, scale=3):
     return out
 
 
-def title_frame(realm, f):
+def title_backdrop(realm, f):
+    """The title without its menu, prompt or credit: the layer a live title screen draws its own menu over."""
     W, H = SCREEN[realm]
     img = scene(realm, f)
     e = emblem(realm, f)
@@ -162,6 +163,19 @@ def title_frame(realm, f):
     tag = "A TALE OF THE SKY ISLES" if realm == "portal" else "THE SHATTERED CRYSTAL"
     t = PF.render(tag, P.hexc("#c8c8f0"), (0.05, 0.03, 0.1))
     UI.blit(img, t, W // 2 - t.shape[1] // 2, y + 4)
+    return img
+
+
+def menu_geometry(realm):
+    """Where the baked menu sits, so a live menu lands on exactly the same pixels."""
+    W, H = SCREEN[realm]
+    return {"window": [W // 2 - 52, H - 82, 104, 56], "item_x": W // 2 - 30, "item_y": H - 72, "item_step": 14,
+            "cursor_x": W // 2 - 44, "cursor_y": H - 73, "press_y": H - 20, "credit": "2026 RICHEYWORKS", "credit_xy": [W - 6, H - 9]}
+
+
+def title_frame(realm, f):
+    W, H = SCREEN[realm]
+    img = title_backdrop(realm, f)
     st = UI.STYLE[realm]
     win = UI.stretch_window(UI.window(st), 104, 56)
     UI.blit(img, win, W // 2 - 52, H - 82)
@@ -211,10 +225,13 @@ def build(out_root, data_root=None):
         P.save_png(P.upscale(strip, 3), os.path.join(od, "Title.png"))
         P.save_png(strip, os.path.join(od, "Title_1x.png"))
         P.save_png(P.upscale(frames[0], 3), os.path.join(od, "Title_F0.png"))
+        bg = np.concatenate([title_backdrop(realm, f) for f in range(FRAMES)], axis=1)
+        P.save_png(bg, os.path.join(od, "TitleBg_1x.png"))
         ne = name_entry(realm, RM.party_sprites(out_root, realm), party[realm])
         P.save_png(P.upscale(ne.img, 3), os.path.join(od, "NameEntry.png"))
         meta[realm] = {"logo": " ".join(x for x in LOGO[realm] if x), "frames": FRAMES, "fps": 6, "screen": SCREEN[realm],
-                       "menu": ["NEW GAME", "CONTINUE", "OPTIONS"], "music_cue": "TITLE",
+                       "menu": ["NEW GAME", "CONTINUE", "OPTIONS"], "music_cue": "TITLE", "menu_geometry": menu_geometry(realm),
+                       "backdrop": "engines/unreal/art/claude-battle-kit/%s/title/TitleBg_1x.png" % realm,
                        "strip": "engines/unreal/art/claude-battle-kit/%s/title/Title.png" % realm,
                        "name_entry": {"grid": NAME_GRID, "max_len": 6 if realm == "portal" else 9, "windows": ne.windows}}
     if data_root:

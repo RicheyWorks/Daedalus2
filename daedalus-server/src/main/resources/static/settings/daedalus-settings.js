@@ -27,8 +27,8 @@
     let schema = null, rows = [], byId = {};
     let values = {};
     try { values = JSON.parse(root.localStorage.getItem(opt.storageKey) || "{}") || {}; } catch (e) { values = {}; }
-    const subs = {};
-    const readyCbs = [];
+    const subs = {}, actions = {};
+    const readyCbs = [], pending = [];                   /* app-local rows waiting for the schema */
     const clamp = (r, v) => {
       v = Number(v); if (!isFinite(v)) v = r.default;
       if (r.kind === "slider") { v = Math.min(r.max, Math.max(r.min, v)); return Math.round(v / r.step) * r.step; }
@@ -41,12 +41,32 @@
       for (const f of subs["*"] || []) try { f(id, v); } catch (e) { if (root.console) console.error(e); }
     };
     function take(s) {
-      schema = s; rows = s.rows; byId = {};
+      schema = JSON.parse(JSON.stringify(s)); rows = schema.rows; byId = {};
       for (const r of rows) byId[r.id] = r;
+      pending.splice(0).forEach(addLocal);
       for (const r of rows) fire(r.id, api.get(r.id));
       readyCbs.splice(0).forEach(f => f(api));
     }
+    /* App-local rows: an app adds its own rows (actions, live info, its own toggles) into a tab and section of the shared
+       layout. They are marked local, kept out of export() (Unreal never sees them) and need no schema change. */
+    function addLocal(spec) {
+      const t = schema.tabs.find(x => x.id === spec.tab);
+      if (!t) return;
+      if (!t.sections.includes(spec.section)) { if (spec.first) t.sections.unshift(spec.section); else t.sections.push(spec.section); }
+      const made = spec.rows.map(r => Object.assign({ min: 0, max: 1, step: 1, unit: "", choices: [], default: 0, help: "" }, r,
+        { tab: spec.tab, section: spec.section, local: true, native: false, consumers: ["app"] }));
+      made.forEach(r => { byId[r.id] = r; });
+      const order = id => { const r = byId[id]; return t.sections.indexOf(r.section); };
+      const rest = rows.filter(r => !made.includes(r));
+      rows = rest.concat(made);
+      const tabOrder = schema.tabs.map(x => x.id);
+      rows.sort((a, b) => (tabOrder.indexOf(a.tab) - tabOrder.indexOf(b.tab)) || (a.tab === b.tab ? order(a.id) - order(b.id) : 0));
+      schema.rows = rows;
+      made.forEach(r => { if (r.kind !== "action" && r.kind !== "info") fire(r.id, api.get(r.id)); });
+    }
     const api = {
+      extend: spec => { if (schema) addLocal(spec); else pending.push(spec); return api; },
+      onAction: (id, f) => { actions[id] = f; return api; },
       ready: f => { if (schema) f(api); else readyCbs.push(f); },
       loaded: () => !!schema,
       schema: () => schema,
@@ -63,15 +83,22 @@
         values[id] = nv; save(); fire(id, nv); return true;
       },
       nudge: (id, dir) => {
-        const r = byId[id]; if (!r) return false;
+        const r = byId[id]; if (!r || r.kind === "action" || r.kind === "info") return false;
         const v = api.get(id);
         if (r.kind === "toggle") return api.set(id, v ? 0 : 1);
         if (r.kind === "choice") return api.set(id, (v + dir + r.choices.length) % r.choices.length);
         return api.set(id, v + dir * r.step);
       },
-      activate: id => { const r = byId[id]; return r && r.kind !== "slider" ? api.nudge(id, 1) : false; },
+      activate: id => {
+        const r = byId[id]; if (!r) return false;
+        if (r.kind === "action") { if (actions[id]) actions[id](); return true; }
+        if (r.kind === "info") return false;
+        return r.kind !== "slider" ? api.nudge(id, 1) : false;
+      },
       format: id => {
         const r = byId[id]; if (!r) return "";
+        if (r.kind === "info") return typeof r.value === "function" ? String(r.value()) : (r.value || "");
+        if (r.kind === "action") return r.button || "START";
         const v = api.get(id);
         if (r.kind === "toggle") return v ? "ON" : "OFF";
         if (r.kind === "choice") return r.choices[v] || "?";
@@ -79,9 +106,9 @@
         return (whole ? String(Math.round(v)) : v.toFixed(1)) + (r.unit || "");
       },
       fraction: id => { const r = byId[id]; return r && r.max > r.min ? (api.get(id) - r.min) / (r.max - r.min) : 0; },
-      resetTab: tab => { for (const r of rows) if (r.tab === tab) { delete values[r.id]; fire(r.id, r.default); } save(); },
+      resetTab: tab => { for (const r of rows) if (r.tab === tab && r.kind !== "action" && r.kind !== "info") { delete values[r.id]; fire(r.id, r.default); } save(); },
       on: (id, f) => { (subs[id] = subs[id] || []).push(f); if (schema && id !== "*") f(api.get(id), id); return () => { subs[id] = subs[id].filter(x => x !== f); }; },
-      export: () => { const o = {}; for (const r of rows) o[r.id] = api.get(r.id); return o; },
+      export: () => { const o = {}; for (const r of rows) if (!r.local) o[r.id] = api.get(r.id); return o; },
       import: obj => { let n = 0; for (const k in obj || {}) if (byId[k] && api.set(k, obj[k])) n++; return n; },
       layout: () => schema && schema.layouts,
     };
@@ -143,6 +170,20 @@
 .dset .track .fill{position:absolute;left:0;top:15px;height:4px;background:#5bd1f5;border-radius:2px}
 .dset .track .knob{position:absolute;top:8px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#eef3f8;box-shadow:0 0 0 3px rgba(91,209,245,.35)}
 .dset .num{min-width:4.2em;text-align:right;font-size:14px}
+.dset .act{display:inline-flex;align-items:center;gap:9px;min-height:38px;padding:0 16px 0 6px;border-radius:19px;border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.06);font-size:13px;letter-spacing:.12em;cursor:pointer}
+.dset .act:hover,.dset .row.on .act{background:rgba(91,209,245,.18);border-color:#5bd1f5}
+.dset .act kbd,.dset .bindbox kbd{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;border-radius:13px;border:1.5px solid rgba(255,255,255,.55);font:700 11px/1 inherit;padding:0 7px}
+.dset .info{max-width:min(380px,40vw);text-align:right;font-size:13px;color:#a9b8c7;line-height:1.35;white-space:pre-line}
+.dset .bindbox{position:absolute;inset:0;z-index:5;display:none;align-items:center;justify-content:center;background:rgba(2,6,12,.88)}
+.dset .bindbox.on{display:flex}
+.dset .bindbox>div{width:min(520px,92vw);padding:28px 30px;border:1px solid rgba(91,209,245,.5);background:rgba(8,20,36,.96);text-align:center}
+.dset .bindbox .k{font-size:11px;letter-spacing:.22em;color:#5bd1f5}
+.dset .bindbox .q{margin:14px 0 6px;font-size:26px;font-weight:300;letter-spacing:.06em;color:#fff}
+.dset .bindbox .who{font-size:13px;color:#8fa1b4}
+.dset .bindbox .steps{display:flex;gap:6px;justify-content:center;margin:18px 0 10px}
+.dset .bindbox .steps i{width:30px;height:4px;background:rgba(255,255,255,.2)}.dset .bindbox .steps i.done{background:#5bd1f5}.dset .bindbox .steps i.now{background:#fff}
+.dset .bindbox button{margin-top:12px;background:none;border:0;color:#d7e0e9;font-size:13px;cursor:pointer;min-height:40px}
 .dset .desc{border-left:1px solid rgba(255,255,255,.1);padding:18px 0 24px max(16px,2.2vw);color:#c6d1dc;font-size:15px;line-height:1.55;overflow-y:auto}
 .dset .desc .kicker{font-size:11px;letter-spacing:.22em;color:#5bd1f5;text-transform:uppercase}
 .dset .desc h3{margin:6px 0 10px;font-size:22px;font-weight:400;color:#fff}
@@ -163,6 +204,7 @@
 @media (prefers-reduced-motion:reduce){.dset .list.swap{animation:none}.dset .ink{transition:none!important}}
 @media (prefers-reduced-motion:no-preference){.dset .ink{transition:left .2s ease,width .2s ease}.dset .row{transition:background .12s}.dset .track .fill,.dset .track .knob{transition:none}}
 @media (max-width:760px){
+  .dset .info{max-width:none;text-align:left}
   .dset .top{padding-top:16px}.dset h2{font-size:20px}.dset .dev{display:none}
   .dset .body{grid-template-columns:1fr}.dset .desc{display:none}
   .dset .row{grid-template-columns:1fr;gap:2px;padding:8px 8px 8px 16px}.dset .ctl{justify-content:flex-end}
@@ -221,11 +263,15 @@
       '<div class="tabs" role="tablist" aria-label="Settings tabs"></div><span class="count"></span>' +
       '<button class="glyph" data-k="rb" aria-label="Next tab">RB</button><span class="ink"></span></div>' +
       '<div class="body"><div class="list" role="tabpanel"></div><div class="desc" aria-live="polite"></div></div>' +
-      '<div class="foot"></div>';
+      '<div class="foot"></div>' +
+      '<div class="bindbox" role="alertdialog" aria-live="assertive"><div><div class="k">TEACH BUTTONS</div><div class="q"></div><div class="who"></div>' +
+      '<div class="steps"></div><button data-k="cancelbind"><kbd>Esc</kbd> Cancel</button></div></div>';
     (opt.host || doc.body).appendChild(el);
     const $ = q => el.querySelector(q);
     const tabsEl = $(".tabs"), listEl = $(".list"), descEl = $(".desc"), footEl = $(".foot"), inkEl = $(".ink"), devEl = $(".dev"), countEl = $(".count");
-    let tab = 0, row = 0, open = false, raf = 0, lastMove = 0, note = "", builtTab = -1, rowEls = [], usingPad = false;
+    let openedAt = 0;                                       /* touch: the tap that opened the panel must not also click it */
+    el.addEventListener("click", e => { if (performance.now() - openedAt < 400) { e.stopPropagation(); e.preventDefault(); } }, true);
+    let tab = 0, row = 0, open = false, raf = 0, lastMove = 0, note = "", builtTab = -1, rowEls = [], usingPad = false, scrolledTo = "", lastInfo = 0;
     const tabs = () => S.tabs();
     const rowsHere = () => S.rows(tabs()[tab]);
     const device = () => (pad ? pad.devices()[0] : null);
@@ -268,6 +314,15 @@
           tr.addEventListener("pointerup", stop); tr.addEventListener("pointercancel", stop); tr.addEventListener("lostpointercapture", stop);
           ctl.append(minus, tr, plus, num);
           Object.assign(parts, { fill: tr.querySelector(".fill"), knob: tr.querySelector(".knob"), num, tr });
+        } else if (r.kind === "action") {
+          const go = doc.createElement("button"); go.className = "act"; go.setAttribute("aria-label", r.label);
+          go.onclick = e => { e.stopPropagation(); select(i); S.activate(r.id); refresh(); };
+          ctl.append(go);
+          Object.assign(parts, { act: go });
+        } else if (r.kind === "info") {
+          const info = doc.createElement("span"); info.className = "info";
+          ctl.append(info);
+          Object.assign(parts, { info });
         } else {
           const prev = doc.createElement("button"); prev.className = "arrow"; prev.textContent = "\u2039"; prev.setAttribute("aria-label", "Previous " + r.label);
           const next = doc.createElement("button"); next.className = "arrow"; next.textContent = "\u203a"; next.setAttribute("aria-label", "Next " + r.label);
@@ -314,8 +369,9 @@
         if (r.kind === "choice") return r.choices[r.default];
         return (r.step >= 1 ? Math.round(r.default) : r.default.toFixed(1)) + (r.unit || "");
       };
-      let html = '<div class="kicker">' + esc(r.section) + "</div><h3>" + esc(r.label) + "</h3><p>" + esc(r.help) + "</p>" +
-        '<div class="now"><span>CURRENT<b>' + esc(S.format(r.id)) + "</b></span><span>DEFAULT<b>" + esc(fmtDefault()) + "</b></span></div>";
+      const help = typeof r.help === "function" ? r.help() : r.help;
+      let html = '<div class="kicker">' + esc(r.section) + "</div><h3>" + esc(r.label) + "</h3><p>" + esc(help).replace(/\n/g, "<br>") + "</p>";
+      if (r.kind !== "action" && r.kind !== "info") html += '<div class="now"><span>CURRENT<b>' + esc(S.format(r.id)) + "</b></span><span>DEFAULT<b>" + esc(fmtDefault()) + "</b></span></div>";
       const L = S.layout(), d = device();
       const labels = d ? { south: pad.label("a", d.index), east: pad.label("b", d.index), west: pad.label("x", d.index), north: pad.label("y", d.index),
         l: pad.label("l", d.index), r: pad.label("r", d.index), zl: pad.label("zl", d.index), zr: pad.label("zr", d.index),
@@ -351,8 +407,10 @@
       rs.forEach((r, i) => {
         const p = rowEls[i]; if (!p) return;
         p.d.classList.toggle("on", i === row); p.d.setAttribute("aria-selected", i === row);
-        p.d.classList.toggle("changed", S.get(r.id) !== r.default);
-        if (p.fill) {
+        p.d.classList.toggle("changed", r.kind !== "action" && r.kind !== "info" && S.get(r.id) !== r.default);
+        if (p.act) { p.act.innerHTML = "<kbd>" + esc(glyph("confirm", "Enter")) + "</kbd>" + esc(r.button || "START"); }
+        else if (p.info) { p.info.textContent = S.format(r.id); }
+        else if (p.fill) {
           const f = S.fraction(r.id) * 100;
           p.fill.style.width = f + "%"; p.knob.style.left = f + "%"; p.num.textContent = S.format(r.id); p.tr.setAttribute("aria-valuenow", S.get(r.id));
         } else {
@@ -361,7 +419,7 @@
         }
       });
       const cur = rowEls[row];
-      if (cur && cur.d.scrollIntoView) cur.d.scrollIntoView({ block: "nearest" });
+      if (cur && cur.d.scrollIntoView && (scrolledTo !== tab + ":" + row)) { scrolledTo = tab + ":" + row; cur.d.scrollIntoView({ block: "nearest" }); }
       if (rs[row]) describe(rs[row]);
       const d = device();
       devEl.innerHTML = d ? "<b>\u25cf</b> " + esc(d.name) : "Keyboard &amp; mouse";
@@ -387,6 +445,7 @@
       KeyQ: "lb", KeyE: "rb", PageUp: "lb", PageDown: "rb", KeyR: "y", KeyC: "x" };
     function onKey(e) {
       if (!open) return;
+      if (pad && pad.binding()) { if (e.code === "Escape") { e.preventDefault(); e.stopPropagation(); pad.cancelBind(); } return; }
       const k = KEYS[e.code]; if (!k) return;
       e.preventDefault(); e.stopPropagation();
       if (usingPad) { usingPad = false; }
@@ -395,11 +454,27 @@
     root.addEventListener("keydown", onKey, true);
     root.addEventListener("resize", () => { if (open) refreshTabs(); });
     el.querySelectorAll(".glyph").forEach(b => b.addEventListener("click", () => act(b.dataset.k)));
+    const bindEl = $(".bindbox");
+    bindEl.querySelector("button").onclick = () => { if (pad) pad.cancelBind(); };
+    function bindView() {                                   /* the pad module's BIND, shown as Infinite-style prompt */
+      const step = pad && pad.binding();
+      bindEl.classList.toggle("on", !!step);
+      if (!step) return false;
+      const all = ["up", "down", "left", "right", "confirm", "cancel", "menu"], i = all.indexOf(step);
+      const NAMES = { up: "UP", down: "DOWN", left: "LEFT", right: "RIGHT", confirm: "CONFIRM", cancel: "BACK", menu: "MENU" };
+      bindEl.querySelector(".q").textContent = "Press the button for " + NAMES[step];
+      const d = device(); bindEl.querySelector(".who").textContent = d ? d.name : "Any controller";
+      bindEl.querySelector(".steps").innerHTML = all.map((x, k) => '<i class="' + (k < i ? "done" : k === i ? "now" : "") + '"></i>').join("");
+      return true;
+    }
     function loop(now) {                                     /* pad: edges for buttons, held + repeat for directions */
       if (!open) return;
       raf = root.requestAnimationFrame(loop);
       if (!pad) return;
       pad.poll();
+      if (bindView()) { bindEl.dataset.was = "1"; pad.clearEdges(); return; }
+      if (bindEl.dataset.was === "1") { bindEl.dataset.was = ""; pad.clearEdges(); refresh(); return; }
+      if (now - lastInfo > 500) { lastInfo = now; refresh(); }      /* live rows (connected pads) and pad glyphs stay current */
       const pressed = a => { const v = pad.pressed(a); if (v && !usingPad) { usingPad = true; footEl.dataset.key = ""; } return v; };
       for (const [a, k] of [["confirm", "a"], ["cancel", "b"], ["menu", "b"], ["y", "y"], ["x", "x"], ["l", "lb"], ["r", "rb"]]) if (pressed(a)) return act(k);
       for (const d of ["up", "down", "left", "right"]) if (pressed(d)) { lastMove = now + 260; return act(d); }
@@ -407,7 +482,7 @@
       if (dirs.length && now > lastMove) { lastMove = now + 90; act(dirs[0]); }
     }
     function openP() {
-      if (open) return; open = true; el.classList.add("open");
+      if (open) return; open = true; el.classList.add("open"); openedAt = performance.now();
       usingPad = !!(pad && pad.devices().length);
       footEl.dataset.key = ""; refresh();
       if (pad) { pad.poll(); pad.clearEdges(); }
@@ -424,5 +499,24 @@
       state: () => ({ tab: tabs()[tab], row: (rowsHere()[row] || {}).id }) };
   }
 
-  root.DaedalusSettings = { create, mountPanel, version: "daedalus-settings/1" };
+  /* The controller rows every app shares: what is plugged in, Teach Buttons (BIND) and Reset, on the Controller tab. */
+  function addPadRows(settings, pad) {
+    if (!pad) return;
+    const list = () => { const d = pad.devices(); return d.length ? d.map(x => x.name).join("\n") : "None. Plug one in or pair it, then press any button."; };
+    const how = () => {
+      const d = pad.devices();
+      if (!d.length) return "Any controller works when it is plugged in: Xbox, PlayStation, Switch, Razer, GameSir, 8BitDo, retro pads and adapters, arcade sticks and encoders. Press a button on it to wake it.";
+      const S = { standard: "the standard layout", bundle: "the community controller map", custom: "your taught buttons", guess: "a best guess (use Teach Buttons)" };
+      return d.map(x => x.name + ": " + x.family + " family, read through " + S[x.source] + "." + (x.oneButton ? " One button: tap to confirm, hold to go back, hold longer for the menu." : "") + (x.note ? " " + x.note : "")).join("\n");
+    };
+    settings.extend({ tab: "CONTROLLER", section: "Devices", first: true, rows: [
+      { id: "PadDevices", kind: "info", label: "Connected", value: list, help: how },
+      { id: "PadTeach", kind: "action", label: "Teach Buttons", button: "TEACH", help: "Press each button you want for up, down, left, right, confirm, back and menu. Use it for any controller that doesn't feel right; it remembers that controller." },
+      { id: "PadForget", kind: "action", label: "Forget Taught Buttons", button: "RESET", help: "Go back to the controller's own layout." },
+    ] });
+    settings.onAction("PadTeach", () => pad.startBind());
+    settings.onAction("PadForget", () => pad.resetBinds());
+  }
+
+  root.DaedalusSettings = { create, mountPanel, addPadRows, version: "daedalus-settings/1" };
 })(typeof window !== "undefined" ? window : globalThis);

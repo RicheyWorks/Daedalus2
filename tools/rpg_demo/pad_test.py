@@ -57,11 +57,13 @@ with sync_playwright() as p:
     def pad(i): return next(d for d in ev("PRISM_DEMO.pads()") if d["index"] == i)
     def walks(js_on, js_off, key, ms=650):
         before = st()[key]; ev(js_on); W(ms); ev(js_off); W(400); return before, st()[key]
-    check("bundle loaded", ev("DaedalusPad && true") and pg.inner_text("#padstatus").find("controllers known") > 0, pg.inner_text("#padstatus")[:90])
+    pg.wait_for_function("PRISM_DEMO.bundle()", timeout=8000)
+    check("bundle loaded", ev("PRISM_DEMO.bundle().devices") > 1000, ev("PRISM_DEMO.bundle()"))
 
     # Xbox Elite Series 2 (standard)
     ev("__pad.plug(0,'Xbox Elite Series 2 (STANDARD GAMEPAD Vendor: 045e Product: 0b00)','standard',17,4)"); W(200)
     d = pad(0); check("elite: name/family/source", d["family"] == "xbox" and d["source"] == "standard" and "Elite" in d["name"], d)
+    check("plug-in notice on screen", "connected" in ev("PRISM_DEMO.toast()"), ev("PRISM_DEMO.toast()"))
     for _ in range(25):
         s = st()
         if s["mode"] == "field" and not s["dialog"]: break
@@ -155,16 +157,15 @@ with sync_playwright() as p:
     # GameSir in DirectInput mode, taught with BIND
     clear()
     ev("__pad.plug(0,'GameSir-T4 Kaleid (Vendor: 3537 Product: 1010)','',14,6)"); W(150)
-    pg.click("#padbind"); W(150)
+    ev("PRISM_DEMO.settings().activate('PadTeach')"); W(150)          # Settings > Controller > Devices > Teach Buttons
     for kind, v in [("btn", 10), ("btn", 11), ("axis", (4, -1)), ("axis", (4, 1)), ("btn", 3), ("btn", 2), ("btn", 13)]:
         if kind == "btn": tap(0, v, 120)
         else: ev("__pad.axis(0,%d,%d)" % (v[0], v[1])); W(120); ev("__pad.axis(0,%d,0)" % v[0]); W(140)
-    status = pg.inner_text("#padstatus")
-    check("bind saved", "SAVED" in status and pad(0)["custom"], status[:140])
+    check("bind saved (toast: Buttons taught)", pad(0)["custom"] and "Buttons taught" in ev("PRISM_DEMO.toast()"), ev("PRISM_DEMO.toast()"))
     clear(); a, z = walks("__pad.axis(0,4,1)", "__pad.axis(0,4,0)", "x", 600); check("bound axis 5+ walks right", z > a, (a, z))
     clear(); tap(0, 13); W(250); check("bound Start (button 14) opens the menu", st()["mode"] == "menu")
     tap(0, 2); W(300); check("bound back (button 3) closes it", st()["mode"] == "field")
-    pg.click("#padreset"); W(100); check("reset clears the binding", not pad(0)["custom"])
+    ev("PRISM_DEMO.settings().activate('PadForget')"); W(100); check("Forget Taught Buttons clears the binding", not pad(0)["custom"])
     ev("__pad.unplug(0)"); W(100)
 
     # arcade keyboard encoder (MAME defaults): Ctrl = A, Digit1 = Start

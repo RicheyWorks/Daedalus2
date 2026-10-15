@@ -16,6 +16,26 @@
     "OPTIONS"
    ],
    "music_cue": "TITLE",
+   "menu_geometry": {
+    "window": [
+     76,
+     142,
+     104,
+     56
+    ],
+    "item_x": 98,
+    "item_y": 152,
+    "item_step": 14,
+    "cursor_x": 84,
+    "cursor_y": 151,
+    "press_y": 204,
+    "credit": "2026 RICHEYWORKS",
+    "credit_xy": [
+     250,
+     215
+    ]
+   },
+   "backdrop": "engines/unreal/art/claude-battle-kit/portal/title/TitleBg_1x.png",
    "strip": "engines/unreal/art/claude-battle-kit/portal/title/Title.png",
    "name_entry": {
     "grid": [
@@ -57,6 +77,26 @@
     "OPTIONS"
    ],
    "music_cue": "TITLE",
+   "menu_geometry": {
+    "window": [
+     108,
+     142,
+     104,
+     56
+    ],
+    "item_x": 130,
+    "item_y": 152,
+    "item_step": 14,
+    "cursor_x": 116,
+    "cursor_y": 151,
+    "press_y": 204,
+    "credit": "2026 RICHEYWORKS",
+    "credit_xy": [
+     314,
+     215
+    ]
+   },
+   "backdrop": "engines/unreal/art/claude-battle-kit/prism/title/TitleBg_1x.png",
    "strip": "engines/unreal/art/claude-battle-kit/prism/title/Title.png",
    "name_entry": {
     "grid": [

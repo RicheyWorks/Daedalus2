@@ -34,6 +34,13 @@ menu, the realm web client, and the Prismheart demo. Its tabs and sections follo
 | `static/settings/settings-schema.json` | The web copy of the schema (written by the builder). |
 | `static/controllers/daedalus-pad.js` | Controllers; with `settings:` it applies the Controller tab (see `docs/controllers.md`). |
 
+**App-local rows.** An app can add its own rows to the shared tabs without changing the schema, using
+`settings.extend({tab, section, rows})`. Kinds are `toggle`, `choice`, `slider`, `action` (a button run through
+`settings.onAction(id, fn)`) and `info` (live text). Local rows are saved in the browser but kept out of `export()`,
+so Unreal never sees them. `DaedalusSettings.addPadRows(settings, pad)` adds the controller rows every app shares to
+Controller > Devices: *Connected* (what is plugged in and how it is read), *Teach Buttons* (BIND, shown as an
+Infinite-style prompt over the tabs) and *Forget Taught Buttons*.
+
 **The panel.** It works like Infinite's: a tab ribbon (LB/RB, Q/E or tap), sections of rows, a description pane, and
 hints for A Change, Y Reset tab, X Copy settings and B Back. Up/down picks a row and left/right adjusts it; held
 directions repeat. Mouse, touch, keyboard and every pad DaedalusPad knows all work. Rows are at least 48 px tall.
@@ -44,7 +51,10 @@ On a phone the description pane hides and each control drops under its label. Te
   Thumbstick Layout (the hero's own tables), look sensitivity/invert/acceleration (the hero's 200°/s rate),
   every dead zone, vibration, Field of View (converted from Unreal's horizontal angle), mouse sensitivity, Tips &
   Tutorials, FPS Counter and Notification Duration.
-- **Prismheart demo:** View/Select, F1 or the SETTINGS button opens it. Audio drives the jukebox chain: Main, Music,
+- **Prismheart demo:** it is a full-screen display with nothing else on screen. Settings opens from the title's OPTIONS,
+  Esc on the title, F1, View/Select on a pad, or the gear on touch screens. Its own rows: Controller > Touch
+  (Touch Controls: Auto/On/Off), Keyboard/Mouse > Keys (keyboard and arcade-encoder keys), Audio > Jukebox (Jukebox
+  Monitor, Now Playing), and Gameplay > Saved Game (the journey saved at the inn, Erase). Audio drives the jukebox chain: Main, Music,
   Menu Music for the title cue, Effects, Voice (dialogue blips), Dynamic Range (Compressed lowers the limiter for
   night listening) and Inactive Mute. Also read: Menu Confirm Button and Tips & Tutorials.
 

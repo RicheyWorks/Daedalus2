@@ -143,7 +143,7 @@ def main(argv):
     for s in demo_spells:
         fx.add("fx:" + s["name"], Image.open(find("Spell_%s_1x.png" % s["name"].replace(" ", ""), "spells")))
     fx_rects = fx.save(os.path.join(out, "spells.png"))
-    shutil.copy(find("Title_1x.png", "title"), os.path.join(out, "title.png"))
+    shutil.copy(find("TitleBg_1x.png", "title"), os.path.join(out, "title.png"))   # the backdrop layer; the menu is drawn live
 
     # ---- audio: jukebox seeds for the cues + sound events -------------------------------------------------------
     seeds_dir = os.path.join(art, "claude-audio", "jukebox-seeds")
@@ -193,7 +193,7 @@ def main(argv):
         "dungeon": forge, "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
         "zones": {z: enc[z] for z in zones if z in enc},
         "foes": {k: {kk: types[k][kk] for kk in ("name", "level", "hp", "attack", "defence", "speed", "exp", "gold", "element", "behaviour")} for k in foes},
-        "boss": pyre, "spells": demo_spells, "party": party,
+        "boss": pyre, "spells": demo_spells, "party": party, "title": J("title.json")["realms"][REALM],
         "audio": {"cues": cue_files, "events": ev_files,
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,

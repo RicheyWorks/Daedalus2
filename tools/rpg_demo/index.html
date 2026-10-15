@@ -1,84 +1,64 @@
 <title>Prismheart Playable Demo</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one arcade cabinet column - marquee, the 320x224 screen at an integer scale, then the pad and the jukebox log. Single dark look by design. */
-:root {
-  --cab: #120f22; --cab-2: #1c1834; --bezel: #07060f; --line: #2e2852;
-  --text: #e8e4ff; --dim: #9a93c4; --crystal: #c890f8; --ember: #f0a048; --ok: #78f8a0;
-  --display: "Pixelify Sans", "Courier New", monospace; --mono: "IBM Plex Mono", ui-monospace, monospace;
-  color-scheme: dark;
-}
-html, body { height: 100%; }
-body { background: var(--cab); color: var(--text); font: 14px/1.45 var(--mono);
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px 24px; }
-.cabinet { max-width: 1000px; margin: 0 auto; display: grid; gap: 14px; }
-.marquee { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
-.marquee h1 { margin: 0; font: 700 clamp(22px, 4vw, 32px)/1 var(--display); letter-spacing: .04em; color: var(--crystal); text-wrap: balance; }
-.marquee p { margin: 0; color: var(--dim); font-size: 12.5px; }
-.screen-wrap { background: var(--bezel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; place-items: center; overflow: hidden; }
-canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; display: block; max-width: 100%; height: auto; background: #000; outline: none; }
-canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
-.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
-@media (max-width: 720px) { .row { grid-template-columns: minmax(0, 1fr); } }
-.panel { background: var(--cab-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0; }
-.panel h2 { margin: 0 0 8px; font: 500 15px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--ember); }
-.pad { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; touch-action: none; user-select: none; -webkit-user-select: none; }
-.dpad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 52px); gap: 4px; }
-.dpad button[data-k="up"] { grid-area: 1 / 2; } .dpad button[data-k="left"] { grid-area: 2 / 1; }
-.dpad button[data-k="right"] { grid-area: 2 / 3; } .dpad button[data-k="down"] { grid-area: 3 / 2; }
-.ab { display: flex; gap: 12px; align-items: center; }
-.pad button { font: 700 15px var(--display); color: var(--text); background: var(--line); border: 1px solid #463e78; border-radius: 10px; min-width: 52px; min-height: 52px; cursor: pointer; }
-.pad button.round { border-radius: 50%; width: 60px; height: 60px; }
-.pad button.a { background: #5a2f7a; } .pad button.b { background: #3a2f5a; }
-.pad button:active, .pad button.held { filter: brightness(1.5); }
-.pad button:focus-visible { outline: 2px solid var(--crystal); outline-offset: 2px; }
-.keys { color: var(--dim); font-size: 12.5px; margin: 8px 0 0; }
-.keys kbd { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--text); }
-#log { margin: 0; max-height: 210px; overflow: auto; font: 12px/1.5 var(--mono); color: var(--dim); white-space: pre-wrap; word-break: break-word; }
-#log b { color: var(--ok); font-weight: 500; }
-.padrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.padrow button { font: 500 11px var(--mono); color: var(--text); background: var(--cab-2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; cursor: pointer; letter-spacing: 0.04em; }
-.padrow button:hover, .padrow button:focus-visible { border-color: var(--crystal); outline: none; }
-.note { color: var(--dim); font-size: 12.5px; margin: 6px 0 0; }
-@media (prefers-reduced-motion: reduce) { .pad button { transition: none; } }
+/* Full-screen display: the 320x224 game fills the window at the largest sharp scale; nothing else is on screen.
+   Every control lives in the Settings tabs (title OPTIONS, F1, Esc on the title, or View/Select on a pad).
+   Touch controls appear only on touch screens (Controller tab: Touch Controls). Single dark look by design. */
+:root { --ink: #eef3f8; --dim: #8fa1b4; --cyan: #5bd1f5; --display: "Pixelify Sans", "Courier New", monospace; --mono: "IBM Plex Mono", ui-monospace, monospace; color-scheme: dark; }
+html, body { height: 100%; margin: 0; }
+body { background: #000; color: var(--ink); font: 14px/1.45 var(--mono); overflow: hidden; overscroll-behavior: none; }
+.stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(120% 100% at 50% 40%, #0b0820 0%, #000 70%); }
+.stage.portrait-touch { align-items: flex-start; padding-top: max(10px, env(safe-area-inset-top)); }
+canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; display: block; background: #000; outline: none; box-shadow: 0 0 60px rgba(120, 90, 220, .18); }
+.boot { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: 500 13px var(--mono); color: var(--dim); letter-spacing: .12em; text-align: center; padding: 0 16px; }
+.toast { position: absolute; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); max-width: min(420px, 80vw); padding: 10px 14px 10px 12px;
+  display: flex; gap: 10px; align-items: center; background: rgba(8, 16, 30, .86); border: 1px solid rgba(91, 209, 245, .45); border-radius: 6px; font: 13px/1.35 "Segoe UI", system-ui, sans-serif;
+  opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity .25s, transform .25s; }
+.toast.on { opacity: 1; transform: none; }
+.toast i { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); flex: none; box-shadow: 0 0 8px var(--cyan); }
+.toast small { display: block; color: var(--dim); font-size: 12px; }
+.monitor { position: absolute; left: max(10px, env(safe-area-inset-left)); bottom: max(10px, env(safe-area-inset-bottom)); width: min(460px, 70vw); max-height: 30vh; overflow: hidden; margin: 0;
+  padding: 8px 10px; background: rgba(0, 0, 0, .62); border-left: 2px solid var(--cyan); font: 11px/1.45 var(--mono); color: #b9c6d4; white-space: pre-wrap; word-break: break-word; pointer-events: none; }
+.monitor b { color: #78f8a0; font-weight: 500; }
+.touch { position: absolute; left: 0; right: 0; bottom: 0; display: none; justify-content: space-between; align-items: flex-end; gap: 12px;
+  padding: 0 max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); pointer-events: none; touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch.on { display: flex; }
+.touch button { pointer-events: auto; font: 700 15px var(--display); color: var(--ink); background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 12px; min-width: 56px; min-height: 56px; -webkit-tap-highlight-color: transparent; backdrop-filter: blur(4px); }
+.touch button.held { background: rgba(91, 209, 245, .35); border-color: var(--cyan); }
+.dpad { display: grid; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(3, 56px); gap: 4px; }
+@media (orientation: landscape) and (max-height: 520px) {
+  .touch { align-items: center; bottom: 50%; transform: translateY(50%); padding-bottom: 0; }
+  .dpad { grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 52px); }
+  .touch button { min-width: 52px; min-height: 52px; } }
+.dpad [data-k="up"] { grid-area: 1 / 2; } .dpad [data-k="left"] { grid-area: 2 / 1; } .dpad [data-k="right"] { grid-area: 2 / 3; } .dpad [data-k="down"] { grid-area: 3 / 2; }
+.ab { display: grid; grid-template-columns: 64px 64px; grid-template-rows: 30px 64px 64px; gap: 8px 12px; align-items: end; }
+.ab [data-k="start"] { grid-area: 1 / 1 / 2 / 3; min-height: 30px; border-radius: 15px; font-size: 12px; letter-spacing: .12em; }
+.ab [data-k="b"] { grid-area: 3 / 1; border-radius: 50%; } .ab [data-k="a"] { grid-area: 2 / 2; border-radius: 50%; background: rgba(150, 90, 220, .3); }
+.ab [data-k="opts"] { grid-area: 3 / 2; border-radius: 50%; font: 22px/1 system-ui, sans-serif; background: rgba(255, 255, 255, .05); }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
 </style>
 
-<div class="cabinet">
-  <div class="marquee">
-    <h1>PRISMHEART</h1>
-    <p>Playable slice of the 16-bit realm, built from the realm's own tiles, sprites, data and music.</p>
-  </div>
-  <div class="screen-wrap"><canvas id="screen" width="320" height="224" tabindex="0" aria-label="Game screen"></canvas></div>
-  <div class="row">
-    <div class="panel">
-      <h2>Controls</h2>
-      <div class="pad" id="pad">
-        <div class="dpad">
-          <button data-k="up" aria-label="Up">&#9650;</button><button data-k="left" aria-label="Left">&#9664;</button>
-          <button data-k="right" aria-label="Right">&#9654;</button><button data-k="down" aria-label="Down">&#9660;</button>
-        </div>
-        <div class="ab">
-          <button data-k="start" aria-label="Start / menu">START</button>
-          <button class="round b" data-k="b" aria-label="B, cancel">B</button>
-          <button class="round a" data-k="a" aria-label="A, confirm">A</button>
-        </div>
-      </div>
-      <div class="padrow">
-        <button id="padbind" type="button">BIND CONTROLLER</button>
-        <button id="padsettings" type="button">SETTINGS</button>
-        <button id="padreset" type="button">RESET</button>
-      </div>
-      <p class="note" id="padstatus" aria-live="polite">No controller yet. Plug one in or pair it, then press any button.</p>
-      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu) &middot; <kbd>F1</kbd> or View/Select: Settings &middot; arcade encoders: MAME keys (<kbd>Ctrl</kbd> A, <kbd>Alt</kbd> B, <kbd>1</kbd> Start)</p>
+<div class="stage" id="stage">
+  <canvas id="screen" width="320" height="224" tabindex="0" aria-label="Prismheart game screen"></canvas>
+  <div class="touch" id="pad" aria-label="Touch controls">
+    <div class="dpad">
+      <button data-k="up" aria-label="Up">&#9650;</button><button data-k="left" aria-label="Left">&#9664;</button>
+      <button data-k="right" aria-label="Right">&#9654;</button><button data-k="down" aria-label="Down">&#9660;</button>
     </div>
-    <div class="panel">
-      <h2>Jukebox cues</h2>
-      <pre id="log">The realm posts {cue, changed, sfx} here, the same body SDaedalusRealm sends to daedalus.Jukebox. Press START on the title to begin (sound starts then).</pre>
-      <p class="note" id="status">Loading&hellip;</p>
+    <div class="ab">
+      <button data-k="start" aria-label="Start, field menu">START</button>
+      <button data-k="a" aria-label="A, confirm">A</button>
+      <button data-k="b" aria-label="B, back">B</button>
+      <button data-k="opts" aria-label="Settings" class="gear">&#9881;</button>
     </div>
   </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><i></i><div></div></div>
+  <pre class="monitor" id="log" hidden></pre>
+  <div class="boot" id="status">LOADING PRISMHEART&hellip;</div>
 </div>
 
 <script src="controllers/daedalus-pad.js"></script>
@@ -95,11 +75,24 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 const ri = (a, b) => Math.floor(rnd(a, b + 1));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-/* ---------- scaling ---------- */
+/* ---------- scaling: the largest sharp scale that fits the window (fractional only below 2x) ---------- */
+const stageEl = document.getElementById("stage"), touchEl = document.getElementById("pad"), toastEl = document.getElementById("toast");
+function touchOn() {
+  const mode = SETTINGS && SETTINGS.loaded() && SETTINGS.row("TouchControls") ? SETTINGS.get("TouchControls") : 0;   /* 0 AUTO, 1 ON, 2 OFF */
+  return mode === 1 || (mode === 0 && window.matchMedia && matchMedia("(pointer: coarse)").matches);
+}
 function fit() {
-  const avail = Math.min(cv.parentElement.clientWidth - 24, (window.innerHeight || 800) * 0.68 / H * W);
-  const k = Math.max(1, Math.floor(avail / W));
-  cv.style.width = W * k + "px"; cv.style.height = H * k + "px";
+  const vw = window.innerWidth || 1024, vh = window.innerHeight || 768, touch = touchOn(), portrait = vh > vw;
+  touchEl.classList.toggle("on", touch);
+  stageEl.classList.toggle("portrait-touch", touch && portrait);
+  const pads = touch ? touchEl.getBoundingClientRect() : null;
+  const ctlH = touch && portrait ? 270 : 0, side = touch && !portrait ? 196 : 0;   /* room the touch controls need */
+  const availH = vh - ctlH, availW = vw - 2 * side;
+  let k = Math.min(availW / W, availH / H);
+  if (k >= 2) k = Math.floor(k);
+  const ch = Math.floor(H * k);
+  cv.style.width = Math.floor(W * k) + "px"; cv.style.height = ch + "px";
+  stageEl.style.paddingTop = touch && portrait ? Math.max(10, (availH - ch) / 2) + "px" : "";
 }
 window.addEventListener("resize", fit);
 
@@ -127,7 +120,7 @@ window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) setHeld
 window.addEventListener("blur", () => Object.keys(SRC).forEach(releaseSource));     /* focus loss releases everything held */
 document.querySelectorAll("#pad button").forEach(b => {
   const k = b.dataset.k;
-  const down = e => { e.preventDefault(); setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
+  const down = e => { e.preventDefault(); if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
   const up = e => { e.preventDefault(); setHeld("touch", k, false); b.classList.remove("held"); };
   b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
 });
@@ -143,37 +136,58 @@ function menuRepeat(now) {                                        /* held direct
    rule for Atari sticks, MAME keys for cabinet encoders. The demo only translates its logical actions. */
 /* ---------- settings: the shared DaedalusSettings module and its Halo Infinite-style panel ---------- */
 const SETTINGS = window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
-if (SETTINGS) SETTINGS.on("*", () => { applyAudio(); if (typeof padStatus === "function") padStatus(); });
+if (SETTINGS) SETTINGS.on("*", () => applyAudio());
 const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
 const PAD = window.DaedalusPad ? DaedalusPad.create({
   bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
     if (e.type === "down" || e.type === "up") {
       if (PANEL && PANEL.isOpen()) return;                  /* the panel reads the pad itself */
-      if (e.action === "select" && e.type === "down" && PANEL) { Object.keys(SRC).forEach(releaseSource); PANEL.open(); return; }
+      if (e.action === "select" && e.type === "down") { openSettings(); return; }
       const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return;
     }
     if (e.type === "bind" && e.step) sfx("TICK");
-    if (e.type === "bound") sfx("PICK");
-    padStatus(e.type === "bound" ? "SAVED: " + e.names.join("  ") : e.type === "bindcancel" ? "BIND CANCELLED." : e.type === "reset" ? "BINDINGS RESET." : "");
+    if (e.type === "bound") { sfx("PICK"); toast("Buttons taught", e.pad.name); }
+    if (e.type === "connect") toast(e.pad.name + " connected", e.pad.source === "guess" ? "Unknown layout: Settings > Controller > Teach Buttons" : "Ready. View / Select opens Settings.");
+    if (e.type === "disconnect") toast(e.pad.name + " disconnected");
   },
 }) : null;
-let padNote = "", padNoteUntil = 0;
 const PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
   onOpen: () => { Object.keys(SRC).forEach(releaseSource); }, onClose: () => { cv.focus({ preventScroll: true }); } }) : null;
-function padStatus(extra) {
-  const el = document.getElementById("padstatus"); if (!el || !PAD) return;
-  if (extra) { padNote = extra; padNoteUntil = performance.now() + 6000; }
-  extra = performance.now() < padNoteUntil ? padNote : "";
-  const list = PAD.devices();
-  const SRCN = { standard: "standard layout", bundle: "community map", custom: "your bindings", guess: "best guess - BIND to teach it" };
-  let t = !list.length ? "No controller yet. Plug one in or pair it, then press any button."
-    : list.map(p => p.name + " [" + p.family + ", " + SRCN[p.source] + "]  confirm " + PAD.label("confirm", p.index) + ", back " + PAD.label("cancel", p.index) + ", menu " + PAD.label("menu", p.index)).join("  |  ");
-  const b = PAD.bundleInfo(); if (b && !list.length) t += "  (" + b.devices + " controllers known.)";
-  const step = PAD.binding(); if (step) t = "BIND: press the button for " + step.toUpperCase() + " (Esc cancels).";
-  el.textContent = extra ? extra + "  " + t : t;
+/* A small notice in the corner: a controller arriving or leaving, a save, a bind finished. */
+let toastTimer = 0;
+function toast(title, sub) {
+  toastEl.querySelector("div").innerHTML = "";
+  const t = document.createElement("div"); t.textContent = title; toastEl.querySelector("div").appendChild(t);
+  if (sub) { const s2 = document.createElement("small"); s2.textContent = sub; toastEl.querySelector("div").appendChild(s2); }
+  toastEl.classList.add("on"); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("on"), 3800);
 }
-if (PAD) setInterval(padStatus, 1000);
+function openSettings() { if (PANEL && !PANEL.isOpen()) { Object.keys(SRC).forEach(releaseSource); PANEL.open(); } }
+
+/* This demo's own rows in the shared tabs: controllers (shared helper), touch controls, the jukebox monitor, keys, save. */
+if (SETTINGS) {
+  DaedalusSettings.addPadRows(SETTINGS, PAD);
+  SETTINGS.extend({ tab: "CONTROLLER", section: "Touch", rows: [
+    { id: "TouchControls", kind: "choice", label: "Touch Controls", choices: ["AUTO", "ON", "OFF"], default: 0, max: 2,
+      help: "The on-screen d-pad and buttons. Auto shows them on touch screens only." }] });
+  SETTINGS.extend({ tab: "KEYBOARD/MOUSE", section: "Keys", rows: [
+    { id: "KeysGame", kind: "info", label: "Keyboard", value: "Arrows / WASD move\nZ or Space: A   X or Esc: B\nEnter: Start (field menu)\nF1: Settings",
+      help: "Move with the arrow keys or WASD. Z or Space confirms and talks, X or Esc goes back, Enter opens the field menu, F1 opens these settings." },
+    { id: "KeysArcade", kind: "info", label: "Arcade Encoders", value: "Left Ctrl: A   Left Alt: B\n1: Start   5: Select",
+      help: "Cabinets wired as keyboards (I-PAC, X-Arcade mode 1) send MAME's default keys; they work as a controller here." }] });
+  SETTINGS.extend({ tab: "AUDIO", section: "Jukebox", rows: [
+    { id: "JukeboxMonitor", kind: "toggle", label: "Jukebox Monitor", default: 0,
+      help: "Show the {cue, changed, sfx} messages the realm sends to the touring jukebox (ADR-052), in the corner of the screen." },
+    { id: "JukeboxNow", kind: "info", label: "Now Playing", value: () => (juke.cue ? juke.cue + " cue" : "Silent") + (actx ? "" : " (press a button to start sound)"),
+      help: "The jukebox cue the realm asked for last. The same cue never restarts its song." }] });
+  SETTINGS.extend({ tab: "GAMEPLAY", section: "Saved Game", rows: [
+    { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Resting at the inn records your journey. CONTINUE on the title screen picks it up." },
+    { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. CONTINUE goes dark until you rest at an inn again." }] });
+  SETTINGS.onAction("SaveErase", () => { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} toast("Saved journey erased"); });
+  SETTINGS.on("TouchControls", () => fit());
+  SETTINGS.on("JukeboxMonitor", v => { logEl.hidden = !v; });
+}
 
 /* ---------- jukebox (ADR-052 cue contract) ---------- */
 const AC = window.AudioContext || window.webkitAudioContext;
@@ -431,7 +445,7 @@ function innPrompt() {
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
     party.forEach(m => { m.hp = m.max; m.mp = m.mmax; });
-    fade = 1; fadeCb = () => { cue(map.cue); say(["GOOD MORNING! YOUR PARTY IS RESTED."], null, 6); };
+    fade = 1; fadeCb = () => { cue(map.cue); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
   });
 }
 function openChest(x, y) {
@@ -862,23 +876,70 @@ function drawBattle() {
   }
 }
 
-/* ---------- title / game over ---------- */
+/* ---------- title: the art's backdrop layer with a live menu on the same pixels (title.json menu_geometry) ----------
+   NEW GAME starts, CONTINUE picks up the journey saved at the inn (dark when there is none), OPTIONS opens the shared
+   Settings tabs. The prompt names the button on whatever is plugged in. Tap or click an item to choose it. */
+const SAVE_KEY = "prism.save.v1";
+const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
 let titleT = 0, goT = 0, titleIdx = 0;
+function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
+function saveGame() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, bag, gold, bossBeaten: !!state.bossBeaten, opened: Array.from(opened) }));
+    return true;
+  } catch (e) { return false; }
+}
+function saveSummary() {
+  const sv = loadSave(); if (!sv) return "No saved journey";
+  const lead = sv.party[0] || {};
+  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (sv.bossBeaten ? " \u00b7 Shard of Fire" : "") + " \u00b7 " + new Date(sv.at).toLocaleString();
+}
+function titleChoose(i) {
+  const item = TITLE_ITEMS[i];
+  if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
+  unlockAudio(); sfx("PICK");
+  if (item === "OPTIONS") { openSettings(); return; }
+  party = buildParty(); state.bossBeaten = false; opened.clear();
+  D.dungeon.floors.forEach(f => { delete f.grid._copy; });
+  if (item === "CONTINUE") {
+    const sv = loadSave();
+    party = sv.party; bag = sv.bag; gold = sv.gold; state.bossBeaten = sv.bossBeaten; sv.opened.forEach(k => opened.add(k));
+    const it = D.interiors.Inn; state.returnTo = null;
+    goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
+    setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
+    return;
+  }
+  goto(townMap(), 11, 15, "up");
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+}
 function titleTick(dt) {
   titleT += dt;
-  if (hit("up") || hit("down")) { titleIdx = 1 - titleIdx; sfx("TICK"); }
-  if (hit("start") || hit("a")) {
-    unlockAudio(); sfx("PICK");
-    party = buildParty(); state.bossBeaten = false; opened.clear();
-    D.dungeon.floors.forEach(f => { delete f.grid._copy; });
-    goto(townMap(), 11, 15, "up");
-    if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
-  }
+  if (hit("up")) { titleIdx = (titleIdx + TITLE_ITEMS.length - 1) % TITLE_ITEMS.length; sfx("TICK"); }
+  if (hit("down")) { titleIdx = (titleIdx + 1) % TITLE_ITEMS.length; sfx("TICK"); }
+  if (hit("start") || hit("a")) titleChoose(titleIdx);
+}
+function titlePrompt() {
+  const d = PAD && PAD.devices()[0];
+  if (!d) return "PRESS START";
+  const g = String(PAD.label("confirm", d.index)).toUpperCase();
+  return /^[A-Z0-9+]{1,8}$/.test(g) ? "PRESS " + g : "PRESS START";
 }
 function drawTitle() {
-  const f = Math.floor(titleT * 6) % 8;
+  const f = Math.floor(titleT * 6) % 8, M = D.title.menu_geometry, hasSave = !!loadSave();
   g.drawImage(IM.title, f * 320, 0, 320, 224, 0, 0, 320, 224);
+  const [wx, wy, ww, wh] = M.window;
+  win(wx, wy, ww, wh);
+  TITLE_ITEMS.forEach((it, i) => text(it, M.item_x, M.item_y + i * M.item_step, it === "CONTINUE" && !hasSave ? "#6c6c8c" : "#ffffff"));
+  cursor(M.cursor_x, M.cursor_y + titleIdx * M.item_step);
+  if (Math.floor(titleT * 1.6) % 2 === 0) { const p = titlePrompt(); text(p, (W - tw(p)) / 2, M.press_y); }
+  text(M.credit, M.credit_xy[0] - tw(M.credit), M.credit_xy[1], "#8080a8", null);
 }
+cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */
+  if (mode !== "title" || !D || (PANEL && PANEL.isOpen())) return;
+  const b = cv.getBoundingClientRect(), x = (e.clientX - b.left) * W / b.width, y = (e.clientY - b.top) * H / b.height, M = D.title.menu_geometry;
+  const i = Math.floor((y - M.item_y + 3) / M.item_step);
+  if (x >= M.window[0] && x <= M.window[0] + M.window[2] && i >= 0 && i < TITLE_ITEMS.length) { titleIdx = i; titleChoose(i); }
+});
 function drawGameOver() {
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
@@ -920,7 +981,7 @@ window.PRISM_DEMO = {
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp]), boss: B.boss },
     party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.bossBeaten }),
   seed: n => { let x = n >>> 0; Math.random = () => { x = (x + 0x6D2B79F5) >>> 0; let t = Math.imul(x ^ (x >>> 15), 1 | x); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; },   /* tests: repeatable fights */
-  press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), pads: () => PAD ? PAD.devices() : [], padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
+  press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), pads: () => PAD ? PAD.devices() : [], bundle: () => PAD && PAD.bundleInfo(), toast: () => toastEl.classList.contains("on") ? toastEl.textContent : "", padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
   audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   warp: (kind, x, y, floor) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
@@ -934,15 +995,16 @@ async function boot() {
     D = await (await fetch("data.json")).json();
     [IM.tiles, IM.sprites, IM.backdrops, IM.spells, IM.title] = await Promise.all(["tiles.png", "sprites.png", "backdrops.png", "spells.png", "title.png"].map(img));
   } catch (e) { statusEl.textContent = "The demo files did not load: " + e.message; return; }
-  statusEl.textContent = "Ready. " + Object.keys(D.foes).length + " monsters, " + D.dungeon.floors.length + " forge floors, " + Object.keys(D.audio.cues).length + " jukebox cues.";
+  statusEl.hidden = true;
   cue("TITLE"); fit(); cv.focus({ preventScroll: true });
   requestAnimationFrame(frame);
 }
-document.getElementById("padbind").addEventListener("click", () => { if (PAD) { PAD.startBind(); padStatus(); } });
-document.getElementById("padsettings").addEventListener("click", () => { if (PANEL) PANEL.open(); });
-window.addEventListener("keydown", e => { if ((e.code === "F1" || e.code === "F10") && PANEL && !PANEL.isOpen()) { e.preventDefault(); Object.keys(SRC).forEach(releaseSource); PANEL.open(); } });
-document.getElementById("padreset").addEventListener("click", () => { if (PAD) PAD.resetBinds(); });
-padStatus();
+
+window.addEventListener("keydown", e => {
+  if (!PANEL || PANEL.isOpen()) return;
+  if (e.code === "F1" || e.code === "F10" || (e.code === "Escape" && mode === "title")) { e.preventDefault(); openSettings(); }
+});
+
 boot();
 })();
 </script>
