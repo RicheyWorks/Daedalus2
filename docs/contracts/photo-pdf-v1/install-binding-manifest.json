@@ -40,11 +40,11 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
-      "sha256": "ea15e11f4f3b4a6480eda23629bc4fbbe479d10b93b027016786352f043846ef"
+      "sha256": "49422a5b1a693dc47a8bd72e7c04275d1cc1a935cca5861a8f2fe20c7128fa5b"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
-      "sha256": "802652858e2e34db6db194dca196df3045a86f09ede1ecb1d8462a963ff6c756"
+      "sha256": "47a7363e5992a95a06f8e6c903d2cf92a18518cf2db08d5e41d72809c3b0e245"
     }
   ],
   "documentationFiles": [
@@ -164,6 +164,18 @@
       "correction": "UIOnly viewport owns input without controller counts. Restore owned opening viewport even if controller is destroyed; retain focus/viewport ownership guards.",
       "claim": 31157,
       "focusedSourceReview": "complete_source_only; independent review found no remaining concrete P1/P2 in the scoped patch"
+    },
+    {
+      "defect": "Prepared-fax review export needs a fixed generated default name and a 25 MiB envelope without duplicating the photo export engine.",
+      "stage": "source_corrected_unverified",
+      "runtimeVerified": false,
+      "baseCommit": "ceef882fef943acd60b3c6cb8d16f5dae18c993a",
+      "sources": [
+        "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
+        "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp"
+      ],
+      "correction": "SavePdf retains photo index 1..8, its 64 MiB/header check, photo-N.pdf default and errors. SavePreparedFaxPdf adds a 25 MiB/header check and prepared-fax-review.pdf default. Both call one private generated-label export engine. Prepared-fax export now requires a caller lifecycle predicate, rechecked before and after the modal chooser, before owned temporary creation, each bounded write, flush and non-replacing commit; invalidation returns the terminal-ownership error and cleans the owned temporary. The photo entry point supplies an always-true predicate to preserve existing behavior. Retained parent locks, owned temporary cleanup and non-replacing commit remain in the shared engine. Source-only change; no build, test, dialog or native operation was run.",
+      "focusedSourceReview": "complete_source_only; independent guard/path/temp/no-replace review found no remaining concrete P1/P2 in the new fax entry; old photo modal caller guard remains a separate queued correction"
     }
   ]
 }

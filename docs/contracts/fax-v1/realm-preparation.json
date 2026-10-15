@@ -5,12 +5,14 @@
   "branch": "codex/fax-preparation-contract-20261015",
   "baselineCommit": "4f82f339470ca61947263e4e09380f20ff231ee1",
   "nativeBinding": {
-    "implemented": false,
+    "implemented": true,
     "placementOrPlayAccepted": false,
     "soleNativeOperator": "codex-play-guard",
-    "class": null,
+    "class": "/Script/DaedalusLink.DaedalusFaxPreparationTerminal",
     "existingTypedAppEnumSupportsFax": false,
-    "physicalArt": "pending separate owner"
+    "physicalArt": "pending separate owner",
+    "stage": "source_written_unverified",
+    "installManifest": "docs/contracts/fax-v1/native-install-binding-manifest.json"
   },
   "owner": {
     "coordinatorAcknowledgment": null,

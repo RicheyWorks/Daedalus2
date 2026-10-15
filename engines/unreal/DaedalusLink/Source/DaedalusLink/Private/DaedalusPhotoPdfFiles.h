@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "DaedalusPhotoPdfClient.h"
+#include "Templates/Function.h"
 
 /** Explicit, local user file choices only. Paths never leave this helper. */
 namespace DaedalusPhotoPdfFiles
@@ -14,4 +15,11 @@ namespace DaedalusPhotoPdfFiles
      * A successful save always creates a new file.
      */
     bool SavePdf(const TArray<uint8>& Bytes, int32 Index, FString& Error);
+    /** Explicit save chooser for the selected prepared fax review PDF, at most 25 MiB.
+     * Suggests only the generated name prepared-fax-review.pdf; the user chooses a new local target.
+     * Requires a PDF header, not structural/page validation or evidence of transmission.
+     * IsStillAllowed must retain the calling terminal's generation/ownership checks through the chooser and save.
+     * False with an empty Error means the user dismissed the dialog. Never overwrites a file.
+     */
+    bool SavePreparedFaxPdf(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed);
 }
