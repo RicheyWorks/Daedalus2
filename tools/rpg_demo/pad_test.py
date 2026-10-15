@@ -67,8 +67,8 @@ with sync_playwright() as p:
     for _ in range(25):
         s = st()
         if s["mode"] == "field" and not s["dialog"]: break
-        tap(0, 0)
-    check("elite A: title -> town", st()["map"] == "town")
+        tap(0, 9 if s["mode"] == "name" else 0)                        # A on NEW GAME, Menu (Start) = END on name entry
+    check("elite A: title -> name entry -> town", st()["map"] == "town")
     W(800); town(11, 15)
     a, z = walks("__pad.btn(0,12,1)", "__pad.btn(0,12,0)", "y", 700); check("elite d-pad up walks", z < a, (a, z))
     clear(); tap(0, 9); W(200); check("elite Menu opens the menu", st()["mode"] == "menu", st()["mode"])

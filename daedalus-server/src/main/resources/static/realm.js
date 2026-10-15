@@ -2754,6 +2754,7 @@ const PAD = window.DaedalusPad ? window.DaedalusPad.create({
 }) : null;
 const PANEL = SETTINGS && window.DaedalusSettings ? window.DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
   onOpen: () => { AVATAR.jump = false; heroCrouch(false); }, onClose: () => {} }) : null;
+if (SETTINGS && PAD) window.DaedalusSettings.addPadRows(SETTINGS, PAD);   // Controller > Devices: connected pads, Teach Buttons, Forget
 state.pad = PAD; state.settings = SETTINGS; state.settingsPanel = PANEL;
 const FPS = { el: Object.assign(document.createElement("div"), { id: "fpsCounter" }), frames: 0, at: performance.now() };
 FPS.el.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:30;display:none;font:600 12px ui-monospace,monospace;color:#3ee08f;background:rgba(0,0,0,.45);padding:3px 7px;border-radius:4px;pointer-events:none";

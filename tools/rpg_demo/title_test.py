@@ -46,8 +46,22 @@ with sync_playwright() as p:
     check("prompt names the pad's confirm button (PRESS CROSS)", ev("PRISM_DEMO.padLabel('confirm',0)") == "Cross")
     ev("__pad.btn(0,12,1)"); W(80); ev("__pad.btn(0,12,0)"); W(120)       # the click left the cursor on OPTIONS; up: CONTINUE
     ev("__pad.btn(0,12,1)"); W(80); ev("__pad.btn(0,12,0)"); W(120)       # up: NEW GAME
-    ev("__pad.btn(0,0,1)"); W(80); ev("__pad.btn(0,0,0)"); W(1200)
-    check("Cross on NEW GAME starts", st()["mode"] == "field" and st()["map"] == "town", st()["map"])
+    ev("__pad.btn(0,0,1)"); W(80); ev("__pad.btn(0,0,0)"); W(900)
+    check("Cross on NEW GAME opens name entry with the lead's name", st()["mode"] == "name" and ev("PRISM_DEMO.name()") == "CORIN", (st()["mode"], ev("PRISM_DEMO.name()")))
+    pg.screenshot(path=os.path.join(DEMO, "..", "t_name.png"))
+    for _ in range(5): ev("__pad.btn(0,1,1)"); W(70); ev("__pad.btn(0,1,0)"); W(110)      # Circle deletes
+    check("Circle deletes letters", ev("PRISM_DEMO.name()") == "", ev("PRISM_DEMO.name()"))
+    ev("__pad.btn(0,15,1)"); W(70); ev("__pad.btn(0,15,0)"); W(110)                      # right: B
+    ev("__pad.btn(0,0,1)"); W(70); ev("__pad.btn(0,0,0)"); W(110)
+    check("d-pad + Cross types the letter under the cursor", ev("PRISM_DEMO.name()") == "B", ev("PRISM_DEMO.name()"))
+    pg.keyboard.type("RAN"); W(150)
+    check("a keyboard types straight in (even W/A/S/D/Z/X)", ev("PRISM_DEMO.name()") == "BRAN", ev("PRISM_DEMO.name()"))
+    pg.keyboard.press("Backspace"); pg.keyboard.type("ND"); W(150)
+    box = pg.locator("#screen").bounding_box()
+    pg.mouse.click(box["x"] + box["width"] * (26 + 4 * 28 + 2) / 320, box["y"] + box["height"] * (64 + 3) / 224); W(200)   # tap E
+    check("tap a letter to type it", ev("PRISM_DEMO.name()") == "BRANDE", ev("PRISM_DEMO.name()"))
+    pg.keyboard.press("Enter"); W(1300)
+    check("Enter = END: the journey starts with the new name", st()["mode"] == "field" and st()["map"] == "town" and st()["party"][0][0] == "Brande", (st()["map"], st()["party"][0][0]))
     for _ in range(12):
         if not st()["dialog"]: break
         ev("PRISM_DEMO.press('a')"); W(250)
@@ -70,7 +84,7 @@ with sync_playwright() as p:
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
     ev("PRISM_DEMO.press('down')"); W(150); ev("PRISM_DEMO.press('a')"); W(1400)
     s = st()
-    check("CONTINUE resumes at the inn with the saved gold", s["mode"] == "field" and s["map"] == "interior" and s["gold"] == saved_gold, (s["map"], s["gold"]))
+    check("CONTINUE resumes at the inn with the saved gold and name", s["mode"] == "field" and s["map"] == "interior" and s["gold"] == saved_gold and s["party"][0][0] == "Brande", (s["map"], s["gold"], s["party"][0][0]))
     check("Settings > Gameplay shows the journey", "LV" in ev("PRISM_DEMO.settings().format('SaveInfo')"), ev("PRISM_DEMO.settings().format('SaveInfo')"))
     ev("PRISM_DEMO.settings().activate('SaveErase')"); W(200)
     check("Erase Saved Journey clears it", ev("localStorage.getItem('prism.save.v1')") is None)
