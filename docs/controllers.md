@@ -116,3 +116,76 @@ Set these in the console, or in `Config/DefaultEngine.ini` under `[ConsoleVariab
   - **Hero:** your record
   - **Controls**
   - **Social:** friends and party, which arrive with online play
+
+## Web clients: one controller module for everything (`DaedalusPad`)
+
+Every browser client loads the same file, `daedalus-server/src/main/resources/static/controllers/daedalus-pad.js`,
+with its device bundle `controllers/controller-bundle.json`. The realm (`realm.html`) and the Prismheart demo
+(`tools/rpg_demo`) use it today; a new page needs two lines:
+
+```js
+import "/controllers/daedalus-pad.js";      // or <script src="/controllers/daedalus-pad.js">
+const pad = DaedalusPad.create({ bundle: "/controllers/controller-bundle.json", onChange: e => { /* e.type down/up, e.action */ } });
+```
+
+It reports logical actions (`up down left right confirm cancel menu select`), the positional buttons
+(`a b x y l r zl zr l3 r3 start back guide`, where `a` is the south face button) and axes (`lx ly rx ry lt rt`).
+`pad.label("confirm")` gives the name printed on the player's pad ("A", "Cross", "Fire", "K1", "C-Left" ...).
+
+**Where a button's meaning comes from, highest first**
+
+1. **BIND.** The player teaches this exact pad: up, down, left, right, confirm, back, menu. Saved per pad in the browser.
+2. **The browser's standard mapping.** Xbox (360 to Series, Elite Series 2, Adaptive), Razer Wolverine V2/V3 (including
+   the 8K models), GameSir in X-input mode, DualShock 4, DualSense and Edge, Switch Pro, most 8BitDo modes, GP2040-CE
+   boards in X-input mode.
+3. **The community map.** The bundle carries SDL_GameControllerDB (zlib licence, vendored in `data/controllers/`):
+   1,018 USB controllers with per-platform mappings. That covers retro pads, adapters for N64, GameCube, Saturn,
+   Dreamcast, NES, SNES, Genesis, 3DO and Jaguar, arcade sticks, encoders and Atari joysticks.
+4. **A family guess.** It uses the `DaedalusControllers.json` numbering below (Button2 south, Button1 east,
+   Button10 Start). A POV-hat d-pad is found from its resting value.
+
+**Families and their customs.** The bundle sorts the 1,018 devices as: xbox 273, playstation 131, arcade 118,
+snes 39, nintendo 24, n64 23, nes 17, sega 16, gamecube 15, saturn 9, neogeo 3, atari 2, pcengine 1, and generic
+347. Nintendo-style pads (Switch, SNES, NES, PC Engine) confirm with the A label, which sits on the right. **Confirm:
+bottom** makes the south button confirm on every pad. Fight sticks sold as "PS3/PS4/Xbox" sticks get arcade labels.
+
+**The curated lineup.** `tools/controllers/curated_source.py` lists 145 models from 41 makers: Microsoft, Sony,
+Nintendo (Switch Online NES/SNES/N64/Genesis, GameCube adapter), Razer (Wolverine V3 Pro / V3 TE / V2 line,
+Kishi, Raiju, Kitsune, Panthera, Atrox), GameSir (G7 line, Cyclone 2, Kaleid Flux, Nova, T4 line, Tarantula Pro,
+G8, X-series), 8BitDo, Hori, Sega (Mega Drive/Genesis Mini, Astro City Mini), Retro-bit, Atari (CX40+, CX78+,
+CX30+ paddles, VCS), Hyperkin, SNK, Victrix, Qanba, Hit Box, GP2040-CE, Brook, Mayflash, Zero Delay, Xin-Mo,
+Ultimarc, X-Arcade and more. `build_bundle.py` reports which models have a community mapping (101 of 145). The rest are
+X-input/standard pads that need none, or new models; BIND covers both.
+
+**Hardware that needs a rule, not a mapping**
+- **One-button sticks** (Atari CX40+, CX Controller): release the fire button before 0.35 s to confirm, release after
+  to go back, and hold 1.2 s for the menu.
+- **No Start button:** Select opens the menu, or A+B together.
+- **Arcade keyboard encoders** (I-PAC, X-Arcade mode 1, keyboard-mode cabinets) send MAME's default keys. With
+  `arcadeKeys: true` the module reads them: arrows to move, Left Ctrl A, Left Alt B, Space X, Left Shift Y, 1 Start,
+  5 Select (coin).
+- **High-polling pads (Razer 8K):** the module samples every 4 ms, so a tap shorter than a frame still lands. The
+  browser itself samples at about 250 Hz. The Unreal hero reads the full rate natively.
+- **Stick to d-pad:** one cardinal direction, pressed at 0.55, released at 0.40, and switched only with a 0.10 lead.
+  These are the same numbers as the native portal-controls translator. Disconnecting or losing focus releases
+  everything held.
+
+**Not covered here.** Light guns (Sinden, GUN4IR) and spinners/trackballs present as a mouse, so mouse code handles
+them. Wheels and flight sticks show up in the bundle but have no driving or flying mode in the web clients yet.
+
+**Native side, as of this audit.**
+- **Unreal hero:** XInput, RawInput, raw mouse and `DaedalusControllers.json` all work. See the sections above.
+- **Unreal realm widget** (`SDaedalusRealm::MapKey`): still hardcoded. It knows the keyboard, the XInput d-pad, the
+  south and east face buttons, Menu and the left stick. It ignores the RawInput (Switch Pro, N64) and
+  `DaedalusControllers.json` path.
+- **Codex's portal-controls translator** (`DaedalusPortalControls.h`, branch `codex/portal-controller-intents-20261014`):
+  covers that gap. It compiles warning-free host-free and passes `tools/controllers/portal_controls_check.cpp`
+  (15/15). It is not wired into the widget yet, and the Unreal operator owns that wiring.
+- **Java first-person host** (`daedalus-explore`): now hands GLFW the same community database
+  (`PadMappings`, `glfwUpdateGamepadMappings`). It uses the first gamepad in any of the 16 slots, not only slot 1.
+
+**Tests.** `tools/rpg_demo/pad_test.py` simulates real ids and numbering (45 checks): Elite Series 2, Wolverine V3
+2 ms tap, Switch Pro, Mayflash N64, Mega Drive Mini 6B, Astro City Mini, Atari CX one-button, an unknown pad,
+GameSir BIND, MAME keys, rumble and unplugging. `tools/controllers/realm_pad_test.py` drives `realm.html` on a
+running server. To refresh the community data, replace `data/controllers/gamecontrollerdb.txt` and run
+`python tools/controllers/build_bundle.py`.

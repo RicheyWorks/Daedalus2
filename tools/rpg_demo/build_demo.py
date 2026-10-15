@@ -201,6 +201,10 @@ def main(argv):
     with open(os.path.join(out, "data.json"), "w", encoding="utf-8") as f:
         json.dump(data, f, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))
+    ctl = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "controllers")   # the shared controller module
+    os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
+    for f in ("daedalus-pad.js", "controller-bundle.json"):
+        shutil.copy(os.path.join(ctl, f), os.path.join(out, "controllers", f))
     print("DEMO tiles=%d sprites=%d foes=%d backdrops=%d spells=%d cues=%d events=%d reach=%s" % (
         len(tile_rects), len(sprite_rects), len(foes), len(backdrop_rects), len(fx_rects), len(cue_files), len(ev_files), reach))
 

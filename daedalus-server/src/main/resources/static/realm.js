@@ -12,6 +12,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { meshChunk } from "/realm-mesh.js";
+import "/controllers/daedalus-pad.js";          // shared controller layer (window.DaedalusPad), see docs/controllers.md
 
 // Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
 const WORLD = (() => {
@@ -2564,7 +2565,7 @@ function renderBest() {
 // lava sends you back to your last checkpoint, and the gold finish stops the clock.
 const AVATAR = {
   on: false, pos: new THREE.Vector3(), vel: new THREE.Vector3(), onGround: false, yaw: 0, model: null,
-  keys: new Set(), joy: { x: 0, y: 0 }, jump: false, respawn: null, reached: -1, finished: false,
+  keys: new Set(), joy: { x: 0, y: 0 }, pad: { x: 0, y: 0 }, jump: false, respawn: null, reached: -1, finished: false,
   deaths: 0, startedAt: 0, best: 0, last: null, acc: 0,
 };
 const AV_HALF = 0.32, AV_HEIGHT = 1.8, GRAVITY = 30, JUMP_SPEED = 9.6, RUN_SPEED = 6, STEP = 1 / 120;
@@ -2611,13 +2612,14 @@ function startPlay() {
   AVATAR.last = AVATAR.pos.clone();
   document.body.classList.add("playing");
   toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump"
-    : "WASD / arrows, Space jumps, J thrusts, hold C to crouch, H heals");
+    : "WASD / arrows, Space jumps, J thrusts, hold C to crouch, H heals. Controller: stick moves, A jumps, X thrusts, hold B crouches, Y heals");
   startFight();
 }
 function stopPlay() {
   AVATAR.on = false;
   AVATAR.keys.clear();
   AVATAR.joy.x = AVATAR.joy.y = 0;
+  AVATAR.pad.x = AVATAR.pad.y = 0;
   AVATAR.jump = false;
   if (AVATAR.model) scene.remove(AVATAR.model);
   document.body.classList.remove("playing");
@@ -2664,8 +2666,8 @@ function playStep(dt) {
   fwd.normalize();
   const right = new THREE.Vector3(-fwd.z, 0, fwd.x);
   const k = AVATAR.keys;
-  let ix = (k.has("d") || k.has("ArrowRight") ? 1 : 0) - (k.has("a") || k.has("ArrowLeft") ? 1 : 0) + AVATAR.joy.x;
-  let iz = (k.has("w") || k.has("ArrowUp") ? 1 : 0) - (k.has("s") || k.has("ArrowDown") ? 1 : 0) + AVATAR.joy.y;
+  let ix = (k.has("d") || k.has("ArrowRight") ? 1 : 0) - (k.has("a") || k.has("ArrowLeft") ? 1 : 0) + AVATAR.joy.x + AVATAR.pad.x;
+  let iz = (k.has("w") || k.has("ArrowUp") ? 1 : 0) - (k.has("s") || k.has("ArrowDown") ? 1 : 0) + AVATAR.joy.y + AVATAR.pad.y;
   const len = Math.hypot(ix, iz);
   if (len > 1) { ix /= len; iz /= len; }
   const want = right.multiplyScalar(ix).add(fwd.multiplyScalar(iz));
@@ -2719,8 +2721,43 @@ function die() {
   placeAvatar(AVATAR.respawn);
   toast(AVATAR.reached >= 0 && state.bricks ? "Ouch! Back to your checkpoint" : "Ouch! Back to the start");
 }
+// ---------------------------------------------------------------- Controllers (shared DaedalusPad module)
+// Left stick / d-pad moves, right stick orbits the camera, A jumps, X or RT thrusts, hold B crouches, Y heals,
+// View goes back to look mode, Menu/Start enters or leaves play. Any pad the module knows (standard, community
+// mapped retro / arcade / adapter, or taught with BIND on the Prismheart page) works here with the same file.
+const PAD = window.DaedalusPad ? window.DaedalusPad.create({
+  bundle: "/controllers/controller-bundle.json", digitalStick: false,
+  onChange: e => {
+    if (e.type === "connect") toast(`${e.pad.name} connected`);
+    if (e.type !== "down" && e.type !== "up") return;
+    const down = e.type === "down";
+    if (e.action === "menu" && down) { setMode(state.mode === "play" ? "look" : "play"); return; }
+    if (state.mode !== "play") return;
+    if (e.action === "a") AVATAR.jump = down;
+    else if ((e.action === "x" || e.action === "zr") && down) heroThrust();
+    else if (e.action === "b") heroCrouch(down);
+    else if (e.action === "y" && down) heroHeal();
+    else if (e.action === "back" && down) setMode("look");
+  },
+}) : null;
+state.pad = PAD;
+function padPlay(dtMs) {
+  if (!PAD) return;
+  PAD.poll();
+  const a = PAD.axes();
+  const dx = (PAD.held("right") ? 1 : 0) - (PAD.held("left") ? 1 : 0), dy = (PAD.held("up") ? 1 : 0) - (PAD.held("down") ? 1 : 0);
+  AVATAR.pad.x = a.lx + dx; AVATAR.pad.y = -a.ly + dy;
+  if (a.rx || a.ry) {                                       // right stick orbits around the avatar, rate-based like the hero
+    const off = camera.position.clone().sub(controls.target);
+    const sph = new THREE.Spherical().setFromVector3(off);
+    sph.theta -= a.rx * 2.6 * dtMs / 1000;
+    sph.phi = Math.min(Math.PI * 0.47, Math.max(0.15, sph.phi + a.ry * 1.8 * dtMs / 1000));
+    camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
+  }
+}
 function movePlay(t, dtMs) {
   if (!AVATAR.on) return;
+  padPlay(dtMs);
   AVATAR.acc = Math.min(0.5, AVATAR.acc + dtMs / 1000);   // a long stall is not a teleport
   while (AVATAR.acc >= STEP) { playStep(STEP); fightStep(STEP); AVATAR.acc -= STEP; }
   drawFight(t);

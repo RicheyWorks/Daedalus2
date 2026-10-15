@@ -38,6 +38,9 @@ canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
 .keys kbd { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--text); }
 #log { margin: 0; max-height: 210px; overflow: auto; font: 12px/1.5 var(--mono); color: var(--dim); white-space: pre-wrap; word-break: break-word; }
 #log b { color: var(--ok); font-weight: 500; }
+.padrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.padrow button { font: 500 11px var(--mono); color: var(--text); background: var(--cab-2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; cursor: pointer; letter-spacing: 0.04em; }
+.padrow button:hover, .padrow button:focus-visible { border-color: var(--crystal); outline: none; }
 .note { color: var(--dim); font-size: 12.5px; margin: 6px 0 0; }
 @media (prefers-reduced-motion: reduce) { .pad button { transition: none; } }
 </style>
@@ -62,7 +65,13 @@ canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
           <button class="round a" data-k="a" aria-label="A, confirm">A</button>
         </div>
       </div>
-      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu)</p>
+      <div class="padrow">
+        <button id="padbind" type="button">BIND CONTROLLER</button>
+        <button id="padconfirm" type="button">CONFIRM: BY LABEL</button>
+        <button id="padreset" type="button">RESET</button>
+      </div>
+      <p class="note" id="padstatus" aria-live="polite">No controller yet. Plug one in or pair it, then press any button.</p>
+      <p class="keys">Keyboard: <kbd>Arrows</kbd>/<kbd>WASD</kbd> move &middot; <kbd>Z</kbd>/<kbd>Space</kbd> A &middot; <kbd>X</kbd>/<kbd>Esc</kbd> B &middot; <kbd>Enter</kbd> Start (menu) &middot; arcade encoders: MAME keys (<kbd>Ctrl</kbd> A, <kbd>Alt</kbd> B, <kbd>1</kbd> Start)</p>
     </div>
     <div class="panel">
       <h2>Jukebox cues</h2>
@@ -72,6 +81,7 @@ canvas#screen:focus-visible { box-shadow: 0 0 0 2px var(--crystal); }
   </div>
 </div>
 
+<script src="controllers/daedalus-pad.js"></script>
 <script>
 "use strict";
 (() => {
@@ -92,20 +102,68 @@ function fit() {
 }
 window.addEventListener("resize", fit);
 
-/* ---------- input ---------- */
-const held = {}, pressed = {};
+/* ---------- input ----------
+   Every source (keyboard, touch pad, each controller, the test hook) holds its own buttons; a logical button is held
+   while any source holds it and is released only when the last one lets go (the native portal-controls translator's
+   rule, so a pad release never cancels a key that is still down). */
+const LOGICAL = ["up", "down", "left", "right", "a", "b", "start"];
+const held = {}, pressed = {}, pressedAt = {}, SRC = {}, repeatAt = {};
+function setHeld(src, k, v) {
+  (SRC[src] = SRC[src] || {})[k] = !!v;
+  const was = !!held[k];
+  held[k] = Object.values(SRC).some(o => o[k]);
+  if (held[k] && !was) { pressed[k] = true; pressedAt[k] = performance.now(); repeatAt[k] = pressedAt[k] + 380; }
+}
+function releaseSource(src) { if (SRC[src]) for (const k of LOGICAL) setHeld(src, k, false); delete SRC[src]; }
 const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
   KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
-window.addEventListener("keydown", e => { const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!held[k]) pressed[k] = true; held[k] = true; unlockAudio(); });
-window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) held[k] = false; });
+window.addEventListener("keydown", e => {
+  if (PAD && PAD.binding() && e.code === "Escape") { e.preventDefault(); return PAD.cancelBind(); }
+  const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) setHeld("kb", k, true); unlockAudio();
+});
+window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) setHeld("kb", k, false); });
+window.addEventListener("blur", () => Object.keys(SRC).forEach(releaseSource));     /* focus loss releases everything held */
 document.querySelectorAll("#pad button").forEach(b => {
   const k = b.dataset.k;
-  const down = e => { e.preventDefault(); if (!held[k]) pressed[k] = true; held[k] = true; b.classList.add("held"); unlockAudio(); };
-  const up = e => { e.preventDefault(); held[k] = false; b.classList.remove("held"); };
+  const down = e => { e.preventDefault(); setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
+  const up = e => { e.preventDefault(); setHeld("touch", k, false); b.classList.remove("held"); };
   b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
 });
 cv.addEventListener("pointerdown", () => { cv.focus(); unlockAudio(); });
 const hit = k => { const v = pressed[k]; pressed[k] = false; return !!v; };
+function menuRepeat(now) {                                        /* held directions repeat in menus, never in the field */
+  if (mode === "field" && !dlg) return;
+  for (const k of ["up", "down", "left", "right"]) if (held[k] && now >= (repeatAt[k] || Infinity)) { pressed[k] = true; repeatAt[k] = now + 110; }
+}
+
+/* ---------- controllers: the shared DaedalusPad module (controllers/daedalus-pad.js + controller-bundle.json) ----------
+   Standard pads, the community-mapped retro / arcade / adapter database, BIND for anything else, the one-button
+   rule for Atari sticks, MAME keys for cabinet encoders. The demo only translates its logical actions. */
+const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
+const PAD = window.DaedalusPad ? DaedalusPad.create({
+  bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2",
+  onChange: e => {
+    if (e.type === "down" || e.type === "up") { const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return; }
+    if (e.type === "bind" && e.step) sfx("TICK");
+    if (e.type === "bound") sfx("PICK");
+    padStatus(e.type === "bound" ? "SAVED: " + e.names.join("  ") : e.type === "bindcancel" ? "BIND CANCELLED." : e.type === "reset" ? "BINDINGS RESET." : "");
+  },
+}) : null;
+let padNote = "", padNoteUntil = 0;
+function padStatus(extra) {
+  const el = document.getElementById("padstatus"); if (!el || !PAD) return;
+  if (extra) { padNote = extra; padNoteUntil = performance.now() + 6000; }
+  extra = performance.now() < padNoteUntil ? padNote : "";
+  const list = PAD.devices();
+  const SRCN = { standard: "standard layout", bundle: "community map", custom: "your bindings", guess: "best guess - BIND to teach it" };
+  let t = !list.length ? "No controller yet. Plug one in or pair it, then press any button."
+    : list.map(p => p.name + " [" + p.family + ", " + SRCN[p.source] + "]  confirm " + PAD.label("confirm", p.index) + ", back " + PAD.label("cancel", p.index) + ", menu " + PAD.label("menu", p.index)).join("  |  ");
+  const b = PAD.bundleInfo(); if (b && !list.length) t += "  (" + b.devices + " controllers known.)";
+  const step = PAD.binding(); if (step) t = "BIND: press the button for " + step.toUpperCase() + " (Esc cancels).";
+  el.textContent = extra ? extra + "  " + t : t;
+  const cb = document.getElementById("padconfirm"); if (cb) cb.textContent = PAD.confirmMode() === "label" ? "CONFIRM: BY LABEL" : "CONFIRM: BOTTOM";
+}
+if (PAD) setInterval(padStatus, 1000);
 
 /* ---------- jukebox (ADR-052 cue contract) ---------- */
 const AC = window.AudioContext || window.webkitAudioContext;
@@ -113,6 +171,7 @@ let actx = null, master, musicGain, sfxGain, musicSrc = null, curBufCue = null;
 const bufs = {};
 const juke = { cue: null, lastPosted: null, sfx: [], posts: 0 };
 function unlockAudio() {
+  if (actx && actx.state === "suspended") actx.resume().catch(() => {});
   if (actx || !AC) return;
   try {
     actx = new AC();
@@ -156,7 +215,8 @@ async function playSfx(ev) {
   }
 }
 function cue(c) { juke.cue = c; }
-function sfx(e) { juke.sfx.push(e); }
+const RUMBLE = { HURT: [0.45, 110], CRIT: [0.7, 150], ZAP: [1, 420], DEFEAT: [0.8, 600], CALL: [0.6, 300] };
+function sfx(e) { juke.sfx.push(e); if (RUMBLE[e] && PAD) PAD.rumble(RUMBLE[e][0], RUMBLE[e][1]); }
 function jukeTick() {
   const changed = juke.cue !== juke.lastPosted;
   if (!changed && !juke.sfx.length) return;
@@ -803,6 +863,7 @@ function drawGameOver() {
 let last = performance.now();
 function frame(now) {
   requestAnimationFrame(frame);
+  if (PAD) PAD.poll(); menuRepeat(now);
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
   if (fade > 0) {
     fade -= dt * 3;
@@ -815,6 +876,8 @@ function frame(now) {
   else if (mode === "battle") battleTick(dt);
   else if (mode === "gameover") { goT += dt; if (goT > 1 && (hit("start") || hit("a"))) { mode = "title"; titleT = 0; cue("TITLE"); } }
   for (const k in pressed) if (fade > 0) pressed[k] = false;
+  for (const k of ["up", "down", "left", "right"]) pressed[k] = false;   /* a direction tap is for this frame only, never a stale menu move */
+  for (const k of ["a", "b", "start"]) if (pressed[k] && now - (pressedAt[k] || 0) > 150) pressed[k] = false;   /* buttons buffer 150 ms (a press mid-step still lands), never longer */
   if (mode === "title") drawTitle();
   else if (mode === "field") { drawField(); if (dlg) drawDialog(); }
   else if (mode === "menu") drawMenu();
@@ -830,7 +893,7 @@ window.PRISM_DEMO = {
   state: () => ({ mode, map: map && map.kind, floor: map && map.floor, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp]), boss: B.boss },
     party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.bossBeaten }),
-  press: k => { pressed[k] = true; }, hold: (k, v) => { held[k] = v; },
+  press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), pads: () => PAD ? PAD.devices() : [], padStore: () => PAD ? PAD.store() : {}, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   warp: (kind, x, y, floor) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
 };
@@ -847,6 +910,10 @@ async function boot() {
   cue("TITLE"); fit(); cv.focus({ preventScroll: true });
   requestAnimationFrame(frame);
 }
+document.getElementById("padbind").addEventListener("click", () => { if (PAD) { PAD.startBind(); padStatus(); } });
+document.getElementById("padconfirm").addEventListener("click", () => { if (PAD) { PAD.setConfirm(PAD.confirmMode() === "label" ? "position" : "label"); padStatus(); } });
+document.getElementById("padreset").addEventListener("click", () => { if (PAD) PAD.resetBinds(); });
+padStatus();
 boot();
 })();
 </script>
