@@ -1055,3 +1055,44 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - **Tests:** `status_test.py` (26 checks). `bot.round(plans)` plays one battle round by the menus and is reused by the
   tests. New hooks: `battle(zone, boss, keys)` picks the formation, plus `foeStatus()`, `inflict(i, k)` and
   `teach(i, spell)`.
+
+### 14.32 The Prismheart demo: foe behaviours
+
+- **Every `behaviour` in `foes.json` now changes what a foe does.** There are 20 of them, and `foeTurn()` handles each.
+  Before this, every foe made the same plain hit.
+
+| Behaviour | What the foe does |
+|---|---|
+| simple | A plain hit. |
+| heavy | Hits ×1.35 but misses 15% of the time. |
+| multi_hit | Two hits at ×0.6 each. |
+| charge | Spends a turn "gathering itself", then hits ×2.2. DEFEND halves it. |
+| pack | Attack +15% for each packmate still standing. |
+| caster | An elemental bolt that spirit resists and armour does not. |
+| caster_drain | The same bolt, and it heals the caster half the damage. |
+| breath_ice | Frost on the whole party every other turn. |
+| erratic | 20% of its turns it flits about and does nothing. |
+| steal | 30% of its hits take gold. The gold comes back when it falls. |
+| ambush | Bursts out and acts first in round 1. |
+| armored | Party blows count its defence ×1.2 instead of ×0.75. Spells are unaffected. |
+| undead | Never sleeps or gets poisoned. Light and fire hit it ×1.5. It may rise once at 30% HP. |
+| status_poison / sleep / confuse / bind / blind / burn / paralyze | 30% of its hits inflict that status. |
+
+- **New statuses:**
+
+| Status | Effect | Ends |
+|---|---|---|
+| Confuse | The hero swings at anyone standing, friend or foe. | When hit, or after 3 rounds. |
+| Bind | The hero loses their turns. | 2 rounds. |
+| Paralyze | The hero loses their turns. | 2 rounds. |
+| Blind | Half of the hero's attacks miss. | 4 rounds. |
+| Burn | Like poison but at 1/12 of max HP. | 3 rounds. |
+
+  None of these last past the battle. A confused, bound, paralysed or sleeping hero is skipped by the command menu.
+- **Wardens** have no behaviour field. They keep their own specials (14.28).
+- **Tests:** `behaviour_test.py` (27 checks). It fights the gentlest real foe with each behaviour through the menus,
+  and fails if a behaviour appears in the data without a check. `bot.start_fight(keys)` and `bot.finish()` are now
+  shared with `status_test.py`.
+- **Found on the way:** `recruit_test` drew its half-EXP field fight from the zone's random formations. When the foe
+  turns changed, the seeded rolls changed with them: a bigger formation came up and the party levelled mid-check. That
+  fight now uses a fixed formation (one Gelfin).

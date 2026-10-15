@@ -858,8 +858,13 @@ const STATUS = {
   poison: { tag: "PSN", word: "POISONED", color: "#a0e070" }, sleep: { tag: "SLP", word: "ASLEEP", color: "#a0a8ff" },
   protect: { tag: "WRD", word: "WARDED", color: "#a0d8f8" }, haste: { tag: "HST", word: "HASTED", color: "#f8d878" },
   slow: { tag: "SLW", word: "SLOWED", color: "#d0a0f8" },
+  confuse: { tag: "CNF", word: "CONFUSED", color: "#f8a0d0" }, bind: { tag: "BND", word: "BOUND", color: "#d8b080" },
+  paralyze: { tag: "PRZ", word: "PARALYZED", color: "#f8f078" }, blind: { tag: "BLN", word: "BLINDED", color: "#a8a8a8" },
+  burn: { tag: "BRN", word: "BURNING", color: "#f89058" },
 };
-const ROUNDS = { sleep: 3, protect: 4, haste: 4, slow: 4 };
+const ROUNDS = { sleep: 3, protect: 4, haste: 4, slow: 4, confuse: 3, bind: 2, paralyze: 2, blind: 4, burn: 3 };
+const HELD = ["sleep", "confuse", "bind", "paralyze"];         /* a hero under one of these does not choose a command */
+const isHeld = m => HELD.some(k => has(m, k));
 const stat = x => x.status || (x.status = {});
 const has = (x, k) => !!(x.status && x.status[k]);
 const tags = x => Object.keys(x.status || {}).filter(k => x.status[k] && STATUS[k]);
@@ -872,22 +877,23 @@ function inflict(t, k) {
   return true;
 }
 function cure(t, k) { if (!has(t, k)) return false; delete t.status[k]; return true; }
-function landHit(t, dmg) {                                     /* any blow wakes a sleeper */
+function landHit(t, dmg) {                                     /* any blow wakes a sleeper and clears the head */
   if (has(t, "sleep")) { delete t.status.sleep; if (B) pop(t, "AWAKE", STATUS.sleep.color); }
+  if (has(t, "confuse")) delete t.status.confuse;
   if (t.hp <= 0) t.status = {};
   return dmg;
 }
 const wardMul = m => has(m, "protect") ? 0.6 : 1;
-function statusChance(f, k) { if (!f.boss) return 0.75; return k === "sleep" ? 0 : 0.4; }
+function statusChance(f, k) { if (f.beh === "undead" && (k === "sleep" || k === "poison")) return 0; if (!f.boss) return 0.75; return k === "sleep" ? 0 : 0.4; }
 function roundStatuses() {                                    /* end of a round: poison bites, timers run down */
   for (const x of party.concat(B.foes)) {
     if (x.hp <= 0 || !x.status) continue;
-    if (x.status.poison) {
-      const isFoe = B.foes.includes(x), d = Math.max(1, Math.round(x.max / 16));
-      x.hp = isFoe ? Math.max(0, x.hp - d) : Math.max(1, x.hp - d); pop(x, d, STATUS.poison.color);
+    for (const k of ["poison", "burn"]) if (x.status[k] && x.hp > 0) {
+      const isFoe = B.foes.includes(x), d = Math.max(1, Math.round(x.max / (k === "burn" ? 12 : 16)));
+      x.hp = isFoe ? Math.max(0, x.hp - d) : Math.max(1, x.hp - d); pop(x, d, STATUS[k].color);
       if (isFoe && x.hp <= 0) B.flash[x.key + x.x] = 0.2;
     }
-    for (const k of ["sleep", "protect", "haste", "slow"]) if (x.status[k] && --x.status[k] <= 0) { delete x.status[k]; if (k === "sleep") pop(x, "AWAKE", STATUS.sleep.color); }
+    for (const k of Object.keys(ROUNDS)) if (x.status[k] && --x.status[k] <= 0) { delete x.status[k]; if (k === "sleep") pop(x, "AWAKE", STATUS.sleep.color); }
   }
 }
 function fieldPoison() {                                      /* every 4th step, poison nips (never below 1 HP) */
@@ -929,13 +935,14 @@ function startBattle(zone, boss, only) {
   foes.forEach((f, i) => { if (!f.boss) { f.x = 24 + (i % 2) * 70 + (i > 1 ? 18 : 0); f.y = 26 + Math.floor(i / 2) * 52 + (i % 2) * 8; } else { f.x = 30; f.y = 10; } });
   const bd = D.backdrop_for_zone[boss ? (dg ? dg.boss_backdrop : "volcano") : zone] || Object.values(D.backdrop_for_zone)[0];
   B = { foes, bd, phase: "intro", who: 0, cmd: 0, target: 0, sub: null, list: [], acts: [], msg: boss ? "THE " + pretty(bd0.name) + " " + flavour(bd0)[0] : foes.length > 1 ? foes[0].name.toUpperCase() + " AND FRIENDS APPEAR!" : "A " + foes[0].name.toUpperCase() + " APPEARS!",
-    t: 0, fx: null, pops: [], flash: {}, boss: !!boss, turn: 0, prevCue: map.cue };
+    t: 0, fx: null, pops: [], flash: {}, boss: !!boss, turn: 0, round: 1, prevCue: map.cue };
+  const amb = foes.find(f => f.beh === "ambush"); if (amb) B.msg = "AMBUSH! THE " + amb.name.toUpperCase() + " BURSTS OUT!";
   cue(boss ? "BOSS" : "BATTLE"); sfx(boss ? "CALL" : "AMBUSH");
   fade = 1; fadeCb = () => { mode = "battle"; };
 }
 const ELEM = { tide: "water", gale: "air", stone: "earth", shade: "dark", flame: "fire" };   /* boss data names elements by realm lore */
 const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
-function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !has(party[i], "sleep")) return i; return -1; }
+function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !isHeld(party[i])) return i; return -1; }
 function battleTick(dt) {
   B.t += dt;
   B.pops = B.pops.filter(p => (p.t += dt) < 0.9);
@@ -1000,15 +1007,21 @@ function advanceChooser() {
   B.cmd = 0;
   if (n >= 0) { B.who = n; return; }
   const foeActs = alive(B.foes).map(f => ({ kind: "foe", who: f }));
-  B.queue = B.acts.concat(foeActs).sort((a, b) => spdOf(b) - spdOf(a));
+  const dazed = party.filter(m => m.hp > 0 && has(m, "confuse")).map(m => ({ kind: "attack", who: m, confused: true }));
+  B.queue = B.acts.concat(dazed, foeActs).sort((a, b) => spdOf(b) - spdOf(a));
   B.phase = "act"; B.wait = 0;
 }
-const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) * (has(a.who, "haste") ? 1.5 : has(a.who, "slow") ? 0.6 : 1) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0);
+const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) * (has(a.who, "haste") ? 1.5 : has(a.who, "slow") ? 0.6 : 1) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0)
+  + (a.kind === "foe" && a.who.beh === "ambush" && B.round === 1 ? 199 : 0);        /* an ambusher always opens the fight */
 function pop(target, txt, color) {
   const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: 268, y: 22 + party.indexOf(target) * 30 };
   B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
 }
-function hurtFoe(f, dmg) { f.hp = Math.max(0, f.hp - dmg); B.flash[f.key + f.x] = 0.2; pop(f, dmg, "#ffffff"); }
+function hurtFoe(f, dmg) {
+  f.hp = Math.max(0, f.hp - dmg); B.flash[f.key + f.x] = 0.2; pop(f, dmg, "#ffffff");
+  if (f.hp <= 0 && f.beh === "undead" && !f.rose && Math.random() < 0.35) { f.rose = true; f.hp = Math.round(f.max * 0.3); B.rose = f; pop(f, "RISES", "#c8a0f8"); }
+}
+const riseNote = () => { const f = B.rose; B.rose = null; return f ? " THE " + f.name.toUpperCase() + " RISES AGAIN!" : ""; };
 function doAction(a) {
   B.wait = 0.75;
   const who = a.who;
@@ -1023,14 +1036,24 @@ function doAction(a) {
     B.msg = "COULDN'T GET AWAY!"; sfx("MISS"); return;
   }
   if (a.kind === "attack") {
+    if (a.confused) {                                          /* a confused hero swings at anyone standing but themself */
+      if (!has(who, "confuse")) { B.wait = 0; return; }
+      const pool = alive(party).filter(m => m !== who).concat(alive(B.foes)), t = pool[ri(0, pool.length - 1)];
+      if (!t) { B.wait = 0; return; }
+      sfx("SWING");
+      if (B.foes.includes(t)) { const d = Math.max(1, Math.round(atkOf(who) * rnd(0.85, 1.15) - t.def * 0.75)); hurtFoe(t, landHit(t, d)); B.msg = who.name + " IS CONFUSED AND HITS " + t.name + " FOR " + d + "." + riseNote(); return; }
+      const d = Math.max(1, Math.round((atkOf(who) * rnd(0.85, 1.15) - defOf(t) * 0.7) * wardMul(t))); t.hp = Math.max(0, t.hp - d); landHit(t, d); pop(t, d, "#ff8868"); sfx("HURT");
+      B.msg = who.name + " IS CONFUSED AND HITS " + t.name + " FOR " + d + "!" + (t.hp <= 0 ? " " + t.name + " IS DOWN!" : ""); return;
+    }
     let f = a.target; if (!f || f.hp <= 0) f = alive(B.foes)[0];
     sfx("SWING");
-    if (Math.random() < 0.05) { B.msg = who.name + " MISSES!"; sfx("MISS"); pop(f, "MISS", "#c0c0c0"); return; }
-    const crit = Math.random() < 0.07;
-    const dmg = Math.max(1, Math.round((atkOf(who) * rnd(0.85, 1.15) - f.def * 0.75) * (crit ? 1.8 : 1)));
+    if (Math.random() < (has(who, "blind") ? 0.5 : 0.05)) { B.msg = who.name + (has(who, "blind") ? " SWINGS BLINDLY AND MISSES!" : " MISSES!"); sfx("MISS"); pop(f, "MISS", "#c0c0c0"); return; }
+    const crit = Math.random() < 0.07, armoured = f.beh === "armored";
+    const dmg = Math.max(1, Math.round((atkOf(who) * rnd(0.85, 1.15) - f.def * (armoured ? 1.2 : 0.75)) * (crit ? 1.8 : 1)));
     hurtFoe(f, landHit(f, dmg)); sfx(crit ? "CRIT" : "HIT");
-    B.msg = (crit ? "CRITICAL! " : "") + who.name + " HITS " + f.name + " FOR " + dmg + ".";
+    B.msg = (crit ? "CRITICAL! " : "") + who.name + " HITS " + f.name + " FOR " + dmg + "." + (armoured ? " THE SHELL TAKES MOST OF IT." : "");
     if (f.hp <= 0) B.msg += " " + f.name + " FALLS!";
+    B.msg += riseNote();
     return;
   }
   if (a.kind === "magic") {
@@ -1056,13 +1079,13 @@ function doAction(a) {
     let total = 0, weakHit = false;
     targets.forEach(f => {
       if (!f || f.hp <= 0) return;
-      const resist = f.weak && f.weak === s.element ? 2 : f.el && f.el === s.element ? 0.5 : 1;
+      const resist = f.weak && f.weak === s.element ? 2 : f.el && f.el === s.element ? 0.5 : f.beh === "undead" && (s.element === "light" || s.element === "fire") ? 1.5 : 1;
       if (resist > 1) weakHit = true;
       const dmg = Math.max(1, Math.round((s.power * 1.4 + who.st.int * 3 - f.def * 0.4) * resist * rnd(0.9, 1.1)));
       hurtFoe(f, landHit(f, dmg)); total += dmg;
       if (s.status === "drain_hp") { const h = Math.min(who.max - who.hp, Math.round(dmg / 2)); who.hp += h; if (h) pop(who, h, "#78f8a0"); }
     });
-    B.msg = who.name + " CASTS " + s.name.toUpperCase() + "!" + (weakHit ? " A WEAK SPOT!" : "") + (targets.length > 1 ? " " + total + " DAMAGE IN ALL." : "");
+    B.msg = who.name + " CASTS " + s.name.toUpperCase() + "!" + (weakHit ? " A WEAK SPOT!" : "") + (targets.length > 1 ? " " + total + " DAMAGE IN ALL." : "") + riseNote();
     return;
   }
   if (a.kind === "item") {
@@ -1079,21 +1102,64 @@ function doAction(a) {
       tg.forEach(m => { const d = Math.max(1, Math.round((f.atk * 1.1 - defOf(m) * 0.6) * rnd(0.85, 1.1) * (m.defend ? 0.5 : 1) * wardMul(m))); m.hp = Math.max(0, m.hp - d); landHit(m, d); pop(m, d, "#ff8868"); });
       sfx("HURT"); return;
     }
-    const m = tg[ri(0, tg.length - 1)];
-    if (Math.random() < 0.06) { B.msg = f.name + " ATTACKS " + m.name + " BUT MISSES."; sfx("MISS"); pop(m, "MISS", "#c0c0c0"); return; }
-    const d = Math.max(1, Math.round((f.atk * 1.5 * rnd(0.85, 1.15) - defOf(m) * 0.7) * (m.defend ? 0.5 : 1) * wardMul(m)));
-    m.hp = Math.max(0, m.hp - d); landHit(m, d); sfx("HURT"); pop(m, d, "#ff8868");
-    B.msg = f.name + " HITS " + m.name + " FOR " + d + "." + (m.hp <= 0 ? " " + m.name + " IS DOWN!" : "");
-    const sk = { status_poison: "poison", status_sleep: "sleep" }[f.beh];
-    if (sk && m.hp > 0 && Math.random() < 0.3 && inflict(m, sk)) B.msg += " " + m.name + " IS " + STATUS[sk].word + "!";
+    foeTurn(f, tg);
   }
+}
+/* Foe turns by foes.json behaviour. Every behaviour in the data does something:
+   simple: a plain hit. heavy: hits ×1.35 but misses 15%. multi_hit: two hits at ×0.6. charge: one turn gathering
+   (telegraphed), then ×2.2 (DEFEND halves it). pack: +15% per other foe standing. caster: an elemental bolt that
+   spirit resists, not armour. caster_drain: a bolt that heals the caster half. breath_ice: frost on everyone every
+   other turn. erratic: 20% of turns it flits about. steal: 30% of hits take gold, returned when it falls.
+   ambush: opens the fight. armored: party blows count its defence ×1.2 (not ×0.75); spells do not care.
+   undead: never sleeps or sickens, light and fire hurt it ×1.5, and it may rise once at 30% HP.
+   status_poison / sleep / confuse / bind / blind / burn / paralyze: 30% of hits inflict it. */
+const FOE_STATUS = { status_poison: "poison", status_sleep: "sleep", status_confuse: "confuse", status_bind: "bind", status_blind: "blind", status_burn: "burn", status_paralyze: "paralyze" };
+const foePower = f => f.atk * (f.beh === "pack" ? 1 + 0.15 * B.foes.filter(o => o !== f && o.hp > 0).length : 1);
+function foeHit(f, m, mul, miss) {
+  if (Math.random() < miss) { pop(m, "MISS", "#c0c0c0"); sfx("MISS"); return -1; }
+  const d = Math.max(1, Math.round((foePower(f) * 1.5 * mul * rnd(0.85, 1.15) - defOf(m) * 0.7) * (m.defend ? 0.5 : 1) * wardMul(m)));
+  m.hp = Math.max(0, m.hp - d); landHit(m, d); sfx("HURT"); pop(m, d, "#ff8868");
+  return d;
+}
+const downNote = m => m.hp <= 0 ? " " + m.name + " IS DOWN!" : "";
+function foeTurn(f, tg) {
+  const beh = f.beh || "simple", F = f.name.toUpperCase(), pick = () => tg[ri(0, tg.length - 1)];
+  f.turns = (f.turns || 0) + 1;
+  if (beh === "erratic" && Math.random() < 0.2) { B.msg = "THE " + F + " FLITS ABOUT AIMLESSLY."; return; }
+  if (beh === "charge" && !f.charged) { f.charged = true; B.msg = "THE " + F + " IS GATHERING ITSELF..."; pop(f, "!!", "#fff070"); return; }
+  if (beh === "breath_ice" && f.turns % 2 === 0) {
+    B.msg = "THE " + F + " BREATHES FROST ON EVERYONE!"; sfx("ZAP");
+    tg.forEach(m => { const d = Math.max(1, Math.round((foePower(f) * 0.9 * rnd(0.9, 1.1) - defOf(m) * 0.5) * (m.defend ? 0.5 : 1) * wardMul(m))); m.hp = Math.max(0, m.hp - d); landHit(m, d); pop(m, d, "#a0d8f8"); });
+    return;
+  }
+  if (beh === "caster" || beh === "caster_drain") {
+    const m = pick(), el = (f.el && f.el !== "none" ? f.el : "dark").toUpperCase();
+    const d = Math.max(1, Math.round((foePower(f) * 1.4 - m.st.spr * 1.2) * rnd(0.9, 1.1) * (m.defend ? 0.5 : 1) * wardMul(m)));
+    m.hp = Math.max(0, m.hp - d); landHit(m, d); sfx("SPELL"); pop(m, d, "#ff8868");
+    B.msg = "THE " + F + " CASTS A " + el + " BOLT AT " + m.name + " FOR " + d + "." + downNote(m);
+    if (beh === "caster_drain") { const h = Math.min(f.max - f.hp, Math.round(d / 2)); if (h > 0) { f.hp += h; pop(f, h, "#78f8a0"); B.msg += " IT DRINKS " + h + " HP."; } }
+    return;
+  }
+  if (beh === "multi_hit") {
+    const m1 = pick(), d1 = foeHit(f, m1, 0.6, 0.06), rest = alive(party), m2 = rest.length ? rest[ri(0, rest.length - 1)] : null, d2 = m2 ? foeHit(f, m2, 0.6, 0.06) : -1;
+    B.msg = "THE " + F + " STRIKES TWICE: " + m1.name + (d1 < 0 ? " DODGES" : " " + d1) + (m2 ? ", " + m2.name + (d2 < 0 ? " DODGES" : " " + d2) : "") + "." + (m2 ? downNote(m1) + (m2 !== m1 ? downNote(m2) : "") : downNote(m1));
+    return;
+  }
+  const m = pick(), heavy = beh === "heavy", charged = beh === "charge";
+  if (charged) f.charged = false;
+  const d = foeHit(f, m, heavy ? 1.35 : charged ? 2.2 : 1, heavy ? 0.15 : 0.06);
+  if (d < 0) { B.msg = f.name + " ATTACKS " + m.name + " BUT MISSES."; return; }
+  B.msg = (charged ? "THE " + F + " UNLEASHES ITSELF ON " : heavy ? f.name + " SWINGS HARD AT " : f.name + " HITS ") + m.name + " FOR " + d + "." + downNote(m);
+  if (beh === "steal" && m.hp > 0 && gold > 0 && Math.random() < 0.3) { const n = Math.min(gold, 4 + Math.round(f.atk / 2)); gold -= n; f.stolen = (f.stolen || 0) + n; B.msg += " IT SNATCHES " + n + " GOLD!"; }
+  const sk = FOE_STATUS[beh];
+  if (sk && m.hp > 0 && Math.random() < 0.3 && inflict(m, sk)) B.msg += " " + m.name + " IS " + STATUS[sk].word + "!";
 }
 function endRound() {
   if (alive(B.foes).length && alive(party).length) roundStatuses();
   if (!alive(B.foes).length) {
-    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0);
-    gold += gd; cue("VICTORY"); sfx("VICTORY");
-    const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."];
+    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0), back = B.foes.reduce((a, f) => a + (f.stolen || 0), 0);
+    gold += gd + back; cue("VICTORY"); sfx("VICTORY");
+    const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."].concat(back ? ["YOU TAKE BACK " + back + " STOLEN GOLD."] : []);
     const grow = (m, e) => { if (m.hp <= 0) return; m.exp += e; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } };
     party.forEach(m => grow(m, exp)); reserve.forEach(m => grow(m, Math.floor(exp / 2)));   /* the reserve learns by watching: half */
     const bf = B.foes.find(f => f.boss);
@@ -1103,7 +1169,7 @@ function endRound() {
     B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
   }
   if (!alive(party).length) { cue("DEFEAT"); sfx("DEFEAT"); B.msg = "THE PARTY HAS FALLEN..."; B.phase = "end"; B.result = "lose"; B.wait = 1.2; return; }
-  B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; B.cmd = 0; party.forEach(m => m.defend = false);
+  B.round++; B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; B.cmd = 0; party.forEach(m => m.defend = false);
   if (B.who < 0) advanceChooser();                           /* everyone standing is asleep: the round plays itself */
 }
 function finishBattle() {
@@ -1399,7 +1465,7 @@ window.PRISM_DEMO = {
   ko: i => { roster()[i].hp = 0; },
   foes: hp => { if (B) B.foes.forEach(f => { f.hp = Math.min(f.hp, hp); }); },
   roster: () => roster().map((m, i) => ({ name: m.name, job: m.job, lv: m.lv, exp: m.exp, next: m.next, hp: m.hp, max: m.max, mp: m.mp, front: i < ACTIVE, status: tags(m) })),
-  foeStatus: () => B ? B.foes.map(f => ({ name: f.name, hp: f.hp, max: f.max, status: tags(f), beh: f.beh })) : [],
+  foeStatus: () => B ? B.foes.map(f => ({ name: f.name, hp: f.hp, max: f.max, status: tags(f), beh: f.beh, power: Math.round(foePower(f)), atk: f.atk, def: f.def, stolen: f.stolen || 0, rose: !!f.rose })) : [],
   inflict: (i, k) => { const m = roster()[i]; stat(m)[k] = k === "poison" ? true : ROUNDS[k] || 3; },
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },

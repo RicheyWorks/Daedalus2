@@ -75,7 +75,7 @@ with sync_playwright() as p:
     # a field fight: the reserve learns by watching (half EXP)
     exp0 = {m["name"]: m["exp"] for m in roster()}; lv0 = {m["name"]: m["lv"] for m in roster()}
     ev("PRISM_DEMO.warp('town',11,10)"); W(300)
-    ev("PRISM_DEMO.battle(Object.keys(%s)[0])" % json.dumps(D["zones"])); W(300); ev("PRISM_DEMO.foes(1)")
+    bot.start_fight(["prism_best_gelfin"]); ev("PRISM_DEMO.foes(1)")      # one plain Gelfin: a small, fixed EXP
     msgs.clear(); bot.fight(); bot.clear()
     won = next((int(m.split()[1]) for m in msgs if m and m.startswith("VICTORY!")), None)
     r = {m["name"]: m for m in roster()}
@@ -105,7 +105,7 @@ with sync_playwright() as p:
     s = st()
     check("ORDER swaps Fennick into the front four", s["party"][0][0] == "Fennick" and s["reserve"][0][0] == "Corin", ([m[0] for m in s["party"]], [m[0] for m in s["reserve"]]))
     bot.press("b", 120); bot.press("b", 120); bot.clear()
-    ev("PRISM_DEMO.battle(Object.keys(%s)[0])" % json.dumps(D["zones"])); W(300)
+    bot.start_fight(["prism_best_gelfin"])
     check("...and he fights", [m[0] for m in st()["party"]][0] == "Fennick" and st()["battle"] is not None)
     ev("PRISM_DEMO.foes(1)"); bot.fight(); bot.clear()
 

@@ -132,6 +132,30 @@ class Bot:
                 self.press("a", 60); continue
         return self.st()
 
+    def start_fight(self, keys, zone="plains"):
+        """From the town square, start a battle against exactly these foes.json keys; True once commands open."""
+        import json
+        self.ev("PRISM_DEMO.warp('town',11,10)"); self.pg.wait_for_timeout(250)
+        self.ev("PRISM_DEMO.battle(%s, null, %s)" % (json.dumps(zone), json.dumps(keys))); self.pg.wait_for_timeout(400)
+        for _ in range(40):
+            s = self.st()
+            if s["mode"] == "battle" and s["battle"]["phase"] == "cmd":
+                return True
+            self.pg.wait_for_timeout(100)
+        return False
+
+    def finish(self):
+        """Knock the foes to 1 HP, attack them down and see the victory out to the field."""
+        self.ev("PRISM_DEMO.foes(1)")
+        for _ in range(40):
+            s = self.st()
+            if s["mode"] != "battle":
+                break
+            if s["battle"]["phase"] == "end":
+                self.press("a", 150); continue
+            self.round({}, default=("ATTACK", None, 0))
+        self.clear()
+
     def shop(self, kind, buys):
         """Walk into an interior shop (Magic, Item, ...), buy each name in buys once, in order, and walk out."""
         stock = [x["name"] for x in self.D["interiors"][kind]["stock"]]

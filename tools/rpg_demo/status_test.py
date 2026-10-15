@@ -45,23 +45,7 @@ with sync_playwright() as p:
         if s.get("battle") and (not msgs or msgs[-1] != s["battle"]["msg"]): msgs.append(s["battle"]["msg"])
         return s
     bot.st = watched; st = watched
-    ZONE = "plains"
-    def fight(keys):
-        ev("PRISM_DEMO.warp('town',11,10)"); W(250)
-        ev("PRISM_DEMO.battle(%s, null, %s)" % (json.dumps(ZONE), json.dumps(keys))); W(400)
-        for _ in range(40):
-            s = st()
-            if s["mode"] == "battle" and s["battle"]["phase"] == "cmd": return True
-            W(100)
-        return False
-    def finish():                                                 # knock the foes to 1 HP, attack them down, see it out
-        ev("PRISM_DEMO.foes(1)")
-        for _ in range(40):
-            s = st()
-            if s["mode"] != "battle": break
-            if s["battle"]["phase"] == "end": bot.press("a", 150); continue
-            bot.round({}, default=("ATTACK", None, 0))
-        bot.clear()
+    fight = bot.start_fight; finish = bot.finish
     for sp in ("Drowse", "Lull", "Blight", "Siphon"): ev("PRISM_DEMO.teach(2,'%s')" % sp)
     for sp in ("Quicken",): ev("PRISM_DEMO.teach(1,'%s')" % sp)
 
