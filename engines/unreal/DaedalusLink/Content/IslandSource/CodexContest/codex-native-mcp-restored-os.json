@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-15T03:15:15.6003434Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 9877,
+      "OwningProcess": 28788
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 8000,
+      "OwningProcess": 28788
+    }
+  ],
+  "memory": {
+    "free_physical_kib": 2246044,
+    "total_visible_kib": 33249688
+  }
+}

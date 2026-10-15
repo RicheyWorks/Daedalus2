@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-15T03:08:29.539780+00:00",
+  "stage": "named_axis_construction_camera_verified_native_capture_saved",
+  "target": {
+    "location": {
+      "x": -343550,
+      "y": 326150,
+      "z": 18615.324
+    },
+    "rotation": {
+      "pitch": -8.999999999999998,
+      "yaw": -89.99999999999996,
+      "roll": -8.050501739108952e-16
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "native": {
+    "rotator_doc": "An orthogonal rotation in 3d space.\r\nnote: The full C++ class is located here: Engine\\Source\\Runtime\\Core\\Public\\Math\\Rotator.h\r\n\r\n**C++ Source:**\r\n\r\n- **Module**: CoreUObject\r\n- **File**: NoExportTypes.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``pitch`` (double):  [Read-Write] Pitch (degrees) around Y axis\r\n- ``roll`` (double):  [Read-Write] Roll (degrees) around X axis\r\n- ``yaw`` (double):  [Read-Write] Yaw (degrees) around Z axis",
+    "camera": {
+      "location": {
+        "x": -343550.0,
+        "y": 326150.0,
+        "z": 18615.324
+      },
+      "rotation": {
+        "pitch": -9.0,
+        "yaw": -90.0,
+        "roll": -8.050501827401146e-16
+      }
+    },
+    "dirty_maps": [],
+    "dirty_content": []
+  },
+  "initial_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-after-native-activation-view.json",
+  "world_mutation_or_save": false,
+  "image": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-after-activation-corrected-0308.png",
+    "bytes": 725395,
+    "sha256": "ef3bf12a0ec98bc8965f4efbf38eb65319481c14c5e03f6514c9173e3414f6da",
+    "pixels": [
+      960,
+      540
+    ]
+  }
+}

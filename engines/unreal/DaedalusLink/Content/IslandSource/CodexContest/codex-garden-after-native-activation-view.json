@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-15T03:06:46.799873+00:00",
+  "stage": "initial_camera_rotation_mismatch_reconciled_in_companion",
+  "requested_camera": {
+    "location": {
+      "x": -343550,
+      "y": 326150,
+      "z": 18615.324
+    },
+    "rotation": {
+      "pitch": -8.999999999999998,
+      "yaw": -89.99999999999996,
+      "roll": -8.050501739108952e-16
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "native": {
+    "camera_owner": "<class 'UnrealEditorSubsystem'>",
+    "setter_doc": "x.set_level_viewport_camera_info(camera_location, camera_rotation) -> None\r\nSets information about the camera position for the primary level editor viewport.\nIn the UnrealEd module instead of Level Editor as it uses FLevelEditorViewportClient which is in this module\r\n\r\nArgs:\r\n    camera_location (Vector): Location the camera will be moved to.\r\n    camera_rotation (Rotator): Rotation the camera will be set to.",
+    "actual_camera": {
+      "location": {
+        "x": -343550.0,
+        "y": 326150.0,
+        "z": 18615.324
+      },
+      "rotation": {
+        "pitch": -90.0,
+        "yaw": -8.050501827401146e-16,
+        "roll": -9.0
+      }
+    },
+    "slate_python_class_present": true,
+    "slate_python_window_methods": [],
+    "dirty_maps": [],
+    "dirty_content": []
+  },
+  "world_mutation_or_save": false,
+  "image": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-after-native-activation-0306.png",
+    "bytes": 687832,
+    "sha256": "f4427babf4221d9f5b1ddb9a2d41314c99e3d29024ded2ef8c70bd35b5cfe7c5",
+    "pixels": [
+      960,
+      540
+    ]
+  },
+  "corrected_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-after-native-activation-corrected-view.json",
+  "correction": "Positional Rotator constructor mapped axes differently; named pitch/yaw/roll verified against the target. Initial capture retained without visual acceptance."
+}

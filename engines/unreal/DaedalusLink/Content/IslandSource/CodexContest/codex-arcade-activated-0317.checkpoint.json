@@ -1,0 +1,204 @@
+{
+  "schema": "daedalus.codex-native-normal-activation-checkpoint.v1",
+  "utc": "2026-10-15T03:15:18.644811+00:00",
+  "stage": "installed_loaded_reflected_preserved_visible",
+  "source": {
+    "commit": "2d5a4a47fe9f7614c4dd311cca52234b14d4d999",
+    "pr157_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+    "pr139_head": "0582c27a7fe3ad1f92da836f087efface618a8b6",
+    "review": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-157-published-source-review.json",
+      "bytes": 12387,
+      "sha256": "a13ebc403b5c5f16902769c9c30bc8edc14b3e033b56178913c52d11ad2a5ed8"
+    },
+    "verdict": "SOURCE_ADOPTION_MATCHES_REVIEWED_STAGE",
+    "committed_payload_files": 11,
+    "all_eleven_byte_exact": true,
+    "mines_registry_additions": 3,
+    "unrelated_cpp_changes": [],
+    "historical_core_final_newline_reconciliation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-mines-source-pin-reconciliation.json",
+      "bytes": 1386,
+      "sha256": "832acd41b2b86197ac94e40e8b175cec751522931b956e6006455d5b3d79f5d9"
+    }
+  },
+  "normal_close": {
+    "old_pid": 65260,
+    "forced": false,
+    "route": "CLOSE_SLATE_MAINFRAME / RequestCloseEditor",
+    "zero_editor_before_install": true
+  },
+  "installation": {
+    "source_leaves": 11,
+    "binary_leaves": 2,
+    "module_receipt_unchanged": true,
+    "settings_changed": false,
+    "new_pid": 28788
+  },
+  "loaded_image": {
+    "scope": "Loaded image identity plus exact backing disk file hash; no relocated memory hash claim.",
+    "utc": "2026-10-15T03:05:48.3849389Z",
+    "command_line": "\"C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe\" C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject /Game/Daedalus/DaedalusWorld",
+    "process_id": 28788,
+    "loaded_image": {
+      "ModuleName": "UnrealEditor-DaedalusLink.dll",
+      "FileName": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "ModuleMemorySize": 8314880,
+      "BaseAddress": {
+        "value": 140717826179072
+      }
+    },
+    "memory_hash_claimed": false,
+    "backing_disk_file": {
+      "sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d",
+      "bytes": 8272384
+    }
+  },
+  "reflected_methods": {
+    "submit_arcade_source_key": true,
+    "submit_arcade_source_controller_button": true
+  },
+  "catalog_ids": [
+    "minesweeper",
+    "pong",
+    "dungeon",
+    "asteroids",
+    "football",
+    "pacman",
+    "sega_shooter",
+    "shadow_ninja",
+    "star_shooter",
+    "dodge_ball",
+    "contra",
+    "zelda"
+  ],
+  "actor_preservation": {
+    "before_count": 101,
+    "after_count": 101,
+    "issues": [],
+    "equivalent": true,
+    "transient_or_numeric_differences": []
+  },
+  "staging_actors": 100,
+  "existing_pong_actors": 1,
+  "map": {
+    "asset_path": "/Game/Daedalus/DaedalusWorld",
+    "bytes": 209329457,
+    "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933",
+    "saved_by_activation": false
+  },
+  "final_native": {
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "pie": false,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "codex_actor_count": 101,
+    "queued_jobs": 0,
+    "other_running": [],
+    "remote_lock_locked": false,
+    "camera": {
+      "location": {
+        "x": -343550.0,
+        "y": 326150.0,
+        "z": 18615.324
+      },
+      "rotation": {
+        "pitch": -9.0,
+        "yaw": -90.0,
+        "roll": -8.050501827401146e-16
+      }
+    }
+  },
+  "mcp_restored": {
+    "runtime_only": true,
+    "fresh_pie": false,
+    "os": {
+      "utc": "2026-10-15T03:15:15.6003434Z",
+      "listeners": [
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 9877,
+          "OwningProcess": 28788
+        },
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 8000,
+          "OwningProcess": 28788
+        }
+      ],
+      "memory": {
+        "free_physical_kib": 2246044,
+        "total_visible_kib": 33249688
+      }
+    },
+    "windows": [
+      {
+        "index": 0,
+        "title": "DaedalusRealm - Unreal Editor"
+      }
+    ]
+  },
+  "camera_image": {
+    "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-after-activation-corrected-0308.png",
+    "bytes": 725395,
+    "sha256": "ef3bf12a0ec98bc8965f4efbf38eb65319481c14c5e03f6514c9173e3414f6da",
+    "pixels": [
+      960,
+      540
+    ],
+    "personally_inspected": true,
+    "observation": "Saved copper/turquoise arch and raised posts frame the pale Garden route; existing terraces/trees/crops remain visible. Bright inherited path highlights remain."
+  },
+  "evidence": [
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-normal-activation.json",
+      "bytes": 138858,
+      "sha256": "06fbdc5694470644612bad3fa18e6a66c761e64035e054ee91a69aec58b4ea8a"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-loaded-readback.json",
+      "bytes": 284183,
+      "sha256": "e75361b031360e2844b6063616c360f737432da4ef2174ab92b38bc7ee43deac"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-loaded-image-os.json",
+      "bytes": 822,
+      "sha256": "e1f0bc52ee539e1dc78cb45ba4230bd72efa38b8f7c84c76aaf291886a129fae"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-native-mcp-runtime-restore.json",
+      "bytes": 1034,
+      "sha256": "4f2a38c7704236cdc2d597e0e2b9a9ca3935a825688cfaeddf14bda84600f294"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-native-mcp-restored-os.json",
+      "bytes": 375,
+      "sha256": "1522d3f252310534f64edd154d41b370c7bbf87356c0914201339773a2043c50"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-native-startup-memory-audit.json",
+      "bytes": 3774,
+      "sha256": "fa201e04bd2137bae325b63e4c25c4f0d63839f9ae2038f799acdba833b6be33"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-after-native-activation-corrected-view.json",
+      "bytes": 1927,
+      "sha256": "4f318305b100e409f00282a941491313b65116b7ecf71f8df609e785535e9230"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-landing-0230.checkpoint.json",
+      "bytes": 4547,
+      "sha256": "8c3ca19dc98287c07455b30c943ec7fb4b8ce953f136c7ecd7a242bc33fff4bd"
+    }
+  ],
+  "historical_reconciliation": "The03:05 readback retains its then-pending journal snapshot and refused MCP connection. This later checkpoint closes those stages without rewriting historical evidence. The initial positional-axis camera error is retained; corrected named-axis capture is used.",
+  "tests_or_pie_executed": false,
+  "new_imports_or_world_mutations_this_activation": false,
+  "limits": [
+    "Reflection/catalog/preservation do not establish keyboard/controller/Hero Use/HUD/gameplay or Star save-recovery acceptance.",
+    "Loaded OS image identity and exact backing-file hash are separate from a relocated memory hash, which was not measured.",
+    "Startup memory warning progressed normally; no process kill, settings change or general safe memory ceiling is claimed.",
+    "Eighteen held source/adapter packets remain held; existing historical import map guards require explicit additive reconciliation before any new intake."
+  ],
+  "issues": []
+}

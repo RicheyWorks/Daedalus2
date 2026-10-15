@@ -1,0 +1,66 @@
+{
+  "stage": "read_only_startup_memory_warning_audit_complete",
+  "utc": "2026-10-15T03:03:59.453747+00:00",
+  "log_snapshot": {
+    "path": "C:/Unreal/DaedalusRealm/Saved/Logs/DaedalusRealm.log",
+    "bytes": 1119956,
+    "sha256": "0251d0972061a9c37f217df06804ace8e4d2ac3c608f7408310babc8db5582b3",
+    "last_line": "[2026.10.15-03.03.57:169][958]LogDerivedDataCache: C:/Users/730ri/AppData/Local/UnrealEngine/Common/DerivedDataCache: Maintenance finished in +00:02:46.056 and deleted 0 files with total size 0 MiB and 0 empty folders. Scanned 88372 files in 80809 folders with total size 1717 MiB."
+  },
+  "observed_progress": [
+    {
+      "line": 2313,
+      "text": "[2026.10.15-02.59.33:229][  0]LogSkinnedAsset: Display: Waiting for skinned assets to be ready 0/1 (Mob_Parcels_WheelbarrowGolem) ..."
+    },
+    {
+      "line": 2322,
+      "text": "[2026.10.15-03.01.36:676][  0]LogStreaming: Display: ULevelStreaming::RequestLevel(/Game/Daedalus/Realms/LABYRINTH/D37) is flushing async loading"
+    },
+    {
+      "line": 4968,
+      "text": "[2026.10.15-03.02.12:822][  0]LogLoad: (Engine Initialization) Total time: 190.62 seconds"
+    },
+    {
+      "line": 5063,
+      "text": "[2026.10.15-03.02.19:576][  0]LogPython: Claude Unreal Bridge: listening on 127.0.0.1:9877"
+    },
+    {
+      "line": 5554,
+      "text": "[2026.10.15-03.02.28:768][ 95]LogSourceControl: Uncontrolled asset discovery finished in 6.955836 seconds (Found 45629 uncontrolled assets)"
+    }
+  ],
+  "facts": [
+    "The inspected run passed the WheelbarrowGolem wait and reached subsequent level loading, engine initialization completion, bridge startup and frame95.",
+    "AssetCompilingManager emits the observed warning when estimated job memory exceeds availability with concurrency zero, then deliberately permits one job to avoid starvation.",
+    "FinishCompilation reschedules at blocking priority and waits for completion without a total-time timeout; each incomplete job is logged once. A quiet log alone does not identify a deadlock.",
+    "The installed DaedalusLink module StartupModule only logs; the DesktopArcade constructor loads Engine BasicShapes Cube; BattlePresentation constructor creates a scene component. These inspected constructors do not reference WheelbarrowGolem.",
+    "No native stack or current detailed job state was observed by this audit. Low free RAM remains a resource constraint, but the warning alone is not proof of indefinite memory-gated scheduling."
+  ],
+  "citations": [
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Private/AssetCompilingManager.cpp",
+      "lines": "169-207,426-475",
+      "supports": "System available-memory budget and always permit one job under low memory."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Private/AsyncCompilationHelpers.cpp",
+      "lines": "136-141,149-227",
+      "supports": "Blocking reschedule, completion polling and once-per-incomplete-job progress logging."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Private/SkinnedAssetCompiler.cpp",
+      "lines": "99-115,314-320,491-499",
+      "supports": "Skinned asset scheduling and shared completion helper."
+    }
+  ],
+  "actions_not_performed": [
+    "native call",
+    "process launch/stop",
+    "debugger attachment",
+    "build",
+    "settings change",
+    "startup modification",
+    "unrelated source fix"
+  ],
+  "next_safe_diagnostic": "Parent sole operator can perform fresh bounded bridge/MCP readbacks and OS/log progress checks now that the existing bridge reports listening. Preserve current editor and allow existing owner-coordinated memory pause policy; do not infer exact stack from the old warning."
+}

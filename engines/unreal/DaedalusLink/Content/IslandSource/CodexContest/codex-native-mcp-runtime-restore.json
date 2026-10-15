@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-15T03:12:54.548111+00:00",
+  "stage": "existing_loopback_listener_and_fresh_mcp_verified",
+  "target": "127.0.0.1:8000/mcp",
+  "configuration_changes": false,
+  "editor_restart": false,
+  "command": "ModelContextProtocol.StartServer 8000",
+  "listener_absent_before_dispatch": true,
+  "native": {
+    "runtime_command_dispatched": true,
+    "pie": false,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "other_running": [],
+    "queued": 0,
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+  },
+  "utc_returned": "2026-10-15T03:12:54.605168+00:00",
+  "verified_utc": "2026-10-15T03:15:18.642812+00:00",
+  "os_witness": "codex-native-mcp-restored-os.json",
+  "mcp": {
+    "pie": false,
+    "windows": [
+      {
+        "index": 0,
+        "title": "DaedalusRealm - Unreal Editor"
+      }
+    ]
+  },
+  "main_window_selected": {
+    "result": "OK",
+    "index": 0,
+    "title": "DaedalusRealm - Unreal Editor",
+    "route": "existing native Slate Windows select"
+  }
+}

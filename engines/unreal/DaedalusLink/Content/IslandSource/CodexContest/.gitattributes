@@ -1,0 +1,13 @@
+# These retained activation receipts hash each other's exact on-host bytes.
+# Preserve their original encoding/newlines; leave other source policies unchanged.
+codex-arcade-activated-0317.checkpoint.json -text -eol
+codex-arcade-loaded-image-os.json -text -eol
+codex-arcade-loaded-readback.json -text -eol
+codex-arcade-normal-activation.json -text -eol
+codex-garden-after-native-activation-corrected-view.json -text -eol
+codex-garden-after-native-activation-view.json -text -eol
+codex-native-after-reopen-first-0303.json -text -eol
+codex-native-mcp-restored-os.json -text -eol
+codex-native-mcp-runtime-restore.json -text -eol
+codex-native-startup-memory-audit.json -text -eol
+codex-resume-native-activation-preflight.json -text -eol

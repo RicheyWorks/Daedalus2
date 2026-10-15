@@ -1,0 +1,19 @@
+{
+  "scope": "Loaded image identity plus exact backing disk file hash; no relocated memory hash claim.",
+  "utc": "2026-10-15T03:05:48.3849389Z",
+  "command_line": "\"C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe\" C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject /Game/Daedalus/DaedalusWorld",
+  "process_id": 28788,
+  "loaded_image": {
+    "ModuleName": "UnrealEditor-DaedalusLink.dll",
+    "FileName": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+    "ModuleMemorySize": 8314880,
+    "BaseAddress": {
+      "value": 140717826179072
+    }
+  },
+  "memory_hash_claimed": false,
+  "backing_disk_file": {
+    "sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d",
+    "bytes": 8272384
+  }
+}
