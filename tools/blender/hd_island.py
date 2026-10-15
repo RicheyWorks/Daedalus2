@@ -256,26 +256,59 @@ def instance(name, base, loc, scale=1.0, rot_z=0.0):
 
 
 # ---- the authored island ---------------------------------------------------------------------------------------
-def inside(x, y, r=R):
-    return (x / r) ** 4 + (y / r) ** 4 <= 1
+SHAPE = {"p": 4.0, "ax": 1.0, "ay": 1.0, "rot": 0.0, "amp": 0.0, "lobes": 3, "ph": 0.0}
 
 
-def rim_radius(angle, r=R):
-    c, s = math.cos(angle), math.sin(angle)
-    return r / (abs(c) ** 4 + abs(s) ** 4) ** .25
+def set_shape(seed, variety=True):
+    """Per-seed outline: superellipse exponent (2.3 round .. 6 squarish), stretch, rotation and a lobed wobble.
+    Off (the classic rounded square) for cluster plots, which must keep Ultra's 220 m footprint on the 256 m pitch."""
+    if not variety:
+        SHAPE.update(p=4.0, ax=1.0, ay=1.0, rot=0.0, amp=0.0, lobes=3, ph=0.0)
+        return dict(SHAPE)
+    rng = random.Random(seed * 7919 + 13)
+    st = rng.uniform(.8, 1.25)
+    SHAPE.update(p=rng.choice((2.3, 2.8, 3.4, 4.0, 5.0, 6.0)), ax=st, ay=1 / st ** .5 if st > 1 else rng.uniform(.85, 1.15),
+                 rot=rng.uniform(0, math.pi), amp=rng.choice((0.0, .04, .07, .1)), lobes=rng.randint(2, 5), ph=rng.uniform(0, math.tau))
+    return dict(SHAPE)
+
+
+def rim_radius(angle, r=None):
+    r = R if r is None else r
+    a = angle - SHAPE["rot"]
+    c, s = math.cos(a) / SHAPE["ax"], math.sin(a) / SHAPE["ay"]
+    p = SHAPE["p"]
+    return r / (abs(c) ** p + abs(s) ** p) ** (1 / p) * (1 + SHAPE["amp"] * math.sin(SHAPE["lobes"] * angle + SHAPE["ph"]))
+
+
+def inside(x, y, r=None):
+    return math.hypot(x, y) <= rim_radius(math.atan2(y, x), r)
+
+
+def fit(x, y, margin=.8, r=None):
+    """Pull a point toward the centre until it sits inside `margin` of the outline (layouts written for the classic shape)."""
+    d = math.hypot(x, y)
+    lim = rim_radius(math.atan2(y, x), r) * margin
+    if d <= lim or d == 0:
+        return x, y
+    return x * lim / d, y * lim / d
 
 
 def author(seed, kind, islet_dir=None):
     """Deterministic layout: hills, terraces, lake, stream to a waterfall lip, spring, path, buildings."""
     rng = random.Random(seed * 31 + 7)
     lake = (rng.uniform(-30, 10), rng.uniform(-25, 15), rng.uniform(22, 30), rng.uniform(16, 22))
+    lake = fit(lake[0], lake[1], .45) + lake[2:]
     hills = [(rng.uniform(-70, 70), rng.uniform(30, 75), rng.uniform(28, 40), rng.uniform(16, 26)),
              (rng.uniform(40, 80), rng.uniform(-70, -20), rng.uniform(25, 35), rng.uniform(6, 12)),
              (rng.uniform(-85, -40), rng.uniform(-60, 0), rng.uniform(22, 32), rng.uniform(4, 9))]
     # terraces: landmark on the big hill's shoulder, a town on the flats, a farm, a dock terrace at the rim
     hx, hy, hs, hh = hills[0]
-    terraces = [(hx - 14, hy - 12, 15, DECK + hh * .55, "landmark"), (45, -45, 16, DECK + .5, "town"),
-                (-55, -45, 14, DECK + .4, "farm"), (rng.choice([-1, 1]) * 95, rng.uniform(-30, 30), 9, DECK, "dock")]
+    hx, hy = fit(hx, hy, .62)
+    hills[0] = (hx, hy, hs, hh)
+    da = (0 if rng.random() < .5 else math.pi) + rng.uniform(-.27, .27)                   # dock sits on the rim
+    terraces = [fit(hx - 14, hy - 12, .62) + (15, DECK + hh * .55, "landmark"), fit(45, -45, .62) + (16, DECK + .5, "town"),
+                fit(-55, -45, .62) + (14, DECK + .4, "farm"),
+                (rim_radius(da) * .86 * math.cos(da), rim_radius(da) * .86 * math.sin(da), 9, DECK, "dock")]
     # the stream leaves the lake toward the far rim and falls off it
     ang = rng.uniform(0, math.tau)
     lip = (rim_radius(ang) * .98 * math.cos(ang), rim_radius(ang) * .98 * math.sin(ang))
@@ -296,7 +329,8 @@ def author(seed, kind, islet_dir=None):
             "islet": islet, "ang": ang}
 
 
-def make_height(A, seed, kind, r=R, base=DECK, islet=False):
+def make_height(A, seed, kind, r=None, base=DECK, islet=False):
+    r = R if r is None else r
     lake = A["lake"]
 
     def h(x, y):
@@ -328,7 +362,7 @@ def make_height(A, seed, kind, r=R, base=DECK, islet=False):
 def ground(name, h, kind, r, vcol_name, grid=2.0, crest=True):
     g, gl, cliff, sand, water, accent, _ = KINDS[kind]
     verts, faces, lookup = [], [], {}
-    n = int(r / grid) + 1
+    n = int(r * 1.6 / grid) + 1                        # the outline can stretch up to ~1.5 r along its long axis
     for iy in range(-n, n + 1):
         for ix in range(-n, n + 1):
             x, y = ix * grid, iy * grid
@@ -551,7 +585,8 @@ def tree_bases(kind, seed):
     return bases
 
 
-def scatter(prefix, A, h, kind, seed, bases, lake, inner=R):
+def scatter(prefix, A, h, kind, seed, bases, lake, inner=None):
+    inner = R if inner is None else inner
     rng = random.Random(seed * 13 + 5)
     g, gl, cliff, sand, water, accent, shape = KINDS[kind]
     rock = sphere("Rock_base", (0, 0, -500), (1, 1, .7), material("Rock_" + kind, cliff, .95), 8, 5)
@@ -577,7 +612,7 @@ def scatter(prefix, A, h, kind, seed, bases, lake, inner=R):
     tries = 0
     while n < 110 and tries < 3000:
         tries += 1
-        x, y = rng.uniform(-inner, inner), rng.uniform(-inner, inner)
+        x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if not free(x, y):
             continue
         slope = abs(h(x + 1.5, y) - h(x - 1.5, y)) + abs(h(x, y + 1.5) - h(x, y - 1.5))
@@ -586,7 +621,7 @@ def scatter(prefix, A, h, kind, seed, bases, lake, inner=R):
         instance("%s_Tree%03d" % (prefix, n), rng.choice(bases), (x, y, h(x, y) - .2), rng.uniform(.7, 1.35), rng.uniform(0, 6.3))
         n += 1
     for i in range(55):
-        x, y = rng.uniform(-inner, inner), rng.uniform(-inner, inner)
+        x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if inside(x, y, inner * .97) and free(x, y, 1):
             s = rng.uniform(.6, 2.6)
             ob = instance("%s_Rock%03d" % (prefix, i), rock, (x, y, h(x, y) - .3 * s), s, rng.uniform(0, 6.3))
@@ -600,7 +635,7 @@ def scatter(prefix, A, h, kind, seed, bases, lake, inner=R):
             if free(x, y, 1.5):
                 instance("%s_Flower%03d_%02d" % (prefix, i, k), flower, (x, y, h(x, y) + .15), rng.uniform(.7, 1.4))
     for i in range(140):
-        x, y = rng.uniform(-inner, inner), rng.uniform(-inner, inner)
+        x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if free(x, y, 1):
             instance("%s_Tuft%03d" % (prefix, i), tuft, (x, y, h(x, y) + .3), rng.uniform(.8, 1.6), rng.uniform(0, 6.3))
 
@@ -674,10 +709,11 @@ def buildings(prefix, A, h, kind, chem):
 
 
 # ---- v2: what makes each kind its own place --------------------------------------------------------------------
-def free_spot(A, h, rng, margin=6, tries=400, inner=R * .85, max_slope=2.5):
+def free_spot(A, h, rng, margin=6, tries=400, inner=None, max_slope=2.5):
+    inner = R * .85 if inner is None else inner
     lake = A["lake"]
     for _ in range(tries):
-        x, y = rng.uniform(-inner, inner), rng.uniform(-inner, inner)
+        x, y = rng.uniform(-1.5 * inner, 1.5 * inner), rng.uniform(-1.5 * inner, 1.5 * inner)
         if not inside(x, y, inner):
             continue
         if math.sqrt(((x - lake[0]) / lake[2]) ** 2 + ((y - lake[1]) / lake[3]) ** 2) < 1.3:
@@ -849,7 +885,8 @@ def kind_features(prefix, A, h, kind, seed):
                     (rng.uniform(-.08, .08), rng.uniform(-.08, .08), a))
 
 
-def rim_details(prefix, h, kind, seed, r=R):
+def rim_details(prefix, h, kind, seed, r=None):
+    r = R if r is None else r
     """Hanging roots/vines under the crest and small rocks drifting around the keel — sells the floating."""
     rng = random.Random(seed * 23 + 11)
     g, gl, cliff, _, _, _, _ = KINDS[kind]
@@ -1098,12 +1135,13 @@ def lods(top, name, h, kind):
     return out
 
 
-def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO", export=True, islet_dir=None):
+def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO", export=True, islet_dir=None, variety=None):
     """Build one HD island at `offset`. Returns the manifest dict. GROUP holds every object made."""
     global GROUP
     GROUP = []
     chem = CH.profile(seed, realm)
     name = prefix or ("HDIsland_%s_%d" % (kind.title(), seed))
+    shape = set_shape(seed, prefix is None if variety is None else variety)   # cluster plots keep the classic outline
     A = author(seed, kind, islet_dir)
     h = make_height(A, seed, kind)
     top, verts, faces = ground(name + "_Terrain", h, kind, R, "HD_terrain")
@@ -1139,7 +1177,7 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
     GROUP = merge_static(name, GROUP, lambda o: any(t in o.name for t in KEEP))
     globals()["GROUP"] = GROUP
     man = {"name": name, "seed": seed, "kind": kind, "realm": realm, "offset": list(offset), "deck_m": DECK, "water_m": WATER,
-           "plateau_half_width_m": R, "sockets": {"E": [R + 10, 0, 0], "N": [0, R + 10, 0], "W": [-R - 10, 0, 0], "S": [0, -R - 10, 0]},
+           "plateau_half_width_m": R, "outline": shape, "sockets": {"E": [R + 10, 0, 0], "N": [0, R + 10, 0], "W": [-R - 10, 0, 0], "S": [0, -R - 10, 0]},
            "terraces": [{"x": t[0], "y": t[1], "r": t[2], "z": t[3] - DECK, "role": t[4]} for t in A["terraces"]],
            "islet": {"x": ix, "y": iy, "z": iz, "r": ir}, "waterfall_lip": list(A["lip"]), "lods": lod,
            "objects": len(GROUP), "triangles": sum(len(o.data.polygons) for o in GROUP if o.type == "MESH"),
