@@ -191,7 +191,7 @@ def rim_radius(angle, r=R):
     return r / (abs(c) ** 4 + abs(s) ** 4) ** .25
 
 
-def author(seed, kind):
+def author(seed, kind, islet_dir=None):
     """Deterministic layout: hills, terraces, lake, stream to a waterfall lip, spring, path, buildings."""
     rng = random.Random(seed * 31 + 7)
     lake = (rng.uniform(-30, 10), rng.uniform(-25, 15), rng.uniform(22, 30), rng.uniform(16, 22))
@@ -216,7 +216,7 @@ def author(seed, kind):
     # path: town -> landmark -> farm -> dock, as a rounded polyline
     path = [terraces[1][:2], (lx + lake[2] + 8, ly), terraces[0][:2], (lx - lake[2] - 8, ly), terraces[2][:2], terraces[3][:2]]
     # source islet for the sky river: off the rim, opposite the waterfall, 40 m up
-    ia = ang + math.pi + rng.uniform(-.4, .4)
+    ia = ang + math.pi + rng.uniform(-.4, .4) if islet_dir is None else islet_dir   # clusters point islets outward
     islet = (1.42 * R * math.cos(ia), 1.42 * R * math.sin(ia), 40.0, 22.0)
     return {"lake": lake, "hills": hills, "terraces": terraces, "stream": stream, "lip": lip, "spring": spring, "path": path,
             "islet": islet, "ang": ang}
@@ -634,13 +634,13 @@ def lods(top, name):
     return out
 
 
-def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO", export=True):
+def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO", export=True, islet_dir=None):
     """Build one HD island at `offset`. Returns the manifest dict. GROUP holds every object made."""
     global GROUP
     GROUP = []
     chem = CH.profile(seed, realm)
     name = prefix or ("HDIsland_%s_%d" % (kind.title(), seed))
-    A = author(seed, kind)
+    A = author(seed, kind, islet_dir)
     h = make_height(A, seed, kind)
     top, verts, faces = ground(name + "_Terrain", h, kind, R, "HD_terrain")
     strata(name + "_Strata", h, kind, R, seed, chem)
@@ -690,7 +690,14 @@ def export_group(path, objs):
     bpy.context.view_layer.objects.active = next(o for o in objs if o.type == "MESH")
     bpy.ops.export_scene.fbx(filepath=path + ".fbx", use_selection=True, apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z",
                              mesh_smooth_type="FACE", use_mesh_modifiers=True, path_mode="AUTO")
-    bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True)
+    for o in objs:
+        if o.type == "MESH" and o.data.color_attributes:
+            o.data.color_attributes.active_color = o.data.color_attributes[0]
+    try:                                            # Blender 4.2+: write COLOR_0 from the active colour attribute
+        bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
+                                  export_vertex_color="ACTIVE")
+    except TypeError:
+        bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True)
 
 
 def render(out_dir, name, views=("hero", "top", "under")):

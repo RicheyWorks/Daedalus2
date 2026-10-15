@@ -9,7 +9,7 @@ at ±(R+10) m, 10 m deck datum, bridges 16 m wide at the deck). Ten themed octet
              and render the whole octet.
   (neither): all of it in one process (slow; fine for a single preview).
 
-Layout: a hub island at the centre and seven around it on a 256 m ring (neighbours ~222 m apart), so every island
+Layout: a hub island at the centre and seven around it on a 295 m ring (ring neighbours exactly 256 m apart), so every island
 touches the hub and its two ring neighbours — 14 rope-plank bridges, and the hub's sky river feeds a ring canal:
 each ring island's lake spills a sky stream to the next island clockwise (7 sky streams), so water flows around the
 whole octet through the air. Theme = kinds per plot + accent palette + props (seasons / holidays). Output: one GLB +
@@ -28,7 +28,8 @@ from mathutils import Vector
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hd_island as H  # noqa: E402
 
-PITCH = 256.0
+PITCH = 256.0                                   # neighbour-to-neighbour (Ultra's Super Island pitch)
+RING = PITCH / (2 * math.sin(math.pi / 7))      # 295 m: ring radius that puts ring neighbours exactly one pitch apart
 THEMES = [
     # name, hub kind, ring kinds (7), accent, prop
     ("Spring",     "meadow",  ["meadow", "meadow", "mire", "meadow", "crystal", "meadow", "mesa"],    (.93, .55, .75), "blossom"),
@@ -48,9 +49,16 @@ def layout():
     pts = [(0.0, 0.0)]
     for i in range(7):
         a = i * math.tau / 7 + math.pi / 14
-        pts.append((PITCH * math.cos(a), PITCH * math.sin(a)))
+        pts.append((RING * math.cos(a), RING * math.sin(a)))
     edges = [(0, i) for i in range(1, 8)] + [(i, 1 + i % 7) for i in range(1, 8)]
     return pts, edges
+
+
+def islet_angle(i, pts):
+    """Ring islets point away from the hub; the hub's islet sits in the gap between two ring plots."""
+    if i == 0:
+        return math.pi / 14 + math.pi / 7
+    return math.atan2(pts[i][1], pts[i][0])
 
 
 def bridge(name, a, b, mat_wood, mat_rope):
@@ -155,7 +163,7 @@ def build_plot(seed, i, out_dir):
     name, _, kinds, _, _ = theme(seed)
     pts, _ = layout()
     t0 = time.time()
-    man = H.build(seed * 100 + i, kinds[i], out_dir, offset=(pts[i][0], pts[i][1], 0), prefix="%s_Plot%d_%s" % (name, i, kinds[i].title()))
+    man = H.build(seed * 100 + i, kinds[i], out_dir, offset=(pts[i][0], pts[i][1], 0), prefix="%s_Plot%d_%s" % (name, i, kinds[i].title()), islet_dir=islet_angle(i, pts))
     print("PLOT %d %s %s tris=%d %.0fs" % (i, kinds[i], man["name"], man["triangles"], time.time() - t0), flush=True)
     return man
 
@@ -168,7 +176,7 @@ def build(seed, out_dir, export=True, plots=True):
     t0 = time.time()
     for i, ((cx, cy), kind) in enumerate(zip(pts, kinds)):
         if plots:
-            man = H.build(seed * 100 + i, kind, out_dir, offset=(cx, cy, 0), prefix="%s_Plot%d_%s" % (name, i, kind.title()), export=export)
+            man = H.build(seed * 100 + i, kind, out_dir, offset=(cx, cy, 0), prefix="%s_Plot%d_%s" % (name, i, kind.title()), export=export, islet_dir=islet_angle(i, pts))
             print("PLOT %d %s %s %.0fs" % (i, kind, man["name"], time.time() - t0), flush=True)
         else:
             jp = os.path.join(out_dir, "%s_Plot%d_%s.json" % (name, i, kind.title()))
@@ -207,6 +215,29 @@ def import_plots(out_dir, name):
     for o in bpy.data.objects:                         # the parked LODs and tree templates stay out of the picture
         if o.name.startswith("UCX_") or "_LOD" in o.name or o.location.z < -400:
             o.hide_render = True
+    # Workbench MATERIAL view reads diffuse_color, which glTF import leaves white: copy Base Color back, and for the
+    # vertex-coloured terrain use the mean of its colour attribute (the asset itself keeps the per-vertex colours)
+    for o in bpy.data.objects:
+        if o.type != "MESH":
+            continue
+        for m in o.data.materials:
+            if not m or not m.use_nodes:
+                continue
+            p = m.node_tree.nodes.get("Principled BSDF")
+            if not p:
+                continue
+            bc = p.inputs["Base Color"]
+            if bc.is_linked and o.data.color_attributes:
+                ca = o.data.color_attributes[0]
+                n = max(1, len(ca.data))
+                acc = [0.0, 0.0, 0.0]
+                for k in range(0, len(ca.data), max(1, n // 400)):
+                    c = ca.data[k].color
+                    acc = [acc[j] + c[j] for j in range(3)]
+                cnt = len(range(0, len(ca.data), max(1, n // 400)))
+                m.diffuse_color = (acc[0] / cnt, acc[1] / cnt, acc[2] / cnt, 1)
+            elif not bc.is_linked:
+                m.diffuse_color = tuple(bc.default_value)
 
 
 def render(out_dir, name):
