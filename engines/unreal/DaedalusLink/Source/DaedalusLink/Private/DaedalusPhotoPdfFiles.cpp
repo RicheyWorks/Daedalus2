@@ -447,15 +447,21 @@ bool DaedalusPhotoPdfFiles::SelectImages(TArray<FDaedalusPhotoPdfImage>& Out, FS
 
 bool DaedalusPhotoPdfFiles::SavePdf(const TArray<uint8>& Bytes, int32 Index, FString& Error)
 {
+    return SavePdf(Bytes, Index, Error, []() { return true; });
+}
+
+bool DaedalusPhotoPdfFiles::SavePdf(const TArray<uint8>& Bytes, int32 Index, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+{
     Error.Reset();
 #if PLATFORM_WINDOWS
     // This is a cheap envelope check, not a PDF parser or a claim of document validation.
     if (Index < 1 || Index > MaxImages || Bytes.Num() < 5 || Bytes.Num() > MaxPdfBytes || FMemory::Memcmp(Bytes.GetData(), "%PDF-", 5) != 0)
     { Error = TEXT("The companion did not return a PDF output within the 64 MiB export limit."); return false; }
-    return SaveGeneratedPdf(Bytes, EGeneratedPdfName::Photo, Index, Error, []() { return true; });
+    return SaveGeneratedPdf(Bytes, EGeneratedPdfName::Photo, Index, Error, IsStillAllowed);
 #else
     (void)Bytes;
     (void)Index;
+    (void)IsStillAllowed;
     Error = TEXT("PDF export is available on Windows only.");
     return false;
 #endif

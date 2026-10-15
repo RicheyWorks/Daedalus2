@@ -71,11 +71,11 @@
   "sharedSourceFiles": [
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
-      "sha256": "49422a5b1a693dc47a8bd72e7c04275d1cc1a935cca5861a8f2fe20c7128fa5b"
+      "sha256": "95cdf8948e8db404712bbbcbdeef151ef8d88a41e89c72b907fa8074eed58564"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
-      "sha256": "47a7363e5992a95a06f8e6c903d2cf92a18518cf2db08d5e41d72809c3b0e245"
+      "sha256": "0191ed2e5268006006824ff496d1d55f3898d4d668306c847e3748e44214789f"
     }
   ],
   "documentationFiles": [
@@ -111,7 +111,7 @@
     "stage": "complete_source_only",
     "modalExportGuard": "Owner/generation predicate checked after chooser and before writes/commit",
     "openConcreteP1P2": 0,
-    "remainingKnownSeparateCorrection": "Existing photo/image actors still require the same caller guard, queued next"
+    "remainingKnownSeparateCorrection": "Photo/Image actor modal export guards corrected separately under claim31288; this manifest refreshes the shared helper hashes"
   },
   "bounds": {
     "pdfEnvelope": "Header at offset zero and terminal EOF, stricter than lenient PDFBox",
@@ -123,5 +123,6 @@
     "pdfBytes": 26214400,
     "grantSeconds": 900,
     "headerBytes": 8192
-  }
+  },
+  "modalExportCorrection": {"claim":31288,"stage":"source_corrected_unverified","baseCommit":"3f5e9a6d730cb703ec9b52adcb2db67eb6d09625","defect":"A modal save chooser could dispatch terminal close or ownership changes after the actor check, before an export was created.","correction":"Photo and Image actors pass weak-owner/panel-generation/local-owner predicates into their export helpers. The helpers check before and after the chooser, before temporary creation, each bounded write, flush and non-replacing commit. Invalidated work cleans its owned temporary. Compatibility overloads remain for callers without a terminal lifecycle policy. Photo image selection also re-acquires the weak owner after its modal chooser before dereferencing terminal state.","nativeCompiled":false,"runtimeVerified":false,"sourceReview":"independent six-file source review complete; adjacent Photo chooser weak-owner reacquisition rechecked separately"}
 }

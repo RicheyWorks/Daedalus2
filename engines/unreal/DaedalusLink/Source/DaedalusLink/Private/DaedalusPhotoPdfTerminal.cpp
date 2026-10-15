@@ -197,10 +197,12 @@ void ADaedalusPhotoPdfTerminal::ChoosePhotos()
     TArray<FDaedalusPhotoPdfImage> Images;
     FString Error;
     const uint64 ExpectedGeneration = PanelGeneration;
+    const TWeakObjectPtr<ADaedalusPhotoPdfTerminal> WeakThis(this);
     const bool bSelected = DaedalusPhotoPdfFiles::SelectImages(Images, Error);
-    if (PanelGeneration != ExpectedGeneration || !HasLocalPanelOwner()) return;
-    if (bSelected) { LocalMessage.Reset(); Client->SetImages(MoveTemp(Images)); }
-    else if (!Error.IsEmpty()) SetLocalMessage(Error);
+    ADaedalusPhotoPdfTerminal* Self = WeakThis.Get();
+    if (!Self || Self->PanelGeneration != ExpectedGeneration || !Self->HasLocalPanelOwner()) return;
+    if (bSelected) { Self->LocalMessage.Reset(); Self->Client->SetImages(MoveTemp(Images)); }
+    else if (!Error.IsEmpty()) Self->SetLocalMessage(Error);
 }
 
 void ADaedalusPhotoPdfTerminal::SubmitOrRetry()
@@ -232,7 +234,11 @@ void ADaedalusPhotoPdfTerminal::ExportPdf(int32 Index)
         if (!Error.IsEmpty()) { Self->SetLocalMessage(Error); return; }
         FString SaveError;
         // Each export chooses a destination explicitly. The helper refuses every existing target.
-        const bool bSaved = DaedalusPhotoPdfFiles::SavePdf(Bytes, Index, SaveError);
+        const bool bSaved = DaedalusPhotoPdfFiles::SavePdf(Bytes, Index, SaveError, [WeakThis, ExpectedGeneration]()
+        {
+            const ADaedalusPhotoPdfTerminal* Owner = WeakThis.Get();
+            return Owner && Owner->PanelGeneration == ExpectedGeneration && Owner->HasLocalPanelOwner();
+        });
         Self = WeakThis.Get();
         if (!Self || Self->PanelGeneration != ExpectedGeneration || !Self->HasLocalPanelOwner()) return;
         if (bSaved) Self->SetLocalMessage(TEXT("PDF exported to your selected new file."));

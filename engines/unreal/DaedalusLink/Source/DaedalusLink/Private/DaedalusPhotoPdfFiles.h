@@ -15,6 +15,8 @@ namespace DaedalusPhotoPdfFiles
      * A successful save always creates a new file.
      */
     bool SavePdf(const TArray<uint8>& Bytes, int32 Index, FString& Error);
+    /** Retains the caller's ownership/generation policy through the modal chooser and file commit. */
+    bool SavePdf(const TArray<uint8>& Bytes, int32 Index, FString& Error, TFunctionRef<bool()> IsStillAllowed);
     /** Explicit save chooser for the selected prepared fax review PDF, at most 25 MiB.
      * Suggests only the generated name prepared-fax-review.pdf; the user chooses a new local target.
      * Requires a PDF header, not structural/page validation or evidence of transmission.

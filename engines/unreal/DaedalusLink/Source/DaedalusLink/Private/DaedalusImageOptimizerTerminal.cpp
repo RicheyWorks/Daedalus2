@@ -242,7 +242,11 @@ void ADaedalusImageOptimizerTerminal::ExportImage(int32 Index)
         if (!Error.IsEmpty()) { Self->SetLocalMessage(Error); return; }
         FString SaveError;
         // Each export chooses a destination explicitly. The helper refuses every existing target.
-        const bool bSaved = DaedalusImageOptimizerFiles::SaveImage(Bytes, Type, Index, SaveError);
+        const bool bSaved = DaedalusImageOptimizerFiles::SaveImage(Bytes, Type, Index, SaveError, [WeakThis, ExpectedGeneration]()
+        {
+            const ADaedalusImageOptimizerTerminal* Owner = WeakThis.Get();
+            return Owner && Owner->PanelGeneration == ExpectedGeneration && Owner->HasLocalPanelOwner();
+        });
         Self = WeakThis.Get();
         if (!Self || Self->PanelGeneration != ExpectedGeneration || !Self->HasLocalPanelOwner()) return;
         if (bSaved) Self->SetLocalMessage(TEXT("Optimized image exported to your selected new file."));

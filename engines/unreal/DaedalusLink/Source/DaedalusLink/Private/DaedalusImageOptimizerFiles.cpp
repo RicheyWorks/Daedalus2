@@ -362,8 +362,21 @@ bool DaedalusImageOptimizerFiles::SelectImages(TArray<FDaedalusImageOptimizerIma
 
 bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Type, int32 Index, FString& Error)
 {
+    return SaveImage(Bytes, Type, Index, Error, []() { return true; });
+}
+
+bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Type, int32 Index, FString& Error,
+    TFunctionRef<bool()> IsStillAllowed)
+{
     Error.Reset();
 #if PLATFORM_WINDOWS
+    const auto StillAllowed = [&Error, IsStillAllowed]()
+    {
+        if (IsStillAllowed()) return true;
+        Error = TEXT("Export no longer belongs to the open terminal.");
+        return false;
+    };
+    if (!StillAllowed()) return false;
     // This is a bounded signature/type envelope check, not structural image decoding.
     if (Index < 1 || Index > MaxImages || (Type != 1 && Type != 2) || Bytes.IsEmpty()
         || Bytes.Num() > MaxOutputBytes || DetectedImageType(Bytes) != Type)
@@ -383,7 +396,10 @@ bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Ty
     Dialog.nMaxFile = static_cast<DWORD>(Buffer.Num());
     Dialog.lpstrTitle = L"Export optimized image to a new file";
     Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
-    if (!::GetSaveFileNameW(&Dialog))
+    const bool bSelected = ::GetSaveFileNameW(&Dialog) != FALSE;
+    // Modal dialogs may dispatch ownership/close events before returning to this stack.
+    if (!StillAllowed()) return false;
+    if (!bSelected)
     {
         if (::CommDlgExtendedError() != 0) Error = TEXT("The save chooser could not complete. Choose a shorter local filename.");
         return false;
@@ -400,6 +416,7 @@ bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Ty
     const FString Leaf = FPaths::GetCleanFilename(Destination);
     const FString TemporaryLeaf = TEXT(".daedalus-") + FGuid::NewGuid().ToString(EGuidFormats::Digits) + TEXT(".tmp");
     const FString TemporaryPath = Parents.StableChild(TemporaryLeaf);
+    if (!StillAllowed()) return false;
     FNewSibling Temporary(::CreateFileW(*TemporaryPath, GENERIC_WRITE | DELETE | FILE_READ_ATTRIBUTES, 0, nullptr, CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OPEN_REPARSE_POINT, nullptr));
     if (!Temporary.Valid()) { Error = TEXT("A new image file could not be created in that location."); return false; }
@@ -408,13 +425,16 @@ bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Ty
     int32 Written = 0;
     while (Written < Bytes.Num())
     {
+        if (!StillAllowed()) return false;
         const DWORD Wanted = static_cast<DWORD>(FMath::Min(1024 * 1024, Bytes.Num() - Written));
         DWORD Count = 0;
         if (!::WriteFile(Temporary.Get(), Bytes.GetData() + Written, Wanted, &Count, nullptr) || Count != Wanted)
         { Error = TEXT("The image could not be fully saved. No existing file was replaced."); return false; }
         Written += static_cast<int32>(Count);
     }
+    if (!StillAllowed()) return false;
     if (!::FlushFileBuffers(Temporary.Get())) { Error = TEXT("The image could not be fully saved. No existing file was replaced."); return false; }
+    if (!StillAllowed()) return false;
     // Rename the still-owned identity relative to its pinned parent. ReplaceIfExists remains false;
     // a destination created after the dialog survives, and cleanup never follows a reused temp name.
     if (!Parents.StillValid() || !Temporary.Commit(Parents.ParentHandle(), Leaf))
@@ -424,6 +444,7 @@ bool DaedalusImageOptimizerFiles::SaveImage(const TArray<uint8>& Bytes, uint8 Ty
     (void)Bytes;
     (void)Type;
     (void)Index;
+    (void)IsStillAllowed;
     Error = TEXT("Image export is available on Windows only.");
     return false;
 #endif
