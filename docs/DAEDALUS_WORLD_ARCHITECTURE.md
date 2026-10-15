@@ -942,3 +942,12 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   `/seeds/<file>` serves them. To hear them: `DAEDALUS_JUKEBOX_ENABLED=true`,
   `DAEDALUS_JUKEBOX_SEED_SONGS_DIR=engines/unreal/art/claude-audio/jukebox-seeds`. `rpg_audio.py` now also covers
   every realm sound event (54 incl. BLIP:0–11) for the day the jukebox takes cue posts (`data/rpg/jukebox.json`).
+
+### 14.26 Title and name entry (`rpg_title.py`)
+- An 8-frame (6 fps) title per realm: layered night scene (twinkling stars, mountain ridges, castle silhouette with lit
+  windows; Prismheart adds a horizon glow), emblem (Portal: ring gate with a turning swirl; Prismheart: an
+  eight-faced crystal heart with a shine sweep), logo in the 5×7 font ×3 with an outline (Portal flat two-tone,
+  Prismheart banded gradient + shine), NEW GAME / CONTINUE / OPTIONS with the cursor, blinking PRESS START.
+  Taglines: "A Tale of the Sky Isles" / "The Shattered Crystal".
+- Name entry: the lead hero's sprite, the name with a blinking caret, a letter grid (A–Z, 0–9, space, - .), BACK / END.
+- `data/rpg/title.json`: logo, menu, frames/fps, music cue TITLE (→ the `*-title` jukebox seed), name grid and length.
