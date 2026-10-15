@@ -224,8 +224,22 @@ def kit_props(feature, rng):
     return obs
 
 
+def sky_behind(px, top, bot):
+    """Paint the zone's sky gradient behind a transparent render (a shaded sky plane renders grey)."""
+    import numpy as np
+    h, w = px.shape[:2]
+    t = np.linspace(0, 1, h, dtype=np.float32)[:, None, None]          # row 0 = bottom (Blender images are bottom-up)
+    grad = np.array(bot, np.float32)[None, None, :] * (1 - t) + np.array(top, np.float32)[None, None, :] * t
+    grad = np.clip(grad, 0, 1) ** (1 / max(PX.GAMMA, 1e-3))            # PX.backdrop re-applies the gamma
+    a = px[..., 3:4]
+    out = px.copy()
+    out[..., :3] = px[..., :3] * a + grad * (1 - a)
+    out[..., 3] = 1
+    return out
+
+
 def render_backdrops():
-    workbench(False)
+    workbench(True)
     sc, cam = cam_get()
     cam.data.type = "PERSP"
     cam.data.lens = 28
@@ -246,7 +260,6 @@ def render_backdrops():
             clear()
             top, bot, g1, g2, props, feat = ZONES[z]
             rng = random.Random(len(z) * 131 + (7 if realm == "prism" else 0))
-            sky(top, bot)
             ground_strip("Ground", g1, g2, rng, feat)
             if feat in ("cave", "cave_crystal", "cave_water", "castle", "tower", "crypt", "sewer"):
                 walls(feat, g1, g2, rng)
@@ -258,14 +271,16 @@ def render_backdrops():
                 vox = F.plan(pname)
                 for i in range(n):
                     if fam == "cloud":
-                        loc = (rng.uniform(-22, 22), rng.uniform(26, 36), rng.uniform(10, 18))
+                        if i > 1:
+                            continue
+                        loc = (rng.uniform(-40, 40), rng.uniform(70, 90), rng.uniform(26, 34))
                     else:
                         side = -1 if i % 2 == 0 else 1
                         loc = (side * rng.uniform(6, 20), rng.uniform(10, 26), .5)
                     vox_obj("%s_%d" % (pname, i), vox, cm, loc, rng.uniform(0, 6.3), pal=F.PAL)
             sc.render.filepath = TMP
             bpy.ops.render.render(write_still=True)
-            arr = PX.backdrop(PX.load(TMP), st["gw"], st["gh"], st["colors"])
+            arr = PX.backdrop(sky_behind(PX.load(TMP), top, bot), st["gw"], st["gh"], st["colors"])
             PX.save(PX.upscale(arr, 4), path)
             PX.save(arr, os.path.join(od, name + "_1x.png"))
             tiles.append(arr)
