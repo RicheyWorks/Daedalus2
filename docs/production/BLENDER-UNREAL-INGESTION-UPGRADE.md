@@ -2,7 +2,7 @@
 
 Audit date: 2026-10-14. Owner: Poot (`pootscoot`), confirmed by coordinator hub30610. Scope: continuous Blender production and a concurrent, bounded upgrade around the existing importer. The later continuous-production direction in30639 supersedes the earlier backlog-only pause. Preserve the current importer owner, assets, namespaces and warm DDC.
 
-**Current checkpoint, 2026-10-14 23:19 UTC:** the Codex PR146 adapter at `05fc3c2521c62e06de88bf85106eee0dd55086ab` has actual operator import/save and unchanged-reuse receipts. The new combined palette/placement runner at `98afbf8ba23c181d775035314ffabead74b4b58c` is source only, manually reviewed and not adopted. Separate tests/builds/benchmarks remain deferred. Root has not operated Unreal, installed source, changed settings or interrupted the sole operator. The original audit and historical handoff snapshots below are retained; this current checkpoint supersedes their pending Codex-adoption statements. Claude-wrapper adoption remains unverified.
+**Current checkpoint, 2026-10-15 00:35 UTC:** the Codex PR146 adapter at `05fc3c2521c62e06de88bf85106eee0dd55086ab` has actual operator import/save and unchanged-reuse receipts. The combined palette/placement runner at `98afbf8ba23c181d775035314ffabead74b4b58c` is now integrated as two unchanged source blobs in operator PR147 at `69fc0048312606f7184be7b8c3458752027e9d8d` (hub31247, integration commit `a99a825f`). Its optimized native execution still awaits a new qualifying voxel delivery; no completed operation was replayed or speedup measured. Root has not operated Unreal, installed source, changed settings or interrupted the sole operator. The original audit and historical handoff snapshots below are retained; this current checkpoint supersedes their pending Codex-source-adoption statements. Claude-wrapper adoption remains unverified.
 
 ## Measured production bottleneck and bounded fix
 
@@ -33,6 +33,8 @@ Operator31146 acknowledged the source ownership/no-overlap and reported the curr
 
 Ownership/adoption requests are hub31099 and31120; isolated source claim is31105. Operator31146 reports four native4K captures complete at a safe saved boundary, without writer transfer. The sole operator next selects the exact reviewed retained voxel candidate/revision, uses this source checkout, and records the loaded head and actual palette/assembly journals. An already placed packet must not be replayed merely to manufacture timing evidence. The next reviewed Server_Rack or transparent Aetherflow packet is outside this bounded voxel contract.
 
+Source integration is complete: `codex-pr155-source-integration-2350.json` records module blob `e4c24d36` and executor blob `14860b59` matching PR155, with three unchanged dependencies and all96 saved mesh files/map preserved. This is source readback, not an optimized native run. The operator's current suitable Hero/Garden/Power packets are already delivered; p91011/rack/fish/water use different contracts. No additional code extension or already-completed mutation is required merely to close the source-integration item.
+
 Reproducible CLI shape (owner supplies exact admission/export paths and agreed centimetre coordinates; this example was **not executed**):
 
 ```powershell
@@ -52,7 +54,7 @@ Missing measurements remain explicit:
 - Native capture review files in `QA/staging.*-review.json` provide completion timestamps: Hero three-view completion span 0.988862 s, Garden four-view span 1.611487 s. Initial capture latency is absent. These are not bulk-delivery timings.
 - Full-world snapshots are 4.25–7.85 MB, but scan durations are unmeasured. Placement itself took under 3 s for Hero/Garden. Fewer scans, queue polling changes, importer hash reductions or a persistent drain need evidence before they displace this narrow save fix.
 
-Actionable next integration step: operator adoption during a real compatible delivery, returning new phase receipts and one-save count; then instrument fresh material creation/recompile/asset saves separately if it still dominates. Root has not demonstrated reduced wall time, throughput, visual approval or a hardware limit.
+Actionable next integration step: optimized native execution during a real compatible delivery, returning new phase receipts and one-save count; source integration is already complete. Instrument fresh material creation/recompile/asset saves separately if it still dominates. Root has not demonstrated reduced wall time, throughput, visual approval or a hardware limit.
 
 ## Immediate result and source
 
