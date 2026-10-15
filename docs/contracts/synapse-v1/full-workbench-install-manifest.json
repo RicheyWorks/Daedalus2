@@ -100,19 +100,19 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
-      "normalizedSha256": "34a14229cb68b52e586565cbe5faf2a03154a237e9b750411e0ea89876e8b30c"
+      "normalizedSha256": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
-      "normalizedSha256": "b75a25f41f040544325d5ec71e654adf17bea9473d6777172bc1e6d0e7e7a6ca"
+      "normalizedSha256": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
-      "normalizedSha256": "1439103917bb283b093ac9fdb08ba98be03e50996d186eedfd612576a1bb562c"
+      "normalizedSha256": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
     }
   ],
   "companionPullRequest": "https://github.com/RicheyWorks/synapse/pull/4",
@@ -121,6 +121,20 @@
     "facade": "frontendcheck/build+finalembeddedUIHTTP2/2 at645fbe76",
     "finalBundle": "assets/index-C0fz5rPt.js",
     "nativeExecution": false
+  },
+  "sharedFaxContinuation": {
+    "baseCommit": "1b97a8b9be19a2067a9039ab634415c26cab6c3c",
+    "branch": "codex/fax-workbench-native-20261015",
+    "fourSharedSourcesRefreshed": true,
+    "synapseReflectedMethods": [
+      "pickimage",
+      "pickimport",
+      "savejson"
+    ],
+    "originalValidatorsPreserved": true,
+    "nativeCompile": false,
+    "cefRuntime": false,
+    "requiredPublicDependency": "written_source_compile_pending"
   },
   "buildRuleSource": {
     "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",

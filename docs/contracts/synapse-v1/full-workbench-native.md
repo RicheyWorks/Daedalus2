@@ -120,3 +120,7 @@ permission group, selected image/import flows, JSON save/cancel, existing-file
 refusal, actor/realm/controller loss during dialogs, repeated actions and final
 input restoration with synthetic fixtures. Record actual source pins and
 outcomes. Source inspection or module availability is not a passing playtest.
+
+## Shared Fax continuation
+
+The Fax full-workbench packet reuses this same C++ browser and Win32 SaveAs implementation through a fixed native profile and fixed-format C++ wrappers. It does not widen the Synapse JavaScript object: `pickimage`, `pickimport` and `savejson` retain their signatures, selectors, image/JSON validation and limits. The Synapse actor defaults to its original profile and API routes; only the separate Fax actor binds `window.ue.faxfiles`. The manifest refreshes the four changed shared-source hashes while retaining the two unchanged Synapse actor hashes and exact companion pin. The shared implementation remains unbuilt and unexercised in CEF/Win32; the required PUBLIC WebBrowser dependency still awaits its source-owner handoff.

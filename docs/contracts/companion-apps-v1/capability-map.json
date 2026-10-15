@@ -216,19 +216,19 @@
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
-      "normalizedSha256": "34a14229cb68b52e586565cbe5faf2a03154a237e9b750411e0ea89876e8b30c"
+      "normalizedSha256": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
-      "normalizedSha256": "b75a25f41f040544325d5ec71e654adf17bea9473d6777172bc1e6d0e7e7a6ca"
+      "normalizedSha256": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
-      "normalizedSha256": "1439103917bb283b093ac9fdb08ba98be03e50996d186eedfd612576a1bb562c"
+      "normalizedSha256": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c"
     },
     {
       "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-      "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
     }
   ],
   "contracts": [
@@ -250,11 +250,87 @@
     "sourceReviewed": true,
     "playAccepted": false
   },
+  "sharedContinuation": "Shared fixed browser profile and same Win32 no-replace engine extended by fax-full-workbench-native; Synapse three reflected methods/validators preserved. Native unverified.",
   "buildRuleSource": {
     "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
     "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
     "change": "one PUBLIC WebBrowser entry only; all other dependencies/staging preserved",
     "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "nativeCompile": "unverified"
+  }
+}
+,
+{
+  "id": "fax-full-workbench-native",
+  "stage": "source_written_unverified",
+  "actorClass": "/Script/DaedalusLink.DaedalusFaxWorkbenchTerminal",
+  "companionCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxWorkbenchTerminal.h",
+      "normalizedSha256": "b6d51313444b778e2b4603aed3b44f21426d1b02a6de4fa7898a67ce7a698749"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxWorkbenchTerminal.cpp",
+      "normalizedSha256": "725d88f6c7f9d9fb24a934ee3627402ad715cf1429fd27d37aa77639ca2522fa"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxWorkbenchFiles.h",
+      "normalizedSha256": "fcd7573fca36b79dc5ec23512596aa00bdccee1d87518c98e22c3c92e5dec696"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxWorkbenchFiles.cpp",
+      "normalizedSha256": "be005cfaec53342c4af9fcc1859f3c9b7d146686cacdcc9a399adbedba5b51a8"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+      "normalizedSha256": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+      "normalizedSha256": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+      "normalizedSha256": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
+    }
+  ],
+  "contracts": [
+    "docs/contracts/fax-v1/full-workbench-native.md",
+    "docs/contracts/fax-v1/full-workbench-install-manifest.json"
+  ],
+  "implementation": "Shared original desktop workbench page; separate two-method bytes-only PNG/plaintext SaveAs bridge with UTC/monotonic and owner/document fences",
+  "moduleDependency": {
+    "acceptancePending": false,
+    "written": true,
+    "visibility": "public",
+    "name": "WebBrowser",
+    "acceptedBy": "team-codex"
+  },
+  "validation": {
+    "compiledPageHttpSmoke": true,
+    "desktopJavaCases": 62,
+    "pageNodeCases": 25,
+    "sourceReview": "Recorded separately at final hash barrier",
+    "actualPortableParserCases": 54
+  },
+  "verification": {
+    "uht": false,
+    "installed": false,
+    "playAccepted": false,
+    "built": false,
+    "cef": false,
+    "win32Dialogs": false
+  },
+  "buildRuleSource": {
+    "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+    "normalizedSha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+    "sourceCommit": "34c5294d6f1d4865de4ab272e145960ef38c68ce",
+    "change": "onePUBLICWebBrowserentryonly; existingruntime/dependenciesunchanged",
     "nativeCompile": "unverified"
   }
 }
@@ -1001,247 +1077,547 @@
   ]
 },
     {
-      "id": "fax-trident",
-      "repository": "RicheyWorks/fax-trident",
-      "sourceCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f",
-      "draftPullRequest": "https://github.com/RicheyWorks/fax-trident/pull/3",
-      "modules": [
-        { "path": "fax-trident-server", "role": "Spring REST/WebSocket, JWT/Redis, PDF processing, Flyway/JPA private jobs and default-disabled transport." },
-        { "path": "fax-trident-desktop", "role": "Separate Spring-free JavaFX REST/WebSocket client, exact PDF review and private job recovery." }
-      ],
-      "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "localRealmBridgeFound": false, "existingClients": ["fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/FaxUpdateClient.java"], "providerAdapter": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java" },
-      "companionBridgeIncrement": {
-        "id": "fax-preparation-local-bridge",
-        "stage": "companion_bridge_source_written_unverified",
-        "stageAfterSourceDelivery": "companion_bridge_source_written_unverified",
-        "sourceBaseCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f",
-        "sourceBranch": "codex/realm-fax-preparation-20261015",
-        "configurationFiles": [".github/workflows/package-desktop.yml"],
-        "packagingScopeFollowUpHubMessage": 31249,
-        "sourceHead": "9e37b26aaaa812108c43a407cef4dc4e43975a2c",
-        "draftPullRequest": "https://github.com/RicheyWorks/fax-trident/pull/4",
-        "staticReview": {"stage":"complete_source_only","sourceHashesMatched":7,"findings":"Final independent seven-file review: no remaining concrete P1/P2; compilation/runtime unverified"},
-        "sourceTargets": [
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java", "symbols": ["existing authenticated uploadPdf, prepareFax, faxJob, reviewPdf and cancelFax; bounded local-only preparation additions"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxBridge.java", "symbols": ["RealmFaxBridge"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxPage.java", "symbols": ["RealmFaxPage"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxGrant.java", "symbols": ["RealmFaxGrant"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/RealmFaxDialog.java", "symbols": ["RealmFaxDialog"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java", "symbols": ["additive preparation-only desktop entry, excluding sendFax flow"] },
-          { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/FaxTridentDesktop.java", "symbols": ["opt-in bridge wiring to the existing logged-in client and shutdown lifecycle"] },
-          { "path": "docs/realm-fax-preparation.md", "symbols": ["companion bridge contract"] },
-          { "path": "docs/confirmed-fax-transport.md", "symbols": ["clarified preparation-only handoff boundary"] }
-        ],
-        "daedalusContracts": ["docs/contracts/fax-v1/README.md", "docs/contracts/fax-v1/realm-preparation.json"],
-        "protocol": { "productId": "fax-trident", "protocol": "faxprep.local.v1", "capabilities": ["fax.prepared.read", "fax.prepared.cancel"], "outputMode": "selected_prepared_pdf", "localGrantSeconds": 900, "approvedJobsPerGrant": 1, "routeAndHeaderAuthority": "docs/realm-fax-preparation.md and Daedalus realm-preparation.json; exact source frozen by the app owner", "backendAuthority": "existing logged-in FaxApiClient and existing literal-127.0.0.1 FaxDeliveryService/FaxDocuments; direct authentication and relay, no localhost/IPv6/proxy", "jwtRelayedToRealm": false, "remoteBackendRelay": false },
-        "implementedWork": ["desktop explicitly selects/uploads/prepares a bounded PDF using its existing authenticated local backend", "retain upload and request identity through preparation uncertainty", "desktop explicitly approves one immutable prepared job", "private-loopback capability grants only that job's status and verified PDF", "explicit pre-submission cancellation and local grant revocation"],
-        "realmCallersMayUploadOrPrepare": false,
-        "realmCallersMayConfirmOrSend": false,
-        "nativeSupport": {"actor":"/Script/DaedalusLink.DaedalusFaxPreparationTerminal","panel":"SDaedalusFaxPreparationPanel","typedLocalAppEnumSupportsFax":false,"stage":"source_written_unverified"},
-        "retentionBoundary": "Local grant expiry/revocation does not imply upstream upload/job deletion. Existing upload lease is one hour, job snapshot lease is 24 hours, and cancellation can fail after a separate desktop submission attempt.",
-        "verification": { "built": false, "tested": false, "desktopExecuted": false, "serviceStarted": false, "personalPdfRead": false, "installed": false, "nativeExecuted": false, "playAccepted": false }
-      },
-      "prerequisites": ["JDK 21 and existing server/desktop", "existing JWT secret and authenticated account", "Redis for auth/rate-limit infrastructure", "persistent PostgreSQL and provider configuration only for separately authorized real transport; no configuration/credential change performed here"],
-      "launch": { "desktopCommand": "mvn -pl fax-trident-desktop javafx:run", "serverDefaultOrigin": "http://localhost:8080", "note": "Existing server/auth must be available; this inventory starts nothing and creates no credentials." },
-      "protocol": {
-        "contract": "docs/confirmed-fax-transport.md",
-        "localCapabilityPairing": null,
-        "authorization": "Existing JWT login via POST /api/auth/login; Authorization: Bearer <JWT>; private jobs scoped to authenticated owner.",
-        "routes": [
-          { "route": "POST /api/fax/uploads", "body": "multipart field file containing explicitly selected PDF; returns opaque uploadId" },
-          { "route": "POST /api/fax/jobs", "body": "recipient, uploadId, idempotencyKey; returns PREPARED immutable snapshot metadata; no provider send" },
-          { "route": "GET /api/fax/jobs/pending", "body": "none; recover own unresolved jobs" },
-          { "route": "GET /api/fax/jobs/{id}", "body": "none; private state/evidence" },
-          { "route": "GET /api/fax/jobs/{id}/document", "body": "none; exact reviewed PDF snapshot" },
-          { "route": "POST /api/fax/jobs/{id}/cancel", "body": "empty JSON; only pre-submission cancellation" },
-          { "route": "POST /api/fax/jobs/{id}/confirm", "body": "recipient, documentSha256, pageCount, confirmed:true", "integrationMayCall": false, "reason": "Could submit real transport when an existing server is enabled; real transmission is not authorized." }
-        ],
-        "limits": { "pdfBytes": 26214400, "pageCountMin": 1, "pageCountMax": 100, "pageDimensionPointsMax": 14400, "snapshotLeaseSeconds": 86400 },
-        "retry": "Stable owner/idempotency key; recover existing job after uncertainty. SUBMITTING is committed before one provider POST. Never blindly retry a send.",
-        "delivery": "PREPARED and TRANSPORT_DISABLED are not sent. Accepted request is queued. Only verified correlated complete-page delivery evidence means DELIVERED.",
-        "privacy": "Opaque upload/job identifiers and owner-isolated snapshot; no arbitrary server file paths. No credentials in native assets; no user document or provider accessed during inventory."
-      },
-      "features": [
-        {
-          "id": "prepare-review-private-pdf",
-          "behavior": "Upload selected bounded PDF, prepare immutable recipient/digest/page tuple, retrieve exact snapshot for review; preparation performs no provider transmission.",
-          "source": [
-            {
-              "path": "fax-trident-server/src/main/java/com/xai/trident/upload/FaxUploadService.java",
-              "symbols": [
-                "resolveOwned"
-              ]
-            },
-            {
-              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
-              "symbols": [
-                "prepare",
-                "preview"
-              ]
-            },
-            {
-              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDocuments.java",
-              "symbols": [
-                "copy",
-                "read",
-                "sha256"
-              ]
-            },
-            {
-              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
-              "symbols": [
-                "uploadPdf",
-                "prepareFax",
-                "reviewPdf"
-              ]
-            },
-            {
-              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java",
-              "symbols": [
-                "sendFax"
-              ]
-            }
-          ],
-          "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
-          "nativeBindings": [
-            "fax-native-terminal"
-          ],
-          "bindingStage": "source_written_unverified",
-          "companionBridgeBindings": [
-            "fax-preparation-local-bridge"
-          ],
-          "companionBridgeStage": "companion_bridge_source_written_unverified",
-          "missingCode": [],
-          "evidenceStage": "source_inspected",
-          "remainingVerification": [
-            "Exact native compile/UHT/link/load",
-            "Synthetic connected PDF/action tests and Windows modal lifecycle",
-            "Physical fax art/placement/Play by sole operator"
-          ]
-        },
-        {
-          "id": "status-recovery-cancel-retention",
-          "behavior": "Owner-scoped durable job status, unresolved-job recovery, safe pre-submission cancellation, snapshot expiry and managed cleanup; uncertain submission is not silently resent.",
-          "source": [
-            {
-              "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
-              "symbols": [
-                "get",
-                "pending",
-                "cancel",
-                "observe"
-              ]
-            },
-            {
-              "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java",
-              "symbols": [
-                "status",
-                "pending",
-                "cancel"
-              ]
-            },
-            {
-              "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
-              "symbols": [
-                "faxJob",
-                "pendingFaxJobs",
-                "cancelFax"
-              ]
-            }
-          ],
-          "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
-          "nativeBindings": [
-            "fax-native-terminal"
-          ],
-          "bindingStage": "source_written_unverified",
-          "companionBridgeBindings": [
-            "fax-preparation-local-bridge"
-          ],
-          "companionBridgeStage": "companion_bridge_source_written_unverified",
-          "missingCode": [],
-          "evidenceStage": "source_inspected",
-          "remainingVerification": [
-            "Exact native compile/UHT/link/load",
-            "Synthetic connected PDF/action tests and Windows modal lifecycle",
-            "Physical fax art/placement/Play by sole operator"
-          ]
-        },
-        {
-          "id": "real-provider-transmission",
-          "behavior": "Default-disabled Telnyx adapter, signed Ed25519 callbacks, deduplication and bounded GET reconciliation. Existing source is not proof of actual receipt.",
-          "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java", "symbols": ["enabled", "submit", "status", "observation"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxWebhookVerifier.java", "symbols": ["verify"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java", "symbols": ["confirm", "observe"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java", "symbols": ["confirm", "media", "webhook"] }
-          ],
-          "existingInterface": "Exact-review confirmation in desktop/REST; disabled by default.",
-          "nativeBindings": [],
-          "bindingStage": "disabled_unverified_transport",
-          "missingCode": ["not authorized to activate or connect confirm in this scope", "separate provider/deployment/consented receipt qualification would be required"],
-          "confirmationCalledByThisIntegration": false,
-          "realFaxSent": false,
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "contacts-history-suggestions",
-          "behavior": "Contact search/save, heuristic suggestions, legacy fax logs/status/metadata endpoints. These are separate from owner-scoped confirmed jobs and require their own access review before native exposure.",
-          "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java", "symbols": ["searchContacts", "predictContact", "getFaxLogsByNumber", "getRecentLogs", "getMetadata", "getFaxStatus"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java", "symbols": ["findOrCreateContact", "saveContact"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/ContactSuggestionService.java", "symbols": ["suggestContact"] }
-          ],
-          "existingInterface": "Existing server REST, not a native permission grant. Suggestions are deterministic heuristics, not a model.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["owner/privacy review of legacy surfaces before any native contacts/history connector"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "pdf-text-barcodes-and-theme",
-          "behavior": "Server PDF text extraction/barcode generation and cleanup; JavaFX preview/theme/preferences; no OCR implementation established.",
-          "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/PdfProcessingService.java", "symbols": ["extractTextFromPdf", "generateBarcode", "cleanupBarcode", "cleanupAllBarcodes"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/PreviewPane.java", "symbols": ["PreviewPane"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/ThemeManager.java", "symbols": ["ThemeManager"] },
-            { "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/config/DesktopPreferences.java", "symbols": ["DesktopPreferences"] }
-          ],
-          "existingInterface": "Existing server internals/desktop; no realm endpoint or native binding.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["explicit bounded extraction/preview interface if later scoped; preserve metadata privacy"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "admin-and-auth-infrastructure",
-          "behavior": "JWT login/logout, Redis rate limits and admin diagnostics/cache/barcode cleanup; separate USER/ADMIN roles.",
-          "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AuthController.java", "symbols": ["AuthController"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/config/SecurityConfig.java", "symbols": ["SecurityConfig"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AdminController.java", "symbols": ["getDashboard", "clearCache", "cleanupBarcodes"] }
-          ],
-          "existingInterface": "Existing authenticated server; not exposed through an object or new credentials.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["future existing-session authentication handoff; admin operations are not part of a normal fax object"],
-          "evidenceStage": "source_inspected"
-        },
-        {
-          "id": "legacy-simulation-and-inbound-gap",
-          "behavior": "Legacy send/process/auto-send paths are preparation/simulation, not real delivery. Dev-only inbound simulator fabricates rows; no real inbound transport is implemented.",
-          "source": [
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java", "symbols": ["sendFax", "processInput", "listenForInboundFax"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/service/InboundFaxSimulator.java", "symbols": ["poll"] },
-            { "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java", "symbols": ["sendFax", "autoSendFax", "processInput"] }
-          ],
-          "existingInterface": "Explicitly labeled legacy simulation; /api/fax/send rejects legacy sends in favor of confirmed jobs; dev inbound simulator must not be presented as receipt.",
-          "nativeBindings": [],
-          "bindingStage": "not_implemented",
-          "missingCode": ["real inbound transport and correlated authenticated receipt service are absent; outside this authorized implementation"],
-          "evidenceStage": "source_inspected"
-        }
-      ]
+  "id": "fax-trident",
+  "repository": "RicheyWorks/fax-trident",
+  "sourceCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
+  "draftPullRequest": "https://github.com/RicheyWorks/fax-trident/pull/5",
+  "modules": [
+    {
+      "path": "fax-trident-server",
+      "role": "Spring REST/WebSocket, JWT/Redis, PDF processing, Flyway/JPA private jobs and default-disabled transport."
+    },
+    {
+      "path": "fax-trident-desktop",
+      "role": "Separate Spring-free JavaFX REST/WebSocket client, exact PDF review and private job recovery."
     }
+  ],
+  "extensionInventory": {
+    "scope": "tracked paths and top-level directory inventory at sourceCommit",
+    "dedicatedConnectorDirectoryFound": false,
+    "dedicatedPluginDirectoryFound": false,
+    "dedicatedExamplesDirectoryFound": false,
+    "localRealmBridgeFound": false,
+    "existingClients": [
+      "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+      "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/FaxUpdateClient.java"
+    ],
+    "providerAdapter": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java"
+  },
+  "companionBridgeIncrement": {
+    "id": "fax-preparation-local-bridge",
+    "stage": "companion_bridge_source_written_unverified",
+    "stageAfterSourceDelivery": "companion_bridge_source_written_unverified",
+    "sourceBaseCommit": "b5e999f93e92135be510bb2a42157cd88ba5fc5f",
+    "sourceBranch": "codex/realm-fax-preparation-20261015",
+    "configurationFiles": [
+      ".github/workflows/package-desktop.yml"
+    ],
+    "packagingScopeFollowUpHubMessage": 31249,
+    "sourceHead": "9e37b26aaaa812108c43a407cef4dc4e43975a2c",
+    "draftPullRequest": "https://github.com/RicheyWorks/fax-trident/pull/4",
+    "staticReview": {
+      "stage": "complete_source_only",
+      "sourceHashesMatched": 7,
+      "findings": "Final independent seven-file review: no remaining concrete P1/P2; compilation/runtime unverified"
+    },
+    "sourceTargets": [
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+        "symbols": [
+          "existing authenticated uploadPdf, prepareFax, faxJob, reviewPdf and cancelFax; bounded local-only preparation additions"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxBridge.java",
+        "symbols": [
+          "RealmFaxBridge"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxPage.java",
+        "symbols": [
+          "RealmFaxPage"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/bridge/RealmFaxGrant.java",
+        "symbols": [
+          "RealmFaxGrant"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/RealmFaxDialog.java",
+        "symbols": [
+          "RealmFaxDialog"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java",
+        "symbols": [
+          "additive preparation-only desktop entry, excluding sendFax flow"
+        ]
+      },
+      {
+        "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/FaxTridentDesktop.java",
+        "symbols": [
+          "opt-in bridge wiring to the existing logged-in client and shutdown lifecycle"
+        ]
+      },
+      {
+        "path": "docs/realm-fax-preparation.md",
+        "symbols": [
+          "companion bridge contract"
+        ]
+      },
+      {
+        "path": "docs/confirmed-fax-transport.md",
+        "symbols": [
+          "clarified preparation-only handoff boundary"
+        ]
+      }
+    ],
+    "daedalusContracts": [
+      "docs/contracts/fax-v1/README.md",
+      "docs/contracts/fax-v1/realm-preparation.json"
+    ],
+    "protocol": {
+      "productId": "fax-trident",
+      "protocol": "faxprep.local.v1",
+      "capabilities": [
+        "fax.prepared.read",
+        "fax.prepared.cancel"
+      ],
+      "outputMode": "selected_prepared_pdf",
+      "localGrantSeconds": 900,
+      "approvedJobsPerGrant": 1,
+      "routeAndHeaderAuthority": "docs/realm-fax-preparation.md and Daedalus realm-preparation.json; exact source frozen by the app owner",
+      "backendAuthority": "existing logged-in FaxApiClient and existing literal-127.0.0.1 FaxDeliveryService/FaxDocuments; direct authentication and relay, no localhost/IPv6/proxy",
+      "jwtRelayedToRealm": false,
+      "remoteBackendRelay": false
+    },
+    "implementedWork": [
+      "desktop explicitly selects/uploads/prepares a bounded PDF using its existing authenticated local backend",
+      "retain upload and request identity through preparation uncertainty",
+      "desktop explicitly approves one immutable prepared job",
+      "private-loopback capability grants only that job's status and verified PDF",
+      "explicit pre-submission cancellation and local grant revocation"
+    ],
+    "realmCallersMayUploadOrPrepare": false,
+    "realmCallersMayConfirmOrSend": false,
+    "nativeSupport": {
+      "actor": "/Script/DaedalusLink.DaedalusFaxPreparationTerminal",
+      "panel": "SDaedalusFaxPreparationPanel",
+      "typedLocalAppEnumSupportsFax": false,
+      "stage": "source_written_unverified"
+    },
+    "retentionBoundary": "Local grant expiry/revocation does not imply upstream upload/job deletion. Existing upload lease is one hour, job snapshot lease is 24 hours, and cancellation can fail after a separate desktop submission attempt.",
+    "verification": {
+      "built": false,
+      "tested": false,
+      "desktopExecuted": false,
+      "serviceStarted": false,
+      "personalPdfRead": false,
+      "installed": false,
+      "nativeExecuted": false,
+      "playAccepted": false
+    }
+  },
+  "prerequisites": [
+    "JDK 21 and existing server/desktop",
+    "existing JWT secret and authenticated account",
+    "Redis for auth/rate-limit infrastructure",
+    "persistent PostgreSQL and provider configuration only for separately authorized real transport; no configuration/credential change performed here"
+  ],
+  "launch": {
+    "desktopCommand": "mvn -pl fax-trident-desktop javafx:run",
+    "serverDefaultOrigin": "http://localhost:8080",
+    "note": "Existing server/auth must be available; this inventory starts nothing and creates no credentials."
+  },
+  "protocol": {
+    "contract": "docs/confirmed-fax-transport.md",
+    "localCapabilityPairing": null,
+    "authorization": "Existing JWT login via POST /api/auth/login; Authorization: Bearer <JWT>; private jobs scoped to authenticated owner.",
+    "routes": [
+      {
+        "route": "POST /api/fax/uploads",
+        "body": "multipart field file containing explicitly selected PDF; returns opaque uploadId"
+      },
+      {
+        "route": "POST /api/fax/jobs",
+        "body": "recipient, uploadId, idempotencyKey; returns PREPARED immutable snapshot metadata; no provider send"
+      },
+      {
+        "route": "GET /api/fax/jobs/pending",
+        "body": "none; recover own unresolved jobs"
+      },
+      {
+        "route": "GET /api/fax/jobs/{id}",
+        "body": "none; private state/evidence"
+      },
+      {
+        "route": "GET /api/fax/jobs/{id}/document",
+        "body": "none; exact reviewed PDF snapshot"
+      },
+      {
+        "route": "POST /api/fax/jobs/{id}/cancel",
+        "body": "empty JSON; only pre-submission cancellation"
+      },
+      {
+        "route": "POST /api/fax/jobs/{id}/confirm",
+        "body": "recipient, documentSha256, pageCount, confirmed:true",
+        "integrationMayCall": false,
+        "reason": "Could submit real transport when an existing server is enabled; real transmission is not authorized."
+      }
+    ],
+    "limits": {
+      "pdfBytes": 26214400,
+      "pageCountMin": 1,
+      "pageCountMax": 100,
+      "pageDimensionPointsMax": 14400,
+      "snapshotLeaseSeconds": 86400
+    },
+    "retry": "Stable owner/idempotency key; recover existing job after uncertainty. SUBMITTING is committed before one provider POST. Never blindly retry a send.",
+    "delivery": "PREPARED and TRANSPORT_DISABLED are not sent. Accepted request is queued. Only verified correlated complete-page delivery evidence means DELIVERED.",
+    "privacy": "Opaque upload/job identifiers and owner-isolated snapshot; no arbitrary server file paths. No credentials in native assets; no user document or provider accessed during inventory."
+  },
+  "features": [
+    {
+      "id": "prepare-review-private-pdf",
+      "behavior": "Upload selected bounded PDF, prepare immutable recipient/digest/page tuple, retrieve exact snapshot for review; preparation performs no provider transmission.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/upload/FaxUploadService.java",
+          "symbols": [
+            "resolveOwned"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
+          "symbols": [
+            "prepare",
+            "preview"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDocuments.java",
+          "symbols": [
+            "copy",
+            "read",
+            "sha256"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+          "symbols": [
+            "uploadPdf",
+            "prepareFax",
+            "reviewPdf"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/MainView.java",
+          "symbols": [
+            "sendFax"
+          ]
+        }
+      ],
+      "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
+      "nativeBindings": [
+        "fax-native-terminal"
+      ],
+      "bindingStage": "source_written_unverified",
+      "companionBridgeBindings": [
+        "fax-preparation-local-bridge"
+      ],
+      "companionBridgeStage": "companion_bridge_source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "remainingVerification": [
+        "Exact native compile/UHT/link/load",
+        "Synthetic connected PDF/action tests and Windows modal lifecycle",
+        "Physical fax art/placement/Play by sole operator"
+      ]
+    },
+    {
+      "id": "status-recovery-cancel-retention",
+      "behavior": "Owner-scoped durable job status, unresolved-job recovery, safe pre-submission cancellation, snapshot expiry and managed cleanup; uncertain submission is not silently resent.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
+          "symbols": [
+            "get",
+            "pending",
+            "cancel",
+            "observe"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java",
+          "symbols": [
+            "status",
+            "pending",
+            "cancel"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/client/FaxApiClient.java",
+          "symbols": [
+            "faxJob",
+            "pendingFaxJobs",
+            "cancelFax"
+          ]
+        }
+      ],
+      "existingInterface": "Existing authenticated desktop/local companion plus additive native prepared-job source; native build/installation/runtime unverified.",
+      "nativeBindings": [
+        "fax-native-terminal"
+      ],
+      "bindingStage": "source_written_unverified",
+      "companionBridgeBindings": [
+        "fax-preparation-local-bridge"
+      ],
+      "companionBridgeStage": "companion_bridge_source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "remainingVerification": [
+        "Exact native compile/UHT/link/load",
+        "Synthetic connected PDF/action tests and Windows modal lifecycle",
+        "Physical fax art/placement/Play by sole operator"
+      ]
+    },
+    {
+      "id": "real-provider-transmission",
+      "behavior": "Default-disabled Telnyx adapter, signed Ed25519 callbacks, deduplication and bounded GET reconciliation. Existing source is not proof of actual receipt.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxFaxTransport.java",
+          "symbols": [
+            "enabled",
+            "submit",
+            "status",
+            "observation"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/TelnyxWebhookVerifier.java",
+          "symbols": [
+            "verify"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/transport/FaxDeliveryService.java",
+          "symbols": [
+            "confirm",
+            "observe"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxDeliveryController.java",
+          "symbols": [
+            "confirm",
+            "media",
+            "webhook"
+          ]
+        }
+      ],
+      "existingInterface": "Exact-review confirmation in desktop/REST; disabled by default.",
+      "nativeBindings": [],
+      "bindingStage": "disabled_unverified_transport",
+      "missingCode": [
+        "not authorized to activate or connect confirm in this scope",
+        "separate provider/deployment/consented receipt qualification would be required"
+      ],
+      "confirmationCalledByThisIntegration": false,
+      "realFaxSent": false,
+      "evidenceStage": "source_inspected"
+    },
+    {
+      "id": "contacts-history-suggestions",
+      "behavior": "Contact search/save, heuristic suggestions, legacy fax logs/status/metadata endpoints. These are separate from owner-scoped confirmed jobs and require their own access review before native exposure.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java",
+          "symbols": [
+            "searchContacts",
+            "predictContact",
+            "getFaxLogsByNumber",
+            "getRecentLogs",
+            "getMetadata",
+            "getFaxStatus"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java",
+          "symbols": [
+            "findOrCreateContact",
+            "saveContact"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/service/ContactSuggestionService.java",
+          "symbols": [
+            "suggestContact"
+          ]
+        }
+      ],
+      "existingInterface": "Original owner-filtered repositories/suggestions through explicit USER desktop workbench and shared native browser host.",
+      "nativeBindings": [
+        "fax-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/fax-v1/full-workbench-native.md",
+        "docs/contracts/fax-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/CEF/install and physical binding/Play with synthetic fixtures; USER/ADMIN boundaries; native modal cancellation/expiry/owner loss"
+      ]
+    },
+    {
+      "id": "pdf-text-barcodes-and-theme",
+      "behavior": "Server PDF text extraction/barcode generation and cleanup; JavaFX preview/theme/preferences; no OCR implementation established.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/service/PdfProcessingService.java",
+          "symbols": [
+            "extractTextFromPdf",
+            "generateBarcode",
+            "cleanupBarcode",
+            "cleanupAllBarcodes"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/PreviewPane.java",
+          "symbols": [
+            "PreviewPane"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/ui/ThemeManager.java",
+          "symbols": [
+            "ThemeManager"
+          ]
+        },
+        {
+          "path": "fax-trident-desktop/src/main/java/com/xai/trident/desktop/config/DesktopPreferences.java",
+          "symbols": [
+            "DesktopPreferences"
+          ]
+        }
+      ],
+      "existingInterface": "Selected prepared-PDF bounded text and real memory-only QR through existing PDFBox/ZXing; original JavaFX theme remains desktop presentation.",
+      "nativeBindings": [
+        "fax-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/fax-v1/full-workbench-native.md",
+        "docs/contracts/fax-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/CEF/install and physical binding/Play with synthetic fixtures; USER/ADMIN boundaries; native modal cancellation/expiry/owner loss"
+      ],
+      "intentionallyDesktopOnly": [
+        "Original JavaFX theme controls; no arbitrary PDF path or generic file processor"
+      ]
+    },
+    {
+      "id": "admin-and-auth-infrastructure",
+      "behavior": "JWT login/logout, Redis rate limits and admin diagnostics/cache/barcode cleanup; separate USER/ADMIN roles.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AuthController.java",
+          "symbols": [
+            "AuthController"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/config/SecurityConfig.java",
+          "symbols": [
+            "SecurityConfig"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/AdminController.java",
+          "symbols": [
+            "getDashboard",
+            "clearCache",
+            "cleanupBarcodes"
+          ]
+        }
+      ],
+      "existingInterface": "Existing desktop login retains JWT; separate explicitly consented current-ADMIN scalar statistics only.",
+      "nativeBindings": [
+        "fax-full-workbench-native"
+      ],
+      "bindingStage": "source_written_unverified",
+      "missingCode": [],
+      "evidenceStage": "source_inspected",
+      "nativeContractTargets": [
+        "docs/contracts/fax-v1/full-workbench-native.md",
+        "docs/contracts/fax-v1/full-workbench-install-manifest.json"
+      ],
+      "remainingVerification": [
+        "Operator UHT/compile/link/CEF/install and physical binding/Play with synthetic fixtures; USER/ADMIN boundaries; native modal cancellation/expiry/owner loss"
+      ],
+      "intentionallyDesktopOnly": [
+        "Account/credential management and administrative mutations; no native backend-login or arbitrary admin proxy"
+      ]
+    },
+    {
+      "id": "legacy-simulation-and-inbound-gap",
+      "behavior": "Legacy send/process/auto-send paths are preparation/simulation, not real delivery. Dev-only inbound simulator fabricates rows; no real inbound transport is implemented.",
+      "source": [
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/service/FaxEngineService.java",
+          "symbols": [
+            "sendFax",
+            "processInput",
+            "listenForInboundFax"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/service/InboundFaxSimulator.java",
+          "symbols": [
+            "poll"
+          ]
+        },
+        {
+          "path": "fax-trident-server/src/main/java/com/xai/trident/controller/FaxController.java",
+          "symbols": [
+            "sendFax",
+            "autoSendFax",
+            "processInput"
+          ]
+        }
+      ],
+      "existingInterface": "Explicitly labeled legacy simulation; /api/fax/send rejects legacy sends in favor of confirmed jobs; dev inbound simulator must not be presented as receipt.",
+      "nativeBindings": [],
+      "bindingStage": "not_implemented",
+      "missingCode": [
+        "real inbound transport and correlated authenticated receipt service are absent; outside this authorized implementation"
+      ],
+      "evidenceStage": "source_inspected"
+    }
+  ],
+  "fullWorkbench": {
+    "protocol": "faxworkbench.local.v1",
+    "companionCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
+    "pairingUri": "http://127.0.0.1:<port>/realm/fax-workbench/#token=<43base64url>",
+    "desktopGuide": "docs/REALM_FAX_WORKBENCH.md",
+    "serverGuide": "docs/FAX_PRIVATE_WORKBENCH.md",
+    "modes": [
+      "USER",
+      "ADMIN_statistics_only"
+    ],
+    "grants": "Separate explicit immutable mode, optional selected prepared job; original preparation grant unchanged",
+    "validation": "31server+62desktop+25Node passed; compiled actualPageHTTPsmoke passed; no installed GUI/provider/native runtime"
+  }
+}
   ],
   "crossAppBoundaries": {
     "physicalObjectIsAnotherInterface": true,
@@ -1313,28 +1689,73 @@
   "runtimeAccepted": false,
   "remaining": "Operator build/install/CEF/native-file/lifecycle/physical binding/Play; wider fax desktop/native work active; original Photo codec/media/packaging gaps remain documented.",
   "dependencyStatus": "written_source_compile_pending"
+}
+,
+  "faxFullWorkbenchContinuation": {
+  "baseCommit": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
+  "branch": "codex/fax-workbench-native-20261015",
+  "companionCommit": "5e005c2afb0b8a46308b069a653da57f2649d5b8",
+  "stage": "source_written_unverified",
+  "sourceOwnerAccepted": true,
+  "publicDependencyAcceptance": true,
+  "runtimeAccepted": false,
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxWorkbenchTerminal.h",
+      "normalizedSha256": "b6d51313444b778e2b4603aed3b44f21426d1b02a6de4fa7898a67ce7a698749"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxWorkbenchTerminal.cpp",
+      "normalizedSha256": "725d88f6c7f9d9fb24a934ee3627402ad715cf1429fd27d37aa77639ca2522fa"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusFaxWorkbenchFiles.h",
+      "normalizedSha256": "fcd7573fca36b79dc5ec23512596aa00bdccee1d87518c98e22c3c92e5dec696"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusFaxWorkbenchFiles.cpp",
+      "normalizedSha256": "be005cfaec53342c4af9fcc1859f3c9b7d146686cacdcc9a399adbedba5b51a8"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+      "normalizedSha256": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+      "normalizedSha256": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+      "normalizedSha256": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
+    }
+  ],
+  "remaining": "Operator serial UHT/compile/link/install/CEF/Win32/physical art/Play; no real transmission/provider/inbound claim; Photo packaging reconciliation recorded separately"
 },
   "win32FileHelperCompileCorrection": {
-    "sourceCommit": "c3625e189d68eec798c19bef0b9158718d51832e",
-    "supersedesSource": "b89aff6e64dc1465bb686e2b02095fc2ca98134e",
-    "sourceFiles": [
-      {
-        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
-        "normalizedSha256": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b"
-      },
-      {
-        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
-        "normalizedSha256": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223"
-      },
-      {
-        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
-        "normalizedSha256": "8414b639bc6c12f1749ccac6141459936139b2ecf3af8aa654eab497c8b27098"
-      }
-    ],
-    "correction": "Aggregate-initialize the one-BOOLEAN disposition struct; compare WinAPI BOOL with zero after wrapper cleanup",
-    "behavior": "Same deletion marker and chooser truth values; cleanup, lifecycle, no-replace and all unrelated source preserved",
-    "nativeRebuild": "pending_for_corrected_source",
-    "runtimeVerified": false,
-    "contract": "docs/contracts/companion-apps-v1/win32-file-helper-compile-fix.md"
-  }
+  "sourceCommit": "c3625e189d68eec798c19bef0b9158718d51832e",
+  "supersedesSource": "f4983b977df1fef8fd96f2003e2a55154b21100f",
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
+      "normalizedSha256": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+      "normalizedSha256": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+      "normalizedSha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a"
+    }
+  ],
+  "correction": "Aggregate-initialize the one-BOOLEAN disposition struct; compare WinAPI BOOL with zero after wrapper cleanup",
+  "behavior": "Same deletion marker and chooser truth values; cleanup, lifecycle, no-replace and all unrelated source preserved",
+  "nativeRebuild": "pending_for_corrected_source",
+  "runtimeVerified": false,
+  "contract": "docs/contracts/companion-apps-v1/win32-file-helper-compile-fix.md"
+}
 }

@@ -18,6 +18,13 @@ namespace DaedalusSynapseWorkbenchFiles
     bool SaveMemoryJson(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed);
 }
 
+/** Native C++ exports only. These functions do not widen the Synapse JS binding. */
+namespace DaedalusWorkbenchExports
+{
+    bool SaveFaxQrPng(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed);
+    bool SaveFaxPlainText(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed);
+}
+
 /** The sole JS binding: selected bytes in, generated JSON bytes out; never paths, URLs or commands. */
 UCLASS(Transient)
 class DAEDALUSLINK_API UDaedalusSynapseWorkbenchBridge final : public UObject
