@@ -259,12 +259,22 @@ def mockup(realm, root, st, win, cursor):
         blit(scr, s, W - 56 + (i % 2) * 10, 8 + i * 32)
     blit(scr, stretch_window(win, W // 2 - 4, 80), 2, H - 82)
     blit(scr, stretch_window(win, W // 2 - 4, 80), W // 2 + 2, H - 82)
-    blit(scr, cursor[:, :8], 10, H - 70)
+    import pixel_font as PF
     tc = st["text"]
-    for i, n in enumerate((412, 96, 1280)):
-        blit(scr, text_number(n, tc, st["shade"]), W // 2 + 60, H - 70 + i * 16)
+    tcol = P.hexc(tc)
+    sh = P.hexc(st["shade"]) if st["shade"] else None
+    cmds = ("FIGHT", "MAGIC", "ITEM", "RUN") if realm == "portal" else ("ATTACK", "MAGIC", "ITEM", "DEFEND")
+    for i, c in enumerate(cmds):
+        blit(scr, PF.render(c, tcol, sh), 22, H - 72 + i * 16)
+    blit(scr, cursor[:, :8], 10, H - 72)
+    names = [os.path.basename(p)[len("Party_"):-len("_1x.png")].split("_")[-1] for p in party] or ["HERO", "SAGE", "SCOUT"]
+    for i, (nm, n) in enumerate(zip(names[:3], (412, 96, 1280))):
+        y = H - 72 + i * 16
+        blit(scr, PF.render(nm[:6 if realm == "portal" else 10], tcol, sh), W // 2 + 8, y)
+        num = text_number(n, tc, st["shade"])
+        blit(scr, num, W - 10 - num.shape[1], y)                                 # right-aligned inside the frame
         if st["gauges"]:
-            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 40), W // 2 + 12, H - 69 + i * 16)
+            blit(scr, gauge("#58d058" if i == 0 else "#f8d038", 40), W - 82, y + 1)
     blit(scr, text_number(999, "#ffffff" if realm == "portal" else "#fff070", st["shade"]), 40, 70)
     return scr
 
@@ -286,6 +296,11 @@ def build(out_root):
         save(np.concatenate([np.pad(glyph(DIGITS[d], st["text"], ol), ((0, 0), (0, 1), (0, 0))) for d in "0123456789"], axis=1), "Digits")
         save(np.concatenate([np.pad(glyph(DIGITS[d], st["heal"], ol), ((0, 0), (0, 1), (0, 0))) for d in "0123456789"], axis=1), "Digits_Heal")
         save(glyph(MISS, st["text"], ol), "Miss")
+        import pixel_font as PF
+        at, chars = PF.atlas(P.hexc(st["text"]))
+        save(at, "Font_5x7")
+        with open(os.path.join(od, "Font_5x7.json"), "w", encoding="utf-8") as f:
+            f.write('{"cell": [6, 8], "glyph": [5, 7], "columns": 16, "chars": %s}' % __import__("json").dumps(chars))
         for name in STATUS:
             save(status_icon(name, realm), "Status_" + name)
         if st["gauges"]:
