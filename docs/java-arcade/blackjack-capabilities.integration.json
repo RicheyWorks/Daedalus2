@@ -1,15 +1,15 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 4,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "JAVA_CABINET_SOURCE_PACKAGE_READY_UNVERIFIED_NATIVE",
+  "status": "LOCAL_SUDOKU_EDITING_AND_PRIOR_CAPABILITIES_SOURCE_READY_UNVERIFIED_NATIVE",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/blackjack-capability-binding-20261014",
-    "code_commit": "c7b3f3e28f759b5408a69ff00f2fde025b3d650b",
+    "code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
     "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
     "files": [
       {
@@ -17,35 +17,40 @@
         "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
         "expected_prior_pr152_sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF",
         "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
-        "mode_checkpoint_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6"
+        "mode_checkpoint_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "previous_package_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
         "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
         "expected_prior_pr152_sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900",
         "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
-        "mode_checkpoint_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52"
+        "mode_checkpoint_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "previous_package_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
-        "sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A",
+        "sha256": "D3187DA35279C9D80736D66241DA8580B42A4F937A51C2C3963891B2F5B7A440",
         "expected_prior_pr152_sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB",
-        "git_blob": "65c0caca765a66fca088269ee35bb426e0de74fb",
-        "mode_checkpoint_sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5"
+        "git_blob": "252e7210addf948cb7160e1ae50bc4b86b3ca2b0",
+        "mode_checkpoint_sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5",
+        "previous_package_sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
-        "sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365",
+        "sha256": "B44F8A03A786ACE32E86349D9C13EC25EA0205D0C1FE0065067B8D351FF5CB1D",
         "expected_prior_pr152_sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7",
-        "git_blob": "3bb1e6c863393d536de4797091e1ee132f8c02c0",
-        "mode_checkpoint_sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15"
+        "git_blob": "67e0ae0f5474c89077a994f5c45c78ada7fe5cc2",
+        "mode_checkpoint_sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15",
+        "previous_package_sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365"
       }
     ],
     "prior_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
     "prior_documentation_head": "89ece41824b9132403ac0bfffae15343b08b13f8",
     "mode_commit": "4d5577dc5659a9a26a9130e70cef68c2e5915ece",
     "package_increment_base": "89ece41824b9132403ac0bfffae15343b08b13f8",
-    "mode_documentation_checkpoint": "0dff5841862d993d2bbd4a96c884a22d698cf0dc"
+    "mode_documentation_checkpoint": "0dff5841862d993d2bbd4a96c884a22d698cf0dc",
+    "local_editing_base": "9fad7509b5e317807f2627d06807e6a8a1b73a2a"
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
@@ -153,7 +158,7 @@
     }
   },
   "stages": {
-    "source": "Selected bounded package complete: prior Blackjack settings/metadata, Sudoku create modes, supported original shortcut/Open/confirmation/status bindings. Full original applications remain incomplete.",
+    "source": "Selected local Sudoku editing package complete alongside preserved prior modes/Blackjack capabilities; full original apps remain incomplete.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
@@ -161,10 +166,10 @@
     "world_placed": false,
     "world_saved": false,
     "end_to_end": false,
-    "source_review": "PASS; no blocking source defect, cleanup applied",
-    "static_checks_passed": 110,
-    "unchanged_methods": 56,
-    "tests_or_builds_run": false
+    "source_review": "PASS; no blocking source defect; note-lifetime copy corrected",
+    "static_checks_passed": 57,
+    "tests_or_builds_run": false,
+    "unchanged_slate_methods": 14
   },
   "pending_operator_steps": [
     "Source packet only; do not reserve a native/build/editor slot ahead of ingestion. Dedicated tests and native acceptance remain deferred.",
@@ -173,7 +178,8 @@
     "At the next owned source-validation slot exercise8flag combinations, ordinaryStart compatibility, invalid/busy gates, selections across async bootstrap and stale/replaced callbacks; preserve existing guard/secret/protocol constraints.",
     "Later approved disposable Sudoku acceptance: normal HeroUse, modeCreate, compare confirmed flags/time limit, timed save/resume without clock extension, then close/reopen/disconnect recovery. No actual service or credentials used by source lane.",
     "Retain prior Blackjack companion/rules/settings/metadata acceptance steps; they remain uncompiled/uninstalled/unaccepted at this source checkpoint. No equivalent nativeSudoku/Blackjack gameplay/persistence is inferred from other Mines/HUD checks.",
-    "After a separately authorized slot, follow cabinet-source-package.md for focused forms/buttons/keys, hint-confirmation identity lifecycle, status after invalid Configure, original Blackjack metadata and actual modal readability/close behavior. Source-only mappings are not native acceptance."
+    "After a separately authorized slot, follow cabinet-source-package.md for focused forms/buttons/keys, hint-confirmation identity lifecycle, status after invalid Configure, original Blackjack metadata and actual modal readability/close behavior. Source-only mappings are not native acceptance.",
+    "At a later authorized slot follow cabinet-source-package.md steps7-8 for local notes/erase/identity resets/typed input/visuals. New private Slate methods need module compilation; no new reflected declaration here, while prior mode UFUNCTION still requires its supported UHT/build route. No immediate runtime slot or native acceptance."
   ],
   "remaining_original_features": [
     "facade health/reopen binding",
@@ -266,6 +272,104 @@
       }
     },
     "lesson": "Use existing guarded action APIs for source shortcuts; scope keys to direct board focus; bind confirmations to current identity; local validation must not hide authoritative status.",
-    "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot."
+    "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot.",
+    "note": "Historical c7b3f3e2 source checkpoint; current local editing evidence is in local_sudoku_editing."
+  },
+  "local_sudoku_editing": {
+    "code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
+    "baseline": "9fad7509b5e317807f2627d06807e6a8a1b73a2a",
+    "changed_runtime_files": 2,
+    "runtime_diff": "207 insertions20 deletions; existing private Java Slate h/cpp only",
+    "reconciliation_messages": [
+      32213,
+      32214,
+      32215,
+      32216
+    ],
+    "claim_messages": [
+      32218,
+      32219,
+      32220
+    ],
+    "saved_status_message": 32227,
+    "ownership": "No overlapping Java-client claim/interface change observed; no explicit other-owner acceptance claimed. No expanded actor/backend/transport/controller/HUD ownership.",
+    "deliverables": [
+      "Unified guarded EnterSudokuDigit for pad/typed characters/erase",
+      "Local pencil mode N/Space/checkbox with per-cell override masks, including zero",
+      "3x3 note positions and clue/value/note tooltips",
+      "First-empty selection and source wrapping arrows",
+      "One ASCII typed-digit path preserving Shift layouts; no overlapping Sudoku physical dispatch",
+      "Confirmed visible duplicate/selected/same-digit/peer/clue colors, filled progress and remaining counts"
+    ],
+    "note_compatibility": "Untouched cells use latest snapshot PencilMasks; local toggle/erase overrides that cell, including zero. Answers hide but do not remove local marks. Same-ID board replacements retain overrides.",
+    "lifetime": "Accepted local New/Open/Resume clears immediately, including later service failure; successful UI Configure and widget close clear. Locally refused calls/invalid Configure preserve context. Bind only accepted nonempty SessionId and81cells/givens. External changed IDs reset; external same-ID reentry has no new reset notification. No cache/durable notes/server note write.",
+    "display_only": "Duplicates/counts derive confirmed visible cells only, never decide legality/completion/rewards or identify a refused command. Native conflict metadata/clear-conflicts/history/replay still absent.",
+    "source_revision": "973c73a35f8659a17022232f0996d4ffb0095997",
+    "original_source_pins": [
+      {
+        "path": "client/src/main/java/com/xai/sudokupro/ui/BoardView.java",
+        "git_blob": "6f4b408de10cdab98182697c78d26ecceef77c80",
+        "git_content_sha256": "DE1DA9749689B589EB42402AB76D82835E2A7C0FF420B229712FE62A7DAD6D24",
+        "inspected_checkout_sha256": "5C67553D8F42DA1E924F702D5EE5D258F74892B619FF6007FF6018C42234CC0D",
+        "source_content_unchanged": true
+      },
+      {
+        "path": "client/src/main/java/com/xai/sudokupro/ui/BoardCell.java",
+        "git_blob": "95d56c120d8e7529c7aa6d4a0d2d0fcd349bb9fc",
+        "git_content_sha256": "DFF4A787CDC4E03E81E9FF9581CB02407598653FBB24894417956A95B211311C",
+        "inspected_checkout_sha256": "83DF97B3E76822B60D0458189BA95F800A83F15452FA858DB343121B3587D7C0",
+        "source_content_unchanged": true
+      },
+      {
+        "path": "client/src/main/java/com/xai/sudokupro/ui/MainStage.java",
+        "git_blob": "76da5c1922a07451957fb792981f5f913995dc99",
+        "git_content_sha256": "3E0501579E26BD54A14CC940D4AE61647DDC297F4DAEE4E82CEAA505F870CA12",
+        "inspected_checkout_sha256": "E8FC109BC19B134372F784C10CBD1650609A59658030523544B3F50740704E32",
+        "source_content_unchanged": true
+      },
+      {
+        "path": "client/src/test/java/com/xai/sudokupro/ui/BoardViewEntryTest.java",
+        "git_blob": "85787b92da5fc227816f7157c55311f35a4a63de",
+        "git_content_sha256": "44D150744B2BB334142A48CA3FED3E1A1C8C2AC618A92545437786767A17C52B",
+        "inspected_checkout_sha256": "1BC9663E95F7F887C12F2105B244E538CECF45FDE7272ACF267C597EAB6D1679",
+        "source_content_unchanged": true
+      },
+      {
+        "path": "server/src/main/resources/static/play/app.js",
+        "git_blob": "76257b60c1c22a6aed314c0290aa605ac14a71c1",
+        "git_content_sha256": "72FB09FD7085F199AE6B583F8E7FA27A72C09B1F9257FA38524CB300DE94E1D1",
+        "inspected_checkout_sha256": "221660ED912DA7CE61130B8DF94773B14D33EBF43E317C8889B22CC7C2EF5DAE",
+        "source_content_unchanged": true
+      }
+    ],
+    "protected_files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+        "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+        "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h",
+        "sha256": "9B819430250B9386E2686EBB423121CA733C0111585E453A49CFAD557DB6CBA0",
+        "unchanged": true
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+        "sha256": "1C457F9D144DA1707592F2AEE26D6F2916C6F21E414F6C026C41331F8B63A338",
+        "unchanged": true
+      }
+    ],
+    "static_report_sha256": "3A4DAEFD399E69C3D8970A2BE18801973F5CE11A32E9DE889B46415A02714708",
+    "static_checks": 57,
+    "unchanged_slate_methods": 14,
+    "compiler_behavior_tests_services_editor_run": false,
+    "lesson": "Represent local note deletion with an explicit override; retain hidden marks without mutating answers; route typed and pad entry once; document exact reset semantics.",
+    "harness_proposal": "Existing Java cabinet harness later: zero-override resync, hidden notes/undo/refusal, accepted/refused same-ID entries, Shift/numpad/forms/other users/repeats, single-command count, colors/counts and note legibility. Benefit ESTIMATED; owner desktop-games, deferred.",
+    "controller_reuse": "Existing native focus/Slate event contract only. Verified daedalus-pad/1 remains web-only; no controller bridge or duplicate framework added."
   }
 }

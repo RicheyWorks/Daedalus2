@@ -122,3 +122,27 @@ Direct board focus and the opening user are required for game shortcuts; editing
 fields and focused buttons retain their own keys. Source review/static checks
 only: compiler, service and native acceptance remain deferred. Full evidence and
 later acceptance are in [cabinet-source-package.md](cabinet-source-package.md).
+
+## Local editing source package — da2b4a84
+
+The same two private Slate files now implement original JavaFX view-local pencil
+editing, one entry helper for the pad/typed digits/erase, first-empty/wrapping
+selection and a 3x3 notes display. Empty-cell notes never send a move; nonzero
+answers hide retained notes. Erase clears notes before skipping an unchanged
+answer. Per-cell override flags preserve the prior snapshot-mask display for
+untouched cells while ensuring an explicit zero cannot resurrect erased notes.
+
+Only accepted SessionId plus complete 81-cell/given data binds a note context.
+Same-ID snapshots/undo/redo/refusal retain notes. Accepted UI New/Open/Resume
+requests clear them immediately (including later service failures); successful
+UI account configuration and widget close also clear them. Locally refused
+requests preserve the context. External same-ID Blueprint entry has no new UI
+reset notification. There is no note write endpoint or durable-note claim.
+
+ASCII digits use OnKeyChar only, preserving Shift-digit layouts; the overlapping
+Sudoku physical-digit path is removed. The existing direct-focus/user/modifier/
+repeat exclusions apply. Blackjack shortcuts and H confirmation remain intact.
+Filled/remaining counts and duplicate/peer/same-digit colors use confirmed cells
+as display-only feedback; no local calculation decides validity or completion.
+Server conflict metadata is still not projected. Source review and57 static
+checks pass; compiler, character routing, visuals and native behavior are deferred.

@@ -270,4 +270,23 @@ actions, H/Cancel/Buy and replaced IDs, plus invalid Configure followed by servi
 failure. Proposed owner desktop-games at its later validation slot; no new job
 framework or runtime queue claim. No fresh Blender/native evidence from reviewer.
 
+### Explicit local note overrides must represent an empty result
+
+2026-10-15, pootscoot-desktop-games; sudoku_editing_source_trace source review.
+Sudoku source da2b4a84 keeps local notes outside the Java answer snapshot. Preserve
+untouched snapshot masks, but let each local toggle/erase establish an override,
+including zero; falling back when the mask is empty would restore erased notes
+on the next resync. Hide notes behind answers without deleting them, and clear
+them before the unchanged-value early return on erase. Bind context to an accepted
+board identity/shape, keep same-ID updates, and describe exact UI entry/configure/
+close resets without promising durable saves. Route typed characters and pad
+through one guarded entry helper; remove overlapping physical-digit dispatch.
+Cosmetic counts/duplicates must never become local legality or completion rules.
+Source review/57 static checks pass;14 existing Slate methods and entire actor,
+public API/protocol/build files unchanged. Compiler/behavioral tests/native remain
+deferred; no measured visual or performance benefit. Existing-harness proposal,
+benefit ESTIMATED: exercise zero-mask resync, hidden notes/undo/refusal, refused vs
+accepted same-ID entry, Shift/numpad/form focus and counted one-command dispatch.
+Proposed owner desktop-games at a later authorized slot; no new framework/queue.
+
 

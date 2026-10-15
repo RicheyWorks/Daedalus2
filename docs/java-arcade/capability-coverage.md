@@ -1,6 +1,27 @@
 # Arcade capability coverage — source checkpoint, 2026-10-15
 
-## Completed bounded source package
+## Current continuation: local Sudoku editing
+
+Source `da2b4a84e357114181cbdb65093628d595cda2a7` completes the selected
+local editing package in the same two private Slate files (+207/-20), preserving
+the entire actor/public API/protocol/build source at prior head9fad7509. Shared
+entry now routes pad/typed digits/erase either to view-local notes or the existing
+Java move call. Per-cell overrides, including zero, retain notes across same-ID
+snapshots and prevent erased notes from returning. Accepted UI New/Open/Resume,
+successful Configure and close clear notes; they have no durable-save contract.
+
+The board gains 3x3 notes, first-empty/wrapping selection, typed digits, tooltips,
+clue/peer/same-digit/cosmetic duplicate colors, filled and remaining-digit counts.
+Display calculations never determine legality/completion. Blackjack dispatch,
+settings, metadata and hint confirmation remain unchanged. Original JavaFX and
+web evidence, snapshot-mask adaptation, exact lifecycle limits and deferred cases
+are in [cabinet-source-package.md](cabinet-source-package.md).
+
+Source review and57 static checks pass,14 old Slate methods unchanged; no compiler,
+behavioral tests, services, editor or native acceptance. Runtime stays behind
+ingestion and the sole operator. The following prior package evidence stays pinned.
+
+## Earlier bounded source package — c7b3f3e2
 
 Source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b` extends the same PR152,
 preserving the mode code below and prior Blackjack bindings. The two Slate files
@@ -206,7 +227,7 @@ and mocked Redis/Jedis/relay; it does not establish full platform or Unreal E2E.
 | Save/list/resume/end | `SudokuGameController /save,/saved,/resume,/end`; `ui/MainStage` picker | Save and explicit-ID Open/Resume buttons use the existing actor methods | Saved-list picker and authoritative end absent; cabinet close cancels local work | S27 subset; E0 |
 | Hint price/confirmation | `SudokuGameController POST /hint`; `EconomyController /wallet`; `ui/BoardView:342–345,477–503` | Explicit Hint action; H separately asks and confirms the same current game ID before calling that action; confirmed hint count shown | Current wallet/price is not fetched; uses source's unknown-price confirmation fallback, no native currency grant | Source review; S27 historical hint subset; E0 |
 | AI solve | `SudokuGameController POST /{id}/solve`; `GameClient`, `BoardView` | None | Service operation/UI absent | E0 |
-| Pencil/highlights/conflict clearing/history | `ui/BoardView`, `ui/BoardCell` | Snapshot pencil-mask display | Local note editor/highlights/filtered history absent; original notes have no server mutation API | E0 |
+| Pencil/highlights/conflict clearing/history | `ui/BoardView:83–90,182–324,440–445,637–680`, `ui/BoardCell`; web `static/play/app.js:910–932,1155–1168` | Local pencil mode/shared entry/3x3 marks; snapshot masks preserved until local override; wrapping/typed input; confirmed cosmetic highlights/progress/counts | Server conflict metadata, clear-conflicts command sequencing and filtered history/replay remain unbound. Notes intentionally stay view-local; no pencil write endpoint invented | Current source review only; E0 |
 | Replay | `GameClient`, `ReplaySession`, `ui/MainStage` | None | Display-only chronological log/replay; never replay mutations into Java | E0 |
 | Share/import | `SudokuGameController GET /{id}/share`, `POST /import`; `net/ServerApi` | None | Endpoints/DTO/UI absent | E0 |
 | Spectator/chat/presence | `SudokuGameController /active-of/{playerId}`, `WebSocketController`, `GameClient/MainStage` | Owner-only projection; chat ignored | Explicit permission-checked read-only spectator and chat handling absent | E0 |
@@ -233,7 +254,7 @@ Neither variant is a Java Minesweeper backend or full `minesweeper-pro` integrat
 | Stage | This checkpoint |
 |---|---|
 | Source | Claimed four Java actor/Slate files and this coverage/manifest only; source review, unverified |
-| Committed | Package source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b`, preserving mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece` and prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
+| Committed | Current editing source `da2b4a84e357114181cbdb65093628d595cda2a7`, preserving package source `c7b3f3e28f759b5408a69ff00f2fde025b3d650b`, mode source `4d5577dc5659a9a26a9130e70cef68c2e5915ece` and prior Blackjack source `4f63c5b04dbac43a625c64741132f61e8719813c`; exact documentation tip in draft PR/hub handoff |
 | Connected | No connection established or observed by this lane; companion PR62 adoption/runtime/provider pending |
 | Native | No current-head UHT/UBT/DLL/load/placement; historical evidence stays pinned |
 | End-to-end | No Unreal settings/action/recovery proof; original app coverage remains open |

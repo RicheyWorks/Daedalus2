@@ -59,3 +59,19 @@ pass, 56 baseline methods unchanged; dedicated compiler/tests/native stay deferr
 Preserve the original PR152 Blackjack implementation and current accepted native
 source; no whole-plugin overwrite, service traffic, credentials or editor action.
 Only the sole operator may later integrate/build/load/accept after ingestion.
+
+## Sudoku local editing source continuation — 2026-10-15
+
+Source da2b4a84 continues the same PR152 from published9fad7509, exactly the two
+private Java Slate files +207/-20. Reconciliation32213–32216, claims32218–32220
+and saved-source status32227 are recorded; no overlapping claim/interface change
+was observed, and no explicit other-owner acceptance is claimed. Local-only
+notes, single-path typed/pad entry, wrapping/first-empty selection, 3x3 display
+and cosmetic confirmed-board feedback reuse original JavaFX/web implementation.
+Actor/public API/transport/guard/protocol/build/persistence remain unchanged.
+Current review and57 static source invariants pass (14 unchanged Slate methods),
+with no compiler/tests/services/editor/native action. Manifest final source pins
+and cabinet-source-package.md record explicit note reset/failure/Blueprint limits,
+historical versus current checks, remaining full-app gaps and deferred acceptance.
+No note endpoint/cache/durable save, controller bridge, native installation or
+runtime slot is created. Preserve accepted native owners; ingestion remains first.
