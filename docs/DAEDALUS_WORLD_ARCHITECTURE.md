@@ -932,3 +932,13 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   (cursor, confirm, cancel, hit, critical, miss, cast, heal, level up, chest, door, stairs, encounter, escape, coin).
 - `data/rpg/audio.json`: file, sample rate, bpm, key, mode, bars, loop start/end in samples, where each track plays.
   `engines/unreal/art/claude-audio/<realm>/` (WAV, 16-bit PCM) + `spectrograms.png` for a visual check.
+- **Into the existing jukebox (no second one).** Audit 2026-10-15: rd-jukebox (docs/rd-jukebox.md) lives on branch
+  `rd-jukebox`, unmerged (26 ahead / 1,057 behind main, no PR), off by default; guest songs are `<slug>.mp3` (+ `.webp`)
+  in `daedalus.jukebox.seed-songs-dir`; it has no route yet for the realm's ADR-052 `{cue, changed, sfx}` posts, and
+  `daedalus.Jukebox` is unset so the realm only logs cues. `rpg_jukebox_seeds.py` therefore writes the realm music as
+  rd-jukebox guest seeds — `portal-realm-<cue>.mp3` / `prismheart-<cue>.mp3` for FIELD, TOWN, CASTLE, CAVE, BATTLE,
+  BOSS, VICTORY, DEFEAT, INN, TITLE (two loop passes, 192 kbps, webp covers from the realm art) — plus `realm-cues.json`
+  (cue → seed). Verified on a build of the rd-jukebox branch: `/seeds` lists all 20 with titles and covers and
+  `/seeds/<file>` serves them. To hear them: `DAEDALUS_JUKEBOX_ENABLED=true`,
+  `DAEDALUS_JUKEBOX_SEED_SONGS_DIR=engines/unreal/art/claude-audio/jukebox-seeds`. `rpg_audio.py` now also covers
+  every realm sound event (54 incl. BLIP:0–11) for the day the jukebox takes cue posts (`data/rpg/jukebox.json`).
