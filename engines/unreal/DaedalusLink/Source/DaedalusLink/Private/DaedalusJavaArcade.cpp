@@ -420,7 +420,7 @@ bool ADaedalusJavaArcade::ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, co
         || !JavaArcadeWire::Integer(Json, TEXT("revision"), Candidate.Revision)
         || !JavaArcadeWire::Bool(Json, TEXT("closed"), Candidate.Closed)
         || !Json->TryGetObjectField(TEXT("snapshot"), Snapshot)) return false;
-    if ((!RequestedBlackjackId.IsEmpty() && Id != RequestedBlackjackId)
+    if ((!RequestedBlackjackId.IsEmpty() && !Id.Equals(RequestedBlackjackId, ESearchCase::CaseSensitive))
         || (!Blackjack.SessionId.empty() && Id != UTF8_TO_TCHAR(Blackjack.SessionId.c_str())) || Candidate.Revision < Blackjack.Revision) return false;
     if (!ExpectedId.IsEmpty() && (!JavaArcadeWire::String(Json, TEXT("requestId"), RequestId, 64) || RequestId != ExpectedId)) return false;
     const auto& S = *Snapshot;
