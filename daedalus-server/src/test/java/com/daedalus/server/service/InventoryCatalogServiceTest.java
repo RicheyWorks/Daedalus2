@@ -22,7 +22,7 @@ class InventoryCatalogServiceTest {
     }
     @Test void loadsEveryCanonicalRealmWithoutSharingOrTransferringCounts() {
         var service = new InventoryCatalogService();
-        for (String key : new String[]{"world-zero", "gallery-city", "parcels", "bricks", "labyrinth"}) {
+        for (String key : new String[]{"world-zero", "gallery-city", "parcels", "bricks", "labyrinth", "ocean"}) {
             var catalog = service.find(key);
             assertThat(catalog).isNotNull();
             assertThat(catalog.tabs()).isNotEmpty();
@@ -34,5 +34,20 @@ class InventoryCatalogServiceTest {
         assertThatThrownBy(() -> controller.catalog("missing"))
                 .isInstanceOf(com.daedalus.server.web.ResourceNotFoundException.class);
         assertThat(controller.catalog("gallery-city").getStatusCode().value()).isEqualTo(200);
+    }
+
+    @Test void oceanCatalogMatchesSessionIdentityAndDoesNotAdvertiseUnimplementedEffects() throws Exception {
+        var catalog = new InventoryCatalogService().find("ocean");
+        assertThat(catalog.realm()).isEqualTo("OCEAN");
+        assertThat(catalog.theme()).isEqualTo("ocean");
+        assertThat(catalog.items()).hasSize(13).allSatisfy(item ->
+                assertThat(item.actions()).containsExactly("INSPECT"));
+        var mvc = MockMvcBuilders.standaloneSetup(new InventoryCatalogController(new InventoryCatalogService())).build();
+        mvc.perform(get("/api/v1/inventory/ocean/catalog"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.realm").value("OCEAN"))
+                .andExpect(jsonPath("$.theme").value("ocean"))
+                .andExpect(jsonPath("$.items[0].id").value("TIDE_COMPASS"))
+                .andExpect(jsonPath("$.items[0].count").doesNotExist());
     }
 }

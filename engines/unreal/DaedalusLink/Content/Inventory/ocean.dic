@@ -1,0 +1,40 @@
+DIC 1
+# Ocean: the Tidefinder. Shared tabs; host-owned bags, equipment and item effects.
+# INSPECT only until host handlers exist: catalog descriptions never consume or grant items.
+realm OCEAN
+theme ocean
+tab ALL
+tab NAVIGATION
+tab DIVING
+tab SALVAGE
+tab VESSEL
+tab QUESTS
+slot HAND
+slot SUIT
+slot BELT
+item TIDE_COMPASS NAVIGATION - INSPECT Tide Compass
+detail TIDE_COMPASS A brass compass marked with the seven realm docks. Salt has polished its rim silver.
+item DOCK_CHART NAVIGATION - INSPECT Dock Chart
+detail DOCK_CHART A chart of boat landings and submarine airlocks, annotated by generations of ferry crews.
+item SONAR_LOG NAVIGATION - INSPECT Sonar Log
+detail SONAR_LOG A waterproof notebook filled with depth marks and the outlines of old wrecks.
+item DIVE_MASK DIVING - INSPECT Dive Mask
+detail DIVE_MASK A saltglass mask with a soft seal and tiny shells caught in its strap.
+item AIR_CANISTER DIVING - INSPECT Air Canister
+detail AIR_CANISTER A blue canister stamped with the harbor diver's crest. Its valve is tightly sealed.
+item DIVE_LANTERN DIVING - INSPECT Dive Lantern
+detail DIVE_LANTERN A sealed lamp from the airlock keeper, with a pearl-white lens and a folding handle.
+item SALVAGE_CLAW SALVAGE - INSPECT Salvage Claw
+detail SALVAGE_CLAW A long retrieval claw with padded jaws, made to lift treasure without breaking coral.
+item SEA_GLASS SALVAGE - INSPECT Sea Glass
+detail SEA_GLASS Green and lavender glass rounded smooth by the tide. Dock artisans prize its cloudy glow.
+item WRECK_PLATE SALVAGE - INSPECT Wreck Plate
+detail WRECK_PLATE A recovered hull plate bearing half a ship's name and three stubborn barnacles.
+item HULL_PATCH VESSEL - INSPECT Hull Patch
+detail HULL_PATCH A waxed packet of resin cloth and copper fasteners from the shipwright's bench.
+item MOORING_LINE VESSEL - INSPECT Mooring Line
+detail MOORING_LINE A neatly coiled line with a red thread woven through it, the ferryman's mark.
+item BEACON_LENS QUESTS - INSPECT Beacon Lens
+detail BEACON_LENS A many-faceted lens from the harbor beacon. A crack runs through its golden centre.
+item SEALED_COURIER_CASE QUESTS - INSPECT Sealed Courier Case
+detail SEALED_COURIER_CASE A waterproof delivery case addressed to the far dock. The seal bears a tiny rainbow.
