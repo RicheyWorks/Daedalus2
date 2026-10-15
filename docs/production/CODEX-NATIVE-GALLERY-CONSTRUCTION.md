@@ -4,6 +4,8 @@ The reusable source is `engines/unreal/DaedalusLink/Content/Python/daedalus_code
 
 Status: the initial native StaticMesh creation attempt crashed on the engine assertion `NumUVs > 0`: the original vertex buffers omitted UV0. It did not reach material binding or a confirmed asset save. The source now supplies UV0 before append, box-projects it and validates every triangle before persistent creation. A subsequent transient call stopped safely before persistent creation because a math factory was unavailable; the source now uses the actual documented `Transform.translation` and `Transform.scale3d` properties. Persistent creation, saving, placement and saved readback of this corrected revision remain unverified. No native visual or gameplay acceptance is claimed.
 
+This standalone experiment is parked. Its source and failed revision are retained; production follows the requested ingestion, polish, then further ingestion order.
+
 ## Hollow planter recipe
 
 All coordinates are native Unreal centimetres. Defaults are width 300, depth 160, height 80 and wall/floor thickness 12. The base pivot is `(0,0,0)`; bounds are `(-150,-80,0)` to `(150,80,80)`. The cavity is 276×136cm with its floor at Z12. Future actor scale is `(1,1,1)`.

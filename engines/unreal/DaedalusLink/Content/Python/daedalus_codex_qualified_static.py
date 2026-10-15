@@ -25,6 +25,7 @@ SHARED_FINGERPRINT = {
 }
 MAX_ITEMS = 3
 MAX_TRIANGLES = 3000
+MAX_PREFLIGHT_PING_YIELDS = 3
 
 
 def _utc():
@@ -182,6 +183,70 @@ def _shared(cfg):
 
     scope['_preflight'] = observed_preflight
     return scope
+
+
+def _ping_only_queue_conflict(error):
+    """Recognize one fully observed read-only contention case; never admit work."""
+    if (type(error) is not RuntimeError
+            or str(error) != 'conflicting/unfinished bridge operation; preserve work'):
+        return False
+    diagnostic = getattr(error, 'codex_guard_diagnostics', None)
+    bridge = sys.modules.get('claude_unreal_bridge')
+    if not isinstance(diagnostic, dict) or bridge is None:
+        return False
+    try:
+        ping = getattr(bridge, 'cmd_ping', None)
+        if (not callable(ping) or bridge.COMMANDS.get('ping') is not ping
+                or bridge.RISK_OF.get('ping') != 'READ'):
+            return False
+        count = diagnostic.get('queued_jobs')
+        rows = diagnostic.get('queued_request_rows')
+        running = diagnostic.get('running')
+        return (not diagnostic.get('snapshot_error') and not diagnostic.get('snapshot_error_type')
+                and diagnostic.get('queued_request_snapshot_available') is True
+                and diagnostic.get('queued_request_rows_truncated') is False
+                and type(count) is int and 1 <= count <= 32
+                and isinstance(rows, list) and count == len(rows)
+                and all(isinstance(row, dict) and row.get('type') == 'ping' for row in rows)
+                and diagnostic.get('expected_step_frame_found') is True
+                and diagnostic.get('expected_type_label_match') is True
+                and type(diagnostic.get('running_total')) is int
+                and diagnostic['running_total'] == 1
+                and diagnostic.get('running_rows_truncated') is False
+                and isinstance(running, list) and len(running) == 1
+                and isinstance(running[0], dict)
+                and running[0].get('type') == 'daedalus.steps'
+                and running[0].get('label') == LABEL
+                and running[0].get('is_exact_expected_running') is True
+                and running[0].get('box_identity') == diagnostic.get('expected_box_identity')
+                and type(diagnostic.get('async_job_boxes_total')) is int
+                and diagnostic['async_job_boxes_total'] == 0
+                and diagnostic.get('remote_execution_lock_locked') is False)
+    except Exception:
+        return False  # Unknown diagnostics or registry state preserve the original refusal.
+
+
+def _preflight_steps(shared, cfg, allowed_dirty=(), on_wait=None):
+    """Yield only to verified queued pings, then call the original guard again.
+
+    At most three yields let the existing bridge pump service its own requests.
+    Nothing consumes/removes/completes a job here, and no guard check is skipped.
+    Every attempt retains the existing absolute operator deadline and its reserve;
+    yielding never resets or extends it. Public preflight/readback stay immediate.
+    """
+    for waits in range(MAX_PREFLIGHT_PING_YIELDS + 1):
+        shared['_deadline'](cfg)
+        try:
+            return shared['_preflight'](allowed_dirty=allowed_dirty)
+        except Exception as error:
+            if waits == MAX_PREFLIGHT_PING_YIELDS or not _ping_only_queue_conflict(error):
+                raise
+            if on_wait is not None:
+                on_wait({'utc': _utc(), 'yield_number': waits + 1,
+                         'reason': 'verified_read_only_ping_queue_contention',
+                         'guard_diagnostics': error.codex_guard_diagnostics})
+            shared['_deadline'](cfg)
+            yield None
 
 
 def _items(cfg):
@@ -363,12 +428,21 @@ def steps(cfg):
               'limits': 'Source/asset-save acceptance only; appearance, collision and runtime acceptance remain unverified.'}
     with journal.open('x', encoding='utf-8', newline='\n') as output:
         _flush(output, report)
+
+    def record_guard_wait(phase, item_name, event):
+        waits = report.setdefault('guard_waits', [])
+        if len(waits) >= MAX_ITEMS * 4 * MAX_PREFLIGHT_PING_YIELDS:
+            raise RuntimeError('bounded guard-wait journal limit reached; preserve work')
+        waits.append({**event, 'phase': phase, 'item': item_name})
+        _write(journal, report)  # Durable rejection/wait evidence precedes every yield.
+
     row = None
     try:
         for item in items:
             expected = _path(item)
             shared['_deadline'](cfg)
-            shared['_preflight']()
+            yield from _preflight_steps(shared, cfg, on_wait=lambda event:
+                                        record_guard_wait('before_import', item['name'], event))
             _items(cfg)
             _absent(item)
             row = {'name': item['name'], 'source': item, 'stage': 'import_dispatch_pending',
@@ -398,7 +472,9 @@ def steps(cfg):
             report['stage'] = 'item_binding_dispatch_pending'
             _write(journal, report)
             shared['_deadline'](cfg)
-            shared['_preflight'](allowed_dirty=(expected.split('.')[0],))
+            yield from _preflight_steps(shared, cfg, allowed_dirty=(expected.split('.')[0],),
+                                        on_wait=lambda event:
+                                        record_guard_wait('before_binding', item['name'], event))
             mesh.modify()
             mesh.set_material(0, eal.load_asset(shared['MATERIAL']))
             for key, value in row['expected_metadata'].items():
@@ -408,7 +484,9 @@ def steps(cfg):
             report['stage'] = 'item_save_dispatch_pending'
             _write(journal, report)
             shared['_deadline'](cfg)
-            shared['_preflight'](allowed_dirty=(expected.split('.')[0],))
+            yield from _preflight_steps(shared, cfg, allowed_dirty=(expected.split('.')[0],),
+                                        on_wait=lambda event:
+                                        record_guard_wait('before_save', item['name'], event))
             started = time.perf_counter()
             row['save_return'] = bool(eal.save_loaded_asset(mesh, only_if_is_dirty=False))
             row['save_s'] = round(time.perf_counter() - started, 6)
@@ -421,7 +499,9 @@ def steps(cfg):
             if row['save_return'] is not True:
                 raise RuntimeError('owned new asset save returned false')
             yield row['native_path']
-            row['post_save_preflight'] = shared['_preflight']()
+            row['post_save_preflight'] = yield from _preflight_steps(
+                shared, cfg, on_wait=lambda event:
+                record_guard_wait('after_save', item['name'], event))
             _write(journal, report)
         report.update(stage='qualified_static_assets_saved_world_held', save_return=True)
         _write(journal, report)
