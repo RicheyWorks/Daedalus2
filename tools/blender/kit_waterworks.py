@@ -269,3 +269,78 @@ def signpost(H, name, x, y, z, arms):
         ox, oy = math.cos(yaw) * .8, math.sin(yaw) * .8
         out.append(H.box("%s_Arm_%s" % (name, key), (x + ox, y + oy, z + 2.6 - k * .38), (1.6, .14, .3), H.material("Sign_" + key, CHOICE_RGB[key], .6, 0, .4), .02, (0, 0, yaw)))
     return out
+
+
+# ---- r2 dressing: what makes the three choices readable up close (PootScoot 32419: hierarchy, grouping, separation) ----
+PAD_RGB = {"repair": (.56, .55, .52), "harvest": (.80, .70, .38), "refuge": (.55, .30, .20)}
+
+
+def choice_pad(H, name, x, y, z, key, radius=4.2):
+    """A ground pad under each choice: flagstone (repair), straw mat (harvest), packed red earth (refuge)."""
+    return [H.cone(name + "_Pad_" + key, (x, y, z + .1), radius, radius * .96, .22, H.material("Pad_" + key, PAD_RGB[key], .9), 20)]
+
+
+def banner(H, name, x, y, z, key, height=4.2):
+    """A pole with a pennant in the choice colour, readable from across the stream."""
+    M = _mats(H)
+    out = [H.beam(name + "_Pole", (x, y, z), (x, y, z + height), .07, M["dark"], 6)]
+    top = z + height - .2
+    verts = [(x, y, top), (x, y, top - 1.1), (x + 1.7, y, top - .55)]
+    out.append(H.mesh(name + "_Pennant_" + key, verts, [(0, 1, 2), (0, 2, 1)], H.material("Cloth_" + key, CHOICE_RGB[key], .8)))
+    return out
+
+
+def awning(H, name, x, y, z, yaw, key, w=4.2, d=2.4):
+    """A sloped cloth awning on four posts over a workplace (the repair bench), in the choice colour."""
+    M = _mats(H)
+    out = []
+    for i, (dx, dy) in enumerate(((-w / 2, -d / 2), (w / 2, -d / 2), (-w / 2, d / 2), (w / 2, d / 2))):
+        px, py = _rot(dx, dy, yaw)
+        out.append(H.beam("%s_Post_%d" % (name, i), (x + px, y + py, z), (x + px, y + py, z + (2.6 if dy < 0 else 3.1)), .08, M["dark"], 6))
+    out.append(H.box(name + "_Cloth_" + key, (x, y, z + 2.95), (w + .4, d + .5, .06), H.material("Cloth_" + key, CHOICE_RGB[key], .8), 0, (math.atan2(.5, d), 0, yaw)))
+    return out
+
+
+def shore_stones(H, name, pts, h, seed=1, every=1.6, water_z=None):
+    """Rounded stones along a bank polyline: a crafted edge where the water meets the haven."""
+    wz = H.WATER if water_z is None else water_z
+    rng = random.Random(seed * 17 + 3)
+    stone = H.material("ShoreStone", (.50, .50, .47), .85)
+    out, k = [], 0
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        L = math.hypot(x1 - x0, y1 - y0)
+        for i in range(max(1, int(L / every))):
+            t = i / max(1, int(L / every))
+            x, y = x0 + (x1 - x0) * t + rng.uniform(-.4, .4), y0 + (y1 - y0) * t + rng.uniform(-.4, .4)
+            s = rng.uniform(.45, .9)
+            out.append(H.sphere("%s_Stone_%03d" % (name, k), (x, y, max(h(x, y), wz - .3) + s * .35), (s, s * rng.uniform(.8, 1.2), s * .6), stone, 8, 5))
+            k += 1
+    return out
+
+
+def string_lights(H, name, pts, h, every=3.0, lift=2.1, min_z=None):
+    """Warm bulbs along a walk polyline at rail height: the route reads at dusk."""
+    lo = (H.WATER + .7) if min_z is None else min_z
+    warm = H.material("Glow_string", (1.0, .80, .45), .3, 0, 4.0)
+    out, k = [], 0
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        L = math.hypot(x1 - x0, y1 - y0)
+        for i in range(max(1, int(L / every))):
+            t = (i + .5) / max(1, int(L / every))
+            x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+            out.append(H.sphere("%s_Bulb_%03d" % (name, k), (x, y, max(h(x, y), lo) + lift - .25 * math.sin(math.pi * t)), (.13, .13, .16), warm, 8, 5))
+            k += 1
+    return out
+
+
+def blossom_tree(H, name, x, y, z, seed=1, rgb=(.93, .55, .75)):
+    """Spring blossom (the Spring octet's accent prop): a twisted trunk and pink crowns, so the haven reads apart from
+    the island's green tree masses."""
+    rng = random.Random(seed * 29 + 11)
+    M = _mats(H)
+    bloom = H.material("Blossom", rgb, .7)
+    out = [H.beam(name + "_Trunk", (x, y, z), (x + rng.uniform(-.6, .6), y + rng.uniform(-.6, .6), z + 3.2), .28, M["dark"], 8)]
+    for k in range(4):
+        out.append(H.sphere("%s_Crown_%d" % (name, k), (x + rng.uniform(-1.6, 1.6), y + rng.uniform(-1.6, 1.6), z + 3.6 + rng.uniform(0, 1.4)),
+                            (rng.uniform(1.4, 2.1),) * 2 + (rng.uniform(1.1, 1.6),), bloom, 12, 7))
+    return out

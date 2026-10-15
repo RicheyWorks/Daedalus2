@@ -158,6 +158,19 @@ def build(out_dir):
     sign = K.signpost(H, NAME + "_Signpost", sg_x, sg_y, h(sg_x, sg_y),
                       [("repair", math.atan2(st_y - sg_y, st_x - sg_x)), ("harvest", math.atan2(rby - sg_y, rbx - sg_x)),
                        ("refuge", math.atan2(rf_y - sg_y, rf_x - sg_x))])
+    # r2 dressing: each choice gets a ground pad, a pennant and its own material; the route gets lights and a stone edge
+    hx_, hy_ = rbx + 10.5, rby                                # the reed drying rack (harvest)
+    st_z, rf_z = h(st_x, st_y), h(rf_x, rf_y)
+    station += K.choice_pad(H, NAME + "_Station", st_x, st_y, st_z, "repair") + K.awning(H, NAME + "_StationAwning", st_x, st_y, st_z, yaw + math.pi / 2, "repair")
+    station += K.banner(H, NAME + "_StationBanner", st_x + px * 3.5, st_y + py * 3.5, h(st_x + px * 3.5, st_y + py * 3.5), "repair")
+    reeds += K.choice_pad(H, NAME + "_Harvest", hx_, hy_, h(hx_, hy_), "harvest", 3.6) + K.banner(H, NAME + "_HarvestBanner", hx_ + 2.5, hy_ + 2.5, h(hx_ + 2.5, hy_ + 2.5), "harvest")
+    hut += K.choice_pad(H, NAME + "_Refuge", rf_x, rf_y, rf_z - .4, "refuge", 5.2) + K.banner(H, NAME + "_RefugeBanner", rf_x - px * 5, rf_y - py * 5, h(rf_x - px * 5, rf_y - py * 5), "refuge")
+    hut += K.reed_bed(H, NAME + "_RefugeReeds", *at(BX, -5.5), 3.0, 2.0, h, SEED + 1, W, count=40)
+    hut += K.blossom_tree(H, NAME + "_RefugeBlossomA", rf_x + 6, rf_y + 4, h(rf_x + 6, rf_y + 4), SEED) + K.blossom_tree(H, NAME + "_RefugeBlossomB", rf_x - 5, rf_y + 6, h(rf_x - 5, rf_y + 6), SEED + 2)
+    keeper += K.blossom_tree(H, NAME + "_KeeperBlossom", kp_x + 4, kp_y - 3, h(kp_x + 4, kp_y - 3), SEED + 3)
+    shore_pts = lambda k: [at(S[i], k) for i in (1, 2, 3, 4)]
+    shore = K.shore_stones(H, NAME + "_ShoreN", shore_pts(5.2), h, SEED, water_z=W) + K.shore_stones(H, NAME + "_ShoreS", shore_pts(-5.2), h, SEED + 5, water_z=W)
+    walk += K.string_lights(H, NAME + "_Lights", [near, at(BX, 14), at(BX, 9), b0], h)
     # gameplay rows: what each piece is wired to, honestly
     X = []
     pu = chem["power_unit"]
@@ -207,6 +220,7 @@ def build(out_dir):
     roles["ReedBed"] = role(NAME + "_ReedBed", reeds, (rbx, rby, W + dz))
     roles["Refuge"] = role(NAME + "_Refuge", hut, (rf_x, rf_y, h(rf_x, rf_y) + dz))
     roles["KeeperPost"] = role(NAME + "_KeeperPost", keeper + sign, (kp_x, kp_y, h(kp_x, kp_y) + dz))
+    roles["Shore"] = role(NAME + "_Shore", shore, (wx, wy, W + dz))
     os.makedirs(out_dir, exist_ok=True)
     files = {}
     H.export_group(os.path.join(out_dir, NAME + "_Island"), island + kit_posts)
@@ -243,6 +257,12 @@ def build(out_dir):
         json.dump(layout, f, indent=1)
     pts = [r["anchor"] for k, r in layout["roles"].items()]
     focus = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))   # centroid of the haven's pieces
+    spread = max(math.hypot(p[0] - focus[0], p[1] - focus[1]) for p in pts)
+    # showcase cameras (land_showcase reads these): hero frames the wheel-water-refuge route, detail sits on the wheel
+    layout["showcase"] = {"hero": [round(focus[0], 2), round(focus[1], 2), 0.0, round(spread * 2.9, 1)],
+                          "detail": [round(wx, 2), round(wy, 2), round(W - H.DECK + 1.5, 2), 30.0]}
+    with open(os.path.join(out_dir, NAME + ".layout.json"), "w", encoding="utf-8") as f:
+        json.dump(layout, f, indent=1)
     return layout, focus
 
 

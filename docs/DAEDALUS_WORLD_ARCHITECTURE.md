@@ -1188,3 +1188,15 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
     islands then shade as in their build scene.
   - r2 also moved the footbridge to the first stream point whose two ends clear the terraces; the first pass landed
     in the farm's pens. It added a spill sheet and foam ring at the wheel.
+- **r2 dressing (PootScoot 32419 feedback on the r1 pixels):**
+  - The three choices now differ beyond brown wood. Each has its own ground pad (flagstone, straw mat, red earth), a
+    pennant in its colour, and an amber cloth awning over the repair bench.
+  - Shore stones edge both banks. Warm string lights line the walkway. Reeds group at the refuge shore. Spring
+    blossom trees (the Spring octet's accent) set the haven apart from the island's green tree masses.
+  - There is a new Shore role. The recipe now frames its own story: `layout.showcase` sets the hero on the
+    wheel-water-refuge route and the detail on the wheel.
+  - BEFORE is now r1 of the same land with the same cameras, so the pair is honestly matched.
+    `--reference Octet_Spring_1_Plot0_Meadow.glb` renders the inspiration land separately, hero and top only,
+    labelled as a different land.
+- **Chemistry is versioned:** `CHEM_ALGORITHM = "v2-crc32"` is written into every profile. v1 manifests stay
+  historical and are not regenerated. Old seeds re-rolled under v2 give new chemistry.

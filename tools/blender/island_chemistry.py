@@ -81,6 +81,12 @@ REALMS = {
 }
 
 
+# Chemistry algorithm version, written into every profile. v1 (until 2026-10-15) seeded from hash(realm), which Python
+# salts per process, so v1 profiles are NOT reproducible. Manifests written under v1 stay as historical records:
+# do not regenerate them. Re-rolling an old seed under v2 gives new chemistry; the geometry hooks are unchanged.
+CHEM_ALGORITHM = "v2-crc32"
+
+
 def profile(seed, realm="WORLD-ZERO"):
     realm = realm.upper()
     R = REALMS.get(realm, REALMS["WORLD-ZERO"])
@@ -126,6 +132,7 @@ def profile(seed, realm="WORLD-ZERO"):
     surplus = max(goods, key=goods.get)
     need = min(goods, key=goods.get)
     return {
+        "algorithm": CHEM_ALGORITHM,
         "seed": seed,
         "realm": realm,
         "realm_type": R["type"],
