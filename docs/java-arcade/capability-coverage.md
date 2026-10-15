@@ -1,6 +1,30 @@
 # Arcade capability coverage — source checkpoint, 2026-10-15
 
-## Current continuation: session identity, recovery and inspection
+## Current continuation: existing Blackjack table reopen
+
+Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues published `3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93` in the existing four PR152 actor/
+Slate files. Java's existing GET session route now has additive OpenBlackjackSession
+and a pure CanOpenBlackjackSession predicate shared with Slate. Captured private
+query identity, current guard generations, bounded read retries and full visible
+snapshot validation protect initial acceptance and later reads. Refused calls
+preserve pending/uncertain/live table recovery; no POST/DELETE or command replay.
+
+The cabinet gains deliberate ID entry, local received-ID fill and Reopen controls.
+Close still forgets credentials/session state; reopening requires configuring the
+same local service bearer and entering a previously recorded ID before Java expiry.
+There is no durable save, per-player isolation, automatic provider or restoration
+after service restart. Shared SessionGuard/HTTP task, rules, original sources,
+saves and keyboard handlers stay unchanged. Source-only reuse reduces drift by
+sharing eligibility and read routing; no measured optimization claim.
+
+Ownership request32318/START32320 cover the same four lane files; no competing
+claim was found and no separate owner-confirmation reply is claimed. Exact pins,
+manual branch matrix, source/packet reviews and deferred acceptance are in manifestv6
+and [cabinet-source-package.md](cabinet-source-package.md). No tests/build/UHT/
+services/credentials/editor/native action ran; new reflected APIs need later sole-
+operator build/load. This completes the finite source binding, not either full app.
+
+## Historical continuation: session identity, recovery and inspection
 
 Source `6e28706693319c53170dda3d545c12f8cf5f95c7` continues published `c0cacb261a960ea71de239f644be4db4f91310fb` in the same two private Java
 Slate files (+207/-8), assigned32249/started32308. Existing received-ID display
@@ -156,7 +180,7 @@ reconciliation remain unchanged. Controls do not decide outcomes or credits.
 | Authenticated health | `B/BridgeServer.route`, `GET /v1/blackjack/health` | No native health operation | Readiness probe still absent; this change does not edit Poot-owned transport | H; E0 |
 | Local bearer | `B/BridgeMain.main`, `BridgeServer.authorized` | `ConfigureBlackjackToken`, masked secret field | No per-player account/provider authorization; one local bearer authorizes all sessions | H; E0 |
 | Create / uncertain-create recovery | `B/BridgeService.create`, `POST /sessions` | `StartBlackjackSession`, `RetryBlackjackCreate`, candidate recovery guidance and actor bool feedback | Companion delivery/adoption pending; retained create ID is lost on local close | H, U; E0 |
-| Current session read | `B/BridgeService.query`, `GET /sessions/{id}` | `RefreshSnapshot`, state-derived Refresh candidate and local-attempt feedback | No reconnect/open-by-existing-session-ID control | H; E0 |
+| Current session read / explicit reopen | `B/BridgeService.query`, `GET /sessions/{id}`; `BridgeServer:131–144` lowercase UUID route | `OpenBlackjackSession`/`CanOpenBlackjackSession`, captured query target, Reopen control; existing Refresh and bounded retry share read routing | Still process-local/expiring, no durable resume or per-player provider. Current reopened gameplay unverified | Historical H; current source review only; E0 |
 | Chips 1/5/25/100/500 | `BridgeService.Session.apply("bet")`, `C/engine/Engine.canBet/addBet` | Five existing legality-gated buttons | No side-bet command in facade | H, J; E0 |
 | Clear / rebet / deal | `Session.apply`, `Engine.clearBet/rebet/deal` | Existing `SubmitBlackjackAction` controls | Current native execution remains unverified | J, H subset; E0 |
 | Hit / stand / double / split / surrender | `Session.apply`, `Engine.can*` and mutations | Existing gated controls; this checkpoint adds all visible hand flags | No local rules/payout calculation | J, H subset; E0 |

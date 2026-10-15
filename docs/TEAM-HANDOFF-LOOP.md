@@ -93,3 +93,20 @@ four final file pins are in cabinet-source-package.md/manifestv5. Historical
 tests/builds/services/credentials/editor/native action. Native focus/layout/typing/
 recovery/persistence and full original apps remain open. Only codex-play-guard
 may later reconcile/build/load/accept; no operator slot or whole-plugin overwrite.
+
+## Blackjack explicit existing-table reopen — 2026-10-15
+
+Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues existing PR152 published3c89e767. Exact existing four
+Java actor/Slate lane files; ownership request32318 and START32320 at20:35UTC
+(minute precision). Latest direct parent continuation and bounded hub read found
+no competing owner; no separate owner-confirmation reply is claimed. Open/CanOpen
+reuse real Java GET query with canonical ID, shared eligibility, private stable
+query target, existing ticket generation/read budget/visible parser/error path.
+No reset on refused pending/uncertain/live-table cases, no new POST/DELETE/replay,
+provider, service, controller, persistence or rules. Close still forgets bearer
+and received state; ID must be recorded and Java table still alive. Shared bearer
+is not user isolation or durable round resume. Existing packet manifestv6/guide/
+coverage pin all final/prior files, manual branches and source/native limits.
+No tests/build/UHT/services/credentials/editor/native or compute reservation.
+Only codex-play-guard later integrates against actual accepted source and preserves
+all owners; no whole-plugin replacement. Full original applications remain open.

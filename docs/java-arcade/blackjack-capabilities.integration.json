@@ -1,60 +1,60 @@
 {
-  "manifest_version": 5,
+  "manifest_version": 6,
   "kind": "source-integration-handoff",
   "executable": false,
-  "status": "RECEIVED_SESSION_RECOVERY_INSPECTION_SOURCE_READY_UNVERIFIED_NATIVE",
+  "status": "BLACKJACK_EXPLICIT_REOPEN_AND_PRIOR_CAPABILITIES_SOURCE_READY_UNVERIFIED_NATIVE",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_message": 30968,
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/blackjack-capability-binding-20261014",
-    "code_commit": "6e28706693319c53170dda3d545c12f8cf5f95c7",
+    "code_commit": "7c4ae40d027bd6e17f80c08661297b28d6571db2",
     "base_main": "7a93e62de7fe5fa193878bed250f28abe3a23f79",
     "files": [
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
-        "sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
+        "sha256": "937942C922A353EEFD37954E381DC3745E8F79CAEB186EC095737FF6CA2737B4",
         "expected_prior_pr152_sha256": "E6909E41C3BF03659ED9B1529E1B9438019B9D9E2126C2F5901F4527102C81EF",
-        "git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
+        "git_blob": "808135ccf404339561625db1c013a4a2131c8f2f",
         "mode_checkpoint_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
         "previous_package_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
         "previous_published_sha256": "D44C4DD0F5F53A0E37DBFE16C6FEB05D3E80EE262A88629E20D6B991F7EE5CD6",
         "previous_published_git_blob": "7e62ea8f2db39daa6d31c31590a0a144cac7ee6d",
-        "session_recovery_changed": false
+        "blackjack_reopen_changed": true
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
-        "sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
+        "sha256": "073A90439BABB0217EB1BA7828758CA02B8033A2F30CD07CAEF7785AE45C0528",
         "expected_prior_pr152_sha256": "4192B92801953C788B1D690A4F786ADE134436199666968785AD29F01B2FF900",
-        "git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
+        "git_blob": "59d9d9d28b556f16771d9832f5cf834d5ac3ce13",
         "mode_checkpoint_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
         "previous_package_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
         "previous_published_sha256": "BC8B62416ACA2005032705DC2060850D9EAF5E32738FC6FB3F30F4CF06A34E52",
         "previous_published_git_blob": "59f5050e85d4bb1a42a648ad720bbe140ffd83de",
-        "session_recovery_changed": false
+        "blackjack_reopen_changed": true
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
-        "sha256": "7434CB0B50CF32D73F2DBB1E20000673D32F6A234395A08F98F5D0CC8B740461",
+        "sha256": "109419DA18106620BD2FFEE7E1E5E8CF2E226643E18B3ED69AB9993A5D8950C2",
         "expected_prior_pr152_sha256": "75D7D73C97DBE3EDD550EA51C86E8A15C6331783A5C6C4C78F4F5D24B3F02EEB",
-        "git_blob": "969ee99c7a6bacfe1a64664a2d09f53a9cd4c958",
+        "git_blob": "ed0eddc1288bcc4c02872fa2e76f798a07440d1b",
         "mode_checkpoint_sha256": "4CB0FCCF0D86404974C249813E4D16B0FFD1606B4C71E3FBF9C4EF24CE8077D5",
         "previous_package_sha256": "7615D59D09DAC8E15BB568017CC5B240B6FEB5EA0E77F4852632DBE674F0AA7A",
-        "previous_published_sha256": "D3187DA35279C9D80736D66241DA8580B42A4F937A51C2C3963891B2F5B7A440",
-        "previous_published_git_blob": "252e7210addf948cb7160e1ae50bc4b86b3ca2b0",
-        "session_recovery_changed": true
+        "previous_published_sha256": "7434CB0B50CF32D73F2DBB1E20000673D32F6A234395A08F98F5D0CC8B740461",
+        "previous_published_git_blob": "969ee99c7a6bacfe1a64664a2d09f53a9cd4c958",
+        "blackjack_reopen_changed": true
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
-        "sha256": "4DC9E55391F63F1EDD2A565F17009B904EF37FC59FB9FB536E430385C1EDE152",
+        "sha256": "A58E329A3E3040AC37D703534DC090D1DA50706FF5210070462610357B52EAC9",
         "expected_prior_pr152_sha256": "CB2C4DB04FF4E9C76CA42067B08BD8FE14A873A4A3AFC8C1A2B9EEF6716FC0F7",
-        "git_blob": "3d1bacb57a58a518ebfac1225bbf8cc36afa4217",
+        "git_blob": "048e1b6f3b6b814999fe59e2cc918f3d19831fa5",
         "mode_checkpoint_sha256": "9465D23C9B037C8D88BE0AFB84372DC9B57641AE7D8D03333AA1DBFC23135E15",
         "previous_package_sha256": "B5FD7C711A9E9F9394DA0E819A1CD038409ABF0FBAC848DC7E09491733E8C365",
-        "previous_published_sha256": "B44F8A03A786ACE32E86349D9C13EC25EA0205D0C1FE0065067B8D351FF5CB1D",
-        "previous_published_git_blob": "67e0ae0f5474c89077a994f5c45c78ada7fe5cc2",
-        "session_recovery_changed": true
+        "previous_published_sha256": "4DC9E55391F63F1EDD2A565F17009B904EF37FC59FB9FB536E430385C1EDE152",
+        "previous_published_git_blob": "3d1bacb57a58a518ebfac1225bbf8cc36afa4217",
+        "blackjack_reopen_changed": true
       }
     ],
     "prior_code_commit": "4f63c5b04dbac43a625c64741132f61e8719813c",
@@ -65,7 +65,9 @@
     "local_editing_base": "9fad7509b5e317807f2627d06807e6a8a1b73a2a",
     "local_editing_code_commit": "da2b4a84e357114181cbdb65093628d595cda2a7",
     "session_recovery_base": "c0cacb261a960ea71de239f644be4db4f91310fb",
-    "file_pin_usage": "sha256/git_blob are final code6e287066 pins. previous_published_sha256/previous_published_git_blob refer to c0cacb26. Other per-file hash fields are retained historical checkpoints, not the current reconciliation baseline. Reconcile against the actual accepted operator source; these are not overwrite instructions."
+    "file_pin_usage": "sha256/git_blob are final 7c4ae40d027bd6e17f80c08661297b28d6571db2 pins. previous_published_sha256/previous_published_git_blob refer to3c89e767. Other hash fields are historical checkpoints. Reconcile against actual accepted operator source; no overwrite instruction.",
+    "session_recovery_code_commit": "6e28706693319c53170dda3d545c12f8cf5f95c7",
+    "blackjack_reopen_base": "3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93"
   },
   "companion": {
     "repository": "RicheyWorks/BlackJackPro",
@@ -170,10 +172,18 @@
       "focus": "Only direct board/table focus and opening local user; no repeats/controllers/Alt/Command; no Blackjack Ctrl/Shift dispatch. Existing Escape close preserved.",
       "status": "Authoritative status/message and hint remain visible beside local credential validation; busy Save/End controls disabled.",
       "transport_rules_persistence_modified": false
+    },
+    "blackjack_reopen": {
+      "actor": "OpenBlackjackSession(const FString&) / CanOpenBlackjackSession(const FString&) const",
+      "existing_java_route": "GET /v1/blackjack/sessions/{canonical-lowercase-UUID}",
+      "snapshot": "Existing strict visible ApplyBlackjack; private target correlation before atomic commit",
+      "read_reuse": "ReadBlackjackSnapshot handles explicit Open, Refresh, existing create-follow-up and bounded CoreTick retries",
+      "ui": "Entered ID, local Use received ID fill, deliberate Reopen table and requested/refused feedback",
+      "limit": "Process-local shared bearer, existing idle/absolute expiry; not durable saves or multiuser identity. No service runtime used."
     }
   },
   "stages": {
-    "source": "Selected received-session/recovery/inspection source package complete, preserving local editing, modes and prior Blackjack bindings. Full original apps remain incomplete.",
+    "source": "Selected existing-table reopen source binding complete, preserving prior session recovery, Sudoku editing/modes and Blackjack capabilities. Full original apps remain incomplete.",
     "code_committed": true,
     "connected": false,
     "native_built": false,
@@ -181,20 +191,21 @@
     "world_placed": false,
     "world_saved": false,
     "end_to_end": false,
-    "source_review": "PASS; independent manual actor-branch/contract and final Slate source review; no blocking defect. Three review corrections applied.",
+    "source_review": "PASS; existing independent reviewer; exact report and limits in blackjack_reopen.review.",
     "tests_or_builds_run": false,
-    "current_evidence": "Manual source branch matrix plus protected file pins and git diff --check. No current counted static suite or behavioral/compiler proof."
+    "current_evidence": "Manual source/branch and packet review, exact current/prior pins and git diff --check; no current counted suite or compiler/behavior/native evidence."
   },
   "pending_operator_steps": [
-    "Source packet only; no runtime/build/editor slot allocated. Existing sole operator selects later separately authorized integration and acceptance.",
-    "Reconcile the full four-file PR152 diff, including original Blackjack/mode additions, against the current accepted native source. Preserve desktop/Mines/R2/other owners; no whole-plugin replacement or rollback.",
-    "Earlier additive reflected mode API still requires supported UHT/generated-code/module integration. This increment adds private Slate methods only. No DLL/LiveCoding assumption.",
-    "Use cabinet-source-package.md current manual matrix for entered/received identity, local field fill/focus, busy/private-refusal recovery, definite-vs-unknown Blackjack create, mode mismatch/ownership, selected-cell/note provenance and lifecycle acceptance. All rows source-reviewed only.",
-    "Retain earlier mode combinations/capture/time-limit save-resume, local-note overrides/reset and one-entry typing, original shortcuts/hint confirmation/metadata, close/EndPlay and actual readability checks. No prior Mines/HUD/Java/DLL proof transfers.",
-    "Companion adoption/provider/account mapping and approved disposable service execution remain dependencies. Never put credentials in the packet; no production/financial services."
+    "Source only; no runtime/build/editor slot allocated. Only codex-play-guard chooses a later authorized integration/acceptance slot, preserving ingestion priority.",
+    "Reconcile the full four-file PR152 source, including prior Blackjack/settings/modes/Slate work, against actual accepted native source and all other owners. No whole-plugin replacement/rollback or DLL/LiveCoding assumption.",
+    "New Open/CanOpen and earlier mode reflected APIs require supported UHT/generated-code/module build/load; no compile evidence here.",
+    "Use the current reopen manual matrix in cabinet-source-package.md for exact validation/refusal/reset branches, stable GET identity/retry, wrong-ID/secrecy/closed errors, old-callback cancellation, create recovery and local-user field focus.",
+    "Later approved disposable companion acceptance: record received ID, local-close (forgets bearer), reconfigure, deliberate reopen, verify full snapshot/revision/legal action plus original Java execution; exercise idle/lifetime expiry and restart without fabricated restoration.",
+    "Retain prior recovery/cell/local-note/mode/typing/hint/Blackjack metadata and close/persistence acceptance matrices. No historical Java/portable/Mines/HUD evidence transfers to this checkpoint.",
+    "Companion adoption, account/provider mapping and full original app features remain dependencies; no production, credentials in packet, financial service or fabricated rewards."
   ],
   "remaining_original_features": [
-    "facade health/reopen binding",
+    "facade health binding",
     "per-player provider/authorization",
     "21+3",
     "strategy/HiLo",
@@ -286,7 +297,7 @@
     },
     "lesson": "Use existing guarded action APIs for source shortcuts; scope keys to direct board focus; bind confirmations to current identity; local validation must not hide authoritative status.",
     "harness_proposal": "Existing Java cabinet harness only: forms/buttons/other users/repeats/modifiers/controllers, disabled actions, H/Cancel/Buy/replaced game IDs, invalid Configure plus service failure. Benefit ESTIMATED; owner desktop-games, later authorized validation slot.",
-    "note": "Historical c7b3f3e2 source checkpoint; local editing history is in local_sudoku_editing and current manual source evidence is in session_recovery.",
+    "note": "Historical c7b3f3e2 source checkpoint; local editing and6e session review remain in their history sections. Current manual source evidence is in blackjack_reopen.",
     "evidence_scope": "Historical checkpoint only; not rerun or current behavioral/compiler/native proof."
   },
   "local_sudoku_editing": {
@@ -523,6 +534,135 @@
     "full_original_application_complete": false,
     "connected_native_end_to_end": false,
     "lesson": "Distinguish requested input, accepted local operation and received identity; derive candidates from public state and let actor-private guards decide; label mixed-origin notes separately.",
-    "harness_proposal": "Extend existing Java cabinet acceptance later with this manual matrix; no new framework/job/controller. Benefit ESTIMATED; no measured runtime gain."
+    "harness_proposal": "Extend existing Java cabinet acceptance later with this manual matrix; no new framework/job/controller. Benefit ESTIMATED; no measured runtime gain.",
+    "evidence_scope": "Historical6e287066/c0 source review and pins; current reopen evidence is in blackjack_reopen. Actor files intentionally change in this later package."
+  },
+  "blackjack_reopen": {
+    "code_commit": "7c4ae40d027bd6e17f80c08661297b28d6571db2",
+    "baseline": "3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93",
+    "ownership_request": 32318,
+    "start_message": 32320,
+    "actual_start_utc": "2026-10-15 20:35 UTC (START32320, minute precision)",
+    "ownership": "Latest direct parent continuation plus existing four-file PR152 lane; bounded hub reconciliation found no competing Java actor/Slate owner. No separate owner-confirmation response claimed. No other lane authority transferred.",
+    "changed_runtime_files": [
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
+      "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp"
+    ],
+    "runtime_diff": "4 files changed, 112 insertions(+), 9 deletions(-)",
+    "actual_existing_contract": {
+      "repository": "RicheyWorks/BlackJackPro",
+      "commit": "8a4dccfbc359be628b5766ea1b7082410baefe1c",
+      "paths": [
+        "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeServer.java:131-144",
+        "arcade-bridge/src/main/java/com/richeyworks/blackjack/arcade/BridgeService.java:78,124-128",
+        "docs/BLACKJACK-ARCADE-BRIDGE.md"
+      ],
+      "behavior": "Canonical lowercase UUID GET query; active visible snapshot or validated closed/not-found error. GET updates idle activity, not absolute lifetime. Shared launch bearer covers all process-local sessions; no per-player isolation or durable resume."
+    },
+    "preserved": "Shared protocol/SessionGuard, SendHttp and HTTP worker/limits/secrets/redirect policy, Java core/source, saves, existing keyboard handlers and original rules/payouts remain unchanged.",
+    "protected_files": [
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h",
+        "sha256": "9B819430250B9386E2686EBB423121CA733C0111585E453A49CFAD557DB6CBA0",
+        "git_blob": "667c76ae0b9a8512abdccf02c27be160f1adc1fc",
+        "unchanged_from": "3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93"
+      },
+      {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs",
+        "sha256": "1C457F9D144DA1707592F2AEE26D6F2916C6F21E414F6C026C41331F8B63A338",
+        "git_blob": "33028a32948633aa86564f16dc7230c565500b37",
+        "unchanged_from": "3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93"
+      }
+    ],
+    "shared_reuse": "Existing SessionGuard ticket/read/generation plus SendHttp/ApplyBlackjack; one actor eligibility predicate used by UI and operation, one private read route used by all Blackjack read seams. No new framework/controller/service/endpoint.",
+    "manual_branch_matrix_status": "Manually inspected source only; not executed tests or runtime acceptance",
+    "manual_branch_matrix": [
+      {
+        "branch": "Canonical ID and local prerequisites",
+        "source_result": "CanOpenBlackjackSession shares the exact actor/UI gate: current Blackjack mode, configured token, valid loopback origin and canonical lowercase UUID. Empty/short/long/uppercase/whitespace/slash/non-ASCII values fail before reset.",
+        "deferred_acceptance": "Exercise valid/invalid IDs, origin, credentials and mode. Verify preflight refusal leaves model/recovery data untouched; later dispatch failure may clear the inactive view."
+      },
+      {
+        "branch": "Pending HTTP or guard work",
+        "source_result": "Both private task presence and Guard.PendingKind must be clear. A timed-out canceled task that has not finished still blocks Open.",
+        "deferred_acceptance": "Delay worker completion/callbacks; no concurrent request, reset or lost recovery context."
+      },
+      {
+        "branch": "Unknown create or uncertain mutation",
+        "source_result": "Open rejects bUnknownBlackjackCreate and Guard.HasUncertainOutcome before any reset. Retained create request/body and current mutation identity remain available to existing recovery.",
+        "deferred_acceptance": "Lose create/command/close replies; Open cannot bypass reconciliation or cause a new mutation."
+      },
+      {
+        "branch": "Existing live received table",
+        "source_result": "Open refuses even the same entered ID while a nonclosed received table exists. Use Refresh while attached. End closes it; existing local-close/configuration detachment remains possible and does not end the remote table.",
+        "deferred_acceptance": "Try same/different IDs in all live phases, including unknown command outcome; Open must not abandon the attached table or bypass its revision floor."
+      },
+      {
+        "branch": "Local cabinet close and reconfiguration",
+        "source_result": "Close still forgets bearer/received/target state. Reopening needs configuration again and a previously recorded ID. No automatic retained-session provider or durable save was added.",
+        "deferred_acceptance": "Record ID, close, configure, reopen before expiry; verify no credentials or session history persisted."
+      },
+      {
+        "branch": "Accepted local Open, pending response and edited field",
+        "source_result": "Open begins a new guard generation/read, captures RequestedBlackjackId and resets the accepted view. Editable text and local attempt feedback never publish identity or retarget the captured request.",
+        "deferred_acceptance": "Delay the reply and edit the field; accepted received ID must be the captured target only."
+      },
+      {
+        "branch": "Successful visible snapshot",
+        "source_result": "ApplyBlackjack checks requested and existing accepted IDs plus monotone revision, full visible DTO and secrecy before atomic model/View commit. Initial Open starts without another table's revision floor. Gameplay waits for Guard.Snapshot.",
+        "deferred_acceptance": "Compare full current snapshot/revision/legal actions with Java; initial lower revision of a different permitted table is accepted only after explicit Open."
+      },
+      {
+        "branch": "Wrong identity, malformed or secret-bearing reply",
+        "source_result": "Existing envelope/visible DTO/secrecy validation plus captured ID rejects the reply before publishing a received table. No gameplay, result or credit change is inferred.",
+        "deferred_acceptance": "Inject wrong ID, missing/invalid fields, hidden dealer/future shoe fields and invalid revision; confirm no partial commit."
+      },
+      {
+        "branch": "Timeout and bounded safe retries",
+        "source_result": "Initial Open, explicit refresh, create reconciliation and CoreTick retries share ReadBlackjackSnapshot. It uses the private captured target (accepted-ID fallback), existing read budget and ticket generation; field edits cannot change it.",
+        "deferred_acceptance": "Exercise both existing retries, exhaustion, late completion and explicit later retry; count GET only, no command replay."
+      },
+      {
+        "branch": "Closed/expired/not-found reply",
+        "source_result": "Only the existing validated 409 SESSION_CLOSED or 404 NOT_FOUND envelope marks unavailable. A requested-only target qualifies for this path, but View.SessionId stays empty and no final result is fabricated.",
+        "deferred_acceptance": "Check valid versus malformed error bodies, Java closure/expiry/restart and explicit later Start/Open decisions."
+      },
+      {
+        "branch": "Authorization, redirect and other failures",
+        "source_result": "Existing permanent authorization/redirect handling and bounded transient read retry remain unchanged. Failed Open keeps private target for safe read recovery, but no received identity; explicit Open can retry after safe work ends.",
+        "deferred_acceptance": "Check 401/403, redirects, 5xx, connection loss and malformed success; reconfigure via existing cancellation path when required."
+      },
+      {
+        "branch": "Fresh create and explicit create recovery",
+        "source_result": "Fresh Start clears captured target; successful Apply binds the created ID before existing follow-up read. Exact request-ID create recovery and revision checks remain. Open never generates a request ID or sends POST/DELETE.",
+        "deferred_acceptance": "Open/fail then fresh Start; close then Start; uncertain-create replay followed by read; no stale target or fabricated fresh session."
+      },
+      {
+        "branch": "Cancel/configure/mode change and stale callbacks",
+        "source_result": "CancelTransport clears target with existing guard generation/secrets policy. Old callback tickets fail Guard.Current. Fresh Open resets accepted state only after eligibility passes.",
+        "deferred_acceptance": "Cancel/close/reconfigure/change mode with pending and completed tasks; no old table can revive."
+      },
+      {
+        "branch": "Use received ID and keyboard focus",
+        "source_result": "Ready nonbusy received table can fill its ID locally and focus the opening user's field. No network, custom clipboard, note/hint reset or automatic Open. Existing direct-board shortcut handlers are unchanged.",
+        "deferred_acceptance": "Verify local fill, standard field selection/copy/typing, focused buttons, modifiers/repeats/controllers/other user and close restoration."
+      }
+    ],
+    "review": {
+      "worker": "java_package_gap_review (existing worker)",
+      "source_outcome": "PASS; no blocking source defect in exact four-file diff. Existing independent reviewer verified pre-reset gates, new generation, stable target/read reuse, atomic identity validation, reset/error/recovery and local-fill behavior. No obvious syntax/include/UHT declaration issue; uncompiled.",
+      "packet_outcome": "PASS; same existing reviewer verified current/prior four SHA/blob pins, protocol/Build pins, historical6e pins, 14-row matrix and final7c4 repin. Lifecycle and historical/current evidence wording corrected and reverified.",
+      "identity_followup_review": "PASS for7c4ae40d; explicit case-sensitive target comparison preserves empty-target and surrounding ID/revision guards; no additional include required. Final actor SHA/blob reverified.",
+      "git_diff_check": "PASS",
+      "counted_suite_tests_builds_uht_services_credentials_editor_runtime_run": false
+    },
+    "product_impact": "Closes source-only access gap to an existing still-active local Java table after configuration/local close when its ID was recorded. Gameplay/resume benefit and performance remain unmeasured/unverified.",
+    "learning": "Treat typed identity as a private read target; correlate every retry and accepted reply, reject uncertainty/live-table replacement before reset, and share UI/operation eligibility. A GET reopen route does not supply durable or per-player resume.",
+    "full_original_application_complete": false,
+    "connected_native_end_to_end": false,
+    "initial_source_commit": "dfca418e216e961b62f48a87c5eb62d7b2ba9bc9",
+    "exact_identity_followup": "Captured target uses explicit FString.Equals with ESearchCase::CaseSensitive; no implicit comparison semantics or case-only alias accepted. Source and final pin follow-up review PASS."
   }
 }

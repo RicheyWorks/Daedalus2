@@ -4,7 +4,76 @@ This completes the selected source package in existing [PR152](https://github.co
 It does not complete either original application or establish installed/native play.
 Owner: pootscoot-desktop-games. Only codex-play-guard operates Unreal.
 
-## Current continuation: received session identity and recovery
+## Current continuation: deliberate Blackjack table reopen
+
+Source `7c4ae40d027bd6e17f80c08661297b28d6571db2` continues published `3c89e767a35bc63f6cc9ae184eb9fa5ad2d14f93` in existing draft PR152.
+The gap was independently traced before editing: Java already implements
+`GET /v1/blackjack/sessions/{id}`, but the cabinet could only create, refresh a
+previously accepted native ID or recover an uncertain create. Local close/configure
+forgets that ID and bearer, leaving a still-active Java table unreachable through
+the UI. This source package adds the deliberate existing-session path.
+
+The latest parent continuation authorizes the next bounded lane package. Ownership
+request32318 and START32320 (2026-10-15 20:35 UTC, minute precision) record the exact
+existing four PR152 files. Bounded hub reconciliation found no competing Java
+actor/Slate claim; no separate owner-confirmation reply is claimed. No other lane,
+backend, shared protocol, HTTP task, controller or editor authority is taken.
+
+| Implemented capability | Actual existing source/interface | Cabinet binding and limit |
+|---|---|---|
+| Query an existing table | BlackJackPro8a4dccfb `arcade-bridge/.../BridgeServer.java:131–144`, `BridgeService.java:78,124–128` | Additive OpenBlackjackSession reuses existing BlackjackRead/SendHttp. GET only; no create, delete or command replay |
+| One eligibility contract | Existing actor auth/mode/task/guard/uncertainty/table state; Java route's canonical lowercase UUID | Pure CanOpenBlackjackSession is used by Open and Slate; preflight refusals cannot reset the table or retained recovery data |
+| Stable query identity | Existing guard generation/ticket, ApplyBlackjack and atomic visible snapshot commit | Private RequestedBlackjackId is captured before read, checked before acceptance and shared across initial GET/refresh/retry/create reconciliation. It never becomes a reflected accepted ID merely by being entered |
+| Deliberate capture/reopen controls | Existing editable field, local-user focus and guarded Button path | Entered table ID, local Use received ID fill and Reopen table attempt feedback. No custom clipboard, durable history or automatic reopening |
+| Unavailable session handling | Existing validated NOT_FOUND/SESSION_CLOSED error path | Also handles requested-only targets; no fake received snapshot, result, bankroll or reward |
+
+First retained source checkpoint: `dfca418e216e961b62f48a87c5eb62d7b2ba9bc9`.
+Final `7c4ae40d` explicitly compares the captured target with case sensitivity.
+Four existing actor/Slate files change; exact diff and pins are in manifestv6.
+The public additions require the sole operator's later supported UHT/module build.
+Shared protocol/SessionGuard, HTTP worker/limits/redirect policy, game rules,
+original Java source, existing saves and keyboard dispatch are preserved.
+
+After preflight passes, Open resets the inactive view before dispatch. If local
+dispatch itself cannot start, it returns false with no received table; it does
+not restore that earlier inactive display. A true return means the read was
+requested locally, not that Java accepted the ID or returned a table.
+
+This closes a source binding gap, with unmeasured product impact: a player who
+records a received ID can request the same still-active table after reconfiguring
+the local bearer. It is not durable desktop round resume, provider/account mapping
+or per-player isolation. Java's shared launch bearer authorizes all process-local
+sessions. GET refreshes idle activity but not the absolute lifetime. Closed,
+expired and service-restart-lost tables remain unavailable; no gameplay state is
+stored by this addition. Create, uncertain-create recovery and Open stay distinct.
+
+Independent source review and the packet audit are recorded in manifestv6.
+Current evidence is manual branch review, exact source pins and `git diff --check`.
+No counted text suite, tests, build, UHT, service traffic, credentials, editor or
+runtime action ran. There is no measured performance or native-play improvement.
+
+### Manual reopen branch review and deferred acceptance
+
+These rows describe inspected source, **not executed behavior/native tests**.
+
+| Branch / combination | Source result | Deferred acceptance |
+|---|---|---|
+| Canonical ID and local prerequisites | CanOpenBlackjackSession shares the exact actor/UI gate: current Blackjack mode, configured token, valid loopback origin and canonical lowercase UUID. Empty/short/long/uppercase/whitespace/slash/non-ASCII values fail before reset. | Exercise valid/invalid IDs, origin, credentials and mode. Verify preflight refusal leaves model/recovery data untouched; a later local-dispatch failure may clear the inactive view. |
+| Pending HTTP or guard work | Both private task presence and Guard.PendingKind must be clear. A timed-out canceled task that has not finished still blocks Open. | Delay worker completion/callbacks; no concurrent request, reset or lost recovery context. |
+| Unknown create or uncertain mutation | Open rejects bUnknownBlackjackCreate and Guard.HasUncertainOutcome before any reset. Retained create request/body and current mutation identity remain available to existing recovery. | Lose create/command/close replies; Open cannot bypass reconciliation or cause a new mutation. |
+| Existing live received table | Open refuses even the same entered ID while a nonclosed received table exists. Use existing Refresh while attached. End closes the table; existing local-close/configuration detachment remains possible and does not end it remotely. | Try same/different IDs in all live phases, including unknown command outcome; Open must not abandon the attached table or bypass its revision floor. |
+| Local cabinet close and reconfiguration | Close still forgets bearer/received/target state. Reopening needs configuration again and a previously recorded ID. No automatic retained-session provider or durable save was added. | Record ID, close, configure, reopen before expiry; verify no credentials or session history persisted. |
+| Accepted local Open, pending response and edited field | Open begins a new guard generation/read, captures RequestedBlackjackId and resets the accepted view. Editable text and local attempt feedback never publish identity or retarget the captured request. | Delay the reply and edit the field; accepted received ID must be the captured target only. |
+| Successful visible snapshot | ApplyBlackjack checks requested and existing accepted IDs plus monotone revision, full visible DTO and secrecy before atomic model/View commit. Initial Open starts without another table's revision floor. Gameplay waits for Guard.Snapshot. | Compare full current snapshot/revision/legal actions with Java; initial lower revision of a different permitted table is accepted only after explicit Open. |
+| Wrong identity, malformed or secret-bearing reply | Existing envelope/visible DTO/secrecy validation plus captured ID rejects the reply before publishing a received table. No gameplay, result or credit change is inferred. | Inject wrong ID, missing/invalid fields, hidden dealer/future shoe fields and invalid revision; confirm no partial commit. |
+| Timeout and bounded safe retries | Initial Open, explicit refresh, create reconciliation and CoreTick retries share ReadBlackjackSnapshot. It uses the private captured target (accepted-ID fallback), existing read budget and ticket generation; field edits cannot change it. | Exercise both existing retries, exhaustion, late completion and explicit later retry; count GET only, no command replay. |
+| Closed/expired/not-found reply | Only the existing validated 409 SESSION_CLOSED or 404 NOT_FOUND envelope marks unavailable. A requested-only target qualifies for this path, but View.SessionId stays empty and no final result is fabricated. | Check valid versus malformed error bodies, Java closure/expiry/restart and explicit later Start/Open decisions. |
+| Authorization, redirect and other failures | Existing permanent authorization/redirect handling and bounded transient read retry remain unchanged. Failed Open keeps private target for safe read recovery, but no received identity; explicit Open can retry after safe work ends. | Check 401/403, redirects, 5xx, connection loss and malformed success; reconfigure via existing cancellation path when required. |
+| Fresh create and explicit create recovery | Fresh Start clears captured target; successful Apply binds the created ID before existing follow-up read. Exact request-ID create recovery and revision checks remain. Open never generates a request ID or sends POST/DELETE. | Open/fail then fresh Start; close then Start; uncertain-create replay followed by read; no stale target or fabricated fresh session. |
+| Cancel/configure/mode change and stale callbacks | CancelTransport clears target with existing guard generation/secrets policy. Old callback tickets fail Guard.Current. Fresh Open resets accepted state only after eligibility passes. | Cancel/close/reconfigure/change mode with pending and completed tasks; no old table can revive. |
+| Use received ID and keyboard focus | Ready nonbusy received table can fill its ID locally and focus the opening user's field. No network, custom clipboard, note/hint reset or automatic Open. Existing direct-board shortcut handlers are unchanged. | Verify local fill, standard field selection/copy/typing, focused buttons, modifiers/repeats/controllers/other user and close restoration. |
+
+## Historical continuation: received session identity and recovery
 
 Source `6e28706693319c53170dda3d545c12f8cf5f95c7` continues published head `c0cacb261a960ea71de239f644be4db4f91310fb` in the same draft PR152.
 Exactly the two private Java Slate files change (+207/-8). Assignment32249 and

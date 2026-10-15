@@ -307,3 +307,19 @@ branch/source review passes; no counted suite/tests/builds/services/native ran.
 Existing-harness proposal: use the documented identity/recovery/focus/cell matrix
 at a later authorized slot. Benefit ESTIMATED, owner desktop-games; no new service,
 framework, worker or runtime queue reservation. No firsthand native/Blender proof.
+
+### Reopen through the existing read contract without bypassing uncertainty
+
+2026-10-15, pootscoot-desktop-games, existing independent Java reviewer.
+Blackjack already had a query route but no cabinet entry after close forgot the
+received ID and bearer. Explicit Open now captures a private query target and
+shares its CanOpen predicate with Slate. Refuse pending work, unknown creation,
+uncertain mutations and live-table replacement before any reset. Bind all reads/
+retries and atomic acceptance to that target; never seed accepted state from text.
+Reuse existing generation, read budget, strict visible DTO and closed error path.
+Local ID fill is not a request. New endpoints, controllers, durable storage and
+per-player authority are unnecessary and not supplied by shared-bearer GET.
+Source product impact: a recorded still-active table becomes reachable again;
+no measured gameplay/performance benefit or runtime acceptance. Existing-harness
+idea is the reopen branch matrix at a later authorized slot, benefit ESTIMATED;
+no new framework/worker/job or editor/compute slot. No tests/build/services ran.
