@@ -1008,3 +1008,22 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
   then Feathers and Tonics). The quest now has 26 checks and passes on seeds 7, 11 and 23, and the Devourer's
   scaling is unchanged. Running three seeds at once once flaked the early chest check, so the suites run one after
   another.
+
+### 14.30 The Prismheart demo: recruits and the reserve
+
+- **Who joins:** `party.members` in `members.json` says when each member joins (`"after <dungeon>"`). Beating a
+  dungeon's Warden brings its recruit in: Fennick the Beastcaller after the Cinder Forge, Aveline the Starlancer after
+  the Windcut Aerie, and Quill the Chronoseer after the Sunwell Sanctum. Brannoc joins after Gearwright's Folly, which
+  is not in this demo, so he never appears.
+- **Joining:** a recruit arrives at the front four's average level, with full health, carrying their own gear from the
+  data. The victory messages name them and point to ORDER.
+- **Four fight, the rest wait.** `party` is the four in battle and `reserve` holds the others. Battle code only ever
+  sees `party`. The field menu works on the whole `roster()`.
+  - With a reserve, the party window switches to compact rows, and a rule marks where battle stops.
+  - STATUS and EQUIP page through everyone.
+  - ORDER swaps across the rule. It refuses a swap that would leave no one standing in front.
+- **EXP:** the reserve earns half the EXP of each win. Inns, fountains and shrines heal everyone. The shops' auto-equip
+  and spell learning look at the whole roster.
+- **Saves** carry `reserve`. A save written before this change gets its owed recruits on CONTINUE (`recruitBeaten`).
+- **Tests:** `recruit_test.py` (21 checks), with test hooks `roster()`, `ko(i)` and `foes(hp)`. `hurt(i)` now indexes
+  the whole roster; front indexes are unchanged.

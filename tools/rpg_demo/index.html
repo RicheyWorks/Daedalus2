@@ -321,18 +321,38 @@ const GEAR = {};
 let bag = {}, gold = 0;
 function buildParty() {
   Object.assign(GEAR, D.gear);                              /* every shop's gear (data.json gear) */
-  const P = D.party.members.filter(m => m.joins === "start").map(m => {
-    const L = START_LEVEL, st = {};
-    for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
-    const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
-    return { name: m.name, job: m.job, lv: L, exp: 0, next: 400, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
-      kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
-  });
+  const P = D.party.members.filter(m => m.joins === "start").map(m => makeMember(m, START_LEVEL));
+  reserve = [];
   bag = Object.assign({}, D.party.start_items, { "Herb Tonic": 8, "Clear Draught": 3, "Feather of Waking": 1 });
   gold = D.party.start_gold;
   return P;
 }
-let party = [];
+let party = [], reserve = [];                               /* party: the four who fight; reserve: friends who joined later */
+const ACTIVE = 4;
+const roster = () => party.concat(reserve);
+function makeMember(m, L) {
+  const st = {};
+  for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
+  const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
+  let next = 400; for (let i = START_LEVEL; i < L; i++) next = Math.round(next * 1.18);
+  return { name: m.name, job: m.job, lv: L, exp: 0, next, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
+    kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
+}
+/* Recruits: members.json says who joins "after <dungeon>". Beating that dungeon's Warden brings them in at the party's
+   average level, into the reserve (or straight into battle if a slot is free). Brannoc joins after Gearwright's Folly,
+   which this demo does not have, so he never appears here. */
+function recruitsFor(dungeonName) { return D.party.members.filter(m => m.joins === "after " + dungeonName); }
+function recruit(dungeonName) {
+  const have = new Set(roster().map(m => m.job)), lv = Math.max(START_LEVEL, Math.round(party.reduce((a, m) => a + m.lv, 0) / Math.max(1, party.length)));
+  return recruitsFor(dungeonName).filter(m => !have.has(m.job)).map(m => {
+    const n = makeMember(m, lv);
+    (party.length < ACTIVE ? party : reserve).push(n);
+    return n;
+  });
+}
+function recruitBeaten() {                                  /* saves from before recruits: bring in whoever is owed */
+  D.dungeons.forEach(d => { if (state.beaten.has(d.boss_data.name)) recruit(d.name); });
+}
 const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
 const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);   /* armour counts now that the gear table has it */
 const spellOf = n => D.spells.find(s => s.name === n);
@@ -450,7 +470,7 @@ function interact() {
   if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
   if (t === "BossGate") return bossGate();
   if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
-  if (t === "Fountain") { party.forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
+  if (t === "Fountain") { roster().forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
   if (t === "Bookcase") return say(["A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
   if (t === "Throne") return say(["AN EMPTY GOLD SEAT, STILL WARM."]);
 }
@@ -460,7 +480,7 @@ function innPrompt() {
     if (i === 1) return say(["COME BACK ANY TIME."], null, 6);
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
-    party.forEach(m => { m.hp = m.max; m.mp = m.mmax; });
+    roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; });
     fade = 1; fadeCb = () => { cue(map.cue); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
   });
 }
@@ -485,19 +505,19 @@ function buy(it) {
   if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
   if (shop.kind === "magic") {
     const sp = spellOf(it.name); if (!sp) return;
-    const caster = sp.target === "ally" ? party.find(m => m.job === "Lightmender") : party.find(m => m.job === "Runecaster");
+    const caster = sp.target === "ally" ? roster().find(m => m.job === "Lightmender") : roster().find(m => m.job === "Runecaster");
     if (!caster || caster.spells.includes(sp.name)) { shop.msg = "YOU ALREADY KNOW THAT."; return; }
     gold -= it.price; caster.spells.push(sp.name); sfx("BUY"); shop.msg = caster.name + " LEARNS " + sp.name.toUpperCase() + "."; return;
   }
   gold -= it.price; sfx("BUY");
   if (it.attack) {
     const kind = WEAPON_KIND[it.name];
-    const who = party.find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
+    const who = roster().find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
     if (who) { who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "NO ONE NEEDS IT. INTO THE BAG."; }
   } else if (it.defence) {
     const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
-    const who = party.find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor"));
+    const who = roster().find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor"));
     if (who) { who.equip[slot] = it.name; sfx("EQUIP"); shop.msg = who.name + " PUTS ON THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "INTO THE BAG."; }
   } else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "THANK YOU!"; }
@@ -556,7 +576,7 @@ function stepDone() {
       if (dg.final && shardCount() < 3) { sfx("LOCKED"); return say(["THE SHRINE IS SEALED BY A HEART-SHAPED LOCK WITH THREE EMPTY HOLLOWS. (" + shardCount() + " OF 3 SHARDS.)"]); }
       sfx("STAIRS"); const f = dg.floors[0]; return goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down");
     }
-    if (t === "Shrine") { party.forEach(m => { m.hp = m.max; m.mp = m.mmax; }); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
+    if (t === "Shrine") { roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
     if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
   }
   if (map.kind === "dungeon") {
@@ -634,8 +654,8 @@ function openMenu() { sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, ms
 function closeMenu() { sfx("TICK"); mode = "field"; menu = null; }
 function menuMove(k, n) { if (hit("up")) { menu[k] = (menu[k] + n - 1) % n; sfx("TICK"); } if (hit("down")) { menu[k] = (menu[k] + 1) % n; sfx("TICK"); } }
 function menuWho() {
-  if (hit("left")) { menu.who = (menu.who + party.length - 1) % party.length; menu.ii = 0; sfx("TICK"); }
-  if (hit("right")) { menu.who = (menu.who + 1) % party.length; menu.ii = 0; sfx("TICK"); }
+  if (hit("left")) { menu.who = (menu.who + roster().length - 1) % roster().length; menu.ii = 0; sfx("TICK"); }
+  if (hit("right")) { menu.who = (menu.who + 1) % roster().length; menu.ii = 0; sfx("TICK"); }
 }
 const fieldItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
 const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
@@ -647,7 +667,7 @@ function menuTick() {
     if (!hit("a")) return;
     const c = MENU_CMDS[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
     if (c === "ITEM") { if (!fieldItems().length) { menu.msg = "THE BAG HOLDS NOTHING TO USE."; return; } menu.sub = "item"; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; }
-    else if (c === "MAGIC") { menu.sub = "magic-who"; menu.who = Math.max(0, party.findIndex(m => m.spells.length)); }
+    else if (c === "MAGIC") { menu.sub = "magic-who"; menu.who = Math.max(0, roster().findIndex(m => m.spells.length)); }
     else if (c === "EQUIP") { menu.sub = "equip"; }
     else if (c === "STATUS") { menu.sub = "status"; }
     else if (c === "ORDER") { menu.sub = "order"; menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; }
@@ -663,18 +683,18 @@ function menuTick() {
     if (!items.length) { menu.sub = null; return; }
     menu.ii = clamp(menu.ii, 0, items.length - 1);
     menuMove("ii", items.length); menuWho();
-    if (hit("a")) menu.msg = useItem(items[menu.ii], party[menu.who]);
+    if (hit("a")) menu.msg = useItem(items[menu.ii], roster()[menu.who]);
     if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic-who") {
     menuWho();
-    if (hit("a")) { if (!fieldSpells(party[menu.who]).length) { sfx("LOCKED"); menu.msg = party[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
+    if (hit("a")) { if (!fieldSpells(roster()[menu.who]).length) { sfx("LOCKED"); menu.msg = roster()[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
     if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic") {
-    const caster = party[menu.who], list = fieldSpells(caster);
+    const caster = roster()[menu.who], list = fieldSpells(caster);
     menuMove("ii", list.length);
     if (hit("a")) {
       const sp = list[menu.ii];
@@ -686,9 +706,9 @@ function menuTick() {
     return;
   }
   if (sub === "magic-target") {
-    menuMove("target", party.length);
+    menuMove("target", roster().length);
     if (hit("a")) {
-      const caster = party[menu.who], m = party[menu.target], sp = menu.spell;
+      const caster = roster()[menu.who], m = roster()[menu.target], sp = menu.spell;
       if (m.hp <= 0) { sfx("LOCKED"); menu.msg = "TOO LATE FOR THAT SPELL."; return; }
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
       const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3);
@@ -705,7 +725,7 @@ function menuTick() {
     return;
   }
   if (sub === "equip-pick") {
-    const m = party[menu.who], cands = equipCandidates(m, menu.slot);
+    const m = roster()[menu.who], cands = equipCandidates(m, menu.slot);
     menuMove("ci", cands.length);
     if (hit("a")) {
       const pick = cands[menu.ci], old = m.equip[menu.slot];
@@ -718,10 +738,14 @@ function menuTick() {
   }
   if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
-    menuMove("ii", party.length);
+    menuMove("ii", roster().length);
     if (hit("a")) {
       if (menu.pick < 0) { menu.pick = menu.ii; sfx("PICK"); menu.msg = "AND SWAP WITH?"; }
-      else { const a = menu.pick, b = menu.ii; [party[a], party[b]] = [party[b], party[a]]; menu.pick = -1; sfx("EQUIP"); menu.msg = "ORDER CHANGED."; }
+      else {
+        const r = roster(), a = menu.pick, b = menu.ii; [r[a], r[b]] = [r[b], r[a]];
+        if (!r.slice(0, ACTIVE).some(m => m.hp > 0)) { sfx("LOCKED"); menu.pick = -1; menu.msg = "SOMEONE STANDING MUST LEAD."; return; }
+        party = r.slice(0, ACTIVE); reserve = r.slice(ACTIVE); menu.pick = -1; sfx("EQUIP"); menu.msg = "ORDER CHANGED.";
+      }
     }
     if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } sfx("TICK"); }
   }
@@ -740,15 +764,27 @@ function useItem(name, m) {
   else return "NOTHING HAPPENS HERE.";
   bag[name]--; sfx("ITEM"); sfx("HEAL"); return name.toUpperCase() + " ON " + m.name + ".";
 }
+/* Four rows fill the party window. With a reserve the rows go compact, and a rule marks where battle stops. */
+const rowH = () => roster().length > ACTIVE ? 30 : 52;
+const rowY = i => (rowH() === 52 ? 8 : 4) + i * rowH() + (i >= ACTIVE ? 4 : 0);
 function drawPartyRows(mark) {
-  party.forEach((m, i) => {
-    const y = 8 + i * 52;
-    spr("sprites", m.sprite, 6, y, 0, null, null, 0.3);
-    text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(m.job, 46, y + 12, "#a0a8c0");
-    text("HP", 46, y + 24); text(m.hp + "/" + m.max, 238 - tw(m.hp + "/" + m.max), y + 24); gauge(64, y + 34, 80, m.hp / m.max, "#58d058");
-    if (m.mmax) { text("MP", 152, y + 36); text(m.mp, 238 - tw(m.mp), y + 36); }
+  const compact = rowH() === 30;
+  roster().forEach((m, i) => {
+    const y = rowY(i), back = i >= ACTIVE, dim = back ? "#a0a8c0" : "#ffffff";
+    if (!compact) {
+      spr("sprites", m.sprite, 6, y, 0, null, null, 0.3);
+      text(m.name, 46, y + 2); text("LV " + m.lv, 180, y + 2); text(m.job, 46, y + 12, "#a0a8c0");
+      text("HP", 46, y + 24); text(m.hp + "/" + m.max, 238 - tw(m.hp + "/" + m.max), y + 24); gauge(64, y + 34, 80, m.hp / m.max, "#58d058");
+      if (m.mmax) { text("MP", 152, y + 36); text(m.mp, 238 - tw(m.mp), y + 36); }
+    } else {
+      spr("sprites", m.sprite, 14, y, 0, null, null, 0.17);
+      text(m.name, 40, y + 2, dim); text(back ? "RESERVE" : m.job, 108, y + 2, "#a0a8c0"); text("LV " + m.lv, 238 - tw("LV " + m.lv), y + 2, dim);
+      text(m.hp + "/" + m.max, 40, y + 14, dim); gauge(110, y + 17, 60, m.hp / m.max, back ? "#3c8c3c" : "#58d058");
+      if (m.mmax) text("MP " + m.mp, 238 - tw("MP " + m.mp), y + 14, dim);
+    }
     if (mark === i) cursor(0, y + 2);
   });
+  if (compact) { g.fillStyle = "#a0a8c0"; g.fillRect(8, rowY(ACTIVE) - 3, 232, 1); }
 }
 function drawMenu() {
   drawField();
@@ -759,7 +795,7 @@ function drawMenu() {
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
   drawPartyRows(mark);
-  if (sub === "order" && menu.pick >= 0) text("*", 238, 8 + menu.pick * 52 + 2, "#fff070");
+  if (sub === "order" && menu.pick >= 0) text("*", 2, rowY(menu.pick) + 14, "#fff070");
   MENU_CMDS.forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
   if (!sub) cursor(cw[0] + 6, cw[1] + 10 + menu.idx * 16);
   text("G", gw[0] + 8, gw[1] + 14); text(gold, gw[0] + gw[2] - 10 - tw(gold), gw[1] + 14);
@@ -771,7 +807,7 @@ function drawMenu() {
     cursor(28, 72 + menu.ii * 13);
   }
   if (sub === "magic" || sub === "magic-target") {
-    const caster = party[menu.who], list = fieldSpells(caster);
+    const caster = roster()[menu.who], list = fieldSpells(caster);
     win(20, 60, 220, 112);
     list.forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
     if (sub === "magic") cursor(28, 72 + menu.ii * 13);
@@ -779,7 +815,7 @@ function drawMenu() {
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
 }
 function drawStatus() {
-  const m = party[menu.who];
+  const m = roster()[menu.who];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 56); win(0, 56, 160, H - 56); win(160, 56, W - 160, H - 56);
   const r = D.rects.sprites[m.sprite]; if (r) spr("sprites", m.sprite, 10, 6, 0, null, null, 44 / r[3]);
@@ -788,13 +824,13 @@ function drawStatus() {
   const rows = [["STR", m.st.str], ["AGI", m.st.agi], ["VIT", m.st.vit], ["INT", m.st.int], ["SPR", m.st.spr], ["ATK", atkOf(m)], ["DEF", defOf(m)]];
   rows.forEach(([k, v], i) => { text(k, 12, 68 + i * 20); text(v, 140 - tw(v), 68 + i * 20); });
   SLOTS.forEach((s, i) => { text(s.toUpperCase(), 172, 68 + i * 34, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 22), 172, 80 + i * 34); });
-  text("< " + (menu.who + 1) + "/" + party.length + " >", W - 70, H - 16, "#fff070");
+  text("< " + (menu.who + 1) + "/" + roster().length + " >", W - 70, H - 16, "#fff070");
 }
 function drawEquip() {
-  const m = party[menu.who];
+  const m = roster()[menu.who];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 36); win(0, 36, 170, 92); win(170, 36, W - 170, 92); win(0, 128, W, H - 128);
-  text(m.name + "  " + m.job, 12, 14); text("< " + (menu.who + 1) + "/" + party.length + " >", W - 70, 14, "#fff070");
+  text(m.name + "  " + m.job, 12, 14); text("< " + (menu.who + 1) + "/" + roster().length + " >", W - 70, 14, "#fff070");
   SLOTS.forEach((s, i) => { text(s.toUpperCase(), 22, 46 + i * 20, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 14), 76, 46 + i * 20); });
   if (menu.sub === "equip") cursor(10, 46 + menu.ii * 20);
   const slot = menu.sub === "equip-pick" ? menu.slot : SLOTS[menu.ii];
@@ -992,9 +1028,12 @@ function endRound() {
     const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0);
     gold += gd; cue("VICTORY"); sfx("VICTORY");
     const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."];
-    party.forEach(m => { if (m.hp <= 0) return; m.exp += exp; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } });
+    const grow = (m, e) => { if (m.hp <= 0) return; m.exp += e; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } };
+    party.forEach(m => grow(m, exp)); reserve.forEach(m => grow(m, Math.floor(exp / 2)));   /* the reserve learns by watching: half */
     const bf = B.foes.find(f => f.boss);
     if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS.");
+    const dg = bf && D.dungeons.find(d => d.boss_data.name === bf.bossName);
+    if (dg) recruit(dg.name).forEach(n => { lines.push(n.name.toUpperCase() + " THE " + n.job.toUpperCase() + " JOINS YOU!"); if (reserve.includes(n)) lines.push("USE ORDER IN THE MENU TO BRING " + n.name.toUpperCase() + " INTO BATTLE."); });
     B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
   }
   if (!alive(party).length) { cue("DEFEAT"); sfx("DEFEAT"); B.msg = "THE PARTY HAS FALLEN..."; B.phase = "end"; B.result = "lose"; B.wait = 1.2; return; }
@@ -1073,7 +1112,7 @@ let titleT = 0, goT = 0, titleIdx = 0;
 function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened) }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened) }));
     return true;
   } catch (e) { return false; }
 }
@@ -1091,7 +1130,7 @@ function titleChoose(i) {
   party = buildParty(); state.beaten = new Set(); opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
-    party = sv.party; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k));
+    party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); recruitBeaten();
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -1220,7 +1259,7 @@ window.addEventListener("keydown", e => {                 /* typing straight in 
 /* ---------- ending ---------- */
 let ending = null;
 const ENDING_LINES = () => ["THE HEART IS WHOLE.", "", "THE WARDENS SLEEP, AND THE ISLES", "HOLD STILL IN THE SKY ONCE MORE.", "",
-  ...party.map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", "PRISMHEART", "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
+  ...roster().map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", "PRISMHEART", "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
 function endingTick(dt) {
   ending.t += dt;
   if (ending.t > 3 && (hit("a") || hit("start"))) { ending = null; mode = "title"; titleT = 0; cue("TITLE"); }
@@ -1276,7 +1315,7 @@ function frame(now) {
 window.PRISM_DEMO = {
   state: () => ({ mode, map: map && map.kind, floor: map && map.floor, ending: !!ending, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp, f.weak || null]), boss: B.boss },
-    party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.beaten.has("PyreWarden"),
+    party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), reserve: reserve.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.beaten.has("PyreWarden"),
     beaten: Array.from(state.beaten), shards: D ? shardCount() : 0, dungeon: map && map.dungeon }),
   speed: k => { SPEED = k; },
   seed: n => { let x = n >>> 0; Math.random = () => { x = (x + 0x6D2B79F5) >>> 0; let t = Math.imul(x ^ (x >>> 15), 1 | x); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; },   /* tests: repeatable fights */
@@ -1284,9 +1323,12 @@ window.PRISM_DEMO = {
   audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   beat: name => { state.beaten.add(name); },
   menu: () => menu && { idx: menu.idx, sub: menu.sub, who: menu.who, ii: menu.ii, ci: menu.ci, msg: menu.msg, cmds: MENU_CMDS },
-  equip: () => party.map(m => Object.assign({ name: m.name, atk: atkOf(m), def: defOf(m) }, m.equip)),
+  equip: () => roster().map(m => Object.assign({ name: m.name, atk: atkOf(m), def: defOf(m) }, m.equip)),
   give: (item, n) => { bag[item] = (bag[item] || 0) + (n || 1); },
-  hurt: (i, n) => { party[i].hp = Math.max(1, party[i].hp - n); },
+  hurt: (i, n) => { const m = roster()[i]; m.hp = Math.max(1, m.hp - n); },
+  ko: i => { roster()[i].hp = 0; },
+  foes: hp => { if (B) B.foes.forEach(f => { f.hp = Math.min(f.hp, hp); }); },
+  roster: () => roster().map((m, i) => ({ name: m.name, job: m.job, lv: m.lv, exp: m.exp, next: m.next, hp: m.hp, max: m.max, front: i < ACTIVE })),
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
 };
