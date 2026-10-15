@@ -1,0 +1,22 @@
+{
+  "observed_utc": "2026-10-15T02:15:05.5384334Z",
+  "os_free_kib": 7206784,
+  "os_total_kib": 33249688,
+  "gpu_free_mib": 17772,
+  "gpu_used_mib": 6367,
+  "gpu_utilization_percent": 37,
+  "build_compiler_processes": [],
+  "compute_lease_absent": true,
+  "unreal_owner": "codex-play-guard",
+  "other_blender_processes": {
+    "3668": "existing interactive bridge",
+    "63648": "Claude hd_batch worker0",
+    "65888": "Claude hd_batch worker1",
+    "5904": "Claude hd_batch worker3",
+    "45860": "Claude hd_batch worker2",
+    "38600": "Verdant v6 command includes render; current phase unqueried",
+    "61180": "Claude hd_cluster"
+  },
+  "native_or_process_mutation_performed": false,
+  "render_availability": "Own build lane released; Haiku/coordinator notified to coordinate existing Blender render load, not wait for lease expiry."
+}

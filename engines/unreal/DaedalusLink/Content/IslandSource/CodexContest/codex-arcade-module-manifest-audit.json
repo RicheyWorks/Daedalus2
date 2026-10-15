@@ -1,0 +1,161 @@
+{
+  "stage": "read_only_module_manifest_compatibility_audit_complete",
+  "utc": "2026-10-15T02:14:49.564208+00:00",
+  "actions_performed": [
+    "read existing build artifacts, metadata, logs and installed primary engine source",
+    "write this bounded audit receipt"
+  ],
+  "build_install_reload_performed_by_auditor": false,
+  "successful_build": {
+    "log": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Saved/build-normal-pch.log",
+      "bytes": 228948,
+      "sha256": "abe9da94d965740f8a518e6dc10b8a5fb40d814b99396321a09c683293e3a93b"
+    },
+    "result": "Succeeded",
+    "ubt_elapsed_seconds": 556.72,
+    "target": "UnrealEditor",
+    "configuration": "Development",
+    "platform": "Win64",
+    "architectures": {
+      "Architectures": [
+        "x64"
+      ]
+    },
+    "target_type": 1,
+    "version": {
+      "EffectiveCompatibleChangelist": 55116800,
+      "MajorVersion": 5,
+      "MinorVersion": 8,
+      "PatchVersion": 3,
+      "Changelist": 58210709,
+      "CompatibleChangelist": 55116800,
+      "IsLicenseeVersion": false,
+      "IsPromotedBuild": false,
+      "BranchName": "++UE5+Release-5.8",
+      "BuildId": "55116800",
+      "BuildVersionString": null,
+      "BuildURL": null
+    }
+  },
+  "candidate_dll": {
+    "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.dll",
+    "bytes": 8272384,
+    "sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d"
+  },
+  "candidate_pdb": {
+    "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.pdb",
+    "bytes": 98422784,
+    "sha256": "310849c2223e7582866c49c840dc4ff66afce7cc5309b1240b7b9b25440d8811"
+  },
+  "ubt_generated_target_metadata": {
+    "fingerprint": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Intermediate/Build/Win64/x64/UnrealEditor/Development/TargetMetadata.json",
+      "bytes": 1430943,
+      "sha256": "5380588631cf3c14e668a4a6b1172c2bbd04e99a83d0095e6db505fb2aaa95d4"
+    },
+    "version_file": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.version",
+    "receipt_file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Binaries\\Win64\\UnrealEditor.target",
+    "receipt_build_id": "55116800",
+    "file_to_manifest": {
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules": {
+        "BuildId": "",
+        "ModuleNameToFileName": {
+          "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+        },
+        "LibraryDependencies": {}
+      }
+    }
+  },
+  "build_manifest": {
+    "fingerprint": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Saved/Manifest-normal-pch.xml",
+      "bytes": 14972,
+      "sha256": "e814b4f17815a2d4d524e5ed1d161c022e2dca23fe70b18fc7b38cf3b1464753"
+    },
+    "prepared_products_count": 39,
+    "candidate_runtime_products": [
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.pdb",
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules"
+    ]
+  },
+  "candidate_modules_file": {
+    "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor.modules",
+    "exists": false,
+    "emitted": false,
+    "prepared_in_ubt_metadata": true
+  },
+  "installed_modules": {
+    "fingerprint": {
+      "path": "C:/Unreal/DaedalusRealm/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor.modules",
+      "bytes": 102,
+      "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+    },
+    "parsed": {
+      "BuildId": "55116800",
+      "Modules": {
+        "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+      }
+    },
+    "changed_by_auditor": false
+  },
+  "installed_engine_version": {
+    "fingerprint": {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor.version",
+      "bytes": 240,
+      "sha256": "22f3006e7ccc7892ba9b236069dc305a1b37f7e7c5b08842594f354a137c5bf2"
+    },
+    "parsed": {
+      "MajorVersion": 5,
+      "MinorVersion": 8,
+      "PatchVersion": 3,
+      "Changelist": 58210709,
+      "CompatibleChangelist": 55116800,
+      "IsLicenseeVersion": 0,
+      "IsPromotedBuild": 1,
+      "BranchName": "++UE5+Release-5.8",
+      "BuildId": "55116800"
+    }
+  },
+  "conclusion": {
+    "retaining_unchanged_installed_manifest_is_consistent": true,
+    "new_manifest_build_not_required_for_this_unchanged_build_id_filename_mapping": true,
+    "reason": "Actual UBT generated receipt has installed engine BuildId 55116800 and prepared DaedalusLink -> UnrealEditor-DaedalusLink.dll mapping, both identical to the existing canonical manifest. The manifest is a compatibility namespace and filename map, not a per-DLL content hash. It must not be rewritten or described as newly emitted.",
+    "why_not_emitted": "Module-only output selection omits the separate WriteMetadata leaf action, even though the target graph prepared metadata and listed the expected manifest in the XML product list.",
+    "minimal_future_install_boundary": "After a separately coordinated authorized normal shutdown, preserve/hash/backup canonical DLL and matching PDB, install the exact built candidate DLL (PDB is optional for runtime and useful for debugging), retain the existing unchanged canonical UnrealEditor.modules, reopen normally and verify reflected methods. No shutdown, copy, install or reopen is performed by this receipt.",
+    "runtime_acceptance": "Not established. Matching target/engine/build-id metadata and successful link do not demonstrate editor loading, Python wrapper exposure, controller behavior or gameplay acceptance."
+  },
+  "primary_source_citations": [
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Programs/UnrealBuildTool/Modes/BuildMode.cs",
+      "lines": "1563-1585",
+      "supports": "Module-only selects ModuleNameToOutputItems instead of all target outputs."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Programs/UnrealBuildTool/Configuration/UEBuildTarget.cs",
+      "lines": "2306-2329",
+      "supports": "Prepares a module manifest with empty placeholder BuildId and the dynamic binary filename mapping."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Programs/UnrealBuildTool/Configuration/UEBuildTarget.cs",
+      "lines": "3371-3373,3647-3664",
+      "supports": "Serializes TargetMetadata and creates WriteMetadata as separate output leaf action."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Programs/UnrealBuildTool/Modes/WriteMetadataMode.cs",
+      "lines": "101-110,132-144",
+      "supports": "Uses actual Receipt.Version.BuildId then assigns it when emitting the manifest."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Programs/UnrealBuildTool/System/ModuleManifest.cs",
+      "lines": "23-30,154-164",
+      "supports": "Manifest stores BuildId plus module name to binary filename mapping."
+    },
+    {
+      "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Core/Private/Modules/ModuleManager.cpp",
+      "lines": "1834-1845,1940-1952",
+      "supports": "Loader derives engine BuildId, admits matching manifest BuildId and locates DLL by mapped filename."
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "utc": "2026-10-15T01:42:31.496524+00:00",
+  "stage": "READY_FOR_OPERATOR_SOURCE_ADOPTION_ONLY",
+  "source_receipt": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\stage-receipt.json",
+    "bytes": 151305,
+    "sha256": "d1fd953476a183b87b35050d8ea5a10cb926d2bc563d8721db3d874dd860c494"
+  },
+  "source_pin_reconciliation": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\source-pin-reconciliation.json",
+    "bytes": 1386,
+    "sha256": "832acd41b2b86197ac94e40e8b175cec751522931b956e6006455d5b3d79f5d9"
+  },
+  "items": [
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 25220,
+        "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+        "git_blob": "d255c968b2787961c8125907c7154f33f0bcee6c"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 34177,
+        "sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+        "git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 25220,
+        "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+        "git_blob": "d255c968b2787961c8125907c7154f33f0bcee6c"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 2385,
+        "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+        "git_blob": "c42a8a5a151654433dea362172840ac7463e11ef"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 4628,
+        "sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+        "git_blob": "310398d66adc004afb22f0df369c9b4bf8355218"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 2385,
+        "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+        "git_blob": "c42a8a5a151654433dea362172840ac7463e11ef"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 27092,
+        "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+        "git_blob": "9a8958903060b419d6588d8e8ce1c9f5908e1cb7"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 37416,
+        "sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+        "git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 27092,
+        "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+        "git_blob": "9a8958903060b419d6588d8e8ce1c9f5908e1cb7"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 25223,
+        "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+        "git_blob": "e2523cf8011d1a857b82c31bd9235850b9d2e862"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 37344,
+        "sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+        "git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 25223,
+        "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+        "git_blob": "e2523cf8011d1a857b82c31bd9235850b9d2e862"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 46562,
+        "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+        "git_blob": "46998a6efb066231648af873ff15ae4699363d22"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 54849,
+        "sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+        "git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 46562,
+        "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+        "git_blob": "46998a6efb066231648af873ff15ae4699363d22"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 4865,
+        "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+        "git_blob": "f7b4af02f1de7ec2fbd2956ab3d1e83c183c778e"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 5326,
+        "sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+        "git_blob": "387b5ba64432818d0bc5034ca729155a78122137"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 4865,
+        "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+        "git_blob": "f7b4af02f1de7ec2fbd2956ab3d1e83c183c778e"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 5871,
+        "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+        "git_blob": "1bd0a1cc9c87f96c4f9f6090d0bb07953b2faa76"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 7013,
+        "sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+        "git_blob": "4c6cdc7ee3b94c91dac5abdd3ed38dbab06e2815"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 5871,
+        "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+        "git_blob": "1bd0a1cc9c87f96c4f9f6090d0bb07953b2faa76"
+      },
+      "action": "three exact PR139 additive registry lines over PR157 v6"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10397,
+        "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+        "git_blob": "c4674ffebdd8aa39a4a306c6d88a4809eb306f50"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10801,
+        "sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+        "git_blob": "d8488c403cc9dea205a9365cf7db94e1e8fab1a9"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10397,
+        "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+        "git_blob": "c4674ffebdd8aa39a4a306c6d88a4809eb306f50"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 19865,
+        "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+        "git_blob": "71d04f14841d6303caf61576c817d7c3d5d3c274"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 20232,
+        "sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180",
+        "git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 19865,
+        "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+        "git_blob": "71d04f14841d6303caf61576c817d7c3d5d3c274"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 26287,
+        "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+        "git_blob": "e60bde13d70c3637624c228af36367c97ae5aa41"
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 27345,
+        "sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf",
+        "git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e"
+      },
+      "original_backup": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 26287,
+        "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+        "git_blob": "e60bde13d70c3637624c228af36367c97ae5aa41"
+      },
+      "action": "exact source bytes"
+    },
+    {
+      "repo_relative_path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMinesweeperCore.h",
+      "target_path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+      "expected_current_installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+        "exists": false
+      },
+      "copy_file_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+      "desired_fingerprint": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+        "exists": true,
+        "bytes": 4773,
+        "sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+        "git_blob": "eecac0b5dda7e509cf57e253dd624ed0d1f852bc"
+      },
+      "original_backup": null,
+      "action": "exact source bytes"
+    }
+  ],
+  "registry_merge_exact_additional_lines": 3,
+  "whole_source_baseline_unchanged_at_stage_completion": true,
+  "installed_vs_current_source_inventory_differences_at_stage_completion": 0,
+  "no_installer_executed": true,
+  "requirements": "Operator must freshly compare all expected_current_installed hashes/existence before copying exactly these eleven files. Do not replace entire plugin. UHT/compile/link/load and native acceptance remain pending."
+}

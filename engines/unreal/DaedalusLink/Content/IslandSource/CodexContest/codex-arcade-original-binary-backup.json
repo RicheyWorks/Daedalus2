@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-15T02:05:46.368094+00:00",
+  "stage": "original_binary_backups_retained_no_install_no_reload",
+  "files": [
+    {
+      "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor-DaedalusLink.dll",
+      "expected": {
+        "bytes": 8138240,
+        "sha256": "9704c471c3b949df6dd179b0fb20f07f335da504a911c39e1202473c769fb392"
+      },
+      "backup_matches": true
+    },
+    {
+      "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.pdb",
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor-DaedalusLink.pdb",
+      "expected": {
+        "bytes": 97898496,
+        "sha256": "508f5a36f78b80992b82e03ccaf8ece3222601da4cb72b4d6ef306b189ab5f5b"
+      },
+      "backup_matches": true
+    },
+    {
+      "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules",
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor.modules",
+      "expected": {
+        "bytes": 102,
+        "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+      },
+      "backup_matches": true
+    }
+  ],
+  "canonical_still_matches": true
+}

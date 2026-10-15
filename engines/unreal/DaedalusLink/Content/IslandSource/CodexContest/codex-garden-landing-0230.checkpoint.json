@@ -1,0 +1,90 @@
+{
+  "schema": "daedalus.codex-saved-visible-construction-checkpoint.v1",
+  "utc": "2026-10-15T02:32:53.613094+00:00",
+  "stage": "eleven_new_garden_actors_saved_verified_and_visible",
+  "operator": "codex-play-guard",
+  "map": "/Game/Daedalus/DaedalusWorld",
+  "map_fingerprint": {
+    "bytes": 209329457,
+    "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933"
+  },
+  "source_recipe": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-landing-r1.recipe.json",
+    "bytes": 9250,
+    "sha256": "04fee18408396949a4904e0aa9ad76e7fb61c75203b649ea63e1c3781224592d",
+    "config_sha256": "530db46ac3dc10eafdead1c521dc5dc6dc4422f923b5740cbde161ed13c9cde0"
+  },
+  "native_receipt": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-landing-r1.world.json",
+    "bytes": 401953,
+    "sha256": "d5e639a5d4d6c14c5f82911c507d6bd75396b7f957b4e28edc390628ea5c0396"
+  },
+  "new_actors": 11,
+  "previous_staging_actors": 89,
+  "current_staging_actors": 100,
+  "unchanged_preexisting_codex_actor_records": 90,
+  "preexisting_record_scope": "89 previous staging actors plus existing CodexAcceptance_Pong",
+  "existing_actor_fields_unchanged": true,
+  "save_return": true,
+  "map_save_seconds": 24.145565,
+  "saved_static_mesh_files": 102,
+  "saved_miri_assets": 17,
+  "new_imports_or_asset_saves": 0,
+  "original_map_backup": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\garden-landing-r1-original-map.umap",
+    "bytes": 209306026,
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa"
+  },
+  "dirty_map_packages": [],
+  "dirty_content_packages": [],
+  "images": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-courtyard-visible-0219.png",
+      "stage": "before_construction",
+      "bytes": 678821,
+      "sha256": "6cab28f22b84700bd53bb84d1aa7a363ff6e7e433c9930a3866be0e008e7f9f0",
+      "pixels": [
+        960,
+        540
+      ],
+      "native_viewport_capture": true,
+      "personally_inspected": true,
+      "file_utc": "2026-10-15T02:19:45.824189+00:00"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-landing-building-0223.png",
+      "stage": "eight_parts_placed",
+      "bytes": 728261,
+      "sha256": "0cdf4f119eba7b49e96deaf756798c155d54614ba2308dde973488973fd35530",
+      "pixels": [
+        960,
+        540
+      ],
+      "native_viewport_capture": true,
+      "personally_inspected": true,
+      "file_utc": "2026-10-15T02:23:07.027517+00:00"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-landing-saved-0230.png",
+      "stage": "eleven_parts_saved",
+      "bytes": 737729,
+      "sha256": "795b75dac6a2c7dffb2146e512b40bd787737d49ba2518839f2955ebd81ebfe4",
+      "pixels": [
+        960,
+        540
+      ],
+      "native_viewport_capture": true,
+      "personally_inspected": true,
+      "file_utc": "2026-10-15T02:29:13.913429+00:00"
+    }
+  ],
+  "visible_subject": "New GardenLandingR1 charging arch in foreground of saved GardenGate courtyard",
+  "world_installation_vs_code_activation": "Scene construction saved; PR157 shadow module compiled but not installed or loaded.",
+  "arcade_checkpoint": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-compiled-0215.checkpoint.json",
+    "bytes": 20965,
+    "sha256": "e249e08976ae856c0483b4f7e189879e7e0a13a8832d37681b1478448ba98368"
+  },
+  "limits": "Existing module appearance/geometry and saved assembly only. Collision, movement, app/charging functionality, controller/Hero Use, gameplay and final BAR acceptance remain unverified. Historical intake helpers retain the prior map hash; next intake must reconcile this additive actor/map checkpoint rather than relax or rewrite old guards.",
+  "issues": []
+}

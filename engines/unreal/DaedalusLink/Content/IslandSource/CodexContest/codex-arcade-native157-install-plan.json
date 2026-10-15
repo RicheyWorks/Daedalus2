@@ -1,0 +1,239 @@
+{
+  "schema": "daedalus.codex-native157-conditional-install-plan.v1",
+  "utc": "2026-10-15T02:00:43.218261+00:00",
+  "scope": "Read-only source/disk audit; no protected .codex reads, native/UI/process/build/test/canonical writes. Own audit JSON only.",
+  "prepared": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\prepared.json",
+    "exists": true,
+    "bytes": 29791,
+    "sha256": "9e937d4435e1245d927fc9aeafef531e1555f0334401b8c39c2c4b3bb8f5363b",
+    "utc": "2026-10-15T01:48:52.038447+00:00"
+  },
+  "install_items": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\install-items.json",
+    "exists": true,
+    "bytes": 19212,
+    "sha256": "df2426e5ed4fa2ead7aa77fec1ab3d058e1de05a80ba2590d71476c22b0fcd56",
+    "utc": "2026-10-15T01:42:31.498525+00:00"
+  },
+  "source_files": [
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+      "desired_sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+      "desired_bytes": 34177,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+      "desired_sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+      "desired_bytes": 4628,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+      "desired_sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+      "desired_bytes": 37416,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+      "desired_sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+      "desired_bytes": 37344,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+      "desired_sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+      "desired_bytes": 54849,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+      "desired_sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+      "desired_bytes": 5326,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+      "desired_sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+      "desired_bytes": 7013,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+      "action": "three exact PR139 additive registry lines over PR157 v6"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+      "desired_sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+      "desired_bytes": 10801,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+      "desired_sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180",
+      "desired_bytes": 20232,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+      "desired_sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf",
+      "desired_bytes": 27345,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+      "original_existed": true,
+      "backup": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+      "action": "exact source bytes"
+    },
+    {
+      "relative": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMinesweeperCore.h",
+      "desired_sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+      "desired_bytes": 4773,
+      "staged_matches": true,
+      "shadow_matches": true,
+      "current_worktree_matches": true,
+      "canonical_original_matches": true,
+      "original_sha256": null,
+      "original_existed": false,
+      "backup": null,
+      "action": "exact source bytes"
+    }
+  ],
+  "canonical139baseline_drift": [],
+  "canonical_binaries": [
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "exists": true,
+      "bytes": 8138240,
+      "sha256": "9704c471c3b949df6dd179b0fb20f07f335da504a911c39e1202473c769fb392",
+      "utc": "2026-10-14T09:50:35.055792+00:00"
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.pdb",
+      "exists": true,
+      "bytes": 97898496,
+      "sha256": "508f5a36f78b80992b82e03ccaf8ece3222601da4cb72b4d6ef306b189ab5f5b",
+      "utc": "2026-10-14T09:50:35.058790+00:00"
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules",
+      "exists": true,
+      "bytes": 102,
+      "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09",
+      "utc": "2026-10-14T09:50:35.468149+00:00"
+    }
+  ],
+  "engine_modules": {
+    "fingerprint": {
+      "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.modules",
+      "exists": true,
+      "bytes": 32290,
+      "sha256": "bbe466e4330f3fddea1120a9070a7402f5a9655404223f55c9e0d1d322568747",
+      "utc": "2026-10-12T00:11:18.177271+00:00"
+    },
+    "BuildId": "55116800"
+  },
+  "canonical_modules": {
+    "BuildId": "55116800",
+    "Modules": {
+      "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+    }
+  },
+  "candidate_modules": null,
+  "candidate_products": [],
+  "loaded_revision": "UNKNOWN; no process/native query",
+  "build_state": "Conditional. Initial NoSharedPCH attempt log observed Shiny.cpp C2079 undefinedFWeakObjectPtr; parent waits terminal then retries normal installed PCH. No successful link/candidate pinned by this audit.",
+  "plan": [
+    "Require final build exit 0, UHT/compile/link success, final command and source/prepared pins, stable DLL/PDB/modules outputs, and Saved/Manifest.xml. Keep any failed-attempt receipt separate.",
+    "Recheck all 139 live source hashes, eleven target hashes/existence, descriptor, canonical DLL/PDB/modules and prepared protection witnesses for 102 meshes, 17 Miri assets, 89 actors and map. Abort and reconcile any drift. Confirm saved work, idle native queue, PIE false and clean packages.",
+    "Candidate .modules must use actual engine BuildId 55116800 and map DaedalusLink to its final DLL. Never edit BuildId to force loading. Verify UnrealEditor Win64 Development / UE5.8 and required dependency products.",
+    "Retain ten existing source originals and an absence marker for the new Minesweeper core. Before binary installation, retain exact DLL/PDB/modules backups with hashes. Do not recursively replace or delete the plugin.",
+    "Copy only the eleven approved source files, using source_files desired hashes. Preserve the three PR139 registry additions and exact committed LF Minesweeper bytes. The own source worktree already matches all eleven. Journal and read back each target.",
+    "Do not overwrite a currently mapped DLL/PDB or force unloading/restart. A supported coordinated reload with UObject reinstancing, or an ordinary editor exit/install/startup, is required. If a supported live transition is unproved, keep products staged until normal coordinated exit and confirmed unmapping, then copy the final binary set before normal startup. This audit executed no loading transition.",
+    "Runtime payload is the final DLL plus its emitted matching .modules receipt. Include the same-link PDB for symbols; it is not a runtime loader dependency and must never be a stale pair. Import libraries, .exp files, shadow project, Intermediate/UHT-generated files and the entire plugin directory are not runtime installation payload.",
+    "After supported loading, record actual loaded image path/revision and reflection for the two new source-dispatch functions, catalog display names plus Minesweeper, and world/map preservation. Source/disk/reflection evidence does not prove Hero Use, controller, Slate/HUD, gameplay or save recovery acceptance.",
+    "Rollback only at a similarly safe unmapped/load boundary, and only when targets still match this installation hashes. Restore the original ten source files and binary set; remove only the added Minesweeper file if it still has the installed payload hash. Preserve later owner edits. Journal partial/uncertain outcomes and inspect before retry."
+  ],
+  "module_loading_evidence": {
+    "engine_source": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Core\\Private\\Modules\\ModuleManager.cpp",
+    "already_loaded_return": "ModuleManager.cpp:1012-1023 returns the existing module; calling LoadModule alone cannot adopt new bytes.",
+    "actual_unload": "ModuleManager.cpp:1370-1379 frees the library only when not shutting down and code unload is allowed; shutdown may leave the DLL mapped until process exit.",
+    "buildid_filter": "ModuleManager.cpp:1940-1952 accepts paths from a matching BuildId receipt.",
+    "module_interface": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Core/Public/Modules/ModuleInterface.h:88-90 defaults SupportsDynamicReloading to true.",
+    "plugin_hooks": "Startup logs only; Shutdown is empty. No custom UObject/widget/ticker reinstancing handler is present. The default support declaration does not prove a safe reload of the current world."
+  },
+  "untouched": [
+    "All unrelated canonical source, Build.cs and descriptor",
+    "Plugin Content, inventory/cast/realm catalogs, materials, 102 saved meshes, 17 Miri assets, 89 actors and world map",
+    "Project and engine configuration, .uproject, engine binaries, BuildId, resource/security/network settings",
+    "Canonical Intermediate/generated files, other owners app source, services and credentials"
+  ],
+  "stage": "PLANNED_ONLY_NOT_INSTALLED_NOT_LOADED",
+  "blocked_action": {
+    "target": "Canonical source/binary installation and currenteditorreload",
+    "state": "Pending; not attempted, not denied, no uncertain mutation.",
+    "reason": "Final successful shadow products/receipt compatibility and a supported normal loading transition are still required; no force restart."
+  }
+}

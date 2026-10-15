@@ -1,0 +1,55 @@
+{
+  "stage": "read_only_engine_source_audit_complete",
+  "engine": "C:/Program Files/Epic Games/UE_5.8/Engine",
+  "installed_engine_version": "5.8.3-58210709+++UE5+Release-5.8",
+  "actions_performed": ["local source/config/log reads"],
+  "actions_not_performed": ["native calls", "build", "process launch", "settings changes", "DLL replacement", "editor reload"],
+  "reflected_additions": [
+    "ADaedalusDesktopArcade::SubmitArcadeSourceKey(int32)",
+    "ADaedalusDesktopArcade::SubmitArcadeSourceControllerButton(int32)"
+  ],
+  "live_coding": {
+    "historical_initialization_evidence": "C:/Unreal/DaedalusRealm/Saved/Logs/DaedalusRealm.log:1155-1290",
+    "current_session_state": "Parent is performing native read-only verification; not inferred from historical log",
+    "settings_class": "/Script/LiveCoding.LiveCodingSettings",
+    "reinstancing_native_property": "bEnableReinstancing",
+    "base_config_reinstancing": true,
+    "async_console_command": "LiveCoding.Compile",
+    "async_command_has_arguments": false,
+    "serial_limit_cannot_be_passed_as_console_argument": true,
+    "source": "Source/Developer/Windows/LiveCoding/Private/LiveCodingModule.cpp:430-440,698-747,1281-1303",
+    "reflected_reload_source": "Source/Developer/Windows/LiveCoding/Private/LiveCodingModule.cpp:843-850,888-908,1535-1548",
+    "toolset": "LiveCodingToolset.CompileLiveCoding is the only exposed tool in its header and blocks via WaitForCompletion; no status/read-only query or parallelism argument",
+    "python_rebinding": "Module dirtied/load wrapper regeneration exists in PythonScriptPlugin.cpp:1324-1325,1996-2012. Automatic Python exposure following this particular patch is not proven; fresh reflected-method readback is required."
+  },
+  "ordinary_build": {
+    "active_live_coding_guard": "Source/Programs/UnrealBuildTool/System/HotReload.cs:270-278",
+    "mutex_scope": "Executable path, not project path; HotReload.cs:289-314",
+    "shadow_project_alone_avoids_guard": false
+  },
+  "supported_shadow_plugin_build": {
+    "source": "Source/Programs/AutomationTool/Scripts/BuildPluginCommand.Automation.cs:171-188,399-414",
+    "host_project": {"FileVersion": 3, "EngineAssociation": "5.8", "Plugins": [{"Name": "DaedalusLink", "Enabled": true}]},
+    "host_target_source": "Engine/Source/UnrealEditor.Target.cs:6-14; no project Target.cs required",
+    "copy": ["all current installed Source", "DaedalusLink.uplugin", "declared Content/Inventory/*.dic", "declared Content/Casts/*.dcs", "declared Content/Realm/*.drr and *.dsp"],
+    "do_not_copy": ["live Binaries", "live Intermediate", "world/assets", "credentials"],
+    "foreign_plugin_guard_exception": "TargetDescriptor.cs:40-41 + HotReload.cs:273",
+    "argv_template": [
+      "UnrealEditor", "Win64", "Development",
+      "-Project=<OWN_SHADOW>/HostProject.uproject",
+      "-Plugin=<OWN_SHADOW>/Plugins/DaedalusLink/DaedalusLink.uplugin",
+      "-Module=DaedalusLink", "-NoUBTMakefiles", "-NoHotReload", "-MaxParallelActions=1",
+      "-NoSharedPCH", "-NoEngineChanges",
+      "-Manifest=<OWN_SHADOW>/Saved/Manifest-UnrealEditor-Win64-Development.xml",
+      "-Log=<OWN_SHADOW>/Saved/arcade-build.log"
+    ],
+    "entrypoint": "Engine/Build/BatchFiles/Build.bat",
+    "flags_source": "BuildConfiguration.cs:111-120; TargetDescriptor.cs:58,95; TargetRules.cs:2398; BuildMode.cs:87,727-734; GlobalOptions.cs:33",
+    "engine_write_guard_limit": "NoEngineChanges rejects existing engine build-product modifications; it permits new engine files and does not promise no engine cache writes.",
+    "competing_build_policy": "Default UBT global mutex; do not pass NoMutex or WaitMutex. UnrealBuildTool.cs:441-447",
+    "warning": "UAT BuildPlugin clears an existing Package directory; do not point it at any existing workspace or live project.",
+    "build_result": "not run by auditor",
+    "load_result": "not attempted; shadow artifact creation does not load it into running editor"
+  },
+  "activation_boundary": "Do not copy over the loaded canonical DaedalusLink DLL or unload its live actor classes. A supported Live Coding patch may apply reflected additions when reinstancing is enabled, but the exposed command cannot enforce serial compilation. A serial shadow-built canonical DLL requires a separately coordinated controlled normal reload before installed-method acceptance; no restart or unload has been performed or declared automatically authorized by this audit."
+}

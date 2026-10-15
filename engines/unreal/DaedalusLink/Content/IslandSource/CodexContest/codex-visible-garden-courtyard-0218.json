@@ -1,0 +1,86 @@
+{
+  "stage": "different_garden_subject_focused_and_wire_capture_verified",
+  "utc": "2026-10-15T02:17:51.956689+00:00",
+  "subject": "CodexIsland_cliff_garden_84022_GardenGateR1",
+  "view": "courtyard",
+  "before": {
+    "pie": false,
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "dirty_map": [],
+    "dirty_content": []
+  },
+  "previous_camera": {
+    "location": {
+      "x": -370400,
+      "y": 350850,
+      "z": 18715.324
+    },
+    "rotation": {
+      "pitch": -26.28314469513715,
+      "yaw": -147.0947570770122,
+      "roll": 3.5472845408736022e-15
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "requested_camera": {
+    "location": {
+      "x": -343550,
+      "y": 325900,
+      "z": 18485.324
+    },
+    "rotation": {
+      "pitch": 0,
+      "yaw": -90.00000000000003,
+      "roll": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "map_sha256_before": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+  "world_mutation_or_save_dispatched": false,
+  "build_running": false,
+  "actual_camera": {
+    "location": {
+      "x": -343550,
+      "y": 325900,
+      "z": 18485.324
+    },
+    "rotation": {
+      "pitch": 0,
+      "yaw": -90.00000000000003,
+      "roll": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "selected_existing_window": "OK",
+  "verified_capture": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\garden-courtyard-visible-0219.png",
+    "stage": "before_construction",
+    "bytes": 678821,
+    "sha256": "6cab28f22b84700bd53bb84d1aa7a363ff6e7e433c9930a3866be0e008e7f9f0",
+    "pixels": [
+      960,
+      540
+    ],
+    "native_viewport_capture": true,
+    "personally_inspected": true,
+    "file_utc": "2026-10-15T02:19:45.824189+00:00"
+  },
+  "capture_reconciliation": {
+    "first_mcp_capture": "Rejected before capture: required captureTransform missing",
+    "second_mcp_capture": "Large read-only capture response reset: received3993475 expected4006347 bytes; no image recovered",
+    "completed_route": "Existing wire viewport_screenshot at960x540; no camera action replayed"
+  },
+  "later_visible_production_receipt": "codex-garden-landing-r1.world.json"
+}

@@ -1,0 +1,305 @@
+{
+  "schema": "daedalus.codex-existing-module-assembly-recipe.v1",
+  "name": "GardenLandingR1",
+  "purpose": "A visible modular landing and charging arch on the existing GardenGate route",
+  "units": "centimetres",
+  "connection_grid_cm": 25,
+  "route_surface_source_metres": 1,
+  "route_surface_native_z": 18315.324,
+  "arch_span_cm": 400,
+  "arch_clear_height_cm": 350,
+  "source_receipts": [
+    "codex-workshop.dressing.json",
+    "codex-native-local-bounds.json",
+    "GardenGateR1/source-layout-refined.json"
+  ],
+  "placements": [
+    {
+      "label": "CodexBuild_GardenLandingR1_deck_1",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343700,
+          "y": 325000,
+          "z": 18290.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 90,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_deck_2",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343600,
+          "y": 325000,
+          "z": 18290.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 90,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_deck_3",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343500,
+          "y": 325000,
+          "z": 18290.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 90,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_deck_4",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343400,
+          "y": 325000,
+          "z": 18290.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 90,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_west_housing",
+      "role": "housing",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+      "transform": {
+        "location": {
+          "x": -343675,
+          "y": 325200,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_west_crystal",
+      "role": "battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+      "transform": {
+        "location": {
+          "x": -343675,
+          "y": 325200,
+          "z": 18415.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_east_housing",
+      "role": "housing",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/990d332407308049/CodexModule_CopperPatina_GearboxHousing_85005.CodexModule_CopperPatina_GearboxHousing_85005",
+      "transform": {
+        "location": {
+          "x": -343425,
+          "y": 325200,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_east_crystal",
+      "role": "battery",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/9f571185388bc082/CodexModule_CopperPatina_CrystalBattery_85004.CodexModule_CopperPatina_CrystalBattery_85004",
+      "transform": {
+        "location": {
+          "x": -343425,
+          "y": 325200,
+          "z": 18415.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_west_column",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343750,
+          "y": 325200,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 0.875,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_east_column",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343350,
+          "y": 325200,
+          "z": 18315.324
+        },
+        "rotation": {
+          "pitch": 90,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 0.875,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "label": "CodexBuild_GardenLandingR1_arch_beam",
+      "role": "crossbeam",
+      "mesh_path": "/Game/Daedalus/Art/Islands/CodexContest/Prepared/module/d09d0b1aaacea5d4/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000",
+      "transform": {
+        "location": {
+          "x": -343750,
+          "y": 325200,
+          "z": 18690.324
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ],
+  "material_templates": {
+    "crossbeam": {
+      "source_actor_label": "CodexDress_CopperPatina_crossbeam",
+      "materials": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_trunk_e673750bb511.MI_Codex_trunk_e673750bb511"
+      ]
+    },
+    "housing": {
+      "source_actor_label": "CodexDress_CopperPatina_housing",
+      "materials": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2",
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_window_4bca69647a19.MI_Codex_window_4bca69647a19"
+      ]
+    },
+    "battery": {
+      "source_actor_label": "CodexDress_CopperPatina_battery",
+      "materials": [
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_leaf2_ae9a232b77da.MI_Codex_leaf2_ae9a232b77da",
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_rock2_06a9baa4a833.MI_Codex_rock2_06a9baa4a833",
+        "/Game/Daedalus/Art/Islands/CodexContest/Palette/MI_Codex_roof_054550f3beb2.MI_Codex_roof_054550f3beb2"
+      ]
+    }
+  },
+  "construction_camera": {
+    "location": {
+      "x": -343550,
+      "y": 326150,
+      "z": 18615.324
+    },
+    "rotation": {
+      "pitch": -8.999999999999998,
+      "yaw": -89.99999999999996,
+      "roll": -8.050501739108952e-16
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "replay_policy": "These exact labels already exist and are saved. Use the retained outcome; do not dispatch this completed assembly again.",
+  "collision_gameplay_or_app_acceptance": false,
+  "config_sha256": "530db46ac3dc10eafdead1c521dc5dc6dc4422f923b5740cbde161ed13c9cde0"
+}

@@ -1,0 +1,184 @@
+{
+  "utc": "2026-10-15T02:04:52.727016+00:00",
+  "scope": "Read-only committed-source review plus this result file only; no tests/build/native/UI/Git edits/network; running serial build not touched",
+  "reviewed_commit": "2d5a4a47fe9f7614c4dd311cca52234b14d4d999",
+  "reviewed_pr157_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+  "reviewed_pr139_head": "0582c27a7fe3ad1f92da836f087efface618a8b6",
+  "stage_receipt_sha256": "d1fd953476a183b87b35050d8ea5a10cb926d2bc563d8721db3d874dd860c494",
+  "source_pin_reconciliation_sha256": "832acd41b2b86197ac94e40e8b175cec751522931b956e6006455d5b3d79f5d9",
+  "verdict": "SOURCE_ADOPTION_MATCHES_REVIEWED_STAGE",
+  "issues": [],
+  "files": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+      "stage_bytes": 34177,
+      "stage_sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+      "stage_git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
+      "committed_bytes": 34177,
+      "committed_sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+      "committed_git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+      "stage_bytes": 4628,
+      "stage_sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+      "stage_git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
+      "committed_bytes": 4628,
+      "committed_sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+      "committed_git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+      "stage_bytes": 37416,
+      "stage_sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+      "stage_git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073",
+      "committed_bytes": 37416,
+      "committed_sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+      "committed_git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+      "stage_bytes": 37344,
+      "stage_sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+      "stage_git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97",
+      "committed_bytes": 37344,
+      "committed_sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+      "committed_git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+      "stage_bytes": 54849,
+      "stage_sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+      "stage_git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7",
+      "committed_bytes": 54849,
+      "committed_sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+      "committed_git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+      "stage_bytes": 5326,
+      "stage_sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+      "stage_git_blob": "387b5ba64432818d0bc5034ca729155a78122137",
+      "committed_bytes": 5326,
+      "committed_sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+      "committed_git_blob": "387b5ba64432818d0bc5034ca729155a78122137",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+      "stage_bytes": 7013,
+      "stage_sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+      "stage_git_blob": "4c6cdc7ee3b94c91dac5abdd3ed38dbab06e2815",
+      "committed_bytes": 7013,
+      "committed_sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+      "committed_git_blob": "4c6cdc7ee3b94c91dac5abdd3ed38dbab06e2815",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+      "stage_bytes": 10801,
+      "stage_sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+      "stage_git_blob": "d8488c403cc9dea205a9365cf7db94e1e8fab1a9",
+      "committed_bytes": 10801,
+      "committed_sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+      "committed_git_blob": "d8488c403cc9dea205a9365cf7db94e1e8fab1a9",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+      "stage_bytes": 20232,
+      "stage_sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180",
+      "stage_git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
+      "committed_bytes": 20232,
+      "committed_sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180",
+      "committed_git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+      "stage_bytes": 27345,
+      "stage_sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf",
+      "stage_git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+      "committed_bytes": 27345,
+      "committed_sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf",
+      "committed_git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+      "match": "byte-exact"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMinesweeperCore.h",
+      "stage_bytes": 4773,
+      "stage_sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+      "stage_git_blob": "eecac0b5dda7e509cf57e253dd624ed0d1f852bc",
+      "committed_bytes": 4773,
+      "committed_sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+      "committed_git_blob": "eecac0b5dda7e509cf57e253dd624ed0d1f852bc",
+      "match": "byte-exact"
+    }
+  ],
+  "changed_source_files": [
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMinesweeperCore.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+    "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h"
+  ],
+  "source_path_set_exactly_expected_eleven": true,
+  "unrelated_cpp_changes": [],
+  "other_changed_evidence_files": [
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/QA/miri-preview-center-0156.png",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/QA/miri-preview-motion-0157.png",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/QA/miri-visible-slate-tree-0154.txt",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/codex-arcade-live-build-settings-0143.json",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/codex-arcade-preflight-0138.json",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/codex-arcade-source-adoption-0154.json",
+    "engines/unreal/DaedalusLink/Content/IslandSource/CodexContest/codex-visible-miri-walk-0148.json"
+  ],
+  "registry_merge": {
+    "additional_lines": 3,
+    "exactly_three_pr139_additions_only": true,
+    "pr157_nonaddition_bytes_preserved": true,
+    "catalog_count": 12,
+    "diff": "--- PR157-v6\n+++ published-PR157-plus-PR139\n@@ -1,6 +1,7 @@\n // SPDX-License-Identifier: MIT\n #pragma once\n #include \"DaedalusDesktopPongCore.h\"\n+#include \"DaedalusDesktopMinesweeperCore.h\"\n #include \"DaedalusDesktopMazeCore.h\"\n #include \"DaedalusDesktopShootersCore.h\"\n #include \"DaedalusDesktopSportsCore.h\"\n@@ -12,6 +13,7 @@\n struct Entry { std::string Id, Title, Controls; };\n inline const std::vector<Entry>& Catalog() {\n     static const std::vector<Entry> Entries{\n+        {\"minesweeper\",\"Minesweeper\",\"Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord\"},\n         {\"pong\",\"Twinwake Volley\",\"A fast duel across the twinwake court. Up/Down or left stick: paddle\"},\n         {\"dungeon\",\"Dungeon Prototype\",\"Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick\"},\n         {\"asteroids\",\"Driftstone Patrol\",\"Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; J/X: shoot\"},\n@@ -27,6 +29,7 @@\n     return Entries;\n }\n inline std::unique_ptr<Game> CreateGame(const std::string& Id) {\n+    if(Id==\"minesweeper\") return std::make_unique<MinesweeperGame>();\n     if(Id==\"pong\") return std::make_unique<PongGame>();\n     if(Id==\"dungeon\") return std::make_unique<DungeonGame>();\n     if(Id==\"asteroids\") return std::make_unique<AsteroidsGame>();\n"
+  },
+  "source_behavior_review": [
+    {
+      "entrypoint": "SubmitArcadeSourceKey(int32)",
+      "declaration": "BlueprintCallable UFUNCTION",
+      "actor_guards": "Closing or scheduled close, or values outside0..9, return before Session dispatch",
+      "driver": "Absent/paused active game ignores key. Otherwise active source-key virtual call; true transition clears semantic Controls, then Refresh renders current frame. No fixed-step advance occurs here.",
+      "slate": "Only non-repeat keydowns; keyboard mapping0..9 is Up,Down,Left,Right,B,A,Enter,Space,R,other. Dispatched before held-input mapping."
+    },
+    {
+      "entrypoint": "SubmitArcadeSourceControllerButton(int32)",
+      "declaration": "BlueprintCallable UFUNCTION returning bool",
+      "actor_guards": "Closing/scheduled-close, or values outside0..1, returns false",
+      "driver": "Absent/paused or unconsumed action returns false. Consumed action clears semantic Controls, refreshes frame, and returns true.",
+      "slate": "Gamepad A maps0; Start maps1. Consumed Start returns before generic pause; A can enter held-jump mapping after immediate source start. Gamepad events stay outside keyboard code dispatch."
+    },
+    {
+      "game": "Contra",
+      "behavior": "Ordered literal keyboard keys drive source code; Enter/Space start title; Enter/R retry terminal. Controller A starts title and A/Start retry terminal while preserving unfinished keyboard-code prefix. This is static code inspection, not live input acceptance."
+    },
+    {
+      "game": "Minesweeper",
+      "behavior": "Exact committed PR139 core retained with include/catalog/CreateGame additions. New Game entrypoints are non-pure no-op/false defaults, so Minesweeper source does not acquire a new required override."
+    }
+  ],
+  "limitations": [
+    "UHT/module compile/link/load not verified by this source review.",
+    "Runtime reflection, focus, physical controller routing, visual game feel and saved-world behavior require operator evidence.",
+    "Remote push was provided by parent; no network was used to re-verify remote state."
+  ],
+  "remaining_protected_path_action": "Previously rejected protected .codex follow-up remains unattempted; this review only reads staged ordinary-project Git provenance."
+}

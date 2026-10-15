@@ -1,0 +1,402 @@
+{
+  "schema": "daedalus.codex-arcade-compiled-checkpoint.v1",
+  "utc": "2026-10-15T02:27:07.341259+00:00",
+  "stage": "SOURCE_ADOPTED_SHADOW_UHT_COMPILE_LINK_SUCCEEDED_CANONICAL_ACTIVATION_PENDING",
+  "scope": "Existing source/build/loader/generated-file/binary-artifact reads plus this checkpoint only; no tests, builds, native calls, installs, restarts, Git writes or source-receipt modifications.",
+  "source": {
+    "commit": "2d5a4a47fe9f7614c4dd311cca52234b14d4d999",
+    "pr157_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+    "pr139_head": "0582c27a7fe3ad1f92da836f087efface618a8b6",
+    "review": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-157-published-source-review.json",
+      "bytes": 12387,
+      "sha256": "a13ebc403b5c5f16902769c9c30bc8edc14b3e033b56178913c52d11ad2a5ed8"
+    },
+    "verdict": "SOURCE_ADOPTION_MATCHES_REVIEWED_STAGE",
+    "committed_payload_files": 11,
+    "all_eleven_byte_exact": true,
+    "mines_registry_additions": 3,
+    "unrelated_cpp_changes": [],
+    "historical_core_final_newline_reconciliation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-mines-source-pin-reconciliation.json",
+      "bytes": 1386,
+      "sha256": "832acd41b2b86197ac94e40e8b175cec751522931b956e6006455d5b3d79f5d9"
+    }
+  },
+  "build_attempts": [
+    {
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-build-no-shared-pch.json",
+        "bytes": 9889,
+        "sha256": "16389d93eac255aa7b37eb815b54f0b411c07fc32beed37950863bbec29b6f20"
+      },
+      "attempt": "no-shared-pch",
+      "actual_observed_shell_exit_code": 1,
+      "native_bat_exit_code": null,
+      "terminal_result": [
+        "Result: Failed (OtherCompilationError)\r"
+      ],
+      "ubt_elapsed_seconds": 732.85,
+      "retained_log": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Saved\\attempt-no-shared-pch.log",
+        "bytes": 227496,
+        "sha256": "efe0a1a7864a1f1e37b8f804dac6ea74a495f6a09809c2af56c46dffafe65370"
+      },
+      "failure_scope": "Missing complete types in existing unrelated translation units under no-shared-PCH configuration; full error list retained in attempt receipt. No source workaround applied."
+    },
+    {
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-build-normal-shared-pch.json",
+        "bytes": 5031,
+        "sha256": "c228b425641f572a1ef2667e09a95ddd810f39dbb665a04d2d699c48f082e156"
+      },
+      "attempt": "normal-shared-pch",
+      "actual_exit_code": 0,
+      "terminal_result": [
+        "Result: Succeeded\r"
+      ],
+      "ubt_elapsed_seconds": 556.72,
+      "retained_log": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Saved\\attempt-normal-shared-pch.log",
+        "bytes": 228948,
+        "sha256": "abe9da94d965740f8a518e6dc10b8a5fb40d814b99396321a09c683293e3a93b"
+      },
+      "serial_compile_link_actions": 57,
+      "source_drift": {
+        "live": [],
+        "owned": [],
+        "shadow": []
+      }
+    }
+  ],
+  "compiled_candidate": {
+    "dll": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.dll",
+      "bytes": 8272384,
+      "sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d"
+    },
+    "pdb": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor-DaedalusLink.pdb",
+      "bytes": 98422784,
+      "sha256": "310849c2223e7582866c49c840dc4ff66afce7cc5309b1240b7b9b25440d8811"
+    },
+    "artifact_hashes_rechecked": true,
+    "canonical_install_performed": false,
+    "runtime_load_proven": false
+  },
+  "uht": {
+    "generated_cpp": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealEditor\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.gen.cpp",
+      "bytes": 120229,
+      "sha256": "b8f50ed1e19386bd02358ed2b127d1b50a42dc7929d4733d17c05dbeb6f88d77"
+    },
+    "generated_header": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealEditor\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.generated.h",
+      "bytes": 7881,
+      "sha256": "3e48089f4f946cb97e310cd4ce7b10b634300317e3b36cec63a491251ca8fb07"
+    },
+    "new_reflected_method_count": 2,
+    "generated_evidence": [
+      {
+        "reflected_method": "SubmitArcadeSourceKey",
+        "generated_cpp": [
+          {
+            "symbol": "Z_Construct_UFunction_ADaedalusDesktopArcade_SubmitArcadeSourceKey",
+            "lines": [
+              1595,
+              1627,
+              1735
+            ]
+          },
+          {
+            "symbol": "DEFINE_FUNCTION(ADaedalusDesktopArcade::execSubmitArcadeSourceKey)",
+            "lines": [
+              1637
+            ]
+          }
+        ],
+        "generated_header_DECLARE_FUNCTION_lines": [
+          88
+        ]
+      },
+      {
+        "reflected_method": "SubmitArcadeSourceControllerButton",
+        "generated_cpp": [
+          {
+            "symbol": "Z_Construct_UFunction_ADaedalusDesktopArcade_SubmitArcadeSourceControllerButton",
+            "lines": [
+              1531,
+              1571,
+              1734
+            ]
+          },
+          {
+            "symbol": "DEFINE_FUNCTION(ADaedalusDesktopArcade::execSubmitArcadeSourceControllerButton)",
+            "lines": [
+              1581
+            ]
+          }
+        ],
+        "generated_header_DECLARE_FUNCTION_lines": [
+          87
+        ]
+      }
+    ],
+    "compiled_native_exports": {
+      "method": "Read existing PE export directory with Python standard-library struct; no dumpbin invocation or DLL execution",
+      "candidate_sha256": "80eca0a812b19e2e6a0d79d17b454eb9863bffbae72c36983206373f5d812e1d",
+      "matching_export_names": [
+        "?SubmitArcadeSourceControllerButton@ADaedalusDesktopArcade@@QEAA_NH@Z",
+        "?SubmitArcadeSourceKey@ADaedalusDesktopArcade@@QEAAXH@Z",
+        "?execSubmitArcadeSourceControllerButton@ADaedalusDesktopArcade@@SAXPEAVUObject@@AEAUFFrame@@QEAX@Z",
+        "?execSubmitArcadeSourceKey@ADaedalusDesktopArcade@@SAXPEAVUObject@@AEAUFFrame@@QEAX@Z"
+      ],
+      "matching_names_count": 4,
+      "interpretation": "Two public native input methods plus their two exec wrappers; these are four exported symbols, not four new reflected API methods.",
+      "dumpbin_output_receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-compiled-exports.txt",
+        "bytes": 1164,
+        "sha256": "fe0030fd9c05ceb8fdc40a1597538013ddd18e1cc7aaed3de5ba2e4a7d543cff",
+        "source": "Retained main-operator dumpbin filtered output; this helper did not invoke dumpbin",
+        "matching_lines": 4,
+        "names_match_independent_PE_export_read": true
+      }
+    }
+  },
+  "loader": {
+    "audit": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-module-manifest-audit.json",
+      "bytes": 7730,
+      "sha256": "98d411df22c8ec1503259922fb2cf9ac75110b365c26fd367d3c9e8c8eec0be1"
+    },
+    "target": "UnrealEditor Win64 Development x64",
+    "engine_version": {
+      "EffectiveCompatibleChangelist": 55116800,
+      "MajorVersion": 5,
+      "MinorVersion": 8,
+      "PatchVersion": 3,
+      "Changelist": 58210709,
+      "CompatibleChangelist": 55116800,
+      "IsLicenseeVersion": false,
+      "IsPromotedBuild": false,
+      "BranchName": "++UE5+Release-5.8",
+      "BuildId": "55116800",
+      "BuildVersionString": null,
+      "BuildURL": null
+    },
+    "installed_manifest": {
+      "fingerprint": {
+        "path": "C:/Unreal/DaedalusRealm/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor.modules",
+        "bytes": 102,
+        "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+      },
+      "parsed": {
+        "BuildId": "55116800",
+        "Modules": {
+          "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+        }
+      },
+      "changed_by_auditor": false
+    },
+    "candidate_modules_file": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Plugins/DaedalusLink/Binaries/Win64/UnrealEditor.modules",
+      "exists": false,
+      "emitted": false,
+      "prepared_in_ubt_metadata": true
+    },
+    "retain_existing_manifest_consistent": true,
+    "reason": "Actual UBT generated receipt has installed engine BuildId 55116800 and prepared DaedalusLink -> UnrealEditor-DaedalusLink.dll mapping, both identical to the existing canonical manifest. The manifest is a compatibility namespace and filename map, not a per-DLL content hash. It must not be rewritten or described as newly emitted.",
+    "metadata": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Intermediate/Build/Win64/x64/UnrealEditor/Development/TargetMetadata.json",
+      "bytes": 1430943,
+      "sha256": "5380588631cf3c14e668a4a6b1172c2bbd04e99a83d0095e6db505fb2aaa95d4"
+    },
+    "build_product_manifest": {
+      "path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native157/Saved/Manifest-normal-pch.xml",
+      "bytes": 14972,
+      "sha256": "e814b4f17815a2d4d524e5ed1d161c022e2dca23fe70b18fc7b38cf3b1464753"
+    }
+  },
+  "rollback_evidence": {
+    "conditional_install_plan": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-native157-install-plan.json",
+      "bytes": 14878,
+      "sha256": "595b9de122e786e79b66f22a0e330d70c31fe9aaea493c31ac4a96e1292469ab"
+    },
+    "original_binary_backup_receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-original-binary-backup.json",
+      "bytes": 1519,
+      "sha256": "793cc1f30ae9adc85243e041d45a44d0fa184fcdcfe16aac3398433b817c0f66"
+    },
+    "retained_binary_backups_rechecked": [
+      {
+        "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+        "retained_backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor-DaedalusLink.dll",
+          "bytes": 8138240,
+          "sha256": "9704c471c3b949df6dd179b0fb20f07f335da504a911c39e1202473c769fb392"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.pdb",
+        "retained_backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor-DaedalusLink.pdb",
+          "bytes": 97898496,
+          "sha256": "508f5a36f78b80992b82e03ccaf8ece3222601da4cb72b4d6ef306b189ab5f5b"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "canonical": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules",
+        "retained_backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native157\\original-canonical-binaries\\UnrealEditor.modules",
+          "bytes": 102,
+          "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09"
+        },
+        "matches_recorded_original": true
+      }
+    ],
+    "original_source_items_receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-source-install-items.json",
+      "bytes": 19212,
+      "sha256": "df2426e5ed4fa2ead7aa77fec1ab3d058e1de05a80ba2590d71476c22b0fcd56"
+    },
+    "retained_original_source_backups_rechecked": [
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+          "bytes": 25220,
+          "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+          "bytes": 2385,
+          "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+          "bytes": 27092,
+          "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+          "bytes": 25223,
+          "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+          "bytes": 46562,
+          "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+          "bytes": 4865,
+          "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+          "bytes": 5871,
+          "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+          "bytes": 10397,
+          "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+          "bytes": 19865,
+          "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9"
+        },
+        "matches_recorded_original": true
+      },
+      {
+        "target": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "backup": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\original-installed\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+          "bytes": 26287,
+          "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf"
+        },
+        "matches_recorded_original": true
+      }
+    ],
+    "mines_core_originally_absent": true
+  },
+  "running_editor_historical_snapshot": {
+    "receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-post-shadow-native.json",
+      "bytes": 2933,
+      "sha256": "7605bde3d1c6ddad56a61c5cd22aea2c2f90c859627e016af47ae9974fa8ce69"
+    },
+    "observed_utc": "2026-10-15T02:12:45.630897+00:00",
+    "pie_running": false,
+    "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "dirty_map_packages": [],
+    "dirty_content_packages": [],
+    "other_running_generators": [],
+    "loaded_new_methods": {
+      "submit_arcade_source_key": false,
+      "submit_arcade_source_controller_button": false
+    },
+    "interpretation": "Both methods were absent in the existing running module at02:12:45; compiling the isolated candidate did not activate it. This checkpoint makes no fresh native call."
+  },
+  "activation_pending": {
+    "state": "pending controlled normal activation; not attempted by this checkpoint",
+    "next_boundary": "After a separately coordinated authorized normal shutdown, preserve/hash/backup canonical DLL and matching PDB, install the exact built candidate DLL (PDB is optional for runtime and useful for debugging), retain the existing unchanged canonical UnrealEditor.modules, reopen normally and verify reflected methods. No shutdown, copy, install or reopen is performed by this receipt.",
+    "no_forced_close_or_live_dll_overwrite": true,
+    "native_acceptance_remaining": [
+      "Fresh running reflected methods after activation",
+      "Hero Use/open/close/focus restoration",
+      "Keyboard/controller dispatch and gameplay/HUD acceptance",
+      "Star failed-save recovery and process-loss durability"
+    ]
+  },
+  "world_construction_is_separate": {
+    "latest_parent_direction": "Main operator reports eleven new Garden actors; current world save is pending. Active visible construction and guarded map save are separate from arcade compilation/activation.",
+    "mutable_world_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-garden-landing-r1.world.json",
+    "stage_observed_from_receipt": "eleven_new_actors_placed_unsaved_readback_pending",
+    "receipt_utc": "2026-10-15T02:22:33.479502+00:00",
+    "save_dispatched_observed": false,
+    "historical_preconstruction_map_witness": {
+      "bytes": 209306026,
+      "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa"
+    },
+    "map_hash_interpretation": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa is historical pre-construction build-preservation evidence only. It is not a required current map hash after authorized construction. Main operator owns the current construction/save receipt; this checkpoint performs no placement or map operation."
+  },
+  "tests_or_play_executed_by_this_task": false,
+  "issues": []
+}

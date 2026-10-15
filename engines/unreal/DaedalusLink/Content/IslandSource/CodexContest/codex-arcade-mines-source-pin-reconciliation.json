@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-15T01:42:31.492525+00:00",
+  "stage": "SOURCE_STAGED_ONLY",
+  "supersedes_source_pin_gap_in": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\stage-receipt.json",
+    "bytes": 151305,
+    "sha256": "d1fd953476a183b87b35050d8ea5a10cb926d2bc563d8721db3d874dd860c494"
+  },
+  "historical_core_sha256": "b4a9c39c68f33182968367e40082a0f5204d329bcbb73fcbf1040ae4c403c544",
+  "historical_core_bytes": 4774,
+  "payload_core": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\arcade-157-stage\\payload\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+    "exists": true,
+    "bytes": 4773,
+    "sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+    "git_blob": "eecac0b5dda7e509cf57e253dd624ed0d1f852bc"
+  },
+  "reconciliation": "Historical checkout bytes equal the exact committed LF Git object with only its final newline changed from LF to CRLF. Payload retains exact Git object bytes. No code change.",
+  "historical_core_equivalence_established": true,
+  "remaining_source_merge_conflicts": [],
+  "protected_path_followup": "Read-only follow-up rejected by automatic approval review; target was not retried. Ordinary project Git source objects were independently available and supply staged provenance.",
+  "installation_or_build_performed": false
+}
