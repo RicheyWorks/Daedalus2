@@ -726,6 +726,10 @@ def build(species, out_dir, scale=10.0, keep=False):
                     rig.pose.bones["body"].location.z = 0.25 * k + 0.06 * k * math.sin(ph * 2)
                     rig.pose.bones["tail"].rotation_euler.z = 0.25 * math.sin(ph)
                     rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph)
+                elif fam == "owl":                                                  # the owl look: slow head swivel, blink-bob
+                    rig.pose.bones["head"].rotation_euler.z = 1.2 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 3)
+                    rig.pose.bones["body"].location.z = 0.01 * k * math.sin(ph * 2)
                 elif fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.9 * math.sin(ph * 6) * (1 if side == "L" else -1)
@@ -748,7 +752,7 @@ def build(species, out_dir, scale=10.0, keep=False):
             elif clip == "Run" and fam not in ("plant",):
                 for side, sgn in (("L", 1), ("R", -1)):
                     rig.pose.bones["leg." + side].rotation_euler.x = 0.8 * math.sin(ph) * sgn
-                    rig.pose.bones["wing." + side].rotation_euler.y = (1.1 if fam in ("bird", "bee") else 0.4) * math.sin(ph * 2) * sgn
+                    rig.pose.bones["wing." + side].rotation_euler.y = (1.1 if fam in ("bird", "bee", "owl") else 0.4) * math.sin(ph * 2) * sgn
                 rig.pose.bones["body"].location.z = 0.06 * k * abs(math.sin(ph))
                 rig.pose.bones["body"].rotation_euler.x = 0.12                     # leans into the run
                 rig.pose.bones["head"].rotation_euler.x = 0.15 * math.sin(ph * 2)
@@ -778,6 +782,13 @@ def build(species, out_dir, scale=10.0, keep=False):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.x = -0.6 * (1 - math.cos(ph)) / 2   # grab
                     rig.pose.bones["head"].rotation_euler.x = 0.3 * math.sin(ph)
+                elif fam == "owl":                                                              # silent swoop: wings wide, dip, talons forward
+                    dip = (1 - math.cos(ph)) / 2
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 1.3 * dip * (1 if side == "L" else -1)
+                        rig.pose.bones["leg." + side].rotation_euler.x = -0.9 * dip
+                    rig.pose.bones["body"].location.z = 0.3 * k * dip - 0.1 * k * max(0.0, math.sin(ph * 2))
+                    rig.pose.bones["body"].rotation_euler.x = 0.3 * dip
                 elif fam == "dragon":                                                           # breath: rear back, then pour it out
                     rear = max(0.0, math.sin(ph)) if ph < math.pi else 0.0
                     rig.pose.bones["head"].rotation_euler.x = -0.6 * rear + 0.5 * max(0.0, math.sin(ph - math.pi))
@@ -799,7 +810,7 @@ def build(species, out_dir, scale=10.0, keep=False):
                     rig.pose.bones["leg." + side].rotation_euler.x = (0.3 if fam == "zombie" else 0.45) * math.sin(ph) * sgn
                 if fam == "zombie":
                     rig.pose.bones["body"].rotation_euler.z = 0.15 * math.sin(ph)              # the shamble
-                    rig.pose.bones["wing." + side].rotation_euler.y = (0.8 if fam == "bird" else 0.15) * math.sin(ph * (2 if fam == "bird" else 1)) * sgn
+                    rig.pose.bones["wing." + side].rotation_euler.y = (0.8 if fam in ("bird", "owl") else 0.15) * math.sin(ph * (2 if fam in ("bird", "owl") else 1)) * sgn
                 rig.pose.bones["body"].location.z = 0.03 * k * abs(math.sin(ph))
                 rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 2)
             elif clip == "Attack":

@@ -15,6 +15,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, here)
 import voxel_creatures as VC  # noqa: E402
 import voxel_dragons  # noqa: E402,F401  (registers the dragon family)
+import voxel_owls  # noqa: E402,F401  (registers the owl family)
 
 for o in list(bpy.data.objects):          # factory startup ships a cube, a light and a camera
     bpy.data.objects.remove(o, do_unlink=True)
