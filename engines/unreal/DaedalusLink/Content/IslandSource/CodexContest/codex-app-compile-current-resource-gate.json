@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-15T03:48:42.5347149Z",
+  "free_physical_kib": 1929868,
+  "free_virtual_kib": 1574152,
+  "processes": [
+    {
+      "ProcessId": 3668,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" --python-expr \"import addon_utils,bpy; addon_utils.enable('claude_blender_bridge', default_set=True); import claude_blender_bridge as b; b.start_server()\""
+    },
+    {
+      "ProcessId": 4780,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 0"
+    },
+    {
+      "ProcessId": 47040,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 1"
+    },
+    {
+      "ProcessId": 61700,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 2"
+    },
+    {
+      "ProcessId": 2876,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 3"
+    },
+    {
+      "ProcessId": 57264,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools/blender/export_wildlife.py -- rabbits engines\\unreal\\art\\claude-rabbits"
+    }
+  ],
+  "compile_started": false,
+  "state": "pending_actual_export_owner_yield_no_heavy_overlap",
+  "owner_requests": [
+    31475,
+    31486,
+    31492
+  ],
+  "yield_ack_observed": false,
+  "source_head": "f4983b977df1fef8fd96f2003e2a55154b21100f",
+  "host_manifest_verified_files": 230,
+  "install_allowed": false
+}

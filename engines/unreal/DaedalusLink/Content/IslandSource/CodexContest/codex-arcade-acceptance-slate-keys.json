@@ -1,0 +1,217 @@
+{
+  "utc": "2026-10-15T03:36:17.725139+00:00",
+  "stage": "returned",
+  "actions": [
+    {
+      "key": "P",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "P",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "R",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Up",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Up",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Down",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Down",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Left",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Right",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Left",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Right",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "B",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "A",
+      "stage": "returned",
+      "return_value": true
+    },
+    {
+      "key": "Enter",
+      "stage": "returned",
+      "return_value": true
+    }
+  ],
+  "checks": [
+    {
+      "check": "focused Slate P pauses Pong",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": true,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "pong",
+          "title": "Twinwake Volley",
+          "note": "CPU 0; rally 0; best 0",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": -1
+        }
+      }
+    },
+    {
+      "check": "focused Slate P resumes Pong",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "pong",
+          "title": "Twinwake Volley",
+          "note": "CPU 0; rally 0; best 0",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": -1
+        }
+      }
+    },
+    {
+      "check": "focused Slate R resets native step count",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "pong",
+          "title": "Twinwake Volley",
+          "note": "CPU 0; rally 0; best 0",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": -1
+        }
+      }
+    },
+    {
+      "check": "focused Slate ordered keyboard sequence arms title bonus",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "contra",
+          "title": "Ironwake Advance",
+          "note": "IRONWAKE ADVANCE TITLE | Arrows, B, A: keyboard bonus code; Enter/Space or pad A starts. Lives: 30",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 30,
+          "seed": 730,
+          "steps": 0,
+          "option": -1
+        }
+      }
+    },
+    {
+      "check": "focused Slate Enter starts armed Contra title",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "contra",
+          "title": "Ironwake Advance",
+          "note": "IRONWAKE ADVANCE | PASS X 2800: 2700 px left | FIRE: ready (hold to repeat)",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 30,
+          "seed": 730,
+          "steps": 0,
+          "option": -1
+        }
+      }
+    }
+  ],
+  "scope": "Synthetic Slate keyboard events on focused native widget; no physical input claim",
+  "final": {
+    "initialized": true,
+    "open": true,
+    "paused": false,
+    "over": false,
+    "won": false,
+    "save_pending": false,
+    "has_saved_run": false,
+    "id": "contra",
+    "title": "Ironwake Advance",
+    "note": "IRONWAKE ADVANCE | PASS X 2800: 2700 px left | FIRE: ready (hold to repeat)",
+    "persistence_message": "",
+    "score": 0,
+    "lives": 30,
+    "seed": 730,
+    "steps": 0,
+    "option": -1
+  }
+}

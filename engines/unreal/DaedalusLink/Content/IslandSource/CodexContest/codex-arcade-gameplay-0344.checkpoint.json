@@ -1,0 +1,503 @@
+{
+  "schema": "daedalus.codex-installed-arcade-native-acceptance-checkpoint.v1",
+  "utc": "2026-10-15T03:46:17.952935+00:00",
+  "stage": "bounded_native_checks_passed_scene_and_saves_restored_visual_issue_open",
+  "activation": {
+    "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-activated-0317.checkpoint.json",
+    "bytes": 8003,
+    "sha256": "edf142398ebab1b862fee564c1d5c6f78caef04763ea3fc04b858f98e6c4d30c"
+  },
+  "scope": "Actual installed PR157+Mines methods and Slate input/HUD in one owned minimal unsaved PIE level,22runtime actors; not whole-production-world PIE or physical hardware evidence.",
+  "source_phases": {
+    "path": "tools\\unreal\\codex_arcade_acceptance_phases.py",
+    "bytes": 12298,
+    "sha256": "06405e841f6f9b5b983e32701b506e6aa008d785f9c7611ec0a7529b2f87cc9c"
+  },
+  "six_generated_phase_hashes_match_executed_receipts": true,
+  "passed_checks": 39,
+  "checks": [
+    {
+      "phase": "logic",
+      "check": "exact twelve stable IDs",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "minesweeper start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "pong start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "dungeon start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "asteroids start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "football start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "pacman start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "sega_shooter start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "shadow_ninja start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "star_shooter start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "dodge_ball start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "contra start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "logic",
+      "check": "zelda start/one step/restart",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "Contra title remains title during neutral fixed steps",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "ordered raw keyboard bonus arms thirty lives without final-A start",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "separate controller-A method starts with armed lives",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "host Restart resets standard three-life active run",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "raw Enter starts armed title",
+      "passed": true
+    },
+    {
+      "phase": "source_keys",
+      "check": "Shadow Ninja reflected jump dispatch advances one native step",
+      "passed": true
+    },
+    {
+      "phase": "mines",
+      "check": "flag first cell and refuse its reveal",
+      "passed": true
+    },
+    {
+      "phase": "mines",
+      "check": "first reveal safe neighbourhood",
+      "passed": true
+    },
+    {
+      "phase": "mines",
+      "check": "Mines option 0 resets board",
+      "passed": true
+    },
+    {
+      "phase": "mines",
+      "check": "Mines option 1 resets board",
+      "passed": true
+    },
+    {
+      "phase": "mines",
+      "check": "Mines option 2 resets board",
+      "passed": true
+    },
+    {
+      "phase": "pong_point",
+      "check": "Pong reaches real scored-point preparation within six hundred native steps",
+      "passed": true
+    },
+    {
+      "phase": "pong_point",
+      "check": "fresh Jump serves early without score replacement",
+      "passed": true
+    },
+    {
+      "phase": "slate-keys",
+      "check": "focused Slate P pauses Pong",
+      "passed": true
+    },
+    {
+      "phase": "slate-keys",
+      "check": "focused Slate P resumes Pong",
+      "passed": true
+    },
+    {
+      "phase": "slate-keys",
+      "check": "focused Slate R resets native step count",
+      "passed": true
+    },
+    {
+      "phase": "slate-keys",
+      "check": "focused Slate ordered keyboard sequence arms title bonus",
+      "passed": true
+    },
+    {
+      "phase": "slate-keys",
+      "check": "focused Slate Enter starts armed Contra title",
+      "passed": true
+    },
+    {
+      "phase": "star_request",
+      "check": "Star failed native write retains pending snapshot",
+      "passed": true
+    },
+    {
+      "phase": "star_request",
+      "check": "pending Star run rejects replacement/restart/option/unpause",
+      "passed": true
+    },
+    {
+      "phase": "star_retry",
+      "check": "real-time retry acknowledges only successful run save",
+      "passed": true
+    },
+    {
+      "phase": "resume-close",
+      "check": "successful Save and Quit completed deferred overlay close",
+      "passed": true
+    },
+    {
+      "phase": "resume-close",
+      "check": "Continue restores native DGS1 run",
+      "passed": true
+    },
+    {
+      "phase": "resume-close",
+      "check": "actual Hero reopens continued Star run",
+      "passed": true
+    },
+    {
+      "phase": "escape-readback",
+      "check": "Slate Escape closes overlay while PIE and possessed pawn remain",
+      "passed": true
+    },
+    {
+      "phase": "escape-readback",
+      "check": "close releases owned pause and restores hidden cursor",
+      "passed": true
+    }
+  ],
+  "phase_receipts": [
+    {
+      "phase": "logic",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-logic.json",
+        "bytes": 47434,
+        "sha256": "11c5291f63023b004d3e78b47472b6cc6356e4fb8490cbf13488ac61b3d5ecff"
+      },
+      "passed_checks": 13
+    },
+    {
+      "phase": "source_keys",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-source_keys.json",
+        "bytes": 7269,
+        "sha256": "35d667faf1906fe94607e30dd1ccd764a6c94dca1ea8955ff8eb0503e09c9f26"
+      },
+      "passed_checks": 6
+    },
+    {
+      "phase": "mines",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-mines.json",
+        "bytes": 7360,
+        "sha256": "25655111f39dffdbf47afbecdd3cbae29622b406f80bd7f16312da72823622f2"
+      },
+      "passed_checks": 5
+    },
+    {
+      "phase": "pong_point",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-pong_point.json",
+        "bytes": 3570,
+        "sha256": "89600992c2613c486cc0293549ab4be008dadc7a369699261799183095ebdde1"
+      },
+      "passed_checks": 2
+    },
+    {
+      "phase": "slate-keys",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-slate-keys.json",
+        "bytes": 4994,
+        "sha256": "9a2f438e0e1d6d40f5fd353933c35b23721e79d294895fa11f405e972dcf4b28"
+      },
+      "passed_checks": 5
+    },
+    {
+      "phase": "star_request",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-star_request.json",
+        "bytes": 3388,
+        "sha256": "2991a8334bf598faaed6c2feb617490ed82a705670eb32bb6dd6155b03bf157e"
+      },
+      "passed_checks": 2
+    },
+    {
+      "phase": "star_retry",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-star_retry.json",
+        "bytes": 2540,
+        "sha256": "8133f03618ad483e8e0368dedb6ee7d0a183df5ab51689b52f79ff9ff0c13fab"
+      },
+      "passed_checks": 1
+    },
+    {
+      "phase": "resume-close",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-resume-close.json",
+        "bytes": 2582,
+        "sha256": "c3108f4d03657431ed21a091839c9e59d70cab3c15cfde70ad71230f18d32b10"
+      },
+      "passed_checks": 3
+    },
+    {
+      "phase": "escape-readback",
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-escape-readback.json",
+        "bytes": 1804,
+        "sha256": "ce468d6c4ae074a4929fff852317fd204186a4827343b5d0d33cef355e4b3768"
+      },
+      "passed_checks": 2
+    }
+  ],
+  "hero_interaction_open": {
+    "world": "/Temp/UEDPIE_0_Untitled_1.Untitled",
+    "actors": 22,
+    "arcade_path": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusDesktopArcade_0",
+    "hero_path": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusHero_0",
+    "controller_path": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.PlayerController_0",
+    "before": {
+      "initialized": true,
+      "open": false,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "pong",
+      "title": "Twinwake Volley",
+      "note": "CPU 0; rally 0; best 0",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 0,
+      "option": -1
+    },
+    "interact_return": true,
+    "after": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "pong",
+      "title": "Twinwake Volley",
+      "note": "CPU 0; rally 0; best 0",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 0,
+      "option": -1
+    },
+    "hero_is_settings_open": false,
+    "hero_is_field_open": false,
+    "hero_is_realm_open": false,
+    "game_paused": true,
+    "auto_advance": false
+  },
+  "production_preservation": {
+    "actor_records_exactly_unchanged": 101,
+    "staging_actor_count": 100,
+    "map": {
+      "bytes": 209329457,
+      "sha256": "5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933"
+    },
+    "camera_restored": true,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "pie": false,
+    "queue": {
+      "queued": 0,
+      "other_running": [],
+      "remote_locked": false
+    },
+    "original_user_saves_restored_byte_exact": true,
+    "original_arcade_save_and_directory_absence_restored": true,
+    "new_editor": false,
+    "production_or_temporary_map_save_dispatched": false
+  },
+  "generated_synthetic_star_save": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-generated-star.dgs",
+    "bytes": 24,
+    "sha256": "001ca2c38d1ab7cfe487ef241965b4d3fe3982c75a3f2986c5ea2bbb80e7cbe1"
+  },
+  "images": [
+    {
+      "name": "pong-open",
+      "image": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-pong-open.png",
+        "bytes": 195196,
+        "sha256": "759581b9c96623fcbe6c933c522cebc5005048e0e5856f7bc8eaa01b48db1205"
+      },
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-pong-open.json",
+        "bytes": 9221,
+        "sha256": "fb08dbc2230f2e347237efe988c3589e0c94d89e45b5b969c7e0aba485253bd4"
+      },
+      "pixels": [
+        2560,
+        1392
+      ],
+      "personally_inspected": true,
+      "observation": "Pong title, score and seed, paddles/ball/net, Pause/Restart/Close and controls are visible. Hero logbook, interaction prompt and lower HUD overlap the arcade."
+    },
+    {
+      "name": "contra-started",
+      "image": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-contra-started.png",
+        "bytes": 278750,
+        "sha256": "f274dfd113314b05198a04d095c7dc87d7b71ce599c0c334d21ed8bd01d4a55b"
+      },
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-contra-started.json",
+        "bytes": 9271,
+        "sha256": "72328ed4d465464fad7e3ac320d21db0fca4c6ff687177943a3db192d01ce970"
+      },
+      "pixels": [
+        2560,
+        1392
+      ],
+      "personally_inspected": true,
+      "observation": "Actual Slate ordered keys then Enter produces LIVES30 with visible native level, source action/status hints and footer. Hero HUD still overlays; lower canvas instructions remain tight at its bottom edge."
+    },
+    {
+      "name": "star-save-failed",
+      "image": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\QA\\arcade-acceptance-star-save-failed.png",
+        "bytes": 293754,
+        "sha256": "bbb3c21160c19578fc950403598ba41cdaa09c8d90d0cd3ebaedd6a50c894af0"
+      },
+      "receipt": {
+        "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-ui-star-save-failed.json",
+        "bytes": 9225,
+        "sha256": "b7db7f24ccdd6313541e9fbd31dced1cfe2347a4f5648f39aad9b1d61cd80ca0"
+      },
+      "pixels": [
+        2560,
+        1392
+      ],
+      "personally_inspected": true,
+      "observation": "Actual pending Save and Quit displays PAUSED menu, pending text and disabled replacement controls. Hero/logbook/prompt HUD remains visible over the arcade."
+    }
+  ],
+  "visual_result": {
+    "arcade_canvas_and_controls_rendered": true,
+    "exclusive_arcade_hud_passed": false,
+    "issue": "Hero/logbook,interaction prompt,character stats and weapon text bleed over the arcade canvas.",
+    "source_inference": "Hero adds a global viewport widget at z10 (DaedalusHero.cpp436); arcade adds a per-player widget at z100 (DaedalusDesktopArcade.cpp398). The different layer containers are a candidate cause, not verified by a fix.",
+    "owner_hub_report": 31489,
+    "source_fix_or_rebuild_performed": false
+  },
+  "reconciliations": {
+    "unsupported_read": "PlayerController.get_pawn unavailable after Escape; supported Hero/controller companion confirmed outcome without replay.",
+    "map_reload": "Original load_map exceeded90s hostsocket; completed on its own. Read-only companion verified all101records/map/camera/saves; no repeated load or forced editor action."
+  },
+  "evidence": [
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-gameplay-acceptance.json",
+      "bytes": 170699,
+      "sha256": "4853f9836857ea60375674da68bc9b0aac2339964166fd25aea5e72496d09e1d"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-production-restored.json",
+      "bytes": 124281,
+      "sha256": "24f704803e3d642c2530e304b74017627c059f305ca348445f3a893ac11d764b"
+    },
+    {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-api-preflight.json",
+      "bytes": 4397,
+      "sha256": "37e4ff9caf2ffe7ad741e480ffdc4495c14ca096b2b169d88caa48367bcb8cc2"
+    }
+  ],
+  "separate_app_compile": {
+    "prepared_head": "f4983b977df1fef8fd96f2003e2a55154b21100f",
+    "manifest_files_verified": 230,
+    "executed": false,
+    "state": "pending_actual_completed_export_yield_and_current_resource_headroom",
+    "latest_observed_free_memory_kib": {
+      "physical": 1929868,
+      "virtual": 1574152,
+      "utc": "2026-10-15T03:48:42.5347149Z"
+    },
+    "competing_export_pids": [
+      4780,
+      47040,
+      61700,
+      2876,
+      57264
+    ],
+    "owner_requests": [
+      31475,
+      31486,
+      31492
+    ],
+    "owner_reply_observed": false,
+    "no_manual_pause_api": "hd_batch wait_for_memory is temporary and cannot reserve an exclusive compute slot.",
+    "activation_limit": "Compile-only host omits currently loaded PR157 methods; its whole DLL must not be installed without integrated source.",
+    "latest_resource_gate": {
+      "path": "engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-app-compile-current-resource-gate.json",
+      "bytes": 2487,
+      "sha256": "fe2a12bce9850a5bd7165063ba84153a9ed07f26e896a981317bde3948aed447"
+    }
+  },
+  "limits": [
+    "Physical controller buttons/axes, disconnect/reconnect, multi-local-user lifecycle and hardware focus are unverified.",
+    "Programmatic methods and synthetic Slate events prove their executed paths only; the twelve-game one-step smoke is not complete all-level/game-over acceptance.",
+    "Normal Hero interaction opened a real overlay in minimal PIE; proximity/placement integration at the saved production cabinet was not exercised.",
+    "Leaderboard merge/write-failure recovery was not exercised; Star run save-failure/retention/retry/Continue was.",
+    "Arcade HUD exclusivity has an observed defect; no final visual or BAR pass is claimed.",
+    "No broad harness, cook or automation suite ran. The user newly authorized these bounded gameplay/PIE checks; older deferred-test receipts remain historical."
+  ],
+  "issues": [
+    "Hero HUD overlays arcade canvas; source fix and native recheck remain open."
+  ]
+}

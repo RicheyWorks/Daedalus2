@@ -1,0 +1,84 @@
+{
+  "utc": "2026-10-15T03:38:49.481082+00:00",
+  "stage": "escape_dispatched_read_error_reconciled_in_companion",
+  "checks": [
+    {
+      "check": "successful Save and Quit completed deferred overlay close",
+      "passed": true,
+      "detail": {
+        "state": {
+          "initialized": true,
+          "open": false,
+          "paused": true,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": true,
+          "id": "star_shooter",
+          "title": "Star Shooter",
+          "note": "Quit requested",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 4,
+          "seed": 730,
+          "steps": 2,
+          "option": 1
+        }
+      }
+    },
+    {
+      "check": "Continue restores native DGS1 run",
+      "passed": true,
+      "detail": {
+        "return": true,
+        "state": {
+          "initialized": true,
+          "open": false,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": true,
+          "id": "star_shooter",
+          "title": "Star Shooter",
+          "note": "Medium; wave 1; shift in 1200 steps; enemies 0; pickups 0; BOSSES ARRIVE EVERY FIFTH WAVE; twin shot; fire READY; COLLISIONS ACTIVE; speed normal",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 4,
+          "seed": 730,
+          "steps": 0,
+          "option": 1
+        }
+      }
+    },
+    {
+      "check": "actual Hero reopens continued Star run",
+      "passed": true,
+      "detail": {
+        "interact_return": true,
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": true,
+          "id": "star_shooter",
+          "title": "Star Shooter",
+          "note": "Medium; wave 1; shift in 1200 steps; enemies 0; pickups 0; BOSSES ARRIVE EVERY FIFTH WAVE; twin shot; fire READY; COLLISIONS ACTIVE; speed normal",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 4,
+          "seed": 730,
+          "steps": 0,
+          "option": 1
+        },
+        "world_paused": true
+      }
+    }
+  ],
+  "escape_dispatched": true,
+  "unsupported_read_field": "PlayerController.get_pawn",
+  "companion": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-escape-readback.json"
+}

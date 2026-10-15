@@ -1,0 +1,40 @@
+{
+  "utc": "2026-10-15T03:29:49.161436+00:00",
+  "native": {
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "pie": false,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "queued": 0,
+    "other_running": [],
+    "remote_locked": false,
+    "api": {
+      "EditorLoadingAndSavingUtils.new_blank_map": "X.new_blank_map(save_existing_map) -> World\r\nNew Blank Map\r\n\r\nArgs:\r\n    save_existing_map (bool): \r\n\r\nReturns:\r\n    World:",
+      "EditorLoadingAndSavingUtils.load_map": "X.load_map(filename) -> World\r\nLoads the specified map.  Does not prompt the user to save the current map.\r\n\r\nArgs:\r\n    filename (str): Level package filename, including path.\r\n\r\nReturns:\r\n    World: true if the map was loaded successfully.",
+      "EditorLevelLibrary.get_game_world": "X.get_game_world() -> World\r\nGet Game World\r\ndeprecated: The Editor Scripting Utilities Plugin is deprecated - Use the function in Unreal Editor Subsystem\r\n\r\nReturns:\r\n    World:",
+      "EditorLevelLibrary.get_pie_worlds": "X.get_pie_worlds(include_dedicated_server) -> Array[World]\r\nGet PIEWorlds\r\n\r\nArgs:\r\n    include_dedicated_server (bool): \r\n\r\nReturns:\r\n    Array[World]:",
+      "GameplayStatics.get_player_character": "X.get_player_character(world_context_object, player_index) -> Character\r\nReturns the pawn for the player controller at the specified player index, will return null if the pawn is not a character.\nThis will not include characters of remote clients with no available player controller, you can iterate the PlayerStates list for that.\r\n\r\nArgs:\r\n    world_context_object (Object): \r\n    player_index (int32): Index in the player controller list, starting first with local players and then available remote ones\r\n\r\nReturns:\r\n    Character:",
+      "GameplayStatics.get_player_controller": "X.get_player_controller(world_context_object, player_index) -> PlayerController\r\nReturns the player controller found while iterating through the local and available remote player controllers.\nOn a network client, this will only include local players as remote player controllers are not available.\nThe index will be consistent as long as no new players join or leave, but it will not be the same across different clients and servers.\r\n\r\nArgs:\r\n    world_context_object (Object): \r\n    player_index (int32): Index in the player controller list, starting first with local players and then available remote ones\r\n\r\nReturns:\r\n    PlayerController:",
+      "GameplayStatics.get_all_actors_of_class": "X.get_all_actors_of_class(world_context_object, actor_class) -> Array[Actor]\r\nFind all Actors in the world of the specified class.\nThis will be slow if there are many actors of the specified class.\r\n\r\nArgs:\r\n    world_context_object (Object): \r\n    actor_class (type(Class)): Class of Actor to find. Must be specified or result array will be empty.\r\n\r\nReturns:\r\n    Array[Actor]: \r\n\r\n    out_actors (Array[Actor]): Output array of Actors of the specified class.",
+      "DaedalusDesktopArcade.use": null,
+      "DaedalusDesktopArcade.start_game": "x.start_game(id, seed) -> bool\r\nStart Game\r\n\r\nArgs:\r\n    id (str): \r\n    seed (int32): \r\n\r\nReturns:\r\n    bool:",
+      "DaedalusDesktopArcade.get_state": "x.get_state() -> DaedalusDesktopArcadeState\r\nGet State\r\n\r\nReturns:\r\n    DaedalusDesktopArcadeState:",
+      "DaedalusDesktopArcade.get_available_games": "x.get_available_games() -> Array[DaedalusDesktopArcadeEntry]\r\nGet Available Games\r\n\r\nReturns:\r\n    Array[DaedalusDesktopArcadeEntry]:",
+      "DaedalusDesktopArcade.get_actor_tick_enabled": null,
+      "LevelEditorSubsystem.editor_play_simulate": "x.editor_play_simulate() -> None\r\nEditor Play Simulate",
+      "LevelEditorSubsystem.editor_request_end_play": "x.editor_request_end_play() -> None\r\nEditor Request End Play"
+    },
+    "arcades": [
+      {
+        "path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.DaedalusDesktopArcade_1",
+        "label": "CodexAcceptance_Pong",
+        "id": "54B7482F4B2C290860641C85B123E933",
+        "initial_game_id": "pong",
+        "initial_seed": 730,
+        "auto_advance": true
+      }
+    ],
+    "world_settings_game_mode": "<Object '/Script/DaedalusLink.DaedalusGameMode' (0x0000022B73528480) Class 'Class'>"
+  },
+  "native_mutation": false
+}

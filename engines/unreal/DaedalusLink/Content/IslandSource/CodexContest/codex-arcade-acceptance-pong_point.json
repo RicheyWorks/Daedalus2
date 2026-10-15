@@ -1,0 +1,125 @@
+{
+  "utc": "2026-10-15T03:35:20.251035+00:00",
+  "phase": "pong_point",
+  "stage": "returned",
+  "code_sha256": "eed98598c5e5fee3d981d29384d01097ab2ba2ebf74811191751019a66f2c3a0",
+  "config": {},
+  "native": {
+    "phase": "pong_point",
+    "world": "/Temp/UEDPIE_0_Untitled_1.Untitled",
+    "arcade": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusDesktopArcade_0",
+    "actor_label": "CodexTransientAcceptance_Arcade",
+    "checks": [
+      {
+        "check": "Pong reaches real scored-point preparation within six hundred native steps",
+        "passed": true,
+        "detail": {
+          "manual_steps": 215,
+          "state": {
+            "initialized": true,
+            "open": true,
+            "paused": false,
+            "over": false,
+            "won": false,
+            "save_pending": false,
+            "has_saved_run": false,
+            "id": "pong",
+            "title": "Twinwake Volley",
+            "note": "CPU 1; rally 0; best 1; ready - Fire/Jump/Action serves early",
+            "persistence_message": "",
+            "score": 0,
+            "lives": 0,
+            "seed": 730,
+            "steps": 215,
+            "option": -1
+          }
+        }
+      },
+      {
+        "check": "fresh Jump serves early without score replacement",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "pong",
+          "title": "Twinwake Volley",
+          "note": "CPU 1; rally 0; best 1; CPU point",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 216,
+          "option": -1
+        }
+      }
+    ],
+    "input_scope": "programmatic reflected native dispatch, not physical controller evidence",
+    "native_ui_or_world_save": false,
+    "early_serve": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "pong",
+      "title": "Twinwake Volley",
+      "note": "CPU 1; rally 0; best 1; CPU point",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 216,
+      "option": -1
+    },
+    "point": {
+      "manual_steps": 215,
+      "state": {
+        "initialized": true,
+        "open": true,
+        "paused": false,
+        "over": false,
+        "won": false,
+        "save_pending": false,
+        "has_saved_run": false,
+        "id": "pong",
+        "title": "Twinwake Volley",
+        "note": "CPU 1; rally 0; best 1; ready - Fire/Jump/Action serves early",
+        "persistence_message": "",
+        "score": 0,
+        "lives": 0,
+        "seed": 730,
+        "steps": 215,
+        "option": -1
+      }
+    },
+    "final": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "pong",
+      "title": "Twinwake Volley",
+      "note": "CPU 1; rally 0; best 1; CPU point",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 216,
+      "option": -1
+    },
+    "limits": [
+      "A bounded point observation is native core evidence; visible ball/paddle/point cues require HUD pixels. No private game state is patched."
+    ]
+  },
+  "returned_utc": "2026-10-15T03:35:20.284559+00:00"
+}

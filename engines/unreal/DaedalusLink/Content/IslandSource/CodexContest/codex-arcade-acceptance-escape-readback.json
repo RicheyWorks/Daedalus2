@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-15T03:39:17.755180+00:00",
+  "stage": "known_input_outcome_reconciled_read_only",
+  "initial_receipt": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-resume-close.json",
+  "initial_readback_error": "PlayerController.get_pawn unavailable; input already dispatched, no replay",
+  "native": {
+    "state": {
+      "initialized": true,
+      "open": false,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": true,
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "note": "Medium; wave 1; shift in 1200 steps; enemies 0; pickups 0; BOSSES ARRIVE EVERY FIFTH WAVE; twin shot; fire READY; COLLISIONS ACTIVE; speed normal",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 4,
+      "seed": 730,
+      "steps": 0,
+      "option": 1
+    },
+    "world_paused": false,
+    "show_mouse_cursor": false,
+    "still_pie": true,
+    "hero": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusHero_0",
+    "possessed_by_same_local_controller": true
+  },
+  "checks": [
+    {
+      "check": "Slate Escape closes overlay while PIE and possessed pawn remain",
+      "passed": true
+    },
+    {
+      "check": "close releases owned pause and restores hidden cursor",
+      "passed": true
+    }
+  ],
+  "generated_save": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-acceptance-generated-star.dgs",
+    "bytes": 24,
+    "sha256": "001ca2c38d1ab7cfe487ef241965b4d3fe3982c75a3f2986c5ea2bbb80e7cbe1"
+  },
+  "input_or_resume_replayed": false
+}

@@ -1,0 +1,273 @@
+{
+  "utc": "2026-10-15T03:35:20.086532+00:00",
+  "phase": "mines",
+  "stage": "returned",
+  "code_sha256": "313d64e395a75d5c5c72500d26e533c97cedf8c2d13e0064e973f54ad33251f7",
+  "config": {},
+  "native": {
+    "phase": "mines",
+    "world": "/Temp/UEDPIE_0_Untitled_1.Untitled",
+    "arcade": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusDesktopArcade_0",
+    "actor_label": "CodexTransientAcceptance_Arcade",
+    "checks": [
+      {
+        "check": "flag first cell and refuse its reveal",
+        "passed": true,
+        "detail": {
+          "flagged": {
+            "initialized": true,
+            "open": true,
+            "paused": false,
+            "over": false,
+            "won": false,
+            "save_pending": false,
+            "has_saved_run": false,
+            "id": "minesweeper",
+            "title": "Minesweeper",
+            "note": "Mines remaining 9 | 0 active seconds",
+            "persistence_message": "",
+            "score": 0,
+            "lives": 0,
+            "seed": 730,
+            "steps": 1,
+            "option": 0
+          },
+          "blocked": {
+            "initialized": true,
+            "open": true,
+            "paused": false,
+            "over": false,
+            "won": false,
+            "save_pending": false,
+            "has_saved_run": false,
+            "id": "minesweeper",
+            "title": "Minesweeper",
+            "note": "Mines remaining 9 | 0 active seconds",
+            "persistence_message": "",
+            "score": 0,
+            "lives": 0,
+            "seed": 730,
+            "steps": 2,
+            "option": 0
+          }
+        }
+      },
+      {
+        "check": "first reveal safe neighbourhood",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 10 | 0 active seconds",
+          "persistence_message": "",
+          "score": 4,
+          "lives": 0,
+          "seed": 730,
+          "steps": 4,
+          "option": 0
+        }
+      },
+      {
+        "check": "Mines option 0 resets board",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 10 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 0
+        }
+      },
+      {
+        "check": "Mines option 1 resets board",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 40 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 1
+        }
+      },
+      {
+        "check": "Mines option 2 resets board",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 99 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 2
+        }
+      }
+    ],
+    "input_scope": "programmatic reflected native dispatch, not physical controller evidence",
+    "native_ui_or_world_save": false,
+    "initial": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "note": "Mines remaining 10 | 0 active seconds",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 0,
+      "option": 0
+    },
+    "first_reveal": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "note": "Mines remaining 10 | 0 active seconds",
+      "persistence_message": "",
+      "score": 4,
+      "lives": 0,
+      "seed": 730,
+      "steps": 4,
+      "option": 0
+    },
+    "options": [
+      {
+        "option": 0,
+        "return": true,
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 10 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 0
+        }
+      },
+      {
+        "option": 1,
+        "return": true,
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 40 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 1
+        }
+      },
+      {
+        "option": 2,
+        "return": true,
+        "state": {
+          "initialized": true,
+          "open": true,
+          "paused": false,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": false,
+          "id": "minesweeper",
+          "title": "Minesweeper",
+          "note": "Mines remaining 99 | 0 active seconds",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 0,
+          "seed": 730,
+          "steps": 0,
+          "option": 2
+        }
+      }
+    ],
+    "final": {
+      "initialized": true,
+      "open": true,
+      "paused": false,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": false,
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "note": "Mines remaining 10 | 0 active seconds",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 0,
+      "seed": 730,
+      "steps": 0,
+      "option": 0
+    },
+    "limits": [
+      "Grid dimensions, flag glyphs and chord rendering require actual HUD observation; status alone does not expose hidden mine layout."
+    ]
+  },
+  "returned_utc": "2026-10-15T03:35:20.107872+00:00"
+}

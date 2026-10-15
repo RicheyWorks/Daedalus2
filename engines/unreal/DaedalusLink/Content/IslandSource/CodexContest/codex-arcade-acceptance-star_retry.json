@@ -1,0 +1,84 @@
+{
+  "utc": "2026-10-15T03:38:03.767803+00:00",
+  "phase": "star_retry",
+  "stage": "returned",
+  "code_sha256": "5ff214f4931c4aec8b4a25a57a82531bdb1f72d45c05dbe3a91b80c81b0967f3",
+  "config": {
+    "request_observed_monotonic": 226570.64
+  },
+  "native": {
+    "phase": "star_retry",
+    "world": "/Temp/UEDPIE_0_Untitled_1.Untitled",
+    "arcade": "/Temp/UEDPIE_0_Untitled_1.Untitled:PersistentLevel.DaedalusDesktopArcade_0",
+    "actor_label": "CodexTransientAcceptance_Arcade",
+    "checks": [
+      {
+        "check": "real-time retry acknowledges only successful run save",
+        "passed": true,
+        "detail": {
+          "initialized": true,
+          "open": true,
+          "paused": true,
+          "over": false,
+          "won": false,
+          "save_pending": false,
+          "has_saved_run": true,
+          "id": "star_shooter",
+          "title": "Star Shooter",
+          "note": "Quit requested",
+          "persistence_message": "",
+          "score": 0,
+          "lives": 4,
+          "seed": 730,
+          "steps": 2,
+          "option": 1
+        }
+      }
+    ],
+    "input_scope": "programmatic reflected native dispatch, not physical controller evidence",
+    "native_ui_or_world_save": false,
+    "elapsed_real_seconds": 66.73499999998603,
+    "before": {
+      "initialized": true,
+      "open": true,
+      "paused": true,
+      "over": false,
+      "won": false,
+      "save_pending": true,
+      "has_saved_run": false,
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "note": "Save & Quit requested; host persistence pending",
+      "persistence_message": "A Star save is pending; restart is unavailable until it is saved.",
+      "score": 0,
+      "lives": 4,
+      "seed": 730,
+      "steps": 2,
+      "option": 1
+    },
+    "after": {
+      "initialized": true,
+      "open": true,
+      "paused": true,
+      "over": false,
+      "won": false,
+      "save_pending": false,
+      "has_saved_run": true,
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "note": "Quit requested",
+      "persistence_message": "",
+      "score": 0,
+      "lives": 4,
+      "seed": 730,
+      "steps": 2,
+      "option": 1
+    },
+    "advance_return": 0,
+    "limits": [
+      "Operator fingerprints/archives generated DGS1 bytes and restores original absence/files only after all own callbacks and PIE EndPlay have stopped.",
+      "No malformed live saves, ACL changes, read-only flags or security settings are used."
+    ]
+  },
+  "returned_utc": "2026-10-15T03:38:03.794870+00:00"
+}
