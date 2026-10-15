@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Mass-produce HD islands (hd_island.py) — the 10,000-island run.
 
-    blender -b --factory-startup --python-exit-code 1 --python tools/blender/hd_batch.py -- OUT_ROOT START COUNT [--workers W --worker I] [--no-thumb]
+    blender -b --factory-startup --python-exit-code 1 --python tools/blender/hd_batch.py -- OUT_ROOT START COUNT [--workers W --worker I] [--no-thumb] [--max-items N]
+(--max-items: exit after N builds so a wrapper loop restarts a fresh process; resume skips finished islands)
 
 Seeds START .. START+COUNT-1; worker I of W takes every W-th seed (start + I, start + I + W, …), so W Blender processes
 split one range with no overlap. Kind = KINDS[seed % 6]. Each island is built, exported (GLB + FBX + json with its
@@ -29,6 +30,7 @@ start, count = int(argv[1]), int(argv[2])
 W = int(argv[argv.index("--workers") + 1]) if "--workers" in argv else 1
 I = int(argv[argv.index("--worker") + 1]) if "--worker" in argv else 0
 thumb = "--no-thumb" not in argv
+MAX_ITEMS = int(argv[argv.index("--max-items") + 1]) if "--max-items" in argv else 0   # recycle the process after N builds
 KIND_ORDER = list(H.KINDS)
 
 
@@ -63,10 +65,18 @@ def wait_for_memory(floor_gb=1.5):
 
 
 def purge():
+    """Drop everything an island leaves behind. Cameras (one ThumbCam per island), lights, images, actions, node
+    groups, textures and stray collections/worlds used to survive the purge; ~2,000 islands in, every scene update
+    walked thousands of orphans and a worker fell from ~8 islands/min to ~1 (2026-10-14 23:30)."""
+    sc = bpy.context.scene
     bpy.data.batch_remove(list(bpy.data.objects))
-    bpy.data.batch_remove(list(bpy.data.meshes))
-    bpy.data.batch_remove([m for m in bpy.data.materials])
-    bpy.data.batch_remove(list(bpy.data.curves))
+    for coll in (bpy.data.meshes, bpy.data.materials, bpy.data.curves, bpy.data.cameras, bpy.data.lights, bpy.data.actions,
+                 bpy.data.node_groups, bpy.data.textures, bpy.data.armatures):
+        bpy.data.batch_remove(list(coll))
+    bpy.data.batch_remove([im for im in bpy.data.images if im.type != "RENDER_RESULT"])
+    bpy.data.batch_remove([c for c in bpy.data.collections if c.name not in sc.collection.children])
+    bpy.data.batch_remove([w for w in bpy.data.worlds if w != sc.world])
+    bpy.data.orphans_purge(do_recursive=True)
     H.MATS.clear()
     H.GROUP = []
 
@@ -129,4 +139,7 @@ for seed in seeds:
             f.write("%d %s\n%s\n" % (seed, kind, traceback.format_exc()))
     purge()
     setup_thumb()
+    if MAX_ITEMS and done >= MAX_ITEMS:
+        print("RECYCLE worker %d after %d islands %.0fs" % (I, done, time.time() - t_all), flush=True)
+        sys.exit(0)
 print("BATCH worker %d/%d done=%d failed=%d %.0fs" % (I, W, done, failed, time.time() - t_all), flush=True)
