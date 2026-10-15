@@ -960,3 +960,28 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
 - `play_test.py OUT_DIR` is a Playwright play-through: title → town → buy → learn a spell → field battle → chest → boss gate → Pyre Warden → gate falls. It fails on any page error, an unbeaten boss or a silent jukebox.
 - Its first runs found: battle teardown nulled state mid-fade (crash on every victory); the boss's `weakness: tide` never matched the spells' `water` element (bosses name elements by lore: tide/gale/stone/shade now map to water/air/earth/dark); the magic shop showed only 8 of 34 spells; the empty-magic message always said the bag was empty.
 - Balance check: a party that only presses ATTACK loses to the Warden with about 1,450 of 2,200 HP left; one that heals under half and casts Splash on the weakness wins.
+
+### 14.28 The Prismheart demo: start screen, name entry, the shard quest
+
+- **Start screen:** a full-screen display. The title art's backdrop layer (`TitleBg_1x.png`, from `rpg_title.py`) carries
+  a live NEW GAME / CONTINUE / OPTIONS menu, drawn on the art's own pixels (`title.json` `menu_geometry`). OPTIONS
+  opens the shared Settings tabs (`docs/settings.md`), where every control lives.
+- **Name entry:** after NEW GAME. It uses `title.json` `name_entry` (letter grid, max 9) and works by pad, keyboard
+  or tap. The name goes in the save.
+- **The shard quest:** the world map's landmarks lead into four dungeons from `dungeons.json`: Cave to the Cinder
+  Forge, Tower to the Windcut Aerie, Ruins to the Sunwell Sanctum, and Crystal Shrine to The Shattered Heart. Each
+  boss comes from `prism-bosses.json` with an entrance line and a special attack keyed to its element. The Pyre,
+  Gale and Light Wardens each leave a shard. The Crystal Shrine stays sealed until all three are in hand.
+- **The final boss is scaled down.** The Prism Devourer's data is level 50 with 12000 HP, built for the full game's
+  six shards. The demo gathers three, so `build_demo.py` scales it openly (HP ×0.33, attack ×0.7). The scaling is
+  recorded as `demo_scale` in `data.json`, and the battle calls the Devourer "half-formed". It was tuned with a careful
+  bot that buys each Warden's weakness and rests at the inn. Without the scale that bot loses at level 26; with it,
+  it wins at level 28 on every seed tried.
+- **Saving and the ending.** Resting at the inn saves the party, gold, items, beaten Wardens and opened chests.
+  CONTINUE resumes at the inn. Floor grids are copied per journey, so NEW GAME starts the dungeons fresh. Beating the
+  Devourer rolls the ending, then returns to the title.
+- **Tests:** `quest_test.py` (24 checks; the whole quest by bot at 6× clock, seeded), `title_test.py`,
+  `play_test.py`, `pad_test.py` and `tools/settings/panel_test.py`. `bot.py` is the shared careful player.
+- **Bugs the quest work found:**
+  - NEW GAME never reset the dungeons, because the floor grids were edited in place.
+  - An opened chest said nothing when checked again: the code tested `"Chest"` twice instead of `"ChestOpen"`.

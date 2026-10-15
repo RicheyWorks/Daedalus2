@@ -6,7 +6,8 @@
 ART_ROOT is an engines/unreal/art tree (claude-battle-kit, claude-battle-sprites, claude-audio as written by the
 tools/blender/rpg_*.py scripts); --sprites can point at a folder holding the battle sprite / party / backdrop _1x
 PNGs when they live elsewhere. Writes OUT_DIR/index.html (copied from this folder), atlas images (tiles/sprites/backdrops/spells.png),
-data.json (every atlas rectangle by name + the realm's data files merged: town, interiors, demo world map, Cinder Forge,
+data.json (every atlas rectangle by name + the realm's data files merged: town, interiors, demo world map, the four shard-quest
+dungeons (Cinder Forge, Windcut Aerie, Sunwell Sanctum, The Shattered Heart) with their bosses,
 encounter zones, bestiary, bosses, spells, party, menus, jukebox cues + loop lengths) and audio/ (the jukebox seed MP3s for the cue
 vocabulary + the sound-event WAVs the demo emits). Checks before writing: every tile, sprite and sound the data
 names exists, and the world map's Cave, Castle and Shrine are reachable on foot from the Town.
@@ -24,6 +25,13 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 REALM = "prism"
+# The shard quest: world-map landmark -> dungeon. The Crystal Shrine opens once the three shards are in hand.
+QUEST = [("Cave", "Cinder Forge"), ("Tower", "Windcut Aerie"), ("Ruins", "Sunwell Sanctum"), ("CrystalShrine", "The Shattered Heart")]
+FINAL = "The Shattered Heart"
+# The final boss is built for the full game's six shards (level 50, 12000 HP). The demo gathers three, so the
+# Devourer only half-forms: its HP and attack are scaled here, in the open, and the realm says so in battle.
+FINAL_SCALE = {"hp": 0.33, "attack": 0.7, "why": "three of six shards: the Devourer only half-forms in this demo"}
+BOSS_BACKDROP = {"volcano": "volcano", "tower": "tower", "castle": "ruins", "crystal": "crystal_cave", "cave": "cave", "sea": "sea_cave", "crypt": "crypt"}
 
 
 def J(name):
@@ -98,9 +106,11 @@ def main(argv):
     for t in wm["tiles"]:
         if t["realm"] == REALM:
             add_tile("wm:" + t["tile"], find("Tile_%s_1x.png" % t["tile"], "worldmap"))
-    forge = next(d for d in dun["dungeons"][REALM] if d["name"] == "Cinder Forge")
-    for p in glob.glob(os.path.join(kit, "dungeons", "Tile_%s_*_1x.png" % forge["theme"].title())):
-        add_tile("dg:" + os.path.basename(p)[len("Tile_%s_" % forge["theme"].title()):-len("_1x.png")], p)
+    quest = [next(d for d in dun["dungeons"][REALM] if d["name"] == name) for _, name in QUEST]
+    for theme in sorted({d["theme"] for d in quest}):
+        T_ = theme.title()
+        for p in glob.glob(os.path.join(kit, "dungeons", "Tile_%s_*_1x.png" % T_)):
+            add_tile("dg:%s:%s" % (theme, os.path.basename(p)[len("Tile_%s_" % T_):-len("_1x.png")]), p)
     tile_rects = tiles.save(os.path.join(out, "tiles.png"))
 
     # ---- people, enemies, backdrops, spells, ui, title ------------------------------------------------------
@@ -110,12 +120,15 @@ def main(argv):
     for m in party["members"]:
         sp.add("Party_" + m["job"], Image.open(find("Party_Prism_%s_1x.png" % m["job"])))
     zones = {t["encounter_zone"] for t in wm["tiles"] if t["realm"] == REALM and t["encounter_zone"]}
-    zones |= {f["encounters"]["zone"] for f in forge["floors"] if f["encounters"]["zone"]}
+    zones |= {f["encounters"]["zone"] for d in quest for f in d["floors"] if f["encounters"]["zone"]}
     foes = sorted({k for z in zones for fm in enc.get(z, {}).get("formations", []) for k in fm["enemies"]})
     for k in foes:
         sp.add("Foe_" + k, Image.open(find(types[k]["export_name"].replace("Mob_", "Battle_") + "_1x.png")))
-    pyre = next(b for b in boss if b["dungeon"] == "Cinder Forge")
-    sp.add("Boss_" + pyre["name"], Image.open(find("Battle_Prism_Boss_%s_1x.png" % pyre["name"])))
+    quest_bosses = {d["name"]: dict(next(b for b in boss if b["dungeon"] == d["name"])) for d in quest}
+    fb = quest_bosses[FINAL]
+    fb.update(hp=int(fb["hp"] * FINAL_SCALE["hp"]), attack=int(round(fb["attack"] * FINAL_SCALE["attack"])), demo_scale=FINAL_SCALE)
+    for b in quest_bosses.values():
+        sp.add("Boss_" + b["name"], Image.open(find("Battle_Prism_Boss_%s_1x.png" % b["name"])))
     for p in glob.glob(os.path.join(kit, "menus", "Icon_*_1x.png")):
         sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
     for p in glob.glob(os.path.join(kit, "ui", "*_1x.png")):
@@ -124,7 +137,7 @@ def main(argv):
 
     bd = Packer(2048)
     backdrop_zone = {}
-    for z in sorted(zones | {"volcano"}):
+    for z in sorted(zones | {BOSS_BACKDROP[d["theme"]] for d in quest}):
         cand = [z, z.replace("_deep", ""), "cave" if "cave" in z else "plains"]
         for c in cand:
             try:
@@ -174,7 +187,7 @@ def main(argv):
             if 0 <= n[1] < len(world) and 0 <= n[0] < len(world[0]) and n not in seen and (walk.get(world[n[1]][n[0]]) or world[n[1]][n[0]] in ("Cave", "Castle", "Shrine", "Town")):
                 seen.add(n)
                 q.append(n)
-    reach = {k: find_tile(k) in seen for k in ("Cave", "Castle", "Shrine")}
+    reach = {k: find_tile(k) in seen for k in ("Castle", "Shrine") + tuple(lm for lm, _ in QUEST)}
     if not all(reach.values()):
         raise SystemExit("world map: not reachable on foot from the Town: %s" % reach)
     for name, grid in [("town", town["demo_towns"][REALM]["grid"])] + [("int:" + k, v["grid"]) for k, v in inter["interiors"][REALM].items()]:
@@ -190,10 +203,12 @@ def main(argv):
         "town": town["demo_towns"][REALM], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == REALM},
         "interiors": inter["interiors"][REALM], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == REALM},
         "world": world, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
-        "dungeon": forge, "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
+        "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
+                     for (lm, _), d in zip(QUEST, quest)],
+        "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
         "zones": {z: enc[z] for z in zones if z in enc},
         "foes": {k: {kk: types[k][kk] for kk in ("name", "level", "hp", "attack", "defence", "speed", "exp", "gold", "element", "behaviour")} for k in foes},
-        "boss": pyre, "spells": demo_spells, "party": party, "title": J("title.json")["realms"][REALM],
+        "spells": demo_spells, "party": party, "title": J("title.json")["realms"][REALM],
         "audio": {"cues": cue_files, "events": ev_files,
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,

@@ -341,7 +341,14 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { bossBeaten: false, steps: 0, sinceBattle: 0, returnTo: null };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null };
+/* The shard quest: four dungeons from data.json (landmark -> dungeon); each boss leaves a shard; the final dungeon
+   opens once the three shards are in hand. Floor grids are copied per journey, so NEW GAME starts them fresh. */
+let grids = {};
+const shardBosses = () => D.dungeons.filter(d => !d.final).map(d => d.boss_data.name);
+const shardCount = () => shardBosses().filter(n => state.beaten.has(n)).length;
+const pretty = n => n.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase();
+const chestKey = (di, fi, x, y) => "dungeon" + di + "/" + fi + ":" + x + "," + y;
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const DIR_ROW = { down: 0, up: 1, left: 2, right: 3 };
 function townMap() {
@@ -360,11 +367,16 @@ function worldMap() {
   return { kind: "world", grid: D.world, cue: "FIELD", key: c => "wm:" + c, npcs: [],
     walk: c => !!(wt[c] && (wt[c].walkable || wt[c].kind === "landmark")), zone: c => (wt[c] || {}).encounter_zone };
 }
-function dungeonMap(i) {
-  const fl = D.dungeon.floors[i], wk = new Set(D.dungeon_walkable.concat(["Hazard", "StairsUp", "StairsDown"]));
-  if (!fl.grid._copy) { fl.grid = fl.grid.map(r => r.slice()); fl.grid._copy = true; }
-  return { kind: "dungeon", floor: i, info: fl, grid: fl.grid, cue: fl.boss && !state.bossBeaten ? "CAVE" : "CAVE", npcs: [],
-    key: c => "dg:" + c, walk: c => wk.has(c), zone: () => fl.encounters.zone, stepsMean: fl.encounters.steps_mean };
+function dungeonMap(di, i) {
+  const dg = D.dungeons[di], fl = dg.floors[i], wk = new Set(D.dungeon_walkable.concat(["Hazard", "StairsUp", "StairsDown"]));
+  const k = di + "/" + i;
+  if (!grids[k]) {
+    grids[k] = fl.grid.map(r => r.slice());
+    (fl.chests || []).forEach(c => { if (opened.has(chestKey(di, i, c.x, c.y))) grids[k][c.y][c.x] = "ChestOpen"; });
+  }
+  if (fl.boss && state.beaten.has(dg.boss_data.name)) grids[k][fl.boss.gate.y][fl.boss.gate.x] = "Floor";
+  return { kind: "dungeon", dungeon: di, floor: i, info: fl, grid: grids[k], cue: dg.theme === "castle" ? "CASTLE" : "CAVE", npcs: [],
+    key: c => "dg:" + dg.theme + ":" + c, walk: c => wk.has(c), zone: () => fl.encounters.zone, stepsMean: fl.encounters.steps_mean };
 }
 function goto(m, x, y, dir) {
   fade = 1; fadeCb = () => { map = m; P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; if (dir) P.dir = dir; mode = "field"; cue(m.cue); };
@@ -411,12 +423,12 @@ function drawDialog() {
 
 /* ---------- NPC talk ---------- */
 const LINES = {
-  Guard: ["THE FORGE TO THE EAST OF THE MOUNTAINS BURNS AGAIN. THE CAVE ROAD LEADS THERE.", "MIND THE LAVA ON THE LOWER FLOORS."],
+  Guard: ["THE FORGE IN THE NORTH-EAST BURNS AGAIN, THE TOWER SOUTH OF THE PEAKS HOWLS, AND LIGHT LEAKS FROM THE OLD RUINS IN THE WEST.", "MIND THE LAVA IN THE FORGE."],
   Merchant: ["FINE GOODS! STEP UP TO THE COUNTER."], Child: ["I DREAMT OF A CRYSTAL HEART. IT WAS CRYING."],
-  Elder: ["FOUR SHARDS HOLD THE HEART TOGETHER. THE PYRE WARDEN GUARDS THE SHARD OF FIRE IN THE CINDER FORGE.", "REST AT THE INN BEFORE YOU GO."],
+  Elder: ["THE HEART BROKE INTO SHARDS, AND WARDENS GREW AROUND THEM. THREE LIE WITHIN A WALK: FIRE IN THE CINDER FORGE, GALE IN THE WINDCUT AERIE, LIGHT IN THE SUNWELL SANCTUM.", "BRING ALL THREE TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. REST AT THE INN BEFORE YOU GO."],
   Farmer: ["RABBITS ATE MY TURNIPS AGAIN. THE WOLVES ARE NO HELP."], Innkeeper: ["WELCOME, TRAVELLERS."], Sailor: ["THE SEA PAST THE COAST IS NO PLACE FOR A ROWBOAT."],
   Mage: ["SPELLS FOR SALE. FIRE, FROST AND STRANGER THINGS."],
-  Ruler: ["BRING BACK THE SHARD OF FIRE FROM THE CINDER FORGE, AND THE REALM WILL REMEMBER YOUR NAMES."],
+  Ruler: ["BRING BACK THE SHARDS OF FIRE, GALE AND LIGHT, AND THE REALM WILL REMEMBER YOUR NAMES."],
 };
 const VOICE = { Guard: 2, Merchant: 7, Child: 11, Elder: 0, Farmer: 4, Innkeeper: 6, Sailor: 3, Mage: 9, Ruler: 1 };
 function interact() {
@@ -428,10 +440,15 @@ function interact() {
     const svc = map.kind === "interior" ? (map.info.service || "") : "";
     if (svc.startsWith("shop:") && n === map.npcs[0]) return say(LINES[n.type] || ["HELLO."], () => openShop(), VOICE[n.type]);
     if (svc === "inn" && n.type === "Innkeeper") return innPrompt();
-    if (n.type === "Ruler" && state.bossBeaten) return say(["THE SHARD OF FIRE! THE HEART BURNS A LITTLE BRIGHTER TONIGHT.", "THREE SHARDS REMAIN. THAT IS WHERE THIS DEMO ENDS. THANK YOU FOR PLAYING."], null, 1);
+    if (n.type === "Ruler" && state.beaten.size) {
+      const c = shardCount(), healed = state.beaten.has(D.dungeons.find(d => d.final).boss_data.name);
+      return say(healed ? ["THE HEART IS WHOLE AGAIN. YOU HAVE THE THANKS OF EVERY ISLAND."]
+        : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
+        : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")], null, 1);
+    }
     return say(LINES[n.type] || ["..."], null, VOICE[n.type]);
   }
-  if (t === "Chest" || t === "Chest") return openChest(tx, ty);
+  if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
   if (t === "BossGate") return bossGate();
   if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
   if (t === "Fountain") { party.forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
@@ -449,7 +466,7 @@ function innPrompt() {
   });
 }
 function openChest(x, y) {
-  const k = map.kind + (map.floor || 0) + ":" + x + "," + y;
+  const k = map.kind === "dungeon" ? chestKey(map.dungeon, map.floor, x, y) : map.kind + (map.floor || 0) + ":" + x + "," + y;
   if (opened.has(k)) return say(["IT'S EMPTY."]);
   opened.add(k); map.grid[y][x] = "ChestOpen"; sfx("CHEST");
   let loot = { gold: 100 };
@@ -534,7 +551,12 @@ function stepDone() {
   if (map.kind === "world") {
     if (t === "Town") { sfx("ENTER"); return goto(townMap(), 11, 16, "up"); }
     if (t === "Castle") { sfx("ENTER"); const it = D.interiors.Castle; return goto(interiorMap("Castle"), it.spawn.x, it.spawn.y, "up"); }
-    if (t === "Cave") { sfx("STAIRS"); const f = D.dungeon.floors[0]; return goto(dungeonMap(0), f.stairs_up.x, f.stairs_up.y, "down"); }
+    const di = D.dungeons.findIndex(d => d.landmark === t);
+    if (di >= 0) {
+      const dg = D.dungeons[di];
+      if (dg.final && shardCount() < 3) { sfx("LOCKED"); return say(["THE SHRINE IS SEALED BY A HEART-SHAPED LOCK WITH THREE EMPTY HOLLOWS. (" + shardCount() + " OF 3 SHARDS.)"]); }
+      sfx("STAIRS"); const f = dg.floors[0]; return goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down");
+    }
     if (t === "Shrine") { party.forEach(m => { m.hp = m.max; m.mp = m.mmax; }); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
     if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
   }
@@ -542,10 +564,11 @@ function stepDone() {
     const fl = map.info;
     if (t === "StairsUp") {
       sfx("STAIRS");
-      if (map.floor === 0) { const p = find(D.world, "Cave"); return goto(worldMap(), p[0], p[1] + 1, "down"); }
-      const prev = D.dungeon.floors[map.floor - 1]; return goto(dungeonMap(map.floor - 1), prev.stairs_down.x, prev.stairs_down.y, "down");
+      const dg = D.dungeons[map.dungeon];
+      if (map.floor === 0) { const p = find(D.world, dg.landmark); return goto(worldMap(), p[0], p[1] + 1, "down"); }
+      const prev = dg.floors[map.floor - 1]; return goto(dungeonMap(map.dungeon, map.floor - 1), prev.stairs_down.x, prev.stairs_down.y, "down");
     }
-    if (t === "StairsDown") { sfx("STAIRS"); const nx = D.dungeon.floors[map.floor + 1]; return goto(dungeonMap(map.floor + 1), nx.stairs_up.x, nx.stairs_up.y, "down"); }
+    if (t === "StairsDown") { sfx("STAIRS"); const nx = D.dungeons[map.dungeon].floors[map.floor + 1]; return goto(dungeonMap(map.dungeon, map.floor + 1), nx.stairs_up.x, nx.stairs_up.y, "down"); }
     if (t === "Hazard") { sfx("HURT"); party.forEach(m => { if (m.hp > 1) m.hp = Math.max(1, m.hp - Math.ceil(m.max * 0.05)); }); }
   }
   const zone = map.zone && map.zone(t);
@@ -648,15 +671,30 @@ function pickFormation(zone) {
   const fs = D.zones[zone].formations, tot = fs.reduce((a, f) => a + f.weight, 0);
   let r = Math.random() * tot; for (const f of fs) { r -= f.weight; if (r <= 0) return f.enemies.slice(0, 4); } return fs[0].enemies.slice(0, 4);
 }
+/* Each boss: its own entrance line and its own special attack, from its element (bosses.json). */
+const BOSS_FLAVOUR = {
+  fire: ["RISES FROM THE MAGMA!", "ERUPTS! MAGMA RAINS ON EVERYONE!"], air: ["DESCENDS ON A SHRIEKING WIND!", "WHIPS UP A CUTTING GALE!"],
+  water: ["SURGES UP FROM THE DEEP!", "BRINGS DOWN A CRASHING WAVE!"], earth: ["SHAKES ITSELF FREE OF THE STONE!", "SPLITS THE FLOOR WITH A QUAKE!"],
+  light: ["BLAZES INTO VIEW!", "FLARES! SEARING LIGHT FILLS THE HALL!"], dark: ["SEEPS OUT OF THE SHADOWS!", "SWALLOWS THE LIGHT!"],
+  all: ["UNFOLDS FROM THE BROKEN HEART, ONLY HALF-FORMED!", "SHATTERS! PRISM SHARDS FLY EVERYWHERE!"], none: ["GRINDS INTO MOTION!", "SLAMS THE GROUND!"],
+};
+const flavour = b => BOSS_FLAVOUR[b.element] || BOSS_FLAVOUR.none;
+function bossOf(boss) {                                   /* true = the boss of the dungeon we are in */
+  if (boss && boss.name) return boss;
+  const dg = D.dungeons[map && map.kind === "dungeon" ? map.dungeon : 0];
+  return dg.boss_data;
+}
 function startBattle(zone, boss) {
   state.sinceBattle = 0;
   const keys = boss ? null : pickFormation(zone);
-  const foes = boss ? [{ key: "boss", name: D.boss.name.replace(/([a-z])([A-Z])/g, "$1 $2"), hp: D.boss.hp, max: D.boss.hp, atk: D.boss.attack, def: D.boss.defence,
-    spd: D.boss.speed, exp: 3000, gold: 2000, el: ELEM[D.boss.element] || D.boss.element, weak: ELEM[D.boss.weakness] || D.boss.weakness, img: "Boss_" + D.boss.name, boss: true, size: 112 }] :
+  const bd0 = boss ? bossOf(boss) : null, dg = bd0 && D.dungeons.find(d => d.boss_data.name === bd0.name);
+  const foes = boss ? [{ key: "boss", name: pretty(bd0.name), hp: bd0.hp, max: bd0.hp, atk: bd0.attack, def: bd0.defence, spd: bd0.speed,
+    exp: bd0.level * 150, gold: bd0.level * 80, el: ELEM[bd0.element] || bd0.element, weak: bd0.weakness && bd0.weakness !== "none" ? ELEM[bd0.weakness] || bd0.weakness : null, img: "Boss_" + bd0.name,
+    boss: true, bossName: bd0.name, shard: bd0.shard, final: !!(dg && dg.final), elem: bd0.element, size: 112 }] :
     keys.map(k => { const f = D.foes[k]; return { key: k, name: f.name, hp: f.hp, max: f.hp, atk: f.attack, def: f.defence, spd: f.speed, exp: f.exp, gold: f.gold, img: "Foe_" + k, size: 56, el: f.element }; });
   foes.forEach((f, i) => { if (!f.boss) { f.x = 24 + (i % 2) * 70 + (i > 1 ? 18 : 0); f.y = 26 + Math.floor(i / 2) * 52 + (i % 2) * 8; } else { f.x = 30; f.y = 10; } });
-  const bd = D.backdrop_for_zone[boss ? "volcano" : zone] || Object.values(D.backdrop_for_zone)[0];
-  B = { foes, bd, phase: "intro", who: 0, cmd: 0, target: 0, sub: null, list: [], acts: [], msg: boss ? "THE PYRE WARDEN RISES FROM THE MAGMA!" : foes.length > 1 ? foes[0].name.toUpperCase() + " AND FRIENDS APPEAR!" : "A " + foes[0].name.toUpperCase() + " APPEARS!",
+  const bd = D.backdrop_for_zone[boss ? (dg ? dg.boss_backdrop : "volcano") : zone] || Object.values(D.backdrop_for_zone)[0];
+  B = { foes, bd, phase: "intro", who: 0, cmd: 0, target: 0, sub: null, list: [], acts: [], msg: boss ? "THE " + pretty(bd0.name) + " " + flavour(bd0)[0] : foes.length > 1 ? foes[0].name.toUpperCase() + " AND FRIENDS APPEAR!" : "A " + foes[0].name.toUpperCase() + " APPEARS!",
     t: 0, fx: null, pops: [], flash: {}, boss: !!boss, turn: 0, prevCue: map.cue };
   cue(boss ? "BOSS" : "BATTLE"); sfx(boss ? "CALL" : "AMBUSH");
   fade = 1; fadeCb = () => { mode = "battle"; };
@@ -792,8 +830,8 @@ function doAction(a) {
     const f = who, tg = alive(party);
     if (!tg.length) return;
     B.turn++;
-    if (f.boss && B.turn % 3 === 0) {
-      B.msg = "THE WARDEN ERUPTS! MAGMA RAINS ON EVERYONE!"; sfx("ZAP");
+    if (f.boss && B.turn % (f.final ? 2 : 3) === 0) {
+      B.msg = "THE " + f.name.toUpperCase() + " " + flavour({ element: f.elem })[1]; sfx("ZAP");
       tg.forEach(m => { const d = Math.max(1, Math.round((f.atk * 1.1 - defOf(m) * 0.6) * rnd(0.85, 1.1) * (m.defend ? 0.5 : 1))); m.hp = Math.max(0, m.hp - d); pop(m, d, "#ff8868"); });
       sfx("HURT"); return;
     }
@@ -810,7 +848,8 @@ function endRound() {
     gold += gd; cue("VICTORY"); sfx("VICTORY");
     const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."];
     party.forEach(m => { if (m.hp <= 0) return; m.exp += exp; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } });
-    if (B.boss) lines.push("THE SHARD OF FIRE IS YOURS. THE FORGE FALLS QUIET.");
+    const bf = B.foes.find(f => f.boss);
+    if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS.");
     B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
   }
   if (!alive(party).length) { cue("DEFEAT"); sfx("DEFEAT"); B.msg = "THE PARTY HAS FALLEN..."; B.phase = "end"; B.result = "lose"; B.wait = 1.2; return; }
@@ -818,21 +857,25 @@ function endRound() {
 }
 function finishBattle() {
   if (B.endLines && B.endLines.length) { B.msg = B.endLines.shift(); return; }
-  const r = B.result, wasBoss = B.boss, prev = B.prevCue;
+  const r = B.result, wasBoss = B.boss, prev = B.prevCue, bf = B.foes.find(f => f.boss);
   if (r === "lose") { B = null; mode = "gameover"; goT = 0; return; }
   B.phase = "out";
   fade = 1; fadeCb = () => {
     B = null; mode = "field"; cue(prev);
-    if (wasBoss && r === "win") {
-      state.bossBeaten = true;
+    if (wasBoss && r === "win" && bf) {
+      state.beaten.add(bf.bossName);
       const fl = map.info; if (fl && fl.boss) map.grid[fl.boss.gate.y][fl.boss.gate.x] = "Floor";
-      say(["THE GATE CRUMBLES. THE PYRE WARDEN IS GONE.", "TAKE THE SHARD BACK TO THE CASTLE NORTH OF TOWN."], null, 1);
+      if (bf.final) { ending = { t: 0 }; mode = "ending"; cue("TITLE"); saveGame(); return; }
+      const c = shardCount();
+      say(["THE GATE CRUMBLES. THE " + bf.name.toUpperCase() + " IS GONE.",
+        c >= 3 ? "THE THREE SHARDS HUM TOGETHER. THE CRYSTAL SHRINE IN THE SOUTH-EAST WILL OPEN NOW." : (3 - c) + (3 - c === 1 ? " SHARD REMAINS OUT THERE." : " SHARDS REMAIN OUT THERE.")], null, 1);
     }
   };
 }
 function bossGate() {
-  if (state.bossBeaten) return;
-  ask("HEAT POURS THROUGH THE GATE. FACE THE PYRE WARDEN?", ["YES", "NO"], i => { if (i === 0) startBattle("cave_deep", true); });
+  const b = D.dungeons[map.dungeon].boss_data;
+  if (state.beaten.has(b.name)) return;
+  ask("SOMETHING VAST WAITS BEYOND THE GATE. FACE THE " + pretty(b.name) + "?", ["YES", "NO"], i => { if (i === 0) startBattle(map.info.encounters.zone, b); });
 }
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
@@ -885,25 +928,25 @@ let titleT = 0, goT = 0, titleIdx = 0;
 function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, bag, gold, bossBeaten: !!state.bossBeaten, opened: Array.from(opened) }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened) }));
     return true;
   } catch (e) { return false; }
 }
 function saveSummary() {
   const sv = loadSave(); if (!sv) return "No saved journey";
   const lead = sv.party[0] || {};
-  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (sv.bossBeaten ? " \u00b7 Shard of Fire" : "") + " \u00b7 " + new Date(sv.at).toLocaleString();
+  const n = (sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])).length;
+  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G \u00b7 " + n + (n === 1 ? " Warden" : " Wardens") + " \u00b7 " + new Date(sv.at).toLocaleString();
 }
 function titleChoose(i) {
   const item = TITLE_ITEMS[i];
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.bossBeaten = false; opened.clear();
-  D.dungeon.floors.forEach(f => { delete f.grid._copy; });
+  party = buildParty(); state.beaten = new Set(); opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
-    party = sv.party; bag = sv.bag; gold = sv.gold; state.bossBeaten = sv.bossBeaten; sv.opened.forEach(k => opened.add(k));
+    party = sv.party; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k));
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -914,7 +957,7 @@ function titleChoose(i) {
 }
 function beginJourney() {
   goto(townMap(), 11, 15, "up");
-  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. A WARDEN STIRS IN THE CINDER FORGE, EAST BEYOND THE MOUNTAINS.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
 }
 function titleTick(dt) {
   titleT += dt;
@@ -1029,6 +1072,22 @@ window.addEventListener("keydown", e => {                 /* typing straight in 
   if (k === "Enter") { stop(); neFinish(); return; }
   if (k === "Backspace") { stop(); if (!neDelete()) neBack(); return; }
 }, true);
+/* ---------- ending ---------- */
+let ending = null;
+const ENDING_LINES = () => ["THE HEART IS WHOLE.", "", "THE WARDENS SLEEP, AND THE ISLES", "HOLD STILL IN THE SKY ONCE MORE.", "",
+  ...party.map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", "PRISMHEART", "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
+function endingTick(dt) {
+  ending.t += dt;
+  if (ending.t > 3 && (hit("a") || hit("start"))) { ending = null; mode = "title"; titleT = 0; cue("TITLE"); }
+}
+function drawEnding() {
+  const f = Math.floor(ending.t * 6) % 8;
+  g.drawImage(IM.title, f * 320, 0, 320, 224, 0, 0, 320, 224);
+  g.fillStyle = "rgba(4,2,16,.86)"; g.fillRect(0, 0, W, H);       /* the credits read over a dimmed title, never over the logo */
+  const lines = ENDING_LINES(), y0 = H - ending.t * 14;
+  lines.forEach((l, i) => { const y = y0 + i * 14; if (y > -10 && y < H) text(l, (W - tw(l)) / 2, Math.round(y), i === lines.length - 1 ? "#fff070" : "#ffffff"); });
+  if (y0 + lines.length * 14 < H / 2) { const p = "PRESS START"; if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
+}
 function drawGameOver() {
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
@@ -1036,17 +1095,18 @@ function drawGameOver() {
 }
 
 /* ---------- loop ---------- */
-let last = performance.now();
+let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
 function frame(now) {
   requestAnimationFrame(frame);
   if (PAD) PAD.poll(); menuRepeat(now);
-  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const dt = Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
   if (fade > 0) {
     fade -= dt * 3;
     if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
     if (fade < 0) fade = 0;
   } else if (mode === "title") titleTick(dt);
   else if (mode === "name" && nameEntry) nameTick(dt);
+  else if (mode === "ending" && ending) endingTick(dt);
   else if (mode === "field") fieldTick(dt);
   else if (mode === "menu") menuTick();
   else if (mode === "shop") shopTick();
@@ -1057,6 +1117,7 @@ function frame(now) {
   for (const k of ["a", "b", "start"]) if (pressed[k] && now - (pressedAt[k] || 0) > 150) pressed[k] = false;   /* buttons buffer 150 ms (a press mid-step still lands), never longer */
   if (mode === "title") drawTitle();
   else if (mode === "name" && nameEntry) drawName();
+  else if (mode === "ending" && ending) drawEnding();
   else if (mode === "field") { drawField(); if (dlg) drawDialog(); }
   else if (mode === "menu") drawMenu();
   else if (mode === "shop") drawShop();
@@ -1068,13 +1129,16 @@ function frame(now) {
 
 /* ---------- harness hooks (scripted play-throughs) ---------- */
 window.PRISM_DEMO = {
-  state: () => ({ mode, map: map && map.kind, floor: map && map.floor, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
-    dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp]), boss: B.boss },
-    party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.bossBeaten }),
+  state: () => ({ mode, map: map && map.kind, floor: map && map.floor, ending: !!ending, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
+    dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp, f.weak || null]), boss: B.boss },
+    party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.beaten.has("PyreWarden"),
+    beaten: Array.from(state.beaten), shards: D ? shardCount() : 0, dungeon: map && map.dungeon }),
+  speed: k => { SPEED = k; },
   seed: n => { let x = n >>> 0; Math.random = () => { x = (x + 0x6D2B79F5) >>> 0; let t = Math.imul(x ^ (x >>> 15), 1 | x); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; },   /* tests: repeatable fights */
   press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), name: () => nameEntry && nameEntry.name, pads: () => PAD ? PAD.devices() : [], bundle: () => PAD && PAD.bundleInfo(), toast: () => toastEl.classList.contains("on") ? toastEl.textContent : "", padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
   audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
-  warp: (kind, x, y, floor) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
+  beat: name => { state.beaten.add(name); },
+  warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss) => startBattle(zone, boss),
 };
 
