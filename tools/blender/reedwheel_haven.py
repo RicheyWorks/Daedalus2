@@ -53,11 +53,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hd_island as H  # noqa: E402
 import kit_waterworks as K  # noqa: E402
 
-LAND_ID = "reedwheel-haven-841025-r1"
+REV = "r2"                # r1: first source (dde77fe83); r2: bridge off the farm, spill + foam
+LAND_ID = "reedwheel-haven-841025-" + REV
 SEED = 841025
 KIND = "meadow"
 REALM = "WORLD-ZERO"
-NAME = "ReedwheelHaven_r1"
+NAME = "ReedwheelHaven_" + REV
 BEFORE = {   # read-only reference, pinned 2026-10-15 from D2-build/engines/unreal/art/claude-octets (sha256 prefixes)
     "dir": "D2-build/engines/unreal/art/claude-octets",
     "files": {"Octet_Spring_1_Canal.glb": [407576, "9e2f9e0f92570205"], "Octet_Spring_1.layout.json": [4333, "1a806bd34d38b49b"],
