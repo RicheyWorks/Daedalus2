@@ -921,3 +921,14 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged â†
   Menu, Status, Equip (with +/- stat change), Items (with 16 item-type icons), Shop (price, gold, who can equip),
   Save (3 slots). `data/rpg/menus.json` records every window rectangle and text field per screen so the engine can
   build them natively. `claude-battle-kit/<realm>/menus/`.
+
+### 14.25 Music and sound effects (`rpg_audio.py`)
+- Original chiptune, synthesised in numpy (no samples): Portal 22,050 Hz mono with NES-style channels (two pulse
+  waves, 4-bit stepped triangle, crunchy noise); Prismheart 32,000 Hz stereo with six voices (filtered-saw lead with
+  delayed vibrato, FM bell, detuned string pad, round bass, plucked arpeggio, kick/snare/hat) and a feedback echo.
+- Composed by rule with fixed seeds: a mode and progression per mood, a two-bar chord-tone motif repeated / varied /
+  transposed in A Aâ€² B A form with a cadence home; bass, arpeggio and drum patterns by style. Nine tracks (Title,
+  Overworld, Town, Dungeon, Battle, Boss, Victory, Inn jingle, Game Over), each in both arrangements; 15 effects
+  (cursor, confirm, cancel, hit, critical, miss, cast, heal, level up, chest, door, stairs, encounter, escape, coin).
+- `data/rpg/audio.json`: file, sample rate, bpm, key, mode, bars, loop start/end in samples, where each track plays.
+  `engines/unreal/art/claude-audio/<realm>/` (WAV, 16-bit PCM) + `spectrograms.png` for a visual check.
