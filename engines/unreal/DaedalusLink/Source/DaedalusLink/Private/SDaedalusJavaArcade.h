@@ -49,12 +49,16 @@ private:
     FText SessionIdentityText() const;
     FText RecoveryText() const;
     FText EnteredSudokuIdText() const;
+    FText EnteredBlackjackIdText() const;
     FText SelectedSudokuCellText() const;
     bool CanRefreshGame() const;
     bool CanRecoverBlackjack() const;
     bool CanStartBlackjack() const;
     bool CanStartSudoku() const;
     bool CanOpenEnteredSudoku() const;
+    bool CanOpenEnteredBlackjack() const;
+    bool CanUseReceivedBlackjackId() const;
+    FReply UseReceivedBlackjackId();
     bool CanUseCurrentSudokuId() const;
     FReply UseCurrentSudokuId();
     void StartSudoku(int32 Difficulty);
@@ -62,6 +66,7 @@ private:
     void RefreshGame();
     void RecoverBlackjack();
     void StartBlackjack();
+    void OpenEnteredBlackjack();
     FText TableText() const;
     FText BlackjackDetailsText() const;
     FReply HandleBlackjackKey(const FKey& Key);
@@ -72,6 +77,7 @@ private:
     TSharedPtr<SEditableTextBox> UsernameBox;
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
+    TSharedPtr<SEditableTextBox> BlackjackSessionBox;
     int32 SelectedCell = 0;
     bool bNewSudokuChaos = false;
     bool bNewSudokuMirror = false;

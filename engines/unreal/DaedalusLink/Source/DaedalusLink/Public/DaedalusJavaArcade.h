@@ -191,6 +191,9 @@ public:
     /** Explicit request only. The Java service may charge existing virtual hint currency. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool RequestSudokuHint();
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartBlackjackSession();
+    /** Read an existing process-local table after explicit ID entry; never creates or replays a command. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool OpenBlackjackSession(const FString& SessionId);
+    UFUNCTION(BlueprintPure, Category="Daedalus|Java Arcade") bool CanOpenBlackjackSession(const FString& SessionId) const;
     /** Recover an unknown create using its retained exact request ID. Never creates a fresh ID. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool RetryBlackjackCreate();
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SubmitBlackjackAction(const FString& Action, int32 Amount = 0, bool bAcceptInsurance = false);
@@ -227,6 +230,7 @@ private:
     bool SendSudokuCommand(const FString& Type, const TSharedPtr<FJsonObject>& Payload);
     bool ApplySudoku(const TSharedPtr<FJsonObject>& Json);
     bool ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, const FString& ExpectedRequestId);
+    bool ReadBlackjackSnapshot(const FTicket& Ticket);
     bool SendBlackjackCommand(const FString& Action, const TSharedPtr<FJsonObject>& Fields);
     void SetMessage(const TCHAR* Text);
     void ReleaseOverlay();
@@ -248,6 +252,8 @@ private:
     bool bRequestedSudokuMirror = false;
     bool bRequestedSudokuTimeAttack = false;
     FString RequestedSudokuId;
+    // Captured query target; never reflected as an accepted session before validation.
+    FString RequestedBlackjackId;
     FString ActiveOrigin;
     FString BasicAuthorization;
     FString BlackjackAuthorization;

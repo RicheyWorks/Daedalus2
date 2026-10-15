@@ -202,6 +202,42 @@ void SDaedalusJavaArcade::StartBlackjack()
     LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: table requested. Check the received table above.")
         : TEXT("Table could not start. Check the current status; an earlier start may need recovery.");
 }
+bool SDaedalusJavaArcade::CanOpenEnteredBlackjack() const
+{
+    return Game.IsValid() && BlackjackSessionBox.IsValid() && Game->CanOpenBlackjackSession(BlackjackSessionBox->GetText().ToString());
+}
+void SDaedalusJavaArcade::OpenEnteredBlackjack()
+{
+    const FString EnteredId = BlackjackSessionBox.IsValid() ? BlackjackSessionBox->GetText().ToString() : FString();
+    const bool bAccepted = CanOpenEnteredBlackjack() && Game->OpenBlackjackSession(EnteredId);
+    LocalFeedbackGame = EDaedalusJavaGame::Blackjack;
+    LocalActionFeedback = bAccepted ? TEXT("Last cabinet action: table read requested for entered ID ") + EnteredId + TEXT(". Check the received table above.")
+        : TEXT("Reopen could not start. Check the exact table ID and current status; an earlier action may need recovery.");
+}
+bool SDaedalusJavaArcade::CanUseReceivedBlackjackId() const
+{
+    const auto S = State();
+    return Game.IsValid() && Game->Game == S.Game && S.Game == EDaedalusJavaGame::Blackjack && BlackjackSessionBox.IsValid()
+        && S.bReady && !S.bBusy && !S.bNeedsSync && !S.bRemoteClosed && !S.SessionId.IsEmpty();
+}
+FReply SDaedalusJavaArcade::UseReceivedBlackjackId()
+{
+    if (!CanUseReceivedBlackjackId()) return FReply::Handled();
+    BlackjackSessionBox->SetText(FText::FromString(State().SessionId));
+    LocalFeedbackGame = EDaedalusJavaGame::Blackjack;
+    LocalActionFeedback = TEXT("Table ID filled locally. Keep it if you want to reopen the table before it expires.");
+    if (FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
+        FSlateApplication::Get().SetUserFocus(Game->GetSlateUserIndex(), BlackjackSessionBox, EFocusCause::SetDirectly);
+    return FReply::Handled();
+}
+FText SDaedalusJavaArcade::EnteredBlackjackIdText() const
+{
+    const FString EnteredId = BlackjackSessionBox.IsValid() ? BlackjackSessionBox->GetText().ToString() : FString();
+    if (EnteredId.IsEmpty()) return FText::FromString(TEXT("Enter the exact table ID to reopen an available table. A new table uses Start."));
+    const auto S = State();
+    return FText::FromString(TEXT("Entered table ID: ") + EnteredId + (S.Game == EDaedalusJavaGame::Blackjack && EnteredId == S.SessionId
+        ? TEXT("  ·  Matches the received table; use Refresh game to read it again.") : TEXT("  ·  Choose Reopen table to request it.")));
+}
 FText SDaedalusJavaArcade::EnteredSudokuIdText() const
 {
     const FString EnteredId = ResumeBox.IsValid() ? ResumeBox->GetText().ToString() : FString();
@@ -256,7 +292,7 @@ FText SDaedalusJavaArcade::RecoveryText() const
     if (!S.bReady)
         return FText::FromString(CanRefreshGame() ? TEXT("The connection is unavailable. Check the account details or try refreshing the received game.")
             : S.Game == EDaedalusJavaGame::Sudoku ? TEXT("Choose New, or enter a game ID and choose Open or Resume. An entered ID alone does not load a game.")
-            : TEXT("Choose Start to request a table. Check the current status before repeating an earlier start."));
+            : TEXT("Choose Start for a new table, or enter an existing table ID and choose Reopen table. Check the status before repeating an earlier start."));
     if (S.Game == EDaedalusJavaGame::Sudoku)
     {
         if (S.bSolved) return FText::FromString(TEXT("Puzzle complete. Choose New or open another game when ready."));
@@ -410,6 +446,19 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
     return SNew(SVerticalBox)
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
         [Button(TEXT("Start Java session"), [this] { StartBlackjack(); }, [this] { return CanStartBlackjack(); })]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+        [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::EnteredBlackjackIdText).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)
+            [SAssignNew(BlackjackSessionBox, SEditableTextBox).HintText(FText::FromString(TEXT("Received table ID to reopen")))]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [SNew(SButton).Text(FText::FromString(TEXT("Use received ID"))).IsEnabled(this, &SDaedalusJavaArcade::CanUseReceivedBlackjackId).OnClicked(this, &SDaedalusJavaArcade::UseReceivedBlackjackId)]
+            + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Reopen table"), [this] { OpenEnteredBlackjack(); }, [this] { return CanOpenEnteredBlackjack(); })]
+        ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Reopen works while the table remains available. Keep its received ID before leaving; ended or expired tables cannot be reopened."))).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::TableText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Chips]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Actions]
