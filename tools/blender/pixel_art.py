@@ -36,7 +36,10 @@ def _limit(rgb, mask, n, lattice=7):
     return top[np.argmin(d, axis=-1)]
 
 
-def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.25):
+GAMMA = 3.5   # voxel colours are stored c**(1/2.2) for Unreal and the Standard view encodes again (net c**(1/4.84)); 3.5 undoes most of it and keeps some lift in the shading
+
+
+def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.12, gamma=GAMMA):
     """Transparent render -> grid×grid sprite: alpha-weighted block average, punch, colour limit, 1 px outline."""
     h, w = px.shape[:2]
     b = w // grid
@@ -45,8 +48,9 @@ def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.25):
     asum = a.sum(axis=(1, 3))
     rgb = (blk[..., :3] * a[..., None]).sum(axis=(1, 3)) / np.maximum(asum, 1e-6)[..., None]
     m = (asum / (b * b)) > .45
+    rgb = np.clip(rgb, 0, 1) ** gamma if gamma else rgb
     lum = rgb.mean(-1, keepdims=True)
-    rgb = np.clip(lum + (rgb - lum) * punch, 0, 1) ** .9
+    rgb = np.clip(lum + (rgb - lum) * punch, 0, 1)
     q = _limit(rgb, m, colors)
     dil = m.copy()
     dil[1:] |= m[:-1]
@@ -68,11 +72,12 @@ def sprite(px, grid, colors, outline=(0.02, 0.02, 0.03), punch=1.25):
     return out
 
 
-def backdrop(px, gw, gh, colors, punch=1.15):
+def backdrop(px, gw, gh, colors, punch=1.1, gamma=GAMMA):
     """Opaque render -> gw×gh pixel backdrop with a limited palette (dithering left out: flat bands read as console art)."""
     h, w = px.shape[:2]
     bx, by = w // gw, h // gh
     blk = px[:gh * by, :gw * bx, :3].reshape(gh, by, gw, bx, 3).mean(axis=(1, 3))
+    blk = np.clip(blk, 0, 1) ** gamma if gamma else blk
     lum = blk.mean(-1, keepdims=True)
     blk = np.clip(lum + (blk - lum) * punch, 0, 1)
     q = _limit(blk, np.ones(blk.shape[:2], bool), colors, lattice=9)

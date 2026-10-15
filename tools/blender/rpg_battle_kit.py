@@ -95,6 +95,8 @@ def workbench(transparent):
     sh.light, sh.color_type, sh.show_shadows, sh.show_cavity = "STUDIO", "VERTEX", True, True
     sc.display.shadow_focus = .6
     sc.render.film_transparent = transparent
+    sc.view_settings.view_transform = "Standard"     # AgX (4.x default) desaturates the palette
+    sc.view_settings.look = "None"
     sc.render.image_settings.color_mode = "RGBA"
     sc.world = bpy.data.worlds.new("Sky") if sc.world is None else sc.world
     sc.world.use_nodes = False

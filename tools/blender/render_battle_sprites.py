@@ -64,6 +64,8 @@ def setup_scene():
     sh.light, sh.color_type, sh.show_shadows, sh.show_cavity = "STUDIO", "VERTEX", False, True
     sh.cavity_type = "WORLD"
     sc.render.film_transparent = True
+    sc.view_settings.view_transform = "Standard"
+    sc.view_settings.look = "None"
     sc.render.image_settings.file_format = "PNG"
     sc.render.image_settings.color_mode = "RGBA"
     cam = bpy.data.objects.get("SpriteCam") or bpy.data.objects.new("SpriteCam", bpy.data.cameras.new("SpriteCam"))
@@ -75,53 +77,10 @@ def setup_scene():
 
 
 def pixelate(path_in, path_out, path_1x, st):
-    img = bpy.data.images.load(path_in)
-    img.colorspace_settings.name = "Non-Color"      # read the PNG's bytes as they are (sRGB-encoded), no linearising
-    w, h = img.size
-    px = np.array(img.pixels[:], dtype=np.float32).reshape(h, w, 4)
-    bpy.data.images.remove(img)
-    g = st["grid"]
-    b = w // g
-    blk = px[:g * b, :g * b].reshape(g, b, g, b, 4)
-    a = blk[..., 3]
-    asum = a.sum(axis=(1, 3))
-    rgb = (blk[..., :3] * a[..., None]).sum(axis=(1, 3)) / np.maximum(asum, 1e-6)[..., None]
-    alpha = (asum / (b * b)) > .45
-    lum = rgb.mean(-1, keepdims=True)
-    rgb = np.clip(lum + (rgb - lum) * 1.25, 0, 1) ** .9          # punchier, like hand-picked console palettes
-    # colour limit: quantise to a coarse lattice, keep the N most common, snap every pixel to its nearest
-    lat = np.round(rgb * 7) / 7
-    cols, counts = np.unique(lat[alpha].reshape(-1, 3), axis=0, return_counts=True) if alpha.any() else (np.zeros((1, 3)), np.ones(1))
-    top = cols[np.argsort(-counts)[:st["colors"]]]
-    d = ((rgb[:, :, None, :] - top[None, None, :, :]) ** 2).sum(-1)
-    q = top[np.argmin(d, axis=-1)]
-    # outline: pixels next to the sprite but outside it
-    m = alpha
-    dil = m.copy()
-    dil[1:] |= m[:-1]
-    dil[:-1] |= m[1:]
-    dil[:, 1:] |= m[:, :-1]
-    dil[:, :-1] |= m[:, 1:]
-    edge = dil & ~m
-    out = np.zeros((g, g, 4), dtype=np.float32)
-    out[m, :3] = q[m]
-    out[m, 3] = 1
-    oc = st["outline"]
-    if oc is None:      # 16-bit: a darker shade of the neighbouring colour
-        nb = np.zeros_like(q)
-        for sh_ in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            nb = np.where(np.roll(m, sh_, axis=(0, 1))[..., None] & (nb.sum(-1, keepdims=True) == 0), np.roll(q, sh_, axis=(0, 1)), nb)
-        out[edge, :3] = nb[edge] * .35
-    else:
-        out[edge, :3] = oc
-    out[edge, 3] = 1
-    for arr, path, k in ((out, path_1x, 1), (np.repeat(np.repeat(out, 4, axis=0), 4, axis=1), path_out, 4)):
-        im = bpy.data.images.new(os.path.basename(path), arr.shape[1], arr.shape[0], alpha=True)
-        im.pixels.foreach_set(arr.ravel())
-        im.filepath_raw = path
-        im.file_format = "PNG"
-        im.save()
-        bpy.data.images.remove(im)
+    import pixel_art as PX
+    out = PX.sprite(PX.load(path_in), st["grid"], st["colors"], st["outline"])
+    PX.save(PX.upscale(out, 4), path_out)
+    PX.save(out, path_1x)
     return out
 
 
