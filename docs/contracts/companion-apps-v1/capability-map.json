@@ -219,8 +219,8 @@
     {
       "id": "photos-to-pdf",
       "repository": "RicheyWorks/PhotosToPDF",
-      "sourceCommit": "7927f75f1e347fdb0c75a0af27b46f6f89b34ebc",
-      "draftPullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/3",
+      "sourceCommit": "771ef87f7d901b5386019c6e4ec674318dc7af9f",
+      "draftPullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/4",
       "modules": [
         { "path": "PhotosToPDFPC", "role": "Focused JavaFX/PDFBox 3 Maven app and same-process private bridge; integration authority." },
         { "path": "src", "role": "Earlier themed implementation; not selected for bridge integration." },
@@ -261,19 +261,60 @@
           "evidenceStage": "source_inspected"
         },
         {
-          "id": "folder-and-output-workflow",
-          "behavior": "Scan one selected folder without recursion; choose output directory or PDFs beside first input; preserve existing filenames using suffixes; remove/clear desktop queue.",
-          "source": [
-            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/util/FileUtils.java", "symbols": ["scanDirectory", "defaultOutputDir", "ensureDirectory"] },
-            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/controller/MainController.java", "symbols": ["onAddFolder", "onRemoveSelected", "onClearAll", "onChooseOutput"] },
-            { "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/service/PdfConversionService.java", "symbols": ["resolveUniqueOutput"] }
-          ],
-          "existingInterface": "JavaFX only; no bridge folder/path API.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["future explicit local-only folder/queue UX if separately scoped; never server filesystem paths"],
-          "evidenceStage": "source_inspected"
-        },
+  "id": "folder-and-output-workflow",
+  "behavior": "Scan one selected folder without recursion; choose output directory or PDFs beside first input; preserve existing filenames using suffixes; remove/clear desktop queue.",
+  "source": [
+    {
+      "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/util/FileUtils.java",
+      "symbols": [
+        "scanDirectory",
+        "defaultOutputDir",
+        "ensureDirectory"
+      ]
+    },
+    {
+      "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/controller/MainController.java",
+      "symbols": [
+        "onAddFolder",
+        "onRemoveSelected",
+        "onClearAll",
+        "onChooseOutput"
+      ]
+    },
+    {
+      "path": "PhotosToPDFPC/src/main/java/com/photostopdfpc/service/PdfConversionService.java",
+      "symbols": [
+        "resolveUniqueOutput"
+      ]
+    }
+  ],
+  "existingInterface": "JavaFX only; no bridge folder/path API.",
+  "nativeBindings": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+      "symbols": [
+        "ADaedalusApprovedWorkspaceTerminal"
+      ],
+      "application": "PhotoPdf"
+    }
+  ],
+  "bindingStage": "source_written_unverified",
+  "missingCode": [],
+  "evidenceStage": "source_written_unverified",
+  "nativeVerification": {
+    "playAccepted": false,
+    "compiled": false,
+    "runtime": false,
+    "installed": false
+  },
+  "companionSource": {
+    "head": "771ef87f7d901b5386019c6e4ec674318dc7af9f",
+    "focusedAppValidationPassed": true,
+    "pullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/4",
+    "installedGui": false
+  },
+  "separateGrant": "Desktop approves immutable selection/settings/layout/destination; original service writes real outputs. Native uses fixed monitor/start/cancel/revoke routes, no paths or approval/upload API."
+},
         {
           "id": "progress-retry-cancel-cleanup",
           "behavior": "Desktop per-file progress/error status; bridge scoped real jobs, repeated action recovery, session/job deletion and cleanup.",
@@ -308,8 +349,8 @@
     {
       "id": "image-optimizer",
       "repository": "RicheyWorks/image-optimizer",
-      "sourceCommit": "486a121c2da6d320045f2447739f2b65c9bc88b3",
-      "draftPullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/4",
+      "sourceCommit": "bdd47836cedb5c5261d281cb4ab132a1e89fcb91",
+      "draftPullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/5",
       "modules": [ { "path": ".", "role": "Single Maven Swing application; shared Thumbnailator service and same-process bridge live under src/main." } ],
       "extensionInventory": { "scope": "tracked paths and top-level directory inventory at sourceCommit", "dedicatedConnectorDirectoryFound": false, "dedicatedPluginDirectoryFound": false, "dedicatedExamplesDirectoryFound": false, "implementedConnector": "src/main/java/com/terpenepirate/imageoptimizer/bridge/RealmImageBridge.java" },
       "prerequisites": ["JDK 21+", "graphical Swing desktop", "built executable JAR", "explicit --realm-bridge opt-in"],
@@ -347,28 +388,94 @@
           "evidenceStage": "source_inspected"
         },
         {
-          "id": "folder-plan-and-alias-protection",
-          "behavior": "Dropped files/folders and Select Folder; preserve relative layouts in optimized output, collision suffixes, exclude optimized folders, skip symlink inputs and reject output aliases/junctions/hardlinks to sources.",
-          "source": [
-            { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["drop", "startOptimization"] },
-            { "path": "src/main/java/com/terpenepirate/imageoptimizer/OptimizationPlan.java", "symbols": ["fromSelection", "resolveOutput", "collectImages", "uniqueOutput"] }
-          ],
-          "existingInterface": "Swing local filesystem planner; no bridge folder/path endpoint.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["future explicitly selected local folder workflow using original planner if scoped"],
-          "evidenceStage": "source_inspected"
-        },
+  "id": "folder-plan-and-alias-protection",
+  "behavior": "Dropped files/folders and Select Folder; preserve relative layouts in optimized output, collision suffixes, exclude optimized folders, skip symlink inputs and reject output aliases/junctions/hardlinks to sources.",
+  "source": [
+    {
+      "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java",
+      "symbols": [
+        "drop",
+        "startOptimization"
+      ]
+    },
+    {
+      "path": "src/main/java/com/terpenepirate/imageoptimizer/OptimizationPlan.java",
+      "symbols": [
+        "fromSelection",
+        "resolveOutput",
+        "collectImages",
+        "uniqueOutput"
+      ]
+    }
+  ],
+  "existingInterface": "Swing local filesystem planner; no bridge folder/path endpoint.",
+  "nativeBindings": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+      "symbols": [
+        "ADaedalusApprovedWorkspaceTerminal"
+      ],
+      "application": "ImageOptimizer"
+    }
+  ],
+  "bindingStage": "source_written_unverified",
+  "missingCode": [],
+  "evidenceStage": "source_written_unverified",
+  "nativeVerification": {
+    "playAccepted": false,
+    "compiled": false,
+    "runtime": false,
+    "installed": false
+  },
+  "companionSource": {
+    "head": "bdd47836cedb5c5261d281cb4ab132a1e89fcb91",
+    "focusedAppValidationPassed": true,
+    "pullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/5",
+    "installedGui": false
+  },
+  "separateGrant": "Desktop approves immutable selection/settings/layout/destination; original service writes real outputs. Native uses fixed monitor/start/cancel/revoke routes, no paths or approval/upload API."
+},
         {
-          "id": "duplicate-and-existing-output-skip",
-          "behavior": "Optional MD5 content duplicate detection and skip when existing destination is less than 95 percent of source size; a heuristic, not quality equivalence.",
-          "source": [ { "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java", "symbols": ["getMD5", "OptimizationWorker.doInBackground", "duplicateCheckBox", "skipOptimizedCheckBox"] } ],
-          "existingInterface": "Swing only; selected-byte bridge creates new private outputs and exposes neither option.",
-          "nativeBindings": [],
-          "bindingStage": "desktop_only_intentionally_unexposed",
-          "missingCode": ["product decision and bounded API design before exposing desktop skip semantics"],
-          "evidenceStage": "source_inspected"
-        },
+  "id": "duplicate-and-existing-output-skip",
+  "behavior": "Optional MD5 content duplicate detection and skip when existing destination is less than 95 percent of source size; a heuristic, not quality equivalence.",
+  "source": [
+    {
+      "path": "src/main/java/com/terpenepirate/imageoptimizer/ImageOptimizer.java",
+      "symbols": [
+        "getMD5",
+        "OptimizationWorker.doInBackground",
+        "duplicateCheckBox",
+        "skipOptimizedCheckBox"
+      ]
+    }
+  ],
+  "existingInterface": "Swing only; selected-byte bridge creates new private outputs and exposes neither option.",
+  "nativeBindings": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+      "symbols": [
+        "ADaedalusApprovedWorkspaceTerminal"
+      ],
+      "application": "ImageOptimizer"
+    }
+  ],
+  "bindingStage": "source_written_unverified",
+  "missingCode": [],
+  "evidenceStage": "source_written_unverified",
+  "nativeVerification": {
+    "playAccepted": false,
+    "compiled": false,
+    "runtime": false,
+    "installed": false
+  },
+  "companionSource": {
+    "head": "bdd47836cedb5c5261d281cb4ab132a1e89fcb91",
+    "focusedAppValidationPassed": true,
+    "pullRequest": "https://github.com/RicheyWorks/image-optimizer/pull/5",
+    "installedGui": false
+  },
+  "separateGrant": "Desktop approves immutable selection/settings/layout/destination; original service writes real outputs. Native uses fixed monitor/start/cancel/revoke routes, no paths or approval/upload API."
+},
         {
           "id": "job-results-retry-cancel",
           "behavior": "Bridge real status, actual input/output byte counts and dimensions, frozen uncertain retries, cancel/session deletion/expiry. Desktop has progress/logs but no persistent job history or cancel control.",
@@ -783,5 +890,49 @@
     "completionEvidence": "App job SUCCEEDED plus real authenticated output export, a matching persisted Synapse receipt, or a separately verified approved-job fax preparation/status/PDF operation. Preparation is not transmission. Native installation/placement/Play must be independently accepted by codex-play-guard.",
     "remainingPortfolioWork": "Primary photo/image/study/fax sources are written; native installation/runtime remain pending. Photo/Image modal export guard correction is written under claim31288, native compile/runtime pending. Photo/Image approved workspaces and full Synapse workbench are active source claims; wider fax privacy/role/extraction and unavailable external transport remain explicit gaps."
   },
-  "modalExportCorrection": {"claim":31288,"stage":"source_corrected_unverified","baseCommit":"3f5e9a6d730cb703ec9b52adcb2db67eb6d09625","defect":"A modal save chooser could dispatch terminal close or ownership changes after the actor check, before an export was created.","correction":"Photo and Image actors pass weak-owner/panel-generation/local-owner predicates into their export helpers. The helpers check before and after the chooser, before temporary creation, each bounded write, flush and non-replacing commit. Invalidated work cleans its owned temporary. Compatibility overloads remain for callers without a terminal lifecycle policy. Photo image selection also re-acquires the weak owner after its modal chooser before dereferencing terminal state.","nativeCompiled":false,"runtimeVerified":false,"sourceReview":"independent six-file source review complete; adjacent Photo chooser weak-owner reacquisition rechecked separately"}
+  "modalExportCorrection": {"claim":31288,"stage":"source_corrected_unverified","baseCommit":"3f5e9a6d730cb703ec9b52adcb2db67eb6d09625","defect":"A modal save chooser could dispatch terminal close or ownership changes after the actor check, before an export was created.","correction":"Photo and Image actors pass weak-owner/panel-generation/local-owner predicates into their export helpers. The helpers check before and after the chooser, before temporary creation, each bounded write, flush and non-replacing commit. Invalidated work cleans its owned temporary. Compatibility overloads remain for callers without a terminal lifecycle policy. Photo image selection also re-acquires the weak owner after its modal chooser before dereferencing terminal state.","nativeCompiled":false,"runtimeVerified":false,"sourceReview":"independent six-file source review complete; adjacent Photo chooser weak-owner reacquisition rechecked separately"},
+  "approvedWorkspaceContinuation": {
+  "companionCommits": {
+    "synapseService": "03273e1e81080b1343e84791b6d6b4233e437963",
+    "photo": "771ef87f7d901b5386019c6e4ec674318dc7af9f",
+    "image": "bdd47836cedb5c5261d281cb4ab132a1e89fcb91"
+  },
+  "nativeRuntimeAccepted": false,
+  "manifests": [
+    "docs/contracts/photo-pdf-v1/approved-workspace-install-manifest.json",
+    "docs/contracts/image-optimizer-v1/approved-workspace-install-manifest.json"
+  ],
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceClient.h",
+      "sha256": "5278cce771058b4602b27a7d93f93239b6eff65dcb14cc80a5164a3e84b8dc65"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusApprovedWorkspaceClient.cpp",
+      "sha256": "ec8c43acc3f8a18c2f37b5fa6a208dd7af84801fbb0b4e8ed14b7fd66aa9db2c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+      "sha256": "b47a259a5284a8dd6d233ac339515bdf7a72226230be876b3a724a8b61e71520"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusApprovedWorkspaceTerminal.cpp",
+      "sha256": "a9c8bf38b37133ad088e2658ad105f5bd54671f6410ca33a23a7837ea7562383"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.h",
+      "sha256": "3e81d3bd34a3e6598614065b3c544289d3911b4109fcf550f88f6704a3bd623d"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.cpp",
+      "sha256": "2bd22af6210ecb6efc8a5505e70e859bb09eb0b574afd8af77c91e561359cf9a"
+    }
+  ],
+  "remaining": "Native compile/install/physical art/Play unverified; Synapse native browser/file adapter source pending final dependency handoff; wider fax privacy/tools/role source active; original WebP/media and offline ZIP/legacy dependency limits remain",
+  "branch": "codex/approved-workspace-native-20261015",
+  "claim": 31322,
+  "sourceReview": "Independent six-file reviews; final remaining-lease and cancellation-count deltas accepted",
+  "baseCommit": "758cfd44f917684a840a034953980e21092899b0",
+  "stage": "source_written_unverified"
+}
 }

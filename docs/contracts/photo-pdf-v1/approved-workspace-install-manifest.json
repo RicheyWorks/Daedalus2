@@ -1,0 +1,102 @@
+{
+  "acceptance": [
+    "Exact app protocol/capabilities/limits and typed link rejection",
+    "Frozen identities/settings/modes/expiry and counts",
+    "Same-key uncertainty, repeated/canceled actions and no new work",
+    "Ownership/reach/realm/pawn/viewport/focus/lifecycle",
+    "Actual approved desktop output existence/hash/PDF or image validation",
+    "Native compile/UHT/link/load and owner-led physical placement/Play"
+  ],
+  "stage": "source_written_unverified",
+  "behavior": {
+    "repeatedActions": "Same key after uncertainty/APPROVED reconciliation; never restart queued/running/completed/canceled plan",
+    "privacy": "No source paths/names or output destination enters native wire/UI; transient capability in memory only",
+    "selection": "Only desktop selects/freezes files or folder, settings, mode and approved output destination",
+    "cancel": "Already committed outputs remain, including partial failed/canceled jobs",
+    "outputs": "Original app commits output files in the explicitly approved destination; native never follows downloadPath or accepts any filesystem path",
+    "actions": "Read fixed capabilities and plan; explicitly start/retry one frozen key, refresh actual progress, cancel unfinished work, revoke"
+  },
+  "repository": "RicheyWorks/Daedalus2",
+  "revisionBinding": "Exact containing delivery commit; normalize UTF8 noBOM CRLF to LF and preserve all other bytes/final newline",
+  "sourceFiles": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceClient.h",
+      "sha256": "5278cce771058b4602b27a7d93f93239b6eff65dcb14cc80a5164a3e84b8dc65"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusApprovedWorkspaceClient.cpp",
+      "sha256": "ec8c43acc3f8a18c2f37b5fa6a208dd7af84801fbb0b4e8ed14b7fd66aa9db2c"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+      "sha256": "b47a259a5284a8dd6d233ac339515bdf7a72226230be876b3a724a8b61e71520"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusApprovedWorkspaceTerminal.cpp",
+      "sha256": "a9c8bf38b37133ad088e2658ad105f5bd54671f6410ca33a23a7837ea7562383"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.h",
+      "sha256": "3e81d3bd34a3e6598614065b3c544289d3911b4109fcf550f88f6704a3bd623d"
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.cpp",
+      "sha256": "2bd22af6210ecb6efc8a5505e70e859bb09eb0b574afd8af77c91e561359cf9a"
+    }
+  ],
+  "binding": {
+    "application": "PhotoPdf",
+    "configuredSecrets": false,
+    "buildModuleChange": false,
+    "playerScope": "Opening player/controller/world/realm/viewport/mapped Slate user; UIOnly viewport without controller ignore counters",
+    "interaction": "Existing ADaedalusUsable / nearby local possessed Hero",
+    "windowsOnly": true,
+    "mesh": "Engine cube placeholder; art/placement remain owner work",
+    "nativeClass": "/Script/DaedalusLink.DaedalusApprovedWorkspaceTerminal"
+  },
+  "sourceReview": {
+    "openP1P2": 0,
+    "closedP2": "Photo same-key retry after APPROVED reconciliation; Image remaining monotonic lease uses request start and only shortens; canceled counts/request displayed without inventing Photo count",
+    "files": 6,
+    "independent": true,
+    "appOwnerPeerReviewAccepted": true
+  },
+  "claim": {
+    "exactHubMessage": 31322,
+    "owner": "pootscoot-practical-apps",
+    "runtimeAcceptance": false,
+    "editorAuthorityChanged": false
+  },
+  "verification": {
+    "compiled": false,
+    "installed": false,
+    "playAccepted": false,
+    "runtimeVerified": false,
+    "personalFilesRead": false,
+    "uhtRun": false
+  },
+  "companion": {
+    "wireHandoffAccepted": true,
+    "sourceCommit": "771ef87f7d901b5386019c6e4ec674318dc7af9f",
+    "repository": "RicheyWorks/PhotosToPDF",
+    "contract": "PhotosToPDFPC/docs/APPROVED_WORKSPACE.md",
+    "protocol": "photospdf.workspace.v1",
+    "sourcePublication": "draft published; remote and PR head verified",
+    "pullRequest": "https://github.com/RicheyWorks/PhotosToPDF/pull/4",
+    "focusedValidation": {
+      "fullPcSkipped": 2,
+      "combinedUniqueCases": 39,
+      "newRegressionCases": 2,
+      "subsequentFocusedRun": 7,
+      "errors": 0,
+      "legacyPureConverterTests": 10,
+      "failures": 0,
+      "zipAndFullLegacyBuild": "blocked offline by uncached plugin/SQLite/JavaMail dependencies",
+      "fullPcRun": 37,
+      "jarProducedAndResourcesInspected": true
+    }
+  },
+  "schema": "daedalus.approved-workspace.native-install-binding.v1",
+  "baselineCommit": "758cfd44f917684a840a034953980e21092899b0",
+  "branch": "codex/approved-workspace-native-20261015"
+}
