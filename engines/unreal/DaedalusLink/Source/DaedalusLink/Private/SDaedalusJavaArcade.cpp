@@ -94,7 +94,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
     {
         const FString Label = FString::Printf(TEXT("New %d"), Difficulty);
         Starts->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
-        [Button(*Label, [this, Difficulty] { if (Game.IsValid()) Game->StartSudokuGame(Difficulty); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
+        [Button(*Label, [this, Difficulty] { if (Game.IsValid()) Game->StartSudokuGameWithModes(Difficulty, bNewSudokuChaos, bNewSudokuMirror, bNewSudokuTimeAttack); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
     }
     auto Grid = SNew(SGridPanel);
     for (int32 Index = 0; Index < 81; ++Index)
@@ -115,7 +115,26 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
         [Button(*Label, [this, Value] { if (Game.IsValid()) Game->SubmitSudokuMove(SelectedCell / 9, SelectedCell % 9, Value); }, [this] { const auto S = State(); return S.bCanAct && S.Givens.IsValidIndex(SelectedCell) && !S.Givens[SelectedCell]; })];
     }
     return SNew(SVerticalBox)
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 12, 0)[SNew(STextBlock).Text(FText::FromString(TEXT("New game options:")))]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 12, 0)[SudokuMode(TEXT("Chaos"), &SDaedalusJavaArcade::bNewSudokuChaos)]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 12, 0)[SudokuMode(TEXT("Mirror"), &SDaedalusJavaArcade::bNewSudokuMirror)]
+            + SHorizontalBox::Slot().AutoWidth()[SudokuMode(TEXT("Time Attack"), &SDaedalusJavaArcade::bNewSudokuTimeAttack)]
+        ]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Starts]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text_Lambda([this]
+        {
+            const auto S = State();
+            if (!S.bReady) return FText::FromString(TEXT("Current modes appear after the game is confirmed."));
+            TArray<FString> Modes;
+            if (S.bChaosMode) Modes.Add(TEXT("Chaos"));
+            if (S.bMirrorMode) Modes.Add(TEXT("Mirror"));
+            if (S.TimeLimitSeconds > 0) Modes.Add(TEXT("Time Attack"));
+            return FText::FromString(TEXT("Current game: ") + (Modes.IsEmpty() ? FString(TEXT("Ordinary")) : FString::Join(Modes, TEXT(" / "))));
+        }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(FString::Printf(TEXT("Difficulty %d  ·  Score %lld  ·  Lives %d  ·  Moves %lld  ·  Elapsed %lld s%s"), S.Difficulty, S.Score, S.Lives, S.MoveCount, S.ElapsedSeconds, S.TimeLimitSeconds > 0 ? *FString::Printf(TEXT("  ·  Remaining %lld s"), S.SecondsLeft) : TEXT(""))); }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Grid]
@@ -135,6 +154,18 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { if (Game.IsValid() && ResumeBox.IsValid()) Game->ResumeSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
         ]
         + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)];
+}
+TSharedRef<SWidget> SDaedalusJavaArcade::SudokuMode(const TCHAR* Label, bool SDaedalusJavaArcade::* Field)
+{
+    return SNew(SCheckBox)
+        .IsEnabled_Lambda([this] { return !State().bBusy; })
+        .IsChecked_Lambda([this, Field] { return this->*Field ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
+        .OnCheckStateChanged_Lambda([this, Field](ECheckBoxState Checked)
+        {
+            if (Checked != ECheckBoxState::Undetermined) this->*Field = Checked == ECheckBoxState::Checked;
+            FocusBoard();
+        })
+        [SNew(STextBlock).Text(FText::FromString(Label))];
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
 {

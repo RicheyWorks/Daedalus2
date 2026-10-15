@@ -538,7 +538,8 @@ bool ADaedalusJavaArcade::ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, co
     return true;
 }
 
-bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume)
+bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume,
+    bool bChaos, bool bMirror, bool bTimeAttack)
 {
     FString Origin;
     if (HttpTask.IsValid() || BasicAuthorization.IsEmpty() || Difficulty < 1 || Difficulty > 5
@@ -546,6 +547,10 @@ bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, i
         || !JavaArcadeWire::Origin(SudokuOrigin, Origin)) return false;
     StopSocket(); Guard.Open(); Sudoku = {}; Blackjack = {}; View = {}; Game = EDaedalusJavaGame::Sudoku; ActiveGame = Game; View.Game = Game;
     ActiveOrigin = Origin; bCreateSudoku = bCreate; bResumeSudoku = bResume; RequestedSudokuId = ExistingId; RequestedDifficulty = Difficulty;
+    // Capture the accepted request before async bootstrap; later UI choices cannot alter it.
+    bRequestedSudokuChaos = bCreate && bChaos;
+    bRequestedSudokuMirror = bCreate && bMirror;
+    bRequestedSudokuTimeAttack = bCreate && bTimeAttack;
     CsrfHeader.Reset(); CsrfToken.Reset(); CookieJar.Reset(); AuthenticatedPlayerId.Reset();
     const auto Ticket = Guard.BeginRead(FPlatformTime::Seconds());
     if (!SendHttp(Operation::SudokuBootstrap, TEXT("GET"), TEXT("/api/session"), FString(), Ticket))
@@ -556,6 +561,10 @@ bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, i
     return true;
 }
 bool ADaedalusJavaArcade::StartSudokuGame(int32 Difficulty) { return BeginSudoku(true, FString(), Difficulty); }
+bool ADaedalusJavaArcade::StartSudokuGameWithModes(int32 Difficulty, bool bChaos, bool bMirror, bool bTimeAttack)
+{
+    return BeginSudoku(true, FString(), Difficulty, false, bChaos, bMirror, bTimeAttack);
+}
 bool ADaedalusJavaArcade::OpenSudokuGame(const FString& Id) { return BeginSudoku(false, Id, 1); }
 bool ADaedalusJavaArcade::ResumeSudokuGame(const FString& Id) { return BeginSudoku(false, Id, 1, true); }
 bool ADaedalusJavaArcade::CreateSudokuAfterBootstrap()
@@ -563,7 +572,9 @@ bool ADaedalusJavaArcade::CreateSudokuAfterBootstrap()
     if (bCreateSudoku)
     {
         const auto Ticket = Guard.BeginCreation(FPlatformTime::Seconds());
-        const FString Path = FString::Printf(TEXT("/api/game/new?difficulty=%d&chaos=false&mirror=false&timeAttack=false"), RequestedDifficulty);
+        const FString Path = FString::Printf(TEXT("/api/game/new?difficulty=%d&chaos=%s&mirror=%s&timeAttack=%s"), RequestedDifficulty,
+            bRequestedSudokuChaos ? TEXT("true") : TEXT("false"), bRequestedSudokuMirror ? TEXT("true") : TEXT("false"),
+            bRequestedSudokuTimeAttack ? TEXT("true") : TEXT("false"));
         return SendHttp(Operation::SudokuCreate, TEXT("POST"), Path, FString(), Ticket);
     }
     if (bResumeSudoku)

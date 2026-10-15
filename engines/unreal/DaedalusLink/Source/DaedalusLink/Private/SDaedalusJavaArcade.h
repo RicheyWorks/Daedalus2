@@ -20,6 +20,7 @@ public:
 
 private:
     TSharedRef<SWidget> SudokuPanel();
+    TSharedRef<SWidget> SudokuMode(const TCHAR* Label, bool SDaedalusJavaArcade::* Field);
     TSharedRef<SWidget> BlackjackPanel();
     TSharedRef<SWidget> BlackjackSettings();
     TSharedRef<SWidget> BlackjackRule(const TCHAR* Label, const TCHAR* Rule, bool FDaedalusJavaBlackjackRules::* Field);
@@ -38,5 +39,8 @@ private:
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
     int32 SelectedCell = 0;
+    bool bNewSudokuChaos = false;
+    bool bNewSudokuMirror = false;
+    bool bNewSudokuTimeAttack = false;
     FString LocalMessage;
 };

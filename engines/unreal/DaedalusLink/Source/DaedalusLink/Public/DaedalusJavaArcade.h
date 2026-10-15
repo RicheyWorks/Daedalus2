@@ -180,6 +180,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ConfigureSudokuCredentials(const FString& Username, const FString& Password);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ConfigureBlackjackToken(const FString& Token);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartSudokuGame(int32 Difficulty = 1);
+    /** Options apply only to the new Java-owned game; ordinary StartSudokuGame stays unchanged. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartSudokuGameWithModes(int32 Difficulty, bool bChaos, bool bMirror, bool bTimeAttack);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool OpenSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ResumeSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SaveSudokuGame();
@@ -216,7 +218,8 @@ private:
     bool CoreTick(float Delta);
     bool SendHttp(Operation Op, const FString& Verb, const FString& Path, const FString& Body, const FTicket& Ticket);
     void FinishHttp(Operation Op, FTicket Ticket, const TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe>& Task);
-    bool BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume = false);
+    bool BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume = false,
+        bool bChaos = false, bool bMirror = false, bool bTimeAttack = false);
     bool CreateSudokuAfterBootstrap();
     bool ConnectSudokuSocket();
     void HandleSocketMessage(uint64 Epoch, const FString& Message);
@@ -241,6 +244,9 @@ private:
     bool bResumeSudoku = false;
     EDaedalusJavaGame ActiveGame = EDaedalusJavaGame::Sudoku;
     int32 RequestedDifficulty = 1;
+    bool bRequestedSudokuChaos = false;
+    bool bRequestedSudokuMirror = false;
+    bool bRequestedSudokuTimeAttack = false;
     FString RequestedSudokuId;
     FString ActiveOrigin;
     FString BasicAuthorization;
