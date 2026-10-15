@@ -33,7 +33,7 @@ import realm_rpg_cast as RC  # noqa: E402
 import rpg_bestiary as BE  # noqa: E402
 import voxel_island as V  # noqa: E402
 
-STYLE = {"portal": {"res": 384, "grid": 64, "colors": 6, "outline": (0.02, 0.02, 0.03), "yaw": 0.0, "elev": 8.0},
+STYLE = {"portal": {"res": 384, "grid": 64, "colors": 7, "outline": (0.02, 0.02, 0.03), "yaw": 28.0, "elev": 16.0},
          "prism": {"res": 448, "grid": 112, "colors": 24, "outline": None, "yaw": -35.0, "elev": 14.0}}
 
 
@@ -76,6 +76,7 @@ def setup_scene():
 
 def pixelate(path_in, path_out, path_1x, st):
     img = bpy.data.images.load(path_in)
+    img.colorspace_settings.name = "Non-Color"      # read the PNG's bytes as they are (sRGB-encoded), no linearising
     w, h = img.size
     px = np.array(img.pixels[:], dtype=np.float32).reshape(h, w, 4)
     bpy.data.images.remove(img)
@@ -86,6 +87,8 @@ def pixelate(path_in, path_out, path_1x, st):
     asum = a.sum(axis=(1, 3))
     rgb = (blk[..., :3] * a[..., None]).sum(axis=(1, 3)) / np.maximum(asum, 1e-6)[..., None]
     alpha = (asum / (b * b)) > .45
+    lum = rgb.mean(-1, keepdims=True)
+    rgb = np.clip(lum + (rgb - lum) * 1.25, 0, 1) ** .9          # punchier, like hand-picked console palettes
     # colour limit: quantise to a coarse lattice, keep the N most common, snap every pixel to its nearest
     lat = np.round(rgb * 7) / 7
     cols, counts = np.unique(lat[alpha].reshape(-1, 3), axis=0, return_counts=True) if alpha.any() else (np.zeros((1, 3)), np.ones(1))
@@ -158,6 +161,7 @@ for realm in want:
         out_png, out_1x = os.path.join(od, name + ".png"), os.path.join(od, name + "_1x.png")
         if os.path.exists(out_1x) and not force:
             im = bpy.data.images.load(out_1x)
+            im.colorspace_settings.name = "Non-Color"
             small.append(np.array(im.pixels[:], dtype=np.float32).reshape(im.size[1], im.size[0], 4))
             bpy.data.images.remove(im)
             rows.append(dict(meta, sprite=name + ".png", sprite_1x=name + "_1x.png"))
