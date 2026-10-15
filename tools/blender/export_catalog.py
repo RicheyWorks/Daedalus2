@@ -33,6 +33,12 @@ elif module == "props":
     def voxels_of(name):
         p = M.plan(name)
         return p if isinstance(p, list) else [v for vs in p.values() for v in vs]
+elif module == "prism":
+    import realm_prism_props as M
+    PITCH = {"structure": 14.0, "item": 1.6}
+
+    def voxels_of(name):
+        return M.plan(name)
 elif module == "sims":
     import voxel_sims as M
     PITCH = {"kit": 3.5, "machine": 2.5, "appliance": 3.0, "house": 24.0}

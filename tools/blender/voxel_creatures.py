@@ -590,6 +590,7 @@ INSECTS = ("butterfly", "moth", "dragonfly", "firefly", "ladybug", "beetle", "gr
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
 SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH),
            "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA, "insect": INSECTS}
+NAMES = {}   # species key -> export name override (e.g. "Mob_Portal_AshDrake_Voxel_01")
 EXTRA = {}   # family -> (names, plan_fn): other catalogues (voxel_dragons) register here and ride the same rig/clips/export
 
 
@@ -638,7 +639,7 @@ def build(species, out_dir, scale=10.0, keep=False):
     import bpy
     parts = plan(species)
     fam = family_of(species)
-    name = "Creature_" + "".join(w.capitalize() for w in species.split("_"))
+    name = NAMES.get(species) or "Creature_" + "".join(w.capitalize() for w in species.split("_"))
     for ob in list(bpy.data.objects):
         if ob.name.startswith(name):
             bpy.data.objects.remove(ob, do_unlink=True)
