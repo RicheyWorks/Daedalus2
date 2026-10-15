@@ -1262,3 +1262,19 @@ WARN; this slice does not change them.
 - team-codex: a `ConfigureHost` loader for `links.json`, and the two mismatches above.
 - A host: the `settled_care` fact store and the capture/enclose actions.
 - Blender: the tide-pool shelf and pen art.
+- **r4 (PootScoot 32503): clearance is measured, not assumed.**
+  - **What r3 got wrong:** r3 said the walk stayed 8 m clear of the wheel. It only tested centre distance on the
+    original route legs, and never re-tested the leg into the detour point it inserted. Measured on r3's delivered
+    GLBs with the new `tools/blender/clearance_check.py`, the true minimum is 1.64 m. Poot's 4.75 m witness was, as
+    Poot said, only an upper bound.
+  - **How it is defined now:** the minimum 3-D distance from any Walkway vertex to any wheel vertex (rotor + frame)
+    on final geometry. The required minimum is 3.0 m (`CLEARANCE_M`).
+  - **How r4 meets it:**
+    - Every leg is re-tested, including legs into inserted detours.
+    - The detour is pushed further out until the measured clearance holds; if it never does, the build fails.
+    - The final joined Walkway is measured again and recorded in the manifest (`clearance.measured_m`, 3.106 m).
+    - `clearance_check.py` reproduces 3.1056 m from the delivered GLBs, in a separate process.
+  - **Found on the way:** `matrix_world` is stale for objects made in the same script until
+    `view_layer.update()` runs, so the first measurement compared un-placed meshes. Lesson filed.
+  - **Adapters:** every design and data row now names its `required_adapter`: repair station, reed harvest,
+    reed-bed purity, wheel, refuge.

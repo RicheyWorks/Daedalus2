@@ -53,9 +53,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hd_island as H  # noqa: E402
 import kit_waterworks as K  # noqa: E402
 
-REV = "r3"                # r1: first source (dde77fe83); r2: bridge off the farm, spill + foam, dressing (f42e478dc);
-                          # r3: honest repair/refuge rows, UCX named for their meshes, post-to-post rails, walk clear of the wheel
+REV = "r4"                # r1: first source (dde77fe83); r2: bridge off the farm, spill + foam, dressing (f42e478dc);
+                          # r3: honest repair/refuge rows, UCX named for their meshes, post-to-post rails, walk clear of the wheel (591bfc761)
+                          # r4: clearance is MEASURED on final geometry (mesh-to-mesh), not a centre distance; adapters on every design row
 LAND_ID = "reedwheel-haven-841025-" + REV
+CLEARANCE_M = 3.0        # walk-to-wheel minimum vertex distance on final geometry (see build())
 SEED = 841025
 KIND = "meadow"
 REALM = "WORLD-ZERO"
@@ -148,18 +150,61 @@ def build(out_dir):
     b0, b1 = at(BX, 8), at(BX, -8)
     bridge = K.footbridge(H, NAME + "_Footbridge", b0, b1, W + 1.0)
     near = min(A["path"], key=lambda p: math.hypot(p[0] - st_x, p[1] - st_y))
-    route = [near, at(BX, 14), at(BX, 9), b0]
-    # r3: keep the walk 8 m clear of the wheel (r2's ran into the frame): push any too-close leg out along +perp
-    fixed = [route[0]]
-    for a, b in zip(route, route[1:]):
-        dx, dy = b[0] - a[0], b[1] - a[1]
-        t = max(0.0, min(1.0, ((wx - a[0]) * dx + (wy - a[1]) * dy) / max(1e-6, dx * dx + dy * dy)))
-        cx, cy = a[0] + dx * t, a[1] + dy * t
-        if math.hypot(cx - wx, cy - wy) < 8 and 0 < t < 1:
-            fixed.append((st_x + px * 6.5, st_y + py * 6.5))     # behind the repair pad, not across it
-        fixed.append(b)
-    route = fixed
-    walk = K.boardwalk(H, NAME + "_Boardwalk", route, h)
+    # r4 (PootScoot 32503): the walk must clear the wheel by CLEARANCE_M, measured as the minimum 3-D distance between
+    # any vertex of the walk (boardwalk + footbridge) and any vertex of the wheel (rotor + frame), on the final
+    # geometry. r3 claimed 8 m but only tested centre distances on the original legs; a vertex pair was 4.75 m apart.
+    route0 = [near, at(BX, 14), at(BX, 9), b0]
+
+    def detour(push):
+        """Route legs that pass the wheel within 8 m + push go behind the repair pad, pushed further out each try.
+        Every inserted leg is re-tested (r3 tested only the original legs)."""
+        pts = [route0[0]]
+        for a, b in zip(route0, route0[1:]):
+            for _ in range(4):
+                dx, dy = b[0] - pts[-1][0], b[1] - pts[-1][1]
+                t = max(0.0, min(1.0, ((wx - pts[-1][0]) * dx + (wy - pts[-1][1]) * dy) / max(1e-6, dx * dx + dy * dy)))
+                cx, cy = pts[-1][0] + dx * t, pts[-1][1] + dy * t
+                if math.hypot(cx - wx, cy - wy) >= 8 + push or not 0 < t < 1:
+                    break
+                k = 6.5 + push
+                pts.append((st_x + px * k + sx * (k * .4), st_y + py * k + sy * (k * .4)))
+                if len(pts) >= 2:                              # the leg INTO the detour must clear too
+                    p0, p1 = pts[-2], pts[-1]
+                    ex, ey = p1[0] - p0[0], p1[1] - p0[1]
+                    tt = max(0.0, min(1.0, ((wx - p0[0]) * ex + (wy - p0[1]) * ey) / max(1e-6, ex * ex + ey * ey)))
+                    if math.hypot(p0[0] + ex * tt - wx, p0[1] + ey * tt - wy) < 8 + push:
+                        pts.insert(-1, (p0[0] + px * (8 + push), p0[1] + py * (8 + push)))
+            pts.append(b)
+        return pts
+    bpy.context.view_layer.update()                           # matrix_world is stale for new objects until this runs
+    wheel_v = [o.matrix_world @ v.co for o in wheel for v in o.data.vertices]
+    kd = __import__("mathutils").kdtree.KDTree(len(wheel_v))
+    for i, v in enumerate(wheel_v):
+        kd.insert(v, i)
+    kd.balance()
+
+    def clearance(objs):
+        bpy.context.view_layer.update()
+        return min(kd.find(o.matrix_world @ v.co)[2] for o in objs for v in o.data.vertices)
+    walk = None
+    for push in (0, 2, 4, 6, 8, 10):
+        if walk:
+            for o in walk:
+                H.GROUP.remove(o)
+                bpy.data.objects.remove(o, do_unlink=True)
+        route = detour(push)
+        walk = K.boardwalk(H, NAME + "_Boardwalk", route, h)
+        walk_clear = clearance(walk + bridge)
+        if walk_clear >= CLEARANCE_M:
+            break
+    if walk_clear < CLEARANCE_M:
+        worst = min(((kd.find(o.matrix_world @ v.co)[2], o.name, kd.find(o.matrix_world @ v.co)[1]) for o in walk + bridge for v in o.data.vertices))
+        owner = 0
+        for o in wheel:
+            if worst[2] < owner + len(o.data.vertices):
+                break
+            owner += len(o.data.vertices)
+        raise RuntimeError("walk clearance %.2f m < %.1f m after every detour (walk %s vs wheel %s)" % (walk_clear, CLEARANCE_M, worst[1], o.name))
     rbx, rby = S[1]
     reeds = K.reed_bed(H, NAME + "_ReedBed", rbx, rby, 7.5, 5.0, h, SEED, W)
     rf_x, rf_y = site(ring([S[2], S[1], S[3]], (-14, -17, -20, -24, 14, 17, 20, 24)), clear=7)
@@ -191,12 +236,15 @@ def build(out_dir):
               "pending": "wheel->machine wiring/snapping is design-only (island_chemistry power_unit.source; ADR-066 PowerUnit wiring)",
               "parts": sorted(pu["parts"]), "broken_paddles": 4, "rotor_pivot": "axle"})
     H.marker(X, NAME, "craft", "repair_station", st_x, st_y, h(st_x, st_y), "kit_waterworks.repair_station; part crates named by chemistry power_unit.parts",
-             {"status": "design", "choice": "repair", "note": "salvage source exists: Ledger.hulks rotor salvage (colony_ledger.py:290)"})
+             {"status": "design", "choice": "repair", "note": "salvage source exists: Ledger.hulks rotor salvage (colony_ledger.py:290)",
+              "required_adapter": "a host-authoritative repair-station UI/action that takes power-unit parts and restores this wheel; no such action exists"})
     H.marker(X, NAME, "water", "reedbed_filter", rbx, rby, W, "chemistry water.filter_needed + spring_purity; voxel_aquatic USES purity bonus (FilterMoss +0.25 per plant)",
              {"status": "data", "purity": chem["water"]["spring_purity"], "filter_needed": chem["water"]["filter_needed"],
+              "required_adapter": "a host purity state that reed planting raises and harvest lowers; today purity is rolled chemistry only",
               "design": "standing reeds raise purity; each harvest lowers it (no runtime yet)"})
     H.marker(X, NAME, "harvest", "reed_bed", rbx + 10.5, rby, h(rbx + 10.5, rby), "kit_waterworks.reed_bed drying rack",
-             {"status": "design", "choice": "harvest", "note": "no reed item exists in data; no bag mutation is claimed"})
+             {"status": "design", "choice": "harvest", "note": "no reed item exists in data; no bag mutation is claimed",
+              "required_adapter": "a reed item in the inventory catalog plus a host-authoritative harvest action that also lowers purity; neither exists"})
     H.marker(X, NAME, "refuge", "haven_hut", rf_x, rf_y, h(rf_x, rf_y), "design; related source: tools/economy/colony_ledger.py Ledger.settle_wave(held)",
              {"status": "design", "choice": "refuge",
               "required_adapter": "a host-authoritative shelter/occupancy model. settle_wave(held) counts zombies that FELL (and their drops), not sheltered occupants, so it does not model refuge (PootScoot 32427)"})
@@ -239,6 +287,18 @@ def build(out_dir):
     roles["Refuge"] = role(NAME + "_Refuge", hut, (rf_x, rf_y, h(rf_x, rf_y) + dz))
     roles["KeeperPost"] = role(NAME + "_KeeperPost", keeper + sign, (kp_x, kp_y, h(kp_x, kp_y) + dz))
     roles["Shore"] = role(NAME + "_Shore", shore, (wx, wy, W + dz))
+    # the clearance as delivered: final joined Walkway (planks, posts, rails, lights, bridge) against the final wheel
+    bpy.context.view_layer.update()
+    kd2 = __import__("mathutils").kdtree.KDTree(sum(len(roles[k].data.vertices) for k in ("WheelRotor", "WheelFrame")))
+    n = 0
+    for k in ("WheelRotor", "WheelFrame"):
+        for v in roles[k].data.vertices:
+            kd2.insert(roles[k].matrix_world @ v.co, n)
+            n += 1
+    kd2.balance()
+    walk_clear = min(kd2.find(roles["Walkway"].matrix_world @ v.co)[2] for v in roles["Walkway"].data.vertices)
+    if walk_clear < CLEARANCE_M:
+        raise RuntimeError("delivered walk clearance %.3f m < %.1f m" % (walk_clear, CLEARANCE_M))
     os.makedirs(out_dir, exist_ok=True)
     files = {}
     H.export_group(os.path.join(out_dir, NAME + "_Island"), island + kit_posts)
@@ -264,6 +324,8 @@ def build(out_dir):
                       "triangles": sum(len(p.vertices) - 2 for p in ob.data.polygons), "materials": [m.name for m in ob.data.materials if m],
                       "collision": [u.name for u in ucx.get(k, [])]}
                   for k, ob in roles.items()},
+        "clearance": {"metric": "minimum 3-D distance between any Walkway vertex (boardwalk + footbridge) and any wheel vertex (rotor + frame), on final geometry",
+                      "required_m": CLEARANCE_M, "measured_m": round(walk_clear, 3)},
         "bake_policy": "each role mesh and its UCX_<mesh>_NN share the anchor as object origin; vertices are island-frame minus anchor; place by translation only. Receiving qualification stays with the native operator.",
         "wheel": {"radius_m": 3.4, "width_m": 1.4, "paddles": 12, "broken_paddles": 4, "axle_yaw_rad": round(yaw + math.pi / 2, 4), "spin": "breastshot, top toward downstream"},
         "island": {k: man[k] for k in ("name", "terraces", "islet", "waterfall_lip", "lods", "triangles", "sockets", "outline")},

@@ -1415,3 +1415,12 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
   processes and diffing the manifests.
 - **Cloud builds:** Blender work can run headless in the cloud with `pip install bpy` (5.2.2, cp313) in a venv. That
   frees the shared PC for native work.
+
+## Blender: refresh matrices before measuring (2026-10-15)
+- **The trap:** objects created in a script have a stale `matrix_world` until `bpy.context.view_layer.update()` runs.
+  Distances computed with it compare meshes sitting at their local origin. Reedwheel r4's first clearance read was
+  0.09 m because of this.
+- **The rule:** call `view_layer.update()` before any `matrix_world`-based measurement, and verify a geometric claim
+  on the delivered files in a fresh process (`tools/blender/clearance_check.py`).
+- **Name the metric:** a centre-distance guard is not a mesh clearance. Say which metric was measured, report the
+  measured number, and make the build fail when the number misses.
