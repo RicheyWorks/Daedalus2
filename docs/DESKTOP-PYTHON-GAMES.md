@@ -1,6 +1,61 @@
 # Desktop Python games into Daedalus
 
-## Current HUD overlap fix, 2026-10-15
+## HUD foreground R2: retain the modal across editor focus, 2026-10-15
+
+The first foreground candidate compiled and linked successfully, but failed native
+acceptance. PR147 `a59093b3` retains the exact
+`codex-hud-build-rollback-0744.checkpoint.json`: UHT generated70 files,58 compile/
+link actions completed, exit0 in350.13 seconds. Real Hero interaction opened Pong
+with world pause, then before any keyboard input the same cabinet reported
+`open=false`, Pong paused, world still paused and cursor visible. The inspected
+2560x1392 capture contains Hero HUD and no arcade. The operator rejected the
+candidate and restored the known working DLL,120 package files,101 actors, saved
+map, camera and saves. **Build success was not native acceptance.**
+
+Source diagnosis: `GetState().bOpen` tests the actor's two strong widget references;
+zero layout cannot alone make that field false. `MaintainOpenSession` previously
+treated any valid non-arcade Slate focus as another overlay, scheduled removal,
+then `ReleaseOverlay` preserved pause/cursor for that presumed foreign owner.
+That path matches the observed state. The actual focus path, close branch and
+player geometry were not recorded; window selection preceded capture. The
+original trigger remains unproven, and the engine does create player layers even
+without per-player content. No missing-layer or widget-lifetime cause is claimed.
+
+R2 code `630646d672e7ceb416156f00667d4ea21302452e` changes only
+`Private/DaedalusDesktopArcade.cpp` relative to R1. Automatic closure now requires
+an explicit Hero menu or another focused game-viewport descendant. Editor/window
+focus and the bare owning viewport retain the modal while existing Slate code
+clears held input and suspends play. Focus repair runs only from the bare owning
+viewport, with active Slate, a valid user and finite positive cached arcade size;
+it never targets editor controls or another overlay, and does not auto-resume.
+Input dispatch, rules, save/retry, foreground geometry and `ReleaseOverlay` are
+unchanged. Existing cleanup with external editor focus is not generalized here.
+
+Independent source/API review passed. The focused offline harness extracts the
+actual actor method and substitutes small engine interfaces; its report in the
+install packet distinguishes simulated focus decisions from Unreal acceptance.
+The unchanged portable registry regression passes123/123. Neither check compiles
+or loads the R2 Unreal module. R1's successful build is retained at its own pin;
+it is not transferred to R2. Corrected pixels and the recorded capture-before-key
+sequence must pass under the sole operator before this defect can be closed.
+
+[Install packet v8](desktop-games-polish-install.json) includes the rejected R1
+receipts/log/image hashes and R2 pins. [The cumulative three-file patch](desktop-games-hud-foreground.patch)
+applies to owned copies of the restored installed baseline; [the incremental R2
+patch](desktop-games-hud-focus-r2.patch) changes only actor cpp in an exact R1
+stage. Both pass check/application and exact after-hashes using
+`git -c core.autocrlf=false -c core.eol=lf apply`. Reconcile before-hashes and
+apply only the matching route; preserve Minesweeper and all other integrated work.
+No installed source, DLL, editor, map or save was changed by this source lane.
+
+Native recheck must observe open state before/after window selection and capture,
+record actual focus ownership/geometry if it closes or stays invisible, then test
+keyboard, other Hero/game UI handoff, close/reopen/Escape/EndPlay, input and save
+guards. Positive cached size is prior arrangement evidence, not proof of current
+visibility; zero layout and separately hosted foreign popups remain explicit
+limits. Only `codex-play-guard` chooses and runs the coordinated native build/load.
+
+## Original overlap and foreground-host design
 
 The sole operator's native checkpoint `codex-arcade-gameplay-0344.checkpoint.json`
 records 39 passing bounded checks on the installed names/input version plus
@@ -20,11 +75,11 @@ child and retains per-user hit-testing/navigation. It respects the engine's
 existing hit-test setting, including PIE, without changing it. Missing/zero
 player geometry stays empty; it never falls back to covering all players.
 
-Code `bcfb1403289416aa6a6a3a9df61c1793aa2d3053` changes only the three private
+R1 code `bcfb1403289416aa6a6a3a9df61c1793aa2d3053` changed only the three private
 presentation files `DaedalusDesktopArcade.cpp`, `SDaedalusDesktopArcade.cpp` and
 `SDaedalusDesktopArcade.h`. Team-codex explicitly transferred this modal fix.
-Close and EndPlay remove the same foreground host; pause/cursor/focus, ordered
-input, saves, core rules, IDs, art, Hero/Sky/HUD code and Minesweeper are unchanged.
+Close and EndPlay remove the same foreground host; ordered input, saves, core
+rules, IDs, art, Hero/Sky/HUD code and Minesweeper remain unchanged in R2.
 No reflected declarations or UObject layout changed.
 
 [The bounded three-file patch](desktop-games-hud-foreground.patch) passes
@@ -33,12 +88,10 @@ baseline; all three after-hashes match. Use explicit
 `git -c core.autocrlf=false -c core.eol=lf apply` for the raw LF pins. The first
 staging probe caught global Git CRLF conversion, and a fresh LF stage passed.
 The unchanged portable core/Driver regression rerun passed123/123. **Those
-portable checks do not compile the new UE wrapper.** Independent source review
-passed against installed engine APIs; build/load and post-patch pixels remain
-pending with the sole operator. No installed source, DLL, editor, map or save was
-changed by this source lane.
+portable checks do not compile the UE wrapper.** The R1 build passed but native
+acceptance failed as recorded above; R2 compilation/load/pixels remain pending.
 
-[Install packet v7](desktop-games-polish-install.json) contains exact before/
+[Install packet v8](desktop-games-polish-install.json) contains exact before/
 after/source/patch hashes, the pre-fix native checkpoint/images and safe staging
 instructions. Apply only these hunks after a fresh baseline check; preserve other
 integrated source. Only `codex-play-guard` performs serial module build/load and

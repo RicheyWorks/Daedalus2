@@ -1,8 +1,8 @@
 {
-  "manifest_version": 7,
+  "manifest_version": 8,
   "kind": "native-minigame-source-install-handoff",
   "executable": false,
-  "status": "HUD_FOREGROUND_SOURCE_READY_NATIVE_RECHECK_PENDING",
+  "status": "HUD_FOCUS_R2_SOURCE_READY_R1_NATIVE_REJECTED_NEW_NATIVE_PENDING",
   "source_owner": "pootscoot-desktop-games",
   "operator": "codex-play-guard",
   "claim_messages": [
@@ -23,7 +23,7 @@
   "source": {
     "repository": "RicheyWorks/Daedalus2",
     "branch": "codex/native-minigame-polish-20261014",
-    "code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+    "code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
     "base_main": "34dfe8340da967392930504d42a8185705449384",
     "files": [
       {
@@ -68,8 +68,8 @@
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
-        "git_blob": "6ec1e190ed6068f220f35d59769c023bedddaf7d",
-        "sha256": "600BF1D5186F5154FEE10F038F758D5959399D6F779E93E8CCDC0629A8384132"
+        "git_blob": "7d07ef97eb7304cfd59db99a570f65b4d25d7fff",
+        "sha256": "DAF5016B309FE7F1176855FB664A58A16DC10B2F1B71BDEA4B2AAA9B41FE6637"
       },
       {
         "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
@@ -92,8 +92,8 @@
       "Star pause/save/snapshot/restore/options/request timing and DGS1 payload blocks"
     ],
     "prior_delivery_preserved": "PR152 head 89ece41824b9132403ac0bfffae15343b08b13f8 remains separate and unchanged; PR139 belongs to team-codex",
-    "prior_checkpoint_commit": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
-    "prior_runtime_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
+    "prior_checkpoint_commit": "4b911de6bf201092f7982778fd91ce88ebf84284",
+    "prior_runtime_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
     "preserved_checkpoints": [
       {
         "cycle": 1,
@@ -761,7 +761,7 @@
     "saved": false
   },
   "stages": {
-    "source": "HUD foreground host implemented and independently source-reviewed. Existing portable cores/tests remain unchanged and123-check regression rerun passed. New UE actor/Slate patch has no build/native visual acceptance yet.",
+    "source": "R2 corrects overbroad foreign-focus auto-close in actor cpp only.32/32 extracted-method fake-interface checks and123/123 unchanged portable registry checks pass. R1 Unreal build succeeded but native acceptance failed/rolled back; R2 Unreal compile/load/visual acceptance pending.",
     "code_committed": true,
     "compiled": false,
     "tested": false,
@@ -778,14 +778,12 @@
     "compiled_scope": "Legacy compiled/tested booleans below remain false for complete Unreal host/module; portable result is explicitly separate"
   },
   "pending_operator_steps": [
-    "Do not replace the whole plugin or apply blindly to installed/live source. Close any existing overlay at a normal safe boundary; retain all other integrated source and PR139 Mines changes.",
-    "Reconcile exact3before SHA256 hashes against the active integrated source. On drift stop/review/rebase only these presentation hunks; never overwrite unrelated edits.",
-    "In an OWNED staged plugin root with Source/DaedalusLink, git -c core.autocrlf=false -c core.eol=lf apply --check <docs/desktop-games-hud-foreground.patch>; then apply with the same flags. This has passed against read-only installed baseline copies.",
-    "Verify all3after SHA256 hashes, preserve LF. Root staging caught global core.autocrlf=true conversion; explicit-LF fresh staging matches all bytes.",
-    "Only codex-play-guard chooses/executes the existing supported serial integrated module build/load route at a safe resource boundary. No new UFUNCTION/UPROPERTY/UObject layout changes. No forced editor close/restart, DLL replacement or build-setting change is prescribed.",
-    "Repeat the three exact screenshot states at original2560x1392 and confirm no Hero/logbook/Eprompt/crosshair/lower-stat bleed. Confirm HUD reappears after close.",
-    "Recheck P/R/Enter/ordered bonus/controller-method input, Star failed-save retention/retry/Continue, Escape/close/reopen, focus loss and EndPlay pause/cursor/input restoration.",
-    "Check resize/DPI, constrained player rectangle and existing per-user hit-testing policy; physical hardware and multiple-local-player behavior remain unverified until actually exercised."
+    "Keep the restored known-working installed binary active until a separately coordinated safe native slot; this packet does not request an immediate build or editor action.",
+    "Reconcile exact baseline hashes; choose cumulative3file patch for restored baseline OR incremental1file patch for retained exactR1 source, never both or a whole-plugin replacement.",
+    "Only codex-play-guard stages/rebuilds/loads the integrated module in its existing serial queue; retain Mines, other apps, source/DLL rollback and preserved scene/saves.",
+    "Read open state, actual focused widget/path and arcade/player geometry before and after main-window selection and capture, before keyboard. Keep failed closure/visibility evidence instead of assuming a cause.",
+    "Verify visible foreground coverage, keyboard, pause, source raw/controller methods, pending-save guards, other Hero/game UI handoff, close/reopen/Escape/EndPlay and cursor/input/pause restoration.",
+    "Resize/DPI/local-player and physical hardware proof remain separate and unverified until exercised."
   ],
   "backlog_order": [
     "dungeon source-pass1",
@@ -1073,7 +1071,7 @@
   },
   "hud_fix": {
     "defect": "Global Hero/logbook/clock/E-prompt/crosshair/stats drawn over opaque per-player arcade canvas",
-    "source_code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+    "source_code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
     "ownership": "team-codex explicit modal-presentation transfer in actor h/cpp and Slate h/cpp; only3private files changed",
     "engine_evidence": [
       "UE5.8.3 SGameLayerManager.cpp:107-174 Player root100 below Viewport root200",
@@ -1085,7 +1083,8 @@
       "Foreground host arranges its weak content inside engine local-player-host geometry; both corners transformed through absolute space, no extra DPI scaling",
       "Child ClipToBoundsAlways; outer SelfHitTestInvisible; empty until finite positive player geometry, never fullscreen fallback",
       "Hit-test user saved/restored around paint and existing Slate.AllowPerUserHitTesting honored without changing it; six navigation-stop boundaries retained",
-      "No changes to actor raw-key/controller, input/pause/cursor/focus/save paths, core rules/IDs/branding, Hero/Sky/HUD ownership, assets or PR139 Mines registry/core"
+      "R2 changes only MaintainOpenSession foreign-game-focus classification and guarded bare-viewport focus repair. Raw/semantic/controller dispatch, focus-loss suspension, save/cleanup implementation, cores/IDs/branding, Hero/Sky/HUD/asset/Mines source stay unchanged.",
+      "Editor/window or bare viewport focus retains host; explicit Hero menu or focused foreign descendant of opening SViewport still closes. Bare viewport refocus requires activeSlate, validuser and finitepositive cached arcade size; does not auto-resume or steal editor/foreign UI focus."
     ],
     "baseline_native": {
       "operator": "codex-play-guard",
@@ -1160,22 +1159,20 @@
       "production_and_saves_restored": true
     },
     "patch": {
-      "code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+      "code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
       "baseline_commit": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
       "patch_path": "docs/desktop-games-hud-foreground.patch",
-      "patch_sha256": "96FBE9EF4437D95DBB75E76E7B534F73CE5535275C9619CAF4EB9FA4F0DACDA7",
-      "staging_root": "C:/Users/730ri/Documents/Codex/2026-10-13/task-4/hud-foreground-patch-check-bcfb1403-lf",
+      "patch_sha256": "7C64EB1C79C492C2EC1FFC39980CBC14E0AFC4FA6786712D12202B1628252BF0",
+      "staging_root": "C:/Users/730ri/Documents/Codex/2026-10-13/task-4/hud-foreground-r2-patch-check-630646d6",
       "patch_check_passed": true,
       "staged_after_hashes_match": true,
-      "line_endings": "Explicit git -c core.autocrlf=false -c core.eol=lf; raw source SHA256 pins require LF",
-      "initial_probe": "Global core.autocrlf=true converted only line endings; exact-hash check caught it. Original failed stage retained; fresh explicit-LF stage passes.",
       "files": [
         {
           "plugin_relative_path": "Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
           "expected_before_sha256": "30D74179F72F32F46CD44528787338FE7E69785FDD69D4607959952AC87A4180",
           "before_git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
-          "after_sha256": "600BF1D5186F5154FEE10F038F758D5959399D6F779E93E8CCDC0629A8384132",
-          "after_git_blob": "6ec1e190ed6068f220f35d59769c023bedddaf7d"
+          "after_sha256": "DAF5016B309FE7F1176855FB664A58A16DC10B2F1B71BDEA4B2AAA9B41FE6637",
+          "after_git_blob": "7d07ef97eb7304cfd59db99a570f65b4d25d7fff"
         },
         {
           "plugin_relative_path": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
@@ -1192,29 +1189,176 @@
           "after_git_blob": "8ebf617621c6ba6ace1374c34d0c835283fbd470"
         }
       ],
+      "line_endings": "Explicit git -c core.autocrlf=false -c core.eol=lf; raw source pins require LF",
       "installed_source_modified": false,
       "unreal_build_run": false
     },
     "operator_instructions": [
-      "Do not replace the whole plugin or apply blindly to installed/live source. Close any existing overlay at a normal safe boundary; retain all other integrated source and PR139 Mines changes.",
-      "Reconcile exact3before SHA256 hashes against the active integrated source. On drift stop/review/rebase only these presentation hunks; never overwrite unrelated edits.",
-      "In an OWNED staged plugin root with Source/DaedalusLink, git -c core.autocrlf=false -c core.eol=lf apply --check <docs/desktop-games-hud-foreground.patch>; then apply with the same flags. This has passed against read-only installed baseline copies.",
-      "Verify all3after SHA256 hashes, preserve LF. Root staging caught global core.autocrlf=true conversion; explicit-LF fresh staging matches all bytes.",
-      "Only codex-play-guard chooses/executes the existing supported serial integrated module build/load route at a safe resource boundary. No new UFUNCTION/UPROPERTY/UObject layout changes. No forced editor close/restart, DLL replacement or build-setting change is prescribed.",
-      "Repeat the three exact screenshot states at original2560x1392 and confirm no Hero/logbook/Eprompt/crosshair/lower-stat bleed. Confirm HUD reappears after close.",
-      "Recheck P/R/Enter/ordered bonus/controller-method input, Star failed-save retention/retry/Continue, Escape/close/reopen, focus loss and EndPlay pause/cursor/input restoration.",
-      "Check resize/DPI, constrained player rectangle and existing per-user hit-testing policy; physical hardware and multiple-local-player behavior remain unverified until actually exercised."
+      "Keep the restored known-working installed binary active until a separately coordinated safe native slot; this packet does not request an immediate build or editor action.",
+      "Reconcile exact baseline hashes; choose cumulative3file patch for restored baseline OR incremental1file patch for retained exactR1 source, never both or a whole-plugin replacement.",
+      "Only codex-play-guard stages/rebuilds/loads the integrated module in its existing serial queue; retain Mines, other apps, source/DLL rollback and preserved scene/saves.",
+      "Read open state, actual focused widget/path and arcade/player geometry before and after main-window selection and capture, before keyboard. Keep failed closure/visibility evidence instead of assuming a cause.",
+      "Verify visible foreground coverage, keyboard, pause, source raw/controller methods, pending-save guards, other Hero/game UI handoff, close/reopen/Escape/EndPlay and cursor/input/pause restoration.",
+      "Resize/DPI/local-player and physical hardware proof remain separate and unverified until exercised."
     ],
     "portable_regression": {
-      "result": "desktop_registry123/123 PASS; no rebuild needed",
+      "result": "desktop_registry123/123 PASS on R2; no rebuild needed",
       "unchanged_source_pin": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
-      "proof": "All7portable headers and registry_test.cpp byte/blob-identical to prior compiled proof; source diff only3Unreal presentation files",
+      "proof": "All7portable headers and registry_test.cpp byte-identical to compiled4c1c2aa6 proof; R2 code diff is one actor presentation/lifecycle method plus SViewport include.",
       "command": "ctest --test-dir ../native-polish-validation-20261015 -C Debug --output-on-failure -R ^desktop_registry$ -j 1",
       "does_not_compile_or_validate_wrapper": true
     },
     "current_patch_unreal_compiled": false,
     "current_patch_installed_or_loaded": false,
     "current_patch_visible_acceptance": false,
-    "native_baseline_limit": "39pre-fix bounded native checks are not transferred to new wrapper; physical controller, all-level/game-over and multiple local users not proven"
+    "native_baseline_limit": "39pre-fix bounded native checks are not transferred to new wrapper; physical controller, all-level/game-over and multiple local users not proven",
+    "rejected_revision": {
+      "head": "4b911de6bf201092f7982778fd91ce88ebf84284",
+      "code_commit": "bcfb1403289416aa6a6a3a9df61c1793aa2d3053",
+      "operator_pr": "https://github.com/RicheyWorks/Daedalus2/pull/147",
+      "operator_reported_head": "a59093b3",
+      "native_build": {
+        "exit_code": 0,
+        "ubt_seconds": 350.13,
+        "uht_generated_files": 70,
+        "compile_link_actions": 58,
+        "candidate_dll_sha256": "E2B00824589B97A2795ABB686614B28868D38BCD77B7535DE64EE3ADF61E8680"
+      },
+      "native_acceptance": false,
+      "rolled_back": true,
+      "observed": "Hero interaction opened Pong; before keyboard state.open=false, Pong/world paused and cursortrue; screenshot has HUD/no arcade.",
+      "preserved": "120package files,101actors,map209329457B SHA5690b48f9cdc9f50251c08127b161ab4f3afae49754b75316d561da2a3a80933,camera,saves; original80eca binary restored by sole operator.",
+      "cause_recorded": false,
+      "new_native_action_by_source_lane": false,
+      "evidence": [
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-hud-build-rollback-0744.checkpoint.json",
+          "bytes": 22709,
+          "sha256": "DF1DE4536F1631038CBD8AC88FFF0543CA1211E4801EFF6CE33B6D7807DD5E7D"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\build.log",
+          "bytes": 205717,
+          "sha256": "DEF82AAE02D09B545AEEB1B7B623435B61A3453A0C0647CD8B481C5CC532F27E"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudBuildR1\\build-result.json",
+          "bytes": 7982,
+          "sha256": "B03F3EB111E2A5786C67EEE6124E2128F15922AB1878A63C42C900C0F42A9E20"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\open-pong.json",
+          "bytes": 900,
+          "sha256": "BEA0B8AD24269E700B073B98D6C9971A58A9D79BADC910AE412FACE743F8F497"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\closed-overlay-readback.json",
+          "bytes": 871,
+          "sha256": "52258921AB4CE14AC1CEFA723649022072B6A70537AE7E7BBAF184391E90EEB4"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\capture-pong.json",
+          "bytes": 9629,
+          "sha256": "FEE923FD773D1B028D695ED46D8473F56FC6A9F18FE3ACC422D8BC85C68473E8"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\keys.json",
+          "bytes": 188,
+          "sha256": "D1435246F75C38F27A810C6E639958A296F5B6C744F15900ECBE430807DFC5EF"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\source-diagnosis.json",
+          "bytes": 1905,
+          "sha256": "E7D40C7671B4D60C929302B4509E38ABCBC358021E36FBEBB6FE09E6C70AAD3E"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\visual-review.json",
+          "bytes": 1192,
+          "sha256": "09D8BB849ED50A4A89ABC78C8D2FFC80BD0D687D0CED54E97A38E055A9F0E830"
+        },
+        {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\HudForegroundR1\\QA\\pong.png",
+          "bytes": 170138,
+          "sha256": "652B370710C48E90CE0D9259EA528C65E25474C6F86D0C35A679F75A737B0790"
+        }
+      ]
+    },
+    "regression_correction": {
+      "code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
+      "changed_source": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+      "diff_from_r1": "14insertions1deletion; SViewport include plus MaintainOpenSession only",
+      "incremental_patch": {
+        "code_commit": "630646d672e7ceb416156f00667d4ea21302452e",
+        "baseline_commit": "4b911de6bf201092f7982778fd91ce88ebf84284",
+        "patch_path": "docs/desktop-games-hud-focus-r2.patch",
+        "patch_sha256": "4343E945EA1EB582B2E72B54804544AF1E370C6EC0070BA437D379CF7CE13ECB",
+        "staging_root": "C:/Users/730ri/Documents/Codex/2026-10-13/task-4/hud-focus-r2-incremental-check-630646d6",
+        "patch_check_passed": true,
+        "staged_after_hashes_match": true,
+        "files": [
+          {
+            "plugin_relative_path": "Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+            "expected_before_sha256": "600BF1D5186F5154FEE10F038F758D5959399D6F779E93E8CCDC0629A8384132",
+            "before_git_blob": "6ec1e190ed6068f220f35d59769c023bedddaf7d",
+            "after_sha256": "DAF5016B309FE7F1176855FB664A58A16DC10B2F1B71BDEA4B2AAA9B41FE6637",
+            "after_git_blob": "7d07ef97eb7304cfd59db99a570f65b4d25d7fff"
+          }
+        ],
+        "line_endings": "Explicit git -c core.autocrlf=false -c core.eol=lf; raw source pins require LF",
+        "installed_source_modified": false,
+        "unreal_build_run": false
+      },
+      "diagnosis": [
+        "GetState.open tests two strong widget references; zero geometry alone cannot make openfalse.",
+        "Previous MaintainOpenSession closed for any valid foreign Slate focus; unchanged ReleaseOverlay then preserved presumed foreign owner's pause/cursor. This path matches receipts.",
+        "Actual trigger/focus/geometry/close branch were not captured; main-window selection preceded capture. No missing-player-layer, lifetime or capture-helper cause asserted."
+      ],
+      "engine_evidence": [
+        "UE5.8.3 GameViewportClient.cpp:1302-1326 parents layer manager under exact SceneViewport SViewport; SLevelViewport.cpp:4987-4992 uses that widget in embeddedPIE.",
+        "SWidget.h HasUserFocus/HasUserFocusedDescendants and GetCachedGeometry support conditional repair; SViewport.h included explicitly.",
+        "SGameLayerManager.cpp Tick/UpdateLayout/AddOrUpdatePlayerLayers creates/sizes all current player layers; missing layer remains unproven."
+      ],
+      "independent_source_review": "PASS; no blocking API/logic finding",
+      "offline_check": {
+        "report_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\hud-focus-regression-r2\\report.json",
+        "report_sha256": "D7F5BB6C3FFD03C47ACF5E8E4E5166691377DB1AF44D5AB84D1D2F1141D4DDC2",
+        "runner_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\hud-focus-regression-r2\\run.py",
+        "runner_sha256": "0dca19a43bd3ea2fa11144a5f052b86cfb8b096eeacca762068792ec5b1b556b",
+        "harness_template_path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\hud-focus-regression-r2\\harness-template.cpp",
+        "harness_template_sha256": "bcbb3e53cae779ab32f23764120589877be11db0ef72f0f8b333c17ac81ab0de",
+        "command": "python ../hud-focus-regression-r2/run.py",
+        "compiler_flags": "/nologo /std:c++17 /W4 /WX /permissive- /EHsc /Od",
+        "current_cases_passed": 32,
+        "current_cases_failed": 0,
+        "old_revision_expected_failures": [
+          "editor_focus",
+          "bare_viewport_valid_size",
+          "bare_viewport_zero_width",
+          "bare_viewport_zero_height",
+          "bare_viewport_negative_width",
+          "bare_viewport_negative_height",
+          "bare_viewport_nan_width",
+          "bare_viewport_nan_height",
+          "bare_viewport_inf_width",
+          "bare_viewport_inf_height",
+          "bare_viewport_negative_inf",
+          "inactive_slate_bare",
+          "missing_viewport_widget_bare"
+        ],
+        "meaning": "Exact extracted current/old MaintainOpenSession and unchanged OtherOverlayOwnsInput compiled with fake observable interfaces; old editor/bare focus failures detected.",
+        "limitations": [
+          "Fakes model observable method returns only; they do not verify actual Slate focus paths, geometry, layout or painting.",
+          "No UHT, Unreal compile/link/load, installed-source modification, editor operation, native screenshot or controller input.",
+          "Focus-loss suspension, deferred ReleaseOverlay, pause/cursor/input restoration and save implementation are outside this function harness.",
+          "Separate popup window ancestry and live cached-geometry validity require operator native checks."
+        ]
+      },
+      "limits": [
+        "R2 Unreal module has not been compiled/linked/loaded or seen; R1 build proof is not transferred.",
+        "Cached positive geometry means prior arrangement, not current visibility; zero layout may retain an invisible modal, so native pixels remain required.",
+        "Separately hosted foreign popup windows may be outside viewport ancestry; known Hero-menu guards remain.",
+        "ReleaseOverlay is unchanged; explicit close/EndPlay with external editor focus may still preserve the prior foreign-focus lease. Generalized cleanup is not established."
+      ]
+    }
   }
 }
