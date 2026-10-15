@@ -1,0 +1,112 @@
+{
+  "stage": "miri_assets_saved_world_held",
+  "source_module": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_miri_finish.py",
+  "source_module_fingerprint": {
+    "sha256": "e8bc1790549eaa86a621df648f827091281d6b0e656a5d88e7343fed56ea2411",
+    "bytes": 10635
+  },
+  "known_journal_fingerprint": {
+    "sha256": "1aa5c82ca9ddb865bd33fbf061cbffdeab54dd6591ce6236e1a33b7db8bccdc9",
+    "bytes": 196435
+  },
+  "known_readback_fingerprint": {
+    "sha256": "90de3c1886ca5552b71ed4a63aab082c1576c52bbe41b42baf71e659a1bf2ea5",
+    "bytes": 208409
+  },
+  "code_sha256": "28f78e3223cbd6ad19fd2f367644b549507631eaf1260a159852556f8e216cad",
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "reply_fingerprint": {
+    "sha256": "bbc9b18b274a589fa3795d357b9347386dbb42fd469394f8390d26441a5037dd",
+    "bytes": 453052
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "c1f04f79a8e213481e41e1f9c2f704e1ff1e6073db0223adfa6c39153fc2ee9b",
+      "bytes": 69665
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "87fc0e630190f34321d2906fc4780e63f9a3969e7d7d3b6457769d4452d0ddec",
+      "bytes": 69848
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "d8aa4fba74fef5859c7632f4073070fe1ba4c23e1b1875629ce9805c5afbc035",
+      "bytes": 68944
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "95b74ed472a3b93f571069157e70b7b9a8b408f4cbc448bad1a2aeb691831a82",
+      "bytes": 69433
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "145c4c9af6dd131d0d2061b9a70e41d50fc7a826b3dbef4a3d0d9117a20a4220",
+      "bytes": 69243
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "a71a4d3ad8c246fdc353667e9b9b32b8a5869a5a5e20f22f206d824c44d60d10",
+      "bytes": 69739
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "1a0b3f89459b0a053518bf4b329e42b3f43cb2caaea8e411fbe999501c234099",
+      "bytes": 69838
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "8ed1bc9ed3f5203b29fb54a93d9de60909ed58c6ac664fd7820429447c1ae3c2",
+      "bytes": 69851
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "b07f0ff638326fea9fd7d1136f75eb7b8eafc2c89c3e34f87e648d2e2a7af59c",
+      "bytes": 69643
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "e01bbec7299be90124c5ecb9c282ce9bce6ac3d099ffe912eea87f00b7d90d8e",
+      "bytes": 69158
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "0aa3c3711aa200be68e101638ac7d8ab59c7bbb4009e10784e0a77b436c3dbd4",
+      "bytes": 69932
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2": {
+      "class": "SkeletalMesh",
+      "sha256": "3cd1f44b91d401f74f27901bb9d74a5a366568b10f50256a3e839d1ad0efdd67",
+      "bytes": 638116
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle": {
+      "class": "AnimSequence",
+      "sha256": "6c37c0d58736cdbb0da73c020297708c24e3829003d08fd3a9f37bd6e8bc5cc1",
+      "bytes": 165546
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction": {
+      "class": "AnimSequence",
+      "sha256": "c33a824752577bdfbb28d7e4f9e7d817ea1fd0cca616c6a186849d71e456d340",
+      "bytes": 176075
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace": {
+      "class": "AnimSequence",
+      "sha256": "bd6be53692b404a8f77bc20e80d2a065a74e6a02754162c4898ef4af569f993d",
+      "bytes": 172246
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_PhysicsAsset.Miri_ActionPack_V2_PhysicsAsset": {
+      "class": "PhysicsAsset",
+      "sha256": "6817476cacbc3adfa8e46eabdee8dfba0c45402869c0c41fdc4c0603ee45f208",
+      "bytes": 34378
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton": {
+      "class": "Skeleton",
+      "sha256": "75aba4908c80a52a846a5e6b10872bc960fee4704c6b9928bd8cb5a0dbb52904",
+      "bytes": 11009
+    }
+  }
+}

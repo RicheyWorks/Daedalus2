@@ -26,6 +26,7 @@ NAMES = ('Prop_Egg_Heartstone_Intact', 'Prop_Egg_Gold_Shiny', 'Prop_Egg_Amethyst
 RACK = BASE / 'ServerRackR1/readback.json'
 MATERIAL = '/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour'
 QUALIFICATION_FP = {'sha256': '635e313be835a1d967cdd1badfca4b2438d57b6b4991f555a8acd80dddbbbb27', 'bytes': 24182}
+PRIOR_CATALOGUE = None
 
 
 def protection():
@@ -41,6 +42,19 @@ def protection():
             raise RuntimeError('protected saved mesh differs: ' + path)
     if fingerprint(MAP_FILE) != rack['map_fingerprint']:
         raise RuntimeError('preserve current saved map; baseline differs')
+    if PRIOR_CATALOGUE is not None:
+        prior = load(PRIOR_CATALOGUE)
+        if (prior.get('stage') != 'three_assets_saved_readback_complete' or prior.get('issues') != []
+                or prior.get('verified_saved_mesh_files') != 99 or prior.get('map_unchanged') is not True
+                or fingerprint(MAP_FILE) != prior['map_fingerprint']):
+            raise ValueError('completed clean 99-mesh catalogue baseline required')
+        for path, expected in prior['outputs'].items():
+            if path in local['disk_static_meshes'] or fingerprint(_asset_file(path)) != expected:
+                raise RuntimeError('prior catalogue output differs: ' + path)
+            local['disk_static_meshes'][path] = expected
+        if len(local['disk_static_meshes']) != 99:
+            raise ValueError('exact 99 prior paths required')
+        return prior, local
     return rack, local
 
 
@@ -161,6 +175,7 @@ def ingest():
 def readback():
     prepared = _prepared()
     baseline, local = protection(); editor()
+    expected_count = len(local['disk_static_meshes']) + 3
     dispatch = load(FOLDER / 'dispatch.json'); native = load(FOLDER / 'native.json')
     if dispatch.get('stage') != 'three_assets_saved_world_held':
         raise RuntimeError('completed asset save dispatch required')
@@ -194,8 +209,8 @@ for item in ITEMS:
                for field in ('actor', 'mesh_path', 'transform', 'materials', 'override_materials', 'folder', 'tags')):
             issues.append('prior actor changed: ' + row['label'])
     classes = result['saved_asset_classes']
-    if len(classes) != 99 or set(classes) != set(local['disk_static_meshes']) or any(row.get('is_static_mesh') is not True for row in classes.values()):
-        issues.append('exact 99 saved mesh path/class set differs')
+    if len(classes) != expected_count or set(classes) != set(local['disk_static_meshes']) or any(row.get('is_static_mesh') is not True for row in classes.values()):
+        issues.append('exact saved mesh path/class set differs: ' + str(expected_count))
     for item in prepared['items']:
         actual = result['catalogue_assets'][item['name']]
         if actual['material'] != MATERIAL or actual['unit_contract'] != 'claude_raw_unit100_build1_actor001_v1' or actual['required_actor_scale'] != '0.01,0.01,0.01' or actual['source_sha256'] != item['fingerprint']['sha256']:
@@ -215,10 +230,10 @@ for item in ITEMS:
         'stage': 'three_assets_saved_readback_complete' if not issues else 'inspection_required',
         'observed_utc': datetime.now(timezone.utc).isoformat(), 'issues': issues, 'native_readback': result,
         'outputs': dispatch['outputs'], 'native_receipt_fingerprint': fingerprint(FOLDER / 'native.json'),
-        'new_saved_mesh_files': 3, 'verified_saved_mesh_files': 99, 'measured_actor_rows': 89,
+        'new_saved_mesh_files': 3, 'verified_saved_mesh_files': expected_count, 'measured_actor_rows': 89,
         'world_placed': 0, 'map_unchanged': map_unchanged, 'map_fingerprint': fingerprint(MAP_FILE),
         'limits': 'Static saved assets only. Required future actor scale .01; no native visual/hatching/economy/collision/runtime acceptance. No Play/tests/worldsave.'})
-    print(json.dumps({'issues': issues, 'new_saved_mesh_files': 3, 'verified_saved_mesh_files': 99,
+    print(json.dumps({'issues': issues, 'new_saved_mesh_files': 3, 'verified_saved_mesh_files': expected_count,
                       'measured_actor_rows': 89, 'world_placed': 0, 'map_unchanged': map_unchanged}, indent=2))
     if issues:
         raise RuntimeError('inspect retained final readback before continuing')

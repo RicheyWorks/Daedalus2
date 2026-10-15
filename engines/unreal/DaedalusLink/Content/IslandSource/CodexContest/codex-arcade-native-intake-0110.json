@@ -1,0 +1,638 @@
+{
+  "utc": "2026-10-15T01:08:12.810621+00:00",
+  "scope": "read-only source/disk audit; no native/UI/build/tests/install or settings writes",
+  "packet_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+  "code_commit": "4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585",
+  "manifest": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\docs\\desktop-games-polish-install.json",
+    "exists": true,
+    "bytes": 53509,
+    "sha256": "b79d1251bb05380d4b5a83fbf69a1980ffc4b7a560507b3ee923b6df461d0619",
+    "git_blob": "d7878851e331171929bea6bb32e4df251198800e",
+    "utc": "2026-10-15T00:59:55.822260+00:00"
+  },
+  "manifest_version": 6,
+  "owner_root": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring",
+  "current_root": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production",
+  "installed_root": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink",
+  "runtime_comparisons": [
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+        "git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
+        "sha256": "1881DC01C3F2CE1DA6C8FCD6E913F898764477B0DDAF0C493606CD8A14A90F34"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 34177,
+        "sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+        "git_blob": "0d150497f9a12ea713b603fe0ada98fca210de58",
+        "utc": "2026-10-15T00:53:55.558555+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 25220,
+        "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+        "git_blob": "d255c968b2787961c8125907c7154f33f0bcee6c",
+        "utc": "2026-10-14T16:31:52.344855+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+        "exists": true,
+        "bytes": 25220,
+        "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+        "git_blob": "d255c968b2787961c8125907c7154f33f0bcee6c",
+        "utc": "2026-10-14T01:17:51.988542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+        "git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
+        "sha256": "DD748E33887B1F7DFF6C5362443B65D881A96E2B3C96752E4E288C480E98563E"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 4628,
+        "sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+        "git_blob": "310398d66adc004afb22f0df369c9b4bf8355218",
+        "utc": "2026-10-14T23:06:01.066134+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 2385,
+        "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+        "git_blob": "c42a8a5a151654433dea362172840ac7463e11ef",
+        "utc": "2026-10-14T16:31:52.345855+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+        "exists": true,
+        "bytes": 2385,
+        "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+        "git_blob": "c42a8a5a151654433dea362172840ac7463e11ef",
+        "utc": "2026-10-14T01:17:51.990542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+        "git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073",
+        "sha256": "5B4F666D36C04E6B3B19BA3ED608EBE30F207E26DE29E19985971515EE2BAC31"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 37416,
+        "sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+        "git_blob": "6353b99a5bc8a07bdbab78a881c7bc35c2219073",
+        "utc": "2026-10-15T00:53:56.234278+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 27092,
+        "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+        "git_blob": "9a8958903060b419d6588d8e8ce1c9f5908e1cb7",
+        "utc": "2026-10-14T16:31:52.345855+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+        "exists": true,
+        "bytes": 27092,
+        "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+        "git_blob": "9a8958903060b419d6588d8e8ce1c9f5908e1cb7",
+        "utc": "2026-10-14T01:17:51.989542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+        "git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97",
+        "sha256": "C93A54BDB1D954595BF0DB31BE8CB20269E47A46693C7CE50066A3A0131A3934"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 37344,
+        "sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+        "git_blob": "cef3db6a8e56989c59de9f7862d3073d81cdec97",
+        "utc": "2026-10-15T00:56:27.007169+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 25223,
+        "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+        "git_blob": "e2523cf8011d1a857b82c31bd9235850b9d2e862",
+        "utc": "2026-10-14T16:31:52.347857+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+        "exists": true,
+        "bytes": 25223,
+        "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+        "git_blob": "e2523cf8011d1a857b82c31bd9235850b9d2e862",
+        "utc": "2026-10-14T01:17:51.991542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+        "git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7",
+        "sha256": "10B64B7493066E0FEADCCB08320A5C3595ADD2DFFA84F1E87BC85D118B057C05"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 54849,
+        "sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+        "git_blob": "5657827da86ffeb7835d9789adf96a2fceac3da7",
+        "utc": "2026-10-15T00:05:37.074804+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 46562,
+        "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+        "git_blob": "46998a6efb066231648af873ff15ae4699363d22",
+        "utc": "2026-10-14T16:31:52.346856+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+        "exists": true,
+        "bytes": 46562,
+        "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+        "git_blob": "46998a6efb066231648af873ff15ae4699363d22",
+        "utc": "2026-10-14T01:17:51.990542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+        "git_blob": "387b5ba64432818d0bc5034ca729155a78122137",
+        "sha256": "CC719F177045B461F8CD7533135C731B02AE62B190DEE047B1019518825EFE76"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 5326,
+        "sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+        "git_blob": "387b5ba64432818d0bc5034ca729155a78122137",
+        "utc": "2026-10-15T00:38:03.861695+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 4865,
+        "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+        "git_blob": "f7b4af02f1de7ec2fbd2956ab3d1e83c183c778e",
+        "utc": "2026-10-14T16:31:52.344855+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+        "exists": true,
+        "bytes": 4865,
+        "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+        "git_blob": "f7b4af02f1de7ec2fbd2956ab3d1e83c183c778e",
+        "utc": "2026-10-14T01:17:51.988542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+        "git_blob": "51b06638e524ddb40615fa069bada53f522919f3",
+        "sha256": "3E3B9EAB4BE9D56ABC5221B11777006905BA0AFCF1CE18B9F325E4E4056E791E"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 6797,
+        "sha256": "3e3b9eab4be9d56abc5221b11777006905ba0afcf1ce18b9f325e4e4056e791e",
+        "git_blob": "51b06638e524ddb40615fa069bada53f522919f3",
+        "utc": "2026-10-15T00:53:54.844302+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 5871,
+        "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+        "git_blob": "1bd0a1cc9c87f96c4f9f6090d0bb07953b2faa76",
+        "utc": "2026-10-14T16:31:52.343856+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+        "exists": true,
+        "bytes": 5871,
+        "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+        "git_blob": "1bd0a1cc9c87f96c4f9f6090d0bb07953b2faa76",
+        "utc": "2026-10-14T01:17:51.987542+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+        "git_blob": "d8488c403cc9dea205a9365cf7db94e1e8fab1a9",
+        "sha256": "F7235D7C2E1DB03E17D7593C3C782F83CAC0A8994C1365512F64D100CA171A6B"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10801,
+        "sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+        "git_blob": "d8488c403cc9dea205a9365cf7db94e1e8fab1a9",
+        "utc": "2026-10-15T00:36:07.805386+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10397,
+        "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+        "git_blob": "c4674ffebdd8aa39a4a306c6d88a4809eb306f50",
+        "utc": "2026-10-14T16:31:52.311067+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+        "exists": true,
+        "bytes": 10397,
+        "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+        "git_blob": "c4674ffebdd8aa39a4a306c6d88a4809eb306f50",
+        "utc": "2026-10-14T01:17:51.983531+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+        "git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
+        "sha256": "30D74179F72F32F46CD44528787338FE7E69785FDD69D4607959952AC87A4180"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 20232,
+        "sha256": "30d74179f72f32f46cd44528787338fe7e69785fdd69d4607959952ac87a4180",
+        "git_blob": "cc44fbe59e857f64cd551ccc62f4f8d7580841b2",
+        "utc": "2026-10-15T00:36:08.501407+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 19865,
+        "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+        "git_blob": "71d04f14841d6303caf61576c817d7c3d5d3c274",
+        "utc": "2026-10-14T16:31:52.276032+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 19865,
+        "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+        "git_blob": "71d04f14841d6303caf61576c817d7c3d5d3c274",
+        "utc": "2026-10-14T01:17:51.976788+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    },
+    {
+      "source_pin": {
+        "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+        "git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+        "sha256": "C135F7BCC3B3B830A3368E5548C730AEC46927D3854E2B17D6A49284A2BB4CCF"
+      },
+      "owner": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 27345,
+        "sha256": "c135f7bcc3b3b830a3368e5548c730aec46927d3854e2b17d6a49284a2bb4ccf",
+        "git_blob": "0df53c9d0b1a309afe74981c0009776e45542c4e",
+        "utc": "2026-10-15T00:56:09.829186+00:00",
+        "matches_expected_sha256": true,
+        "matches_expected_git_blob": true
+      },
+      "current": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 26287,
+        "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+        "git_blob": "e60bde13d70c3637624c228af36367c97ae5aa41",
+        "utc": "2026-10-14T16:31:52.297051+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      },
+      "installed": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+        "exists": true,
+        "bytes": 26287,
+        "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+        "git_blob": "e60bde13d70c3637624c228af36367c97ae5aa41",
+        "utc": "2026-10-14T01:17:51.980530+00:00",
+        "matches_expected_sha256": false,
+        "matches_expected_git_blob": false
+      }
+    }
+  ],
+  "pr139_mines_core": {
+    "path": "C:\\Users\\730ri\\.codex\\worktrees\\island-shardstead\\Daedalus2\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMinesweeperCore.h",
+    "exists": true,
+    "bytes": 4774,
+    "sha256": "b4a9c39c68f33182968367e40082a0f5204d329bcbb73fcbf1040ae4c403c544",
+    "git_blob": "8419f83fae75b14d8c2f1364d4d4d9162aa55021",
+    "utc": "2026-10-14T13:11:40.374764+00:00"
+  },
+  "pr139_registry": {
+    "path": "C:\\Users\\730ri\\.codex\\worktrees\\island-shardstead\\Daedalus2\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+    "exists": true,
+    "bytes": 6087,
+    "sha256": "cece984b9feb1f3065be03ee978e4d89399e5429b98fbc6fcf9a57b83d6daff0",
+    "git_blob": "bd67b73e7def11651672b1b1448374d884ca4ee4",
+    "utc": "2026-10-14T08:56:57.762107+00:00"
+  },
+  "pr139_registry_additions": [
+    "#include \"DaedalusDesktopMinesweeperCore.h\"",
+    "Catalog minesweeper entry",
+    "CreateGame minesweeper branch"
+  ],
+  "native_loaded_identity": "UNKNOWN; disk binaries and source are not running-module proof",
+  "native_actions_performed": false,
+  "installed_build": {
+    "editor_dll": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "exists": true,
+      "bytes": 8138240,
+      "sha256": "9704c471c3b949df6dd179b0fb20f07f335da504a911c39e1202473c769fb392",
+      "utc": "2026-10-14T09:50:35.055792+00:00"
+    },
+    "modules_receipt": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor.modules",
+      "exists": true,
+      "bytes": 102,
+      "sha256": "5595d31b76491f1c6fbab83764fa833b8c58332d7d0ce2a27f33c7f5af08eb09",
+      "utc": "2026-10-14T09:50:35.468149+00:00"
+    },
+    "modules": {
+      "BuildId": "55116800",
+      "Modules": {
+        "DaedalusLink": "UnrealEditor-DaedalusLink.dll"
+      }
+    },
+    "plugin_descriptor": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\DaedalusLink.uplugin",
+      "exists": true,
+      "bytes": 1046,
+      "sha256": "02727987041d51d4af37f0b77c80f3d5adc2ab4e1b5f56764e75f0692343951c",
+      "utc": "2026-10-12T23:10:21.727346+00:00"
+    },
+    "descriptor": {
+      "FileVersion": 3,
+      "Version": 1,
+      "VersionName": "0.32.0",
+      "FriendlyName": "Daedalus Link",
+      "Description": "Stream a live Daedalus world (islands, arks, sky gates past the rainbow) into Unreal Engine 5, or import a Daedalus World Package. Generate a world once; deploy it to any engine.",
+      "Category": "Daedalus",
+      "CreatedBy": "RicheyWorks",
+      "CreatedByURL": "https://github.com/RicheyWorks/Daedalus2",
+      "DocsURL": "https://github.com/RicheyWorks/Daedalus2/blob/main/engines/unreal/README.md",
+      "SupportURL": "https://github.com/RicheyWorks/Daedalus2/issues",
+      "CanContainContent": true,
+      "IsBetaVersion": true,
+      "Installed": false,
+      "Modules": [
+        {
+          "Name": "DaedalusLink",
+          "Type": "Runtime",
+          "LoadingPhase": "Default",
+          "PlatformAllowList": [
+            "Win64",
+            "Mac",
+            "Linux"
+          ]
+        }
+      ],
+      "Plugins": [
+        {
+          "Name": "ProceduralMeshComponent",
+          "Enabled": true
+        },
+        {
+          "Name": "EnhancedInput",
+          "Enabled": true
+        },
+        {
+          "Name": "RawInput",
+          "Enabled": true,
+          "PlatformAllowList": [
+            "Win64"
+          ]
+        }
+      ]
+    },
+    "module_rules": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\DaedalusLink.Build.cs",
+      "exists": true,
+      "bytes": 1624,
+      "sha256": "1c457f9d144da1707592f2aee26d6f2916c6f21e414f6c026c41331f8b63a338",
+      "utc": "2026-10-14T11:33:24.792235+00:00"
+    }
+  },
+  "existing_generated_files": [
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealEditor\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.gen.cpp",
+      "exists": true,
+      "bytes": 112915,
+      "sha256": "6705b046dadb1f8fb3bc8a6885471a242247fcabb33fcf3822232b65cf4ed7b0",
+      "utc": "2026-10-14T07:06:11.478784+00:00"
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealGame\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.gen.cpp",
+      "exists": true,
+      "bytes": 112915,
+      "sha256": "6705b046dadb1f8fb3bc8a6885471a242247fcabb33fcf3822232b65cf4ed7b0",
+      "utc": "2026-10-14T11:46:32.082911+00:00"
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealEditor\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.generated.h",
+      "exists": true,
+      "bytes": 7315,
+      "sha256": "8d0619a7cf68ec1de0e09c8966e1c8156ef563e38d9fb4e9e236897e80c8701f",
+      "utc": "2026-10-14T07:06:11.477784+00:00"
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Intermediate\\Build\\Win64\\UnrealGame\\Inc\\DaedalusLink\\UHT\\DaedalusDesktopArcade.generated.h",
+      "exists": true,
+      "bytes": 7315,
+      "sha256": "8d0619a7cf68ec1de0e09c8966e1c8156ef563e38d9fb4e9e236897e80c8701f",
+      "utc": "2026-10-14T11:46:32.076912+00:00"
+    }
+  ],
+  "project_descriptor": {
+    "fingerprint": {
+      "path": "C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject",
+      "exists": true,
+      "bytes": 1358,
+      "sha256": "66b7676b9adfedfe7a298892c0beb1c12e438640c3e3edfdd8ad3a2a7ceb0826",
+      "utc": "2026-10-14T09:50:36.166140+00:00"
+    },
+    "descriptor": {
+      "FileVersion": 3,
+      "EngineAssociation": "5.8",
+      "Category": "",
+      "Description": "A Daedalus world in Unreal Engine 5 (made by setup-unreal.ps1)",
+      "Plugins": [
+        {
+          "Name": "DaedalusLink",
+          "Enabled": true
+        },
+        {
+          "Name": "ProceduralMeshComponent",
+          "Enabled": true
+        },
+        {
+          "Name": "PythonScriptPlugin",
+          "Enabled": true
+        },
+        {
+          "Name": "EditorScriptingUtilities",
+          "Enabled": true
+        },
+        {
+          "Name": "ClaudeUnrealBridge",
+          "Enabled": true
+        },
+        {
+          "Name": "PCG",
+          "Enabled": true
+        },
+        {
+          "Name": "ModelContextProtocol",
+          "Enabled": true
+        },
+        {
+          "Name": "AllToolsets",
+          "Enabled": true
+        }
+      ]
+    }
+  },
+  "adoption_feasibility": {
+    "packet_is_executable": false,
+    "owner_sha_matches": 10,
+    "owner_gitblob_matches": 10,
+    "current_sha_matches": 0,
+    "installed_sha_matches": 0,
+    "files_missing": [],
+    "all_ten_installed_files_equal_current_baseline": true,
+    "source_stage": "Exact v6 source available; not adopted into contest worktree or installed plugin.",
+    "build_requirement": "Portable headers plus host cpp/Slate changed; two new UFUNCTION declarations require correct project editor-target UHT, module compile/link and coordinated load. Portable CTest binary is not an Unreal module.",
+    "new_reflected_functions": [
+      "SubmitArcadeSourceKey(int32)",
+      "SubmitArcadeSourceControllerButton(int32)"
+    ],
+    "pr139_integration": "Preserve Minesweeper core and three registry additions while merging PR157 Title/Controls/Driver input changes. PR157 registry intentionally contains eleven original IDs; installed/current old source lacks PR139.",
+    "safe_boundary": "Sole writer, saved-world evidence, idle queue and clean dirty packages before source/build/load. No wholesale live-plugin replacement or force-close."
+  },
+  "build_instructions": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-4\\Daedalus2-arcade-wiring\\engines\\unreal\\setup-unreal.ps1",
+    "line773": "& $ubt UnrealEditor Win64 Development \"-Project=$Project\" -WaitMutex -NoHotReloadFromIDE",
+    "not_executed": true,
+    "wrapper_risk": "Line781 says close Unreal if DLL locked. Full fallback794-800 runs BuildPlugin and removes/replaces entire plugin. Do not run blanket wrapper during live custody.",
+    "replacement_lines": [
+      794,
+      799,
+      800
+    ]
+  },
+  "nonmutating_native_checks_for_operator": {
+    "executed": false,
+    "read_only": [
+      "Fresh existing bridge PIE/world/queue/dirty readback.",
+      "Find already loaded /Script/DaedalusLink.DaedalusDesktopArcade; check reflection/Python attributes submit_arcade_source_key and submit_arcade_source_controller_button. Do not load/spawn for this check.",
+      "Enumerate existing actors read-only; if present record Arcade path/class/transform and InitialGameId, InitialSeed, CabinetId, bAutoAdvance via get_editor_property.",
+      "Existing actor get_available_games()/get_state() are const pure source reads (cpp180-208). get_selected_game_id()/get_cabinet_id() also const. Read stable IDs, display names, steps and open/paused/initialized state.",
+      "Presence/new names still cannot bind exact loaded binary to a22; source/binary compile/load receipt remains necessary."
+    ],
+    "avoid": [
+      "StartGame",
+      "input submission",
+      "AdvanceGame",
+      "RestartGame",
+      "PauseGame",
+      "ResumeGame",
+      "Use",
+      "CloseArcade",
+      "spawn/default-object creation for acceptance",
+      "GetHighScores/GetHighScoreRecords (lazy cache load)"
+    ]
+  },
+  "acceptance_gaps": [
+    "Current exact Unreal UHT/module compilation/link/load unverified.",
+    "Saved adopted cabinet/map identity and transform unverified.",
+    "Normal Hero Use/open/close/native Slate focus restoration unverified.",
+    "Physical controller routing/analog/Dpad/A/Start/keyboard Contra dispatch/pressed edges/reconnect/focus unverified.",
+    "Native HUD/new-name text fit/readability/game feel unverified.",
+    "Star host failed-save recovery/process-loss durability unverified; retry source already exists with five-second retries and success-only acknowledgment.",
+    "Current portable123/123 result is manifest-pinned owner evidence; historical7-suite result remains at its original source/binary pin."
+  ],
+  "blocked_action": {
+    "action": "Native minigame adoption/acceptance",
+    "target": "PR157 a22/v6 -> installed DaedalusLink/editor",
+    "state": "pending; not attempted, not denied, no uncertain mutation",
+    "reason": "Read-only scope; installed/current10runtime stale; needs PR139-preserving source merge/UHT/module build/load at coordinated safe boundary.",
+    "completed": "Exact local head/clean tree/10byte+Gitblob pins verified, installed/current and build/generated artifacts audited."
+  }
+}

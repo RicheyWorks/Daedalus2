@@ -1,0 +1,7 @@
+{
+  "steps": 0,
+  "yielded": [],
+  "result": null,
+  "error": "Traceback (most recent call last):\n  File \"C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_bridge_commands.py\", line 149, in run_steps\n    v = next(gen)\n        ^^^^^^^^^\n  File \"<daedalus.steps:Codex Miri v2 skeletal GLB asset-only import-save>\", line 9, in steps\n  File \"C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_miri.py\", line 389, in steps\n    raise NativeContractError('; '.join(observed['issues']), observed)\n_codex_retained_miri_v2.NativeContractError: native readback unsupported: AttributeError: 'NoneType' object has no attribute 'get_bone_track_names'\n",
+  "seconds": 13.2
+}

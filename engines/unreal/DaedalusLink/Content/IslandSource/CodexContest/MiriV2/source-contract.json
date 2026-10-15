@@ -1,0 +1,988 @@
+{
+  "schema": "codex.miri-v2.source-contract.v1",
+  "observed_utc": "2026-10-15T01:07:30.748562+00:00",
+  "scope": "Read-only exact source bytes, local installed importer/engine source and one source contact sheet. No native or Blender calls, exports, tests, world mutations or saves.",
+  "packet": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\source-review-packet.json",
+    "bytes": 7505,
+    "sha256": "900b0a42073a6adb23a2120c31d68f7d92f8952fa593241bad659b79fdaf4f44"
+  },
+  "all_reviewed_pins_match": true,
+  "source_files": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\README.md",
+      "bytes": 4782,
+      "sha256": "f86adc3f4ebe48d81843fc97d8c52529048bcaae3eda2b47335cc9407cdec6a4",
+      "relative": "README.md",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\walk-revision-recipe.json",
+      "bytes": 1864,
+      "sha256": "2e06d2e0d4b34ce302ee3e2fce1de335926891f486c5f586e60360f03a763865",
+      "relative": "walk-revision-recipe.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\revise_walk.py",
+      "bytes": 16248,
+      "sha256": "fd5073d237edd548338a419b713b3e4f2674dbde684b22470a6d7f3aba550fd7",
+      "relative": "revise_walk.py",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.blend",
+      "bytes": 1831752,
+      "sha256": "064dd725a2c6188b1086fdcba1b3fcd111c3a97b4001148683caf17cb0638325",
+      "relative": "exports/miri-action-pack-v2.blend",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.glb",
+      "bytes": 202220,
+      "sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc",
+      "relative": "exports/miri-action-pack-v2.glb",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\export-contract.json",
+      "bytes": 1795,
+      "sha256": "35be2db295b97e5c07272bee2e299c4db49fdb82e1bcb3bf653270c322b00d5a",
+      "relative": "receipts/export-contract.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\walk-revision-observed.json",
+      "bytes": 127563,
+      "sha256": "0068980d34bcdd492f0f0103258eebb17e2c65e4f24b2d64da1159329659f111",
+      "relative": "receipts/walk-revision-observed.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\preserved-export-semantics.json",
+      "bytes": 812,
+      "sha256": "51ac10abbe453444497fdafbd73ad60924ff38c996341338f96f900d28c289d8",
+      "relative": "receipts/preserved-export-semantics.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\review\\walk-stance-comparison.png",
+      "bytes": 3826949,
+      "sha256": "dadc3bc9ceadfa6fb4ea4ee2fef1e5ce2fb0ed0c03acf6d3a894da956820568b",
+      "relative": "review/walk-stance-comparison.png",
+      "matches_reviewed_pin": true
+    }
+  ],
+  "payload": {
+    "glb": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.glb",
+      "bytes": 202220,
+      "sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc"
+    },
+    "asset": {
+      "generator": "Khronos glTF Blender I/O v4.3.47",
+      "version": "2.0"
+    },
+    "extensions_used": [],
+    "external_buffers": [],
+    "mesh_count": 1,
+    "mesh_name": "Miri_WeightedBlocks",
+    "primitives": [
+      {
+        "material_index": 0,
+        "material_name": "Miri_wood_dark",
+        "triangle_count": 176,
+        "vertex_records": 384,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 1,
+        "material_name": "Miri_roof_dark",
+        "triangle_count": 220,
+        "vertex_records": 480,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 2,
+        "material_name": "Miri_roof",
+        "triangle_count": 264,
+        "vertex_records": 576,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 3,
+        "material_name": "Miri_roof_light",
+        "triangle_count": 88,
+        "vertex_records": 192,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 4,
+        "material_name": "Miri_scarf",
+        "triangle_count": 88,
+        "vertex_records": 192,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 5,
+        "material_name": "Miri_skin",
+        "triangle_count": 132,
+        "vertex_records": 288,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 6,
+        "material_name": "Miri_ink",
+        "triangle_count": 88,
+        "vertex_records": 192,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 7,
+        "material_name": "Miri_cream",
+        "triangle_count": 132,
+        "vertex_records": 256,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 8,
+        "material_name": "Miri_wood",
+        "triangle_count": 44,
+        "vertex_records": 96,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 9,
+        "material_name": "Miri_wood_light",
+        "triangle_count": 44,
+        "vertex_records": 96,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      },
+      {
+        "material_index": 10,
+        "material_name": "Miri_apple",
+        "triangle_count": 44,
+        "vertex_records": 96,
+        "attributes": [
+          "JOINTS_0",
+          "NORMAL",
+          "POSITION",
+          "WEIGHTS_0"
+        ]
+      }
+    ],
+    "triangle_count": 1320,
+    "weighted_vertex_records": 2848,
+    "weight_sum_max_error": 0.0,
+    "nonzero_influence_counts": [
+      1
+    ],
+    "joint_indices_in_skin_range": true,
+    "skin_count": 1,
+    "skin_name": "Miri_Rig",
+    "inverse_bind_matrices_count": 17,
+    "authored_joints": [
+      {
+        "name": "root",
+        "parent": "Miri_Rig"
+      },
+      {
+        "name": "hips",
+        "parent": "root"
+      },
+      {
+        "name": "spine",
+        "parent": "hips"
+      },
+      {
+        "name": "head",
+        "parent": "spine"
+      },
+      {
+        "name": "upper_arm.L",
+        "parent": "spine"
+      },
+      {
+        "name": "forearm.L",
+        "parent": "upper_arm.L"
+      },
+      {
+        "name": "hand.L",
+        "parent": "forearm.L"
+      },
+      {
+        "name": "upper_arm.R",
+        "parent": "spine"
+      },
+      {
+        "name": "forearm.R",
+        "parent": "upper_arm.R"
+      },
+      {
+        "name": "hand.R",
+        "parent": "forearm.R"
+      },
+      {
+        "name": "scarf_tip",
+        "parent": "spine"
+      },
+      {
+        "name": "thigh.L",
+        "parent": "hips"
+      },
+      {
+        "name": "shin.L",
+        "parent": "thigh.L"
+      },
+      {
+        "name": "foot.L",
+        "parent": "shin.L"
+      },
+      {
+        "name": "thigh.R",
+        "parent": "hips"
+      },
+      {
+        "name": "shin.R",
+        "parent": "thigh.R"
+      },
+      {
+        "name": "foot.R",
+        "parent": "shin.R"
+      }
+    ],
+    "mesh_node": {
+      "extras": {
+        "original_character": "Miri, Emberthread seed-letter courier",
+        "source_seed": 160814,
+        "skin_contract": "Rigid one-joint weights per authored block"
+      },
+      "mesh": 0,
+      "name": "Miri_SkinnedCourier",
+      "skin": 0
+    },
+    "container_node": {
+      "children": [
+        17,
+        16
+      ],
+      "extras": {
+        "forward": "-Y in Blender, standard glTF Y-up conversion",
+        "root_motion": "In place; root fixed. Hip compensation is vertical only."
+      },
+      "name": "Miri_Rig"
+    },
+    "source_gltf_y_up_bounds_metres": {
+      "min": [
+        -0.6000000238418579,
+        0.0,
+        -0.5899999737739563
+      ],
+      "max": [
+        0.8100000023841858,
+        2.2699999809265137,
+        0.4000000059604645
+      ],
+      "dimensions": [
+        1.4100000262260437,
+        2.2699999809265137,
+        0.9899999797344208
+      ]
+    },
+    "source_blender_z_up_bounds_metres": {
+      "min": [
+        -0.6000000238418579,
+        -0.4000000059604645,
+        -6.5192584663975595e-09
+      ],
+      "max": [
+        0.8100000023841858,
+        0.5899999737739563,
+        2.2699999809265137
+      ]
+    },
+    "expected_native_dimension_set_cm_at_scale1": [
+      98.99999797344208,
+      141.00000262260437,
+      226.99999809265137
+    ],
+    "material_count": 11,
+    "materials": [
+      {
+        "doubleSided": true,
+        "name": "Miri_wood_dark",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.12213877588510513,
+            0.04817182570695877,
+            0.0382043719291687,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_roof_dark",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.04970656707882881,
+            0.04373503103852272,
+            0.09989872574806213,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_roof",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.1384316086769104,
+            0.09758734703063965,
+            0.19120168685913086,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_roof_light",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.28314873576164246,
+            0.16513219475746155,
+            0.32314321398735046,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_scarf",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.7835378050804138,
+            0.2015562504529953,
+            0.08650045841932297,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_skin",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.7083757519721985,
+            0.38642942905426025,
+            0.19806931912899017,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_ink",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.01850022003054619,
+            0.026241222396492958,
+            0.05126945674419403,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_cream",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.8227857351303101,
+            0.6795424818992615,
+            0.35153260827064514,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_wood",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.3967552185058594,
+            0.14995978772640228,
+            0.05951123684644699,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_wood_light",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.637596845626831,
+            0.3324515223503113,
+            0.12213877588510513,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      },
+      {
+        "doubleSided": true,
+        "name": "Miri_apple",
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.6038273572921753,
+            0.12477181851863861,
+            0.08437620848417282,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.7900000214576721
+        }
+      }
+    ],
+    "uv_sets": [],
+    "vertex_colour_attributes": [],
+    "images": [],
+    "textures": [],
+    "clips": [
+      {
+        "name": "Miri_Idle",
+        "channel_count": 51,
+        "start_seconds": 0.03333333507180214,
+        "end_seconds": 2.0333333015441895,
+        "changing_channel_count": 4,
+        "changing_channels": [
+          {
+            "bone": "spine",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 61,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.008999881334602833
+          },
+          {
+            "bone": "head",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 61,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.027496537193655968
+          },
+          {
+            "bone": "forearm.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 61,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.017407044768333435
+          },
+          {
+            "bone": "scarf_tip",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 61,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 1.9999998211860657
+          }
+        ],
+        "root_channels": [
+          {
+            "bone": "root",
+            "path": "translation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "rotation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "scale",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 2.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          }
+        ]
+      },
+      {
+        "name": "Miri_LetterReaction",
+        "channel_count": 51,
+        "start_seconds": 0.03333333507180214,
+        "end_seconds": 1.5333333015441895,
+        "changing_channel_count": 8,
+        "changing_channels": [
+          {
+            "bone": "spine",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.049918342381715775
+          },
+          {
+            "bone": "head",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.08955007791519165
+          },
+          {
+            "bone": "upper_arm.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.1393742561340332
+          },
+          {
+            "bone": "forearm.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.229957714676857
+          },
+          {
+            "bone": "upper_arm.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.3889697194099426
+          },
+          {
+            "bone": "forearm.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.18545354902744293
+          },
+          {
+            "bone": "hand.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.05958236753940582
+          },
+          {
+            "bone": "scarf_tip",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 46,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 2.0
+          }
+        ],
+        "root_channels": [
+          {
+            "bone": "root",
+            "path": "translation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "rotation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "scale",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.5333333015441895,
+            "maximum_raw_component_delta": 0.0
+          }
+        ]
+      },
+      {
+        "name": "Miri_Walk_InPlace",
+        "channel_count": 51,
+        "start_seconds": 0.03333333507180214,
+        "end_seconds": 1.0333333015441895,
+        "changing_channel_count": 14,
+        "changing_channels": [
+          {
+            "bone": "hips",
+            "path": "translation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.01582515239715576
+          },
+          {
+            "bone": "spine",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.01740325428545475
+          },
+          {
+            "bone": "head",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.012431202456355095
+          },
+          {
+            "bone": "upper_arm.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 2.0
+          },
+          {
+            "bone": "forearm.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.014811694622039795
+          },
+          {
+            "bone": "upper_arm.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 2.0
+          },
+          {
+            "bone": "forearm.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.014811687171459198
+          },
+          {
+            "bone": "scarf_tip",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 2.0
+          },
+          {
+            "bone": "thigh.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 1.935835599899292
+          },
+          {
+            "bone": "shin.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.39266887307167053
+          },
+          {
+            "bone": "foot.L",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.44648438692092896
+          },
+          {
+            "bone": "thigh.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 1.9966323375701904
+          },
+          {
+            "bone": "shin.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.2999930679798126
+          },
+          {
+            "bone": "foot.R",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "samples": 31,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.28280478715896606
+          }
+        ],
+        "root_channels": [
+          {
+            "bone": "root",
+            "path": "translation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "rotation",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          },
+          {
+            "bone": "root",
+            "path": "scale",
+            "interpolation": "STEP",
+            "samples": 2,
+            "start_seconds": 0.03333333507180214,
+            "end_seconds": 1.0333333015441895,
+            "maximum_raw_component_delta": 0.0
+          }
+        ]
+      }
+    ],
+    "additive_fbx_files": []
+  },
+  "source_view_review": {
+    "view": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\review\\walk-stance-comparison.png",
+      "bytes": 3826949,
+      "sha256": "dadc3bc9ceadfa6fb4ea4ee2fef1e5ce2fb0ed0c03acf6d3a894da956820568b"
+    },
+    "personally_inspected": true,
+    "dimensions": [
+      2400,
+      1400
+    ],
+    "finding": "Five matched v1/v2 poses show v2 lower step and flatter boots, retained face/costume/letter. Dark knee gaps visible in bent stance. A source comparison sheet, not GLB/native continuous playback acceptance."
+  },
+  "existing_route": {
+    "status": "SOURCE_SUPPORTED_SKELETAL_GLB_ROUTE; native acceptance pending sole operator",
+    "importer": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_import_cast.py",
+      "bytes": 5493,
+      "sha256": "7af8fa967767302ad55a5131c1ea567fd04f5bd053c6fbf8e8f5e3fe3d1b9391"
+    },
+    "entry": "import_one(asset_id, glb, sha, force=False, root=owned_root)",
+    "source_lines": {
+      "direct_import_task": 81,
+      "existing_same_sha_skip": 79,
+      "replace_existing_true": 86,
+      "task_save_true": 87,
+      "native_asset_inventory": 99
+    },
+    "folder_filter_limit": "plan/import_folder only enumerate Mob_*.glb; the miri-action-pack-v2 filename is not picked up. Reuse direct import_one AssetImportTask pattern rather than folder enumeration.",
+    "defaults_not_appropriate_for_bounded_intake": [
+      "replace_existing=True",
+      "save=True before strict result readback"
+    ],
+    "bounded_reuse": "Fresh owned hash destination, replace_existing=False, task.save=False; retain skeletal+animation+material pipeline behavior. Inspect returned imported_object_paths and registry classes first, then save only new owned assets once and record booleans. No shared cast overwrite, no static flatten, no actor/world placement.",
+    "expected_roles": [
+      "SkeletalMesh",
+      "Skeleton",
+      "three AnimSequence clips corresponding to named source animations",
+      "eleven constant PBR materials or semantically equivalent owned material instances"
+    ],
+    "possible_auxiliary_roles": [
+      "PhysicsAsset and Interchange import data/pipeline assets; enumerate actual outputs and report, do not infer runtime collision acceptance"
+    ],
+    "native_naming": "Interchange derives names and nests paths. Installed translator mesh label policy is Mesh.Name_RootJointNode.Name (Miri_WeightedBlocks_root before further pipeline normalization); animation track labels use source clip names. Exact imported names, skeleton extra-container joints and sanitized authored-bone-name mapping require native readback. Do not assume filename equals final mesh or clip path.",
+    "native_binding_probe_source": {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\unreal\\battle_cast_import_probe.py",
+      "bytes": 2733,
+      "sha256": "ba5db62081043a50b7589a9048942519451092507614ca6185c133be9807018f"
+    },
+    "probe_limit": "Existing probe demonstrates class/clip resolution pattern for prior cast, but is not invoked or reused as a test here; Miri is not an Attack/Hurt cast contract.",
+    "material_rule": "Keep 11 explicit opaque PBR slots: linear baseColorFactor values, metallic0, roughness~0.79, double-sided. No texture UV requirement for those constant colors. M_VoxelVertexColour static palette material is not equivalent because COLOR_0 is absent.",
+    "unit_rule": "glTF is metres; installed UE5.8 skeletal mesh/animation translator multiplies translations by100 into centimetres. Use unit-scale native import/actor scale1 unless actual readback demonstrates different pipeline settings. Do not carry static Claude FBX actor.01 contract into Miri. Expected rest height~227cm; unordered native rest-dimension set~[99,141,227]cm atscale1, source node transforms retained.",
+    "native_readback_required": [
+      "Exactly one new skinned mesh with preserved authored rig and weights; enumerate all actual asset paths/classes",
+      "17 authored joint mapping/hierarchy, allowing explicitly reported container bone if importer adds it",
+      "three distinct sequences with length near2s,1.5s,1s and same skeleton binding; confirm actual imported track/time range and nonconstant Walk transforms",
+      "11 source PBR slot semantics and triangle sections, source1320triangles",
+      "correct native rest dimensions atunit scale; no .01 compensation without evidence",
+      "save returns for every new package, no existing actor/map mutations; preservation witness unchanged"
+    ],
+    "engine_source": [
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Interchange\\Runtime\\Source\\Import\\Private\\Gltf\\InterchangeGltfPrivate.h",
+          "bytes": 1920,
+          "sha256": "138756f91dbf85332aa7c67957c7cbb96306e395fd53da5e3d288d4f9b31269e"
+        },
+        "lines": {
+          "unit_multiplier100": 24
+        }
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Interchange\\Runtime\\Source\\Import\\Private\\Gltf\\InterchangeGltfMesh.cpp",
+          "bytes": 11392,
+          "sha256": "6900f5097b3042fdd900f786d18e9b9aa2ace08aa5a2302fa6d79dacd4f0bf78"
+        },
+        "lines": {
+          "skeletal_payload_function": 104,
+          "metres_to_cm": 142
+        }
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Interchange\\Runtime\\Source\\Import\\Private\\Gltf\\InterchangeGltfTranslator.cpp",
+          "bytes": 65585,
+          "sha256": "d42895e6f1d9ac4a6bc74a660950fa2486cf7ee549126f03e8821c3a78637eda"
+        },
+        "lines": {
+          "skinned_mesh_label_policy": 1443,
+          "set_skinned_mesh": 1448,
+          "skeleton_dependency": 1455
+        }
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Interchange\\Runtime\\Source\\Import\\Private\\Gltf\\InterchangeGltfAnimation.cpp",
+          "bytes": 44009,
+          "sha256": "98def5e5f19e7aea5f5621c0c1d995da42b4a81c9cc805ec7585136a6dbd1ae6"
+        },
+        "lines": {
+          "skeletal_track_source_clip_label": 742,
+          "joint_channel_classification": 1089,
+          "rigged_channel_collection": 1115
+        }
+      }
+    ]
+  },
+  "limits": [
+    "No native asset has been imported by this audit; exact engine route availability/settings must be read in active editor by sole operator.",
+    "No FBX fallback delivered, but none is required by source-supported skinnedGLB route.",
+    "Rest/motion source readback does not establish continuous native playback, collision, controller/root travel, gameplay events, transitions or persistence.",
+    "Fixed root; source in-place stance travels backwards relative to body. Hypothetical matching movement.666667m/s is not implemented world foot planting.",
+    "Source-reported .2404mm stance interpolation penetration; five frames do not prove timing; knee gaps and lowered idle/walk transition remain."
+  ],
+  "no_additional_permission_or_ack_gate": true
+}

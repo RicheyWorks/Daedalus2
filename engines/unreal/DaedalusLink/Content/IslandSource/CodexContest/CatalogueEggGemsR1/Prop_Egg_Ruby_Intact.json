@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Ruby_Intact",
+ "egg": "Ruby",
+ "stage": "Intact",
+ "rarity": "rare",
+ "hatch": {
+  "animal": 3,
+  "bird": 2,
+  "dino": 1
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

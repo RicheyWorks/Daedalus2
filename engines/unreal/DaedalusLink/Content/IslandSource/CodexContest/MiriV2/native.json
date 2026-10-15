@@ -1,0 +1,5817 @@
+{
+  "schema": "daedalus.codex-miri-v2-native.v1",
+  "stage": "halted_preserve_partial",
+  "root": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51",
+  "source_glb": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\miri-action-pack-v2.glb",
+  "source_sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc",
+  "source_contract_sha256": "11034938cec63a80123b46817aab485a66b603067adc23374efe657f87896d33",
+  "reviewed_packet_sha256": "900b0a42073a6adb23a2120c31d68f7d92f8952fa593241bad659b79fdaf4f44",
+  "initial_preflight": {
+    "dirty_map_packages": [],
+    "dirty_content_packages": [],
+    "other_running_generators": [],
+    "queued_jobs": 0,
+    "unfinished_async_job_boxes": 0,
+    "pie_running": false,
+    "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "remote_execution_lock_locked": false,
+    "background_compilation": "not_queried",
+    "epic_mcp_other_sessions": "not_queried"
+  },
+  "unit_contract": "gltf_metres_to_unreal_cm100_actor1_v1",
+  "required_future_actor_scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "requested_options": {
+    "backend": "existing_cast_AssetImportTask_auto_glTF",
+    "options_override": null,
+    "replace_existing": false,
+    "task_save": false
+  },
+  "world_placed": 0,
+  "world_saved": false,
+  "material_data_changed": false,
+  "outputs": [],
+  "save_return": null,
+  "replay_permitted": false,
+  "import_s": 13.085156,
+  "imported_object_paths": [
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_PhysicsAsset.Miri_ActionPack_V2_PhysicsAsset",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction",
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace"
+  ],
+  "observed_before_first_save": {
+    "root": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51",
+    "assets": [
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2",
+        "class": "SkeletalMesh"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_PhysicsAsset.Miri_ActionPack_V2_PhysicsAsset",
+        "class": "PhysicsAsset"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+        "class": "Skeleton"
+      }
+    ],
+    "mesh": {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2",
+      "skeleton": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+      "rig": [
+        {
+          "source_name": "root",
+          "native_name": "root",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "None"
+        },
+        {
+          "source_name": "hips",
+          "native_name": "hips",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "root"
+        },
+        {
+          "source_name": "spine",
+          "native_name": "spine",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "head",
+          "native_name": "head",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "upper_arm.L",
+          "native_name": "upper_arm_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "forearm.L",
+          "native_name": "forearm_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "upper_arm_L"
+        },
+        {
+          "source_name": "hand.L",
+          "native_name": "hand_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "forearm_L"
+        },
+        {
+          "source_name": "upper_arm.R",
+          "native_name": "upper_arm_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "forearm.R",
+          "native_name": "forearm_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "upper_arm_R"
+        },
+        {
+          "source_name": "hand.R",
+          "native_name": "hand_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "forearm_R"
+        },
+        {
+          "source_name": "scarf_tip",
+          "native_name": "scarf_tip",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "thigh.L",
+          "native_name": "thigh_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "shin.L",
+          "native_name": "shin_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "thigh_L"
+        },
+        {
+          "source_name": "foot.L",
+          "native_name": "foot_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "shin_L"
+        },
+        {
+          "source_name": "thigh.R",
+          "native_name": "thigh_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "shin.R",
+          "native_name": "shin_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "thigh_R"
+        },
+        {
+          "source_name": "foot.R",
+          "native_name": "foot_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "shin_R"
+        }
+      ],
+      "materials": [
+        {
+          "index": 0,
+          "slot": "Miri_wood_dark",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood_dark",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.12213877588510513,
+                0.04817182570695877,
+                0.0382043719291687,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.12213877588510513,
+                0.04817182570695877,
+                0.0382043719291687,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.12213877588510513,
+                    0.04817182570695877,
+                    0.0382043719291687,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.12213877588510513,
+                  0.04817182570695877,
+                  0.0382043719291687,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 1,
+          "slot": "Miri_roof_dark",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof_dark",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.04970656707882881,
+                0.04373503103852272,
+                0.09989872574806213,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.04970656707882881,
+                0.04373503103852272,
+                0.09989872574806213,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.04970656707882881,
+                    0.04373503103852272,
+                    0.09989872574806213,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.04970656707882881,
+                  0.04373503103852272,
+                  0.09989872574806213,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 2,
+          "slot": "Miri_roof",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.1384316086769104,
+                0.09758734703063965,
+                0.19120168685913086,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.1384316086769104,
+                0.09758734703063965,
+                0.19120168685913086,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.1384316086769104,
+                    0.09758734703063965,
+                    0.19120168685913086,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.1384316086769104,
+                  0.09758734703063965,
+                  0.19120168685913086,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 3,
+          "slot": "Miri_roof_light",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof_light",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.28314873576164246,
+                0.16513219475746155,
+                0.32314321398735046,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.28314873576164246,
+                0.16513219475746155,
+                0.32314321398735046,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.28314873576164246,
+                    0.16513219475746155,
+                    0.32314321398735046,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.28314873576164246,
+                  0.16513219475746155,
+                  0.32314321398735046,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 4,
+          "slot": "Miri_scarf",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_scarf",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.7835378050804138,
+                0.2015562504529953,
+                0.08650045841932297,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.7835378050804138,
+                0.2015562504529953,
+                0.08650045841932297,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.7835378050804138,
+                    0.2015562504529953,
+                    0.08650045841932297,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.7835378050804138,
+                  0.2015562504529953,
+                  0.08650045841932297,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 5,
+          "slot": "Miri_skin",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_skin",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.7083757519721985,
+                0.38642942905426025,
+                0.19806931912899017,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.7083757519721985,
+                0.38642942905426025,
+                0.19806931912899017,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.7083757519721985,
+                    0.38642942905426025,
+                    0.19806931912899017,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.7083757519721985,
+                  0.38642942905426025,
+                  0.19806931912899017,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 6,
+          "slot": "Miri_ink",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_ink",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.01850022003054619,
+                0.026241222396492958,
+                0.05126945674419403,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.01850022003054619,
+                0.026241222396492958,
+                0.05126945674419403,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.01850022003054619,
+                    0.026241222396492958,
+                    0.05126945674419403,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.01850022003054619,
+                  0.026241222396492958,
+                  0.05126945674419403,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 7,
+          "slot": "Miri_cream",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_cream",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.8227857351303101,
+                0.6795424818992615,
+                0.35153260827064514,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.8227857351303101,
+                0.6795424818992615,
+                0.35153260827064514,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.8227857351303101,
+                    0.6795424818992615,
+                    0.35153260827064514,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.8227857351303101,
+                  0.6795424818992615,
+                  0.35153260827064514,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 8,
+          "slot": "Miri_wood",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.3967552185058594,
+                0.14995978772640228,
+                0.05951123684644699,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.3967552185058594,
+                0.14995978772640228,
+                0.05951123684644699,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.3967552185058594,
+                    0.14995978772640228,
+                    0.05951123684644699,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.3967552185058594,
+                  0.14995978772640228,
+                  0.05951123684644699,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 9,
+          "slot": "Miri_wood_light",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood_light",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.637596845626831,
+                0.3324515223503113,
+                0.12213877588510513,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.637596845626831,
+                0.3324515223503113,
+                0.12213877588510513,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.637596845626831,
+                    0.3324515223503113,
+                    0.12213877588510513,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.637596845626831,
+                  0.3324515223503113,
+                  0.12213877588510513,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 10,
+          "slot": "Miri_apple",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_apple",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.6038273572921753,
+                0.12477181851863861,
+                0.08437620848417282,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.6038273572921753,
+                0.12477181851863861,
+                0.08437620848417282,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.6038273572921753,
+                    0.12477181851863861,
+                    0.08437620848417282,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.6038273572921753,
+                  0.12477181851863861,
+                  0.08437620848417282,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        }
+      ],
+      "geometry": {
+        "copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+        "triangles": 1320,
+        "source_bounds_cm": {
+          "min": [
+            -60.000003814697266,
+            -58.999996185302734,
+            0.0
+          ],
+          "max": [
+            81.0,
+            40.0,
+            227.0
+          ]
+        },
+        "source_dimensions_cm": [
+          141.00000381469727,
+          98.99999618530273,
+          227.0
+        ],
+        "imported_bounds_origin_cm": [
+          10.499998092651367,
+          -9.499998092651367,
+          113.5
+        ],
+        "imported_dimensions_cm": [
+          141.00000381469727,
+          98.99999618530273,
+          227.0
+        ]
+      },
+      "import_data_class": "InterchangeAssetImportData"
+    },
+    "clips": [
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+        "source_name": "Miri_Idle",
+        "length_s": 2.0333333015441895,
+        "skeleton": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+        "pose_samples": [],
+        "changing_sampled_bones": []
+      }
+    ],
+    "issues": [
+      "native readback unsupported: AttributeError: 'NoneType' object has no attribute 'get_bone_track_names'"
+    ],
+    "world_placed": 0,
+    "world_saved": false,
+    "required_future_actor_scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "unit_contract": "gltf_metres_to_unreal_cm100_actor1_v1",
+    "native_continuous_playback": "unverified",
+    "authored_collision": "not delivered or accepted"
+  },
+  "failed_observation": {
+    "root": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51",
+    "assets": [
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+        "class": "MaterialInstanceConstant"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2",
+        "class": "SkeletalMesh"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace",
+        "class": "AnimSequence"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_PhysicsAsset.Miri_ActionPack_V2_PhysicsAsset",
+        "class": "PhysicsAsset"
+      },
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+        "class": "Skeleton"
+      }
+    ],
+    "mesh": {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2",
+      "skeleton": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+      "rig": [
+        {
+          "source_name": "root",
+          "native_name": "root",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "None"
+        },
+        {
+          "source_name": "hips",
+          "native_name": "hips",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "root"
+        },
+        {
+          "source_name": "spine",
+          "native_name": "spine",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "head",
+          "native_name": "head",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "upper_arm.L",
+          "native_name": "upper_arm_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "forearm.L",
+          "native_name": "forearm_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "upper_arm_L"
+        },
+        {
+          "source_name": "hand.L",
+          "native_name": "hand_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "forearm_L"
+        },
+        {
+          "source_name": "upper_arm.R",
+          "native_name": "upper_arm_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "forearm.R",
+          "native_name": "forearm_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "upper_arm_R"
+        },
+        {
+          "source_name": "hand.R",
+          "native_name": "hand_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "forearm_R"
+        },
+        {
+          "source_name": "scarf_tip",
+          "native_name": "scarf_tip",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "spine"
+        },
+        {
+          "source_name": "thigh.L",
+          "native_name": "thigh_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "shin.L",
+          "native_name": "shin_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "thigh_L"
+        },
+        {
+          "source_name": "foot.L",
+          "native_name": "foot_L",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "shin_L"
+        },
+        {
+          "source_name": "thigh.R",
+          "native_name": "thigh_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "hips"
+        },
+        {
+          "source_name": "shin.R",
+          "native_name": "shin_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "thigh_R"
+        },
+        {
+          "source_name": "foot.R",
+          "native_name": "foot_R",
+          "exists_on_all_clip_skeletons": true,
+          "parent": "shin_R"
+        }
+      ],
+      "materials": [
+        {
+          "index": 0,
+          "slot": "Miri_wood_dark",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood_dark",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.12213877588510513,
+                0.04817182570695877,
+                0.0382043719291687,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.12213877588510513,
+                0.04817182570695877,
+                0.0382043719291687,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.12213877588510513,
+                    0.04817182570695877,
+                    0.0382043719291687,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.12213877588510513,
+                  0.04817182570695877,
+                  0.0382043719291687,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 1,
+          "slot": "Miri_roof_dark",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof_dark",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.04970656707882881,
+                0.04373503103852272,
+                0.09989872574806213,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.04970656707882881,
+                0.04373503103852272,
+                0.09989872574806213,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.04970656707882881,
+                    0.04373503103852272,
+                    0.09989872574806213,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.04970656707882881,
+                  0.04373503103852272,
+                  0.09989872574806213,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 2,
+          "slot": "Miri_roof",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.1384316086769104,
+                0.09758734703063965,
+                0.19120168685913086,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.1384316086769104,
+                0.09758734703063965,
+                0.19120168685913086,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.1384316086769104,
+                    0.09758734703063965,
+                    0.19120168685913086,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.1384316086769104,
+                  0.09758734703063965,
+                  0.19120168685913086,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 3,
+          "slot": "Miri_roof_light",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_roof_light",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.28314873576164246,
+                0.16513219475746155,
+                0.32314321398735046,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.28314873576164246,
+                0.16513219475746155,
+                0.32314321398735046,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.28314873576164246,
+                    0.16513219475746155,
+                    0.32314321398735046,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.28314873576164246,
+                  0.16513219475746155,
+                  0.32314321398735046,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 4,
+          "slot": "Miri_scarf",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_scarf",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.7835378050804138,
+                0.2015562504529953,
+                0.08650045841932297,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.7835378050804138,
+                0.2015562504529953,
+                0.08650045841932297,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.7835378050804138,
+                    0.2015562504529953,
+                    0.08650045841932297,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.7835378050804138,
+                  0.2015562504529953,
+                  0.08650045841932297,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 5,
+          "slot": "Miri_skin",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_skin",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.7083757519721985,
+                0.38642942905426025,
+                0.19806931912899017,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.7083757519721985,
+                0.38642942905426025,
+                0.19806931912899017,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.7083757519721985,
+                    0.38642942905426025,
+                    0.19806931912899017,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.7083757519721985,
+                  0.38642942905426025,
+                  0.19806931912899017,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 6,
+          "slot": "Miri_ink",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_ink",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.01850022003054619,
+                0.026241222396492958,
+                0.05126945674419403,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.01850022003054619,
+                0.026241222396492958,
+                0.05126945674419403,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.01850022003054619,
+                    0.026241222396492958,
+                    0.05126945674419403,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.01850022003054619,
+                  0.026241222396492958,
+                  0.05126945674419403,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 7,
+          "slot": "Miri_cream",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_cream",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.8227857351303101,
+                0.6795424818992615,
+                0.35153260827064514,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.8227857351303101,
+                0.6795424818992615,
+                0.35153260827064514,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.8227857351303101,
+                    0.6795424818992615,
+                    0.35153260827064514,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.8227857351303101,
+                  0.6795424818992615,
+                  0.35153260827064514,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 8,
+          "slot": "Miri_wood",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.3967552185058594,
+                0.14995978772640228,
+                0.05951123684644699,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.3967552185058594,
+                0.14995978772640228,
+                0.05951123684644699,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.3967552185058594,
+                    0.14995978772640228,
+                    0.05951123684644699,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.3967552185058594,
+                  0.14995978772640228,
+                  0.05951123684644699,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 9,
+          "slot": "Miri_wood_light",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_wood_light",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.637596845626831,
+                0.3324515223503113,
+                0.12213877588510513,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.637596845626831,
+                0.3324515223503113,
+                0.12213877588510513,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.637596845626831,
+                    0.3324515223503113,
+                    0.12213877588510513,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.637596845626831,
+                  0.3324515223503113,
+                  0.12213877588510513,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        },
+        {
+          "index": 10,
+          "slot": "Miri_apple",
+          "material": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+          "pbr": {
+            "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+            "class": "MaterialInstanceConstant",
+            "source_name": "Miri_apple",
+            "source_pbr": {
+              "baseColorFactor": [
+                0.6038273572921753,
+                0.12477181851863861,
+                0.08437620848417282,
+                1
+              ],
+              "metallicFactor": 0,
+              "roughnessFactor": 0.7900000214576721
+            },
+            "vectors": {
+              "BaseColorFactor": [
+                0.6038273572921753,
+                0.12477181851863861,
+                0.08437620848417282,
+                1.0
+              ],
+              "MetallicRoughnessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "BaseColorTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "NormalTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "OcclusionTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "SpecularTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveFactor": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "SpecularTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "OcclusionTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "NormalTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "EmissiveTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "MetallicRoughnessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "BaseColorTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceThicknessTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "IridescenceTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "IridescenceThicknessTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_OffsetScale": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "AnisotropyTexture_TilingMethod": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "scalars": {
+              "BaseColorTexture_Rotation": 0.0,
+              "BaseColorTexture_TexCoord": 0.0,
+              "MetallicRoughnessTexture_Rotation": 0.0,
+              "MetallicRoughnessTexture_TexCoord": 0.0,
+              "MetallicFactor": 0.0,
+              "RoughnessFactor": 0.7900000214576721,
+              "NormalTexture_Rotation": 0.0,
+              "NormalTexture_TexCoord": 0.0,
+              "NormalScale": 1.0,
+              "OcclusionTexture_Rotation": 0.0,
+              "OcclusionTexture_TexCoord": 0.0,
+              "OcclusionStrength": 1.0,
+              "IOR": 1.5,
+              "SpecularTexture_Rotation": 0.0,
+              "SpecularTexture_TexCoord": 0.0,
+              "SpecularFactor": 1.0,
+              "EmissiveTexture_Rotation": 0.0,
+              "EmissiveTexture_TexCoord": 0.0,
+              "EmissiveStrength": 1.0,
+              "AlphaCutoff": 0.0,
+              "IridescenceIOR": 1.2999999523162842,
+              "IridescenceFactor": 0.0,
+              "IridescenceThicknessMinimum": 100.0,
+              "IridescenceThicknessMaximum": 400.0,
+              "IridescenceTexture_Rotation": 0.0,
+              "IridescenceTexture_TexCoord": 0.0,
+              "IridescenceThicknessTexture_Rotation": 0.0,
+              "IridescenceThicknessTexture_TexCoord": 0.0,
+              "AnisotropyStrength": 0.0,
+              "AnisotropyRotation": 0.0,
+              "AnisotropyTexture_Rotation": 0.0,
+              "AnisotropyTexture_TexCoord": 0.0
+            },
+            "readback_errors": [],
+            "matches": {
+              "baseColorFactor": {
+                "candidates": {
+                  "BaseColorFactor": [
+                    0.6038273572921753,
+                    0.12477181851863861,
+                    0.08437620848417282,
+                    1.0
+                  ]
+                },
+                "matching_parameters": [
+                  "BaseColorFactor"
+                ],
+                "source_value": [
+                  0.6038273572921753,
+                  0.12477181851863861,
+                  0.08437620848417282,
+                  1
+                ]
+              },
+              "roughnessFactor": {
+                "candidates": {
+                  "RoughnessFactor": 0.7900000214576721
+                },
+                "matching_parameters": [
+                  "RoughnessFactor"
+                ],
+                "source_value": 0.7900000214576721
+              },
+              "metallicFactor": {
+                "candidates": {
+                  "MetallicFactor": 0.0
+                },
+                "matching_parameters": [
+                  "MetallicFactor"
+                ],
+                "source_value": 0
+              }
+            },
+            "physical": {
+              "chain": [
+                {
+                  "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": false,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS",
+                  "class": "MaterialInstanceConstant",
+                  "override_two_sided": true,
+                  "override_blend_mode": false
+                },
+                {
+                  "path": "/InterchangeAssets/gltf/M_Default.M_Default",
+                  "class": "Material"
+                }
+              ],
+              "two_sided": true,
+              "blend_mode": "<BlendMode.BLEND_OPAQUE: 0>",
+              "opaque": true,
+              "errors": []
+            }
+          }
+        }
+      ],
+      "geometry": {
+        "copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+        "triangles": 1320,
+        "source_bounds_cm": {
+          "min": [
+            -60.000003814697266,
+            -58.999996185302734,
+            0.0
+          ],
+          "max": [
+            81.0,
+            40.0,
+            227.0
+          ]
+        },
+        "source_dimensions_cm": [
+          141.00000381469727,
+          98.99999618530273,
+          227.0
+        ],
+        "imported_bounds_origin_cm": [
+          10.499998092651367,
+          -9.499998092651367,
+          113.5
+        ],
+        "imported_dimensions_cm": [
+          141.00000381469727,
+          98.99999618530273,
+          227.0
+        ]
+      },
+      "import_data_class": "InterchangeAssetImportData"
+    },
+    "clips": [
+      {
+        "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+        "source_name": "Miri_Idle",
+        "length_s": 2.0333333015441895,
+        "skeleton": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton",
+        "pose_samples": [],
+        "changing_sampled_bones": []
+      }
+    ],
+    "issues": [
+      "native readback unsupported: AttributeError: 'NoneType' object has no attribute 'get_bone_track_names'"
+    ],
+    "world_placed": 0,
+    "world_saved": false,
+    "required_future_actor_scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "unit_contract": "gltf_metres_to_unreal_cm100_actor1_v1",
+    "native_continuous_playback": "unverified",
+    "authored_collision": "not delivered or accepted"
+  },
+  "error_type": "NativeContractError",
+  "error": "native readback unsupported: AttributeError: 'NoneType' object has no attribute 'get_bone_track_names'"
+}

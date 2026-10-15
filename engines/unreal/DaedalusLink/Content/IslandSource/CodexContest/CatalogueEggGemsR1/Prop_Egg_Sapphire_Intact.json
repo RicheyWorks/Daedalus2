@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Sapphire_Intact",
+ "egg": "Sapphire",
+ "stage": "Intact",
+ "rarity": "rare",
+ "hatch": {
+  "sea": 3,
+  "fish": 2,
+  "bird": 1
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

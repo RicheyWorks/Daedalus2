@@ -1,0 +1,352 @@
+{
+  "schema": "daedalus.codex-static-gem-eggs-source.v1",
+  "stage": "source_qualified_static_eggs_only",
+  "items": [
+    {
+      "name": "Prop_Egg_Ruby_Intact",
+      "fbx": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Ruby_Intact.fbx",
+        "bytes": 19084,
+        "sha256": "555672502acaffbdc679196650e9d669e3b46bf31b20926c181684730c516d69"
+      },
+      "sidecar": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Ruby_Intact.json",
+        "bytes": 204,
+        "sha256": "d3ac852c8ef6c01fd23cf018f972cc8ad3217a168711f3c8366bfbc9a7a9b49a"
+      },
+      "sidecar_identity": {
+        "egg": "Ruby",
+        "stage": "Intact",
+        "rarity": "rare",
+        "voxel_cm": 10.0,
+        "pivot": "bottom-centre"
+      },
+      "stored_rgba_float": [
+        [
+          0.658823549747467,
+          0.5411764979362488,
+          0.42352941632270813,
+          1.0
+        ],
+        [
+          0.929411768913269,
+          0.3529411852359772,
+          0.48235294222831726,
+          1.0
+        ],
+        [
+          0.9450980424880981,
+          0.8784313797950745,
+          0.658823549747467,
+          1.0
+        ],
+        [
+          1.0,
+          0.6196078658103943,
+          0.6941176652908325,
+          1.0
+        ]
+      ],
+      "rgba_bytes": [
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          237,
+          90,
+          123,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ],
+        [
+          255,
+          158,
+          177,
+          255
+        ]
+      ],
+      "sheet_binding": {
+        "catalogue_index_zero_based": 0,
+        "row_zero_based": 0,
+        "column_zero_based": 0
+      },
+      "triangles": 568,
+      "source_bounds": {
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ],
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ]
+      }
+    },
+    {
+      "name": "Prop_Egg_Sapphire_Intact",
+      "fbx": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Sapphire_Intact.fbx",
+        "bytes": 19084,
+        "sha256": "969b5e306696dc370d01314a685b71fab94c0469ad58fa050381f36530e50bca"
+      },
+      "sidecar": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Sapphire_Intact.json",
+        "bytes": 209,
+        "sha256": "243749798b54e3ee84086c1c497bed9d788e0b690242a3eadfe46206e4680321"
+      },
+      "sidecar_identity": {
+        "egg": "Sapphire",
+        "stage": "Intact",
+        "rarity": "rare",
+        "voxel_cm": 10.0,
+        "pivot": "bottom-centre"
+      },
+      "stored_rgba_float": [
+        [
+          0.42352941632270813,
+          0.5803921818733215,
+          0.929411768913269,
+          1.0
+        ],
+        [
+          0.658823549747467,
+          0.5411764979362488,
+          0.42352941632270813,
+          1.0
+        ],
+        [
+          0.658823549747467,
+          0.7607843279838562,
+          1.0,
+          1.0
+        ],
+        [
+          0.9450980424880981,
+          0.8784313797950745,
+          0.658823549747467,
+          1.0
+        ]
+      ],
+      "rgba_bytes": [
+        [
+          108,
+          148,
+          237,
+          255
+        ],
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          168,
+          194,
+          255,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ]
+      ],
+      "sheet_binding": {
+        "catalogue_index_zero_based": 4,
+        "row_zero_based": 0,
+        "column_zero_based": 4
+      },
+      "triangles": 568,
+      "source_bounds": {
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ],
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ]
+      }
+    },
+    {
+      "name": "Prop_Egg_Emerald_Intact",
+      "fbx": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Emerald_Intact.fbx",
+        "bytes": 19084,
+        "sha256": "e06041c1b95c98e4f8cfb30b335d710f2458843975c239138c996eb47c9d8ab3"
+      },
+      "sidecar": {
+        "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/Prop_Egg_Emerald_Intact.json",
+        "bytes": 213,
+        "sha256": "8d220e6dc1a4f7d34dfc122fbbf746f5d2dc746500328bf47c8196622efd5db2"
+      },
+      "sidecar_identity": {
+        "egg": "Emerald",
+        "stage": "Intact",
+        "rarity": "rare",
+        "voxel_cm": 10.0,
+        "pivot": "bottom-centre"
+      },
+      "stored_rgba_float": [
+        [
+          0.3529411852359772,
+          0.8235294222831726,
+          0.6196078658103943,
+          1.0
+        ],
+        [
+          0.658823549747467,
+          0.5411764979362488,
+          0.42352941632270813,
+          1.0
+        ],
+        [
+          0.658823549747467,
+          0.9529411792755127,
+          0.7921568751335144,
+          1.0
+        ],
+        [
+          0.9450980424880981,
+          0.8784313797950745,
+          0.658823549747467,
+          1.0
+        ]
+      ],
+      "rgba_bytes": [
+        [
+          90,
+          210,
+          158,
+          255
+        ],
+        [
+          168,
+          138,
+          108,
+          255
+        ],
+        [
+          168,
+          243,
+          202,
+          255
+        ],
+        [
+          241,
+          224,
+          168,
+          255
+        ]
+      ],
+      "sheet_binding": {
+        "catalogue_index_zero_based": 8,
+        "row_zero_based": 0,
+        "column_zero_based": 8
+      },
+      "triangles": 568,
+      "source_bounds": {
+        "min": [
+          -40.0,
+          -40.0,
+          0.0
+        ],
+        "max": [
+          50.0,
+          50.0,
+          100.0
+        ]
+      }
+    }
+  ],
+  "reviewed_relay": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\production-checkpoint-new-egg-candidates-20261015.json",
+    "sha256": "6c0f5016b28122284bc28ec76c8bb37e363a160fb2fc03b3056c7006da49281d",
+    "bytes": 15048
+  },
+  "source_witnesses": [
+    {
+      "bytes": 4263,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_catalog.py",
+      "sha256": "2cfa50709ea899e923c64816f7ac17d5e63ce320c22e739b12dd8923044bcf08"
+    },
+    {
+      "bytes": 43574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\hero_island.py",
+      "sha256": "0ad5cb1df156a39e3f88cd10ee6d123729e1bf8d658480f62ad9d2603e46f72f"
+    },
+    {
+      "bytes": 54087,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_creatures.py",
+      "sha256": "38b076a41c168693682a075df42331d9dbf548b582f7b687c03d6cefc2cf6618"
+    },
+    {
+      "bytes": 13642,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_eggs.py",
+      "sha256": "2c18e23593b168989c00d03ca9671a45d13d64f2acacefa63aa68120d5da16a9"
+    },
+    {
+      "bytes": 25198,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_island.py",
+      "sha256": "e4ec1a50a88ce22efcdb51c7691b2f7621fccb67043a0f1439cabd377e67c006"
+    },
+    {
+      "bytes": 6574,
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-eggs\\eggs.manifest.json",
+      "sha256": "bec156053b5e68399e72191a2225c6006939dbf4d1354206e1d9fa874f7b4437"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\production-checkpoint-new-egg-candidates-20261015.json",
+      "sha256": "6c0f5016b28122284bc28ec76c8bb37e363a160fb2fc03b3056c7006da49281d",
+      "bytes": 15048
+    }
+  ],
+  "source_views": [
+    {
+      "path": "C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-eggs/sheet-egg.png",
+      "bytes": 3198075,
+      "sha256": "8ee35660235c2e0946f2570ba893a2c31e5507c1039ec397f634bae98d196145",
+      "original_pixels": [
+        2000,
+        1250
+      ],
+      "personally_viewed": true,
+      "viewer": "tools.view_image; displayed preview1996x1248; original file untouched",
+      "observed": "Faceted red, blue and green eggs in nests read consistently at sheet scale; no obvious silhouette defect in these visible intact variants. Limited source appearance qualification only.",
+      "binding": {
+        "grid_columns": 18,
+        "basis": "voxel_eggs EGGS insertion order Ruby/Sapphire/Emerald first; each contributes Intact,Cracked,Hatching,Shiny. export_catalog uses CATALOG order, grid18columns for196entries.",
+        "source_path": "C:/Users/730ri/projects/D2-build/tools/blender/voxel_eggs.py",
+        "source_sha256": "2c18e23593b168989c00d03ca9671a45d13d64f2acacefa63aa68120d5da16a9",
+        "sheet_generator_path": "C:/Users/730ri/projects/D2-build/tools/blender/export_catalog.py",
+        "sheet_generator_sha256": "2cfa50709ea899e923c64816f7ac17d5e63ce320c22e739b12dd8923044bcf08"
+      },
+      "limits": [
+        "Sheet rebuilds source geometry in Workbench with vertex colours; it is not a render of the exact existing FBX bytes.",
+        "Source hashes/order bind the current recipe, not a signed producer attestation that those exact source bytes generated the retained FBX.",
+        "No native material parity, placement, hatching, rarity mechanics, economy, collision or BAR acceptance."
+      ]
+    }
+  ],
+  "unit_contract": "claude_raw_unit100_build1_actor001_v1",
+  "limits": [
+    "Sheet rebuilds source geometry in Workbench with vertex colours; it is not a render of the exact existing FBX bytes.",
+    "Source hashes/order bind the current recipe, not a signed producer attestation that those exact source bytes generated the retained FBX.",
+    "No native material parity, placement, hatching, rarity mechanics, economy, collision or BAR acceptance."
+  ],
+  "preserve_prior": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggR1\\readback.json"
+}

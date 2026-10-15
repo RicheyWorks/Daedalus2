@@ -1,0 +1,31 @@
+{
+  "stage": "three_assets_saved_world_held",
+  "observed_utc": "2026-10-15T01:06:47.796371+00:00",
+  "code_sha256": "e4af8f191b7e7b30a4a9ff22276e28428d38f65b0436f2640ff78b5e23ea4372",
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "prepared_fingerprint": {
+    "sha256": "bf69756bec94a151fc5ecb58d5bd90f8e14373ec6ec7c58fc6d4ce36ba5f4dcd",
+    "bytes": 10850
+  },
+  "reply_fingerprint": {
+    "sha256": "5dfbd09206515861709aaa6ef660d78e54921f5854a337e6ac43b723d7cd3bc0",
+    "bytes": 54439
+  },
+  "outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Ruby_Intact_555672502acaffbd/Prop_Egg_Ruby_Intact.Prop_Egg_Ruby_Intact": {
+      "sha256": "1696cff0e69550565d166c171f8128e969c678880b0ecaba3da77c2de660c7aa",
+      "bytes": 42366
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Sapphire_Intact_969b5e306696dc37/Prop_Egg_Sapphire_Intact.Prop_Egg_Sapphire_Intact": {
+      "sha256": "b88892e765f4d8149a39134cf2f39a83c4ca3637e02607efd2608a2f882ca61a",
+      "bytes": 42465
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Emerald_Intact_e06041c1b95c98e4/Prop_Egg_Emerald_Intact.Prop_Egg_Emerald_Intact": {
+      "sha256": "ba8ef1e2153e71b913848c2362e3405a163da97072a511daaf9fde2936a7341c",
+      "bytes": 42351
+    }
+  }
+}

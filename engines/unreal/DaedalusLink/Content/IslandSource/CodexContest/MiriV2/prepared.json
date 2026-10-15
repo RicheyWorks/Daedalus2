@@ -1,0 +1,96 @@
+{
+  "schema": "daedalus.codex-miri-prepared.v1",
+  "stage": "reviewed_skeletal_glb_prepared",
+  "glb": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\miri-action-pack-v2.glb",
+  "glb_fingerprint": {
+    "sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc",
+    "bytes": 202220
+  },
+  "original_glb": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.glb",
+    "bytes": 202220,
+    "sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc"
+  },
+  "source_contract": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\source-contract.json",
+  "source_contract_fingerprint": {
+    "bytes": 33017,
+    "sha256": "11034938cec63a80123b46817aab485a66b603067adc23374efe657f87896d33"
+  },
+  "native_module": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_miri.py",
+  "native_module_fingerprint": {
+    "sha256": "5a434e398dcaafc0cb5f66d399aca372f322dcd51a29bf7c3687e78fed05c059",
+    "bytes": 25647
+  },
+  "source_witnesses": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\source-review-packet.json",
+      "bytes": 7505,
+      "sha256": "900b0a42073a6adb23a2120c31d68f7d92f8952fa593241bad659b79fdaf4f44"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\README.md",
+      "bytes": 4782,
+      "sha256": "f86adc3f4ebe48d81843fc97d8c52529048bcaae3eda2b47335cc9407cdec6a4",
+      "relative": "README.md",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\walk-revision-recipe.json",
+      "bytes": 1864,
+      "sha256": "2e06d2e0d4b34ce302ee3e2fce1de335926891f486c5f586e60360f03a763865",
+      "relative": "walk-revision-recipe.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\revise_walk.py",
+      "bytes": 16248,
+      "sha256": "fd5073d237edd548338a419b713b3e4f2674dbde684b22470a6d7f3aba550fd7",
+      "relative": "revise_walk.py",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.blend",
+      "bytes": 1831752,
+      "sha256": "064dd725a2c6188b1086fdcba1b3fcd111c3a97b4001148683caf17cb0638325",
+      "relative": "exports/miri-action-pack-v2.blend",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\exports\\miri-action-pack-v2.glb",
+      "bytes": 202220,
+      "sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc",
+      "relative": "exports/miri-action-pack-v2.glb",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\export-contract.json",
+      "bytes": 1795,
+      "sha256": "35be2db295b97e5c07272bee2e299c4db49fdb82e1bcb3bf653270c322b00d5a",
+      "relative": "receipts/export-contract.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\walk-revision-observed.json",
+      "bytes": 127563,
+      "sha256": "0068980d34bcdd492f0f0103258eebb17e2c65e4f24b2d64da1159329659f111",
+      "relative": "receipts/walk-revision-observed.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\receipts\\preserved-export-semantics.json",
+      "bytes": 812,
+      "sha256": "51ac10abbe453444497fdafbd73ad60924ff38c996341338f96f900d28c289d8",
+      "relative": "receipts/preserved-export-semantics.json",
+      "matches_reviewed_pin": true
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\emberthread-orchard-16bit\\miri-action-pack-v2\\review\\walk-stance-comparison.png",
+      "bytes": 3826949,
+      "sha256": "dadc3bc9ceadfa6fb4ea4ee2fef1e5ce2fb0ed0c03acf6d3a894da956820568b",
+      "relative": "review/walk-stance-comparison.png",
+      "matches_reviewed_pin": true
+    }
+  ],
+  "unit_contract": "gltf_metres_to_native_centimetres_actor1",
+  "scope": "One skeletal mesh and original three clips/materials, asset-only; no static flattening, actor placement, world save or playback."
+}

@@ -1,0 +1,961 @@
+{
+  "schema": "daedalus.codex-gem-miri-native-checkpoint.v1",
+  "stage": "three_gem_eggs_and_seventeen_miri_assets_saved_asset_only",
+  "observed_utc": "2026-10-15T01:19:06.566811+00:00",
+  "operator": "codex-play-guard; user-designated sole writer",
+  "verified_saved_static_mesh_files": 102,
+  "prior_saved_static_mesh_files": 99,
+  "new_saved_static_mesh_files": 3,
+  "new_miri_saved_assets": 17,
+  "miri_classes": {
+    "MaterialInstanceConstant": 11,
+    "SkeletalMesh": 1,
+    "AnimSequence": 3,
+    "PhysicsAsset": 1,
+    "Skeleton": 1
+  },
+  "measured_actor_rows": 89,
+  "all_prior_recorded_actor_fields_unchanged": true,
+  "world_placed": 0,
+  "world_saved": false,
+  "map_unchanged": true,
+  "map": "/Game/Daedalus/DaedalusWorld",
+  "map_fingerprint": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "gem_outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Ruby_Intact_555672502acaffbd/Prop_Egg_Ruby_Intact.Prop_Egg_Ruby_Intact": {
+      "sha256": "1696cff0e69550565d166c171f8128e969c678880b0ecaba3da77c2de660c7aa",
+      "bytes": 42366
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Sapphire_Intact_969b5e306696dc37/Prop_Egg_Sapphire_Intact.Prop_Egg_Sapphire_Intact": {
+      "sha256": "b88892e765f4d8149a39134cf2f39a83c4ca3637e02607efd2608a2f882ca61a",
+      "bytes": 42465
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/Egg_Emerald_Intact_e06041c1b95c98e4/Prop_Egg_Emerald_Intact.Prop_Egg_Emerald_Intact": {
+      "sha256": "ba8ef1e2153e71b913848c2362e3405a163da97072a511daaf9fde2936a7341c",
+      "bytes": 42351
+    }
+  },
+  "miri_outputs": {
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "c1f04f79a8e213481e41e1f9c2f704e1ff1e6073db0223adfa6c39153fc2ee9b",
+      "bytes": 69665
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "87fc0e630190f34321d2906fc4780e63f9a3969e7d7d3b6457769d4452d0ddec",
+      "bytes": 69848
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "d8aa4fba74fef5859c7632f4073070fe1ba4c23e1b1875629ce9805c5afbc035",
+      "bytes": 68944
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "95b74ed472a3b93f571069157e70b7b9a8b408f4cbc448bad1a2aeb691831a82",
+      "bytes": 69433
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "145c4c9af6dd131d0d2061b9a70e41d50fc7a826b3dbef4a3d0d9117a20a4220",
+      "bytes": 69243
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "a71a4d3ad8c246fdc353667e9b9b32b8a5869a5a5e20f22f206d824c44d60d10",
+      "bytes": 69739
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "1a0b3f89459b0a053518bf4b329e42b3f43cb2caaea8e411fbe999501c234099",
+      "bytes": 69838
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "8ed1bc9ed3f5203b29fb54a93d9de60909ed58c6ac664fd7820429447c1ae3c2",
+      "bytes": 69851
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "b07f0ff638326fea9fd7d1136f75eb7b8eafc2c89c3e34f87e648d2e2a7af59c",
+      "bytes": 69643
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "e01bbec7299be90124c5ecb9c282ce9bce6ac3d099ffe912eea87f00b7d90d8e",
+      "bytes": 69158
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light": {
+      "class": "MaterialInstanceConstant",
+      "sha256": "0aa3c3711aa200be68e101638ac7d8ab59c7bbb4009e10784e0a77b436c3dbd4",
+      "bytes": 69932
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2.Miri_ActionPack_V2": {
+      "class": "SkeletalMesh",
+      "sha256": "3cd1f44b91d401f74f27901bb9d74a5a366568b10f50256a3e839d1ad0efdd67",
+      "bytes": 638116
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle": {
+      "class": "AnimSequence",
+      "sha256": "6c37c0d58736cdbb0da73c020297708c24e3829003d08fd3a9f37bd6e8bc5cc1",
+      "bytes": 165546
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction": {
+      "class": "AnimSequence",
+      "sha256": "c33a824752577bdfbb28d7e4f9e7d817ea1fd0cca616c6a186849d71e456d340",
+      "bytes": 176075
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace": {
+      "class": "AnimSequence",
+      "sha256": "bd6be53692b404a8f77bc20e80d2a065a74e6a02754162c4898ef4af569f993d",
+      "bytes": 172246
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_PhysicsAsset.Miri_ActionPack_V2_PhysicsAsset": {
+      "class": "PhysicsAsset",
+      "sha256": "6817476cacbc3adfa8e46eabdee8dfba0c45402869c0c41fdc4c0603ee45f208",
+      "bytes": 34378
+    },
+    "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2_Skeleton.Miri_ActionPack_V2_Skeleton": {
+      "class": "Skeleton",
+      "sha256": "75aba4908c80a52a846a5e6b10872bc960fee4704c6b9928bd8cb5a0dbb52904",
+      "bytes": 11009
+    }
+  },
+  "miri_source_sha256": "33b8c1a8a5a3bd513648faf56822b250b7b8254efb55f668031124c7f47d22bc",
+  "miri_root": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51",
+  "miri_unit_contract": "gltf_metres_to_unreal_cm100_actor1_v1",
+  "miri_required_actor_scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "miri_geometry": {
+    "copy_outcome": "<GeometryScriptOutcomePins.SUCCESS: 1>",
+    "triangles": 1320,
+    "source_bounds_cm": {
+      "min": [
+        -60.000003814697266,
+        -58.999996185302734,
+        0.0
+      ],
+      "max": [
+        81.0,
+        40.0,
+        227.0
+      ]
+    },
+    "source_dimensions_cm": [
+      141.00000381469727,
+      98.99999618530273,
+      227.0
+    ],
+    "imported_bounds_origin_cm": [
+      10.499998092651367,
+      -9.499998092651367,
+      113.5
+    ],
+    "imported_dimensions_cm": [
+      141.00000381469727,
+      98.99999618530273,
+      227.0
+    ]
+  },
+  "miri_authored_joint_count": 17,
+  "miri_materials": [
+    {
+      "slot": "Miri_wood_dark",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_dark.Miri_wood_dark",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.12213877588510513,
+          0.04817182570695877,
+          0.0382043719291687,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.12213877588510513,
+              0.04817182570695877,
+              0.0382043719291687,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.12213877588510513,
+            0.04817182570695877,
+            0.0382043719291687,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_roof_dark",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_dark.Miri_roof_dark",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.04970656707882881,
+          0.04373503103852272,
+          0.09989872574806213,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.04970656707882881,
+              0.04373503103852272,
+              0.09989872574806213,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.04970656707882881,
+            0.04373503103852272,
+            0.09989872574806213,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_roof",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof.Miri_roof",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.1384316086769104,
+          0.09758734703063965,
+          0.19120168685913086,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.1384316086769104,
+              0.09758734703063965,
+              0.19120168685913086,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.1384316086769104,
+            0.09758734703063965,
+            0.19120168685913086,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_roof_light",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_roof_light.Miri_roof_light",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.28314873576164246,
+          0.16513219475746155,
+          0.32314321398735046,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.28314873576164246,
+              0.16513219475746155,
+              0.32314321398735046,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.28314873576164246,
+            0.16513219475746155,
+            0.32314321398735046,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_scarf",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_scarf.Miri_scarf",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.7835378050804138,
+          0.2015562504529953,
+          0.08650045841932297,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.7835378050804138,
+              0.2015562504529953,
+              0.08650045841932297,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.7835378050804138,
+            0.2015562504529953,
+            0.08650045841932297,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_skin",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_skin.Miri_skin",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.7083757519721985,
+          0.38642942905426025,
+          0.19806931912899017,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.7083757519721985,
+              0.38642942905426025,
+              0.19806931912899017,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.7083757519721985,
+            0.38642942905426025,
+            0.19806931912899017,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_ink",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_ink.Miri_ink",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.01850022003054619,
+          0.026241222396492958,
+          0.05126945674419403,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.01850022003054619,
+              0.026241222396492958,
+              0.05126945674419403,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.01850022003054619,
+            0.026241222396492958,
+            0.05126945674419403,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_cream",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_cream.Miri_cream",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.8227857351303101,
+          0.6795424818992615,
+          0.35153260827064514,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.8227857351303101,
+              0.6795424818992615,
+              0.35153260827064514,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.8227857351303101,
+            0.6795424818992615,
+            0.35153260827064514,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_wood",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood.Miri_wood",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.3967552185058594,
+          0.14995978772640228,
+          0.05951123684644699,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.3967552185058594,
+              0.14995978772640228,
+              0.05951123684644699,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.3967552185058594,
+            0.14995978772640228,
+            0.05951123684644699,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_wood_light",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_wood_light.Miri_wood_light",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.637596845626831,
+          0.3324515223503113,
+          0.12213877588510513,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.637596845626831,
+              0.3324515223503113,
+              0.12213877588510513,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.637596845626831,
+            0.3324515223503113,
+            0.12213877588510513,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    },
+    {
+      "slot": "Miri_apple",
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/Materials/Miri_apple.Miri_apple",
+      "source_pbr": {
+        "baseColorFactor": [
+          0.6038273572921753,
+          0.12477181851863861,
+          0.08437620848417282,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7900000214576721
+      },
+      "matches": {
+        "baseColorFactor": {
+          "candidates": {
+            "BaseColorFactor": [
+              0.6038273572921753,
+              0.12477181851863861,
+              0.08437620848417282,
+              1.0
+            ]
+          },
+          "matching_parameters": [
+            "BaseColorFactor"
+          ],
+          "source_value": [
+            0.6038273572921753,
+            0.12477181851863861,
+            0.08437620848417282,
+            1
+          ]
+        },
+        "roughnessFactor": {
+          "candidates": {
+            "RoughnessFactor": 0.7900000214576721
+          },
+          "matching_parameters": [
+            "RoughnessFactor"
+          ],
+          "source_value": 0.7900000214576721
+        },
+        "metallicFactor": {
+          "candidates": {
+            "MetallicFactor": 0.0
+          },
+          "matching_parameters": [
+            "MetallicFactor"
+          ],
+          "source_value": 0
+        }
+      },
+      "two_sided": true,
+      "opaque": true
+    }
+  ],
+  "miri_clips": [
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Idle.Miri_ActionPack_V2Miri_Idle",
+      "source_name": "Miri_Idle",
+      "length_s": 2.0333333015441895,
+      "changing_sampled_bones": [
+        "spine",
+        "head",
+        "forearm.L",
+        "scarf_tip"
+      ],
+      "track_names_readback": "legacy data_model absent; named clips, skeleton and local pose samples remain strict"
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_LetterReaction.Miri_ActionPack_V2Miri_LetterReaction",
+      "source_name": "Miri_LetterReaction",
+      "length_s": 1.5333333015441895,
+      "changing_sampled_bones": [
+        "spine",
+        "head",
+        "upper_arm.L",
+        "forearm.L",
+        "upper_arm.R",
+        "forearm.R",
+        "hand.R",
+        "scarf_tip"
+      ],
+      "track_names_readback": "legacy data_model absent; named clips, skeleton and local pose samples remain strict"
+    },
+    {
+      "path": "/Game/Daedalus/Art/Islands/CodexContest/Characters/MiriV2_33b8c1a8a5a3bd51/miri-action-pack-v2/SkeletalMeshes/Miri_ActionPack_V2Miri_Walk_InPlace.Miri_ActionPack_V2Miri_Walk_InPlace",
+      "source_name": "Miri_Walk_InPlace",
+      "length_s": 1.0333333015441895,
+      "changing_sampled_bones": [
+        "hips",
+        "spine",
+        "head",
+        "upper_arm.L",
+        "forearm.L",
+        "upper_arm.R",
+        "forearm.R",
+        "scarf_tip",
+        "thigh.L",
+        "shin.L",
+        "foot.L",
+        "thigh.R",
+        "shin.R",
+        "foot.R"
+      ],
+      "track_names_readback": "legacy data_model absent; named clips, skeleton and local pose samples remain strict"
+    }
+  ],
+  "miri_reconciliation": "One import returned17assets, then stopped before any save on null legacy AnimSequence.data_model. Native bone-pose extraction, all original rig/geometry/PBR checks and exact17path/classes passed. A pinned companion completed first saves without reimport; original preparation/module/import journal remain unchanged.",
+  "miri_import_s": 13.085156,
+  "miri_first_save_s_sum": 0.945221,
+  "timing_scope": "Native phases only; no whole-intake, compilation or speedup claim.",
+  "arcade_native_acceptance": {
+    "packet_head": "a22cd83f26c82eba63992bac6aacd06dbeb6205d",
+    "manifest_version": 6,
+    "owner_runtime_pins_match": "10/10",
+    "installed_runtime_pins_match": "0/10",
+    "loaded_class": "DaedalusDesktopArcade",
+    "existing_actor": "CodexAcceptance_Pong",
+    "new_source_key_and_controller_dispatch_methods": "absent from loaded Python class",
+    "status": "pending source integration/UHT/module compile/link/load; not denied or attempted",
+    "integration_rule": "Preserve PR139 Minesweeper core and three registry additions. Existing setup wrapper whole-plugin fallback/NoHotReloadFromIDE is not a live adoption route.",
+    "owner_requests": [
+      31327,
+      31341
+    ],
+    "evidence": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-arcade-native-intake-0110.json",
+      "bytes": 31543,
+      "sha256": "7fece33fd31338f5165436ff5f7498fa73bc289d2aa5d1c9c7ab2547ce00c244"
+    },
+    "native_controller_HeroUse_HUD_Star_save_failure_recovery": "unverified; no Start/Advance/Use/Play/spawn/input/save invoked"
+  },
+  "remaining_reviewed_asset_holds": {
+    "aetherflow_fish": 3,
+    "aetherflow_water": 7,
+    "rainlight": 6,
+    "dragon_samples": 2,
+    "total": 18
+  },
+  "fresh_final_bridge": {
+    "observed_utc": "2026-10-15T01:18:25.034224+00:00",
+    "bridge_file": "C:\\Unreal/DaedalusRealm/Plugins/ClaudeUnrealBridge/Content/Python\\claude_unreal_bridge.py",
+    "bridge_source_sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+    "queued_jobs": [],
+    "running_generators": [
+      {
+        "type": "execute_python",
+        "label": null,
+        "code_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde"
+      }
+    ],
+    "unfinished_async_job_boxes": 0,
+    "remote_execution_lock_locked": false,
+    "scope": "existing bridge queue snapshot only; host compares code hashes to distinguish this read from other generators",
+    "background_compilation": "not_queried",
+    "epic_mcp_other_sessions": "not_queried",
+    "pie_running": false,
+    "editor_world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "dirty_map_packages": [],
+    "dirty_content_packages": [],
+    "read_command_sha256": "b9ca750774946b500d91a1fea3c96fda0b25f53914493bc6506571853bc51cde",
+    "matching_read_generators": 1,
+    "other_running_generators": [],
+    "bridge_conflict_absent_at_snapshot": true
+  },
+  "issues": [],
+  "evidence": {
+    "CatalogueEggGemsR1\\source-qualification.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggGemsR1\\source-qualification.json",
+      "bytes": 10395,
+      "sha256": "797d63f474ab0afbcafb8261eda7f06375ec1420ed0d2accf7846e5ca8386f7c"
+    },
+    "CatalogueEggGemsR1\\prepared.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggGemsR1\\prepared.json",
+      "bytes": 10850,
+      "sha256": "bf69756bec94a151fc5ecb58d5bd90f8e14373ec6ec7c58fc6d4ce36ba5f4dcd"
+    },
+    "CatalogueEggGemsR1\\native.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggGemsR1\\native.json",
+      "bytes": 50516,
+      "sha256": "afee846ab1cbfda52f33712535b7f0bd1af0e8f45acb47bfd6b69758a137dec5"
+    },
+    "CatalogueEggGemsR1\\readback.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\CatalogueEggGemsR1\\readback.json",
+      "bytes": 200179,
+      "sha256": "030b40a7cc87ba25e8d20f6142fb3afdacb3d819db1abbfb5f855e358e035fd8"
+    },
+    "MiriV2\\source-contract.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\source-contract.json",
+      "bytes": 33017,
+      "sha256": "11034938cec63a80123b46817aab485a66b603067adc23374efe657f87896d33"
+    },
+    "MiriV2\\prepared.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\prepared.json",
+      "bytes": 5130,
+      "sha256": "23b3a3c23ec8c719ca16c05663302b4bb56c6a315e90fb21e3946f6280e8640c"
+    },
+    "MiriV2\\native.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\native.json",
+      "bytes": 196435,
+      "sha256": "1aa5c82ca9ddb865bd33fbf061cbffdeab54dd6591ce6236e1a33b7db8bccdc9"
+    },
+    "MiriV2\\known-import-readback.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\known-import-readback.json",
+      "bytes": 208409,
+      "sha256": "90de3c1886ca5552b71ed4a63aab082c1576c52bbe41b42baf71e659a1bf2ea5"
+    },
+    "MiriV2\\finish-dispatch.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\finish-dispatch.json",
+      "bytes": 6286,
+      "sha256": "b99a86f9da92e4d00027f75bd59a999a5e83a43807d0d2959f5a4d0f7bc2e9de"
+    },
+    "MiriV2\\finish-native.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\finish-native.json",
+      "bytes": 423901,
+      "sha256": "a6d6746889a562fe02a234d080c09b27c44621bd5b4dd83e272f8732da68f361"
+    },
+    "MiriV2\\readback.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\MiriV2\\readback.json",
+      "bytes": 406109,
+      "sha256": "1efda8ff15ef85f719b44625541c3b3b3291e44f7203291d07ea6428b59b5914"
+    },
+    "codex-miri-arcade-native-controls-0109.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-miri-arcade-native-controls-0109.json",
+      "bytes": 58208,
+      "sha256": "8c79eff0a38d13e407205a2ef05161efa28814c068dac547a17ca30429469123"
+    },
+    "codex-gems-miri-bridge-final-0118.json": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\IslandSource\\CodexContest\\codex-gems-miri-bridge-final-0118.json",
+      "bytes": 2519,
+      "sha256": "c7409ba01b922c83bc51dba341502110710c293fa3cf223e5e893dd6d78fcaae"
+    }
+  },
+  "limits": [
+    "Miri continuous native playback, planted feet, knee gaps, transitions and visual/BAR acceptance remain open.",
+    "Native clip lengths are2.0333333/1.5333333/1.0333333s, one30fps frame beyond source spans; loop behavior is not accepted.",
+    "Generated PhysicsAsset is observed, not authored or accepted collision.",
+    "Static eggs require future actor scale .01; Miri requires scale1. No recentering or duplicate color conversion.",
+    "No world/actor/app settings mutation, tests/project build/Play/restart, dependency or credential/security changes.",
+    "All originals and prior saved content preserved; binaries retained on host, source/JSON receipts published."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+ "name": "Prop_Egg_Emerald_Intact",
+ "egg": "Emerald",
+ "stage": "Intact",
+ "rarity": "rare",
+ "hatch": {
+  "animal": 2,
+  "plant": 2,
+  "insect": 2
+ },
+ "voxel_cm": 10.0,
+ "pivot": "bottom-centre"
+}

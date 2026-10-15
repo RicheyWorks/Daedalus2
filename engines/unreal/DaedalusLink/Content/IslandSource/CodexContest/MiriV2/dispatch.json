@@ -1,0 +1,16 @@
+{
+  "stage": "native_returned_inspect_before_replay",
+  "code_sha256": "4818b1a7e6eab4bd036fcb04e756ddf5fb709d0c06593eb9ccb31f0aacf87b0c",
+  "prepared_fingerprint": {
+    "sha256": "23b3a3c23ec8c719ca16c05663302b4bb56c6a315e90fb21e3946f6280e8640c",
+    "bytes": 5130
+  },
+  "map_before": {
+    "sha256": "0402ccf48ba037fb475e4cb4818b79158312888510628cd7b42f7ad317da8afa",
+    "bytes": 209306026
+  },
+  "reply_fingerprint": {
+    "sha256": "0d748295ba64aea1be4bce6e4de92bf73c878dc9f09c0dbb6a4c5ffc0bb9e975",
+    "bytes": 802
+  }
+}
