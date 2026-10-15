@@ -41,7 +41,7 @@ elif module == "prism":
         return M.plan(name)
 elif module == "aquatic":
     import voxel_aquatic as M
-    PITCH = {"pond": 2.4, "marsh": 2.4, "submerged": 2.0, "sea": 6.0, "realm": 2.2}
+    PITCH = {"pond": 6.0, "marsh": 2.4, "submerged": 2.0, "sea": 6.0, "realm": 2.4}
 
     def voxels_of(name):
         return M.plan(name)

@@ -161,10 +161,11 @@ def plan(species):
     for side in (-1, 1):
         x0 = 1 if side > 0 else -3
         if o["ear_mode"] == "lop":
-            for k in range(el):
-                x = (int(hr) + (1 if k > 1 else 0)) if side > 0 else -(int(hr) + 2 + (1 if k > 1 else 0))
+            ll = max(3, int(el * 0.55))                                                              # lops hang to the jaw, not the ground
+            for k in range(ll):
+                x = (int(hr) - 1 + (1 if k > 0 else 0)) if side > 0 else -(int(hr) + 1 + (1 if k > 0 else 0))
                 z = ez0 + 1 - k
-                box(out, "head", x, ey0, z, 2, 3, 1, main)
+                box(out, "head", x, ey0, z, 2, 3, 1, main if k < ll - 1 else dark)
             continue
         splay = o["ear_splay"] * (k_s := 1)
         for k in range(el):

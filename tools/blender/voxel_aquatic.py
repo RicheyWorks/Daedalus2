@@ -192,7 +192,7 @@ def frogbit(out, g, st, rng):
 def giant_waterlily(out, g, st, rng):
     _disc(out, 0, 0, 0, max(3, 13 * g), "aq_pad", "aq_pad_r", notch=False, ring="aq_pad_r")
     for i in range(int(2 * g)):
-        _disc(out, (12 + 9 * i) * g, 6 * g, 0, max(2, 8 * g), "aq_pad", "aq_pad_r", notch=False, ring="aq_pad_r")
+        _disc(out, (22 + 17 * i) * g, 4 * g * (1 if i % 2 else -1), 0, max(2, 8 * g), "aq_pad", "aq_pad_r", notch=False, ring="aq_pad_r")
     if st >= 3:
         _flower(out, -4 * g, -14 * g, 1, 3, "aq_white" if st == 3 else "aq_pink", "aq_yellow")
     _roots(out, 0, 0, 0, 4, 6, rng)

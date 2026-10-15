@@ -58,7 +58,7 @@ print("EXPORTED %d %s in %.0fs -> %s" % (done, module, time.time() - t0, out_dir
 def sheet(names, path):
     vox_all = {n: [v for vs in M.plan(n).values() for v in vs] for n in names}
     ext = max(max(max(abs(x), abs(y)) for x, y, _, _ in vs) for vs in vox_all.values()) * CM / 100.0
-    pitch = max(0.6, ext * 2.4)
+    pitch = max(0.5, ext * 1.7)
     cols = int(math.ceil(math.sqrt(len(names) * 1.6)))
     obs = []
     for i, n in enumerate(names):
@@ -85,8 +85,8 @@ def sheet(names, path):
     cam.data.lens, cam.data.clip_end = 35, 100000
     rows = int(math.ceil(len(names) / cols))
     span = max(cols, rows) * pitch
-    cam.location = (0, -(rows * pitch) / 2 - span * 0.9, span * 0.6)
-    cam.rotation_euler = (math.radians(55), 0, 0)
+    cam.location = (0, -(rows * pitch) / 2 - span * 0.62, span * 0.5)
+    cam.rotation_euler = (math.radians(57), 0, 0)
     scene.render.filepath = path
     bpy.ops.render.render(write_still=True)
     print("SHEET " + path, flush=True)
