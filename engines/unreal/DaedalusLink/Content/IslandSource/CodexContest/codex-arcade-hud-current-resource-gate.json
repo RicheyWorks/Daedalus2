@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-15T04:17:58.2624595Z",
+  "free_physical_kib": 3221416,
+  "free_virtual_kib": 2076764,
+  "processes": [
+    {
+      "ProcessId": 3668,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" --python-expr \"import addon_utils,bpy; addon_utils.enable('claude_blender_bridge', default_set=True); import claude_blender_bridge as b; b.start_server()\""
+    },
+    {
+      "ProcessId": 4780,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 0"
+    },
+    {
+      "ProcessId": 47040,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 1"
+    },
+    {
+      "ProcessId": 61700,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 2"
+    },
+    {
+      "ProcessId": 2876,
+      "Name": "blender.exe",
+      "CommandLine": "\"C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe\" -b --factory-startup --python-exit-code 1 --python tools\\blender\\hd_batch.py -- C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-hd-islands\\batch 10000 10000 --workers 4 --worker 3"
+    },
+    {
+      "ProcessId": 28788,
+      "Name": "UnrealEditor.exe",
+      "CommandLine": "\"C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe\" C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject /Game/Daedalus/DaedalusWorld"
+    }
+  ],
+  "heavy_build_started": false,
+  "state": "pending_actual_serial_resource_boundary",
+  "producer_requests": [
+    31475,
+    31486,
+    31492,
+    31520
+  ],
+  "producer_yield_ack_observed": false,
+  "app_compile_started": false,
+  "hud_native_acceptance": false
+}
