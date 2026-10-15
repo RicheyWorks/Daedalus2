@@ -46,6 +46,28 @@ def pack_glb(document, binary):
             + struct.pack("<I4s", len(padded), b"BIN\0") + padded)
 
 
+def unpack_glb(path):
+    """Independent fixture reader; does not call producer/admission internals."""
+    raw = Path(path).read_bytes()
+    if len(raw) < 28 or struct.unpack_from("<4sII", raw) != (b"glTF", 2, len(raw)):
+        raise AssertionError("Produced file has an invalid GLB header")
+    chunks, offset = [], 12
+    while offset < len(raw):
+        length, kind = struct.unpack_from("<I4s", raw, offset)
+        offset += 8
+        if length % 4 or offset + length > len(raw):
+            raise AssertionError("Produced file has an invalid chunk range")
+        chunks.append((kind, raw[offset:offset + length]))
+        offset += length
+    if [kind for kind, _ in chunks] != [b"JSON", b"BIN\0"]:
+        raise AssertionError("Produced file must contain exactly JSON and BIN")
+    doc = json.loads(chunks[0][1])
+    length = doc["buffers"][0]["byteLength"]
+    if not 0 <= len(chunks[1][1]) - length <= 3:
+        raise AssertionError("Produced buffer length differs from BIN")
+    return doc, chunks[1][1][:length]
+
+
 def fixture(names=NAMES, *, indexed=True, interleaved=False, aliases=None,
             mesh_order=None, material_order=None, reorder_vertices=False,
             cycle=0, reverse_winding=False, reorder_triangles=False,
@@ -191,6 +213,74 @@ class SubsetTests(unittest.TestCase):
         pin = fingerprint(self.source)
         return ["plan", "--source", str(self.source), "--sha256", pin["sha256"],
                 "--bytes", str(pin["bytes"]), "--nodes", *SELECTED]
+
+    def assert_export_preserved(self, plan, output):
+        """Follow both dependency graphs independently and compare raw views."""
+        source, source_bin = unpack_glb(plan["source"]["path"])
+        made, made_bin = unpack_glb(output)
+        wanted = {n["name"]: n for n in source["nodes"] if n.get("name") in plan["nodes"]}
+        actual = {n["name"]: n for n in made["nodes"]}
+        self.assertEqual(set(actual), set(plan["nodes"]))
+        self.assertEqual(len(made["nodes"]), len(plan["nodes"]))
+        self.assertEqual(len(made["scenes"]), 1)
+        self.assertEqual(set(made["scenes"][made.get("scene", 0)]["nodes"]), set(range(len(actual))))
+        mappings = {key: {} for key in ("meshes", "materials", "accessors", "bufferViews")}
+
+        def pair(label, old, new):
+            previous = mappings[label].setdefault(old, new)
+            self.assertEqual(previous, new, "shared %s reference was duplicated" % label)
+            self.assertEqual(len(set(mappings[label].values())), len(mappings[label]),
+                             "distinct source %s definitions were merged" % label)
+
+        def compare_accessor(old_index, new_index):
+            pair("accessors", old_index, new_index)
+            old, new = source["accessors"][old_index], made["accessors"][new_index]
+            self.assertEqual({k: v for k, v in old.items() if k != "bufferView"},
+                             {k: v for k, v in new.items() if k != "bufferView"})
+            old_view, new_view = old["bufferView"], new["bufferView"]
+            pair("bufferViews", old_view, new_view)
+            a, b = source["bufferViews"][old_view], made["bufferViews"][new_view]
+            self.assertEqual({k: v for k, v in a.items() if k not in ("buffer", "byteOffset")},
+                             {k: v for k, v in b.items() if k not in ("buffer", "byteOffset")})
+            self.assertEqual(b.get("buffer", 0), 0)
+            self.assertEqual(b.get("byteOffset", 0) % 4, 0)
+            old_start, new_start = a.get("byteOffset", 0), b.get("byteOffset", 0)
+            self.assertEqual(source_bin[old_start:old_start + a["byteLength"]],
+                             made_bin[new_start:new_start + b["byteLength"]])
+
+        for name in plan["nodes"]:
+            old, new = wanted[name], actual[name]
+            self.assertEqual({k: v for k, v in old.items() if k != "mesh"},
+                             {k: v for k, v in new.items() if k != "mesh"})
+            pair("meshes", old["mesh"], new["mesh"])
+            a, b = source["meshes"][old["mesh"]], made["meshes"][new["mesh"]]
+            self.assertEqual({k: v for k, v in a.items() if k != "primitives"},
+                             {k: v for k, v in b.items() if k != "primitives"})
+            self.assertEqual(len(a["primitives"]), len(b["primitives"]))
+            for ap, bp in zip(a["primitives"], b["primitives"]):
+                references = ("attributes", "indices", "material")
+                self.assertEqual({k: v for k, v in ap.items() if k not in references},
+                                 {k: v for k, v in bp.items() if k not in references})
+                self.assertEqual(set(ap["attributes"]), set(bp["attributes"]))
+                for semantic in ap["attributes"]:
+                    compare_accessor(ap["attributes"][semantic], bp["attributes"][semantic])
+                self.assertEqual("indices" in ap, "indices" in bp)
+                if "indices" in ap:
+                    compare_accessor(ap["indices"], bp["indices"])
+                self.assertEqual("material" in ap, "material" in bp)
+                if "material" in ap:
+                    pair("materials", ap["material"], bp["material"])
+                    self.assertEqual(source["materials"][ap["material"]], made["materials"][bp["material"]])
+        for label, mapping in mappings.items():
+            self.assertEqual(len(made.get(label, [])), len(mapping), "extra " + label)
+        view_bytes = sum(v["byteLength"] for v in made["bufferViews"])
+        self.assertGreaterEqual(len(made_bin), view_bytes)
+        self.assertLessEqual(len(made_bin), view_bytes + 3 * len(made["bufferViews"]))
+        self.assertEqual(len(made["buffers"]), 1)
+        self.assertNotIn("uri", made["buffers"][0])
+        for unsupported in ("images", "textures", "animations", "skins", "extensionsUsed", "extensionsRequired"):
+            self.assertFalse(made.get(unsupported))
+        return made
 
     def test_plan_is_pinned_json_contract(self):
         self.assertEqual(self.plan["schema"], "daedalus.static-subset.v1")
@@ -458,6 +548,252 @@ class SubsetTests(unittest.TestCase):
     def test_json_chunk_cap_without_large_allocation(self):
         with patch.object(subset, "MAX_JSON_BYTES", 64), self.assertRaises(ValueError):
             subset.make_plan(str(self.source), list(SELECTED), fingerprint(self.source))
+
+    def test_producer_receipt_and_raw_binary_preservation(self):
+        output = self.directory / "selected.glb"
+        before = fingerprint(self.source)
+        receipt = subset.export_subset(self.plan, str(output))
+        self.assertEqual(receipt["schema"], "daedalus.static-subset-export.v1")
+        self.assertIs(receipt["exported"], True)
+        self.assertEqual(receipt["producer"], "pinned-glb-byte-extraction")
+        self.assertIs(receipt["native_ready"], False)
+        self.assertEqual(receipt["nodes"], list(SELECTED))
+        self.assertIs(receipt["admission"]["admitted"], True)
+        self.assertIs(receipt["admission"]["native_ready"], False)
+        self.assertEqual({k: receipt["candidate"][k] for k in ("sha256", "bytes")}, fingerprint(output))
+        self.assertEqual(Path(receipt["candidate"]["path"]).resolve(), output.resolve())
+        self.assertEqual(json.loads(json.dumps(receipt)), receipt)
+        self.assert_export_preserved(self.plan, output)
+        self.assertEqual(fingerprint(self.source), before)
+
+    def test_producer_follows_distant_shared_index_accessor(self):
+        doc, binary = fixture()
+        distant = doc["meshes"][3]["primitives"][0]["indices"]
+        doc["meshes"][2]["primitives"][0]["indices"] = distant
+        self.assertGreater(distant, max(doc["meshes"][2]["primitives"][0]["attributes"].values()))
+        source = self.write(doc, binary)
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        output = self.directory / "distant.glb"
+        subset.export_subset(plan, str(output))
+        self.assert_export_preserved(plan, output)
+
+    def test_producer_preserves_interleaved_views_and_shared_mesh_nodes(self):
+        for options in ({"interleaved": True}, {"aliases": {"B": "A"}},
+                        {"interleaved": True, "aliases": {"B": "A"}}):
+            with self.subTest(options=options):
+                source = self.write(*fixture(**options))
+                plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+                self.serial += 1
+                output = self.directory / ("produced-%02d.glb" % self.serial)
+                subset.export_subset(plan, str(output))
+                self.assert_export_preserved(plan, output)
+
+    def test_producer_preserves_nonindexed_geometry(self):
+        source = self.write(*fixture(indexed=False, interleaved=True))
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        output = self.directory / "nonindexed.glb"
+        subset.export_subset(plan, str(output))
+        made = self.assert_export_preserved(plan, output)
+        self.assertTrue(all("indices" not in p for m in made["meshes"] for p in m["primitives"]))
+
+    def test_producer_realigns_short_copied_views(self):
+        doc, binary = fixture()
+        indices = doc["meshes"][0]["primitives"][0]["indices"]
+        doc["accessors"][indices]["count"] = 3
+        doc["bufferViews"][doc["accessors"][indices]["bufferView"]]["byteLength"] = 6
+        source = self.write(doc, binary)
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        output = self.directory / "alignment.glb"
+        subset.export_subset(plan, str(output))
+        self.assert_export_preserved(plan, output)
+
+    def test_producer_bytes_are_deterministic_across_output_names(self):
+        first, second = self.directory / "first.glb", self.directory / "second.glb"
+        subset.export_subset(self.plan, str(first))
+        subset.export_subset(self.plan, str(second))
+        self.assertEqual(first.read_bytes(), second.read_bytes())
+
+    def test_producer_refuses_existing_target_without_changes(self):
+        output = self.directory / "retained.glb"
+        output.write_bytes(b"retained preexisting artifact")
+        before = output.read_bytes(), fingerprint(self.source), set(self.directory.iterdir())
+        with self.assertRaises((ValueError, FileExistsError)):
+            subset.export_subset(self.plan, str(output))
+        self.assertEqual(before, (output.read_bytes(), fingerprint(self.source), set(self.directory.iterdir())))
+
+    def test_producer_refuses_source_as_output_without_changes(self):
+        before = self.source.read_bytes()
+        with self.assertRaises((ValueError, FileExistsError)):
+            subset.export_subset(self.plan, str(self.source))
+        self.assertEqual(self.source.read_bytes(), before)
+
+    def test_producer_refuses_source_drift_and_bad_plan_without_output(self):
+        invalid = copy.deepcopy(self.plan)
+        invalid["schema"] = "wrong"
+        output = self.directory / "bad-plan.glb"
+        with self.assertRaises(ValueError):
+            subset.export_subset(invalid, str(output))
+        self.assertFalse(output.exists())
+        doc, binary = fixture(interleaved=True)
+        source = self.write(doc, binary)
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        binary[32] ^= 1
+        source.write_bytes(pack_glb(doc, binary))
+        output = self.directory / "drift.glb"
+        with self.assertRaises(ValueError):
+            subset.export_subset(plan, str(output))
+        self.assertFalse(output.exists())
+
+    def test_cli_producer_exports_then_admits_the_actual_file(self):
+        plan_path = self.directory / "producer-plan.json"
+        plan_path.write_text(json.dumps(self.plan), encoding="utf-8")
+        output = self.directory / "cli-selected.glb"
+        exported = self.cli(["export", "--plan", str(plan_path), "--output", str(output)])
+        self.assertEqual(exported.returncode, 0, exported.stderr)
+        receipt = json.loads(exported.stdout)
+        self.assertIs(receipt["exported"], True)
+        self.assertIs(receipt["native_ready"], False)
+        pin = fingerprint(output)
+        self.assertEqual({k: receipt["candidate"][k] for k in ("sha256", "bytes")}, pin)
+        self.assert_export_preserved(self.plan, output)
+        checked = self.cli(["admit", "--plan", str(plan_path), "--candidate", str(output),
+                            "--sha256", pin["sha256"], "--bytes", str(pin["bytes"])])
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+        self.assertIs(json.loads(checked.stdout)["admitted"], True)
+
+    def test_cli_producer_failures_exit_two_and_preserve_existing_files(self):
+        plan_path = self.directory / "producer-plan.json"
+        plan_path.write_text(json.dumps(self.plan), encoding="utf-8")
+        output = self.directory / "cli-existing.glb"
+        output.write_bytes(b"keep exactly these bytes")
+        before = fingerprint(output)
+        failed = self.cli(["export", "--plan", str(plan_path), "--output", str(output)])
+        self.assertEqual(failed.returncode, 2, failed.stderr)
+        self.assertEqual(fingerprint(output), before)
+        invalid = copy.deepcopy(self.plan)
+        invalid["schema"] = "wrong"
+        plan_path.write_text(json.dumps(invalid), encoding="utf-8")
+        fresh = self.directory / "cli-invalid.glb"
+        failed = self.cli(["export", "--plan", str(plan_path), "--output", str(fresh)])
+        self.assertEqual(failed.returncode, 2, failed.stderr)
+        self.assertFalse(fresh.exists())
+        # Valid JSON and unchanged length do not excuse a source hash change.
+        doc, binary = fixture(interleaved=True)
+        source = self.write(doc, binary)
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        plan_path.write_text(json.dumps(plan), encoding="utf-8")
+        binary[32] ^= 1
+        source.write_bytes(pack_glb(doc, binary))
+        failed = self.cli(["export", "--plan", str(plan_path), "--output", str(fresh)])
+        self.assertEqual(failed.returncode, 2, failed.stderr)
+        self.assertFalse(fresh.exists())
+
+    def test_geometry_identity_bounds_use_referenced_corners_and_default_is_unchanged(self):
+        def only_first_face(doc, binary):
+            index = doc["meshes"][0]["primitives"][0]["indices"]
+            accessor = doc["accessors"][index]
+            view = doc["bufferViews"][accessor["bufferView"]]
+            start = view.get("byteOffset", 0) + accessor.get("byteOffset", 0)
+            struct.pack_into("<12H", binary, start, *([0, 1, 4] * 4))
+        doc, binary = fixture()
+        only_first_face(doc, binary)
+        source = self.write(doc, binary)
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        doc, binary = fixture(SELECTED)
+        only_first_face(doc, binary)
+        candidate = self.write(doc, binary)
+        default = subset.admit(plan, str(candidate), fingerprint(candidate))
+        self.assertNotIn("geometry", default)
+        report = subset.admit(plan, str(candidate), fingerprint(candidate), include_geometry=True)
+        geometry = report["geometry"]
+        self.assertEqual(geometry["coordinate_system"], {
+            "distance_unit": "metre", "up_axis": "+Y", "handedness": "right",
+            "native_conversion_verified": False})
+        a = next(n for n in geometry["nodes"] if n["name"] == "A")
+        # Unused POSITION rows still reach Y1 in the accessor bounds. The
+        # actual referenced face reaches only Y0.4 and must control this report.
+        self.assertEqual(a["local_bounds"]["min"], [-1., 0., 0.])
+        self.assertAlmostEqual(a["local_bounds"]["max"][1], .4, places=6)
+        self.assertAlmostEqual(a["local_bounds"]["size"][1], .4, places=6)
+        self.assertEqual(a["local_bounds"], a["world_bounds"])
+        self.assertEqual(a["triangles"], 4)
+        self.assertEqual(a["transform"], {"translation": [0, 0, 0],
+                                          "rotation": [0, 0, 0, 1], "scale": [1, 1, 1]})
+        self.assertIs(report["native_ready"], False)
+
+    def test_geometry_quaternion_bounds_match_analytic_rotation_and_world_union(self):
+        candidate = self.write(*fixture(SELECTED))
+        geometry = subset.admit(self.plan, str(candidate), fingerprint(candidate),
+                                include_geometry=True)["geometry"]
+        b = next(n for n in geometry["nodes"] if n["name"] == "B")
+        cosine, sine = math.cos(.2), math.sin(.2)
+        expected = {"min": [2 - cosine - sine, -sine, .25],
+                    "max": [2 + cosine, sine + cosine, .25],
+                    "size": [2 * cosine + sine, cosine + 2 * sine, 0.]}
+        for key in expected:
+            for actual, wanted in zip(b["world_bounds"][key], expected[key]):
+                self.assertAlmostEqual(actual, wanted, places=6)
+        self.assertEqual(b["local_bounds"], {"min": [-1., 0., 0.], "max": [1., 1., 0.],
+                                             "size": [2., 1., 0.]})
+        union = {"min": [-1., -sine, 0.], "max": [4 + cosine, sine + cosine, .5]}
+        for key in union:
+            for actual, wanted in zip(geometry["world_bounds"][key], union[key]):
+                self.assertAlmostEqual(actual, wanted, places=6)
+
+    def test_geometry_affine_matrix_translation_and_negative_scale(self):
+        matrix = [-2., 0., 0., 0., 0., 3., 0., 0., 0., 0., 1., 0., 4., -5., 6., 1.]
+        def transformed(names):
+            doc, binary = fixture(names)
+            b = next(n for n in doc["nodes"] if n["name"] == "B")
+            for key in ("translation", "rotation", "scale"):
+                b.pop(key, None)
+            b["matrix"] = list(matrix)
+            return doc, binary
+        source = self.write(*transformed(NAMES))
+        plan = subset.make_plan(str(source), list(SELECTED), fingerprint(source))
+        candidate = self.write(*transformed(SELECTED))
+        geometry = subset.admit(plan, str(candidate), fingerprint(candidate),
+                                include_geometry=True)["geometry"]
+        b = next(n for n in geometry["nodes"] if n["name"] == "B")
+        self.assertEqual(b["transform"], {"matrix": matrix})
+        self.assertEqual(b["world_bounds"], {"min": [2., -5., 6.], "max": [6., -2., 6.],
+                                             "size": [4., 3., 0.]})
+
+    def test_geometry_retains_raw_pbr_extras_and_material_binding_facts(self):
+        doc, binary = fixture(SELECTED)
+        candidate = self.write(doc, binary)
+        geometry = subset.admit(self.plan, str(candidate), fingerprint(candidate),
+                                include_geometry=True)["geometry"]
+        nodes = {n["name"]: n for n in geometry["nodes"]}
+        for index, name in enumerate(SELECTED):
+            node = nodes[name]
+            self.assertEqual(node["node_index"], index)
+            self.assertEqual(node["mesh_index"], index)
+            self.assertEqual(node["mesh_name"], "GenericMesh_" + name)
+            self.assertEqual(node["node_extras"], doc["nodes"][index]["extras"])
+            self.assertEqual(node["primitive_material_indices"], [index])
+            self.assertEqual(node["source_material_slots"], 1)
+            self.assertEqual(node["materials"], [{"index": index, "name": "Mat_" + name,
+                                                  "definition": doc["materials"][index]}])
+        self.assertEqual(nodes["C"]["materials"][0]["definition"]["emissiveFactor"], [.1, .2, .3])
+
+    def test_cli_geometry_flag_is_optional_and_emits_actual_bounds(self):
+        plan_path = self.directory / "geometry-plan.json"
+        plan_path.write_text(json.dumps(self.plan), encoding="utf-8")
+        candidate = self.write(*fixture(SELECTED))
+        pin = fingerprint(candidate)
+        args = ["admit", "--plan", str(plan_path), "--candidate", str(candidate),
+                "--sha256", pin["sha256"], "--bytes", str(pin["bytes"])]
+        default = self.cli(args)
+        self.assertEqual(default.returncode, 0, default.stderr)
+        self.assertNotIn("geometry", json.loads(default.stdout))
+        detailed = self.cli(args + ["--geometry"])
+        self.assertEqual(detailed.returncode, 0, detailed.stderr)
+        report = json.loads(detailed.stdout)
+        self.assertEqual(len(report["geometry"]["nodes"]), 3)
+        self.assertEqual(report["geometry"]["coordinate_system"]["distance_unit"], "metre")
+        self.assertIs(report["geometry"]["coordinate_system"]["native_conversion_verified"], False)
+        self.assertIs(report["native_ready"], False)
 
     def test_cli_plan_and_admit_emit_only_json_and_remain_not_native_ready(self):
         made = self.cli(self.plan_arguments())

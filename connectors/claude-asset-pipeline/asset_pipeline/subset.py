@@ -1,17 +1,19 @@
 # SPDX-License-Identifier: MIT
-"""Pinned, offline admission for 1-3 static root mesh nodes. Never contacts an editor.
+"""Pinned, offline subsets for 1-3 static root mesh nodes. Never contacts an editor.
 
-The existing object-list exporter remains the producer. This module describes
-the selected source and checks a separately produced GLB before native intake.
-CLI results are JSON on stdout; callers choose their own fresh receipt paths.
+Plan and admit completed GLBs, or extract a source-derived GLB subset by copying
+referenced binary spans. Export publishes only to a fresh explicit file path.
+CLI receipts are JSON on stdout; no command dispatches native intake.
 """
 import argparse
+import copy
 import hashlib
 import json
 import math
 import os
 import struct
 import sys
+import tempfile
 
 SCHEMA = "daedalus.static-subset.v1"
 MAX_BYTES = 64 * 1024 * 1024
@@ -322,8 +324,7 @@ def make_plan(source_path, names, expected_source):
             "scope": "Static root meshes only; no subset export, editor call, import or pivot conversion."}
 
 
-def admit(plan, candidate_path, expected_candidate):
-    """Check an existing candidate; success proves file preservation, never native readiness."""
+def _plan_witnesses(plan):
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("unsupported subset plan schema")
     names = _names(plan.get("nodes"))
@@ -334,6 +335,87 @@ def admit(plan, candidate_path, expected_candidate):
     # JSON round-tripping converts tuples to lists. Compare the persisted form.
     if json.loads(_canonical(expected)) != plan.get("expected"):
         raise ValueError("source witnesses differ from pinned plan")
+    return names, source, expected
+
+
+def _root_matrix(node):
+    transform = _transform(node)
+    if "matrix" in transform:
+        matrix = transform["matrix"]
+        if any(abs(matrix[i]) > 1e-9 for i in (3, 7, 11)) or abs(matrix[15] - 1) > 1e-9:
+            raise ValueError("geometry manifest requires an affine root matrix")
+        return matrix
+    x, y, z, w = transform["rotation"]
+    if abs(x*x + y*y + z*z + w*w - 1) > 1e-5:
+        raise ValueError("geometry manifest requires a unit root quaternion")
+    sx, sy, sz = transform["scale"]
+    tx, ty, tz = transform["translation"]
+    return [(1-2*y*y-2*z*z)*sx, (2*x*y+2*z*w)*sx, (2*x*z-2*y*w)*sx, 0,
+            (2*x*y-2*z*w)*sy, (1-2*x*x-2*z*z)*sy, (2*y*z+2*x*w)*sy, 0,
+            (2*x*z+2*y*w)*sz, (2*y*z-2*x*w)*sz, (1-2*x*x-2*y*y)*sz, 0,
+            tx, ty, tz, 1]
+
+
+def _bounds(lo, hi):
+    size = [b-a for a, b in zip(lo, hi)]
+    if any(not math.isfinite(v) for v in lo + hi + size):
+        raise ValueError("non-finite geometry manifest bounds")
+    return {"min": lo, "max": hi, "size": size}
+
+
+def _geometry_manifest(path, expected, names):
+    """Describe actual referenced corners in the GLB source coordinate system."""
+    doc, binary = _read(path, expected)
+    by_name = {node.get("name"): (i, node) for i, node in enumerate(doc["nodes"])}
+    budget = {"scalars": MAX_DECODED_SCALARS}
+    nodes, all_lo, all_hi = [], [math.inf]*3, [-math.inf]*3
+    for name in names:
+        node_index, node = by_name[name]
+        mesh = doc["meshes"][node["mesh"]]
+        matrix = _root_matrix(node)
+        lo, hi = [math.inf]*3, [-math.inf]*3
+        world_lo, world_hi = [math.inf]*3, [-math.inf]*3
+        materials, material_order, triangles, attributes = [], [], 0, set()
+        for prim in mesh["primitives"]:
+            positions, _, _ = _accessor(doc, binary, prim["attributes"]["POSITION"], budget, vertex=True)
+            if "indices" in prim:
+                indices, _, _ = _accessor(doc, binary, prim["indices"], budget)
+                indices = [row[0] for row in indices]
+            else:
+                indices = range(len(positions))
+            triangles += len(indices) // 3
+            attributes.update(prim["attributes"])
+            material = prim.get("material")
+            materials.append(material)
+            if material is not None and material not in material_order:
+                material_order.append(material)
+            for index in set(indices):
+                point = positions[index]
+                world = [sum(matrix[c*4+r] * point[c] for c in range(3)) + matrix[12+r] for r in range(3)]
+                if any(not math.isfinite(v) for v in world):
+                    raise ValueError("non-finite transformed geometry")
+                for axis in range(3):
+                    lo[axis], hi[axis] = min(lo[axis], point[axis]), max(hi[axis], point[axis])
+                    world_lo[axis], world_hi[axis] = min(world_lo[axis], world[axis]), max(world_hi[axis], world[axis])
+        nodes.append({"name": name, "node_index": node_index, "mesh_index": node["mesh"],
+                      "mesh_name": mesh.get("name"), "transform": _transform(node),
+                      "node_extras": copy.deepcopy(node.get("extras", {})), "triangles": triangles,
+                      "attributes": sorted(attributes), "primitive_material_indices": materials,
+                      "source_material_slots": len(material_order),
+                      "materials": [{"index": i, "name": doc["materials"][i]["name"],
+                                     "definition": copy.deepcopy(doc["materials"][i])} for i in material_order],
+                      "local_bounds": _bounds(lo, hi), "world_bounds": _bounds(world_lo, world_hi)})
+        all_lo = [min(a, b) for a, b in zip(all_lo, world_lo)]
+        all_hi = [max(a, b) for a, b in zip(all_hi, world_hi)]
+    return {"coordinate_system": {"distance_unit": "metre", "up_axis": "+Y", "handedness": "right",
+                                   "native_conversion_verified": False},
+            "nodes": nodes, "world_bounds": _bounds(all_lo, all_hi),
+            "scope": "Actual referenced POSITION corners; root transforms applied. Source material slots are not native slot acceptance; no pivot/collision/actor-scale inference."}
+
+
+def admit(plan, candidate_path, expected_candidate, include_geometry=False):
+    """Check an existing candidate; success proves file preservation, never native readiness."""
+    names, source, expected = _plan_witnesses(plan)
     candidate_path = os.path.abspath(candidate_path)
     if os.path.normcase(candidate_path) == os.path.normcase(os.path.abspath(source["path"])):
         raise ValueError("candidate must be a separately produced subset file")
@@ -342,12 +424,119 @@ def admit(plan, candidate_path, expected_candidate):
         if wanted != got:
             fields = [key for key in wanted if wanted[key] != got.get(key)]
             raise ValueError("subset changed %s: %s" % (wanted["name"], ", ".join(fields)))
+    geometry = _geometry_manifest(candidate_path, expected_candidate, names) if include_geometry else None
     _file_bytes(source["path"], source)
     _file_bytes(candidate_path, expected_candidate)
-    return {"schema": "daedalus.static-subset-admission.v1", "admitted": True, "native_ready": False,
+    report = {"schema": "daedalus.static-subset-admission.v1", "admitted": True, "native_ready": False,
             "source": source, "candidate": {"path": candidate_path, **_pin(expected_candidate)},
             "nodes": names, "mesh_nodes": len(names), "triangles": sum(n["triangles"] for n in actual),
             "scope": "Offline file evidence only; native units, material translation, collision and placement remain unverified."}
+    if geometry is not None:
+        report["geometry"] = geometry
+    return report
+
+
+def export_subset(plan, output_path):
+    """Extract pinned GLB bytes into a fresh, admitted file; never invoke Blender.
+
+    Whole used bufferViews are retained, including any unused bytes inside them.
+    A staged file is admitted before atomic no-overwrite hard-link publication.
+    A failure after publication leaves an unadmitted output for reconciliation.
+    """
+    names, source, _ = _plan_witnesses(plan)
+    output_path = os.path.abspath(output_path)
+    if os.path.lexists(output_path):
+        raise FileExistsError("subset output must be fresh: " + output_path)
+    doc, binary = _read(source["path"], source)
+    node_ids = [next(i for i, node in enumerate(doc["nodes"]) if node.get("name") == name) for name in names]
+    mesh_ids = sorted({doc["nodes"][i]["mesh"] for i in node_ids})
+    primitives = [prim for i in mesh_ids for prim in doc["meshes"][i]["primitives"]]
+    material_ids = sorted({prim["material"] for prim in primitives if "material" in prim})
+    accessor_ids = {index for prim in primitives for index in prim["attributes"].values()}
+    accessor_ids.update(prim["indices"] for prim in primitives if "indices" in prim)
+    accessor_ids = sorted(accessor_ids)
+    view_ids = sorted({doc["accessors"][i]["bufferView"] for i in accessor_ids})
+    source_indices = {"nodes": node_ids, "meshes": mesh_ids, "materials": material_ids,
+                      "accessors": accessor_ids, "bufferViews": view_ids}
+    maps = {key: {old: new for new, old in enumerate(indices)} for key, indices in source_indices.items()}
+    result = {key: [copy.deepcopy(doc[key][i]) for i in indices] for key, indices in source_indices.items()}
+    for node in result["nodes"]:
+        node["mesh"] = maps["meshes"][node["mesh"]]
+    for mesh in result["meshes"]:
+        for prim in mesh["primitives"]:
+            prim["attributes"] = {key: maps["accessors"][i] for key, i in prim["attributes"].items()}
+            if "indices" in prim:
+                prim["indices"] = maps["accessors"][prim["indices"]]
+            if "material" in prim:
+                prim["material"] = maps["materials"][prim["material"]]
+    for accessor in result["accessors"]:
+        accessor["bufferView"] = maps["bufferViews"][accessor["bufferView"]]
+    spans, binary_length = [], 0
+    for old, view in zip(view_ids, result["bufferViews"]):
+        original = doc["bufferViews"][old]
+        padding = -binary_length % 4
+        start, length = original.get("byteOffset", 0), original["byteLength"]
+        binary_length += padding + length
+        # Overlapping source views can grow the output when copied separately.
+        # Reject the complete span budget before allocating or writing its bytes.
+        if binary_length > MAX_BYTES:
+            raise ValueError("subset output exceeds file work limit")
+        view.update(buffer=0, byteOffset=binary_length - length)
+        spans.append((padding, start, length))
+    result["asset"] = copy.deepcopy(doc["asset"])
+    result["asset"]["generator"] = "Daedalus pinned GLB subset v1 (source-derived)"
+    result["scene"] = 0
+    result["scenes"] = [{"name": "Daedalus static subset", "nodes": list(range(len(names)))}]
+    result["buffers"] = [copy.deepcopy(doc["buffers"][0])]
+    result["buffers"][0]["byteLength"] = binary_length
+    result["extras"] = {"daedalus_subset": {"schema": SCHEMA, "source_sha256": source["sha256"], "nodes": names}}
+    metadata = _canonical(result).encode("utf-8")
+    metadata += b" " * (-len(metadata) % 4)
+    if len(metadata) > MAX_JSON_BYTES:
+        raise ValueError("subset JSON metadata work limit exceeded")
+    bin_padding = -binary_length % 4
+    total = 12 + 8 + len(metadata) + 8 + binary_length + bin_padding
+    if total > MAX_BYTES:
+        raise ValueError("subset output exceeds file work limit")
+    digest, written, staged_path = hashlib.sha256(), 0, None
+    try:
+        with tempfile.NamedTemporaryFile(prefix=".static-subset-", suffix=".glb", dir=os.path.dirname(output_path), delete=False) as staged:
+            staged_path = staged.name
+
+            def emit(data):
+                nonlocal written
+                if staged.write(data) != len(data):
+                    raise OSError("short subset write")
+                digest.update(data)
+                written += len(data)
+
+            emit(struct.pack("<4sII", b"glTF", 2, total))
+            emit(struct.pack("<I4s", len(metadata), b"JSON"))
+            emit(metadata)
+            emit(struct.pack("<I4s", binary_length + bin_padding, b"BIN\x00"))
+            for padding, start, length in spans:
+                emit(b"\0" * padding)
+                emit(memoryview(binary)[start:start + length])
+            emit(b"\0" * bin_padding)
+            staged.flush()
+            os.fsync(staged.fileno())
+        if written != total:
+            raise ValueError("subset declared length differs from written bytes")
+        candidate_pin = {"sha256": digest.hexdigest(), "bytes": written}
+        admit(plan, staged_path, candidate_pin)
+        # os.link fails if any destination already exists. There is no overwrite
+        # fallback on filesystems that cannot provide this publication primitive.
+        os.link(staged_path, output_path)
+        admission = admit(plan, output_path, candidate_pin)
+    finally:
+        if staged_path is not None:
+            os.unlink(staged_path)
+    return {"schema": "daedalus.static-subset-export.v1", "exported": True,
+            "producer": "pinned-glb-byte-extraction", "native_ready": False,
+            "source": source, "source_asset": doc["asset"], "source_indices": source_indices,
+            "plan_sha256": hashlib.sha256(_canonical(plan).encode("utf-8")).hexdigest(),
+            "candidate": {"path": output_path, **candidate_pin}, "nodes": names, "admission": admission,
+            "scope": "Source-derived GLB subset; no Blender execution, native import or compact-BIN guarantee."}
 
 
 def main(argv=None):
@@ -363,10 +552,14 @@ def main(argv=None):
     check.add_argument("--candidate", required=True)
     check.add_argument("--sha256", required=True)
     check.add_argument("--bytes", type=int, required=True)
+    check.add_argument("--geometry", action="store_true", help="include actual source geometry/material metadata for handoff")
+    produce = commands.add_parser("export", help="extract a pinned source-derived subset to a fresh GLB")
+    produce.add_argument("--plan", required=True)
+    produce.add_argument("--output", required=True)
     args = parser.parse_args(argv)
     try:
-        expected = {"sha256": args.sha256, "bytes": args.bytes}
         if args.command == "plan":
+            expected = {"sha256": args.sha256, "bytes": args.bytes}
             result = make_plan(args.source, args.nodes, expected)
         else:
             with open(args.plan, encoding="utf-8-sig") as source:
@@ -374,7 +567,10 @@ def main(argv=None):
             if len(raw) > MAX_BYTES:
                 raise ValueError("subset plan work limit exceeded")
             plan = json.loads(raw)
-            result = admit(plan, args.candidate, expected)
+            if args.command == "export":
+                result = export_subset(plan, args.output)
+            else:
+                result = admit(plan, args.candidate, {"sha256": args.sha256, "bytes": args.bytes}, include_geometry=args.geometry)
     except (OSError, ValueError, KeyError, TypeError, AttributeError, IndexError, struct.error) as error:
         print(json.dumps({"admitted": False, "native_ready": False,
                           "error": {"type": type(error).__name__, "message": str(error)}}))
