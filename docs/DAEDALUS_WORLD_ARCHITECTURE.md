@@ -844,3 +844,17 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
 - Colour lesson: Blender 4.x renders through **AgX** by default — set `view_transform = "Standard"` for pixel art;
   `pixel_art.GAMMA` (env `PIXEL_GAMMA`, default 0.85) is the only extra correction (1.6+ crushes the image).
 - Whole kit renders in ~40 s; all 412 enemy sprites in ~40 s.
+
+### 14.19 Wildlife: wolves, rabbits, aquatic plants (`voxel_wolves.py`, `voxel_rabbits.py`, `voxel_aquatic.py`)
+- **Wolves** — 504 rigged (12 kinds: grey, timber, arctic, tundra, red, maned, highland, steppe, mountain, coastal,
+  desert, dire × 6 coats × 7 variants), 5 cm voxels: deep chest, tucked waist, hocks, ruff, tapered muzzle with mask,
+  bushy tail. Clips: scan Idle, trot Walk, gallop Run, lunge Attack, howl Action. `claude-wolves/` (GLB + FBX + json).
+- **Rabbits** — 504 rigged (12 breeds incl. jackrabbit, snowshoe, lop, dutch, angora, lionhead, giant, dwarf,
+  harlequin, himalayan × 6 coats × 7), 2.5 cm voxels, eyes on the sides, long flat hind feet. Clips: twitch Idle,
+  hop Walk/Run (smooth arcs), thump Attack, rear-up Action. `claude-rabbits/`.
+- The two manifests carry `ECOLOGY`: a predator–prey (Lotka–Volterra) pair, r-selected rabbits vs K-selected wolves;
+  rabbits raid crop rows above 12 per island unless a fence, guard wolf (kennel) or owl roost is near.
+- **Aquatic plants** — 258 props: 43 species (pond, marsh, submerged, sea, and realm originals: rillprism reed,
+  filter moss, glowkelp, skylily, ember lotus, frost fern) × 6 growth stages. Each json has its pivot (waterline,
+  mud line, bed, seabed) and `uses`: which island_chemistry FISH it feeds, a spring-purity bonus (FilterMoss can lift
+  a `filter_needed` island over 0.6), herbs, inn/craft goods, island kinds. `claude-aquatic/`.
