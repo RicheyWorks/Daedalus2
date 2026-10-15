@@ -117,11 +117,13 @@ def waterwheel(H, name, x, y, yaw, radius=3.4, width=1.4, paddles=12, broken=0, 
     return out
 
 
-def boardwalk(H, name, pts, h, width=2.4, min_z=None):
-    """Planks every 0.6 m along a polyline, on posts, rope rails both sides. Deck rides at max(ground, min_z) + 0.5."""
+def boardwalk(H, name, pts, h, width=2.4, min_z=None, post_every=5):
+    """Planks every 0.6 m along a polyline, on posts every `post_every` planks, with rope rails strung post to post
+    (r3: no long rope spans; a rope never runs further than one post gap). Deck rides at max(ground, min_z) + 0.5."""
     M = _mats(H)
     lo = (H.WATER + .7) if min_z is None else min_z
     out, k = [], 0
+    posts = {-1: [], 1: []}
     for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
         L = math.hypot(x1 - x0, y1 - y0)
         yaw = math.atan2(y1 - y0, x1 - x0)
@@ -131,15 +133,15 @@ def boardwalk(H, name, pts, h, width=2.4, min_z=None):
             x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
             z = max(h(x, y), lo) + .5
             out.append(H.box("%s_Plank_%03d" % (name, k), (x, y, z), (.5, width, .1), M["wood"], .01, (0, 0, yaw)))
-            if k % 5 == 0:
+            if k % post_every == 0 or (i == n - 1 and (x1, y1) == pts[-1]):
                 for side in (-1, 1):
                     ox, oy = _rot(0, side * (width / 2 + .1), yaw)
-                    out.append(H.beam("%s_Post_%03d_%s" % (name, k, "L" if side < 0 else "R"), (x + ox, y + oy, min(h(x, y), z) - .6), (x + ox, y + oy, z + 1.0), .07, M["dark"], 6))
+                    top = (x + ox, y + oy, z + 1.0)
+                    out.append(H.beam("%s_Post_%03d_%s" % (name, k, "L" if side < 0 else "R"), (x + ox, y + oy, min(h(x, y), z) - .6), top, .07, M["dark"], 6))
+                    if posts[side]:
+                        out.append(H.beam("%s_Rail_%03d_%s" % (name, k, "L" if side < 0 else "R"), posts[side][-1], top, .035, M["rope"], 5))
+                    posts[side].append(top)
             k += 1
-        for side in (-1, 1):
-            ox, oy = _rot(0, side * (width / 2 + .1), yaw)
-            za, zb = max(h(x0, y0), lo) + 1.45, max(h(x1, y1), lo) + 1.45
-            out.append(H.beam("%s_Rail_%d_%s" % (name, len(out), "L" if side < 0 else "R"), (x0 + ox, y0 + oy, za), (x1 + ox, y1 + oy, zb), .035, M["rope"], 5))
     return out
 
 

@@ -30,10 +30,10 @@ readable by colour:
   * REFUGE (hearth red): shelter at the haven when a wave comes.
 The keeper's quest is the balance: repair with bought parts and leave the reeds standing, and the water clears.
 
-Mechanics are bound only where code exists. Each gameplay row carries a status:
-  * "implemented": the code is named.
+Each gameplay row carries a status. Nothing here is bound in Unreal yet:
   * "data": rolled or stored data with no runtime yet.
-  * "design": a socket with no host or native authority yet.
+  * "design": a socket with no host or native authority yet. Where related source exists, the row names it and the
+    adapter a host would still need. A source capability is not proof of a binding (PootScoot 32427).
 
     blender -b --factory-startup --python-exit-code 1 --python tools/blender/reedwheel_haven.py -- OUT_DIR [--render]
 Also runs under the bpy module: python reedwheel_haven.py OUT_DIR [--render]. Metres, Z up. The island pivot is the
@@ -53,7 +53,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hd_island as H  # noqa: E402
 import kit_waterworks as K  # noqa: E402
 
-REV = "r2"                # r1: first source (dde77fe83); r2: bridge off the farm, spill + foam
+REV = "r3"                # r1: first source (dde77fe83); r2: bridge off the farm, spill + foam, dressing (f42e478dc);
+                          # r3: honest repair/refuge rows, UCX named for their meshes, post-to-post rails, walk clear of the wheel
 LAND_ID = "reedwheel-haven-841025-" + REV
 SEED = 841025
 KIND = "meadow"
@@ -147,7 +148,18 @@ def build(out_dir):
     b0, b1 = at(BX, 8), at(BX, -8)
     bridge = K.footbridge(H, NAME + "_Footbridge", b0, b1, W + 1.0)
     near = min(A["path"], key=lambda p: math.hypot(p[0] - st_x, p[1] - st_y))
-    walk = K.boardwalk(H, NAME + "_Boardwalk", [near, at(BX, 14), at(BX, 9), b0], h)
+    route = [near, at(BX, 14), at(BX, 9), b0]
+    # r3: keep the walk 8 m clear of the wheel (r2's ran into the frame): push any too-close leg out along +perp
+    fixed = [route[0]]
+    for a, b in zip(route, route[1:]):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        t = max(0.0, min(1.0, ((wx - a[0]) * dx + (wy - a[1]) * dy) / max(1e-6, dx * dx + dy * dy)))
+        cx, cy = a[0] + dx * t, a[1] + dy * t
+        if math.hypot(cx - wx, cy - wy) < 8 and 0 < t < 1:
+            fixed.append((st_x + px * 6.5, st_y + py * 6.5))     # behind the repair pad, not across it
+        fixed.append(b)
+    route = fixed
+    walk = K.boardwalk(H, NAME + "_Boardwalk", route, h)
     rbx, rby = S[1]
     reeds = K.reed_bed(H, NAME + "_ReedBed", rbx, rby, 7.5, 5.0, h, SEED, W)
     rf_x, rf_y = site(ring([S[2], S[1], S[3]], (-14, -17, -20, -24, 14, 17, 20, 24)), clear=7)
@@ -170,12 +182,12 @@ def build(out_dir):
     keeper += K.blossom_tree(H, NAME + "_KeeperBlossom", kp_x + 4, kp_y - 3, h(kp_x + 4, kp_y - 3), SEED + 3)
     shore_pts = lambda k: [at(S[i], k) for i in (1, 2, 3, 4)]
     shore = K.shore_stones(H, NAME + "_ShoreN", shore_pts(5.2), h, SEED, water_z=W) + K.shore_stones(H, NAME + "_ShoreS", shore_pts(-5.2), h, SEED + 5, water_z=W)
-    walk += K.string_lights(H, NAME + "_Lights", [near, at(BX, 14), at(BX, 9), b0], h)
+    walk += K.string_lights(H, NAME + "_Lights", route, h)
     # gameplay rows: what each piece is wired to, honestly
     X = []
     pu = chem["power_unit"]
-    H.marker(X, NAME, "power_unit", "reed_wheel", wx, wy, W, "chemistry power_unit (drive the stream, salvageable) + tools/economy/colony_ledger.py Ledger.outfit(ENERGY, power_unit)",
-             {"status": "implemented", "binding": "repair = Ledger.outfit(owner, deed, 'ENERGY', 'power_unit'): consumes PART_COST ENERGY iron 2 + copper 1",
+    H.marker(X, NAME, "power_unit", "reed_wheel", wx, wy, W, "chemistry power_unit (drive the stream, salvageable); related source: tools/economy/colony_ledger.py Ledger.outfit",
+             {"status": "design", "required_adapter": "a host-authoritative 'repair this wheel' action. Ledger.outfit(owner, deed, 'ENERGY', 'power_unit') only appends a generic ENERGY worker (PART_COST ENERGY iron 2 + copper 1); it is NOT a wheel repair (PootScoot 32427)",
               "pending": "wheel->machine wiring/snapping is design-only (island_chemistry power_unit.source; ADR-066 PowerUnit wiring)",
               "parts": sorted(pu["parts"]), "broken_paddles": 4, "rotor_pivot": "axle"})
     H.marker(X, NAME, "craft", "repair_station", st_x, st_y, h(st_x, st_y), "kit_waterworks.repair_station; part crates named by chemistry power_unit.parts",
@@ -185,32 +197,38 @@ def build(out_dir):
               "design": "standing reeds raise purity; each harvest lowers it (no runtime yet)"})
     H.marker(X, NAME, "harvest", "reed_bed", rbx + 10.5, rby, h(rbx + 10.5, rby), "kit_waterworks.reed_bed drying rack",
              {"status": "design", "choice": "harvest", "note": "no reed item exists in data; no bag mutation is claimed"})
-    H.marker(X, NAME, "refuge", "haven_hut", rf_x, rf_y, h(rf_x, rf_y), "tools/economy/colony_ledger.py Ledger.settle_wave(held)",
-             {"status": "implemented", "choice": "refuge", "binding": "sheltered defenders count toward `held` in settle_wave",
-              "pending": "shelter capacity/occupancy is design-only"})
+    H.marker(X, NAME, "refuge", "haven_hut", rf_x, rf_y, h(rf_x, rf_y), "design; related source: tools/economy/colony_ledger.py Ledger.settle_wave(held)",
+             {"status": "design", "choice": "refuge",
+              "required_adapter": "a host-authoritative shelter/occupancy model. settle_wave(held) counts zombies that FELL (and their drops), not sheltered occupants, so it does not model refuge (PootScoot 32427)"})
     H.marker(X, NAME, "npc", "npc_reed_keeper", kp_x, kp_y, h(kp_x, kp_y), "design: not in data/npcs/npcs.json",
              {"status": "design", "role": "ecology keeper"})
     H.marker(X, NAME, "quest_socket", "q_reedwheel_balance", kp_x + 1.4, kp_y, h(kp_x, kp_y), "design: proposed id, not in data/quests/quests.json",
              {"status": "design", "steps": ["talk npc_reed_keeper", "repair reed_wheel with bought parts", "leave reed_bed standing", "purity rises above 0.6"]},
              post=False)
     H.marker(X, NAME, "ecology", "reedbed_habitat", rbx, rby, W, "daedalus-core world/ecology Habitat/Ecosystem (Java)",
-             {"status": "implemented", "pending": "binding this marker to a Habitat instance is host work", "fish": chem["water"]["fish"]}, post=False)
+             {"status": "design", "related_source": "daedalus-core world/ecology Habitat/Ecosystem exist as code; binding this marker to a Habitat instance is host work", "fish": chem["water"]["fish"]}, post=False)
     H.marker(X, NAME, "walkway", "boardwalk", b0[0], b0[1], W + 1.0, "kit_waterworks.boardwalk + footbridge", {"status": "data", "note": "walkable; collision UCX_ boxes below"}, post=False)
     kit_posts = [o for o in H.GROUP[n0:] if o.name.startswith("MKR_")]
     # every kit object down by the deck datum, like the island
     shift(H.GROUP[n0:], -H.DECK)
     for r in X:
         r["world"] = list(r["local"])
-    # walkway collision (UCX_), one box per boardwalk segment and the bridge
+    # collision (r3): UCX_<exact role mesh name>_NN, convex boxes, built in the island frame and re-based on the role
+    # anchor exactly like the role mesh, so Unreal's FBX import pairs them and both share one origin
     hid = H.material("Collision", (1, 0, 1), 1)
-    ucx = []
-    pts = [near, at(BX, 14), at(BX, 9), b0, b1]
-    for i, (a, b) in enumerate(zip(pts, pts[1:])):
+    ucx = {k: [] for k in ("Walkway", "Refuge", "RepairStation")}
+
+    def ucx_box(rk, center, size, rot_z=0.0):
+        ob = H.box("UCX_%s_%s_%02d" % (NAME, rk, len(ucx[rk])), center, size, hid, 0, (0, 0, rot_z))
+        ob.display_type, ob.hide_render = "WIRE", True
+        ucx[rk].append(ob)
+    pts = route + [b1]
+    for a, b in zip(pts, pts[1:]):
         mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
         z = max(h(mx, my), W + .7) + .5 - H.DECK
-        ob = H.box("UCX_%s_Walk_%02d" % (NAME, i), (mx, my, z - .1), (math.hypot(b[0] - a[0], b[1] - a[1]), 2.4, .3), hid, 0, (0, 0, math.atan2(b[1] - a[1], b[0] - a[0])))
-        ob.display_type, ob.hide_render = "WIRE", True
-        ucx.append(ob)
+        ucx_box("Walkway", (mx, my, z - .1), (math.hypot(b[0] - a[0], b[1] - a[1]), 2.4, .3), math.atan2(b[1] - a[1], b[0] - a[0]))
+    ucx_box("Refuge", (rf_x, rf_y, rf_z + 1.4 - H.DECK), (6.6, 6.6, .3))                       # the hut floor
+    ucx_box("RepairStation", (st_x, st_y, st_z + .1 - H.DECK), (7.6, 7.6, .25))                # the flagstone pad
     roles = {}
     dz = -H.DECK
     roles["WheelRotor"] = role(NAME + "_WheelRotor", rotor, (wx, wy, W + 3.4 - .7 + dz))
@@ -226,7 +244,12 @@ def build(out_dir):
     H.export_group(os.path.join(out_dir, NAME + "_Island"), island + kit_posts)
     files["Island"] = NAME + "_Island"
     for k, ob in roles.items():
-        H.export_group(os.path.join(out_dir, "%s_%s" % (NAME, k)), [ob] + ([u for u in ucx] if k == "Walkway" else []))
+        for u in ucx.get(k, []):                               # re-base each UCX on its role's anchor
+            u.data.transform(u.matrix_basis)
+            u.matrix_basis.identity()
+            u.data.transform(__import__("mathutils").Matrix.Translation(-ob.location))
+            u.location = ob.location.copy()
+        H.export_group(os.path.join(out_dir, "%s_%s" % (NAME, k)), [ob] + ucx.get(k, []))
         files[k] = "%s_%s" % (NAME, k)
     try:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=os.path.dirname(os.path.abspath(__file__)), capture_output=True, text=True).stdout.strip()
@@ -238,8 +261,10 @@ def build(out_dir):
         "before": BEFORE, "story": dict(STORY, premise=STORY["premise"] % chem["water"]["spring_purity"]),
         "roles": {k: {"file": files[k] + ".glb", "fbx": files[k] + ".fbx", "anchor": [round(v, 3) for v in ob.location], "placement": "translate to anchor; orientation is baked in the island frame",
                       "pivot": "axle centre (spin about local axle)" if k == "WheelRotor" else "anchor",
-                      "triangles": sum(len(p.vertices) - 2 for p in ob.data.polygons), "materials": [m.name for m in ob.data.materials if m]}
+                      "triangles": sum(len(p.vertices) - 2 for p in ob.data.polygons), "materials": [m.name for m in ob.data.materials if m],
+                      "collision": [u.name for u in ucx.get(k, [])]}
                   for k, ob in roles.items()},
+        "bake_policy": "each role mesh and its UCX_<mesh>_NN share the anchor as object origin; vertices are island-frame minus anchor; place by translation only. Receiving qualification stays with the native operator.",
         "wheel": {"radius_m": 3.4, "width_m": 1.4, "paddles": 12, "broken_paddles": 4, "axle_yaw_rad": round(yaw + math.pi / 2, 4), "spin": "breastshot, top toward downstream"},
         "island": {k: man[k] for k in ("name", "terraces", "islet", "waterfall_lip", "lods", "triangles", "sockets", "outline")},
         "island_file": files["Island"] + ".glb",

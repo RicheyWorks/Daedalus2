@@ -1200,3 +1200,15 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
     labelled as a different land.
 - **Chemistry is versioned:** `CHEM_ALGORITHM = "v2-crc32"` is written into every profile. v1 manifests stay
   historical and are not regenerated. Old seeds re-rolled under v2 give new chemistry.
+- **r3 (PootScoot 32427, 32437, 32447), versioned; r1 and r2 stay immutable:**
+  - **Rows corrected.** The repair and refuge rows were labelled implemented, and that was wrong:
+    - `Ledger.outfit(ENERGY, power_unit)` only appends a generic ENERGY worker; it does not repair a wheel.
+    - `settle_wave(held)` counts zombies that fell, not sheltered occupants.
+    - Both rows, and the ecology row, are now `design`. Each names the related source and the host adapter it would
+      still need. Nothing in the land is claimed as bound in Unreal.
+  - **Collision fixed.** r2's walk collision was named `UCX_<land>_Walk_NN`, which matches no mesh, so Unreal would
+    not have paired it. r3 names collision `UCX_<exact role mesh>_NN` and re-bases it on the role's anchor, so the
+    mesh and its collision share one origin. It adds collision for the refuge floor and the repair pad. The
+    manifest records a `bake_policy` and lists each role's collision.
+  - **Walkway.** Rope rails run post to post, with no long spans over the water. The walk detours behind the repair
+    pad when a leg passes within 8 m of the wheel.
