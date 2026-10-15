@@ -5,7 +5,7 @@
 
 Checks: the Crystal Shrine is sealed with no shards; the Tower and the Ruins lead into their own dungeons; NEW GAME
 starts the dungeons fresh (a chest opened in one journey is closed again in the next); the bot buys each Warden's
-weakness at the magic shop, buys better weapons when gold allows, stocks Feathers and Tonics, rests at the inn between dungeons, beats the Pyre, Gale and Light Wardens in order;
+weakness at the magic shop, buys better weapons when gold allows, stocks Feathers and Tonics, fields its strongest four by ORDER (recruits included), rests at the inn between dungeons, beats the Pyre, Gale and Light Wardens in order;
 the shard count and the Ruler's words follow; the shrine opens at three shards; the half-formed Prism Devourer
 falls; the ending rolls and returns to the title. Seeded rolls, so a result never depends on luck.
 """
@@ -69,12 +69,14 @@ with sync_playwright() as p:
     check("NEW GAME: the same chest is full again", "FOUND" in (open_chest() or ""))
     # the quest, in order
     plan = [(0, ["Splash"]), (1, ["Tremor"]), (2, ["Gloom"])]
+    fronts = []
     for i, (di, spells) in enumerate(plan):
         for sp in spells: bot.buy_spell(sp)
         bot.gear_up(); bag0 = st()["bag"]; bought = bot.stock_up(); bag1 = st()["bag"]
         if i == 0:
             check("the bot stocks up at the item shop", bought and all(bag1.get(k, 0) - bag0.get(k, 0) == bought.count(k) for k in set(bought)), (bought, bag1))
         bot.rest()
+        fronts.append(bot.lineup())
         check("%s: the gate asks, the battle starts" % D["dungeons"][di]["name"], bot.to_boss(di))
         last = bot.fight()
         s = st()
@@ -84,9 +86,11 @@ with sync_playwright() as p:
         bot.clear()
     ev("PRISM_DEMO.warp('Castle',7,6)"); W(300); bot.face("up"); bot.press("a", 500)
     check("the Ruler sends you to the shrine", "CRYSTAL SHRINE" in (st()["dialog"] or ""), st()["dialog"])
-    bot.clear(); bot.gear_up(); bot.stock_up(); bot.rest()
+    bot.clear(); bot.gear_up(); bot.stock_up(); bot.rest(); fronts.append(bot.lineup())
+    check("recruits fight: Aveline (Silver Lance) is in the front four against the Light Warden and the Devourer",
+          "Aveline" in fronts[2] and "Aveline" in fronts[3], fronts)
     eq = {e["name"]: e["weapon"] for e in ev("PRISM_DEMO.equip()")}
-    check("boss gold bought the swordsmen better blades", eq["Corin"] != "Copper Blade" and eq["Rook"] != "Copper Blade", eq)
+    check("boss gold bought the front swordsman a better blade (not the benched one)", eq["Corin"] != "Copper Blade", eq)
     walk_onto("CrystalShrine")
     check("three shards open the Crystal Shrine", st()["map"] == "dungeon" and st()["dungeon"] == 3, (st()["map"], st()["dialog"]))
     check("The Shattered Heart: the gate asks, the battle starts", bot.to_boss(3))

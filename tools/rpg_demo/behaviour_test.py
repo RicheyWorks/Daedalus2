@@ -48,19 +48,22 @@ with sync_playwright() as p:
     foes = lambda: ev("PRISM_DEMO.foeStatus()")
     seen = lambda text: any(text in (m or "") for m in msgs)
     covered = set()
-    def until(beh, text, plans=None, rounds=30, keys=None, before=None):
-        """Fight the gentlest foe with this behaviour until `text` shows in the battle log; True if it did."""
+    def until(beh, text, plans=None, rounds=30, keys=None, before=None, tries=4):
+        """Fight the gentlest foe with this behaviour until `text` shows in the battle log; True if it did. A chance
+        behaviour can miss its moment (the foe falls to a confused swing, or to the rolls), so a fresh fight is tried."""
         covered.add(beh)
-        bot.rest() if any(m[2] < m[3] / 2 for m in st()["party"]) else None
-        msgs.clear()
-        if not bot.start_fight(keys or [KEY[beh]]): return False
-        if before: before()
-        for _ in range(rounds):
-            if seen(text) or st()["mode"] != "battle": break
-            bot.round(plans or {})
-        hit = seen(text)
-        if st()["mode"] == "battle": bot.finish()
-        return hit
+        for _ in range(tries):
+            bot.rest() if any(m[2] < m[3] / 2 for m in st()["party"]) else None
+            msgs.clear()
+            if not bot.start_fight(keys or [KEY[beh]]): return False
+            if before: before()
+            for _ in range(rounds):
+                if seen(text) or st()["mode"] != "battle": break
+                bot.round(plans or {})
+            hit = seen(text)
+            if st()["mode"] == "battle": bot.finish()
+            if hit: return True
+        return False
 
     ev("PRISM_DEMO.give('Feather of Waking', 9)"); ev("PRISM_DEMO.give('Herb Tonic', 20)")
     check("simple: a plain hit", until("simple", " HITS "))
@@ -96,8 +99,7 @@ with sync_playwright() as p:
     check("undead: it does not sleep", until("undead", "IT DOES NOT TAKE", plans={"Tamsin": ("MAGIC", "Drowse", 0)}))
     check("undead: light finds a weak spot", until("undead", "A WEAK SPOT!", plans={"Tamsin": ("MAGIC", "Radiance", 0)}))
     rose = False
-    for _ in range(10):
-        if until("undead", "RISES AGAIN", plans={"Corin": ("ATTACK", None, 0), "Rook": ("ATTACK", None, 0)}, rounds=4, before=lambda: ev("PRISM_DEMO.foes(1)")): rose = True; break
+    if until("undead", "RISES AGAIN", plans={"Corin": ("ATTACK", None, 0), "Rook": ("ATTACK", None, 0)}, rounds=4, before=lambda: ev("PRISM_DEMO.foes(1)"), tries=25): rose = True
     check("undead: it can rise once", rose)
     for beh, word in (("status_poison", "POISONED"), ("status_sleep", "ASLEEP"), ("status_confuse", "CONFUSED"), ("status_bind", "BOUND"),
                       ("status_blind", "BLINDED"), ("status_burn", "BURNING"), ("status_paralyze", "PARALYZED")):

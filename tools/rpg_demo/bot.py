@@ -161,6 +161,41 @@ class Bot:
             self.round({}, default=("ATTACK", None, 0))
         self.clear()
 
+    def lineup(self, keep=("Ysolde", "Tamsin")):
+        """Field the strongest four by the ORDER menu, like a player with recruits would: the healer and the caster stay,
+        the other two front slots go to the hardest hitters (ATK) among everyone standing. Returns the front four."""
+        def front():
+            return [m["name"] for m in self.ev("PRISM_DEMO.roster()") if m["front"]]
+        def plan():
+            r = self.ev("PRISM_DEMO.roster()")
+            atk = {e["name"]: e["atk"] for e in self.ev("PRISM_DEMO.equip()")}
+            hitters = sorted((m for m in r if m["name"] not in keep and m["hp"] > 0), key=lambda m: -atk.get(m["name"], 0))
+            return [m["name"] for m in r if m["name"] in keep] + [m["name"] for m in hitters[:4 - len(keep)]]
+        want = plan()
+        if set(front()) == set(want):
+            return front()
+        mn = lambda: self.ev("PRISM_DEMO.menu()")
+        self.press("start", 250)
+        while mn()["idx"] != mn()["cmds"].index("ORDER"):
+            self.press("down", 60)
+        self.press("a", 150)
+        for _ in range(4):
+            names = [m["name"] for m in self.ev("PRISM_DEMO.roster()")]
+            out = next((i for i, n in enumerate(names[:4]) if n not in want), None)
+            inn = next((i for i, n in enumerate(names[4:], 4) if n in want), None)
+            if out is None or inn is None:
+                break
+            for target in (out, inn):
+                while mn()["ii"] != target:
+                    self.press("down", 50)
+                self.press("a", 150)
+        for _ in range(4):
+            if self.st()["mode"] != "menu":
+                break
+            self.press("b", 120)
+        self.clear()
+        return front()
+
     def shop(self, kind, buys):
         """Walk into an interior shop (Magic, Item, ...), buy each name in buys once, in order, and walk out."""
         stock = [x["name"] for x in self.D["interiors"][kind]["stock"]]

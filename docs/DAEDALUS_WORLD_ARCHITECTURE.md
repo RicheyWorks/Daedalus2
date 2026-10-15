@@ -1112,3 +1112,18 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
   picking an item and then a person used a Herb Tonic instead. ITEM and EQUIP now keep their cursor.
 - **Tests:** `item_test.py` (15 checks). New hooks: `itemKinds()`, `lists()`, `itemLine(name)` and `spend(i, n)`.
   `bot.battle_items()` mirrors the battle list.
+
+### 14.34 The Prismheart demo: the quest is played with recruits
+
+- **What changed in the bot:** before each Warden, `bot.lineup()` fields the strongest four through the real ORDER menu.
+  The healer (Ysolde) and the caster (Tamsin) stay in front. The other two slots go to the hardest hitters by ATK,
+  counting everyone standing, recruits included.
+- **Who it fields:** Fennick replaces Rook for the Gale Warden. Aveline, with the Silver Lance, replaces him for the
+  Light Warden and the Devourer.
+- **The quest test now proves recruits matter.** It checks that Aveline is in the front four for the last two fights.
+  The gear check now expects the boss gold to go to the swordsman in front (Corin), not the benched one (Rook).
+- **Result:** the quest passes 27/27 on seeds 7, 11 and 23, with the Devourer's scaling unchanged.
+- **Found: a flaky check.** In one full-suite run `behaviour_test` failed 26/27, and four reruns on their own passed. Its
+  chance-based checks got a single fight, and a fight can end before the behaviour shows: a foe can fall to a
+  confused swing, or an undead foe may simply not rise (35%). `until()` now starts a fresh fight up to 4 times, and
+  25 times for the undead rise.
