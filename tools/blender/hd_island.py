@@ -605,6 +605,411 @@ def buildings(prefix, A, h, kind, chem):
         box(prefix + "_Bridge_Rail%d" % int(k), (sx + k, sy, WATER + 1.9), (.15, 2.4, 1.0), wood, .02)
 
 
+# ---- v2: what makes each kind its own place --------------------------------------------------------------------
+def free_spot(A, h, rng, margin=6, tries=400, inner=R * .85, max_slope=2.5):
+    lake = A["lake"]
+    for _ in range(tries):
+        x, y = rng.uniform(-inner, inner), rng.uniform(-inner, inner)
+        if not inside(x, y, inner):
+            continue
+        if math.sqrt(((x - lake[0]) / lake[2]) ** 2 + ((y - lake[1]) / lake[3]) ** 2) < 1.3:
+            continue
+        if min(seg_dist(x, y, a, b) for pl in (A["stream"], A["spring"], A["path"]) for a, b in zip(pl, pl[1:])) < margin:
+            continue
+        if any(math.hypot(x - t[0], y - t[1]) < t[2] + margin for t in A["terraces"]):
+            continue
+        if abs(h(x + 2, y) - h(x - 2, y)) + abs(h(x, y + 2) - h(x, y - 2)) > max_slope:
+            continue
+        return x, y
+    return None
+
+
+def kind_features(prefix, A, h, kind, seed):
+    rng = random.Random(seed * 17 + 3)
+    g, gl, cliff, sand, water, accent, _ = KINDS[kind]
+    wood = material("Cedar", (.30, .14, .07), .7)
+    stone = material("Flagstone", (.62, .56, .46), .9)
+    hx, hy, hs, hh = A["hills"][0]
+    top = h(hx, hy)
+    if kind == "volcano":
+        lava = material("Lava", (1.0, .35, .04), .4, 0, 6.0)
+        obs = material("Obsidian", (.06, .05, .08), .15, .3)
+        cone(prefix + "_Volcano_Cone", (hx, hy, top + 9), 26, 9, 18, material("Basalt", (.18, .15, .14), .95), 28)
+        cone(prefix + "_Volcano_CraterRim", (hx, hy, top + 18.3), 9.5, 8, 1.2, obs, 28)
+        cone(prefix + "_Volcano_Lava", (hx, hy, top + 18.2), 7.6, 7.6, .4, lava, 24)
+        for i in range(5):                                   # lava rivulets down the flank
+            a = i * math.tau / 5 + rng.uniform(-.3, .3)
+            pts = [Vector((hx + (8 + k * 4.5) * math.cos(a + k * .08), hy + (8 + k * 4.5) * math.sin(a + k * .08), top + 18 - k * 4.2)) for k in range(5)]
+            tube(prefix + "_Volcano_Flow%d" % i, pts, .8, lava, 12)
+        smoke = material("Smoke", (.35, .33, .32), .9, 0, 0, .6)
+        for i in range(6):
+            sphere(prefix + "_Volcano_Smoke%d" % i, (hx + rng.uniform(-3, 3), hy + rng.uniform(-3, 3), top + 23 + i * 4.5), (3 + i, 3 + i, 2 + i * .6), smoke, 10, 6)
+        for i in range(9):
+            p = free_spot(A, h, rng, 4)
+            if p:
+                cone(prefix + "_Obsidian%d" % i, (p[0], p[1], h(*p) + 3), 1.4, .05, 7 + rng.uniform(0, 5), obs, 5, (rng.uniform(-.2, .2), rng.uniform(-.2, .2), 0))
+        p = free_spot(A, h, rng, 8)
+        if p:                                                # hot spring with steam
+            cone(prefix + "_HotSpring", (p[0], p[1], h(*p) + .15), 4.5, 4.5, .3, material("HotSpring", (.35, .85, .85), .1, 0, .5, .85), 20)
+            for k in range(4):
+                sphere(prefix + "_Steam%d" % k, (p[0] + rng.uniform(-2, 2), p[1] + rng.uniform(-2, 2), h(*p) + 2 + k * 2), (1.6, 1.6, 1.2), material("Steam", (.95, .95, .95), .9, 0, 0, .5), 8, 5)
+    elif kind == "frost":
+        ice = material("Ice", (.75, .90, 1.0), .05, 0, .2, .75)
+        snow = material("Snow", (.97, .98, 1.0), .9)
+        for i in range(14):
+            p = free_spot(A, h, rng, 3, max_slope=4)
+            if p:
+                for k in range(rng.randint(2, 4)):
+                    cone(prefix + "_IceSpire%d_%d" % (i, k), (p[0] + rng.uniform(-2, 2), p[1] + rng.uniform(-2, 2), h(*p) + 3), rng.uniform(1, 2.2), .05, rng.uniform(5, 12), ice, 6,
+                         (rng.uniform(-.25, .25), rng.uniform(-.25, .25), 0))
+        cone(prefix + "_FrozenLake", (A["lake"][0], A["lake"][1], WATER + .15), A["lake"][2] * .95, A["lake"][2] * .95, .2, ice, 32).scale = (1, A["lake"][3] / A["lake"][2], 1)
+        for i in range(10):
+            p = free_spot(A, h, rng, 2)
+            if p:
+                sphere(prefix + "_Drift%d" % i, (p[0], p[1], h(*p)), (rng.uniform(3, 7), rng.uniform(2, 4), 1.2), snow, 12, 6)
+        for i in range(40):                                  # icicles under the rim
+            a = i * math.tau / 40
+            rr = rim_radius(a) * .97
+            x, y = rr * math.cos(a), rr * math.sin(a)
+            cone(prefix + "_Icicle%02d" % i, (x, y, h(x, y) - 4), .6, .02, rng.uniform(4, 10), ice, 5, (math.pi, 0, 0))
+    elif kind == "mesa":
+        bands = [material("Butte%d" % k, c, .95) for k, c in enumerate(((.72, .42, .22), (.85, .62, .38), (.60, .30, .18)))]
+        for i in range(4):
+            p = free_spot(A, h, rng, 10)
+            if p:
+                w, z = rng.uniform(9, 16), h(*p)
+                for k in range(5):
+                    box(prefix + "_Butte%d_%d" % (i, k), (p[0], p[1], z + 1.6 + k * 3.2), (w - k * .9, w * .8 - k * .7, 3.2), bands[k % 3], .5)
+        cact = material("Cactus", (.25, .50, .25), .8)
+        for i in range(18):
+            p = free_spot(A, h, rng, 2)
+            if p:
+                z = h(*p)
+                hgt = rng.uniform(3, 6)
+                cone(prefix + "_Cactus%d" % i, (p[0], p[1], z + hgt / 2), .45, .4, hgt, cact, 10)
+                for sgn in (-1, 1):
+                    if rng.random() < .7:
+                        beam(prefix + "_CactusArm%d_%d" % (i, sgn), (p[0], p[1], z + hgt * .5), (p[0] + sgn * 1.3, p[1], z + hgt * .55), .3, cact)
+                        beam(prefix + "_CactusArmUp%d_%d" % (i, sgn), (p[0] + sgn * 1.3, p[1], z + hgt * .55), (p[0] + sgn * 1.3, p[1], z + hgt * .85), .3, cact)
+        p = free_spot(A, h, rng, 8)
+        if p:                                                # vineyard rows
+            vine = material("Vine", (.35, .45, .18), .85)
+            grape = material("Grape", (.45, .15, .45), .5)
+            for r_ in range(6):
+                for k in range(8):
+                    x, y = p[0] - 7 + k * 2, p[1] - 5 + r_ * 2
+                    sphere(prefix + "_Vine%d_%d" % (r_, k), (x, y, h(x, y) + 1), (.9, .5, .9), vine, 6, 4)
+                    if k % 2:
+                        sphere(prefix + "_Grape%d_%d" % (r_, k), (x, y - .5, h(x, y) + .7), (.3, .3, .4), grape, 6, 4)
+    elif kind == "mire":
+        lily = material("Lily", (.25, .55, .25), .7)
+        bloom = material("LilyBloom", (.98, .80, .90), .6)
+        lx, ly, la, lb = A["lake"]
+        for i in range(30):
+            a, r_ = rng.uniform(0, math.tau), math.sqrt(rng.random()) * .85
+            x, y = lx + la * r_ * math.cos(a), ly + lb * r_ * math.sin(a)
+            cone(prefix + "_LilyPad%02d" % i, (x, y, WATER + .06), rng.uniform(.6, 1.3), rng.uniform(.6, 1.3), .08, lily, 10)
+            if i % 4 == 0:
+                sphere(prefix + "_LilyBloom%02d" % i, (x, y, WATER + .35), (.35, .35, .3), bloom, 8, 5)
+        # boardwalk across the lake on posts
+        pts = [(lx - la * 1.1, ly), (lx, ly + lb * .2), (lx + la * 1.1, ly)]
+        for k in range(len(pts) - 1):
+            a, b = pts[k], pts[k + 1]
+            n = int(math.hypot(b[0] - a[0], b[1] - a[1]) / 1.4)
+            ang = math.atan2(b[1] - a[1], b[0] - a[0])
+            for j in range(n):
+                t = j / n
+                x, y = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+                box(prefix + "_Boardwalk%d_%02d" % (k, j), (x, y, WATER + .7), (1.2, 3.0, .18), wood, .02, (0, 0, ang))
+                if j % 3 == 0:
+                    beam(prefix + "_BoardPost%d_%02d" % (k, j), (x, y, WATER - 2), (x, y, WATER + .6), .12, wood)
+        reed = material("Cattail", (.45, .40, .20), .9)
+        for i in range(60):
+            a = rng.uniform(0, math.tau)
+            x, y = lx + la * 1.05 * math.cos(a), ly + lb * 1.05 * math.sin(a)
+            beam(prefix + "_Reed%02d" % i, (x, y, WATER - .3), (x + rng.uniform(-.3, .3), y + rng.uniform(-.3, .3), WATER + rng.uniform(1.5, 2.8)), .06, reed, 5)
+        glow = material("Glowshroom", (.45, 1.0, .75), .4, 0, 3.0)
+        for i in range(14):
+            p = free_spot(A, h, rng, 2)
+            if p:
+                for k in range(3):
+                    x, y = p[0] + rng.uniform(-1, 1), p[1] + rng.uniform(-1, 1)
+                    beam(prefix + "_ShroomStem%d_%d" % (i, k), (x, y, h(x, y)), (x, y, h(x, y) + .8), .1, material("Stem", (.9, .9, .8), .8), 6)
+                    sphere(prefix + "_ShroomCap%d_%d" % (i, k), (x, y, h(x, y) + .9), (.45, .45, .25), glow, 8, 5)
+    elif kind == "crystal":
+        for i in range(10):
+            p = free_spot(A, h, rng, 5, max_slope=4)
+            if not p:
+                continue
+            col = [(.75, .55, 1.0), (.45, .85, 1.0), (1.0, .55, .85)][i % 3]
+            cm = material("Crystal%d" % (i % 3), col, .08, 0, 1.6, .8)
+            z = h(*p)
+            for k in range(rng.randint(3, 7)):
+                a = rng.uniform(0, math.tau)
+                cone(prefix + "_Crystal%d_%d" % (i, k), (p[0] + 1.2 * math.cos(a), p[1] + 1.2 * math.sin(a), z + 3), rng.uniform(1, 2.2), .1, rng.uniform(5, 14), cm, 6,
+                     (.35 * math.sin(a), .35 * math.cos(a), 0))
+        shard = material("Shard", accent, .1, 0, 2.0, .7)
+        for i in range(16):                                  # shards floating above the plateau
+            a, r_ = rng.uniform(0, math.tau), rng.uniform(20, 95)
+            cone(prefix + "_FloatShard%02d" % i, (r_ * math.cos(a), r_ * math.sin(a), DECK + rng.uniform(25, 55)), rng.uniform(.8, 2), .05, rng.uniform(3, 7), shard, 5,
+                 (rng.uniform(0, 3), rng.uniform(0, 3), 0))
+    else:   # meadow: windmill on the big hill's shoulder + beehives + standing stones
+        p = free_spot(A, h, rng, 8)
+        if p:
+            z = h(*p)
+            cone(prefix + "_Windmill_Tower", (p[0], p[1], z + 6), 3.2, 2.2, 12, material("Plaster", (.80, .72, .55), .85), 12)
+            cone(prefix + "_Windmill_Cap", (p[0], p[1], z + 13), 2.6, .3, 3, material("Roof_meadow", (.56, .25, .15), .6), 12)
+            hub = Vector((p[0], p[1] - 2.6, z + 11))
+            for k in range(4):
+                a = k * math.pi / 2 + .3
+                tip = hub + Vector((7 * math.cos(a), 0, 7 * math.sin(a)))
+                beam(prefix + "_Windmill_Arm%d" % k, hub, tip, .15, wood)
+                mid = hub.lerp(tip, .6)
+                box(prefix + "_Windmill_Sail%d" % k, mid, (1.8, .08, 4.2), material("Sail", (.95, .92, .85), .8), .02, (0, -a + math.pi / 2, 0))
+        hive = material("Hive", (.92, .78, .35), .7)
+        for i in range(5):
+            p = free_spot(A, h, rng, 3)
+            if p:
+                for k in range(3):
+                    cone(prefix + "_Hive%d_%d" % (i, k), (p[0], p[1], h(*p) + .4 + k * .7), .9 - k * .15, .8 - k * .15, .7, hive, 12)
+        p = free_spot(A, h, rng, 10)
+        if p:
+            for k in range(9):
+                a = k * math.tau / 9
+                x, y = p[0] + 8 * math.cos(a), p[1] + 8 * math.sin(a)
+                box(prefix + "_StandingStone%d" % k, (x, y, h(x, y) + 2), (1.2, .8, 4 + rng.uniform(0, 1.5)), material("Rock_meadow", cliff, .95), .3,
+                    (rng.uniform(-.08, .08), rng.uniform(-.08, .08), a))
+
+
+def rim_details(prefix, h, kind, seed, r=R):
+    """Hanging roots/vines under the crest and small rocks drifting around the keel — sells the floating."""
+    rng = random.Random(seed * 23 + 11)
+    g, gl, cliff, _, _, _, _ = KINDS[kind]
+    root = material("Root_" + kind, tuple(c * .7 for c in g) if kind not in ("frost", "volcano", "crystal") else (.25, .18, .12), .9)
+    for i in range(48):
+        a = i * math.tau / 48 + rng.uniform(-.05, .05)
+        rr = rim_radius(a, r) * .99
+        x, y = rr * math.cos(a), rr * math.sin(a)
+        z = h(x, y) - 1
+        L = rng.uniform(4, 14)
+        pts = [Vector((x, y, z)), Vector((x * 1.01, y * 1.01, z - L * .4)), Vector((x * 1.005 + rng.uniform(-1, 1), y * 1.005 + rng.uniform(-1, 1), z - L))]
+        tube(prefix + "_Root%02d" % i, pts, rng.uniform(.12, .3), root, 6)
+    rock = material("Strata_" + kind, cliff, .95)
+    for i in range(14):
+        a = rng.uniform(0, math.tau)
+        d = rng.uniform(1.05, 1.35) * r
+        s = rng.uniform(2, 6)
+        ob = sphere(prefix + "_Drift%02d" % i, (d * math.cos(a), d * math.sin(a), rng.uniform(-30, 0)), (s, s * .8, s * .7), rock, 8, 5)
+        cone(prefix + "_DriftKeel%02d" % i, (d * math.cos(a), d * math.sin(a), ob.location.z - s * .9), s * .7, .1, s * 1.6, rock, 7, (math.pi, 0, 0))
+
+
+# ---- v2: gameplay — every placed piece comes from the chemistry or a mechanics data file ----------------------
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+
+
+def _data(rel):
+    try:
+        with open(os.path.join(ROOT, rel), encoding="utf-8-sig") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+ESSENCE_RGB = {"warm": (.95, .45, .20), "cool": (.35, .65, .95), "calm": (.55, .80, .55), "quick": (.95, .85, .30),
+               "iron": (.55, .45, .40), "bright": (1.0, .95, .55)}
+ORE_RGB = {"coal": (.12, .12, .14), "copper": (.78, .45, .22), "iron": (.60, .40, .32), "gold": (.95, .78, .25), "silver": (.86, .88, .92),
+           "tin": (.80, .82, .84), "starmetal": (.50, .90, 1.0), "crystal": (.75, .55, 1.0), "emberite": (1.0, .55, .15), "obsidian": (.08, .06, .10)}
+FRUIT_RGB = {"cherry": (.80, .10, .15), "orange": (1.0, .55, .10), "plum": (.45, .15, .45), "apple": (.85, .15, .12), "pear": (.80, .85, .30),
+             "peach": (1.0, .65, .45), "lemon": (1.0, .92, .25), "fig": (.45, .25, .35), "date": (.55, .35, .15)}
+
+
+def marker(GP, prefix, kind, ident, x, y, z, source, extra=None, post=True):
+    """A named, exported gameplay hook: a small signpost mesh `MKR_<kind>_<id>` plus a manifest row citing its source."""
+    if post:
+        beam("MKR_%s_%s_%s" % (prefix, kind, ident), (x, y, z), (x, y, z + 2.2), .08, material("MarkerPost", (.95, .85, .30), .6, 0, .6), 6)
+    row = {"kind": kind, "id": ident, "local": [round(x, 2), round(y, 2), round(z - DECK, 2)], "source": source}
+    if extra:
+        row.update(extra)
+    GP.append(row)
+
+
+def gameplay(prefix, A, h, kind, seed, chem):
+    rng = random.Random(seed * 41 + 9)
+    GP = []
+    npcs = {n.get("id"): n for n in _data("data/npcs/npcs.json").get("npcs", [])}
+    terr = {t[4]: t for t in A["terraces"]}
+    wood = material("Cedar", (.30, .14, .07), .7)
+    # spawn overlook (data/spawn/spawn.json: marker_spawn_overlook on the player's own island)
+    lx, ly, lr, lz, _ = terr["landmark"]
+    marker(GP, prefix, "spawn", "marker_spawn_overlook", lx + lr * .7, ly - lr * .3, lz, "data/spawn/spawn.json first_spawn")
+    # NPC homes (data/npcs/npcs.json)
+    tx, ty, tr, tz, _ = terr["town"]
+    fx, fy, fr, fz, _ = terr["farm"]
+    dx, dy, dr, dz, _ = terr["dock"]
+    homes = {"npc_ark_keeper": (dx, dy, dz), "npc_trader": (tx - 10, ty - 10, tz), "npc_forge_smith": (tx + 3, ty + 14, tz),
+             "npc_beast_tender": (fx + 9, fy - 2, fz), "npc_drydock_riveter": (dx - 4, dy + 4, dz), "npc_crater_scholar": (lx - 6, ly + 6, lz)}
+    for nid, (x, y, z) in homes.items():
+        if nid in npcs or not npcs:
+            marker(GP, prefix, "npc", nid, x, y, z, "data/npcs/npcs.json", {"role": npcs.get(nid, {}).get("role")})
+    # ark deck + latch (data/ark/travel.json: latch range 60 m, tows up to 3 islands)
+    ark = _data("data/ark/travel.json")
+    marker(GP, prefix, "ark", "ark_deck", dx, dy, dz, "data/ark/travel.json", {"latch_range_m": ark.get("latch", {}).get("range_m", 60)})
+    # water sources (data/water/water.json) + the chemistry's spring purity / filter
+    wsrc = [w.get("id") for w in _data("data/water/water.json").get("sources", [])]
+    water = chem.get("water", {})
+    marker(GP, prefix, "water", "well", tx, ty, tz, "data/water/water.json sources.well", post=False)
+    sx, sy = A["spring"][0]
+    marker(GP, prefix, "water", "spring", sx, sy, h(sx, sy), "data/water/water.json sources.spring + chemistry water.spring_purity",
+           {"purity": water.get("spring_purity"), "filter_needed": water.get("filter_needed")})
+    marker(GP, prefix, "water", "lake", A["lake"][0], A["lake"][1], WATER, "data/water/water.json sources.sea/lake", post=False)
+    cone(prefix + "_RainCatch", (tx - 12, ty + 4, tz + 1), 1.1, 1.3, 2, wood, 12)
+    marker(GP, prefix, "water", "rain_catch", tx - 12, ty + 4, tz, "data/water/water.json sources.rain_catch", post=False)
+    if water.get("filter_needed"):
+        box(prefix + "_FilterHut", (sx + 6, sy - 4, h(sx + 6, sy - 4) + 1.5), (3, 3, 3), wood, .1)
+        marker(GP, prefix, "water", "filter_hut", sx + 6, sy - 4, h(sx + 6, sy - 4), "chemistry water.filter_needed + data/water/water.json purification")
+    # fishing pier on the lake (chemistry water.fish)
+    lkx, lky, la, lb = A["lake"]
+    px, py = lkx + la * 1.05, lky
+    for k in range(5):
+        box(prefix + "_FishingPier%d" % k, (px - k * 1.6, py, WATER + .6), (1.6, 2.6, .2), wood, .02)
+    beam(prefix + "_FishingPier_Rod", (px - 6.5, py, WATER + .8), (px - 9, py + 1.5, WATER + 3.5), .04, wood, 5)
+    marker(GP, prefix, "fishing", "pier", px - 6, py, WATER + .6, "chemistry water.fish (Colony Ledger fishing)", {"fish": water.get("fish")})
+    # herbs (chemistry flora.herbs + essences; data/herbs/herbs.json; RingInfusion brews)
+    flora = chem.get("flora", {})
+    herbs = flora.get("herbs", [])
+    ess = flora.get("herb_essences", {})
+    hc = (lx - lr - 10, ly)
+    for i, hb in enumerate(herbs):
+        a = i * math.tau / max(1, len(herbs))
+        x, y = hc[0] + 6 * math.cos(a), hc[1] + 6 * math.sin(a)
+        mat = material("Herb_" + hb, ESSENCE_RGB.get(ess.get(hb, ""), (.6, .8, .4)), .8, 0, .4)
+        for k in range(7):
+            xx, yy = x + rng.gauss(0, .9), y + rng.gauss(0, .9)
+            cone(prefix + "_Herb_%s_%d" % (hb, k), (xx, yy, h(xx, yy) + .35), .25, .02, .8, mat, 5)
+        marker(GP, prefix, "herb", hb, x, y, h(x, y), "chemistry flora.herbs + data/herbs/herbs.json + docs/mechanics/RingInfusion.md",
+               {"essence": ess.get(hb)}, post=False)
+    cone(prefix + "_BrewTrough", (hc[0], hc[1], h(*hc) + .5), 1.4, 1.2, 1, wood, 12)
+    marker(GP, prefix, "craft", "brew_trough", hc[0], hc[1], h(*hc), "docs/mechanics/RingInfusion.md (brews)")
+    # orchard (chemistry flora.orchard: fruit + uses)
+    bark = material("Bark", (.28, .14, .07), .85)
+    for i, (sp, info) in enumerate(sorted(flora.get("orchard", {}).items())):
+        for k in range(4):
+            x, y = fx - 14 + k * 5, fy + 14 + i * 6
+            z = h(x, y)
+            cone(prefix + "_Orchard_%s_%d_Trunk" % (sp, k), (x, y, z + 1.4), .3, .22, 2.8, bark, 8)
+            sphere(prefix + "_Orchard_%s_%d_Crown" % (sp, k), (x, y, z + 3.6), (1.8, 1.8, 1.5), material("Leaf_orchard", (.22, .45, .20), .9), 10, 6)
+            fruit = material("Fruit_" + info.get("fruit", sp), FRUIT_RGB.get(info.get("fruit", sp), (.9, .3, .2)), .5)
+            for m in range(5):
+                a = m * 1.3
+                sphere(prefix + "_Orchard_%s_%d_Fruit%d" % (sp, k, m), (x + 1.5 * math.cos(a), y + 1.5 * math.sin(a), z + 3.2 + .4 * math.sin(m)), (.22, .22, .22), fruit, 6, 4)
+        marker(GP, prefix, "orchard", sp, fx - 14, fy + 14 + i * 6, h(fx - 14, fy + 14 + i * 6), "chemistry flora.orchard", {"fruit": info.get("fruit"), "uses": info.get("uses")}, post=False)
+    # livestock (chemistry fauna.livestock; data/livestock/animals.json housing/care)
+    hide = material("Hide", (.85, .80, .72), .9)
+    for i, (an, product) in enumerate(sorted(chem.get("fauna", {}).get("livestock", {}).items())):
+        for k in range(3):
+            x, y = fx + 8 + rng.uniform(-2.5, 2.5), fy - 6 + rng.uniform(-2.5, 2.5)
+            z = h(x, y)
+            box(prefix + "_Livestock_%s_%d_Body" % (an, k), (x, y, z + .9), (1.6 if an != "hen" else .6, .8 if an != "hen" else .5, .8 if an != "hen" else .5), hide, .15)
+            box(prefix + "_Livestock_%s_%d_Head" % (an, k), (x + .9, y, z + 1.3), (.5, .45, .45), hide, .1)
+        marker(GP, prefix, "livestock", an, fx + 8, fy - 6, fz, "chemistry fauna.livestock + data/livestock/animals.json", {"product": product}, post=False)
+    # crops are placed by buildings() from chemistry soil.crops; record them
+    soil = chem.get("soil", {})
+    marker(GP, prefix, "crops", "+".join(soil.get("crops", [])), fx - 5, fy - 7, fz, "chemistry soil.crops / crop_rows / fertility (Ultra island_farm.py)",
+           {"fertility": soil.get("fertility"), "rows": soil.get("crop_rows")}, post=False)
+    # ore nodes (data/spawn/ore_nodes.json 40/km2, seeded by island seed; chemistry ores_here + geology.ore_mult)
+    geo = chem.get("geology", {})
+    ores = chem.get("ores_here", [])
+    area_km2 = (2 * R) ** 2 * .88 / 1e6
+    n_nodes = max(6, int(round(40 * area_km2 * geo.get("ore_mult", 1.0) * 4)))      # x4: the keel's faces count too
+    for i in range(n_nodes):
+        ore = ores[i % len(ores)] if ores else "iron"
+        if ore == "starmetal" and not geo.get("starmetal_crater"):
+            ore = "iron"
+        spot = free_spot(A, h, rng, 3, max_slope=6)
+        if not spot:
+            continue
+        x, y = spot
+        z = h(x, y)
+        rock = sphere(prefix + "_OreNode_%s_%02d" % (ore.title(), i), (x, y, z + .5), (1.4, 1.1, 1.0), material("Strata_" + kind, KINDS[kind][2], .95), 8, 5)
+        for m in range(3):
+            a = m * 2.1
+            cone(prefix + "_OreNode_%s_%02d_Vein%d" % (ore.title(), i, m), (x + .9 * math.cos(a), y + .9 * math.sin(a), z + 1.1), .35, .05, .9,
+                 material("Ore_" + ore, ORE_RGB.get(ore, (.6, .5, .4)), .4, .7 if ore in ("gold", "copper", "iron", "silver") else 0, 1.2 if ore in ("starmetal", "crystal") else 0), 5)
+        marker(GP, prefix, "ore_node", "Prop_OreNode_%s_Small" % ore.title(), x, y, z, "data/spawn/ore_nodes.json + chemistry ores_here/geology.ore_mult", post=False)
+    # caves (chemistry geology.caves) — mouths in the big hill's flank
+    hx, hy, hs, hh = A["hills"][0]
+    dark = material("CaveDark", (.02, .02, .03), 1)
+    for i in range(int(geo.get("caves", 0))):
+        a = i * 2.4 + 1
+        x, y = hx + hs * .55 * math.cos(a), hy + hs * .55 * math.sin(a)
+        sphere(prefix + "_CaveMouth%d" % i, (x, y, h(x, y) + 1), (2.4, 1.2, 2.0), dark, 12, 6)
+        box(prefix + "_CaveLintel%d" % i, (x, y, h(x, y) + 3.2), (4.5, 1.5, .8), material("Strata_" + kind, KINDS[kind][2], .95), .3, (0, 0, a))
+        marker(GP, prefix, "cave", "cave_%d" % i, x, y, h(x, y), "chemistry geology.caves (ADR-049 dig, ADR-050 geology)", post=False)
+    # meteor crater with starmetal (chemistry geology.starmetal_crater / LEGENDARY grade)
+    if geo.get("starmetal_crater"):
+        spot = free_spot(A, h, rng, 10)
+        if spot:
+            x, y = spot
+            z = h(x, y)
+            cone(prefix + "_Crater_Rim", (x, y, z + .6), 9, 7, 1.4, material("Scorch", (.18, .14, .12), .95), 24)
+            cone(prefix + "_Crater_Bowl", (x, y, z - .2), 7, 3, 1.2, material("Scorch", (.18, .14, .12), .95), 24, (math.pi, 0, 0))
+            for k in range(5):
+                cone(prefix + "_Starmetal%d" % k, (x + rng.uniform(-3, 3), y + rng.uniform(-3, 3), z + 1), .8, .05, 2.6, material("Ore_starmetal", ORE_RGB["starmetal"], .3, .6, 2.0), 5)
+            marker(GP, prefix, "crater", "starmetal_crater", x, y, z, "chemistry geology.starmetal_crater (LEGENDARY) + Colony Ledger meteor event")
+    # Power Unit (chemistry power_unit: parts + drive) — sited by its drive
+    pu = chem.get("power_unit", {})
+    drive = str(pu.get("drive", "the stream"))
+    if "stream" in drive:
+        x, y = A["stream"][3]
+    elif "wind" in drive:
+        x, y = hx + hs * .3, hy - hs * .3
+    else:
+        x, y = tx + 12, ty + 10
+    marker(GP, prefix, "power_unit", "PowerUnit", x, y, h(x, y), "chemistry power_unit (Codex PowerUnit 86100 parts)",
+           {"drive": drive, "parts": list(pu.get("parts", {}).keys()), "energy_per_unit": pu.get("energy_per_unit")})
+    if "stream" in drive:
+        wheel = material("Steel", (.6, .64, .7), .4, .9)
+        cone(prefix + "_PowerUnit_WaterWheel", (x, y, WATER + 1.6), 2.6, 2.6, .8, wheel, 16, (math.pi / 2, 0, 0))
+        box(prefix + "_PowerUnit_Housing", (x + 3.5, y, h(x + 3.5, y) + 1.4), (2.6, 2.2, 2.8), material("Brass", (.72, .50, .15), .35, .8), .1)
+    # shop + inn (chemistry economy.shop_stock / inn_menu) on the town terrace
+    eco = chem.get("economy", {})
+    crate = material("Crate", (.55, .38, .20), .8)
+    for i, item in enumerate(eco.get("shop_stock", [])[:8]):
+        box(prefix + "_ShopCrate_%s" % item, (tx - 12 + (i % 4) * 1.5, ty - 12 - (i // 4) * 1.5, tz + .5), (1.2, 1.2, 1.0), crate, .05)
+    marker(GP, prefix, "shop", "trader_stall", tx - 12, ty - 12, tz, "chemistry economy.shop_stock + data/trade/prices.json", {"stock": eco.get("shop_stock")})
+    marker(GP, prefix, "inn", "inn", tx + 8, ty - 6, tz, "chemistry economy.inn_menu + data/food/cooking.json", {"menu": eco.get("inn_menu")})
+    # Colony Ledger production roles (tools/economy/colony_ledger.py): goods this island exports / imports
+    GP.append({"kind": "ledger", "id": "goods", "goods": eco.get("goods"), "surplus": eco.get("surplus"), "need": eco.get("need"),
+               "source": "chemistry economy + tools/economy/colony_ledger.py (produce / market_day)"})
+    # Living Island Defense (Ultra, docs/mechanics/LIVING-ISLAND-DEFENSE.md): watch post on the approach, guard beds
+    ang = A["ang"] + math.pi
+    rr = rim_radius(ang) * .85
+    wx, wy = rr * math.cos(ang), rr * math.sin(ang)
+    box(prefix + "_WatchTower", (wx, wy, h(wx, wy) + 4), (2.5, 2.5, 8), wood, .1)
+    box(prefix + "_WatchTower_Deck", (wx, wy, h(wx, wy) + 8.3), (4, 4, .4), wood, .05)
+    marker(GP, prefix, "defense", "watch_post", wx, wy, h(wx, wy), "Ultra LIVING-ISLAND-DEFENSE.md (warning phase) + colony_ledger zombie_wave/settle_wave")
+    trap = material("Trap", (.35, .70, .30), .7)
+    for k in range(4):
+        x, y = wx * .9 + rng.uniform(-6, 6), wy * .9 + rng.uniform(-6, 6)
+        cone(prefix + "_GuardBed%d" % k, (x, y, h(x, y) + .6), 1, 1.2, 1.2, trap, 8)
+        marker(GP, prefix, "defense", "guard_bed_%d" % k, x, y, h(x, y), "voxel_creatures carnivorous plants as defenders (LIVING-ISLAND-DEFENSE)", post=False)
+    # egg nests (voxel_eggs hatching minigame, PORT06)
+    nest = material("Nest", (.55, .42, .25), .95)
+    for k in range(3):
+        spot = free_spot(A, h, rng, 2)
+        if spot:
+            x, y = spot
+            cone(prefix + "_Nest%d" % k, (x, y, h(x, y) + .2), 1.0, .7, .4, nest, 10)
+            marker(GP, prefix, "egg_nest", "nest_%d" % k, x, y, h(x, y), "tools/blender/voxel_eggs.py (Prop_Egg_* hatch pools, PORT06)", post=False)
+    # quests that reach markers on this island (data/quests/quests.json)
+    for q in _data("data/quests/quests.json").get("quests", []):
+        for st in q.get("steps", []):
+            tgt = st.get("target") or st.get("npc")
+            if tgt and any(r["id"] == tgt for r in GP):
+                GP.append({"kind": "quest_step", "id": q.get("id"), "target": tgt, "source": "data/quests/quests.json"})
+    return GP
+
+
 def collision(prefix, A, name_terrain):
     """UCX_ boxes: one per terrace (walkable) + a deck slab under the plateau + the dock planks."""
     hid = material("Collision", (1, 0, 1), 1)
@@ -661,6 +1066,9 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
     bases = tree_bases(kind, seed)
     scatter(name, A, h, kind, seed, bases, A["lake"])
     buildings(name, A, h, kind, chem)
+    kind_features(name, A, h, kind, seed)
+    GP = gameplay(name, A, h, kind, seed, chem)
+    rim_details(name, h, kind, seed)
     collision(name, A, name + "_Terrain")
     lod = lods(top, name + "_Terrain")
     # move the whole island to its cluster offset and pivot so the deck sits at z=0
@@ -673,6 +1081,8 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
            "terraces": [{"x": t[0], "y": t[1], "r": t[2], "z": t[3] - DECK, "role": t[4]} for t in A["terraces"]],
            "islet": {"x": ix, "y": iy, "z": iz, "r": ir}, "waterfall_lip": list(A["lip"]), "lods": lod,
            "objects": len(GROUP), "triangles": sum(len(o.data.polygons) for o in GROUP if o.type == "MESH"),
+           "gameplay": [dict(r, world=[r["local"][0] + offset[0], r["local"][1] + offset[1], r["local"][2] + offset[2]]) if "local" in r else r for r in GP],
+           "mechanics_sources": sorted({r["source"] for r in GP}),
            "chemistry": chem, "materials": sorted({m.name for o in GROUP if o.type == "MESH" for m in o.data.materials if m})}
     if export:
         os.makedirs(out_dir, exist_ok=True)
