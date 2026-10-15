@@ -105,6 +105,13 @@ def waterwheel(H, name, x, y, yaw, radius=3.4, width=1.4, paddles=12, broken=0, 
     for t in (.2, .55, .85):
         tx, ty = f0[0] + (f1[0] - f0[0]) * t, f0[1] + (f1[1] - f0[1]) * t
         out.append(H.beam("%s_Trestle_%d" % (name, int(t * 100)), (tx, ty, wz - 2), (tx, ty, fz + .2 - .35 * t), .14, M["dark"], 6))
+    # the spill: a sheet falling from the flume lip onto the top paddles, and foam where the wheel meets the stream
+    out.append(H.box(name + "_Spill", (f1[0] + sx * .35, f1[1] + sy * .35, fz - .2), (.12, width * .7, 1.1), M["water"], 0, (0, .35, yaw)))
+    foam = H.material("Foam", (.92, .96, 1.0), .35, 0, 0, .75)
+    for k in range(7):
+        a = k / 7 * math.tau
+        out.append(H.cone("%s_Foam_%d" % (name, k), (x + sx * 1.6 * math.cos(a) + ax * .6 * math.sin(a), y + sy * 1.6 * math.cos(a) + ay * .6 * math.sin(a), wz + .05),
+                          .9 - .08 * k % 3, .5, .12, foam, 10))
     if broken:
         out.append(H.box(name + "_SnappedFlumeBoard", (f1[0] + ax * 1.6, f1[1] + ay * 1.6, wz + .6), (2.4, .4, .08), M["wood"], .02, (0, .5, yaw + .3)))
     return out

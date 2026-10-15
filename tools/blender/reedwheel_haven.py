@@ -140,17 +140,20 @@ def build(out_dir):
     taken.append((wx, wy, 7))
     st_x, st_y = site(ring([S[3], S[4], S[2]], (10, 12, 14, -10, -12, -14)))
     station = K.repair_station(H, NAME + "_Station", st_x, st_y, h(st_x, st_y), yaw + math.pi / 2, sorted(chem["power_unit"]["parts"]))
-    b0, b1 = at(S[2], 8), at(S[2], -8)
+    # the crossing: the first stream point whose both bridge ends land clear of every terrace and the lake
+    clear_of = lambda q: all(math.hypot(q[0] - tx, q[1] - ty) >= r for tx, ty, r in taken[:len(A["terraces"]) + 1])
+    BX = next((S[i] for i in (2, 1, 4) if clear_of(at(S[i], 8)) and clear_of(at(S[i], -8)) and math.hypot(S[i][0] - wx, S[i][1] - wy) > 12), S[2])
+    b0, b1 = at(BX, 8), at(BX, -8)
     bridge = K.footbridge(H, NAME + "_Footbridge", b0, b1, W + 1.0)
     near = min(A["path"], key=lambda p: math.hypot(p[0] - st_x, p[1] - st_y))
-    walk = K.boardwalk(H, NAME + "_Boardwalk", [near, at(S[2], 14), at(S[2], 9), b0], h)
+    walk = K.boardwalk(H, NAME + "_Boardwalk", [near, at(BX, 14), at(BX, 9), b0], h)
     rbx, rby = S[1]
     reeds = K.reed_bed(H, NAME + "_ReedBed", rbx, rby, 7.5, 5.0, h, SEED, W)
     rf_x, rf_y = site(ring([S[2], S[1], S[3]], (-14, -17, -20, -24, 14, 17, 20, 24)), clear=7)
     hut = K.refuge(H, NAME + "_Refuge", rf_x, rf_y, h(rf_x, rf_y), yaw + math.pi / 2)
     kp_x, kp_y = site(ring([S[1], S[0], S[2]], (9, 11, 13, -9, -11, -13)), max_slope=2.5)
     keeper = K.keeper_post(H, NAME + "_Keeper", kp_x, kp_y, h(kp_x, kp_y))
-    sg_x, sg_y = at(S[2], 10.5)                                 # beside the boardwalk bend, where the three ways part
+    sg_x, sg_y = at(BX, 10.5)                                 # beside the boardwalk bend, where the three ways part
     sign = K.signpost(H, NAME + "_Signpost", sg_x, sg_y, h(sg_x, sg_y),
                       [("repair", math.atan2(st_y - sg_y, st_x - sg_x)), ("harvest", math.atan2(rby - sg_y, rbx - sg_x)),
                        ("refuge", math.atan2(rf_y - sg_y, rf_x - sg_x))])
@@ -187,7 +190,7 @@ def build(out_dir):
     # walkway collision (UCX_), one box per boardwalk segment and the bridge
     hid = H.material("Collision", (1, 0, 1), 1)
     ucx = []
-    pts = [near, at(S[2], 14), at(S[2], 9), b0, b1]
+    pts = [near, at(BX, 14), at(BX, 9), b0, b1]
     for i, (a, b) in enumerate(zip(pts, pts[1:])):
         mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
         z = max(h(mx, my), W + .7) + .5 - H.DECK
@@ -237,7 +240,9 @@ def build(out_dir):
                 layout.setdefault("hashes", {})[files[k] + ext] = [os.path.getsize(p), sha(p)]
     with open(os.path.join(out_dir, NAME + ".layout.json"), "w", encoding="utf-8") as f:
         json.dump(layout, f, indent=1)
-    return layout, (wx, wy)
+    pts = [r["anchor"] for k, r in layout["roles"].items()]
+    focus = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))   # centroid of the haven's pieces
+    return layout, focus
 
 
 def render(out_dir, focus):

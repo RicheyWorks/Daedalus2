@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: MIT
+"""One command from recipe to showcase: build a land, then render BEFORE and AFTER with identical cameras.
+
+    python land_showcase.py RECIPE OUT_DIR --before A.glb [B.glb ...] [--res 1920x1200] [--samples 64] [--quick]
+
+RECIPE is a land recipe module in tools/blender that exposes:
+  * build(out_dir) -> (layout, focus_xy)
+  * NAME
+reedwheel_haven is one.
+
+Steps:
+1. Build the land into OUT_DIR. The build runs in the same process, so no second Blender is started.
+2. Render AFTER (every exported role GLB) and BEFORE (the given GLBs). Both use the same three cameras:
+   * hero: three-quarter view of the island centre at a fixed distance
+   * detail: close view on the land's focus
+   * top: orthographic plan at a fixed scale
+   Cameras are fixed numbers and do not depend on scene bounds, so the pair is comparable shot for shot.
+3. Write NAME.showcase.json. It holds every image's sha256, bytes, settings, sources and hashes, and the camera
+   numbers. Each image is labelled a Blender render, not an Unreal capture.
+
+--quick renders 640x400 at 16 samples, for checking framing.
+Runs wherever `bpy` imports: the cloud venv, or Blender's own Python.
+"""
+import importlib
+import json
+import os
+import sys
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import showcase_render as SR  # noqa: E402
+
+HERO = (0.0, 0.0, 0.0, 330.0)        # target x, y, z, distance: the whole 220 m plateau with its islet in frame
+TOP = (0.0, 0.0, 0.0, 300.0)         # centre x, y, (unused), ortho scale in metres
+
+
+def main(argv):
+    recipe, out = argv[0], os.path.abspath(argv[1])
+    opt = lambda k, d=None: argv[argv.index(k) + 1] if k in argv else d
+    before = []
+    if "--before" in argv:
+        i = argv.index("--before") + 1
+        while i < len(argv) and not argv[i].startswith("--"):
+            before.append(os.path.abspath(argv[i]))
+            i += 1
+    quick = "--quick" in argv
+    res = (640, 400) if quick else tuple(int(v) for v in opt("--res", "1920x1200").split("x"))
+    samples = 16 if quick else int(opt("--samples", "64"))
+    R = importlib.import_module(recipe)
+    t0 = time.time()
+    layout, focus = R.build(out)
+    after = [os.path.join(out, v["file"]) for v in layout["roles"].values()] + [os.path.join(out, layout["island_file"])]
+    spread = max(((v["anchor"][0] - focus[0]) ** 2 + (v["anchor"][1] - focus[1]) ** 2) ** .5 for v in layout["roles"].values())
+    detail = (round(focus[0], 2), round(focus[1], 2), 0.0, round(max(48.0, spread * 2.4), 1))     # every role piece in frame
+    shots = []
+    for tag, glbs in (("after", after), ("before", before)):
+        if not glbs:
+            continue
+        for view, frame in (("hero", HERO), ("detail", detail), ("top", TOP)):
+            m = SR.render(out, glbs, tag, view, focus=detail[:3] if view == "detail" else None, frame=frame, res=res, samples=samples, name=R.NAME)
+            shots.append(m)
+    card = {"land": layout.get("land_id"), "name": R.NAME, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",
+            "comparable": "before and after share camera numbers, light, sky, samples and resolution per view",
+            "cameras": {"hero": HERO, "detail": detail, "top": TOP}, "res": list(res), "samples": samples, "quick": quick,
+            "before_sources": [os.path.basename(b) for b in before], "shots": shots, "seconds": round(time.time() - t0, 1)}
+    with open(os.path.join(out, R.NAME + ".showcase.json"), "w", encoding="utf-8") as f:
+        json.dump(card, f, indent=1)
+    print("LAND_SHOWCASE %s shots=%d %.0fs" % (R.NAME, len(shots), card["seconds"]), flush=True)
+
+
+if __name__ == "__main__":
+    main(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:])

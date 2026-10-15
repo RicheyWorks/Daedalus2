@@ -1175,3 +1175,16 @@ The first end-to-end play of a realm, in the browser, made only from the realm's
   between runs, so byte hashes pin one export.
 - **Cloud builds:** the package builds and renders headless in the cloud with the `bpy` 5.2.2 module
   (`python reedwheel_haven.py OUT [--render]`, about 4 s) without touching the shared PC.
+- **One command, recipe to showcase (r2):**
+  `python tools/blender/land_showcase.py reedwheel_haven OUT --before Octet_Spring_1_Plot0_Meadow.glb [--quick]`
+  1. It builds the land.
+  2. It renders AFTER and BEFORE with `showcase_render.py`: Cycles CPU, denoised, a gradient sky with a warm sun, and
+     the Standard view so the stylised palette survives.
+  3. Both use the same three fixed cameras: hero (island centre at 330 m), detail (centroid of the role anchors, at a
+     distance set by their spread), and top (orthographic, 300 m).
+  4. It writes `NAME.showcase.json` with each shot's sha256, settings, sources and their hashes. Every image is
+     labelled "Blender render, not an Unreal capture".
+  - The glTF importer leaves COLOR_0 unused, so `showcase_render` wires the vertex colour into Base Color. Imported
+    islands then shade as in their build scene.
+  - r2 also moved the footbridge to the first stream point whose two ends clear the terraces; the first pass landed
+    in the farm's pens. It added a spill sheet and foam ring at the wheel.
