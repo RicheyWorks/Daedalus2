@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "DaedalusJavaArcade.h"
 #include "InputCoreTypes.h"
+#include "Input/Events.h"
 #include "Widgets/SCompoundWidget.h"
 
 class SEditableTextBox;
@@ -17,6 +18,8 @@ public:
     void Construct(const FArguments& Args);
     virtual bool SupportsKeyboardFocus() const override { return true; }
     virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
+    virtual FReply OnKeyChar(const FGeometry& Geometry, const FCharacterEvent& Event) override;
+    virtual void Tick(const FGeometry& Geometry, const double CurrentTime, const float DeltaTime) override;
     bool OwnsUserFocus(int32 UserIndex) const;
 
 private:
@@ -29,7 +32,19 @@ private:
     FDaedalusJavaArcadeState State() const;
     FReply SelectCell(int32 Index);
     FText CellText(int32 Index) const;
+    FText CellNoteText(int32 Index, int32 Digit) const;
+    FText CellDescription(int32 Index) const;
     FSlateColor CellColor(int32 Index) const;
+    TSharedRef<SWidget> SudokuCell(int32 Index);
+    TSharedRef<SWidget> SudokuDigitButton(int32 Value);
+    bool OwnsKeyboardEvent(const FInputEvent& Event) const;
+    bool CanEnterSudokuDigit(int32 Value) const;
+    void EnterSudokuDigit(int32 Value);
+    void ToggleSudokuPencil();
+    void SyncSudokuPresentation(const FDaedalusJavaArcadeState& S);
+    void ResetSudokuPresentation();
+    int32 PencilMask(int32 Index, const FDaedalusJavaArcadeState& S) const;
+    static bool VisibleDuplicate(int32 Index, const FDaedalusJavaArcadeState& S);
     FText StatusText() const;
     FText TableText() const;
     FText BlackjackDetailsText() const;
@@ -47,4 +62,9 @@ private:
     bool bNewSudokuTimeAttack = false;
     FString LocalMessage;
     FString HintConfirmationGameId;
+    // View-local overrides, including explicit zero, survive same-board snapshots.
+    FString NotesGameId;
+    TArray<int32> LocalPencilMasks;
+    TArray<bool> LocalPencilOverrides;
+    bool bSudokuPencilMode = false;
 };
