@@ -8,6 +8,108 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "UObject/StrongObjectPtr.h"
+#include <cstddef>
+#include <cstdint>
+
+// BEGIN PORTABLE FAX EXPORT VALIDATION (also exercised by the offline fixture harness).
+namespace DaedalusWorkbenchValidation
+{
+    bool ValidPlainText(const std::uint8_t* Data, std::size_t Size)
+    {
+        if (Size > 393216 || (Size && !Data)) return false;
+        std::size_t Units = 0;
+        for (std::size_t At = 0; At < Size;)
+        {
+            const std::uint8_t Lead = Data[At++];
+            std::uint32_t Code = 0;
+            int Extra = 0;
+            if (Lead < 0x80) Code = Lead;
+            else if (Lead >= 0xc2 && Lead <= 0xdf) { Code = Lead & 0x1f; Extra = 1; }
+            else if (Lead >= 0xe0 && Lead <= 0xef) { Code = Lead & 0x0f; Extra = 2; }
+            else if (Lead >= 0xf0 && Lead <= 0xf4) { Code = Lead & 0x07; Extra = 3; }
+            else return false;
+            if (static_cast<std::size_t>(Extra) > Size - At) return false;
+            for (int I = 0; I < Extra; ++I)
+            {
+                const std::uint8_t Next = Data[At++];
+                if ((Next & 0xc0) != 0x80) return false;
+                Code = (Code << 6) | (Next & 0x3f);
+            }
+            if ((Extra == 1 && Code < 0x80) || (Extra == 2 && Code < 0x800) || (Extra == 3 && Code < 0x10000)
+                || Code > 0x10ffff || (Code >= 0xd800 && Code <= 0xdfff)) return false;
+            Units += Code > 0xffff ? 2 : 1;
+            if (Units > 131072) return false;
+        }
+        return true; // Empty extracted text is a valid local plaintext export.
+    }
+    std::uint32_t Big32(const std::uint8_t* Bytes)
+    {
+        return (std::uint32_t(Bytes[0]) << 24) | (std::uint32_t(Bytes[1]) << 16)
+            | (std::uint32_t(Bytes[2]) << 8) | std::uint32_t(Bytes[3]);
+    }
+    std::uint32_t ChunkCrc(const std::uint8_t* Bytes, std::size_t Size)
+    {
+        std::uint32_t Crc = 0xffffffffu;
+        for (std::size_t At = 0; At < Size; ++At)
+        {
+            Crc ^= Bytes[At];
+            for (int Bit = 0; Bit < 8; ++Bit) Crc = (Crc >> 1) ^ ((Crc & 1) ? 0xedb88320u : 0u);
+        }
+        return Crc ^ 0xffffffffu;
+    }
+    bool ValidQrPng(const std::uint8_t* Data, std::size_t Size)
+    {
+        static const std::uint8_t Signature[] = {137, 80, 78, 71, 13, 10, 26, 10};
+        if (!Data || Size < 57 || Size > 262144) return false;
+        for (std::size_t I = 0; I < 8; ++I) if (Data[I] != Signature[I]) return false;
+        bool Header = false, Palette = false, Image = false, ImageClosed = false;
+        std::uint8_t Color = 0, Depth = 0;
+        std::size_t ImageBytes = 0;
+        for (std::size_t At = 8; At < Size;)
+        {
+            if (Size - At < 12) return false;
+            const std::uint32_t Length = Big32(Data + At), Type = Big32(Data + At + 4);
+            if (Length > Size - At - 12) return false;
+            for (std::size_t I = 4; I < 8; ++I)
+                if (!((Data[At + I] >= 'a' && Data[At + I] <= 'z') || (Data[At + I] >= 'A' && Data[At + I] <= 'Z'))) return false;
+            if ((Data[At + 6] & 0x20) || ChunkCrc(Data + At + 4, std::size_t(Length) + 4) != Big32(Data + At + 8 + Length)) return false;
+            const std::uint8_t* Payload = Data + At + 8;
+            if (!Header && Type != 0x49484452u) return false;
+            if (Type == 0x49484452u) // IHDR first and unique; fixed dimensions, legal PNG format fields.
+            {
+                if (Header || At != 8 || Length != 13 || Big32(Payload) != 200 || Big32(Payload + 4) != 200) return false;
+                Depth = Payload[8]; Color = Payload[9];
+                const bool LegalDepth = (Color == 0 && (Depth == 1 || Depth == 2 || Depth == 4 || Depth == 8 || Depth == 16))
+                    || ((Color == 2 || Color == 4 || Color == 6) && (Depth == 8 || Depth == 16))
+                    || (Color == 3 && (Depth == 1 || Depth == 2 || Depth == 4 || Depth == 8));
+                if (!LegalDepth || Payload[10] != 0 || Payload[11] != 0 || Payload[12] > 1) return false;
+                Header = true;
+            }
+            else if (Type == 0x6163544cu || Type == 0x6663544cu || Type == 0x66644154u) return false; // No APNG.
+            else if (Type == 0x504c5445u)
+            {
+                if (Palette || Image || Length == 0 || Length > 768 || Length % 3 || Color == 0 || Color == 4
+                    || (Color == 3 && Length / 3 > (1u << Depth))) return false;
+                Palette = true;
+            }
+            else if (Type == 0x49444154u)
+            {
+                if (ImageClosed || (Color == 3 && !Palette)) return false;
+                Image = true; ImageBytes += Length;
+            }
+            else if (Type == 0x49454e44u)
+                return Length == 0 && Header && Image && ImageBytes > 0 && At + 12 == Size;
+            else
+            {
+                if (!(Data[At + 4] & 0x20)) return false; // Unknown critical chunk.
+                if (Image) ImageClosed = true;
+            }
+            At += std::size_t(Length) + 12;
+        }
+        return false; // An IEND chunk and an exact complete envelope are required; pixels are not decoded here.
+    }
+}
+// END PORTABLE FAX EXPORT VALIDATION.
 
 namespace
 {
@@ -364,29 +466,38 @@ bool DaedalusSynapseWorkbenchFiles::Select(ESelection Kind, FSelectedBytes& Out,
 #endif
 }
 
-bool DaedalusSynapseWorkbenchFiles::SaveMemoryJson(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+namespace
+{
+enum class EArtifact : uint8 { MemoryJson, FaxQrPng, FaxPlainText };
+bool SaveArtifact(EArtifact Kind, const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
 {
     Error.Reset();
 #if PLATFORM_WINDOWS
     const auto Allowed = [&] { if (IsStillAllowed()) return true; Error = TEXT("The workbench no longer owns this export."); return false; };
     if (!Allowed()) return false;
-    if (!MemoryJson(Bytes)) { Error = TEXT("The export must be memory JSON within the 8 MiB limit."); return false; }
+    const bool bJson = Kind == EArtifact::MemoryJson, bPng = Kind == EArtifact::FaxQrPng;
+    if ((bJson && !MemoryJson(Bytes))
+        || (bPng && !DaedalusWorkbenchValidation::ValidQrPng(Bytes.GetData(), static_cast<std::size_t>(Bytes.Num())))
+        || (Kind == EArtifact::FaxPlainText && !DaedalusWorkbenchValidation::ValidPlainText(Bytes.GetData(), static_cast<std::size_t>(Bytes.Num()))))
+    { Error = bJson ? TEXT("The export must be memory JSON within the 8 MiB limit.") : TEXT("The Fax export did not match its bounded PNG or UTF-8 text contract."); return false; }
     const HWND OwnerWindow = DialogOwner();
     if (!OwnerWindow) { Error = TEXT("Open the workbench in a game window before exporting."); return false; }
     TArray<WCHAR> Buffer; Buffer.SetNumZeroed(DialogCharacters);
-    const FString Suggested = TEXT("synapse-memories.json");
+    const FString Suggested = bJson ? TEXT("synapse-memories.json") : bPng ? TEXT("fax-qr.png") : TEXT("fax-selected-text.txt");
     FMemory::Memcpy(Buffer.GetData(), *Suggested, Suggested.Len() * sizeof(WCHAR));
     OPENFILENAMEW Dialog = {}; Dialog.lStructSize = sizeof(Dialog); Dialog.hwndOwner = OwnerWindow;
-    Dialog.lpstrFilter = L"Synapse memory JSON\0*.json\0\0"; Dialog.lpstrDefExt = L"json";
-    Dialog.lpstrTitle = L"Export Synapse memories to a new JSON file";
+    Dialog.lpstrFilter = bJson ? L"Synapse memory JSON\0*.json\0\0" : bPng ? L"Fax QR PNG\0*.png\0\0" : L"Fax selected text\0*.txt\0\0";
+    Dialog.lpstrDefExt = bJson ? L"json" : bPng ? L"png" : L"txt";
+    Dialog.lpstrTitle = bJson ? L"Export Synapse memories to a new JSON file" : L"Export Fax workbench data to a new file";
     Dialog.lpstrFile = Buffer.GetData(); Dialog.nMaxFile = Buffer.Num();
     Dialog.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT | OFN_HIDEREADONLY;
     const bool Selected = ::GetSaveFileNameW(&Dialog) != FALSE;
     if (!Allowed()) return false;
     if (!Selected) { if (::CommDlgExtendedError()) Error = TEXT("The save chooser could not complete."); return false; }
     FString Destination;
-    if (!DialogPath(Buffer, Destination) || FPaths::GetExtension(Destination).ToLower() != TEXT("json"))
-    { Error = TEXT("Choose a new JSON filename on a local drive."); return false; }
+    const FString ExpectedExtension = bJson ? TEXT("json") : bPng ? TEXT("png") : TEXT("txt");
+    if (!DialogPath(Buffer, Destination) || FPaths::GetExtension(Destination).ToLower() != ExpectedExtension)
+    { Error = TEXT("Choose a new filename with the expected extension on a local drive."); return false; }
     FDirectoryLocks Parents; // Retained until temporary cleanup and no-replace commit finish.
     if (!Parents.AcquireParent(Destination)) { Error = TEXT("Choose a shorter local folder without links or mount points."); return false; }
     const FString Leaf = FPaths::GetCleanFilename(Destination);
@@ -402,11 +513,11 @@ bool DaedalusSynapseWorkbenchFiles::SaveMemoryJson(const TArray<uint8>& Bytes, F
         if (!Allowed()) return false;
         const DWORD Wanted = FMath::Min(1024 * 1024, Bytes.Num() - Written); DWORD Count = 0;
         if (!::WriteFile(Temporary.Get(), Bytes.GetData() + Written, Wanted, &Count, nullptr) || Count != Wanted)
-        { Error = TEXT("The JSON could not be fully saved. No existing file was replaced."); return false; }
+        { Error = TEXT("The export could not be fully saved. No existing file was replaced."); return false; }
         Written += Count;
     }
     if (!Allowed()) return false;
-    if (!::FlushFileBuffers(Temporary.Get())) { Error = TEXT("The JSON export could not be flushed safely."); return false; }
+    if (!::FlushFileBuffers(Temporary.Get())) { Error = TEXT("The export could not be flushed safely."); return false; }
     if (!Allowed()) return false;
     if (!Parents.StillValid()) { Error = TEXT("The destination folder changed. Nothing was exported."); return false; }
     if (!Allowed()) return false;
@@ -414,10 +525,17 @@ bool DaedalusSynapseWorkbenchFiles::SaveMemoryJson(const TArray<uint8>& Bytes, F
     { Error = TEXT("Choose a new filename; existing files are never replaced."); return false; }
     return true;
 #else
-    (void)Bytes; (void)IsStillAllowed;
-    Error = TEXT("Workbench JSON export is available on Windows only."); return false;
+    (void)Kind; (void)Bytes; (void)IsStillAllowed;
+    Error = TEXT("Workbench export is available on Windows only."); return false;
 #endif
 }
+}
+bool DaedalusSynapseWorkbenchFiles::SaveMemoryJson(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+{ return SaveArtifact(EArtifact::MemoryJson, Bytes, Error, IsStillAllowed); }
+bool DaedalusWorkbenchExports::SaveFaxQrPng(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+{ return SaveArtifact(EArtifact::FaxQrPng, Bytes, Error, IsStillAllowed); }
+bool DaedalusWorkbenchExports::SaveFaxPlainText(const TArray<uint8>& Bytes, FString& Error, TFunctionRef<bool()> IsStillAllowed)
+{ return SaveArtifact(EArtifact::FaxPlainText, Bytes, Error, IsStillAllowed); }
 
 void UDaedalusSynapseWorkbenchBridge::Initialize(ADaedalusSynapseWorkbenchTerminal* InOwner, uint64 InGeneration)
 { Owner = InOwner; Generation = InGeneration; ActionCount = 0; bBusy = false; }
