@@ -897,3 +897,17 @@ every sprite to its bestiary row. `--rigs` also exports the 320 bodies rigged �
   Castle landmark), and the stock: original items (Herb Tonic, Clear Draught, Feather of Waking …), weapons and
   armour with prices and attack/defence; the magic shop sells the realm's tier-1/2 spells from `spells.json`.
 - `claude-battle-kit/<realm>/interiors/Interior_<Room>.png` + `sheet-interiors.png`.
+
+### 14.23 Dungeons (`rpg_dungeon.py`)
+- 7 themes × 14 tiles per realm (cave, castle, crypt, tower, volcano, crystal, sea): floor, cracked floor, wall top,
+  wall face, wall torch (2 frames), stairs down/up, chest closed/open, door, boss gate, pillar, rubble, hazard
+  (2 frames: water, spikes, open grave, broken floor, lava, crystal shards, tide pool).
+- Seeded generator on a 40 × 28 grid: scattered rooms, L corridors (spanning tree + loops), wall faces wherever a wall
+  has floor below, stairs up in the first room / down in the farthest (BFS), chests in side rooms with loot scaled by
+  depth (gold or shop items), themed hazards, pillars, rubble. Boss floors keep the top band for a sealed chamber that
+  only the BossGate opens; the boss sprite stands inside.
+- Portal: Old Mine, Sunken Keep, Hollow Crypt, Wizard's Spire, Ember Depths (3 floors each). Prismheart: the nine
+  boss dungeons from `prism-bosses.json` (3–4 floors, boss on the last). 46 floors; a reachability check confirms the
+  stairs and gate are reachable from the entrance and every chamber is sealed.
+- `data/rpg/dungeons.json`: per floor grid, stair links (overworld ↔ floor n), chests + loot, hazard tiles + effect,
+  encounter zone (`*_deep` below floor 1 when the realm has one) with step rate, and the boss (name, tile, gate).
