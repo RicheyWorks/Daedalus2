@@ -1,0 +1,221 @@
+{
+  "schema": "daedalus.codex-winter4-staging-saved-source-checkpoint.v1",
+  "utc": "2026-10-15T23:15:46.159097+00:00",
+  "stage": "TWO_STAGING_ACTORS_SAVED_NATIVE_READBACK_AND_VIEWS_INSPECTED",
+  "source_predecessor": "4c2cdfc6510e59366094abd2e2d077ad432384f8",
+  "source_files": {
+    "tools/unreal/codex_canal_water_placement.py": {
+      "bytes": 20261,
+      "sha256": "f13a5b63c99f0084d91cf256b1890bf45e04b6c04102768fdfd9a3393c5b849e"
+    },
+    "tools/unreal/codex_canal_water_placement_finish.py": {
+      "bytes": 7016,
+      "sha256": "f1935f6615ac5a2b3ec1482d0f8d212ce7b5866d4037e0d115d9b6d5096aedd2"
+    },
+    "tools/unreal/codex_canal_water_placement_native.py": {
+      "bytes": 24766,
+      "sha256": "3ea20e729950c1bb34bf5d36ba62398746bd1b400c88a05027f8e83f7cbad2c4"
+    }
+  },
+  "source_promotion": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\source-promotion.json",
+    "bytes": 2089,
+    "sha256": "ea2c8999d3faebe70e7f9f070fb2b5a4c4dc13e4022898cef2ec229c443014e4"
+  },
+  "source_owner_evidence_hub": 32500,
+  "coordination_start_hub": 32512,
+  "completion_hub": 32522,
+  "receipts": {
+    "readback.json": {
+      "bytes": 7350,
+      "sha256": "86a28b26c1cdbcfb190b1cb53695c1686df11593291c1bc8752ee90af228c2b8"
+    },
+    "saved-production-baseline.json": {
+      "bytes": 511778,
+      "sha256": "9c032e9e929498615aaf69bd222fadaeb40c38e5f90ea77e772c54614127d188"
+    },
+    "native-placement.json": {
+      "bytes": 188522,
+      "sha256": "79696432553d64cce65e10a83521ca2e15fa713e2308f5b61d9aecf47e602c1b"
+    },
+    "native-map-save-camera-precision-r1.json": {
+      "bytes": 2441,
+      "sha256": "f94bb0794b1dff5f2e58bffd2188f7e589a4eb050e6ca525ab5d97dfb074050f"
+    },
+    "readback-camera-precision-r1-return.json": {
+      "bytes": 379774,
+      "sha256": "2323eb7b87691426baefca505a021b7d4ae720034c971bbeba61969bc3c982b0"
+    },
+    "compute-release.json": {
+      "bytes": 1652,
+      "sha256": "830befbae9cc66a1afdc32670cf4515205f4266eecfb0203eeb0d4660fcacdef"
+    },
+    "operator-visual-review.json": {
+      "bytes": 1805,
+      "sha256": "1e94b7a8cee4a69c1318bb3853d0f30a954cbcd4441dc3a630d4ee2c49f3eac5"
+    },
+    "completion.json": {
+      "bytes": 10970,
+      "sha256": "5fa459775d541657d1650155a0b11ae16e9314f4d5ea8ce48c3edf4d18b18110"
+    }
+  },
+  "native_saved_map": {
+    "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "sha256": "9033d4bd371357888749768f03b46a28fccaff6a62145e06c36dfe87111f3542",
+    "bytes": 209412456
+  },
+  "native_actor_paths": [
+    "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4018",
+    "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4019"
+  ],
+  "native_actor_labels": [
+    "CodexStage_Winter4Stream1CoreR1_Water",
+    "CodexStage_Winter4Stream1CoreR1_FoamCore"
+  ],
+  "staging": {
+    "name": "OwnedStagingSlot1",
+    "centre_cm": [
+      -292350.0,
+      348900.0,
+      24000.0
+    ],
+    "translation_cm": [
+      -312377.806640625,
+      366021.96923828125,
+      22941.667510986328
+    ],
+    "local_bounds": {
+      "min": [
+        10897.001953125,
+        -27429.58984375,
+        -409.52520751953125
+      ],
+      "max": [
+        29158.611328125,
+        -6814.3486328125,
+        2526.190185546875
+      ]
+    }
+  },
+  "counts": {
+    "protected_packages": 217,
+    "actors": 145,
+    "prior_actors_preserved": 143,
+    "accepted_cpp_sources": 184
+  },
+  "cycle_metrics": {
+    "imports": 0,
+    "native_created_assets": 0,
+    "new_content_packages": 0,
+    "new_actors": 2,
+    "map_save_calls": 1,
+    "new_island_versions": 0
+  },
+  "map_save_s": 20.455274,
+  "all_world_digest": {
+    "actor_count": 22869,
+    "sha256": "c0b3d150b91a44a84162e9d0798f7394999c88116291a762e3a7472d75423602",
+    "counts": {
+      "actors": 22869,
+      "static_components": 17944,
+      "instanced_components": 5644,
+      "instances": 208100
+    },
+    "excluded_paths": [
+      "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4018",
+      "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.StaticMeshActor_4019"
+    ],
+    "native_mutations": 0,
+    "scope": "Sorted ALL-world actor path/class/label/pose/scale/attach-parent plus static component path/class/mesh/materials/affine world transform/ISMcount.",
+    "limits": "No per-instance transforms or complete serialized actor properties; those are not claimed preserved by this digest."
+  },
+  "configuration": {
+    "common_translation_cm": [
+      -312377.806640625,
+      366021.96923828125,
+      22941.667510986328
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "actor_scale": [
+      1,
+      1,
+      1
+    ],
+    "collision": "NO_COLLISION",
+    "physics_simulation": false,
+    "translucency_sort_priority": 0,
+    "translucency_sort_distance_offset": 0,
+    "inherited_materials_no_overrides": true,
+    "content_assets_modified": 0
+  },
+  "native_editor_captures": {
+    "wide": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\UnrealEditor_Winter4_STAGING_wide.png",
+      "bytes": 1192915,
+      "sha256": "6e3fa1d35ab45ab64f76e2859cd51de9854425bdd43e394d0cfbb996cba0587c"
+    },
+    "detail": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\Winter4CanalStream1CoreR2\\PlacementR1\\UnrealEditor_Winter4_STAGING_detail.png",
+      "bytes": 1197193,
+      "sha256": "50a6b2df97f37fcde05f8676158027329cc63760ef767789abe8c47d5521d3d4"
+    }
+  },
+  "visual_observation": "Pale luminous arc, faint blue edging and faceted segments; weak water/foam separation in existing lighting. Two actual fixed editor views personally inspected before the one true map save; exact same actor records independently read back saved.",
+  "camera": "Original Copperfall camera restored within established1e-5 tolerance; max angular rounding2.66e-7deg, exact positions unchanged. No final camera change.",
+  "failed_attempt": "Initial exact camera equality rejected before any save journal/call. Separate pinned remaining-only finisher used the existing scene tolerance and same600s claim; no spawn/camera replay.",
+  "compute_release": {
+    "utc": "2026-10-15T23:13:16.754737+00:00",
+    "release": {
+      "ok": true,
+      "lock": null
+    },
+    "locks_after": {
+      "reedwheel-haven-841025-r1": {
+        "holder": "unreal-team",
+        "note": "Claude source package; output D2-build/engines/unreal/art/claude-lands/reedwheel-haven-841025-r1/ only",
+        "at": 1792100974.2074318,
+        "ttl": 14400.0,
+        "age_s": 5022.5,
+        "left_s": 9377.5
+      },
+      "reedwheel-haven-841025-r2": {
+        "holder": "unreal-team",
+        "note": "Claude: r2 delivered, claude-lands/reedwheel-haven-841025-r2/",
+        "at": 1792104471.9621265,
+        "ttl": 14400.0,
+        "age_s": 1524.8,
+        "left_s": 12875.2
+      },
+      "reedwheel-haven-841025-r3": {
+        "holder": "unreal-team",
+        "note": "Claude: r3 source delivered, claude-lands/reedwheel-haven-841025-r3/",
+        "at": 1792104790.2672079,
+        "ttl": 14400.0,
+        "age_s": 1206.5,
+        "left_s": 13193.5
+      },
+      "reedwheel-haven-841025-r4": {
+        "holder": "unreal-team",
+        "note": "Claude: r4 delivered",
+        "at": 1792105624.1344094,
+        "ttl": 14400.0,
+        "age_s": 372.6,
+        "left_s": 14027.4
+      },
+      "unreal": {
+        "holder": "codex-play-guard",
+        "note": "USER sole native operator custody retained; Winter4 R5 COMPLETE6firstsaved+independentreadback22:45:22,217packages143actors184sources/map72cb/Copperfallcamera preserved. COMPUTE released; no active native operation. Source publication/next admitted packet only after normal queue/resource/profile guards. No PIE/editor restart/settings.",
+        "at": 1792104499.636648,
+        "ttl": 3600.0,
+        "age_s": 1497.1,
+        "left_s": 2102.9
+      }
+    }
+  },
+  "validation": "Independent source peer reviews, actual guarded placement/native readback and independent file-only package/actor/hash audit. No PIE, heavy tests or harness suites.",
+  "limits": "Two-role decorative STAGING display; no assigned canonical realm/full Winter4 terrain. Pale luminous appearance/weak foam separation observed; final visual BAR, fluid, collision/navigation/ecology/gameplay remain open. Digest covers all-world actor poses/static bindings/component transforms/ISMcounts, not every instance or serialized property."
+}
