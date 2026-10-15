@@ -314,6 +314,11 @@ public:
         Out.AddText(580,250,"Power: "+std::to_string(PowerPelletsLeft())+" (300-step fright)",White,13);
         if(RespawnFrames>0 && !Over && !Won)
             Out.AddText(580,280,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},14);
+        const auto Window=CurrentFrightWindow();
+        if(Window.Count>0) {
+            Out.AddText(580,304,"Frightened: "+std::to_string(Window.Count),{110,170,255,255},14);
+            Out.AddText(580,327,"Next wake: "+std::to_string(Window.NextWake)+" steps",{110,170,255,255},14);
+        }
         if(Over || Won) Out.AddText(580,320,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
         if(Over || Won) Out.AddText(580,360,"Fresh Action / Fire / Jump",White,14);
         if(Over || Won) Out.AddText(580,383,"or host R: replay",White,14);
@@ -323,9 +328,23 @@ public:
             :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
                 :"Glowtrail Chase: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
         if(RespawnFrames>0 && !Over && !Won) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        const auto Window=CurrentFrightWindow();
+        if(Window.Count>0) Text+=" Frightened: "+std::to_string(Window.Count)+"; next wake in "+std::to_string(Window.NextWake)+" steps.";
         return {Score,Lives,Over,Won,Text};
     }
 private:
+    struct FrightWindow { int Count=0, NextWake=0; };
+    FrightWindow CurrentFrightWindow() const {
+        FrightWindow Window;
+        if(Over || Won) return Window;
+        // Captured pursuers freeze their own timers; revival can leave unequal
+        // durations. Report the next live expiry, never a global safety period.
+        for(const auto& G:Ghosts) if(G.Alive && G.Frightened && G.FrightenedTimer>0) {
+            if(Window.Count==0 || G.FrightenedTimer<Window.NextWake) Window.NextWake=G.FrightenedTimer;
+            ++Window.Count;
+        }
+        return Window;
+    }
     friend struct MazeTestAccess;
     std::uint32_t SessionSeed=730;
     Random Rng;
