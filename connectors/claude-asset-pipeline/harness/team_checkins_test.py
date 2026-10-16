@@ -52,6 +52,53 @@ class Checkins(unittest.TestCase):
             state = reduce(state, [message(mid, status)], AT)
         self.assertTrue(state['started'] and state['terminal'])
         self.assertEqual(state['stage'], 'completed')
+        self.assertFalse(state['acceptance_missing'])
+
+    def test_actual_32878_blocked_without_start_is_retained(self):
+        assignment = json.loads(json.dumps(ASSIGNMENT))
+        assignment.update(id=32863)
+        assignment['body'] = {'assignment_id': 'claude-status-hook-binding-r1',
+                              'request_id': 'claude-local-status-hook-binding-20261016T0700Z'}
+        report = {'id': 32878, 'from': 'unreal-team', 'to': 'pootscoot-coordination',
+                  'type': 'checkin', 'reply_to': 32863,
+                  'body': {'assignment_id': 'claude-status-hook-binding-r1', 'status': 'BLOCKED',
+                           'reported_at_utc': '2026-10-16T07:07:11Z',
+                           'session_id': 'session_01DK9VUiyxsxHGgBLGV1tcPP'}}
+        state = create(assignment, DEADLINE, 300)
+        state = reduce(state, [report], '2026-10-16T07:08:00Z')
+        self.assertEqual(state['stage'], 'blocked')
+        self.assertEqual(state['last_semantic_id'], 32878)
+        self.assertFalse(state['started'])
+        self.assertTrue(state['acceptance_missing'])
+        self.assertEqual(state['deadline_utc'], DEADLINE)
+        replay = reduce(state, [report], '2026-10-16T07:09:00Z')
+        self.assertEqual(replay, state)
+        state, advice = checkpoint(state, '2026-10-16T07:09:00Z')
+        self.assertEqual(advice['action'], 'reconcile_missing_start')
+        self.assertFalse(advice['automatic_assignment'])
+
+    def test_terminal_without_start_preserves_result_and_missing_acceptance(self):
+        for status in ('COMPLETED', 'FAILED', 'CANCELLED'):
+            with self.subTest(status=status):
+                state = reduce(self.state(), [message(32834, status)], AT)
+                self.assertTrue(state['terminal'] and state['acceptance_missing'])
+                self.assertFalse(state['started'])
+                self.assertEqual(state['stage'], status.lower())
+                state, advice = checkpoint(state, DEADLINE)
+                self.assertEqual(advice['action'], 'reconcile_missing_start')
+                state, again = checkpoint(state, DEADLINE)
+                self.assertIsNone(again)
+
+    def test_unqualified_blocker_cannot_create_missing_start_evidence(self):
+        for mutation in ('sender', 'assignment', 'request'):
+            report = message(32834, 'BLOCKED')
+            if mutation == 'sender':
+                report['from'] = 'other-team'
+            else:
+                report['body'][mutation+'_id'] = 'conflicting-task'
+            state = reduce(self.state(), [report], AT)
+            self.assertEqual(state['stage'], 'delivered')
+            self.assertIsNone(state['last_semantic_id'])
 
     def test_progress_without_start_does_not_hide_missed_start(self):
         state = reduce(self.state(), [message(32834, 'PROGRESS')], AT)

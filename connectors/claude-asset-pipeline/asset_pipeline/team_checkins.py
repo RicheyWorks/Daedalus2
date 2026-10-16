@@ -46,6 +46,7 @@ def create(assignment, start_deadline, checkpoint_seconds=900):
                 request_id=body['request_id'], assignment_message_id=mid,
                 assignment_sha256=digest(assignment), coordinator=coordinator, worker=worker,
                 stage='delivered', transport_ack=False, started=False, terminal=False,
+                acceptance_missing=True,
                 superseded_by=None, deadline_utc=start_deadline, checkpoint_seconds=checkpoint_seconds,
                 cursor=0, seen={}, correlated_ids=[mid], last_semantic_id=None,
                 unqualified_count=0, reminder_issued=False)
@@ -63,6 +64,7 @@ def reduce(state, messages, observed_at):
     state = json.loads(json.dumps(state))
     if state.get('schema') != 'daedalus.team-checkins.v1' or not isinstance(messages, list):
         raise ValueError('unsupported state/messages')
+    state['acceptance_missing'] = not state['started']
     for message in sorted(messages, key=lambda m: positive(m['id'])):
         mid, pin = positive(message['id']), digest(message)
         prior = state['seen'].get(str(mid))
@@ -106,13 +108,17 @@ def reduce(state, messages, observed_at):
             continue
         if kind == 'start':
             state['started'] = True
-        elif not state['started']:
+            state['acceptance_missing'] = False
+        elif not state['started'] and kind == 'progress':
             state['unqualified_count'] += 1
             continue
         state['last_semantic_id'] = mid
         state['stage'] = kind
         state['terminal'] = kind in ('completed', 'failed', 'cancelled')
-        state['deadline_utc'] = (now + timedelta(seconds=state['checkpoint_seconds'])).isoformat()
+        # A blocker/result is evidence even if START was missed. Do not invent
+        # acceptance or postpone the original missing-START checkpoint.
+        if state['started']:
+            state['deadline_utc'] = (now + timedelta(seconds=state['checkpoint_seconds'])).isoformat()
     return state
 
 
@@ -121,11 +127,14 @@ def checkpoint(state, now):
     instant = utc(now)
     state = json.loads(json.dumps(state))
     advice = None
-    if (not state['terminal'] and not state['superseded_by'] and not state['reminder_issued']
+    missing = not state['started']
+    state['acceptance_missing'] = missing
+    if ((not state['terminal'] or missing) and not state['superseded_by'] and not state['reminder_issued']
             and instant >= utc(state['deadline_utc'])):
         advice = {'assignment_id': state['assignment_id'], 'request_id': state['request_id'],
                   'reply_to': state['assignment_message_id'], 'worker': state['worker'],
-                  'action': 'request_semantic_start' if not state['started'] else 'request_checkpoint',
+                  'action': ('reconcile_missing_start' if state['last_semantic_id'] else 'request_semantic_start')
+                            if missing else 'request_checkpoint',
                   'automatic_send': False, 'automatic_assignment': False}
         state['reminder_issued'] = True
     return state, advice
@@ -173,7 +182,7 @@ def main(argv=None):
         state, advice = checkpoint(state, datetime.now(timezone.utc).isoformat())
         save(path, state)
         print(json.dumps({k: state[k] for k in ('assignment_id', 'request_id', 'stage',
-              'transport_ack', 'started', 'terminal', 'superseded_by', 'cursor')}
+              'transport_ack', 'started', 'acceptance_missing', 'terminal', 'superseded_by', 'cursor')}
               | {'advice': advice, 'automatic_send': False, 'automatic_assignment': False}))
         return 0
     except (ValueError, KeyError, TypeError, OSError) as error:

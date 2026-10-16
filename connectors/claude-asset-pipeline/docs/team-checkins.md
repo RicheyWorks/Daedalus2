@@ -36,7 +36,12 @@ always refused. Use `type: checkin` and body `status` exactly `START`, `PROGRESS
 `task.progress`, `task.blocked`, `task.completed`, `task.failed`, `task.cancelled`.
 These are opt-in structured conventions over the existing generic transport,
 not a claim that Claude already emits them. Free-form prose remains unqualified.
-Progress/completion without START cannot hide a missed acceptance. Terminal state
+Progress without START cannot hide a missed acceptance. Qualified BLOCKED and
+terminal reports are retained even when START was missed: `started` stays false,
+`acceptance_missing` stays true, and the original acceptance deadline is preserved.
+An overdue report without acceptance yields one `reconcile_missing_start` advice,
+including after a terminal report; it never fabricates retrospective START or
+authorizes assigning the next job. Terminal state
 cannot be reopened. A later coordinator assignment to the same worker marks the
 old assignment superseded; old completion never marks the new task done.
 
