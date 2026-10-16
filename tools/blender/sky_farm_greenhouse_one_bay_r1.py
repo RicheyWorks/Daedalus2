@@ -101,6 +101,11 @@ def group_geometry(parts):
     return groups
 
 
+def socket_positions(r):
+    half = (r["length"] + 2*r["path_apron"]) / 2
+    return {"Entry": [0,-half,0], "Repeat": [0,half,0]}
+
+
 def validate_geometry(r, parts):
     names = [p["name"] for p in parts]
     if len(set(names)) != len(names) or not parts:
@@ -171,9 +176,9 @@ def build(scene, r):
         obj["source_parts"] = json.dumps(group["source_parts"])
         obj["units"] = "metres"
         objects.append(obj)
-    for name, y in (("Entry", -r["length"]/2), ("Repeat", r["length"]/2)):
+    for name, position in socket_positions(r).items():
         obj = bpy.data.objects.new("SFG_R1_SOCKET_" + name, None)
-        obj.location = (0, y, 0)
+        obj.location = position
         obj["socket_role"] = name
         collection.objects.link(obj)
         objects.append(obj)

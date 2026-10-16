@@ -38,7 +38,8 @@ class GeometryTest(unittest.TestCase):
         r=dict(self.recipe,width=8.0,length=10.0,eave_height=3.0,ridge_height=4.0,bed_length=8.0)
         stats=bay.validate_geometry(r,bay.geometry(r))
         self.assertEqual(8,stats["mesh_count"])
-        self.assertEqual([-6,6],[stats["bounds_m"][0][1],stats["bounds_m"][1][1]])
+        self.assertAlmostEqual(-6,stats["bounds_m"][0][1],places=12)
+        self.assertAlmostEqual(6,stats["bounds_m"][1][1],places=12)
 
     def test_roof_meets_ridge_and_has_headroom_at_both_sides(self):
         roofs = [p for p in self.parts if p["name"].startswith("RoofGlass")]
@@ -52,6 +53,16 @@ class GeometryTest(unittest.TestCase):
         parts=[p for p in self.parts if p["name"] != "Path_10"]
         with self.assertRaisesRegex(ValueError,"support gap"):
             bay.validate_geometry(self.recipe,parts)
+
+    def test_repeat_socket_accounts_for_path_aprons_without_coplanar_overlap(self):
+        sockets=bay.socket_positions(self.recipe)
+        self.assertEqual([0,-5,0],sockets["Entry"])
+        self.assertEqual([0,5,0],sockets["Repeat"])
+        pitch=sockets["Repeat"][1]-sockets["Entry"][1]
+        intervals=[bay.bounds(p) for p in self.parts if p["role"]=="path"]
+        end=max(hi[1] for lo,hi in intervals)
+        next_start=min(lo[1] for lo,hi in intervals)+pitch
+        self.assertAlmostEqual(end,next_start,places=12)
 
     def test_low_beam_or_crop_intruding_into_corridor_is_rejected(self):
         for name in ("Ridge","Leaf_1_0_1"):
