@@ -29,6 +29,7 @@ import bpy
 from mathutils import Vector, noise
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import stable_mesh  # noqa: E402  (same folder; deterministic face order)
 import island_chemistry as CH  # noqa: E402
 
 R = 110.0                 # plateau half-width (superellipse)
@@ -134,9 +135,7 @@ def sphere(name, loc, size, mat, seg=16, rings=8):
     bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=rings, radius=1.0)
     # create_uvsphere emits its faces in a different order on every run (Blender 5.2, measured), so every GLB with a
     # sphere hashed differently each build. Sort faces by rounded centroid: same mesh, stable bytes.
-    order = {f: k for k, f in enumerate(sorted(bm.faces, key=lambda f: tuple(round(c, 5) for c in f.calc_center_median())))}
-    bm.faces.sort(key=lambda f: order[f])                  # bmesh sort keys must be numbers: rank by centroid
-    bm.faces.index_update()
+    stable_mesh.sort_bmesh(bm)
     bmesh.ops.scale(bm, vec=Vector(size), verts=bm.verts)
     return _obj(name, bm, mat, loc)
 

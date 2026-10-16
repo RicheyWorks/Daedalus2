@@ -1447,6 +1447,10 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
 - **What this means for delivered packets:** bytes already delivered stay the reference, pinned by their hashes.
   A rebuild of those sphere roles will not match them byte for byte. The rebuilt geometry is the same, and Reedwheel
   r4's WheelFrame and WheelRotor do rebuild byte-identical.
-- **Not yet fixed:** `bpy.ops.mesh.primitive_uv_sphere_add` probably shares the bug. It is used by labyrinth_cast,
-  portal_hero_polish, realm_creature, gallery_creatures and portal_slime_polish. Run `repro_check.py` before
-  trusting their hashes.
+- **Confirmed for the operator too:** `bpy.ops.mesh.primitive_uv_sphere_add` gives a different face order on each
+  of three runs. It is used by labyrinth_cast, portal_hero_polish, realm_creature, gallery_creatures and
+  portal_slime_polish (not changed here; their owners decide).
+- **The shared fix:** `tools/blender/stable_mesh.py` provides `sort_faces(obj)` and `sort_bmesh(bm)`. Faces are
+  ranked by centroid, with vertex positions as the tie-break. Three runs of the operator sphere followed by
+  `sort_faces` give the same order. `hd_island.sphere` uses it, and Tide-Pen r3 rebuilds byte-identical to the
+  delivered packet.
