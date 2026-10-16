@@ -1,10 +1,90 @@
 #include "DaedalusOceanTravelComponent.h"
+#include "DaedalusRealmSessionCore.h"
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/BoxComponent.h"
 #include "Camera/CameraTypes.h"
+
+// Source-authored regression only: this package has not compiled or run it.
+// Uses the existing session policy as the departure authority; no host/loader
+// activation, realm aliases in Session, or client-supplied departure is added.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanCanonicalDepartureTest,
+    "Daedalus.Ocean.CanonicalDeparturePolicy",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanCanonicalDepartureTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    using namespace DaedalusOceanTravel;
+    const Dock Portal{"portal","PORTAL","portal_shore",false};
+    const Dock WorldZero{"wz","WORLD-ZERO","wz_shore",false};
+    const Dock Sea{"sea","OCEAN","sea_pier",false};
+    const Dock SeaSub{"sea-sub","OCEAN","sea_airlock",true};
+    const Dock Gallery{"gallery","GALLERY-CITY","gallery_airlock",true};
+    const Dock GalleryShore{"gallery-shore","GALLERY-CITY","gallery_shore",false};
+    const Dock LegacyHome{"legacy-home","Portal Realm","legacy_shore",false};
+    const Dock LegacySea{"legacy-sea","Ocean Realm","legacy_pier",false};
+    TestTrue(TEXT("Canonical Ocean recognised"),IsOceanRealm("OCEAN"));
+    TestTrue(TEXT("Legacy Ocean recognised"),IsOceanRealm("Ocean Realm"));
+    TestTrue(TEXT("Canonical Portal recognised"),IsPortalRealm("PORTAL"));
+    TestTrue(TEXT("Legacy Portal recognised"),IsPortalRealm("Portal Realm"));
+    TestFalse(TEXT("No guessed lowercase Ocean alias"),IsOceanRealm("ocean"));
+    TestTrue(TEXT("Legacy boarding remains compatible"),Board("Portal Realm",LegacyHome,LegacySea,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Legacy default shore remains Portal only"),Land("Ocean Realm",LegacyHome,Vessel::Boat).Allowed);
+    TestFalse(TEXT("Legacy default does not authorize World Zero"),Land("Ocean Realm",WorldZero,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Canonical Portal boarding"),Board("PORTAL",Portal,Sea,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Canonical World Zero boarding"),Board("WORLD-ZERO",WorldZero,Sea,Vessel::Boat).DestinationRealm=="OCEAN");
+    TestFalse(TEXT("Boat cannot board underwater arrival"),Board("WORLD-ZERO",WorldZero,SeaSub,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Submarine can board underwater arrival"),Board("WORLD-ZERO",WorldZero,SeaSub,Vessel::Submarine).Allowed);
+
+    DockRegistry Registry;
+    const std::vector<std::string> Realms{"WORLD-ZERO","PORTAL","OCEAN","GALLERY-CITY"};
+    const std::vector<Dock> Docks{WorldZero,Portal,Sea,SeaSub,Gallery,GalleryShore};
+    const std::vector<DockConnection> Connections{
+        {"wz","sea",true,true},{"portal","sea",true,true},
+        {"sea","wz",true,true},{"sea","portal",true,true},
+        {"sea","gallery-shore",true,true},{"sea-sub","gallery",false,true}};
+    TestTrue(TEXT("Trusted registry can declare potential canonical shore edges"),Registry.Configure(Realms,Docks,Connections));
+
+    daedalus::session::Session Session;
+    const auto Enter=Session.Go("OCEAN",daedalus::session::Via::Dock,"boat:wz");
+    TestTrue(TEXT("Existing session accepts World Zero boat departure"),Enter.Ok);
+    Session.Apply(Enter);
+    TestTrue(TEXT("Existing session owns the remembered departure"),Session.SailedFrom()=="WORLD-ZERO");
+    const auto Home=Registry.Resolve(Session.Current(),"sea","wz",Vessel::Boat,Session.SailedFrom());
+    TestTrue(TEXT("World Zero shore return matches authoritative session departure"),Home.Allowed && Home.DestinationRealm=="WORLD-ZERO" && Home.ArrivalAnchor=="wz_shore");
+    TestFalse(TEXT("Configured Portal shore still refused for World Zero passenger"),Registry.Resolve(Session.Current(),"sea","portal",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Configured unrelated shore refused"),Registry.Resolve(Session.Current(),"sea","gallery-shore",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Missing remembered departure fails closed"),Registry.Resolve("OCEAN","sea","wz",Vessel::Boat,"").Allowed);
+    TestFalse(TEXT("Ocean cannot be a remembered shore realm"),Land("OCEAN",WorldZero,Vessel::Boat,"OCEAN").Allowed);
+    TestFalse(TEXT("Unknown destination has no configured route"),Registry.Resolve("OCEAN","sea","unknown",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Wrong current realm cannot use ocean departure"),Registry.Resolve("WORLD-ZERO","sea","wz",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Boat cannot use an underwater dock edge"),Registry.Resolve("OCEAN","sea-sub","gallery",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestTrue(TEXT("Submarine underwater link remains independent of shore return"),Registry.Resolve("OCEAN","sea-sub","gallery",Vessel::Submarine,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Invalid vessel enum refused"),Registry.Resolve("OCEAN","sea","wz",static_cast<Vessel>(99),Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Malformed remembered departure refused"),Land("OCEAN",WorldZero,Vessel::Boat,"WORLD-ZERO\n").Allowed);
+    TestTrue(TEXT("Legacy Portal departure identity matches canonical shore"),Land("OCEAN",Portal,Vessel::Boat,"Portal Realm").Allowed);
+
+    auto DuplicateDocks=Docks;
+    DuplicateDocks.push_back(WorldZero);
+    TestFalse(TEXT("Duplicate dock reload rejected"),Registry.Configure(Realms,DuplicateDocks,Connections));
+    auto DuplicateConnections=Connections;
+    DuplicateConnections.push_back(Connections.front());
+    TestFalse(TEXT("Duplicate edge reload rejected"),Registry.Configure(Realms,Docks,DuplicateConnections));
+    TestFalse(TEXT("Unknown dock edge rejected"),Registry.Configure(Realms,Docks,{{"wz","unknown",true,false}}));
+    TestFalse(TEXT("Unknown dock realm rejected"),Registry.Configure({"WORLD-ZERO","OCEAN"},Docks,Connections));
+    TestFalse(TEXT("Alias duplicate realm registration rejected"),Registry.Configure({"WORLD-ZERO","PORTAL","Portal Realm","OCEAN","GALLERY-CITY"},Docks,Connections));
+    TestFalse(TEXT("Boat/underwater configuration rejected"),Registry.Configure(Realms,Docks,{{"wz","sea-sub",true,false}}));
+    TestTrue(TEXT("Failed reloads preserve last accepted World Zero route"),Registry.Resolve("OCEAN","sea","wz",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Session itself refuses wrong shore"),Session.Go("PORTAL",daedalus::session::Via::Shore).Ok);
+    const auto Return=Session.Go(Home.DestinationRealm,daedalus::session::Via::Shore);
+    TestTrue(TEXT("Accepted core destination fits existing session shore contract"),Return.Ok);
+    Session.Apply(Return);
+    TestTrue(TEXT("Returned session clears its remembered departure"),Session.Current()=="WORLD-ZERO" && Session.SailedFrom().empty());
+    return true;
+}
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanEligibilityTest,
     "Daedalus.Ocean.HostEligibility",
