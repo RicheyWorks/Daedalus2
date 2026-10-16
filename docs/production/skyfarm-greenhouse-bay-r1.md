@@ -121,9 +121,75 @@ Sixteen tiny offline contract checks pass, including custom-output, mask,
 extra-connection, raw-factor and empty-evidence regressions. The file-only
 preparer verifies the original GLB/manifest, baseline and ten installed source/
 body pins. `GlassSourceR1/qualification.json` retains the source result.
-Neither new module collects native state or dispatches editor work. Existing
-glass graph/defaults, native API return shapes and actual transmitted appearance
-remain unknown: the previous graph inspections explicitly skipped glass.
-Next is a separately scoped guarded read-only observation of the two held
-objects after the producer's actual terminal/release. Saving, placement and
-visual acceptance require later admission; both objects remain held.
+At this source checkpoint neither module collected native state or dispatched
+editor work. The next observation was separately scoped as 32998 below.
+
+## 32998 glass graph observation — actual HOLD
+
+The guarded `witness` phase now reuses the existing bridge, exact queue/world
+guard, retained replies, source pins and preservation checks. Its read-only
+collector observes only the two already-loaded held objects and their referenced
+transmission function. Public MaterialEditingLibrary reads are crosschecked
+against ordinary ObjectExporterT3D class-default and delta evidence. Setters
+apply only to the text export task; there are no asset setters or saves.
+
+The initial read ended with a known missing `EmissiveFactor` input. After its
+explicit compute release and the intervening producer's actual terminal/release,
+the single permitted compatibility follow-up started at 09:14:11 UTC, before
+the original 09:15 start-by. It records missing defaults rather than inventing
+values, and completed all remaining observations in **2.8031324 seconds**.
+The frozen qualifier `76a69377…dcf2a9` returned
+`HOLD_ACTUAL_GRAPH_CONTRACT_DIFFERS`:
+
+- The actual 89-input transmission body exposes neither `EmissiveFactor` nor
+  `EmissiveStrength`. Its complete public and serialized input sets agree.
+  Their absence violates the source policy; no emission default was synthesized.
+- The actual Constant3Vector RGB connection has `Mask=1`, RGB bits 1, alpha bit
+  0. The frozen source policy requires zero masks. The raw mask is preserved.
+- Five independent raw factors match the source: RGB
+  `[0.5199999809265137, 0.8199999928474426, 0.7200000286102295]`, alpha
+  `0.1599999964237213`, metallic `0`, roughness `0.25`, transmission `0.25`;
+  an additional connected `AlphaMode` constant is `2`.
+- All 30 ordinary roots and separate custom-output defaults/deltas were retained.
+  The ThinTranslucent custom output connects actual `TransmissionColor` output
+  0; `SurfaceCoverage` remains the explicit disconnected class default.
+- Actual physical flags are Translucent, ThinTranslucent,
+  SurfacePerPixelLighting, TwoSided and screen-space reflections enabled.
+  The mesh has 48 triangles, unit build scale, Nanite/lightmap generation off,
+  zero simple collision, Interchange import data and the expected baked bounds.
+
+The complete function text export is retained for a later source review of
+emission semantics. Correct physical flags and geometry do not resolve the
+policy differences or prove transmitted appearance. No policy/shared-helper
+change, third observation, save, placement, camera change or reimport occurred.
+
+Both read-only attempts preserved the exact before/after scene, camera, complete
+bounded world digest, clean map and two held dirty content packages. The host
+also rechecked all 231 saved packages, 152 tracked actors and 184 source files
+against baseline `7d7a3367…e4614e`; saved map `f8887fde…74cd5f` is unchanged.
+The digest covers 22,878 actor records and static-component/ISM counts, not
+every instance transform or serialized property. Both glass files remain
+absent, unsaved and unplaced. Compute was explicitly unlocked and read back
+at **09:14:24.845581 UTC**, leaving only sole Unreal custody.
+
+New source: `daedalus_codex_skyfarm_glass_witness.py` and the `witness` phase in
+`tools/unreal/codex_skyfarm_glass_delivery.py`. Changed-source grammar, read-only
+AST gate and typed-reference parsing checks passed; independent source review
+found no blocker. The unchanged 16-check suite was not rerun. No gameplay,
+build or broad harness tests were run.
+
+Retained evidence under `GlassGraphR1/CompatibilityR2/`:
+
+- `terminal.json`: 6,910 bytes, SHA256
+  `d485fdc1c7a8b689bb7a977793546cf1b1adc2dfdabeca561cbfaa2bcc9b48bf`.
+- `native-terminal.json`: 439,351 bytes, SHA256
+  `3bc8f316c87c3a338ef9da1594c83d776d08bfa7eb109a34fce848e180324a45`.
+- `collector-reply.json`: 450,449 bytes, SHA256
+  `bdcd9be5d4b25324c62b732c7341950270db8f222adc09b08664fbbf7fbf9db2`.
+- `compute-release.json`, raw T3D witnesses, executed source copies and the
+  file-only reconciliation retain the exact outcome without replay.
+
+The next step is source review of the retained transmission-function body and
+its actual emission route. Any revised receiving policy needs explicit review;
+first saves, placement and matched appearance views remain a later receiving
+step. The 32998 observation grant is consumed and confers no mutation authority.
