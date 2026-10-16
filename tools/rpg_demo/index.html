@@ -574,7 +574,7 @@ let shop = null;
 function openShop() {
   const svc = map.info.service, kind = svc.split(":")[1];
   const stock = (map.info.stock || []).slice();
-  shop = { kind, stock, idx: 0, top: 0, msg: "WHAT WOULD YOU LIKE?" }; mode = "shop";
+  shop = { kind, stock, idx: 0, top: 0, tab: "buy", msg: "WHAT WOULD YOU LIKE?" + (kind === "magic" ? "" : "  LEFT/RIGHT: SELL") }; mode = "shop";
 }
 function buy(it) {
   if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
@@ -597,7 +597,25 @@ function buy(it) {
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "INTO THE BAG."; }
   } else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "THANK YOU!"; }
 }
+/* SELL (every shop but magic): anything in the bag with a price goes for half of it, fish included. */
+const sellPrice = name => Math.floor(((GEAR[name] || {}).price || 0) / 2);
+const sellList = () => Object.keys(bag).filter(k => bag[k] > 0 && sellPrice(k) > 0).sort();
 function shopTick() {
+  if (shop.kind !== "magic" && (hit("left") || hit("right"))) {
+    shop.tab = shop.tab === "buy" ? "sell" : "buy"; shop.idx = 0; shop.top = 0; sfx("TICK");
+    shop.msg = shop.tab === "sell" ? (sellList().length ? "WHAT WILL YOU SELL?" : "NOTHING I CAN BUY FROM YOU.") : "WHAT WOULD YOU LIKE?";
+  }
+  if (shop.tab === "sell") {
+    const list = sellList(), n = list.length;
+    if (n) {
+      if (hit("up")) { shop.idx = (shop.idx + n - 1) % n; sfx("TICK"); }
+      if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
+      shop.idx = Math.min(shop.idx, n - 1); shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
+      if (hit("a")) { const k = list[shop.idx], p = sellPrice(k); bag[k]--; gold += p; sfx("BUY"); shop.msg = "SOLD " + k.toUpperCase() + " FOR " + p + " G."; }
+    }
+    if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
+    return;
+  }
   const n = shop.stock.length;
   if (hit("up")) { shop.idx = (shop.idx + n - 1) % n; sfx("TICK"); }
   if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
@@ -607,7 +625,23 @@ function shopTick() {
 }
 function drawShop() {
   drawField();
-  win(0, 0, W, 26); text(({ item: "ITEM SHOP", weapon: "WEAPONS", armor: "ARMOUR", magic: "MAGIC" })[shop.kind] + " - BUY", 12, 9, "#fff070");
+  const title = ({ item: "ITEM SHOP", weapon: "WEAPONS", armor: "ARMOUR", magic: "MAGIC" })[shop.kind];
+  win(0, 0, W, 26); text(title, 12, 9, "#fff070");
+  if (shop.kind !== "magic") { text("BUY", 150, 9, shop.tab === "buy" ? "#ffffff" : "#6c6c8c"); text("SELL", 182, 9, shop.tab === "sell" ? "#ffffff" : "#6c6c8c"); }
+  else text("- BUY", 12 + tw(title) + 6, 9, "#fff070");
+  if (shop.tab === "sell") {
+    const list = sellList();
+    win(0, 26, W - 92, 150); win(W - 92, 26, 92, 30);
+    text("G", W - 82, 37); text(gold, W - 10 - tw(gold), 37);
+    list.slice(shop.top, shop.top + 8).forEach((k, i) => {
+      const y = 38 + i * 16, p = sellPrice(k);
+      const cnt = " X" + bag[k]; text(k.slice(0, 20 - cnt.length) + cnt, 24, y); text(p, W - 102 - tw(p), y);
+    });
+    if (list.length) cursor(10, 38 + (shop.idx - shop.top) * 16);
+    win(0, 176, W, 48); text(shop.msg, 12, 190);
+    if (list.length) text("SELLS FOR HALF ITS PRICE.", 12, 204, "#a0a8c0");
+    return;
+  }
   win(0, 26, W - 92, 150); win(W - 92, 26, 92, 30);
   text("G", W - 82, 37); text(gold, W - 10 - tw(gold), 37);
   shop.stock.slice(shop.top, shop.top + 8).forEach((it, i) => {
@@ -1761,6 +1795,7 @@ window.PRISM_DEMO = {
   setClock: (day, minute) => { state.day = day; state.minute = minute; },
   fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
   recoverAir: saved => recoverAir(saved),
+  shop: () => shop && { kind: shop.kind, tab: shop.tab, idx: shop.idx, msg: shop.msg, sell: shop.tab === "sell" ? sellList().map(k => [k, bag[k], sellPrice(k)]) : null },
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },
 };

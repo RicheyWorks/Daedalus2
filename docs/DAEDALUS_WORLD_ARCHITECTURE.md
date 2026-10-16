@@ -1497,3 +1497,17 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
   - the menu clock;
   - night fish odds over 20,000 draws;
   - waking at the inn, saving and CONTINUE, an old save, and NEW GAME.
+
+### 14.43 The Prismheart demo: shops buy too
+
+- **How selling works:** every shop except the magic shop has BUY and SELL tabs, switched with LEFT/RIGHT. BUY is
+  first, so existing play and the quest bot are unchanged.
+- **What sells:** SELL lists every bag item that has a price, fish and sky-cache finds included, for half that
+  price. Equipped gear is not in the bag, so it never appears.
+- **Using the list:** A sells one and the list shrinks with it. An empty bag says "NOTHING I CAN BUY FROM YOU". B
+  leaves from either tab.
+- **What it gives the game:** an economy loop. Night fishing turns a Sunscale Carp into 45 G here, or 600 G from the
+  Windmere Elder once.
+- **Proof:** `tools/rpg_demo/sell_test.py` passes 13/13.
+  - **Found in the test, not the game:** the test's own bag-clearing called `give(k, -0)`. The hook reads 0 as "1"
+    (`n || 1`), so it added a fish back. It now skips empty stacks.
