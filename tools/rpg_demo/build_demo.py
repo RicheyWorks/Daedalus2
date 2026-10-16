@@ -133,6 +133,11 @@ def main(argv):
         sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
     for p in glob.glob(os.path.join(kit, "ui", "*_1x.png")):
         sp.add("ui:" + os.path.basename(p)[:-len("_1x.png")], Image.open(p))
+    # World-map vehicles (tools/blender/rpg_vehicles.py): a strip of square frames. The map's AirshipPad needs the skiff.
+    for p in glob.glob(os.path.join(kit, "vehicles", "Vehicle_*_1x.png")):
+        sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
+    if any("AirshipPad" in row for row in wm["demo_maps"][REALM]) and not os.path.exists(os.path.join(kit, "vehicles", "Vehicle_Prism_Airship_1x.png")):
+        raise SystemExit("the world map has an AirshipPad but %s has no Vehicle_Prism_Airship_1x.png (run tools/blender/rpg_vehicles.py)" % os.path.join(kit, "vehicles"))
     sprite_rects = sp.save(os.path.join(out, "sprites.png"))
 
     bd = Packer(2048)

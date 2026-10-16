@@ -360,7 +360,18 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {} };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null };
+/* ---------- the airship (world map only) ----------
+   The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
+   Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
+   to land on a tile the map marks airship_lands. It stays where you land; walk onto it to fly again. */
+const AIR_SPEED = 2;
+function airUnlocked() { return !!(D && D.dungeons[0] && state.beaten.has(D.dungeons[0].boss_data.name)); }
+function airship() {
+  if (!state.air) { const p = find(D.world, "AirshipPad"); state.air = p ? { x: p[0], y: p[1], aboard: false } : null; }
+  return state.air;
+}
+const flying = () => !!(map && map.kind === "world" && state.air && state.air.aboard);
 /* The shard quest: four dungeons from data.json (landmark -> dungeon); each boss leaves a shard; the final dungeon
    opens once the three shards are in hand. Floor grids are copied per journey, so NEW GAME starts them fresh. */
 let grids = {};
@@ -567,6 +578,14 @@ function stepDone() {
     if (map.name === "Castle") { const p = find(D.world, "Castle"); return goto(worldMap(), p[0], p[1] + 1, "down"); }
     const r = state.returnTo || { x: 11, y: 15 }; return goto(townMap(), r.x, r.y, "down");
   }
+  if (map.kind === "world" && airUnlocked()) {
+    const a = airship();
+    if (a && a.aboard) return;                                                   /* flying: no landmarks, no battles */
+    if (a && a.x === P.x && a.y === P.y) { a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", "A: LAND ON OPEN GROUND"); return; }
+  }
+  if (map.kind === "world" && t === "AirshipPad" && !airUnlocked()) {
+    sfx("LOCKED"); return say(["AN AIRSHIP DOCK. THE PRISM SKIFF'S ENVELOPE HANGS SLACK.", "IT NEEDS A WARDEN'S SHARD TO LIFT."]);
+  }
   if (map.kind === "world") {
     if (t === "Town") { sfx("ENTER"); return goto(townMap(), 11, 16, "up"); }
     if (t === "Castle") { sfx("ENTER"); const it = D.interiors.Castle; return goto(interiorMap("Castle"), it.spawn.x, it.spawn.y, "up"); }
@@ -577,6 +596,7 @@ function stepDone() {
       sfx("STAIRS"); const f = dg.floors[0]; return goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down");
     }
     if (t === "Shrine") { roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster()); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
+    if (t === "AirshipPad") return;                                               /* the dock, once the skiff has flown */
     if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
   }
   if (map.kind === "dungeon") {
@@ -599,22 +619,41 @@ function stepDone() {
 function fieldTick(dt) {
   if (dlg) return dialogTick(dt);
   if (P.moving > 0) {
-    P.moving -= dt * 7.5;
+    P.moving -= dt * 7.5 * (flying() ? AIR_SPEED : 1);
     const [dx, dy] = DIRS[P.dir];
     P.fx = (P.x - dx * Math.max(0, P.moving)) * T; P.fy = (P.y - dy * Math.max(0, P.moving)) * T;
     if (P.moving <= 0) { P.moving = 0; P.fx = P.x * T; P.fy = P.y * T; P.step++; stepDone(); }
     return;
   }
   if (hit("start")) { openMenu(); return; }
-  if (hit("a")) return interact();
+  if (hit("a")) return flying() ? land() : interact();
   for (const d of ["up", "down", "left", "right"]) {
     if (!held[d]) continue;
     P.dir = d;
     const [dx, dy] = DIRS[d], nx = P.x + dx, ny = P.y + dy, t = at(nx, ny);
-    if (t === undefined || !map.walk(t) || npcAt(nx, ny)) { if (!P.bumped) { sfx("BUMP"); P.bumped = true; } return; }
+    if (t === undefined || (!flying() && (!map.walk(t) || npcAt(nx, ny)))) { if (!P.bumped) { sfx("BUMP"); P.bumped = true; } return; }
     P.bumped = false; P.x = nx; P.y = ny; P.moving = 1; return;
   }
   P.bumped = false;
+}
+function land() {
+  const a = airship(), t = at(P.x, P.y), wt = D.world_tiles[t] || {};
+  if (!wt.airship_lands) { sfx("BUMP"); toast("NO PLACE TO LAND", t.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase()); return; }
+  a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", "WALK ONTO THE SKIFF TO FLY AGAIN");
+}
+function drawAirship(ox, oy) {
+  if (map.kind !== "world" || !airUnlocked() || !D.rects.sprites.Vehicle_Prism_Airship) return false;
+  const a = airship(), now = performance.now(), r = D.rects.sprites.Vehicle_Prism_Airship, fw = r[3];
+  const fr = a.aboard ? Math.floor(now / 140) % 2 : 0;
+  const x = a.aboard ? ox + P.fx : ox + a.x * T, y = a.aboard ? oy + P.fy : oy + a.y * T;
+  const lift = a.aboard ? 14 + Math.sin(now / 320) * 2 : 4;
+  g.fillStyle = "rgba(0,0,0,0.35)"; g.beginPath(); g.ellipse(Math.round(x + 8), Math.round(y + 13), a.aboard ? 9 : 11, 3, 0, 0, Math.PI * 2); g.fill();
+  const flip = a.aboard && P.dir === "left";
+  g.save();
+  if (flip) { g.translate(Math.round(x + 8) * 2, 0); g.scale(-1, 1); }
+  g.drawImage(IM.sprites, r[0] + fr * fw, r[1], fw, fw, Math.round(x + 8 - fw / 2), Math.round(y + 14 - fw - lift), fw, fw);
+  g.restore();
+  return a.aboard;
 }
 function drawField() {
   const gw = map.grid[0].length, gh = map.grid.length;
@@ -632,7 +671,10 @@ function drawField() {
     spr("sprites", name, ox + n.x * T, oy + n.y * T, (DIR_ROW[n.dir] * 2 + walkF) * 16, 16, 16);
   }
   const pf = P.moving > 0 ? (P.step % 2) : 0;
-  spr("sprites", "NPC_Guard", ox + P.fx, oy + P.fy, (DIR_ROW[P.dir] * 2 + pf) * 16, 16, 16);
+  const parked = map.kind === "world" && airUnlocked() && !airship().aboard;
+  if (parked && airship().y <= P.y) drawAirship(ox, oy);                                        /* draw back to front */
+  if (!flying()) spr("sprites", "NPC_Guard", ox + P.fx, oy + P.fy, (DIR_ROW[P.dir] * 2 + pf) * 16, 16, 16);
+  if (flying() || (parked && airship().y > P.y)) drawAirship(ox, oy);
 }
 
 /* ---------- field menu ---------- */
@@ -1316,7 +1358,8 @@ let titleT = 0, goT = 0, titleIdx = 0;
 function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
+      air: state.air && { x: state.air.x, y: state.air.y } }));
     return true;
   } catch (e) { return false; }
 }
@@ -1331,10 +1374,11 @@ function titleChoose(i) {
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; opened.clear(); grids = {};
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
+    state.air = sv.air ? { x: sv.air.x, y: sv.air.y, aboard: false } : null;                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -1544,6 +1588,7 @@ window.PRISM_DEMO = {
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
+  airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },
 };
 
 /* ---------- boot ---------- */
