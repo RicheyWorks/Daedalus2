@@ -380,5 +380,184 @@ class HostGrantTests(unittest.TestCase):
         self.d.fingerprint.assert_not_called(); self.assert_no_production()
 
 
+class NormalRepairCandidateTests(unittest.TestCase):
+    """Only new33219 tests; engine/network/process/save boundaries absent."""
+    def setUp(self):
+        self.native=load_native()
+        self.values={name:0 for name in self.native.BUILD_FIELDS}
+        self.values.update(bRecomputeNormals=True,bRecomputeTangents=True,bSupportFaceRemap=True,
+                           BuildScale3D=[1.,1.,1.],BuildScale_DEPRECATED=1.,DistanceFieldBias_DEPRECATED=.125,
+                           DistanceFieldReplacementMesh=None,MaxLumenMeshCards=12,
+                           future_exposed_field={'nested':[3,7,11]})
+
+    def fixture(self):
+        class Settings:
+            def __init__(self,values):self.values=copy.deepcopy(values)
+            def copy(self):return Settings(self.values)
+            def to_dict(self):return copy.deepcopy(self.values)
+            def get_editor_property(self,key):return self.values[key]
+            def set_editor_property(self,key,value):
+                if key!='recompute_normals':raise AssertionError('Only one field allowed')
+                self.values['bRecomputeNormals']=value
+        mesh=SimpleNamespace(get_path_name=lambda:REAL_PATHS[0],
+            get_class=lambda:SimpleNamespace(get_path_name=lambda:'/Script/Engine.StaticMesh'),
+            get_num_triangles=Mock(return_value=2592))
+        subsystem=SimpleNamespace(current=Settings(self.values),calls=[])
+        subsystem.get_lod_build_settings=lambda obj,lod:subsystem.current.copy()
+        def setter(obj,lod,settings):
+            subsystem.calls.append((obj.get_path_name(),lod,copy.deepcopy(settings.values)))
+            subsystem.current=settings.copy()
+        subsystem.set_lod_build_settings=Mock(side_effect=setter)
+        report={'stage':'TEST_ONLY'};keep=Mock();guard=Mock();pre=Mock(return_value={'clear':True})
+        post=Mock(return_value=dict(stored_authored_clear=True,raw_authored_clear=True,original_pbr_clear=True,preservation_clear=True))
+        return mesh,subsystem,report,keep,guard,pre,post
+
+    def test_exact_target_one_setter_changes_only_normal_flag_and_never_saves(self):
+        args=self.fixture();mesh,sub,r,keep,guard,pre,post=args
+        result=self.native._repair_transaction(*args)
+        self.assertEqual(result['stage'],'CORN_NORMAL_REPAIR_QUALIFIED_UNSAVED')
+        self.assertEqual(len(sub.calls),1);path,lod,values=sub.calls[0]
+        self.assertEqual((path,lod),(REAL_PATHS[0],0))
+        changed={k for k in self.values if values[k]!=self.values[k]}
+        self.assertEqual(changed,{'bRecomputeNormals'})
+        self.assertIs(values['bRecomputeNormals'],False)
+        self.assertEqual(self.values['future_exposed_field'],values['future_exposed_field'])
+        self.assertEqual(result['saves'],0);self.assertEqual(result['imports'],0)
+        self.assertEqual(result['new_actors'],0);self.assertEqual(result['map_saves'],0)
+        pre.assert_called_once();post.assert_called_once();self.assertTrue(result['known_terminal'])
+
+    def test_foreign_target_or_wrong_class_cannot_reach_proofs_or_setter(self):
+        for foreign in ('path','class'):
+            args=list(self.fixture())
+            if foreign=='path':args[0].get_path_name=lambda:'/Game/Foreign/F.F'
+            else:args[0].get_class=lambda:SimpleNamespace(get_path_name=lambda:'/Script/Engine.Material')
+            with self.subTest(foreign=foreign),self.assertRaisesRegex(RuntimeError,'exact retained Corn'):
+                self.native._repair_transaction(*args)
+            args[1].set_lod_build_settings.assert_not_called();args[5].assert_not_called()
+
+    def test_failed_preproof_or_guard_stops_before_setter(self):
+        for kind in ('preproof','guard'):
+            args=list(self.fixture())
+            if kind=='preproof':args[5].return_value={'clear':False}
+            else:args[4].side_effect=RuntimeError('guard failed')
+            result=self.native._repair_transaction(*args)
+            self.assertEqual(result['stage'],'CORN_NORMAL_REPAIR_PARTIAL_HOLD')
+            self.assertTrue(result['known_terminal']);args[1].set_lod_build_settings.assert_not_called();args[6].assert_not_called()
+
+    def test_already_changed_flag_is_not_an_implicit_retry(self):
+        args=self.fixture();args[1].current.values['bRecomputeNormals']=False
+        result=self.native._repair_transaction(*args)
+        self.assertIn('flagtrue',result['error']);args[1].set_lod_build_settings.assert_not_called()
+
+    def test_all_other_fields_including_deprecated_and_new_exposed_are_preserved(self):
+        args=self.fixture();result=self.native._repair_transaction(*args)
+        self.assertEqual(result['build_after'],result['build_expected'])
+        self.assertEqual(result['build_before']['native']['bSupportFaceRemap'],True)
+        self.assertEqual(result['build_after']['native']['DistanceFieldBias_DEPRECATED'],.125)
+        self.assertEqual(result['build_before']['exposed']['future_exposed_field'],result['build_after']['exposed']['future_exposed_field'])
+
+    def test_unrelated_after_setting_change_holds_before_postproof(self):
+        args=self.fixture();sub=args[1];original=sub.set_lod_build_settings.side_effect
+        def bad_setter(*values):
+            original(*values);sub.current.values['bSupportFaceRemap']=False
+        sub.set_lod_build_settings.side_effect=bad_setter
+        result=self.native._repair_transaction(*args)
+        self.assertIn('another build setting',result['error']);args[6].assert_not_called();self.assertEqual(result['saves'],0)
+
+    def test_each_failed_stored_raw_pbr_or_preservation_proof_stops_unsaved(self):
+        for field in ('stored_authored_clear','raw_authored_clear','original_pbr_clear','preservation_clear'):
+            args=self.fixture();args[6].return_value[field]=False
+            with self.subTest(field=field):
+                result=self.native._repair_transaction(*args)
+                self.assertEqual(result['stage'],'CORN_NORMAL_REPAIR_PARTIAL_HOLD')
+                self.assertEqual(result['setter_intents'],1);self.assertEqual(result['saves'],0)
+
+    def test_postproof_exception_is_retained_without_setter_retry(self):
+        args=self.fixture();args[6].side_effect=RuntimeError('PBR graph mismatch')
+        result=self.native._repair_transaction(*args)
+        self.assertTrue(result['known_terminal']);self.assertEqual(len(args[1].calls),1)
+        with self.assertRaisesRegex(RuntimeError,'no replay'):self.native._repair_transaction(*args)
+        self.assertEqual(len(args[1].calls),1)
+
+    def test_setter_or_rebuild_barrier_exception_retains_unknown_completion(self):
+        for field in ('setter','barrier'):
+            args=self.fixture()
+            if field=='setter':args[1].set_lod_build_settings.side_effect=RuntimeError('setter outcome uncertain')
+            else:args[0].get_num_triangles.side_effect=RuntimeError('render completion unavailable')
+            with self.subTest(field=field):
+                result=self.native._repair_transaction(*args)
+                self.assertFalse(result['known_terminal']);self.assertEqual(result['setter_intents'],1)
+                self.assertEqual(result['saves'],0);args[6].assert_not_called()
+
+    def test_changed_post_rebuild_count_stops_before_normal_or_pbr_proof(self):
+        args=self.fixture();args[0].get_num_triangles.return_value=2556
+        result=self.native._repair_transaction(*args)
+        self.assertIn('multiplicity',result['error']);args[6].assert_not_called();self.assertEqual(result['saves'],0)
+
+    def test_public_source_only_candidate_rejects_before_engine_context(self):
+        with tempfile.TemporaryDirectory() as folder,patch.object(self.native,'_context') as context:
+            with self.assertRaisesRegex(RuntimeError,'SOURCE ONLY33219'):
+                self.native.repair_normals({'normal_repair_journal':str(Path(folder)/'new.json'),'source_only':True,'repair_runtime_grant':None})
+            context.assert_not_called()
+
+    def test_retained_public_journal_rejects_before_authority_or_context(self):
+        with tempfile.TemporaryDirectory() as folder,patch.object(self.native,'_context') as context:
+            path=Path(folder)/'retained.json';path.write_text('retained')
+            with self.assertRaisesRegex(RuntimeError,'no replay'):
+                self.native.repair_normals({'normal_repair_journal':str(path)})
+            self.assertEqual(path.read_text(),'retained');context.assert_not_called()
+
+    def test_source_assignment_cannot_substitute_for_runtime_grant(self):
+        with tempfile.TemporaryDirectory() as folder,patch.object(self.native,'_context') as context, \
+                patch.object(self.native,'_pin',return_value=json.dumps({'messages':[{'id':33219,'from':'pootscoot-coordination','to':'codex-play-guard','type':'source.assignment','body':{'assignment_id':'skyfarm-corn-authored-normal-repair-r1'}}]}).encode()):
+            with self.assertRaisesRegex(RuntimeError,'distinct explicit'):
+                self.native.repair_normals({'normal_repair_journal':str(Path(folder)/'new.json'),'source_only':False,'repair_runtime_grant':{'path':'mocked-grant'}})
+            context.assert_not_called()
+
+    def test_repair_functions_have_no_save_import_actor_camera_or_cleanup_route(self):
+        tree=ast.parse(NATIVE.read_text());names={'_repair_transaction','repair_normals','_repair_stored','_repair_raw_proof','_repair_stored_proof'}
+        nodes=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in names]
+        calls=[n.func.attr for node in nodes for n in ast.walk(node) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute)]
+        self.assertEqual(calls.count('set_lod_build_settings'),1)
+        self.assertFalse(set(calls)&{'save_loaded_asset','save_map','save_all','import_asset_tasks','spawn_actor_from_class','set_level_viewport_camera_info','rename_asset','delete_asset','destroy_actor'})
+        host=HOST.read_text();self.assertIn("'prepare-normal-repair'",host)
+        self.assertNotIn("choices=['prepare','run','repair'",host)
+
+    def test_stored_component_guard_accepts_float32_noise_and_rejects_wider_drift(self):
+        # Full coverage belongs to the pinned comparator. This fixture isolates
+        # the NEW component check after a comparator reports complete mapping.
+        source=[{'positions':[[0.,0.,0.],[1.,0.,0.],[0.,1.,0.]],'normals':[[0.,0.,1.]]*3}]
+        normal={'compare':Mock(return_value={'status':'MATCH_WITHIN_EXPLICIT_TOLERANCES','matched_corners':7776,'triangle_mapping':[[0,0]]}),
+                'unit':lambda v:[x/self.native.math.sqrt(sum(a*a for a in v)) for x in v]}
+        for drift,accepted in ((3e-8,True),(1e-6,False)):
+            stored={'triangles':[{'triangle_id':0,'positions':source[0]['positions'],'normals':[[drift,0.,1.]]*3}]}
+            with self.subTest(drift=drift):
+                if accepted:
+                    result=self.native._repair_stored_proof(source,stored,normal)
+                    self.assertLessEqual(result['maximum_normalized_component_error'],2**-22)
+                else:
+                    with self.assertRaisesRegex(RuntimeError,'float32 component'):
+                        self.native._repair_stored_proof(source,stored,normal)
+
+    def test_incomplete_stored_coverage_cannot_reach_component_acceptance(self):
+        normal={'compare':Mock(return_value={'status':'UNPROVEN','matched_corners':7773})}
+        with self.assertRaisesRegex(RuntimeError,'full stored'):
+            self.native._repair_stored_proof([],{},normal)
+
+    def test_exact_six_dirty_packages_rechecked_before_the_setter(self):
+        expected=set(self.native.HELD)|{p.split('.')[0] for p in self.native.PATHS}
+        with patch.object(self.native,'_guard',return_value={'dirty_content':list(expected)}) as guard, \
+                patch.object(self.native,'_file',return_value=SimpleNamespace(exists=lambda:False)):
+            self.assertEqual(set(self.native._repair_guard({}, {})['dirty_content']),expected)
+            guard.return_value={'dirty_content':list(self.native.HELD)}
+            with self.assertRaisesRegex(RuntimeError,'exact six'):self.native._repair_guard({}, {})
+
+    def test_any_new_saved_corn_file_blocks_the_repair(self):
+        expected=set(self.native.HELD)|{p.split('.')[0] for p in self.native.PATHS}
+        with patch.object(self.native,'_guard',return_value={'dirty_content':list(expected)}), \
+                patch.object(self.native,'_file',return_value=SimpleNamespace(exists=lambda:True)):
+            with self.assertRaisesRegex(RuntimeError,'never-saved'):self.native._repair_guard({}, {})
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

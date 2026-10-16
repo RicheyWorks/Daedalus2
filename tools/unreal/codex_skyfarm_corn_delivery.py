@@ -207,10 +207,51 @@ def run(a):
     print(json.dumps({'stage':terminal['stage'],'terminal':d.pin(a.folder/'terminal.json'),'release':d.pin(a.folder/'compute-release.json')}))
 
 
+def prepare_normal_repair(a):
+    """SOURCE ONLY33219. There is deliberately no repair-dispatch CLI phase."""
+    expected=TASK/'native-ingestion/Harvest3CornR1/NormalRepairSourceR1'
+    if a.folder.resolve()!=expected or (a.folder/'prepared.json').exists():raise RuntimeError('exact fresh normal-repair source packet required')
+    scope=d.load(a.scope)
+    if not any(m.get('id')==33219 and m.get('type')=='source.assignment'
+               and m.get('from')=='pootscoot-coordination' and m.get('body',{}).get('source_only')is True for m in scope['messages']):
+        raise RuntimeError('actual source-only33219 assignment required')
+    evidence=TASK/'native-ingestion/Harvest3CornR1/RenderNormalsR1'
+    report=d.load(evidence/'diagnosis-and-proposal.json')
+    if (d.fingerprint(evidence/'diagnosis-and-proposal.json')['sha256']!='bf9b3da53974b63548660c9680cb7b50bd7fe4010ef37e32997b73d0e62464d0'
+            or report['full_multiplicity_normal_comparison']['source_quantized_mismatch_components']!=144):
+        raise RuntimeError('exact actual authored-normal mismatch evidence required')
+    previous=d.load(TASK/'native-ingestion/Harvest3CornR1/AliasRecoveryR2/prepared.json')
+    # The prior packet remains byte-for-byte frozen; its executed source was
+    # archived before these own source edits. No native state is queried here.
+    supports={
+        'reader':evidence/'native-reader.py','normal_contract':evidence.parent/'NormalDiagnosisR1/normal_contract.py',
+        'raw_contract':evidence/'render_compare.py','source_normals':evidence.parent/'NormalDiagnosisR1/source-normal-triangles.json',
+        'prior_raw':evidence/'native.json','archived_corn':a.folder/'native-used-4911c6fd.py',
+        'engine_types':Path('C:/Program Files/Epic Games/UE_5.8/Engine/Source/Runtime/Engine/Classes/Engine/EngineTypes.h')}
+    if d.fingerprint(supports['archived_corn'])['sha256']!='32f06960a47ce6bc5ce8eee48c2a2dc4fbc01773fbdd368e945e88b558cf1788':
+        raise RuntimeError('exact executed Corn source archive required')
+    witnesses=a.folder/'graph-witnesses';witnesses.mkdir()
+    cfg={**previous['cfg'],'source_only':True,'repair_runtime_grant':None,'witness_directory':str(witnesses),
+         'repair_support':{k:d.pin(v) for k,v in supports.items()},
+         'normal_repair_journal':str(a.folder/'normal-repair-native.json'),
+         'normal_repair_before_journal':str(a.folder/'normal-repair-before-native.json'),
+         'normal_repair_after_journal':str(a.folder/'normal-repair-after-native.json')}
+    value={'stage':'CORN_NORMAL_REPAIR_SOURCE_ONLY_RUNTIME_DENIED','utc':d._utc(),'cfg':cfg,
+           'native_source':d.pin(NATIVE),'host_source':d.pin(Path(__file__)),
+           'test_source':d.pin(REPO/'tools/unreal/test_codex_skyfarm_corn_recovery.py'),
+           'scope':d.pin(a.scope),'diagnosis':d.pin(evidence/'diagnosis-and-proposal.json'),
+           'runtime_authorized':False,'runtime_dispatch_entrypoint':None,'native_calls':0,'compute_claims':0,
+           'prospective_effects':'ONE target CornLOD0 recompute_normals true->false via copied full settings and ONE setter/implicit asset rebuild; strict full stored/raw/PBR/preservation readback. ZERO saves/imports/placement/map/camera.',
+           'blocker':'ROOT automatic approval review rejected downstream runtime authorization; source clearance/publication grants no execution.'}
+    d.write_new(a.folder/'prepared.json',value)
+    print(json.dumps({'stage':value['stage'],'prepared':d.pin(a.folder/'prepared.json'),'native_calls':0,'runtime_authorized':False}))
+
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('phase',choices=['prepare','run'])
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('phase',choices=['prepare','run','prepare-normal-repair'])
     parser.add_argument('--folder',type=Path,required=True);parser.add_argument('--scope',type=Path)
     parser.add_argument('--prerequisite',type=Path);parser.add_argument('--review',type=Path)
     args=parser.parse_args()
-    if args.phase=='prepare':prepare(args)
+    if args.phase=='prepare-normal-repair':prepare_normal_repair(args)
+    elif args.phase=='prepare':prepare(args)
     else:run(args)

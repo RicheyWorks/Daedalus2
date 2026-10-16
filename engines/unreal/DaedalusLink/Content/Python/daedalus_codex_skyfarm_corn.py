@@ -10,6 +10,7 @@ import math
 import os
 from pathlib import Path
 import time
+from datetime import datetime,timezone
 import unreal
 
 ROOT='/Game/Daedalus/Art/SkyFarm/CornPolishR1'
@@ -273,3 +274,191 @@ def camera(cfg,mode):
     value['observed']=s['farm']['_farm_camera'](e)
     if not s['farm']['_farm_camera_same'](value['observed'],target):raise RuntimeError('camera write/readback differs; retain intent')
     _old(w,r['before'],[r['new_actor']]);_guard(cfg,s);value['stage']='FRAMED' if mode=='frame' else 'RESTORED';s['inventory']['_write'](j,value);return value
+
+
+# Source-only33219 candidate. No host repair-dispatch entry point is provided.
+BUILD_FIELDS=('bUseMikkTSpace','bRecomputeNormals','bRecomputeTangents','bComputeWeightedNormals',
+    'bRemoveDegenerates','bBuildReversedIndexBuffer','bUseHighPrecisionTangentBasis','bUseFullPrecisionUVs',
+    'bUseBackwardsCompatibleF16TruncUVs','bGenerateLightmapUVs','bGenerateDistanceFieldAsIfTwoSided',
+    'bSupportFaceRemap','MinLightmapResolution','SrcLightmapIndex','DstLightmapIndex','BuildScale_DEPRECATED',
+    'BuildScale3D','DistanceFieldResolutionScale','DistanceFieldBias_DEPRECATED','DistanceFieldReplacementMesh','MaxLumenMeshCards')
+
+
+def _repair_value(value):
+    if value is None or type(value)in(bool,int,str):return value
+    if type(value)is float:
+        if not math.isfinite(value):raise RuntimeError('nonfinite build setting')
+        return value
+    if isinstance(value,dict):return {str(k):_repair_value(v) for k,v in value.items()}
+    if isinstance(value,(list,tuple)):return [_repair_value(v) for v in value]
+    if hasattr(value,'get_path_name'):return {'object_path':value.get_path_name()}
+    if hasattr(value,'to_dict'):return _repair_value(value.to_dict())
+    raise RuntimeError('unsupported build-setting snapshot value: '+type(value).__name__)
+
+
+def _repair_settings(settings):
+    # Native property names cover all21 installed UPROPERTYs, including the two
+    # deprecated values omitted by the native FMeshBuildSettings operator==.
+    return {'exposed':_repair_value(settings.to_dict()),
+            'native':{key:_repair_value(settings.get_editor_property(key)) for key in BUILD_FIELDS}}
+
+
+def _repair_transaction(mesh,subsystem,report,keep,guard,precheck,postcheck):
+    """Single-target proposal core; callbacks are strict reads, never saves."""
+    if report.get('operation_started'):raise RuntimeError('retained repair operation; no replay')
+    if mesh.get_path_name()!=PATHS[0] or mesh.get_class().get_path_name()!='/Script/Engine.StaticMesh':
+        raise RuntimeError('only exact retained Corn StaticMesh may be proposed')
+    report.update(operation_started=True,setter_intents=0,setter_returns=0,rebuild_barrier_returned=False,
+                  saves=0,new_actors=0,map_saves=0,camera_actions=0,imports=0,replay_permitted=False)
+    keep()
+    try:
+        guard();report['before_proof']=precheck();keep()
+        if report['before_proof'].get('clear')is not True:raise RuntimeError('fresh exact pre-repair proof required')
+        original=subsystem.get_lod_build_settings(mesh,0);before=_repair_settings(original)
+        report['build_before']=before;keep()
+        if original.get_editor_property('bRecomputeNormals')is not True:raise RuntimeError('expected unrepaired normals flagtrue required')
+        candidate=original.copy()
+        if _repair_settings(candidate)!=before:raise RuntimeError('full native buildsettings copy differs')
+        candidate.set_editor_property('recompute_normals',False)
+        expected=_repair_settings(candidate);roundtrip=candidate.copy();roundtrip.set_editor_property('recompute_normals',True)
+        if candidate.get_editor_property('bRecomputeNormals')is not False or _repair_settings(roundtrip)!=before:
+            raise RuntimeError('candidate changes more than one normals field')
+        report['build_expected']=expected;keep();guard()
+        report['setter_intents']=1;report['stage']='ONE_CORN_NORMAL_SETTER_INTENT';keep()
+        # This setter invokes Modify+PostEditChange: ONE target asset rebuild,
+        # not a harmless struct edit and not a C++/UHT build.
+        subsystem.set_lod_build_settings(mesh,0,candidate)
+        report['setter_returns']=1;keep()
+        # Installed GetNumTriangles -> GetRenderData waits for async RenderData.
+        count=int(mesh.get_num_triangles(0));report['rebuild_barrier_returned']=True;report['raw_render_count_after']=count;keep()
+        if count!=2592:raise RuntimeError('post-rebuild raw triangle multiplicity differs')
+        observed=_repair_settings(subsystem.get_lod_build_settings(mesh,0));report['build_after']=observed;keep()
+        if observed!=expected:raise RuntimeError('another build setting changed')
+        guard();report['after_proof']=postcheck();keep()
+        proof=report['after_proof']
+        if any(proof.get(k)is not True for k in ('stored_authored_clear','raw_authored_clear','original_pbr_clear','preservation_clear')):
+            raise RuntimeError('full stored/raw authored normal and original PBR/preservation proof required')
+        report.update(stage='CORN_NORMAL_REPAIR_QUALIFIED_UNSAVED',known_terminal=True);keep();return report
+    except Exception as exc:
+        report.update(stage='CORN_NORMAL_REPAIR_PARTIAL_HOLD',error=str(exc),error_type=type(exc).__name__,
+            known_terminal=report['setter_intents']==0 or report['rebuild_barrier_returned'])
+        keep();return report
+
+
+def _repair_load(row):
+    scope={'__name__':'_corn_repair_private','__file__':row['path']}
+    exec(compile(_pin(row),row['path'],'exec'),scope);return scope
+
+
+def _repair_guard(cfg,s):
+    result=_guard(cfg,s,PATHS)
+    if set(result['dirty_content'])!=set(HELD)|{p.split('.')[0] for p in PATHS} or any(_file(p).exists() for p in PATHS):
+        raise RuntimeError('repair requires exact six dirty packages and four never-saved Corn files')
+    return result
+
+
+def _repair_stored(cfg,s,mesh):
+    _repair_guard(cfg,s)
+    options=unreal.GeometryScriptCopyMeshFromAssetOptions()
+    options.set_editor_property('apply_build_settings',False);options.set_editor_property('use_build_scale',True);options.set_editor_property('request_tangents',True)
+    lod=unreal.GeometryScriptMeshReadLOD();lod.set_editor_property('lod_type',unreal.GeometryScriptLODType.SOURCE_MODEL);lod.set_editor_property('lod_index',0)
+    dynamic,outcome=unreal.GeometryScript_AssetUtils.copy_mesh_from_static_mesh(mesh,unreal.DynamicMesh(),options,lod)
+    if outcome!=unreal.GeometryScriptOutcomePins.SUCCESS:raise RuntimeError('stored source copy unavailable')
+    count=int(dynamic.get_triangle_count());maximum=int(unreal.GeometryScript_MeshQueries.get_num_triangle_i_ds(dynamic))
+    if count!=2592 or maximum>10000:raise RuntimeError('full stored source2592 required')
+    rows=[]
+    for tid in range(maximum):
+        positions=unreal.GeometryScript_MeshQueries.get_triangle_positions(dynamic,tid)
+        if not positions[0]:continue
+        normals=unreal.GeometryScript_MeshQueries.get_triangle_normals(dynamic,tid)
+        if not isinstance(normals,tuple) or len(normals)!=5:raise RuntimeError('stored split-normal tuple unavailable')
+        xyz=lambda v:[float(getattr(v,k)) for k in ('x','y','z')]
+        rows.append({'triangle_id':tid,'positions':[xyz(v) for v in positions[1:]],'normals':[xyz(v) for v in normals[1:4]],'normals_valid':normals[-1]is True})
+    return {'triangles':rows,'coverage_complete':len(rows)==2592 and all(t['normals_valid'] for t in rows)}
+
+
+def _repair_raw_proof(source,read,normal,contract):
+    if read['stage']!='RENDER_NORMAL_READ_COMPLETE' or read['raw_sections']['attempted']is not True:raise RuntimeError('complete UV0-safe raw render read required')
+    rows=contract['section_triangles'](read['raw_sections']['sections'],2592,list(PATHS[1:]));pairs=[]
+    for slot in range(3):
+        indexes=[i for i,t in enumerate(source) if t['primitive']==slot]
+        expected=[{**source[i],'normals':[[code/127 for code in contract['codes'](n)] for n in source[i]['normals']]} for i in indexes]
+        observed=[t for t in rows if t['material_slot']==slot]
+        observed=[{**t,'normals_valid':True} for t in observed]
+        result=normal['compare'](expected,{'triangles':observed,'coverage_complete':True},angular_tolerance_degrees=.0001)
+        if 'triangle_mapping'not in result:raise RuntimeError('full raw corner correspondence unavailable')
+        pairs.extend((native,indexes[index]) for native,index in result['triangle_mapping'])
+    result=contract['check_bijection'](source,rows,pairs)
+    if not result['full_material_winding_multiplicity_bijection'] or result['source_quantized_mismatch_components']!=0:
+        raise RuntimeError('authored raw normal codes differ; no save or repair retry')
+    return result
+
+
+def _repair_stored_proof(source,stored,normal):
+    result=normal['compare'](source,stored,angular_tolerance_degrees=.0001)
+    if result.get('status')!='MATCH_WITHIN_EXPLICIT_TOLERANCES' or result.get('matched_corners')!=7776:
+        raise RuntimeError('full stored authored NORMAL preservation failed')
+    rows={t['triangle_id']:t for t in stored['triangles']};maximum=0.
+    for native,index in result['triangle_mapping']:
+        a=source[index];b=rows[native];orders=[(i,(i+1)%3,(i+2)%3) for i in range(3)]
+        order=min(orders,key=lambda p:max(abs(a['positions'][p[j]][k]-b['positions'][j][k]) for j in range(3) for k in range(3)))
+        for j in range(3):
+            left=normal['unit'](a['normals'][order[j]]);right=normal['unit'](b['normals'][j])
+            maximum=max(maximum,max(abs(x-y) for x,y in zip(left,right)))
+    if maximum>2**-22:raise RuntimeError('stored normal float32 component preservation failed')
+    result['maximum_normalized_component_error']=maximum;result['float32_component_error_bound']=2**-22
+    return result
+
+
+def repair_normals(cfg):
+    """INERT source candidate until a distinct explicit repair-only grant exists."""
+    journal=Path(cfg['normal_repair_journal'])
+    if journal.exists():raise RuntimeError('retained normal-repair journal; no replay')
+    if cfg.get('source_only')is not False or not cfg.get('repair_runtime_grant'):
+        raise RuntimeError('SOURCE ONLY33219: asset-rebuild runtime authority absent')
+    grants=json.loads(_pin(cfg['repair_runtime_grant']))['messages']
+    grants=[m for m in grants if m.get('id',0)>33221 and m.get('from')=='pootscoot-coordination'
+        and m.get('to')=='codex-play-guard' and m.get('type')=='grant'
+        and m.get('body',{}).get('assignment_id')=='skyfarm-corn-authored-normal-repair-r1']
+    if len(grants)!=1:raise RuntimeError('distinct explicit repair-only runtime grant required')
+    body=grants[0]['body'];start=datetime.fromisoformat(body['start_by_utc'].replace('Z','+00:00'))
+    if (start.tzinfo is None or start.utcoffset()!=timezone.utc.utcoffset(start) or time.time()>=start.timestamp()
+            or body.get('target')!=PATHS[0] or body.get('maximum_targeted_normal_rebuilds')!=1
+            or any(body.get(k)!=0 for k in ('maximum_imports','maximum_saves','maximum_new_actors','maximum_camera_actions'))):
+        raise RuntimeError('finite one-target rebuild-only scope required; no saves/placement')
+    # Every support file and installed ABI is pinned by source-only preparation.
+    for row in cfg['repair_support'].values():_pin(row)
+    packet,s,w,e,world,sub=_context(cfg);_repair_guard(cfg,s)
+    before=_scene(w);original=json.loads(_pin(cfg['original_import']))
+    if before!=original['before'] or any(_file(p).exists() for p in PATHS):raise RuntimeError('original world/zero-save boundary differs')
+    reader=_repair_load(cfg['repair_support']['reader']);normal=_repair_load(cfg['repair_support']['normal_contract']);contract=_repair_load(cfg['repair_support']['raw_contract'])
+    source_packet=json.loads(_pin(cfg['repair_support']['source_normals']));source=source_packet['triangles']
+    if source_packet['source_sha256']!=SOURCE_SHA or len(source)!=2592:raise RuntimeError('exact pinned authored NORMAL reference required')
+    prior=json.loads(_pin(cfg['repair_support']['prior_raw']));objects=s['inventory']['_assets']()
+    if set(objects)!=set(PATHS):raise RuntimeError('exact four retained Corn objects required')
+    report={'stage':'CORN_NORMAL_REPAIR_PRECHECK','target':PATHS[0],'lod':0}
+    with journal.open('x',encoding='utf-8') as stream:s['inventory']['_flush'](stream,report)
+    keep=lambda:s['inventory']['_write'](journal,report)
+    def capture(phase):
+        value=reader['run']({**cfg,'corn_source':cfg['repair_support']['archived_corn'],
+            'diagnostic_journal':cfg['normal_repair_'+phase+'_journal']})
+        if value.get('stage')!='RENDER_NORMAL_READ_COMPLETE':raise RuntimeError('complete '+phase+' raw read required')
+        return json.loads(_pin(value['journal']))
+    def precheck():
+        observed=capture('before')
+        keys=('raw_render_triangle_count','raw_section_count','slots','section_bindings','build_options','raw_sections')
+        if any(observed[k]!=prior[k] for k in keys):raise RuntimeError('retained measured pre-repair Corn data differs')
+        return {'clear':True,'raw_matches_measured_prior':True}
+    def postcheck():
+        observed=capture('after');stored=_repair_stored(cfg,s,objects[PATHS[0]])
+        report['stored_after']=stored;keep()
+        stored_proof=_repair_stored_proof(source,stored,normal)
+        raw_proof=_repair_raw_proof(source,observed,normal,contract)
+        report.update(stored_authored_proof=stored_proof,raw_authored_proof=raw_proof);keep()
+        original_profile,_=_inspect(cfg,packet,s)  # Strict original geometry/PBR/NORMAL predicates unchanged.
+        preservation=_old(w,before);_repair_guard(cfg,s)
+        if _scene(w)!=before:raise RuntimeError('post-repair world/selection/camera differs')
+        return {'stored_authored_clear':True,'raw_authored_clear':True,'original_pbr_clear':True,
+                'preservation_clear':True,'original_profile':original_profile,'preservation':preservation}
+    return _repair_transaction(objects[PATHS[0]],unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem),
+        report,keep,lambda:_repair_guard(cfg,s),precheck,postcheck)
