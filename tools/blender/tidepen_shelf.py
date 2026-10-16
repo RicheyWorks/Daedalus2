@@ -7,6 +7,8 @@ Revisions (each reproducible, earlier ones immutable):
       under a rock overhang and a deep basin, at the proposed depths (measured on the final rock mesh, build fails if
       they drift); the pen water is its own role, PenWater, at the NORMAL level, so a host or a render can move it to
       the low/high states; all four residents live in the pen in their normal-state zones.
+  r3  geometry as r2; the pen water is clear (alpha .32, lighter teal) so the bed, plants and residents read from
+      above. r2's murky sheet (alpha .7) hid everything under it.
 
 What the player sees, sailing down from World-Zero's rim dock:
   * A rock shelf of tide pools beside the Ocean pier.
@@ -46,7 +48,8 @@ import voxel_aquatic as AQ  # noqa: E402
 import voxel_creatures as VC  # noqa: E402
 import voxel_island as VI  # noqa: E402
 
-REV = "r2"                 # build(..., rev=) switches; r1 stays reproducible
+REV = "r3"                 # build(..., rev=) switches; r1 and r2 stay reproducible
+PEN_WATER = {"r2": ((.18, .55, .60), .7), "r3": ((.32, .72, .74), .32)}   # pen sheet colour, alpha per revision
 NAME = "TidePen_" + REV
 LAND_ID = "ocean-tidepen-" + REV
 HABITAT = "data/ocean/habitat-tidepool-r2.json"   # r2 of the proposal: residents have a body size
@@ -274,8 +277,9 @@ def build(out_dir, rev=None):
     pools = [water("%s_PoolWater_%d" % (NAME, i), PEN_SURFACE, rx * .86, ry * .86, px, py, H.material("PoolWater", (.18, .55, .60), .05, 0, 0, .7))
              for i, (px, py, rx, ry) in enumerate(POOLS) if not (hab and i == 0)]
     shelf += pools
+    pw_rgb, pw_alpha = PEN_WATER.get(REV, PEN_WATER["r2"])
     penwater = [water(NAME + "_PenWaterSheet", PEN_SURFACE, POOLS[0][2] + 1.0, POOLS[0][3] + 1.0, POOLS[0][0], POOLS[0][1],
-                      H.material("PoolWater", (.18, .55, .60), .05, 0, 0, .7))] if hab else []
+                      H.material("PoolWater" if REV == "r2" else "PenWaterClear", pw_rgb, .05, 0, 0, pw_alpha))] if hab else []
     # the pen: wall + gate facing the care station (east)
     pcx, pcy, prx, pry = POOLS[0]
     gate_a = 0.0

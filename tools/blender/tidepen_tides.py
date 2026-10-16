@@ -1,7 +1,9 @@
 # SPDX-License-Identifier: MIT
 """Render the Tide-Pen's water states: the same pen close-up at LOW, NORMAL and HIGH water.
 
-    python tidepen_tides.py BUILD_DIR [--rev r2] [--res 1600x1000] [--samples 32]
+    python tidepen_tides.py BUILD_DIR [--rev r3] [--view detail|plunge] [--res 1600x1000] [--samples 32]
+
+--view plunge looks steeply down into the pen from closer (14 m), so the bed and residents read through the water.
 
 BUILD_DIR holds a built Tide-Pen revision (tidepen_shelf.py). Every role GLB is loaded; the PenWater role, which the
 recipe exports at the NORMAL level, is moved by each state's offset_m read from the layout's habitat record (itself
@@ -21,14 +23,15 @@ import showcase_render as SR  # noqa: E402
 def main(argv):
     out = os.path.abspath(argv[0])
     opt = lambda k, d=None: argv[argv.index(k) + 1] if k in argv else d
-    name = "TidePen_" + opt("--rev", "r2")
+    name = "TidePen_" + opt("--rev", "r3")
+    view = opt("--view", "detail")
     lay = json.load(open(os.path.join(out, name + ".layout.json"), encoding="utf-8"))
     hab = lay["habitat"]
     glbs = [os.path.join(out, v["file"]) for v in lay["roles"].values()] + [os.path.join(out, lay["island_file"])]
     res = tuple(int(v) for v in opt("--res", "1600x1000").split("x"))
     samples = int(opt("--samples", "32"))
     pen = lay["roles"]["Pen"]["anchor"]
-    frame = (pen[0] - .5, pen[1] - 1.0, -.6, 19.0)                    # fixed pen close-up for all three states
+    frame = (pen[0] - .5, pen[1] - 1.0, -.6, 19.0) if view == "detail" else (pen[0] - 1.2, pen[1], -1.2, 14.0)   # fixed per view
     shots, t0 = [], time.time()
     for st in hab["water_states"]:
         def adjust(dz=st["offset_m"]):
@@ -37,7 +40,7 @@ def main(argv):
                 raise RuntimeError("PenWater role not found in the loaded GLBs")
             for o in hit:
                 o.location.z += dz
-        m = SR.render(out, glbs, "tide." + st["id"], "detail", focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust)
+        m = SR.render(out, glbs, "tide." + st["id"], view, focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust)
         m["water_state"] = {k: st[k] for k in ("id", "offset_m", "surface_z", "wet")}
         shots.append(m)
     card = {"name": name, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",

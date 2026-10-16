@@ -146,6 +146,10 @@ def camera(view, focus=None, frame=None, lens=40):
         t = Vector(frame[:3]) if frame else Vector((c.x, c.y, c.z * .3))
         dist = frame[3] if frame else max(hi.x - lo.x, hi.y - lo.y) * 1.35
         d = Vector((math.cos(math.radians(-50)), math.sin(math.radians(-50)), .48)).normalized()
+    elif view == "plunge":                                   # steep look down into water (about 58 degrees)
+        t = Vector(focus)
+        dist = frame[3] if frame else 14.0
+        d = Vector((math.cos(math.radians(-38)), math.sin(math.radians(-38)), 1.6)).normalized()
     else:
         t = Vector(focus)
         dist = frame[3] if frame else 46.0
