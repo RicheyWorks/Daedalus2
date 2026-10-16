@@ -206,5 +206,148 @@ class CopyCallerContract(unittest.TestCase):
                 caller.check_quality(dict(quality, **{key: value}))
 
 
+class PresentationRecovery(unittest.TestCase):
+    """Run this new class alone for R2; old eleven contracts remain unchanged."""
+    def facts(self, identity=False):
+        comp = dict(enabled=False, render_enabled=True, tree_present=False, nodes=[], links=[], errors=[])
+        if identity:
+            rows = [dict(name="Layers", type="CompositorNodeRLayers", muted=False,
+                         source_scene_name=None, source_scene_is_current=True, source_layer="ViewLayer"),
+                    dict(name="Composite", type="CompositorNodeComposite", muted=False,
+                         use_alpha=True, alpha_linked=False)]
+            links = [dict(from_node="Layers", from_socket="Image", to_node="Composite", to_socket="Image", valid=True, muted=False)]
+            comp.update(enabled=True, tree_present=True, tree_type="CompositorNodeTree", tree_animated=False,
+                        scene_animated=False, view_layer="ViewLayer", nodes=rows, links=links,
+                        full_graph_witness=dict(nodes=copy.deepcopy(rows), links=copy.deepcopy(links)))
+        return dict(linked=dict(count=0, identities=[], errors=[]), composited=comp,
+                    sequenced=dict(editor_exists=False, strip_count=0, strips=[], render_enabled=True, errors=[]))
+
+    def test_separate_all_three_refusal_reasons_without_short_circuit(self):
+        facts = self.facts()
+        facts["linked"] = dict(count=1, identities=[dict(name="external", filepath="linked.blend")], errors=[])
+        facts["composited"]["enabled"] = True
+        facts["sequenced"].update(editor_exists=True, strip_count=1, strips=[dict(name="Movie")])
+        result = caller.classify_presentation(facts)
+        self.assertEqual(result["refusal_reasons"], ["LINKED_LIBRARIES_UNSUPPORTED",
+                         "COMPOSITOR_NONIDENTITY_OR_UNKNOWN_GRAPH", "SEQUENCER_NONEMPTY_UNSUPPORTED"])
+        self.assertFalse(result["safe_to_continue"])
+
+    def test_identity_image_composite_and_empty_sequencer_are_read_only(self):
+        facts = self.facts(identity=True)
+        facts["sequenced"].update(editor_exists=True)
+        before = copy.deepcopy(facts)
+        result = caller.classify_presentation(facts)
+        self.assertTrue(result["safe_to_continue"])
+        self.assertEqual(result["separate_conditions"]["composited"], "PASS_UNIQUE_DIRECT_IMAGE_COMPOSITE")
+        self.assertEqual(result["separate_conditions"]["sequenced"], "PASS_EMPTY_SEQUENCER_INACTIVE")
+        self.assertEqual(facts, before)
+
+    def test_transform_color_fileoutput_extra_output_and_unknown_graphs_refuse(self):
+        for node_type in ("CompositorNodeTransform", "CompositorNodeGamma", "CompositorNodeOutputFile",
+                          "CompositorNodeComposite", "CompositorNodeGroup", "UnknownNode"):
+            facts = self.facts(identity=True)
+            facts["composited"]["nodes"].append(dict(name="Extra", type=node_type, muted=False))
+            with self.subTest(node_type=node_type):
+                self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+        for enabled in (True, False):
+            facts = self.facts(identity=True)
+            facts["composited"].update(nodes=[], links=[], render_enabled=enabled)
+            self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+
+    def test_wrong_scene_layer_alpha_muting_and_link_counterexamples_refuse(self):
+        cases = [("source_scene_is_current", False, 0), ("source_layer", "Other", 0),
+                 ("muted", True, 0), ("use_alpha", False, 1), ("alpha_linked", True, 1),
+                 ("muted", True, 1)]
+        for key, value, index in cases:
+            facts = self.facts(identity=True)
+            facts["composited"]["nodes"][index][key] = value
+            with self.subTest(key=key, index=index):
+                self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+        for key, value in (("from_socket", "Alpha"), ("to_socket", "Alpha"), ("valid", False), ("muted", True)):
+            facts = self.facts(identity=True)
+            facts["composited"]["links"][0][key] = value
+            self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+        for key, value in (("tree_animated", True), ("scene_animated", True), ("full_graph_witness", None)):
+            facts = self.facts(identity=True)
+            facts["composited"][key] = value
+            self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+
+    def test_absent_and_empty_only_sequencer_even_when_muted_or_disabled(self):
+        for editor, render in ((False, True), (True, True), (True, False)):
+            facts = self.facts()
+            facts["sequenced"].update(editor_exists=editor, render_enabled=render)
+            self.assertTrue(caller.classify_presentation(facts)["safe_to_continue"])
+        for render in (True, False):
+            facts = self.facts()
+            facts["sequenced"].update(editor_exists=True, render_enabled=render, strip_count=1,
+                                      strips=[dict(name="Muted", muted=True)])
+            self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+
+    def test_partial_observation_and_inconsistent_counts_never_admit(self):
+        for category in ("linked", "composited", "sequenced"):
+            facts = self.facts(identity=True)
+            facts[category]["errors"] = ["unsupported RNA property"]
+            result = caller.classify_presentation(facts)
+            self.assertFalse(result["safe_to_continue"])
+            self.assertIn("FACTS_UNSUPPORTED", result["separate_conditions"][category])
+        for category, key in (("linked", "count"), ("sequenced", "strip_count")):
+            facts = self.facts()
+            facts[category][key] = 2
+            self.assertFalse(caller.classify_presentation(facts)["safe_to_continue"])
+
+    def test_diagnostics_are_durable_before_refusal_and_never_overwritten(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "presentation-before.json"
+            facts = self.facts()
+            facts["linked"] = dict(count=1, identities=[dict(name="Library", filepath="original.blend")], errors=[])
+            with self.assertRaises(caller.PresentationRefused) as raised:
+                caller.record_presentation(facts, path, context="synthetic_contract_test")
+            raw = path.read_bytes()
+            saved = json.loads(raw)
+            self.assertEqual(saved["conditions"], facts)
+            self.assertEqual(raised.exception.report, saved)
+            self.assertEqual(saved["observation_context"], "synthetic_contract_test")
+            self.assertEqual(saved["classification"]["separate_conditions"]["linked"], "LINKED_LIBRARIES_UNSUPPORTED")
+            with self.assertRaises(FileExistsError):
+                caller.record_presentation(self.facts(), path, context="synthetic_contract_test")
+            self.assertEqual(path.read_bytes(), raw)
+
+    def test_presentation_witness_changes_refuse_without_mutating_either(self):
+        before = dict(conditions=self.facts(identity=True), observed_at_utc="before")
+        after = copy.deepcopy(before); after["observed_at_utc"] = "after"
+        caller.require_same_presentation(before, after)
+        after["conditions"]["composited"]["nodes"][1]["use_alpha"] = False
+        preserved = copy.deepcopy((before, after))
+        with self.assertRaises(ValueError):
+            caller.require_same_presentation(before, after)
+        self.assertEqual((before, after), preserved)
+
+    def test_literal_r2_binding_preserves_occupied_r1_and_frozen_recipe_proposal(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory).absolute()
+            presentation = project / caller.PRESENTATION
+            presentation.parent.mkdir(parents=True); presentation.write_bytes(b"synthetic path fixture")
+            old = project / caller.PROPOSAL["directory"]
+            old.mkdir(parents=True); witness = old / "retained_presentation_copy.blend"; witness.write_bytes(b"retain failed R1")
+            proposal = copy.deepcopy(caller.PROPOSAL)
+            plan = caller.output_plan(presentation, proposal)
+            self.assertEqual(plan["root"], project / "artifacts/ecology/sky-botanical-pilot-r1/inspection/hearthjaw-camera-r2")
+            self.assertEqual(plan["scene"].name, "hearthjaw_inspection_r2.blend")
+            self.assertEqual(witness.read_bytes(), b"retain failed R1")
+            self.assertEqual(proposal, caller.PROPOSAL)
+            plan["root"].mkdir()
+            with self.assertRaises(ValueError):
+                caller.output_plan(presentation, proposal)
+
+    def test_unknown_or_missing_r2_action_intent_cannot_execute(self):
+        state = dict(caller_sha256="0"*64, paths={}, caller=SOURCE.absolute())
+        for argv in (["--execute", "--operation", "hearthjaw-camera-r1"],
+                     ["--operation", caller.INTENT], ["--execute", "--caller-sha256", "0"*64]):
+            with mock.patch.object(caller, "preflight", return_value=state), \
+                    mock.patch.object(caller, "execute_copy", side_effect=AssertionError("must not execute")), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(caller.main(argv), 2)
+
+
 if __name__ == "__main__":
     unittest.main()

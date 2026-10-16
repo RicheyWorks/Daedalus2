@@ -28,6 +28,9 @@ FROZEN = {
 }
 PROPOSAL = {"directory": "artifacts/ecology/sky-botanical-pilot-r1/inspection/hearthjaw-camera-r1",
             "image": "hearthjaw_inspection_r1.png", "scene": "hearthjaw_inspection_r1.blend", "approved": False}
+INTENT = "hearthjaw-camera-r2"
+OUTPUT_R2 = {"directory": "artifacts/ecology/sky-botanical-pilot-r1/inspection/hearthjaw-camera-r2",
+             "image": "hearthjaw_inspection_r2.png", "scene": "hearthjaw_inspection_r2.blend"}
 PRESENTATION = "artifacts/ecology/sky-botanical-pilot-r1/jobs/sky_hearthjaw/sky/sky_Ecology_Presentation.blend"
 
 
@@ -76,13 +79,15 @@ def output_plan(presentation, proposal):
     require(len(presentation.parents) >= 7, "presentation layout differs")
     project = presentation.parents[6]
     require(project / PRESENTATION == presentation, "canonical presentation path differs")
-    root = project / PROPOSAL["directory"]
+    # The frozen recipe proposal remains R1 provenance. R2 is one literal binding,
+    # never a user-selected path and never a replay/overwrite of the consumed R1.
+    root = project / OUTPUT_R2["directory"]
     safe_path(root.parent.parent)
     safe_path(root, missing=True)
     require(not os.path.lexists(root), "inspection root exists; no overwrite/replay")
     return {"root": root, "copy": root / "retained_presentation_copy.blend",
-            "scene": root / PROPOSAL["scene"], "image": root / PROPOSAL["image"],
-            "receipt": root / "hearthjaw_inspection_r1.receipt.json"}
+            "scene": root / OUTPUT_R2["scene"], "image": root / OUTPUT_R2["image"],
+            "receipt": root / "hearthjaw_inspection_r2.receipt.json"}
 
 
 def preflight(here=None):
@@ -181,6 +186,137 @@ def nodes(tree):
                              l.to_node.name, l.to_socket.identifier) for l in tree.links)}
 
 
+def presentation_conditions(bpy):
+    """Read three independent conditions without setters or inferred defaults.
+
+    4.3.1 RNA: rna_nodetree.cc def_cmp_render_layers/def_cmp_composite/
+    rna_def_node_link; rna_sequencer.cc SequenceEditor.sequences_all.
+    RE_seq_render_active (render/intern/pipeline.cc1340) is false for zero strips.
+    node_composite_composite.cc41-59 copies Image only with use_alpha enabled and
+    unlinked Alpha. No unexposed compositor is_active_output API is assumed:
+    admission requires a UNIQUE Composite output. ui_active_node is UI state only.
+    """
+    scene, layer = bpy.context.scene, bpy.context.view_layer
+    facts = {"linked": {"count": None, "identities": None, "errors": []},
+             "composited": {"enabled": None, "render_enabled": None, "tree_present": None,
+                            "nodes": None, "links": None, "errors": []},
+             "sequenced": {"editor_exists": None, "strip_count": None, "strips": None,
+                           "render_enabled": None, "errors": []}}
+    linked, comp, seq = (facts[k] for k in ("linked", "composited", "sequenced"))
+    try:
+        libraries = list(bpy.data.libraries)
+        linked.update(count=len(libraries), identities=[dict(name=x.name, filepath=x.filepath) for x in libraries])
+    except Exception as error:
+        linked["errors"].append(type(error).__name__+": "+str(error))
+    try:
+        tree = scene.node_tree
+        comp.update(enabled=scene.use_nodes, render_enabled=scene.render.use_compositing,
+                    tree_present=tree is not None, scene_name=scene.name, view_layer=layer.name,
+                    scene_animated=scene.animation_data is not None, nodes=[], links=[],
+                    ui_active_node=None, tree_type=None, tree_animated=False, full_graph_witness=None)
+        if tree is not None:
+            comp.update(tree_type=tree.bl_idname, tree_animated=tree.animation_data is not None,
+                        ui_active_node=tree.nodes.active.name if tree.nodes.active else None)
+            for node in tree.nodes:
+                row = dict(name=node.name, type=node.bl_idname, muted=node.mute)
+                if node.bl_idname == "CompositorNodeRLayers":
+                    row.update(source_scene_name=node.scene.name if node.scene else None,
+                               source_scene_is_current=node.scene is None or node.scene == scene,
+                               source_layer=node.layer)
+                if node.bl_idname == "CompositorNodeComposite":
+                    row.update(use_alpha=node.use_alpha, alpha_linked=node.inputs["Alpha"].is_linked)
+                comp["nodes"].append(row)
+            comp["links"] = [dict(from_node=x.from_node.name, from_socket=x.from_socket.identifier,
+                                  to_node=x.to_node.name, to_socket=x.to_socket.identifier,
+                                  valid=x.is_valid, muted=x.is_muted) for x in tree.links]
+            comp["full_graph_witness"] = nodes(tree)
+    except Exception as error:
+        comp["errors"].append(type(error).__name__+": "+str(error))
+    try:
+        editor = scene.sequence_editor
+        seq.update(editor_exists=editor is not None, render_enabled=scene.render.use_sequencer,
+                   strip_count=0, strips=[])
+        if editor is not None:
+            strips = list(editor.sequences_all)
+            seq.update(strip_count=len(strips), strips=[dict(name=x.name, type=x.type, muted=x.mute,
+                       channel=x.channel, frame_start=x.frame_final_start, frame_end=x.frame_final_end) for x in strips])
+    except Exception as error:
+        seq["errors"].append(type(error).__name__+": "+str(error))
+    return facts
+
+
+def classify_presentation(facts):
+    """Conservative classification of observed metadata; no scene changes."""
+    results = {}; reasons = []
+    linked, comp, seq = (facts.get(k, {}) for k in ("linked", "composited", "sequenced"))
+    if linked.get("errors") or type(linked.get("count")) is not int or not isinstance(linked.get("identities"), list) \
+            or linked["count"] != len(linked["identities"]):
+        results["linked"] = "LINKED_LIBRARY_FACTS_UNSUPPORTED"
+    else:
+        results["linked"] = "PASS_NO_LINKED_LIBRARIES" if linked["count"] == 0 else "LINKED_LIBRARIES_UNSUPPORTED"
+    if comp.get("errors") or type(comp.get("enabled")) is not bool or type(comp.get("render_enabled")) is not bool:
+        results["composited"] = "COMPOSITOR_FACTS_UNSUPPORTED"
+    elif comp["enabled"] is False:
+        results["composited"] = "PASS_COMPOSITOR_DISABLED"
+    else:
+        rows, links = comp.get("nodes"), comp.get("links")
+        identity = False
+        if (comp.get("tree_present") is True and comp.get("tree_type") == "CompositorNodeTree"
+                and comp.get("tree_animated") is False and comp.get("scene_animated") is False
+                and isinstance(comp.get("full_graph_witness"), dict)
+                and isinstance(rows, list) and len(rows) == 2 and all(isinstance(x, dict) for x in rows)
+                and isinstance(links, list) and len(links) == 1 and isinstance(links[0], dict)):
+            sources = [x for x in rows if x.get("type") == "CompositorNodeRLayers"]
+            outputs = [x for x in rows if x.get("type") == "CompositorNodeComposite"]
+            if len(sources) == len(outputs) == 1:
+                source, output, link = sources[0], outputs[0], links[0]
+                identity = (source.get("muted") is False and output.get("muted") is False
+                    and source.get("source_scene_is_current") is True
+                    and source.get("source_layer") == comp.get("view_layer")
+                    and isinstance(comp.get("view_layer"), str) and bool(comp["view_layer"])
+                    and output.get("use_alpha") is True and output.get("alpha_linked") is False
+                    and isinstance(source.get("name"), str) and isinstance(output.get("name"), str)
+                    and source["name"] != output["name"]
+                    and link == dict(from_node=source["name"], from_socket="Image", to_node=output["name"],
+                                     to_socket="Image", valid=True, muted=False))
+        results["composited"] = "PASS_UNIQUE_DIRECT_IMAGE_COMPOSITE" if identity else "COMPOSITOR_NONIDENTITY_OR_UNKNOWN_GRAPH"
+    if (seq.get("errors") or type(seq.get("editor_exists")) is not bool
+            or type(seq.get("render_enabled")) is not bool or type(seq.get("strip_count")) is not int
+            or not isinstance(seq.get("strips"), list) or seq["strip_count"] != len(seq["strips"])):
+        results["sequenced"] = "SEQUENCER_FACTS_UNSUPPORTED"
+    elif seq["strip_count"] != 0:
+        results["sequenced"] = "SEQUENCER_NONEMPTY_UNSUPPORTED"
+    else:
+        results["sequenced"] = "PASS_SEQUENCER_ABSENT" if not seq["editor_exists"] else "PASS_EMPTY_SEQUENCER_INACTIVE"
+    for key, value in results.items():
+        if not value.startswith("PASS_"):
+            reasons.append(value)
+    return dict(safe_to_continue=not reasons, separate_conditions=results, refusal_reasons=reasons)
+
+
+class PresentationRefused(ValueError):
+    def __init__(self, report, path):
+        self.report, self.diagnostic_path = report, str(path)
+        super().__init__("; ".join(report["classification"]["refusal_reasons"]))
+
+
+def record_presentation(facts, path, context="runtime_copy"):
+    """Immutable actual facts and all reasons MUST be durable before refusal."""
+    report = dict(schema="daedalus.hearthjaw-presentation-conditions.v2", operation_intent=INTENT,
+                  observed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  observation_context=context, conditions=facts, classification=classify_presentation(facts))
+    with Path(path).open("x", encoding="utf-8") as out:
+        json.dump(report, out, indent=2, allow_nan=False)
+        out.write("\n"); out.flush(); os.fsync(out.fileno())
+    if not report["classification"]["safe_to_continue"]:
+        raise PresentationRefused(report, path)
+    return report
+
+
+def require_same_presentation(before, after):
+    require(before["conditions"] == after["conditions"], "presentation node/state witness changed")
+
+
 def field_witness(scene):
     """Recorded fields only, NOT full semantic equality of arbitrary Blender data."""
     objects = []
@@ -212,8 +348,6 @@ def collect(bpy, recipe):
     scene, layer = bpy.context.scene, bpy.context.view_layer
     require(len(bpy.data.scenes) == 1 and len(scene.view_layers) == 1 and layer.use,
             "one scene and one enabled view layer required")
-    require(not bpy.data.libraries and not scene.use_nodes and scene.sequence_editor is None,
-            "linked/composited/sequenced presentation unsupported")
     require(not any(img.source == "FILE" and not img.packed_file for img in bpy.data.images),
             "external image dependency unsupported")
     def check_layer(item):
@@ -277,6 +411,7 @@ def execute_copy(state):
             "copy open failed")
     require(Path(bpy.data.filepath) == paths["copy"] and not bpy.app.autoexec_fail, "copy/autoexec admission failed")
     scene = bpy.context.scene
+    presentation_before = record_presentation(presentation_conditions(bpy), paths["root"] / "presentation-before.json")
     bounds, quality, inventory = collect(bpy, recipe)
     helper = types.ModuleType("hearthjaw_frozen_fit")
     exec(compile(state["helper_bytes"], str(state["caller"].parent / "hearthjaw_inspection_camera_r1.py"), "exec"), helper.__dict__)
@@ -287,6 +422,8 @@ def execute_copy(state):
     scene.camera.data.ortho_scale = fit["ortho_scale"]
     scene.render.filepath = str(paths["image"])
     bpy.context.view_layer.update()
+    presentation_after = record_presentation(presentation_conditions(bpy), paths["root"] / "presentation-after-fit.json")
+    require_same_presentation(presentation_before, presentation_after)
     after_bounds, after_quality, after_inventory = collect(bpy, recipe)
     after = field_witness(scene)
     require(before == after and quality == after_quality and inventory == after_inventory,
@@ -305,6 +442,8 @@ def execute_copy(state):
     require(bpy.ops.wm.save_as_mainfile(filepath=str(paths["scene"]), compress=True, relative_remap=False,
                                        check_existing=False) == {"FINISHED"}, "inspection save failed")
     require(bpy.ops.render.render(write_still=True, scene=scene.name) == {"FINISHED"}, "inspection render failed")
+    presentation_terminal = record_presentation(presentation_conditions(bpy), paths["root"] / "presentation-terminal.json")
+    require_same_presentation(presentation_before, presentation_terminal)
     terminal = field_witness(scene)
     require(terminal == before, "recorded fields changed during save/render")
     for pin in recipe["input_pins"] + recipe["frozen_source_pins"]:
@@ -315,10 +454,14 @@ def execute_copy(state):
         raw = p.read_bytes()
         require(raw, "empty output")
         outputs.append(dict(path=str(p), bytes=len(raw), sha256=digest(raw)))
-    receipt = dict(schema="daedalus.hearthjaw-copy-inspection.v1", observed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    receipt = dict(schema="daedalus.hearthjaw-copy-inspection.v2", operation_intent=INTENT,
+                   historical_recipe_proposal=PROPOSAL, literal_output_binding=OUTPUT_R2,
+                   observed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
                    state="ONE_COPY_INSPECTION_RENDER_RETURNED_FINISHED", caller_sha256=state["caller_sha256"],
                    actual_bounds_before=bounds, actual_bounds_after=after_bounds, actual_inventory=inventory,
                    actual_quality=quality, fit=fit, before_fields=before, after_fields=after, terminal_fields=terminal,
+                   presentation_before=presentation_before, presentation_after=presentation_after,
+                   presentation_terminal=presentation_terminal,
                    filepath_before=filepath_before, filepath_after=str(paths["image"]), outputs=outputs,
                    field_coverage="Object matrices/scales, mesh vertices/faces/material slots, scalar material/node/socket/light/world/render/cycles/view/display/unit fields. Not a complete semantic proof; arbitrary nested/custom data, all mesh attributes and visual quality are not certified.",
                    image_quality_accepted=False, native_accepted=False, process_exit_code=None)
@@ -341,20 +484,27 @@ def main(argv=None):
         parser.error = refuse
         parser.add_argument("--execute", action="store_true")
         parser.add_argument("--caller-sha256")
+        parser.add_argument("--operation", choices=[INTENT])
         args = parser.parse_args(tokens)
         require(args.execute or args.caller_sha256 is None, "SHA requires explicit execute")
         state = preflight()
         result = dict(state="COPY_CALLER_VALIDATED_ACTUAL_DATA_PENDING", source_only=True, runtime_ready=False,
                       execution_authorized=False, app_calls=0, actual_bounds=None, actual_camera=None,
-                      actual_sensor_fit=None, fit=None,
+                      actual_sensor_fit=None, presentation_conditions=None, fit=None, operation_intent=INTENT,
                       caller_sha256=state["caller_sha256"], proposed_paths={k: str(v) for k, v in state["paths"].items()})
         if args.execute:
+            require(args.operation == INTENT, "explicit r2 operation intent required")
             require_launch(prefix, state, args.caller_sha256)
             result = execute_copy(state)
         else:
+            require(args.operation is None, "operation intent requires explicit execute")
             require(prefix is None, "dry run uses ordinary Python without Blender flags")
         print(json.dumps(result, allow_nan=False))
         return 0
+    except PresentationRefused as error:
+        print(json.dumps({"state": "REFUSED_PRESENTATION_FACTS_RETAINED_NO_REPLAY", "error": str(error),
+                          "diagnostic_path": error.diagnostic_path, "presentation": error.report}, allow_nan=False))
+        return 2
     except (ValueError, KeyError, TypeError, OSError, AttributeError) as error:
         print(json.dumps({"state": "REFUSED_OR_PARTIAL_RETAINED_NO_REPLAY", "error": str(error),
                           "actual_data_from_this_error": None}))
