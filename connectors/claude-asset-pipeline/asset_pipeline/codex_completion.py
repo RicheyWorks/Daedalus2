@@ -39,7 +39,8 @@ def identity(value):
 def utc(value):
     need(isinstance(value, str) and len(value) <= 40
          and value.endswith(("Z", "+00:00")), "explicit UTC required")
-    result = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    normalized = re.sub(r"(\.\d{6})\d+(?=\+00:00$)", r"\1", value.replace("Z", "+00:00"))
+    result = datetime.fromisoformat(normalized)
     need(result.utcoffset().total_seconds() == 0, "UTC required")
     return result
 
@@ -230,45 +231,49 @@ class Observer:
     def deliver(self, key, current, now=None):
         event = self.event(key)
         view = snapshot(current, event["task_id"], now)  # Always reconcile before notifying.
-        delivered = self.get("deliveries", key)
-        if delivered:
-            return dict(delivered, duplicate=True, current=view)
-        intent = self.get("intents", key)
-        if intent:
-            matches = [m for m in self.log(intent["after"])
-                       if m.get("from") == SENDER and m.get("to") == COORDINATOR
-                       and m.get("type") == "codex.turn.terminal" and m.get("body") == intent["body"]]
-            if matches:
-                result = {"event_key": key, "message_id": matches[0]["id"],
-                          "recovered": True, "matching_message_ids": [m["id"] for m in matches]}
-                return dict(self.record("deliveries", key, result), current=view)
-            return {"event_key": key, "delivery": "uncertain", "automatic_retry": False, "current": view}
-        need(self.link is not None, "TeamLink not configured")
-        health = self.link.health()
-        need(isinstance(health, dict) and type(health.get("last")) is int, "TeamLink unavailable before intent")
         body = {"schema": "daedalus.codex-completion.v1", "event_key": key,
                 "task_id": event["task_id"], "turn_id": event["turn_id"], "outcome": event["outcome"],
                 "terminal_source_sha256": event["source_sha256"],
                 "current_turn_id": view["turn_id"], "current_worker_state": view["worker_state"],
                 "current_source_sha256": view["source_sha256"], "observed_at_utc": view["observed_at_utc"],
                 "collector": view["collection"], "parent_push": False, "assignment_executed": False}
-        intent = {"event_key": key, "after": health["last"], "body": body}
+        return dict(self.notify(key, body), current=view)
+
+    def notify(self, key, body, kind="codex.turn.terminal"):
+        """Shared durable delivery, also used by the unified status adapter."""
+        need(kind in ("codex.turn.terminal", "worker.status.actionable"), "unsupported notice kind")
+        delivered = self.get("deliveries", key)
+        if delivered:
+            return dict(delivered, duplicate=True)
+        intent = self.get("intents", key)
+        if intent:
+            matches = [m for m in self.log(intent["after"])
+                       if m.get("from") == SENDER and m.get("to") == COORDINATOR
+                       and m.get("type") == intent.get("kind", "codex.turn.terminal")
+                       and m.get("body") == intent["body"]]
+            if matches:
+                result = {"event_key": key, "message_id": matches[0]["id"],
+                          "recovered": True, "matching_message_ids": [m["id"] for m in matches]}
+                return self.record("deliveries", key, result)
+            return {"event_key": key, "delivery": "uncertain", "automatic_retry": False}
+        need(self.link is not None, "TeamLink not configured")
+        health = self.link.health()
+        need(isinstance(health, dict) and type(health.get("last")) is int, "TeamLink unavailable before intent")
+        intent = {"event_key": key, "after": health["last"], "body": body, "kind": kind}
         try:
             write_once(self.path("intents", key), intent)
         except FileExistsError:
-            return self.deliver(key, current, now)  # Loser reconciles; never sends.
+            return self.notify(key, body, kind)  # Loser reconciles; never sends.
         # /send acceptance is delivery only. Body correlation + local records
         # provide dedup; no assumption that the running broker persists UID.
-        mid = self.link.send(COORDINATOR, "codex.turn.terminal", body,
+        mid = self.link.send(COORDINATOR, kind, body,
                              topic="codex-completion")
         if type(mid) is not int or mid <= 0:
-            return {"event_key": key, "delivery": "uncertain", "automatic_retry": False, "current": view}
+            return {"event_key": key, "delivery": "uncertain", "automatic_retry": False}
         return dict(self.record("deliveries", key, {"event_key": key, "message_id": mid,
-                                                  "recovered": False}), current=view)
+                                                  "recovered": False}))
 
-    def status(self, key, current, now=None):
-        event = self.event(key)
-        view = snapshot(current, event["task_id"], now)
+    def acknowledgments(self, key, kind, expected):
         delivery = self.get("deliveries", key)
         transport, semantic = None, None
         if delivery:
@@ -280,9 +285,9 @@ class Observer:
                     continue
                 if message.get("type") == "ack" and body.get("id") == delivery["message_id"]:
                     transport = message["id"]
-                if (message.get("type") == "codex.completion.ack"
-                        and body.get("event_key") == key and body.get("task_id") == event["task_id"]
-                        and body.get("turn_id") == event["turn_id"]
+                if (message.get("type") == kind
+                        and body.get("event_key") == key
+                        and all(body.get(field) == value for field, value in expected.items())
                         and body.get("notification_id") == delivery["message_id"]
                         and body.get("decision") == "received"):
                     semantic = message["id"]
@@ -292,11 +297,18 @@ class Observer:
                 self.record("semantic_ack", key, {"message_id": semantic, "notification_id": delivery["message_id"]})
         transport = self.get("transport_ack", key)
         semantic = self.get("semantic_ack", key)
+        return {"delivery": delivery, "transport_ack": transport, "semantic_ack": semantic}
+
+    def status(self, key, current, now=None):
+        event = self.event(key)
+        view = snapshot(current, event["task_id"], now)
+        acks = self.acknowledgments(key, "codex.completion.ack",
+                                   {"task_id": event["task_id"], "turn_id": event["turn_id"]})
         same = view["turn_id"] == event["turn_id"]
-        eligible = bool(semantic and same and view["worker_state"] == "idle"
+        eligible = bool(acks["semantic_ack"] and same and view["worker_state"] == "idle"
                         and view["outcome"] == event["outcome"] == "succeeded")
         return {"event_key": key, "task_id": event["task_id"], "turn_id": event["turn_id"],
-                "delivery": delivery, "transport_ack": transport, "semantic_ack": semantic,
+                **acks,
                 "current": view, "newer_or_different_turn": not same,
                 "may_offer_next_task": eligible, "assignment_executed": False, "parent_push": False,
                 "boundary": "Recheck supported task state immediately before any separately authorized assignment."}

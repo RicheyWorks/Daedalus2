@@ -107,6 +107,81 @@ parsed as an executable state transition. This package does not install Claude
 reminders or reassign ownership; coordinator check-in handling remains with its
 existing owner.
 
+## Unified worker status and finite local listener
+
+The additive worker_status module composes Team Codex's actual PR172 reducer,
+source SHA256810fe24c3ce54d1e6a3e9df081f7dfbca8b038cbe0e3dc9dd3a63e2a0490fbae.
+It neither copies that parser nor changes the broker. Until PR172 is integrated,
+provide its exact source using --checkins-module; a missing/different pin fails
+before import. The verified bytes are executed directly. This dependency is
+source composition, not an assertion that PR172 is installed or merged.
+
+Register a retained real coordinator assignment, then supply retained hub
+snapshots or use the existing local /wait route. For example, from the package:
+
+~~~powershell
+python -B -m asset_pipeline.worker_status --state PATH_TO_OWN_STATE --checkins-module PATH_TO_PR172_TEAM_CHECKINS --assignment ACTUAL_ASSIGNMENT_JSON --start-deadline EXPLICIT_UTC --listen-seconds 10 --wait-seconds 5 --max-waits 3 --notify
+~~~
+
+Optional --snapshot accepts {observed_at_utc, messages}; --codex TASK=PATH accepts
+up to32 actual supported-tool envelopes described above. These are explicit
+caller inputs, never an invented Python MCP API. No autonomous Codex collector
+or authoritative Claude session-status API is available in this integration.
+An authorized tool caller must refresh Codex observations; after60 seconds their
+current status becomes unknown/stale. The listener cannot wake the parent/model.
+
+Claude uses the exact assigned broker route and PR172's qualified START followed
+by PROGRESS/BLOCKED/COMPLETED/FAILED/CANCELLED. These are attributed owner reports,
+not proof of a Claude session terminal event, authenticated account ownership or
+completed tests. Include explicit body.reported_at_utc ending Z or +00:00 and
+body.session_id. Offsetless broker ts, presence, unknown aliases, free prose and
+transport ACK cannot provide freshness or semantic START. Missing report time
+produces unknown freshness; reports expire after the assignment checkpoint
+interval (default900 seconds). Newer assignments suppress old completed status;
+register a new explicit assignment in a separate state directory, without
+automatic reassignment. Failed/cancelled outcomes require coordinator review.
+Session metadata must be an identifier, never a session URL, prompt or transcript.
+Cloud hook support does not establish an installed hook: the actual configured
+MCP server/tool, runtime hook/session IDs and delivered event must be verified by
+the Claude owner before using that path. No hook configuration is written here.
+UserPromptSubmit means turn started; Stop alone is response-ended/outcome unknown,
+and SessionEnd is not successful task completion. These are not normalized into
+qualified job completion by this self-report adapter.
+
+Rows report working/finished/blocked/unknown, freshness, reason, task/session/turn,
+source SHA and source authority. may_assign is always false. Acknowledgment does
+not refresh status. Current status must be reconciled again before dispatch.
+
+The finite listener lasts at most600 requested seconds/120 waits, each wait at
+most25 seconds plus the existing client's bounded HTTP timeout. It catches up
+all log routes before and after waits so a newer coordinator assignment cannot
+be hidden by recipient filtering. Existing /wait also updates broker presence;
+presence is never used as work-state evidence. No ACK, registration, heartbeat,
+ownership transfer, process inspection or worker dispatch is performed.
+Disconnects produce unknown status and bounded1/2/4/8-second reconnect backoff.
+Files, messages and retained state are bounded; overflow stops for reconciliation.
+Do not remove a stale writer.lock without checking the previous owner/operation.
+
+Only completion, blocker or stale/disconnect/checkpoint decisions enter the
+durable outbox. Identical working updates generate no notification. Stable task,
+session/turn and semantic-message identities deduplicate replay and refreshed
+observations; no broker UID guarantee is assumed. Queue delivery uses the same
+immutable send-intent/reconciliation path as Codex completion above. Retained
+history is not a new assignment and does not imply current availability.
+
+New notices have type worker.status.actionable. A coordinator may separately
+acknowledge with type worker.status.ack and body containing event_key, owner,
+task_id, session_id, notification_id and decision: received, all matching the
+notice. Broker transport ACK is recorded separately. --ack-key EVENT_KEY reads
+both proofs; --notify is required to send, and retries of uncertain send intents
+remain disabled. The listener queues requests for human/coordinator decisions;
+it does not send reminders to workers or issue unchanged model pings.
+
+For the composed focused suite, set DAEDALUS_CHECKINS_SOURCE to the same pinned
+PR172 source and run python -B harness/codex_completion_test.py. These synthetic
+checks use temporary files/fake TeamLink; live acceptance and timings must be
+reported separately. No token or performance savings are inferred from design.
+
 ## Verification checkpoint
 
 On16 October2026, the focused suite passed31 tests in0.294 seconds. A real

@@ -4,14 +4,17 @@ import copy
 from datetime import timedelta
 import io
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from asset_pipeline import codex_completion as c
+from asset_pipeline import worker_status as w
 
 NOW = "2026-10-16T06:30:00Z"
 TASK, TURN = "task-1", "turn-1"
@@ -90,6 +93,9 @@ class CompletionTest(unittest.TestCase):
         self.assertTrue(result["terminal"])
         self.assertEqual("succeeded", result["outcome"])
         self.assertEqual(c.key_for(TASK, TURN), result["event_key"])
+
+    def test_powershell_seven_digit_utc_fraction(self):
+        self.assertEqual(869441, c.utc("2026-10-16T07:00:46.8694415+00:00").microsecond)
 
     def test_tool_completion_marker_is_not_turn_completion(self):
         self.assertFalse(self.observe(self.save(self.envelope("inProgress", "active")))["terminal"])
@@ -265,6 +271,213 @@ class CompletionTest(unittest.TestCase):
         self.assertNotIn("result", body)
         self.assertNotIn("content", body)
         self.assertFalse(body["parent_push"])
+
+
+class WorkerStatusTest(unittest.TestCase):
+    envelope = CompletionTest.envelope
+    save = CompletionTest.save
+
+    @classmethod
+    def setUpClass(cls):
+        cls.checkins = w.checkins_module(os.environ.get("DAEDALUS_CHECKINS_SOURCE"))
+
+    def setUp(self):
+        CompletionTest.setUp(self)
+        self.assignment = {"id": 10, "from": c.COORDINATOR, "to": "unreal-team", "type": "ping",
+                           "body": {"assignment_id": "current-job", "request_id": "request-1"}}
+        self.status = w.Status(self.root/"unified", self.checkins, self.link)
+        self.status.register(self.assignment, NOW, 90)
+
+    def message(self, mid, kind, **body):
+        return {"id": mid, "from": "unreal-team", "to": c.COORDINATOR, "type": kind,
+                "body": {"assignment_id": "current-job", "request_id": "request-1",
+                         "session_id": "session-1", "reported_at_utc": NOW, **body}}
+
+    def ingest(self, *messages):
+        self.status.ingest(list(messages), NOW)
+        return self.status.rows(NOW)[0]
+
+    def test_legacy_prose_does_not_become_claude_start(self):
+        row = self.ingest(self.message(11, "checkin", text="Done everything"))
+        self.assertEqual("unknown", row["status"])
+        self.assertFalse(row["semantic_start"])
+
+    def test_completion_without_start_is_unknown(self):
+        self.assertEqual("unknown", self.ingest(self.message(11, "task.completed"))["status"])
+
+    def test_transport_ack_not_semantic_start(self):
+        row = self.ingest({"id": 11, "from": "unreal-team", "to": c.COORDINATOR,
+                           "type": "ack", "body": {"id": 10}})
+        self.assertTrue(row["transport_ack"])
+        self.assertEqual("unknown", row["status"])
+
+    def test_qualified_start_is_attributed_working(self):
+        row = self.ingest(self.message(11, "task.start"))
+        self.assertEqual("working", row["status"])
+        self.assertEqual("session-1", row["session_id"])
+        self.assertIn("self-report", row["source"])
+        self.assertIsNone(row["turn_id"])
+
+    def test_missing_report_time_is_unknown(self):
+        row = self.ingest(self.message(11, "task.start", reported_at_utc=None))
+        self.assertEqual("unknown", row["status"])
+        self.assertEqual("unknown", row["freshness"])
+
+    def test_session_metadata_rejects_prose_and_urls(self):
+        with self.assertRaisesRegex(ValueError, "session"):
+            self.ingest(self.message(11, "task.start", session_id="https://example.test/private"))
+
+    def test_stale_report_not_refreshed_by_new_observation(self):
+        self.ingest(self.message(11, "task.start"))
+        later = (c.utc(NOW)+timedelta(seconds=91)).isoformat()
+        self.status.ingest([], later)
+        self.assertEqual("unknown", self.status.rows(later)[0]["status"])
+        self.assertEqual("stale", self.status.rows(later)[0]["freshness"])
+
+    def test_newer_assignment_invalidates_old_completion(self):
+        self.ingest(self.message(11, "task.start"), self.message(12, "task.completed"))
+        assignment = copy.deepcopy(self.assignment)
+        assignment["id"], assignment["body"]["assignment_id"] = 13, "new-job"
+        row = self.ingest(assignment)
+        self.assertEqual("unknown", row["status"])
+        self.assertEqual("newer-assignment", row["reason"])
+        self.assertFalse(row["may_assign"])
+
+    def test_foreign_route_does_not_supply_status(self):
+        message = self.message(11, "task.start")
+        message["from"] = "ultra"
+        self.assertFalse(self.ingest(message)["semantic_start"])
+
+    def test_blocked_and_failed_are_actionable(self):
+        row = self.ingest(self.message(11, "task.start"), self.message(12, "task.failed"))
+        self.assertEqual("blocked", row["status"])
+        self.assertEqual(1, len(self.status.queue(NOW)))
+
+    def test_duplicate_completion_restart_has_one_notice(self):
+        messages = [self.message(11, "task.start"), self.message(12, "task.completed")]
+        self.ingest(*messages)
+        self.status.queue(NOW)
+        self.status.notify()
+        recovered = w.Status(self.root/"unified", self.checkins, self.link)
+        recovered.ingest(messages, NOW)
+        recovered.queue(NOW)
+        self.assertTrue(recovered.notify()[0]["duplicate"])
+        self.assertEqual(1, self.link.sends)
+
+    def test_status_semantic_ack_is_distinct_and_correlated(self):
+        self.ingest(self.message(11, "task.start"), self.message(12, "task.completed"))
+        key = self.status.queue(NOW)[0]
+        mid = self.status.notify()[0]["message_id"]
+        self.link.append(c.COORDINATOR, c.SENDER, "ack", {"id": mid})
+        self.assertIsNone(self.status.acks(key)["semantic_ack"])
+        self.link.append(c.COORDINATOR, c.SENDER, "worker.status.ack", {
+            "event_key": key, "owner": "unreal-team", "task_id": "current-job", "session_id": "session-1",
+            "notification_id": mid, "decision": "received"})
+        self.assertIsNotNone(self.status.acks(key)["semantic_ack"])
+
+    def test_status_uncertain_delivery_recovers_without_resend(self):
+        self.ingest(self.message(11, "task.start"), self.message(12, "task.completed"))
+        self.status.queue(NOW)
+        self.link.lose_response = True
+        self.assertEqual("uncertain", self.status.notify()[0]["delivery"])
+        self.assertTrue(self.status.notify()[0]["recovered"])
+        self.assertEqual(1, self.link.sends)
+
+    def test_unchanged_working_has_no_queue_or_notice(self):
+        self.ingest(self.message(11, "task.start"))
+        self.assertEqual([], self.status.queue(NOW))
+        self.assertEqual([], self.status.notify())
+
+    def test_missing_checkpoint_emits_one_decision(self):
+        self.ingest(self.message(11, "task.start"))
+        later = (c.utc(NOW)+timedelta(seconds=91)).isoformat()
+        self.assertEqual(self.status.queue(later), self.status.queue(later))
+        # A stale transition and a one-time checkpoint advice may coexist;
+        # repeated evaluation must not issue another reminder or send work.
+        self.assertTrue(self.status.state["claude"]["reminder_issued"])
+
+    def test_codex_newer_active_not_replaced_by_old_completion(self):
+        old = self.save(self.envelope())
+        self.status.codex(TASK, old, NOW)
+        active = self.envelope("inProgress", "active", "turn-2")
+        active["observed_at_utc"] = (c.utc(NOW)+timedelta(seconds=1)).isoformat()
+        self.status.codex(TASK, self.save(active, "active.json"), active["observed_at_utc"])
+        self.assertFalse(self.status.codex(TASK, old, active["observed_at_utc"]))
+        self.assertEqual("working", self.status.rows(active["observed_at_utc"])[1]["status"])
+
+    def test_stale_codex_never_means_idle(self):
+        self.status.codex(TASK, self.source, NOW)
+        later = (c.utc(NOW)+timedelta(seconds=61)).isoformat()
+        self.assertEqual("unknown", self.status.rows(later)[1]["status"])
+
+    def test_future_report_does_not_publish_state(self):
+        before = c.read(self.status.path)[0]
+        future = (c.utc(NOW)+timedelta(seconds=1)).isoformat()
+        with self.assertRaisesRegex(ValueError, "future"):
+            self.ingest(self.message(11, "task.start", reported_at_utc=future))
+        self.assertEqual(before, c.read(self.status.path)[0])
+
+    def test_disconnected_never_claims_finished(self):
+        self.ingest(self.message(11, "task.start"), self.message(12, "task.completed"))
+        self.status.state["connected"] = False
+        self.assertEqual("unknown", self.status.rows(NOW)[0]["status"])
+
+    def test_wrong_dependency_pin_fails_closed(self):
+        path = self.root/"wrong.py"
+        path.write_text("raise RuntimeError('must not execute')")
+        with self.assertRaisesRegex(ValueError, "dependency"):
+            w.checkins_module(path)
+
+    def test_reobserved_same_codex_completion_does_not_notify_twice(self):
+        self.status.codex(TASK, self.source, NOW)
+        before = self.status.queue(NOW)
+        newer = self.envelope()
+        later = (c.utc(NOW)+timedelta(seconds=1)).isoformat()
+        newer["observed_at_utc"] = later
+        self.status.codex(TASK, self.save(newer), later)
+        self.assertEqual(before, self.status.queue(later))
+
+    def test_bounded_listener_catches_final_wake_without_auto_ack(self):
+        link = FakeLink()
+        link.up = True
+        link.messages = [self.message(11, "task.start")]
+        def wait(after, timeout):
+            link.messages.append(self.message(12, "task.completed"))
+            return [link.messages[-1]], 12
+        link.wait = wait
+        result = self.status.listen(link, seconds=.01, max_waits=1)
+        self.assertEqual(1, result["waits"])
+        self.assertEqual("completed", self.status.state["claude"]["stage"])
+        self.assertEqual(0, link.sends)
+        self.assertFalse(result["automatic_collector"])
+
+    def test_bounded_listener_disconnect_queues_unknown_once(self):
+        link = FakeLink()
+        link.up = False
+        link.unavailable = True
+        with patch.object(w.time, "sleep"):
+            self.status.listen(link, seconds=.01, max_waits=2)
+        self.assertFalse(self.status.state["connected"])
+        rows = self.status.rows(NOW)
+        self.assertEqual("unknown", rows[0]["status"])
+        self.assertEqual("disconnected", rows[0]["reason"])
+        self.assertEqual(1, len(self.status.state["queued"]))
+
+    def test_listener_does_not_skip_cross_route_new_assignment(self):
+        link = FakeLink()
+        link.up = True
+        link.messages = [self.message(11, "task.start")]
+        replacement = copy.deepcopy(self.assignment)
+        replacement["id"], replacement["body"]["assignment_id"] = 12, "next-job"
+        link.messages.append(replacement)
+        link.wait = lambda after, timeout: ([], 12)
+        self.status.listen(link, seconds=.01, max_waits=1)
+        self.assertEqual(12, self.status.state["claude"]["superseded_by"])
+        self.assertEqual(12, self.status.state["cursor"])
+
+    def test_invalid_listener_limits_fail_before_wait(self):
+        with self.assertRaisesRegex(ValueError, "bounded"):
+            self.status.listen(self.link, seconds=601)
 
 
 if __name__ == "__main__":
