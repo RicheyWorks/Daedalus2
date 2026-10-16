@@ -106,3 +106,24 @@ grapple, transmission-glass or physics acceptance is claimed. No tests, Play,
 build, editor restart or global-setting changes were part of this delivery.
 The preservation digest covers actor poses and static-component records, not
 all instance transforms or complete serialized actor properties.
+
+## 32971 glass receiving contract — source stage
+
+Codex's file-only qualifier and delivery parser now retain the original BLEND
+alpha `0.1599999964237213` independently from transmission `0.25`. Installed
+UE5.8 source maps this role to `MF_Transmission_Body`, ThinTranslucent,
+Translucent and SurfacePerPixelLighting. Qualification requires the separate
+ThinTranslucent custom output as well as all 30 ordinary roots; an alpha-only
+graph cannot pass. A connected `AlphaMode=2` constant and an evidenced function
+default of 2 are both source-backed forms. No output index is guessed.
+
+Sixteen tiny offline contract checks pass, including custom-output, mask,
+extra-connection, raw-factor and empty-evidence regressions. The file-only
+preparer verifies the original GLB/manifest, baseline and ten installed source/
+body pins. `GlassSourceR1/qualification.json` retains the source result.
+Neither new module collects native state or dispatches editor work. Existing
+glass graph/defaults, native API return shapes and actual transmitted appearance
+remain unknown: the previous graph inspections explicitly skipped glass.
+Next is a separately scoped guarded read-only observation of the two held
+objects after the producer's actual terminal/release. Saving, placement and
+visual acceptance require later admission; both objects remain held.
