@@ -17,6 +17,13 @@ $manifest=Get-Content $manifestPath -Raw|ConvertFrom-Json
 $repo=$manifest.repository_root
 $root=Join-Path $repo $manifest.output_root
 $stagePlan=$manifest.stages.$Stage
+# Reject a consumed allocation before any lease/attempt write/launch, including
+# historical r1 attempts whose selected output never reached publication.
+foreach($version in @('stage-plan-r1','stage-plan-r2')){
+ if(Test-Path -LiteralPath (Join-Path $root "$version/attempts/$GrantId")){
+  throw "Consumed grant in ${version}: reconcile the retained attempt, never replay"
+ }
+}
 foreach($pin in $manifest.pins){
  $file=Join-Path $repo $pin.path
  if((Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant() -ne $pin.sha256){throw "Changed pin $($pin.path)"}
@@ -35,7 +42,8 @@ if($locks.compute){throw 'Compute held; do not race or steal'}
 if($locks.unreal -and $locks.unreal.holder -ne 'codex-play-guard'){throw 'Native custody changed; reconcile'}
 $lease=Invoke-RestMethod "$hub/lock" -Method Post -ContentType application/json -Body (@{me='team-codex';name='compute';ttl=$ttl;note=$GrantId}|ConvertTo-Json) -TimeoutSec 5
 if(-not $lease.ok -or $lease.lock.holder -ne 'team-codex'){throw 'Exclusive compute not acquired'}
-$job=$null;$terminal=$false;$attempt=$null
+$job=$null;$terminal=$false;$attempt=$null;$start=$null
+$phase='lease-acquired'
 try{
  $locks=Invoke-RestMethod "$hub/locks" -TimeoutSec 5
  if($locks.compute.holder -ne 'team-codex' -or $locks.compute.note -ne $GrantId){throw 'Lease readback mismatch'}
@@ -49,9 +57,12 @@ try{
  $memory=Invoke-WillowMemoryPreflight -Path (Join-Path $attempt 'prelaunch-memory.json') -Grant $GrantId -Stage $Stage -Memory $os -QueryError $queryError
  if([DateTimeOffset]::UtcNow -ge $StartByUtc){throw 'Start window expired UTC'}
  $start=[DateTimeOffset]::UtcNow;$clock=[Diagnostics.Stopwatch]::StartNew()
+ $phase='launch-requested'
  $job=Start-Process -FilePath $manifest.blender -ArgumentList $argv -WorkingDirectory $repo -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $attempt 'stdout.log') -RedirectStandardError (Join-Path $attempt 'stderr.log')
+ $phase='launched-before-start-receipt'
  $started=@{grant=$GrantId;stage=$Stage;pid=$job.Id;start_utc=$start.ToString('o');argv=$argv;memory=$memory;manifest_sha256=$ManifestSha256;cpu_threads=$stagePlan.cpu_threads}
  Write-WillowEvidence -Path (Join-Path $attempt 'started.json') -Value $started
+ $phase='running'
  $started|ConvertTo-Json -Depth 6
  while(-not $job.HasExited){
   if($clock.Elapsed.TotalSeconds -gt $stagePlan.max_wall_seconds -or [DateTimeOffset]::UtcNow -ge $ExpiresUtc){
@@ -61,16 +72,30 @@ try{
   Start-Sleep -Milliseconds 250;$job.Refresh()
  }
  $job.WaitForExit();$clock.Stop();$terminal=$true
+ $phase='process-terminal-before-terminal-receipt'
  $result=@{grant=$GrantId;stage=$Stage;pid=$job.Id;exit_code=$job.ExitCode;end_utc=[DateTimeOffset]::UtcNow.ToString('o');wall_seconds=$clock.Elapsed.TotalSeconds;native=$null;quality_accepted=$null;validation=$null}
  # Always retain terminal status before trying content validation.
  Write-WillowEvidence -Path (Join-Path $attempt 'terminal.json') -Value $result
+ $phase='terminal-receipt-retained'
  if($job.ExitCode -eq 0){
   $result.validation=& (Join-Path $PSScriptRoot 'validate-stage.ps1') -Stage $Stage -Repo $repo -ManifestPath $manifestPath
   Write-WillowEvidence -Path (Join-Path $attempt 'verified.json') -Value $result
  }else{throw 'Stage failed: partial files remain; no automatic replay'}
 }catch{
- if($attempt -and (Test-Path $attempt)){Write-WillowEvidence -Path (Join-Path $attempt 'failure.json') -Value @{utc=[DateTimeOffset]::UtcNow.ToString('o');error=$_.Exception.Message;launched=($null -ne $job);terminal=$terminal;retry=$false}}
- throw
+ $originalError=$_
+ $failure=@{utc=[DateTimeOffset]::UtcNow.ToString('o');error=$originalError.Exception.Message;
+  grant=$GrantId;stage=$Stage;launched=($null -ne $job);terminal=$terminal;retry=$false;
+  pid=$(if($job){$job.Id}else{$null});start_utc=$(if($null -ne $start){$start.ToUniversalTime().ToString('o')}else{$null});
+  argv=$argv;executable=$manifest.blender;lifecycle_phase=$phase;
+  compute_retained=($null -ne $job -and -not $terminal)}
+ try{
+  if(-not $attempt -or -not(Test-Path -LiteralPath $attempt)){throw 'No attempt directory available for failure evidence'}
+  Write-WillowEvidence -Path (Join-Path $attempt 'failure.json') -Value $failure
+ }catch{
+  $failure.evidence_publication_error=$_.Exception.Message
+  Write-Warning ('WILLOW_FAILURE_FALLBACK '+($failure|ConvertTo-Json -Depth 8 -Compress))
+ }
+ throw $originalError
 }finally{
  if(Test-WillowMayRelease -Launched ($null -ne $job) -Terminal $terminal){
   $release=Invoke-RestMethod "$hub/unlock" -Method Post -ContentType application/json -Body (@{me='team-codex';name='compute';force=$false}|ConvertTo-Json) -TimeoutSec 5

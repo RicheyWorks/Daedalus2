@@ -64,8 +64,9 @@ rejection with no process, completed exit+validation+release, failed exit+releas
 and uncertain live-process lease retention. No production HTTP, OS query,
 Blender/native process or actual lease is used by these tests.
 
-Actual final focused result: **40 checks PASS**. Test sandbox:
-`C:/Users/730ri/AppData/Local/Temp/willow-r2-tests-689db6e6b8a3472aa397a72d6457a8a2`.
+Initial focused result: **40 checks PASS**. After the independent review fixes
+below, the final focused result is **75 checks PASS**. Final test sandbox:
+`C:/Users/730ri/AppData/Local/Temp/willow-r2-tests-916ce58f9f7240f598b45b0eeb252ca7`.
 Earlier sandboxed filesystem Move restrictions prevented atomic evidence writes;
 the authorized focused run outside that restriction succeeded. Test-only mock
 scope/parameter/interpolation defects were corrected before the passing result.
@@ -98,3 +99,31 @@ source/GLB/attempt bytes. Sole Unreal operator remains codex-play-guard.
 
 Lesson: keep the failed outcome immutable, make rejection evidence as durable as
 success evidence, and normalize portable serialization without relaxing identity.
+
+## Independent PR167 review corrections
+
+Review5542885212 at published83786a49 identified three P2 source-boundary gaps.
+This follow-up preserves the same five-file scope and all original r1 evidence:
+
+- WILLOW-R2-01: the runner checks consumed GrantId paths in BOTH r1 and r2
+  before any HTTP, lease, attempt write or launch. Synthetic retained attempts
+  reject with zero mocked HTTP/process calls and unchanged original bytes.
+- WILLOW-R2-02: lifecycle phase and known PID/start/argv/grant/executable survive
+  a failure publishing started.json after launch. Durable failure evidence is
+  attempted; if that publication also fails, WILLOW_FAILURE_FALLBACK emits the
+  same context plus the publication error to the console warning stream. No
+  terminal acceptance, kill, retry or lease release follows an uncertain launch.
+  Tests cover prelaunch write failure (zero launches/normal release), started
+  write failure, and simultaneous started/failure publication failure. The
+  pre-existing evidence bytes are preserved in every case.
+- WILLOW-R2-03: root, authored.json, selected stage receipt and expected retained
+  reopen scene are resolved through the existing reparse policy BEFORE pilot
+  content/hash reads. Synthetic metadata mocks reject each reparse case with
+  zero authored/stage content reads; a normal reopen receipt still validates.
+
+All75 serial checks passed with only synthetic files and mocked boundaries.
+The metadata tests create no actual symlinks and call no native API. Parser-only
+checks cover all four PowerShell source files. These results do not establish
+real OS/process fault recovery, production adoption, current memory, editable
+reopen or visual/native acceptance. The changed source requires independent
+re-review; no prior review acceptance is silently transferred to this head.

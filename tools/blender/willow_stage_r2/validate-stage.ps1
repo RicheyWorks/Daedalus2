@@ -15,10 +15,16 @@ function CheckFile([string]$path,[string]$hash){
 function LocalPath([string]$relative){
  return Resolve-WillowPath -Root $root -Relative $relative
 }
-foreach($pin in $manifest.pins){CheckFile (Join-Path $Repo $pin.path) $pin.sha256}
-$authored=Get-Content (Join-Path $root 'authored.json') -Raw|ConvertFrom-Json
 $receiptName=@{export='exported.json';views='views.json';reopen='reopened.json'}[$Stage]
-$receipt=Get-Content (Join-Path $root $receiptName) -Raw|ConvertFrom-Json
+# Resolve metadata and the reopen target BEFORE any pilot content/hash read.
+# LocalPath checks the root and every existing component for reparse points.
+$authoredPath=LocalPath 'authored.json'
+$receiptPath=LocalPath $receiptName
+$reopenTarget=$null
+if($Stage -eq 'reopen'){$reopenTarget=LocalPath 'WillowPilot.blend'}
+foreach($pin in $manifest.pins){CheckFile (Join-Path $Repo $pin.path) $pin.sha256}
+$authored=Get-Content -LiteralPath $authoredPath -Raw|ConvertFrom-Json
+$receipt=Get-Content -LiteralPath $receiptPath -Raw|ConvertFrom-Json
 foreach($property in $authored.inputs.PSObject.Properties){
  Require ($receipt.inputs.($property.Name) -eq $property.Value) 'Stage input binding mismatch'
 }
@@ -84,7 +90,7 @@ if($Stage -eq 'export'){
  }
 }else{
  Require ($receipt.stage -eq 'editable-reopened') 'Not a reopen receipt'
- Require ([IO.Path]::GetFullPath($receipt.filepath) -eq [IO.Path]::GetFullPath((Join-Path $root 'WillowPilot.blend'))) 'Wrong reopened file'
+ Require ([IO.Path]::GetFullPath($receipt.filepath) -eq $reopenTarget) 'Wrong reopened file'
  Require ($receipt.objects -gt 0 -and $null -eq $receipt.visual_review) 'Invalid reopen fields'
 }
 Require ($null -eq $receipt.native) 'Stage cannot claim native acceptance'
