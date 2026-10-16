@@ -249,11 +249,11 @@ def prepare_normal_repair(a):
     print(json.dumps({'stage':value['stage'],'prepared':d.pin(a.folder/'prepared.json'),'native_calls':0,'runtime_authorized':False}))
 
 
-REPAIR_VERSION='corn-authored-normal-repair-caller-v1'
+REPAIR_VERSION='corn-authored-normal-repair-caller-v2'
 REPAIR_OPERATION='corn-authored-normal-repair-only-v1'
-REPAIR_NATIVE_SHA='a82dc0639c718200fdd328896b47596310b8a53e2ca38e3f6c2a9d5bfe3d7b5d'
-REPAIR_SOURCE_SHA='59ff2d3c6bd9693e6c5b722a74e6e9a8671a9c748e1fcace4b6d7f926fb2a600'
-REPAIR_SOURCE=TASK/'native-ingestion/Harvest3CornR1/NormalRepairCallerSourceR1'
+REPAIR_NATIVE_SHA='4561dd8d37804e6f331e2de5210fe560ec52b57086c33c590a60cae256af0fce'
+REPAIR_SOURCE_SHA='ae64e9cab2c5f9cfc9f0a89c127c56087de1f50f7b53ff3492f297bf0695aa87'
+REPAIR_SOURCE=TASK/'native-ingestion/Harvest3CornR1/NormalRepairCallerSourceR2'
 REPAIR_ATTEMPTS=TASK/'native-ingestion/Harvest3CornR1/NormalRepairAttempts'
 REPAIR_EDITOR='C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe'
 REPAIR_EDITOR_START='2026-10-16T05:00:48.3931312Z'
@@ -266,12 +266,14 @@ def prepare_repair_caller(a):
     """File-only source plan. No external tools, reservations or dispatch."""
     if a.folder.resolve()!=REPAIR_SOURCE or (a.folder/'prepared.json').exists():raise RuntimeError('fresh exact caller source packet required')
     scope=d.load(a.scope)
-    if not any(m.get('id')==33230 and m.get('type')=='source.assignment' and m.get('from')=='pootscoot-coordination'
-               and m.get('to')=='codex-play-guard' and m.get('body',{}).get('source_only')is True for m in scope['messages']):raise RuntimeError('addressed source-only33230 assignment required')
-    source=TASK/'native-ingestion/Harvest3CornR1/NormalRepairSourceR1/prepared.json'
+    if not any(m.get('id')==33316 and m.get('type')=='task.assign' and m.get('from')=='pootscoot-coordination'
+               and m.get('to')=='codex-play-guard' and m.get('body',{}).get('source_only')is True for m in scope['messages']):raise RuntimeError('addressed source-only33316 assignment required')
+    source=TASK/'native-ingestion/Harvest3CornR1/NormalRepairSourceR2/prepared.json'
     if d.fingerprint(source)['sha256']!=REPAIR_SOURCE_SHA or d.fingerprint(NATIVE)['sha256']!=REPAIR_NATIVE_SHA:raise RuntimeError('exact reviewed native/source cut required')
     candidate=d.load(source)
-    publication=source.parent/'publication.json';published=d.load(publication)
+    # Verified unchanged-core lineage only. R2 still needs its own exact source
+    # review and finite runtime grant; the consumed R1 publication grants none.
+    publication=TASK/'native-ingestion/Harvest3CornR1/NormalRepairSourceR1/publication.json';published=d.load(publication)
     if published.get('commit')!='c20170324aa0605796e49a4f1c8a71b2b8c094a3' or published.get('exact_reviewed_cut')is not True or not all(row.get('remote_bytes_verified')is True for row in published['files']):
         raise RuntimeError('verified exact reviewed source publication required first')
     for row in candidate['cfg']['repair_support'].values():d._check(row)

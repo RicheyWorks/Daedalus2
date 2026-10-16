@@ -282,6 +282,8 @@ BUILD_FIELDS=('bUseMikkTSpace','bRecomputeNormals','bRecomputeTangents','bComput
     'bUseBackwardsCompatibleF16TruncUVs','bGenerateLightmapUVs','bGenerateDistanceFieldAsIfTwoSided',
     'bSupportFaceRemap','MinLightmapResolution','SrcLightmapIndex','DstLightmapIndex','BuildScale_DEPRECATED',
     'BuildScale3D','DistanceFieldResolutionScale','DistanceFieldBias_DEPRECATED','DistanceFieldReplacementMesh','MaxLumenMeshCards')
+BUILD_READ_NAMES={key:key for key in BUILD_FIELDS}
+BUILD_READ_NAMES.update(BuildScale_DEPRECATED='BuildScale',DistanceFieldBias_DEPRECATED='DistanceFieldBias')
 
 
 def _repair_value(value):
@@ -299,8 +301,15 @@ def _repair_value(value):
 def _repair_settings(settings):
     # Native property names cover all21 installed UPROPERTYs, including the two
     # deprecated values omitted by the native FMeshBuildSettings operator==.
+    # Installed UHT strips _DEPRECATED from EngineName, not SourceName. Python
+    # get_editor_property looks up that reflected FProperty name. Keep original
+    # C++ identities in the report; never skip/default a missing property.
+    expected={key:key.removesuffix('_DEPRECATED') for key in BUILD_FIELDS}
+    if (len(expected)!=21 or BUILD_READ_NAMES!=expected
+            or len(set(BUILD_READ_NAMES.values()))!=21):
+        raise RuntimeError('exact one-to-one installed build-property read names required')
     return {'exposed':_repair_value(settings.to_dict()),
-            'native':{key:_repair_value(settings.get_editor_property(key)) for key in BUILD_FIELDS}}
+            'native':{key:_repair_value(settings.get_editor_property(BUILD_READ_NAMES[key])) for key in BUILD_FIELDS}}
 
 
 def _repair_transaction(mesh,subsystem,report,keep,guard,precheck,postcheck):

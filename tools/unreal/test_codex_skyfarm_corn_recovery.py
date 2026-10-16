@@ -396,7 +396,13 @@ class NormalRepairCandidateTests(unittest.TestCase):
             def __init__(self,values):self.values=copy.deepcopy(values)
             def copy(self):return Settings(self.values)
             def to_dict(self):return copy.deepcopy(self.values)
-            def get_editor_property(self,key):return self.values[key]
+            def get_editor_property(self,key):
+                # Installed UHT reflection strips this C++ suffix. Reject the
+                # old spelling instead of letting the fixture hide that bug.
+                if key in ('BuildScale_DEPRECATED','DistanceFieldBias_DEPRECATED'):
+                    raise KeyError('C++ deprecated spelling is not a reflected property')
+                native={'BuildScale':'BuildScale_DEPRECATED','DistanceFieldBias':'DistanceFieldBias_DEPRECATED'}.get(key,key)
+                return self.values[native]
             def set_editor_property(self,key,value):
                 if key!='recompute_normals':raise AssertionError('Only one field allowed')
                 self.values['bRecomputeNormals']=value
@@ -412,6 +418,38 @@ class NormalRepairCandidateTests(unittest.TestCase):
         report={'stage':'TEST_ONLY'};keep=Mock();guard=Mock();pre=Mock(return_value={'clear':True})
         post=Mock(return_value=dict(stored_authored_clear=True,raw_authored_clear=True,original_pbr_clear=True,preservation_clear=True))
         return mesh,subsystem,report,keep,guard,pre,post
+
+    def test_reflected_aliases_read_all21_and_old_cpp_spelling_fails(self):
+        args=self.fixture();sub=args[1]
+        with self.assertRaisesRegex(KeyError,'not a reflected property'):
+            sub.current.get_editor_property('BuildScale_DEPRECATED')
+        with self.assertRaisesRegex(KeyError,'not a reflected property'):
+            sub.current.get_editor_property('DistanceFieldBias_DEPRECATED')
+        snapshot=self.native._repair_settings(sub.current)
+        self.assertEqual(set(snapshot['native']),set(self.native.BUILD_FIELDS))
+        self.assertEqual(len(snapshot['native']),21)
+        self.assertEqual(snapshot['native']['BuildScale_DEPRECATED'],1.)
+        self.assertEqual(snapshot['native']['DistanceFieldBias_DEPRECATED'],.125)
+        self.assertEqual(snapshot['native'],{k:self.values[k] for k in self.native.BUILD_FIELDS})
+
+    def test_unknown_or_colliding_read_map_holds_before_setter(self):
+        for changes in ({'BuildScale_DEPRECATED':'BuildScale3D'},
+                        {'BuildScale_DEPRECATED':'UnknownProperty'},
+                        {'UnknownNativeProperty':'BuildScale'}):
+            with self.subTest(changes=changes),patch.dict(self.native.BUILD_READ_NAMES,changes):
+                args=self.fixture();result=self.native._repair_transaction(*args)
+                self.assertEqual(result['stage'],'CORN_NORMAL_REPAIR_PARTIAL_HOLD')
+                self.assertIn('one-to-one',result['error'])
+                self.assertEqual(result['setter_intents'],0);self.assertEqual(result['setter_returns'],0)
+                args[1].set_lod_build_settings.assert_not_called()
+
+    def test_missing_actual_reflected_property_has_no_default_or_setter(self):
+        args=self.fixture();del args[1].current.values['DistanceFieldBias_DEPRECATED']
+        result=self.native._repair_transaction(*args)
+        self.assertEqual(result['stage'],'CORN_NORMAL_REPAIR_PARTIAL_HOLD')
+        self.assertIn('DistanceFieldBias_DEPRECATED',result['error'])
+        self.assertEqual(result['setter_intents'],0);self.assertEqual(result['setter_returns'],0)
+        args[1].set_lod_build_settings.assert_not_called()
 
     def test_exact_target_one_setter_changes_only_normal_flag_and_never_saves(self):
         args=self.fixture();mesh,sub,r,keep,guard,pre,post=args
@@ -726,6 +764,19 @@ class RepairCallerTests(unittest.TestCase):
     def test_reviewed_native_bytes_remain_unchanged(self):
         import hashlib
         self.assertEqual(hashlib.sha256(NATIVE.read_bytes()).hexdigest(),self.ns['REPAIR_NATIVE_SHA'])
+
+    def test_prior_r1_version_or_native_pin_cannot_admit_reflected_revision(self):
+        for old_version,old_native in [('corn-authored-normal-repair-caller-v1',None),
+                (None,'a82dc0639c718200fdd328896b47596310b8a53e2ca38e3f6c2a9d5bfe3d7b5d')]:
+            with self.subTest(old_version=old_version,old_native=old_native):
+                value=copy.deepcopy(self.prepared)
+                if old_version:value['version']=old_version
+                if old_native:value['native_source']['sha256']=old_native
+                (self.args.folder/'prepared.json').write_text(json.dumps(value))
+                result=self.run_caller()
+                self.assertEqual(result['stage'],'NO_DISPATCH_REJECTED')
+                self.assertIn('caller/native/target/function',result['error'])
+                self.io.claim.assert_not_called();self.io.call.assert_not_called();self.factory.assert_not_called()
 
     def test_absent_compute_is_not_a_substitute_for_actual_resource_closure(self):
         self.body['resource_prerequisite_confirmed']=False;self.write_grant()
