@@ -550,6 +550,7 @@ class GuiStagesTest(unittest.TestCase):
         changes = (("grant", 32783), ("grant", True), ("before", {}),
                    ("before", {"compute": {"holder": "another-owner"}}),
                    ("after", {"compute": None}), ("unlock", {"ok": False, "lock": None}),
+                   ("unlock", {"ok": 1, "lock": None}),
                    ("observed_at_utc", "2026-10-16T05:50:49.1272009Z"),
                    ("observed_at_utc", "2026-10-16T06:20:00.0000001Z"),
                    ("observed_at_utc", "malformed"))

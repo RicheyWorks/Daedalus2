@@ -556,13 +556,15 @@ def gui_released(proof, allocation_id, owner, finished, observed):
     if not isinstance(before, dict) or not isinstance(after, dict):
         return False
     lease = before.get("compute")
+    unlock = proof.get("unlock")
     try:
         ordered = gui_clock(finished) <= gui_clock(proof.get("observed_at_utc")) <= gui_clock(observed)
     except ValueError:
         return False
     return (type(proof.get("grant")) is int and proof["grant"] == allocation_id
             and isinstance(lease, dict) and lease.get("holder") == owner
-            and proof.get("unlock") == {"ok": True, "lock": None}
+            and isinstance(unlock, dict) and set(unlock) == {"ok", "lock"}
+            and unlock["ok"] is True and unlock["lock"] is None
             and "compute" not in after and ordered)
 
 
