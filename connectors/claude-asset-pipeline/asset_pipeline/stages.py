@@ -431,6 +431,8 @@ def field(value, path):
 
 
 GUI_SCHEMA = "daedalus.copperfall.existing-session.v1"
+GUI_GREENHOUSE_SCHEMA = "daedalus.sky-farm.existing-session.v1"
+GUI_SCHEMAS = (GUI_SCHEMA, GUI_GREENHOUSE_SCHEMA)
 GUI_SUCCEEDED = "TERMINAL_SOURCE_HERO_CREATED_REVIEW_PENDING"
 GUI_FAILED = {"TERMINAL_FAILED_PARTIAL_OUTPUTS_RECONCILE", "TERMINAL_CONTEXT_RECONCILIATION_REQUIRED"}
 
@@ -458,7 +460,8 @@ def inspect_gui(witness, outputs, reader, attempt_id, observed):
     """Qualify the known retained GUI schema, never fabricate a process exit."""
     reader.verify(witness["evidence"])
     proof = read_json(resolve(witness["evidence"], reader.root))
-    need(isinstance(proof, dict) and proof.get("schema") == GUI_SCHEMA, "unsupported GUI receipt schema")
+    need(isinstance(proof, dict) and proof.get("schema") in GUI_SCHEMAS, "unsupported GUI receipt schema")
+    greenhouse = proof["schema"] == GUI_GREENHOUSE_SCHEMA
     need(proof.get("operation_id") == witness["operation_id"] == attempt_id
          and type(proof.get("accepted_allocation_hub")) is int
          and proof["accepted_allocation_hub"] == witness["allocation_id"], "GUI source identity mismatch")
@@ -479,7 +482,10 @@ def inspect_gui(witness, outputs, reader, attempt_id, observed):
     outcome = gui_outcome(proof)
     if outcome != "succeeded":
         issues.append("GUI operation failed/partial or terminal outcome is unknown")
-    for name in ("startup_copy_result", "source_copy_result", "render_operator_result"):
+    operator_fields = ("startup_copy_result", "source_copy_result", "render_operator_result")
+    if greenhouse:
+        operator_fields += ("glb_operator_result",)
+    for name in operator_fields:
         if proof.get(name) != ["FINISHED"]:
             issues.append("GUI FINISHED witness missing: " + name)
     backup = proof.get("startup_backup")
@@ -505,8 +511,14 @@ def inspect_gui(witness, outputs, reader, attempt_id, observed):
         need(role in outputs and outputs[role] == selected, "GUI output pin differs from retained terminal")
         if selected["bytes"] == 0:
             issues.append("GUI required output is empty: " + role)
-    restored = all(proof.get(k) is True for k in (
-        "startup_objects_preserved", "original_context_restored", "retained_scenes_preserved"))
+    # Greenhouse's frozen producer hashes EVERY retained scene, including the
+    # startup scene, and its context-restored predicate includes the filepath.
+    # It has no separate startup_objects_preserved flag. Never synthesize one
+    # or relax Copperfall's three existing flags. A supplied false flag holds.
+    restoration_fields = ("original_context_restored", "retained_scenes_preserved")
+    if not greenhouse or "startup_objects_preserved" in proof:
+        restoration_fields += ("startup_objects_preserved",)
+    restored = all(proof.get(k) is True for k in restoration_fields)
     baseline_ok = False
     if "baseline" in witness:
         reader.verify(witness["baseline"])
@@ -517,12 +529,13 @@ def inspect_gui(witness, outputs, reader, attempt_id, observed):
                             and all(isinstance(k, str) and 0 < len(k) <= 128
                                     and isinstance(v, str) and SHA.fullmatch(v) for k, v in hashes.items()))
             context = proof.get("original_context")
+            active_key = "active" if greenhouse else "active_object"
             mapping = {"scene": "original_scene", "mode": "mode", "active_object": "active",
                        "selected": "selected", "filepath": "filepath"}
             context_ok = (isinstance(context, dict)
                           and all(isinstance(context.get(k), str) and 0 < len(context[k]) <= 128
                                   for k in ("scene", "mode", "view_layer"))
-                          and (context.get("active_object") is None or isinstance(context.get("active_object"), str))
+                          and (context.get(active_key) is None or isinstance(context.get(active_key), str))
                           and isinstance(context.get("filepath"), str)
                           and isinstance(context.get("selected"), list) and len(context["selected"]) <= 1024
                           and all(isinstance(k, str) and 0 < len(k) <= 128 for k in context["selected"]))
@@ -531,8 +544,11 @@ def inspect_gui(witness, outputs, reader, attempt_id, observed):
                            and baseline.get("pid") == pid
                            and hashes == proof.get("retained_scene_hashes")
                            and context_ok
-                           and all(a in context and b in baseline and context[a] == baseline[b]
-                                   for a, b in mapping.items())
+                           and (isinstance(baseline.get("context"), dict)
+                                and all(k in context for k in ("scene", "view_layer", "active", "selected", "mode", "filepath"))
+                                and context == baseline["context"] if greenhouse else
+                                all(a in context and b in baseline and context[a] == baseline[b]
+                                    for a, b in mapping.items()))
                            )
             try:
                 baseline_ok = baseline_ok and gui_clock(baseline.get("observed_at_utc")) <= gui_clock(proof.get("started_at_utc"))
@@ -572,7 +588,7 @@ def adapt_gui(terminal_path, job_id, stage_id, attempt_id, selections, observed_
               baseline_path=None, release_path=None, release_owner=None):
     """Normalize actual persistent-GUI receipts read-only; no execution/adoption."""
     proof = read_json(terminal_path)
-    need(isinstance(proof, dict) and proof.get("schema") == GUI_SCHEMA, "unsupported GUI receipt schema")
+    need(isinstance(proof, dict) and proof.get("schema") in GUI_SCHEMAS, "unsupported GUI receipt schema")
     need(ident(attempt_id) == proof.get("operation_id"), "caller attempt ID must equal actual GUI operation ID")
     witness = {"operation_id": attempt_id, "allocation_id": proof.get("accepted_allocation_hub"),
                "evidence": fingerprint(terminal_path), "output_fields": copy.deepcopy(selections)}
