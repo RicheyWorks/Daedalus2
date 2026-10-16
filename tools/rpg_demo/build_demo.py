@@ -203,7 +203,7 @@ def main(argv):
     fish = J("prism-fish.json")["fish"]
     import re as _re
     for f in fish:
-        if not _re.fullmatch(r"(heal \d+ HP|restore \d+ MP)", f["effect"]) or f["weight"] <= 0 or not 0.2 <= f["window_s"] <= 2:
+        if not _re.fullmatch(r"(heal \d+ HP|restore \d+ MP)", f["effect"]) or f["weight"] <= 0 or f.get("night_weight", 1) <= 0 or not 0.2 <= f["window_s"] <= 2:
             raise SystemExit("prism-fish.json: %s has an effect, weight or bite window the demo cannot use" % f["name"])
     if not any(c == "Water" for r in J("prism-village.json")["grid"] for c in r):
         raise SystemExit("prism-fish.json: Windmere has no Water to fish in")

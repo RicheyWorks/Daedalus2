@@ -360,7 +360,29 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {} };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {}, day: 1, minute: 8 * 60 };
+/* ---------- time of day ----------
+   A day passes in steps: 4 minutes a step on the world map, 2 in towns and villages, 1 in dungeons (no sky there),
+   15 a battle. Dawn 5-7, day 7-18, dusk 18-20, night 20-5. The field darkens toward night and lamps glow; at night
+   random battles come a little more often and the rare fish feed (prism-fish.json night_weight). A night at the inn
+   wakes you at 7:00 the next day; a camp tent at 6:00. */
+const STEP_MIN = { world: 4, town: 2, village: 2, interior: 2, dungeon: 1 };
+function passTime(min) {
+  state.minute += min;
+  while (state.minute >= 1440) { state.minute -= 1440; state.day++; }
+}
+function wakeAt(hour) { if (state.minute >= hour * 60) state.day++; state.minute = hour * 60; }
+function phase(m = state.minute) { const h = m / 60; return h >= 20 || h < 5 ? "night" : h < 7 ? "dawn" : h < 18 ? "day" : "dusk"; }
+const isNight = () => phase() === "night" || phase() === "dusk";
+const clockText = () => "D" + state.day + " " + String(Math.floor(state.minute / 60)).padStart(2, "0") + ":" + String(state.minute % 60).padStart(2, "0");
+function dark() {                                               /* 0 at noon-ish, ~0.55 at midnight; indoors and dungeons stay as they are */
+  if (!map || !(map.kind === "world" || map.kind === "town" || map.kind === "village")) return 0;
+  const h = state.minute / 60;
+  if (h >= 7 && h < 18) return 0;
+  if (h >= 18 && h < 20) return (h - 18) / 2 * 0.45;
+  if (h >= 5 && h < 7) return (1 - (h - 5) / 2) * 0.45;
+  return 0.5;
+}
 /* ---------- the airship (world map only) ----------
    The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
@@ -534,7 +556,7 @@ function innPrompt() {
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
     roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster());
-    fade = 1; fadeCb = () => { cue(map.cue); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
+    fade = 1; fadeCb = () => { cue(map.cue); wakeAt(7); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
   });
 }
 function openChest(x, y) {
@@ -607,7 +629,7 @@ function drawShop() {
 /* ---------- field ---------- */
 function stepDone() {
   const t = at(P.x, P.y);
-  state.steps++; state.sinceBattle++; fieldPoison();
+  state.steps++; state.sinceBattle++; fieldPoison(); passTime(flying() ? 2 : (STEP_MIN[map.kind] || 2));
   if (map.kind === "town" && P.y === map.grid.length - 1) {                    /* the south road leaves town */
     const p = find(D.world, "Town"); return goto(worldMap(), p[0], p[1] + 1, "down");
   }
@@ -659,7 +681,7 @@ function stepDone() {
   }
   const zone = map.zone && map.zone(t);
   if (zone && D.zones[zone] && state.sinceBattle > 4) {
-    const mean = map.stepsMean || D.zones[zone].steps_mean || 24;
+    const mean = (map.stepsMean || D.zones[zone].steps_mean || 24) * (map.kind === "world" && isNight() ? 0.75 : 1);   /* night: more ambushes */
     if (Math.random() < 1 / mean) startBattle(zone);
   }
 }
@@ -724,6 +746,18 @@ function drawField() {
   if (parked && airship().y <= P.y) drawAirship(ox, oy);                                        /* draw back to front */
   if (!flying()) spr("sprites", "NPC_Guard", ox + P.fx, oy + P.fy, (DIR_ROW[P.dir] * 2 + pf) * 16, 16, 16);
   if (flying() || (parked && airship().y > P.y)) drawAirship(ox, oy);
+  const dk = dark();
+  if (dk > 0) {                                                  /* dusk to dawn: a blue night over the field, lamps glow */
+    g.fillStyle = "rgba(10,14,48," + dk.toFixed(3) + ")"; g.fillRect(0, 0, W, H);
+    for (let y = y0; y < Math.min(gh, y0 + 16); y++) for (let x = x0; x < Math.min(gw, x0 + 22); x++) {
+      const c = map.grid[y][x];
+      if (c === "Lamp" || c === "Town" || c === "Village" || c === "Castle") {
+        const lx = ox + x * T + 8, ly = oy + y * T + 6, r = c === "Lamp" ? 22 : 14, gr = g.createRadialGradient(lx, ly, 1, lx, ly, r);
+        gr.addColorStop(0, "rgba(255,214,120," + (0.55 * dk / 0.5).toFixed(3) + ")"); gr.addColorStop(1, "rgba(255,214,120,0)");
+        g.fillStyle = gr; g.fillRect(lx - r, ly - r, r * 2, r * 2);
+      }
+    }
+  }
 }
 
 /* ---------- fishing (data.json fish, from data/rpg/prism-fish.json) ----------
@@ -747,9 +781,9 @@ function castLine(tx, ty) {
   mode = "fish"; sfx("SWING");
 }
 function pickFish() {
-  const all = D.fish || [], tot = all.reduce((a, f) => a + f.weight, 0);
+  const all = D.fish || [], wt = f => (isNight() && f.night_weight) || f.weight, tot = all.reduce((a, f) => a + wt(f), 0);
   let r = Math.random() * tot;
-  for (const f of all) { r -= f.weight; if (r < 0) return f; }
+  for (const f of all) { r -= wt(f); if (r < 0) return f; }
   return all[all.length - 1];
 }
 function endFish() { fishing = null; mode = "field"; }
@@ -944,7 +978,7 @@ function useItem(name, m) {
   if (itemKind(name) === "camp") {
     if (B || !map || map.kind !== "world") return "PITCH THE TENT OUT ON THE OPEN ROAD.";
     roster().forEach(x => { x.hp = x.max; x.mp = x.mmax; }); clearAll(roster());
-    bag[name]--; sfx("INN"); fade = 1; fadeCb = () => {}; return "THE PARTY CAMPS UNDER THE ISLES. ALL RESTED.";
+    bag[name]--; sfx("INN"); fade = 1; fadeCb = () => { wakeAt(6); }; return "THE PARTY CAMPS UNDER THE ISLES. ALL RESTED.";
   }
   if (/revive/.test(e)) { if (m.hp > 0) return m.name + " IS STANDING ALREADY."; m.hp = Math.ceil(m.max / 4); m.status = {}; }
   else if (/cure (\w+)/.test(e)) { const k = e.match(/cure (\w+)/)[1]; if (m.hp <= 0) return "TOO LATE FOR THAT."; if (!cure(m, k)) return m.name + " IS NOT " + (STATUS[k] ? STATUS[k].word : k.toUpperCase()) + "."; }
@@ -992,6 +1026,7 @@ function drawMenu() {
   if (!sub) cursor(cw[0] + 6, cw[1] + 10 + menu.idx * 16);
   text("G", gw[0] + 8, gw[1] + 14); text(gold, gw[0] + gw[2] - 10 - tw(gold), gw[1] + 14);
   text("SHARDS", gw[0] + 8, gw[1] + 30); text(shardCount(), gw[0] + gw[2] - 10 - tw(shardCount()), gw[1] + 30);
+  text(clockText(), gw[0] + 8, gw[1] + 46, isNight() ? "#90a8ff" : "#fff070");
   if (sub === "item") {
     const items = fieldItems();
     win(20, 60, 220, 112);
@@ -1160,7 +1195,7 @@ function bossOf(boss) {                                   /* true = the boss of 
   return dg.boss_data;
 }
 function startBattle(zone, boss, only) {
-  state.sinceBattle = 0;
+  state.sinceBattle = 0; passTime(15);
   const keys = boss ? null : only || pickFormation(zone);
   const bd0 = boss ? bossOf(boss) : null, dg = bd0 && D.dungeons.find(d => d.boss_data.name === bd0.name);
   const foes = boss ? [{ key: "boss", name: pretty(bd0.name), hp: bd0.hp, max: bd0.hp, atk: bd0.attack, def: bd0.defence, spd: bd0.speed,
@@ -1485,7 +1520,7 @@ function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) 
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
-      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests }));
+      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests, day: state.day, minute: state.minute }));
     return true;
   } catch (e) { return false; }
 }
@@ -1500,13 +1535,14 @@ function titleChoose(i) {
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; opened.clear(); grids = {};
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
     state.air = sv.air ? recoverAir(sv.air) : null;                    /* CONTINUE starts on foot at the inn: never strand the skiff */
     if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"), 1400);
-    state.fish = sv.fish || {}; state.quests = sv.quests || {};                    /* CONTINUE starts at the inn, on foot */
+    state.fish = sv.fish || {}; state.quests = sv.quests || {};
+    state.day = Number.isInteger(sv.day) && sv.day > 0 ? sv.day : 1; state.minute = Number.isInteger(sv.minute) && sv.minute >= 0 && sv.minute < 1440 ? sv.minute : 7 * 60;                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -1721,6 +1757,8 @@ window.PRISM_DEMO = {
   fishing: () => fishing && { phase: fishing.phase, t: fishing.t, msg: fishing.msg, fish: fishing.fish && fishing.fish.name, wait: fishing.wait },
   fishLog: () => Object.assign({}, state.fish),
   quests: () => Object.assign({}, state.quests),
+  clock: () => ({ day: state.day, minute: state.minute, phase: phase(), dark: dark(), text: clockText() }),
+  setClock: (day, minute) => { state.day = day; state.minute = minute; },
   fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
   recoverAir: saved => recoverAir(saved),
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),

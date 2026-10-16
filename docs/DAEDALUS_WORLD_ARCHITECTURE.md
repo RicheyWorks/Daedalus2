@@ -1471,3 +1471,29 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
       stays opened and it boards again.
   - **Found on the way:** the old test had rested at the inn while the skiff sat on the cache, which is the same
     stranding.
+
+### 14.42 The Prismheart demo: time of day
+
+- **Time passes in steps:**
+  - 4 minutes a step on the world map, 2 in town, the village or indoors, and 1 in dungeons;
+  - 2 a flown step (the skiff is quick);
+  - 15 a battle.
+
+  A journey starts on day 1 at 08:00, and the clock rolls over midnight into the next day.
+- **The day:** dawn 5–7, day 7–18, dusk 18–20, night 20–5.
+- **What changes:**
+  - The world map, town and village darken toward night (a blue tint up to 0.5). Town lamps and the
+    Town/Village/Castle markers glow with a warm radial light. Indoors and dungeons are unchanged.
+  - At dusk and night, world-map random battles come a quarter more often.
+  - The rare fish feed at night. `prism-fish.json night_weight` replaces `weight` between dusk and dawn, so carp
+    and koi bite about 2.5–3× more often.
+  - The field menu shows the clock (`D3 21:05`), blue at night.
+  - A night at the inn wakes the party at 07:00 the next day; a camp tent wakes it at 06:00.
+- **Saves:** the clock is saved, and a save from before the clock loads at day 1, 07:00.
+- **Proof:** `tools/rpg_demo/clock_test.py` passes 16/16. It checks:
+  - the step and battle costs;
+  - the midnight rollover and every phase boundary;
+  - the town at 23:00 measurably darker than at noon (mean canvas brightness), with indoors unchanged;
+  - the menu clock;
+  - night fish odds over 20,000 draws;
+  - waking at the inn, saving and CONTINUE, an old save, and NEW GAME.
