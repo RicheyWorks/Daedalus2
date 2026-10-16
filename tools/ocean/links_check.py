@@ -97,7 +97,7 @@ def check(links, pen, out):
                and (not c["submarines"] or ("sub" in a["vessels"] and "sub" in b["vessels"])))
             if a["realm"] == "OCEAN" and b["realm"] != "OCEAN":
                 ok("connection %s -> %s: Ocean to a realm needs a sub and an underwater dock" % (a["id"], b["id"]),
-                   c["submarines"] and not c["boats"] and R[b["realm"]]["has_sub_dock"])
+                   c["submarines"] and not c["boats"] and b["realm"] in R and R[b["realm"]]["has_sub_dock"])
     ok("tide-pen landing is an Ocean dock", docks.get(pen["landing"], {}).get("realm") == "OCEAN", pen["landing"])
     ok("tide-pen landing is reachable from World-Zero", any(c["destination"] == pen["landing"] and docks.get(c["departure"], {}).get("realm") == "WORLD-ZERO" for c in links["connections"]))
     for r in pen["residents"]:
@@ -175,7 +175,27 @@ def main(argv):
                 print("\n".join(out))
             flags_ok += right_reason
         print("LINKS-FLAGS %d/%d %s" % (flags_ok, len(flag_canaries), "PASS" if flags_ok == len(flag_canaries) else "FAIL"))
-        return 0 if n == len(canaries) and flags_ok == len(flag_canaries) else 1
+        L = copy.deepcopy(links)
+        return_destination = next(d for d in L["docks"] if d["id"] == "wz-rim-tidepen")
+        return_destination["vessels"].append("sub")
+        L["connections"].append({"departure": "ocean-pier-sub", "destination": return_destination["id"],
+                                 "boats": False, "submarines": True})
+        return_destination["realm"] = "MISSING-SESSION"
+        out = []
+        unknown_rejected = not all(check(L, pen, out))
+        failures = [line for line in out if line.startswith("FAIL ")]
+        # This canonical dock also supplies the World-Zero tide-pen route; preserve its reachability failure.
+        expected_failures = (
+            "FAIL dock wz-rim-tidepen: realm MISSING-SESSION is a session realm",
+            "FAIL connection ocean-pier-sub -> wz-rim-tidepen: Ocean to a realm needs a sub and an underwater dock",
+            "FAIL tide-pen landing is reachable from World-Zero")
+        unknown_ok = (unknown_rejected and len(failures) == len(expected_failures)
+                      and all(any(line.startswith(reason) for line in failures) for reason in expected_failures))
+        print(("ok   " if unknown_ok else "FAIL ") + "unknown return realm fails with realm, connection and reachability diagnostics")
+        if not unknown_ok:
+            print("\n".join(out))
+        print("LINKS-RETURN-REALM %d/1 %s" % (int(unknown_ok), "PASS" if unknown_ok else "FAIL"))
+        return 0 if n == len(canaries) and flags_ok == len(flag_canaries) and unknown_ok else 1
     out = []
     res = check(links, pen, out)
     print("\n".join(out + warnings()))
