@@ -1,0 +1,104 @@
+{
+  "schema": "daedalus.hearthjaw-inspection-camera.recipe.v1",
+  "source_only": true,
+  "runtime_ready": false,
+  "render_authorized": false,
+  "input_pins": [
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\sky\\sky_Ecology_Presentation.blend",
+      "bytes": 177718,
+      "sha256": "043bee8b2440bc124173fdbd25e6d96a75edd58faed93434932eddb365f2a30d"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\sky\\sky_Botanical_Family.png",
+      "bytes": 2439988,
+      "sha256": "5abe2918c52172bc00a777a1b585c48ac267e6c405906f387dcdc7de7459fe9a"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\Realm_Ecology_Manifest.json",
+      "bytes": 57616,
+      "sha256": "e066a45792b71927803d906f539519fcb8884486356e25980d466ebe49d97eb9"
+    }
+  ],
+  "frozen_source_pins": [
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\realm_ecology_pack.py",
+      "bytes": 44629,
+      "sha256": "113d3d7f03ef56b87bcfd1d1c764633e1e3b47915dbd771d6e0d966bbcf980aa"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_sky.py",
+      "bytes": 29078,
+      "sha256": "3b637f5ae85b308e8637b9186f28b5d5d16ff651fe0dad3484e18b40796756a4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_city.py",
+      "bytes": 31186,
+      "sha256": "b4d504447042c1217695a578103184fddb19a25f193a194739e12ab927d04889"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_wild.py",
+      "bytes": 29095,
+      "sha256": "d34f75e8f22f07e5605076c2023bfdfbd601410a2d0eb4566a36e85ecaae94c2"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\premium_transit_pack.py",
+      "bytes": 20609,
+      "sha256": "97214ea27d2a923d0343cd654e99ecba75ab53495d2dc9fa513b200a82d99f33"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\package_realm_ecology.py",
+      "bytes": 78246,
+      "sha256": "a4faa4dc6e7ad4912110051a44051392f0dec43eea367d8db40ef7489dd43c65"
+    }
+  ],
+  "expected_plant_names": [
+    "Display_Prop_Eco_sky_hearthjaw_G0",
+    "Display_Prop_Eco_sky_hearthjaw_G1",
+    "Display_Prop_Eco_sky_hearthjaw_G2"
+  ],
+  "margin_fraction_per_edge": 0.08,
+  "actual_staged_bounds": null,
+  "actual_camera_basis": null,
+  "actual_sensor_fit": null,
+  "bounds_schema": "daedalus.hearthjaw-staged-bounds.v1",
+  "bound_input_contract": "Complete evaluated world-space eight-corner inventory: every stage0/1/2 has plant+pedestal+rim, plus only Presentation_Floor excluded. Existing orthographic camera right/up/forward/location/zero shift/clip planes/resolution/pixel aspect must be observed in a separately authorized presentation COPY. No stale or inferred stage bounds.",
+  "canonical_camera_source_reference": {
+    "file": "tools/blender/realm_ecology_pack.py",
+    "function": "render",
+    "type": "ORTHO",
+    "name": "Botanical_Family_Camera",
+    "target_offset_from_source_m": [
+      13,
+      -23,
+      20
+    ],
+    "minimum_scale_from_source_m": 24,
+    "observed_camera_state": false
+  },
+  "projection_reference": "https://github.com/blender/blender/blob/v4.3.1/source/blender/blenkernel/intern/camera.cc#L494",
+  "future_use": "Separately authorized caller must verify and open only a COPY, observe complete evaluated bounds/camera, call this pure fit, apply only camera position/ortho_scale to that copy and use fresh supplemental paths. This module has no Blender entry, open/save/render/export/dispatch function.",
+  "future_output_proposal": {
+    "directory": "artifacts/ecology/sky-botanical-pilot-r1/inspection/hearthjaw-camera-r1",
+    "image": "hearthjaw_inspection_r1.png",
+    "scene": "hearthjaw_inspection_r1.blend",
+    "approved": false
+  },
+  "preserve": [
+    "All three growth stages and both pedestal parts at unchanged geometry/relative scale/positions",
+    "Canonical presentation/image/manifest, source/raw plan, R1/R2attempts and existing exports",
+    "Materials/emission/lights/exposure/gamma/shaders and source assets"
+  ],
+  "qualification": "Pure projection math and file pins only; actual bounds, fitted camera values, supplemental render and visual quality remain unproven.",
+  "expected_resolution": [
+    1800,
+    1400
+  ],
+  "camera_assumptions": [
+    "Orthographic camera with evaluated orthonormal world axes and zero lens shift",
+    "Full-frame output, no render border/crop; canonical PNG1800x1400 retained",
+    "Positive finite observed pixel aspect; sensor fit AUTO/HORIZONTAL/VERTICAL",
+    "Observed clip planes already enclose all corners; helper preserves view depth",
+    "Actual subject, pedestal, rim world corners and camera transform remain unobserved; future copy-only collector/admission required"
+  ]
+}
