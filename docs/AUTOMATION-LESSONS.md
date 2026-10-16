@@ -1424,3 +1424,15 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
   on the delivered files in a fresh process (`tools/blender/clearance_check.py`).
 - **Name the metric:** a centre-distance guard is not a mesh clearance. Say which metric was measured, report the
   measured number, and make the build fail when the number misses.
+
+## Art can disprove a design: render it at the design's own numbers (2026-10-15)
+- **What happened:** the tide-pool habitat proposal r1 passed its checker (46/46): no zone dries out under any
+  resident. Building it as Tide-Pen art r2 showed a 3 m seahorse standing out of 0.7 m low water. The checker only
+  asked whether a zone was wet, never whether it was deeper than the creature is tall.
+- **The fix:** proposal r2 gives residents a body size read from the voxel creature itself, and both the checker and
+  the build fail when a used zone is shallower than its resident.
+- **Also found:** r1's sea sheet ran under the whole shelf at z=0, so every pool showed sea level whatever its own
+  water did. A tide state cannot be shown until each basin owns its water.
+- **Also found:** GLBs holding a `Glow_*` lamp sphere export the same triangles in a different order run to run, so
+  their bytes never hash the same twice; every other role is byte-identical. Pin the delivered bytes; do not expect
+  a rebuild to reproduce lamp roles byte for byte.

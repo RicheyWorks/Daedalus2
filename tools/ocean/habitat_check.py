@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Check data/ocean/habitat-tidepool-r1.json, the bounded aquatic habitat proposal.
+"""Check a bounded aquatic habitat proposal (data/ocean/habitat-tidepool-rN.json; default: every revision).
 
 Every reference is read from source, not copied:
   * residents must be exactly tidepen.json's residents, with the same food
@@ -11,8 +11,11 @@ Habitat invariants (the point of the design):
   * no stranding: in EVERY water state, each resident's zones are all wet (depth >= wet_min_m)
   * it can eat: in EVERY water state, one of its zones grows what it eats
   * the refuge stays wet at low water, and the low state really drains the shallow zone (a changing water level)
+  * body size (when the proposal has "display"): every zone a resident uses in a state is deeper than the resident
+    is tall, height read from the voxel creature itself (r2 added this after r1's art showed a seahorse standing
+    out of the water)
 
-    python tools/ocean/habitat_check.py [--self-test]
+    python tools/ocean/habitat_check.py [--self-test] [FILE ...]
 
 Last line "HABITAT n/m PASS|FAIL"; exit 0 only on PASS. --self-test: broken copies must each FAIL.
 """
@@ -46,6 +49,16 @@ def sea_plants():
     return set(re.findall(r'^\s+"([A-Za-z]+)":\s+\("sea",', src, re.M))
 
 
+def heights(h):
+    """species -> body height in metres at the proposal's display scale, from the voxel plan (feet at z=0)."""
+    if "display" not in h:
+        return {}
+    sys.path.insert(0, P("tools", "blender"))
+    import voxel_creatures as VC
+    cm = h["display"]["voxel_cm"]
+    return {r["species"]: (max(v[2] for part in VC.plan(r["species"]).values() for v in part) + 1) * cm / 100.0 for r in h["residents"]}
+
+
 def check(h, pen, out, cn, cl, plants):
     res = []
     def ok(name, cond, info=""):
@@ -62,6 +75,7 @@ def check(h, pen, out, cn, cl, plants):
     ok("low water drains the shallows (level really changes)", not wet("shallow", states[0]) and wet("shallow", states[1]))
     bad = sorted(set(p for z in zones.values() for p in z["plants"]) - plants)
     ok("zone plants are sea plants", not bad, ", ".join(bad))
+    tall = heights(h)
     pr = {r["species"]: r for r in pen["residents"]}
     hr = {r["species"]: r for r in h["residents"]}
     ok("residents are exactly tidepen.json's", set(pr) == set(hr), str(sorted(set(pr) ^ set(hr))))
@@ -83,13 +97,27 @@ def check(h, pen, out, cn, cl, plants):
             dry = [z for z in zs if z not in zones or not wet(z, s)]
             ok("%s not stranded at %s" % (sp, s["id"]), zs and not dry, ("dry: " + ", ".join(dry)) if dry else "")
             ok("%s can eat at %s" % (sp, s["id"]), any(z in zones and eats in zones[z]["plants"] for z in zs))
+            if sp in tall:
+                low = [z for z in zs if z in zones and depth(z, s) < tall[sp]]
+                ok("%s (%.2f m tall) covered at %s" % (sp, tall[sp], s["id"]), not low, ("sticks out in: " + ", ".join(low)) if low else "")
     return res
 
 
 def main(argv):
-    h = json.load(open(P("data", "ocean", "habitat-tidepool-r1.json"), encoding="utf-8"))
+    files = [a for a in argv if a.endswith(".json")] or sorted(os.path.join(P("data", "ocean"), f) for f in os.listdir(P("data", "ocean")) if re.match(r"habitat-tidepool-r\d+\.json$", f))
     pen = json.load(open(P("data", "ocean", "tidepen.json"), encoding="utf-8"))
     cn, cl, plants = canon(), clips(), sea_plants()
+    if "--self-test" not in argv:
+        total = []
+        for f in files:
+            out = ["== " + os.path.relpath(f, ROOT)]
+            res = check(json.load(open(f, encoding="utf-8")), pen, out, cn, cl, plants)
+            print("\n".join(out))
+            total += res
+        k = sum(total)
+        print("HABITAT %d/%d %s" % (k, len(total), "PASS" if k == len(total) else "FAIL"))
+        return 0 if k == len(total) else 1
+    h = json.load(open(files[-1], encoding="utf-8"))
     if "--self-test" in argv:
         cans = []
         H = copy.deepcopy(h); H["residents"][1]["zones"]["low"] = ["shallow"]; cans.append(("seahorse stranded in drained shallows", H))
@@ -99,6 +127,8 @@ def main(argv):
         H = copy.deepcopy(h); H["residents"][0]["behaviours"][1]["clip"] = "Swim"; cans.append(("clip the rig does not export", H))
         H = copy.deepcopy(h); H["residents"][3]["behaviours"][2]["eats"] = "Seagrass"; cans.append(("eats something not its food", H))
         H = copy.deepcopy(h); H["residents"].pop(); cans.append(("resident dropped", H))
+        H = copy.deepcopy(h); H["residents"][1]["zones"]["normal"] = ["refuge", "shallow"]; cans.append(("seahorse sticks out of the shallows", H))
+        H = copy.deepcopy(h); H["display"]["voxel_cm"] = 25; cans.append(("r1 art scale (25 cm voxel) in the pen", H))
         n = 0
         for name, H in cans:
             failed = not all(check(H, pen, [], cn, cl, plants))
@@ -106,12 +136,6 @@ def main(argv):
             n += failed
         print("HABITAT-CANARIES %d/%d %s" % (n, len(cans), "PASS" if n == len(cans) else "FAIL"))
         return 0 if n == len(cans) else 1
-    out = []
-    res = check(h, pen, out, cn, cl, plants)
-    print("\n".join(out))
-    k = sum(res)
-    print("HABITAT %d/%d %s" % (k, len(res), "PASS" if k == len(res) else "FAIL"))
-    return 0 if k == len(res) else 1
 
 
 if __name__ == "__main__":

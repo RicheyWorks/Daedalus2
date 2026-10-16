@@ -1301,3 +1301,45 @@ WARN; this slice does not change them.
     `hd_island.export_group` now sets the render colour index and exports only the active layer. Verified: one
     COLOR_0 that carries the real colours.
   - Pennants are single faces now; the doubled face made the meshes invalid.
+
+### 14.38 Sea Realm sources, the tide-pool habitat, and Tide-Pen r2
+
+**The gate only trusts what it can check (PootScoot 32524, 32543).**
+- `TidePenGate` decides over a `Subject` (actor, individual, species, realm, season).
+- It refuses rather than guesses:
+  - a blank request id;
+  - one request id carrying two different events, so a HARM cannot hide behind a FEED;
+  - care given to another creature, or by another actor.
+- Rule ranges are validated.
+- `Species` keeps its own unmodifiable copies of its food and habitat sets. This cleared the SpotBugs CI failure.
+- The caller owns persistent replay protection, receipts and freshness. The gate deduplicates within one call only.
+
+**Sea Realm inventory (32345/32349/32353).**
+- `data/ocean/sea-sources.json` lists the existing code and data the Sea Realm can reuse, with paths and symbols.
+- It also lists what is absent: buoyancy, oxygen, water levels, evolution, befriending, vessel upgrades, pirate
+  gameplay and an ocean item catalog.
+- `tools/ocean/sources_check.py` proves every row. An absent claim is a grep that must find nothing, and owners come
+  from git.
+
+**Tide-pool habitat proposal (`data/ocean/habitat-tidepool-r1.json`, then `-r2.json`).**
+- Three zones: shallow, a covered refuge and deep. Three water states: low, normal and high.
+- The residents are exactly the Tide-Pen's four. Rarity, temperament, size and r/K come from the species canon, not
+  this file. The sea turtle has no MARINE canon row.
+- `tools/ocean/habitat_check.py` proves, for every water state:
+  - low water really drains the shallows;
+  - the refuge stays wet;
+  - no resident is stranded;
+  - every resident can eat.
+- r2 adds body size: a zone counts only if its water is deeper than the resident is tall. The r2 art found the gap
+  (lessons file, 2026-10-15).
+
+**Tide-Pen art r2 (`tools/blender/tidepen_shelf.py --rev r2`; r1 stays reproducible).**
+- The pen bed follows the habitat zones. The depths are measured on the final rock mesh by ray cast, and the build
+  fails if they drift past 0.25 m.
+- The covered refuge sits under a rock overhang.
+- The pen water is its own role, `PenWater`, at the normal level. A host moves it by `offset_m` for low or high water.
+- The sea sheet no longer runs under the pools.
+- All four residents live in the pen at the habitat's 10 cm voxel. The build fails if any resident sticks out of low
+  water or touches the overhang.
+- `tools/blender/tidepen_tides.py` renders the same pen close-up at all three water levels. Only the water moves.
+- Still design: the feed, enclose and leave-wild host actions, and the care fact store.

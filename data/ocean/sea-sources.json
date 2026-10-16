@@ -240,7 +240,30 @@
     "\"refuge\"",
     "\"low\""
    ],
-   "note": "bounded habitat proposal: 3 zones x 3 water states, canon-bound residents; checked by habitat_check.py"
+   "note": "bounded habitat proposal r1 (kept) and r2 (body size); checked by habitat_check.py"
+  },
+  {
+   "id": "habitat-tidepool-r2",
+   "area": "creatures",
+   "status": "data-only",
+   "path": "data/ocean/habitat-tidepool-r2.json",
+   "symbols": [
+    "\"voxel_cm\"",
+    "\"supersedes\""
+   ],
+   "note": "r2: residents have a body size; zones must be deeper than the resident is tall"
+  },
+  {
+   "id": "tidepen-art-r2",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "tools/blender/tidepen_shelf.py",
+   "symbols": [
+    "pen_floor",
+    "sea_outside_pen",
+    "PenWater"
+   ],
+   "note": "Tide-Pen art r2: pen bed at the habitat depths (measured), PenWater role movable per water state; tidepen_tides.py renders low/normal/high"
   }
  ],
  "absent": [

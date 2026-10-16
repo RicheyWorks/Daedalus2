@@ -155,9 +155,12 @@ def camera(view, focus=None, frame=None, lens=40):
     return cam
 
 
-def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None):
+def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None, adjust=None):
+    """adjust(): optional hook run after the GLBs load and before lighting, e.g. to move a water sheet to a tide state."""
     clean()
     load(glbs)
+    if adjust:
+        adjust()
     stage(res, samples)
     cam = camera(view, focus, frame)
     os.makedirs(out_dir, exist_ok=True)

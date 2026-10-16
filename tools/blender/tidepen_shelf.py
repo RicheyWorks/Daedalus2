@@ -1,5 +1,12 @@
 # SPDX-License-Identifier: MIT
-"""The Ocean Tide-Pen shelf (r1): the art for data/ocean/tidepen.json and the ocean-tidepen-landing dock.
+"""The Ocean Tide-Pen shelf: the art for data/ocean/tidepen.json and the ocean-tidepen-landing dock.
+
+Revisions (each reproducible, earlier ones immutable):
+  r1  the shelf, the pen, care station, landing; residents spread over the pools; every pool a 0.55 m basin.
+  r2  the pen pool follows the habitat proposal data/ocean/habitat-tidepool-r1.json: shallow flats, a covered refuge
+      under a rock overhang and a deep basin, at the proposed depths (measured on the final rock mesh, build fails if
+      they drift); the pen water is its own role, PenWater, at the NORMAL level, so a host or a render can move it to
+      the low/high states; all four residents live in the pen in their normal-state zones.
 
 What the player sees, sailing down from World-Zero's rim dock:
   * A rock shelf of tide pools beside the Ocean pier.
@@ -14,7 +21,7 @@ body from voxel_creatures (sea_turtle, seahorse, crab, starfish), and each plant
 its species at stage 4. Every plant a resident needs is placed around it. The ledger rows carry status
 design/data; nothing here is bound in a host or in Unreal.
 
-    python tidepen_shelf.py OUT_DIR            (bpy module)  |  blender -b --python tidepen_shelf.py -- OUT_DIR
+    python tidepen_shelf.py OUT_DIR [--rev r1|r2]   (bpy module)  |  blender -b --python tidepen_shelf.py -- OUT_DIR [--rev r2]
 
 Units are metres, Z up, sea level z = 0 (OceanTerrain.SEA_LEVEL). The shelf's own origin sits at the tide-pen
 landing anchor. links.json gives that anchor in Ocean blocks, Y up: [24, 1, 24]. In Z-up metres that is
@@ -39,13 +46,18 @@ import voxel_aquatic as AQ  # noqa: E402
 import voxel_creatures as VC  # noqa: E402
 import voxel_island as VI  # noqa: E402
 
-REV = "r1"
+REV = "r2"                 # build(..., rev=) switches; r1 stays reproducible
 NAME = "TidePen_" + REV
 LAND_ID = "ocean-tidepen-" + REV
+HABITAT = "data/ocean/habitat-tidepool-r2.json"   # r2 of the proposal: residents have a body size
+PEN_SURFACE = -.08         # the pen water at the NORMAL state (r1's pool sheet height)
+ZONE_XY = {"shallow": (3.6, .4, 2.0), "deep": (-.6, -.3, 2.4), "refuge": (-4.4, 1.3, 1.5)}   # x, y, radius in the pen pool
+DEPTH_TOL = .25            # measured zone depth may differ from the proposal by at most this
+OVERHANG_CLEAR = .25       # no resident may touch the refuge overhang
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SEED = 2410
 CLEARANCE_M = 1.0          # resident to wall: no creature mesh may clip into the pen wall
-RESIDENT_SCALE = 2.5       # residents read at shelf scale (stylised: a 25 cm voxel); stated in the manifest
+RESIDENT_SCALE = 2.5       # r1: residents read at shelf scale (stylised: a 25 cm voxel); r2 uses the habitat's display voxel
 
 
 def sha(p):
@@ -67,21 +79,34 @@ POOLS = [  # x, y, rx, ry  (the first is the PEN pool)
 SHELF = (20.0, 14.0)       # half extents (x, y); the sea side is -y
 
 
+ZONE_DEPTH = {}             # filled from HABITAT in r2
+VOXEL_CM = []              # r2: the habitat's display voxel size
+
+
+def pen_floor(x, y):
+    """r2 pen bed: the zones' proposed depths below PEN_SURFACE, blended by Gaussian weight around each zone centre."""
+    ws = [(math.exp(-(math.hypot(x - zx, y - zy) / r) ** 2), ZONE_DEPTH[z]) for z, (zx, zy, r) in ZONE_XY.items()]
+    t = sum(w for w, _ in ws) or 1e-9
+    return PEN_SURFACE - sum(w * d for w, d in ws) / t
+
+
 def height(x, y):
-    """Shelf top ~ +0.9 m, rough, falling below the sea toward -y; each pool a basin down to -0.55 m."""
+    """Shelf top ~ +0.9 m, rough, falling below the sea toward -y; each pool a basin down to -0.55 m (r2: the pen
+    pool's bed follows the habitat zones)."""
     n = .18 * mathutils.noise.noise(mathutils.Vector((x / 3.1, y / 3.1, SEED))) + .08 * mathutils.noise.noise(mathutils.Vector((x, y, 1)))
     edge = H.smooth((y + SHELF[1] * .55) / (SHELF[1] * .5))       # 0 at the sea edge -> 1 on the bench
     z = -1.6 * (1 - edge) + .9 * edge + n
-    for px, py, rx, ry in POOLS:
+    for i, (px, py, rx, ry) in enumerate(POOLS):
         d = math.sqrt(((x - px) / rx) ** 2 + ((y - py) / ry) ** 2)
-        z = min(z, z * H.smooth((d - .75) / .35) + (-.55) * (1 - H.smooth((d - .75) / .35)))
+        bed = pen_floor(x - px, y - py) if (i == 0 and ZONE_DEPTH) else -.55
+        z = min(z, z * H.smooth((d - .75) / .35) + bed * (1 - H.smooth((d - .75) / .35)))
     rim = max(abs(x) / SHELF[0], abs(y) / SHELF[1])
     return z - 2.5 * H.smooth((rim - .9) / .1)                     # crumble into the sea at the outer edge
 
 
 def shelf_mesh(name):
     verts, faces, cols, idx = [], [], [], {}
-    g = .5
+    g = .5 if REV == "r1" else .35                                     # r2: finer, so the zone depths hold on the mesh
     nx, ny = int(SHELF[0] / g), int(SHELF[1] / g)
     rock, wet, weed = (.42, .40, .38), (.25, .26, .27), (.22, .32, .18)
     for j in range(-ny, ny + 1):
@@ -120,6 +145,27 @@ def water(name, z, rx, ry, cx=0.0, cy=0.0, mat=None, n=40):
     return H.mesh(name, verts, faces, mat or H.material("SeaWater", (.10, .42, .52), .05, 0, 0, .78), smooth_shade=False)
 
 
+def sea_outside_pen(name, g=1.0):
+    """r2: the sea sheet at z=0 with the pen basin cut out, so the pen shows its OWN water level (r1's sea disc ran
+    under the whole shelf and filled the pen to sea level whatever its own sheet did)."""
+    pcx, pcy, prx, pry = POOLS[0]
+    verts, faces, idx = [], [], {}
+    x0, x1, y0, y1 = -60, 60, -54, 34
+    for j in range(int((y1 - y0) / g) + 1):
+        for i in range(int((x1 - x0) / g) + 1):
+            idx[i, j] = len(verts)
+            verts.append((x0 + i * g, y0 + j * g, 0.0))
+    for j in range(int((y1 - y0) / g)):
+        for i in range(int((x1 - x0) / g)):
+            cx, cy = x0 + (i + .5) * g, y0 + (j + .5) * g
+            if ((cx - pcx) / (prx + .9)) ** 2 + ((cy - pcy) / (pry + .9)) ** 2 < 1:
+                continue                                           # inside the pen wall: the pen's own water
+            if height(cx, cy) > .6:
+                continue                                           # dry bench: no sheet under the rock
+            faces.append((idx[i, j], idx[i + 1, j], idx[i + 1, j + 1], idx[i, j + 1]))
+    return H.mesh(name, verts, faces, H.material("SeaWater", (.10, .42, .52), .05, 0, 0, .78), smooth_shade=False)
+
+
 def voxel_obj(name, voxels, cm, loc, rot_z=0.0):
     ob = VI._mesh_from_voxels(name, voxels, scale=cm / 100.0, pal=AQ.PAL)
     ob.location = loc
@@ -133,7 +179,7 @@ def creature(species, loc, rot_z=0.0):
     mx = (min(v[0] for v in vox) + max(v[0] for v in vox)) / 2
     my = (min(v[1] for v in vox) + max(v[1] for v in vox)) / 2
     vox = [(round(x - mx), round(y - my), z, c) for x, y, z, c in vox]      # pivot at the body's centre, feet at z=0
-    return voxel_obj("%s_Resident_%s" % (NAME, species), vox, 10.0 * RESIDENT_SCALE, loc, rot_z)
+    return voxel_obj("%s_Resident_%s" % (NAME, species), vox, VOXEL_CM[0] if VOXEL_CM else 10.0 * RESIDENT_SCALE, loc, rot_z)
 
 
 def plant(species, loc, stage=4, rot_z=0.0):
@@ -156,6 +202,16 @@ def stone_wall(name, cx, cy, rx, ry, gate_a, gap, rng):
                 out.append(H.box("%s_Stone_%03d" % (name, k), (x, y, z + .25 + lvl * .42), (s * 1.3, s * .8, s * .55), M, .08, (0, 0, a + rng.uniform(-.2, .2))))
                 k += 1
         a += da
+    return out
+
+
+def overhang(name, cx, cy, r, rng):
+    """r2 refuge cover: a flat rock slab leaning out over the refuge from the wall side, on two stones."""
+    M = H.material("DryStone", (.55, .53, .49), .9)
+    ox, oy = cx - .5, cy + .9                                          # set back toward the north-west wall
+    out = [H.box(name + "_Slab", (ox, oy, .2), (r * 1.9, r * 1.3, .32), M, .1, (0, 0, .35))]
+    for k, (dx, dy) in enumerate(((-r * .8, r * .4), (r * .3, r * .7))):
+        out.append(H.box("%s_Prop_%d" % (name, k), (ox + dx, oy + dy, -.35), (.6, .6, .9), M, .08, (0, 0, rng.uniform(0, 1))))
     return out
 
 
@@ -193,7 +249,16 @@ def role(name, objs, anchor):
     return ob
 
 
-def build(out_dir):
+def build(out_dir, rev=None):
+    global REV, NAME, LAND_ID
+    if rev:
+        REV, NAME, LAND_ID = rev, "TidePen_" + rev, "ocean-tidepen-" + rev
+    hab = data(HABITAT) if REV != "r1" else None
+    ZONE_DEPTH.clear()
+    VOXEL_CM.clear()
+    if hab:
+        ZONE_DEPTH.update({z["id"]: z["base_depth_m"] for z in hab["zones"]})
+        VOXEL_CM.append(hab["display"]["voxel_cm"])
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o, do_unlink=True)
     H.GROUP = []
@@ -204,16 +269,20 @@ def build(out_dir):
     bx, by, bz = landing["anchor"]["xyz"]                       # Ocean blocks, Y up
     anchor_zup = (bx, -bz, by)
 
-    shelf = [shelf_mesh(NAME + "_Shelf"), water(NAME + "_Sea", 0.0, 60, 44, 0, -10)]
-    pools = [water("%s_PoolWater_%d" % (NAME, i), -.08, rx * .86, ry * .86, px, py, H.material("PoolWater", (.18, .55, .60), .05, 0, 0, .7))
-             for i, (px, py, rx, ry) in enumerate(POOLS)]
+    rock = shelf_mesh(NAME + "_Shelf")
+    shelf = [rock, water(NAME + "_Sea", 0.0, 60, 44, 0, -10) if not hab else sea_outside_pen(NAME + "_Sea")]
+    pools = [water("%s_PoolWater_%d" % (NAME, i), PEN_SURFACE, rx * .86, ry * .86, px, py, H.material("PoolWater", (.18, .55, .60), .05, 0, 0, .7))
+             for i, (px, py, rx, ry) in enumerate(POOLS) if not (hab and i == 0)]
     shelf += pools
+    penwater = [water(NAME + "_PenWaterSheet", PEN_SURFACE, POOLS[0][2] + 1.0, POOLS[0][3] + 1.0, POOLS[0][0], POOLS[0][1],
+                      H.material("PoolWater", (.18, .55, .60), .05, 0, 0, .7))] if hab else []
     # the pen: wall + gate facing the care station (east)
     pcx, pcy, prx, pry = POOLS[0]
     gate_a = 0.0
     gx, gy = pcx + (prx + .9) * math.cos(gate_a), pcy + (pry + .9) * math.sin(gate_a)
     penparts = stone_wall(NAME + "_PenWall", pcx, pcy, prx, pry, gate_a, .55, rng)
     penparts += gate(NAME + "_PenGate", gx, gy, max(height(gx, gy), 0), gate_a)
+    cover = overhang(NAME + "_Refuge", pcx + ZONE_XY["refuge"][0], pcy + ZONE_XY["refuge"][1], ZONE_XY["refuge"][2], rng) if hab else []
     # care station beside the gate: trough, drying rack of sea plants, a choice pad + keeper banner
     cx_, cy_ = gx + 4.5, gy + 1.5
     cz = height(cx_, cy_)
@@ -240,7 +309,23 @@ def build(out_dir):
     # residents in their habitats, with every habitat plant each needs (from tidepen.json)
     homes = {"sea_turtle": (0, 0), "seahorse": (1, 0), "crab": (2, 1), "starfish": (4, 0)}
     residents, habitat = [], []
-    for r in pen["residents"]:
+    placed = {}
+    if hab:                                                            # r2: everyone lives in the pen, in its NORMAL-state zone
+        spots = {"sea_turtle": (-1.4, -1.3, .3), "seahorse": (-4.4, 1.2, .02), "crab": (.9, .9, 0), "starfish": (-5.1, .5, 0)}
+        for r in hab["residents"]:
+            zone = r["zones"]["normal"][0]
+            sx_, sy_, lift = spots[r["species"]]
+            fz = height(pcx + sx_, pcy + sy_)
+            residents.append(creature(r["species"], (pcx + sx_, pcy + sy_, fz + lift), math.pi / 2 if r["species"] == "sea_turtle" else rng.uniform(0, math.tau)))
+            placed[r["species"]] = {"zone": zone, "xy": [sx_, sy_], "bed_z": round(fz, 3)}
+        for z in hab["zones"]:
+            zx, zy, zr = ZONE_XY[z["id"]]
+            for k, hp in enumerate(z["plants"]):
+                for m in range(3):
+                    a, rr = rng.uniform(0, math.tau), zr * rng.uniform(.25, .7)
+                    x_, y_ = pcx + zx + rr * math.cos(a), pcy + zy + rr * math.sin(a)
+                    habitat.append(plant(hp, (x_, y_, height(x_, y_)), 4, rng.uniform(0, math.tau)))
+    for r in ([] if hab else pen["residents"]):
         i, _ = homes.get(r["species"], (2, 0))
         px, py, rx, ry = POOLS[i]
         z = -.5 if r["species"] in ("sea_turtle", "seahorse") else max(height(px + rx * .9, py), -.3)
@@ -284,15 +369,53 @@ def build(out_dir):
     wall_clear = min(per.values())
     if wall_clear < CLEARANCE_M:
         raise RuntimeError("resident clips the pen wall: %s" % {k: round(v, 2) for k, v in per.items()})
+    habitat_rec = None
+    if hab:
+        cv = [o.matrix_world @ v.co for o in cover for v in o.data.vertices]
+        kc = mathutils.kdtree.KDTree(len(cv))
+        for i, v in enumerate(cv):
+            kc.insert(v, i)
+        kc.balance()
+        cov = min(kc.find(o.matrix_world @ v.co)[2] for o in residents for v in o.data.vertices)
+        if cov < OVERHANG_CLEAR:
+            raise RuntimeError("a resident touches the refuge overhang: %.2f m" % cov)
+        low_z = PEN_SURFACE + min(s["offset_m"] for s in hab["water_states"])
+        for o in residents:                                            # placed in its NORMAL zone, which it also uses at LOW
+            sp = o.name.split("_Resident_")[-1]
+            top = max((o.matrix_world @ v.co).z for v in o.data.vertices)
+            placed[sp]["top_z"] = round(top, 3)
+            placed[sp]["covered_at_low_m"] = round(low_z - top, 3)
+            if top > low_z - .05:
+                raise RuntimeError("%s sticks out of low water: top %.2f, low surface %.2f" % (sp, top, low_z))
+        dg = bpy.context.evaluated_depsgraph_get()
+        bvh = mathutils.bvhtree.BVHTree.FromObject(rock, dg)
+        zones = []
+        for z in hab["zones"]:
+            zx, zy, _ = ZONE_XY[z["id"]]
+            hit = bvh.ray_cast(mathutils.Vector((pcx + zx, pcy + zy, 20.0)), mathutils.Vector((0, 0, -1)))
+            measured = PEN_SURFACE - hit[0].z
+            if abs(measured - z["base_depth_m"]) > DEPTH_TOL:
+                raise RuntimeError("zone %s depth drifted: proposed %.2f measured %.2f" % (z["id"], z["base_depth_m"], measured))
+            zones.append({"id": z["id"], "centre_local": [zx, zy], "proposed_depth_m": z["base_depth_m"], "measured_depth_m": round(measured, 3), "cover": z["cover"]})
+        states = [{"id": s["id"], "offset_m": s["offset_m"], "surface_z": round(PEN_SURFACE + s["offset_m"], 3),
+                   "wet": {z["id"]: z["measured_depth_m"] + s["offset_m"] >= hab["wet_min_m"] for z in zones}} for s in hab["water_states"]]
+        if states[0]["wet"]["shallow"] or not states[0]["wet"]["refuge"]:
+            raise RuntimeError("measured bed does not give the proposal's tide: %s" % states[0]["wet"])
+        habitat_rec = {"source": HABITAT, "sha256": sha(os.path.join(ROOT, HABITAT)), "metric": "ray cast down onto the final rock mesh at each zone centre",
+                       "normal_surface_z": PEN_SURFACE, "tolerance_m": DEPTH_TOL, "zones": zones, "water_states": states,
+                       "overhang_clearance_m": round(cov, 3), "residents": placed,
+                       "pen_water": "role PenWater holds the sheet at the NORMAL level; translate it by offset_m (z) for low/high"}
     # roles
     roles = {
         "Shelf": role(NAME + "_Shelf_Role", shelf, (0.0, 0.0, 0.0)),
-        "Pen": role(NAME + "_Pen", penparts, (pcx, pcy, 0.0)),
+        "Pen": role(NAME + "_Pen", penparts + cover, (pcx, pcy, 0.0)),
         "CareStation": role(NAME + "_CareStation", care, (cx_, cy_, cz)),
         "Landing": role(NAME + "_Landing", land, (lx0, ly0, 0.0)),
         "Residents": role(NAME + "_Residents", residents, (0.0, 0.0, 0.0)),
         "Habitat": role(NAME + "_Habitat", habitat, (0.0, 0.0, 0.0)),
     }
+    if hab:
+        roles["PenWater"] = role(NAME + "_PenWater", penwater, (pcx, pcy, PEN_SURFACE))
     for k, us in ucx.items():
         for u in us:
             u.name = "UCX_%s_%02d" % (roles[k].name, us.index(u))
@@ -324,10 +447,12 @@ def build(out_dir):
         "clearance": {"metric": "minimum vertex distance, Residents to Pen wall, final geometry", "required_m": CLEARANCE_M, "measured_m": round(wall_clear, 3)},
         "gameplay": X,
         "showcase": {"hero": [0.0, -2.0, 0.0, 46.0], "detail": [round(gx, 2), round(gy, 2), 0.5, 16.0], "top": [0.0, -3.0, 0.0, 52.0]},
-        "resident_scale": RESIDENT_SCALE,
+        "resident_scale": RESIDENT_SCALE if not hab else VOXEL_CM[0] / 10.0,
         "provenance": {"recipe": "tools/blender/tidepen_shelf.py + kit_waterworks + voxel_creatures + voxel_aquatic + hd_island",
                        "git": commit, "blender": bpy.app.version_string, "built_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
     }
+    if habitat_rec:
+        layout["habitat"] = habitat_rec
     layout["island_file"] = files["Shelf"] + ".glb"
     layout["roles"] = {k: v for k, v in layout["roles"].items() if k != "Shelf"}
     layout["hashes"] = {f: [os.path.getsize(os.path.join(out_dir, f)), sha(os.path.join(out_dir, f))] for f in sorted(os.listdir(out_dir)) if f.endswith((".glb", ".fbx"))}
@@ -339,5 +464,5 @@ def build(out_dir):
 if __name__ == "__main__":
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
     t0 = time.time()
-    lay, _ = build(os.path.abspath(argv[0]))
+    lay, _ = build(os.path.abspath(argv[0]), argv[argv.index("--rev") + 1] if "--rev" in argv else None)
     print("TIDEPEN %s roles=%d residents=%d clearance=%.2f %.0fs" % (lay["land_id"], len(lay["roles"]) + 1, len(lay["residents"]), lay["clearance"]["measured_m"], time.time() - t0), flush=True)
