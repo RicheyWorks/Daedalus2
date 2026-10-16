@@ -183,7 +183,7 @@ def validate(document):
                     keys(event, ("state", "observed_at_utc"))
                 else:
                     keys(event, ("state", "observed_at_utc", "outcome", "effects", "outputs"),
-                         ("process", "compute_release", "progress", "materials"))
+                         ("process", "compute_release", "progress", "materials", "gui_operation"))
                     need(event["outcome"] in ("succeeded", "failed", "unknown"), "invalid outcome")
                     need(event["effects"] in ("none", "complete", "partial", "unknown"), "invalid effects")
                     need(isinstance(event["outputs"], dict) and len(event["outputs"]) <= 32,
@@ -191,15 +191,40 @@ def validate(document):
                     for role, pin in event["outputs"].items():
                         ident(role)
                         pin_shape(pin)
+                    if "gui_operation" in event:
+                        gui = event["gui_operation"]
+                        keys(gui, ("operation_id", "allocation_id", "evidence", "output_fields"), ("baseline",))
+                        need(ident(gui["operation_id"]) == aid, "GUI operation/attempt identity mismatch")
+                        need(type(gui["allocation_id"]) is int and gui["allocation_id"] > 0,
+                             "invalid GUI allocation identity")
+                        pin_shape(gui["evidence"])
+                        need(isinstance(gui["output_fields"], dict)
+                             and set(gui["output_fields"]) == set(roles), "GUI output role contract differs")
+                        for selector in gui["output_fields"].values():
+                            text(selector, "GUI output selector", 256)
+                        if "baseline" in gui:
+                            pin_shape(gui["baseline"])
+                        need("process" not in event, "GUI completion cannot supply a process exit")
+                        if "compute_release" in event:
+                            need(isinstance(event["compute_release"], dict)
+                                 and event["compute_release"].get("proof_kind") == "gui-release-v1",
+                                 "GUI release requires its operation-bound proof kind")
                     for kind in ("process", "compute_release", "progress"):
                         if kind in event:
                             item = event[kind]
                             field = {"process": "exit_code", "compute_release": "released",
                                      "progress": "state"}[kind]
-                            optional = ("field",) if kind == "progress" else ("proof_kind",) if kind == "compute_release" else ()
+                            optional = ("field",) if kind == "progress" else ("proof_kind", "owner") if kind == "compute_release" else ()
                             keys(item, (field, "evidence"), optional)
+                            need("owner" not in item or item.get("proof_kind") == "gui-release-v1",
+                                 "unexpected release owner")
                             if "proof_kind" in item:
-                                need(item["proof_kind"] == "nursery-release-v1", "unknown release proof kind")
+                                need(item["proof_kind"] in ("nursery-release-v1", "gui-release-v1"), "unknown release proof kind")
+                                if item["proof_kind"] == "gui-release-v1":
+                                    need("gui_operation" in event, "GUI release requires GUI operation evidence")
+                                    text(item.get("owner"), "explicit release owner", 128)
+                                else:
+                                    need("owner" not in item, "unexpected release owner")
                             if "field" in item:
                                 text(item["field"], "progress field", 128)
                             pin_shape(item["evidence"])
@@ -261,7 +286,7 @@ def inspect(document, root=".", now=None, stale_after=300):
         unsafe_history = False
         history = []
         attempt_fields = ("attempt_id", "observed_state", "status", "verified_outputs", "issues",
-                          "advice", "process", "compute_release", "progress", "stale_running")
+                          "advice", "process", "compute_release", "progress", "stale_running", "gui_operation")
         for attempt in stage["attempts"]:
             if "attempt_id" in row:
                 history.append({key: copy.deepcopy(row[key]) for key in attempt_fields if key in row})
@@ -289,15 +314,28 @@ def inspect(document, root=".", now=None, stale_after=300):
             row["status"] = event["outcome"]
             row["advice"] = "inspect-failure-and-retained-outputs"
             exit_code = None
+            gui_result = None
+            if "gui_operation" in event:
+                gui_result = inspect_gui(event["gui_operation"], event["outputs"], reader,
+                                         attempt["attempt_id"], document["observed_at_utc"])
+                row["gui_operation"] = gui_result
+                row["issues"].extend(gui_result["issues"])
+                need(event["outcome"] == gui_result["declared_outcome"], "GUI source outcome differs")
+                expected_effects = {"succeeded": "complete", "failed": "partial", "unknown": "unknown"}
+                need(event["effects"] == expected_effects[event["outcome"]], "GUI source effects differ")
             for kind, field in (("process", "exit_code"), ("compute_release", "released"), ("progress", "state")):
                 if kind in event:
                     value = event[kind]
                     reader.verify(value["evidence"])
                     proof = read_json(resolve(value["evidence"], root))
                     proof_field = value.get("field", field)
-                    if kind == "compute_release" and "proof_kind" in value:
-                        need(value[field] is True and nursery_released(proof),
-                             "contradictory Nursery release evidence")
+                    if kind == "compute_release" and value.get("proof_kind") == "gui-release-v1":
+                        released = gui_released(proof, event["gui_operation"]["allocation_id"],
+                                                value["owner"], gui_result["finished_at_utc"],
+                                                document["observed_at_utc"])
+                        need(value[field] is (True if released else None), "contradictory GUI release evidence")
+                    elif kind == "compute_release" and "proof_kind" in value:
+                        need(value[field] is True and nursery_released(proof), "contradictory Nursery release evidence")
                     else:
                         need(isinstance(proof, dict) and proof_field in proof
                              and type(proof[proof_field]) is type(value[field])
@@ -317,14 +355,20 @@ def inspect(document, root=".", now=None, stale_after=300):
                 need(set(mat["used"]) <= set(mat["retained"]), "missing USED material")
                 need(not set(mat["validated_unused"]) & set(mat["used"]), "used material marked unused")
             if event["outcome"] == "succeeded":
-                need("process" in event and exit_code == 0, "success lacks retained actual exit0 evidence")
-                need(set(stage["required_outputs"]) <= verified.keys()
-                     and all(verified[r]["bytes"] > 0 for r in stage["required_outputs"]),
-                     "success lacks required nonempty pinned outputs")
+                if gui_result is None:
+                    need("process" in event and exit_code == 0, "success lacks retained actual exit0 evidence")
+                    need(set(stage["required_outputs"]) <= verified.keys()
+                         and all(verified[r]["bytes"] > 0 for r in stage["required_outputs"]),
+                         "success lacks required nonempty pinned outputs")
+                elif not gui_result["operation_completed"] or row.get("compute_release") is not True:
+                    unsafe_history = True
+                    if row.get("compute_release") is not True:
+                        row["issues"].append("GUI compute release is not separately verified")
                 need(event["effects"] in ("none", "complete"), "success contradicts uncertain effects")
             elif event["outcome"] == "failed":
-                need("process" in event and exit_code is not None and exit_code != 0,
-                     "failed outcome lacks actual nonzero exit evidence")
+                if gui_result is None:
+                    need("process" in event and exit_code is not None and exit_code != 0,
+                         "failed outcome lacks actual nonzero exit evidence")
             if event["effects"] in ("partial", "unknown") or event["outcome"] == "unknown":
                 unsafe_history = True
             if event["outcome"] == "succeeded":
@@ -384,6 +428,183 @@ def field(value, path):
             need(isinstance(value, dict) and key in value, "output selector requires an existing object field")
             value = value[key]
     return value
+
+
+GUI_SCHEMA = "daedalus.copperfall.existing-session.v1"
+GUI_SUCCEEDED = "TERMINAL_SOURCE_HERO_CREATED_REVIEW_PENDING"
+GUI_FAILED = {"TERMINAL_FAILED_PARTIAL_OUTPUTS_RECONCILE", "TERMINAL_CONTEXT_RECONCILIATION_REQUIRED"}
+
+
+def gui_clock(value):
+    """Exact UTC ordering of retained Python/.NET clocks, including 100 ns ticks."""
+    text(value, "GUI UTC timestamp", 40)
+    match = re.fullmatch(r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?(?:Z|\+00:00)", value)
+    need(match is not None, "GUI timestamp requires explicit UTC and at most nine fraction digits")
+    return stamp(match[1] + "Z"), int((match[2] or "0").ljust(9, "0"))
+
+
+def gui_outcome(proof):
+    state = proof.get("state")
+    return "succeeded" if state == GUI_SUCCEEDED else "failed" if isinstance(state, str) and state in GUI_FAILED else "unknown"
+
+
+def gui_finished(proof, observed):
+    start, end = gui_clock(proof.get("started_at_utc")), gui_clock(proof.get("finished_at_utc"))
+    need(start <= end <= gui_clock(observed), "GUI completion clock order differs")
+    return proof["finished_at_utc"]
+
+
+def inspect_gui(witness, outputs, reader, attempt_id, observed):
+    """Qualify the known retained GUI schema, never fabricate a process exit."""
+    reader.verify(witness["evidence"])
+    proof = read_json(resolve(witness["evidence"], reader.root))
+    need(isinstance(proof, dict) and proof.get("schema") == GUI_SCHEMA, "unsupported GUI receipt schema")
+    need(proof.get("operation_id") == witness["operation_id"] == attempt_id
+         and type(proof.get("accepted_allocation_hub")) is int
+         and proof["accepted_allocation_hub"] == witness["allocation_id"], "GUI source identity mismatch")
+    issues = []
+    need(set(outputs) <= set(witness["output_fields"]), "GUI output role lacks a terminal binding")
+    exit_null = "process_exit_code" in proof and proof["process_exit_code"] is None
+    need("process_exit_code" not in proof or exit_null, "persistent GUI receipt must not claim process exit0/exit")
+    if not exit_null or proof.get("process_launched") is not False:
+        issues.append("persistent GUI process lifecycle witness missing")
+    pid = proof.get("existing_blender_pid")
+    if type(pid) is not int or pid <= 0:
+        issues.append("existing GUI process identity missing")
+    finished = None
+    try:
+        finished = gui_finished(proof, observed)
+    except ValueError:
+        issues.append("GUI terminal timestamps missing or contradictory")
+    outcome = gui_outcome(proof)
+    if outcome != "succeeded":
+        issues.append("GUI operation failed/partial or terminal outcome is unknown")
+    for name in ("startup_copy_result", "source_copy_result", "render_operator_result"):
+        if proof.get(name) != ["FINISHED"]:
+            issues.append("GUI FINISHED witness missing: " + name)
+    backup = proof.get("startup_backup")
+    if isinstance(backup, dict):
+        reader.verify(backup)
+        if backup["bytes"] == 0:
+            issues.append("startup/session backup is empty")
+    else:
+        issues.append("verified startup/session backup pin missing")
+    for role, selector in witness["output_fields"].items():
+        try:
+            selected = field(proof, selector)
+        except ValueError:
+            selected = None
+        if selected is None:
+            need(role not in outputs, "GUI output has no source witness")
+            issues.append("GUI required output witness missing: " + role)
+            continue
+        need(isinstance(selected, dict), "GUI output witness must be a pin")
+        need({"path", "bytes", "sha256"} <= selected.keys(), "GUI output witness lacks pin fields")
+        selected = {key: selected[key] for key in ("path", "bytes", "sha256")}
+        pin_shape(selected)
+        need(role in outputs and outputs[role] == selected, "GUI output pin differs from retained terminal")
+        if selected["bytes"] == 0:
+            issues.append("GUI required output is empty: " + role)
+    restored = all(proof.get(k) is True for k in (
+        "startup_objects_preserved", "original_context_restored", "retained_scenes_preserved"))
+    baseline_ok = False
+    if "baseline" in witness:
+        reader.verify(witness["baseline"])
+        baseline = read_json(resolve(witness["baseline"], reader.root))
+        if isinstance(baseline, dict):
+            hashes = baseline.get("scene_hashes")
+            valid_hashes = (isinstance(hashes, dict) and 1 <= len(hashes) <= 32
+                            and all(isinstance(k, str) and 0 < len(k) <= 128
+                                    and isinstance(v, str) and SHA.fullmatch(v) for k, v in hashes.items()))
+            context = proof.get("original_context")
+            mapping = {"scene": "original_scene", "mode": "mode", "active_object": "active",
+                       "selected": "selected", "filepath": "filepath"}
+            context_ok = (isinstance(context, dict)
+                          and all(isinstance(context.get(k), str) and 0 < len(context[k]) <= 128
+                                  for k in ("scene", "mode", "view_layer"))
+                          and (context.get("active_object") is None or isinstance(context.get("active_object"), str))
+                          and isinstance(context.get("filepath"), str)
+                          and isinstance(context.get("selected"), list) and len(context["selected"]) <= 1024
+                          and all(isinstance(k, str) and 0 < len(k) <= 128 for k in context["selected"]))
+            baseline_ok = (valid_hashes and baseline.get("read_only") is True
+                           and baseline.get("run_called") is False and type(baseline.get("pid")) is int
+                           and baseline.get("pid") == pid
+                           and hashes == proof.get("retained_scene_hashes")
+                           and context_ok
+                           and all(a in context and b in baseline and context[a] == baseline[b]
+                                   for a, b in mapping.items())
+                           )
+            try:
+                baseline_ok = baseline_ok and gui_clock(baseline.get("observed_at_utc")) <= gui_clock(proof.get("started_at_utc"))
+            except ValueError:
+                baseline_ok = False
+    if not restored or not baseline_ok:
+        issues.append("GUI restoration flags and pinned retained-scene baseline do not verify")
+    return {"operation_id": witness["operation_id"], "allocation_id": witness["allocation_id"],
+            "source_state": proof.get("state"), "declared_outcome": outcome,
+            "operation_terminal": outcome != "unknown" and finished is not None,
+            "operation_completed": not issues, "restoration_verified": restored and baseline_ok,
+            "process_exit_code": None, "existing_pid": pid, "finished_at_utc": finished,
+            "retained_partial_scene": proof.get("scene"), "issues": issues}
+
+
+def gui_released(proof, allocation_id, owner, finished, observed):
+    """Historical release of this exact operation/owner, not a live lease query."""
+    if not isinstance(proof, dict) or finished is None:
+        return False
+    before, after = proof.get("before"), proof.get("after")
+    if not isinstance(before, dict) or not isinstance(after, dict):
+        return False
+    lease = before.get("compute")
+    try:
+        ordered = gui_clock(finished) <= gui_clock(proof.get("observed_at_utc")) <= gui_clock(observed)
+    except ValueError:
+        return False
+    return (type(proof.get("grant")) is int and proof["grant"] == allocation_id
+            and isinstance(lease, dict) and lease.get("holder") == owner
+            and proof.get("unlock") == {"ok": True, "lock": None}
+            and "compute" not in after and ordered)
+
+
+def adapt_gui(terminal_path, job_id, stage_id, attempt_id, selections, observed_at_utc,
+              baseline_path=None, release_path=None, release_owner=None):
+    """Normalize actual persistent-GUI receipts read-only; no execution/adoption."""
+    proof = read_json(terminal_path)
+    need(isinstance(proof, dict) and proof.get("schema") == GUI_SCHEMA, "unsupported GUI receipt schema")
+    need(ident(attempt_id) == proof.get("operation_id"), "caller attempt ID must equal actual GUI operation ID")
+    witness = {"operation_id": attempt_id, "allocation_id": proof.get("accepted_allocation_hub"),
+               "evidence": fingerprint(terminal_path), "output_fields": copy.deepcopy(selections)}
+    if baseline_path:
+        witness["baseline"] = fingerprint(baseline_path)
+    outputs = {}
+    for role, selector in selections.items():
+        try:
+            pin = field(proof, selector)
+        except ValueError:
+            continue  # Missing required evidence stays missing, never reconstructed.
+        need(isinstance(pin, dict), "GUI output field is not a pin")
+        need({"path", "bytes", "sha256"} <= pin.keys(), "GUI output field lacks pin fields")
+        outputs[role] = {key: pin[key] for key in ("path", "bytes", "sha256")}
+    outcome = gui_outcome(proof)
+    terminal = {"state": "terminal", "observed_at_utc": observed_at_utc, "outcome": outcome,
+                "effects": "complete" if outcome == "succeeded" else "partial" if outcome == "failed" else "unknown",
+                "outputs": outputs, "gui_operation": witness}
+    if release_path:
+        text(release_owner, "explicit release owner", 128)
+        release = read_json(release_path)
+        try:
+            finished = gui_finished(proof, observed_at_utc)
+        except ValueError:
+            finished = None
+        released = gui_released(release, witness["allocation_id"], release_owner,
+                                finished, observed_at_utc)
+        terminal["compute_release"] = {"released": True if released else None, "owner": release_owner,
+            "proof_kind": "gui-release-v1", "evidence": fingerprint(release_path)}
+    return validate({"schema": SCHEMA, "job_id": ident(job_id), "observed_at_utc": observed_at_utc,
+        "identities": {}, "provenance": "Known persistent-GUI receipt adapter; no process exit or native qualification inferred.",
+        "stages": [{"stage_id": ident(stage_id), "requires": [], "effect": "local-files",
+                    "required_outputs": list(selections), "attempts": [{"attempt_id": attempt_id,
+                    "inputs": {}, "events": [{"state": "accepted", "observed_at_utc": observed_at_utc}, terminal]}]}]})
 
 
 def nursery_released(process):
@@ -451,16 +672,27 @@ def main(argv=None):
     command.add_argument("--output-field", action="append", default=[])
     command.add_argument("--progress")
     command.add_argument("--progress-field", default="stage")
+    command = sub.add_parser("adapt-gui")
+    for name in ("terminal", "job-id", "stage-id", "attempt-id", "observed-at-utc"):
+        command.add_argument("--" + name, required=True)
+    command.add_argument("--output-field", action="append", default=[])
+    command.add_argument("--baseline")
+    command.add_argument("--release")
+    command.add_argument("--release-owner")
     args = parser.parse_args(argv)
     try:
-        if args.command == "adapt-process":
+        if args.command in ("adapt-process", "adapt-gui"):
             selections = {}
             for item in args.output_field:
                 role, selection = item.split("=", 1)
                 need(role not in selections, "duplicate output role")
                 selections[role] = selection
-            result = adapt_process(args.process, args.manifest, args.job_id, args.stage_id,
-                                   selections, args.observed_at_utc, args.progress, args.progress_field, args.attempt_id)
+            if args.command == "adapt-process":
+                result = adapt_process(args.process, args.manifest, args.job_id, args.stage_id,
+                                       selections, args.observed_at_utc, args.progress, args.progress_field, args.attempt_id)
+            else:
+                result = adapt_gui(args.terminal, args.job_id, args.stage_id, args.attempt_id,
+                                   selections, args.observed_at_utc, args.baseline, args.release, args.release_owner)
             code = 0
         else:
             document = read_json(args.receipt)

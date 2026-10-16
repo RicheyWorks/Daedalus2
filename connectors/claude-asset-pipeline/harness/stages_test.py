@@ -407,5 +407,252 @@ class StagesTest(unittest.TestCase):
             s.adapt_process(self.process["path"], manifest["path"], "job", "stage", {"blend": "source"}, NOW)
 
 
+GUI_NOW = "2026-10-16T06:20:00Z"
+GUI_PROVENANCE = {
+    "r2_terminal": ("task-3/copperfall-ark-rest-polish-842401/after-r2/existing-session-attempt-32797/0010.json",
+                    6221, "85f0adb84eb409d396ac0326c58a4a585a5299ae26bd28fcca1429fe2f4f1233"),
+    "r1_terminal": ("task-3/copperfall-ark-rest-polish-842401/after-r1/existing-session-attempt-32783/0005.json",
+                    2751, "c2f675e6b180b9f551d2cbeab9f1f8fdc26ce86ae518c0ebdb1d0984c1bc5e33"),
+    "baseline": ("task-3/copperfall-ark-rest-polish-842401/after-r2/reconciled-session-baseline.json",
+                 628, "dd2a246823ccd29db3c7f4fd8b6fb7643183f4e2665f8c36d8a89991f5d62526"),
+    "r2_release": ("task-3/open-session-20261016/grant32797-release.json",
+                   1387, "16a0bc1b75f36d40484792adc075e56ecd6f6e806bd15162fa0199fbb3d3f580"),
+    "r1_release": ("task-3/open-session-20261016/grant32783-release.json",
+                   1406, "ed6a23783c8e1ada7401104d4507921a7fcf306095abf36ce3190a74960b4e37"),
+}
+
+
+class GuiStagesTest(unittest.TestCase):
+    """Real retained R2/R1 scalar structure; all portable payload bytes synthetic."""
+    setUp = StagesTest.setUp
+    write = StagesTest.write
+    terminal = StagesTest.terminal
+
+    def fixture(self):
+        hashes = {"Copperfall_Ark_Rest_842401_polish_r1": "6e3e18e5ca5314b0fcb0b2e4435ec74542c34d23bfb14cf9b682012bb16e2bf0",
+                  "Scene": "45605c9a7e2d2eb4d36ef2fa6a9fbf4a008ecc75232972751425a72cb51e3302"}
+        proof = {"schema": s.GUI_SCHEMA, "operation_id": "copperfall-after-r2-32797",
+                 "accepted_allocation_hub": 32797, "state": s.GUI_SUCCEEDED,
+                 "started_at_utc": "2026-10-16T05:50:29.038158+00:00",
+                 "finished_at_utc": "2026-10-16T05:50:49.127201+00:00",
+                 "process_exit_code": None, "process_launched": False, "existing_blender_pid": 12580,
+                 "startup_copy_result": ["FINISHED"], "source_copy_result": ["FINISHED"],
+                 "render_operator_result": ["FINISHED"], "startup_backup": self.artifact,
+                 "original_context": {"scene": "Scene", "view_layer": "ViewLayer", "active_object": "Cube",
+                                      "selected": ["Cube"], "mode": "OBJECT", "filepath": ""},
+                 "retained_scene_hashes": hashes, "startup_objects_preserved": True,
+                 "original_context_restored": True, "retained_scenes_preserved": True,
+                 "scene": "Copperfall_Ark_Rest_842401_polish_r2"}
+        for key in ("source", "glb", "fbx", "hero"):
+            proof[key] = self.write(key + ".bin", ("synthetic " + key).encode())
+        baseline = {"read_only": True, "run_called": False, "pid": 12580,
+                    "scene_hashes": copy.deepcopy(hashes), "original_scene": "Scene", "mode": "OBJECT",
+                    "active": "Cube", "selected": ["Cube"], "filepath": "",
+                    "observed_at_utc": "2026-10-16T05:46:15.059455+00:00"}
+        release = {"grant": 32797, "observed_at_utc": "2026-10-16T05:51:37.3570228Z",
+                   "before": {"compute": {"holder": "pootscoot"}}, "unlock": {"ok": True, "lock": None},
+                   "after": {"unreal": {"holder": "codex-play-guard"}}}
+        return proof, baseline, release
+
+    def adapt(self, proof, baseline, release):
+        terminal = self.write("gui.json", proof)
+        before = self.write("baseline.json", baseline) if baseline is not None else None
+        after = self.write("released.json", release) if release is not None else None
+        return s.adapt_gui(terminal["path"], "gui-retained", "source-export-hero", proof["operation_id"],
+                           {"blend": "source", "glb": "glb", "fbx": "fbx", "hero": "hero"}, GUI_NOW,
+                           before["path"] if before else None, after["path"] if after else None,
+                           "pootscoot" if after else None)
+
+    def inspect(self, doc):
+        return s.inspect(doc, self.root, GUI_NOW)
+
+    def assert_reconcile(self, proof, baseline, release):
+        result = self.inspect(self.adapt(proof, baseline, release))
+        self.assertFalse(result["complete"])
+        self.assertEqual("reconciliation-required", result["stages"][0]["status"])
+        self.assertEqual("operator-reconciliation-only-no-replay", result["stages"][0]["advice"])
+        return result["stages"][0]
+
+    def test_real_r2_structure_completes_with_null_process_exit(self):
+        doc = self.adapt(*self.fixture())
+        result = self.inspect(doc)
+        self.assertTrue(result["complete"])
+        self.assertFalse(result["native_qualified"])
+        self.assertFalse(result["execution"])
+        row = result["stages"][0]
+        self.assertNotIn("process", row)
+        self.assertIsNone(row["gui_operation"]["process_exit_code"])
+        self.assertTrue(row["gui_operation"]["operation_completed"])
+        self.assertTrue(row["gui_operation"]["restoration_verified"])
+        self.assertIs(True, row["compute_release"])
+        self.assertEqual(4, len(row["verified_outputs"]))
+
+    def test_real_r1_failed_structure_preserves_partial_scene_and_no_replay(self):
+        proof, _, release = self.fixture()
+        proof.update(operation_id="copperfall-after-r1-32783", accepted_allocation_hub=32783,
+                     state="TERMINAL_FAILED_PARTIAL_OUTPUTS_RECONCILE",
+                     started_at_utc="2026-10-16T05:37:03.816250+00:00",
+                     finished_at_utc="2026-10-16T05:37:04.063618+00:00",
+                     scene="Copperfall_Ark_Rest_842401_polish_r1")
+        for key in ("source", "glb", "fbx", "hero", "source_copy_result", "render_operator_result",
+                    "retained_scenes_preserved", "retained_scene_hashes"):
+            del proof[key]
+        release.update(grant=32783, observed_at_utc="2026-10-16T05:38:27.3547761Z")
+        row = self.assert_reconcile(proof, None, release)
+        self.assertTrue(row["gui_operation"]["operation_terminal"])
+        self.assertFalse(row["gui_operation"]["operation_completed"])
+        self.assertEqual(proof["scene"], row["gui_operation"]["retained_partial_scene"])
+        self.assertEqual({}, row["verified_outputs"])
+        self.assertIs(True, row["compute_release"])
+
+    def test_each_missing_or_false_finished_and_restoration_witness_is_incomplete(self):
+        for key in ("startup_copy_result", "source_copy_result", "render_operator_result",
+                    "startup_objects_preserved", "original_context_restored", "retained_scenes_preserved",
+                    "startup_backup", "process_exit_code", "process_launched", "existing_blender_pid"):
+            for value in ("missing", False):
+                # A false exit is contradictory, rather than a missing witness.
+                if key == "process_exit_code" and value is False:
+                    continue
+                with self.subTest(key=key, value=value):
+                    proof, baseline, release = self.fixture()
+                    if value == "missing":
+                        del proof[key]
+                    else:
+                        proof[key] = True if key == "process_launched" else value
+                    self.assert_reconcile(proof, baseline, release)
+
+    def test_missing_baseline_or_required_output_cannot_complete(self):
+        proof, baseline, release = self.fixture()
+        self.assert_reconcile(proof, None, release)
+        for key in ("source", "glb", "fbx", "hero"):
+            with self.subTest(key=key):
+                proof, baseline, release = self.fixture()
+                del proof[key]
+                self.assert_reconcile(proof, baseline, release)
+
+    def test_baseline_hash_context_identity_and_clock_must_match(self):
+        changes = (("scene_hashes", {}), ("scene_hashes", {"Scene": "0" * 64}),
+                   ("pid", 1), ("active", "Other"), ("selected", []), ("read_only", False),
+                   ("run_called", True), ("observed_at_utc", GUI_NOW))
+        for key, value in changes:
+            with self.subTest(key=key, value=value):
+                proof, baseline, release = self.fixture()
+                baseline[key] = value
+                self.assert_reconcile(proof, baseline, release)
+
+    def test_separate_release_is_required_even_after_finished_outputs(self):
+        proof, baseline, _ = self.fixture()
+        row = self.assert_reconcile(proof, baseline, None)
+        self.assertTrue(row["gui_operation"]["operation_completed"])
+        self.assertNotIn("compute_release", row)
+
+    def test_wrong_or_ambiguous_release_does_not_prove_completion(self):
+        changes = (("grant", 32783), ("grant", True), ("before", {}),
+                   ("before", {"compute": {"holder": "another-owner"}}),
+                   ("after", {"compute": None}), ("unlock", {"ok": False, "lock": None}),
+                   ("observed_at_utc", "2026-10-16T05:50:49.1272009Z"),
+                   ("observed_at_utc", "2026-10-16T06:20:00.0000001Z"),
+                   ("observed_at_utc", "malformed"))
+        for key, value in changes:
+            with self.subTest(key=key, value=value):
+                proof, baseline, release = self.fixture()
+                release[key] = value
+                row = self.assert_reconcile(proof, baseline, release)
+                self.assertIsNone(row["compute_release"])
+
+    def test_exact_submicrosecond_utc_ordering_without_truncation(self):
+        self.assertLess(s.gui_clock("2026-10-16T05:00:00.1234567Z"),
+                        s.gui_clock("2026-10-16T05:00:00.1234568+00:00"))
+        self.assertEqual(s.gui_clock("2026-10-16T05:00:00.1Z"),
+                         s.gui_clock("2026-10-16T05:00:00.100000000+00:00"))
+        for clock in ("2026-10-16T05:00:00.1234567890Z", "2026-10-16T05:00:00+01:00",
+                      "2026-10-16T05:00:00", "2026-13-16T05:00:00Z"):
+            with self.subTest(clock=clock), self.assertRaises(ValueError):
+                s.gui_clock(clock)
+
+    def test_unknown_state_or_bad_terminal_clock_requires_reconciliation(self):
+        for key, value in (("state", "RENDERING"), ("state", []), ("finished_at_utc", None),
+                           ("finished_at_utc", "2026-10-16T05:00:00Z")):
+            proof, baseline, release = self.fixture()
+            proof[key] = value
+            self.assert_reconcile(proof, baseline, release)
+
+    def test_zero_exit_or_forged_operation_release_effects_are_rejected(self):
+        proof, baseline, release = self.fixture()
+        proof["process_exit_code"] = 0
+        with self.assertRaisesRegex(ValueError, "process exit"):
+            self.inspect(self.adapt(proof, baseline, release))
+        doc = self.adapt(*self.fixture())
+        self.terminal(doc)["compute_release"] = {"released": True, "evidence": self.write("fake.json", {"released": True})}
+        with self.assertRaisesRegex(ValueError, "operation-bound"):
+            self.inspect(doc)
+        doc = self.adapt(*self.fixture())
+        self.terminal(doc)["effects"] = "none"
+        with self.assertRaisesRegex(ValueError, "effects differ"):
+            self.inspect(doc)
+
+    def test_operation_attempt_and_allocation_are_bound_to_raw_terminal(self):
+        for key, value in (("operation_id", "different-attempt"), ("allocation_id", 32783)):
+            doc = self.adapt(*self.fixture())
+            self.terminal(doc)["gui_operation"][key] = value
+            with self.assertRaisesRegex(ValueError, "identity mismatch"):
+                self.inspect(doc)
+
+    def test_changed_terminal_baseline_release_and_output_pins_fail_closed(self):
+        for selected in ("terminal", "baseline", "release", "hero"):
+            doc = self.adapt(*self.fixture())
+            event = self.terminal(doc)
+            pin = {"terminal": event["gui_operation"]["evidence"],
+                   "baseline": event["gui_operation"]["baseline"],
+                   "release": event["compute_release"]["evidence"], "hero": event["outputs"]["hero"]}[selected]
+            Path(pin["path"]).write_bytes(b"changed after adaptation")
+            with self.subTest(pin=selected), self.assertRaisesRegex(ValueError, "changed pin"):
+                self.inspect(doc)
+
+    def test_output_pin_cannot_be_substituted_or_empty(self):
+        doc = self.adapt(*self.fixture())
+        self.terminal(doc)["outputs"]["hero"] = self.artifact
+        with self.assertRaisesRegex(ValueError, "differs from retained"):
+            self.inspect(doc)
+        proof, baseline, release = self.fixture()
+        proof["hero"] = self.write("empty.png", b"")
+        self.assert_reconcile(proof, baseline, release)
+
+    def test_empty_backup_or_matching_malformed_context_is_incomplete(self):
+        proof, baseline, release = self.fixture()
+        proof["startup_backup"] = self.write("empty.blend", b"")
+        self.assert_reconcile(proof, baseline, release)
+        for source_key, before_key, value in (("scene", "original_scene", None),
+                                               ("selected", "selected", 0), ("mode", "mode", "")):
+            with self.subTest(key=source_key):
+                proof, baseline, release = self.fixture()
+                proof["original_context"][source_key] = baseline[before_key] = value
+                self.assert_reconcile(proof, baseline, release)
+
+    def test_gui_attempt_witness_not_inherited_by_new_attempt(self):
+        doc = self.adapt(*self.fixture())
+        doc["stages"][0]["attempts"].append({"attempt_id": "next", "inputs": {},
+            "events": [{"state": "accepted", "observed_at_utc": GUI_NOW}]})
+        row = self.inspect(doc)["stages"][0]
+        self.assertEqual("accepted", row["status"])
+        self.assertNotIn("gui_operation", row)
+        self.assertNotIn("compute_release", row)
+        self.assertTrue(row["previous_attempts"][0]["gui_operation"]["operation_completed"])
+
+    def test_cli_gui_bad_receipt_or_selected_pin_returns_json3(self):
+        for value in ([], {"schema": "unknown"}, b'{"schema":',
+                      dict(self.fixture()[0], hero={"bytes": 1})):
+            pin = self.write("bad-gui.json", value)
+            args = ["adapt-gui", "--terminal", pin["path"], "--job-id", "job", "--stage-id", "stage",
+                    "--attempt-id", "copperfall-after-r2-32797", "--observed-at-utc", GUI_NOW,
+                    "--output-field", "hero=hero"]
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                self.assertEqual(3, s.main(args))
+            self.assertEqual("", stdout.getvalue())
+            self.assertFalse(json.loads(stderr.getvalue())["complete"])
+            self.assertNotIn("Traceback", stderr.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -18,7 +18,7 @@ python -m asset_pipeline.stages publish candidate.json --root ARTIFACT_ROOT --ou
 `verify` returns 0 only when all local stages have retained successful terminal
 evidence and every required nonempty output pin verifies. It returns 2 for valid
 but incomplete/uncertain evidence, and 3 for malformed, contradictory, changed or
-unavailable evidence. Parsed command results are JSON; argparse usage errors retain its standard text/exit2. `adapt-process` emits a candidate,
+unavailable evidence. Parsed command results are JSON; argparse usage errors retain its standard text/exit2. `adapt-process` and `adapt-gui` emit candidates,
 not a verified or published result. `publish` reports successful publication of
 evidence, including honest failed/unknown evidence; that exit code is **not job
 success**. Verify the published receipt separately.
@@ -55,15 +55,16 @@ versions from filenames. Pins have exactly `path`, `bytes`, `sha256`. Relative
 paths resolve against explicit `--root`; absolute retained paths are also
 supported. A terminal event has `outcome` (`succeeded`, `failed`, `unknown`),
 `effects` (`none`, `complete`, `partial`, `unknown`), `outputs` keyed by role,
-and optional separate `process`, `compute_release`, `progress`, `materials`.
+and optional separate `process`, `compute_release`, `progress`, `materials`,
+`gui_operation`.
 
-For success the wrapper must provide `process: {"exit_code": 0, "evidence": PIN}`
+For finite-process success the wrapper provides `process: {"exit_code": 0, "evidence": PIN}`
 whose retained JSON actually contains integer `exit_code: 0`, plus all required
 output pins. File presence, a transport ACK, progress text or compute release
 alone cannot complete a stage. A nonzero process exit proves failure, while a
 saved source file can still be retained as a verified partial output. A
-persistent GUI operation must use its own actual operation-result adapter;
-this finite-process adapter must not invent exit0 for a living Blender process.
+persistent GUI operation uses the separate adapter below; a living Blender
+process never supplies an invented exit0.
 
 `compute_release: {"released": true, "evidence": PIN}` requires a separate
 retained JSON `released: true`. The Nursery adapter also understands its exact
@@ -155,3 +156,56 @@ e03d72d6…. Its artifact bytes are explicitly synthetic; those tests do not
 claim to reproduce Blender exports or prove native behavior. A wrapper owner
 must accept emission/adoption into its existing runner; no live runner, bridge,
 queue or native journal integration is performed by this package.
+
+## Retained persistent GUI operation adapter
+
+`adapt-gui` understands only `daedalus.copperfall.existing-session.v1`. It reads
+explicit terminal, baseline and release files without contacting their producer.
+Its `attempt_id` must equal the actual terminal `operation_id`; the allocation
+number is bound to that terminal. Required output roles use explicit selectors
+in the terminal itself. No manifest progress or filename supplies completion.
+
+```text
+python -m asset_pipeline.stages adapt-gui --terminal COPPERFALL/after-r2/existing-session-attempt-32797/0010.json --baseline COPPERFALL/after-r2/reconciled-session-baseline.json --release SESSION/grant32797-release.json --release-owner pootscoot --job-id copperfall-gui-r2 --stage-id source-export-hero --attempt-id copperfall-after-r2-32797 --observed-at-utc CURRENT_UTC --output-field blend=source --output-field glb=glb --output-field fbx=fbx --output-field hero=hero > gui-r2-candidate.json
+python -m asset_pipeline.stages verify gui-r2-candidate.json
+python -m asset_pipeline.stages adapt-gui --terminal COPPERFALL/after-r1/existing-session-attempt-32783/0005.json --release SESSION/grant32783-release.json --release-owner pootscoot --job-id copperfall-gui-r1 --stage-id source-export-hero --attempt-id copperfall-after-r1-32783 --observed-at-utc CURRENT_UTC --output-field blend=source --output-field glb=glb --output-field fbx=fbx --output-field hero=hero > gui-r1-candidate.json
+python -m asset_pipeline.stages verify gui-r1-candidate.json
+```
+
+Set `SESSION` to the retained `task-3/open-session-20261016` directory and use
+fresh candidate names. As with `adapt-process`, adapter exit0 means a candidate
+was emitted; only `verify` reports whether its stage is complete.
+
+For GUI success the inspector requires all of:
+
+- Known successful operation state and ordered start/finish/observation clocks;
+  `process_launched: false`, positive existing PID, and `process_exit_code: null`.
+  The report has a separate `gui_operation`, never a numeric process exit.
+- Exact `FINISHED` results for session backup, source copy and hero render;
+  a matching backup pin and all selected nonempty output pins.
+- All three restoration booleans true plus a pinned read-only pre-operation
+  baseline: same PID, context fields and nonempty retained-scene hash map.
+  These are retained producer witnesses, not a fresh query of the current GUI.
+- Separate pinned `gui-release-v1` proof: exact allocation, explicit owner in
+  the before-compute holder, successful empty-lock unlock, no compute in the
+  after-read, and finish <= release <= observation. A generic released boolean
+  or Nursery proof cannot stand in for this operation-bound release.
+
+GUI source clocks accept explicit UTC ISO timestamps with up to nine fractional
+digits. Ordering preserves every digit; the actual .NET seven-digit release
+timestamps are neither rounded nor truncated for Python 3.10 compatibility.
+Missing/false witnesses or unknown states remain incomplete and require
+reconciliation. Malformed JSON, changed hashes, contradictory identities or
+invented numeric GUI exits fail verification with code3. No outcome advises
+automatic replay, reacquisition, cancellation or process termination.
+
+The retained real R2 terminal (6221B/85f0adb8…), baseline (628B/dd2a2468…) and
+release (1387B/16a0bc1b…) qualify four actual output pins while keeping exit
+`null`. R1's failed terminal (2751B/c2f675e6…) and release
+(1406B/ed6a2378…) retain the named partial scene and require reconciliation;
+release does not turn failed geometry into success. No absent R1 output is
+invented. The portable tests retain these input provenance pins and sanitized
+scalar structures, with explicitly synthetic artifact bytes. Full real-file
+CLI verification is separate and does not render, reopen or modify any asset.
+Neither path qualifies visual quality, native ingestion, gameplay, live process
+state, or adoption into a runner. Original operation receipts remain untouched.
