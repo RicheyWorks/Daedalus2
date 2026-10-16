@@ -396,6 +396,13 @@ function townMap() {
   return { kind: "town", grid: D.town.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
     walk: c => !!(tt[c] && tt[c].walkable), npcs: D.town.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing })) };
 }
+/* Windmere (data.json village): the world map's Village, a small skiff-wrights' hamlet. Same tiles and rules as the
+   town; its people have their own lines. The bottom row leads back out to the world map. */
+function villageMap() {
+  const tt = D.town_tiles, v = D.village;
+  return { kind: "village", name: v.name, grid: v.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
+    walk: c => !!(tt[c] && tt[c].walkable), npcs: v.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing, lines: n.lines })) };
+}
 function interiorMap(name) {
   const it = D.interiors[name], ti = D.interior_tiles, tt = D.town_tiles;
   return { kind: "interior", name, info: it, grid: it.grid.map(r => r.slice()), cue: name === "Castle" ? "CASTLE" : name === "Inn" ? "TOWN" : "TOWN",
@@ -486,7 +493,7 @@ function interact() {
         : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
         : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")], null, 1);
     }
-    return say(LINES[n.type] || ["..."], null, VOICE[n.type]);
+    return say(n.lines || LINES[n.type] || ["..."], null, VOICE[n.type]);
   }
   if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
   if (t === "BossGate") return bossGate();
@@ -583,6 +590,9 @@ function stepDone() {
     const name = Object.keys(D.interiors).find(k => { const o = D.interiors[k].opened_by; return o && o.door && o.door.x === P.x && o.door.y === P.y; });
     if (name) { sfx("DOOR"); state.returnTo = { kind: "town", x: P.x, y: P.y + 1 }; const it = D.interiors[name]; return goto(interiorMap(name), it.spawn.x, it.spawn.y, "up"); }
   }
+  if (map.kind === "village" && P.y >= D.village.exit_row) {                   /* the gate leads back out */
+    const p = find(D.world, D.village.landmark); return goto(worldMap(), p[0], p[1] + 1, "down");
+  }
   if (map.kind === "interior" && t === "ExitMat") {
     sfx("DOOR");
     if (map.name === "Castle") { const p = find(D.world, "Castle"); return goto(worldMap(), p[0], p[1] + 1, "down"); }
@@ -599,6 +609,7 @@ function stepDone() {
   }
   if (map.kind === "world") {
     if (t === "Town") { sfx("ENTER"); return goto(townMap(), 11, 16, "up"); }
+    if (D.village && t === D.village.landmark) { sfx("ENTER"); const s0 = D.village.spawn; toast(D.village.name.toUpperCase()); return goto(villageMap(), s0.x, s0.y, s0.facing); }
     if (t === "Castle") { sfx("ENTER"); const it = D.interiors.Castle; return goto(interiorMap("Castle"), it.spawn.x, it.spawn.y, "up"); }
     const di = D.dungeons.findIndex(d => d.landmark === t);
     if (di >= 0) {
@@ -1599,7 +1610,7 @@ window.PRISM_DEMO = {
   bestiary: () => beastList().map(k => Object.assign({ key: k }, beastInfo(k), state.seen[k], { text: BEHAVIOUR_TEXT[beastInfo(k).beh] || null })),
   behaviourText: () => BEHAVIOUR_TEXT,
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
-  warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
+  warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "village" ? villageMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },

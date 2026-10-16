@@ -1387,3 +1387,29 @@ The world map always had an `AirshipPad` landmark next to the Town; until now it
   - re-boarding;
   - saving at the inn, CONTINUE and NEW GAME;
   - each sky cache sits on unreachable landable ground, opens once on landing, and is saved, then reset by NEW GAME.
+
+### 14.40 The Prismheart demo: Windmere, the Village
+
+The world map's `Village` landmark used to say "the way is sealed". It is now Windmere, a skiff-wrights' hamlet.
+- **The data (`data/rpg/prism-village.json`, original):** a 16×13 grid of the realm's own town tiles: two cottages,
+  a well, a fish pond, flowers, a barrel and crate, and a chest. It has a gate spawn, an exit row and five villagers.
+  Each villager has their own lines. Together they tell the skiff's story and point to the sky caches:
+  - the Elder: the skiff-wrights built the Prism Skiff, and it lifts on a Warden's shard;
+  - the Farmer: a valley no road enters;
+  - the Child: things shine where there are no roads;
+  - the Sailor: how flying and landing work;
+  - the Mage: why monsters keep away.
+- **The build check (`build_demo.py`):** it refuses to build if:
+  - a Windmere tile has no image;
+  - the landmark is missing from the map;
+  - a villager has no sprite;
+  - anyone can't be walked up to from the gate;
+  - the exit row can't be reached.
+- **The game (`index.html`):**
+  - `villageMap()` reuses the town's tiles and walk rules. NPCs say their own `lines` before the town's per-type
+    lines.
+  - Walking onto the Village enters at the gate. The bottom row leads back out to the tile south of it.
+  - There are no random battles. The barrel and chest give their prize once.
+- **Proof:** `tools/rpg_demo/village_test.py` passes 17/17. It walks a BFS route up to each villager and checks each
+  speaks their own line. It also checks the barrel and the chest each give their prize once, there are no battles
+  inside, and the gate leads back to the world.

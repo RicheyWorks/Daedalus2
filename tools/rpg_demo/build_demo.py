@@ -198,6 +198,33 @@ def main(argv):
     reach = {k: find_tile(k) in seen for k in ("Castle", "Shrine") + tuple(lm for lm, _ in QUEST)}
     if not all(reach.values()):
         raise SystemExit("world map: not reachable on foot from the Town: %s" % reach)
+    # Windmere (data/rpg/prism-village.json): the world map's Village. Every tile needs an image; every NPC must be
+    # reachable on foot from the gate, and so must the exit row.
+    village = J("prism-village.json")
+    vwalk = {t["tile"]: t["walkable"] for t in town["tiles"] if t["realm"] == REALM}
+    vg = village["grid"]
+    for row in vg:
+        for c in row:
+            if "town:" + c not in frames:
+                raise SystemExit("prism-village.json uses tile %s with no image" % c)
+    if village["landmark"] not in {c for r in world for c in r}:
+        raise SystemExit("prism-village.json: landmark %s is not on the world map" % village["landmark"])
+    sp = (village["spawn"]["x"], village["spawn"]["y"])
+    vseen, vq, blocked = {sp}, deque([sp]), {(n["x"], n["y"]) for n in village["npcs"]}
+    while vq:
+        x, y = vq.popleft()
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            n = (x + dx, y + dy)
+            if 0 <= n[1] < len(vg) and 0 <= n[0] < len(vg[0]) and n not in vseen and n not in blocked and vwalk.get(vg[n[1]][n[0]]):
+                vseen.add(n)
+                vq.append(n)
+    for n in village["npcs"]:
+        if not any((n["x"] + dx, n["y"] + dy) in vseen for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+            raise SystemExit("Windmere: no one can walk up to the %s at (%d, %d)" % (n["type"], n["x"], n["y"]))
+        if "NPC_" + n["type"] not in sprite_rects:
+            raise SystemExit("Windmere: no sprite for NPC_%s" % n["type"])
+    if not any((x, village["exit_row"]) in vseen for x in range(len(vg[0]))):
+        raise SystemExit("Windmere: the exit row cannot be reached from the gate")
     lands = {t["tile"] for t in wm["tiles"] if t["realm"] == REALM and t.get("airship_lands")}
     pockets, done = [], set()
     for y, r in enumerate(world):
@@ -229,7 +256,7 @@ def main(argv):
         "backdrop_for_zone": backdrop_zone,
         "town": town["demo_towns"][REALM], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == REALM},
         "interiors": inter["interiors"][REALM], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == REALM},
-        "world": world, "sky_caches": sky_caches, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
+        "world": world, "sky_caches": sky_caches, "village": village, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
         "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
                      for (lm, _), d in zip(QUEST, quest)],
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
