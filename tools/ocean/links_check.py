@@ -83,6 +83,11 @@ def check(links, pen, out):
     for c in links["connections"]:
         a, b = docks.get(c["departure"]), docks.get(c["destination"])
         ok("connection %s -> %s: both docks exist" % (c["departure"], c["destination"]), a and b)
+        flags_are_bool = all(type(c.get(flag)) is bool for flag in ("boats", "submarines"))
+        ok("connection %s -> %s: boats and submarines must be JSON booleans" % (c["departure"], c["destination"]),
+           flags_are_bool, {flag: type(c[flag]).__name__ if flag in c else "missing" for flag in ("boats", "submarines")})
+        if not flags_are_bool:
+            continue
         if a and b:
             ok("connection %s -> %s: one end is the Ocean (session core: docks lead to the Ocean)" % (a["id"], b["id"]),
                (a["realm"] == "OCEAN") != (b["realm"] == "OCEAN"))
@@ -149,7 +154,28 @@ def main(argv):
             print(("ok   " if failed else "FAIL ") + "canary FAILs: " + name)
             n += failed
         print("LINKS-CANARIES %d/%d %s" % (n, len(canaries), "PASS" if n == len(canaries) else "FAIL"))
-        return 0 if n == len(canaries) else 1
+        flag_canaries = []
+        for flag in ("boats", "submarines"):
+            for label, value in (("string", "false"), ("integer", 1), ("null", None), ("missing", None)):
+                L = copy.deepcopy(links)
+                if label == "missing":
+                    del L["connections"][0][flag]
+                else:
+                    L["connections"][0][flag] = value
+                flag_canaries.append((flag + " " + label, L))
+        flags_ok = 0
+        for name, L in flag_canaries:
+            out = []
+            rejected = not all(check(L, pen, out))
+            failures = [line for line in out if line.startswith("FAIL ")]
+            right_reason = (rejected and len(failures) == 1
+                            and "boats and submarines must be JSON booleans" in failures[0])
+            print(("ok   " if right_reason else "FAIL ") + "flag type rejected for boolean diagnostic: " + name)
+            if not right_reason:
+                print("\n".join(out))
+            flags_ok += right_reason
+        print("LINKS-FLAGS %d/%d %s" % (flags_ok, len(flag_canaries), "PASS" if flags_ok == len(flag_canaries) else "FAIL"))
+        return 0 if n == len(canaries) and flags_ok == len(flag_canaries) else 1
     out = []
     res = check(links, pen, out)
     print("\n".join(out + warnings()))
