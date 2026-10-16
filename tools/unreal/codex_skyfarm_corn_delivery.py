@@ -8,9 +8,11 @@ import argparse
 import ast
 import base64
 import copy
+import ctypes
 from datetime import datetime,timezone
 import hashlib
 import json
+import re
 from pathlib import Path
 import subprocess
 import time
@@ -247,11 +249,251 @@ def prepare_normal_repair(a):
     print(json.dumps({'stage':value['stage'],'prepared':d.pin(a.folder/'prepared.json'),'native_calls':0,'runtime_authorized':False}))
 
 
+REPAIR_VERSION='corn-authored-normal-repair-caller-v1'
+REPAIR_OPERATION='corn-authored-normal-repair-only-v1'
+REPAIR_NATIVE_SHA='a82dc0639c718200fdd328896b47596310b8a53e2ca38e3f6c2a9d5bfe3d7b5d'
+REPAIR_SOURCE_SHA='59ff2d3c6bd9693e6c5b722a74e6e9a8671a9c748e1fcace4b6d7f926fb2a600'
+REPAIR_SOURCE=TASK/'native-ingestion/Harvest3CornR1/NormalRepairCallerSourceR1'
+REPAIR_ATTEMPTS=TASK/'native-ingestion/Harvest3CornR1/NormalRepairAttempts'
+REPAIR_EDITOR='C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe'
+REPAIR_EDITOR_START='2026-10-16T05:00:48.3931312Z'
+
+
+def _repair_utc():return datetime.now(timezone.utc).isoformat()
+
+
+def prepare_repair_caller(a):
+    """File-only source plan. No external tools, reservations or dispatch."""
+    if a.folder.resolve()!=REPAIR_SOURCE or (a.folder/'prepared.json').exists():raise RuntimeError('fresh exact caller source packet required')
+    scope=d.load(a.scope)
+    if not any(m.get('id')==33230 and m.get('type')=='source.assignment' and m.get('from')=='pootscoot-coordination'
+               and m.get('to')=='codex-play-guard' and m.get('body',{}).get('source_only')is True for m in scope['messages']):raise RuntimeError('addressed source-only33230 assignment required')
+    source=TASK/'native-ingestion/Harvest3CornR1/NormalRepairSourceR1/prepared.json'
+    if d.fingerprint(source)['sha256']!=REPAIR_SOURCE_SHA or d.fingerprint(NATIVE)['sha256']!=REPAIR_NATIVE_SHA:raise RuntimeError('exact reviewed native/source cut required')
+    candidate=d.load(source)
+    publication=source.parent/'publication.json';published=d.load(publication)
+    if published.get('commit')!='c20170324aa0605796e49a4f1c8a71b2b8c094a3' or published.get('exact_reviewed_cut')is not True or not all(row.get('remote_bytes_verified')is True for row in published['files']):
+        raise RuntimeError('verified exact reviewed source publication required first')
+    for row in candidate['cfg']['repair_support'].values():d._check(row)
+    value={'version':REPAIR_VERSION,'operation':REPAIR_OPERATION,'target':PATHS[0],'native_function':'repair_normals',
+        'runtime_authorized':False,'native_source':d.pin(NATIVE),'source_candidate':d.pin(source),
+        'host_source':d.pin(Path(__file__)),'test_source':d.pin(REPO/'tools/unreal/test_codex_skyfarm_corn_recovery.py'),
+        'world_guard':d.pin(TASK/'build_gallery_dispatch_spur.py'),'source_scope':d.pin(a.scope),
+        'reviewed_source_publication':d.pin(publication),'cfg':candidate['cfg'],
+        'runtime_gate':'Distinct actual addressed finite repair-only grant with direct-user authorization reference, exact source/prepared/review pins and unique attempt. No grant exists at source preparation.',
+        'maximum_native_callbacks':1,'maximum_targeted_normal_rebuilds':1,
+        'maximum_imports':0,'maximum_saves':0,'maximum_new_actors':0,'maximum_map_saves':0,'maximum_camera_actions':0,'maximum_captures':0}
+    d.write_new(a.folder/'prepared.json',value)
+    print(json.dumps({'stage':'REPAIR_CALLER_SOURCE_ONLY','prepared':d.pin(a.folder/'prepared.json'),'native_calls':0,'compute_claims':0}))
+
+
+def repair_caller_dry_run(a):
+    # Default remains inert even if somebody supplies a grant file as an option.
+    result={'stage':'REPAIR_CALLER_DRY_RUN','version':REPAIR_VERSION,'operation':REPAIR_OPERATION,
+            'target':PATHS[0],'native_function':'repair_normals','native_calls':0,'external_calls':0,
+            'compute_claims':0,'runtime_authorized':False,'effects':'No operation executed. A future approved run is one target rebuild/readback, zero saves/placement/camera.'}
+    if getattr(a,'folder',None):result['source_packet_exists']=(a.folder/'prepared.json').exists()
+    return result
+
+
+def _repair_time(value):
+    parsed=datetime.fromisoformat(value.replace('Z','+00:00'))
+    if parsed.tzinfo is None or parsed.utcoffset()!=timezone.utc.utcoffset(parsed):raise ValueError('explicit zero-offset UTC required')
+    return parsed.timestamp()
+
+
+def _repair_pending():
+    for folder in REPAIR_ATTEMPTS.glob('corn-normal-repair-*'):
+        terminal=folder/'terminal.json';release=folder/'release.json'
+        if (folder/'uncertain.json').exists():raise RuntimeError('unreconciled prior repair attempt; no new attempt')
+        if not terminal.exists():raise RuntimeError('prior repair attempt has no durable terminal')
+        value=d.load(terminal)
+        if value.get('known_terminal')is not True:raise RuntimeError('prior repair outcome remains pending')
+        if (folder/'claim-intent.json').exists() and not release.exists() and value.get('reservation_acquired')is not False:raise RuntimeError('prior repair reservation requires explicit reconciliation')
+        if release.exists() and d.load(release).get('old_lease_absent')is not True:raise RuntimeError('prior repair release unconfirmed')
+
+
+def _repair_local_plan(a):
+    if a.folder.resolve()!=REPAIR_SOURCE:raise ValueError('exact reviewed caller source path required')
+    prepared=d.load(a.folder/'prepared.json')
+    if (prepared.get('version')!=REPAIR_VERSION or prepared.get('operation')!=REPAIR_OPERATION
+            or prepared.get('target')!=PATHS[0] or prepared.get('native_function')!='repair_normals'
+            or prepared['native_source']['sha256']!=REPAIR_NATIVE_SHA or prepared['source_candidate']['sha256']!=REPAIR_SOURCE_SHA):
+        raise ValueError('exact reviewed caller/native/target/function required')
+    if Path(prepared['native_source']['path']).resolve()!=NATIVE.resolve() or Path(prepared['host_source']['path']).resolve()!=Path(__file__).resolve():raise ValueError('reviewed source file identity differs')
+    rows=[prepared[k] for k in ('native_source','host_source','test_source','source_candidate','world_guard','source_scope','reviewed_source_publication')]
+    cfg=prepared['cfg'];rows += [cfg[k] for k in ('source','manifest','packet','baseline','snap','world_helper','original_import')]
+    rows += list(cfg['helpers'].values())+list(cfg['repair_support'].values())
+    for row in rows:d._check(row)
+    if not re.fullmatch(r'corn-normal-repair-\d{8}T\d{6}Z-[a-f0-9]{8}',a.repair_attempt or ''):raise ValueError('fresh closed repair attempt name required')
+    attempt=REPAIR_ATTEMPTS/a.repair_attempt
+    if attempt.exists():raise RuntimeError('retained attempt directory; no replay')
+    _repair_pending()
+    grant_pin=d.pin(a.prerequisite);review_pin=d.pin(a.review);review=d.load(a.review)
+    prepared_pin=d.pin(a.folder/'prepared.json')
+    if review.get('clear')is not True or review.get('prepared_sha256')!=prepared_pin['sha256']:raise ValueError('exact caller source review required')
+    messages=d.load(a.prerequisite)['messages']
+    grants=[m for m in messages if m.get('id',0)>33232 and m.get('from')=='pootscoot-coordination'
+        and m.get('to')=='codex-play-guard' and m.get('type')=='grant'
+        and m.get('body',{}).get('assignment_id')=='skyfarm-corn-authored-normal-repair-r1']
+    if len(grants)!=1:raise ValueError('distinct actual addressed repair-only grant required')
+    body=grants[0]['body']
+    exact={'caller_version':REPAIR_VERSION,'operation':REPAIR_OPERATION,'target':PATHS[0],
+        'native_function':'repair_normals','prepared_sha256':prepared_pin['sha256'],
+        'native_source_sha256':REPAIR_NATIVE_SHA,'host_source_sha256':prepared['host_source']['sha256'],
+        'source_review_sha256':review_pin['sha256'],'attempt_id':a.repair_attempt,'attempt_directory':str(attempt),
+        'maximum_native_callbacks':1,'maximum_targeted_normal_rebuilds':1,
+        'maximum_imports':0,'maximum_saves':0,'maximum_new_actors':0,'maximum_map_saves':0,'maximum_camera_actions':0,'maximum_captures':0}
+    if any(body.get(k)!=v for k,v in exact.items()):raise ValueError('grant target/source/review/attempt/effect binding differs')
+    if body.get('direct_user_authorization_received')is not True or not isinstance(body.get('direct_user_authorization_reference'),str) or not body['direct_user_authorization_reference'].strip():
+        raise ValueError('direct user runtime authorization still pending; source publication is insufficient')
+    if body.get('resource_prerequisite_confirmed')is not True or not isinstance(body.get('resource_prerequisite_reference'),str) or not body['resource_prerequisite_reference'].strip():
+        raise ValueError('actual prior terminal/release or no-launch closure required; absent compute alone is insufficient')
+    start=_repair_time(body['start_by_utc']);stop=_repair_time(body['stop_by_utc']);now=time.time()
+    if now>=start or stop<=start or stop-now<330:raise ValueError('finite current UTC window with240sRPC+90s reserve required')
+    return {'prepared':prepared,'prepared_pin':prepared_pin,'grant_pin':grant_pin,'review_pin':review_pin,
+            'attempt':attempt,'start_by':start,'stop_by':stop,'operation':REPAIR_OPERATION,'source_rows':rows}
+
+
+def _repair_code(plan,cfg):
+    p=plan['prepared'];row=p['native_source']
+    body='from pathlib import Path\nimport hashlib\npin='+repr(row)+'\nraw=Path(pin["path"]).read_bytes()\nif len(raw)!=pin["bytes"] or hashlib.sha256(raw).hexdigest()!=pin["sha256"]:raise RuntimeError("reviewed repair source changed")\nscope={"__name__":"_corn_repair_only","__file__":pin["path"]}\nexec(compile(raw,pin["path"],"exec"),scope)\nresult=scope["repair_normals"]('+repr(cfg)+')\n'
+    tree=ast.parse(Path(p['world_guard']['path']).read_text());fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='native')
+    value=next(n.value for n in fn.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='code' for t in n.targets))
+    return eval(compile(ast.Expression(value),'<existing-guarded-repair-only-route>','eval'),dict(MARKER=MARKER,body=body,dirty=False,owned=list(HELD)+[p.split('.')[0] for p in PATHS]))
+
+
+def _repair_resources(folder,label):
+    class MemoryStatus(ctypes.Structure):
+        _fields_=[('length',ctypes.c_ulong),('load',ctypes.c_ulong)]+[(k,ctypes.c_ulonglong) for k in ('total_physical','available_physical','total_commit_limit','available_commit','total_virtual','available_virtual','reserved')]
+    sample=MemoryStatus();sample.length=ctypes.sizeof(sample)
+    ok=bool(ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(sample)))
+    d.write_new(folder/(label+'.json'),{'utc':_repair_utc(),'api_success':ok,'observed':{k:int(getattr(sample,k)) for k,t in sample._fields_},'physical_floor_bytes':1700000*1024,'commit_floor_bytes':2200000*1024})
+    if not ok:raise RuntimeError('fresh numeric memory observation unavailable')
+    return receiving.resources()  # Original floors remain unchanged.
+
+
+def _repair_runtime_tools():
+    def code_write(path,code):
+        with path.open('x',encoding='utf-8') as stream:stream.write(code)
+    return SimpleNamespace(write=d.write_new,code_write=code_write,now=time.time,locks=d.locks,lease=d._lease,
+        protect=lambda p:d.protect(d.load(p['prepared']['cfg']['baseline']['path'])),resources=_repair_resources,
+        process=lambda:json.loads(subprocess.check_output(['powershell','-NoProfile','-Command',"Get-Process -Id 42564 -ErrorAction Stop | Select-Object Id,Path,@{n='start_utc';e={$_.StartTime.ToUniversalTime().ToString('o')}} | ConvertTo-Json -Compress"],text=True)),
+        claim=lambda:d.post('/lock',{'me':d.OWNER,'name':'compute','ttl':600,'note':'Explicitly granted Corn repair-only:ONEtargetassetrebuild+proof;ZEROsave/import/placement/map/camera. No retry.'}),
+        same=d.same_compute_lease,release=lambda:d.post('/unlock',{'me':d.OWNER,'name':'compute'}),
+        call=lambda code:d.wire.call(d.wire.UNREAL,'execute_python',code=code,side='Unreal',unattended=False,timeout=240),
+        unwrap=lambda reply:d.wire.obj(reply,side='Unreal',what='Corn explicit repair-only'))
+
+
+def _repair_native_terminal(result):
+    if (not isinstance(result,dict) or result.get('known_terminal')is not True or result.get('target')!=PATHS[0]
+            or result.get('lod')!=0 or any(result.get(k)!=0 for k in ('imports','saves','new_actors','map_saves','camera_actions'))):
+        raise RuntimeError('native qualification/outcome not confirmed by transport success')
+    if result.get('stage')=='CORN_NORMAL_REPAIR_QUALIFIED_UNSAVED':
+        if (result.get('setter_intents')!=1 or result.get('setter_returns')!=1 or result.get('rebuild_barrier_returned')is not True
+                or not isinstance(result.get('build_after'),dict) or result.get('build_after')!=result.get('build_expected')
+                or result['build_after'].get('native',{}).get('bRecomputeNormals')is not False
+                or any(result.get('after_proof',{}).get(k)is not True for k in ('stored_authored_clear','raw_authored_clear','original_pbr_clear','preservation_clear'))):
+            raise RuntimeError('complete target rebuild and strict proof required')
+        return 'TARGET_REBUILD_QUALIFIED_UNSAVED'
+    if result.get('stage')=='CORN_NORMAL_REPAIR_PARTIAL_HOLD':
+        if result.get('setter_intents')==0 and result.get('setter_returns')==0 and result.get('rebuild_barrier_returned')is False:return 'KNOWN_HOLD_NO_REBUILD'
+        if result.get('setter_intents')==1 and result.get('setter_returns')==1 and result.get('rebuild_barrier_returned')is True:return 'TARGET_REBUILD_COMPLETED_QUALIFICATION_HOLD'
+    raise RuntimeError('inconsistent native terminal; hold without replay')
+
+
+def _repair_release(folder,claim,io):
+    if claim.get('holder')!='codex-play-guard' or not io.same(io.locks().get('compute',{}),claim):raise RuntimeError('exact own reservation changed; no unlock')
+    io.write(folder/'release-intent.json',{'utc':_repair_utc(),'claim':claim})
+    reply=io.release();after=io.locks()
+    if reply.get('ok')is not True or reply.get('lock')is not None or io.same(after.get('compute',{}),claim):raise RuntimeError('normal own release/readback unconfirmed')
+    value={'utc':_repair_utc(),'reply':reply,'locks_after':after,'old_lease_absent':True}
+    try:io.write(folder/'release.json',value)
+    except Exception as exc:exc.release_observation=value;raise
+    return value
+
+
+def _repair_execute(plan,io):
+    folder=plan['attempt'];folder.mkdir(parents=True,exist_ok=False)
+    state={'stage':'LOCAL_VALIDATED','known_terminal':False,'native_status':'NOT_DISPATCHED','dispatch_started':False,'claim_requested':False,'claim':None,'release':None}
+    raw_observation=None
+    try:
+        io.write(folder/'preflight.json',{'utc':_repair_utc(),'version':REPAIR_VERSION,'operation':REPAIR_OPERATION,
+            'prepared':plan['prepared_pin'],'grant':plan['grant_pin'],'review':plan['review_pin'],'target':PATHS[0],'native_function':'repair_normals','replay_permitted':False})
+        io.protect(plan);locks=io.locks();io.write(folder/'custody-observed.json',{'utc':_repair_utc(),'locks':locks});lease=io.lease()
+        if lease.get('holder')!='codex-play-guard' or locks.get('compute'):raise RuntimeError('sole own native custody/free compute required')
+        memory=io.resources(folder,'memory-before-admission');process=io.process();io.write(folder/'editor-observed.json',{'utc':_repair_utc(),'editor':process,'memory':memory})
+        if process.get('Id')!=42564 or process.get('Path')!=REPAIR_EDITOR or process.get('start_utc')!=REPAIR_EDITOR_START:raise RuntimeError('exact original editor context required')
+        if memory.get('available_physical',0)<1700000*1024 or memory.get('available_commit',0)<2200000*1024:raise RuntimeError('original numeric memory floors not met')
+        if io.now()>=plan['start_by']:raise RuntimeError('fresh finite start deadline passed')
+        io.write(folder/'claim-intent.json',{'utc':_repair_utc(),'ttl_seconds':600});state['claim_requested']=True
+        reply=io.claim()
+        if reply.get('ok')is not True:state['claim_requested']=False;raise RuntimeError('exclusive reservation rejected; no dispatch')
+        claim=reply['lock']
+        if claim.get('holder')!='codex-play-guard' or claim.get('ttl')!=600:raise RuntimeError('exact own600second reservation not established')
+        state['claim']=claim
+        if not io.same(io.locks().get('compute',{}),claim):raise RuntimeError('claim identity unconfirmed')
+        deadline=min(plan['stop_by'],claim['at']+claim['ttl'],lease['at']+lease['ttl'])
+        io.write(folder/'claim.json',{'utc':_repair_utc(),'claim':claim,'deadline_epoch':deadline})
+        memory=io.resources(folder,'memory-before-dispatch');io.lease();process=io.process()
+        io.write(folder/'context-before-dispatch.json',{'utc':_repair_utc(),'memory':memory,'editor':process})
+        if memory.get('available_physical',0)<1700000*1024 or memory.get('available_commit',0)<2200000*1024:raise RuntimeError('original numeric floors failed before dispatch')
+        if process.get('Id')!=42564 or process.get('Path')!=REPAIR_EDITOR or process.get('start_utc')!=REPAIR_EDITOR_START:raise RuntimeError('fresh editor context changed before dispatch')
+        if io.now()>=plan['start_by'] or deadline-io.now()<330:raise RuntimeError('240second RPC/90second reserve unavailable')
+        if not io.same(io.locks().get('compute',{}),claim):raise RuntimeError('reservation changed before dispatch')
+        for row in plan['source_rows']:d._check(row)
+        cfg={**plan['prepared']['cfg'],'source_only':False,'repair_runtime_grant':plan['grant_pin'],'deadline_epoch':deadline,
+             'normal_repair_journal':str(folder/'native.json'),'normal_repair_before_journal':str(folder/'before-native.json'),
+             'normal_repair_after_journal':str(folder/'after-native.json'),'witness_directory':str(folder/'graph-witnesses')}
+        (folder/'graph-witnesses').mkdir();code=_repair_code(plan,cfg)
+        io.write(folder/'dispatch-intent.json',{'utc':_repair_utc(),'native_function':'repair_normals','target':PATHS[0],
+            'native_source':plan['prepared']['native_source'],'code_sha256':hashlib.sha256(code.encode()).hexdigest(),'maximum_callbacks':1,'replay_permitted':False})
+        io.code_write(folder/'repair-executed.py',code)
+        state['dispatch_started']=True;state['native_status']='DISPATCH_OUTCOME_UNCONFIRMED'
+        raw=io.call(code);raw_observation=raw;io.write(folder/'reply.json',raw);result=io.unwrap(raw);io.write(folder/'result.json',result)
+        stage=_repair_native_terminal(result)
+        state['native_status']=stage
+        terminal={'utc':_repair_utc(),'stage':stage,'known_terminal':True,'native_result':d.pin(folder/'result.json'),
+                  'target':PATHS[0],'saves':0,'placement':0,'camera':0}
+        io.write(folder/'terminal.json',terminal);state.update(stage=stage,known_terminal=True)
+        state['release']=_repair_release(folder,claim,io);return state
+    except Exception as exc:
+        state.update(error=str(exc),error_type=type(exc).__name__)
+        if hasattr(exc,'release_observation'):state['release_observation']=exc.release_observation
+        if not state['dispatch_started'] and (state['claim'] is not None or not state['claim_requested']):
+            terminal={'utc':_repair_utc(),'stage':'NO_DISPATCH_REJECTED','known_terminal':True,'error':str(exc),'native_callbacks':0,'reservation_acquired':state['claim']is not None}
+            try:
+                io.write(folder/'terminal.json',terminal)
+                if state['claim'] is not None:state['release']=_repair_release(folder,state['claim'],io)
+                state.update(stage='NO_DISPATCH_REJECTED',known_terminal=True);return state
+            except Exception as close_error:
+                state['closure_error']=str(close_error)
+                if hasattr(close_error,'release_observation'):state['release_observation']=close_error.release_observation
+                if state['claim']is None and not state['claim_requested']:
+                    state.update(stage='NO_DISPATCH_RECEIPT_FAILURE',known_terminal=True);return state
+        state['stage']='UNCERTAIN_DISPATCH_OR_CLOSURE' if state['dispatch_started'] else 'UNCONFIRMED_PRELAUNCH_RESERVATION'
+        try:io.write(folder/'uncertain.json',{'utc':_repair_utc(),**state,'raw_reply_observation':raw_observation,'replay_permitted':False,'forced_unlock_permitted':False})
+        except Exception as receipt_error:state['receipt_error']=str(receipt_error)
+        return state
+
+
+def run_normal_repair(a,*,_io=None):
+    if getattr(a,'execute_approved_repair',False)is not True:return repair_caller_dry_run(a)
+    try:plan=_repair_local_plan(a)  # ALL grant/path/pin checks precede any external IO.
+    except Exception as exc:return {'stage':'NO_DISPATCH_REJECTED','known_terminal':True,'native_callbacks':0,'external_calls':0,'error':str(exc),'runtime_authorized':False}
+    return _repair_execute(plan,_io or _repair_runtime_tools())
+
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('phase',choices=['prepare','run','prepare-normal-repair'])
-    parser.add_argument('--folder',type=Path,required=True);parser.add_argument('--scope',type=Path)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('phase',nargs='?',default='repair-dry-run',choices=['prepare','run','prepare-normal-repair','prepare-repair-caller','repair-dry-run','run-normal-repair'])
+    parser.add_argument('--folder',type=Path);parser.add_argument('--scope',type=Path)
     parser.add_argument('--prerequisite',type=Path);parser.add_argument('--review',type=Path)
+    parser.add_argument('--repair-attempt');parser.add_argument('--execute-approved-repair',action='store_true')
     args=parser.parse_args()
-    if args.phase=='prepare-normal-repair':prepare_normal_repair(args)
+    if args.phase not in ('repair-dry-run','run-normal-repair') and args.folder is None:parser.error('--folder is required for that phase')
+    if args.phase=='repair-dry-run':print(json.dumps(repair_caller_dry_run(args)))
+    elif args.phase=='prepare-repair-caller':prepare_repair_caller(args)
+    elif args.phase=='run-normal-repair':print(json.dumps(run_normal_repair(args)))
+    elif args.phase=='prepare-normal-repair':prepare_normal_repair(args)
     elif args.phase=='prepare':prepare(args)
     else:run(args)

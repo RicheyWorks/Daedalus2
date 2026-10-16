@@ -9,6 +9,7 @@ import ast
 import copy
 from datetime import datetime, timezone
 import json
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -557,6 +558,196 @@ class NormalRepairCandidateTests(unittest.TestCase):
         with patch.object(self.native,'_guard',return_value={'dirty_content':list(expected)}), \
                 patch.object(self.native,'_file',return_value=SimpleNamespace(exists=lambda:True)):
             with self.assertRaisesRegex(RuntimeError,'never-saved'):self.native._repair_guard({}, {})
+
+
+class RepairCallerTests(unittest.TestCase):
+    """NEW33230 caller checks: only temporary files and mocked external IO."""
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory(prefix='corn-caller-offline-');self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name);self.now=datetime(2026,10,16,13,0,tzinfo=timezone.utc).timestamp()
+        def pin(path):
+            import hashlib
+            raw=Path(path).read_bytes();return {'path':str(path),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+        self.d=SimpleNamespace(pin=pin,load=lambda p:json.loads(Path(p).read_text()),_check=Mock())
+        import hashlib
+        ns={'__file__':str(HOST),'TASK':self.root,'REPO':REPO,'NATIVE':self.root/'native.py',
+            'PATHS':REAL_PATHS,'HELD':(), 'MARKER':'# mocked existing route', 'Path':Path,'json':json,'ast':ast,'re':re,
+            'datetime':datetime,'timezone':timezone,'time':SimpleNamespace(time=lambda:self.now),
+            'hashlib':hashlib,'SimpleNamespace':SimpleNamespace,'d':self.d}
+        tree=ast.parse(HOST.read_text());nodes=[]
+        for n in tree.body:
+            if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id.startswith('REPAIR_') for t in n.targets):nodes.append(n)
+            if isinstance(n,ast.FunctionDef) and (n.name.startswith('_repair_') or n.name in ('prepare_repair_caller','repair_caller_dry_run','run_normal_repair')):nodes.append(n)
+        exec(compile(ast.Module(body=nodes,type_ignores=[]),str(HOST),'exec'),ns);self.ns=ns
+        self.factory=Mock(side_effect=AssertionError('No real IO factory in offline tests'));ns['_repair_runtime_tools']=self.factory
+        folder=ns['REPAIR_SOURCE'];folder.mkdir(parents=True);fixture=self.root/'fixture.json';fixture.write_text('{}')
+        row=pin(fixture);guard=self.root/'guard.py';guard.write_text("def native():\n    code=MARKER+'\\n'+body\n")
+        cfg={k:row for k in ('source','manifest','packet','baseline','snap','world_helper','original_import')};cfg.update(helpers={},repair_support={},source_only=True,repair_runtime_grant=None)
+        self.prepared={'version':ns['REPAIR_VERSION'],'operation':ns['REPAIR_OPERATION'],'target':REAL_PATHS[0],'native_function':'repair_normals',
+            'native_source':{**row,'path':str(ns['NATIVE']),'sha256':ns['REPAIR_NATIVE_SHA']},'host_source':{**row,'path':str(HOST),'sha256':'caller-source-pin'},
+            'test_source':row,'source_candidate':{**row,'sha256':ns['REPAIR_SOURCE_SHA']},'world_guard':pin(guard),'source_scope':row,'reviewed_source_publication':row,'cfg':cfg}
+        (folder/'prepared.json').write_text(json.dumps(self.prepared))
+        self.args=SimpleNamespace(folder=folder,prerequisite=self.root/'grant.json',review=self.root/'review.json',
+            repair_attempt='corn-normal-repair-20261016T130000Z-1234abcd',execute_approved_repair=True)
+        self.args.review.write_text(json.dumps({'clear':True,'prepared_sha256':pin(folder/'prepared.json')['sha256']}))
+        self.body={'assignment_id':'skyfarm-corn-authored-normal-repair-r1','caller_version':ns['REPAIR_VERSION'],'operation':ns['REPAIR_OPERATION'],
+            'target':REAL_PATHS[0],'native_function':'repair_normals','prepared_sha256':pin(folder/'prepared.json')['sha256'],
+            'native_source_sha256':ns['REPAIR_NATIVE_SHA'],'host_source_sha256':'caller-source-pin','source_review_sha256':pin(self.args.review)['sha256'],
+            'attempt_id':self.args.repair_attempt,'attempt_directory':str(ns['REPAIR_ATTEMPTS']/self.args.repair_attempt),
+            'maximum_native_callbacks':1,'maximum_targeted_normal_rebuilds':1,'maximum_imports':0,'maximum_saves':0,'maximum_new_actors':0,'maximum_map_saves':0,'maximum_camera_actions':0,'maximum_captures':0,
+            'direct_user_authorization_received':True,'direct_user_authorization_reference':'UNIT TEST ONLY; no production authority',
+            'resource_prerequisite_confirmed':True,'resource_prerequisite_reference':'UNIT TEST ONLY prior terminal/release fixture',
+            'start_by_utc':'2026-10-16T13:05:00Z','stop_by_utc':'2026-10-16T13:15:00Z'}
+        self.grant={'id':33300,'from':'pootscoot-coordination','to':'codex-play-guard','type':'grant','body':self.body};self.write_grant()
+        self.result={'known_terminal':True,'stage':'CORN_NORMAL_REPAIR_QUALIFIED_UNSAVED','target':REAL_PATHS[0],'lod':0,
+            'imports':0,'saves':0,'new_actors':0,'map_saves':0,'camera_actions':0,'setter_intents':1,'setter_returns':1,'rebuild_barrier_returned':True,
+            'build_after':{'native':{'bRecomputeNormals':False}},'build_expected':{'native':{'bRecomputeNormals':False}},
+            'after_proof':dict(stored_authored_clear=True,raw_authored_clear=True,original_pbr_clear=True,preservation_clear=True)}
+        self.active=None;self.fail_files=set()
+        def write(path,value):
+            if path.name in self.fail_files:raise OSError('mock receipt failure: '+path.name)
+            with path.open('x',encoding='utf-8') as stream:json.dump(value,stream)
+        self.lease={'holder':'codex-play-guard','at':self.now-100,'ttl':3600}
+        def claim():
+            self.active={'holder':'codex-play-guard','at':self.now,'ttl':600}
+            return {'ok':True,'lock':copy.deepcopy(self.active)}
+        def release():self.active=None;return {'ok':True,'lock':None}
+        self.io=SimpleNamespace(write=Mock(side_effect=write),code_write=Mock(side_effect=lambda p,c:p.write_text(c)),now=lambda:self.now,
+            locks=Mock(side_effect=lambda:{'unreal':self.lease,**({'compute':self.active} if self.active else {})}),lease=Mock(return_value=self.lease),
+            protect=Mock(),resources=Mock(return_value={'available_physical':2_000_000*1024,'available_commit':3_000_000*1024}),
+            process=Mock(return_value={'Id':42564,'Path':ns['REPAIR_EDITOR'],'start_utc':ns['REPAIR_EDITOR_START']}),claim=Mock(side_effect=claim),
+            same=lambda left,right:bool(left) and all(left.get(k)==right.get(k) for k in ('holder','at','ttl')),
+            release=Mock(side_effect=release),call=Mock(side_effect=lambda code:{'result':self.result}),unwrap=lambda reply:reply['result'])
+
+    def write_grant(self):self.args.prerequisite.write_text(json.dumps({'messages':[self.grant]}))
+    def run_caller(self):return self.ns['run_normal_repair'](self.args,_io=self.io)
+    def attempt(self):return self.ns['REPAIR_ATTEMPTS']/self.args.repair_attempt
+
+    def test_default_dry_run_has_zero_external_calls_even_with_grant_options(self):
+        self.args.execute_approved_repair=False;result=self.run_caller()
+        self.assertEqual(result['stage'],'REPAIR_CALLER_DRY_RUN');self.factory.assert_not_called()
+        self.io.locks.assert_not_called();self.io.process.assert_not_called();self.io.call.assert_not_called();self.io.claim.assert_not_called()
+
+    def test_source_old_foreign_and_publication_messages_cannot_grant_runtime(self):
+        for change in ({'id':33079},{'id':33122},{'id':33230,'type':'source.assignment'},{'id':33232,'type':'source.clear'},{'from':'another-bot'},{'to':'another-owner'}):
+            original=copy.deepcopy(self.grant);self.grant.update(change);self.write_grant()
+            with self.subTest(change=change):
+                self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED');self.io.locks.assert_not_called();self.io.call.assert_not_called()
+            self.grant=original;self.body=self.grant['body']
+
+    def test_target_source_prepared_review_attempt_and_extra_effect_mismatches_reject_locally(self):
+        for key,value in [('target','/Game/Foreign/F.F'),('native_function','run'),('native_source_sha256','wrong'),('host_source_sha256','wrong'),('prepared_sha256','wrong'),('source_review_sha256','wrong'),('attempt_directory','C:/Foreign'),('maximum_saves',1),('maximum_captures',1)]:
+            old=self.body[key];self.body[key]=value;self.write_grant()
+            with self.subTest(key=key):self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED')
+            self.body[key]=old
+        self.io.locks.assert_not_called();self.io.call.assert_not_called();self.factory.assert_not_called()
+
+    def test_direct_human_authorization_must_be_received_not_inferred(self):
+        self.body['direct_user_authorization_received']=False;self.write_grant()
+        result=self.run_caller();self.assertIn('authorization still pending',result['error']);self.io.locks.assert_not_called()
+
+    def test_naive_non_utc_expired_or_insufficient_windows_reject_before_io(self):
+        for key,value in [('start_by_utc','2026-10-16T13:05:00'),('start_by_utc','2026-10-16T13:05:00-07:00'),('start_by_utc','2026-10-16T12:59:00Z'),('stop_by_utc','2026-10-16T13:04:00Z')]:
+            old=self.body[key];self.body[key]=value;self.write_grant()
+            with self.subTest(value=value):self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED')
+            self.body[key]=old
+        self.io.locks.assert_not_called()
+
+    def test_retained_attempt_and_unreconciled_prior_outcome_cannot_replay(self):
+        self.attempt().mkdir(parents=True)
+        self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED');self.io.call.assert_not_called()
+        self.args.repair_attempt='corn-normal-repair-20261016T130001Z-1234abcd';self.body.update(attempt_id=self.args.repair_attempt,attempt_directory=str(self.attempt()));self.write_grant()
+        old=next(self.ns['REPAIR_ATTEMPTS'].iterdir());(old/'uncertain.json').write_text('{}')
+        self.assertIn('unreconciled',self.run_caller()['error']);self.io.locks.assert_not_called()
+
+    def test_changed_source_pin_rejects_before_external_io(self):
+        self.d._check.side_effect=RuntimeError('pinned source changed')
+        self.assertIn('pinned source changed',self.run_caller()['error']);self.io.call.assert_not_called();self.io.claim.assert_not_called()
+
+    def test_one_repair_callback_and_strict_terminal_normal_release(self):
+        result=self.run_caller();self.assertEqual(result['stage'],'TARGET_REBUILD_QUALIFIED_UNSAVED')
+        self.io.call.assert_called_once();self.io.release.assert_called_once();self.assertIsNone(self.active)
+        code=self.io.call.call_args.args[0];self.assertIn('scope["repair_normals"]',code);self.assertNotIn('scope["run"]',code)
+        self.assertTrue(json.loads((self.attempt()/'release.json').read_text())['old_lease_absent'])
+        self.assertFalse(result['release']is None);self.assertNotIn('save_map',code)
+
+    def test_wrong_os_context_or_foreign_compute_rejects_before_claim(self):
+        self.io.process.return_value={'Id':999,'Path':'foreign','start_utc':'wrong'}
+        self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED');self.io.claim.assert_not_called();self.io.call.assert_not_called()
+
+    def test_foreign_compute_is_preserved_without_unlock(self):
+        self.active={'holder':'other-owner','at':self.now,'ttl':600}
+        self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED');self.io.claim.assert_not_called();self.io.release.assert_not_called();self.io.call.assert_not_called()
+
+    def test_low_memory_before_claim_has_no_dispatch_or_reservation(self):
+        self.io.resources.return_value={'available_physical':1,'available_commit':1}
+        self.assertEqual(self.run_caller()['stage'],'NO_DISPATCH_REJECTED');self.io.claim.assert_not_called();self.io.call.assert_not_called()
+
+    def test_post_claim_guard_failure_closes_known_no_dispatch_normally(self):
+        high={'available_physical':2_000_000*1024,'available_commit':3_000_000*1024}
+        self.io.resources.side_effect=[high,{'available_physical':1,'available_commit':1}]
+        result=self.run_caller();self.assertEqual(result['stage'],'NO_DISPATCH_REJECTED');self.io.call.assert_not_called();self.io.release.assert_called_once();self.assertIsNone(self.active)
+
+    def test_dispatch_intent_receipt_failure_prevents_rpc_and_closes_reservation(self):
+        self.fail_files={'dispatch-intent.json'};result=self.run_caller()
+        self.assertEqual(result['stage'],'NO_DISPATCH_REJECTED');self.io.call.assert_not_called();self.io.release.assert_called_once()
+
+    def test_timeout_after_dispatch_holds_exact_lease_without_retry(self):
+        self.io.call.side_effect=TimeoutError('mock uncertain RPC');result=self.run_caller()
+        self.assertEqual(result['stage'],'UNCERTAIN_DISPATCH_OR_CLOSURE');self.io.call.assert_called_once();self.io.release.assert_not_called();self.assertIsNotNone(self.active)
+        uncertain=json.loads((self.attempt()/'uncertain.json').read_text());self.assertFalse(uncertain['replay_permitted']);self.assertFalse(uncertain['forced_unlock_permitted'])
+
+    def test_reply_receipt_failure_retains_raw_evidence_and_lease(self):
+        self.fail_files={'reply.json'};result=self.run_caller()
+        self.assertEqual(result['stage'],'UNCERTAIN_DISPATCH_OR_CLOSURE');self.io.call.assert_called_once();self.io.release.assert_not_called()
+        self.assertEqual(json.loads((self.attempt()/'uncertain.json').read_text())['raw_reply_observation']['result']['target'],REAL_PATHS[0])
+
+    def test_native_uncertain_or_incomplete_transport_success_is_not_qualification(self):
+        self.result['known_terminal']=False;result=self.run_caller()
+        self.assertEqual(result['stage'],'UNCERTAIN_DISPATCH_OR_CLOSURE');self.io.release.assert_not_called()
+
+    def test_missing_native_build_proof_is_held_despite_transport_success(self):
+        self.result.pop('build_after');self.result.pop('build_expected')
+        self.assertEqual(self.run_caller()['stage'],'UNCERTAIN_DISPATCH_OR_CLOSURE');self.io.release.assert_not_called()
+
+    def test_known_native_preproof_hold_releases_without_claiming_rebuild(self):
+        self.result.update(stage='CORN_NORMAL_REPAIR_PARTIAL_HOLD',setter_intents=0,setter_returns=0,rebuild_barrier_returned=False)
+        result=self.run_caller();self.assertEqual(result['stage'],'KNOWN_HOLD_NO_REBUILD');self.io.release.assert_called_once()
+
+    def test_known_completed_rebuild_qualification_hold_is_unsaved_and_released(self):
+        self.result['stage']='CORN_NORMAL_REPAIR_PARTIAL_HOLD'
+        result=self.run_caller();self.assertEqual(result['stage'],'TARGET_REBUILD_COMPLETED_QUALIFICATION_HOLD');self.io.release.assert_called_once();self.assertEqual(self.result['saves'],0)
+
+    def test_release_receipt_failure_preserves_confirmed_observation_without_second_unlock(self):
+        self.fail_files={'release.json'};result=self.run_caller()
+        self.assertEqual(result['stage'],'UNCERTAIN_DISPATCH_OR_CLOSURE');self.io.release.assert_called_once();self.assertIsNone(self.active)
+        self.assertTrue(json.loads((self.attempt()/'uncertain.json').read_text())['release_observation']['old_lease_absent'])
+
+    def test_reviewed_native_bytes_remain_unchanged(self):
+        import hashlib
+        self.assertEqual(hashlib.sha256(NATIVE.read_bytes()).hexdigest(),self.ns['REPAIR_NATIVE_SHA'])
+
+    def test_absent_compute_is_not_a_substitute_for_actual_resource_closure(self):
+        self.body['resource_prerequisite_confirmed']=False;self.write_grant()
+        self.assertIn('absent compute alone',self.run_caller()['error']);self.io.locks.assert_not_called();self.io.claim.assert_not_called()
+
+    def test_complete_default_module_calls_no_network_or_process_boundary(self):
+        import contextlib
+        import io
+        import runpy
+        import socket
+        import subprocess
+        import urllib.request
+        output=io.StringIO()
+        with patch.object(sys,'argv',[str(HOST)]),patch.object(sys,'path',[str(HOST.parent),*sys.path]), \
+                patch.object(socket,'create_connection',side_effect=AssertionError('network forbidden')) as connect, \
+                patch.object(socket.socket,'connect',side_effect=AssertionError('network forbidden')) as sock, \
+                patch.object(urllib.request,'urlopen',side_effect=AssertionError('HTTP forbidden')) as http, \
+                patch.object(subprocess,'Popen',side_effect=AssertionError('process forbidden')) as process, \
+                contextlib.redirect_stdout(output):
+            runpy.run_path(str(HOST),run_name='__main__')
+        self.assertEqual(json.loads(output.getvalue())['stage'],'REPAIR_CALLER_DRY_RUN')
+        connect.assert_not_called();sock.assert_not_called();http.assert_not_called();process.assert_not_called()
 
 
 if __name__ == '__main__':
