@@ -1449,3 +1449,10 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
   shorter than a test round trip.
 - **Flake found and fixed in the test, not the game:** `face("right")` on the bank can walk a step onto grass, so the
   next "face left and cast" faced grass. The test now warps back to the bank before casting.
+- **FISH page and the Elder's request (follow-up):**
+  - The field menu has a ninth command, FISH. It lists every kind in the table. Uncaught fish show as "???" with
+    their rarity and how often they bite. Caught fish show their count, their note and what eating them really does
+    (`itemLine`, at the demo's scaled numbers).
+  - The Windmere Elder has a `request` in `prism-village.json`: she buys a Sunscale Carp for 600 gold, once per
+    journey. The request is saved in `quests`, CONTINUE restores it and NEW GAME clears it.
+  - `fish_test.py` passes 22/22.

@@ -360,7 +360,7 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {} };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {} };
 /* ---------- the airship (world map only) ----------
    The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
@@ -401,7 +401,7 @@ function townMap() {
 function villageMap() {
   const tt = D.town_tiles, v = D.village;
   return { kind: "village", name: v.name, grid: v.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
-    walk: c => !!(tt[c] && tt[c].walkable), npcs: v.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing, lines: n.lines })) };
+    walk: c => !!(tt[c] && tt[c].walkable), npcs: v.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing, lines: n.lines, request: n.request })) };
 }
 function interiorMap(name) {
   const it = D.interiors[name], ti = D.interior_tiles, tt = D.town_tiles;
@@ -493,6 +493,7 @@ function interact() {
         : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
         : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")], null, 1);
     }
+    if (n.request) return villageRequest(n);
     return say(n.lines || LINES[n.type] || ["..."], null, VOICE[n.type]);
   }
   if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
@@ -707,6 +708,17 @@ function drawField() {
    and the fish is yours; press too soon and the ripple scatters, too late and it gets away. Rarer fish bite less
    often and let go faster. Every fish is an item (eat it from ITEM); the fish log counts each kind caught. */
 let fishing = null;
+/* A villager's request (prism-village.json npcs[].request): bring an item, get gold. Once per journey; saved. */
+function villageRequest(n) {
+  const r = n.request, v = VOICE[n.type];
+  if (state.quests[r.id]) return say([r.done], null, v);
+  if (!(bag[r.item] > 0)) return say((n.lines || []).concat([r.ask]), null, v);
+  ask(r.offer, ["YES", "NO"], i => {
+    if (i === 1) return say(["I UNDERSTAND. A FISH LIKE THAT IS HARD TO PART WITH."], null, v);
+    bag[r.item]--; gold += r.gold; state.quests[r.id] = true; sfx("BUY");
+    say([r.thanks, "RECEIVED " + r.gold + " GOLD."], null, v);
+  });
+}
 function castLine(tx, ty) {
   fishing = { x: tx, y: ty, phase: "wait", t: 0, wait: 1.2 + Math.random() * 2.4, fish: null, msg: "WAITING FOR A BITE...  A: STRIKE   B: REEL IN" };
   mode = "fish"; sfx("SWING");
@@ -735,6 +747,23 @@ function fishTick(dt) {
     } else if (f.t > f.fish.window_s) { f.phase = "done"; f.t = 0; f.msg = "IT GOT AWAY."; sfx("MISS"); }
   } else if (f.t > 0.3 && (hit("a") || hit("b"))) endFish();
 }
+function drawFishLog() {                                     /* every kind in the table; the uncaught ones keep their secret */
+  const all = D.fish || [], i = menu.ii, have = Object.keys(state.fish).length;
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 26); win(0, 26, W, 120); win(0, 146, W, H - 146);
+  text("FISH LOG", 12, 9, "#fff070"); const c = "CAUGHT " + have + " / " + all.length; text(c, W - 10 - tw(c), 9, "#a0a8c0");
+  const RC = { COMMON: "#c8d0e0", UNCOMMON: "#70e0a0", RARE: "#70b8ff", LEGENDARY: "#ffd060" };
+  all.forEach((f, k) => {
+    const n = state.fish[f.name] || 0, y = 38 + k * 17;
+    text(n ? f.name : "???", 24, y, n ? "#ffffff" : "#6c6c8c");
+    text(f.rarity, 150, y, RC[f.rarity] || "#ffffff");
+    if (n) text("X" + n, W - 14 - tw("X" + n), y);
+  });
+  cursor(10, 38 + i * 17);
+  const f = all[i], n = f && state.fish[f.name];
+  if (f) wrap(n ? f.note.toUpperCase() + ". EAT IT: " + itemLine(f.name) + "." : "NOT CAUGHT YET. " + f.rarity + " FISH BITE " + (f.weight >= 20 ? "OFTEN." : f.weight >= 5 ? "NOW AND THEN." : "VERY RARELY."), 48).slice(0, 5)
+    .forEach((l, j) => text(l, 12, 158 + j * 12, "#d8dcf0"));
+}
 function drawFish() {
   drawField();
   const f = fishing, gw = map.grid[0].length, gh = map.grid.length;
@@ -754,7 +783,7 @@ let menu = null;
    ITEM, MAGIC (field healing), EQUIP (anything the bag holds that fits: chest weapons and armour included), STATUS,
    ORDER (swap two members), BESTIARY (every foe met), SAVE (outside dungeons) and OPTIONS (the shared Settings tabs).
    B steps back. */
-const MENU_CMDS = ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "BESTIARY", "SAVE", "OPTIONS"];
+const MENU_CMDS = ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "BESTIARY", "FISH", "SAVE", "OPTIONS"];
 const WEAPON_KIND = { "Copper Blade": "sword", "Oak Staff": "staff", "Hunter Bow": "bow", "Iron Axe": "axe", "Steel Saber": "sword", "Silver Lance": "lance" };
 const SLOTS = ["weapon", "armor", "helm", "shield"];
 const slotOf = name => { const g = GEAR[name] || {}; return g.attack != null ? "weapon" : /Shield/.test(name) ? "shield" : /Helm/.test(name) ? "helm" : g.defence != null ? "armor" : null; };
@@ -803,6 +832,7 @@ function menuTick() {
       menu.msg = saveGame() ? "YOUR JOURNEY IS WRITTEN DOWN." : "THE JOURNEY COULD NOT BE WRITTEN."; if (menu.msg[0] === "Y") toast("Journey saved", saveSummary());
     }
     else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
+    else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; }
     else if (c === "OPTIONS") { closeMenu(); openSettings(); }
     return;
   }
@@ -864,6 +894,7 @@ function menuTick() {
     if (hit("b")) { menu.sub = "equip"; sfx("TICK"); }
     return;
   }
+  if (sub === "fish") { const n = (D.fish || []).length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
@@ -928,6 +959,7 @@ function drawMenu() {
   const sub = menu.sub;
   if (sub === "status") return drawStatus();
   if (sub === "bestiary") return drawBestiary();
+  if (sub === "fish") return drawFishLog();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
@@ -1430,7 +1462,7 @@ function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) 
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
-      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish }));
+      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests }));
     return true;
   } catch (e) { return false; }
 }
@@ -1445,12 +1477,12 @@ function titleChoose(i) {
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; opened.clear(); grids = {};
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
     state.air = sv.air ? { x: sv.air.x, y: sv.air.y, aboard: false } : null;
-    state.fish = sv.fish || {};                    /* CONTINUE starts at the inn, on foot */
+    state.fish = sv.fish || {}; state.quests = sv.quests || {};                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -1664,6 +1696,7 @@ window.PRISM_DEMO = {
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
   fishing: () => fishing && { phase: fishing.phase, t: fishing.t, msg: fishing.msg, fish: fishing.fish && fishing.fish.name, wait: fishing.wait },
   fishLog: () => Object.assign({}, state.fish),
+  quests: () => Object.assign({}, state.quests),
   fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },

@@ -6,7 +6,8 @@
 Checks: the fish table and its items are packed; facing grass does nothing, facing the pond casts; B reels in; A
 before the bite scatters it; a bite you ignore gets away; A during the bite lands the fish into the bag and the fish
 log, "NEW!" the first time only; the fish is an ITEM that heals the number it says; bite odds follow the weights
-(commons most, the legendary koi rarest); the log is saved at the inn and back on CONTINUE; NEW GAME empties it; no
+(commons most, the legendary koi rarest); the field menu's FISH page lists every kind; the Windmere Elder buys a
+Sunscale Carp for 600 gold once; the log and the request are saved at the inn and back on CONTINUE; NEW GAME empties it; no
 page errors.
 """
 import functools, http.server, json, os, sys, threading, time
@@ -105,14 +106,61 @@ with sync_playwright() as p:
     check("bite odds follow the weights: commons most, the koi rarest", common > 12000 and 50 < odds.get("Prismscale Koi", 0) < 400
           and odds.get("Prismscale Koi", 0) < odds.get("Sunscale Carp", 0) < odds.get("Glassfin Minnow", 0), odds)
 
+    # the FISH page in the field menu
+    mn = lambda: ev("PRISM_DEMO.menu()")
+    bot.press("start", 250)
+    while mn()["idx"] != mn()["cmds"].index("FISH"): bot.press("down", 60)
+    bot.press("a", 250)
+    check("the field menu has a FISH page", mn()["sub"] == "fish", mn())
+    bot.press("down", 80)
+    check("...whose cursor moves through all six kinds", mn()["ii"] == 1)
+    pg.screenshot(path=os.path.join(DEMO, "..", "t_fishlog.png"))
+    bot.press("b", 150); bot.press("b", 150); bot.clear()
+
+    # the Elder's request: a Sunscale Carp for 600 gold, once
+    elder = next(n for n in D["village"]["npcs"] if n.get("request"))
+    req = elder["request"]
+    def talk_elder():
+        ev("PRISM_DEMO.warp('village',%d,%d)" % (elder["x"], elder["y"] + 1)); W(250)
+        bot.face("up"); bot.press("a", 500)
+    talk_elder()
+    pages = []
+    for _ in range(6):
+        d = st()["dialog"]
+        if not d: break
+        pages.append(d); bot.press("a", 300)
+    check("without the fish, the Elder asks for a Sunscale Carp", any(req["item"].upper() in p_ for p_ in pages), pages)
+    ev("PRISM_DEMO.give(%s, 1)" % json.dumps(req["item"]))
+    g0 = st()["gold"]
+    talk_elder()
+    for _ in range(6):
+        if st()["dialog"] == req["offer"]: break
+        bot.press("a", 300)
+    W(400); bot.press("a", 400)                                # YES is the default choice
+    for _ in range(6):
+        if not st()["dialog"]: break
+        bot.press("a", 300)
+    check("giving her the carp pays the gold and takes the fish", st()["gold"] == g0 + req["gold"] and st()["bag"].get(req["item"], 0) == 0,
+          (g0, st()["gold"], st()["bag"].get(req["item"])))
+    check("...and the request is marked done", ev("PRISM_DEMO.quests()").get(req["id"]) is True)
+    ev("PRISM_DEMO.give(%s, 1)" % json.dumps(req["item"]))
+    talk_elder()
+    d = st()["dialog"]
+    for _ in range(6):
+        if not st()["dialog"]: break
+        bot.press("a", 300)
+    check("...once only: afterwards she just remembers it", d == req["done"] and st()["gold"] == g0 + req["gold"], d)
+
     before = ev("PRISM_DEMO.fishLog()")
+    qbefore = ev("PRISM_DEMO.quests()")
     bot.rest()
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
     ev("PRISM_DEMO.speed(6)"); bot.press("down", 150); bot.press("a", 300); W(1200); bot.clear()
     check("the fish log is saved at the inn and back on CONTINUE", ev("PRISM_DEMO.fishLog()") == before, ev("PRISM_DEMO.fishLog()"))
+    check("the finished request is saved too", ev("PRISM_DEMO.quests()") == qbefore, ev("PRISM_DEMO.quests()"))
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
     ev("PRISM_DEMO.speed(6)"); new_game()
-    check("NEW GAME empties the fish log", ev("PRISM_DEMO.fishLog()") == {})
+    check("NEW GAME empties the fish log and the requests", ev("PRISM_DEMO.fishLog()") == {} and ev("PRISM_DEMO.quests()") == {})
     check("no page errors", not errs, errs[:3])
     b.close()
 
