@@ -1,0 +1,323 @@
+{
+  "schema": "daedalus.codex.saved-intake-checkpoint.v1",
+  "utc": "2026-10-16T00:13:49.557120+00:00",
+  "stage": "saved_native_readback_strict_file_verified_compute_released",
+  "name": "Team Claude TidePen r1 Residents static role",
+  "source_provenance": {
+    "team": "Team Claude / unreal-team",
+    "individual_author": "unknown",
+    "reported_source_commit": "94f8507e3",
+    "producer_delivery_hub": 32536,
+    "explicit_asset_only_release_hub": 32582,
+    "fbx": {
+      "bytes": 22588,
+      "sha256": "a82c0e1ee724138fabad7996a5b623a41a6f74c2a200ddfa4e405a404cd5b4bd"
+    },
+    "glb": {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-lands\\ocean-tidepen-r1\\TidePen_r1_Residents.glb",
+      "bytes": 45920,
+      "sha256": "a139bf338cb358f09be673963f05e05b4e158cbe03af5d98a2f8f15d0f4b2583"
+    },
+    "source_frame": {
+      "units": "metres, Z up, sea level z=0 (OceanTerrain.SEA_LEVEL)",
+      "origin": "the tide-pen landing anchor",
+      "anchor_blocks_yup": [
+        24,
+        1,
+        24
+      ],
+      "anchor_zup_m": [
+        24,
+        -24,
+        1
+      ],
+      "conversion": "Ocean blocks (x, y_up, z) -> Blender (x, -z, y); 1 block = 1 m"
+    },
+    "original_assets_modified": false
+  },
+  "native_path": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/TidePenResidentsR1_a82c0e1ee724138f/TidePen_r1_Residents.TidePen_r1_Residents",
+  "native_output": {
+    "sha256": "4b275d1c927662a3b998955b7b32878f9d6bf20049707834c1bc31935d7d07c1",
+    "bytes": 42592
+  },
+  "unit_contract": "source_metres_unit100_build1_actor1_v1",
+  "required_future_actor_scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "actual_native_dimensions_cm": [
+    2655.4239501953125,
+    1544.4386596679688,
+    300.0
+  ],
+  "actual_axis_conversion": [
+    {
+      "native_x_source_axis": "x",
+      "native_x_sign": 1,
+      "native_y_source_axis": "y",
+      "native_y_sign": -1,
+      "native_z_source_axis": "z",
+      "native_z_sign": 1,
+      "unit_multiplier": 100,
+      "expected_native_bounds_cm": {
+        "min": [
+          -1192.5145149230957,
+          -842.4022674560547,
+          -50.0
+        ],
+        "max": [
+          1462.9093170166016,
+          702.0364284515381,
+          250.0
+        ]
+      }
+    }
+  ],
+  "triangles": 650,
+  "opaque_palette_entries": 7,
+  "flags": {
+    "native_class": "StaticMesh",
+    "import_data_class": "InterchangeAssetImportData",
+    "observed_build_scale3d": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "observed_generate_lightmap_u_vs": false,
+    "nanite_enabled": false,
+    "simple_collision_count": 0,
+    "slots": [
+      {
+        "slot": "VoxelVertexColour",
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour"
+      }
+    ]
+  },
+  "actual_vertex_palette": [
+    [
+      65,
+      65,
+      71,
+      255
+    ],
+    [
+      136,
+      164,
+      128,
+      255
+    ],
+    [
+      148,
+      210,
+      158,
+      255
+    ],
+    [
+      158,
+      186,
+      148,
+      255
+    ],
+    [
+      237,
+      136,
+      123,
+      255
+    ],
+    [
+      249,
+      217,
+      123,
+      255
+    ],
+    [
+      253,
+      237,
+      136,
+      255
+    ]
+  ],
+  "native_metadata": {
+    "codex_owner": "codex-contest",
+    "codex_sha256": "a82c0e1ee724138fabad7996a5b623a41a6f74c2a200ddfa4e405a404cd5b4bd",
+    "codex_source_fbx": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-lands\\ocean-tidepen-r1\\TidePen_r1_Residents.fbx",
+    "codex_author": "Team Claude; individual unknown",
+    "codex_source_provenance": "{\"frame\": {\"anchor_blocks_yup\": [24, 1, 24], \"anchor_zup_m\": [24, -24, 1], \"conversion\": \"Ocean blocks (x, y_up, z) -> Blender (x, -z, y); 1 block = 1 m\", \"origin\": \"the tide-pen landing anchor\", \"units\": \"metres, Z up, sea level z=0 (OceanTerrain.SEA_LEVEL)\"}, \"individual_author\": \"unknown\", \"layout\": {\"bytes\": 7265, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\engines\\\\unreal\\\\art\\\\claude-lands\\\\ocean-tidepen-r1\\\\TidePen_r1.layout.json\", \"sha256\": \"c0c171cbd73371a4d6f6342a8141a07fa69ed45f3cd96c1ab26106c4bc973314\"}, \"owner_reported_source_commit\": \"94f8507e3\", \"producer_handoff_id\": 32536, \"realm_intent\": \"OCEAN design, not a native realm binding\", \"source_audit\": \"C:\\\\Users\\\\730ri\\\\Documents\\\\Codex\\\\2026-10-14\\\\task-2\\\\native-ingestion\\\\TidePenResidentsR1\\\\source-audit.json\", \"source_glb\": {\"bytes\": 45920, \"path\": \"C:\\\\Users\\\\730ri\\\\projects\\\\D2-build\\\\engines\\\\unreal\\\\art\\\\claude-lands\\\\ocean-tidepen-r1\\\\TidePen_r1_Residents.glb\", \"sha256\": \"a139bf338cb358f09be673963f05e05b4e158cbe03af5d98a2f8f15d0f4b2583\"}, \"source_story\": \"Sky-born sea creatures are cared for in the tide pools before anyone may pen them. The pen gate stays shut until settled_care holds; the sea edge is always open.\", \"team\": \"Team Claude / unreal-team\"}",
+    "codex_unit_contract": "source_metres_unit100_build1_actor1_v1",
+    "codex_required_actor_scale": "1,1,1",
+    "codex_intended_dimensions_cm": "2655.42383194,1544.43869591,300",
+    "codex_world_placement": "held; asset-only save; native appearance, collision and runtime acceptance unverified"
+  },
+  "measured_seconds": {
+    "import_s": 0.26203,
+    "save_s": 0.096819
+  },
+  "save_return": true,
+  "protected_packages": 218,
+  "preserved_actor_records": 145,
+  "accepted_Cpp_sources": 184,
+  "map": {
+    "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\DaedalusWorld.umap",
+    "sha256": "f77f83a221ea456f82b09cadf7866f8388b2b406dba9f5f62e3198e30f08ce38",
+    "bytes": 209412518
+  },
+  "world_placed": 0,
+  "world_saved": false,
+  "compute_release_utc": "2026-10-16T00:04:27.812099+00:00",
+  "evidence": {
+    "source_qualification": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\qualification.json",
+      "sha256": "452e0997365ec45d4e0c8a7214d62b76d18f81f5eee27b52aabca395e9a644b9",
+      "bytes": 12428
+    },
+    "source_audit": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\source-audit.json",
+      "sha256": "fb3ddcb29b1f9517a70c2dde718c61b211294934756839be811b1321984a25b6",
+      "bytes": 9022
+    },
+    "receiving_admission": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\receiver-admission.json",
+      "sha256": "0bb0f7d274c456aee54413e0035629bdd521100313e921f837629328d69cb6d0",
+      "bytes": 15457
+    },
+    "native_journal": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\native.json",
+      "sha256": "5f72b21612ca6d6f1bbc15cb5534d0a85e75f7d3cadae8efd09525532525fe9b",
+      "bytes": 29673
+    },
+    "independent_native_readback": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\native-readback.json",
+      "sha256": "6667e71f25c19efa9abaf286be26668badd4e29132c02d5418dbdf568bebf9ec",
+      "bytes": 179174
+    },
+    "final_readback": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\readback.json",
+      "sha256": "adbd210c310c89c50158829c70ecbf3f5f1d62ba2e016d5606b41b10b61da79a",
+      "bytes": 179892
+    },
+    "baseline": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\saved-production-baseline.json",
+      "sha256": "2b92d48abfc53a94f2a8eb8ff49fbe3f8178364c2566e7691e6ed7d0567ec1de",
+      "bytes": 512123
+    },
+    "strict_receipt_verification": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\strict-receipt-verification.json",
+      "sha256": "05405f609b4fb07b726a162d7a8ccc7747e666cc8edb07be80c939522e0b2a95",
+      "bytes": 4173
+    },
+    "compute_release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\DeliveryR1\\compute-release.json",
+      "sha256": "8dd4fb8006f3c74821a42587c809f8df41223e89f45249b0740c8e9014576a28",
+      "bytes": 1870
+    },
+    "next_intake_manifest": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\TidePenResidentsR1\\next-intake-manifest.json",
+      "sha256": "55969bc3f7e2dceca8e969d804dfdcc71f52e3828169dc93dd96546fb6cae5d5",
+      "bytes": 106146
+    }
+  },
+  "recipes": {
+    "codex_tidepen_residents_prepare.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_tidepen_residents_prepare.py",
+      "sha256": "b63e02f73a12f51f0b122ab1fb4ca64c8623aa848c6eee76c7a0ae6b79563f77",
+      "bytes": 16796
+    },
+    "codex_tidepen_residents_delivery.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_tidepen_residents_delivery.py",
+      "sha256": "b29d03091b8f6a49d5fea84dceb9108d016d6397f66aa1a320691d2c46050db8",
+      "bytes": 6215
+    },
+    "codex_tidepen_residents_receipts.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_tidepen_residents_receipts.py",
+      "sha256": "b3ae6f0f99bdda744257730e3222243f66a43b09a340209088d8b863ed46baac",
+      "bytes": 22502
+    },
+    "codex_tidepen_queue_manifest.py": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_tidepen_queue_manifest.py",
+      "sha256": "86e4c39eb35cf755d064fb7f7f2c1166c14c3910fc37c238824e399898a06976",
+      "bytes": 16900
+    }
+  },
+  "native_adapter": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_tidepen_residents.py",
+    "sha256": "b318d059e3fab006b9e9084c1de65561375c0f532ad141b998911771e98578a7",
+    "bytes": 8859
+  },
+  "next_roles": [
+    {
+      "role": "Residents",
+      "producer_release": "released_asset_only_owned_namespace",
+      "source_candidate_profile_ready": true,
+      "receiving_stage": "saved_native_asset_world_held",
+      "blockers_or_limits": [
+        "Already imported/saved once; do not replay. Appearance, placement and creature/gameplay acceptance remain unverified."
+      ]
+    },
+    {
+      "role": "CareStation",
+      "producer_release": "released_asset_only_owned_namespace",
+      "source_candidate_profile_ready": false,
+      "receiving_stage": "candidate_not_native_admitted",
+      "blockers_or_limits": [
+        "Closed7-slot rawPBR plus COLOR_0 multiplication proof for actual imported MI/parent graph.",
+        "KHR_materials_emissive_strength2.55: installed importer supports scalar; existing subset producer rejects extensions.",
+        "Preserve authored translated root; require metre/build1/actor1 and exact output/slot readback."
+      ]
+    },
+    {
+      "role": "Landing",
+      "producer_release": "released_asset_only_owned_namespace",
+      "source_candidate_profile_ready": false,
+      "receiving_stage": "candidate_not_native_admitted",
+      "blockers_or_limits": [
+        "3130 visible triangles exceeds existing3000-triangle qualified profile; no arbitrary limit increase.",
+        "Closed multi-slot receiver with two authored UCX proxies excluded from visible output; preserve proxy bytes/names.",
+        "Retain translated root/pivot and qualify collision separately; current no-UCX single-static profile does not admit it."
+      ]
+    },
+    {
+      "role": "Pen",
+      "producer_release": "HOLD_later_intake",
+      "source_candidate_profile_ready": false,
+      "receiving_stage": "candidate_not_native_admitted",
+      "blockers_or_limits": [
+        "Producer HOLD for later assembly intake.",
+        "15188 triangles plus4 rawPBR slots/KHRstrength require bounded reviewed receiving scope."
+      ]
+    },
+    {
+      "role": "Habitat",
+      "producer_release": "HOLD_later_intake",
+      "source_candidate_profile_ready": false,
+      "receiving_stage": "candidate_not_native_admitted",
+      "blockers_or_limits": [
+        "Producer HOLD for later assembly intake.",
+        "11496 triangles exceeds current qualified-static budget; do not raise limits arbitrarily."
+      ]
+    },
+    {
+      "role": "Shelf",
+      "producer_release": "HOLD_later_intake",
+      "source_candidate_profile_ready": false,
+      "receiving_stage": "candidate_not_native_admitted",
+      "blockers_or_limits": [
+        "Producer HOLD for later island-base intake.",
+        "Mixed OPAQUE/BLEND rawPBR and COLOR_0, two distinct water alpha factors, authored UCX proxy.",
+        "Requires closed mixed-alpha/material and collision-exclusion contract; current opaque profile is incompatible."
+      ]
+    }
+  ],
+  "validation": {
+    "source_reviews": "Independent source peers passed; no automated tests run.",
+    "strict_file_verification": "Exact retained native payload, nine metadata values, palette/bounds/guards, source/material pins, backups and preservation baseline verified.",
+    "host_boundary_note": "Executed frozen R1 read_native required a dict but did not validate its shape. Actual full saved payload passed separate strict validation; reusable checked_read_native validates before future callers finalize."
+  },
+  "limits": [
+    "One combined StaticMesh of four stylized species at producer scale2.5, no creature actors/rigs/animations.",
+    "Asset-only save; Ocean realm/world placement, native visual quality, canonical frame/handedness beyond recorded conversion, collision/navigation/ecology/gameplay remain unaccepted.",
+    "Existing shared vertex-colour material reused unchanged; no claim of exact original raw PBR roughness/two-sided reproduction.",
+    "Remaining producer holds/receiver-profile gaps are explicit in next-intake-manifest; no arbitrary widening or automatic next import.",
+    "Completed recipes/receipts are retained evidence, not instructions to replay the import/save."
+  ]
+}
