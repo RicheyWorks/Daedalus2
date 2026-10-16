@@ -210,4 +210,86 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     World->DestroyWorld(false);
     return true;
 }
+// Authored only: UObject/world/possession behavior needs the native lane later.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanHostDepartureBindingTest,
+    "Daedalus.Ocean.HostDepartureBinding",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanHostDepartureBindingTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    UWorld* World=UWorld::CreateWorld(EWorldType::Game,false);
+    if (!TestNotNull(TEXT("Host binding world"),World)) return false;
+    World->InitializeActorsForPlay(FURL());
+    AActor* Host=World->SpawnActor<AActor>();
+    auto* Component=NewObject<UDaedalusOceanTravelComponent>(Host);
+    Host->AddInstanceComponent(Component);
+    Component->RegisterComponent();
+    auto* Player=World->SpawnActor<APlayerController>();
+    auto* OtherPlayer=World->SpawnActor<APlayerController>();
+    auto* Avatar=World->SpawnActor<APawn>();
+    auto* Vessel=World->SpawnActor<ADaedalusOceanVessel>();
+    auto* OtherVessel=World->SpawnActor<ADaedalusOceanVessel>();
+    FDaedalusOceanDock Home;
+    Home.Id=TEXT("wz");Home.Realm=TEXT("WORLD-ZERO");Home.ArrivalAnchor=TEXT("wz_shore");
+    Home.ExitLocation=FVector(0,200,0);Home.BoardingRadiusCm=500;
+    auto Sea=Home;Sea.Id=TEXT("sea");Sea.Realm=TEXT("OCEAN");Sea.ArrivalAnchor=TEXT("sea_pier");
+    auto Portal=Home;Portal.Id=TEXT("portal");Portal.Realm=TEXT("PORTAL");Portal.ArrivalAnchor=TEXT("portal_shore");
+    FDaedalusOceanConnection Out;
+    Out.DepartureId=Home.Id;Out.DestinationId=Sea.Id;Out.bBoats=true;Out.bSubmarines=true;
+    auto Back=Out;Back.DepartureId=Sea.Id;Back.DestinationId=Home.Id;
+    auto Wrong=Back;Wrong.DestinationId=Portal.Id;
+    const TArray<FString> Realms{Home.Realm,Sea.Realm,Portal.Realm};
+    TestTrue(TEXT("Canonical host routes configured"),Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong}));
+    Player->Possess(Avatar);
+    Vessel->CurrentRealm=Home.Realm;
+    Vessel->SetActorLocation(FVector::ZeroVector);
+    Avatar->SetActorLocation(FVector::ZeroVector);
+    bool bReloadAttempted=false;
+    bool bReloadAccepted=true;
+    bool bNestedBoardAccepted=true;
+    OtherVessel->CurrentRealm=Home.Realm;
+    OtherVessel->SetActorLocation(FVector::ZeroVector);
+    const FDelegateHandle PossessionObserver=Player->GetOnNewPawnNotifier().AddLambda([&](APawn* NewPawn) {
+        if (NewPawn!=Vessel) return;
+        bReloadAttempted=true;
+        // Even an identical reload replaces ActiveDocks storage. It must fail
+        // while Possess is between validating the dock and publishing the record.
+        bReloadAccepted=Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong});
+        bNestedBoardAccepted=Component->BoardAtDock(Player,OtherVessel,Home.Id);
+    });
+    const bool bBoardAccepted=Component->BoardAtDock(Player,Vessel,Home.Id);
+    Player->GetOnNewPawnNotifier().Remove(PossessionObserver);
+    TestTrue(TEXT("Host accepts boarding before origin is recorded"),bBoardAccepted);
+    TestTrue(TEXT("Possession callback actually attempted a reload"),bReloadAttempted);
+    TestFalse(TEXT("Configuration cannot change across the possession callback"),bReloadAccepted);
+    TestFalse(TEXT("Nested boarding cannot replace the pending boarding"),bNestedBoardAccepted);
+    TestFalse(TEXT("Cannot reconfigure an active boarding session"),Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong}));
+    FString Realm,Anchor;
+    TestTrue(TEXT("Outbound eligibility is reachable through component"),Component->ResolveForPlayer(Player,Vessel,Home.Id,Sea.Id,Realm,Anchor));
+    daedalus::session::Session Session;
+    const auto Enter=Session.Go(TCHAR_TO_UTF8(*Realm),daedalus::session::Via::Dock,"boat:wz");
+    TestTrue(TEXT("Existing session accepts the host eligible destination"),Enter.Ok);
+    Session.Apply(Enter);
+    // Simulate the owning host applying the accepted session result, not a
+    // client's requested realm. Global Hero/session transition code is untouched.
+    Vessel->CurrentRealm=UTF8_TO_TCHAR(Session.Current().c_str());
+    TestTrue(TEXT("Component supplies its accepted World Zero origin"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    TestTrue(TEXT("Component returns canonical matching shore"),Realm==Home.Realm && Anchor==Home.ArrivalAnchor);
+    TestFalse(TEXT("Component refuses a configured wrong Portal shore"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Portal.Id,Realm,Anchor));
+    TestTrue(TEXT("Wrong shore clears route outputs"),Realm.IsEmpty() && Anchor.IsEmpty());
+    OtherVessel->CurrentRealm=Sea.Realm;
+    OtherVessel->SetActorLocation(FVector::ZeroVector);
+    Player->Possess(OtherVessel);
+    TestFalse(TEXT("Different vessel cannot borrow accepted origin"),Component->ResolveForPlayer(Player,OtherVessel,Sea.Id,Home.Id,Realm,Anchor));
+    TestFalse(TEXT("No origin does not fall back to Portal"),Component->ResolveForPlayer(Player,OtherVessel,Sea.Id,Portal.Id,Realm,Anchor));
+    Player->Possess(Vessel);
+    OtherPlayer->Possess(Avatar);
+    TestFalse(TEXT("Repossessed original avatar makes departure stale"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    OtherPlayer->UnPossess();
+    Avatar->Destroy();
+    TestFalse(TEXT("Destroyed original avatar cannot authorize shore"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    World->DestroyWorld(false);
+    return true;
+}
 #endif

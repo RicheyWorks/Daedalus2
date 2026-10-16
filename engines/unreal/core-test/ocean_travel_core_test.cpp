@@ -1,4 +1,6 @@
 #include "../DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h"
+#include <cstdlib>
+#include "../DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h"
 #include <iostream>
 using namespace DaedalusOceanTravel;
 #define CHECK(x) do { if (!(x)) return 1; ++checks; } while (0)
@@ -81,5 +83,51 @@ int main()
     CHECK(registry.Resolve("Portal Realm","home","sea",Vessel::Boat).ArrivalAnchor=="sea_pier");
     CHECK(registry.Configure(realms,docks,{}));
     CHECK(!registry.Resolve("Portal Realm","home","sea",Vessel::Boat).Allowed);
+    // The actual existing session owns accepted departure; requested targets do not.
+    const Dock wz{"wz","WORLD-ZERO","wz_shore",false};
+    const Dock canonicalPortal{"portal","PORTAL","portal_shore",false};
+    const Dock canonicalSea{"sea","OCEAN","sea_pier",false};
+    const Dock canonicalSub{"sea-sub","OCEAN","sea_airlock",true};
+    const Dock canonicalGallery{"gallery","GALLERY-CITY","gallery_airlock",true};
+    const std::vector<std::string> canonicalRealms{"WORLD-ZERO","PORTAL","OCEAN","GALLERY-CITY"};
+    const std::vector<Dock> canonicalDocks{wz,canonicalPortal,canonicalSea,canonicalSub,canonicalGallery};
+    const std::vector<DockConnection> canonicalEdges{{"wz","sea",true,true},{"sea","wz",true,true},
+        {"portal","sea",true,true},{"sea","portal",true,true},{"sea-sub","gallery",false,true}};
+    DockRegistry bound;
+    CHECK(bound.Configure(canonicalRealms,canonicalDocks,canonicalEdges));
+    daedalus::session::Session session;
+    const auto before=session.Save();
+    const auto outbound=bound.Resolve(session.Current(),"wz","sea",Vessel::Boat,session.SailedFrom());
+    CHECK(outbound.Allowed && outbound.DestinationRealm=="OCEAN");
+    CHECK(session.Save()==before); // Eligibility alone must not apply a realm switch.
+    const auto enter=session.Go(outbound.DestinationRealm,daedalus::session::Via::Dock,"boat:wz");
+    CHECK(enter.Ok && session.Current()=="WORLD-ZERO" && session.SailedFrom().empty());
+    session.Apply(enter);
+    CHECK(session.Current()=="OCEAN" && session.SailedFrom()=="WORLD-ZERO");
+    const auto atSea=session.Save();
+    const auto wrong=bound.Resolve(session.Current(),"sea","portal",Vessel::Boat,session.SailedFrom());
+    CHECK(!wrong.Allowed && wrong.DestinationRealm.empty() && wrong.ArrivalAnchor.empty());
+    CHECK(!session.Go("PORTAL",daedalus::session::Via::Shore).Ok);
+    CHECK(session.Save()==atSea);
+    CHECK(!bound.Resolve("OCEAN","sea","wz",Vessel::Boat,"").Allowed);
+    CHECK(!bound.Resolve("OCEAN","sea","portal",Vessel::Boat,"").Allowed);
+    CHECK(!bound.Resolve("WORLD-ZERO","sea","wz",Vessel::Boat,"WORLD-ZERO").Allowed);
+    CHECK(!bound.Resolve("Ocean Realm","sea","wz",Vessel::Boat,"WORLD-ZERO").Allowed); // Exact registry spelling.
+    CHECK(!bound.Resolve("OCEAN","sea-sub","gallery",Vessel::Boat,session.SailedFrom()).Allowed);
+    CHECK(bound.Resolve("OCEAN","sea-sub","gallery",Vessel::Submarine,session.SailedFrom()).Allowed);
+    CHECK(!bound.Resolve("OCEAN","sea","wz",static_cast<Vessel>(99),session.SailedFrom()).Allowed);
+    CHECK(!bound.Resolve("OCEAN","sea","missing",Vessel::Boat,session.SailedFrom()).Allowed);
+    const auto inbound=bound.Resolve(session.Current(),"sea","wz",Vessel::Boat,session.SailedFrom());
+    CHECK(inbound.Allowed && inbound.DestinationRealm==session.SailedFrom());
+    const auto returnHome=session.Go(inbound.DestinationRealm,daedalus::session::Via::Shore);
+    CHECK(returnHome.Ok && session.Save()==atSea);
+    session.Apply(returnHome);
+    CHECK(session.Current()=="WORLD-ZERO" && session.SailedFrom().empty());
+    // Legacy registry stays valid; canonical session IDs are not silently aliased.
+    CHECK(Board("Portal Realm",home,sea,Vessel::Boat).Allowed);
+    CHECK(Land("Ocean Realm",home,Vessel::Boat,"PORTAL").Allowed);
+    CHECK(!Board("PORTAL",home,sea,Vessel::Boat).Allowed);
+    CHECK(!bound.Configure({"WORLD-ZERO","PORTAL","Portal Realm","OCEAN","GALLERY-CITY"},canonicalDocks,canonicalEdges));
+    CHECK(bound.Resolve("WORLD-ZERO","wz","sea",Vessel::Boat,"").Allowed);
     std::cout << "OCEAN_TRAVEL_PASS " << checks << " checks\n";
 }
