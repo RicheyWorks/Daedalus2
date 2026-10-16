@@ -15,6 +15,42 @@ import shardstead_willow_wetland_polish_r2_blender as adapter
 
 
 class AdapterContract(unittest.TestCase):
+    def test_isolated_blender_style_path_bootstrap_and_fileonly_guard(self):
+        # -I/-S remove caller Python paths/site; runpy does not add script dir.
+        # Exercise the old boundary in memory first, then the actual fixed file.
+        code=r'''
+import pathlib,runpy,sys
+script=pathlib.Path(sys.argv[1])
+directory=str(script.parent.resolve())
+sys.path[:]=[p for p in sys.path if p and str(pathlib.Path(p).resolve())!=directory]
+assert 'shardstead_willow_wetland_polish_r2' not in sys.modules
+raw=script.read_text()
+bootstrap='sys.path.insert(0,str(Path(__file__).resolve().parent))'
+assert raw.count(bootstrap)==1
+try:
+    exec(compile(raw.replace(bootstrap,'',1),str(script),'exec'),
+         {'__file__':str(script),'__name__':'old_import_boundary'})
+except ModuleNotFoundError as error:
+    assert error.name=='shardstead_willow_wetland_polish_r2'
+else:
+    raise AssertionError('old missing-path failure not reproduced')
+scope=runpy.run_path(str(script),run_name='fixed_import_boundary')
+scope['validate_descriptors'](scope['geometry'].build())
+assert 'bpy' not in sys.modules
+try:
+    scope['main'](['--r1-scene',str(script.parent/'absent-input-for-pure-test.blend')])
+except FileNotFoundError:
+    pass
+else:
+    raise AssertionError('default file-only input guard did not refuse')
+assert 'bpy' not in sys.modules
+print('OLD_IMPORT_FAILURE_REPRODUCED_FIXED_FILEONLY_GUARD_PASS')
+'''
+        result=subprocess.run([sys.executable,'-I','-S','-B','-c',code,str(Path(adapter.__file__))],
+                              capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stderr)
+        self.assertIn('OLD_IMPORT_FAILURE_REPRODUCED_FIXED_FILEONLY_GUARD_PASS',result.stdout)
+
     def test_nonfollowing_metadata_accepts_ordinary_ancestors(self):
         ordinary=SimpleNamespace(st_mode=stat.S_IFDIR,st_file_attributes=0)
         with patch.object(Path,'lstat',return_value=ordinary), \
