@@ -5,6 +5,7 @@ source pins before run(). On unknown wire outcome retain custody and read state;
 never dispatch this operation again. All output directories are exclusive.
 """
 from datetime import datetime, timezone
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -12,16 +13,86 @@ import os
 from pathlib import Path
 import tempfile
 import time
+import types
 
 HERE = Path(__file__).resolve().parent
 GENERATOR = HERE / "sky_farm_greenhouse_one_bay_r1.py"
 RECIPE = HERE / "sky_farm_greenhouse_one_bay_r1.recipe.json"
+STAGES = HERE.parents[1] / "connectors/claude-asset-pipeline/asset_pipeline/stages.py"
+OUTPUT_FIELDS = {"blend": "source", "glb": "glb", "hero": "hero", "manifest": "manifest"}
 
 
 def pin(path):
     path = Path(path)
     data = path.read_bytes()
     return {"path": str(path), "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+
+
+def stage_completion(terminal_path, baseline_path, release_path=None, release_owner=None,
+                     observed_at_utc=None, output_path=None):
+    """PR170 adoption at this caller's retained terminal/release boundary.
+
+    Reads historical producer witnesses; never contacts Blender, a process, HTTP
+    or a lease. Operation return is not stage completion. Missing/unknown proof
+    stays incomplete; separate release must match the exact operation and owner.
+    Optional immutable publication may retain INCOMPLETE evidence too, so its
+    success never replaces report.complete. No raw receipt or art is rewritten.
+    """
+    raw = STAGES.read_bytes()
+    stages = types.ModuleType("greenhouse_stage_evidence")
+    stages.__file__ = str(STAGES)
+    exec(compile(raw, str(STAGES), "exec"), stages.__dict__)
+    if stages.SCHEMA != "daedalus.stage-evidence.v1":
+        raise ValueError("unsupported stage-evidence dependency")
+    proof = stages.read_json(terminal_path)
+    if (not isinstance(proof, dict) or proof.get("schema") != "daedalus.sky-farm.existing-session.v1"
+            or type(proof.get("accepted_allocation_hub")) is not int
+            or proof["accepted_allocation_hub"] <= 32852
+            or proof.get("operation_id") != "sky-farm-greenhouse-r1-" + str(proof["accepted_allocation_hub"])):
+        raise ValueError("exact Greenhouse operation/allocation identity required")
+    observed = observed_at_utc or datetime.now(timezone.utc).isoformat()
+    document = stages.adapt_gui(terminal_path, proof["operation_id"], "source-export-hero",
+        proof["operation_id"], OUTPUT_FIELDS, observed, baseline_path, release_path, release_owner)
+    # run() already records these four exact input pins. Carry that producer
+    # evidence into PR170 rather than guessing versions or substituting this
+    # integration checkout for the historical producer source.
+    inputs = proof.get("inputs")
+    if not isinstance(inputs, list) or len(inputs) != 4:
+        raise ValueError("four explicit producer source/recipe/caller/baseline pins required")
+    named = {}
+    for role, name in (("producer_source", GENERATOR.name), ("producer_recipe", RECIPE.name),
+                       ("producer_caller", Path(__file__).name)):
+        matches = [p for p in inputs if isinstance(p, dict) and Path(p.get("path", "")).name == name]
+        if len(matches) != 1:
+            raise ValueError("producer input binding missing or ambiguous: " + role)
+        named[role] = matches[0]
+    baseline_pin = stages.fingerprint(baseline_path)
+    if inputs.count(baseline_pin) != 1 or len({p["path"] for p in named.values()} | {baseline_pin["path"]}) != 4:
+        raise ValueError("producer baseline pin differs or aliases source inputs")
+    named["session_baseline"] = baseline_pin
+    helper_pin = {"path": str(STAGES), "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()}
+    named["stage_helper"] = helper_pin
+    document["stages"][0]["attempts"][0]["inputs"] = named
+    report = stages.inspect(document, now=observed)
+    published = stages.publish(document, output_path, now=observed) if output_path is not None else None
+    row = report["stages"][0]
+    return {"schema": "daedalus.sky-farm.stage-completion.v1", "operation_id": proof["operation_id"],
+            "operation_completed": row["gui_operation"]["operation_completed"],
+            "stage_completed": report["complete"], "compute_release_verified": row.get("compute_release") is True,
+            "process_exit_code": None, "native_qualified": False, "execution": False,
+            "stage_helper": helper_pin,
+            "document": document, "report": report, "published_receipt": published}
+
+
+def returned_operation(record, terminal_snapshot, baseline_path):
+    """A GUI return is explicitly pending the separately recorded compute release."""
+    if pin(terminal_snapshot["path"]) != terminal_snapshot:
+        raise ValueError("terminal snapshot changed; reconcile, do not replay")
+    completion = stage_completion(terminal_snapshot["path"], baseline_path)
+    return dict(record, terminal_snapshot=terminal_snapshot, stage_evidence=completion,
+                stage_completed=completion["stage_completed"],
+                completion_state="QUALIFIED_RETAINED_STAGE" if completion["stage_completed"] else
+                                 "RETURNED_OPERATION_REQUIRES_SEPARATE_RELEASE_QUALIFICATION")
 
 
 def scene_digest(scene):
@@ -220,4 +291,35 @@ def run(allocation_id, output_dir, baseline_path, expected_pins):
         emit(state)
     if record["state"] != "TERMINAL_SOURCE_HERO_CREATED_REVIEW_PENDING":
         raise RuntimeError("Operation needs reconciliation, do not replay")
-    return dict(record, terminal_snapshot=last)
+    return returned_operation(record, last, baseline_path)
+
+
+def main(argv=None):
+    """Inert by default. Explicit CLI arguments qualify retained files only."""
+    parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
+    def refuse(message):
+        raise ValueError(message)
+    parser.error = refuse
+    parser.add_argument("--terminal"); parser.add_argument("--baseline")
+    parser.add_argument("--release"); parser.add_argument("--release-owner")
+    parser.add_argument("--observed-at-utc"); parser.add_argument("--output")
+    try:
+        args = parser.parse_args(argv)
+        if not any(vars(args).values()):
+            print(json.dumps({"state": "INERT_NO_OPERATION_OR_FILE_WRITES", "execution": False,
+                              "stage_completed": False, "process_exit_code": None, "app_calls": 0}))
+            return 0
+        if not args.terminal or not args.baseline or bool(args.release) != bool(args.release_owner):
+            raise ValueError("explicit terminal/baseline and paired release/owner required")
+        result = stage_completion(args.terminal, args.baseline, args.release, args.release_owner,
+                                  args.observed_at_utc, args.output)
+        print(json.dumps(result, allow_nan=False))
+        return 0 if result["stage_completed"] else 2
+    except (ValueError, TypeError, KeyError, OSError) as error:
+        print(json.dumps({"state": "MALFORMED_OR_CHANGED_RETAINED_EVIDENCE", "error": str(error),
+                          "stage_completed": False, "execution": False, "process_exit_code": None}))
+        return 3
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
