@@ -7,7 +7,8 @@ Checks: the fish table and its items are packed; facing grass does nothing, faci
 before the bite scatters it; a bite you ignore gets away; A during the bite lands the fish into the bag and the fish
 log, "NEW!" the first time only; the fish is an ITEM that heals the number it says; bite odds follow the weights
 (commons most, the legendary koi rarest); the field menu's FISH page lists every kind; the Windmere Elder buys a
-Sunscale Carp for 600 gold once; the log and the request are saved at the inn and back on CONTINUE; NEW GAME empties it; no
+Sunscale Carp for 600 gold once; the log and the request are saved at the inn and back on CONTINUE; after a
+field-menu SAVE and CONTINUE the bag, gold, log and request all come back and the Elder pays nothing twice; NEW GAME empties it; no
 page errors.
 """
 import functools, http.server, json, os, sys, threading, time
@@ -158,6 +159,30 @@ with sync_playwright() as p:
     ev("PRISM_DEMO.speed(6)"); bot.press("down", 150); bot.press("a", 300); W(1200); bot.clear()
     check("the fish log is saved at the inn and back on CONTINUE", ev("PRISM_DEMO.fishLog()") == before, ev("PRISM_DEMO.fishLog()"))
     check("the finished request is saved too", ev("PRISM_DEMO.quests()") == qbefore, ev("PRISM_DEMO.quests()"))
+
+    # the field-menu SAVE path (not the inn), then the Elder again with another carp (PootScoot 32833)
+    ev("PRISM_DEMO.warp('village',%d,%d)" % (elder["x"], elder["y"] + 1)); W(250)
+    if st()["bag"].get(req["item"], 0) < 1: ev("PRISM_DEMO.give(%s, 1)" % json.dumps(req["item"]))
+    snap = {"bag": st()["bag"], "gold": st()["gold"], "log": ev("PRISM_DEMO.fishLog()"), "quests": ev("PRISM_DEMO.quests()")}
+    bot.press("start", 250)
+    while mn()["idx"] != mn()["cmds"].index("SAVE"): bot.press("down", 60)
+    bot.press("a", 300)
+    saved_msg = mn()["msg"]
+    bot.press("b", 150); bot.press("b", 150); bot.clear()
+    check("the field menu saves in Windmere", "WRITTEN" in saved_msg, saved_msg)
+    pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
+    ev("PRISM_DEMO.speed(6)"); bot.press("down", 150); bot.press("a", 300); W(1200); bot.clear()
+    back = {"bag": st()["bag"], "gold": st()["gold"], "log": ev("PRISM_DEMO.fishLog()"), "quests": ev("PRISM_DEMO.quests()")}
+    check("after a field-menu SAVE and CONTINUE: bag, gold, fish log and finished request all come back", back == snap,
+          {k: (snap[k], back[k]) for k in snap if snap[k] != back[k]})
+    talk_elder()
+    d = st()["dialog"]
+    for _ in range(6):
+        if not st()["dialog"]: break
+        bot.press("a", 300)
+    check("...and the Elder, offered another carp, only remembers: no second reward, the carp stays in the bag",
+          d == req["done"] and st()["gold"] == snap["gold"] and st()["bag"].get(req["item"], 0) == snap["bag"].get(req["item"], 0) >= 1,
+          (d, st()["gold"], snap["gold"], st()["bag"].get(req["item"])))
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
     ev("PRISM_DEMO.speed(6)"); new_game()
     check("NEW GAME empties the fish log and the requests", ev("PRISM_DEMO.fishLog()") == {} and ev("PRISM_DEMO.quests()") == {})
