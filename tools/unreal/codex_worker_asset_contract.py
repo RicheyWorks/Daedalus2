@@ -46,6 +46,31 @@ def _positive_number(value, label):
     return number
 
 
+def _nonnegative_number(value, label):
+    if isinstance(value, (int, float)) and not isinstance(value, bool) and value == 0:
+        return 0.0
+    return _positive_number(value, label)
+
+
+def _timeline(row):
+    """The proven glTF route plays from zero, including any pre-first-key hold.
+
+    Key span and playback length are separate facts. Missing timeline fields
+    never silently reinterpret a historical span-only packet.
+    """
+    row = _dict(row, "expected clip")
+    first = _nonnegative_number(row.get("first_key_s"), "expected clip first_key_s")
+    last = _positive_number(row.get("last_key_s"), "expected clip last_key_s")
+    span = _positive_number(row.get("span_s"), "expected clip span_s")
+    origin = _nonnegative_number(row.get("playback_origin_s"), "expected clip playback_origin_s")
+    _require(origin == 0, "expected clip playback_origin_s must be exactly zero for this glTF route")
+    _require(last > first, "expected clip last_key_s must follow first_key_s")
+    _require(math.isclose(span, last-first, rel_tol=1e-9, abs_tol=1e-9),
+             "expected clip span_s is inconsistent with source key times")
+    return {"first_key_s": first, "last_key_s": last, "span_s": span,
+            "playback_origin_s": origin, "playback_length_s": last-origin}
+
+
 def _path(value, label):
     value = _name(value, label)
     _require(value.startswith("/Game/") and "\\" not in value,
@@ -110,10 +135,7 @@ def qualify(expected, observed):
     _require("." not in root.rsplit("/", 1)[-1], "expected.root must be a package namespace")
     expected_clips = _dict(expected.get("clips"), "expected.clips")
     _require(set(expected_clips) == CLIP_NAMES, "expected.clips must contain exactly the seven worker clips")
-    spans = {
-        name: _positive_number(_dict(row, "expected clip").get("span_s"), "expected clip span_s")
-        for name, row in expected_clips.items()
-    }
+    timelines = {name: _timeline(row) for name, row in expected_clips.items()}
     bones = _expected_bones(expected.get("bones"))
     saved_files = _list(observed.get("saved_files"), "observed.saved_files")
     _require(not saved_files, "observed.saved_files must be empty")
@@ -146,14 +168,14 @@ def qualify(expected, observed):
     for row in clip_rows:
         row = _dict(row, "observed clip")
         source = _name(row.get("source_name"), "observed clip source_name")
-        _require(source in spans, "observed clip source_name is not expected")
+        _require(source in timelines, "observed clip source_name is not expected")
         _require(source not in clip_paths, "observed clip source_name is duplicated")
         path = _owned_path(row.get("path"), root, "observed clip path")
         _require(path not in used_clip_paths, "observed clip path is duplicated")
         _require(row.get("skeleton_path") == skeleton, "clip references a different Skeleton")
         length = _positive_number(row.get("length_s"), "observed clip length_s")
-        _require(abs(length - spans[source]) <= CLIP_LENGTH_TOLERANCE_S,
-                 "observed clip length differs from source span beyond one frame")
+        _require(abs(length - timelines[source]["playback_length_s"]) <= CLIP_LENGTH_TOLERANCE_S,
+                 "observed clip length differs from zero-origin source playback beyond the fixed tolerance")
         used_clip_paths.add(path)
         clip_paths[source] = path
     _require(used_clip_paths == set(paths_by_class["AnimSequence"]),
@@ -181,6 +203,9 @@ def qualify(expected, observed):
         "mesh_path": mesh,
         "skeleton_path": skeleton,
         "clips": dict(sorted(clip_paths.items())),
+        "clip_timelines": {name: {**timelines[name], "native_length_s": next(
+            row["length_s"] for row in clip_rows if row["source_name"] == name)}
+            for name in sorted(clip_paths)},
         "bones": dict(sorted(bone_map.items())),
         "physics_asset_path": next(iter(paths_by_class["PhysicsAsset"]), None),
         "material_paths": sorted(paths_by_class["Material"] + paths_by_class["MaterialInstanceConstant"]),

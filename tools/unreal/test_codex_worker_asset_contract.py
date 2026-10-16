@@ -21,7 +21,9 @@ def fixture():
     expected = {
         "asset_id": "prospector_pinned_fixture",
         "root": root,
-        "clips": {name: {"span_s": 2.0 + i / 10.0} for i, name in enumerate(names)},
+        "clips": {name: {"span_s": 2.0 + i / 10.0, "first_key_s": 0.0,
+                         "last_key_s": 2.0 + i / 10.0, "playback_origin_s": 0.0}
+                  for i, name in enumerate(names)},
         "bones": bones,
     }
     observed = {
@@ -88,9 +90,10 @@ class WorkerAssetContractTests(unittest.TestCase):
                 observed["clips"][0]["length_s"] += sign * (CLIP_LENGTH_TOLERANCE_S - 0.000001)
                 qualify(expected, observed)
 
-    def test_observed_24th_second_overrun_remains_a_hold(self):
-        # Prospector native readback33421: provenance and bones can pass while
-        # inclusive-looking clip lengths still exceed the fixed 30 Hz policy.
+    def test_offset_is_not_a_blanket_duration_allowance(self):
+        # The old fixture described zero-origin keys but native lengths longer
+        # by 1/24. That remains invalid; only evidenced source key times change
+        # the expected playback length.
         expected, observed = fixture()
         spans = dict(Idle=2.0, Walk=1.0, Attack=1.0, Hurt=1.0,
                      Mine=1.5, Trade=2.0, Repair=1.5)
@@ -98,11 +101,55 @@ class WorkerAssetContractTests(unittest.TestCase):
                         1.5416666269302368 if span == 1.5 else 1.0416666269302368)
                   for name, span in spans.items()}
         for name, span in spans.items():
-            expected["clips"][name]["span_s"] = span
+            expected["clips"][name].update(span_s=span, last_key_s=span)
         for row in observed["clips"]:
             row["length_s"] = actual[row["source_name"]]
         with self.assertRaisesRegex(ValueError, "clip length differs"):
             qualify(expected, observed)
+
+    def test_known_source_offset_uses_zero_to_last_playback(self):
+        expected, observed = fixture()
+        first = 0.0416666679084301
+        ends = dict(Idle=2.0416667461395264, Walk=1.0416666269302368,
+                    Attack=1.0416666269302368, Hurt=1.0416666269302368,
+                    Mine=1.5416666269302368, Trade=2.0416667461395264,
+                    Repair=1.5416666269302368)
+        for name, last in ends.items():
+            expected["clips"][name] = dict(first_key_s=first, last_key_s=last,
+                                          span_s=last-first, playback_origin_s=0.0)
+        for row in observed["clips"]:
+            row["length_s"] = ends[row["source_name"]]
+        result = qualify(expected, observed)
+        for name, timeline in result["clip_timelines"].items():
+            self.assertEqual(timeline["first_key_s"], first)
+            self.assertEqual(timeline["span_s"], ends[name]-first)
+            self.assertEqual(timeline["playback_origin_s"], 0.0)
+            self.assertEqual(timeline["playback_length_s"], ends[name])
+            self.assertEqual(timeline["native_length_s"], ends[name])
+        # The unchanged tolerance applies to playback, in both directions.
+        self.assertEqual(CLIP_LENGTH_TOLERANCE_S, 1.0/30.0 + 0.0001)
+        for sign in (-1, 1):
+            bad = copy.deepcopy(observed)
+            bad["clips"][0]["length_s"] += sign * (CLIP_LENGTH_TOLERANCE_S + 0.000001)
+            with self.subTest(sign=sign), self.assertRaisesRegex(ValueError, "clip length differs"):
+                qualify(expected, bad)
+
+    def test_missing_inconsistent_or_invalid_source_timelines_fail(self):
+        for field in ("first_key_s", "last_key_s", "span_s", "playback_origin_s"):
+            with self.subTest(missing=field):
+                self.assert_rejected(mutate_expected=lambda e: e["clips"]["Idle"].pop(field))
+            for value in (float("nan"), float("inf"), -float("inf"), True, "0", None, 10**400):
+                with self.subTest(field=field, value=str(value)):
+                    self.assert_rejected(mutate_expected=lambda e: e["clips"]["Idle"].update({field: value}))
+        for field, value in (("first_key_s", -0.1), ("first_key_s", 2.0),
+                             ("last_key_s", 0.0), ("last_key_s", -1.0),
+                             ("span_s", 1.0), ("playback_origin_s", -0.1),
+                             ("playback_origin_s", 0.0416666679084301)):
+            with self.subTest(field=field, value=value):
+                self.assert_rejected(mutate_expected=lambda e: e["clips"]["Idle"].update({field: value}))
+        # Span-only historical packets require explicit re-preparation.
+        self.assert_rejected(mutate_expected=lambda e: e["clips"].update(
+            Idle={"span_s": e["clips"]["Idle"]["span_s"]}))
 
     def test_missing_extra_duplicate_and_disallowed_objects_fail(self):
         cases = {
