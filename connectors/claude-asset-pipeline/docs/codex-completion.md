@@ -207,3 +207,120 @@ turn in progress, and next-task eligibility remained false despite both ACKs.
 Raw tool results and local acceptance receipts are retained outside the repository.
 This verifies the assisted tool-caller/consumer/coordinator path, not an autonomous
 collector, parent wake-up service, or overnight scheduler.
+
+## Bounded reported-status profiles (source successor to PR171)
+
+`--profiles COORDINATOR_OWNED_JSON` adds 1..32 explicit owner profiles. The original
+`--assignment` CLI and `Status` implementation remain available. Profile mode
+composes the same frozen PR172 reducer and PR171 observer/delivery implementation;
+it adds no daemon, new polling loop, collector, model wake or assignment service.
+This source change does not adopt or restart any running watcher or use its state.
+
+The coordinator must author the profile file and retain each actual assignment.
+One active profile per owner prevents ambiguous aliases; assignment IDs may be
+shared by different owners because all durable scopes include owner/provider and
+the bootstrap assignment/request. Merely naming pootscoot, codex-play-guard,
+buckwild-sol, team-codex or unreal-team grants no route, task identity or send
+permission. Hub reports never supply file paths, add profiles or choose recipients.
+The fixed report route is that configured owner to pootscoot-coordination. The
+assignment must be an actual retained coordinator-to-owner ping/task.assign with
+structured assignment_id and request_id; broker route labels are not authentication.
+
+Synthetic format illustration only; substitute retained real records and supported
+tool output before any separately authorized use:
+
+~~~json
+{
+  "schema": "daedalus.worker-status-profiles.v1",
+  "coordinator": "pootscoot-coordination",
+  "profiles": [
+    {
+      "owner": "example-owner",
+      "provider": "codex",
+      "assignment": {
+        "id": 10,
+        "from": "pootscoot-coordination",
+        "to": "example-owner",
+        "type": "task.assign",
+        "body": {"assignment_id": "example-job", "request_id": "example-request"}
+      },
+      "start_deadline": "2026-10-16T12:00:00Z",
+      "checkpoint_seconds": 900,
+      "follow_assignments": false,
+      "notify": false
+    }
+  ]
+}
+~~~
+
+All fields above are explicit and required. A Codex profile may additionally bind
+`"codex": {"task_id": "ACTUAL_RETAINED_THREAD_ID", "snapshot": "TRUSTED_TOOL_OUTPUT_PATH"}`.
+This tool binding belongs to the configured bootstrap assignment. Observing a newer
+coordinator assignment clears cached tool observations and suppresses that old binding,
+including when automatic tracking of the replacement is disabled;
+it cannot relabel an old completed turn as the new job. A new tool binding requires
+an explicit coordinator profile in a separate state directory. Structured owner
+reports may still follow independently.
+No thread ID is derived from the owner name or self-reported session. Tool paths
+come only from this trusted configuration; profile mode refuses legacy `--codex`,
+`--start-deadline` and `--follow-assignments` overrides. The configuration digest
+is pinned to its own new state directory; a changed registry requires a separate
+state directory. Do not point profile mode at the live legacy watcher state.
+
+~~~powershell
+python -B -m asset_pipeline.worker_status --state NEW_OWN_STATE --checkins-module EXACT_PR172_SOURCE --profiles COORDINATOR_OWNED_JSON --snapshot RETAINED_HUB_SNAPSHOT
+~~~
+
+This queues local decisions without sending. A notice requires BOTH the explicit
+CLI `--notify` and that owner's `notify:true` profile. Notifications still go only
+to the fixed coordinator route through the existing immutable send-intent path.
+No worker reminders, presence/ACK registration or automatic work dispatch occurs.
+The existing finite listener may be explicitly selected with its unchanged bounds;
+this assignment does not launch one. Real process adoption and live acceptance
+remain separate from these source/synthetic results.
+
+Each profile has its own reducer, cursor, deadline, missed-START flag, witnesses,
+assignment history, deduplication outbox and ACK records. Only configured owners'
+actual coordinator assignments can supersede/follow their state. Foreign routes,
+conflicting assignment/request identities and historical replays cannot establish
+START. Prose-only reports remain UNKNOWN. A BLOCKED/result report can be retained
+without inventing START; checkpoint advice is a separate immutable decision so it
+cannot rewrite a previously queued status notice. Replaying an event or recovering
+an uncertain intent never automatically sends again. Configured-owner filtering
+never hides newer coordinator assignments from the existing reducer.
+
+A structured report is always `outcome_authority:owner-self-report`, including
+when its configured provider is codex. Its source is
+`structured-owner-self-report-not-session-terminal-api`; working/finished describe
+the reported assignment, not authoritative session state or proof of idle.
+Missing timestamps, stale reports and disconnection remain UNKNOWN. An optional
+configured supported-tool row is separate, with
+`outcome_authority:supported-tool-observation` and the original 60-second/turn
+rules. Neither source sets `may_assign:true`.
+
+Before creating any new send intent, profile delivery rechecks the current event
+identity. A stale result, newer turn or superseding assignment withholds an old
+queued completion. A retained uncertain intent is only reconciled using the frozen
+observer; it is never retried. Delivery and ACKs do not refresh the evidence.
+
+A `worker.status.ack` must include event_key, notification_id and decision:received,
+plus all eight matching fields: profile_id, provider, owner, assignment_id, task_id,
+session_id, turn_id and source. Null identity fields must be explicitly present.
+Transport ACK is separate. ACKing one owner/assignment cannot accept another;
+acknowledgment never authorizes a next assignment. `--ack-key` resolves only a
+uniquely retained configured-owner event.
+
+Focused synthetic tests use temporary state and FakeLink only. No live POST,
+PID/state/intake/lock mutation, native call, private API or hook is part of their
+acceptance. The frozen source pins remain codex_completion.py SHA256
+8069c7fa0b40f95ad7adf1f489ca28d802bd21210bba95af9abb86fbe89cd408 and
+team_checkins.py SHA25687421d4813b3b51cae02b8f8e55e0daf15e097249efbc4c1094142ccdff0846a.
+Successor source verification: the focused run passed 46 synthetic tests in
+1.761 seconds (30 existing WorkerStatusTest cases and16 FanoutTest cases), using
+only temporary state and FakeLink. An additional actual `--profiles` CLI run with
+two synthetic retained profiles/reports exited0: Codex-owner completion remained
+owner-self-report with missing START and may_assign:false; prose-only Claude stayed
+UNKNOWN. It queued one local decision and delivered zero notices with `--notify`
+absent. Both frozen dependencies and all executable/test inputs stayed unchanged.
+These are source/synthetic checks, not live fanout acceptance, supported-tool
+collection, measured savings or adoption into the existing watcher process.
