@@ -117,5 +117,3 @@ foreach($scenario in @('blocked','complete','failed','uncertain')){
  }
 }
 @{checks=$script:checks;result='PASS';fixtures='synthetic only';sandbox=$sandbox;production_http=0;blender=0;native=0}|ConvertTo-Json
-
-
