@@ -317,4 +317,47 @@ bool FDaedalusOceanHostDepartureBindingTest::RunTest(const FString& Parameters)
     World->DestroyWorld(false);
     return true;
 }
+// Authored only: controller handoff requires the native automation lane.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanHelmHandoffTest,
+    "Daedalus.Ocean.HelmHandoff",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanHelmHandoffTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    UWorld* World=UWorld::CreateWorld(EWorldType::Game,false);
+    if (!TestNotNull(TEXT("Helm handoff world"),World)) return false;
+    World->InitializeActorsForPlay(FURL());
+    auto* First=World->SpawnActor<APlayerController>();
+    auto* Second=World->SpawnActor<APlayerController>();
+    auto* Vessel=World->SpawnActor<ADaedalusOceanVessel>();
+    if (!First || !Second || !Vessel)
+    {
+        AddError(TEXT("Helm handoff actor spawn failed"));
+        World->DestroyWorld(false);
+        return false;
+    }
+    TestTrue(TEXT("Controllers have no local input sender"),
+        First->GetLocalPlayer()==nullptr && Second->GetLocalPlayer()==nullptr);
+    Vessel->VesselType=EDaedalusOceanVessel::Submarine;
+    Vessel->SetActorLocation(FVector(0,0,-1000));
+    Vessel->SetActorRotation(FRotator::ZeroRotator);
+    First->Possess(Vessel);
+    Vessel->SetHelmInput(0,1,-1);
+    // No tick or timeout can clear the old command between these operations.
+    First->UnPossess();
+    Second->Possess(Vessel);
+    TestTrue(TEXT("Second pilot accepted immediately"),Vessel->GetController()==Second);
+    const double BeforeDepth=Vessel->GetActorLocation().Z;
+    const double BeforeYaw=Vessel->GetActorRotation().Yaw;
+    Vessel->Tick(.1f);
+    TestEqual(TEXT("New pilot does not inherit old dive"),Vessel->GetActorLocation().Z,BeforeDepth);
+    TestEqual(TEXT("New pilot does not inherit old turn"),Vessel->GetActorRotation().Yaw,BeforeYaw);
+    Vessel->SetHelmInput(0,-1,1);
+    Vessel->Tick(.1f);
+    TestTrue(TEXT("Fresh second-pilot dive command works"),Vessel->GetActorLocation().Z>BeforeDepth);
+    TestTrue(TEXT("Fresh second-pilot turn command works"),Vessel->GetActorRotation().Yaw<BeforeYaw);
+    World->DestroyWorld(false);
+    return true;
+}
 #endif

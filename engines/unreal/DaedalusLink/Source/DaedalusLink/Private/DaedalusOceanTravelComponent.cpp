@@ -125,7 +125,16 @@ void ADaedalusOceanVessel::RemoveHelmMapping()
             Subsystem->RemoveMappingContext(HelmMapping);
     MappingController.Reset();LocalHelm=FVector::ZeroVector;LocalAge=1;SendAge=0;bLocalSender=false;
 }
-void ADaedalusOceanVessel::UnPossessed() {RemoveHelmMapping();Super::UnPossessed();}
+void ADaedalusOceanVessel::UnPossessed()
+{
+    // Retire the departing pilot's authoritative command before cleanup or
+    // Super can notify callbacks that immediately install another controller.
+    // ForwardSpeed is physical inertia, not pilot input, and is preserved.
+    Helm=FVector::ZeroVector;
+    InputAge=1;
+    RemoveHelmMapping();
+    Super::UnPossessed();
+}
 void ADaedalusOceanVessel::OnRep_Controller()
 {
     if (MappingController.Get()!=GetController()) RemoveHelmMapping();
