@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Render the Tide-Pen's water states: the same pen close-up at LOW, NORMAL and HIGH water.
 
-    python tidepen_tides.py BUILD_DIR [--rev r3] [--view detail|plunge] [--res 1600x1000] [--samples 32]
+    python tidepen_tides.py BUILD_DIR [--rev r3] [--view detail|plunge] [--res 1600x1000] [--samples 32] [--resume]
 
 --view plunge looks steeply down into the pen from closer (14 m), so the bed and residents read through the water.
 
@@ -40,7 +40,7 @@ def main(argv):
                 raise RuntimeError("PenWater role not found in the loaded GLBs")
             for o in hit:
                 o.location.z += dz
-        m = SR.render(out, glbs, "tide." + st["id"], view, focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust)
+        m = SR.render(out, glbs, "tide." + st["id"], view, focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust, resume="--resume" in argv)
         m["water_state"] = {k: st[k] for k in ("id", "offset_m", "surface_z", "wet")}
         shots.append(m)
     card = {"name": name, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",

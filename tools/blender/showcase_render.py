@@ -159,8 +159,20 @@ def camera(view, focus=None, frame=None, lens=40):
     return cam
 
 
-def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None, adjust=None):
-    """adjust(): optional hook run after the GLBs load and before lighting, e.g. to move a water sheet to a tide state."""
+def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None, adjust=None, resume=False):
+    """adjust(): optional hook run after the GLBs load and before lighting, e.g. to move a water sheet to a tide state.
+    resume: reuse a finished shot (its .png and .json both on disk, same sources, samples and resolution) instead of
+    rendering it again, so a long batch cut off by a restart loses at most the shot in progress."""
+    base = name or os.path.splitext(os.path.basename(glbs[0]))[0]
+    done = os.path.join(out_dir, "%s.%s.%s" % (base, tag, view))
+    if resume and os.path.exists(done + ".png") and os.path.exists(done + ".json"):
+        meta = json.load(open(done + ".json", encoding="utf-8"))
+        same = (meta.get("sources") == {os.path.basename(g): [os.path.getsize(g), sha(g)] for g in glbs}
+                and meta["settings"]["samples"] == samples and meta["settings"]["resolution"] == list(res)
+                and meta.get("sha256") == sha(done + ".png"))
+        if same:
+            print("SHOWCASE %s.png reused (resume)" % done, flush=True)
+            return meta
     clean()
     load(glbs)
     if adjust:

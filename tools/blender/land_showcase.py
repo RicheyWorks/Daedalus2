@@ -21,7 +21,8 @@ Steps:
 3. Write NAME.showcase.json. It holds every image's sha256, bytes, settings, sources and hashes, and the camera
    numbers. Each image is labelled a Blender render, not an Unreal capture.
 
---quick renders 640x400 at 16 samples, for checking framing.
+--quick renders 640x400 at 16 samples, for checking framing. --resume reuses finished shots whose sources match
+(the build is byte-reproducible, see repro_check.py), so a restarted batch picks up where it stopped.
 Runs wherever `bpy` imports: the cloud venv, or Blender's own Python.
 """
 import importlib
@@ -68,7 +69,8 @@ def main(argv):
         for view, frame in (("hero", hero), ("detail", detail), ("top", top)):
             if tag == "reference" and view == "detail":
                 continue                                  # inspiration only: a different land, so no matched close-up
-            m = SR.render(out, glbs, tag, view, focus=detail[:3] if view == "detail" else None, frame=frame, res=res, samples=samples, name=R.NAME)
+            m = SR.render(out, glbs, tag, view, focus=detail[:3] if view == "detail" else None, frame=frame, res=res, samples=samples, name=R.NAME,
+                          resume="--resume" in argv)
             shots.append(m)
     card = {"land": layout.get("land_id"), "name": R.NAME, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",
             "comparable": "before and after share camera numbers, light, sky, samples and resolution per view",
