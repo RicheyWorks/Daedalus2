@@ -110,7 +110,7 @@ existing owner.
 ## Unified worker status and finite local listener
 
 The additive worker_status module composes Team Codex's actual PR172 reducer,
-source SHA256810fe24c3ce54d1e6a3e9df081f7dfbca8b038cbe0e3dc9dd3a63e2a0490fbae.
+source SHA25687421d4813b3b51cae02b8f8e55e0daf15e097249efbc4c1094142ccdff0846a.
 It neither copies that parser nor changes the broker. Until PR172 is integrated,
 provide its exact source using --checkins-module; a missing/different pin fails
 before import. The verified bytes are executed directly. This dependency is
@@ -130,16 +130,25 @@ or authoritative Claude session-status API is available in this integration.
 An authorized tool caller must refresh Codex observations; after60 seconds their
 current status becomes unknown/stale. The listener cannot wake the parent/model.
 
-Claude uses the exact assigned broker route and PR172's qualified START followed
-by PROGRESS/BLOCKED/COMPLETED/FAILED/CANCELLED. These are attributed owner reports,
+Claude uses the exact assigned broker route and PR172's qualified status reports.
+PROGRESS requires START. BLOCKED/COMPLETED/FAILED/CANCELLED can be retained when
+START was missed, with acceptance_missing:true and semantic_start:false. A real
+blocker must not disappear because acceptance was absent. These are owner reports,
 not proof of a Claude session terminal event, authenticated account ownership or
 completed tests. Include explicit body.reported_at_utc ending Z or +00:00 and
 body.session_id. Offsetless broker ts, presence, unknown aliases, free prose and
 transport ACK cannot provide freshness or semantic START. Missing report time
 produces unknown freshness; reports expire after the assignment checkpoint
 interval (default900 seconds). Newer assignments suppress old completed status;
-register a new explicit assignment in a separate state directory, without
-automatic reassignment. Failed/cancelled outcomes require coordinator review.
+register a new explicit assignment in a separate state directory, or opt into
+--follow-assignments for tracking-only adoption of actual newer coordinator
+assignments to the SAME known worker. This archives the old metadata, resets its
+witness and uses the normal reducer on the new actual assignment; it sends no
+job, changes no ownership and never follows aliases or worker self-assignment.
+The original bootstrap assignment remains the restart identity. New tracked
+assignments get an observer checkpoint deadline one checkpoint interval after
+capture; this is not an invented worker promise. Failed/cancelled outcomes and
+missing START require coordinator review; no self-report authorizes next work.
 Session metadata must be an identifier, never a session URL, prompt or transcript.
 Cloud hook support does not establish an installed hook: the actual configured
 MCP server/tool, runtime hook/session IDs and delivered event must be verified by
@@ -152,7 +161,7 @@ Rows report working/finished/blocked/unknown, freshness, reason, task/session/tu
 source SHA and source authority. may_assign is always false. Acknowledgment does
 not refresh status. Current status must be reconciled again before dispatch.
 
-The finite listener lasts at most600 requested seconds/120 waits, each wait at
+The finite listener allows up to28800 requested seconds (8hours)/12000 waits, each wait at
 most25 seconds plus the existing client's bounded HTTP timeout. It catches up
 all log routes before and after waits so a newer coordinator assignment cannot
 be hidden by recipient filtering. Existing /wait also updates broker presence;
@@ -161,6 +170,11 @@ ownership transfer, process inspection or worker dispatch is performed.
 Disconnects produce unknown status and bounded1/2/4/8-second reconnect backoff.
 Files, messages and retained state are bounded; overflow stops for reconciliation.
 Do not remove a stale writer.lock without checking the previous owner/operation.
+An overnight invocation can explicitly request --listen-seconds 28800
+--wait-seconds 25 --max-waits 1200 --follow-assignments --notify. Start it only
+after the prior same-state instance has actually exited and released writer.lock.
+This is one ordinary bounded process, not an OS service, autostart entry or
+indefinite guarantee. The existing 1MiB state/catch-up bounds may stop it earlier.
 
 Only completion, blocker or stale/disconnect/checkpoint decisions enter the
 durable outbox. Identical working updates generate no notification. Stable task,

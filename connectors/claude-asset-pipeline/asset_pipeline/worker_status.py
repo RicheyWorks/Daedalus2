@@ -5,7 +5,7 @@ No Codex/Claude private endpoint, autonomous MCP collector, assignment or model 
 Claude states are qualified self-reports, never authoritative session terminal proof.
 """
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import hashlib
 import importlib.util
 import json
@@ -17,7 +17,8 @@ import time
 from . import codex_completion as c
 from .teamlink import Link
 
-CHECKINS_SHA = "810fe24c3ce54d1e6a3e9df081f7dfbca8b038cbe0e3dc9dd3a63e2a0490fbae"
+CHECKINS_SHA = "87421d4813b3b51cae02b8f8e55e0daf15e097249efbc4c1094142ccdff0846a"
+MAX_SECONDS = 8 * 60 * 60
 
 
 def checkins_module(path=None):
@@ -43,7 +44,7 @@ def event_key(value):
 
 class Status:
     """Single-writer durable status and actionable outbox, sharing PR171 delivery."""
-    def __init__(self, folder, checkins, notifier=None):
+    def __init__(self, folder, checkins, notifier=None, follow_assignments=False):
         self.folder, self.checkins = Path(folder), checkins
         self.path = self.folder / "current.json"
         self.state = c.read(self.path)[0] if self.path.exists() else {
@@ -51,6 +52,7 @@ class Status:
             "codex": {}, "queued": [], "cursor": 0, "connected": False}
         c.need(self.state.get("schema") == "daedalus.worker-status.v1", "unsupported status state")
         self.observer = c.Observer(self.folder / "notices", notifier)
+        self.follow_assignments = follow_assignments
 
     def save(self):
         c.need(len(json.dumps(self.state, allow_nan=False).encode()) <= c.MAX_BYTES, "status bound reached; retain and reconcile")
@@ -59,11 +61,13 @@ class Status:
     def register(self, assignment, deadline, checkpoint_seconds=900):
         previous = self.state["claude"]
         if previous:
-            c.need(previous["assignment_sha256"] == self.checkins.digest(assignment),
+            root = self.state.get("root_assignment_sha256", previous["assignment_sha256"])
+            c.need(root == self.checkins.digest(assignment),
                    "different assignment requires separate state directory; no automatic reassignment")
         else:
             self.state["claude"] = self.checkins.create(assignment, deadline, checkpoint_seconds)
             self.state["cursor"] = assignment["id"] - 1
+        self.state.setdefault("root_assignment_sha256", self.checkins.digest(assignment))
         self.save()
 
     def ingest(self, messages, observed_at):
@@ -72,6 +76,19 @@ class Status:
         previous = self.state["claude"]
         c.need(previous is not None, "register actual coordinator assignment first")
         reduced = self.checkins.reduce(previous, messages, observed_at)
+        if self.follow_assignments and reduced["superseded_by"]:
+            replacements = [m for m in messages if m["id"] == reduced["superseded_by"]]
+            c.need(len(replacements) == 1, "new assignment source missing; reconcile before following")
+            replacement = replacements[0]
+            c.need(replacement.get("from") == previous["coordinator"]
+                   and replacement.get("to") == previous["worker"], "known-worker assignment route required")
+            deadline = (c.utc(observed_at) + timedelta(seconds=previous["checkpoint_seconds"])).isoformat()
+            adopted = self.checkins.create(replacement, deadline, previous["checkpoint_seconds"])
+            self.observer.record("assignment_history", event_key([previous["worker"], previous["assignment_sha256"]]),
+                                 {"state": reduced, "witness": self.state["witness"], "tracked_at_utc": observed_at})
+            self.state["witness"] = None
+            previous = adopted
+            reduced = self.checkins.reduce(adopted, [m for m in messages if m["id"] >= replacement["id"]], observed_at)
         last = reduced["last_semantic_id"]
         if last != previous["last_semantic_id"]:
             matches = [m for m in messages if m.get("id") == last]
@@ -133,6 +150,8 @@ class Status:
                          "source": "structured-owner-self-report-not-session-terminal-api",
                          "source_sha256": witness.get("source_sha256"), "message_id": witness.get("message_id"),
                          "transport_ack": state["transport_ack"], "semantic_start": state["started"],
+                         "acceptance_missing": state.get("acceptance_missing", not state["started"]),
+                         "outcome_authority": "owner-self-report",
                          "superseded_by": state["superseded_by"], "may_assign": False})
         for task, value in sorted(self.state["codex"].items()):
             age = (current - c.utc(value["observed_at_utc"])).total_seconds()
@@ -185,7 +204,7 @@ class Status:
             "owner": body["owner"], "task_id": body["task_id"], "session_id": body["session_id"]})
 
     def listen(self, reader, seconds=10, wait_seconds=5, max_waits=4, codex=(), notify=False):
-        c.need(0 < seconds <= 600 and 0 < wait_seconds <= 25 and type(max_waits) is int and 1 <= max_waits <= 120,
+        c.need(0 < seconds <= MAX_SECONDS and 0 < wait_seconds <= 25 and type(max_waits) is int and 1 <= max_waits <= 12000,
                "bounded listener limits required")
         start, cpu = time.monotonic(), time.process_time()
         waits, failures = 0, 0
@@ -240,6 +259,7 @@ def main(argv=None):
     parser.add_argument("--max-waits", type=int, default=4)
     parser.add_argument("--notify", action="store_true")
     parser.add_argument("--ack-key")
+    parser.add_argument("--follow-assignments", action="store_true", help="track newer coordinator assignments to the same known worker; never dispatch")
     args = parser.parse_args(argv)
     lock = Path(args.state) / "writer.lock"
     owned = False
@@ -254,7 +274,8 @@ def main(argv=None):
         lock.parent.mkdir(parents=True, exist_ok=True)
         with lock.open("x"):
             owned = True
-        status = Status(args.state, module, Link(c.SENDER) if args.notify or args.ack_key else None)
+        status = Status(args.state, module, Link(c.SENDER) if args.notify or args.ack_key else None,
+                        args.follow_assignments)
         status.register(assignment, args.start_deadline)
         if args.snapshot:
             data = c.read(args.snapshot)[0]

@@ -302,8 +302,23 @@ class WorkerStatusTest(unittest.TestCase):
         self.assertEqual("unknown", row["status"])
         self.assertFalse(row["semantic_start"])
 
-    def test_completion_without_start_is_unknown(self):
-        self.assertEqual("unknown", self.ingest(self.message(11, "task.completed"))["status"])
+    def test_reported_completion_without_start_does_not_invent_acceptance(self):
+        row = self.ingest(self.message(11, "task.completed"))
+        self.assertEqual("finished", row["status"])
+        self.assertTrue(row["acceptance_missing"])
+        self.assertFalse(row["semantic_start"])
+        self.assertEqual("owner-self-report", row["outcome_authority"])
+        self.assertFalse(row["may_assign"])
+
+    def test_blocked_without_start_is_actionable(self):
+        row = self.ingest(self.message(11, "checkin", status="BLOCKED"))
+        self.assertEqual("blocked", row["status"])
+        self.assertTrue(row["acceptance_missing"])
+        self.assertFalse(row["semantic_start"])
+        self.assertEqual(1, len(self.status.queue(NOW)))
+
+    def test_progress_without_start_still_unknown(self):
+        self.assertEqual("unknown", self.ingest(self.message(11, "task.progress"))["status"])
 
     def test_transport_ack_not_semantic_start(self):
         row = self.ingest({"id": 11, "from": "unreal-team", "to": c.COORDINATOR,
@@ -477,7 +492,41 @@ class WorkerStatusTest(unittest.TestCase):
 
     def test_invalid_listener_limits_fail_before_wait(self):
         with self.assertRaisesRegex(ValueError, "bounded"):
-            self.status.listen(self.link, seconds=601)
+            self.status.listen(self.link, seconds=w.MAX_SECONDS+1)
+
+    def test_follow_tracks_only_actual_coordinator_assignment_without_dispatch(self):
+        self.status.follow_assignments = True
+        replacement = copy.deepcopy(self.assignment)
+        replacement["id"], replacement["body"]["assignment_id"] = 12, "next-job"
+        report = self.message(13, "task.blocked", assignment_id="next-job")
+        self.status.ingest([self.message(11, "task.completed"), replacement, report], NOW)
+        row = self.status.rows(NOW)[0]
+        self.assertEqual("next-job", row["task_id"])
+        self.assertEqual("blocked", row["status"])
+        self.assertTrue(row["acceptance_missing"])
+        self.assertEqual(1, len(list((self.root/"unified/notices/assignment_history").glob("*.json"))))
+        self.assertEqual(0, self.link.sends)
+        # Original retained bootstrap assignment remains valid across restart.
+        recovered = w.Status(self.root/"unified", self.checkins, self.link, True)
+        recovered.register(self.assignment, NOW)
+        recovered.ingest([replacement, report], NOW)
+        self.assertEqual("next-job", recovered.rows(NOW)[0]["task_id"])
+
+    def test_follow_does_not_adopt_worker_self_assignment_or_alias(self):
+        self.status.follow_assignments = True
+        replacement = copy.deepcopy(self.assignment)
+        replacement["id"], replacement["body"]["assignment_id"] = 12, "next-job"
+        replacement["from"] = "unreal-team"
+        self.ingest(replacement)
+        replacement["id"], replacement["from"], replacement["to"] = 13, c.COORDINATOR, "claude"
+        self.ingest(replacement)
+        self.assertEqual("current-job", self.status.rows(NOW)[0]["task_id"])
+
+    def test_bounded_eight_hour_option_exercises_same_finite_loop(self):
+        link = FakeLink()
+        link.up = True
+        link.wait = lambda after, timeout: ([], after)
+        self.assertEqual(1, self.status.listen(link, seconds=w.MAX_SECONDS, max_waits=1)["waits"])
 
 
 if __name__ == "__main__":
