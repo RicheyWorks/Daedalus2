@@ -1343,3 +1343,37 @@ WARN; this slice does not change them.
   water or touches the overhang.
 - `tools/blender/tidepen_tides.py` renders the same pen close-up at all three water levels. Only the water moves.
 - Still design: the feed, enclose and leave-wild host actions, and the care fact store.
+
+### 14.39 The Prismheart demo: the Prism Skiff airship
+
+The world map always had an `AirshipPad` landmark next to the Town; until now it said "the way is sealed".
+- **The art (`tools/blender/rpg_vehicles.py`):**
+  - An original voxel skiff: a timber hull, a striped teal-and-violet gas envelope, a prism crystal at the bow and a
+    propeller each side of the stern.
+  - It goes through the realm's own pixel pipeline (Workbench vertex colour, then `pixel_art.sprite` with a dark
+    outline) as a 2-frame, 32 px strip. The frames turn the propellers.
+  - It is written to `claude-battle-kit/prism/vehicles/`.
+  - `build_demo.py` packs `vehicles/Vehicle_*` into the sprite atlas. It refuses to build a map that has an
+    `AirshipPad` but no skiff sprite.
+- **The rules (`index.html`):**
+  - The skiff lifts once the first Warden falls. Until then the dock says the envelope hangs slack.
+  - Walk onto the skiff to board it. Aboard, you:
+    - fly over anything at twice walking speed;
+    - get no random battles;
+    - cannot enter landmarks.
+  - A lands only on tiles the map marks `airship_lands`. Elsewhere it shows "NO PLACE TO LAND".
+  - The skiff stays where it landed; walk onto it to fly again. It bobs in the air, has a drop shadow, and mirrors
+    when flying left.
+  - Its parked spot is saved at the inn. CONTINUE starts on foot at the inn. NEW GAME moors it at the dock.
+- **Proof:** `tools/rpg_demo/airship_test.py` passes 20/20 in Playwright. It checks:
+  - the atlas frames;
+  - the dock's message before the first Warden;
+  - boarding;
+  - flying over mountains and deep sea;
+  - fly speed against walk speed;
+  - 60 flown steps over battle ground with no battle;
+  - the Town not opening from the air;
+  - refusing to land on a mountain;
+  - landing and parking;
+  - re-boarding;
+  - saving at the inn, CONTINUE and NEW GAME.
