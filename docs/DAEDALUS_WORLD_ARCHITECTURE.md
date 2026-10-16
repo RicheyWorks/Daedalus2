@@ -1456,3 +1456,18 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
   - The Windmere Elder has a `request` in `prism-village.json`: she buys a Sunscale Carp for 600 gold, once per
     journey. The request is saved in `quests`, CONTINUE restores it and NEW GAME clears it.
   - `fish_test.py` passes 22/22.
+- **Fix, stranded skiff (PootScoot review 32769):**
+  - **The bug:** a field-menu SAVE while parked on a walled-off sky cache saved that spot. CONTINUE starts on foot at
+    the inn, so the skiff sat where no one could walk to it.
+  - **The fix:** `recoverAir()` runs on CONTINUE. It keeps a parked spot only if it is landable ground the party can
+    walk to from the Town (`footReach()`, a BFS like the build's). Anything else goes back to the dock with a
+    "THE SKIFF FLEW HOME" toast: an isolated pocket, ground it could never land on, bad or missing coordinates.
+    Opened caches and first-Warden eligibility are kept.
+  - **Proof:** `airship_test.py` passes 37/37. It checks:
+    - recovery keeps a reachable spot;
+    - recovery sends home a pocket spot, reachable forest, and five kinds of bad coordinates;
+    - with no saved skiff it moors at the dock with nothing recalled;
+    - the real path works: land on the cache, SAVE from the menu, CONTINUE, then the skiff is at the dock, the cache
+      stays opened and it boards again.
+  - **Found on the way:** the old test had rested at the inn while the skiff sat on the cache, which is the same
+    stranding.

@@ -170,7 +170,12 @@ with sync_playwright() as p:
     step("left"); step("right")                                                   # walk off and back: no second prize
     check("an opened cache gives nothing twice", have(c0["item"]) == n0 + 1 and not st()["dialog"], have(c0["item"]))
     pg.screenshot(path=os.path.join(DEMO, "..", "t_skycache.png"))
-    lx, ly = air()["x"], air()["y"]
+    # fly back to ground the party can walk to and park there (a player who rests at the inn walked there)
+    if not air()["flying"]:
+        a_ = air(); warp(a_["x"] - 1, a_["y"]); step("right")
+    lx, ly = next((x, y) for y, row in enumerate(WORLD) for x, c in enumerate(row) if (x, y) in foot and c == "Grass")
+    warp(lx, ly); bot.press("a", 300); bot.clear()
+    check("parked again on walkable grass before resting", not air()["flying"] and (air()["x"], air()["y"]) == (lx, ly), air())
 
     # save at the inn, CONTINUE
     bot.rest()
@@ -180,6 +185,42 @@ with sync_playwright() as p:
     a3 = air()
     check("the parked spot is saved at the inn and back on CONTINUE", a3["unlocked"] and (a3["x"], a3["y"]) == (lx, ly) and not a3["flying"], a3)
     check("opened caches are saved too", next(c for c in ev("PRISM_DEMO.skyCaches()") if c["x"] == c0["x"])["opened"])
+
+    # a skiff saved where no one can walk (field-menu SAVE on a sky cache) flies home on CONTINUE (review 32769)
+    rec = lambda v: ev("PRISM_DEMO.recoverAir(%s)" % json.dumps(v))
+    reach_land = next((x, y) for y, row in enumerate(WORLD) for x, c in enumerate(row) if (x, y) in foot and WT.get(c, {}).get("airship_lands") and c != "AirshipPad")
+    walk_noland = next((x, y) for y, row in enumerate(WORLD) for x, c in enumerate(row) if (x, y) in foot and WT.get(c, {}).get("walkable") and not WT.get(c, {}).get("airship_lands"))
+    r1 = rec({"x": reach_land[0], "y": reach_land[1]})
+    check("recovery keeps a parked spot the party can walk to", (r1["x"], r1["y"]) == reach_land and not r1["recalled"], r1)
+    r2 = rec({"x": c0["x"], "y": c0["y"]})
+    check("recovery sends a skiff parked in a walled-off pocket home to the dock", (r2["x"], r2["y"]) == PAD and r2["recalled"], r2)
+    r3 = rec({"x": walk_noland[0], "y": walk_noland[1]})
+    check("...and one on reachable ground it could never land on (%s)" % tile(*walk_noland), (r3["x"], r3["y"]) == PAD and r3["recalled"], r3)
+    bad = [rec(v) for v in ({"x": -1, "y": 3}, {"x": 999, "y": 999}, {"x": "7", "y": 3}, {"x": 2.5, "y": 1}, {})]
+    check("...and bad coordinates (negative, off the map, text, fractional, missing)", all((r["x"], r["y"]) == PAD and r["recalled"] for r in bad), bad)
+    r4 = rec(None)
+    check("no saved skiff: moored at the dock, nothing recalled", (r4["x"], r4["y"]) == PAD and not r4["recalled"], r4)
+    # the real path: board, land on the cache, SAVE from the field menu, CONTINUE
+    ax, ay = air()["x"], air()["y"]
+    ev("PRISM_DEMO.warp('world',%d,%d)" % (PAD[0] - 1, PAD[1])); W(200)
+    if air()["x"] != PAD[0] or air()["y"] != PAD[1]:
+        warp(ax - 1, ay)
+    s_ = st(); a_ = air()
+    warp(a_["x"] - 1, a_["y"]); step("right")
+    warp(c0["x"], c0["y"]); bot.press("a", 400); bot.clear()
+    check("parked on the walled-off cache, on foot", not air()["flying"] and (air()["x"], air()["y"]) == (c0["x"], c0["y"]), air())
+    mn = lambda: ev("PRISM_DEMO.menu()")
+    bot.press("start", 250)
+    while mn()["idx"] != mn()["cmds"].index("SAVE"): bot.press("down", 60)
+    bot.press("a", 300); bot.press("b", 150); bot.press("b", 150); bot.clear()
+    pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
+    ev("PRISM_DEMO.speed(6)"); bot.press("down", 150); bot.press("a", 300); W(1200); bot.clear()
+    warp(1, 1)
+    a5 = air()
+    check("CONTINUE after a field-menu SAVE on the cache: the skiff is home at the dock, still able to fly", (a5["x"], a5["y"]) == PAD and a5["unlocked"] and not a5["flying"], a5)
+    check("...and the cache it found stays opened", next(c for c in ev("PRISM_DEMO.skyCaches()") if c["x"] == c0["x"])["opened"])
+    warp(PAD[0] - 1, PAD[1]); step("right")
+    check("...and boards from the dock as usual", air()["flying"], air())
 
     # NEW GAME moors it at the dock again
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)

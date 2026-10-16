@@ -372,6 +372,29 @@ function airship() {
   return state.air;
 }
 const flying = () => !!(map && map.kind === "world" && state.air && state.air.aboard);
+/* Where a saved skiff may stay parked: on landable ground the party can walk to from the Town. CONTINUE starts on
+   foot at the inn, so a skiff saved anywhere else (a sky-cache pocket, via the field menu's SAVE) would strand
+   itself: those are recalled to the dock. Bad or missing coordinates also go home. (PootScoot review 32769.) */
+let footCache = null;
+function footReach() {
+  if (footCache) return footCache;
+  const W0 = D.world, wt = D.world_tiles, start = find(W0, "Town"), seen = new Set([start + ""]), q = [start];
+  while (q.length) {
+    const [x, y] = q.shift();
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nx = x + dx, ny = y + dy, c = W0[ny] && W0[ny][nx], k = nx + "," + ny;
+      if (c && !seen.has(k) && wt[c] && (wt[c].walkable || wt[c].kind === "landmark")) { seen.add(k); q.push([nx, ny]); }
+    }
+  }
+  return (footCache = seen);
+}
+function recoverAir(saved) {
+  const pad = find(D.world, "AirshipPad");
+  if (!pad) return null;
+  const ok = saved && Number.isInteger(saved.x) && Number.isInteger(saved.y) && D.world[saved.y] && D.world[saved.y][saved.x] !== undefined
+    && (D.world_tiles[D.world[saved.y][saved.x]] || {}).airship_lands && footReach().has(saved.x + "," + saved.y);
+  return ok ? { x: saved.x, y: saved.y, aboard: false, recalled: false } : { x: pad[0], y: pad[1], aboard: false, recalled: !!saved };
+}
 /* Sky caches (data.json sky_caches): a chest in each pocket of land no one can walk to. Only the skiff reaches them;
    landing on one, or stepping onto it after landing nearby, opens it. Opened caches are saved with the other chests. */
 const skyKey = c => "sky:" + c.x + "," + c.y;
@@ -1481,7 +1504,8 @@ function titleChoose(i) {
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
-    state.air = sv.air ? { x: sv.air.x, y: sv.air.y, aboard: false } : null;
+    state.air = sv.air ? recoverAir(sv.air) : null;                    /* CONTINUE starts on foot at the inn: never strand the skiff */
+    if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"), 1400);
     state.fish = sv.fish || {}; state.quests = sv.quests || {};                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
@@ -1698,6 +1722,7 @@ window.PRISM_DEMO = {
   fishLog: () => Object.assign({}, state.fish),
   quests: () => Object.assign({}, state.quests),
   fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
+  recoverAir: saved => recoverAir(saved),
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },
 };
