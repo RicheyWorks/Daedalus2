@@ -127,3 +127,57 @@ checks cover all four PowerShell source files. These results do not establish
 real OS/process fault recovery, production adoption, current memory, editable
 reopen or visual/native acceptance. The changed source requires independent
 re-review; no prior review acceptance is silently transferred to this head.
+
+## Optional real-junction module conformance (test/docs only)
+
+Source-cleared implementation checkpoint is
+`cac2d85bc7e6f129115c1361f6a9b7e7549a7786`. This addendum changes ONLY tests.ps1
+and README.md; StagePolicy/module, runner and validator bytes remain respectively
+`b29a626b4f4f44660004c7692b33809c96a5f33ee23b66b9120d16937a857eca`,
+`53e0f1befdba118f417f3fb230dd88710d353a7f90ea6f4ed822638c030e88d2`,
+`6c59d979dbfa411a8ef31fd22b97a17b73b2754623e893ad5515ab3e52f0d93f`.
+
+Default invocation retains the original75 mocked checks. Optional invocation:
+
+```powershell
+pwsh -NoProfile -File tools/blender/willow_stage_r2/tests.ps1 -RealJunctionConformance
+```
+
+This separate module-only mode is placed after the default suite's mock cleanup;
+it does not rerun the mocked runner suite or install its mocks. It calls the REAL
+Resolve-WillowPath for a junction declared as root, a junction below an ordinary
+root, and an ordinary-directory control. Its consumer read counter increments
+ONLY after successful resolution. Junction rejection requires the exact intended
+Reparse-point guard AND zero reads; an arbitrary exception is a FAIL.
+
+Everything is inside one newly allocated Temp GUID directory. Creation uses only
+normal New-Item -ItemType Junction. Denied/unsupported creation is a specific
+SKIP, not a pass; no escalation, alternate API, settings change or retry workaround.
+Target sentinel hashes and entry names are compared before/after; final source
+also emits both snapshots. Link cleanup first validates exact owned location,
+expected target, ReparsePoint and Junction kind, then uses only
+[IO.Directory]::Delete(link,false). No recursive deletion occurs. Uncertain
+cleanup is FAIL/incomplete with the fixture retained. Successful ordinary target
+directories and sentinels are retained too. PARTIAL_SKIPPED returns a nonzero
+status, never a conformance PASS.
+
+Actual unprivileged run, 16 October2026 UTC / 15 OctoberPacific:
+
+- PowerShell7.6.5, Microsoft Windows10.0.26300, sandboxed Temp directory
+  `willow-r2-junction-e4a14bcd4efa4aaf86b14ebe69316e3a`.
+- Declared-root junction: SKIP, New-Item returned 'Access is denied.', zero reads,
+  no link created/cleanup needed, target sentinel/hash and entries preserved.
+- Intermediate junction: same SKIP/denial/zero reads/target preservation, no link.
+- Ordinary directory: PASS, exactly ONE consumer read, exact sentinel match,
+  unchanged target hash/entries. Overall PARTIAL_SKIPPED; host returned nonzero.
+- No privilege escalation or creation retry followed either denial. An earlier
+  parser error was corrected before any fixture execution; it created no links.
+  The subsequent snapshot-output-only addition was parsed, not rerun around the
+  denial. Original75-check results are from the accepted checkpoint above; the
+  optional mode does not claim those checks were newly executed.
+
+This establishes the ordinary control only in this environment. Actual junction
+rejection/unlink remains UNVERIFIED here because creation was denied. It is
+module conformance, not new validator-wide ordering, above-root/race-resistance,
+OS safety, production adoption or native evidence. Any real source defect found
+by a future separately authorized run must be reported before expanding scope.

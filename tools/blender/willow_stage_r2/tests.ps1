@@ -1,9 +1,11 @@
 # Tiny serial synthetic tests. All runner external boundaries are mocked below.
+param([switch]$RealJunctionConformance)
 $ErrorActionPreference='Stop'
 Import-Module (Join-Path $PSScriptRoot 'StagePolicy.psm1') -Force
 $script:checks=0
 function Check($condition,$label){if(-not $condition){throw "FAIL: $label"};$script:checks++}
 function Throws($label,[scriptblock]$operation){try{& $operation|Out-Null}catch{$script:lastReject=$_.Exception.Message;$script:checks++;return};throw "Expected rejection: $label"}
+if(-not $RealJunctionConformance){
 $sandbox=Join-Path ([IO.Path]::GetTempPath()) ('willow-r2-tests-'+[Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $sandbox|Out-Null
 # Synthetic files are retained in this unique temp directory for inspection.
@@ -191,3 +193,87 @@ try{
  Remove-Item Function:\global:Get-Item,Function:\global:Get-Content
 }
 @{checks=$script:checks;result='PASS';fixtures='synthetic only';sandbox=$sandbox;production_http=0;blender=0;native=0}|ConvertTo-Json
+return
+}
+
+# Separate module-only mode, after the normal suite's mock-cleanup block.
+# No runner, HTTP/CIM/process mock or production boundary is invoked in this mode.
+$fixture=Join-Path ([IO.Path]::GetTempPath()) ('willow-r2-junction-'+[Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $fixture -ErrorAction Stop|Out-Null
+$results=@()
+$global:WillowConformanceReads=0
+function Read-WillowConsumer([string]$Root,[string]$Relative){
+ $resolved=Resolve-WillowPath -Root $Root -Relative $Relative
+ $global:WillowConformanceReads++ # ONLY after successful resolution.
+ return Get-Content -LiteralPath $resolved -Raw -ErrorAction Stop
+}
+function TargetSnapshot([string]$Target){
+ $entries=@(Get-ChildItem -LiteralPath $Target -Force|Sort-Object Name|ForEach-Object {$_.Name})
+ return @{entries=($entries|ConvertTo-Json -Compress);sha256=(Get-FileHash -LiteralPath (Join-Path $Target 'sentinel.txt') -Algorithm SHA256).Hash}
+}
+foreach($case in @('declared-root-junction','intermediate-junction')){
+ $target=Join-Path $fixture ($case+'-target');New-Item -ItemType Directory -Path $target|Out-Null
+ [IO.File]::WriteAllText((Join-Path $target 'sentinel.txt'),'owned conformance sentinel')
+ $before=TargetSnapshot $target
+ if($case -eq 'declared-root-junction'){
+  $link=Join-Path $fixture 'declared-root-link';$declaredRoot=$link;$relative='sentinel.txt';$expected='Reparse-point root rejected'
+ }else{
+  $declaredRoot=Join-Path $fixture 'real-root';New-Item -ItemType Directory -Path $declaredRoot|Out-Null
+  $link=Join-Path $declaredRoot 'intermediate-link';$relative='intermediate-link/sentinel.txt';$expected='Reparse-point receipt path rejected'
+ }
+ $row=[ordered]@{case=$case;result='PENDING';link=$link;target=$target;reads=0;guard=$null;creation_error=$null;cleanup='not-created';target_before=$before;target_after=$null;target_preserved=$false}
+ $created=$false
+ try{
+  try{New-Item -ItemType Junction -Path $link -Target $target -ErrorAction Stop|Out-Null;$created=$true}
+  catch{$row.result='SKIP';$row.creation_error=$_.Exception.Message}
+  if($created){
+   $global:WillowConformanceReads=0;$guard=$null
+   try{$null=Read-WillowConsumer $declaredRoot $relative}catch{$guard=$_.Exception.Message}
+   $row.reads=$global:WillowConformanceReads;$row.guard=$guard
+   if($guard -ceq $expected -and $row.reads -eq 0){$row.result='PASS'}
+   else{$row.result='FAIL';$row.guard="Expected '$expected' and zero reads; observed '$guard' / $($row.reads)"}
+  }
+ }catch{$row.result='FAIL';$row.guard=$_.Exception.Message}
+ finally{
+  # Never delete a target or recursively traverse a link. Re-verify exact own
+  # link identity, location, ReparsePoint, Junction kind and expected target.
+  if($created -or (Test-Path -LiteralPath $link)){
+   try{
+    $item=Get-Item -LiteralPath $link -Force -ErrorAction Stop
+    $fullLink=[IO.Path]::GetFullPath($link);$fullTarget=[IO.Path]::GetFullPath($target)
+    $prefix=[IO.Path]::GetFullPath($fixture)+[IO.Path]::DirectorySeparatorChar
+    $targets=@($item.Target)
+    $known=$fullLink.StartsWith($prefix,[StringComparison]::OrdinalIgnoreCase) -and $fullTarget.StartsWith($prefix,[StringComparison]::OrdinalIgnoreCase)
+    $known=$known -and [IO.Path]::GetFullPath($item.FullName) -eq $fullLink
+    $known=$known -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and $item.LinkType -eq 'Junction' -and $targets.Count -eq 1
+    $known=$known -and [IO.Path]::GetFullPath([string]$targets[0]) -eq $fullTarget
+    if(-not $known){throw 'Uncertain link identity/target; retain fixture without cleanup'}
+    [IO.Directory]::Delete($fullLink,$false)
+    if(Test-Path -LiteralPath $fullLink){throw 'Link remains after nonrecursive unlink'}
+    $row.cleanup='verified-nonrecursive-unlink'
+   }catch{$row.result='FAIL';$row.cleanup='UNCERTAIN: '+$_.Exception.Message}
+  }
+  try{$after=TargetSnapshot $target;$row.target_after=$after;$row.target_preserved=($after.entries -ceq $before.entries -and $after.sha256 -ceq $before.sha256);if(-not $row.target_preserved){$row.result='FAIL'}}
+  catch{$row.result='FAIL';$row.target_preserved=$false}
+ }
+ $results+=$row
+}
+$ordinary=Join-Path $fixture 'ordinary';New-Item -ItemType Directory -Path $ordinary|Out-Null
+[IO.File]::WriteAllText((Join-Path $ordinary 'sentinel.txt'),'ordinary conformance sentinel')
+$before=TargetSnapshot $ordinary;$global:WillowConformanceReads=0
+$control=[ordered]@{case='ordinary-directory';result='FAIL';reads=0;sentinel_match=$false;target_preserved=$false;error=$null}
+try{
+ $value=Read-WillowConsumer $ordinary 'sentinel.txt';$control.reads=$global:WillowConformanceReads
+ $control.sentinel_match=($value -ceq 'ordinary conformance sentinel')
+ $after=TargetSnapshot $ordinary;$control.target_preserved=($before.entries -ceq $after.entries -and $before.sha256 -ceq $after.sha256)
+ if($control.reads -eq 1 -and $control.sentinel_match -and $control.target_preserved){$control.result='PASS'}
+}catch{$control.error=$_.Exception.Message;$control.reads=$global:WillowConformanceReads}
+$results+=$control
+$failed=@($results|Where-Object {$_.result -eq 'FAIL'}).Count
+$skipped=@($results|Where-Object {$_.result -eq 'SKIP'}).Count
+$outcome=$(if($failed){'FAIL'}elseif($skipped){'PARTIAL_SKIPPED'}else{'PASS'})
+@{mode='real-junction-module-conformance';result=$outcome;cases=$results;fixture=$fixture;
+ powershell=$PSVersionTable.PSVersion.ToString();os=[Runtime.InteropServices.RuntimeInformation]::OSDescription;
+ default_mocked_checks='NOT_RERUN_IN_THIS_MODE';production_http=0;production_cim=0;processes=0;blender=0;native=0}|ConvertTo-Json -Depth 8
+if($failed){exit 1}
+if($skipped){exit 2}
