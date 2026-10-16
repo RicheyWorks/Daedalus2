@@ -529,5 +529,427 @@ class WorkerStatusTest(unittest.TestCase):
         self.assertEqual(1, self.status.listen(link, seconds=w.MAX_SECONDS, max_waits=1)["waits"])
 
 
+
+
+class FanoutTest(unittest.TestCase):
+    """Synthetic multi-owner boundaries; no broker, worker or supported-tool calls."""
+
+    OWNERS = ("buckwild-sol", "buckwild-claude", "buckwild-luna")
+    SELF_REPORT = "structured-owner-self-report-not-session-terminal-api"
+    TOOL_REPORT = "supported-tool-caller-supplied"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.checkins = w.checkins_module(os.environ.get("DAEDALUS_CHECKINS_SOURCE"))
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.link = FakeLink()
+        self.now = (c.utc(w.instant()) - timedelta(seconds=10)).isoformat()
+        self.config = {
+            "schema": "daedalus.worker-status-profiles.v1",
+            "coordinator": c.COORDINATOR,
+            "profiles": [self.profile(owner, i) for i, owner in enumerate(self.OWNERS)],
+        }
+
+    def at(self, seconds):
+        return (c.utc(self.now) + timedelta(seconds=seconds)).isoformat()
+
+    def profile(self, owner, index=0, provider=None):
+        return {
+            "owner": owner,
+            "provider": provider or ("claude" if index == 1 else "codex"),
+            "assignment": {
+                "id": 10 + index, "from": c.COORDINATOR, "to": owner, "type": "ping",
+                "body": {"assignment_id": "shared-job", "request_id": "request." + owner},
+            },
+            "start_deadline": self.at(60),
+            "checkpoint_seconds": 90,
+            "follow_assignments": False,
+            "notify": True,
+        }
+
+    def fanout(self, config=None, name="fanout", notifier=True):
+        return w.Fanout(self.root / name, self.checkins,
+                        copy.deepcopy(self.config if config is None else config),
+                        self.link if notifier else None)
+
+    def report(self, owner, mid, kind, **body):
+        return {
+            "id": mid, "from": owner, "to": c.COORDINATOR, "type": kind,
+            "body": {"assignment_id": "shared-job", "request_id": "request." + owner,
+                     "session_id": "session." + owner, "reported_at_utc": self.now, **body},
+        }
+
+    def row(self, fanout, owner, now=None, source=None):
+        matches = [row for row in fanout.rows(now or self.now)
+                   if row["owner"] == owner and row["source"] == (source or self.SELF_REPORT)]
+        self.assertEqual(1, len(matches))
+        return matches[0]
+
+    def notices(self):
+        return [message for message in self.link.messages
+                if message["type"] == "worker.status.actionable"]
+
+    def body(self, fanout, key):
+        found = [child.observer.get("queue", key) for child in fanout.profiles.values()]
+        found = [value for value in found if value is not None]
+        self.assertEqual(1, len(found))
+        return found[0]
+
+    def tool(self, name="tool.json", status="completed", state="idle", turn=TURN,
+             task=TASK, observed=None):
+        observed = observed or self.now
+        data = {"schemaVersion": 1, "thread": {"id": task, "status": {"type": state}},
+                "latestTurn": {"id": turn, "status": status, "error": None,
+                               "completedAt": c.utc(observed).timestamp() - 1
+                               if status in c.TERMINAL else None}}
+        value = {
+            "schema": c.SCHEMA, "tool": c.TOOLS[0],
+            "request": {"targets": [{"threadId": task}], "timeoutMs": 0},
+            "observed_at_utc": observed,
+            "result": {"isError": False, "content": [{"type": "text",
+                                                       "text": json.dumps({"polls": [data]})}]},
+        }
+        path = self.root / name
+        path.write_text(json.dumps(value), encoding="utf-8")
+        return path
+
+    def test_simultaneous_owners_keep_shared_assignment_ids_separate(self):
+        fanout = self.fanout()
+        a, b, d = self.OWNERS
+        fanout.ingest([self.report(a, 100, "task.start"),
+                       self.report(b, 101, "task.blocked"),
+                       self.report(d, 102, "task.completed")], self.now)
+        rows = [self.row(fanout, owner) for owner in self.OWNERS]
+        self.assertEqual(["working", "blocked", "finished"], [row["status"] for row in rows])
+        self.assertEqual(3, len({row["profile_id"] for row in rows}))
+        self.assertTrue(all(row["assignment_id"] == "shared-job" for row in rows))
+        self.assertTrue(rows[1]["acceptance_missing"])
+        self.assertTrue(rows[2]["acceptance_missing"])
+        self.assertFalse(rows[2]["semantic_start"])
+        self.assertTrue(all(row["outcome_authority"] == "owner-self-report" for row in rows))
+        self.assertTrue(all(row["may_assign"] is False for row in rows))
+        keys = fanout.queue(self.now)
+        self.assertEqual(2, len(keys))
+        self.assertEqual({b, d}, {self.body(fanout, key)["owner"] for key in keys})
+        fanout.notify(self.now)
+        self.assertEqual(2, self.link.sends)
+
+    def test_deadline_advice_is_per_owner_and_only_issued_once(self):
+        config = copy.deepcopy(self.config)
+        config["profiles"] = config["profiles"][:2]
+        config["profiles"][0]["start_deadline"] = self.at(-1)
+        config["profiles"][1]["start_deadline"] = self.at(300)
+        fanout = self.fanout(config)
+        fanout.ingest([], self.now)
+        first = fanout.queue(self.now)
+        self.assertTrue(fanout.profiles[self.OWNERS[0]].state["claude"]["reminder_issued"])
+        self.assertFalse(fanout.profiles[self.OWNERS[1]].state["claude"]["reminder_issued"])
+        self.assertTrue(first)
+        self.assertEqual({self.OWNERS[0]}, {self.body(fanout, key)["owner"] for key in first})
+        self.assertEqual(first, fanout.queue(self.now))
+        self.assertEqual(0, self.link.sends)
+
+    def test_wrong_routes_exact_replay_and_conflicting_replay(self):
+        fanout = self.fanout()
+        owner = self.OWNERS[0]
+        wrong_sender = self.report(owner, 100, "task.completed")
+        wrong_sender["from"] = "unconfigured-owner"
+        wrong_receiver = self.report(owner, 101, "task.completed")
+        wrong_receiver["to"] = "unconfigured-coordinator"
+        wrong_assignment = self.report(owner, 102, "task.completed", assignment_id="other-job")
+        wrong_assignment["reply_to"] = self.config["profiles"][0]["assignment"]["id"]
+        wrong_request = self.report(owner, 103, "task.completed", request_id="other-request")
+        wrong_request["reply_to"] = self.config["profiles"][0]["assignment"]["id"]
+        fanout.ingest([wrong_sender, wrong_receiver, wrong_assignment, wrong_request], self.now)
+        self.assertTrue(all(row["status"] == "unknown" for row in fanout.rows(self.now)))
+        start = self.report(owner, 104, "task.start")
+        fanout.ingest([start], self.now)
+        fanout.ingest([copy.deepcopy(start)], self.now)
+        self.assertEqual("working", self.row(fanout, owner)["status"])
+        changed = copy.deepcopy(start)
+        changed["type"] = "task.completed"
+        with self.assertRaises(ValueError):
+            fanout.ingest([changed], self.now)
+        conflicting_assignment = copy.deepcopy(self.config["profiles"][0]["assignment"])
+        conflicting_assignment["id"] = 200
+        conflicting_assignment["body"]["request_id"] = "conflicting-request"
+        with self.assertRaises(ValueError):
+            fanout.ingest([self.report(self.OWNERS[1], 201, "task.start"),
+                           conflicting_assignment], self.now)
+        self.assertEqual("unknown", self.row(fanout, self.OWNERS[1])["status"])
+        self.assertEqual(0, self.link.sends)
+
+    def test_owner_two_cannot_ack_owner_one_and_all_fields_are_correlated(self):
+        fanout = self.fanout()
+        fanout.ingest([self.report(owner, 100 + i, "task.completed")
+                       for i, owner in enumerate(self.OWNERS[:2])], self.now)
+        fanout.queue(self.now)
+        fanout.notify(self.now)
+        notices = {message["body"]["owner"]: message for message in self.notices()}
+        first, second = (notices[owner] for owner in self.OWNERS[:2])
+        key, mid = first["body"]["event_key"], first["id"]
+        fields = ("profile_id", "provider", "owner", "assignment_id",
+                  "task_id", "session_id", "turn_id", "source")
+        correct = {field: first["body"][field] for field in fields}
+        correct.update(event_key=key, notification_id=mid, decision="received")
+        foreign = {field: second["body"][field] for field in fields}
+        foreign.update(event_key=key, notification_id=mid, decision="received")
+        self.link.append(c.COORDINATOR, c.SENDER, "worker.status.ack", foreign)
+        self.assertIsNone(fanout.acks(key)["semantic_ack"])
+        for field in fields:
+            with self.subTest(field=field):
+                wrong = dict(correct, **{field: "wrong-" + field})
+                self.link.append(c.COORDINATOR, c.SENDER, "worker.status.ack", wrong)
+                self.assertIsNone(fanout.acks(key)["semantic_ack"])
+        for field in fields:
+            if correct[field] is None:
+                with self.subTest(missing_null_field=field):
+                    omitted = dict(correct)
+                    del omitted[field]
+                    self.link.append(c.COORDINATOR, c.SENDER, "worker.status.ack", omitted)
+                    self.assertIsNone(fanout.acks(key)["semantic_ack"])
+        self.link.append(c.COORDINATOR, c.SENDER, "ack", {"id": mid})
+        self.assertIsNone(fanout.acks(key)["semantic_ack"])
+        self.link.append(c.COORDINATOR, c.SENDER, "worker.status.ack", correct)
+        self.assertIsNotNone(fanout.acks(key)["semantic_ack"])
+        self.assertTrue(all(row["may_assign"] is False for row in fanout.rows(self.now)))
+
+    def test_restart_deduplicates_each_owner_notice(self):
+        fanout = self.fanout()
+        reports = [self.report(owner, 100 + i, "task.completed")
+                   for i, owner in enumerate(self.OWNERS[:2])]
+        fanout.ingest(reports, self.now)
+        keys = fanout.queue(self.now)
+        fanout.notify(self.now)
+        restarted = self.fanout()
+        restarted.ingest(reports, self.now)
+        self.assertEqual(keys, restarted.queue(self.now))
+        results = restarted.notify(self.now)
+        self.assertTrue(results)
+        self.assertTrue(all(result.get("duplicate") for result in results))
+        self.assertEqual(2, self.link.sends)
+
+    def test_profile_and_global_notification_opt_ins_are_both_required(self):
+        config = copy.deepcopy(self.config)
+        for profile in config["profiles"]:
+            profile["notify"] = False
+        disabled = self.fanout(config, name="profile-disabled")
+        disabled.ingest([self.report(self.OWNERS[0], 100, "task.blocked")], self.now)
+        disabled.queue(self.now)
+        disabled.notify(self.now)
+        offline = self.fanout(name="no-notifier", notifier=False)
+        offline.ingest([self.report(self.OWNERS[0], 100, "task.blocked")], self.now)
+        offline.queue(self.now)
+        offline.notify(self.now)
+        self.assertEqual(0, self.link.sends)
+        for fanout in (disabled, offline):
+            for key in fanout.state["queued"]:
+                self.assertTrue(all(child.observer.get("intents", key) is None
+                                    for child in fanout.profiles.values()))
+
+    def test_prose_and_stale_reports_remain_unknown(self):
+        fanout = self.fanout()
+        a, b = self.OWNERS[:2]
+        fanout.ingest([self.report(a, 100, "checkin", text="Done, ready for more work"),
+                       self.report(b, 101, "task.start")], self.now)
+        self.assertEqual("unknown", self.row(fanout, a)["status"])
+        self.assertEqual("working", self.row(fanout, b)["status"])
+        late = self.at(91)
+        row = self.row(fanout, b, late)
+        self.assertEqual("unknown", row["status"])
+        self.assertEqual("stale", row["freshness"])
+        self.assertFalse(row["may_assign"])
+
+    def test_newer_supported_tool_turn_holds_previous_completion_notice(self):
+        config = copy.deepcopy(self.config)
+        path = self.tool()
+        owner = self.OWNERS[0]
+        config["profiles"][0]["codex"] = {"task_id": TASK, "snapshot": str(path)}
+        fanout = self.fanout(config)
+        fanout.ingest([], self.now)
+        fanout.codex(owner, now=self.now)
+        keys = fanout.queue(self.now)
+        completed = [key for key in keys if self.body(fanout, key)["source"] == self.TOOL_REPORT]
+        self.assertEqual(1, len(completed))
+        later = self.at(1)
+        self.tool(status="inProgress", state="active", turn="turn-2", observed=later)
+        fanout.codex(owner, now=later)
+        self.assertEqual("working", self.row(fanout, owner, later, self.TOOL_REPORT)["status"])
+        fanout.notify(later)
+        self.assertFalse(any(message["body"]["event_key"] in completed for message in self.notices()))
+
+    def test_stale_owner_completion_is_not_sent_from_old_queue(self):
+        fanout = self.fanout()
+        owner = self.OWNERS[0]
+        fanout.ingest([self.report(owner, 100, "task.completed")], self.now)
+        keys = fanout.queue(self.now)
+        self.assertEqual(1, len(keys))
+        fanout.notify(self.at(91))
+        self.assertFalse(any(message["body"]["event_key"] == keys[0] for message in self.notices()))
+        self.assertEqual("unknown", self.row(fanout, owner, self.at(91))["status"])
+
+    def test_new_assignment_holds_queued_previous_owner_completion(self):
+        config = copy.deepcopy(self.config)
+        owner = self.OWNERS[0]
+        config["profiles"][0]["codex"] = {"task_id": TASK, "snapshot": str(self.tool())}
+        fanout = self.fanout(config)
+        fanout.ingest([self.report(owner, 100, "task.completed")], self.now)
+        fanout.codex(owner, now=self.now)
+        keys = fanout.queue(self.now)
+        self.assertTrue(any(self.body(fanout, key)["source"] == self.TOOL_REPORT for key in keys))
+        assignment = copy.deepcopy(config["profiles"][0]["assignment"])
+        assignment["id"], assignment["body"]["assignment_id"] = 200, "new-job"
+        fanout.ingest([assignment], self.now)
+        self.assertEqual("newer-assignment", self.row(fanout, owner)["reason"])
+        with patch.object(c, "snapshot", side_effect=AssertionError("superseded source must not be read")):
+            self.assertFalse(fanout.codex(owner, now=self.now))
+        self.assertFalse(any(row["source"] == self.TOOL_REPORT and row["status"] == "finished"
+                             for row in fanout.rows(self.now)))
+        fanout.notify(self.now)
+        self.assertFalse(any(message["body"]["event_key"] in keys for message in self.notices()))
+
+    def test_uncertain_delivery_is_recovered_after_restart_without_resend(self):
+        fanout = self.fanout()
+        fanout.ingest([self.report(self.OWNERS[0], 100, "task.completed")], self.now)
+        fanout.queue(self.now)
+        self.link.lose_response = True
+        first = fanout.notify(self.now)
+        self.assertEqual("uncertain", first[0]["delivery"])
+        restarted = self.fanout()
+        recovered = restarted.notify(self.now)
+        self.assertTrue(recovered[0]["recovered"])
+        self.assertEqual(1, self.link.sends)
+
+    def test_unmatched_uncertain_intent_is_only_reconciled_even_when_stale(self):
+        fanout = self.fanout()
+        owner = self.OWNERS[0]
+        fanout.ingest([self.report(owner, 100, "task.completed")], self.now)
+        key = fanout.queue(self.now)[0]
+        body = self.body(fanout, key)
+        fanout.profiles[owner].observer.record(
+            "intents", key, {"event_key": key, "after": 0, "body": body,
+                            "kind": "worker.status.actionable"})
+        results = fanout.notify(self.at(91))
+        self.assertEqual("uncertain", results[0]["delivery"])
+        self.assertFalse(results[0]["automatic_retry"])
+        self.assertEqual(0, self.link.sends)
+
+    def test_invalid_profile_sets_and_changed_config_fail_closed(self):
+        cases = []
+        empty = copy.deepcopy(self.config)
+        empty["profiles"] = []
+        cases.append(empty)
+        too_many = copy.deepcopy(self.config)
+        too_many["profiles"] = [self.profile("worker-%d" % i, i) for i in range(33)]
+        cases.append(too_many)
+        duplicate = copy.deepcopy(self.config)
+        duplicate["profiles"][1]["owner"] = duplicate["profiles"][0]["owner"]
+        duplicate["profiles"][1]["assignment"]["to"] = duplicate["profiles"][0]["owner"]
+        cases.append(duplicate)
+        wrong_route = copy.deepcopy(self.config)
+        wrong_route["profiles"][0]["assignment"]["to"] = "another-owner"
+        cases.append(wrong_route)
+        for flag in ("notify", "follow_assignments"):
+            malformed = copy.deepcopy(self.config)
+            malformed["profiles"][0][flag] = "false"
+            cases.append(malformed)
+            missing = copy.deepcopy(self.config)
+            del missing["profiles"][0][flag]
+            cases.append(missing)
+        for index, config in enumerate(cases):
+            with self.subTest(case=index), self.assertRaises(ValueError):
+                self.fanout(config, name="invalid-%d" % index)
+        maximum = copy.deepcopy(too_many)
+        maximum["profiles"] = maximum["profiles"][:32]
+        self.assertEqual(32, len(self.fanout(maximum, name="max32").profiles))
+        self.fanout(name="pinned")
+        changed = copy.deepcopy(self.config)
+        changed["profiles"][0]["start_deadline"] = self.at(120)
+        with self.assertRaises(ValueError):
+            self.fanout(changed, name="pinned")
+        self.assertEqual(3, len(self.fanout(name="pinned").profiles))
+        self.assertEqual(0, self.link.sends)
+
+    def test_supported_tool_requires_explicit_task_and_exact_snapshot_binding(self):
+        owner = self.OWNERS[0]
+        path = self.tool()
+        unbound = self.fanout(name="unbound")
+        with self.assertRaises(ValueError):
+            unbound.codex(owner, path, self.now)
+        config = copy.deepcopy(self.config)
+        config["profiles"][0]["codex"] = {"task_id": TASK, "snapshot": str(path)}
+        fanout = self.fanout(config, name="bound")
+        fanout.ingest([], self.now)
+        self.assertTrue(fanout.codex(owner, now=self.now))
+        report = self.row(fanout, owner)
+        tool = self.row(fanout, owner, source=self.TOOL_REPORT)
+        self.assertEqual("unknown", report["status"])
+        self.assertEqual("owner-self-report", report["outcome_authority"])
+        self.assertEqual("shared-job", report["task_id"])
+        self.assertEqual(TASK, tool["task_id"])
+        self.assertEqual("supported-tool-observation", tool["outcome_authority"])
+        self.assertFalse(tool["may_assign"])
+        alternate = self.tool(name="unconfigured-snapshot.json")
+        with self.assertRaises(ValueError):
+            fanout.codex(owner, alternate, self.now)
+        self.tool(task="unconfigured-task")
+        with self.assertRaises(ValueError):
+            fanout.codex(owner, now=self.now)
+
+    def test_follow_assignment_is_limited_to_its_configured_owner(self):
+        config = copy.deepcopy(self.config)
+        config["profiles"][0]["follow_assignments"] = True
+        config["profiles"][0]["codex"] = {"task_id": TASK, "snapshot": str(self.tool())}
+        fanout = self.fanout(config)
+        a, b = self.OWNERS[:2]
+        fanout.ingest([self.report(a, 100, "task.completed"),
+                       self.report(b, 101, "task.completed")], self.now)
+        fanout.codex(a, now=self.now)
+        self.assertEqual("finished", self.row(fanout, a, source=self.TOOL_REPORT)["status"])
+        previous = fanout.queue(self.now)
+        assignment = copy.deepcopy(config["profiles"][0]["assignment"])
+        assignment["id"], assignment["body"]["assignment_id"] = 200, "next-job"
+        fanout.ingest([assignment, self.report(a, 201, "task.blocked",
+                                              assignment_id="next-job")], self.now)
+        self.assertEqual("next-job", self.row(fanout, a)["assignment_id"])
+        self.assertEqual("blocked", self.row(fanout, a)["status"])
+        self.assertEqual("shared-job", self.row(fanout, b)["assignment_id"])
+        self.assertEqual("finished", self.row(fanout, b)["status"])
+        with patch.object(c, "snapshot", side_effect=AssertionError("superseded source must not be read")):
+            self.assertFalse(fanout.codex(a, now=self.now))
+        self.assertFalse(any(row["owner"] == a and row["source"] == self.TOOL_REPORT
+                             and row["status"] == "finished" for row in fanout.rows(self.now)))
+        fanout.queue(self.now)
+        fanout.notify(self.now)
+        self.assertFalse(any(message["body"]["owner"] == a
+                             and message["body"]["event_key"] in previous for message in self.notices()))
+        self.assertTrue(all(message["to"] == c.COORDINATOR for message in self.notices()))
+        self.assertTrue(all(row["may_assign"] is False for row in fanout.rows(self.now)))
+
+    def test_legacy_assignment_cli_remains_supported_without_profiles(self):
+        assignment = self.root / "assignment.json"
+        assignment.write_text(json.dumps(self.config["profiles"][0]["assignment"]), encoding="utf-8")
+        snapshot = self.root / "hub.json"
+        snapshot.write_text(json.dumps({
+            "observed_at_utc": self.now,
+            "messages": [self.report(self.OWNERS[0], 100, "task.start")],
+        }), encoding="utf-8")
+        args = ["--state", str(self.root / "legacy"), "--assignment", str(assignment),
+                "--start-deadline", self.at(60), "--snapshot", str(snapshot)]
+        external = os.environ.get("DAEDALUS_CHECKINS_SOURCE")
+        if external:
+            args.extend(["--checkins-module", external])
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with redirect_stdout(stdout), redirect_stderr(stderr):
+            result = w.main(args)
+        self.assertEqual(0, result, stderr.getvalue())
+        self.assertEqual("working", json.loads(stdout.getvalue())["rows"][0]["status"])
+        self.assertEqual(0, self.link.sends)
+
+
 if __name__ == "__main__":
     unittest.main()
