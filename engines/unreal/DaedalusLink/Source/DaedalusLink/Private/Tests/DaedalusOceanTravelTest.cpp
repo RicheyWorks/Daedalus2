@@ -1,10 +1,90 @@
 #include "DaedalusOceanTravelComponent.h"
+#include "DaedalusRealmSessionCore.h"
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/BoxComponent.h"
 #include "Camera/CameraTypes.h"
+
+// Source-authored regression only: this package has not compiled or run it.
+// Uses the existing session policy as the departure authority; no host/loader
+// activation, realm aliases in Session, or client-supplied departure is added.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanCanonicalDepartureTest,
+    "Daedalus.Ocean.CanonicalDeparturePolicy",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanCanonicalDepartureTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    using namespace DaedalusOceanTravel;
+    const Dock Portal{"portal","PORTAL","portal_shore",false};
+    const Dock WorldZero{"wz","WORLD-ZERO","wz_shore",false};
+    const Dock Sea{"sea","OCEAN","sea_pier",false};
+    const Dock SeaSub{"sea-sub","OCEAN","sea_airlock",true};
+    const Dock Gallery{"gallery","GALLERY-CITY","gallery_airlock",true};
+    const Dock GalleryShore{"gallery-shore","GALLERY-CITY","gallery_shore",false};
+    const Dock LegacyHome{"legacy-home","Portal Realm","legacy_shore",false};
+    const Dock LegacySea{"legacy-sea","Ocean Realm","legacy_pier",false};
+    TestTrue(TEXT("Canonical Ocean recognised"),IsOceanRealm("OCEAN"));
+    TestTrue(TEXT("Legacy Ocean recognised"),IsOceanRealm("Ocean Realm"));
+    TestTrue(TEXT("Canonical Portal recognised"),IsPortalRealm("PORTAL"));
+    TestTrue(TEXT("Legacy Portal recognised"),IsPortalRealm("Portal Realm"));
+    TestFalse(TEXT("No guessed lowercase Ocean alias"),IsOceanRealm("ocean"));
+    TestTrue(TEXT("Legacy boarding remains compatible"),Board("Portal Realm",LegacyHome,LegacySea,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Legacy default shore remains Portal only"),Land("Ocean Realm",LegacyHome,Vessel::Boat).Allowed);
+    TestFalse(TEXT("Legacy default does not authorize World Zero"),Land("Ocean Realm",WorldZero,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Canonical Portal boarding"),Board("PORTAL",Portal,Sea,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Canonical World Zero boarding"),Board("WORLD-ZERO",WorldZero,Sea,Vessel::Boat).DestinationRealm=="OCEAN");
+    TestFalse(TEXT("Boat cannot board underwater arrival"),Board("WORLD-ZERO",WorldZero,SeaSub,Vessel::Boat).Allowed);
+    TestTrue(TEXT("Submarine can board underwater arrival"),Board("WORLD-ZERO",WorldZero,SeaSub,Vessel::Submarine).Allowed);
+
+    DockRegistry Registry;
+    const std::vector<std::string> Realms{"WORLD-ZERO","PORTAL","OCEAN","GALLERY-CITY"};
+    const std::vector<Dock> Docks{WorldZero,Portal,Sea,SeaSub,Gallery,GalleryShore};
+    const std::vector<DockConnection> Connections{
+        {"wz","sea",true,true},{"portal","sea",true,true},
+        {"sea","wz",true,true},{"sea","portal",true,true},
+        {"sea","gallery-shore",true,true},{"sea-sub","gallery",false,true}};
+    TestTrue(TEXT("Trusted registry can declare potential canonical shore edges"),Registry.Configure(Realms,Docks,Connections));
+
+    daedalus::session::Session Session;
+    const auto Enter=Session.Go("OCEAN",daedalus::session::Via::Dock,"boat:wz");
+    TestTrue(TEXT("Existing session accepts World Zero boat departure"),Enter.Ok);
+    Session.Apply(Enter);
+    TestTrue(TEXT("Existing session owns the remembered departure"),Session.SailedFrom()=="WORLD-ZERO");
+    const auto Home=Registry.Resolve(Session.Current(),"sea","wz",Vessel::Boat,Session.SailedFrom());
+    TestTrue(TEXT("World Zero shore return matches authoritative session departure"),Home.Allowed && Home.DestinationRealm=="WORLD-ZERO" && Home.ArrivalAnchor=="wz_shore");
+    TestFalse(TEXT("Configured Portal shore still refused for World Zero passenger"),Registry.Resolve(Session.Current(),"sea","portal",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Configured unrelated shore refused"),Registry.Resolve(Session.Current(),"sea","gallery-shore",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Missing remembered departure fails closed"),Registry.Resolve("OCEAN","sea","wz",Vessel::Boat,"").Allowed);
+    TestFalse(TEXT("Ocean cannot be a remembered shore realm"),Land("OCEAN",WorldZero,Vessel::Boat,"OCEAN").Allowed);
+    TestFalse(TEXT("Unknown destination has no configured route"),Registry.Resolve("OCEAN","sea","unknown",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Wrong current realm cannot use ocean departure"),Registry.Resolve("WORLD-ZERO","sea","wz",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Boat cannot use an underwater dock edge"),Registry.Resolve("OCEAN","sea-sub","gallery",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestTrue(TEXT("Submarine underwater link remains independent of shore return"),Registry.Resolve("OCEAN","sea-sub","gallery",Vessel::Submarine,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Invalid vessel enum refused"),Registry.Resolve("OCEAN","sea","wz",static_cast<Vessel>(99),Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Malformed remembered departure refused"),Land("OCEAN",WorldZero,Vessel::Boat,"WORLD-ZERO\n").Allowed);
+    TestTrue(TEXT("Legacy Portal departure identity matches canonical shore"),Land("OCEAN",Portal,Vessel::Boat,"Portal Realm").Allowed);
+
+    auto DuplicateDocks=Docks;
+    DuplicateDocks.push_back(WorldZero);
+    TestFalse(TEXT("Duplicate dock reload rejected"),Registry.Configure(Realms,DuplicateDocks,Connections));
+    auto DuplicateConnections=Connections;
+    DuplicateConnections.push_back(Connections.front());
+    TestFalse(TEXT("Duplicate edge reload rejected"),Registry.Configure(Realms,Docks,DuplicateConnections));
+    TestFalse(TEXT("Unknown dock edge rejected"),Registry.Configure(Realms,Docks,{{"wz","unknown",true,false}}));
+    TestFalse(TEXT("Unknown dock realm rejected"),Registry.Configure({"WORLD-ZERO","OCEAN"},Docks,Connections));
+    TestFalse(TEXT("Alias duplicate realm registration rejected"),Registry.Configure({"WORLD-ZERO","PORTAL","Portal Realm","OCEAN","GALLERY-CITY"},Docks,Connections));
+    TestFalse(TEXT("Boat/underwater configuration rejected"),Registry.Configure(Realms,Docks,{{"wz","sea-sub",true,false}}));
+    TestTrue(TEXT("Failed reloads preserve last accepted World Zero route"),Registry.Resolve("OCEAN","sea","wz",Vessel::Boat,Session.SailedFrom()).Allowed);
+    TestFalse(TEXT("Session itself refuses wrong shore"),Session.Go("PORTAL",daedalus::session::Via::Shore).Ok);
+    const auto Return=Session.Go(Home.DestinationRealm,daedalus::session::Via::Shore);
+    TestTrue(TEXT("Accepted core destination fits existing session shore contract"),Return.Ok);
+    Session.Apply(Return);
+    TestTrue(TEXT("Returned session clears its remembered departure"),Session.Current()=="WORLD-ZERO" && Session.SailedFrom().empty());
+    return true;
+}
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanEligibilityTest,
     "Daedalus.Ocean.HostEligibility",
@@ -87,6 +167,31 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Vessel->SetActorLocation(FVector(501,0,0));
     TestFalse(TEXT("Remote vessel cannot disembark"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     Vessel->SetActorLocation(FVector::ZeroVector);
+    bool bExitCallbackAttempted=false;
+    bool bNestedExitAccepted=true;
+    bool bExitReloadAccepted=true;
+    bool bExitBoardAccepted=true;
+    const FDelegateHandle ExitObserver=Player->GetOnNewPawnNotifier().AddLambda([&](APawn* NewPawn) {
+        if (NewPawn!=Avatar || bExitCallbackAttempted) return;
+        bExitCallbackAttempted=true;
+        // Restore vessel possession so nested exit passes the ordinary ownership
+        // checks. Without the transition guard it removes the outer map record.
+        Player->Possess(Vessel);
+        bNestedExitAccepted=Component->DisembarkAtDock(Player,Vessel,Home.Id);
+        bExitReloadAccepted=Component->ConfigureHost(Realms,{Home,Sea},{Connection});
+        bExitBoardAccepted=Component->BoardAtDock(Player,OtherVessel,Home.Id);
+    });
+    const bool bInterruptedExit=Component->DisembarkAtDock(Player,Vessel,Home.Id);
+    Player->GetOnNewPawnNotifier().Remove(ExitObserver);
+    TestTrue(TEXT("Exit notifier actually exercised reentry"),bExitCallbackAttempted);
+    TestFalse(TEXT("Interrupted possession reports failed exit"),bInterruptedExit);
+    TestFalse(TEXT("Nested exit cannot remove the pending record"),bNestedExitAccepted);
+    TestFalse(TEXT("Exit callback cannot reload docks"),bExitReloadAccepted);
+    TestFalse(TEXT("Exit callback cannot start boarding"),bExitBoardAccepted);
+    TestTrue(TEXT("Failed exit retains vessel and hidden nonblocking avatar"),
+        Player->GetPawn()==Vessel && Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
+    // A successful retry proves the original record survived the failed exit;
+    // the observer has been removed before retry and world teardown.
     TestTrue(TEXT("Dock restores original avatar"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
     TestTrue(TEXT("Avatar visibility and collision restored"),!Avatar->IsHidden() && Avatar->GetActorEnableCollision());
@@ -127,6 +232,131 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Vessel->CalcCamera(.016f,View);
     TestTrue(TEXT("Chase camera provides a view behind hull"),View.Location.X<Vessel->GetActorLocation().X-100);
     TestTrue(TEXT("Chase camera provides an elevated view"),View.Location.Z>Vessel->GetActorLocation().Z+100);
+    World->DestroyWorld(false);
+    return true;
+}
+// Authored only: UObject/world/possession behavior needs the native lane later.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanHostDepartureBindingTest,
+    "Daedalus.Ocean.HostDepartureBinding",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanHostDepartureBindingTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    UWorld* World=UWorld::CreateWorld(EWorldType::Game,false);
+    if (!TestNotNull(TEXT("Host binding world"),World)) return false;
+    World->InitializeActorsForPlay(FURL());
+    AActor* Host=World->SpawnActor<AActor>();
+    auto* Component=NewObject<UDaedalusOceanTravelComponent>(Host);
+    Host->AddInstanceComponent(Component);
+    Component->RegisterComponent();
+    auto* Player=World->SpawnActor<APlayerController>();
+    auto* OtherPlayer=World->SpawnActor<APlayerController>();
+    auto* Avatar=World->SpawnActor<APawn>();
+    auto* Vessel=World->SpawnActor<ADaedalusOceanVessel>();
+    auto* OtherVessel=World->SpawnActor<ADaedalusOceanVessel>();
+    FDaedalusOceanDock Home;
+    Home.Id=TEXT("wz");Home.Realm=TEXT("WORLD-ZERO");Home.ArrivalAnchor=TEXT("wz_shore");
+    Home.ExitLocation=FVector(0,200,0);Home.BoardingRadiusCm=500;
+    auto Sea=Home;Sea.Id=TEXT("sea");Sea.Realm=TEXT("OCEAN");Sea.ArrivalAnchor=TEXT("sea_pier");
+    auto Portal=Home;Portal.Id=TEXT("portal");Portal.Realm=TEXT("PORTAL");Portal.ArrivalAnchor=TEXT("portal_shore");
+    FDaedalusOceanConnection Out;
+    Out.DepartureId=Home.Id;Out.DestinationId=Sea.Id;Out.bBoats=true;Out.bSubmarines=true;
+    auto Back=Out;Back.DepartureId=Sea.Id;Back.DestinationId=Home.Id;
+    auto Wrong=Back;Wrong.DestinationId=Portal.Id;
+    const TArray<FString> Realms{Home.Realm,Sea.Realm,Portal.Realm};
+    TestTrue(TEXT("Canonical host routes configured"),Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong}));
+    Player->Possess(Avatar);
+    Vessel->CurrentRealm=Home.Realm;
+    Vessel->SetActorLocation(FVector::ZeroVector);
+    Avatar->SetActorLocation(FVector::ZeroVector);
+    bool bReloadAttempted=false;
+    bool bReloadAccepted=true;
+    bool bNestedBoardAccepted=true;
+    OtherVessel->CurrentRealm=Home.Realm;
+    OtherVessel->SetActorLocation(FVector::ZeroVector);
+    const FDelegateHandle PossessionObserver=Player->GetOnNewPawnNotifier().AddLambda([&](APawn* NewPawn) {
+        if (NewPawn!=Vessel) return;
+        bReloadAttempted=true;
+        // Even an identical reload replaces ActiveDocks storage. It must fail
+        // while Possess is between validating the dock and publishing the record.
+        bReloadAccepted=Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong});
+        bNestedBoardAccepted=Component->BoardAtDock(Player,OtherVessel,Home.Id);
+    });
+    const bool bBoardAccepted=Component->BoardAtDock(Player,Vessel,Home.Id);
+    Player->GetOnNewPawnNotifier().Remove(PossessionObserver);
+    TestTrue(TEXT("Host accepts boarding before origin is recorded"),bBoardAccepted);
+    TestTrue(TEXT("Possession callback actually attempted a reload"),bReloadAttempted);
+    TestFalse(TEXT("Configuration cannot change across the possession callback"),bReloadAccepted);
+    TestFalse(TEXT("Nested boarding cannot replace the pending boarding"),bNestedBoardAccepted);
+    TestFalse(TEXT("Cannot reconfigure an active boarding session"),Component->ConfigureHost(Realms,{Home,Sea,Portal},{Out,Back,Wrong}));
+    FString Realm,Anchor;
+    TestTrue(TEXT("Outbound eligibility is reachable through component"),Component->ResolveForPlayer(Player,Vessel,Home.Id,Sea.Id,Realm,Anchor));
+    daedalus::session::Session Session;
+    const auto Enter=Session.Go(TCHAR_TO_UTF8(*Realm),daedalus::session::Via::Dock,"boat:wz");
+    TestTrue(TEXT("Existing session accepts the host eligible destination"),Enter.Ok);
+    Session.Apply(Enter);
+    // Simulate the owning host applying the accepted session result, not a
+    // client's requested realm. Global Hero/session transition code is untouched.
+    Vessel->CurrentRealm=UTF8_TO_TCHAR(Session.Current().c_str());
+    TestTrue(TEXT("Component supplies its accepted World Zero origin"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    TestTrue(TEXT("Component returns canonical matching shore"),Realm==Home.Realm && Anchor==Home.ArrivalAnchor);
+    TestFalse(TEXT("Component refuses a configured wrong Portal shore"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Portal.Id,Realm,Anchor));
+    TestTrue(TEXT("Wrong shore clears route outputs"),Realm.IsEmpty() && Anchor.IsEmpty());
+    OtherVessel->CurrentRealm=Sea.Realm;
+    OtherVessel->SetActorLocation(FVector::ZeroVector);
+    Player->Possess(OtherVessel);
+    TestFalse(TEXT("Different vessel cannot borrow accepted origin"),Component->ResolveForPlayer(Player,OtherVessel,Sea.Id,Home.Id,Realm,Anchor));
+    TestFalse(TEXT("No origin does not fall back to Portal"),Component->ResolveForPlayer(Player,OtherVessel,Sea.Id,Portal.Id,Realm,Anchor));
+    Player->Possess(Vessel);
+    OtherPlayer->Possess(Avatar);
+    TestFalse(TEXT("Repossessed original avatar makes departure stale"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    OtherPlayer->UnPossess();
+    Avatar->Destroy();
+    TestFalse(TEXT("Destroyed original avatar cannot authorize shore"),Component->ResolveForPlayer(Player,Vessel,Sea.Id,Home.Id,Realm,Anchor));
+    World->DestroyWorld(false);
+    return true;
+}
+// Authored only: controller handoff requires the native automation lane.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanHelmHandoffTest,
+    "Daedalus.Ocean.HelmHandoff",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusOceanHelmHandoffTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    UWorld* World=UWorld::CreateWorld(EWorldType::Game,false);
+    if (!TestNotNull(TEXT("Helm handoff world"),World)) return false;
+    World->InitializeActorsForPlay(FURL());
+    auto* First=World->SpawnActor<APlayerController>();
+    auto* Second=World->SpawnActor<APlayerController>();
+    auto* Vessel=World->SpawnActor<ADaedalusOceanVessel>();
+    if (!First || !Second || !Vessel)
+    {
+        AddError(TEXT("Helm handoff actor spawn failed"));
+        World->DestroyWorld(false);
+        return false;
+    }
+    TestTrue(TEXT("Controllers have no local input sender"),
+        First->GetLocalPlayer()==nullptr && Second->GetLocalPlayer()==nullptr);
+    Vessel->VesselType=EDaedalusOceanVessel::Submarine;
+    Vessel->SetActorLocation(FVector(0,0,-1000));
+    Vessel->SetActorRotation(FRotator::ZeroRotator);
+    First->Possess(Vessel);
+    Vessel->SetHelmInput(0,1,-1);
+    // No tick or timeout can clear the old command between these operations.
+    First->UnPossess();
+    Second->Possess(Vessel);
+    TestTrue(TEXT("Second pilot accepted immediately"),Vessel->GetController()==Second);
+    const double BeforeDepth=Vessel->GetActorLocation().Z;
+    const double BeforeYaw=Vessel->GetActorRotation().Yaw;
+    Vessel->Tick(.1f);
+    TestEqual(TEXT("New pilot does not inherit old dive"),Vessel->GetActorLocation().Z,BeforeDepth);
+    TestEqual(TEXT("New pilot does not inherit old turn"),Vessel->GetActorRotation().Yaw,BeforeYaw);
+    Vessel->SetHelmInput(0,-1,1);
+    Vessel->Tick(.1f);
+    TestTrue(TEXT("Fresh second-pilot dive command works"),Vessel->GetActorLocation().Z>BeforeDepth);
+    TestTrue(TEXT("Fresh second-pilot turn command works"),Vessel->GetActorRotation().Yaw<BeforeYaw);
     World->DestroyWorld(false);
     return true;
 }

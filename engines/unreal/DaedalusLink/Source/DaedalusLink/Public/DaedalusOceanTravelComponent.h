@@ -132,12 +132,17 @@ public:
 private:
     DaedalusOceanTravel::DockRegistry Registry;
     UPROPERTY() TArray<FDaedalusOceanDock> ActiveDocks;
+    // Possession broadcasts callbacks before the boarding record is published.
+    bool bBoardingTransition = false;
     struct BoardingState
     {
         TWeakObjectPtr<APawn> Avatar;
         TWeakObjectPtr<ADaedalusOceanVessel> Vessel;
         bool bCollision = true;
         bool bHidden = false;
+        // Host-owned origin captured only after validated boarding/possession.
+        // Never copied from the requested destination or a client RPC field.
+        FString DepartureRealm;
     };
     TMap<TWeakObjectPtr<AController>, BoardingState> BoardingAvatars;
     bool IsHost() const;
