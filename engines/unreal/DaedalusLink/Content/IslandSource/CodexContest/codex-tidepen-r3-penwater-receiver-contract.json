@@ -1,0 +1,418 @@
+{
+  "schema": "daedalus.tidepen-r3-penwater-receiver.v1",
+  "stage": "SOURCE_QUALIFIED_NATIVE_NOT_ADMITTED",
+  "source_qualified": true,
+  "native_ready": false,
+  "scope": {
+    "roles": [
+      "PenWater"
+    ],
+    "native_execution_authorized": false,
+    "imported": false,
+    "saved": false,
+    "placed": false
+  },
+  "producer": {
+    "team": "TeamClaude / unreal-team",
+    "individual_author": null,
+    "release_hub_id": 32741,
+    "release_record_sha256": "24fc312a7e50ab06da18ff3cf8da59b6ceb5e3feea9d7b1e4c1d0756bbe8fb2e",
+    "layout_provenance": {
+      "recipe": "tools/blender/tidepen_shelf.py + kit_waterworks + voxel_creatures + voxel_aquatic + hd_island",
+      "git": "678db42fc",
+      "blender": "5.2.2 LTS",
+      "built_utc": "2026-10-16T01:51:34Z"
+    }
+  },
+  "source_pins": {
+    "TidePen_r3_PenWater.glb": {
+      "bytes": 2328,
+      "sha256": "e76ccbfa471a5da029794d95e1836244c39a2897224db345f46e8ce7c8661a75"
+    },
+    "TidePen_r3.layout.json": {
+      "bytes": 9756,
+      "sha256": "4facb66004a4a793a1f7e59e628b48dd3e338d8aa678918c8101c6d41f46a9c5"
+    },
+    "TidePen_r3.tides.json": {
+      "bytes": 5943,
+      "sha256": "a854a14ed417182586d3af1bb7fc563cc7341a348649740d7bbc46cc605e1656"
+    }
+  },
+  "raw_material": {
+    "alphaMode": "BLEND",
+    "doubleSided": true,
+    "name": "HD_PenWaterClear",
+    "pbrMetallicRoughness": {
+      "baseColorFactor": [
+        0.3199999928474426,
+        0.7200000286102295,
+        0.7400000095367432,
+        0.3199999928474426
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.05000000074505806
+    }
+  },
+  "raw_material_canonical_sha256": "487a79f43eb3aa11bfc6ffbbe9ad871efd7fd918f7e1a6b15f66e1e03b98a55a",
+  "semantic_material": {
+    "alphaMode": "BLEND",
+    "doubleSided": true,
+    "name": "HD_PenWaterClear",
+    "pbrMetallicRoughness": {
+      "baseColorFactor": [
+        0.3199999928474426,
+        0.7200000286102295,
+        0.7400000095367432,
+        0.3199999928474426
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.05000000074505806
+    },
+    "emissiveFactor": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "semantic_material_canonical_sha256": "5cf2a09c07cba6f4f6f61374cee45270287573fafdb95fbaf89c06a13667ce3b",
+  "semantic_default_expansion": {
+    "emissiveFactor": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "geometry": {
+    "decoded": {
+      "coordinate_system": "glTF Y-up metres; not native transform/pivot acceptance",
+      "scene_roots": [
+        0
+      ],
+      "nodes": [
+        {
+          "node_index": 0,
+          "name": "TidePen_r3_PenWater",
+          "mesh_name": "TidePen_r3_PenWater",
+          "classification": "render",
+          "authored_transform_fields": {
+            "translation": [
+              0,
+              -0.07999999821186066,
+              0
+            ]
+          },
+          "omitted_TRS_defaults": "translation0, quaternion identity, scale1 under glTF2 semantics",
+          "primitives": [
+            {
+              "material_index": 0,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1
+              },
+              "triangles_decoded_from_index_count": 40,
+              "position_count_decoded": 41,
+              "position_bounds_declared": {
+                "min": [
+                  -7.5,
+                  0,
+                  -5.5
+                ],
+                "max": [
+                  7.5,
+                  0,
+                  5.5
+                ]
+              },
+              "position_bounds_decoded_local": {
+                "min": [
+                  -7.5,
+                  0.0,
+                  -5.5
+                ],
+                "max": [
+                  7.5,
+                  0.0,
+                  5.5
+                ]
+              },
+              "position_bounds_decoded_node_world": {
+                "min": [
+                  -7.5,
+                  -0.07999999821186066,
+                  -5.5
+                ],
+                "max": [
+                  7.5,
+                  -0.07999999821186066,
+                  5.5
+                ]
+              },
+              "COLOR_0": null
+            }
+          ]
+        }
+      ],
+      "triangle_totals_decoded": {
+        "render_triangles": 40
+      },
+      "materials": [
+        {
+          "alphaMode": "BLEND",
+          "doubleSided": true,
+          "name": "HD_PenWaterClear",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.3199999928474426,
+              0.7200000286102295,
+              0.7400000095367432,
+              0.3199999928474426
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 0.05000000074505806
+          }
+        }
+      ],
+      "extensions_used": [],
+      "extensions_required": [],
+      "images": 0,
+      "textures": 0,
+      "pivots": "node origin/TRS retained; no native pivot, recenter or world assignment inferred"
+    },
+    "units": "glTF Y-up metres",
+    "conditional_native_conversion": "root-baked XZY * 100; verify readback",
+    "expected_native_bounds_cm": {
+      "min": [
+        -750.0,
+        -550.0,
+        -7.999999821186066
+      ],
+      "max": [
+        750.0,
+        550.0,
+        -7.999999821186066
+      ]
+    },
+    "zero_z_extent_intentional": true,
+    "render_triangles": 40,
+    "collision_primitives": 0,
+    "actor_scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tides": {
+    "offsets_metres": {
+      "low": -0.5,
+      "normal": 0.0,
+      "high": 0.6
+    },
+    "neutral_actor_examples": {
+      "low": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          -50.0
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": -57.999999821186066,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      },
+      "normal": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": -7.999999821186066,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      },
+      "high": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          60.0
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": 52.000000178813934,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      }
+    },
+    "logical_pivot_examples": {
+      "low": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          -57.999999821186066
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          7.999999821186066
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": -57.999999821186066,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      },
+      "normal": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          -7.999999821186066
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          7.999999821186066
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": -7.999999821186066,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      },
+      "high": {
+        "actor_translation_cm": [
+          0.0,
+          0.0,
+          52.000000178813934
+        ],
+        "mesh_relative_translation_cm": [
+          0.0,
+          0.0,
+          7.999999821186066
+        ],
+        "actor_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "surface_z_cm": 52.000000178813934,
+        "native_observed": false,
+        "world_anchor_assigned": false
+      }
+    },
+    "placement_status": "conditional arithmetic only; no native pivot/world assignment"
+  },
+  "native_plan": {
+    "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/TidePenR3PenWaterR1_e76ccbfa471a5da0",
+    "private_parent_package": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/TidePenR3PenWaterR1_e76ccbfa471a5da0/OwnedParents/M_Codex_TidePenR3_PenWater_RawAlpha_R1",
+    "backend": "existing AssetImportTask; actual Interchange receipt required",
+    "task": {
+      "replace_existing": false,
+      "save": false,
+      "options": null
+    },
+    "expected_imported_classes": [
+      "StaticMesh",
+      "MaterialInstanceConstant"
+    ],
+    "expected_imported_objects": 2,
+    "expected_private_parents": 1,
+    "expected_saved_packages": 3,
+    "actual_imported_object_paths": null,
+    "material_helper": {
+      "file": "daedalus_codex_canal_material.py",
+      "sha256": "75c6d1eecef4d2c42d47db0b3a52033024f8bc7ac67efa58aeff83ad00f62000",
+      "reuse": "private scope; build_parent, bind_instance, inspect only",
+      "adapter": "daedalus_codex_tidepen_penwater_policy.py",
+      "helper_metadata_hash_represents": "original raw exporter material",
+      "defaults_boundary": "only private _source validation expands omitted emission"
+    },
+    "mesh_options": {
+      "nanite": false,
+      "generate_lightmap_uvs": false,
+      "auto_generate_collision": false,
+      "simple_collision_count": 0
+    },
+    "required_before_first_save": [
+      "new native execution assignment; fresh ownership/resource/PIE/inflight/dirty checks",
+      "protect 184 accepted sources, 218 saved packages, 145 actors and map f77f83a2",
+      "pin source/helper bytes; exact fresh destination and retained intent/raw envelope",
+      "journal original backend return before unwrap; never replay an uncertain import",
+      "actual paths/classes inventory exactly one StaticMesh and one MIC",
+      "mesh slot0 binds that exact imported MIC; complete namespace has no unexpected outputs",
+      "40 triangles, local/root-baked bounds, scale1, flat Z and zero collision readbacks",
+      "private translucent two-sided raw linear RGBA/PBR parent; no gamma/vertex multiplier",
+      "full existing material graph/parameters/opacity/witness checks and new-object metadata",
+      "unchanged queue/deadline/preservation guards; all three objects verified before save",
+      "parent-first saves with true returns, independent readback and output/backup hashes"
+    ],
+    "receiver_execution": "not implemented or invoked by this file-only profile"
+  },
+  "limitations": [
+    "source/tide renders are Blender evidence only",
+    "no native import/save/placement/pivot/material visual acceptance",
+    "no canonical Ocean anchor, tide animation or care/gate gameplay acceptance",
+    "other TidePen roles and source/build adoption remain separate"
+  ]
+}
