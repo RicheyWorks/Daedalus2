@@ -86,8 +86,10 @@ def check(links, pen, out):
         if a and b:
             ok("connection %s -> %s: one end is the Ocean (session core: docks lead to the Ocean)" % (a["id"], b["id"]),
                (a["realm"] == "OCEAN") != (b["realm"] == "OCEAN"))
-            ok("connection %s -> %s: a vessel kind both ends take" % (a["id"], b["id"]),
-               (c["boats"] and "boat" in a["vessels"] and "boat" in b["vessels"]) or (c["submarines"] and "sub" in a["vessels"] and "sub" in b["vessels"]))
+            ok("connection %s -> %s: every enabled vessel kind is supported at both ends" % (a["id"], b["id"]),
+               (c["boats"] or c["submarines"])
+               and (not c["boats"] or ("boat" in a["vessels"] and "boat" in b["vessels"]))
+               and (not c["submarines"] or ("sub" in a["vessels"] and "sub" in b["vessels"])))
             if a["realm"] == "OCEAN" and b["realm"] != "OCEAN":
                 ok("connection %s -> %s: Ocean to a realm needs a sub and an underwater dock" % (a["id"], b["id"]),
                    c["submarines"] and not c["boats"] and R[b["realm"]]["has_sub_dock"])
@@ -117,10 +119,27 @@ def main(argv):
     links = json.load(open(P("data", "ocean", "links.json"), encoding="utf-8"))
     pen = json.load(open(P("data", "ocean", "tidepen.json"), encoding="utf-8"))
     if "--self-test" in argv:
+        baseline_out = []
+        baseline = check(links, pen, baseline_out)
+        baseline_ok = all(baseline)
+        print("LINKS-BASELINE %d/%d %s" % (sum(baseline), len(baseline), "PASS" if baseline_ok else "FAIL"))
+        if not baseline_ok:
+            print("\n".join(baseline_out))
+            return 1
         canaries = []
         L = copy.deepcopy(links); L["docks"][0]["realm"] = "LABYRINTH"; canaries.append(("dock from a realm with no docks", L, pen))
         L = copy.deepcopy(links); L["docks"][1]["anchor"]["xyz"] = [0, 1, 9]; canaries.append(("berth drifted from OceanTerrain", L, pen))
         L = copy.deepcopy(links); L["connections"].append({"departure": "ocean-pier-boat", "destination": "wz-rim-tidepen", "boats": True, "submarines": False}); canaries.append(("boat from the Ocean into a realm", L, pen))
+        L = copy.deepcopy(links); L["connections"][0]["submarines"] = True
+        canaries.append(("boat support cannot authorize an unsupported submarine", L, pen))
+        L = copy.deepcopy(links)
+        departure = next(d for d in L["docks"] if d["id"] == L["connections"][0]["departure"])
+        departure["vessels"].append("sub")
+        L["connections"][0]["destination"] = "ocean-pier-sub"
+        L["connections"][0]["submarines"] = True
+        canaries.append(("submarine support cannot authorize an unsupported boat", L, pen))
+        L = copy.deepcopy(links); L["connections"][0].update(boats=False, submarines=False)
+        canaries.append(("connection with neither vessel enabled", L, pen))
         Q = copy.deepcopy(pen); Q["residents"][0]["species"] = "griffin"; canaries.append(("resident not a sea species", links, Q))
         Q = copy.deepcopy(pen); Q["settled_care"]["requires"]["feedings_min"] = 1; canaries.append(("threshold drifted from TidePenGate", links, Q))
         n = 0
