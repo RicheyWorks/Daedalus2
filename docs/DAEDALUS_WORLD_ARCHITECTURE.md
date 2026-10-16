@@ -1413,3 +1413,39 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
 - **Proof:** `tools/rpg_demo/village_test.py` passes 17/17. It walks a BFS route up to each villager and checks each
   speaks their own line. It also checks the barrel and the chest each give their prize once, there are no battles
   inside, and the gate leads back to the world.
+
+### 14.41 The Prismheart demo: fishing in Windmere's pond
+
+- **The data (`data/rpg/prism-fish.json`, original species):**
+
+  | Fish | Rarity | Weight | Effect |
+  |---|---|---|---|
+  | Reedling | common | 40 | heal 20 HP |
+  | Pond Perch | common | 30 | heal 30 HP |
+  | Mudskipper Eel | uncommon | 15 | heal 45 HP |
+  | Glassfin Minnow | uncommon | 9 | restore 15 MP |
+  | Sunscale Carp | rare | 5 | heal 120 HP |
+  | Prismscale Koi | legendary | 1 | restore 40 MP |
+
+  - Each fish has a bite window from 0.9 s (Reedling) down to 0.35 s (Prismscale Koi).
+  - `build_demo.py` adds every fish to the gear table as an item, so it is eaten from ITEM like any tonic.
+  - The build refuses an effect, weight or window the demo cannot use, or a Windmere with no water.
+- **The game:**
+  - Face water in a village or town and press A to cast.
+  - After 1.2–3.6 s (game time) a fish picked by weight bites, and "!" shows over the float, which dips.
+  - A during the bite lands it into the bag and the fish log. "NEW!" shows the first time a kind is caught, and a
+    toast shows the log count and the fish's note.
+  - A before the bite scatters it; a bite you ignore gets away; B reels in at any point.
+  - The fish log is saved at the inn, CONTINUE restores it and NEW GAME empties it.
+  - The Windmere Sailor explains how to fish.
+- **Proof:** `tools/rpg_demo/fish_test.py` passes 15/15, 6 runs in a row. It checks:
+  - casting only at water;
+  - reeling in, striking too soon, and a bite that gets away;
+  - landing fish into the bag and log, with "NEW!" only once;
+  - the fish as an ITEM with its real numbers;
+  - bite odds over 20,000 draws (commons most, the koi rarest);
+  - saving and CONTINUE, and NEW GAME.
+- **Note:** the strike test runs at real speed. At the suite's 6× speed a 0.35 s bite lasts about 60 ms, which is
+  shorter than a test round trip.
+- **Flake found and fixed in the test, not the game:** `face("right")` on the bank can walk a step onto grass, so the
+  next "face left and cast" faced grass. The test now warps back to the bank before casting.

@@ -1,0 +1,13 @@
+{
+ "schema": "daedalus.rpg-fish/v1",
+ "realm": "prism",
+ "about": "What bites in Prismheart's fresh water (Windmere's pond). Original species. Each fish is also an item: eat it from ITEM for its effect. weight = how often it bites (relative); window_s = how long the bite lasts before it gets away, in game seconds.",
+ "fish": [
+  {"name": "Reedling", "rarity": "COMMON", "weight": 40, "window_s": 0.9, "effect": "heal 20 HP", "price": 6, "note": "a thin silver fish that lives in the reed beds"},
+  {"name": "Pond Perch", "rarity": "COMMON", "weight": 30, "window_s": 0.8, "effect": "heal 30 HP", "price": 10, "note": "striped green and gold, always hungry"},
+  {"name": "Mudskipper Eel", "rarity": "UNCOMMON", "weight": 15, "window_s": 0.6, "effect": "heal 45 HP", "price": 24, "note": "it wriggles back toward the bank"},
+  {"name": "Glassfin Minnow", "rarity": "UNCOMMON", "weight": 9, "window_s": 0.55, "effect": "restore 15 MP", "price": 30, "note": "fins clear as window glass; mages chew them"},
+  {"name": "Sunscale Carp", "rarity": "RARE", "weight": 5, "window_s": 0.45, "effect": "heal 120 HP", "price": 90, "note": "warm to the touch even at night"},
+  {"name": "Prismscale Koi", "rarity": "LEGENDARY", "weight": 1, "window_s": 0.35, "effect": "restore 40 MP", "price": 400, "note": "its scales split light like the Prism Heart"}
+ ]
+}

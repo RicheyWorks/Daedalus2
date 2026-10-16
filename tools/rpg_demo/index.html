@@ -360,7 +360,7 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {} };
 /* ---------- the airship (world map only) ----------
    The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
@@ -498,6 +498,7 @@ function interact() {
   if (t === "Chest" || t === "ChestOpen") return openChest(tx, ty);
   if (t === "BossGate") return bossGate();
   if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
+  if (t === "Water" && (map.kind === "village" || map.kind === "town") && (D.fish || []).length) return castLine(tx, ty);
   if (t === "Fountain") { roster().forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); clearAll(roster()); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
   if (t === "Bookcase") return say(["A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
   if (t === "Throne") return say(["AN EMPTY GOLD SEAT, STILL WARM."]);
@@ -699,6 +700,52 @@ function drawField() {
   if (parked && airship().y <= P.y) drawAirship(ox, oy);                                        /* draw back to front */
   if (!flying()) spr("sprites", "NPC_Guard", ox + P.fx, oy + P.fy, (DIR_ROW[P.dir] * 2 + pf) * 16, 16, 16);
   if (flying() || (parked && airship().y > P.y)) drawAirship(ox, oy);
+}
+
+/* ---------- fishing (data.json fish, from data/rpg/prism-fish.json) ----------
+   Face water (Windmere's pond) and press A to cast. Wait for the bite: "!" over the float. Press A while it shows
+   and the fish is yours; press too soon and the ripple scatters, too late and it gets away. Rarer fish bite less
+   often and let go faster. Every fish is an item (eat it from ITEM); the fish log counts each kind caught. */
+let fishing = null;
+function castLine(tx, ty) {
+  fishing = { x: tx, y: ty, phase: "wait", t: 0, wait: 1.2 + Math.random() * 2.4, fish: null, msg: "WAITING FOR A BITE...  A: STRIKE   B: REEL IN" };
+  mode = "fish"; sfx("SWING");
+}
+function pickFish() {
+  const all = D.fish || [], tot = all.reduce((a, f) => a + f.weight, 0);
+  let r = Math.random() * tot;
+  for (const f of all) { r -= f.weight; if (r < 0) return f; }
+  return all[all.length - 1];
+}
+function endFish() { fishing = null; mode = "field"; }
+function fishTick(dt) {
+  const f = fishing; f.t += dt;
+  if (f.phase === "wait") {
+    if (hit("b")) return endFish();
+    if (hit("a")) { f.phase = "done"; f.t = 0; f.msg = "TOO SOON. THE RIPPLE SCATTERS."; sfx("MISS"); return; }
+    if (f.t >= f.wait) { f.fish = pickFish(); f.phase = "bite"; f.t = 0; f.msg = "!"; sfx("CALL"); }
+  } else if (f.phase === "bite") {
+    if (hit("b")) return endFish();
+    if (hit("a")) {
+      const k = f.fish.name, first = !state.fish[k];
+      bag[k] = (bag[k] || 0) + 1; state.fish[k] = (state.fish[k] || 0) + 1;
+      f.phase = "done"; f.t = 0; f.caught = k; sfx("ITEM");
+      f.msg = (first ? "NEW! " : "") + "CAUGHT A " + k.toUpperCase() + " (" + f.fish.rarity + ").";
+      toast("Fish log " + Object.keys(state.fish).length + " / " + (D.fish || []).length, f.fish.note);
+    } else if (f.t > f.fish.window_s) { f.phase = "done"; f.t = 0; f.msg = "IT GOT AWAY."; sfx("MISS"); }
+  } else if (f.t > 0.3 && (hit("a") || hit("b"))) endFish();
+}
+function drawFish() {
+  drawField();
+  const f = fishing, gw = map.grid[0].length, gh = map.grid.length;
+  const cx = clamp(P.fx + 8 - W / 2, 0, Math.max(0, gw * T - W)), cy = clamp(P.fy + 8 - H / 2, 0, Math.max(0, gh * T - H));
+  const ox = gw * T < W ? (W - gw * T) / 2 : -cx, oy = gh * T < H ? (H - gh * T) / 2 : -cy;
+  const bx = Math.round(ox + f.x * T + 8), dip = f.phase === "bite" ? 3 : Math.round(Math.sin(f.t * 4) * 1);
+  const by = Math.round(oy + f.y * T + 8 + dip);
+  g.strokeStyle = "rgba(255,255,255,0.7)"; g.beginPath(); g.moveTo(Math.round(ox + P.fx + 8), Math.round(oy + P.fy + 4)); g.lineTo(bx, by - 2); g.stroke();
+  g.fillStyle = "#f04848"; g.fillRect(bx - 2, by - 3, 4, 3); g.fillStyle = "#ffffff"; g.fillRect(bx - 2, by, 4, 2);
+  if (f.phase === "bite") { g.strokeStyle = "rgba(255,255,255,0.6)"; g.beginPath(); g.ellipse(bx, by + 1, 6 + f.t * 10, 2 + f.t * 3, 0, 0, Math.PI * 2); g.stroke(); text("!", bx - 2, by - 16, "#fff070"); }
+  win(4, H - 30, W - 8, 26); text(f.msg, 14, H - 20, f.phase === "done" && f.caught ? "#fff070" : "#ffffff");
 }
 
 /* ---------- field menu ---------- */
@@ -1383,7 +1430,7 @@ function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) 
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
-      air: state.air && { x: state.air.x, y: state.air.y } }));
+      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish }));
     return true;
   } catch (e) { return false; }
 }
@@ -1398,11 +1445,12 @@ function titleChoose(i) {
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; opened.clear(); grids = {};
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
-    state.air = sv.air ? { x: sv.air.x, y: sv.air.y, aboard: false } : null;                    /* CONTINUE starts at the inn, on foot */
+    state.air = sv.air ? { x: sv.air.x, y: sv.air.y, aboard: false } : null;
+    state.fish = sv.fish || {};                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
@@ -1566,6 +1614,7 @@ function frame(now) {
   else if (mode === "field") fieldTick(dt);
   else if (mode === "menu") menuTick();
   else if (mode === "shop") shopTick();
+  else if (mode === "fish" && fishing) fishTick(dt);
   else if (mode === "battle") battleTick(dt);
   else if (mode === "gameover") { goT += dt; if (goT > 1 && (hit("start") || hit("a"))) { mode = "title"; titleT = 0; cue("TITLE"); } }
   for (const k in pressed) if (fade > 0) pressed[k] = false;
@@ -1577,6 +1626,7 @@ function frame(now) {
   else if (mode === "field") { drawField(); if (poisonFlash > 0) { g.fillStyle = "rgba(96,200,64," + (poisonFlash * 1.2).toFixed(2) + ")"; g.fillRect(0, 0, W, H); poisonFlash -= dt; } if (dlg) drawDialog(); }
   else if (mode === "menu") drawMenu();
   else if (mode === "shop") drawShop();
+  else if (mode === "fish" && fishing) drawFish();
   else if (mode === "battle") { drawBattle(); if (dlg) drawDialog(); }
   else if (mode === "gameover") drawGameOver();
   if (fade > 0) { g.fillStyle = "rgba(0,0,0," + (1 - Math.abs(fade - 0.5) * 2) + ")"; g.fillRect(0, 0, W, H); }
@@ -1612,6 +1662,9 @@ window.PRISM_DEMO = {
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "village" ? villageMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
+  fishing: () => fishing && { phase: fishing.phase, t: fishing.t, msg: fishing.msg, fish: fishing.fish && fishing.fish.name, wait: fishing.wait },
+  fishLog: () => Object.assign({}, state.fish),
+  fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
   skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },
 };

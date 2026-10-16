@@ -200,6 +200,13 @@ def main(argv):
         raise SystemExit("world map: not reachable on foot from the Town: %s" % reach)
     # Windmere (data/rpg/prism-village.json): the world map's Village. Every tile needs an image; every NPC must be
     # reachable on foot from the gate, and so must the exit row.
+    fish = J("prism-fish.json")["fish"]
+    import re as _re
+    for f in fish:
+        if not _re.fullmatch(r"(heal \d+ HP|restore \d+ MP)", f["effect"]) or f["weight"] <= 0 or not 0.2 <= f["window_s"] <= 2:
+            raise SystemExit("prism-fish.json: %s has an effect, weight or bite window the demo cannot use" % f["name"])
+    if not any(c == "Water" for r in J("prism-village.json")["grid"] for c in r):
+        raise SystemExit("prism-fish.json: Windmere has no Water to fish in")
     village = J("prism-village.json")
     vwalk = {t["tile"]: t["walkable"] for t in town["tiles"] if t["realm"] == REALM}
     vg = village["grid"]
@@ -256,7 +263,7 @@ def main(argv):
         "backdrop_for_zone": backdrop_zone,
         "town": town["demo_towns"][REALM], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == REALM},
         "interiors": inter["interiors"][REALM], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == REALM},
-        "world": world, "sky_caches": sky_caches, "village": village, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
+        "world": world, "sky_caches": sky_caches, "village": village, "fish": fish, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
         "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
                      for (lm, _), d in zip(QUEST, quest)],
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
@@ -272,6 +279,8 @@ def main(argv):
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,
     }
+    for f in fish:                                     # every fish is an item too: eat it from ITEM
+        data["gear"][f["name"]] = {"name": f["name"], "effect": f["effect"], "price": f["price"], "fish": True}
     missing = [c["item"] for c in data["sky_caches"] if c["item"] not in data["gear"]]
     if missing:
         raise SystemExit("sky cache loot not in the gear table: %s" % missing)
