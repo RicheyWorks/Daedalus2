@@ -1,6 +1,52 @@
 # Tiny serial synthetic tests. All runner external boundaries are mocked below.
-param([switch]$RealJunctionConformance)
+param([switch]$RealJunctionConformance,[switch]$JunctionClassificationOnly)
 $ErrorActionPreference='Stop'
+function Get-JunctionCreationDisposition([Management.Automation.ErrorRecord]$CreationError){
+ # Called ONLY for the New-Item Junction catch, never unrelated fixture setup.
+ # Category/message alone is insufficient; use explicit exception/native evidence.
+ $decision='FAIL';$reason='unexpected_creation_error';$recognized=$null
+ $node=$CreationError.Exception
+ for($depth=0;$null -ne $node -and $depth -lt 16;$depth++){
+  if($node -is [UnauthorizedAccessException]){$decision='SKIP';$reason='permission_denied';$recognized=$node.GetType().FullName;break}
+  if($node -is [ComponentModel.Win32Exception]){
+   if($node.NativeErrorCode -in @(5,1314)){$decision='SKIP';$reason='permission_denied';$recognized=$node.GetType().FullName;break}
+   if($node.NativeErrorCode -in @(1,50,120)){$decision='SKIP';$reason='unsupported_capability';$recognized=$node.GetType().FullName;break}
+  }
+  if($node -is [PlatformNotSupportedException] -or ($node -is [NotSupportedException] -and $CreationError.CategoryInfo.Category -eq [Management.Automation.ErrorCategory]::NotImplemented)){
+   $decision='SKIP';$reason='unsupported_capability';$recognized=$node.GetType().FullName;break
+  }
+  $node=$node.InnerException
+ }
+ return @{result=$decision;reason=$reason;recognized_exception=$recognized;
+  exception_type=$CreationError.Exception.GetType().FullName;category=$CreationError.CategoryInfo.Category.ToString();
+  fully_qualified_error_id=$CreationError.FullyQualifiedErrorId;message=$CreationError.Exception.Message;
+  hresult=$CreationError.Exception.HResult;target=[string]$CreationError.TargetObject}
+}
+if($JunctionClassificationOnly){
+ if($RealJunctionConformance){throw 'Select one mode; classification never creates a junction'}
+ $cases=@(
+  @{name='permission';exception=[UnauthorizedAccessException]::new('synthetic denied');category='PermissionDenied';expected='SKIP'},
+  @{name='native-permission';exception=[ComponentModel.Win32Exception]::new(5,'synthetic denied');category='PermissionDenied';expected='SKIP'},
+  @{name='platform-unsupported';exception=[PlatformNotSupportedException]::new('synthetic unsupported');category='NotImplemented';expected='SKIP'},
+  @{name='native-unsupported';exception=[ComponentModel.Win32Exception]::new(50,'synthetic unsupported');category='NotImplemented';expected='SKIP'},
+  @{name='explicit-unsupported';exception=[NotSupportedException]::new('synthetic unsupported');category='NotImplemented';expected='SKIP'},
+  @{name='unexpected-io';exception=[IO.IOException]::new('synthetic disk fault');category='WriteError';expected='FAIL'},
+  @{name='unexpected-setup';exception=[ArgumentException]::new('synthetic bad target');category='InvalidArgument';expected='FAIL'},
+  @{name='message-category-alone';exception=[Exception]::new('Access is denied.');category='PermissionDenied';expected='FAIL'},
+  @{name='wrapped-permission';exception=[Exception]::new('synthetic wrapper',[UnauthorizedAccessException]::new('synthetic denied'));category='PermissionDenied';expected='SKIP'}
+ )
+ $results=@()
+ foreach($case in $cases){
+  $record=[Management.Automation.ErrorRecord]::new($case.exception,'synthetic-classification',[Management.Automation.ErrorCategory]$case.category,'synthetic-target')
+  $actual=Get-JunctionCreationDisposition $record
+  if($actual.result -cne $case.expected){throw "Classifier mismatch: $($case.name)"}
+  if($actual.message -cne $case.exception.Message -or $actual.target -cne 'synthetic-target'){throw 'Classifier lost original error context'}
+  $results+=@{case=$case.name;expected=$case.expected;actual=$actual.result;reason=$actual.reason}
+ }
+ @{mode='pure-junction-error-classification';result='PASS';cases=$results;checks=$results.Count;
+   junction_calls=0;filesystem_fixture_calls=0;production_calls=0;implementation_changed=$false}|ConvertTo-Json -Depth 6
+ return
+}
 Import-Module (Join-Path $PSScriptRoot 'StagePolicy.psm1') -Force
 $script:checks=0
 function Check($condition,$label){if(-not $condition){throw "FAIL: $label"};$script:checks++}
@@ -221,11 +267,11 @@ foreach($case in @('declared-root-junction','intermediate-junction')){
   $declaredRoot=Join-Path $fixture 'real-root';New-Item -ItemType Directory -Path $declaredRoot|Out-Null
   $link=Join-Path $declaredRoot 'intermediate-link';$relative='intermediate-link/sentinel.txt';$expected='Reparse-point receipt path rejected'
  }
- $row=[ordered]@{case=$case;result='PENDING';link=$link;target=$target;reads=0;guard=$null;creation_error=$null;cleanup='not-created';target_before=$before;target_after=$null;target_preserved=$false}
+ $row=[ordered]@{case=$case;result='PENDING';link=$link;target=$target;reads=0;guard=$null;creation_error=$null;creation_classification=$null;cleanup='not-created';target_before=$before;target_after=$null;target_preserved=$false}
  $created=$false
  try{
   try{New-Item -ItemType Junction -Path $link -Target $target -ErrorAction Stop|Out-Null;$created=$true}
-  catch{$row.result='SKIP';$row.creation_error=$_.Exception.Message}
+  catch{$row.creation_classification=Get-JunctionCreationDisposition $_;$row.result=$row.creation_classification.result;$row.creation_error=$_.Exception.Message}
   if($created){
    $global:WillowConformanceReads=0;$guard=$null
    try{$null=Read-WillowConsumer $declaredRoot $relative}catch{$guard=$_.Exception.Message}

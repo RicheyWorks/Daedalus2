@@ -181,3 +181,32 @@ rejection/unlink remains UNVERIFIED here because creation was denied. It is
 module conformance, not new validator-wide ordering, above-root/race-resistance,
 OS safety, production adoption or native evidence. Any real source defect found
 by a future separately authorized run must be reported before expanding scope.
+
+### Test-only creation-error classification correction
+
+Independent review at c396a802 found that the creation catch labelled every
+exception SKIP. This follow-up changes only tests/docs: the catch now retains
+exception type, category, error ID, message, HRESULT and target context and
+classifies narrowly recognized permission/capability errors as SKIP. Recognized
+evidence is UnauthorizedAccessException (including wrapped causes), Win32 error
+5/1314 for permission, Win32 error1/50/120 or PlatformNotSupportedException for
+capability, or NotSupportedException WITH NotImplemented category. Unexpected
+I/O/setup errors, or a permission-looking message/category without specific
+exception evidence, FAIL. Unrelated fixture setup remains outside that catch.
+Existing target snapshots and guarded nonrecursive cleanup are unchanged.
+
+The prior real AccessDenied SKIPs and ordinary control result remain historical;
+no real junction creation was retried or newly classified from absent metadata.
+The post-run correction was validated only with:
+
+```powershell
+pwsh -NoProfile -File tools/blender/willow_stage_r2/tests.ps1 -JunctionClassificationOnly
+```
+
+Actual result: **9 pure synthetic classification cases PASS**, plus source parse
+0 errors. Covers recognized permission/capability and wrapped permission, versus
+unexpected I/O/setup and message/category-only failures. This mode returns before
+module import, mocked runner suite, fixture creation or junction operations.
+No filesystem fixture, production call, privilege escalation or settings change
+occurred. The three implementation blobs remain the accepted cac2 bytes. Pure
+classification success is not real junction conformance, cleanup or runtime proof.
