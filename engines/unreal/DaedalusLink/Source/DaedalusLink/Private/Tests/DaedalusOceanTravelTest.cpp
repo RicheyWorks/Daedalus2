@@ -167,6 +167,31 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Vessel->SetActorLocation(FVector(501,0,0));
     TestFalse(TEXT("Remote vessel cannot disembark"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     Vessel->SetActorLocation(FVector::ZeroVector);
+    bool bExitCallbackAttempted=false;
+    bool bNestedExitAccepted=true;
+    bool bExitReloadAccepted=true;
+    bool bExitBoardAccepted=true;
+    const FDelegateHandle ExitObserver=Player->GetOnNewPawnNotifier().AddLambda([&](APawn* NewPawn) {
+        if (NewPawn!=Avatar || bExitCallbackAttempted) return;
+        bExitCallbackAttempted=true;
+        // Restore vessel possession so nested exit passes the ordinary ownership
+        // checks. Without the transition guard it removes the outer map record.
+        Player->Possess(Vessel);
+        bNestedExitAccepted=Component->DisembarkAtDock(Player,Vessel,Home.Id);
+        bExitReloadAccepted=Component->ConfigureHost(Realms,{Home,Sea},{Connection});
+        bExitBoardAccepted=Component->BoardAtDock(Player,OtherVessel,Home.Id);
+    });
+    const bool bInterruptedExit=Component->DisembarkAtDock(Player,Vessel,Home.Id);
+    Player->GetOnNewPawnNotifier().Remove(ExitObserver);
+    TestTrue(TEXT("Exit notifier actually exercised reentry"),bExitCallbackAttempted);
+    TestFalse(TEXT("Interrupted possession reports failed exit"),bInterruptedExit);
+    TestFalse(TEXT("Nested exit cannot remove the pending record"),bNestedExitAccepted);
+    TestFalse(TEXT("Exit callback cannot reload docks"),bExitReloadAccepted);
+    TestFalse(TEXT("Exit callback cannot start boarding"),bExitBoardAccepted);
+    TestTrue(TEXT("Failed exit retains vessel and hidden nonblocking avatar"),
+        Player->GetPawn()==Vessel && Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
+    // A successful retry proves the original record survived the failed exit;
+    // the observer has been removed before retry and world teardown.
     TestTrue(TEXT("Dock restores original avatar"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
     TestTrue(TEXT("Avatar visibility and collision restored"),!Avatar->IsHidden() && Avatar->GetActorEnableCollision());

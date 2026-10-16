@@ -334,7 +334,7 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
 bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
     ADaedalusOceanVessel* Vessel, const FString& DockId)
 {
-    if (!IsHost() || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
+    if (!IsHost() || bBoardingTransition || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
         || !Vessel->HasAuthority() || Player->GetWorld() != GetWorld()
         || Vessel->GetWorld() != GetWorld() || Player->GetPawn() != Vessel
         || Vessel->GetController() != Player) return false;
@@ -350,9 +350,17 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
     if (!Dock || Dock->Realm != Vessel->CurrentRealm || !Finite(Position)
         || FVector::DistSquared(Position, Dock->BoardingLocation)
             > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
+    // Collision/teleport and possession can invoke host callbacks. Snapshot all
+    // map/array values before the first boundary and serialize the entire exit,
+    // including rollback; no Original or Dock pointer is used after it.
+    const bool bOriginalCollision = Original->bCollision;
+    const bool bOriginalHidden = Original->bHidden;
+    const FVector ExitLocation = Dock->ExitLocation;
+    const FRotator ExitRotation = Avatar->GetActorRotation();
+    TGuardValue<bool> BoardingTransition(bBoardingTransition, true);
     // Collision-aware teleport refuses an obstructed exit before possession changes.
-    Avatar->SetActorEnableCollision(Original->bCollision);
-    if (!Avatar->TeleportTo(Dock->ExitLocation, Avatar->GetActorRotation(), false, false))
+    Avatar->SetActorEnableCollision(bOriginalCollision);
+    if (!Avatar->TeleportTo(ExitLocation, ExitRotation, false, false))
     {
         Avatar->SetActorEnableCollision(false);
         return false;
@@ -363,7 +371,7 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
         Avatar->SetActorEnableCollision(false);
         return false;
     }
-    Avatar->SetActorHiddenInGame(Original->bHidden);
+    Avatar->SetActorHiddenInGame(bOriginalHidden);
     BoardingAvatars.Remove(Player);
     return true;
 }
