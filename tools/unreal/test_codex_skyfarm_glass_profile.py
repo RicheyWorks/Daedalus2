@@ -162,4 +162,124 @@ class ObservationTests(unittest.TestCase):
             with self.subTest(change=change),self.assertRaises(ValueError):p.check_observation(x)
 
 
+class UE58ProfileTests(unittest.TestCase):
+    """33041 changed-contract checks only; run this class, not the old suite.
+
+    Fixtures are small synthetic normalized facts, never actual native proof.
+    Even the complete top-level receiver fixture must remain intrinsically held.
+    """
+    @classmethod
+    def setUpClass(cls):
+        path58=path.with_name('daedalus_codex_skyfarm_glass_ue58_profile.py')
+        spec58=importlib.util.spec_from_file_location('_tested_ue58_profile',path58)
+        cls.v=importlib.util.module_from_spec(spec58);spec58.loader.exec_module(cls.v)
+
+    def modern(self):
+        x=observation();g=x['graph'];v=self.v
+        node=p.MATERIAL+':AlphaMode'
+        g['nodes'][node]='/Script/Engine.MaterialExpressionConstant'
+        g['factor_inputs']['AlphaMode']=dict(node=node,value=[2.],reference=reference(node,0,'AlphaMode'))
+        g['function_input_names']=list(v.INPUTS);g['function_outputs']=list(v.OUTPUTS)
+        rgb=g['factor_inputs']['BaseColorFactor_RGB']['reference']
+        rgb.update(Mask=1,MaskR=1,MaskG=1,MaskB=1)
+        g['function_inputs']={name:(g['factor_inputs'][name]['reference'] if name in g['factor_inputs'] else None) for name in v.INPUTS}
+        g['omitted_defaults']={name:dict(missing_function_input=True,matches=0) for name in ('EmissiveFactor','EmissiveStrength')}
+        for name,out in p.OUTPUTS.items():g['roots'][name]=reference(g['call'],v.OUTPUTS.index(out))
+        g['custom_outputs'][0]['TransmittanceColor']=reference(g['call'],0)
+        return x
+
+    def check(self,x,body=None,source=None):
+        return self.v.check_observation(x,deepcopy(self.v.BODY_TEXT) if body is None else body,
+            deepcopy(self.v.SOURCE_PINS) if source is None else source)
+
+    def test_complete_top_level_receiver_stays_intrinsically_held_and_unmodified(self):
+        x=self.modern();before=deepcopy(x);result=self.check(x)
+        self.assertEqual(x,before);self.assertEqual(result['top_level_abi'],'VALID')
+        self.assertEqual(result['stage'],'HOLD_INTRINSIC_TRANSMISSION_MODEL_UNPROVEN')
+        self.assertFalse(result['native_ready']);self.assertFalse(result['runtime_authorized'])
+        self.assertIsNone(result['intrinsic_transport']['intrinsic_proof'])
+        self.assertEqual(result['intrinsic_transport']['missing_evidence'],list(self.v.MISSING))
+
+    def test_historical_policy_is_unchanged_and_still_refuses_modern_shape(self):
+        import hashlib
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),self.v.GENERIC_SHA)
+        with self.assertRaises(ValueError):p.check_observation(self.modern())
+
+    def test_only_exact_rgb_output0_mask_is_recognized(self):
+        for key,value in [('Mask',0),('MaskR',0),('MaskA',1),('OutputIndex',1),('MaskB',True)]:
+            x=self.modern();x['graph']['factor_inputs']['BaseColorFactor_RGB']['reference'][key]=value
+            with self.subTest(key=key,value=value),self.assertRaises(ValueError):self.check(x)
+
+    def test_scalar_custom_and_root_masks_are_not_relaxed(self):
+        for which in ['alpha','transmission','custom','root']:
+            x=self.modern();g=x['graph']
+            row={'alpha':g['factor_inputs']['BaseColorFactor_A']['reference'],
+                'transmission':g['factor_inputs']['TransmissionFactor']['reference'],
+                'custom':g['custom_outputs'][0]['TransmittanceColor'],'root':g['roots']['BaseColor']}[which]
+            row['Mask']=1
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x)
+
+    def test_alpha_mode_alpha_and_output_indices_are_exact(self):
+        for which in ['alpha','mode','scalar-index','custom-index']:
+            x=self.modern();g=x['graph']
+            if which=='alpha':g['factor_inputs']['BaseColorFactor_A']['value']=[.25]
+            elif which=='mode':g['factor_inputs']['AlphaMode']['value']=[1.]
+            elif which=='scalar-index':g['factor_inputs']['TransmissionFactor']['reference']['OutputIndex']=1
+            else:g['custom_outputs'][0]['TransmittanceColor']['OutputIndex']=7
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x)
+
+    def test_exact_source_body_pins_and_complete_abi_are_required(self):
+        for which in ['body-text','package','source','input','output']:
+            x=self.modern();body=deepcopy(self.v.BODY_TEXT);source=deepcopy(self.v.SOURCE_PINS)
+            if which=='body-text':body['sha256']='b'*64
+            elif which=='package':x['graph']['proofs']['function_body_package']['sha256']='b'*64
+            elif which=='source':source['qualification']['sha256']='b'*64
+            elif which=='input':x['graph']['function_input_names'][0]='ForeignMode'
+            else:x['graph']['function_outputs'][0]='ForeignTransmission'
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x,body,source)
+
+    def test_extra_edge_node_and_altered_geometry_remain_rejected(self):
+        for which in ['edge','node','triangles','scale','uv','normal-provenance']:
+            x=self.modern();source=deepcopy(self.v.SOURCE_PINS)
+            if which=='edge':x['graph']['function_inputs']['IOR']=reference(x['graph']['call'])
+            elif which=='node':x['graph']['nodes'][p.MATERIAL+':Extra']='/Script/Engine.MaterialExpressionPower'
+            elif which=='triangles':x['geometry']['triangles']=49
+            elif which=='scale':x['geometry']['build_scale']=[.01,.01,.01]
+            elif which=='uv':x['geometry']['generate_lightmap_uvs']=True
+            else:source['source']['sha256']='b'*64
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x,source=source)
+
+    def test_missing_repointed_or_fabricated_intrinsic_proof_never_clears(self):
+        x=self.modern()
+        self.assertEqual(self.check(x)['stage'],'HOLD_INTRINSIC_TRANSMISSION_MODEL_UNPROVEN')
+        request=self.v.intrinsic_transport(self.v.BODY_TEXT)
+        x['graph']['intrinsic_transport']=deepcopy(request)
+        self.assertEqual(self.check(x)['stage'],'HOLD_INTRINSIC_TRANSMISSION_MODEL_UNPROVEN')
+        for which in ['flag','repoint','missing','defaults']:
+            x=self.modern();claim=deepcopy(request)
+            if which=='flag':claim['intrinsic_proof']={'proven':True,'active_branch':'Normal'}
+            elif which=='repoint':claim['body_text']['sha256']='b'*64
+            elif which=='missing':claim['missing_evidence']=[]
+            else:claim['emission']=[0.,0.,0.]
+            x['graph']['intrinsic_transport']=claim
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x)
+
+    def test_missing_default_cannot_be_forged_as_zero_or_boolean_count(self):
+        for which in ['zero','bool']:
+            x=self.modern();row=x['graph']['omitted_defaults']['EmissiveFactor']
+            if which=='zero':row.update(value=[0.,0.,0.],use_preview_default=True)
+            else:row['matches']=False
+            with self.subTest(which=which),self.assertRaises(ValueError):self.check(x)
+
+    def test_collector_request_matches_profile_without_importing_unreal(self):
+        import ast
+        source=path.with_name('daedalus_codex_skyfarm_glass_witness.py').read_text()
+        tree=ast.parse(source);fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='intrinsic_transport_request')
+        scope={};exec(compile(ast.Module(body=[fn],type_ignores=[]),'<pure-request-only>','exec'),scope)
+        self.assertEqual(scope['intrinsic_transport_request'](self.v.BODY_TEXT),self.v.intrinsic_transport(self.v.BODY_TEXT))
+        plan=self.v.future_witness_plan()
+        self.assertFalse(plan['executable']);self.assertFalse(plan['native_authorized'])
+        self.assertTrue(plan['unresolved_before_native'])
+
+
 if __name__=='__main__':unittest.main()

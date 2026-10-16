@@ -36,6 +36,18 @@ def _shape(value):
     return {'type':type(value).__name__,'repr':repr(value)[:1800]}
 
 
+def intrinsic_transport_request(body_text):
+    """Describe missing composite proof; never infer emission from absent inputs.
+
+    Future collection still needs a new read-only grant. These are requests,
+    not success flags, and no nested asset is loaded or queried here.
+    """
+    return {'model':'ue58-transmission-composite-v1','body_text':dict(body_text),
+        'missing_evidence':['nested-temporal-blur-scene-color-closure',
+            'active-render-and-feature-level-path','explicit-black-constant-defaults'],
+        'intrinsic_proof':None}
+
+
 def _file_pin(path):
     raw=Path(path).read_bytes()
     return {'path':str(path),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
@@ -224,6 +236,7 @@ def collect(cfg):
             'physical':physical,'active_customized_uvs':int(mat.get_editor_property('NumCustomizedUVs')),'geometry':geometry,
             'graph':{'call':call.get_path_name(),'function':function.get_path_name(),'nodes':{p:n.get_class().get_path_name() for p,n in by_path.items()},
                 'factor_inputs':factors,'function_input_names':names,'function_inputs':table,'omitted_defaults':defaults,'function_outputs':output_names,
+                'intrinsic_transport':intrinsic_transport_request(body_proof),
                 'roots':roots,'default_roots':normalized_defaults,'custom_outputs':[{'node':custom.get_path_name(),
                     'TransmittanceColor':_reference(custom_fields['TransmittanceColor'],mat,nodes,graph),
                     'SurfaceCoverage':_reference(custom_fields['SurfaceCoverage'],mat,nodes,graph),

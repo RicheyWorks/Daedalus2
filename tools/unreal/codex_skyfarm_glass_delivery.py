@@ -40,6 +40,41 @@ def write(path,value):
     with Path(path).open('x',encoding='utf-8') as stream:json.dump(value,stream,indent=2);stream.write('\n')
 
 
+def check(args):
+    """Offline only, including opt-in versioned ABI diagnosis; no native calls."""
+    observed=load(args.observation)
+    for witness in observed.get('graph',{}).get('proofs',{}).values():
+        if not isinstance(witness,dict):raise ValueError('actual retained witness files required')
+        paths=[witness[key] for key in ('path','file') if key in witness]
+        if not paths or any(not isinstance(p,str) or p!=paths[0] for p in paths):
+            raise ValueError('one unambiguous retained witness file required')
+        actual=pin(paths[0])
+        if any(actual[k]!=witness[k] for k in ('bytes','sha256')):raise ValueError('retained native witness changed')
+    selected=getattr(args,'profile','historical-strict')
+    if selected=='historical-strict':
+        result=policy.check_observation(observed)
+    elif selected=='ue58-transmission-composite-v1':
+        if not args.function_text or not args.qualification:
+            raise ValueError('versioned offline check requires retained function text and source qualification')
+        path=POLICY.with_name('daedalus_codex_skyfarm_glass_ue58_profile.py')
+        spec=importlib.util.spec_from_file_location('_skyfarm_glass_ue58_offline',path)
+        versioned=importlib.util.module_from_spec(spec);spec.loader.exec_module(versioned)
+        qualification_pin=pin(args.qualification)
+        if not versioned._same_pin(qualification_pin,versioned.SOURCE_PINS['qualification']):
+            raise ValueError('exact reviewed immutable source qualification required')
+        q=load(args.qualification)
+        source_proof={'qualification':qualification_pin}
+        for key in ('source','manifest'):
+            source_proof[key]=pin(q[key]['path'])
+        text_pin=pin(args.function_text)
+        result=versioned.check_observation(observed,text_pin,source_proof)
+        result.update(profile_source=pin(path),observation=pin(args.observation),
+            function_text=text_pin,source_proof=source_proof,future_readonly_plan=versioned.future_witness_plan(),
+            native_calls=0,compute_claims=0)
+    else:raise ValueError('unknown offline profile')
+    write(args.output,result);print(json.dumps(result))
+
+
 def prepare(args):
     source=pin(args.glb);manifest=pin(args.manifest);baseline=pin(args.baseline)
     if (source['sha256']!=GLB_SHA or source['bytes']!=88052
@@ -176,18 +211,12 @@ if __name__=='__main__':
     for name in ('glb','manifest','baseline','evidence','observation'):parser.add_argument('--'+name,type=Path)
     for name in ('folder','qualification','grant'):parser.add_argument('--'+name,type=Path)
     parser.add_argument('--compatibility-of',type=Path)
+    parser.add_argument('--profile',choices=['historical-strict','ue58-transmission-composite-v1'],default='historical-strict',
+        help='Opt-in offline check only; never selects a native receiving route.')
+    parser.add_argument('--function-text',type=Path)
     args=parser.parse_args()
+    if args.profile!='historical-strict' and args.phase!='check':
+        parser.error('versioned profile is offline-check-only; no native/prepare selection')
     if args.phase=='witness':witness(args)
     elif args.phase=='prepare':prepare(args)
-    else:
-        observed=load(args.observation)
-        for witness in observed.get('graph',{}).get('proofs',{}).values():
-            if not isinstance(witness,dict):raise ValueError('actual retained witness files required')
-            # Existing root exporters use "file"; package/custom pins use
-            # "path". Preserve both raw proof forms, rejecting disagreement.
-            paths=[witness[key] for key in ('path','file') if key in witness]
-            if not paths or any(not isinstance(p,str) or p!=paths[0] for p in paths):
-                raise ValueError('one unambiguous retained witness file required')
-            actual=pin(paths[0])
-            if any(actual[k]!=witness[k] for k in ('bytes','sha256')):raise ValueError('retained native witness changed')
-        result=policy.check_observation(observed);write(args.output,result);print(json.dumps(result))
+    else:check(args)
