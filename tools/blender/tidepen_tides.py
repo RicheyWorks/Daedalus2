@@ -40,14 +40,14 @@ def main(argv):
                 raise RuntimeError("PenWater role not found in the loaded GLBs")
             for o in hit:
                 o.location.z += dz
-        m = SR.render(out, glbs, "tide." + st["id"], view, focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust, resume="--resume" in argv)
+        m = SR.render(out, glbs, "tide." + st["id"], view, focus=frame[:3], frame=frame, res=res, samples=samples, name=name, adjust=adjust, resume="--resume" in argv,
+                     identity={"water_state": st["id"], "offset_m": st["offset_m"], "moves": "PenWater role z", "habitat_sha256": hab["sha256"]})
         m["water_state"] = {k: st[k] for k in ("id", "offset_m", "surface_z", "wet")}
         shots.append(m)
     card = {"name": name, "label": "Blender renders (Cycles CPU) - NOT Unreal captures",
             "comparable": "one camera, light, sky, samples and resolution; only the PenWater role moves (offset_m)",
             "camera": frame, "habitat_source": hab["source"], "habitat_sha256": hab["sha256"], "shots": shots, "seconds": round(time.time() - t0, 1)}
-    with open(os.path.join(out, name + ".tides.json"), "w", encoding="utf-8") as f:
-        json.dump(card, f, indent=1)
+    SR.RCACHE.write_json_atomic(os.path.join(out, name + ".tides.json"), card)
     print("TIDES %s shots=%d %.0fs" % (name, len(shots), card["seconds"]), flush=True)
 
 

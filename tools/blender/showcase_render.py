@@ -23,6 +23,9 @@ import time
 import bpy
 from mathutils import Vector
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import render_cache as RCACHE  # noqa: E402
+
 
 def sha(p):
     h = hashlib.sha256()
@@ -159,20 +162,22 @@ def camera(view, focus=None, frame=None, lens=40):
     return cam
 
 
-def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None, adjust=None, resume=False):
+def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), samples=96, name=None, adjust=None, resume=False,
+           identity=None):
     """adjust(): optional hook run after the GLBs load and before lighting, e.g. to move a water sheet to a tide state.
-    resume: reuse a finished shot (its .png and .json both on disk, same sources, samples and resolution) instead of
-    rendering it again, so a long batch cut off by a restart loses at most the shot in progress."""
+    identity: a JSON-serialisable description of what adjust() does (for example {"tide": "low", "offset_m": -0.5}).
+    resume: reuse a finished shot only when render_cache says every input that decides its pixels matches (sources,
+    samples, resolution, view, focus, frame, adjustment identity, the PNG's own hash). A shot made with adjust() but no
+    identity is never reused. The PNG and its sidecar are each written to a temporary file and then renamed, the sidecar
+    last, so an interrupted shot never leaves a sidecar that describes pixels it does not have."""
     base = name or os.path.splitext(os.path.basename(glbs[0]))[0]
-    done = os.path.join(out_dir, "%s.%s.%s" % (base, tag, view))
-    if resume and os.path.exists(done + ".png") and os.path.exists(done + ".json"):
-        meta = json.load(open(done + ".json", encoding="utf-8"))
-        same = (meta.get("sources") == {os.path.basename(g): [os.path.getsize(g), sha(g)] for g in glbs}
-                and meta["settings"]["samples"] == samples and meta["settings"]["resolution"] == list(res)
-                and meta.get("sha256") == sha(done + ".png"))
-        if same:
-            print("SHOWCASE %s.png reused (resume)" % done, flush=True)
-            return meta
+    stem = os.path.join(out_dir, "%s.%s.%s" % (base, tag, view))
+    inp = RCACHE.inputs(glbs, view, focus, frame, res, samples, identity, adjust is not None)
+    if resume:
+        hit = RCACHE.reusable(stem, inp)
+        if hit:
+            print("SHOWCASE %s.png reused (resume, cache key %s)" % (stem, hit["cache_key"][:12]), flush=True)
+            return hit
     clean()
     load(glbs)
     if adjust:
@@ -180,20 +185,19 @@ def render(out_dir, glbs, tag, view, focus=None, frame=None, res=(2560, 1600), s
     stage(res, samples)
     cam = camera(view, focus, frame)
     os.makedirs(out_dir, exist_ok=True)
-    base = name or os.path.splitext(os.path.basename(glbs[0]))[0]
-    path = os.path.join(out_dir, "%s.%s.%s.png" % (base, tag, view))
-    bpy.context.scene.render.filepath = path
+    path, tmp = stem + ".png", stem + ".rendering.png"
+    bpy.context.scene.render.filepath = tmp
     t0 = time.time()
     bpy.ops.render.render(write_still=True)
+    os.replace(tmp, path)
     meta = {"label": "Blender render (Cycles CPU, denoised) - NOT an Unreal capture", "tag": tag, "view": view, "file": os.path.basename(path),
             "sha256": sha(path), "bytes": os.path.getsize(path), "seconds": round(time.time() - t0, 1),
             "settings": {"engine": "CYCLES", "samples": samples, "resolution": list(res), "lens_mm": cam.data.lens, "camera_type": cam.data.type,
                          "camera_location": [round(v, 2) for v in cam.location], "camera_rotation": [round(v, 4) for v in cam.rotation_euler],
                          "view_transform": bpy.context.scene.view_settings.view_transform, "sky": "gradient sky (horizon .78/.86/.95 to zenith .36/.55/.86) + warm sun 2.6"},
-            "sources": {os.path.basename(g): [os.path.getsize(g), sha(g)] for g in glbs},
+            "sources": {os.path.basename(g): [os.path.getsize(g), sha(g)] for g in glbs}, "adjustment": identity,
             "blender": bpy.app.version_string, "rendered_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
-    with open(path[:-4] + ".json", "w", encoding="utf-8") as f:
-        json.dump(meta, f, indent=1)
+    meta = RCACHE.write_sidecar(stem, meta, inp)
     print("SHOWCASE %s %.0fs" % (path, meta["seconds"]), flush=True)
     return meta
 

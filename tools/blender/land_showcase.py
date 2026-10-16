@@ -21,8 +21,9 @@ Steps:
 3. Write NAME.showcase.json. It holds every image's sha256, bytes, settings, sources and hashes, and the camera
    numbers. Each image is labelled a Blender render, not an Unreal capture.
 
---quick renders 640x400 at 16 samples, for checking framing. --resume reuses finished shots whose sources match
-(the build is byte-reproducible, see repro_check.py), so a restarted batch picks up where it stopped.
+--quick renders 640x400 at 16 samples, for checking framing. --resume reuses a finished shot only when every input
+that decides its pixels matches (render_cache.py: sources, samples, resolution, view, focus, frame, adjustment
+identity, PNG hash); the build is byte-reproducible (repro_check.py), so a restarted batch picks up where it stopped.
 Runs wherever `bpy` imports: the cloud venv, or Blender's own Python.
 """
 import importlib
@@ -77,8 +78,7 @@ def main(argv):
             "cameras": {"hero": hero, "detail": detail, "top": tuple(sc.get("top", TOP))}, "res": list(res), "samples": samples, "quick": quick,
             "before_sources": [os.path.basename(b) for b in before], "reference_sources": [os.path.basename(b) for b in reference],
             "reference_note": "inspiration/source reference only - a different seed and geometry, NOT the same land", "shots": shots, "seconds": round(time.time() - t0, 1)}
-    with open(os.path.join(out, R.NAME + ".showcase.json"), "w", encoding="utf-8") as f:
-        json.dump(card, f, indent=1)
+    SR.RCACHE.write_json_atomic(os.path.join(out, R.NAME + ".showcase.json"), card)
     print("LAND_SHOWCASE %s shots=%d %.0fs" % (R.NAME, len(shots), card["seconds"]), flush=True)
 
 

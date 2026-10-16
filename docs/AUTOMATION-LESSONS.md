@@ -1454,3 +1454,21 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
   ranked by centroid, with vertex positions as the tie-break. Three runs of the operator sphere followed by
   `sort_faces` give the same order. `hd_island.sphere` uses it, and Tide-Pen r3 rebuilds byte-identical to the
   delivered packet.
+
+## A render cache key must cover everything that decides the pixels (2026-10-16)
+- **The bug:** PootScoot's review (32692) found it. `--resume` reused a shot when its GLBs, samples and resolution
+  matched. It ignored the camera frame, focus, view and the tide `adjust()` hook. A changed camera or water offset
+  with the same GLBs would have reused the old PNG while the card reported the new state. The sidecar was also
+  written in place, so an interrupted write could leave a half file.
+- **Did it happen?** No. In the Tide-Pen r3 batch the reused shots (after hero/detail/top, before hero/detail) had the
+  same cameras and no adjustment, and all three tide shots were rendered fresh.
+- **The fix:** `tools/blender/render_cache.py` (pure, no bpy) builds one cache key from:
+  - the sources;
+  - samples, resolution, view, focus and frame;
+  - a JSON identity for whatever `adjust()` does.
+
+  A shot made with `adjust()` but no identity is never reused. A malformed, truncated or pre-key sidecar is a miss,
+  not an error. The PNG and sidecar are written to temp files and renamed, sidecar last. `render_cache_test.py`
+  passes 22/22.
+- **The rule:** list every input that decides the output before writing a cache key, and make a missing or unnamed
+  input a miss.
