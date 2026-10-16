@@ -372,6 +372,16 @@ function airship() {
   return state.air;
 }
 const flying = () => !!(map && map.kind === "world" && state.air && state.air.aboard);
+/* Sky caches (data.json sky_caches): a chest in each pocket of land no one can walk to. Only the skiff reaches them;
+   landing on one, or stepping onto it after landing nearby, opens it. Opened caches are saved with the other chests. */
+const skyKey = c => "sky:" + c.x + "," + c.y;
+const cacheAt = (x, y) => (D.sky_caches || []).find(c => c.x === x && c.y === y);
+function openCache(c) {
+  if (!c || opened.has(skyKey(c))) return false;
+  opened.add(skyKey(c)); bag[c.item] = (bag[c.item] || 0) + 1; sfx("CHEST");
+  say(["A CHEST NO ONE COULD WALK TO.", "FOUND " + c.item.toUpperCase() + "!"]);
+  return true;
+}
 /* The shard quest: four dungeons from data.json (landmark -> dungeon); each boss leaves a shard; the final dungeon
    opens once the three shards are in hand. Floor grids are copied per journey, so NEW GAME starts them fresh. */
 let grids = {};
@@ -581,6 +591,7 @@ function stepDone() {
   if (map.kind === "world" && airUnlocked()) {
     const a = airship();
     if (a && a.aboard) return;                                                   /* flying: no landmarks, no battles */
+    if (openCache(cacheAt(P.x, P.y))) return;
     if (a && a.x === P.x && a.y === P.y) { a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", "A: LAND ON OPEN GROUND"); return; }
   }
   if (map.kind === "world" && t === "AirshipPad" && !airUnlocked()) {
@@ -640,6 +651,7 @@ function land() {
   const a = airship(), t = at(P.x, P.y), wt = D.world_tiles[t] || {};
   if (!wt.airship_lands) { sfx("BUMP"); toast("NO PLACE TO LAND", t.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase()); return; }
   a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", "WALK ONTO THE SKIFF TO FLY AGAIN");
+  openCache(cacheAt(P.x, P.y));
 }
 function drawAirship(ox, oy) {
   if (map.kind !== "world" || !airUnlocked() || !D.rects.sprites.Vehicle_Prism_Airship) return false;
@@ -665,6 +677,7 @@ function drawField() {
     const c = map.grid[y][x];
     if (c !== "Void" && !tileImg(map.key(c), Math.round(ox + x * T), Math.round(oy + y * T))) { g.fillStyle = "#000"; g.fillRect(Math.round(ox + x * T), Math.round(oy + y * T), T, T); }
   }
+  if (map.kind === "world") for (const c of D.sky_caches || []) tileImg(opened.has(skyKey(c)) ? "town:ChestOpen" : "town:Chest", Math.round(ox + c.x * T), Math.round(oy + c.y * T));
   const walkF = Math.floor(performance.now() / 260) % 2;
   for (const n of map.npcs) {
     const name = n.type === "Ruler" ? "NPC_Ruler" : "NPC_" + n.type;
@@ -1588,6 +1601,7 @@ window.PRISM_DEMO = {
   teach: (i, sp) => { const m = roster()[i]; if (!m.spells.includes(sp)) m.spells.push(sp); },
   warp: (kind, x, y, floor, di) => { map = kind === "town" ? townMap() : kind === "world" ? worldMap() : kind === "dungeon" ? dungeonMap(di || 0, floor || 0) : interiorMap(kind); P.x = x; P.y = y; P.fx = x * T; P.fy = y * T; P.moving = 0; mode = "field"; dlg = null; cue(map.cue); },
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
+  skyCaches: () => (D.sky_caches || []).map(c => Object.assign({ opened: opened.has(skyKey(c)) }, c)),
   airship: () => D && map && map.kind === "world" ? Object.assign({ unlocked: airUnlocked(), flying: flying() }, airship()) : { unlocked: airUnlocked(), saved: state.air },
 };
 

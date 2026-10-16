@@ -1365,7 +1365,16 @@ The world map always had an `AirshipPad` landmark next to the Town; until now it
   - The skiff stays where it landed; walk onto it to fly again. It bobs in the air, has a drop shadow, and mirrors
     when flying left.
   - Its parked spot is saved at the inn. CONTINUE starts on foot at the inn. NEW GAME moors it at the dock.
-- **Proof:** `tools/rpg_demo/airship_test.py` passes 20/20 in Playwright. It checks:
+- **Sky caches (somewhere for the skiff to go):**
+  - `build_demo.py` finds every pocket of landable ground that cannot be reached on foot from the Town. It puts one
+    chest in each pocket, biggest pocket first, with loot from `SKY_LOOT`: Scale Coat, Tower Shield, Feather of
+    Waking.
+  - On this map the pockets are a hidden valley of hills ringed by mountains (5 tiles) and two single tiles.
+  - The Prism shops sell no armour, so the coat and shield are found only here.
+  - Landing on a cache, or stepping onto it after landing beside it, opens it once. Opened caches are saved with the
+    other chests, and NEW GAME closes them.
+  - The build refuses loot that is not in the gear table.
+- **Proof:** `tools/rpg_demo/airship_test.py` passes 27/27 in Playwright. It checks:
   - the atlas frames;
   - the dock's message before the first Warden;
   - boarding;
@@ -1376,4 +1385,5 @@ The world map always had an `AirshipPad` landmark next to the Town; until now it
   - refusing to land on a mountain;
   - landing and parking;
   - re-boarding;
-  - saving at the inn, CONTINUE and NEW GAME.
+  - saving at the inn, CONTINUE and NEW GAME;
+  - each sky cache sits on unreachable landable ground, opens once on landing, and is saved, then reset by NEW GAME.

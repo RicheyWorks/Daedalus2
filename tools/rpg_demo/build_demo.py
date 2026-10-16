@@ -31,6 +31,9 @@ FINAL = "The Shattered Heart"
 # The final boss is built for the full game's six shards (level 50, 12000 HP). The demo gathers three, so the
 # Devourer only half-forms: its HP and attack are scaled here, in the open, and the realm says so in battle.
 FINAL_SCALE = {"hp": 0.33, "attack": 0.7, "why": "three of six shards: the Devourer only half-forms in this demo"}
+# Sky caches: one chest in each pocket of land the airship can land on but no one can walk to (computed from the
+# map below), best pocket first. The loot is armour the realm's own shops do not sell.
+SKY_LOOT = ["Scale Coat", "Tower Shield", "Feather of Waking"]
 BOSS_BACKDROP = {"volcano": "volcano", "tower": "tower", "castle": "ruins", "crystal": "crystal_cave", "cave": "cave", "sea": "sea_cave", "crypt": "crypt"}
 
 
@@ -195,6 +198,25 @@ def main(argv):
     reach = {k: find_tile(k) in seen for k in ("Castle", "Shrine") + tuple(lm for lm, _ in QUEST)}
     if not all(reach.values()):
         raise SystemExit("world map: not reachable on foot from the Town: %s" % reach)
+    lands = {t["tile"] for t in wm["tiles"] if t["realm"] == REALM and t.get("airship_lands")}
+    pockets, done = [], set()
+    for y, r in enumerate(world):
+        for x, c in enumerate(r):
+            if c in lands and (x, y) not in seen and (x, y) not in done:
+                comp, q2 = [], deque([(x, y)])
+                done.add((x, y))
+                while q2:
+                    cx, cy = q2.popleft()
+                    comp.append((cx, cy))
+                    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        n = (cx + dx, cy + dy)
+                        if 0 <= n[1] < len(world) and 0 <= n[0] < len(world[0]) and n not in done and n not in seen and world[n[1]][n[0]] in lands:
+                            done.add(n)
+                            q2.append(n)
+                pockets.append(sorted(comp))
+    pockets.sort(key=lambda c: (-len(c), c[0]))
+    sky_caches = [{"x": comp[len(comp) // 2][0], "y": comp[len(comp) // 2][1], "item": item, "pocket": len(comp)}
+                  for comp, item in zip(pockets, SKY_LOOT)]
     for name, grid in [("town", town["demo_towns"][REALM]["grid"])] + [("int:" + k, v["grid"]) for k, v in inter["interiors"][REALM].items()]:
         for row in grid:
             for c in row:
@@ -207,7 +229,7 @@ def main(argv):
         "backdrop_for_zone": backdrop_zone,
         "town": town["demo_towns"][REALM], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == REALM},
         "interiors": inter["interiors"][REALM], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == REALM},
-        "world": world, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
+        "world": world, "sky_caches": sky_caches, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
         "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
                      for (lm, _), d in zip(QUEST, quest)],
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
@@ -223,6 +245,9 @@ def main(argv):
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,
     }
+    missing = [c["item"] for c in data["sky_caches"] if c["item"] not in data["gear"]]
+    if missing:
+        raise SystemExit("sky cache loot not in the gear table: %s" % missing)
     with open(os.path.join(out, "data.json"), "w", encoding="utf-8") as f:
         json.dump(data, f, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))

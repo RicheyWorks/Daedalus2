@@ -7,7 +7,8 @@ Checks: the skiff sprite is in the atlas (two square frames); before the first W
 hangs slack and nothing boards; after it, walking onto the skiff boards it; aboard you cross mountains and deep sea
 the walker cannot; flying is faster than walking; no random battle in 60 flown steps over battle ground; landmarks do
 not open from the air; A over a mountain refuses to land, A over grass lands and parks the skiff there; walking away
-leaves it parked, walking back boards it; the parked spot is saved at the inn and comes back on CONTINUE; NEW GAME
+leaves it parked, walking back boards it; a chest waits in each pocket of land no one can walk to (armour the shops do
+not sell), landing on it opens it once; the parked spot and the opened caches are is saved at the inn and comes back on CONTINUE; NEW GAME
 moors it at the dock again; no page errors.
 """
 import functools, http.server, json, os, sys, threading, time
@@ -141,6 +142,36 @@ with sync_playwright() as p:
     a2 = air()
     check("walking away leaves it parked", moved == 1 and (a2["x"], a2["y"]) == (lx, ly) and not a2["flying"], a2)
 
+    # sky caches: chests only the skiff can reach
+    from collections import deque
+    town = next((x, y) for y, row in enumerate(WORLD) for x, c in enumerate(row) if c == "Town")
+    foot, q = {town}, deque([town])
+    while q:
+        x, y = q.popleft()
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            n = (x + dx, y + dy)
+            if tile(*n) and n not in foot and (WT.get(tile(*n), {}).get("walkable") or WT.get(tile(*n), {}).get("kind") == "landmark"):
+                foot.add(n); q.append(n)
+    caches = ev("PRISM_DEMO.skyCaches()")
+    check("the map has sky caches, each on landable ground no one can walk to",
+          len(caches) >= 2 and all((c["x"], c["y"]) not in foot and WT.get(tile(c["x"], c["y"]), {}).get("airship_lands") for c in caches), caches)
+    check("...and their loot is armour the shops do not sell", all(c["item"] in D["gear"] and not any(c["item"] == i["name"] for it in D["interiors"].values() for i in it.get("stock", [])) for c in caches[:2]),
+          [c["item"] for c in caches])
+    c0 = caches[0]
+    have = lambda it: ev("PRISM_DEMO.state()")["bag"].get(it, 0)
+    n0 = have(c0["item"])
+    ax, ay = air()["x"], air()["y"]
+    warp(ax - 1, ay); step("right")                                               # board again
+    warp(c0["x"], c0["y"]); bot.press("a", 400)
+    d0 = st()["dialog"] or ""
+    check("landing on a cache opens it: the item goes in the bag", have(c0["item"]) == n0 + 1 and "CHEST" in d0, (n0, have(c0["item"]), d0))
+    bot.clear()
+    check("...and marks it opened", next(c for c in ev("PRISM_DEMO.skyCaches()") if c["x"] == c0["x"])["opened"])
+    step("left"); step("right")                                                   # walk off and back: no second prize
+    check("an opened cache gives nothing twice", have(c0["item"]) == n0 + 1 and not st()["dialog"], have(c0["item"]))
+    pg.screenshot(path=os.path.join(DEMO, "..", "t_skycache.png"))
+    lx, ly = air()["x"], air()["y"]
+
     # save at the inn, CONTINUE
     bot.rest()
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
@@ -148,12 +179,14 @@ with sync_playwright() as p:
     warp(1, 1)
     a3 = air()
     check("the parked spot is saved at the inn and back on CONTINUE", a3["unlocked"] and (a3["x"], a3["y"]) == (lx, ly) and not a3["flying"], a3)
+    check("opened caches are saved too", next(c for c in ev("PRISM_DEMO.skyCaches()") if c["x"] == c0["x"])["opened"])
 
     # NEW GAME moors it at the dock again
     pg.reload(); pg.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=10000)
     ev("PRISM_DEMO.speed(6)"); new_game(); warp(1, 1)
     a4 = air()
     check("NEW GAME: moored at the dock, grounded again", not a4["unlocked"] and (a4["x"], a4["y"]) == PAD, a4)
+    check("NEW GAME: every cache closed again", not any(c["opened"] for c in ev("PRISM_DEMO.skyCaches()")))
     check("no page errors", not errs, errs[:3])
     b.close()
 
