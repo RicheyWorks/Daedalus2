@@ -1436,3 +1436,17 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
 - **Also found:** GLBs holding a `Glow_*` lamp sphere export the same triangles in a different order run to run, so
   their bytes never hash the same twice; every other role is byte-identical. Pin the delivered bytes; do not expect
   a rebuild to reproduce lamp roles byte for byte.
+
+## Blender's create_uvsphere is not deterministic: sort, then prove with two processes (2026-10-15)
+- **The bug:** `bmesh.ops.create_uvsphere` (Blender 5.2) emits the same faces in a different order on every run.
+  Every GLB holding a sphere (lamps, lanterns, string lights) hashed differently each build: Tide-Pen r1/r2
+  CareStation and Pen, and Reedwheel r4 Island, KeeperPost, Refuge, RepairStation, Shore and Walkway. The geometry
+  was the same each time; only the bytes moved.
+- **The fix:** `hd_island.sphere` now ranks the faces by rounded centroid and sorts them. `tools/blender/repro_check.py
+  RECIPE` builds twice in two fresh processes and compares every GLB: Tide-Pen r1/r2/r3 and Reedwheel r4 now pass.
+- **What this means for delivered packets:** bytes already delivered stay the reference, pinned by their hashes.
+  A rebuild of those sphere roles will not match them byte for byte. The rebuilt geometry is the same, and Reedwheel
+  r4's WheelFrame and WheelRotor do rebuild byte-identical.
+- **Not yet fixed:** `bpy.ops.mesh.primitive_uv_sphere_add` probably shares the bug. It is used by labyrinth_cast,
+  portal_hero_polish, realm_creature, gallery_creatures and portal_slime_polish. Run `repro_check.py` before
+  trusting their hashes.
