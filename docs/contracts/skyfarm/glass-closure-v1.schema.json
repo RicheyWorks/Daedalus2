@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:daedalus:skyfarm:glass-closure-v1",
+  "title": "Retained UE5.8 transmission evidence envelope, never material acceptance",
+  "description": "Opaque package pins and retained UTF-8 T3D only. Consumer must verify bytes, owners, serialized identities, edges and reroutes. Absent bodies/defaults/active context remain PENDING. Synthetic closure never substitutes for real evidence. No collector or runtime grant is defined.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "synthetic", "root", "artifacts", "functions", "black_constants", "switch_context"],
+  "properties": {
+    "version": {"const": "skyfarm-glass-closure-v1"},
+    "synthetic": {"type": "boolean"},
+    "root": {"type": "string", "pattern": "^/"},
+    "artifacts": {"type": "object", "additionalProperties": {"$ref": "#/$defs/artifact"}},
+    "functions": {"type": "array", "items": {"$ref": "#/$defs/function"}},
+    "black_constants": {"type": "array", "items": {"$ref": "#/$defs/black"}},
+    "switch_context": {
+      "description": "Only explicit synthetic branch selection is supported in v1. Real active-context evidence contract is missing; CVars, flags and all-branch claims cannot close it.",
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/context"}
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"synthetic": {"const": false}}}, "then": {
+      "properties": {"root": {"const": "/InterchangeAssets/gltf/MaterialBodies/MF_Transmission_Body.MF_Transmission_Body"}, "switch_context": {"maxProperties": 0}}
+    }}
+  ],
+  "$defs": {
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "owner", "bytes", "sha256", "file"],
+      "properties": {
+        "kind": {"enum": ["package", "t3d", "class_default"]},
+        "owner": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "file": {"type": "string", "minLength": 1}
+      }
+    },
+    "function": {
+      "type": "object", "additionalProperties": false,
+      "required": ["asset", "class", "package", "export"],
+      "properties": {
+        "asset": {"type": "string", "pattern": "^/[^:]+$"},
+        "class": {"const": "/Script/Engine.MaterialFunction"},
+        "package": {"type": ["string", "null"]},
+        "export": {"type": ["string", "null"]}
+      }
+    },
+    "black": {
+      "description": "Explicit RGBA assertion requires an actual matching Constant property or exact class-default export. A hash or omitted Constant property is insufficient. This says nothing about intrinsic emission of the scene-color composite.",
+      "type": "object", "additionalProperties": false,
+      "required": ["node", "value", "class_default"],
+      "properties": {
+        "node": {"type": "string", "pattern": "^/.+:"},
+        "value": {"type": "array", "prefixItems": [{"const": 0}, {"const": 0}, {"const": 0}, {"type": "number"}], "minItems": 4, "maxItems": 4},
+        "class_default": {"type": ["string", "null"]}
+      }
+    },
+    "context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["synthetic", "branch"],
+      "properties": {"synthetic": {"const": true}, "branch": {"type": "string", "minLength": 1}}
+    }
+  }
+}
