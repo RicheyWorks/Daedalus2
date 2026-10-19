@@ -1600,7 +1600,7 @@ function drawBattle() {
   party.forEach((m, i) => {
     const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
     text(compact ? m.name.slice(0, 7) : m.name, statsX, y, c); text(m.hp, W - (compact ? 52 : 58) - tw(m.hp), y, c); text(m.mp, W - 12 - tw(m.mp), y, "#a0c8ff");
-    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, compact ? statsX : 216, compact ? y + 9 : y, STATUS[k].color); }
+    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, compact ? W - 44 : 216, compact ? y + 9 : y, STATUS[k].color); }
     gauge(statsX, y + 9, compact ? 76 : 104, m.hp / m.max, "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
