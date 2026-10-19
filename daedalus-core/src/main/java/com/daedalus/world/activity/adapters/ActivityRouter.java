@@ -156,6 +156,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(OwlFixAdapter.ACTIVITY_ID, "mastery.listening"));
         r.register(new SquirrelsWinterAdapter(mode), SquirrelsWinterAdapter.Hoard.class,
                 AwardPolicy.inactive(SquirrelsWinterAdapter.ACTIVITY_ID, "mastery.observation"));
+        r.register(new GuestLoftsAdapter(mode), GuestLoftsAdapter.Stay.class,
+                AwardPolicy.inactive(GuestLoftsAdapter.ACTIVITY_ID, "mastery.companionship"));
+        r.register(new ScarDigAdapter(mode), ScarDigAdapter.Dig.class,
+                AwardPolicy.inactive(ScarDigAdapter.ACTIVITY_ID, "mastery.hauling"));
+        r.register(new VoidCrossingAdapter(mode), VoidCrossingAdapter.Passage.class,
+                AwardPolicy.inactive(VoidCrossingAdapter.ACTIVITY_ID, "mastery.crewing"));
+        r.register(new ApprenticesAdapter(mode), ApprenticesAdapter.Lantern.class,
+                AwardPolicy.inactive(ApprenticesAdapter.ACTIVITY_ID, "mastery.companionship"));
         return r;
     }
 
