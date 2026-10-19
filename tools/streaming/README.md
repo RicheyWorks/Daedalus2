@@ -44,3 +44,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Driftwood Codes (contest G76, quest q_driftwood_codes)
 - `driftwood_codes.py`: DiskSaver Island packing minigame. Tie chunk-kind bundles into a raft; the code length is the depth; packed bits must fit the reef slot. Huffman's rule (lightest pair) hits the optimum and tying in order is the trap. Canonical prefix codes round-trip, and the frequencies can come from the G70 tide chart (`driftwood_codes_test.py`; CI `Driftwood Codes`). Rules: `docs/islands/DISKSAVER-DRIFTWOOD-CODES.md`.
+
+## Coral Wear (contest G78, quest q_coral_wear)
+- `coral_wear.py`: DiskSaver Island wear-leveling minigame. Saves move between flash-like coral cells with seeded endurance, and worn cells retire. Dynamic leveling, plus static relocation of cold archives, keeps the shelf alive. Hot and cold saves come from the G70 tide chart plus G59 archives (`coral_wear_test.py`; CI `Coral Wear`). Rules: `docs/islands/DISKSAVER-CORAL-WEAR.md`.
