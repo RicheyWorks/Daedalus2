@@ -6,6 +6,7 @@
 //   ./egs ../../../../docs/contracts/echo-bell-v1/CUE-SHEET.md ../../../../docs/contracts/echo-bell-v1/peals.ebg
 #include "DaedalusEchoBellSessionCore.h"
 
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
@@ -209,6 +210,45 @@ int main(int argc, char** argv) {
         Check(sx.Judged && !sx.Verdict.Open && sx.Verdict.FirstMiss == 0, tag + " stray tap fails");
     }
 
+    // 2b. Prometheus's oracle (48496): 7 bells, gain 0.6 / 0.3 passing (gap <= 750 ms),
+    // echo = ring + 200 + 70 x depth, window 140/120/100/80 by difficulty, x1.5 with crickets.
+    // Hz within 0.001 of the oracle set: the core rounds G3/F4 to 195.997/349.227 (as peals.ebg and
+    // the CUE-SHEET tables do) where the oracle list prints 195.998/349.228.
+    {
+        const double bells[7] = {146.832, 174.614, 195.998, 219.999, 261.625, 293.664, 349.228};
+        const int windows[4] = {140, 120, 100, 80};
+        bool hzOk = true, gainOk = true, echoOk = true, winOk = true, cueOk = true;
+        for (int64_t seed = -500; seed < 500; ++seed) {
+            for (int d = 0; d <= 3; ++d) {
+                for (int crk = 0; crk <= 1; ++crk) {
+                    EchoBellSession s;
+                    EchoGateConfig c; c.Seed = seed; c.Difficulty = d; c.Crickets = crk != 0;
+                    s.Start(c);
+                    if (s.WindowMs() != (crk ? windows[d] * 3 / 2 : windows[d])) winOk = false;
+                    int last = 0;
+                    for (const EchoRing& r : s.GetGate()->GetRings()) {
+                        bool near = false;
+                        for (double b : bells) near = near || std::abs(r.Hz - b) <= 0.0010001;
+                        hzOk = hzOk && near;
+                        gainOk = gainOk && r.Gain == (r.RingMs - last <= 750 ? 0.3 : 0.6);
+                        echoOk = echoOk && r.EchoMs == r.RingMs + 200 + 70 * r.DepthCells;
+                        last = r.RingMs;
+                    }
+                    for (const EchoCue& q : s.GetCues()) {
+                        if (q.Kind == EchoCueKind::Cricket) { cueOk = cueOk && q.Gain <= 0.2 && crk; continue; }
+                        bool near = false;
+                        for (double b : bells) near = near || std::abs(q.Hz - b) <= 0.0010001;
+                        cueOk = cueOk && near && q.Gain <= 0.6;
+                    }
+                }
+            }
+        }
+        Check(hzOk, "oracle: every bell within 0.001 Hz of the 7-bell set (8000 peals)");
+        Check(gainOk, "oracle: gain 0.6, 0.3 for passing notes (gap <= 750 ms)");
+        Check(echoOk, "oracle: echoMs = ring + 200 + 70 x depth");
+        Check(winOk, "oracle: window 140/120/100/80 by difficulty, x1.5 with crickets");
+        Check(cueOk, "oracle: scheduled cues stay on the bell set, gain <= 0.6, crickets <= 0.2");
+    }
     // 3. Invalid configs are refused without reaching the core's throw paths.
     std::string why;
     EchoBellSession bad;
