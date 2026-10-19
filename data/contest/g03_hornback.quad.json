@@ -4456,7 +4456,7 @@
   "rig": "skinned; baked Idle, Walk, Run",
   "asker": "pythagoras 48506"
  },
- "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review; L = Blender +X (the animal's own left)",
+ "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one; L = Blender +X (the animal's own left)",
  "status": "STAGED NOT READY",
  "bind": "ARMATURE_AUTO bone-heat weights, validated per part (dominant bone within 2 hops of the part's bone), rigid per-part fallback; <=4 influences, normalised",
  "unreal": {
