@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 import sys
 import threading
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 from playwright.sync_api import sync_playwright
 
@@ -30,7 +30,7 @@ def main(argv):
     root = Path(os.path.commonpath([portal, prism]))
     evidence.mkdir(parents=True, exist_ok=True)
     data = json.loads((portal / "data.json").read_text(encoding="utf-8"))
-    results, errors = [], []
+    results, errors, network = [], [], []
 
     def check(name, ok, detail=None):
         results.append({"name": name, "pass": bool(ok), "detail": detail})
@@ -64,11 +64,16 @@ def main(argv):
                 })();""")
                 page = context.new_page()
                 page.on("pageerror", lambda error: errors.append(str(error)))
+                def request_info(url, **detail):
+                    parsed = urlsplit(url)
+                    network.append({"host": parsed.hostname, "path": parsed.path, **detail})
+                page.on("requestfailed", lambda request: request_info(request.url, failure=request.failure))
+                page.on("response", lambda response: request_info(response.url, status=response.status))
                 bot = Bot(page, data)
 
                 def title(realm):
                     page.goto(urls[realm])
-                    page.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded() && document.getElementById('status').hidden", timeout=15000)
+                    page.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded() && document.getElementById('status').hidden", timeout=45000)
                     # mode starts as title before boot finishes loading its images.
                     page.evaluate("() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))")
 
@@ -217,7 +222,9 @@ def main(argv):
                 try:
                     page.screenshot(path=str(evidence / "portal-failure.png"))
                     (evidence / "failure-state.json").write_text(json.dumps({"state": bot.st(), "page_errors": errors,
-                        "boot_status": page.locator("#status").text_content(), "url": page.url}, indent=2) + "\n", encoding="utf-8")
+                        "boot_status": page.locator("#status").text_content(), "url": page.url,
+                        "boot": page.evaluate("({hidden:document.getElementById('status').hidden,settingsLoaded:PRISM_DEMO.settings().loaded(),resources:performance.getEntriesByType('resource').map(r=>({path:new URL(r.name).pathname,duration:r.duration,bytes:r.transferSize}))})"),
+                        "network": network[-100:]}, indent=2) + "\n", encoding="utf-8")
                 except Exception as diagnosis:
                     print("Failure capture: " + str(diagnosis), flush=True)
                 raise
