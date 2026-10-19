@@ -53,3 +53,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Compaction Shoals (contest G86, quest q_compaction_shoals)
 - `compaction_shoals.py`: DiskSaver Island LSM-tree minigame. Writes fill a memtable, flush to sorted runs, and compactions merge levels. Lookups pay read amplification and compactions spend write amplification from an io budget. Tuned leveled compaction beats the never-compact and compact-every-flush traps, and every lookup is checked against a dict. Writes come from G79 Journal Tide (`compaction_shoals_test.py`; CI `Compaction Shoals`). Rules: `docs/islands/DISKSAVER-COMPACTION-SHOALS.md`.
+
+## Merkle Mangroves (contest G90, quest q_merkle_mangroves)
+- `merkle_mangroves.py`: DiskSaver Island anti-entropy minigame. The shore and mangrove replicas drift as storms flip saves. Sync compares Merkle tree hashes, skips matching subtrees and copies only the differing leaves, all within a bandwidth budget. Merkle descent beats the flat leaf-scan and full-copy traps, and the replicas are checked equal after every window. Keys come from G86 Compaction Shoals (`merkle_mangroves_test.py`; CI `Merkle Mangroves`). Rules: `docs/islands/DISKSAVER-MERKLE-MANGROVES.md`.
