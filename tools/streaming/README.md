@@ -74,3 +74,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Prefetch Pelicans (contest G123, quest q_prefetch_pelicans)
 - `prefetch_pelicans.py`: DiskSaver Island streaming-readahead minigame. A traveller walks the save path chunk by chunk while pelicans prefetch chunks with a fixed latency and a flights-per-tick limit; seeded ferries to other islands waste every chunk flown for the old stretch. A readahead of latency + 1 keeps both stalls and waste in budget; shallower readahead stalls and deeper readahead wastes. Path comes from G86 Compaction Shoals (`prefetch_pelicans_test.py`; CI `Prefetch Pelicans`). Rules: `docs/islands/DISKSAVER-PREFETCH-PELICANS.md`.
+
+## Breakwater Queue (contest G126, quest q_breakwater_queue)
+- `breakwater_queue.py`: DiskSaver Island bounded-queue minigame. Save writes arrive in calm trickles and storm swells; the crane lands a fixed number per tick and the rest wait behind a bounded breakwater, where a full queue drops arrivals. A tuned capacity keeps drops and waits in budget through the storm season; a short breakwater drops every swell and a long one bloats until writes wait for ages. Every write is accounted for. Keys come from G86 Compaction Shoals (`breakwater_queue_test.py`; CI `Breakwater Queue`). Rules: `docs/islands/DISKSAVER-BREAKWATER-QUEUE.md`.
