@@ -109,6 +109,7 @@ class EarRuleSweepTest {
         sweep("G138 DrumRollId", s -> List.of(DrumRollId.knockHz()));
         sweep("G145 BuzzGarden", s -> BuzzGarden.seeded(s).bees().stream().map(BuzzGarden.Bee::hz).toList());
         sweep("G150 OwlFix", s -> List.of(OwlFix.seeded(s).hootHz()));
+        sweep("G159 CricketThermometer", s -> CricketThermometer.seeded(s).soundscape().stream().map(CricketThermometer.Chirp::hz).toList());
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 }
