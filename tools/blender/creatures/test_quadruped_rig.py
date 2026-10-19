@@ -69,6 +69,29 @@ add("antlers mirror L/R", all(abs(ep[n]["centre"][0] + ep[n.replace("AntlerL", "
 add("antlers rise above the head", min(p["centre"][2] for p in ant) > ep["Head"]["centre"][2])
 add("elk clips loop and match the Hornback set", sorted(e["clips"]) == ["Idle", "Run", "Walk"] and all(k[0][1] == k[-1][1] for c in e["clips"].values() for t in c["tracks"].values() for k in t.values()))
 add("elk head bone lifted vs body", E["Head"]["head"][2] > E["Chest"]["tail"][2] + 0.2)
+# G129 squirrel: bushy tail chain, ears, paws, Forage clip, rigid bind; defaults above stay pinned
+import squirrel_g129
+q = squirrel_g129.squirrel(); QB = {b["name"]: b for b in q["bones"]}; QP = {p["name"]: p for p in q["parts"]}
+qpin = json.load(open(os.path.join(ROOT, "data", "contest", "g129_squirrel.quad.json"), encoding="utf-8"))
+add("squirrel == its pin", json.loads(json.dumps(q)) == qpin)
+add("squirrel ~40 cm nose to tail tip (0.36-0.44)", 0.36 <= squirrel_g129.length_nose_to_tail(q) <= 0.44, squirrel_g129.length_nose_to_tail(q))
+add("squirrel clips Idle, Run, Forage", sorted(q["clips"]) == ["Forage", "Idle", "Run"])
+add("squirrel tail chain Tail > Tail1 > Tail2 off Hips", QB["Tail"]["parent"] == "Hips" and QB["Tail1"]["parent"] == "Tail" and QB["Tail2"]["parent"] == "Tail1" and len(QB) == 17)
+add("tail curls up: each link higher than the last", QB["Tail"]["tail"][2] < QB["Tail1"]["tail"][2] and all(QB[n]["tail"][2] > QB[n]["head"][2] for n in ("Tail", "Tail1")))
+add("bushy: tail spindles fatter than the legs", min(max(r for r, _ in QP[n]["profile"]) for n in ("Tail", "Tail1", "Tail2")) > 1.5 * QP["LegFL_Lower"]["size"][0])
+add("ears + eyes on Head, paws not hooves", all(QP[n]["bone"] == "Head" for n in ("EarL", "EarR", "EyeL", "EyeR")) and "PawFL" in QP and not any(n.startswith(("Hoof", "Horn", "Plate")) for n in QP))
+add("squirrel rigid bind, stands on z=0, centred", q.get("bind_mode") == "rigid" and abs(q["predicted"]["bounds_min"][2]) < 1e-6 and abs(q["predicted"]["bounds_min"][0] + q["predicted"]["bounds_max"][0]) < 0.01)
+add("squirrel LOD1 35-65%, <= 6000 tris", 0.35 <= q["predicted"]["lod1_ratio"] <= 0.65 and q["predicted"]["triangles"] <= 6000, q["predicted"]["lod1_ratio"])
+F = q["clips"]["Forage"]["tracks"]
+add("Forage sits up: Hips lifts the front, hind legs counter it", F["Hips"]["rot"][0][1][0] > math.radians(40) and abs(F["LegBL_Upper"]["rot"][0][1][0] - F["Hips"]["rot"][0][1][0]) < 1e-9)
+add("Forage forepaws reach up to the mouth, head nibbles", F["LegFL_Upper"]["rot"][0][1][0] < 0 and F["LegFL_Lower"]["rot"][0][1][0] < 0 and len({round(v[0], 4) for _, v in F["Head"]["rot"]}) > 3)
+for n, c in q["clips"].items():
+    add("squirrel %s loops on real bones" % n, all(b in QB for b in c["tracks"]) and all(k[0][1] == k[-1][1] for t in c["tracks"].values() for k in t.values()))
+try:
+    Q.recipe("x", 1, clip_names=("Idle", "Dance")); add("unknown clip refused", False)
+except ValueError:
+    add("unknown clip refused", True)
+add("default recipe keeps Idle/Walk/Run only, no bind_mode", sorted(m["clips"]) == ["Idle", "Run", "Walk"] and "bind_mode" not in m)
 ok = 0
 for n, r, dd in checks:
     ok += r
