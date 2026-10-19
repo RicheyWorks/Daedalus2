@@ -12,7 +12,9 @@ import java.util.List;
  * The player picks the brood's cycle (10-18 years); each predator is scored at its worst-case phase over one
  * full joint cycle (N x predator years, i.e. predator-cycle-many emergences), counting emergences that meet
  * a boom with {@link BeatCoincidence}. Scores are meetings per {@link #PER_EMERGENCES} emergences, summed
- * over predators, so long and short cycles compare fairly. The best cycle minimises the score. This is the prime-cycle hypothesis: a cycle sharing a factor
+ * over predators, so long and short cycles compare fairly. The best cycle minimises the score. Real periodical
+ * cicadas (Magicicada) emerge on 13- or 17-year cycles; this models the prime-cycle hypothesis (a hypothesis
+ * for why, not a settled explanation): a cycle sharing a factor
  * with a predator's lets it lock on every time, while cycles coprime to every predator (13 and 17 always
  * are) meet each one only once per predator cycle length.
  *
