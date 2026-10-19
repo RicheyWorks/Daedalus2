@@ -36,12 +36,14 @@ def part_into(bm, p, lod, offset, slot):
     else:
         vs = K.local_verts(p, lod); vv = [t.verts.new(v) for v in vs]
         n = p["lod1"]["segments"] if lod and p.get("lod1", {}).get("segments") else p["segments"]
+        if p["shape"] == "slab":
+            n = len(vs) // 2
         rings = len(vs) // n
         for r in range(rings - 1):
             for i in range(n):
                 j = (i + 1) % n
                 t.faces.new((vv[r * n + i], vv[r * n + j], vv[(r + 1) * n + j], vv[(r + 1) * n + i]))
-        caps = [True, True] if p["shape"] == "cyl" else p["caps"]
+        caps = [True, True] if p["shape"] in ("cyl", "slab") else p["caps"]
         if caps[0]: t.faces.new([vv[i] for i in reversed(range(n))])
         if caps[1]: t.faces.new([vv[(rings - 1) * n + i] for i in range(n)])
         bmesh.ops.recalc_face_normals(t, faces=t.faces)

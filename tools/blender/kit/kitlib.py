@@ -48,6 +48,22 @@ def lathe(name, profile, centre, slot, segments=16, cap_bottom=True, cap_top=Tru
     return p
 
 
+def slab(name, outline, thickness, centre, slot, rot=None, lod1=None):
+    """Flat extruded polygon: outline [(x, y), ...] in the part's local XY about its centre (simple polygon, any winding),
+    thickness along local Z. LOD1 {"segments": k} keeps every other outline vertex (k = ceil(n / 2)). Tris = 4n - 4."""
+    n = len(outline)
+    p = {"name": name, "shape": "slab", "outline": [[round(x, 6), round(y, 6)] for x, y in outline], "thickness": round(thickness, 6),
+         "centre": [round(v, 6) for v in centre], "slot": slot, "segments": n}
+    if rot: p["rot"] = [round(v, 4) for v in rot]
+    if lod1: p["lod1"] = lod1
+    return p
+
+
+def _slab_outline(p, lod):
+    o = p["outline"]
+    return o[::2] if lod and p.get("lod1", {}).get("segments") else o
+
+
 def in_lod(p, lod):
     """lod1={"drop": True} parts are LOD0 only; lod1={"only": True} parts are LOD1 only (a simpler stand-in)."""
     l1 = p.get("lod1", {})
@@ -62,6 +78,8 @@ def part_tris(p, lod=0):
         return BOX_TRIS if p.get("bevel", True) else BOX_PLAIN_TRIS
     if p["shape"] == "cyl":
         return 4 * seg - 4
+    if p["shape"] == "slab":
+        return 4 * len(_slab_outline(p, lod)) - 4
     if p["shape"] == "lathe":
         k = len(p["profile"])
         return 2 * seg * (k - 1) + sum(p["caps"]) * (seg - 2)
@@ -89,6 +107,9 @@ def local_verts(p, lod=0):
                 for sz in (-1, 1):
                     out += [(sx * a, sy * (b - o), sz * (c - o)), (sx * (a - o), sy * b, sz * (c - o)), (sx * (a - o), sy * (b - o), sz * c)]
         return out
+    if p["shape"] == "slab":
+        h = p["thickness"] / 2; o = _slab_outline(p, lod)
+        return [(x, y, -h) for x, y in o] + [(x, y, h) for x, y in o]
     seg = p["lod1"]["segments"] if lod and p.get("lod1", {}).get("segments") else p["segments"]
     ring = [(math.cos(2 * math.pi * i / seg), math.sin(2 * math.pi * i / seg)) for i in range(seg)]
     if p["shape"] == "cyl":

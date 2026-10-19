@@ -5,7 +5,8 @@ clip in the exported glb (side view), so the sheet shows the rig actually moves.
   python preview_quadruped.py --compose --tiles <tmp> --title "..." --out sheet.png"""
 import argparse, json, math, os, sys
 
-SAMPLES = {"Idle": (0.5,), "Walk": (0.0, 0.25, 0.5, 0.75), "Run": (0.0, 0.33, 0.66)}
+SAMPLES = {"Idle": (0.5,), "Walk": (0.0, 0.25, 0.5, 0.75), "Run": (0.0, 0.33, 0.66), "Flutter": (0.0, 0.25, 0.5, 0.75)}
+VIEWS = {"side": (1.0, -0.12, 0.18), "front": (0.15, -1.0, 0.35), "top": (0.35, -0.45, 1.0)}
 
 
 def render(o):
@@ -13,7 +14,10 @@ def render(o):
     from mathutils import Vector
     os.makedirs(o.tiles, exist_ok=True); shots = []
     bpy.ops.wm.read_factory_settings(use_empty=True); bpy.ops.import_scene.gltf(filepath=o.glb)
-    arm = next(x for x in bpy.data.objects if x.type == "ARMATURE"); meshes = [x for x in bpy.data.objects if x.type == "MESH"]
+    arm = next(x for x in bpy.data.objects if x.type == "ARMATURE"); meshes = [x for x in bpy.data.objects if x.type == "MESH" and any(md.type == "ARMATURE" for md in x.modifiers)]
+    for x in bpy.data.objects:                  # the glTF importer adds a unit "Icosphere" bone-shape helper: keep it out of frame and render
+        if x.type == "MESH" and x not in meshes:
+            x.hide_render = True
     acts = {a.name: a for a in bpy.data.actions}
     def act(clip):
         return next((a for n, a in acts.items() if n == clip or n.endswith("|" + clip) or n.startswith(clip)), None)
@@ -25,15 +29,16 @@ def render(o):
     def frame_cam(d):
         pts = [m.matrix_world @ Vector(c) for m in meshes for c in m.bound_box]
         lo = Vector([min(p[i] for p in pts) for i in range(3)]); hi = Vector([max(p[i] for p in pts) for i in range(3)]); c = (lo + hi) / 2; L = max(hi - lo) * 1.15
-        cam.ortho_scale = 1.15 * L; dv = Vector(d).normalized(); co.location = c + dv * L * 4; co.rotation_euler = (-dv).to_track_quat("-Z", "Y").to_euler(); cam.clip_end = L * 10
+        cam.ortho_scale = 1.15 * L; dv = Vector(d).normalized(); co.location = c + dv * L * 4; co.rotation_euler = (-dv).to_track_quat("-Z", "Y").to_euler(); cam.clip_end = L * 10; cam.clip_start = L * 0.01
     if arm.animation_data:
         arm.animation_data.action = None
     for pb in arm.pose.bones:
         pb.rotation_quaternion = (1, 0, 0, 0); pb.rotation_euler = (0, 0, 0); pb.location = (0, 0, 0)
-    s.frame_set(0); frame_cam((0.6, -0.75, 0.45)); s.render.filepath = os.path.join(o.tiles, "rest.png"); bpy.ops.render.render(write_still=True); shots.append(["rest", "rest pose", 0])
-    side = (1.0, -0.12, 0.18)
-    for clip, fr in SAMPLES.items():
-        a = act(clip)
+    s.frame_set(0); frame_cam(tuple(float(v) for v in o.rest_view.split(","))); s.render.filepath = os.path.join(o.tiles, "rest.png"); bpy.ops.render.render(write_still=True); shots.append(["rest", "rest pose", 0])
+    side = VIEWS[o.view]
+    want = [c.strip() for c in o.clips.split(",")] if o.clips else [c for c in SAMPLES if act(c) is not None]
+    for clip in want:
+        fr = SAMPLES.get(clip, (0.0, 0.33, 0.66)); a = act(clip)
         if a is None:
             raise SystemExit("clip %s not in glb (actions: %s)" % (clip, sorted(acts)))
         arm.animation_data_create(); arm.animation_data.action = a; f0, f1 = a.frame_range
@@ -62,4 +67,6 @@ if __name__ == "__main__":
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
     ap = argparse.ArgumentParser(); ap.add_argument("--compose", action="store_true"); ap.add_argument("--glb"); ap.add_argument("--tiles", required=True)
     ap.add_argument("--title", default=""); ap.add_argument("--out")
+    ap.add_argument("--clips", default="", help="comma list; default = every known clip present"); ap.add_argument("--view", default="side", choices=sorted(VIEWS))
+    ap.add_argument("--rest-view", default="0.6,-0.75,0.45")
     o = ap.parse_args(argv); compose(o) if o.compose else render(o)

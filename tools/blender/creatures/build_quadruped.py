@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Build a blender-quadruped/v1 recipe headless into a skinned glb with Idle/Walk/Run glTF animations (blender-team).
+"""Build a blender-quadruped/v1 (or any bones/parts/clips creature recipe, e.g. blender-insect/v1) headless into a skinned glb with Idle/Walk/Run glTF animations (blender-team).
   blender -b --factory-startup --python tools/blender/creatures/build_quadruped.py -- --recipe <x.quad.json> --out <staging dir>
 Writes <out>/<Asset>/<Asset>.glb (mesh + armature + skin + 3 animations), <Asset>_LOD1.glb (same skeleton, skin, no clips),
 <Asset>.blend, build_report.json (tris, bones, bind result per part, weight checks, glb read-back: joints, animations, channels).
@@ -57,8 +57,11 @@ def bind(m, me_ob, arm_ob, ranges):
     """ARMATURE_AUTO (bone heat), then validate per part; rigid fallback for parts heat got wrong; <= 4 influences, normalised."""
     bpy.ops.object.select_all(action="DESELECT"); me_ob.select_set(True); arm_ob.select_set(True)
     bpy.context.view_layer.objects.active = arm_ob
-    auto_ok = True
+    auto_ok = m.get("bind_mode", "auto") != "rigid"      # rigid recipes (insects: tiny, plate-like parts) skip bone heat
+    rigid = {p["name"] for p in m["parts"] if p.get("rigid")}
     try:
+        if not auto_ok:
+            raise RuntimeError("recipe bind_mode rigid")
         bpy.ops.object.parent_set(type="ARMATURE_AUTO")
     except Exception as e:      # heat failure: parent with empty groups, then everything falls back to rigid
         auto_ok = False; print("ARMATURE_AUTO failed:", e)
@@ -69,8 +72,8 @@ def bind(m, me_ob, arm_ob, ranges):
     G = {g.index: g.name for g in me_ob.vertex_groups}; vg = me_ob.vertex_groups; me = me_ob.data
     result = {"auto_parts": [], "rigid_parts": []}
     for name, bone, a, z in ranges:
-        good = True
-        for i in range(a, z):
+        good = name not in rigid
+        for i in range(a, z if good else a):
             ws = [(g.weight, G[g.group]) for g in me.vertices[i].groups if g.weight > 1e-4]
             if not ws or Q.hops(m["bones"], max(ws)[1], bone) > 2:
                 good = False; break
@@ -89,7 +92,7 @@ def bind(m, me_ob, arm_ob, ranges):
     for v in me.vertices:
         ws = [g.weight for g in v.groups if g.weight > 1e-4]
         maxinf = max(maxinf, len(ws)); unweighted += not ws; badsum += abs(sum(ws) - 1) > 1e-3
-    result.update({"method": "ARMATURE_AUTO bone heat" if auto_ok else "ARMATURE_AUTO failed -> rigid", "max_influences": maxinf, "unweighted_vertices": unweighted,
+    result.update({"method": "ARMATURE_AUTO bone heat" if auto_ok else ("rigid per part (recipe bind_mode)" if m.get("bind_mode") == "rigid" else "ARMATURE_AUTO failed -> rigid"), "max_influences": maxinf, "unweighted_vertices": unweighted,
                    "non_normalised_vertices": badsum, "vertices": len(me.vertices)})
     return result
 

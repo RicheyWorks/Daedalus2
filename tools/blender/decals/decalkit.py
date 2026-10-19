@@ -25,6 +25,19 @@ def vnoise(rng, h, w, cells_y, cells_x, octaves=3):
     return out / tot
 
 
+def tnoise(rng, h, w, cells_y, cells_x, octaves=3):
+    """Tileable value noise in [0,1]: the random grids wrap, so the texture repeats seamlessly in both axes."""
+    out = np.zeros((h, w)); amp, tot = 1.0, 0.0
+    for o in range(octaves):
+        cy, cx = cells_y * 2 ** o, cells_x * 2 ** o; g = rng.random((cy, cx))
+        ys, xs = np.arange(h) * cy / h, np.arange(w) * cx / w
+        y0, x0 = ys.astype(int), xs.astype(int); fy, fx = (ys - y0)[:, None], (xs - x0)[None, :]
+        fy, fx = fy * fy * (3 - 2 * fy), fx * fx * (3 - 2 * fx); y1, x1 = (y0 + 1) % cy, (x0 + 1) % cx
+        a, b, c, d = g[y0][:, x0], g[y0][:, x1], g[y1][:, x0], g[y1][:, x1]
+        out += amp * ((a * (1 - fx) + b * fx) * (1 - fy) + (c * (1 - fx) + d * fx) * fy); tot += amp; amp *= 0.5
+    return out / tot
+
+
 def voronoi(rng, h, w, cell_px):
     """Jittered-grid Voronoi: (F1, F2, cell id) per pixel, distances in pixels. Checks the 3x3 neighbour cells."""
     gy, gx = int(np.ceil(h / cell_px)) + 2, int(np.ceil(w / cell_px)) + 2
