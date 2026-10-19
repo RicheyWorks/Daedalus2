@@ -10,7 +10,8 @@ centre; front = Blender -Y = Unreal +X after the glTF/Interchange swap (buffffff
 States are separate assets <Asset>_<State> with the same pivot and sockets. No node animation on rigid props
 (unreal-epic-boss 48497: Unreal drives swing/dip/open).
 Everything here is pure Python, so triangle counts and bounds are predicted (and tested) without Blender."""
-import hashlib, json, math, random
+import hashlib, json, math, os, random, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))   # sockets_sidecar
 
 BOX_TRIS = 44            # a cube with all 12 edges bevelled once (segments=1): 6 + 12 quads + 8 corner tris
 BOX_PLAIN_TRIS = 12
@@ -122,10 +123,84 @@ def obj(name, parts, parent=None, pivot=(0, 0, 0), role="root"):
     return {"name": name, "parent": parent, "pivot": [round(v, 5) for v in pivot], "role": role, "parts": parts}
 
 
-def socket(name, location, parent=None, forward=(0, -1, 0)):
+def socket(name, location, parent=None, forward=(0, -1, 0), attach=None):
+    """attach=(barrel, up) in Blender axes marks a held-prop attach socket: sidecar rotation +X along the barrel/shaft, +Z up.
+    Plain sockets get sidecar rotation [0, 0, 0] (mesh-aligned). forward is descriptive only (sockets_sidecar convention, UEB 48793/48812)."""
     x, y, z = location
-    return {"name": name if name.startswith("SOCKET_") else "SOCKET_" + name, "location": [round(v, 5) for v in location], "parent": parent,
-            "forward": list(forward), "location_gltf": [round(x, 5), round(z, 5), round(-y, 5) + 0.0]}
+    s = {"name": name if name.startswith("SOCKET_") else "SOCKET_" + name, "location": [round(v, 5) for v in location], "parent": parent,
+         "forward": list(forward), "location_gltf": [round(x, 5), round(z, 5), round(-y, 5) + 0.0]}
+    if attach:
+        s["attach"] = {"barrel": list(attach[0]), "up": list(attach[1])}
+    return s
+
+
+def _euler_xyz(rot):
+    a, b, c = (math.radians(v) for v in rot)
+    ca, sa, cb, sb, cc, sc = math.cos(a), math.sin(a), math.cos(b), math.sin(b), math.cos(c), math.sin(c)
+    rx = ((1, 0, 0), (0, ca, -sa), (0, sa, ca)); ry = ((cb, 0, sb), (0, 1, 0), (-sb, 0, cb)); rz = ((cc, -sc, 0), (sc, cc, 0), (0, 0, 1))
+    mm = lambda p, q: tuple(tuple(sum(p[i][k] * q[k][j] for k in range(3)) for j in range(3)) for i in range(3))
+    return mm(rz, mm(ry, rx))
+
+
+def ue_rotator_of_blender_rot(rot):
+    """Blender XYZ euler (deg) of a mover -> UE [pitch, yaw, roll] of the same physical rotation (N R N, N = diag(1, -1, 1))."""
+    import sockets_sidecar as SS
+    r = _euler_xyz(rot); n = SS.N
+    return SS.matrix_to_rotator(SS._mm(SS._mm(n, r), n))
+
+
+def split_movers(closed, opened=None):
+    """UEB 48812: Interchange puts every UCX of a glb on the root static mesh, so moving children ship as their own glbs.
+    From a state asset (Closed) -> [frame, mover...]:
+      frame  <state_of>          root parts + root UCX + root sockets + SOCKET_Hinge_<Part> at each mover's pivot (plain rotation).
+      mover  <state_of>_<Part>   the child's parts/UCX/sockets moved so the hinge pivot is the origin.
+    The Closed/Open state glbs stay as static snapshots (all hulls correct for that pose). opened gives the open pose as a
+    hinge rotation (Blender euler of the child's first part, Open minus Closed) and its UE rotator."""
+    base = closed["state_of"]; root = closed["objects"][0]; kids = closed["objects"][1:]
+    def sub(v, p):
+        return [round(v[i] - p[i], 5) + 0.0 for i in range(3)]
+    def matsub(mats, asset, used):
+        keep = sorted(used); remap = {o: n for n, o in enumerate(keep)}
+        out = []
+        for o in keep:
+            mt = dict(mats[o]); mt["slot"] = remap[o]; mt["name"] = mt["name"].replace(closed["asset"], asset); out.append(mt)
+        return out, remap
+    hinges = []; out = []
+    for k in kids:
+        part = k["name"][len(closed["asset"]) + 1:]; mv = "%s_%s" % (base, part); piv = k["pivot"]
+        open_rot = None
+        if opened:
+            ok_ = next(o for o in opened["objects"] if o["name"] == k["name"].replace(closed["asset"], opened["asset"]))
+            open_rot = [round(ok_["parts"][0].get("rot", [0, 0, 0])[i] - k["parts"][0].get("rot", [0, 0, 0])[i], 4) for i in range(3)]
+        hinges.append({"socket": "SOCKET_Hinge_" + part, "mover": mv, "pivot_m": piv,
+                       "open_blender_euler_deg": open_rot, "open_ue_rotator": ue_rotator_of_blender_rot(open_rot) if open_rot else None})
+        used = {q["slot"] for q in k["parts"]}; mats, remap = matsub(closed["materials"], mv, used)
+        parts = [dict(q, centre=sub(q["centre"], piv), slot=remap[q["slot"]]) for q in k["parts"]]
+        col = [dict(c, name=c["name"].replace(closed["asset"], mv).rsplit("_", 1)[0] + "_%02d" % i, centre=sub(c["centre"], piv), parent=None)
+               for i, c in enumerate([c for c in closed.get("collision", []) if c.get("parent") == k["name"]])]
+        socks = [socket(s["name"], sub(s["location"], piv), None, s.get("forward", (0, -1, 0))) for s in closed["sockets"] if s.get("parent") == k["name"]]
+        m = {"asset": mv, "kind": closed["kind"], "seed": closed["seed"], "mover_of": base, "hinge": hinges[-1],
+             "spec": dict(closed["spec"], split="mover glb (UEB 48812): origin = hinge pivot"), "materials": mats,
+             "objects": [obj(mv, parts, role="mover; origin at the hinge pivot (frame SOCKET_Hinge_%s)" % part)], "sockets": socks, "collision": col,
+             "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at %s SOCKET_Hinge_%s)" % (base, part), "nanite": True}
+        m = finish(m)
+        for q in parts:                       # small movers: keep LOD0-only trim at LOD1 until the ~50 % band holds
+            if m["predicted"]["lod1_ratio"] is None or m["predicted"]["lod1_ratio"] >= 0.35:
+                break
+            if (q.get("lod1") or {}).get("drop"):
+                q["lod1"] = {k: v for k, v in q["lod1"].items() if k != "drop"} or None
+                if q["lod1"] is None:
+                    del q["lod1"]
+                m = finish(m)
+        out.append(m)
+    used = {q["slot"] for q in root["parts"]}; mats, remap = matsub(closed["materials"], base, used)
+    fs = [socket(s["name"], s["location"], None, s.get("forward", (0, -1, 0))) for s in closed["sockets"] if not s.get("parent")]
+    fs += [socket(h["socket"], h["pivot_m"]) for h in hinges]
+    fcol = [dict(c, name=c["name"].replace(closed["asset"], base)) for c in closed.get("collision", []) if not c.get("parent")]
+    frame = {"asset": base, "kind": closed["kind"], "seed": closed["seed"], "frame_of": [h["mover"] for h in hinges], "hinges": hinges,
+             "spec": dict(closed["spec"], split="frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"),
+             "materials": mats, "objects": [obj(base, [dict(q, slot=remap[q["slot"]]) for q in root["parts"]])], "sockets": fs, "collision": fcol, "nanite": True}
+    return [finish(frame)] + out
 
 
 def ucx_box(asset, i, size, centre, parent=None):
@@ -156,8 +231,8 @@ def finish(m):
                       "bounds_min": lo, "bounds_max": hi, "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)],
                       "collision_tris": sum(c["tris"] for c in m.get("collision", []))}
     m.setdefault("schema", SCHEMA); m.setdefault("axes", AXES); m.setdefault("status", "STAGED NOT READY")
-    m["unreal"] = {"nanite": "on by default on the UE side (unreal-epic-boss)", "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): "
-                   "use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    m["unreal"] = {"nanite": "on by default on the UE side (unreal-epic-boss)", "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar "
+                   "rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
                    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"}
     m["export"] = {"format": "GLB", "export_yup": True, "export_apply": True, "export_extras": True, "export_animations": False}
     keys = ("objects", "materials", "sockets", "collision")
@@ -179,7 +254,10 @@ def check_asset(m, cap):
     """Generic spec checks used by every recipe's tests: [(name, ok, detail)]."""
     p = m["predicted"]; out = []
     out.append(("%s tris %d <= %d" % (m["asset"], p["triangles"], cap), p["triangles"] <= cap, p["triangles"]))
-    out.append(("%s stands on z=0" % m["asset"], abs(p["bounds_min"][2]) < 1e-6, p["bounds_min"][2]))
+    if m.get("mover_of"):                # frame/mover split: origin is the hinge pivot, placed at the frame's SOCKET_Hinge_*
+        out.append(("%s origin = hinge pivot (by design)" % m["asset"], m["hinge"]["socket"].startswith("SOCKET_Hinge_"), p["bounds_min"]))
+    else:
+        out.append(("%s stands on z=0" % m["asset"], abs(p["bounds_min"][2]) < 1e-6, p["bounds_min"][2]))
     if m.get("off_centre_ok"):   # e.g. a gate state whose leaves swing open: pivot stays the closed asset's bottom centre
         out.append(("%s off-centre by design: %s" % (m["asset"], m["off_centre_ok"]), True, p["bounds_min"]))
     else:
@@ -191,4 +269,12 @@ def check_asset(m, cap):
     out.append(("%s root object named like the asset" % m["asset"], m["objects"][0]["name"] == m["asset"] and m["objects"][0]["parent"] is None, ""))
     if p["lod1_triangles"] is not None:
         out.append(("%s LOD1 ~50%% (35-65%%)" % m["asset"], 0.35 <= p["lod1_ratio"] <= 0.65, p["lod1_ratio"]))
+    return out
+
+
+def split_into(caps, sockets, cap, closed, opened=None):
+    """split_movers + register caps/sockets for a recipe module's tables."""
+    out = split_movers(closed, opened)
+    for m in out:
+        caps[m["asset"]] = cap; sockets[m["asset"]] = [x["name"] for x in m["sockets"]]
     return out
