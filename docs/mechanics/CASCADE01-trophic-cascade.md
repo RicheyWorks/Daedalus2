@@ -62,4 +62,8 @@ NPC lines (Orrin Vale):
 - `TrophicCascade.valley(Settings, seed)`, then `release(year, n)` / `fence(reach)` / `cull(perYear)`, then `run()` → `Report`.
 - The host reads `years()` for the timeline: elk, wolves, kills, culled, mean willow, colonies.
 - `Report.band(reach)` paints the river cells of the BattlefieldEcology grid. Colony reaches are where BEAVER01 dams start.
-- Assets: wolf and elk (reuse the ecology Guild animals), willow thicket (reuse pcg-ecology willow) and a fence segment. See UNREAL-QUEUE / BLENDER-ASKS G58.
+- Assets (blender-team DONE 49457, staged NOT READY in `bot-team\staging\g58-valley-exclosure-fence-20261019\`):
+  - `Prop_Valley_ExclosureFence`: a tileable 3 m segment. `SOCKET_End_A`/`SOCKET_End_B` are at ground level, and segment n's End_B is segment n+1's End_A. Each segment owns only its -X post.
+  - `Prop_Valley_ExclosureFence_EndPost` closes a run.
+  - Wolf is `Mob_Wolf` (or `Mob_Realm_Wolf`) and willow is `Prop_Tree_PYT_Willow_V01+`, both reused.
+  - There is no elk mesh yet: the `Mob_Lab_Hornback` rig stands in until blender builds the placeholder `Mob_Valley_Elk` (Idle/Walk/Run clips, from quadruped_rig.py).
