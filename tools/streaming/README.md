@@ -41,3 +41,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Tide Chart Cache (contest G70, quest q_tide_chart)
 - `tide_chart_cache.py`: DiskSaver Island RAM-pool caching minigame. Seeded island requests come in, each miss stalls for the island's cost, and the keeper evicts by reading the tide chart (Belady over a visible window) or by LRU. The pool and islands are built from G39 Byte Spring (`tide_chart_cache_test.py`; CI `Tide Chart Cache`). Rules: `docs/islands/DISKSAVER-TIDE-CHART.md`.
+
+## Driftwood Codes (contest G76, quest q_driftwood_codes)
+- `driftwood_codes.py`: DiskSaver Island packing minigame. Tie chunk-kind bundles into a raft; the code length is the depth; packed bits must fit the reef slot. Huffman's rule (lightest pair) hits the optimum and tying in order is the trap. Canonical prefix codes round-trip, and the frequencies can come from the G70 tide chart (`driftwood_codes_test.py`; CI `Driftwood Codes`). Rules: `docs/islands/DISKSAVER-DRIFTWOOD-CODES.md`.
