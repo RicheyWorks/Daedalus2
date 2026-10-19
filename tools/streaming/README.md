@@ -1,4 +1,4 @@
-﻿# tools/streaming: DSB 1 island streaming budget tooling (disk-saver, ADR-063)
+# tools/streaming: DSB 1 island streaming budget tooling (disk-saver, ADR-063)
 
 - `dsb.py`: Python port of the DSB 1 parser/writer/picker. `test_dsb.py` replays
   `engines/unreal/core-test/streaming_budget_parity.txt`, so Python = Java = C++ byte for byte.
@@ -27,3 +27,5 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 - `data/islands/streaming_sources.json` rows may carry `"pin": {"disk_kib": N, ...}` with provenance; priority is layout `streaming` block, then pin, then measurement, then estimate.
 - BlenderBoss (2026-10-18): disk 16,348 KiB = ceil(16,739,484 bytes), the 67 BIP1 packets in `data/islands/blenderboss/flagship.bip.json` (sha256 a00fb9ca...09a9, checked by test_dsb.py). File-only, with blender-team consent (47979, receipt 47991). RAM stays an ESTIMATE.
 
+## Byte Spring cistern (contest G39, quest q_byte_spring)
+- `byte_spring.py`: DiskSaver Island minigame that composes `dsb.py`. DSB rows become islands that drink water, and the DSB 1 picker chooses the start residents. A seeded, integer-only tick sim (`byte_spring_test.py`, 46 tests; CI `Byte Spring cistern`). Rules: `docs/islands/DISKSAVER-BYTE-SPRING.md`.
