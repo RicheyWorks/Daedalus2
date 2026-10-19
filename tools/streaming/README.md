@@ -32,3 +32,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Save Vault Keeper (contest G59, quest q_save_vault)
 - `save_vault.py`: DiskSaver Island save-state minigame. A quota'd vault of content-addressed (dedupe) snapshot chunks, a bandwidth-limited and hash-verified Reef mirror, the newest snapshot per island pinned, and pruning an unmirrored snapshot = lost work. The quota comes from the G39 Byte Spring budget cap (`save_vault_test.py`; CI `Save Vault Keeper`). Rules: `docs/islands/DISKSAVER-SAVE-VAULT.md`.
+
+## Defrag Tide (contest G63, quest q_defrag_tide)
+- `defrag_tide.py`: DiskSaver Island disk-layout minigame. G39 island caches are scattered over a block shelf. The player moves N blocks per tide, the tide erodes free blocks into bad ones, and the goal is to reach the weighted seek target (`defrag_tide_test.py`; CI `Defrag Tide`). Rules: `docs/islands/DISKSAVER-DEFRAG-TIDE.md`.
