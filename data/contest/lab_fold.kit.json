@@ -1,0 +1,1559 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Closed",
+   "kind": "Bld",
+   "seed": 505,
+   "state": "Closed",
+   "state_of": "Bld_Lab_FoldWall_4m",
+   "alias": "WallMimic (pythagoras 48594)",
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Closed_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Closed_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Closed_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Closed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        0,
+        0,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        -1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Closed_Panel0",
+     "parent": "Bld_Lab_FoldWall_4m_Closed",
+     "pivot": [
+      -1.6,
+      0,
+      0.0
+     ],
+     "role": "fold panel 0 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -1.2,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -1.2,
+        -0.18,
+        1.788
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -0.81,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Closed_Panel1",
+     "parent": "Bld_Lab_FoldWall_4m_Closed",
+     "pivot": [
+      -0.8,
+      0,
+      0.0
+     ],
+     "role": "fold panel 1 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -0.4,
+        -0.18,
+        1.782
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -0.79,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Closed_Panel2",
+     "parent": "Bld_Lab_FoldWall_4m_Closed",
+     "pivot": [
+      0.8,
+      0,
+      0.0
+     ],
+     "role": "fold panel 2 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        0.4,
+        -0.18,
+        1.397
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        0.79,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Closed_Panel3",
+     "parent": "Bld_Lab_FoldWall_4m_Closed",
+     "pivot": [
+      1.6,
+      0,
+      0.0
+     ],
+     "role": "fold panel 3 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        1.2,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        1.2,
+        -0.18,
+        1.743
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        0.81,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      0.6,
+      0.15
+     ],
+     "centre": [
+      0,
+      0,
+      0.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      -1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_03",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      -1.2,
+      0,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Closed_Panel0",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_04",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      -0.4,
+      0,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Closed_Panel1",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_05",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      0.4,
+      0,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Closed_Panel2",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Closed_06",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      1.2,
+      0,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Closed_Panel3",
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_L",
+     "location": [
+      -1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.6,
+      2.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_R",
+     "location": [
+      1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.6,
+      2.0,
+      0.0
+     ]
+    }
+   ],
+   "predicted": {
+    "triangles": 620,
+    "lod1_triangles": 308,
+    "lod1_ratio": 0.497,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Closed": 220,
+     "Bld_Lab_FoldWall_4m_Closed_Panel0": 100,
+     "Bld_Lab_FoldWall_4m_Closed_Panel1": 100,
+     "Bld_Lab_FoldWall_4m_Closed_Panel2": 100,
+     "Bld_Lab_FoldWall_4m_Closed_Panel3": 100
+    },
+    "bounds_min": [
+     -2.0,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     0.3,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     0.6,
+     4.0
+    ],
+    "collision_tris": 84
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a14349133433e4284047d0680221416fad2ba86b86ac5d09e4a2c60cdb8dfd8a"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Open",
+   "kind": "Bld",
+   "seed": 505,
+   "state": "Open",
+   "state_of": "Bld_Lab_FoldWall_4m",
+   "alias": "WallMimic (pythagoras 48594)",
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Open_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Open_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Open_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        0,
+        0,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        -1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Open_Panel0",
+     "parent": "Bld_Lab_FoldWall_4m_Open",
+     "pivot": [
+      -1.6,
+      0,
+      0.0
+     ],
+     "role": "fold panel 0 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -1.43,
+        0.55,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -1.25,
+        0.55,
+        1.788
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -1.43,
+        0.94,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Open_Panel1",
+     "parent": "Bld_Lab_FoldWall_4m_Open",
+     "pivot": [
+      -0.8,
+      0,
+      0.0
+     ],
+     "role": "fold panel 1 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -1.12,
+        0.55,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -0.94,
+        0.55,
+        1.782
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -1.12,
+        0.16,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Open_Panel2",
+     "parent": "Bld_Lab_FoldWall_4m_Open",
+     "pivot": [
+      0.8,
+      0,
+      0.0
+     ],
+     "role": "fold panel 2 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        1.12,
+        0.55,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        0.94,
+        0.55,
+        1.397
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        1.12,
+        0.16,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_FoldWall_4m_Open_Panel3",
+     "parent": "Bld_Lab_FoldWall_4m_Open",
+     "pivot": [
+      1.6,
+      0,
+      0.0
+     ],
+     "role": "fold panel 3 (hinge pivot)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        1.43,
+        0.55,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        1.25,
+        0.55,
+        1.743
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        1.43,
+        0.94,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      }
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      0.6,
+      0.15
+     ],
+     "centre": [
+      0,
+      0,
+      0.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      -1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_03",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.78,
+      3.7
+     ],
+     "centre": [
+      -1.43,
+      0.55,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Open_Panel0",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_04",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.78,
+      3.7
+     ],
+     "centre": [
+      -1.12,
+      0.55,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Open_Panel1",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_05",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.78,
+      3.7
+     ],
+     "centre": [
+      1.12,
+      0.55,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Open_Panel2",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Open_06",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.78,
+      3.7
+     ],
+     "centre": [
+      1.43,
+      0.55,
+      2.0
+     ],
+     "parent": "Bld_Lab_FoldWall_4m_Open_Panel3",
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_L",
+     "location": [
+      -1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.6,
+      2.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_R",
+     "location": [
+      1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.6,
+      2.0,
+      0.0
+     ]
+    }
+   ],
+   "off_centre_ok": "Open panels fold back to +Y; root pivot stays the Closed wall's bottom centre so both states line up",
+   "predicted": {
+    "triangles": 620,
+    "lod1_triangles": 308,
+    "lod1_ratio": 0.497,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Open": 220,
+     "Bld_Lab_FoldWall_4m_Open_Panel0": 100,
+     "Bld_Lab_FoldWall_4m_Open_Panel1": 100,
+     "Bld_Lab_FoldWall_4m_Open_Panel2": 100,
+     "Bld_Lab_FoldWall_4m_Open_Panel3": 100
+    },
+    "bounds_min": [
+     -2.0,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     0.975,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     1.275,
+     4.0
+    ],
+    "collision_tris": 84
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f908a9a15c93b40e438d9991a20e4617e8e40fb87d472112ee5132f33d8629b0"
+  },
+  {
+   "asset": "Bld_Lab_Wall4m_Plain",
+   "kind": "Bld",
+   "seed": 505,
+   "alias": "Wall4m (pythagoras 48594)",
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "states": null,
+    "sockets": [],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_Wall4m_Plain_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_Wall4m_Plain_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_Wall4m_Plain",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.6,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.5,
+        3.55
+       ],
+       "centre": [
+        0,
+        0,
+        2.075
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Coping",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        0,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.52,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pilaster0",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.05,
+        3.55
+       ],
+       "centre": [
+        -1.0,
+        -0.275,
+        2.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pilaster1",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.05,
+        3.55
+       ],
+       "centre": [
+        1.0,
+        -0.275,
+        2.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pilaster2",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.05,
+        3.55
+       ],
+       "centre": [
+        -1.0,
+        0.275,
+        2.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pilaster3",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.05,
+        3.55
+       ],
+       "centre": [
+        1.0,
+        0.275,
+        2.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_Wall4m_Plain_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      0.6,
+      4.0
+     ],
+     "centre": [
+      0,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 352,
+    "lod1_triangles": 132,
+    "lod1_ratio": 0.375,
+    "objects": {
+     "Bld_Lab_Wall4m_Plain": 352
+    },
+    "bounds_min": [
+     -2.0,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     0.3,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     0.6,
+     4.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "281b3503910d4c30e6a99c8ab803f8e04e5b758d188b4f41ead17532ad4bde48"
+  }
+ ]
+}

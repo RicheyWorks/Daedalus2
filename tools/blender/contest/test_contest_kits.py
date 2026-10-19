@@ -6,7 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys
 import kitlib as K
 DATA = os.path.join(HERE, "..", "..", "..", "data", "contest")
 MODULES = {"wz_fishing": "wz_fishing.kit.json", "wz_eggs": "wz_eggs.kit.json"}
-for extra in ("lab_echo", "g03_hornback"):
+for extra in ("lab_echo", "lab_fold", "g03_hornback", "or_parlay"):
     if os.path.exists(os.path.join(HERE, extra + ".py")):
         MODULES[extra] = extra + ".kit.json"
 CAPS = {"Tool_WZ_FishingRod": 2000, "Prop_WZ_FishingFloat_Rest": 400, "Prop_WZ_FishingFloat_Dip": 400, "Prop_WZ_EggNest": 3000, "Prop_WZ_EggIncubator": 3000}
@@ -52,6 +52,10 @@ if "lab_echo" in MODULES:
     import lab_echo as L
     for c in L.extra_checks(allassets):
         add(*c)
+for extra in ("lab_fold", "or_parlay"):
+    if extra in MODULES:
+        for c in importlib.import_module(extra).extra_checks(allassets):
+            add(*c)
 if "g03_hornback" in MODULES:
     import g03_hornback as H
     for c in H.extra_checks(allassets):
