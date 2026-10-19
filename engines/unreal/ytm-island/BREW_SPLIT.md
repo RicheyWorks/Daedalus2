@@ -9,4 +9,6 @@ Status: AGREED. Proposed by youtube-master Oct 18 2026 (link #33510, follow-up #
 | Owns | herbcombo.py, found_tunes.csv, balance.json, ADaedalusBrewBench (DaedalusLink) | HerbChord, /api/v1/audio/herb-chord, AUD 1 |
 | Shared, not duplicated | one pitch class per herb. Melody Brewing reads prometheus's herb-to-pitch table and never defines its own | same table is the source of truth |
 
+Pitch table decision (Oct 19 2026, prometheus DONE A, #49071 reply_to 49056, request_id ytm-pitch-table-20261019): the one shared herb-to-pitch table is the island canon (Doleaf 0, Sharpcress 1, Rebell 2, Flatfern 3, Mimint 4, Fasage 5, Hushmoss 6, Solthorn 7, Gloryroot 8, Lavine 9, Dronebloom 10, Tisquill 11; collision-free), `PitchTable.ISLAND_CANON` in `daedalus-core/.../world/brew/PitchTable.java`. prometheus's FNV `Herb.pitchClass()` is only a fallback for herbs outside the canon (`ISLAND_CANON.orElse(HERB_CHORD)`).
+
 Rules: no second herb-to-pitch mapping; ordered melody = brew bench, unordered chord = audio; the brew bench may call the herb-chord endpoint to play a result, never the reverse.
