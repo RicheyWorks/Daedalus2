@@ -1,0 +1,9 @@
+{
+  "_comment": "Which Unreal Content folders each island owns, for tools/streaming/dsb_measure.py. Paths are relative to the project's Content folder (/Game/<path>). Owners: correct your row if your island keeps assets elsewhere.",
+  "islands": [
+    {"island": "BlenderBoss", "content_dirs": ["BlenderBoss"]},
+    {"island": "DiskSaver", "content_dirs": ["DiskSaver"]},
+    {"island": "Hephaestus", "content_dirs": ["Hephaestus"]},
+    {"island": "OddsReaper", "content_dirs": ["OddsReaper"]}
+  ]
+}

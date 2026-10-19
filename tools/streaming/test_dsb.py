@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import dsb  # noqa: E402
 import dsb_manifest  # noqa: E402
+import dsb_measure  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 PARITY = os.path.join(ROOT, "engines", "unreal", "core-test", "streaming_budget_parity.txt")
@@ -107,6 +108,37 @@ class GeneratorTest(unittest.TestCase):
         with open(out, "a") as f:
             f.write("# edited\n")
         self.assertEqual(dsb_manifest.main(["--root", root, "--check", out]), 1)
+
+
+class MeasureTest(unittest.TestCase):
+    def test_measure_sums_packages_and_manifest_prefers_measured(self):
+        root = tempfile.mkdtemp()
+        content = os.path.join(root, "Content")
+        os.makedirs(os.path.join(content, "Isle", "Meshes"))
+        for name, size in (("Isle/Meshes/A.uasset", 2048), ("Isle/Meshes/A.ubulk", 1000), ("Isle/Map.umap", 4096), ("Isle/notes.txt", 999999)):
+            with open(os.path.join(content, *name.split("/")), "wb") as f:
+                f.write(b"x" * size)
+        m = dsb_measure.measure(content, {"islands": [{"island": "Isle", "content_dirs": ["Isle"]}, {"island": "Gone", "content_dirs": ["Nope"]}]})
+        self.assertEqual(m["Isle"], {"disk_kib": 7, "ram_kib": 3, "files": 3, "missing": []})
+        self.assertEqual(m["Gone"]["files"], 0)
+        self.assertEqual(m["Gone"]["missing"], ["Nope"])
+        os.makedirs(os.path.join(root, "data", "islands", "isle"))
+        with open(os.path.join(root, "data", "islands", "isle", "layout.json"), "w") as f:
+            json.dump({"island": "Isle", "origin_cm": [0, 0], "placements": [{}] * 5}, f)
+        with open(os.path.join(root, "data", "islands", "streaming_measured.json"), "w") as f:
+            json.dump({"islands": m}, f)
+        text, _ = dsb_manifest.build(root)
+        self.assertEqual(text, "DSB 1\nisland Isle x 0 y 0 ram 3 disk 7\n")
+
+    def test_layout_pin_beats_measurement(self):
+        root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(root, "data", "islands", "p"))
+        with open(os.path.join(root, "data", "islands", "p", "layout.json"), "w") as f:
+            json.dump({"island": "P", "origin_cm": [0, 0], "placements": [], "streaming": {"ram_kib": 9}}, f)
+        with open(os.path.join(root, "data", "islands", "streaming_measured.json"), "w") as f:
+            json.dump({"islands": {"P": {"ram_kib": 1, "disk_kib": 2, "files": 1}}}, f)
+        text, _ = dsb_manifest.build(root)
+        self.assertEqual(text, "DSB 1\nisland P x 0 y 0 ram 9 disk 2\n")
 
 
 if __name__ == "__main__":
