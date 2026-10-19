@@ -22,7 +22,8 @@ import java.util.SplittableRandom;
  * {@value ArkDrydock#MISSING_RIVET_COST} strength up to the seam's launch strength. On a cold-snap day the crew can
  * only work if they drank the Void Crossing tonic ({@code dual_void_crossing}: cold_resist + slow_hunger), and without
  * it they drink double that day. The tonic also cuts the crew's own water by a quarter. The hold pays the day's water (crew plus manifest, the G24 rates). On
- * a day it runs dry, one head of the thirstiest kind aboard is lost. If any seam ends a day below {@value #BREACH},
+ * a day it runs dry, one head of the thirstiest kind aboard is lost (a tie goes to the kind listed first in
+ * {@link Life}). If any seam ends a day below {@value #BREACH},
  * the hull breaches and the ark limps home.
  *
  * <p>The host owns the {@link Crossing}. The storms and snaps are fixed by the seed when the crossing begins, so the
@@ -137,6 +138,7 @@ public final class VoidCrossing {
             return need;
         }
 
+        /** One head of the thirstiest kind aboard; a tie goes to the earlier {@link Life} (EnumMap order). */
         private void loseThirstiest() {
             Life worst = null;
             for (Map.Entry<Life, Integer> e : aboard.entrySet()) {

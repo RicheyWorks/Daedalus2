@@ -225,4 +225,72 @@ class VoidCrossingTest {
         assertThat(mech).contains("\"dual_void_crossing\"").contains("cold_resist+slow_hunger");
         assertThat(ForgeTemperQuest.DUAL_COOKBOOK).contains("dual_void_crossing");
     }
+
+    @Test
+    void aProvisionedArkWithTheTonicSurvivesFarMoreOftenThanADryOne() {
+        int provisioned = 0;
+        int dry = 0;
+        int n = 500;
+        for (long s = 0; s < n; s++) {
+            Voyage v = new Voyage("Kennel Isle", 3 + (int) (s % 5));
+            Crossing p = VoidCrossing.bosun(ark(70, v, 300), v, true, VoidCrossing.MAX_SPARES, s);
+            Crossing d = VoidCrossing.depart(ark(70, v, 0), v, false, 0, s);
+            while (d.outcome() == Outcome.SAILING) {
+                d.sail(-1);
+            }
+            provisioned += p.outcome() == Outcome.ARRIVED ? 1 : 0;
+            dry += d.outcome() == Outcome.ARRIVED ? 1 : 0;
+        }
+        // 406/500 (81%) against 128/500 (25%) with these rules.
+        assertThat(provisioned).isEqualTo(406);
+        assertThat(dry).isEqualTo(128);
+        assertThat(provisioned * 100 / n).isGreaterThanOrEqualTo(dry * 100 / n + 40);
+    }
+
+    @Test
+    void theSameSeedAndOrdersReplayIdentically() {
+        Ark a = ark(75, KENNEL, 50);
+        for (long s = 0; s < 50; s++) {
+            Crossing one = VoidCrossing.depart(a, KENNEL, s % 2 == 0, 4, s);
+            Crossing two = VoidCrossing.depart(a, KENNEL, s % 2 == 0, 4, s);
+            int day = 0;
+            while (one.outcome() == Outcome.SAILING) {
+                int order = (int) ((s + day++) % 7) - 1;
+                assertThat(one.sail(order)).isEqualTo(two.sail(order));
+            }
+            assertThat(two.outcome()).isEqualTo(one.outcome());
+            assertThat(two.encode()).isEqualTo(one.encode());
+            assertThat(two.lost()).isEqualTo(one.lost());
+        }
+    }
+
+    @Test
+    void aTieForThirstiestGoesToTheEarlierKindEveryTime() {
+        Voyage v = new Voyage("Glass Reef", 3);
+        List<Plate> plates = new ArrayList<>();
+        List<Integer> rivets = new ArrayList<>();
+        for (int i = 0; i < ArkClass.SKIFF.plates(); i++) {
+            plates.add(new Plate(90, i == 3 ? Quench.SPRING : Quench.MAGMA, true));
+            rivets.add(ArkDrydock.RIVETS_PER_SEAM);
+        }
+        Map<Life, Integer> m = new EnumMap<>(Life.class);
+        m.put(Life.PET, 1);
+        m.put(Life.VENT_BEES, 1);
+        Ark dry = new Ark(ArkClass.SKIFF, plates, rivets, m, 0);
+        Ark a = new Ark(ArkClass.SKIFF, plates, rivets, m, ArkDrydock.waterNeedDl(dry, v));
+        assertThat(Life.VENT_BEES.dlPerDay()).isEqualTo(Life.PET.dlPerDay());
+        long s = seedWhere(a, v, w -> w.get(0).cold() && w.stream().allMatch(d -> d.stormSeam() < 0));
+        for (int k = 0; k < 3; k++) {
+            Crossing x = VoidCrossing.depart(a, v, false, 0, s);
+            while (x.outcome() == Outcome.SAILING) {
+                x.sail(-1);
+            }
+            assertThat(x.lost().get(Life.VENT_BEES)).isEqualTo(1);
+            assertThat(x.lost()).containsKey(Life.VENT_BEES);
+            assertThat(x.lostHead()).isBetween(1, 2);
+            if (x.lostHead() == 1) {
+                assertThat(x.lost()).doesNotContainKey(Life.PET);
+            }
+        }
+    }
 }
