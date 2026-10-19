@@ -18,4 +18,8 @@ ISLAND.md beat 6 asks the player to "mine Meteor Scar (starmetal + emberite), ri
 
 ## Host contract
 
-The host owns the plan and kit, and judges the swing and drink actions it receives. A native C++ core will be its own claim.
+The host owns the plan and kit, and judges the swing and drink actions it receives. The native C++ core is its own claim, G143 (below).
+
+## Native C++ core (G143)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusScarDigCore.h` is a header-only C++17 port for the Unreal binding. It provides `MakeScarPlan`, `RunScarDig` (returns false where Java throws), `ScarProspector`, `ScarLuck` and `Encode`, and the `SCR 1` line is the same as `ScarDig.Result.encode()`. `engines/unreal/core-test/scar_dig_core_test.cpp` runs 7 checks under MSVC `/W4 /WX` and g++ `-Werror` with ASan/UBSan. Its `--write` mode writes `scar_dig_parity.txt`: 50 seeds x 4 kits x 3 hands (prospector, wild, wild off the west edge), 600 lines. `ScarDigParityTest` replays the same hands in Java and matches the file line for line.
