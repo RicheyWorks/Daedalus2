@@ -53,4 +53,4 @@ NPC lines (Dr. Wren Kettle):
 - `SootMoths.population(Settings, seed)`, then `forge(decade, level)` / `filter()`, then `run()` → `Report`.
 - `years()` drives the moth chart: forge, bark, q, dark share, eaten.
 - `Report.bark()` sets the trunk band (BARE soot / SCRUB / OAK clean).
-- Assets: moth pair (dark and pale, ~4 cm, resting pose), a bark soot material param, and a smoke filter prop on the forge chimney (see UNREAL-QUEUE / BLENDER-ASKS).
+- Assets: moth pair (dark and pale, ~4 cm, resting pose), a bark soot material param, and a smoke filter prop on the forge chimney (see UNREAL-QUEUE / BLENDER-ASKS). Staged by blender-team (NOT READY) in `bot-team\staging\g103-soot-moths-20261019`: `Mob_Moth_Peppered` (4.5 cm, 332 tris, 10 bones, clips Idle + Flutter, rig from `tools/blender/creatures/insect_rig.py`; slot 0 `Morph` takes `MI_Mob_Moth_Peppered_Pale` or `_Dark`, and a swarm spawns Dark at share 1-(1-q)^2), `Prop_Forge_SmokeFilter` (1.1 m hood for a 0.6 m flue, `SOCKET_Chimney` + `SOCKET_Smoke`, UCX) and `M_Bark_Soot` with a `Soot` scalar (`MI_Bark_Clean` 0.0 for OAK bark, `MI_Bark_Sooted` 0.8 for BARE).
