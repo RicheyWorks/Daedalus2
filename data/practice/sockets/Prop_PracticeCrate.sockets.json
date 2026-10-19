@@ -1,0 +1,22 @@
+{
+ "asset": "Prop_PracticeCrate",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; location relative to parent node; rotation [pitch, yaw, roll] deg",
+ "sockets": [
+  {
+   "name": "SOCKET_Top",
+   "parent": "Prop_PracticeCrate",
+   "location": [
+    0.0,
+    0.0,
+    50.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ ]
+}
