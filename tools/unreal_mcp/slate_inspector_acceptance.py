@@ -20,8 +20,9 @@ from tools.unreal_mcp.slate_inspector_results import ContractViolation
 SCOPE = "existing_primary_level_editor_details"
 TAB_ID = "LevelEditorSelectionDetails"
 BINDING_CONTRACT_SHA256 = "cba01057e2bcf49f2f6f70bb4bde62c6c53cd4a2a6aa384e0b6656efcd367bfa"
-CAPTURE_CONTRACT_SHA256 = "4e930cd79e430f1a9151831cc07b709f936b871abec2577503b829f02f1189d4"
+CAPTURE_CONTRACT_SHA256 = "557e1515f3fbee8b36933a970bfb091eb2ddbcf08f980761c0b4a6686a61b190"
 CAPTURE_SCHEMA = "daedalus.official-slate-panel-capture.v1"
+CAPTURE_MAX_DEPTH = 5
 MAX_CAPTURE_AGE_SECONDS = 300
 _CAPTURE_FIELDS = {
     "schema", "capture_id", "editor", "route", "binding", "snapshot_request",
@@ -102,7 +103,7 @@ def read_details_binding(return_value, *, expected_process_id, expected_world):
     _text(binding["world"], "binding world")
     _require(binding["world"] == expected_world, "binding world mismatch")
     _require(binding["tab_id"] == TAB_ID, "unapproved Details tab")
-    results.PanelResults(binding["approved_ref"], 2)
+    results.PanelResults(binding["approved_ref"], CAPTURE_MAX_DEPTH)
     for flag in _TRUE_FLAGS:
         _require(binding[flag] is True, "binding flag must be true: " + flag)
     _require(type(binding["ref_preexisting"]) is bool, "ref_preexisting must be bool")
@@ -231,22 +232,25 @@ def _accessibility_text(text):
     for line in lines:
         match = pattern.fullmatch(line)
         _require(match is not None, "malformed accessibility record")
-        results.PanelResults(match.group(1), 2)
+        results.PanelResults(match.group(1), CAPTURE_MAX_DEPTH)
 
 
 def read_panel_capture(capture, *, expected_process_id, expected_process_start_utc,
                        expected_world, expected_capture_id, expected_request_id,
-                       consumed_capture_ids):
+                       expected_max_depth, consumed_capture_ids):
     """Consume retained terminal['result'] once as caller-attested capture evidence.
 
     Receiver identity and outstanding capture/request IDs must be independently
-    retained by the operator. Keep the consumed-ID set across calls. Hashes do
-    not authenticate supplied evidence. Old captures remain historical artifacts;
+    retained by the operator. The expected depth must independently be integer5
+    for R3; never derive it from the supplied request. Keep the consumed-ID set
+    across calls. Hashes do not authenticate supplied evidence. Old captures remain historical artifacts;
     this current-capture check rejects them without changing their timestamps.
     The embedded existing packet remains plan-only and natively unqualified.
     """
     _keys(capture, _CAPTURE_FIELDS, "capture")
     _require(capture["schema"] == CAPTURE_SCHEMA, "unknown capture schema")
+    _require(type(expected_max_depth) is int and expected_max_depth == CAPTURE_MAX_DEPTH,
+             "independent expected MaxDepth must be integer 5 for R3")
     _require(type(consumed_capture_ids) is set, "caller-owned consumed-ID set required")
     _text(expected_capture_id, "expected capture ID", maximum=64)
     try:
@@ -290,7 +294,7 @@ def read_panel_capture(capture, *, expected_process_id, expected_process_start_u
     request = capture["snapshot_request"]
     _keys(request, {"Ref", "MaxDepth", "bIncludeSourceLocations"}, "Snapshot request")
     _require(request["Ref"] == binding["approved_ref"] and type(request["MaxDepth"]) is int
-             and request["MaxDepth"] == 2 and request["bIncludeSourceLocations"] is True,
+             and request["MaxDepth"] == expected_max_depth and request["bIncludeSourceLocations"] is True,
              "Snapshot request differs from approved single-panel request")
 
     call = capture["call"]
@@ -303,8 +307,8 @@ def read_panel_capture(capture, *, expected_process_id, expected_process_start_u
              "historical capture cannot qualify as current evidence")
 
     text = capture["raw_return_text"]
-    snapshot = results.PanelResults(binding["approved_ref"], 2).snapshot(
-        text, ref=request["Ref"], max_depth=2, include_source_locations=True)
+    snapshot = results.PanelResults(binding["approved_ref"], expected_max_depth).snapshot(
+        text, ref=request["Ref"], max_depth=expected_max_depth, include_source_locations=True)
     _accessibility_text(text)
     _digest(capture["raw_return_utf8_sha256"], snapshot["content_sha256"], "Snapshot")
     _check_preservation(capture["preservation"], expected_world, started, ended, checked)
@@ -317,8 +321,8 @@ def read_panel_capture(capture, *, expected_process_id, expected_process_start_u
     _require(effects["ref_cache"] == "scoped_shared_ref_append_or_reuse", "unexpected ref-cache effect")
 
     packet = packets.build_execution_packet(
-        approved_ref=binding["approved_ref"], max_depth=2, purpose="official_existing_details_capture",
-        snapshot_return=text, snapshot_ref=request["Ref"], snapshot_max_depth=2,
+        approved_ref=binding["approved_ref"], max_depth=expected_max_depth, purpose="official_existing_details_capture",
+        snapshot_return=text, snapshot_ref=request["Ref"], snapshot_max_depth=expected_max_depth,
         include_source_locations=True)
     receipt = {
         "kind": "official_slate_panel_capture_evidence", "version": 1, "scope": SCOPE,

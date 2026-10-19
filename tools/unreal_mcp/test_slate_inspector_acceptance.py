@@ -127,7 +127,7 @@ def capture():
                   "toolset_class_path": "/Script/SlateInspectorToolset.SlateInspectorToolset",
                   "reflected_method": "Snapshot"},
         "binding": {"raw_return_json": raw_binding, "payload": binding(), "utf8_sha256": digest(raw_binding)},
-        "snapshot_request": {"Ref": "g7", "MaxDepth": 2, "bIncludeSourceLocations": True},
+        "snapshot_request": {"Ref": "g7", "MaxDepth": 5, "bIncludeSourceLocations": True},
         "call": {"started_utc": "2026-10-19T17:09:50+00:00", "ended_utc": "2026-10-19T17:09:51+00:00"},
         "raw_return_text": TEXT, "raw_return_utf8_sha256": digest(TEXT),
         "preservation": {"before": state("2026-10-19T10:09:49-07:00"),
@@ -150,7 +150,8 @@ class PanelCaptureTests(unittest.TestCase):
     def read(self, value=None, **changes):
         options = {"expected_process_id": PID, "expected_process_start_utc": PROCESS_START,
                    "expected_world": WORLD, "expected_capture_id": CAPTURE_ID,
-                   "expected_request_id": REQUEST_ID, "consumed_capture_ids": self.consumed}
+                   "expected_request_id": REQUEST_ID, "expected_max_depth": 5,
+                   "consumed_capture_ids": self.consumed}
         options.update(changes)
         return acceptance.read_panel_capture(capture() if value is None else value, **options)
 
@@ -168,6 +169,8 @@ class PanelCaptureTests(unittest.TestCase):
         self.assertFalse(result["packet"]["native_runtime_qualified"])
         self.assertEqual(result["packet"]["freshness"], "unproven")
         self.assertEqual(result["snapshot_sha256"], digest(TEXT))
+        self.assertEqual(result["packet"]["max_depth"], 5)
+        self.assertEqual(result["packet"]["steps"][0]["requested_depth"], 5)
         self.assertEqual(self.consumed, {"capture:"+CAPTURE_ID, "request:"+REQUEST_ID})
 
     def test_replay_capture_or_retained_request_rejected(self):
@@ -189,7 +192,26 @@ class PanelCaptureTests(unittest.TestCase):
         self.assertEqual(self.consumed, set())
         result = self.read()
         self.assertEqual(result["capture_contract_sha256"],
-                         "4e930cd79e430f1a9151831cc07b709f936b871abec2577503b829f02f1189d4")
+                         "557e1515f3fbee8b36933a970bfb091eb2ddbcf08f980761c0b4a6686a61b190")
+
+    def test_r3_depth_expectation_is_independent_strict_and_required(self):
+        for expected in (2, 3, 6, True, 5.0, "5", None):
+            changed = capture()
+            # Matching attacker-supplied request/expectation still fails R3 policy.
+            changed["snapshot_request"]["MaxDepth"] = expected
+            with self.subTest(expected=expected), self.assertRaisesRegex(ContractViolation, "independent expected"):
+                self.read(changed, expected_max_depth=expected)
+        for requested in (2, 3, 6, True, 5.0):
+            changed = capture()
+            changed["snapshot_request"]["MaxDepth"] = requested
+            with self.subTest(requested=requested), self.assertRaisesRegex(ContractViolation, "Snapshot request differs"):
+                self.read(changed, expected_max_depth=5)
+        with self.assertRaises(TypeError):
+            acceptance.read_panel_capture(capture(), expected_process_id=PID,
+                expected_process_start_utc=PROCESS_START, expected_world=WORLD,
+                expected_capture_id=CAPTURE_ID, expected_request_id=REQUEST_ID,
+                consumed_capture_ids=self.consumed)
+        self.assertEqual(self.consumed, set())
 
     def test_receiver_pid_start_world_and_external_dispatch_ids_are_required(self):
         mutations = (("editor", "pid", PID+1), ("editor", "pid", True),
@@ -231,7 +253,7 @@ class PanelCaptureTests(unittest.TestCase):
 
     def test_snapshot_ref_depth_source_flag_and_hash_are_exact(self):
         for field, value in (("Ref", "g8"), ("Ref", ""), ("MaxDepth", True),
-                             ("MaxDepth", 3), ("bIncludeSourceLocations", False)):
+                             ("MaxDepth", 2), ("bIncludeSourceLocations", False)):
             changed = capture()
             changed["snapshot_request"][field] = value
             with self.subTest(field=field, value=value), self.assertRaises(ContractViolation):
