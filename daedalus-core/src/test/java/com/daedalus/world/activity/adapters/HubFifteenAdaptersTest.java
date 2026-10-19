@@ -238,7 +238,7 @@ class HubFifteenAdaptersTest {
             restarted.setPolicy(enabled);
             var s = session("enabled-" + c.id(), c.participant());
             var once = router.settle(c.id(), s, c.snapshot());
-            assertThat(once).allSatisfy(a -> assertThat(a.points()).isPositive());
+            assertThat(once).hasSize(1).allSatisfy(a -> assertThat(a.points()).isPositive());
             assertThat(router.settle(c.id(), s, c.snapshot())).isEqualTo(once);
         }
         assertThat(restarted.replay(router.journal())).isEqualTo(4);
