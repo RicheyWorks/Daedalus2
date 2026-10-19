@@ -40,6 +40,60 @@ struct DAEDALUSLINK_API FDaedalusJavaHand
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") TArray<FDaedalusJavaCard> Cards;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 Bet = 0;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Value = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSoft = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bBust = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bBlackjack = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDoubled = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSurrendered = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bFromSplit = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSplitAce = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bStood = false;
+};
+/** Values accepted from Java's visible rules DTO, never local settings defaults. */
+USTRUCT(BlueprintType)
+struct DAEDALUSLINK_API FDaedalusJavaBlackjackRules
+{
+    GENERATED_BODY()
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Decks = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 MaxHands = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") double Penetration = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDealerHitsSoft17 = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bLateSurrender = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bOfferInsurance = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDoubleAfterSplit = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSplitAcesOneCard = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 BlackjackPayoutNum = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 BlackjackPayoutDen = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 InsurancePayoutNum = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 InsurancePayoutDen = 0;
+};
+USTRUCT(BlueprintType)
+struct DAEDALUSLINK_API FDaedalusJavaBlackjackStats
+{
+    GENERATED_BODY()
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Hands = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Wins = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Losses = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Pushes = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Blackjacks = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Busts = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Doubles = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Splits = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Surrenders = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 PeakBankroll = 0;
+    // Java long values stay decimal strings so lifetime totals never pass through double.
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString TotalWagered;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString TotalReturned;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString Net;
+};
+USTRUCT(BlueprintType)
+struct DAEDALUSLINK_API FDaedalusJavaBlackjackShoe
+{
+    GENERATED_BODY()
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Decks = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Remaining = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 ReshuffleAt = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bNeedsShuffle = false;
 };
 /** Deliberately contains only presentation data. No credentials, puzzle solution, hole-card,
  * future-shoe cards, RNG, save paths, or Java Engine objects are reflected or replicated. */
@@ -86,6 +140,20 @@ struct DAEDALUSLINK_API FDaedalusJavaArcadeState
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") TArray<FString> LegalActions;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") TArray<int32> LegalBetAmounts;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bInsuranceAcceptAllowed = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bBlackjackDetailsAvailable = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 InsuranceBet = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDealerValueAvailable = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 DealerValue = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDealerSoft = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDealerBust = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bDealerBlackjack = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") TArray<FString> LastOutcomes;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 LastNet = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 LastInsurance = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 LastInsuranceReturn = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FDaedalusJavaBlackjackRules BlackjackRules;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FDaedalusJavaBlackjackStats BlackjackStats;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FDaedalusJavaBlackjackShoe BlackjackShoe;
 };
 
 /** Placeable standalone client cabinet. Java is authoritative; this actor never deals cards,
@@ -112,6 +180,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ConfigureSudokuCredentials(const FString& Username, const FString& Password);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ConfigureBlackjackToken(const FString& Token);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartSudokuGame(int32 Difficulty = 1);
+    /** Options apply only to the new Java-owned game; ordinary StartSudokuGame stays unchanged. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartSudokuGameWithModes(int32 Difficulty, bool bChaos, bool bMirror, bool bTimeAttack);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool OpenSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ResumeSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SaveSudokuGame();
@@ -121,6 +191,9 @@ public:
     /** Explicit request only. The Java service may charge existing virtual hint currency. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool RequestSudokuHint();
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool StartBlackjackSession();
+    /** Read an existing process-local table after explicit ID entry; never creates or replays a command. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool OpenBlackjackSession(const FString& SessionId);
+    UFUNCTION(BlueprintPure, Category="Daedalus|Java Arcade") bool CanOpenBlackjackSession(const FString& SessionId) const;
     /** Recover an unknown create using its retained exact request ID. Never creates a fresh ID. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool RetryBlackjackCreate();
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SubmitBlackjackAction(const FString& Action, int32 Amount = 0, bool bAcceptInsurance = false);
@@ -148,7 +221,8 @@ private:
     bool CoreTick(float Delta);
     bool SendHttp(Operation Op, const FString& Verb, const FString& Path, const FString& Body, const FTicket& Ticket);
     void FinishHttp(Operation Op, FTicket Ticket, const TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe>& Task);
-    bool BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume = false);
+    bool BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume = false,
+        bool bChaos = false, bool bMirror = false, bool bTimeAttack = false);
     bool CreateSudokuAfterBootstrap();
     bool ConnectSudokuSocket();
     void HandleSocketMessage(uint64 Epoch, const FString& Message);
@@ -156,6 +230,7 @@ private:
     bool SendSudokuCommand(const FString& Type, const TSharedPtr<FJsonObject>& Payload);
     bool ApplySudoku(const TSharedPtr<FJsonObject>& Json);
     bool ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, const FString& ExpectedRequestId);
+    bool ReadBlackjackSnapshot(const FTicket& Ticket);
     bool SendBlackjackCommand(const FString& Action, const TSharedPtr<FJsonObject>& Fields);
     void SetMessage(const TCHAR* Text);
     void ReleaseOverlay();
@@ -173,7 +248,12 @@ private:
     bool bResumeSudoku = false;
     EDaedalusJavaGame ActiveGame = EDaedalusJavaGame::Sudoku;
     int32 RequestedDifficulty = 1;
+    bool bRequestedSudokuChaos = false;
+    bool bRequestedSudokuMirror = false;
+    bool bRequestedSudokuTimeAttack = false;
     FString RequestedSudokuId;
+    // Captured query target; never reflected as an accepted session before validation.
+    FString RequestedBlackjackId;
     FString ActiveOrigin;
     FString BasicAuthorization;
     FString BlackjackAuthorization;

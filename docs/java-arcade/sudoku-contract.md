@@ -19,7 +19,7 @@ Server authentication can fail after password changes, and revocation closes old
 | Method and path | Request body | Success response |
 |---|---|---|
 | `GET /api/session` | none | Direct session object |
-| `POST /api/game/new?difficulty=1..5&chaos=false&mirror=false&timeAttack=false` | none | Direct `BoardState` |
+| `POST /api/game/new?difficulty=1..5&chaos=<true/false>&mirror=<true/false>&timeAttack=<true/false>` | none | Direct `BoardState` |
 | `GET /api/game/{gameId}` | none | Direct `BoardState` |
 | `POST /api/game/{gameId}/save` | none | `{"status":"saved","gameId":"..."}` |
 | `GET /api/game/saved?limit=1..50` | none | Array of `BoardState` |
@@ -70,6 +70,20 @@ The record deliberately excludes hidden solutions. A completed game's fully fill
 
 The server clock stays authoritative. Time attack is configured at five minutes per difficulty level by default. Local menu pause, cabinet close, reconnect or resume must not add time.
 
+### Native create-mode binding, source-only — 2026-10-15
+
+Code4d5577dc adds `StartSudokuGameWithModes(Difficulty,Chaos,Mirror,TimeAttack)`.
+The original `StartSudokuGame(Difficulty)` remains ordinary all-false creation.
+Checkbox choices are local next-game settings, captured by the actor before
+asynchronous session bootstrap. The POST reads only those captures; changing a
+later UI choice cannot change the in-flight create. No options are sent on
+open/resume. The readout uses confirmed `chaosMode`, `mirrorMode` and nonzero
+`timeLimitSeconds`; client choices never rewrite the current board or clock.
+Source review/static checks are not flag-combination or timed save/resume proof.
+Deferred cases: eight combinations at difficulties1/5; invalid/busy refusal;
+choices changed across bootstrap; ordinary API compatibility; rejected creation;
+Java-confirmed differing flags; timed save/resume without time extension.
+
 ## Authority and lifecycle constraints
 
 Free-play boards can be read/spectated by an authenticated client knowing their game ID. Competitive `daily-`, `week-` and `duel-` boards are owner-only reads/joins. Mutations on a socket, hints, save and resume are owner restricted. The initial native cabinet accepts only the authenticated player's own board; spectating is out of scope.
@@ -93,3 +107,74 @@ The current default-head GitHub CI run 38087377620 was reported failed before it
 Primary pinned references: [BoardState](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/api/BoardState.java), [game REST controller](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/SudokuGameController.java), [raw socket controller](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/WebSocketController.java), [existing client reconciliation](https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/client/src/main/java/com/xai/sudokupro/client/GameClient.java).
 
 Unresolved integration acceptance: concrete service address, approved runtime account setup/Daedalus identity mapping, actual native parser/lifecycle tests, Unreal link/load, packaging and live acceptance. Cabinet identity and any future ownership system remain separate from Sudoku authentication and game rules.
+
+## Cabinet UI source package — c7b3f3e2
+
+The existing OpenSudokuGame API now has an explicit ID button beside Resume.
+Ctrl+Z/Y reuse undo/redo and Home/End/Page Up/Down select row/column ends. H only
+shows confirmation; Buy consumes its saved target, rechecks the current game ID
+and canAct, then calls the existing hint request. Cancel sends nothing. New,
+Open, Resume and Configure clear old prompts. The labeled Hint button remains
+the deliberate direct purchase used by the original BoardView. Wallet/price is
+not fetched, so the prompt uses that source's unknown-price fallback. Java's
+hintCount appears in the readout. No hints, save or socket protocol changed.
+Direct board focus and the opening user are required for game shortcuts; editing
+fields and focused buttons retain their own keys. Source review/static checks
+only: compiler, service and native acceptance remain deferred. Full evidence and
+later acceptance are in [cabinet-source-package.md](cabinet-source-package.md).
+
+## Local editing source package — da2b4a84
+
+The same two private Slate files now implement original JavaFX view-local pencil
+editing, one entry helper for the pad/typed digits/erase, first-empty/wrapping
+selection and a 3x3 notes display. Empty-cell notes never send a move; nonzero
+answers hide retained notes. Erase clears notes before skipping an unchanged
+answer. Per-cell override flags preserve the prior snapshot-mask display for
+untouched cells while ensuring an explicit zero cannot resurrect erased notes.
+
+Only accepted SessionId plus complete 81-cell/given data binds a note context.
+Same-ID snapshots/undo/redo/refusal retain notes. Accepted UI New/Open/Resume
+requests clear them immediately (including later service failures); successful
+UI account configuration and widget close also clear them. Locally refused
+requests preserve the context. External same-ID Blueprint entry has no new UI
+reset notification. There is no note write endpoint or durable-note claim.
+
+ASCII digits use OnKeyChar only, preserving Shift-digit layouts; the overlapping
+Sudoku physical-digit path is removed. The existing direct-focus/user/modifier/
+repeat exclusions apply. Blackjack shortcuts and H confirmation remain intact.
+Filled/remaining counts and duplicate/peer/same-digit colors use confirmed cells
+as display-only feedback; no local calculation decides validity or completion.
+Server conflict metadata is still not projected. Source review and57 static
+checks pass; compiler, character routing, visuals and native behavior are deferred.
+
+## Received identity and recovery source package — 6e287066
+
+Source `6e28706693319c53170dda3d545c12f8cf5f95c7` changes only the existing private Java Slate pair. The received
+ID row already existed; it now distinguishes current/last received identity from
+the editable requested ID. Only a nonempty ID and complete 81-cell/given snapshot
+is presented as a received Sudoku board. Ready/nonbusy/nonsync/owner status gates
+the local Use current ID fill; it changes text/focus only and leaves note context,
+selection and pending hints intact. Entered text equality does not prove a load.
+Sudoku Revision is not populated by ApplySudoku; default zero is never displayed
+as an authoritative board version.
+
+Refresh uses the existing actor method and public owner/credential/mode/busy/
+closed candidate gate. Actor-private HTTP/request/guard state remains final, so
+an enabled candidate can return false. A true call only records a local request;
+no fresh board/command receipt is inferred. New/Open/Resume retain their previous
+accepted-local-call note resets and entry-attempt hint clearing. The captured
+entered ID remains an attempt record while later field edits or service outcomes
+can differ. Failed Open may retain an actor-private requested ID even while the
+received ID is empty; the UI does not invent recovery from editable text.
+
+Selected-cell inspection reads confirmed/last received answer and clue data plus
+the existing native entry gate. Local note overrides, zero overrides, received
+snapshot marks and notes hidden behind answers are separately described. Nothing
+here changes answer legality, the socket protocol, saves or hint cost/selection.
+Recommended difficulty, saved-list/End, wallet/price, server conflict/history and
+broader original app flows remain absent from this native contract.
+
+Independent manual source review found no blocking defect. The branch/acceptance
+matrix is in cabinet-source-package.md and manifestv5. No tests, build, UHT,
+service, credentials, editor or native action ran; focus/typing/readability,
+asynchronous recovery, lifecycle and persistence acceptance remain deferred.

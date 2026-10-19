@@ -48,6 +48,17 @@ namespace JavaArcadeWire
         Out = UTF8_TO_TCHAR(Normalized.c_str());
         return true;
     }
+    bool BlackjackSessionId(const FString& Id)
+    {
+        // Match the existing Java route's canonical lowercase UUID, without rewriting opaque IDs.
+        if (Id.Len() != 36) return false;
+        for (int32 I = 0; I < Id.Len(); ++I)
+        {
+            if (I == 8 || I == 13 || I == 18 || I == 23) { if (Id[I] != TEXT('-')) return false; }
+            else if (!((Id[I] >= TEXT('0') && Id[I] <= TEXT('9')) || (Id[I] >= TEXT('a') && Id[I] <= TEXT('f')))) return false;
+        }
+        return true;
+    }
     bool String(const TSharedPtr<FJsonObject>& Json, const TCHAR* Name, FString& Out, int32 Max, bool bEmpty = false)
     {
         const TSharedPtr<FJsonValue>* Field = Json.IsValid() ? Json->Values.Find(Name) : nullptr;
@@ -70,6 +81,18 @@ namespace JavaArcadeWire
     {
         const TSharedPtr<FJsonValue>* Field = Json.IsValid() ? Json->Values.Find(Name) : nullptr;
         return Field && Field->IsValid() && (*Field)->Type == EJson::Boolean && (*Field)->TryGetBool(Out);
+    }
+    bool DecimalLong(const TSharedPtr<FJsonObject>& Json, const TCHAR* Name, FString& Out, bool bSigned = false)
+    {
+        if (!String(Json, Name, Out, 20)) return false;
+        const bool bNegative = Out[0] == TEXT('-');
+        if (bNegative && !bSigned) return false;
+        const int32 Start = bNegative ? 1 : 0;
+        const int32 Digits = Out.Len() - Start;
+        if (Digits < 1 || Digits > 19 || (Digits > 1 && Out[Start] == TEXT('0')) || (bNegative && Out == TEXT("-0"))) return false;
+        for (int32 I = Start; I < Out.Len(); ++I) if (Out[I] < TEXT('0') || Out[I] > TEXT('9')) return false;
+        const FString Limit = bNegative ? TEXT("9223372036854775808") : TEXT("9223372036854775807");
+        return Digits < 19 || Out.Mid(Start).Compare(Limit, ESearchCase::CaseSensitive) <= 0;
     }
     bool SafeText(const FString& Text)
     {
@@ -311,6 +334,7 @@ void ADaedalusJavaArcade::CancelTransport(bool bForgetSecrets)
     LastReadOperation = Operation::None;
     bAwaitingSudokuReconcile = false; bUnknownBlackjackCreate = false;
     PendingRequestId.Reset(); PendingRequestBody.Reset(); CreateRequestId.Reset();
+    RequestedBlackjackId.Reset();
     Sudoku = {}; Blackjack = {}; View = {}; ActiveGame = Game; View.Game = ActiveGame;
     CsrfToken.Reset(); CsrfHeader.Reset(); CookieJar.Reset(); AuthenticatedPlayerId.Reset(); ActiveOrigin.Reset();
     if (bForgetSecrets) { BasicAuthorization.Reset(); BlackjackAuthorization.Reset(); }
@@ -396,7 +420,8 @@ bool ADaedalusJavaArcade::ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, co
         || !JavaArcadeWire::Integer(Json, TEXT("revision"), Candidate.Revision)
         || !JavaArcadeWire::Bool(Json, TEXT("closed"), Candidate.Closed)
         || !Json->TryGetObjectField(TEXT("snapshot"), Snapshot)) return false;
-    if ((!Blackjack.SessionId.empty() && Id != UTF8_TO_TCHAR(Blackjack.SessionId.c_str())) || Candidate.Revision < Blackjack.Revision) return false;
+    if ((!RequestedBlackjackId.IsEmpty() && !Id.Equals(RequestedBlackjackId, ESearchCase::CaseSensitive))
+        || (!Blackjack.SessionId.empty() && Id != UTF8_TO_TCHAR(Blackjack.SessionId.c_str())) || Candidate.Revision < Blackjack.Revision) return false;
     if (!ExpectedId.IsEmpty() && (!JavaArcadeWire::String(Json, TEXT("requestId"), RequestId, 64) || RequestId != ExpectedId)) return false;
     const auto& S = *Snapshot;
     Candidate.SessionId = TCHAR_TO_UTF8(*Id);
@@ -440,21 +465,94 @@ bool ADaedalusJavaArcade::ApplyBlackjack(const TSharedPtr<FJsonObject>& Json, co
     if (!JavaArcadeWire::String(*Dealer, TEXT("caption"), Next.DealerCaption, 256, true)
         || !JavaArcadeWire::String(S, TEXT("resultText"), Next.ResultText, 512, true)
         || !JavaArcadeWire::Bool(S, TEXT("insuranceAcceptAllowed"), Next.bInsuranceAcceptAllowed)) return false;
-    for (const auto& H : Candidate.Hands)
+    const TSharedPtr<FJsonObject>* Rules = nullptr;
+    const TSharedPtr<FJsonObject>* Stats = nullptr;
+    const TSharedPtr<FJsonObject>* Shoe = nullptr;
+    if (!S->TryGetObjectField(TEXT("rules"), Rules) || !S->TryGetObjectField(TEXT("stats"), Stats)
+        || !S->TryGetObjectField(TEXT("shoe"), Shoe)) return false;
+    auto& R = Next.BlackjackRules;
+    const TSharedPtr<FJsonValue>* Penetration = (*Rules)->Values.Find(TEXT("penetration"));
+    if (!JavaArcadeWire::Integer(*Rules, TEXT("decks"), R.Decks, 1, 8)
+        || (R.Decks != 1 && R.Decks != 2 && R.Decks != 4 && R.Decks != 6 && R.Decks != 8)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("maxHands"), R.MaxHands, 2, 4)
+        || !Penetration || !Penetration->IsValid() || (*Penetration)->Type != EJson::Number
+        || !(*Penetration)->TryGetNumber(R.Penetration)
+        || !FMath::IsFinite(R.Penetration) || R.Penetration < 0 || R.Penetration > 1
+        || !JavaArcadeWire::Bool(*Rules, TEXT("dealerHitsSoft17"), R.bDealerHitsSoft17)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("lateSurrender"), R.bLateSurrender)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("offerInsurance"), R.bOfferInsurance)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("doubleAfterSplit"), R.bDoubleAfterSplit)
+        || !JavaArcadeWire::Bool(*Rules, TEXT("splitAcesOneCard"), R.bSplitAcesOneCard)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("blackjackPayoutNum"), R.BlackjackPayoutNum, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("blackjackPayoutDen"), R.BlackjackPayoutDen, 1, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("insurancePayoutNum"), R.InsurancePayoutNum, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Rules, TEXT("insurancePayoutDen"), R.InsurancePayoutDen, 1, 2147483647LL)) return false;
+    auto& T = Next.BlackjackStats;
+    if (!JavaArcadeWire::Integer(*Stats, TEXT("hands"), T.Hands, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("wins"), T.Wins, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("losses"), T.Losses, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("pushes"), T.Pushes, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("blackjacks"), T.Blackjacks, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("busts"), T.Busts, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("doubles"), T.Doubles, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("splits"), T.Splits, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("surrenders"), T.Surrenders, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(*Stats, TEXT("peakBankroll"), T.PeakBankroll, 0, 2147483647LL)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("totalWagered"), T.TotalWagered)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("totalReturned"), T.TotalReturned)
+        || !JavaArcadeWire::DecimalLong(*Stats, TEXT("net"), T.Net, true)) return false;
+    auto& Q = Next.BlackjackShoe;
+    if (!JavaArcadeWire::Integer(*Shoe, TEXT("decks"), Q.Decks, 1, 8) || Q.Decks != R.Decks
+        || !JavaArcadeWire::Integer(*Shoe, TEXT("remaining"), Q.Remaining, 0, Q.Decks * 52)
+        || !JavaArcadeWire::Integer(*Shoe, TEXT("reshuffleAt"), Q.ReshuffleAt, 0, Q.Decks * 52)
+        || !JavaArcadeWire::Bool(*Shoe, TEXT("needsShuffle"), Q.bNeedsShuffle)
+        || !JavaArcadeWire::Integer(S, TEXT("insuranceBet"), Next.InsuranceBet, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastNet"), Next.LastNet, -2147483648LL, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastInsurance"), Next.LastInsurance, 0, 2147483647LL)
+        || !JavaArcadeWire::Integer(S, TEXT("lastInsuranceReturn"), Next.LastInsuranceReturn, 0, 2147483647LL)) return false;
+    const TArray<TSharedPtr<FJsonValue>>* Outcomes = nullptr;
+    if (!S->TryGetArrayField(TEXT("lastOutcomes"), Outcomes) || Outcomes->Num() > 4) return false;
+    for (const auto& Outcome : *Outcomes)
     {
-        FDaedalusJavaHand R; R.Bet = H.Bet; R.Value = H.Value;
-        for (const auto& C : H.Cards) R.Cards.Add(JavaArcadeWire::Reflect(C));
-        Next.PlayerHands.Add(MoveTemp(R));
+        FString Name;
+        if (!Outcome.IsValid() || Outcome->Type != EJson::String || !Outcome->TryGetString(Name)
+            || (Name != TEXT("BLACKJACK") && Name != TEXT("WIN") && Name != TEXT("PUSH")
+                && Name != TEXT("LOSS") && Name != TEXT("BUST") && Name != TEXT("SURRENDER"))) return false;
+        Next.LastOutcomes.Add(Name);
+    }
+    Next.bDealerValueAvailable = Candidate.HasDealerDerivedValues;
+    if (Next.bDealerValueAvailable
+        && (!JavaArcadeWire::Integer(*Dealer, TEXT("value"), Next.DealerValue, 0, 231)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("soft"), Next.bDealerSoft)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("bust"), Next.bDealerBust)
+            || !JavaArcadeWire::Bool(*Dealer, TEXT("blackjack"), Next.bDealerBlackjack))) return false;
+    for (int32 I = 0; I < static_cast<int32>(Candidate.Hands.size()); ++I)
+    {
+        const auto& H = Candidate.Hands[static_cast<std::size_t>(I)];
+        const auto Hand = (*Hands)[I]->AsObject();
+        FDaedalusJavaHand Reflected; Reflected.Bet = H.Bet; Reflected.Value = H.Value;
+        if (!JavaArcadeWire::Bool(Hand, TEXT("soft"), Reflected.bSoft)
+            || !JavaArcadeWire::Bool(Hand, TEXT("bust"), Reflected.bBust)
+            || !JavaArcadeWire::Bool(Hand, TEXT("blackjack"), Reflected.bBlackjack)
+            || !JavaArcadeWire::Bool(Hand, TEXT("doubled"), Reflected.bDoubled)
+            || !JavaArcadeWire::Bool(Hand, TEXT("surrendered"), Reflected.bSurrendered)
+            || !JavaArcadeWire::Bool(Hand, TEXT("fromSplit"), Reflected.bFromSplit)
+            || !JavaArcadeWire::Bool(Hand, TEXT("splitAce"), Reflected.bSplitAce)
+            || !JavaArcadeWire::Bool(Hand, TEXT("stood"), Reflected.bStood)) return false;
+        for (const auto& C : H.Cards) Reflected.Cards.Add(JavaArcadeWire::Reflect(C));
+        Next.PlayerHands.Add(MoveTemp(Reflected));
     }
     for (const auto& C : Candidate.DealerCards) Next.DealerCards.Add(JavaArcadeWire::Reflect(C));
     for (const auto& A : Candidate.LegalActions) Next.LegalActions.Add(UTF8_TO_TCHAR(A.c_str()));
     for (int B : Candidate.LegalBetAmounts) Next.LegalBetAmounts.Add(B);
+    Next.bBlackjackDetailsAvailable = true;
     Next.Message = View.Message;
-    Blackjack = std::move(Candidate); View = MoveTemp(Next);
+    Blackjack = std::move(Candidate); View = MoveTemp(Next); RequestedBlackjackId = Id;
     return true;
 }
 
-bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume)
+bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, int32 Difficulty, bool bResume,
+    bool bChaos, bool bMirror, bool bTimeAttack)
 {
     FString Origin;
     if (HttpTask.IsValid() || BasicAuthorization.IsEmpty() || Difficulty < 1 || Difficulty > 5
@@ -462,6 +560,10 @@ bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, i
         || !JavaArcadeWire::Origin(SudokuOrigin, Origin)) return false;
     StopSocket(); Guard.Open(); Sudoku = {}; Blackjack = {}; View = {}; Game = EDaedalusJavaGame::Sudoku; ActiveGame = Game; View.Game = Game;
     ActiveOrigin = Origin; bCreateSudoku = bCreate; bResumeSudoku = bResume; RequestedSudokuId = ExistingId; RequestedDifficulty = Difficulty;
+    // Capture the accepted request before async bootstrap; later UI choices cannot alter it.
+    bRequestedSudokuChaos = bCreate && bChaos;
+    bRequestedSudokuMirror = bCreate && bMirror;
+    bRequestedSudokuTimeAttack = bCreate && bTimeAttack;
     CsrfHeader.Reset(); CsrfToken.Reset(); CookieJar.Reset(); AuthenticatedPlayerId.Reset();
     const auto Ticket = Guard.BeginRead(FPlatformTime::Seconds());
     if (!SendHttp(Operation::SudokuBootstrap, TEXT("GET"), TEXT("/api/session"), FString(), Ticket))
@@ -472,6 +574,10 @@ bool ADaedalusJavaArcade::BeginSudoku(bool bCreate, const FString& ExistingId, i
     return true;
 }
 bool ADaedalusJavaArcade::StartSudokuGame(int32 Difficulty) { return BeginSudoku(true, FString(), Difficulty); }
+bool ADaedalusJavaArcade::StartSudokuGameWithModes(int32 Difficulty, bool bChaos, bool bMirror, bool bTimeAttack)
+{
+    return BeginSudoku(true, FString(), Difficulty, false, bChaos, bMirror, bTimeAttack);
+}
 bool ADaedalusJavaArcade::OpenSudokuGame(const FString& Id) { return BeginSudoku(false, Id, 1); }
 bool ADaedalusJavaArcade::ResumeSudokuGame(const FString& Id) { return BeginSudoku(false, Id, 1, true); }
 bool ADaedalusJavaArcade::CreateSudokuAfterBootstrap()
@@ -479,7 +585,9 @@ bool ADaedalusJavaArcade::CreateSudokuAfterBootstrap()
     if (bCreateSudoku)
     {
         const auto Ticket = Guard.BeginCreation(FPlatformTime::Seconds());
-        const FString Path = FString::Printf(TEXT("/api/game/new?difficulty=%d&chaos=false&mirror=false&timeAttack=false"), RequestedDifficulty);
+        const FString Path = FString::Printf(TEXT("/api/game/new?difficulty=%d&chaos=%s&mirror=%s&timeAttack=%s"), RequestedDifficulty,
+            bRequestedSudokuChaos ? TEXT("true") : TEXT("false"), bRequestedSudokuMirror ? TEXT("true") : TEXT("false"),
+            bRequestedSudokuTimeAttack ? TEXT("true") : TEXT("false"));
         return SendHttp(Operation::SudokuCreate, TEXT("POST"), Path, FString(), Ticket);
     }
     if (bResumeSudoku)
@@ -632,6 +740,7 @@ bool ADaedalusJavaArcade::StartBlackjackSession()
     if (HttpTask.IsValid() || BlackjackAuthorization.IsEmpty() || bUnknownBlackjackCreate
         || (!Blackjack.SessionId.empty() && !Blackjack.Closed) || !JavaArcadeWire::Origin(BlackjackOrigin, Origin)) return false;
     Guard.Open(); StopSocket(); Sudoku = {}; Blackjack = {}; View = {}; Game = EDaedalusJavaGame::Blackjack; ActiveGame = Game; View.Game = Game;
+    RequestedBlackjackId.Reset();
     ActiveOrigin = Origin; CreateRequestId = FGuid::NewGuid().ToString(EGuidFormats::Digits);
     auto BodyJson = MakeShared<FJsonObject>(); BodyJson->SetStringField(TEXT("requestId"), CreateRequestId);
     PendingRequestId = CreateRequestId; PendingRequestBody = JavaArcadeWire::Json(BodyJson);
@@ -640,6 +749,35 @@ bool ADaedalusJavaArcade::StartBlackjackSession()
     { Guard.Reject(Ticket, true); return false; }
     SetMessage(TEXT("Creating a local Java Blackjack session with simulated credits…"));
     return true;
+}
+bool ADaedalusJavaArcade::CanOpenBlackjackSession(const FString& SessionId) const
+{
+    FString Origin;
+    return Game == ActiveGame && ActiveGame == EDaedalusJavaGame::Blackjack && !BlackjackAuthorization.IsEmpty()
+        && !HttpTask.IsValid() && Guard.PendingKind() == JA::Work::None && !bUnknownBlackjackCreate && !Guard.HasUncertainOutcome()
+        && (Blackjack.SessionId.empty() || Blackjack.Closed) && JavaArcadeWire::BlackjackSessionId(SessionId)
+        && JavaArcadeWire::Origin(BlackjackOrigin, Origin);
+}
+bool ADaedalusJavaArcade::OpenBlackjackSession(const FString& SessionId)
+{
+    FString Origin;
+    // Refusals preserve the active table and retained uncertain-create/mutation recovery data.
+    if (!CanOpenBlackjackSession(SessionId) || !JavaArcadeWire::Origin(BlackjackOrigin, Origin)) return false;
+    Guard.Open(); StopSocket(); Sudoku = {}; Blackjack = {}; View = {}; View.Game = ActiveGame;
+    ActiveOrigin = Origin; RequestedBlackjackId = SessionId;
+    PendingRequestId.Reset(); PendingRequestBody.Reset(); CreateRequestId.Reset();
+    LastReadOperation = Operation::None; bAwaitingSudokuReconcile = false;
+    const auto Ticket = Guard.BeginRead(FPlatformTime::Seconds());
+    if (!ReadBlackjackSnapshot(Ticket))
+    { Guard.Reject(Ticket, true); SetMessage(TEXT("The table read could not start. No table has been received.")); return false; }
+    SetMessage(TEXT("Reading the requested Java table. Verify the received table before taking an action."));
+    return true;
+}
+bool ADaedalusJavaArcade::ReadBlackjackSnapshot(const FTicket& Ticket)
+{
+    const FString Id = RequestedBlackjackId.IsEmpty() ? FString(UTF8_TO_TCHAR(Blackjack.SessionId.c_str())) : RequestedBlackjackId;
+    return !Id.IsEmpty() && SendHttp(Operation::BlackjackRead, TEXT("GET"),
+        TEXT("/v1/blackjack/sessions/") + JavaArcadeWire::Encode(Id), FString(), Ticket);
 }
 bool ADaedalusJavaArcade::RetryBlackjackCreate()
 {
@@ -714,8 +852,7 @@ bool ADaedalusJavaArcade::RefreshSnapshot()
     }
     else
     {
-        if (Blackjack.SessionId.empty()) { Guard.Reject(Ticket, false); return false; }
-        if (!SendHttp(Operation::BlackjackRead, TEXT("GET"), TEXT("/v1/blackjack/sessions/") + JavaArcadeWire::Encode(UTF8_TO_TCHAR(Blackjack.SessionId.c_str())), FString(), Ticket)) { Guard.Reject(Ticket, false); return false; }
+        if (!ReadBlackjackSnapshot(Ticket)) { Guard.Reject(Ticket, false); return false; }
     }
     SetMessage(TEXT("Explicitly refreshing authoritative state. Verify any previous action before retrying it."));
     return true;
@@ -754,7 +891,7 @@ void ADaedalusJavaArcade::FinishHttp(Operation Op, FTicket Ticket, const TShared
         if (bPermanent) { Guard.Reject(Ticket, true); StopSocket(); SetMessage(TEXT("Authorization refused or redirect rejected. Reconfigure the local service credentials.")); }
         else if (Task->StatusCode >= 400 && Task->StatusCode < 500)
         {
-            if (Op == Operation::BlackjackRead && !Blackjack.SessionId.empty() && JA::PayloadFits(Task->Response.Num(), 32768))
+            if (Op == Operation::BlackjackRead && (!RequestedBlackjackId.IsEmpty() || !Blackjack.SessionId.empty()) && JA::PayloadFits(Task->Response.Num(), 32768))
             {
                 const FUTF8ToTCHAR ConvertedError(reinterpret_cast<const ANSICHAR*>(Task->Response.GetData()), Task->Response.Num());
                 const auto ErrorJson = JavaArcadeWire::Parse(FString(ConvertedError.Length(), ConvertedError.Get()));
@@ -856,7 +993,7 @@ void ADaedalusJavaArcade::FinishHttp(Operation Op, FTicket Ticket, const TShared
         // Create replay is a historical decided response, including after later closure.
         // Always reconcile its returned session before enabling gameplay.
         const auto Read = Guard.BeginRead(FPlatformTime::Seconds());
-        if (!SendHttp(Operation::BlackjackRead, TEXT("GET"), TEXT("/v1/blackjack/sessions/") + JavaArcadeWire::Encode(UTF8_TO_TCHAR(Blackjack.SessionId.c_str())), FString(), Read))
+        if (!ReadBlackjackSnapshot(Read))
             Guard.Reject(Read, true);
         return;
     }
@@ -867,7 +1004,7 @@ bool ADaedalusJavaArcade::ConfigureBlackjackToken(const FString& Token)
     if (!JavaArcadeWire::HeaderValue(Token, 256) || Token.Len() < 32) return false;
     CancelTransport(true); Game = EDaedalusJavaGame::Blackjack; ActiveGame = Game; View.Game = Game;
     BlackjackAuthorization = TEXT("Bearer ") + Token;
-    SetMessage(TEXT("Token configured in memory. Start a Java Blackjack session."));
+    SetMessage(TEXT("Token configured in memory. Start a new table or reopen an existing table by ID."));
     return true;
 }
 bool ADaedalusJavaArcade::SendHttp(Operation Op, const FString& Verb, const FString& Path, const FString& BodyText, const FTicket& Ticket)
@@ -980,7 +1117,7 @@ bool ADaedalusJavaArcade::CoreTick(float Delta)
         {
         case Operation::SudokuBootstrap: bSent = SendHttp(Operation::SudokuBootstrap, TEXT("GET"), TEXT("/api/session"), FString(), Ticket); break;
         case Operation::SudokuRead: bSent = SendHttp(Operation::SudokuRead, TEXT("GET"), TEXT("/api/game/") + JavaArcadeWire::Encode(RequestedSudokuId), FString(), Ticket); break;
-        case Operation::BlackjackRead: bSent = SendHttp(Operation::BlackjackRead, TEXT("GET"), TEXT("/v1/blackjack/sessions/") + JavaArcadeWire::Encode(UTF8_TO_TCHAR(Blackjack.SessionId.c_str())), FString(), Ticket); break;
+        case Operation::BlackjackRead: bSent = ReadBlackjackSnapshot(Ticket); break;
         case Operation::SudokuSync: bSent = ConnectSudokuSocket(); break;
         default: break;
         }
