@@ -16,3 +16,9 @@ python -m unittest tools/streaming/test_dsb.py                            # offl
 The Unreal side (a subsystem that reads `streaming.dsb`, calls `Pick` as the player moves and loads/unloads
 sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the plain-C++ header
 `DaedalusStreamingBudgetCore.h` is ready for it.
+
+## Measured costs (2026-10-18)
+- `dsb_measure.py --content C:/Unreal/DaedalusRealm/Content -o data/islands/streaming_measured.json` sums package sizes in the folders listed in `data/islands/streaming_sources.json` (read-only; no editor needed). disk_kib is measured; ram_kib is the uncooked payload, an upper-bound proxy until an in-game memreport.
+- Priority in `dsb_manifest.py`: a layout's own `streaming` pin, then the measurement, then the placement-count estimate.
+- First run (23:24 PT Oct 18): DiskSaver 25,470 KiB disk / 25,015 KiB RAM proxy (341 files); OddsReaper 140,682 / 139,310 (1,908 files). BlenderBoss and Hephaestus keep estimates until their owners list their asset folders.
+
