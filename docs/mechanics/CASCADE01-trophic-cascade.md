@@ -66,4 +66,4 @@ NPC lines (Orrin Vale):
   - `Prop_Valley_ExclosureFence`: a tileable 3 m segment. `SOCKET_End_A`/`SOCKET_End_B` are at ground level, and segment n's End_B is segment n+1's End_A. Each segment owns only its -X post.
   - `Prop_Valley_ExclosureFence_EndPost` closes a run.
   - Wolf is `Mob_Wolf` (or `Mob_Realm_Wolf`) and willow is `Prop_Tree_PYT_Willow_V01+`, both reused.
-  - There is no elk mesh yet: the `Mob_Lab_Hornback` rig stands in until blender builds the placeholder `Mob_Valley_Elk` (Idle/Walk/Run clips, from quadruped_rig.py).
+  - Elk is `Mob_Valley_Elk` (blender 49623, same staging folder), on the same 15-bone quadruped rig as `Mob_Lab_Hornback`, with Idle/Walk/Run clips.
