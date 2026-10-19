@@ -224,7 +224,7 @@ class ReviewFixTests(Base):
     def test_ue_harness_modify_before_sockets_and_no_dead_branch(self):
         with open(os.path.join(HERE, "ue_harness.py"), encoding="utf-8") as fh:
             src = fh.read()
-        body = src[src.index("def add_sockets"):src.index("def facts")]
+        body = src[src.index("def add_sockets"):src.index("def set_nanite")]
         self.assertLess(body.index("mesh.modify()"), body.index("mesh.add_socket("))
         self.assertNotIn('get_editor_property("sockets")', src)  # protected in UE 5.8
         self.assertEqual(body.count("mesh.modify()"), 1)
