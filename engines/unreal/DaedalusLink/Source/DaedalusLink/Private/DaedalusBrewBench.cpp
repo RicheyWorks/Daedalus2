@@ -15,7 +15,7 @@
 #include "UObject/ConstructorHelpers.h"
 
 // Named (not anonymous) so unity builds cannot collide with the helpers in DaedalusTonic.cpp.
-namespace DaedalusBrewBenchLocal
+namespace DaedalusMelodyBenchLocal
 {
 std::string ToUtf8(const FString& S) { return std::string(TCHAR_TO_UTF8(*S)); }
 FString FromUtf8(const std::string& S) { return FString(UTF8_TO_TCHAR(S.c_str())); }
@@ -34,10 +34,10 @@ bool RecordIdOk(const FString& Id)
 }
 
 // ---------------- bench ----------------
-ADaedalusBrewBench::ADaedalusBrewBench()
+ADaedalusMelodyBench::ADaedalusMelodyBench()
 {
 	bReplicates = false;
-	Tags.Add(TEXT("BrewBench"));
+	Tags.Add(TEXT("MelodyBench"));
 	Tags.Add(TEXT("Interact_BrewMelody"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Cylinder(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
 	if (Cylinder.Succeeded())
@@ -48,13 +48,13 @@ ADaedalusBrewBench::ADaedalusBrewBench()
 	Glow->SetLightColor(FLinearColor(0.55f, 0.9f, 0.6f));
 }
 
-FString ADaedalusBrewBench::Prompt(const ADaedalusHero*) const
+FString ADaedalusMelodyBench::Prompt(const ADaedalusHero*) const
 {
 	if (IsBrewing()) { return TEXT("The kettle is singing..."); }
 	return FString::Printf(TEXT("Brew a melody (%d herbs, %d records heard)"), Herbs.Num(), Records.Num());
 }
 
-bool ADaedalusBrewBench::Use(ADaedalusHero*)
+bool ADaedalusMelodyBench::Use(ADaedalusHero*)
 {
 	if (IsBrewing()) { Tell(TEXT("The kettle is still singing.")); return false; }
 	if (Herbs.Num() < daedalus::brewmelody::MinHerbs)
@@ -65,21 +65,21 @@ bool ADaedalusBrewBench::Use(ADaedalusHero*)
 	return Brew();
 }
 
-void ADaedalusBrewBench::Tell(const FString& Line) const
+void ADaedalusMelodyBench::Tell(const FString& Line) const
 {
 	if (UDaedalusOrrery* O = UDaedalusOrrery::Get(this)) { O->Say(Line); }
 	UE_LOG(LogTemp, Log, TEXT("Daedalus brew: %s"), *Line);
 }
 
-bool ADaedalusBrewBench::ConfigureSession(const FString& Origin, const FString& Token)
+bool ADaedalusMelodyBench::ConfigureSession(const FString& Origin, const FString& Token)
 {
-	if (!IsInGameThread() || !daedalus::tonic::OriginAllowed(DaedalusBrewBenchLocal::ToUtf8(Origin)) || !DaedalusBrewBenchLocal::BearerOk(Token)) { return false; }
+	if (!IsInGameThread() || !daedalus::tonic::OriginAllowed(DaedalusMelodyBenchLocal::ToUtf8(Origin)) || !DaedalusMelodyBenchLocal::BearerOk(Token)) { return false; }
 	ClearSession();
 	ServerOrigin = Origin; BearerToken = Token;
 	return true;
 }
 
-void ADaedalusBrewBench::ClearSession()
+void ADaedalusMelodyBench::ClearSession()
 {
 	++Generation;
 	auto Old = Pending; Pending.Reset();
@@ -87,7 +87,7 @@ void ADaedalusBrewBench::ClearSession()
 	if (Old) { Old->OnProcessRequestComplete().Unbind(); Old->CancelRequest(); }
 }
 
-bool ADaedalusBrewBench::HasSession()
+bool ADaedalusMelodyBench::HasSession()
 {
 	if (!BearerToken.IsEmpty()) { return true; }
 	// Same auth posture as /api/v1/kennel/brew (contract README), so the kennel session is the fallback.
@@ -100,37 +100,37 @@ bool ADaedalusBrewBench::HasSession()
 	return false;
 }
 
-void ADaedalusBrewBench::EndPlay(const EEndPlayReason::Type Reason)
+void ADaedalusMelodyBench::EndPlay(const EEndPlayReason::Type Reason)
 {
 	ClearSession();
 	Super::EndPlay(Reason);
 }
 
-bool ADaedalusBrewBench::AddHerb(const FString& Herb)
+bool ADaedalusMelodyBench::AddHerb(const FString& Herb)
 {
-	if (IsBrewing() || Herbs.Num() >= daedalus::brewmelody::MaxHerbs || !daedalus::brewmelody::KnownHerb(DaedalusBrewBenchLocal::ToUtf8(Herb))) { return false; }
+	if (IsBrewing() || Herbs.Num() >= daedalus::brewmelody::MaxHerbs || !daedalus::brewmelody::KnownHerb(DaedalusMelodyBenchLocal::ToUtf8(Herb))) { return false; }
 	Herbs.Add(Herb);
 	return true;
 }
 
-void ADaedalusBrewBench::ClearKettle()
+void ADaedalusMelodyBench::ClearKettle()
 {
 	if (IsBrewing()) { return; }
 	Herbs.Reset(); Stages.Reset();
 }
 
-bool ADaedalusBrewBench::RecordPlayed(const FString& RecordId)
+bool ADaedalusMelodyBench::RecordPlayed(const FString& RecordId)
 {
-	if (!DaedalusBrewBenchLocal::RecordIdOk(RecordId)) { return false; }
+	if (!DaedalusMelodyBenchLocal::RecordIdOk(RecordId)) { return false; }
 	if (Records.Contains(RecordId)) { return true; }
 	if (Records.Num() >= daedalus::brewmelody::MaxRecords) { return false; }
 	Records.Add(RecordId);
 	return true;
 }
 
-bool ADaedalusBrewBench::Brew()
+bool ADaedalusMelodyBench::Brew()
 {
-	using namespace DaedalusBrewBenchLocal;
+	using namespace DaedalusMelodyBenchLocal;
 	if (!IsInGameThread() || Pending.IsValid()) { return false; }
 	std::vector<std::string> H, R; std::vector<int> S;
 	for (const FString& X : Herbs) { H.push_back(ToUtf8(X)); }
@@ -167,7 +167,7 @@ bool ADaedalusBrewBench::Brew()
 			if (Length < 0 || Length > (int64)daedalus::brewmelody::MaxBody + 1 - Reply->Num()) { Length = 0; return; }
 			Reply->Append(static_cast<const uint8*>(Data), static_cast<int32>(Length));
 		}))) { return false; }
-	TWeakObjectPtr<ADaedalusBrewBench> Self(this);
+	TWeakObjectPtr<ADaedalusMelodyBench> Self(this);
 	const uint64 Session = Generation;
 	Request->OnProcessRequestComplete().BindLambda([Self, Session, Reply, Url](FHttpRequestPtr, FHttpResponsePtr Response, bool Connected)
 	{
@@ -189,9 +189,9 @@ bool ADaedalusBrewBench::Brew()
 	return true;
 }
 
-void ADaedalusBrewBench::Finish(int32 Status, const std::string& Text)
+void ADaedalusMelodyBench::Finish(int32 Status, const std::string& Text)
 {
-	using namespace DaedalusBrewBenchLocal;
+	using namespace DaedalusMelodyBenchLocal;
 	const daedalus::brewmelody::Result R = daedalus::brewmelody::Parse(Status, Text);
 	if (!R.Ok)
 	{
@@ -232,14 +232,14 @@ FString ADaedalusJukebox::Prompt(const ADaedalusHero*) const
 	return FString::Printf(TEXT("Play %s"), *Records[Next % Records.Num()]);
 }
 
-ADaedalusBrewBench* ADaedalusJukebox::FindBench() const
+ADaedalusMelodyBench* ADaedalusJukebox::FindBench() const
 {
 	if (Bench) { return Bench.Get(); }
 	UWorld* World = GetWorld();
 	if (!World) { return nullptr; }
-	ADaedalusBrewBench* Best = nullptr;
+	ADaedalusMelodyBench* Best = nullptr;
 	double BestD = FMath::Square((double)BenchReach);
-	for (TActorIterator<ADaedalusBrewBench> It(World); It; ++It)
+	for (TActorIterator<ADaedalusMelodyBench> It(World); It; ++It)
 	{
 		const double D = FVector::DistSquared(It->GetActorLocation(), GetActorLocation());
 		if (D <= BestD) { BestD = D; Best = *It; }
@@ -252,7 +252,7 @@ bool ADaedalusJukebox::Use(ADaedalusHero*)
 	if (Records.Num() == 0) { return false; }
 	Playing = Records[Next % Records.Num()];
 	Next = (Next + 1) % Records.Num();
-	ADaedalusBrewBench* B = FindBench();
+	ADaedalusMelodyBench* B = FindBench();
 	const bool Heard = B && B->RecordPlayed(Playing);
 	const FString Line = Heard ? FString::Printf(TEXT("The jukebox plays %s. The kettle is listening."), *Playing)
 		: FString::Printf(TEXT("The jukebox plays %s."), *Playing);
@@ -262,10 +262,10 @@ bool ADaedalusJukebox::Use(ADaedalusHero*)
 }
 
 // ---------------- console ----------------
-static ADaedalusBrewBench* DaedalusFirstBrewBench(UWorld* World)
+static ADaedalusMelodyBench* DaedalusFirstMelodyBench(UWorld* World)
 {
 	if (!World) { return nullptr; }
-	for (TActorIterator<ADaedalusBrewBench> It(World); It; ++It) { return *It; }
+	for (TActorIterator<ADaedalusMelodyBench> It(World); It; ++It) { return *It; }
 	return nullptr;
 }
 
@@ -274,8 +274,8 @@ static FAutoConsoleCommandWithWorldAndArgs GBrewMelody(
 	TEXT("daedalus.brew.melody <Herb> <Herb> <Herb> [Herb] [Herb]: fill the first brew bench and brew (needs DAEDALUS_BREW_ORIGIN / DAEDALUS_BREW_TOKEN)."),
 	FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args, UWorld* World)
 	{
-		ADaedalusBrewBench* B = DaedalusFirstBrewBench(World);
-		if (!B) { UE_LOG(LogTemp, Warning, TEXT("daedalus.brew.melody: no ADaedalusBrewBench in this world")); return; }
+		ADaedalusMelodyBench* B = DaedalusFirstMelodyBench(World);
+		if (!B) { UE_LOG(LogTemp, Warning, TEXT("daedalus.brew.melody: no ADaedalusMelodyBench in this world")); return; }
 		B->ClearKettle();
 		for (const FString& H : Args) { if (!B->AddHerb(H)) { UE_LOG(LogTemp, Warning, TEXT("daedalus.brew.melody: kettle refused herb %s"), *H); } }
 		UE_LOG(LogTemp, Log, TEXT("daedalus.brew.melody: %d herbs -> %s"), B->Herbs.Num(), B->Brew() ? TEXT("request sent") : *B->LastError());
@@ -286,7 +286,7 @@ static FAutoConsoleCommandWithWorldAndArgs GBrewStatus(
 	TEXT("daedalus.brew.status: kettle, records heard and the last brew of the first brew bench."),
 	FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>&, UWorld* World)
 	{
-		ADaedalusBrewBench* B = DaedalusFirstBrewBench(World);
+		ADaedalusMelodyBench* B = DaedalusFirstMelodyBench(World);
 		if (!B) { UE_LOG(LogTemp, Log, TEXT("daedalus.brew.status: no bench")); return; }
 		UE_LOG(LogTemp, Log, TEXT("daedalus.brew.status: brewing=%d herbs=%d records=%d item=%s tier=%d tune=%s error=%s"), B->IsBrewing() ? 1 : 0,
 			B->Herbs.Num(), B->PlayedRecords().Num(), *B->LastItem(), B->LastTier(), *B->LastFoundTune(), *B->LastError());

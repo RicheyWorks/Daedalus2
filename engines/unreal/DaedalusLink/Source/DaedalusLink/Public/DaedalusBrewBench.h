@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// G25 brew bench in Unreal: the client of POST /api/v1/brew/melody (docs/contracts/brew-melody-v1, youtube-master #316).
+// G25 melody bench in Unreal (ADaedalusMelodyBench; the local #285 ADaedalusBrewBench in DaedalusHomestead.h is untouched): the client of POST /api/v1/brew/melody (docs/contracts/brew-melody-v1, youtube-master #316).
 // Java (world.brew BrewBench behind the route) does every calculation; this file only gathers the kettle herbs, the
 // records the jukebox has played, sends them once, and shows the parsed reply. Building, bounds and parsing live in
 // DaedalusBrewMelodyCore.h (core-test/brew_melody_core_test.cpp, 18/18 against the contract's http-cases.json).
@@ -14,16 +14,16 @@
 
 class IHttpRequest;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusMelodyBrewed, const FString&, Item, int32, Tier, const FString&, FoundTune);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusMelodyServed, const FString&, Item, int32, Tier, const FString&, FoundTune);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDaedalusMelodyRefused, int32, Status, const FString&, Reason);
 
 /** The Youtube Master Island brew bench: put 3 to 5 island herbs in the kettle, Interact, and the server brews the melody. */
 UCLASS(Blueprintable)
-class DAEDALUSLINK_API ADaedalusBrewBench : public ADaedalusUsable
+class DAEDALUSLINK_API ADaedalusMelodyBench : public ADaedalusUsable
 {
 	GENERATED_BODY()
 public:
-	ADaedalusBrewBench();
+	ADaedalusMelodyBench();
 	virtual FString Prompt(const ADaedalusHero* Hero) const override;
 	virtual bool Use(ADaedalusHero* Hero) override;
 
@@ -50,7 +50,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Brew") TArray<int32> LastNotes() const { return LastNoteList; }
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Brew") FString LastError() const { return Error; }
 
-	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusMelodyBrewed OnBrewed;
+	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusMelodyServed OnBrewed;
 	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusMelodyRefused OnRefused;
 
 protected:
@@ -84,14 +84,14 @@ public:
 
 	/** Record item ids in play order (the twelve found-tune records by default). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") TArray<FString> Records;
-	/** The bench that listens; when empty, the nearest ADaedalusBrewBench within BenchReach. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") TObjectPtr<ADaedalusBrewBench> Bench;
+	/** The bench that listens; when empty, the nearest ADaedalusMelodyBench within BenchReach. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") TObjectPtr<ADaedalusMelodyBench> Bench;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") float BenchReach = 3000.f;
 
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Brew") FString NowPlaying() const { return Playing; }
 
 private:
-	ADaedalusBrewBench* FindBench() const;
+	ADaedalusMelodyBench* FindBench() const;
 	int32 Next = 0;
 	FString Playing;
 };
