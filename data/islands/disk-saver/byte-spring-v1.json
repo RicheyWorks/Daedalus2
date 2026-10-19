@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_byte_spring",
+  "lore": "DiskSaver Island's Byte Spring feeds the cistern that keeps resident island caches hydrated. Overflow dumps a cache; three dry empty ticks fail the quest.",
+  "cistern": {
+    "capacity": 2000,
+    "level": 800,
+    "spring_fill": 250,
+    "leak": 80,
+    "budget_cap": 900
+  },
+  "islands": [
+    {"id": "disk_saver_home", "cost_kib": 300, "priority": 2},
+    {"id": "cache_north", "cost_kib": 200, "priority": 1},
+    {"id": "cache_south", "cost_kib": 250, "priority": 0},
+    {"id": "vault_east", "cost_kib": 400, "priority": 3}
+  ],
+  "start_residents": ["disk_saver_home", "cache_north"],
+  "drought_limit": 3,
+  "win_ticks": 10
+}
