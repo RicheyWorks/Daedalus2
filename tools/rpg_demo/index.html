@@ -70,7 +70,8 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 (() => {
 const cv = document.getElementById("screen"), g = cv.getContext("2d");
 g.imageSmoothingEnabled = false;
-const W = 320, H = 224, T = 16;
+let W = 320, H = 224;
+const T = 16;
 const statusEl = document.getElementById("status"), logEl = document.getElementById("log");
 let D, IM = {};
 const rnd = (a, b) => a + Math.random() * (b - a);
@@ -323,9 +324,9 @@ const GEAR = {};
 let bag = {}, gold = 0;
 function buildParty() {
   Object.assign(GEAR, D.gear);                              /* every shop's gear (data.json gear) */
-  const P = D.party.members.filter(m => m.joins === "start").map(m => makeMember(m, START_LEVEL));
+  const P = D.party.members.filter(m => m.joins === "start").map(m => makeMember(m, D.realm_profile ? D.realm_profile.start_level : START_LEVEL));
   reserve = [];
-  bag = Object.assign({}, D.party.start_items, { "Herb Tonic": 8, "Clear Draught": 3, "Feather of Waking": 1 });
+  bag = Object.assign({}, D.party.start_items, D.realm_profile ? {} : { "Herb Tonic": 8, "Clear Draught": 3, "Feather of Waking": 1 });
   gold = D.party.start_gold;
   return P;
 }
@@ -336,7 +337,7 @@ function makeMember(m, L) {
   const st = {};
   for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
   const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
-  let next = 400; for (let i = START_LEVEL; i < L; i++) next = Math.round(next * 1.18);
+  let next = D.realm_profile ? m.next : 400; for (let i = START_LEVEL; i < L; i++) next = Math.round(next * 1.18);
   return { name: m.name, job: m.job, lv: L, exp: 0, next, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
     kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
 }
@@ -353,7 +354,7 @@ function recruit(dungeonName) {
   });
 }
 function recruitBeaten() {                                  /* saves from before recruits: bring in whoever is owed */
-  D.dungeons.forEach(d => { if (state.beaten.has(d.boss_data.name)) recruit(d.name); });
+  D.dungeons.forEach(d => { if (d.boss_data && state.beaten.has(d.boss_data.name)) recruit(d.name); });
 }
 const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
 const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);   /* armour counts now that the gear table has it */
@@ -390,7 +391,7 @@ function dark() {                                               /* 0 at noon-ish
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
    to land on a tile the map marks airship_lands. It stays where you land; walk onto it to fly again. */
 const AIR_SPEED = 2;
-function airUnlocked() { return !!(D && D.dungeons[0] && state.beaten.has(D.dungeons[0].boss_data.name)); }
+function airUnlocked() { return !!(D && D.dungeons[0] && D.dungeons[0].boss_data && state.beaten.has(D.dungeons[0].boss_data.name)); }
 function airship() {
   if (!state.air) { const p = find(D.world, "AirshipPad"); state.air = p ? { x: p[0], y: p[1], aboard: false } : null; }
   return state.air;
@@ -432,7 +433,7 @@ function openCache(c) {
 /* The shard quest: four dungeons from data.json (landmark -> dungeon); each boss leaves a shard; the final dungeon
    opens once the three shards are in hand. Floor grids are copied per journey, so NEW GAME starts them fresh. */
 let grids = {};
-const shardBosses = () => D.dungeons.filter(d => !d.final).map(d => d.boss_data.name);
+const shardBosses = () => D.dungeons.filter(d => d.boss_data && !d.final).map(d => d.boss_data.name);
 const shardCount = () => shardBosses().filter(n => state.beaten.has(n)).length;
 const pretty = n => n.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase();
 const chestKey = (di, fi, x, y) => "dungeon" + di + "/" + fi + ":" + x + "," + y;
@@ -527,7 +528,7 @@ function wrap(s, n) { const out = []; let l = ""; for (const w of s.split(" ")) 
 function drawDialog() {
   win(4, H - 62, W - 8, 58);
   const page = dlg.pages[dlg.i].slice(0, Math.floor(dlg.shown));
-  wrap(page, 48).slice(0, 4).forEach((l, i) => text(l, 14, H - 52 + i * 11));
+  wrap(page, Math.floor((W - 32) / 6)).slice(0, 4).forEach((l, i) => text(l, 14, H - 52 + i * 11));
   if (dlg.choice && dlg.shown >= dlg.pages[dlg.i].length) {
     win(W - 74, H - 104, 70, 40);
     dlg.choice.options.forEach((o, i) => text(o, W - 54, H - 94 + i * 13));
@@ -554,7 +555,7 @@ function interact() {
     const svc = map.kind === "interior" ? (map.info.service || "") : "";
     if (svc.startsWith("shop:") && n === map.npcs[0]) return say(LINES[n.type] || ["HELLO."], () => openShop(), VOICE[n.type]);
     if (svc === "inn" && n.type === "Innkeeper") return innPrompt();
-    if (n.type === "Ruler" && state.beaten.size) {
+    if (n.type === "Ruler" && state.beaten.size && D.dungeons.some(d => d.final && d.boss_data)) {
       const c = shardCount(), healed = state.beaten.has(D.dungeons.find(d => d.final).boss_data.name);
       return say(healed ? ["THE HEART IS WHOLE AGAIN. YOU HAVE THE THANKS OF EVERY ISLAND."]
         : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
@@ -568,7 +569,7 @@ function interact() {
   if (t === "Barrel" || t === "Crate" || t === "Pot") { const k = map.kind + tx + "," + ty; if (opened.has(k)) return say(["EMPTY."]); opened.add(k); bag["Herb Tonic"] = (bag["Herb Tonic"] || 0) + 1; sfx("ITEM"); return say(["FOUND A HERB TONIC."]); }
   if (t === "Water" && (map.kind === "village" || map.kind === "town") && (D.fish || []).length) return castLine(tx, ty);
   if (t === "Fountain") { roster().forEach(m => { if (m.hp > 0) { m.hp = m.max; m.mp = m.mmax; } }); clearAll(roster()); sfx("BLESS"); return say(["THE FOUNTAIN'S WATER RESTORES YOUR PARTY."]); }
-  if (t === "Bookcase") return say(["A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
+  if (t === "Bookcase") return say([D.realm_profile ? "A BOOK OF OLD ROADS AND MINE MAPS." : "A BOOK: 'THE HEART WAS NEVER WHOLE. IT WAS ONLY EVER HELD.'"]);
   if (t === "Throne") return say(["AN EMPTY GOLD SEAT, STILL WARM."]);
 }
 function innPrompt() {
@@ -836,6 +837,7 @@ function villageRequest(n) {
   });
 }
 function castLine(tx, ty) {
+  if (!(D.fish || []).length) return say(["THE WATER IS QUIET HERE."]);
   fishing = { x: tx, y: ty, phase: "wait", t: 0, wait: 1.2 + Math.random() * 2.4, fish: null, msg: "WAITING FOR A BITE...  A: STRIKE   B: REEL IN" };
   mode = "fish"; sfx("SWING");
 }
@@ -1205,7 +1207,7 @@ const BEHAVIOUR_TEXT = {
 const beastKey = f => f.boss ? "warden:" + f.bossName : f.key;
 function beastInfo(k) {
   if (k.startsWith("warden:")) {
-    const b = D.dungeons.map(d => d.boss_data).find(x => x.name === k.slice(7)) || {};
+    const b = D.dungeons.map(d => d.boss_data).find(x => x && x.name === k.slice(7)) || {};
     return { name: pretty(b.name || "?"), lv: b.level, hp: b.hp, atk: b.attack, def: b.defence, el: b.element, weak: b.weakness, beh: "warden", img: "Boss_" + b.name, scale: 0.55 };
   }
   const f = D.foes[k] || {};
@@ -1214,7 +1216,7 @@ function beastInfo(k) {
 function meet(foes) { foes.forEach(f => { const k = beastKey(f), e = state.seen[k] || (state.seen[k] = { seen: 0, felled: 0 }); e.seen++; }); }
 function fell(foes) { foes.forEach(f => { const e = state.seen[beastKey(f)]; if (e) e.felled++; }); }
 const beastList = () => Object.keys(state.seen).sort((a, b) => (beastInfo(a).lv || 0) - (beastInfo(b).lv || 0) || String(beastInfo(a).name).localeCompare(beastInfo(b).name));
-const BEAST_TOTAL = () => Object.keys(D.foes).length + D.dungeons.length;
+const BEAST_TOTAL = () => Object.keys(D.foes).length + D.dungeons.filter(d => d.boss_data).length;
 function drawBestiary() {
   const list = beastList(), i = menu.ii, k = list[i];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
@@ -1256,7 +1258,7 @@ function bossOf(boss) {                                   /* true = the boss of 
 function startBattle(zone, boss, only) {
   state.sinceBattle = 0; passTime(15);
   const keys = boss ? null : only || pickFormation(zone);
-  const bd0 = boss ? bossOf(boss) : null, dg = bd0 && D.dungeons.find(d => d.boss_data.name === bd0.name);
+  const bd0 = boss ? bossOf(boss) : null, dg = bd0 && D.dungeons.find(d => d.boss_data && d.boss_data.name === bd0.name);
   const foes = boss ? [{ key: "boss", name: pretty(bd0.name), hp: bd0.hp, max: bd0.hp, atk: bd0.attack, def: bd0.defence, spd: bd0.speed,
     exp: bd0.level * 150, gold: bd0.level * 80, el: ELEM[bd0.element] || bd0.element, weak: bd0.weakness && bd0.weakness !== "none" ? ELEM[bd0.weakness] || bd0.weakness : null, img: "Boss_" + bd0.name,
     boss: true, bossName: bd0.name, shard: bd0.shard, final: !!(dg && dg.final), elem: bd0.element, size: 112 }] :
@@ -1375,7 +1377,7 @@ function advanceChooser() {
 const spdOf = a => (a.kind === "foe" ? a.who.spd : a.who.st.agi) * (has(a.who, "haste") ? 1.5 : has(a.who, "slow") ? 0.6 : 1) + rnd(0, 6) + (a.kind === "defend" ? 99 : 0)
   + (a.kind === "foe" && a.who.beh === "ambush" && B.round === 1 ? 199 : 0);        /* an ambusher always opens the fight */
 function pop(target, txt, color) {
-  const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: 268, y: 22 + party.indexOf(target) * 30 };
+  const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: W - 52, y: 22 + party.indexOf(target) * 30 };
   B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
 }
 function hurtFoe(f, dmg) {
@@ -1540,7 +1542,7 @@ function endRound() {
     if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS.");
     const sp = bf && !bf.final && SUMMONS().find(x => x.warden === bf.bossName);
     if (sp) lines.push("THE SHARD HUMS. " + sp.name.toUpperCase() + " WILL ANSWER A SUMMON NOW.");
-    const dg = bf && D.dungeons.find(d => d.boss_data.name === bf.bossName);
+    const dg = bf && D.dungeons.find(d => d.boss_data && d.boss_data.name === bf.bossName);
     if (dg) recruit(dg.name).forEach(n => { lines.push(n.name.toUpperCase() + " THE " + n.job.toUpperCase() + " JOINS YOU!"); if (reserve.includes(n)) lines.push("USE ORDER IN THE MENU TO BRING " + n.name.toUpperCase() + " INTO BATTLE."); });
     B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
   }
@@ -1568,13 +1570,14 @@ function finishBattle() {
 }
 function bossGate() {
   const b = D.dungeons[map.dungeon].boss_data;
-  if (state.beaten.has(b.name)) return;
+  if (!b || state.beaten.has(b.name)) return;
   ask("SOMETHING VAST WAITS BEYOND THE GATE. FACE THE " + pretty(b.name) + "?", ["YES", "NO"], i => { if (i === 0) startBattle(map.info.encounters.zone, b); });
 }
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
+  const compact = W < 320, split = compact ? 120 : 150, statsX = split + 8;
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
-  if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, 320, 180);
+  if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, W, 180);
   for (const f of B.foes) {
     if (f.hp <= 0 && !(B.flash[f.key + f.x] > 0)) continue;
     const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
@@ -1584,50 +1587,50 @@ function drawBattle() {
     if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
   }
   party.forEach((m, i) => {
-    const x = m.hp > 0 ? 262 - (B.phase === "cmd" && B.who === i ? 10 : 0) : 270, y = 8 + i * 30;
+    const x = m.hp > 0 ? W - 58 - (B.phase === "cmd" && B.who === i ? 10 : 0) : W - 50, y = 8 + i * 30;
     spr("sprites", m.sprite, x, y, 0, null, null, 0.3);
     if (B.sub === "target" && B.list[B.target] === m) cursor(x - 12, y + 12);
   });
   if (B.fx) {
     const fr = D.rects.spells["fx:" + B.fx.name];
-    if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [258, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
+    if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [W - 62, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
   }
   for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
-  win(0, 144, 150, 80); win(150, 144, 170, 80);
+  win(0, 144, split, 80); win(split, 144, W - split, 80);
   party.forEach((m, i) => {
     const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
-    text(m.name, 158, y, c); text(m.hp, 262 - tw(m.hp), y, c); text(m.mp, 308 - tw(m.mp), y, "#a0c8ff");
-    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, 216, y, STATUS[k].color); }
-    gauge(158, y + 9, 104, m.hp / m.max, "#58d058");
+    text(compact ? m.name.slice(0, 7) : m.name, statsX, y, c); text(m.hp, W - (compact ? 52 : 58) - tw(m.hp), y, c); text(m.mp, W - 12 - tw(m.mp), y, "#a0c8ff");
+    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, compact ? statsX : 216, compact ? y + 9 : y, STATUS[k].color); }
+    gauge(statsX, y + 9, compact ? 76 : 104, m.hp / m.max, "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
     const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13;
     cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
-    text(party[B.who].name, 86, 152, "#fff070");
+    text(compact ? party[B.who].name.slice(0, 5) : party[B.who].name, 86, 152, "#fff070");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
     const m = party[B.who], used = new Set(B.summoned || []);
     const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
     const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
-    opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], 144 - tw(o[1]), 152 + i * 13); });
+    opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
     cursor(10, 152 + ((B.oi || 0) - from) * 13);
   } else {
-    wrap(B.msg || "", 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
-    if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", 138, 210, "#fff070");
+    wrap(B.msg || "", compact ? 16 : 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
+    if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", split - 12, 210, "#fff070");
   }
 }
 
 /* ---------- title: the art's backdrop layer with a live menu on the same pixels (title.json menu_geometry) ----------
    NEW GAME starts, CONTINUE picks up the journey saved at the inn (dark when there is none), OPTIONS opens the shared
    Settings tabs. The prompt names the button on whatever is plugged in. Tap or click an item to choose it. */
-const SAVE_KEY = "prism.save.v1";
+let SAVE_KEY = "prism.save.v1";
 const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
 let titleT = 0, goT = 0, titleIdx = 0;
-function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
+function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 && (v.realm_key || "prism") === (D.realm_key || "prism") ? v : null; } catch (e) { return null; } }
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, realm_key: D.realm_key || "prism", at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
       air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests, day: state.day, minute: state.minute,
-      ways: typeof PrismWaystones !== "undefined" ? PrismWaystones.encode(WAYS(), state.ways) : undefined }));
+      ways: D.waystones && typeof PrismWaystones !== "undefined" ? PrismWaystones.encode(WAYS(), state.ways) : undefined }));
     return true;
   } catch (e) { return false; }
 }
@@ -1635,7 +1638,7 @@ function saveSummary() {
   const sv = loadSave(); if (!sv) return "No saved journey";
   const lead = sv.party[0] || {};
   const n = (sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])).length;
-  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G \u00b7 " + n + (n === 1 ? " Warden" : " Wardens") + " \u00b7 " + new Date(sv.at).toLocaleString();
+  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (D.realm_profile ? "" : " \u00b7 " + n + (n === 1 ? " Warden" : " Wardens")) + " \u00b7 " + new Date(sv.at).toLocaleString();
 }
 function titleChoose(i) {
   const item = TITLE_ITEMS[i];
@@ -1660,8 +1663,9 @@ function titleChoose(i) {
   fade = 1; fadeCb = () => { mode = "name"; };
 }
 function beginJourney() {
-  goto(townMap(), 11, 15, "up");
-  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say(["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+  const spawn = D.realm_profile && D.realm_profile.start_spawn;
+  goto(townMap(), spawn ? spawn.x : 11, spawn ? spawn.y : 15, "up");
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
 }
 function titleTick(dt) {
   titleT += dt;
@@ -1677,7 +1681,7 @@ function titlePrompt() {
 }
 function drawTitle() {
   const f = Math.floor(titleT * 6) % 8, M = D.title.menu_geometry, hasSave = !!loadSave();
-  g.drawImage(IM.title, f * 320, 0, 320, 224, 0, 0, 320, 224);
+  g.drawImage(IM.title, f * W, 0, W, H, 0, 0, W, H);
   const [wx, wy, ww, wh] = M.window;
   win(wx, wy, ww, wh);
   TITLE_ITEMS.forEach((it, i) => text(it, M.item_x, M.item_y + i * M.item_step, it === "CONTINUE" && !hasSave ? "#6c6c8c" : "#ffffff"));
@@ -1695,7 +1699,7 @@ cv.addEventListener("pointerdown", e => {                 /* tap or click a titl
    D-pad / stick moves over the grid and BACK / END, A types or chooses, B deletes (on an empty name: back to the
    title), Start jumps to END. A keyboard types straight in (Enter = END, Backspace deletes). Tap a letter to type it. */
 let nameEntry = null;
-const NE_CW = Math.floor((W - 40) / 10), NE_X = c => 26 + c * NE_CW, NE_Y = r => 64 + r * 22;
+const NE_X = c => 26 + c * Math.floor((W - 40) / 10), NE_Y = r => 64 + r * 22;
 function neRows() { return D.title.name_entry.grid.length; }
 function neCell(r, c) {                                   /* row neRows() is the bottom bar: columns 0-4 BACK, 5-9 END */
   if (r === neRows()) return c < 5 ? "BACK" : "END";
@@ -1759,7 +1763,7 @@ function drawName() {
 }
 function nameAt(px, py) {                                 /* canvas pixel -> grid cell, for taps */
   if (py >= H - 36 && py <= H - 18) return px < W / 2 ? [neRows(), 0] : [neRows(), 5];
-  const r = Math.floor((py - NE_Y(0) + 6) / 22), c = Math.floor((px - NE_X(0) + 6) / NE_CW);
+  const r = Math.floor((py - NE_Y(0) + 6) / 22), c = Math.floor((px - NE_X(0) + 6) / Math.floor((W - 40) / 10));
   return r >= 0 && r < neRows() && c >= 0 && c < 10 && neCell(r, c) ? [r, c] : null;
 }
 cv.addEventListener("pointerdown", e => {
@@ -1779,14 +1783,14 @@ window.addEventListener("keydown", e => {                 /* typing straight in 
 /* ---------- ending ---------- */
 let ending = null;
 const ENDING_LINES = () => ["THE HEART IS WHOLE.", "", "THE WARDENS SLEEP, AND THE ISLES", "HOLD STILL IN THE SKY ONCE MORE.", "",
-  ...roster().map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", "PRISMHEART", "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
+  ...roster().map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", D.realm.toUpperCase(), "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
 function endingTick(dt) {
   ending.t += dt;
   if (ending.t > 3 && (hit("a") || hit("start"))) { ending = null; mode = "title"; titleT = 0; cue("TITLE"); }
 }
 function drawEnding() {
   const f = Math.floor(ending.t * 6) % 8;
-  g.drawImage(IM.title, f * 320, 0, 320, 224, 0, 0, 320, 224);
+  g.drawImage(IM.title, f * W, 0, W, H, 0, 0, W, H);
   g.fillStyle = "rgba(4,2,16,.86)"; g.fillRect(0, 0, W, H);       /* the credits read over a dimmed title, never over the logo */
   const lines = ENDING_LINES(), y0 = H - ending.t * 14;
   lines.forEach((l, i) => { const y = y0 + i * 14; if (y > -10 && y < H) text(l, (W - tw(l)) / 2, Math.round(y), i === lines.length - 1 ? "#fff070" : "#ffffff"); });
@@ -1835,7 +1839,7 @@ function frame(now) {
 
 /* ---------- harness hooks (scripted play-throughs) ---------- */
 window.PRISM_DEMO = {
-  state: () => ({ mode, map: map && map.kind, floor: map && map.floor, ending: !!ending, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
+  state: () => ({ realm: D && D.realm, realmKey: D && D.realm_key, saveKey: SAVE_KEY, screen: [W, H], mode, map: map && map.kind, floor: map && map.floor, ending: !!ending, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp, f.weak || null]), boss: B.boss },
     party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), reserve: reserve.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.beaten.has("PyreWarden"),
     beaten: Array.from(state.beaten), shards: D ? shardCount() : 0, dungeon: map && map.dungeon }),
@@ -1883,6 +1887,13 @@ async function boot() {
   fit();
   try {
     D = await (await fetch("data.json")).json();
+    // Realm projection only: keep the shared engine and other owners' load hooks.
+    if (D.realm_profile) {
+      W = D.screen[0]; H = D.screen[1]; cv.width = W; cv.height = H; g.imageSmoothingEnabled = false;
+      SAVE_KEY = D.realm_profile.save_key;
+      document.title = D.realm + " Playable Demo"; cv.setAttribute("aria-label", D.realm + " game screen");
+      Object.assign(LINES, D.realm_profile.dialogue);
+    }
     [IM.tiles, IM.sprites, IM.backdrops, IM.spells, IM.title] = await Promise.all(["tiles.png", "sprites.png", "backdrops.png", "spells.png", "title.png"].map(img));
   } catch (e) { statusEl.textContent = "The demo files did not load: " + e.message; return; }
   statusEl.hidden = true;

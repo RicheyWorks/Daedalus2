@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
-"""Pack the Prismheart realm into a playable browser demo built only from the real realm outputs.
+"""Pack Prismheart (default) or Portal into the same playable browser demo built only from the real realm outputs.
 
-    python tools/rpg_demo/build_demo.py ART_ROOT OUT_DIR [--sprites DIR]
+    python tools/rpg_demo/build_demo.py ART_ROOT OUT_DIR [--sprites DIR] [--realm prism|portal]
 
 ART_ROOT is an engines/unreal/art tree (claude-battle-kit, claude-battle-sprites, claude-audio as written by the
 tools/blender/rpg_*.py scripts); --sprites can point at a folder holding the battle sprite / party / backdrop _1x
@@ -74,22 +74,34 @@ class Packer:
 
 
 def main(argv):
+    realm = argv[argv.index("--realm") + 1] if "--realm" in argv and argv.index("--realm") + 1 < len(argv) else REALM
+    if realm not in ("prism", "portal") or ("--realm" in argv and argv.index("--realm") + 1 >= len(argv)):
+        raise SystemExit("--realm must be prism or portal")
+    projection = None
+    if realm == "portal":
+        from portal_realm import project
+        projection = project(J)
+    quest_spec = projection["quest"] if projection else QUEST
+    sky_loot = projection["sky_loot"] if projection else SKY_LOOT
     art = os.path.abspath(argv[0])
     out = os.path.abspath(argv[1])
     spr_dir = os.path.abspath(argv[argv.index("--sprites") + 1]) if "--sprites" in argv else None
-    kit = os.path.join(art, "claude-battle-kit", REALM)
+    kit = os.path.join(art, "claude-battle-kit", realm)
     os.makedirs(os.path.join(out, "audio"), exist_ok=True)
 
     def find(name, *subs):
-        for d in ([spr_dir] if spr_dir else []) + [os.path.join(kit, s) for s in subs] + [kit, os.path.join(art, "claude-battle-sprites", REALM)]:
+        for d in ([spr_dir] if spr_dir else []) + [os.path.join(kit, s) for s in subs] + [kit, os.path.join(art, "claude-battle-sprites", realm)]:
             p = os.path.join(d, name)
             if os.path.exists(p):
                 return p
         raise FileNotFoundError(name)
 
     town, inter, wm, dun = J("town-tiles.json"), J("interiors.json"), J("worldmap-tiles.json"), J("dungeons.json")
-    enc, best, boss = J("prism-encounters.json")["zones"], J("prism-bestiary.json"), J("prism-bosses.json")["bosses"]
-    spells, party, juke = J("spells.json")["spells"], J("party.json")["party"][REALM], J("jukebox.json")["realms"][REALM]
+    if projection:
+        enc, best, boss = projection["encounters"], projection["bestiary"], []
+    else:
+        enc, best, boss = J("prism-encounters.json")["zones"], J("prism-bestiary.json"), J("prism-bosses.json")["bosses"]
+    spells, party, juke = J("spells.json")["spells"], J("party.json")["party"][realm], J("jukebox.json")["realms"][realm]
     types = best.get("types") or best
     types = {t["key"]: t for t in (types if isinstance(types, list) else types.values())}
 
@@ -104,15 +116,15 @@ def main(argv):
         for i in range(n):
             tiles.add("%s#%d" % (key, i), im.crop((i * 16, 0, i * 16 + 16, 16)))
     for t in town["tiles"]:
-        if t["realm"] == REALM:
+        if t["realm"] == realm:
             add_tile("town:" + t["tile"], find("Tile_%s_1x.png" % t["tile"], "town"))
     for t in inter["tiles"]:
-        if t["realm"] == REALM:
+        if t["realm"] == realm:
             add_tile("int:" + t["tile"], find("Tile_%s_1x.png" % t["tile"], "interiors"))
     for t in wm["tiles"]:
-        if t["realm"] == REALM:
+        if t["realm"] == realm:
             add_tile("wm:" + t["tile"], find("Tile_%s_1x.png" % t["tile"], "worldmap"))
-    quest = [next(d for d in dun["dungeons"][REALM] if d["name"] == name) for _, name in QUEST]
+    quest = projection["dungeons"] if projection else [next(d for d in dun["dungeons"][realm] if d["name"] == name) for _, name in quest_spec]
     for theme in sorted({d["theme"] for d in quest}):
         T_ = theme.title()
         for p in glob.glob(os.path.join(kit, "dungeons", "Tile_%s_*_1x.png" % T_)):
@@ -124,16 +136,17 @@ def main(argv):
     for p in glob.glob(os.path.join(kit, "town", "NPC_*_1x.png")) + glob.glob(os.path.join(kit, "interiors", "NPC_Ruler_1x.png")):
         sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
     for m in party["members"]:
-        sp.add("Party_" + m["job"], Image.open(find("Party_Prism_%s_1x.png" % m["job"])))
-    zones = {t["encounter_zone"] for t in wm["tiles"] if t["realm"] == REALM and t["encounter_zone"]}
+        sp.add("Party_" + m["job"], Image.open(find("Party_%s_%s_1x.png" % (realm.title(), m["job"]))))
+    zones = {t["encounter_zone"] for t in wm["tiles"] if t["realm"] == realm and t["encounter_zone"]}
     zones |= {f["encounters"]["zone"] for d in quest for f in d["floors"] if f["encounters"]["zone"]}
     foes = sorted({k for z in zones for fm in enc.get(z, {}).get("formations", []) for k in fm["enemies"]})
     for k in foes:
         sp.add("Foe_" + k, Image.open(find(types[k]["export_name"].replace("Mob_", "Battle_") + "_1x.png")))
-    quest_bosses = {d["name"]: dict(next(b for b in boss if b["dungeon"] == d["name"])) for d in quest}
-    fb = quest_bosses[FINAL]
-    fb.update(hp=int(fb["hp"] * FINAL_SCALE["hp"]), attack=int(round(fb["attack"] * FINAL_SCALE["attack"])), demo_scale=FINAL_SCALE)
-    for b in quest_bosses.values():
+    quest_bosses = {d["name"]: None for d in quest} if projection else {d["name"]: dict(next(b for b in boss if b["dungeon"] == d["name"])) for d in quest}
+    if not projection:
+        fb = quest_bosses[FINAL]
+        fb.update(hp=int(fb["hp"] * FINAL_SCALE["hp"]), attack=int(round(fb["attack"] * FINAL_SCALE["attack"])), demo_scale=FINAL_SCALE)
+    for b in (value for value in quest_bosses.values() if value is not None):
         sp.add("Boss_" + b["name"], Image.open(find("Battle_Prism_Boss_%s_1x.png" % b["name"])))
     for p in glob.glob(os.path.join(kit, "menus", "Icon_*_1x.png")):
         sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
@@ -142,7 +155,7 @@ def main(argv):
     # World-map vehicles (tools/blender/rpg_vehicles.py): a strip of square frames. The map's AirshipPad needs the skiff.
     for p in glob.glob(os.path.join(kit, "vehicles", "Vehicle_*_1x.png")):
         sp.add(os.path.basename(p)[:-len("_1x.png")], Image.open(p))
-    if any("AirshipPad" in row for row in wm["demo_maps"][REALM]) and not os.path.exists(os.path.join(kit, "vehicles", "Vehicle_Prism_Airship_1x.png")):
+    if any("AirshipPad" in row for row in wm["demo_maps"][realm]) and not os.path.exists(os.path.join(kit, "vehicles", "Vehicle_Prism_Airship_1x.png")):
         raise SystemExit("the world map has an AirshipPad but %s has no Vehicle_Prism_Airship_1x.png (run tools/blender/rpg_vehicles.py)" % os.path.join(kit, "vehicles"))
     sprite_rects = sp.save(os.path.join(out, "sprites.png"))
 
@@ -152,7 +165,7 @@ def main(argv):
         cand = [z, z.replace("_deep", ""), "cave" if "cave" in z else "plains"]
         for c in cand:
             try:
-                bd.add("bd:" + c, Image.open(find("Backdrop_Prism_%s_1x.png" % c)))
+                bd.add("bd:" + c, Image.open(find("Backdrop_%s_%s_1x.png" % (realm.title(), c))))
                 backdrop_zone[z] = "bd:" + c
                 break
             except FileNotFoundError:
@@ -163,7 +176,7 @@ def main(argv):
     known = set()
     for m in party["members"]:
         known |= set(m["spells"])
-    demo_spells = [s for s in spells if s["realm"] == REALM and (s["name"] in known or s["tier"] <= 2)]
+    demo_spells = [s for s in spells if s["realm"] == realm and (s["name"] in known or s["tier"] <= 2)]
     for s in demo_spells:
         fx.add("fx:" + s["name"], Image.open(find("Spell_%s_1x.png" % s["name"].replace(" ", ""), "spells")))
     fx_rects = fx.save(os.path.join(out, "spells.png"))
@@ -172,7 +185,7 @@ def main(argv):
     # ---- audio: jukebox seeds for the cues + sound events -------------------------------------------------------
     seeds_dir = os.path.join(art, "claude-audio", "jukebox-seeds")
     cue_files = {}
-    seeds = json.load(open(os.path.join(seeds_dir, "realm-cues.json"), encoding="utf-8"))["realms"][REALM]["cues"]
+    seeds = json.load(open(os.path.join(seeds_dir, "realm-cues.json"), encoding="utf-8"))["realms"][realm]["cues"]
     for cue, s in seeds.items():
         shutil.copy(os.path.join(seeds_dir, s["file"]), os.path.join(out, "audio", s["file"]))
         cue_files[cue] = "audio/" + s["file"]
@@ -184,8 +197,8 @@ def main(argv):
         ev_files[ev] = "audio/" + dst
 
     # ---- checks ----------------------------------------------------------------------------------------------
-    world = wm["demo_maps"][REALM]
-    walk = {t["tile"]: t["walkable"] for t in wm["tiles"] if t["realm"] == REALM}
+    world = projection["world"] if projection else wm["demo_maps"][realm]
+    walk = {t["tile"]: t["walkable"] for t in wm["tiles"] if t["realm"] == realm}
 
     def find_tile(name):
         return next((x, y) for y, r in enumerate(world) for x, c in enumerate(r) if c == name)
@@ -198,20 +211,20 @@ def main(argv):
             if 0 <= n[1] < len(world) and 0 <= n[0] < len(world[0]) and n not in seen and (walk.get(world[n[1]][n[0]]) or world[n[1]][n[0]] in ("Cave", "Castle", "Shrine", "Town")):
                 seen.add(n)
                 q.append(n)
-    reach = {k: find_tile(k) in seen for k in ("Castle", "Shrine") + tuple(lm for lm, _ in QUEST)}
+    reach = {k: find_tile(k) in seen for k in ("Castle", "Shrine") + tuple(lm for lm, _ in quest_spec)}
     if not all(reach.values()):
         raise SystemExit("world map: not reachable on foot from the Town: %s" % reach)
     # Windmere (data/rpg/prism-village.json): the world map's Village. Every tile needs an image; every NPC must be
     # reachable on foot from the gate, and so must the exit row.
-    fish = J("prism-fish.json")["fish"]
+    fish = projection["fish"] if projection else J("prism-fish.json")["fish"]
     import re as _re
     for f in fish:
         if not _re.fullmatch(r"(heal \d+ HP|restore \d+ MP)", f["effect"]) or f["weight"] <= 0 or f.get("night_weight", 1) <= 0 or not 0.2 <= f["window_s"] <= 2:
             raise SystemExit("prism-fish.json: %s has an effect, weight or bite window the demo cannot use" % f["name"])
-    if not any(c == "Water" for r in J("prism-village.json")["grid"] for c in r):
+    if not projection and not any(c == "Water" for r in J("prism-village.json")["grid"] for c in r):
         raise SystemExit("prism-fish.json: Windmere has no Water to fish in")
-    village = J("prism-village.json")
-    vwalk = {t["tile"]: t["walkable"] for t in town["tiles"] if t["realm"] == REALM}
+    village = projection["village"] if projection else J("prism-village.json")
+    vwalk = {t["tile"]: t["walkable"] for t in town["tiles"] if t["realm"] == realm}
     vg = village["grid"]
     for row in vg:
         for c in row:
@@ -235,7 +248,7 @@ def main(argv):
             raise SystemExit("Windmere: no sprite for NPC_%s" % n["type"])
     if not any((x, village["exit_row"]) in vseen for x in range(len(vg[0]))):
         raise SystemExit("Windmere: the exit row cannot be reached from the gate")
-    lands = {t["tile"] for t in wm["tiles"] if t["realm"] == REALM and t.get("airship_lands")}
+    lands = {t["tile"] for t in wm["tiles"] if t["realm"] == realm and t.get("airship_lands")}
     pockets, done = [], set()
     for y, r in enumerate(world):
         for x, c in enumerate(r):
@@ -253,42 +266,47 @@ def main(argv):
                 pockets.append(sorted(comp))
     pockets.sort(key=lambda c: (-len(c), c[0]))
     sky_caches = [{"x": comp[len(comp) // 2][0], "y": comp[len(comp) // 2][1], "item": item, "pocket": len(comp)}
-                  for comp, item in zip(pockets, SKY_LOOT)]
-    for name, grid in [("town", town["demo_towns"][REALM]["grid"])] + [("int:" + k, v["grid"]) for k, v in inter["interiors"][REALM].items()]:
+                  for comp, item in zip(pockets, sky_loot)]
+    for name, grid in [("town", town["demo_towns"][realm]["grid"])] + [("int:" + k, v["grid"]) for k, v in inter["interiors"][realm].items()]:
         for row in grid:
             for c in row:
                 if ("town:" + c not in frames) and ("int:" + c not in frames):
                     raise SystemExit("%s uses tile %s with no image" % (name, c))
 
     data = {
-        "realm": "Prismheart", "tile": 16, "screen": [320, 224], "frames": frames,
+        "realm": projection["name"] if projection else "Prismheart", "realm_key": realm,
+        "tile": 16, "screen": projection["screen"] if projection else [320, 224], "frames": frames,
         "rects": {"tiles": tile_rects, "sprites": sprite_rects, "backdrops": backdrop_rects, "spells": fx_rects},
         "backdrop_for_zone": backdrop_zone,
-        "town": town["demo_towns"][REALM], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == REALM},
-        "interiors": inter["interiors"][REALM], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == REALM},
-        "world": world, "sky_caches": sky_caches, "village": village, "fish": fish, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == REALM},
+        "town": town["demo_towns"][realm], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == realm},
+        "interiors": inter["interiors"][realm], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == realm},
+        "world": world, "sky_caches": sky_caches, "village": village, "fish": fish, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == realm},
         "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
-                     for (lm, _), d in zip(QUEST, quest)],
+                     for (lm, _), d in zip(quest_spec, quest)],
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
         "zones": {z: enc[z] for z in zones if z in enc},
         "foes": {k: {kk: types[k][kk] for kk in ("name", "level", "hp", "attack", "defence", "speed", "exp", "gold", "element", "behaviour")} for k in foes},
         "spells": demo_spells,
         # One gear table from every shop in interiors.json (both realms share gear names: Prism has no armour shop,
         # so its party's Ring Mail / Kite Shield / Iron Helm take their numbers from the Portal armour shop).
-        "gear": {g["name"]: g for realm in ("portal", REALM) for shop in inter["interiors"][realm].values() for g in shop.get("stock", [])
+        "gear": {g["name"]: g for realm in ("portal", realm) for shop in inter["interiors"][realm].values() for g in shop.get("stock", [])
                  if g.get("attack") is not None or g.get("defence") is not None or g.get("effect")},
-        "menus": json.load(open(os.path.join(REPO, "data", "rpg", "menus.json"), encoding="utf-8"))["layouts"][REALM], "party": party, "title": J("title.json")["realms"][REALM],
+        "menus": json.load(open(os.path.join(REPO, "data", "rpg", "menus.json"), encoding="utf-8"))["layouts"][realm], "party": party, "title": J("title.json")["realms"][realm],
         "audio": {"cues": cue_files, "events": ev_files,
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,
     }
-    ws = J("prism-waystones.json")                     # G10 waystones: placed next to their landmarks, reachable on foot
-    try:
-        data["waystones"] = waystones.place(world, walk, ws["waystones"], {t["tile"] for t in wm["tiles"] if t["realm"] == REALM and t.get("kind") == "landmark"},
-                                            avoid=[(c["x"], c["y"]) for c in sky_caches])
-    except ValueError as e:
-        raise SystemExit("prism-waystones.json: %s" % e)
-    data["waystone_fare"] = ws["fare"]
+    if projection:
+        data["realm_profile"] = projection["runtime"]
+        data["projection_notes"] = projection["projection_notes"]
+    else:
+        ws = J("prism-waystones.json")                 # G10 belongs to the Prism build only
+        try:
+            data["waystones"] = waystones.place(world, walk, ws["waystones"], {t["tile"] for t in wm["tiles"] if t["realm"] == realm and t.get("kind") == "landmark"},
+                                                avoid=[(c["x"], c["y"]) for c in sky_caches])
+        except ValueError as e:
+            raise SystemExit("prism-waystones.json: %s" % e)
+        data["waystone_fare"] = ws["fare"]
     for f in fish:                                     # every fish is an item too: eat it from ITEM
         data["gear"][f["name"]] = {"name": f["name"], "effect": f["effect"], "price": f["price"], "fish": True}
     missing = [c["item"] for c in data["sky_caches"] if c["item"] not in data["gear"]]
