@@ -25,4 +25,4 @@ vegetation, fires and tonics drive the puzzle. A burning oak wood forces a route
 
 **Host seam.** `HornbackHerd.run(seed, herd, start, exit, route, terrain, settings, maxSeconds)` returns a `Report`
 (outcome, arrived, calmArrived, burned, lost, drinks, stampedeSteps, steps, peakStress). The host owns the actors, trough
-props, UI and saves. Unreal later: hornback actors + HornbackTrough prop (UNREAL-QUEUE contest section).
+props, UI and saves. Unreal later: hornback actors + trough props (UNREAL-QUEUE contest section). Assets staged NOT READY by blender-team (2026-10-19, link 48751) in `bot-team\staging\contest-20261019\`: `Mob_Lab_Hornback` (rigged; Idle/Walk/Run; LOD1) and `Prop_Lab_HornbackTrough_Wood` (water as a named child, `SOCKET_Water`; LOD1). Front axis: Blender -Y lands on UE +Y, placement yaw -90.

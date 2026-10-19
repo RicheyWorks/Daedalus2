@@ -61,5 +61,5 @@ band (cover, DBE 1 snapshot); finite budgets and bad input refused.
 The field you pass in is the live field. Read it with `UDaedalusEcology` through `Dbe.write(field)` (DBE 1), so the
 PCG island and cover queries see the regrowth. Call `seedCache/water/graze` from player interactions and `season()`
 on a day or season tick. `strike(x, y)` takes combat fires, e.g. from DBE-E 1 IGNITE events.
-Assets (later, via blender-team): seed cache crate, water skin/bucket, goat herd (reuse Mob livestock), and the
-pcg-ecology flora for each band. The editor binding goes in `BOARD/UNREAL-QUEUE.md`.
+Assets staged NOT READY by blender-team (2026-10-19, link 48889) in `bot-team\staging\contest-20261019\`:
+`Prop_Ash_SeedCache` (frame) with `Prop_Ash_SeedCache_Lid`, `_Closed` and `_Open` states, and `Prop_WaterBucket`; the herd reuses the Mob livestock from catalog.bba; flora are the pcg-ecology bands. Front axis: Blender -Y lands on UE +Y, placement yaw -90. The editor binding goes in `BOARD/UNREAL-QUEUE.md`.
