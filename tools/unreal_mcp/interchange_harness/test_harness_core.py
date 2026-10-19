@@ -237,6 +237,53 @@ class ReviewFixTests(Base):
         self.assertNotIn("override_pipelines = [_pipeline(", src)
 
 
+class CollisionAndLightmapTests(Base):
+    """buffffff 48710: collision=false means 0 simple collision primitives; lightmap prop name (UE 5.8)."""
+
+    def plan(self, **ov):
+        p = h.build_plan(self.glb(make_glb(socket=False, ucx=False)), "/Game/T", "Crate", checkpoint="cp.json", overrides=ov)
+        p["expect"] = {}
+        return p
+
+    def test_collision_false_plans_no_generation(self):
+        self.assertFalse(self.plan(collision=False)["options"]["generate_collision"])
+        self.assertTrue(self.plan()["options"]["generate_collision"])
+
+    def test_collision_false_requires_zero_simple(self):
+        p = self.plan(collision=False, build_nanite=False)
+        ok = h.evaluate(p, {"done": True}, {"mesh_found": True, "nanite": False, "simple_collision_count": 0})
+        self.assertTrue(ok["ok"], ok)
+        for bad in ({"mesh_found": True, "nanite": False, "simple_collision_count": 1},
+                    {"mesh_found": True, "nanite": False},
+                    {"mesh": None, "simple_collision_count": 0}):
+            r = h.evaluate(p, {"done": True}, bad)
+            self.assertFalse(r["checks"]["no_simple_collision"], bad)
+            self.assertFalse(r["ok"])
+
+    def test_collision_true_does_not_assert_zero(self):
+        r = h.evaluate(self.plan(), {"done": True}, {"mesh_found": True, "nanite": True, "simple_collision_count": 3})
+        self.assertNotIn("no_simple_collision", r["checks"])
+
+    def test_terrain33_profile_asserts_zero_collision(self):
+        with open(os.path.join(HERE, "profiles", "flagship_terrain_33.json"), encoding="utf-8") as fh:
+            prof = json.load(fh)
+        p = h.build_plan(self.glb(make_glb(socket=False, ucx=False)), prof["destination"], "Crate", checkpoint="cp.json", profile=prof)
+        self.assertFalse(p["options"]["generate_collision"])
+
+    def test_ue_harness_pipeline_names(self):
+        with open(os.path.join(HERE, "ue_harness.py"), encoding="utf-8") as fh:
+            src = fh.read()
+        pipe = src[src.index("def _pipeline"):src.index("def _on_done")]
+        self.assertIn('_try_set(mesh, "generate_lightmap_u_vs"', pipe)
+        self.assertNotIn('_try_set(common, "generate_lightmap_u_vs"', pipe)
+        self.assertIn('_try_set(mesh, "collision", False', pipe)
+        self.assertIn("InterchangeMeshCollision.NONE", pipe)
+        self.assertIn('"simple_collision_count"', src)
+        cnt = src[src.index("def _simple_count"):src.index("def strip_simple_collision")]
+        self.assertIn('"convex_elems"', cnt)
+        self.assertNotIn("get_simple_collision_count(mesh)", cnt)  # excludes convex in 5.8
+
+
 class TerrainProfileTests(Base):
     def packet(self):
         sp = {"triangles": 669, "slots": [{"slot": i, "material": {"name": n}} for i, n in [(1, "Sand"), (0, "Grass")]],

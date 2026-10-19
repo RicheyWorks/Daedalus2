@@ -11,6 +11,7 @@ in overrides.failed); a reimport ignores the override's build_nanite on an exist
     h.poll()               # {"done": bool, "done_objects": [...]}
     h.add_sockets(plan)    # from plan["sockets"]["sockets"] (sidecar), returns per-socket result
     h.set_nanite(plan)     # only if a reimport kept the old Nanite setting (see below)
+    h.strip_simple_collision(plan)  # only for collision=false assets that still carry a hull
     h.facts(plan)          # raw facts for harness_core.evaluate
     h.save(plan)           # only dirty packages under plan["destination"], up to 3 passes
 """
@@ -54,8 +55,15 @@ def _pipeline(plan, report):
     common = p.get_editor_property("common_meshes_properties")
     _try_set(mesh, "build_nanite", o["build_nanite"], report, "nanite")
     _try_set(mesh, "import_collision_according_to_mesh_name", o["collision_from_ucx"], report, "ucx")
+    if not o.get("generate_collision", True):
+        # UE 5.8 (probed read-only 2026-10-19): mesh_pipeline.collision defaults True and
+        # fallback_collision_type defaults CONVEX18DOP, which made a 24-vert hull on terrain_33.
+        _try_set(mesh, "collision", False, report, "collision")
+        _try_set(mesh, "fallback_collision_type", unreal.InterchangeMeshCollision.NONE, report, "fallback_collision")
+        _try_set(mesh, "force_collision_primitive_generation", False, report, "force_collision")
     _try_set(common, "bake_meshes", o["bake_meshes"], report, "bake")
-    _try_set(common, "generate_lightmap_u_vs", o["generate_lightmap_uvs"], report, "lightmap")
+    # UE 5.8: generate_lightmap_u_vs lives on mesh_pipeline, not common_meshes_properties.
+    _try_set(mesh, "generate_lightmap_u_vs", o["generate_lightmap_uvs"], report, "lightmap")
     _try_set(mat, "import_materials", o["import_materials"], report, "import_materials")
     # 48194: reuse-existing and create-new are separate; set each on its own, report both.
     for name in ("reuse_existing_materials", "search_existing_materials"):
@@ -172,6 +180,38 @@ def set_nanite(plan):
                                         "tris_lod0": mesh.get_num_triangles(0)}}
 
 
+def _simple_count(mesh):
+    """All simple collision primitives in agg_geom: box, sphere, capsule, convex, tapered capsule.
+    Native run 2026-10-19: StaticMeshEditorSubsystem.get_simple_collision_count() returned 0 on
+    terrain_33 while it had 1 convex hull (it excludes convex), so it is not used here."""
+    body = mesh.get_editor_property("body_setup")
+    if body is None:
+        return 0
+    agg = body.get_editor_property("agg_geom")
+    n = 0
+    for k in ("box_elems", "sphere_elems", "sphyl_elems", "convex_elems", "tapered_capsule_elems"):
+        try:
+            n += len(agg.get_editor_property(k))
+        except Exception:
+            pass
+    return n
+
+
+def strip_simple_collision(plan):
+    """Remove all simple collision when the plan says collision=false (existing assets, e.g. the
+    terrain_33 auto hull from before this fix). Refuses when the plan wants collision."""
+    if plan["options"].get("generate_collision", True):
+        return {"error": "plan wants collision; refusing to strip"}
+    mesh = _mesh(plan)
+    if mesh is None:
+        return {"error": "mesh missing"}
+    before = _simple_count(mesh)
+    if before:
+        mesh.modify()
+        unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem).remove_collisions(mesh)
+    return {"before": before, "after": _simple_count(mesh)}
+
+
 def facts(plan):
     mesh = _mesh(plan)
     ar = unreal.AssetRegistryHelpers.get_asset_registry()
@@ -194,6 +234,7 @@ def facts(plan):
                     for n, s in sorted(_sockets(mesh, [x["name"] for x in plan["sockets"]["sockets"]]).items())],
         "collision": {"convex": len(agg.get_editor_property("convex_elems")) if agg else 0,
                       "hulls": [_convex(c) for c in agg.get_editor_property("convex_elems")] if agg else []},
+        "simple_collision_count": _simple_count(mesh),
         "nanite": mesh.get_editor_property("nanite_settings").get_editor_property("enabled"),
         "inventory": inv,
         "dirty": _dirty(),
