@@ -1,0 +1,151 @@
+{
+  "schema": "daedalus.official-details-panel-runtime-evidence.v1",
+  "tested_source_checkpoint": "a20213de6a4986740447183d574e8e0b85adedd5",
+  "stage": "BINDING_PASSED_SNAPSHOT_EMPTY_FOLLOWUP_PENDING",
+  "official_inspector_panel_acceptance_complete": false,
+  "production_ui_accepted": false,
+  "all_epic_products_integrated": false,
+  "native_runtime_qualified": false,
+  "native_build": {
+    "exit_code": 0,
+    "elapsed_seconds": 256.53014640000765,
+    "receipt": {
+      "retained_local_receipt": "NativeBuildR1/build-terminal.json",
+      "sha256": "5d7b3dc21f07faca814ef9f954e8a0bf97a27b38613cebde62a6a636c916004c",
+      "bytes": 464
+    }
+  },
+  "fresh_process_readback": {
+    "blueprint": {
+      "AuditValue": 37
+    },
+    "owned_import_fixture": {
+      "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate.Prop_PracticeCrate",
+      "triangles": 264,
+      "lightmap_resolution": 4,
+      "nanite": false,
+      "convex": 1,
+      "materials": [
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1"
+      ],
+      "native_top_socket_present": true
+    },
+    "receipt": {
+      "retained_local_receipt": "ReopenReadinessR1/terminal.json",
+      "sha256": "b46079bd6b73d14644d0ce647d6e7f0346279698d15366e4a487a7bfc89ea77c",
+      "bytes": 2270
+    }
+  },
+  "binding": {
+    "scope": "existing_primary_level_editor_details",
+    "status": "Bound",
+    "bound": true,
+    "approved_ref": "panel1",
+    "process_id": 57572,
+    "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "tab_id": "LevelEditorSelectionDetails",
+    "tab_label": "Details",
+    "panel_type": "SBorder",
+    "window_title": "DaedalusRealm - Unreal Editor",
+    "owning_manager_agrees": true,
+    "window_identity_agrees": true,
+    "panel_visible": true,
+    "tab_foreground": true,
+    "window_visible": true,
+    "cache_roundtrip": true,
+    "keyboard_focus_preserved": true,
+    "active_window_preserved": true,
+    "ref_preexisting": false,
+    "diagnostic": ""
+  },
+  "first_capture": {
+    "capture_id": "c45afed0-d7e4-4f3b-8216-1d3df01f61f7",
+    "request_id": "codex-epic-capturer1-20261019",
+    "snapshot_request": {
+      "Ref": "panel1",
+      "MaxDepth": 2,
+      "bIncludeSourceLocations": true
+    },
+    "call": {
+      "started_utc": "2026-10-19T17:23:31.761070+00:00",
+      "ended_utc": "2026-10-19T17:23:31.761070+00:00"
+    },
+    "raw_return_text": "",
+    "raw_return_utf8_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native_receipt": {
+      "retained_local_receipt": "CaptureR1/terminal.json",
+      "sha256": "22065e7f4cb77de656b4ffa91132c8df164264f0d3161f64789ca583e8be8e57",
+      "bytes": 6285
+    },
+    "consumer_source_sha256": "d77e0fddc2aa606c7e44bc6454e8068aa87cba69580e81d76e24f00b03dd3da2",
+    "consumer_accepted": false,
+    "consumer_error": "ContractViolation('empty snapshot cannot qualify panel content')",
+    "replay_ids_consumed": 0,
+    "consumer_receipt": {
+      "retained_local_receipt": "capture-consumer-r1.json",
+      "sha256": "1dea5a0dd1e4275ea19fb0f49baa2dc62d1af0096f68b8c11924deab235eb6b4",
+      "bytes": 1107
+    }
+  },
+  "preservation": {
+    "equal_fields": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "accepted": true,
+    "state_effects": {
+      "assets": 0,
+      "world": 0,
+      "input": 0,
+      "observers": 0,
+      "ref_cache": "scoped_shared_ref_append_or_reuse"
+    },
+    "protected_saved_count": 1358,
+    "protected_saved_mismatches": [],
+    "source_config_mismatches": [],
+    "canonical_header_sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7",
+    "receipt": {
+      "retained_local_receipt": "preservation-r1.json",
+      "sha256": "de4e76ce89523ad5993bd17c8e890c7da242dc15a92a94d4d99fecec65163cd0",
+      "bytes": 5101
+    },
+    "compute_release": {
+      "retained_local_receipt": "compute-release-r1.json",
+      "sha256": "e07fb2acbac51d7ed989b93ecea5a7c425b44613af798cd5148831cd3ca5527f",
+      "bytes": 1373
+    },
+    "unreal_custody_retained": true
+  },
+  "prepared_followup": {
+    "fixed_depth": 5,
+    "source_locations": true,
+    "same_existing_panel_only": true,
+    "dispatched": false,
+    "contract": {
+      "retained_local_receipt": "capture-source-contract-r3.json",
+      "sha256": "557e1515f3fbee8b36933a970bfb091eb2ddbcf08f980761c0b4a6686a61b190",
+      "bytes": 3795
+    },
+    "source_review": {
+      "retained_local_receipt": "followup-host-source-review.json",
+      "sha256": "adc6b3d267e1f25b174431db7782a469c28bff8714d468cb5dd45153f0e588f9",
+      "bytes": 667
+    },
+    "blocker": "Existing pure consumer remains depth2; minimal owned expected-depth5/R3 source adjustment pending. No native replay, new snapshot, selection/focus change or rebuild performed."
+  },
+  "limits": [
+    "Snapshot output is accessibility text, not a screenshot.",
+    "Binding success and empty output do not qualify panel-content acceptance.",
+    "Shared cache may append or reuse root and emitted descendant refs without reset.",
+    "Consumer freshness is real UTC, with caller-retained identities; no retimestamp or bookkeeping recapture.",
+    "First batch validation NotValidated aggregate coverage remains incomplete."
+  ]
+}
