@@ -64,3 +64,26 @@ This isolates observed localhost connection resets without substituting game dat
 or images. It keeps one browser context and HTTP origin across page lifecycles,
 explicitly checks both identities, and compares both save values byte for byte.
 It validates the browser frontend; actual HTTP hosting remains unvalidated.
+
+For separate real-loopback-HTTP evidence on those same built directories:
+
+```console
+python tools/rpg_demo/portal_http_test.py OUT/portal OUT/prism OUT/http-evidence
+```
+
+This focused check uses `demo_http.py`, a loopback-only static validation server
+with explicitly mounted build directories, a 16 MiB per-file cap, finite socket
+timeouts and GET/HEAD body receipts. It checks client-received length, SHA-256 and
+MIME for real HTML, data, atlases and controller assets, including the backdrop and
+controller bundle that previously reset. Server write completion alone is not
+client-delivery proof. The browser then loads both realms over actual HTTP in one
+context/origin, creates inn saves through normal interaction, reloads/continues and
+checks both saved byte strings. No local-origin requests are fulfilled or mocked;
+only optional external font requests are aborted. JSON retains client/server and
+browser evidence, plus a PNG. A fresh evidence directory is required.
+
+This is a bounded development-server check, not a production hosting service.
+Earlier failed HTTP receipts and the separate 36-check frontend result remain
+valid historical evidence; a later HTTP pass does not establish the cause of the
+earlier resets. Run outcomes, source/build pins and remaining limits belong in
+the delivery receipt. Native/editor, hardware and art acceptance remain separate.
