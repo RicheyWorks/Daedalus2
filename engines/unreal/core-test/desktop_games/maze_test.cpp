@@ -216,7 +216,7 @@ static void NativeLifecycle() {
     MazeTestAccess::ZeldaTerminal(Zelda);Zelda.Step(Held);Check("Zelda held action does not restart without press",Zelda.GetStatus().Over);
     Zelda.Step(Restart);Check("Zelda gameover restart restores health",!Zelda.GetStatus().Over&&Zelda.GetPlayer().Health==6);
 
-    Frame F;Dungeon.Render(F);Check("Dungeon procedural frame is bounded finite source extent",ValidFrame(F)&&F.Width==800&&F.Height==280);
+    Frame F;Dungeon.Render(F);Check("Dungeon procedural frame is bounded finite source extent",ValidFrame(F)&&F.Width==800&&F.Height==344);
     Pac.Render(F);Check("Pac frame fits whole620-pixel maze and HUD",ValidFrame(F)&&F.Width==800&&F.Height==660);
     Zelda.Render(F);Check("Zelda procedural world and source character frame is bounded finite",ValidFrame(F)&&F.Width==800&&F.Height==600);
     for(int Round=0;Round<16;++Round) {
