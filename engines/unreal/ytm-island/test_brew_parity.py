@@ -29,6 +29,22 @@ class BrewParity(unittest.TestCase):
                 self.assertEqual(r["melody"], c[4], c[0])
                 self.assertEqual(r["notes"], [int(n) for n in c[3].split("|")], c[0])
 
+class NativeTierRounding(unittest.TestCase):
+    """ADaedalusBrewBench (DaedalusHomestead.cpp) must round the stage average half-to-even like herbcombo/Java.
+    Editor run 2026-10-19: FMath::RoundToInt made 27/1935 parity rows one tier too high (every 2.5 average)."""
+    CPP = os.path.join(os.path.dirname(os.path.dirname(HERE)), "unreal", "DaedalusLink", "Source", "DaedalusLink", "Private",
+                       "DaedalusHomestead.cpp")
+
+    def test_python_reference_ties(self):
+        self.assertEqual(H.brew([("Mimint", 3), ("Sharpcress", 4), ("Flatfern", 1), ("Dronebloom", 2)])["tier"], 2)
+        self.assertEqual(round(3.5), 4)
+
+    def test_native_tier_uses_half_to_even(self):
+        with open(self.CPP, encoding="utf-8") as f:
+            line = next(l for l in f if "R.Tier = " in l and "StageSum" in l)
+        self.assertIn("RoundHalfToEven", line)
+        self.assertNotIn("RoundToInt", line)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -15,162 +15,233 @@
  "blocking": [],
  "needs_import": [],
  "lod1_ready": [
+  "Item_Herb_Ashmint",
+  "Item_Herb_Boilbalm",
+  "Item_Herb_Cinderroot",
+  "Item_Herb_Coalclover",
+  "Item_Herb_Emberleaf",
+  "Item_Herb_Forgefern",
+  "Item_Herb_Hearthbasil",
+  "Item_Herb_Kilnpoppy",
+  "Item_Herb_Lavathistle",
+  "Item_Herb_Pyreweed",
+  "Item_Herb_Steamreed",
+  "Item_Herb_Ventmoss",
+  "Item_Shard_Asteroid",
+  "Item_Shard_Planet",
+  "Mob_Bee",
+  "Mob_Boar_Wild",
+  "Mob_Chicken",
+  "Mob_Cow",
+  "Mob_Goat",
+  "Mob_Sheep",
+  "Prop_ArkRivetCrate",
   "Prop_ArkWreck_Hull",
   "Prop_Asteroid_Chunk_Large",
   "Prop_Asteroid_Chunk_Small",
   "Prop_Asteroid_Core",
   "Prop_Crater_RimRock",
+  "Prop_ForgeAnvil_Basalt",
+  "Prop_ForgeAnvil_Obsidian",
+  "Prop_ForgeBellows_Basalt",
+  "Prop_ForgeChimney_Basalt",
+  "Prop_ForgeCrucible_Iron",
+  "Prop_ForgeEmberBrazier_Basalt",
+  "Prop_ForgeForgeAltar_Basalt",
+  "Prop_ForgeGrindstone_Basalt",
+  "Prop_ForgeIngotStack_Iron",
+  "Prop_ForgeLavaRock_Basalt",
+  "Prop_ForgeLavaRock_Obsidian",
+  "Prop_ForgeMagmaPool_Basalt",
+  "Prop_ForgeObsidianSpire_Basalt",
+  "Prop_ForgeQuenchTub_Basalt",
+  "Prop_ForgeToolRack_Iron",
+  "Prop_ForgeVentPlume_Basalt",
+  "Prop_ForgeWorkbench_Iron",
   "Prop_Grok_Monolith",
-  "Prop_Grok_SeedPod"
+  "Prop_Grok_SeedPod",
+  "Prop_HephaestusAnvil_Great",
+  "Prop_HephaestusForge_Great",
+  "Prop_LavaLantern",
+  "Prop_RanchCoop_Wood",
+  "Prop_RanchFeeder_Wood",
+  "Prop_RanchFencePost_Wood",
+  "Prop_RanchFenceRail_Wood",
+  "Prop_RanchGate_Wood",
+  "Prop_RanchHaybale_Wood",
+  "Prop_RanchHutch_Wood",
+  "Prop_RanchMilkpail_Iron",
+  "Prop_RanchNestbox_Wood",
+  "Prop_RanchStall_Iron",
+  "Prop_RanchStall_Wood",
+  "Prop_RanchTrough_Iron",
+  "Prop_RanchTrough_Wood",
+  "Prop_WaterBarrel_Iron",
+  "Prop_WaterBoiler_Copper",
+  "Prop_WaterBucket_Clay",
+  "Prop_WaterCanteen_Copper",
+  "Prop_WaterCistern_Clay",
+  "Prop_WaterJug_Copper",
+  "Prop_WaterPipeElbow_Copper",
+  "Prop_WaterPipe_Copper",
+  "Prop_WaterPipe_Iron",
+  "Prop_WaterRainCatch_Clay",
+  "Prop_WaterRainCatch_Copper",
+  "Prop_WaterSpigot_Iron",
+  "Prop_WaterStill_Copper",
+  "Prop_WaterTrough_Iron",
+  "Prop_WaterWellhead_Clay",
+  "Prop_WaterWellhead_Wood",
+  "Tool_HephaestusHammer"
  ],
- "lod1_count": 7,
+ "lod1_count": 78,
  "assets": [
   {
    "asset": "Item_Herb_Ashmint",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Boilbalm",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Cinderroot",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Coalclover",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Emberleaf",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Forgefern",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Hearthbasil",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Kilnpoppy",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Lavathistle",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Pyreweed",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Steamreed",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Herb_Ventmoss",
    "uses": 1,
    "category": "herbs",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Shard_Asteroid",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Item_Shard_Planet",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Bee",
    "uses": 2,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Boar_Wild",
    "uses": 3,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Chicken",
    "uses": 3,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Cow",
    "uses": 2,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Goat",
    "uses": 3,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Mob_Sheep",
    "uses": 3,
    "category": "livestock",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ArkRivetCrate",
    "uses": 3,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ArkWreck_Hull",
@@ -212,119 +283,119 @@
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeAnvil_Obsidian",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeBellows_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeChimney_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeCrucible_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeEmberBrazier_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeForgeAltar_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeGrindstone_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeIngotStack_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeLavaRock_Basalt",
    "uses": 3,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeLavaRock_Obsidian",
    "uses": 2,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeMagmaPool_Basalt",
    "uses": 2,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeObsidianSpire_Basalt",
    "uses": 7,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeQuenchTub_Basalt",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeToolRack_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeVentPlume_Basalt",
    "uses": 2,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_ForgeWorkbench_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_Grok_Monolith",
@@ -345,231 +416,231 @@
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_HephaestusForge_Great",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_LavaLantern",
    "uses": 3,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchCoop_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchFeeder_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchFencePost_Wood",
    "uses": 8,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchFenceRail_Wood",
    "uses": 8,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchGate_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchHaybale_Wood",
    "uses": 2,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchHutch_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchMilkpail_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchNestbox_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchStall_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchStall_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchTrough_Iron",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_RanchTrough_Wood",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterBarrel_Iron",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterBoiler_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterBucket_Clay",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterCanteen_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterCistern_Clay",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterJug_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterPipeElbow_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterPipe_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterPipe_Iron",
    "uses": 6,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterRainCatch_Clay",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterRainCatch_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterSpigot_Iron",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterStill_Copper",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterTrough_Iron",
    "uses": 2,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterWellhead_Clay",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Prop_WaterWellhead_Wood",
    "uses": 1,
    "category": "water",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "Tool_HephaestusHammer",
    "uses": 1,
    "category": "other",
    "status": "in_unreal",
-   "lod1": false
+   "lod1": true
   },
   {
    "asset": "WaterPlane_HotSpring",
