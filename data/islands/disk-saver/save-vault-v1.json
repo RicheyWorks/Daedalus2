@@ -1,0 +1,27 @@
+{
+  "v": 1,
+  "quest": "q_save_vault",
+  "lore": "Under DiskSaver Island the Archivist keeps every island's save snapshots on vault shelves with a hard quota. Shared chunks are shelved once. Copy a snapshot to the Reef vault before you clear its shelf, and never touch the newest save of any island: that is someone's hard work.",
+  "vault": {"quota_kib": 600, "mirror_kib_per_tick": 48},
+  "islands": [
+    {"id": "disk_saver_home", "chunk_kib": 8, "pool": 64, "chunks_per_snapshot": 6, "write_permille": 600, "churn_permille": 450},
+    {"id": "cache_north", "chunk_kib": 6, "pool": 64, "chunks_per_snapshot": 5, "write_permille": 450, "churn_permille": 375},
+    {"id": "vault_east", "chunk_kib": 12, "pool": 64, "chunks_per_snapshot": 4, "write_permille": 300, "churn_permille": 600}
+  ],
+  "win_ticks": 30,
+  "seed": 1,
+  "npc": {
+    "name": "Archivist Ledger",
+    "lines": {
+      "start": "Shelves are filling. Copy to the Reef before you clear anything.",
+      "write": "Fresh saves came in from the islands.",
+      "mirror": "The Reef copy checks out, hash for hash.",
+      "prune": "Shelf cleared. The Reef still holds it.",
+      "pinned": "Not that one. It is the newest save; it stays.",
+      "near_full": "We are near the quota. Mirror and clear old shelves.",
+      "win": "Every save kept, and room to spare. Well kept.",
+      "fail_lost": "You cleared a save the Reef never had. That work is gone.",
+      "fail_quota": "The shelves overflowed. The vault locked."
+    }
+  }
+}

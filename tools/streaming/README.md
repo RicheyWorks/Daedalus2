@@ -29,3 +29,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Byte Spring cistern (contest G39, quest q_byte_spring)
 - `byte_spring.py`: DiskSaver Island minigame that composes `dsb.py`. DSB rows become islands that drink water, and the DSB 1 picker chooses the start residents. A seeded, integer-only tick sim (`byte_spring_test.py`, 46 tests; CI `Byte Spring cistern`). Rules: `docs/islands/DISKSAVER-BYTE-SPRING.md`.
+
+## Save Vault Keeper (contest G59, quest q_save_vault)
+- `save_vault.py`: DiskSaver Island save-state minigame. A quota'd vault of content-addressed (dedupe) snapshot chunks, a bandwidth-limited and hash-verified Reef mirror, the newest snapshot per island pinned, and pruning an unmirrored snapshot = lost work. The quota comes from the G39 Byte Spring budget cap (`save_vault_test.py`; CI `Save Vault Keeper`). Rules: `docs/islands/DISKSAVER-SAVE-VAULT.md`.
