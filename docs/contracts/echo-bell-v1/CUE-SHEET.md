@@ -9,7 +9,8 @@ Generated from `peals.ebg` (Daedalus2 main, Java core is the source of truth). A
 - Echo: same bell sample, played at `echoMs`, gain x0.5, low-passed (~1.2 kHz), slight reverb. Delay = 200 + 70 x depthCells.
 - Timing window: +/- `windowMs` around each echo (140/120/100/80 by difficulty 0-3; x1.5 with Echo Crickets).
 - Crickets assist: quiet cricket chirp loop (gain <= 0.2) ticking on each echo time.
-- Pitch set: D3 146.832, F3 174.614, G3 195.998, A3 219.999, C4 261.625, D4 293.664, F4 349.228 Hz.
+- Pitch set (7 bells, semis 0,3,5,7,10,12,15): D3 146.832, F3 174.614, G3 195.997, A3 219.999, C4 261.625, D4 293.664, F4 349.227 Hz.
+- These are the core's output and are canonical (they match peals.ebg and the tables below): hz = round(146.832 x 2^(semis/12)) to 3 decimals, root 146.832. Because the root is 146.832 rather than true D3 146.8324, G3 and F4 land at 195.997 / 349.227 (true equal-temperament G3 = 195.9977, F4 = 349.2282). Use the listed values.
 
 ## Fixture peals (the first one is `sample.ebg`: seed 1, difficulty 0, no crickets)
 
