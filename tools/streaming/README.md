@@ -47,3 +47,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Coral Wear (contest G78, quest q_coral_wear)
 - `coral_wear.py`: DiskSaver Island wear-leveling minigame. Saves move between flash-like coral cells with seeded endurance, and worn cells retire. Dynamic leveling, plus static relocation of cold archives, keeps the shelf alive. Hot and cold saves come from the G70 tide chart plus G59 archives (`coral_wear_test.py`; CI `Coral Wear`). Rules: `docs/islands/DISKSAVER-CORAL-WEAR.md`.
+
+## Journal Tide (contest G79, quest q_journal_tide)
+- `journal_tide.py`: DiskSaver Island write-ahead-journal minigame. Saves are buffered and then committed as CRC32 records, storm surges lose the buffer, and a torn mid-commit record is caught on replay. Paced commits beat the commit-everything and never-commit traps. The saves come from G78 Coral Wear (`journal_tide_test.py`; CI `Journal Tide`). Rules: `docs/islands/DISKSAVER-JOURNAL-TIDE.md`.
