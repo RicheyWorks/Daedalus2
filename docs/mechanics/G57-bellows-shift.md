@@ -31,3 +31,7 @@ Tests: `ForgeBellowsTest` (11 tests).
 ## Engine
 
 The host owns the plan and judges the pump inputs it receives. A bellows actor on Prop_ForgeBellows_Basalt drives the pump, the firebed glow follows the heat, and a forgeox animation plays while it works. The Unreal binding belongs on UNREAL-QUEUE.md.
+
+## C++ core (G69)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusForgeBellowsCore.h` ports the rules to header-only C++17 with no Unreal types. It contains `MakeBellowsPlan`, `BellowsStep`, `RunBellows`, `BellowsSteadyHand`, `BellowsLine` and `Encode` (the BLW 1 line), and it uses TemperForgeCore for the SplittableRandom port and the metals. `core-test/forge_bellows_core_test.cpp` passes 7 checks under MSVC /W4 /WX and g++ -Werror with ASan/UBSan. Its `--write` produces `forge_bellows_parity.txt`: 900 lines covering 5 metals × 0–2 oxen × seeds 0–19 × three inputs (steadyHand, spam, seeded coin-flip). `ForgeBellowsParityTest` replays the same cases in Java and compares the two line by line. Java gains `Result.encode()`.
