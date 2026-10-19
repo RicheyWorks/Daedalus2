@@ -96,6 +96,7 @@ class EarRuleSweepTest {
             }
             return out;
         });
+        sweep("G121 KeepersCall", s -> KeepersCall.seeded(s).call(KeepersCall.MAX_LENGTH).stream().map(KeepersCall.Stroke::hz).toList());
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 }
