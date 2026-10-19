@@ -116,11 +116,18 @@ public final class HerdOutbreak {
         if (!(r > 1)) {
             return 0;
         }
-        double z = 1;
+        // bisection on f(z) = z - 1 + exp(-r z): f < 0 just above 0 and f(1) > 0, so it converges even for r near 1
+        double lo = 1e-12;
+        double hi = 1;
         for (int i = 0; i < 200; i++) {
-            z = 1 - Math.exp(-r * z);
+            double mid = (lo + hi) / 2;
+            if (mid - 1 + Math.exp(-r * mid) < 0) {
+                lo = mid;
+            } else {
+                hi = mid;
+            }
         }
-        return z;
+        return (lo + hi) / 2;
     }
 
     /** Runs the blight. Deterministic in the settings, the seed and the plan. */

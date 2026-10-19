@@ -65,6 +65,11 @@ class HerdOutbreakTest {
         assertEquals(1 - Math.exp(-2.5 * z), z, 1e-12);
         assertEquals(0.8926, z, 1e-3);
         assertEquals(0.0, HerdOutbreak.finalSize(0.9), 0.0);
+        for (double r : new double[] {1.01, 1.05, 1.2}) {
+            double zr = HerdOutbreak.finalSize(r);
+            assertTrue(zr > 0 && zr < 0.4, "r " + r + " z " + zr);
+            assertEquals(1 - Math.exp(-r * zr), zr, 1e-9);
+        }
         assertEquals(0.6, HerdOutbreak.herd(D, 1).threshold(), 1e-12);
     }
 
@@ -107,6 +112,20 @@ class HerdOutbreakTest {
         int none = count(0, -1, Outcome.CONTAINED);
         assertTrue(early > late && late > none, early + " > " + late + " > " + none);
         assertTrue(early >= 300, "fence at generation 1: " + early);
+    }
+
+    @Test
+    void theFenceRunsOnTheLedgerClock() {
+        for (long seed = 1; seed <= 40; seed++) {
+            Report open = run(seed, 0, -1);
+            Report fenced = run(seed, 0, 3);
+            assertEquals(fenced, run(seed, 0, 3));
+            int same = Math.min(3, Math.min(open.generations().size(), fenced.generations().size()));
+            for (int g = 0; g < same; g++) {
+                assertEquals(open.generations().get(g), fenced.generations().get(g), "week " + (g + 1));
+            }
+            assertTrue(fenced.sick() <= open.sick() || fenced.generations().size() > 3);
+        }
     }
 
     @Test

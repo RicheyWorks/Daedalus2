@@ -1,6 +1,6 @@
 # BLIGHT01 — Hoof Blight (contest G172)
 
-*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/HerdOutbreak.java` (tests: `HerdOutbreakTest`, 9).*
+*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/HerdOutbreak.java` (tests: `HerdOutbreakTest`, 10).*
 
 ## Story
 
@@ -43,13 +43,16 @@ Every roll is a splitmix hash of (seed, week, animal). `Settings.DEFAULT = (200,
 
 ## What the tests pin
 
-- `finalSize(2.5)` solves its equation (0.8926), there is no major outbreak below r = 1, and the threshold is 0.6.
+- `finalSize(2.5)` solves its equation (0.8926), and so do r = 1.01, 1.05 and 1.2 just above 1 (small z; the solver
+  bisects, so it converges there too). There is no major outbreak below r = 1, and the threshold is 0.6.
 - With no doses the blight is an EPIDEMIC in at least 320 of 400 seeds, and major outbreaks match z within 0.03.
 - Vaccinating 75% (past the threshold) contains the blight in every seed; vaccinating 20% still leaves at least 250
   epidemics.
 - At 40% vaccinated, major outbreaks match the effective-R final size within 0.05.
 - More doses never mean more sick animals on average.
 - A fence in week 1 contains at least 300 of 400 and beats a fence in week 3, which beats no fence.
+- The fence runs on the ledger's own week clock: weeks before the fence match the unfenced run exactly, and the same
+  seed and fence week replay the same blight.
 - The weekly ledger adds up to the total, susceptibles only fall, and `band()` is MEADOW exactly when CONTAINED.
 - The same seed and plan give the same blight, and bad plans and settings are refused.
 
