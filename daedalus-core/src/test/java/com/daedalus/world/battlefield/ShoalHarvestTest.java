@@ -49,8 +49,12 @@ class ShoalHarvestTest {
         ShoalHarvest calm = ShoalHarvest.shoal(new Settings(1000, 0.6, 0, 50, 0.05), 1);
         for (Report r : new Report[] {calm.run(Rule.QUOTA, calm.msy()), calm.run(Rule.EFFORT, calm.msyEffort())}) {
             assertEquals(Outcome.THRIVING, r.outcome());
-            assertEquals(150.0, r.meanCatch(), 1e-6);
-            assertEquals(500.0, r.shoal(), 1e-6);
+            assertEquals(150.0, r.meanCatch(), 1e-9);
+            assertEquals(500.0, r.shoal(), 1e-9);
+            for (Year y : r.years()) {
+                assertEquals(650.0, y.shoal(), 1e-9);
+                assertEquals(150.0, y.catchTonnes(), 1e-9);
+            }
         }
     }
 
@@ -60,6 +64,17 @@ class ShoalHarvestTest {
         assertTrue(collapsed >= 100, "MSY quota collapsed " + collapsed);
         assertEquals(0, count(Rule.EFFORT, E, Outcome.COLLAPSED));
         assertEquals(SEEDS, count(Rule.EFFORT, E, Outcome.THRIVING));
+    }
+
+    @Test
+    void theNoiseModelAndSeedsAreLocked() {
+        // seed 1, year 0: 500 + 0.6 * 500 * 0.5 * (1 + 0.5 * (2u - 1)) for the splitmix draw u of (seed 1, year 0)
+        Report r = ShoalHarvest.shoal(D, 1).run(Rule.QUOTA, 150);
+        assertEquals(659.9842362758421, r.years().get(0).shoal(), 1e-9);
+        assertEquals(696.776988431989, r.years().get(1).shoal(), 1e-9);
+        assertEquals(138, count(Rule.QUOTA, 150, Outcome.COLLAPSED));
+        assertEquals(0, count(Rule.EFFORT, E, Outcome.COLLAPSED));
+        assertEquals(0.3 / 1.3, E, 0.0);
     }
 
     @Test

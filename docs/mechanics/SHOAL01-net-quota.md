@@ -1,6 +1,6 @@
 # SHOAL01 — Net Quota (contest G176)
 
-*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/ShoalHarvest.java` (tests: `ShoalHarvestTest`, 9).*
+*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/ShoalHarvest.java` (tests: `ShoalHarvestTest`, 10).*
 
 ## Story
 
@@ -46,7 +46,10 @@ Every roll is a splitmix hash of (seed, year). `Settings.DEFAULT = (1000, 0.6, 0
 ## What the tests pin
 
 - MSY is 150 t and the MSY share 0.3/1.3.
-- With no noise, both MSY rules land 150 t a year and hold the shoal at 500 t.
+- With no noise, both MSY rules land exactly 150 t every year (the shoal grows to 650 t and is fished back to 500 t),
+  with the share at exactly (r/2)/(1 + r/2).
+- The noise model and seeds are locked: golden shoal values for seed 1, and exactly 138 MSY-quota collapses and 0
+  MSY-share collapses over seeds 1 to 200.
 - With noise, the MSY quota collapses at least 100 of 200 seeds, while the MSY share collapses none and thrives in all.
 - The MSY share lands more than 30 t a year more than the MSY quota, and more than 140 t.
 - A precautionary quota of 120 never collapses, a 0.45 share always does, and no fishing always thrives.
