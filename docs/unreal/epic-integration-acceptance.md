@@ -1,6 +1,6 @@
 # Epic integration acceptance recipe
 
-This is the bounded acceptance recipe for the source integration. It depends on [PR #408](https://github.com/RicheyWorks/Daedalus2/pull/408) and [PR #409](https://github.com/RicheyWorks/Daedalus2/pull/409); those links do not assert their merge or adoption status. Run through the existing admitted editor connection and sole operator. These helpers add no transport, server, or authority to mutate another owner's work.
+This is the bounded acceptance recipe for the integration source, documentation and retained runtime witness. It depends on [PR #408](https://github.com/RicheyWorks/Daedalus2/pull/408) and [PR #409](https://github.com/RicheyWorks/Daedalus2/pull/409); those links do not assert their merge or adoption status. Run through the existing admitted editor connection and sole operator. These helpers add no transport, server, or authority to mutate another owner's work.
 
 ## Evidence and adoption boundary
 
@@ -8,13 +8,17 @@ This is the bounded acceptance recipe for the source integration. It depends on 
 | --- | --- | --- |
 | First integration build | Exit 0; measured elapsed time 274.6032471 seconds | Compilation does not establish installation or runtime behavior. |
 | Offline checks | 50 tests passed | Fakes and source contracts do not establish native acceptance. |
-| Blueprint | Created, edited to integer 37, strictly compiled, saved, and reopened with 37 | Acceptance covers that owned asset and recorded process transition. |
-| Slate R1 | **CRASHED** during the geometry-only `FWidgetPath` route with empty pointer positions | Pointer-aware routing and owned-content detachment repaired and rebuilt (exit 0, 9.6477064 seconds). Recovery acceptance is pending; the original crash remains failed evidence. |
-| Native validation | **NOT RUN** | Policy and snapshot checks are not a native invocation receipt. |
-| Automation | **NOT RUN** | Discovery, catalogue, and completed native run still need receipts. |
-| Import/reimport checks | **NOT RUN** | Existing harness capability is not evidence for this integration. |
+| Blueprint | Created, edited to integer 37, strictly compiled, exactly saved, and observed as 37 after two fresh-process reopens | Acceptance covers that owned asset and recorded process transitions; no property flags changed or world saved. |
+| Slate | R1 **CRASHED**; repaired R2 **PASS**: all required fields true, click count 1, empty failure reason, protected state equal | Disposable fixture only; `production_ui_accepted=false`. The original crash remains failed evidence. |
+| Native validation R1 | Three real native calls: Valid/accepted true, Invalid/accepted false, configured NotValidated returned aggregate Valid/accepted true | **Three-class coverage INCOMPLETE**. All snapshots retain `native_runtime_qualified=false`. |
+| AutomationResultsR1 | Four exact tests returned `Success`; 4 passed, 0 failed/skipped, no errors/warnings; strict consumer accepted | Covers the two Slate tests, validation Policy, and NativeProjection. NamedFixtures was not run. |
+| Import/reimport checks | New owned mesh + two materials imported and saved; one reimport preserved UObject, geometry, materials, socket, UCX, Nanite and lightmap override 128; restored 4 and saved | No production assets or world placement/save; no additional fresh-process reopen after this import. |
 
-Keep **installed**, **live-tested**, and **adopted** separate. Installed means the intended binary and contracts were identified in the running editor. Live-tested means a particular admitted operation produced its required native observations. Adopted means its scoped acceptance and preservation evidence were reviewed. The Blueprint result and failed Slate attempt do not establish blanket adoption of the complete batch. Record installation identity with each later runtime result.
+These results come from the retained `EpicIntegrationSprint20261019` receipts through final readback at 2026-10-19 16:53:16 UTC. The [runtime witness](../../tools/unreal_mcp/fixtures/epic_integration_20261019.json) retains actual results and receipt hashes. Final preservation verified all 1,352 protected saved files, 223 unchanged original source/config files and three approved source/config updates; six new owned fixture packages are saved. Maps/content were clean, the 22,878-actor scene and camera were unchanged, all owned operations were terminal, and compute was released normally at 16:54:09 UTC while the editor and sole Unreal custody were retained.
+
+Keep **installed**, **live-tested**, and **adopted** separate. Installed means the intended binary and contracts were identified in the running editor. Live-tested means a particular admitted operation produced its required native observations. Adopted means its scoped acceptance and preservation evidence were reviewed. The recorded Blueprint, Slate, and four-test results do not establish blanket adoption of the complete batch or close the remaining three-class validation gap. Record installation identity with each later runtime result.
+
+The retained recovery history includes the Slate R1 crash, a first recovery link attempt ending with exit 6 (`LNK1104`), and the later `RecoveryBuildR3` exit 0 in 9.6477064 seconds. The link failure does not establish which process held the DLL. The focused repair uses a pointer-aware path and detaches only the fixture's own content during cleanup. Later success does not replace the earlier failed receipts.
 
 ## Admission and Blueprint acceptance
 
@@ -56,15 +60,19 @@ The root [DaedalusEditorAcceptanceLibrary](../../engines/unreal/DaedalusLink/Sou
 ```python
 validation_reply = ue.DaedalusEditorAcceptanceLibrary.validate_named_assets(
     asset_object_paths, allowed_package_root, False)
-# Fixture-only; currently blocked by the recorded Slate R1 crash:
-# slate_reply = ue.DaedalusEditorAcceptanceLibrary.run_slate_button_fixture()
+# Fixture-only; the installed repaired route passed as NativeSlateR2:
+slate_reply = ue.DaedalusEditorAcceptanceLibrary.run_slate_button_fixture()
 ```
 
 Validation delegates to the existing native `FDaedalusNativeValidationBridge`; it does not create another validation implementation. Its admission requires game-thread/editor/no-PIE state, no active compilation or registry discovery, and 1–16 distinct canonical, already-loaded, registered, clean, non-map assets within the explicit approved subtree. `/Game` alone is too broad. The bridge does not load, scan, save, or register validators. Existing validators and delegates can perform work; this is not a sandbox. Cancellation is checked before and after the synchronous native call and cannot interrupt a validator already executing.
 
 Retain the complete envelope, including `native_invoked`, outcome, cancellation, diagnostics, and unchanged `snapshot_json`. Feed that exact snapshot string to [native_validation_snapshot_consumer.consume](../../tools/unreal_mcp/native_validation_snapshot_consumer.py). Parsing and consistency acceptance alone do not prove invocation. The supplied-struct projection path explicitly leaves `native_invoked=false` and `accepted=false`; `native_runtime_qualified` remains false by design.
 
-The acceptance fixture honors `Valid`, `Invalid`, and `NotValidated` only beneath `/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/`. The Slate wrapper delegates to [FDaedalusSlateAcceptanceBridge](../../engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSlateAcceptanceBridge.h), which owns a disposable virtual button/window/user, with no caller-selected production widget. A passing receipt must prove refusal cases, exactly one handled click, focus preservation, release, and cleanup; `production_ui_accepted` remains false. **Do not rerun the crashed R1 route until the owner fix is installed and the new attempt is freshly admitted.**
+The acceptance fixture honors `Valid`, `Invalid`, and `NotValidated` only beneath `/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/`. In `NativeValidationR1`, the saved fixtures carried those three configurations and all three replies attest native invocation. Valid and Invalid produced the expected aggregate outcomes. The configured NotValidated fixture produced aggregate Valid, so it does not demonstrate a native NotValidated result. At aggregate level, a participant's NotValidated is neutral when another enabled validator contributes Valid; these receipts do not attribute the positive result to an individual validator. Do not change the consumer or relabel the fixture to turn this into complete three-class acceptance.
+
+The Slate wrapper delegates to [FDaedalusSlateAcceptanceBridge](../../engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusSlateAcceptanceBridge.h), which owns a disposable virtual button/window/user, with no caller-selected production widget. The repair constructs a pointer-aware `FWidgetPath` with an optional pointer entry for each widget; an unset optional is the intended identity transform for this 2D fixture. Geometry-only path validity was insufficient for routing in the failed R1 attempt.
+
+A passing receipt requires the refusal cases, exactly one handled click, focus preservation, release, and cleanup. `window_unregister_called=true` attests the explicit `UnregisterVirtualWindow` API call; it does not independently enumerate Slate's private registry. `owned_content_detached=true` separately observes that the owned button has no parent and its path can no longer be generated after replacing the fixture window's content with `SNullWidget`. NativeSlateR2 recorded both, all other required fields, click count 1, empty failure reason, and `protected_equal=true`. Its `production_ui_accepted` remains false. Future attempts still require fresh admission and the repaired installed source identity.
 
 ## Canonical serializer staging
 
@@ -81,26 +89,36 @@ The staging step in [setup-unreal.ps1](../../engines/unreal/setup-unreal.ps1) co
 Use [AutomationResultContract](../../tools/unreal_mcp/automation_result_contract.py) with completed results from an already-admitted `Mcp` client. It supplies no dispatch, retry, editor qualification, or custody mechanism. `RunTests` stops existing tests before starting the requested set, so runner custody is required too.
 
 ```python
+import json
 from tools.unreal_mcp.automation_result_contract import (
     AutomationResultContract, TOOLSET,
 )
 
 requested = [
+    "Daedalus.Slate.Acceptance.VirtualButton",
+    "Daedalus.Slate.Acceptance.RepeatCleanup",
     "Daedalus.Editor.Validation.Policy",
     "Daedalus.Editor.Validation.NativeProjection",
-    "Daedalus.Editor.Validation.NamedFixtures",
 ]
 contract = AutomationResultContract(requested)
 contract.accept_discovery(
     m.call(TOOLSET, "DiscoverTests", bForceRediscover=False))
-contract.accept_catalog(m.call(
-    TOOLSET, "ListTests", NameFilter="Daedalus.Editor.Validation.",
-    TagFilter="", Limit=0))
+raw_catalogs = {}
+for name in requested:
+    value = m.call(TOOLSET, "ListTests", NameFilter=name,
+                   TagFilter="", Limit=0)
+    row = json.loads(value) if isinstance(value, str) else value
+    if (row.get("tests") != [name] or row.get("total") != 1
+            or row.get("returned") != 1):
+        raise RuntimeError("exact catalogue differs")
+    raw_catalogs[name] = row  # Retain every complete native catalogue.
+contract.accept_catalog(dict(tests=requested, total=len(requested),
+                             returned=len(requested)))
 verdict = contract.evaluate_run(
     m.call(TOOLSET, "RunTests", TestNames=requested))
 ```
 
-`TOOLSET` is `AutomationTestToolset.AutomationTestToolset`. The filter is a substring; `Limit=0` removes the cap. Require the exact requested catalogue and matching total/returned counts; do not locally trim broader results. Failures, skips, warnings, unfinished results, or unknown transport outcomes cannot establish a pass or authorize replay.
+`TOOLSET` is `AutomationTestToolset.AutomationTestToolset`. The filter is a substring; `Limit=0` removes the cap. This recipe first requires each complete native catalogue to contain exactly its one requested name, then submits their exact union to the strict consumer; it does not trim broader results. Require matching counts and retain the raw catalogues. Failures, skips, warnings, unfinished results, or unknown transport outcomes cannot establish a pass or authorize replay. In AutomationResultsR1 all four named tests returned `Success`, and `strict-consumer-verdicts-r1.json` records `accepted=true`, `all_completed=true`, and no problems, while preserving `native_runtime_qualified=false`.
 
 [NamedFixtures](../../engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusNativeValidationBridgeTest.cpp) needs **three asset arguments plus a root: four editor-launch flags**, read from `FCommandLine`, not Automation `Parameters`:
 
@@ -111,7 +129,7 @@ verdict = contract.evaluate_run(
 -DaedalusValidationNotValidated=<exact-not-validated-fixture-object-path>
 ```
 
-Prepare three distinct, already-loaded, registered, clean fixtures under the supported validation root before admitting the run. NamedFixtures makes three native validation calls and expects Valid/Invalid/NotValidated, accepting only Valid. `Policy` checks policy; `NativeProjection` checks supplied-struct projection. Passing either does not attest a native validation invocation. The current integration has not run these checks.
+Prepare three distinct, already-loaded, registered, clean fixtures under the supported validation root before admitting that separate run. NamedFixtures makes three native validation calls and expects Valid/Invalid/NotValidated, accepting only Valid. **NamedFixtures was not part of the four-test run.** `Policy` checks policy; `NativeProjection` checks supplied-struct projection. Their recorded success does not close the NotValidated aggregate gap or attest the three native calls; those invocation receipts are separately retained in NativeValidationR1.
 
 ## Safe import and reimport acceptance
 
@@ -121,4 +139,8 @@ Dispatch `start(plan)` once. Retain its pipeline/options report, then reconcile 
 
 For reimport, use `start(plan, reimport_obj=owned_existing_object)` only for the explicitly admitted owned object. Compare its identity and the preservation baseline afterward; never redirect reimport to an unrelated existing asset. Unknown async outcomes require readback, not another start.
 
-Review facts before saving. `save(plan)` refuses dirty packages outside the destination and limits save passes, but that subtree guard does not prove every package inside it is authorized. Require the expected exact inventory, inspect save results and final dirty state, and retain evidence that unrelated packages, maps, actors, and source payloads were preserved. Import, save, reopen, and adoption remain separate gates. This integration's import/reimport acceptance is **NOT RUN**.
+Review facts before saving. `save(plan)` refuses dirty packages outside the destination and limits save passes, but that subtree guard does not prove every package inside it is authorized. Require the expected exact inventory, inspect save results and final dirty state, and retain evidence that unrelated packages, maps, actors, and source payloads were preserved. Import, save, reopen, and adoption remain separate gates.
+
+The completed bounded attempt targets `/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate`, with exactly three flat source-named packages: `Prop_PracticeCrate`, `Prop_PracticeCrate_M0` and `Prop_PracticeCrate_M1`. Source SHA256 is `4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f` (18,576 bytes). Native facts show 264 triangles, bounds 52 by 53 by 50 cm, one 24-vertex UCX hull, Nanite off, two stable material references and a native Top socket. One import save pass saved all three packages; reimport preserved the same UObject and all recorded facts plus custom lightmap 128, then restored 4 and saved the mesh. No world placement or world save occurred.
+
+The earlier resource-floor hold dispatched zero calls. Read-only reconciliation established the flat output layout before admitting those exact packages; nothing was renamed or imported again. Poll elapsed values include resource holds and observation delay and are not import performance measurements. The reused harness warning that glTF drops socket empties is stale: this run observed the native socket without a sidecar or socket edit. The raw held/error receipts remain retained.
