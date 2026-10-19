@@ -79,3 +79,5 @@ Every roll is a splitmix hash of (seed, session, hare, salt). `Settings.DEFAULT 
 - Assets: `Mob_Thistle_Hare` (Idle/Hop/Freeze; tagged-ear variant), `Prop_Live_Trap` (box trap with a drop door),
   `Prop_Ear_Tag` (small numbered tag), and reuse of the refuge tiles and the G119 census board (see UNREAL-QUEUE /
   BLENDER-ASKS).
+- The G119 board is staged (see ISLES01): use `SOCKET_Peg_00`..`39` with `Prop_Census_Peg` as the M / C / R tally and
+  `SOCKET_Text` for the Chapman count and band.
