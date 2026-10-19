@@ -38,6 +38,8 @@ jobs:
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
       - name: battlefield ecology DBE 1 reader (ADR-061)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public ecology_core_test.cpp -o ecology_core_test && ./ecology_core_test
+      - name: Kennel Isle TONIC 1 trough core (request, reply parser, trough, effect ledger; fixtures from docs/contracts/tonic-v1)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tonic_core_test.cpp -o tonic_core_test && ./tonic_core_test ../../../docs/contracts/tonic-v1
       - name: import script compiles and refuses a non-package
         run: |
           python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py ../DaedalusLink/Content/Python/daedalus_view.py ../DaedalusLink/Content/Python/init_unreal.py ../DaedalusLink/Content/Python/daedalus_bridge_commands.py live_parity.py
