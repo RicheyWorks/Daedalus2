@@ -9,8 +9,8 @@
 // The peal itself (rings, hz, gain, depth, echo times, window, Judge) comes unchanged from
 // DaedalusEchoBellCore.h, a byte-identical copy of core-test/echo_bell/DaedalusEchoBellCore.h
 // (Prometheus's port of daedalus-core world/labyrinth/EchoBellGate.java; CI compares the two).
-// Plain C++17, no engine headers, no exceptions reached: configs are validated first so the
-// core's invalid_argument paths are never taken from game code.
+// Plain C++17, no engine headers, no exceptions: configs are validated first, and the core's
+// IsValid() is checked as well.
 #pragma once
 
 #include "DaedalusEchoBellCore.h"
@@ -100,6 +100,7 @@ public:
         if (!ValidateGateConfig(c, why)) return false;
         Config = c;
         Gate.emplace(c.Seed, c.Difficulty, c.Crickets, c.Depths);
+        if (!Gate->IsValid()) { Gate.reset(); if (why) *why = "invalid gate config"; return false; }
         Cues = BuildCues(*Gate, c.Crickets);
         int lastEcho = 0;
         for (const EchoRing& r : Gate->GetRings()) lastEcho = std::max(lastEcho, r.EchoMs);

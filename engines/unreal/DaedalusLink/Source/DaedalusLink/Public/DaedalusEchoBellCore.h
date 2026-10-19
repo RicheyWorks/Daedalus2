@@ -9,7 +9,6 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -24,11 +23,14 @@ public:
     static constexpr double kMaxHz = 360.0;
 
     // depths: empty = seed picks them; otherwise exactly 3 + difficulty values in 1..40.
+    // No exceptions (Unreal builds with them off): a bad config leaves the gate invalid, with no
+    // rings and WindowMs 0. Check IsValid(). Valid configs produce exactly the same peal as before.
     EchoBellGate(int64_t seed, int difficulty, bool crickets, const std::vector<int>& depths = {})
         : Seed(seed), Difficulty(difficulty), Crickets(crickets) {
-        if (difficulty < 0 || difficulty > 3) throw std::invalid_argument("difficulty 0-3");
+        if (difficulty < 0 || difficulty > 3) return;  // difficulty 0-3
         const int n = 3 + difficulty;
-        if (!depths.empty() && static_cast<int>(depths.size()) != n) throw std::invalid_argument("one depth per bell");
+        if (!depths.empty() && static_cast<int>(depths.size()) != n) return;  // one depth per bell
+        for (int d : depths) if (d < 1 || d > 40) return;  // corridor depth 1-40 cells
         static constexpr int kPenta[5] = {0, 3, 5, 7, 10};
         uint64_t state = static_cast<uint64_t>(seed) ^ 0x45424731ULL;
         auto next = [&state]() {
@@ -46,14 +48,16 @@ public:
             const int gap = 600 + 150 * static_cast<int>(next() % 5);
             const int rolled = 2 + static_cast<int>(next() % 9);
             const int depth = depths.empty() ? rolled : depths[static_cast<size_t>(i)];
-            if (depth < 1 || depth > 40) throw std::invalid_argument("corridor depth 1-40 cells");
             t += gap;
             const double hz = std::round(kRootHz * std::pow(2.0, semis / 12.0) * 1000.0) / 1000.0;
             Rings.push_back({i, t, hz, gap <= 750 ? 0.3 : 0.6, depth, t + EchoDelayMs(depth)});
         }
         const int base = 140 - 20 * difficulty;
         WindowMs = crickets ? base * 3 / 2 : base;
+        Valid = true;
     }
+
+    bool IsValid() const { return Valid; }
 
     static int EchoDelayMs(int depthCells) { return 200 + 70 * depthCells; }
     const std::vector<EchoRing>& GetRings() const { return Rings; }
@@ -96,6 +100,7 @@ private:
     int Difficulty;
     bool Crickets;
     int WindowMs = 0;
+    bool Valid = false;
     std::vector<EchoRing> Rings;
 };
 
