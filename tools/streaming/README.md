@@ -65,3 +65,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Quorum Quays (contest G110, quest q_quorum_quays)
 - `quorum_quays.py`: DiskSaver Island quorum-replication minigame. Every save is kept on five quays with a version tally, and storms close quays each tick. Writes count once W open quays have them; reads ask R quays and trust the highest tally. R + W > quays means no stale read, and the storms decide how large the quorums can be while the harbour stays available. Only the majority quorum wins the shipped season; R=W=1 serves stale saves and write-all stalls. Keys come from G86 Compaction Shoals (`quorum_quays_test.py`; CI `Quorum Quays`). Rules: `docs/islands/DISKSAVER-QUORUM-QUAYS.md`.
+
+## Snapshot Shells (contest G113, quest q_snapshot_shells)
+- `snapshot_shells.py`: DiskSaver Island copy-on-write snapshot minigame. Each dusk a shell (snapshot) of every save is pressed; unchanged saves are shared with earlier shells, so only changed versions cost space. Villagers ask for the island as it was up to 8 dusks ago and must get that exact snapshot. Keeping just enough shells wins; too few cannot restore, and keeping every shell or full-copy shells overflow the space budget. Keys come from G86 Compaction Shoals (`snapshot_shells_test.py`; CI `Snapshot Shells`). Rules: `docs/islands/DISKSAVER-SNAPSHOT-SHELLS.md`.
