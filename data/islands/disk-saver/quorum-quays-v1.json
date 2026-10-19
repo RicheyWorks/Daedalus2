@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "quest": "q_quorum_quays",
+  "lore": "Every save on DiskSaver Island is chalked onto the slates of five quays, each copy marked with its tally. Storms close quays without warning. The harbourmaster's rule: a new save counts once enough quays have chalked it, and anyone asking for a save asks enough quays and trusts the highest tally. Ask too few and you may hear an old tally; demand every quay and the first storm stops the harbour.",
+  "quays": {"ticks": 6000, "keys_per_island": 200, "replicas": 5, "read_quorum": 3, "write_quorum": 3, "max_down": 2, "write_permille": 400, "min_available_permille": 950},
+  "islands": [
+    {"id": "cache_north"},
+    {"id": "cache_south"},
+    {"id": "vault_east"},
+    {"id": "archive_a"},
+    {"id": "archive_b"},
+    {"id": "archive_c"}
+  ],
+  "seed": 1,
+  "npc": {
+    "name": "Harbourmaster Quill",
+    "lines": {
+      "start": "Five quays, twelve hundred saves, and a storm season. Chalk enough slates and ask enough quays.",
+      "storm": "Surf's over the north quays. Work with the slates you can reach.",
+      "read": "Three slates say three different tallies? Trust the highest. That's the latest save.",
+      "win": "Not one old tally handed out all season, and the harbour hardly ever stopped.",
+      "fail": "Either somebody got handed an old save or the harbour stood still in every storm. Fix your counts."
+    }
+  }
+}
