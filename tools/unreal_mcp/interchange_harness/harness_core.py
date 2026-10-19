@@ -23,6 +23,8 @@ import struct
 SCHEMA = "daedalus.interchange-harness-plan.v1"
 SIDE_SCHEMA_KEYS = ("name", "parent", "location_cm", "rotation")
 MAX_SAVE_PASSES = 3
+SOCKET_POS_TOL_CM = 0.5
+SOCKET_ROT_TOL_DEG = 0.05
 
 
 class PlanError(ValueError):
@@ -163,6 +165,9 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
             "generate_collision": bool(ov.get("collision", True)),
             "generate_lightmap_uvs": bool(ov.get("generate_lightmap_u_vs", False)),
             "bake_meshes": bool(ov.get("bake_meshes", True)),
+            # Sidecar is the rotation carrier (blender-team: empties carry no rotation, the
+            # native [0,180,-90] is a glTF->UE basis artefact). Opt out with sidecar_rotation=False.
+            "sidecar_rotation": bool(ov.get("sidecar_rotation", True)),
         },
         "material_review": material_review(summary),
         "glb": summary,
@@ -190,6 +195,26 @@ def _close(a, b, tol):
         return all(abs(float(x) - float(y)) <= tol for x, y in zip(a, b))
     except (TypeError, ValueError):
         return False
+
+
+def _wrap(d):
+    return (float(d) + 180.0) % 360.0 - 180.0
+
+
+def rotation_close(a, b, tol=SOCKET_ROT_TOL_DEG):
+    """[pitch, yaw, roll] equal within tol, angles wrapped (179.99 == -180)."""
+    try:
+        a, b = list(a), list(b)
+    except TypeError:
+        return False
+    if len(a) != 3 or len(b) != 3:
+        return False
+    return all(abs(_wrap(float(x) - float(y))) <= tol for x, y in zip(a, b))
+
+
+def socket_position_ok(native_loc, sidecar_loc, tol=SOCKET_POS_TOL_CM):
+    """A native socket is only re-rotated from the sidecar when its position agrees within 0.5 cm."""
+    return _close(native_loc, sidecar_loc, tol)
 
 
 def evaluate(plan, done, facts, before_identity=None, save_passes=None):
@@ -226,6 +251,11 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
     if want:
         have = {s.get("name") for s in facts.get("sockets", [])}
         checks["sockets_added"] = want <= have
+        if plan["options"].get("sidecar_rotation", True):
+            by = {s.get("name"): s for s in facts.get("sockets", [])}
+            side = plan["sockets"]["sockets"]
+            checks["socket_positions"] = all(n["name"] in by and socket_position_ok(by[n["name"]].get("location_cm"), n["location_cm"]) for n in side)
+            checks["socket_rotations"] = all(n["name"] in by and rotation_close(by[n["name"]].get("rotation_pyr"), n["rotation_pyr"]) for n in side)
     if before_identity is not None:
         checks["same_uobject"] = bool(before_identity.get("same_uobject"))
     if save_passes is not None:
