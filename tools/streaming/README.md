@@ -56,3 +56,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Merkle Mangroves (contest G90, quest q_merkle_mangroves)
 - `merkle_mangroves.py`: DiskSaver Island anti-entropy minigame. The shore and mangrove replicas drift as storms flip saves. Sync compares Merkle tree hashes, skips matching subtrees and copies only the differing leaves, all within a bandwidth budget. Merkle descent beats the flat leaf-scan and full-copy traps, and the replicas are checked equal after every window. Keys come from G86 Compaction Shoals (`merkle_mangroves_test.py`; CI `Merkle Mangroves`). Rules: `docs/islands/DISKSAVER-MERKLE-MANGROVES.md`.
+
+## Bloom Buoys (contest G99, quest q_bloom_buoys)
+- `bloom_buoys.py`: DiskSaver Island Bloom filter minigame. A buoy over each reef holds a Bloom filter of the saves below (G86 Compaction Shoals keys, read-only). "Not here" skips a dive; "maybe" costs one. Under a fixed bit budget per key the keeper picks the hash count: about bits x ln 2 keeps wasted dives in budget, while one hash, too many hashes or no buoy flood the reef. Never a false negative (`bloom_buoys_test.py`; CI `Bloom Buoys`). Rules: `docs/islands/DISKSAVER-BLOOM-BUOYS.md`.
