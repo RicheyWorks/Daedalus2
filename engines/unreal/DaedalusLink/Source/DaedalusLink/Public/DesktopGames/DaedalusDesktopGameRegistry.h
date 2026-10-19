@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusDesktopPongCore.h"
+#include "DaedalusDesktopMinesweeperCore.h"
 #include "DaedalusDesktopMazeCore.h"
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
@@ -12,21 +13,23 @@ namespace daedalus { namespace desktop {
 struct Entry { std::string Id, Title, Controls; };
 inline const std::vector<Entry>& Catalog() {
     static const std::vector<Entry> Entries{
-        {"pong","Pong","Up/Down or left stick: paddle"},
-        {"dungeon","Dungeon Prototype","Move: WASD/arrows or left stick"},
-        {"asteroids","Asteroids","Left/Right: turn; Up: thrust; J/X: shoot"},
-        {"football","Football / Soccer","Move: WASD/arrows or left stick; J/X: kick"},
-        {"pacman","Pac-Man source maze","Move: WASD/arrows or left stick"},
-        {"sega_shooter","Sega Space Shooter","Move: WASD/arrows or left stick; J/X: shoot"},
-        {"shadow_ninja","Shadow Ninja","Space/A: jump; J/X: sword; K/B: star; Shift/Y: spin; Up/Down: climb"},
-        {"star_shooter","Star Shooter","Move: WASD/arrows or left stick; J/X: shoot; P/Start: source pause/save menu"},
-        {"dodge_ball","Super Dodge Ball Tournament","Move: WASD/arrows or left stick; source throw/catch/jump actions"},
-        {"contra","CONTRA source platformer","Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/A: jump"},
-        {"zelda","Zelda source adventure","Move: WASD/arrows or left stick; J/X: sword"}
+        {"minesweeper","Minesweeper","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
+        {"pong","Twinwake Volley","A fast duel across the twinwake court. Up/Down or left stick: paddle"},
+        {"dungeon","Dungeon Prototype","Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick"},
+        {"asteroids","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; J/X: shoot"},
+        {"football","Football / Soccer","A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick"},
+        {"pacman","Glowtrail Chase","Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick"},
+        {"sega_shooter","Riftwing Vanguard","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
+        {"shadow_ninja","Shadow Ninja","Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb"},
+        {"star_shooter","Star Shooter","Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu"},
+        {"dodge_ball","Courtyard Clash","Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions"},
+        {"contra","Ironwake Advance","Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump"},
+        {"zelda","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"}
     };
     return Entries;
 }
 inline std::unique_ptr<Game> CreateGame(const std::string& Id) {
+    if(Id=="minesweeper") return std::make_unique<MinesweeperGame>();
     if(Id=="pong") return std::make_unique<PongGame>();
     if(Id=="dungeon") return std::make_unique<DungeonGame>();
     if(Id=="asteroids") return std::make_unique<AsteroidsGame>();
@@ -57,7 +60,7 @@ public:
     bool Select(const std::string& NewId,std::uint32_t NewSeed) {
         auto Candidate=CreateGame(NewId);
         if(!Candidate) return false;
-        Candidate->Reset(NewSeed); Active=std::move(Candidate); Id=NewId; Seed=NewSeed;
+        Candidate->Reset(NewSeed); Candidate->EnterTitle(); Active=std::move(Candidate); Id=NewId; Seed=NewSeed;
         Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh(); return true;
     }
     void Restart() {
@@ -73,6 +76,15 @@ public:
         Next.DashPressed=Next.DashPressed||Controls.DashPressed; Controls=Next;
     }
     void ClearInput() { Controls={}; }
+    void SourceKeyDown(int Key) {
+        if(!Active || Paused) return;
+        if(Active->SourceKeyDown(Key)) Controls={};
+        Refresh();
+    }
+    bool SourceControllerButton(int Button) {
+        if(!Active || Paused || !Active->SourceControllerButton(Button)) return false;
+        Controls={}; Refresh(); return true;
+    }
     void SetPaused(bool Value) { Paused=Active && Active->OwnPause(Value) ? false : Value; Controls={}; PendingSeconds=0; }
     bool IsPaused() const { return Paused || (Active && Active->IsCorePaused()); }
     int Advance(double DeltaSeconds) {
