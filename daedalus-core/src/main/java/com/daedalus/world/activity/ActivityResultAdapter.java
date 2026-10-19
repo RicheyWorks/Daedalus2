@@ -14,7 +14,12 @@ public interface ActivityResultAdapter<R> {
 
     /** Session facts supplied by the host that ran the game (ids, authority, clock). */
     record Session(String sessionId, String resultId, String issuer, String verificationRef,
-                   List<ActivityParticipant> participants, List<String> sourceEventRefs, long clockBoundaryMs) { }
+                   List<ActivityParticipant> participants, List<String> sourceEventRefs, long clockBoundaryMs) {
+        public Session {
+            participants = List.copyOf(participants);
+            sourceEventRefs = List.copyOf(sourceEventRefs);
+        }
+    }
 
     /** Turns the game's result into a receipt; throws if the result does not fit the definition. */
     ActivityResultReceipt toReceipt(Session session, R result);

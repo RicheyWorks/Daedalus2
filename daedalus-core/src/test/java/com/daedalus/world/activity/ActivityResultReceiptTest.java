@@ -34,7 +34,7 @@ class ActivityResultReceiptTest {
         t.mark(new ChalkTrail.Point(1, 1));
         t.mark(new ChalkTrail.Point(2, 1));
         t.erase(new ChalkTrail.Point(1, 0));
-        return new ChalkTrailRunAdapter.Run(t, 10, exit, abandoned);
+        return ChalkTrailRunAdapter.Run.of(t, 10, exit, abandoned);
     }
 
     static ActivityResultReceipt receipt() {

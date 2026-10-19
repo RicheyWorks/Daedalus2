@@ -19,11 +19,17 @@ public final class ChalkTrailRunAdapter implements ActivityResultAdapter<ChalkTr
 
     public static final String ACTIVITY_ID = "labyrinth.chalk-trail";
 
-    /** A finished chalk-trail run: the trail as left, chalk carried in, and how the run ended. */
-    public record Run(ChalkTrail trail, int chalkCarried, boolean exitReached, boolean abandoned) {
+    /** A finished chalk-trail run snapshot: marks kept, chalk left and carried in, and how the run ended. */
+    public record Run(int marksKept, int chalkLeft, int chalkCarried, boolean exitReached, boolean abandoned) {
         public Run {
+            if (marksKept < 0 || chalkLeft < 0) throw new IllegalArgumentException("negative trail facts");
+            if (chalkCarried < chalkLeft) throw new IllegalArgumentException("chalkCarried < chalk left");
+        }
+
+        /** Snapshots the finished trail the host already owns. */
+        public static Run of(ChalkTrail trail, int chalkCarried, boolean exitReached, boolean abandoned) {
             if (trail == null) throw new IllegalArgumentException("trail required");
-            if (chalkCarried < trail.charges()) throw new IllegalArgumentException("chalkCarried < chalk left");
+            return new Run(trail.marks().size(), trail.charges(), chalkCarried, exitReached, abandoned);
         }
     }
 
@@ -43,8 +49,8 @@ public final class ChalkTrailRunAdapter implements ActivityResultAdapter<ChalkTr
         ActivityOutcome outcome = run.abandoned() ? ActivityOutcome.ABANDONED
                 : run.exitReached() ? ActivityOutcome.COMPLETED : ActivityOutcome.FAILED;
         Map<String, Long> measures = new LinkedHashMap<>();
-        measures.put("marks_kept", (long) run.trail().marks().size());
-        measures.put("chalk_spent", (long) (run.chalkCarried() - run.trail().charges()));
+        measures.put("marks_kept", (long) run.marksKept());
+        measures.put("chalk_spent", (long) (run.chalkCarried() - run.chalkLeft()));
         measures.put("exit_reached", run.exitReached() ? 1L : 0L);
         return ActivityResultReceipt.issue(definition, s.resultId(), s.sessionId(), s.issuer(), s.verificationRef(),
                 outcome, s.participants(), measures, s.sourceEventRefs(), s.clockBoundaryMs());

@@ -46,7 +46,7 @@ class ProgressionLedgerTest {
         t.mark(new ChalkTrail.Point(5, 5));
         ActivityResultReceipt forged = new ChalkTrailRunAdapter(ActivityMode.AUTHORITATIVE).toReceipt(
                 ActivityResultReceiptTest.session("res-lab-0001", List.of(ActivityResultReceiptTest.HOUND)),
-                new ChalkTrailRunAdapter.Run(t, 10, true, false));
+                ChalkTrailRunAdapter.Run.of(t, 10, true, false));
         assertThatThrownBy(() -> ledger.credit(forged, POLICY)).isInstanceOf(ProgressionLedger.ConflictException.class);
         assertThat(ledger.total("life:mossback-hound-07", TRACK)).isEqualTo(16);
     }
