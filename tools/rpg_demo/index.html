@@ -63,6 +63,7 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 
 <script src="controllers/daedalus-pad.js"></script>
 <script src="settings/daedalus-settings.js"></script>
+<script src="summons.js"></script>
 <script>
 "use strict";
 (() => {
@@ -1247,6 +1248,21 @@ function startBattle(zone, boss, only) {
 }
 const ELEM = { tide: "water", gale: "air", stone: "earth", shade: "dark", flame: "fire" };   /* boss data names elements by realm lore */
 const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
+/* PRISM03 summon spirits (summons.js): beaten Wardens' spirits, one call each per battle */
+const SUMMONS = () => window.PrismSummons ? PrismSummons.table(D.dungeons.map(d => d.boss_data)) : [];
+const mySpirits = () => window.PrismSummons ? PrismSummons.unlocked(SUMMONS(), state.beaten) : [];
+const battleCmds = () => mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
+function playChord(sp) {                                  /* soft rolled triad: sine, low-passed, gain <= 0.3 */
+  sfx("SUMMON:" + sp.name);
+  if (!actx) return;
+  const t0 = actx.currentTime, lp = actx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1200; lp.connect(sfxGain);
+  for (const n of sp.chord) {
+    const o = actx.createOscillator(), gn = actx.createGain(), t = t0 + n.at_ms / 1000;
+    o.type = "sine"; o.frequency.value = Math.min(n.hz, PrismSummons.MAX_HZ);
+    gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(n.gain, t + 0.04); gn.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
+    o.connect(gn); gn.connect(lp); o.start(t); o.stop(t + 1.7);
+  }
+}
 function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !isHeld(party[i])) return i; return -1; }
 function battleTick(dt) {
   B.t += dt;
@@ -1261,6 +1277,20 @@ function battleTick(dt) {
       if (hit("right") || hit("down")) { B.target = (B.target + 1) % tg.length; sfx("TICK"); }
       if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; sfx("TICK"); return; }
       if (hit("a")) { sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser(); }
+      return;
+    }
+    if (B.sub === "summon") {
+      const opts = mySpirits();
+      if (!opts.length) { B.msg = "NO SPIRIT ANSWERS YET."; B.sub = null; sfx("LOCKED"); return; }
+      B.oi = clamp(B.oi || 0, 0, opts.length - 1);
+      if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
+      if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
+      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
+      if (hit("a")) {
+        const o = opts[B.oi], used = new Set((B.summoned || []).concat(B.acts.filter(x => x.kind === "summon").map(x => x.spirit.name)));
+        if (PrismSummons.refusal(o, used, m.mp)) { sfx("LOCKED"); return; }
+        sfx("PICK"); B.acts.push({ kind: "summon", who: m, spirit: o, target: "all" }); B.sub = null; return advanceChooser();
+      }
       return;
     }
     if (B.sub === "magic" || B.sub === "item") {
@@ -1285,17 +1315,19 @@ function battleTick(dt) {
       }
       return;
     }
-    if (hit("up")) { B.cmd = (B.cmd + CMDS.length - 1) % CMDS.length; sfx("TICK"); }
-    if (hit("down")) { B.cmd = (B.cmd + 1) % CMDS.length; sfx("TICK"); }
+    const cmds = battleCmds();
+    if (hit("up")) { B.cmd = (B.cmd + cmds.length - 1) % cmds.length; sfx("TICK"); }
+    if (hit("down")) { B.cmd = (B.cmd + 1) % cmds.length; sfx("TICK"); }
     if (hit("b") && B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); return; }
     if (hit("a")) {
       sfx("PICK");
-      const c = CMDS[B.cmd];
+      const c = cmds[B.cmd];
       if (c === "ATTACK") { B.pending = { kind: "attack", who: m }; B.list = alive(B.foes); B.target = 0; B.sub = "target"; }
       else if (c === "MAGIC") { B.sub = "magic"; B.oi = 0; }
       else if (c === "ITEM") { B.sub = "item"; B.oi = 0; }
       else if (c === "DEFEND") { B.acts.push({ kind: "defend", who: m }); advanceChooser(); }
       else if (c === "RUN") { B.acts.push({ kind: "run", who: m }); advanceChooser(); }
+      else if (c === "SUMMON") { B.sub = "summon"; B.oi = 0; }
     }
     return;
   }
@@ -1359,6 +1391,19 @@ function doAction(a) {
     B.msg = (crit ? "CRITICAL! " : "") + who.name + " HITS " + f.name + " FOR " + dmg + "." + (armoured ? " THE SHELL TAKES MOST OF IT." : "");
     if (f.hp <= 0) B.msg += " " + f.name + " FALLS!";
     B.msg += riseNote();
+    return;
+  }
+  if (a.kind === "summon") {
+    const sp = a.spirit; B.summoned = B.summoned || [];
+    const why = PrismSummons.refusal(sp, new Set(B.summoned), who.mp);
+    if (why) { B.msg = sp.name.toUpperCase() + (why === "NOT ENOUGH MP" ? " DOES NOT HEAR " + who.name + ". (NOT ENOUGH MP)" : " HAS ALREADY ANSWERED."); return; }
+    who.mp -= sp.mp; B.summoned.push(sp.name); playChord(sp); B.wait = 1.1;
+    let total = 0, weakHit = false;
+    alive(B.foes).forEach(f => {
+      if (PrismSummons.resist(sp, f) > 1) weakHit = true;
+      const dmg = PrismSummons.damage(sp, f, who.st, rnd(0.9, 1.1)); hurtFoe(f, landHit(f, dmg)); total += dmg;
+    });
+    B.msg = who.name + " CALLS " + sp.name.toUpperCase() + " FROM THE SHARD OF " + sp.shard.toUpperCase() + "!" + (weakHit ? " A WEAK SPOT!" : "") + " " + total + " DAMAGE IN ALL." + riseNote();
     return;
   }
   if (a.kind === "magic") {
@@ -1469,6 +1514,8 @@ function endRound() {
     party.forEach(m => grow(m, exp)); reserve.forEach(m => grow(m, Math.floor(exp / 2)));   /* the reserve learns by watching: half */
     const bf = B.foes.find(f => f.boss);
     if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS.");
+    const sp = bf && !bf.final && SUMMONS().find(x => x.warden === bf.bossName);
+    if (sp) lines.push("THE SHARD HUMS. " + sp.name.toUpperCase() + " WILL ANSWER A SUMMON NOW.");
     const dg = bf && D.dungeons.find(d => d.boss_data.name === bf.bossName);
     if (dg) recruit(dg.name).forEach(n => { lines.push(n.name.toUpperCase() + " THE " + n.job.toUpperCase() + " JOINS YOU!"); if (reserve.includes(n)) lines.push("USE ORDER IN THE MENU TO BRING " + n.name.toUpperCase() + " INTO BATTLE."); });
     B.msg = lines[0]; B.endLines = lines.slice(1); B.phase = "end"; B.result = "win"; B.wait = 0.8; return;
@@ -1530,11 +1577,12 @@ function drawBattle() {
     gauge(158, y + 9, 104, m.hp / m.max, "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
-    CMDS.forEach((c, i) => text(c, 22, 152 + i * 13)); cursor(10, 152 + B.cmd * 13);
+    const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13;
+    cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
     text(party[B.who].name, 86, 152, "#fff070");
-  } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item")) {
-    const m = party[B.who];
-    const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
+  } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
+    const m = party[B.who], used = new Set(B.summoned || []);
+    const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
     const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
     opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], 144 - tw(o[1]), 152 + i * 13); });
     cursor(10, 152 + ((B.oi || 0) - from) * 13);
@@ -1770,6 +1818,7 @@ window.PRISM_DEMO = {
   press: k => { pressed[k] = true; pressedAt[k] = performance.now(); }, hold: (k, v) => setHeld("test", k, v), name: () => nameEntry && nameEntry.name, pads: () => PAD ? PAD.devices() : [], bundle: () => PAD && PAD.bundleInfo(), toast: () => toastEl.classList.contains("on") ? toastEl.textContent : "", padStore: () => PAD ? PAD.store() : {}, settings: () => SETTINGS, panel: () => PANEL,
   audio: () => actx ? { master: master.gain.value, music: musicGain.gain.value, sfx: sfxGain.gain.value, voice: voiceGain.gain.value, threshold: lim.threshold.value } : null, padLabel: (a, i) => PAD.label(a, i), sources: () => JSON.parse(JSON.stringify(SRC)),
   beat: name => { state.beaten.add(name); },
+  summons: () => ({ all: SUMMONS(), unlocked: mySpirits().map(s => s.name), used: B ? (B.summoned || []).slice() : [], cmds: B ? battleCmds() : CMDS }),
   menu: () => menu && { idx: menu.idx, sub: menu.sub, who: menu.who, ii: menu.ii, ci: menu.ci, msg: menu.msg, cmds: MENU_CMDS },
   equip: () => roster().map(m => Object.assign({ name: m.name, atk: atkOf(m), def: defOf(m) }, m.equip)),
   give: (item, n) => { bag[item] = (bag[item] || 0) + (n || 1); },

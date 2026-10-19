@@ -287,6 +287,7 @@ def main(argv):
     with open(os.path.join(out, "data.json"), "w", encoding="utf-8") as f:
         json.dump(data, f, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))
+    shutil.copy(os.path.join(HERE, "summons.js"), os.path.join(out, "summons.js"))     # PRISM03 summon spirit rules
     ctl = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "controllers")   # the shared controller module
     os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
     for f in ("daedalus-pad.js", "controller-bundle.json"):

@@ -6,7 +6,7 @@ the best spell she knows (the boss's weakness first), the rest attack, a Herb To
 a Feather of Waking brings back whoever falls (the Runecaster first).
 buy_spell(), gear_up() and stock_up() walk into the shops and buy like a player would.
 """
-CM = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"]
+CM = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN", "SUMMON"]   # SUMMON shows only once a Warden is beaten (PRISM03)
 
 
 class Bot:
@@ -121,8 +121,10 @@ class Bot:
                 if b["cmd"] != CM.index(cmd):
                     self.press("down", 40); continue
                 self.press("a", 60); continue
-            if b["sub"] in ("magic", "item"):
-                if b["sub"] == "magic":
+            if b["sub"] in ("magic", "item", "summon"):
+                if b["sub"] == "summon":
+                    opts = self.ev("PRISM_DEMO.summons().unlocked")
+                elif b["sub"] == "magic":
                     opts = [n for n in me[6] if n in self.spells]
                 else:
                     opts = self.battle_items(s["bag"])
