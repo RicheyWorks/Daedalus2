@@ -153,6 +153,16 @@ def material_review(summary):
     return flags
 
 
+MATERIAL_SEARCH_LOCATIONS = ("LOCAL", "UNDER_PARENT", "UNDER_ROOT", "ALL_ASSETS")  # UE 5.8 InterchangeMaterialSearchLocation
+
+
+def _search_location(v):
+    v = str(v).upper()
+    if v not in MATERIAL_SEARCH_LOCATIONS:
+        raise PlanError("material_search_location %r not one of %s" % (v, ", ".join(MATERIAL_SEARCH_LOCATIONS)))
+    return v
+
+
 def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=None, profile=None, checkpoint=None):
     """Build an import plan. Refuses without a checkpoint path (imports are not undoable).
 
@@ -185,6 +195,9 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
             "reuse_existing_materials": bool(ov.get("reuse_existing_materials", True)),
             "create_new_materials": bool(ov.get("create_new_materials", True)),
             "import_materials": bool(ov.get("import_materials", True)),
+            # Where Interchange looks for an existing material of the same name before creating one.
+            # UNDER_PARENT lets FlagshipBIP1/<Packet>R1 reuse the shared M_BB_* set in a sibling folder (buffffff 49583).
+            "material_search_location": _search_location(ov.get("material_search_location", "LOCAL")),
             "collision_from_ucx": bool(ov.get("collision", True)),
             # collision=false also turns OFF Interchange's automatic simple collision
             # (mesh_pipeline.collision / fallback_collision_type); readback must be 0 primitives.
