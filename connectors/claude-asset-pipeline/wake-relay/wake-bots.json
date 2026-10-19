@@ -1,3 +1,18 @@
-{
-  "wake": ["2hot2trot*", "art-master-flex", "blender-team", "blender-boss", "buffffff", "disk-saver", "hephaestus", "oddsreaper", "prometheus", "pythagoras", "youtube-master", "blockchain-ruffff", "ruffff"]
+﻿{
+    "wake":  [
+                 "2hot2trot*",
+                 "art-master-flex",
+                 "blender-team",
+                 "blender-boss",
+                 "buffffff",
+                 "disk-saver",
+                 "hephaestus",
+                 "oddsreaper",
+                 "prometheus",
+                 "pythagoras",
+                 "youtube-master",
+                 "blockchain-ruffff",
+                 "ruffff",
+                 "unreal-epic-boss"
+             ]
 }
