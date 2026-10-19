@@ -98,6 +98,13 @@ class EarRuleSweepTest {
         });
         sweep("G121 KeepersCall", s -> KeepersCall.seeded(s).call(KeepersCall.MAX_LENGTH).stream().map(KeepersCall.Stroke::hz).toList());
         sweep("G124 DawnChorusCensus", s -> DawnChorusCensus.seeded(s).soundscape().stream().map(DawnChorusCensus.Call::hz).toList());
+        sweep("G130 FrogPondNiches", s -> {
+            List<Double> out = new ArrayList<>();
+            for (FrogPondNiches.Frog f : FrogPondNiches.seeded(s).frogs()) {
+                out.add(f.hz() * (1 + FrogPondNiches.BAND));
+            }
+            return out;
+        });
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 }
