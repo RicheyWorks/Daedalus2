@@ -92,3 +92,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Toll Bridge Tokens (contest G158, quest q_toll_bridge_tokens)
 - `toll_bridge_tokens.py`: DiskSaver Island rate-limiting minigame over the G126 Breakwater Queue harbour waves (read-only). The archive bridge sways if too many writes cross in any window; an open gate and a fixed-window counter (2x the limit at a block edge) both sway it, and a token bucket wins when the jar is sized right. Envelope burst + (t-1) x rate pinned and tight under saturation; largest safe jar equals brute force (`toll_bridge_tokens_test.py`; CI `Toll Bridge Tokens`). Rules: `docs/islands/DISKSAVER-TOLL-BRIDGE-TOKENS.md`.
+
+## Tide Clocks (contest G166, quest q_tide_clocks)
+- `tide_clocks.py`: DiskSaver Island causality minigame over G86 islands and keys (read-only). Islands edit the same saves between ferry syncs; wall-clock and Lamport last-writer-wins silently drop concurrent edits, while vector clocks keep concurrent siblings for the Merge Keeper and lose nothing. Vector order equals a brute-force happens-before oracle, Lamport is consistent but not complete, detected conflicts equal the oracle (`tide_clocks_test.py`; CI `Tide Clocks`). Rules: `docs/islands/DISKSAVER-TIDE-CLOCKS.md`.
