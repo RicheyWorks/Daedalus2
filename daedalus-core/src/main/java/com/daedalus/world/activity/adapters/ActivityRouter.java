@@ -130,6 +130,16 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(DawnChorusAdapter.ACTIVITY_ID, "mastery.listening"));
         r.register(new FrogPondAdapter(mode), FrogPondAdapter.Wetland.class,
                 AwardPolicy.inactive(FrogPondAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new CaptainChoiceAdapter(mode), CaptainChoiceAdapter.Hiring.class,
+                AwardPolicy.inactive(CaptainChoiceAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new StarChartAdapter(mode), StarChartAdapter.Haul.class,
+                AwardPolicy.inactive(StarChartAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new LifeboatDriftAdapter(mode), LifeboatDriftAdapter.Voyage.class,
+                AwardPolicy.inactive(LifeboatDriftAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new BroodCyclesAdapter(mode), BroodCyclesAdapter.Brood.class,
+                AwardPolicy.inactive(BroodCyclesAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new DrumRollAdapter(mode), DrumRollAdapter.Roll.class,
+                AwardPolicy.inactive(DrumRollAdapter.ACTIVITY_ID, "mastery.listening"));
         return r;
     }
 

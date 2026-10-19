@@ -168,3 +168,24 @@ abundant and the missing species, and a pond assignment with no masking pair.
 Tie-in: regrowth on the shattered planet is heard before it is seen. The wren that echoed the Keeper's bells, the
 hound that sat out the dawn chorus and listened as the frogs sorted themselves into ponds each earn their G12 credit
 once per run, replayable from the G49 journal.
+
+## Receipts hub XI (contest G146, 2hot2trot): sky-island odds quests and regrowth audio
+
+Registered in `ActivityRouter.contestAll` under inactive policies (`mastery.reckoning` for the odds quests,
+`mastery.listening` for the audio games). Read-only on `world.odds.*` and `world.audio.*`; each snapshot is built from
+the game's own quest stage or judged result, and a quest still in play is refused unless the host abandoned it.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `CaptainChoiceAdapter` | G122 Choosing the Last Captain, `world.odds.stopping.CaptainChoiceQuest` (oddsreaper) | `odds.captain-choice` | `Hiring.of(quest, abandoned)` | best, rank (0 = not hired), seen | animal, bird / scouting, observation, judgement |
+| `StarChartAdapter` | G125 The Torn Star Chart, `world.odds.collect.ChartCollectorQuest` (oddsreaper) | `odds.star-chart` | `Haul.of(quest, abandoned)` | charted, traded (0-8) | animal, bird / scouting, hauling, observation |
+| `LifeboatDriftAdapter` | G133 The Lifeboat Drift, `world.odds.walk.LifeboatQuest` (oddsreaper) | `odds.lifeboat-drift` | `Voyage.of(quest, abandoned)` | harbour, watches (cap 1000), rations_left | animal, bird / rowing, companionship, endurance |
+| `BroodCyclesAdapter` | G135 Brood Cycles, `world.audio.BroodCycles` (prometheus) | `audio.brood-cycles` | `Brood.of(verdict, abandoned)` | best, meetings, best_meetings (cap 10000) | bird, animal / listening, counting, observation |
+| `DrumRollAdapter` | G138 Drum Roll ID, `world.audio.DrumRollId` (prometheus) | `audio.drum-roll-id` | `Roll.of(roll, guess, abandoned)` | correct, beats | bird, animal / listening, observation, counting |
+
+What completes: hiring the single best sailor, a full star chart, reaching the harbour lights, a brood cycle with the
+fewest predator meetings, and naming the right woodpecker.
+
+Tie-in: the last ark needs a captain, a chart and a crew that survives the wreck, while the regrown forest below
+counts its cicada years and woodpecker rolls. The gull that watched the interviews and the pup that rowed beside you
+each earn their G12 credit once per run, replayable from the G49 journal.
