@@ -104,6 +104,18 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(ArkUnderwriterAdapter.ACTIVITY_ID, "mastery.reckoning"));
         r.register(new KeepersToteAdapter(mode), KeepersToteAdapter.Heat.class,
                 AwardPolicy.inactive(KeepersToteAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new RecordHuntAdapter(mode), RecordHuntAdapter.Hunt.class,
+                AwardPolicy.inactive(RecordHuntAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new ChoirStonesAdapter(mode), ChoirStonesAdapter.Watch.class,
+                AwardPolicy.inactive(ChoirStonesAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new FirstWeekAdapter(mode), FirstWeekAdapter.Week.class,
+                AwardPolicy.inactive(FirstWeekAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new RootCellarAdapter(mode), RootCellarAdapter.Cellar.class,
+                AwardPolicy.inactive(RootCellarAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new HomecomingSupperAdapter(mode), HomecomingSupperAdapter.Supper.class,
+                AwardPolicy.inactive(HomecomingSupperAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new ThirteenthSongAdapter(mode), ThirteenthSongAdapter.Composing.class,
+                AwardPolicy.inactive(ThirteenthSongAdapter.ACTIVITY_ID, "mastery.island-story"));
         return r;
     }
 
