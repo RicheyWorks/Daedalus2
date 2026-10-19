@@ -25,7 +25,7 @@ SCHEMA = "daedalus.interchange-harness-plan.v1"
 SIDE_SCHEMA_KEYS = ("name", "parent", "location_cm", "rotation")
 MAX_SAVE_PASSES = 3
 SOCKET_POS_TOL_CM = 0.5
-SOCKET_ROT_TOL_DEG = 0.05
+SOCKET_ROT_TOL_DEG = 0.5  # angle between orientations (quaternions), not per-component
 
 
 class PlanError(ValueError):
@@ -113,6 +113,31 @@ def socket_plan(glb_path, sidecar_path=None):
     return {"sidecar": None, "sockets": [], "warnings": warnings}
 
 
+def lod1_plan(glb_path):
+    """LOD1 file next to the asset: the build_report.json name if it lists one, else <Asset>_LOD1.glb.
+    Verifies the build_report sha256 when given; expected LOD1 tris come from build_report lod1.triangles."""
+    folder = os.path.dirname(glb_path)
+    base = os.path.splitext(os.path.basename(glb_path))[0]
+    report, name = {}, base + "_LOD1.glb"
+    rp = os.path.join(folder, "build_report.json")
+    if os.path.exists(rp):
+        with open(rp, encoding="utf-8-sig") as fh:
+            report = json.load(fh)
+        named = [k for k in report.get("files", {}) if k.lower().endswith("_lod1.glb")]
+        if len(named) == 1:
+            name = named[0]
+    path = os.path.join(folder, name)
+    if not os.path.exists(path):
+        return None
+    with open(path, "rb") as fh:
+        digest = hashlib.sha256(fh.read()).hexdigest()
+    want = report.get("files", {}).get(name, {}).get("sha256")
+    if want and want.lower() != digest:
+        raise PlanError("LOD1 sha256 mismatch for %s: %s != %s" % (name, digest, want))
+    return {"path": path.replace("\\", "/"), "sha256": digest,
+            "expected_tris": (report.get("lod1") or {}).get("triangles")}
+
+
 def default_sidecar_path(glb_path):
     base = os.path.splitext(glb_path)[0]
     return base + ".sockets.json"
@@ -173,6 +198,7 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
         "material_review": material_review(summary),
         "glb": summary,
         "sockets": socket_plan(glb_path),
+        "lod1": lod1_plan(glb_path),
         "expect": (profile or {}).get("expect", {}),
     }
     if not nanite:
@@ -198,19 +224,37 @@ def _close(a, b, tol):
         return False
 
 
-def _wrap(d):
-    return (float(d) + 180.0) % 360.0 - 180.0
+def rotator_to_quat(pyr):
+    """UE FRotator(pitch, yaw, roll) in degrees -> FQuat (x, y, z, w), same formula as FRotator::Quaternion."""
+    import math
+    p, y, r = (math.radians(float(v)) / 2.0 for v in pyr)
+    sp, cp = math.sin(p), math.cos(p)
+    sy, cy = math.sin(y), math.cos(y)
+    sr, cr = math.sin(r), math.cos(r)
+    return (cr * sp * sy - sr * cp * cy,
+            -cr * sp * cy - sr * cp * sy,
+            cr * cp * sy - sr * sp * cy,
+            cr * cp * cy + sr * sp * sy)
+
+
+def rotation_angle_deg(a, b):
+    """Angle in degrees between two [pitch, yaw, roll] orientations (q and -q are the same)."""
+    import math
+    qa, qb = rotator_to_quat(a), rotator_to_quat(b)
+    dot = abs(sum(x * y for x, y in zip(qa, qb)))
+    return math.degrees(2.0 * math.acos(min(1.0, dot)))
 
 
 def rotation_close(a, b, tol=SOCKET_ROT_TOL_DEG):
-    """[pitch, yaw, roll] equal within tol, angles wrapped (179.99 == -180)."""
+    """Same ORIENTATION within tol degrees. Compares quaternions, so gimbal-equivalent rotators
+    pass (native rod Tip [90,90,0] == sidecar [90,0,-90], test-folder run 2026-10-19)."""
     try:
-        a, b = list(a), list(b)
-    except TypeError:
+        a, b = [float(v) for v in a], [float(v) for v in b]
+    except (TypeError, ValueError):
         return False
     if len(a) != 3 or len(b) != 3:
         return False
-    return all(abs(_wrap(float(x) - float(y))) <= tol for x, y in zip(a, b))
+    return rotation_angle_deg(a, b) <= tol
 
 
 def socket_position_ok(native_loc, sidecar_loc, tol=SOCKET_POS_TOL_CM):
@@ -263,6 +307,13 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
         checks["saved_clean"] = save_passes.get("dirty_after") == [] and save_passes.get("passes", 0) <= MAX_SAVE_PASSES
         if save_passes.get("passes", 0) > 1:
             notes.append("needed %d save passes (MIC re-dirty)" % save_passes["passes"])
+    lod1 = plan.get("lod1")
+    if lod1:
+        checks["lod1_attached"] = checks["mesh_found"] and facts.get("lods") == 2
+        if lod1.get("expected_tris") is not None:
+            checks["lod1_tris"] = facts.get("lod1_source_tris") == lod1["expected_tris"]
+        if plan["options"]["build_nanite"]:
+            notes.append("Nanite on: LOD0/LOD1 act as the Nanite fallback mesh only")
     notes.extend(plan["sockets"]["warnings"])
     notes.extend(plan["material_review"])
     return {"ok": all(checks.values()), "checks": checks, "notes": notes}

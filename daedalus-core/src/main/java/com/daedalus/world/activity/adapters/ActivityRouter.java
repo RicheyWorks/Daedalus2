@@ -43,6 +43,23 @@ public final class ActivityRouter {
         return r;
     }
 
+    /**
+     * Every landed contest game: the three from {@link #contest} plus G06 egg care, G11 catch, G14 mail route and
+     * G16 assembly repair (contest G36), all with inactive policies.
+     */
+    public static ActivityRouter contestAll(com.daedalus.world.activity.ActivityMode mode) {
+        ActivityRouter r = contest(mode);
+        r.register(new EggCareAdapter(mode), EggCareAdapter.Care.class,
+                AwardPolicy.inactive(EggCareAdapter.ACTIVITY_ID, "mastery.nursery"));
+        r.register(new CatchRallyAdapter(mode), CatchRallyAdapter.Rally.class,
+                AwardPolicy.inactive(CatchRallyAdapter.ACTIVITY_ID, "mastery.play"));
+        r.register(new MailRouteAdapter(mode), MailRouteAdapter.Round.class,
+                AwardPolicy.inactive(MailRouteAdapter.ACTIVITY_ID, "mastery.logistics"));
+        r.register(new AssemblyRepairAdapter(mode), AssemblyRepairAdapter.Repair.class,
+                AwardPolicy.inactive(AssemblyRepairAdapter.ACTIVITY_ID, "mastery.restoration"));
+        return r;
+    }
+
     /** Registers an adapter for its result type; one adapter per activity id. */
     public <R> void register(ActivityResultAdapter<R> adapter, Class<R> resultType, AwardPolicy policy) {
         synchronized (lock) {

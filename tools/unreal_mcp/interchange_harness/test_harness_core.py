@@ -341,6 +341,67 @@ class SidecarRotationTests(Base):
             self.assertIn(k, kept)
 
 
+class QuatAndLod1Tests(Base):
+    def test_gimbal_equivalent_rotators_pass(self):
+        self.assertTrue(h.rotation_close([90, 0, -90], [90, 90, 0]))
+        self.assertLess(h.rotation_angle_deg([90, 0, -90], [90, 90, 0]), 0.01)
+
+    def test_genuinely_different_fails(self):
+        self.assertFalse(h.rotation_close([90, 0, -90], [0, -90, 90]))
+        self.assertFalse(h.rotation_close([0, 0, 0], [0, 1, 0]))
+        self.assertTrue(h.rotation_close([0, 0, 0], [0, 0.4, 0]))
+        self.assertAlmostEqual(h.rotation_angle_deg([0, 0, 0], [0, 90, 0]), 90.0, places=6)
+
+    def test_quat_matches_ue_formula_identity_and_q_minus_q(self):
+        self.assertEqual(tuple(round(v, 9) for v in h.rotator_to_quat([0, 0, 0])), (0.0, 0.0, 0.0, 1.0))
+        self.assertTrue(h.rotation_close([0, 180, 0], [0, -180, 0]))
+
+    def _asset(self, report=None, lod=True, lod_bytes=b"lod1"):
+        g = self.glb(make_glb(socket=False, ucx=False), "Gate.glb")
+        if lod:
+            with open(os.path.join(self.tmp, "Gate_LOD1.glb"), "wb") as fh:
+                fh.write(lod_bytes)
+        if report is not None:
+            with open(os.path.join(self.tmp, "build_report.json"), "w", encoding="utf-8") as fh:
+                json.dump(report, fh)
+        return g
+
+    def test_lod1_found_with_build_report(self):
+        sha = hashlib.sha256(b"lod1").hexdigest()
+        g = self._asset({"files": {"Gate_LOD1.glb": {"sha256": sha}}, "lod1": {"triangles": 264}})
+        p = h.build_plan(g, "/Game/T", "Gate", checkpoint="cp.json")
+        self.assertEqual(p["lod1"]["expected_tris"], 264)
+        self.assertTrue(p["lod1"]["path"].endswith("Gate_LOD1.glb"))
+        p["expect"] = {}
+        ok = h.evaluate(p, {"done": True}, {"mesh_found": True, "nanite": True, "lods": 2, "lod1_source_tris": 264})
+        self.assertTrue(ok["ok"], ok)
+        self.assertTrue(any("fallback" in n for n in ok["notes"]))
+        bad = h.evaluate(p, {"done": True}, {"mesh_found": True, "nanite": True, "lods": 1})
+        self.assertFalse(bad["checks"]["lod1_attached"])
+        self.assertFalse(bad["checks"]["lod1_tris"])
+
+    def test_lod1_sha_mismatch_refused(self):
+        g = self._asset({"files": {"Gate_LOD1.glb": {"sha256": "0" * 64}}})
+        with self.assertRaises(h.PlanError):
+            h.build_plan(g, "/Game/T", "Gate", checkpoint="cp.json")
+
+    def test_no_lod1_file(self):
+        p = h.build_plan(self._asset(lod=False), "/Game/T", "Gate", checkpoint="cp.json")
+        self.assertIsNone(p["lod1"])
+        p["expect"] = {}
+        self.assertNotIn("lod1_attached", h.evaluate(p, {"done": True}, {"mesh_found": True, "nanite": True})["checks"])
+
+    def test_lod1_default_name_without_report(self):
+        p = h.build_plan(self._asset(), "/Game/T", "Gate", checkpoint="cp.json")
+        self.assertIsNone(p["lod1"]["expected_tris"])
+
+    def test_ue_harness_uses_import_lod(self):
+        with open(os.path.join(HERE, "ue_harness.py"), encoding="utf-8") as fh:
+            src = fh.read()
+        self.assertIn("import_lod(mesh, 1, lod1[\"path\"])", src)
+        self.assertIn('"lod1_source_tris"', src)
+
+
 class TerrainProfileTests(Base):
     def packet(self):
         sp = {"triangles": 669, "slots": [{"slot": i, "material": {"name": n}} for i, n in [(1, "Sand"), (0, "Grass")]],

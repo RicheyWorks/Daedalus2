@@ -66,3 +66,11 @@ NPCs:
 - Quartermaster Hesper has a manifest panel.
 - Brannoc's inspection bark comes from `line`.
 - A launch cinematic plays when `ready`.
+
+## Native C++ core (G38)
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusArkDrydockCore.h` is a header-only, plain C++17 port with no Unreal types. It covers hull classes, life (with the livestock.json water figures), `SeamStrength`, `WaterNeedDl`, `Inspect` (reasons in Java enum order), Brannoc's lines, `ArkQuestStep`, `MakeVoyage` (using the SplittableRandom port from DaedalusTemperForgeCore.h), `PlateOf(TemperResult)` and `Encode` (the ADK 1 line). It returns `false` where Java throws.
+
+- Test: `engines/unreal/core-test/ark_drydock_core_test.cpp` passes 10/10, built with MSVC `/std:c++17 /W4 /WX` and with g++ `-Wall -Wextra -Werror -fsanitize=address,undefined`.
+- Regenerate the parity file by running the test with `--write`.
+- Parity: `ark_drydock_parity.txt` has 180 lines (seeds 0-59 x 3 variants: random ark, sound hull, sound hull with paired life and exact water). The MSVC and g++ outputs are identical.
+- `ArkDrydockParityTest.java` checks Java against the parity file line by line.
