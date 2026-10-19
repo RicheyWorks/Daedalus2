@@ -1,6 +1,6 @@
 # CRANE01 — Sky-Crane Return (contest G142)
 
-*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/AlleeRelease.java` (tests: `AlleeReleaseTest`, 10).*
+*Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/AlleeRelease.java` (tests: `AlleeReleaseTest`, 11).*
 
 ## Story
 
@@ -38,6 +38,7 @@ salt). `Settings.DEFAULT = (40, 40, 0.75, 30, 1.0, 150, 50)`.
 
 ## What the tests pin
 
+- One release at half the threshold (12 birds) dies out in at least 95 of 100 seeds; one release of all 40 (above it) dies out in at most 15 (measured: 99 vs 6).
 - A single release establishes in at least 85 of 100 seeds.
 - Twenty trickles establish in at most 35 and die out in at least 40.
 - The odds never improve as batches get thinner (1 → 2 → 10 → 20).

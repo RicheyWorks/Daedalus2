@@ -42,6 +42,30 @@ class AlleeReleaseTest {
     }
 
     @Test
+    void releasesBelowTheThresholdGoExtinctFarMoreOftenThanReleasesAboveIt() {
+        int t = AlleeRelease.marsh(D, 1).threshold();
+        int below = t / 2;
+        int above = D.budget();
+        assertTrue(below < t && above > t);
+        int extinctBelow = 0;
+        int extinctAbove = 0;
+        for (long seed = 1; seed <= 100; seed++) {
+            AlleeRelease small = AlleeRelease.marsh(D, seed);
+            assertTrue(small.release(0, below));
+            if (small.run().outcome() == Outcome.EXTINCT) {
+                extinctBelow++;
+            }
+            AlleeRelease big = AlleeRelease.marsh(D, seed);
+            assertTrue(big.release(0, above));
+            if (big.run().outcome() == Outcome.EXTINCT) {
+                extinctAbove++;
+            }
+        }
+        assertTrue(extinctBelow >= 95, "below threshold extinct " + extinctBelow);
+        assertTrue(extinctAbove <= 15, "above threshold extinct " + extinctAbove);
+    }
+
+    @Test
     void tricklingTheSameBirdsOutUsuallyFails() {
         int trickle = 0;
         for (long seed = 1; seed <= 100; seed++) {
@@ -116,7 +140,10 @@ class AlleeReleaseTest {
 
     @Test
     void sameScheduleSameSeason() {
-        assertEquals(spread(9, 2), spread(9, 2));
+        for (long seed = 1; seed <= 10; seed++) {
+            assertEquals(spread(seed, 2), spread(seed, 2));
+            assertEquals(spread(seed, 10).years(), spread(seed, 10).years());
+        }
     }
 
     @Test
