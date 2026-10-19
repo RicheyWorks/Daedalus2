@@ -133,3 +133,20 @@ lost to thirst or hunger, a Long Dark ended without the quest, or a supper that 
 Tie-in: the goat that nosed herbs into the kettle and the wren that hummed the verses back walked every chapter of
 the shattered-planet homecoming with you; each earns its G12 credit once per chapter run, replayable from the G49
 journal.
+
+## Receipts hub IX (contest G127, 2hot2trot): island-audio games
+
+Registered in `ActivityRouter.contestAll` under inactive `mastery.listening` policies. Read-only on `world.audio.*`;
+each snapshot is built from the game's own judged `Verdict`.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `ThunderTowersAdapter` | G89 Thunder Towers, `world.audio.ThunderTowers` (prometheus) | `audio.thunder-towers` | `Storm.of(verdict, abandoned)` | correct, towers, worst_error_tenths | bird, animal / listening, counting, observation |
+| `DopplerFlybyAdapter` | G96 Doppler Flyby, `world.audio.DopplerFlyby` (prometheus) | `audio.doppler-flyby` | `Flyby.of(verdict, abandoned)` | right_ark, right_speed, speed | bird, animal / listening, observation, scouting |
+| `HullKnockAdapter` | G101 Hull Knock Survey, `world.audio.HullKnockSurvey` (prometheus) | `audio.hull-knock-survey` | `Survey.of(verdict, abandoned)` | hits, misses, false_alarms | bird, animal / listening, guarding, observation |
+| `WaveOrganAdapter` | G109 Wave Organ, `world.audio.WaveOrgan` (prometheus) | `audio.wave-organ` | `Tide.of(verdict, abandoned)` | triad, worst_cents (0-1200) | bird, animal / listening, singing, observation |
+
+What completes: the right strike cell, the right ark at the right speed, a perfect hull survey and a true triad.
+
+Tie-in: before the arks sail, the island listens: the owl that counted thunder, the hound that heard a cracked
+plate ring dull. Each earns its G12 credit once per run, replayable from the G49 journal.
