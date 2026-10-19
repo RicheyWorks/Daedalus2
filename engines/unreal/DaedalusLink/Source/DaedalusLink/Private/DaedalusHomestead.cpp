@@ -113,7 +113,9 @@ FDaedalusBrewResult ADaedalusBrewBench::BrewStatic(const TArray<FString>& Herbs,
 	else { Contour = TEXT("Dance"); Quality = TEXT("Sus"); Effect = TEXT("stamina_boost"); }
 	FDaedalusBrewResult R;
 	R.Notes = Notes;
-	R.Tier = FMath::Clamp(FMath::RoundToInt(StageSum / Herbs.Num()), 1, 4);
+	// Half-to-even like herbcombo.py round() and Java MelodyBrew Math.rint: a 2.5 average is tier 2, not 3. FMath::RoundToInt
+	// rounds halves up and broke 27/1935 rows of melody-parity.tsv in the editor (G25 native parity, 2026-10-19).
+	R.Tier = FMath::Clamp(static_cast<int32>(FMath::RoundHalfToEven(StageSum / Herbs.Num())), 1, 4);
 	R.bPurifiesWater = Notes.Last() == Notes[0];
 	R.Melody = R.bPurifiesWater ? Contour + TEXT(" Cadence") : Contour;
 	R.Tonic = FString::Printf(TEXT("Item_YTM_Tonic_%s_T%d"), R.bPurifiesWater ? TEXT("Seventh") : *Quality, R.Tier);
