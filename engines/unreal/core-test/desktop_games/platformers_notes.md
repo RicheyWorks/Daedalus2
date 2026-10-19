@@ -1,6 +1,86 @@
 # Desktop platformer ports: CONTRA and Shadow Ninja
 
-These are ports of the actual user's Desktop scripts into the existing `daedalus::desktop::Game` contract. The Python originals are preserved. Both native cores start a playable session immediately; the Daedalus launcher owns opening, closing and restarting the minigame.
+## Current display-name checkpoint, 2026-10-15
+
+Player-facing titles and descriptions are listed in [The Daedalus arcade](../../../../docs/DESKTOP-ARCADE.md).
+Code `4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585` makes display-only naming
+changes. The focused MSVC registry/UI/ID check passed123/123. Stable IDs/classes,
+originals, rules, input, saves, art and license notices are preserved. Historical
+franchise names below are technical source attribution, not current player copy.
+The earlier full-suite receipt remains pinned to its earlier commit; current
+Unreal/native/controller/text-fit and content provenance are unverified.
+
+
+## Previous portable verification, 2026-10-15
+
+Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
+MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish
+checks across all eleven families. Existing source fixtures remain unchanged;
+Python oracles were not rerun. Exact source/test/binary pins and commands are in
+[the v5 install packet](../../../../docs/desktop-games-polish-install.json).
+
+This compiles game cores and Driver only. Current Unreal actor/Slate/UHT/module,
+native load/rendering/focus, physical-controller gameplay and E2E acceptance are
+unverified. Earlier cycle sections below retain their historical source-only
+stage; their uncompiled/untested statements do not describe this checkpoint.
+New shooter polish checks use public seeded sessions, not forced private-vector
+saturation. Star host disk-write failure/recovery remains unexecuted.
+
+
+## Native polish cycle 4: Contra — source only, 2026-10-15
+
+Claims 31229/31230 cover only `ContraGame` in this header plus existing notes and
+the install packet. The original hash below was rechecked unchanged. New derived
+feedback shows current-position distance/finish marker, boss HP, spread timer,
+rapid-until-reset, real shot-cap/cooldown, jump/crouch, protection and mapped host
+controls/result/replay. No checkpoint/save, balance, AI, scores, spawns, particles
+or RNG calls were added. Victory stays strictly `X>2800` without a boss prerequisite.
+Held jump/fire and the fire-before/after-update ordering remain. Spread pickups
+remain 900 steps, in-play cheat spread 600, fire 8/4 and bullet capacity 96 with
+one or three slots as actual shooting requires. Title cheat 30-lives binding is
+still a separate host gap. Direct Pad input mirrors the existing Slate merge,
+including cheat direction edges; source stick/right precedence remain.
+
+The protection label describes current timer state; at 1 it expires before the
+next live collision pass. Read-only review corrected a reachable upper-jump/HUD
+overlap: top panel now ends at Y=98 and lower feedback occupies Y=526..594 below
+the source ground at Y=520. All helpers/NinjaBoss/ShadowNinjaGame bytes remain
+unchanged from checkpoint 81ffdd84. No new gameplay state or timers were added.
+
+**Uncompiled/untested.** Later checks include strict X=2800/above with a living
+boss, spread/rapid expiry/reset, capacity/cooldown, held jumping/crouching, mixed
+Pad/stick/cheat edges and actual upper-jump/HUD readability. Existing canonical
+docs/install packet pin this source and deferred validation; the historical
+oracle/compiler evidence below does not validate it. No editor/game execution,
+assets, builds or tests occurred in this pass.
+
+## Native polish cycle 2 checkpoint — source only, 2026-10-14
+
+Claims hub 31185/31186 cover only `NinjaBoss` cue constants/read-only helpers and
+`ShadowNinjaGame` feedback. CONTRA, `NinjaPlayer`, attack/enemy helpers and all
+existing damage/movement/input/randomness remain unchanged. Boss movement still
+precedes predecrementing its timer: initial 40, subsequent 50. Strike reach is the
+strict axis rectangle `abs(dx)<300 && abs(dy)<100`, independent of ordinary boss
+contact at distance <35; eligible strike damage remains one health and 60-step
+invincibility. Static constants preserve those exact defaults and comparisons.
+
+The final 12 timer steps display a countdown and current reach outline. This is
+not a prediction of the next moved position and does not promise safety from
+contact/enemies. Each existing instant pulse records an eight-step cosmetic
+"pulse fired" cue, including misses or invincible players; it never asserts damage
+or extends an attack. Existing ground/air/wall jump, spin cooldown/ground need and
+shared sword/star cooldown/64-attack cap drive readiness text. Boss entry remains
+score 1200, level remains 1 and host R/Restart still resets the game.
+
+**Uncompiled/untested.** No CI, service, editor, controller or native gameplay run.
+The exact source packet and current per-game coverage/queue are in
+`docs/desktop-games-polish-install.json` and
+[DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md). Later validation
+must inspect timer 13/12/1/50, strict range edges, invincibility, moving boss and
+receipt on hit/miss/protected pulses. The old oracle receipts below do not prove
+the new cues. No new Blender assets or character imports were created.
+
+These are ports of the actual user's Desktop scripts into the existing `daedalus::desktop::Game` contract. The Python originals are preserved. Direct core Reset starts play immediately; the Driver's optional EnterTitle call opens Contra's source title when selecting it in the cabinet. The launcher owns opening, closing and host Restart.
 
 ## Canonical source selection
 
@@ -31,7 +111,9 @@ Call one `Step` per 1/60-second simulation step. The Unreal adapter should cap a
 
 For Shadow Ninja, keyboard directions, stick axes and D-pad directions remain separate. `ShadowNinjaGame::Step` passes `PadRight-PadLeft` and `PadUp-PadDown` into the player's explicit hat parameters. The source's horizontal hat wins over keyboard and stick input, including opposing directions; both D-pad flags cancel to neutral. Vertical wall-climb conditions preserve the source's independent up/down checks, so opposing keyboard/stick/hat climb requests can cancel. The wrapper should retain these independent fields rather than merging D-pad into keyboard directions or clearing stick axes. Controller connection/hotplug and physical mappings belong to the adapter.
 
-CONTRA `SubmitCheatKey(key, titleScreen=false)` accepts `0=up, 1=down, 2=left, 3=right, 4=B, 5=A`. The source sequence U,U,D,D,L,R,L,R,B,A gives +5 lives, capped at 99, and 600 steps of spread in play; passing `titleScreen=true` gives the source's 30-lives title bonus. Normal gameplay feeds digital direction/action/jump edges automatically. A title-screen-specific binding is optional UI work; native `Reset` starts play directly.
+CONTRA now uses ordered `SourceKeyDown`: `0=Up,1=Down,2=Left,3=Right,4=literal B,5=literal A,6=Enter,7=Space,8=R,9=other`. Slate sends every non-repeat keyboard key before held mapping. The source sequence gives 30 lives on title and stays there after final A; in play it adds5 capped99 and600 spread, before the next Step decrements to599. Any wrong keyboard key resets the prefix. Controller events use separate `SourceControllerButton(0=A,1=Start)` and never track/reset the keyboard code. A starts the title preserving an unfinished prefix; A/Start retries a terminal result; Start otherwise keeps generic pause. Keyboard Enter/Space starts title, terminal Enter/R retries, terminal Space is ignored. Semantic Jump/W cannot start title. Transitions clear stale Driver pressed edges before held input is rebuilt. Raw mode stays through Reset, preventing duplicate semantic cheat submission. The old semantic-edge helper remains for direct legacy core callers only; cabinet selection always uses raw mode.
+
+Core `SourceKeyDown` returns true only on a run transition; the Driver uses that result to clear pre-transition pending input. Other games inherit no-op/false defaults for all optional title/key/controller hooks. Direct Reset/host Restart starts a standard run; native retries retain two grunts at450/650 with spread620,350, while the original terminal retry uses three at400/580/760 and spread550,380. Those reset adaptations remain explicit. The existing actor/Slate/save/focus cleanup path is preserved. These source bindings and portable checks do not verify Unreal compilation or native/physical-controller acceptance.
 
 `GetStatus().Lives` is lives for CONTRA and health for Shadow Ninja. `Over` stops subsequent simulation; `Won` distinguishes success. The port does not grant Daedalus currencies or persistence rewards: the session owner must consume terminal state once if those are added.
 
@@ -52,7 +134,7 @@ Shadow Ninja preserves start at (175,380), feet-based platform collision and its
 - Native sessions use the shared deterministic portable random stream, not Python's random generator. Cosmetic explosions have a separate stream and rendering does not consume gameplay randomness. Seed replay is native-to-native evidence, not a claim of seed-for-seed Python replay.
 - Source ellipses and polygons are approximated with the existing rectangle/circle/line/triangle render contract. There is no audio or imported character mesh in this portable slice.
 
-## Verification and limits
+## Historical baseline verification and limits
 
 `platformers_source_oracle.py` checks both original SHA256 hashes before selecting reviewed AST constants, controller accessors, non-rendering class methods and bounded award/pickup fragments. It runs those selected source statements with controlled controller/random/Rect providers. It never imports Pygame, runs source module initialization, starts a full main loop, displays a window or initializes audio. The Rect provider models truncation toward zero and strict right/bottom edge exclusion; this is a stub contract, not evidence from an installed Pygame runtime.
 

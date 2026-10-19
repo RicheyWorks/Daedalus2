@@ -1,5 +1,67 @@
 # Desktop shooter ports
 
+## Current display-name checkpoint, 2026-10-15
+
+Player-facing titles and descriptions are listed in [The Daedalus arcade](../../../../docs/DESKTOP-ARCADE.md).
+Code `4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585` makes display-only naming
+changes. The focused MSVC registry/UI/ID check passed123/123. Stable IDs/classes,
+originals, rules, input, saves, art and license notices are preserved. Historical
+franchise names below are technical source attribution, not current player copy.
+The earlier full-suite receipt remains pinned to its earlier commit; current
+Unreal/native/controller/text-fit and content provenance are unverified.
+
+
+## Previous portable verification, 2026-10-15
+
+Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
+MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish
+checks across all eleven families. Existing source fixtures remain unchanged;
+Python oracles were not rerun. Exact source/test/binary pins and commands are in
+[the v5 install packet](../../../../docs/desktop-games-polish-install.json).
+
+This compiles game cores and Driver only. Current Unreal actor/Slate/UHT/module,
+native load/rendering/focus, physical-controller gameplay and E2E acceptance are
+unverified. Earlier cycle sections below retain their historical source-only
+stage; their uncompiled/untested statements do not describe this checkpoint.
+New shooter polish checks use public seeded sessions, not forced private-vector
+saturation. Star host disk-write failure/recovery remains unexecuted.
+
+
+## Native polish cycle 4 — source only, 2026-10-15
+
+Claims 31229/31230 cover the three game classes only, preserving `shooter_detail`.
+All original hashes below match. Asteroids now reports rocks/UFOs, fire capacity/
+cooldown, current protection timer/halo, wave objective and final score/replay.
+Ship/Step/input remain unchanged, including additive independent hat rotation
+and existing 60-step native protection. Sega labels pickups/caps 3/8/5, shot mode,
+enemies/pickups, protection, 1500-point boss entry/20 HP and combined result flags.
+Star reports wave shift `1200-WaveTimer`, enemy/pickup counts, shot/power/protection,
+boss health/state/phase and controls/pause confirmation/result/replay. Wave shift
+does not promise an exact boss entry; every-fifth-wave rules and live boss/wave
+timing remain. All new feedback is derived, with no new state/timers/RNG calls.
+
+Direct Pad directions for Sega/Star mirror existing Slate merging: Sega's stick
+override and Star's digital-over-stick priority remain. Asteroids' additive hat
+rules remain separate. Fire readiness matches actual capacity: Asteroids <128;
+Sega/Star reserve three slots even for normal/twin modes. Protection at timer 1
+expires before the next LIVE collision step; Star pause freezes it. All Reset,
+Step, fire/damage, enemy bullets/patterns, scores, waves, spawns and boss rules are
+unchanged. Sega's unused enemy shot timers do not create projectiles.
+
+Star DGS1/save/restore/CaptureRun/ResumeRun/SaveAndQuit/options/request and pause
+timing blocks remain bytewise unchanged at checkpoint 81ffdd84. New status says
+host persistence is pending for Save & Quit; it does not claim a successful write.
+Existing host on-disk/top-ten ownership remains separate. `ADaedalusDesktopArcade::ProcessSourceRequests` already retains failed pending saves, retries after five seconds and acknowledges only success; current-head native failure/recovery acceptance is pending.
+No editor/save file, asset, audio or character was touched.
+
+**Uncompiled/untested.** Independent source review is the current evidence.
+Later checks include caps/cooldown, timers 0/1/60 and paused Star, independent/mixed
+inputs, pickup caps, Sega boss/results, Star wave/boss phases/power reset, menu/
+save-request/quit flags and native rendering/readability. Existing fixtures and
+compiler/replay/pilot receipts below are historical baseline; no game/oracle,
+editor, build or tests ran in this pass. Exact coverage/install/deferred record
+is in DESKTOP-PYTHON-GAMES.md and docs/desktop-games-polish-install.json.
+
 These three cores port the user's selected latest Desktop revisions. The original files remain on `C:\Users\730ri\OneDrive\Desktop`; no source script is launched or imported as a module. The source oracle selects reviewed AST rule classes into a small stub namespace, with controlled random values and no Pygame import/display, home-directory file access or script startup.
 
 | Core | Canonical source | SHA256 |
@@ -40,7 +102,7 @@ Polymorphic host bindings avoid Unreal RTTI: `OwnPause`, `IsCorePaused`, `SaveSt
 
 Polish changes: dead enemies cannot score more than once, consumed bullets hit only one target, and invulnerability is rechecked between hit categories so overlapping hits cannot consume several lives/shield plus life in one source frame. Entities/effects/popups are bounded. Boss thresholds can summon once per threshold, and boss rewards occur once. Source rules for escaped cruiser escorts remain conservative: an escort disappearing offscreen does not count as a kill for the bonus.
 
-## Evidence and owner acceptance
+## Historical baseline evidence and owner acceptance
 
 `shooters_parity.txt` contains 635 executed-source cases across 21 rule categories, with original SHA pins and numeric schemas. The oracle supplies deterministic random fragments; it does not claim Pygame runtime behavior or full-screen script parity. The rectangle stub explicitly models integer construction; real Unreal input, rendering, audio, save integration and live gameplay remain separate verification stages.
 

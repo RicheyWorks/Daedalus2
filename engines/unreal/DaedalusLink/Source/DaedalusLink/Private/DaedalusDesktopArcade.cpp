@@ -21,7 +21,7 @@
 #include "Misc/Guid.h"
 #include "Misc/Paths.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Widgets/SWeakWidget.h"
+#include "Widgets/SViewport.h"
 
 namespace DD = daedalus::desktop;
 
@@ -116,6 +116,18 @@ void ADaedalusDesktopArcade::SetArcadeInput(const FDaedalusDesktopArcadeInput& I
 void ADaedalusDesktopArcade::ClearArcadeInput()
 {
 	Session.ClearInput();
+}
+
+void ADaedalusDesktopArcade::SubmitArcadeSourceKey(int32 Key)
+{
+	if (bClosing || bCloseScheduled || Key < 0 || Key > 9) return;
+	Session.SourceKeyDown(Key);
+}
+
+bool ADaedalusDesktopArcade::SubmitArcadeSourceControllerButton(int32 Button)
+{
+	if (bClosing || bCloseScheduled || Button < 0 || Button > 1) return false;
+	return Session.SourceControllerButton(Button);
 }
 
 void ADaedalusDesktopArcade::ResetPresentationInput()
@@ -386,8 +398,10 @@ bool ADaedalusDesktopArcade::Use(ADaedalusHero* Hero)
 	SlateUserIndex = FSlateApplication::Get().GetUserIndexForController(LocalPlayer->GetControllerId());
 	Session.ClearInput();
 	ArcadeWidget = SNew(SDaedalusDesktopArcade).Game(this);
-	ArcadeHost = SNew(SWeakWidget).PossiblyNullContent(ArcadeWidget.ToSharedRef());
-	Viewport->AddViewportWidgetForPlayer(LocalPlayer, ArcadeHost.ToSharedRef(), 100);
+	// The engine's global viewport overlay paints above its per-player layer,
+	// regardless of each layer's child Z. The host retains the player's rect/user.
+	ArcadeHost = SDaedalusDesktopArcade::MakeForegroundHost(LocalPlayer, Viewport, ArcadeWidget.ToSharedRef());
+	Viewport->AddViewportWidgetContent(ArcadeHost.ToSharedRef(), 100);
 	FInputModeUIOnly Mode;
 	Mode.SetWidgetToFocus(ArcadeWidget);
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
@@ -415,13 +429,25 @@ bool ADaedalusDesktopArcade::MaintainOpenSession()
 	if (!ArcadeHost.IsValid() || bClosing || bCloseScheduled) return false;
 	const APlayerController* PC = OpenController.Get();
 	const ADaedalusHero* Hero = OpenHero.Get();
+	const TSharedPtr<SViewport> ViewportWidget = OpenViewport.IsValid() ? OpenViewport->GetGameViewportWidget() : nullptr;
+	// Editor/window activation and the bare viewport are focus loss, not another
+	// game's modal lease. Keep our host alive; Slate suspends and clears held input.
+	const bool bOtherGameOverlay = OtherHeroOverlayOpen() || (OtherOverlayOwnsInput()
+		&& ViewportWidget.IsValid() && ViewportWidget->HasUserFocusedDescendants(SlateUserIndex));
 	if (!PC || !Hero || PC->GetWorld() != GetWorld() || PC->GetPawn() != Hero || Hero->GetController() != PC
-		|| !OpenViewport.IsValid() || !OpenLocalPlayer.IsValid() || OtherOverlayOwnsInput())
+		|| !OpenViewport.IsValid() || !OpenLocalPlayer.IsValid() || bOtherGameOverlay)
 	{
 		ResetPresentationInput();
 		CloseArcade();
 		return false;
 	}
+	// Initial focus can precede the foreground host's first arrangement. Retry
+	// only after layout and only from our bare viewport, never editor/foreign UI.
+	const FVector2D Size = ArcadeWidget.IsValid() ? ArcadeWidget->GetCachedGeometry().GetLocalSize() : FVector2D::ZeroVector;
+	if (FSlateApplication::IsInitialized() && FSlateApplication::Get().IsActive() && SlateUserIndex != INDEX_NONE
+		&& ViewportWidget.IsValid() && ViewportWidget->HasUserFocus(SlateUserIndex).IsSet()
+		&& !Size.ContainsNaN() && Size.X > 0.0 && Size.Y > 0.0)
+		FSlateApplication::Get().SetUserFocus(SlateUserIndex, ArcadeWidget, EFocusCause::SetDirectly);
 	return true;
 }
 
@@ -449,7 +475,7 @@ void ADaedalusDesktopArcade::ReleaseOverlay()
 	UGameViewportClient* Viewport = OpenViewport.Get();
 	Session.ClearInput();
 	if (ArcadeHost.IsValid() && Viewport)
-		Viewport->RemoveViewportWidgetForPlayer(OpenLocalPlayer.Get(), ArcadeHost.ToSharedRef());
+		Viewport->RemoveViewportWidgetContent(ArcadeHost.ToSharedRef());
 	ArcadeHost.Reset(); ArcadeWidget.Reset();
 	if (bRestore && PC)
 	{

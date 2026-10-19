@@ -1,5 +1,72 @@
 # Desktop maze and adventure ports
 
+## Current display-name checkpoint, 2026-10-15
+
+Player-facing titles and descriptions are listed in [The Daedalus arcade](../../../../docs/DESKTOP-ARCADE.md).
+Code `4c1c2aa62f681a3ed8d947df9f5c20cedfe0c585` makes display-only naming
+changes. The focused MSVC registry/UI/ID check passed123/123. Stable IDs/classes,
+originals, rules, input, saves, art and license notices are preserved. Historical
+franchise names below are technical source attribution, not current player copy.
+The earlier full-suite receipt remains pinned to its earlier commit; current
+Unreal/native/controller/text-fit and content provenance are unverified.
+
+
+## Previous portable verification, 2026-10-15
+
+Code `fe6d0ec6f6fb19671f244cdaca73c707b2bb3630` passes all seven portable
+MSVC C++17 suites serially: 394,774 reported assertions, including 162 new polish
+checks across all eleven families. Existing source fixtures remain unchanged;
+Python oracles were not rerun. Exact source/test/binary pins and commands are in
+[the v5 install packet](../../../../docs/desktop-games-polish-install.json).
+
+This compiles game cores and Driver only. Current Unreal actor/Slate/UHT/module,
+native load/rendering/focus, physical-controller gameplay and E2E acceptance are
+unverified. Earlier cycle sections below retain their historical source-only
+stage; their uncompiled/untested statements do not describe this checkpoint.
+New shooter polish checks use public seeded sessions, not forced private-vector
+saturation. Star host disk-write failure/recovery remains unexecuted.
+
+
+Native polish cycle 4 (2026-10-15, claims 31229/31230): `ZeldaGame` now derives
+remaining roster/key objective, labelled ground key, Moblin HP, sword readiness,
+current hurt timer and distinct victory/defeat/fresh retry text. Direct Pad flags
+mirror the existing Slate merge before source analog/facing precedence. All sword
+collision still occurs before movement, cooldown 18/hurt timer 45 remain, and
+enemy AI, scores, drop/key RNG and prior loss-before-win/key repair are unchanged.
+The shield remains decorative. At hurt timer 1 the new label says it expires
+before the next live collision pass; terminal controls/ready labels are gated.
+No gameplay state/timers or new shield/inventory behavior were added. Dungeon,
+Pac-Man and shared helper bytes match prior checkpoint 81ffdd84 exactly.
+
+Uncompiled/untested: no game/oracle/editor, test or build execution. Later checks
+include opposing/mixed Pad/stick/facing, sword-before-move and timer 18/1/0,
+hurt timer 45/1/0, four-roster/key pickup/death transitions, no duplicate drops,
+terminal/fresh reset and actual frame readability. Current canonical coverage and
+exact install/deferred-validation packet are the existing DESKTOP-PYTHON-GAMES.md
+and docs/desktop-games-polish-install.json; old receipts below are historical.
+
+Native polish cycle 2 (2026-10-14, claims hub 31185/31186): Pac-Man now guards only
+lethal unfrightened-ghost collisions for exactly 90 subsequent live steps after a
+nonterminal death. This explicit native rule extension leaves movement, ghost
+updates/random calls, pellets/fright/captures, scores, loss-before-win and ghost
+revival ordering unchanged. Initial run/terminal death have no guard; Reset clears it and
+terminal steps freeze. A cyan halo/counter, remaining dot/power counts and fresh
+Action/Fire/Jump/host R retry explain existing state. Dungeon cycle 1 and Zelda
+are unchanged by this continuation. No tests/builds/CI/Unreal/Play were run.
+Later validation must check the protected 90th step versus vulnerable 91st,
+frightened captures during grace, terminal/reset and last-dot/lethal ordering.
+
+Native polish cycle 1 checkpoint (2026-10-14, dedicated minigame owner): Dungeon has an
+original Threadlight Passage lantern circuit in its existing room. Map/start/
+movement/collision/Action reset remain source-derived, but ordered Fire/Jump
+interaction, local terminal completion, seed permutations and feedback are new
+native design. They are uncompiled/untested and outside the historical Python
+parity evidence below. Pac-Man/Zelda were unchanged at that checkpoint. Architecture/story, before/
+after, per-game backlog and operator requirements are in the existing canonical
+[DESKTOP-PYTHON-GAMES.md](../../../../docs/DESKTOP-PYTHON-GAMES.md), with a source-only
+install packet at `docs/desktop-games-polish-install.json`. No dedicated tests,
+builds, CI, editor or gameplay were run to make this documentation update.
+
 These ports use the actual Desktop collection. They do not replace it with the
 unrelated repository ComputerPets or Minesweeper projects. All three families
 have one discovered source variant, so these are also their latest baselines.
@@ -36,7 +103,10 @@ session can create at most nine collectibles. Pac-Man has four ghosts and a
 fixed 304-collectible array represented by a bounded vector. Render commands use
 the shared 4,096-command cap. Animation phases are bounded.
 
-## Preserved rules and deliberate repairs
+## Historical baseline preserved rules and deliberate repairs
+
+The following baseline predates the explicitly identified native polish above.
+Its original-source facts and old verification pins remain historical evidence.
 
 **Dungeon:** exact seven source rows, 40-pixel tiles, starting green 40x40 box at
 `(80,80)`, 5 pixels per frame per digital axis, and X-before-Y movement. The source
@@ -158,3 +228,19 @@ action with cooldown-driven attack state; ghost alive/frightened/color states;
 Link health/invincibility flash and enemy alive/hit-flash/kind states. There is
 no skeleton, rig, animation file, art license grant, Blender acceptance, Unreal
 compile result, or live playtest approval supplied by this core port.
+
+## Glowtrail power-window iteration — 2026-10-15, pootscoot-desktop-games
+
+Source9f55ac5f adds one private const snapshot shared by Render/GetStatus: count
+living frightened pursuers with positive timers and report their minimum timer.
+Labels580,304/327 sit below grace280; terminal result320 is mutually exclusive.
+This is source-layout reasoning, not native text-fit/screenshot evidence.
+Captured pursuers freeze clocks; revival preserves them. A maximum/global timer
+could suggest safety while another pursuer wakes. Timer1 expires in the next ghost
+update before collision. The cue uses simulation steps, not wall-clock seconds.
+Step/Reset/ghost/RNG/score/input/save bodies stay intact. Twelve static invariants
+and source review pass; new compile/tests/native checks are deferred.
+
+Deferred cases: none active; mixed living/dead/unequal clocks;300/2/1→0; pickup
+refresh; all-captured revival; terminal suppression; repeated Render/GetStatus
+versus identical state/RNG progression. Reuse existing maze access/Driver/input.
