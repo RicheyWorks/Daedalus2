@@ -91,6 +91,15 @@ class SocketTests(Base):
         socks = h.load_sidecar(os.path.join(HERE, "samples", "Prop_PracticeCrate.sockets.json"))
         self.assertEqual(socks, [{"name": "Top", "parent": "Prop_PracticeCrate", "location_cm": [0.0, 0.0, 50.0], "rotation_pyr": [0.0, 0.0, 0.0], "scale": [1.0, 1.0, 1.0]}])
 
+    def test_blender_team_fixture_shape(self):
+        # exact shape delivered by blender-team in interchange-fixture-20261019/B (48521)
+        obj = {"asset": "Prop_PracticeCrate", "units": "cm", "space": "unreal",
+               "sockets": [{"name": "SOCKET_Top", "parent": "Prop_PracticeCrate", "location": [0.0, 0.0, 50.0], "rotation": [0.0, 0.0, 0.0]}]}
+        socks = h.load_sidecar(self.side(obj))
+        self.assertEqual(socks, [{"name": "Top", "parent": "Prop_PracticeCrate", "location_cm": [0.0, 0.0, 50.0], "rotation_pyr": [0.0, 0.0, 0.0], "scale": [1.0, 1.0, 1.0]}])
+        with self.assertRaises(h.PlanError):
+            h.load_sidecar(self.side(dict(obj, units="m"), "m.json"))
+
     def test_sidecar_next_to_glb_used(self):
         g = self.glb(make_glb())
         self.side([{"name": "Top", "parent": "Crate", "location_cm": [0, 0, 50], "rotation": [0, 90, 0]}])

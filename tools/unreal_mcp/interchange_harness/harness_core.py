@@ -56,14 +56,22 @@ def glb_summary(gltf):
 # ---------------------------------------------------------------- sockets sidecar
 
 def load_sidecar(path):
-    """Read <Asset>.sockets.json. Accepts a list or {"sockets": [...]}. Validates every entry."""
+    """Read <Asset>.sockets.json. Accepts a list or {"sockets": [...]}. Validates every entry.
+
+    Location key: "location_cm", or "location" as blender-team ships it (48521 shape, top-level
+    "units": "cm"). Any top-level units other than cm is refused rather than guessed.
+    """
     with open(path, encoding="utf-8-sig") as fh:
         raw = json.load(fh)
+    if isinstance(raw, dict) and str(raw.get("units", "cm")).lower() != "cm":
+        raise PlanError("sidecar: units %r not supported (cm only)" % raw.get("units"))
     entries = raw.get("sockets", raw) if isinstance(raw, dict) else raw
     if not isinstance(entries, list):
         raise PlanError("sidecar: expected a list of sockets")
     out, seen = [], set()
     for i, e in enumerate(entries):
+        if isinstance(e, dict) and "location_cm" not in e and "location" in e:
+            e = dict(e, location_cm=e["location"])
         missing = [k for k in SIDE_SCHEMA_KEYS if k not in e]
         if missing:
             raise PlanError("sidecar entry %d missing %s" % (i, ",".join(missing)))
