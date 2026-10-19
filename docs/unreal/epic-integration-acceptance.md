@@ -151,8 +151,27 @@ This follow-up uses the installed official `SlateInspectorToolset`, separately f
 
 Call the official toolset's reflected `Snapshot` with that nonempty ref, a fixed admitted depth and `bIncludeSourceLocations=true`. The result is accessibility text, not a screenshot. Empty text and `Error:` returns fail acceptance. Do not use an empty ref, default all-window snapshot, `WaitFor`, input tools or another owner's observer. Source-location mode uses the live subtree renderer with `bResetCache=false`; it can append or reuse refs for the root and emitted descendants. The capture effect is `scoped_shared_ref_append_or_reuse`, without an exactly-one-ref claim.
 
-The first actual Details capture bound successfully but returned empty text at depth 2. The pure consumer rejected it and consumed no replay IDs. The installed renderer counts skipped structural containers toward depth: the no-selection panel has `SBorder → SActorDetails → SVerticalBox` before meaningful descendants. Source locates its no-selection text at depth 5. A follow-up must therefore be a new fixed-depth-5 request with a new capture/request identity; it must preserve the failed depth-2 receipt and reject empty output again. A source prediction alone is not a native pass.
+The first actual Details capture bound successfully but returned empty text at depth 2. The pure consumer rejected it and consumed no replay IDs. The installed renderer counts skipped structural containers toward depth: the no-selection panel has `SBorder → SActorDetails → SVerticalBox` before meaningful descendants. Source locates its no-selection text at depth 5. The source-grounded follow-up used a new fixed-depth-5 request and new capture/request identity; the failed depth-2 receipt remains intact. It returned the expected no-selection text and splitter, with source locations. The strict pure consumer accepted that same actual capture within its 300-second freshness limit. No trial-depth loop or extra capture for bookkeeping ran.
 
 Retain the host-allocated capture UUID and request ID before dispatch, actual editor PID/start time and world, exact reflected request, real start/end UTC, raw returned text and UTF-8 hash, exact binding payload/hash and before/after preservation observations. The pure consumer checks these against independently retained caller expectations and a caller-owned consumed-ID set. Its internal freshness clock has a 300-second limit: never retimestamp old evidence or take another Snapshot for bookkeeping. Hashes prove integrity, not caller authentication. Consumer evidence remains caller-attested with `current_receiver_rechecked=false`; existing packet `plan_only` and `native_runtime_qualified=false` flags stay unchanged.
 
-The [separate Inspector witness](../../tools/unreal_mcp/fixtures/official_details_panel_20261019.json) records the compiled source checkpoint, actual successful binding, failed empty depth-2 capture and pure-consumer rejection. Its coherent build exited 0 in 256.5301464 measured seconds. The fresh process also read Blueprint 37 and the saved owned import's geometry, materials, socket, one UCX hull, Nanite off and original lightmap 4. All 1,358 protected saved files and the expected source/config bytes match; the staged canonical header hash is explicitly verified. Compute was normally released while sole Unreal custody and the open editor were retained. The fixed-depth-5 follow-up is prepared but not dispatched: the existing pure consumer's matching expected-depth/R3 adjustment remains pending. Neither this partial witness nor green source checks close panel-content acceptance or the validation aggregate gap.
+The [separate Inspector witness](../../tools/unreal_mcp/fixtures/official_details_panel_20261019.json) records the compiled source checkpoint, failed empty depth-2 attempt and accepted fixed-depth-5 follow-up. The actual 182-byte accessibility return is pinned by SHA256 `03e2871eaa8f0454de1a307bccb61880f81b8f1f242b92428704be7f32691e5e`. The consumer uses the reviewed R3 capture contract and an independent exact-integer `expected_max_depth=5`; matching the supplied payload alone is insufficient. Its source hashes match before and after consumption. Caller-owned replay state advances only for the accepted new capture/request.
+
+Its coherent build exited 0 in 256.5301464 measured seconds. The fresh process also read Blueprint 37 and the saved owned import's geometry, materials, socket, one UCX hull, Nanite off and original lightmap 4. All 1,358 protected saved files and expected source/config bytes match; the staged canonical header hash is explicitly verified. Compute was normally released at 17:41:09 UTC while sole Unreal custody and the open editor were retained. The local host's initial missing import-path preflight failed before any compute claim or native dispatch; that failure and correction are retained. No native request was replayed to resolve it.
+
+For pure receipt consumption, supply expectations from the independently retained host dispatch and launch records:
+
+```python
+verdict = read_panel_capture(
+    terminal["result"],
+    expected_process_id=host_dispatch["pid"],
+    expected_process_start_utc=host_dispatch["process_start_utc"],
+    expected_world=host_dispatch["world"],
+    expected_capture_id=host_dispatch["capture_id"],
+    expected_request_id=host_dispatch["request_id"],
+    expected_max_depth=5,
+    consumed_capture_ids=retained_consumed_ids,
+)
+```
+
+The pure consumer is delivered separately in [PR #411](https://github.com/RicheyWorks/Daedalus2/pull/411). This observed acceptance covers one existing Details panel's binding, bounded accessibility snapshot and strict same-capture consumption. It does not add input, observer, screenshot or production UI coverage, close the validation aggregate gap, or change generic parser/packet qualification flags.
