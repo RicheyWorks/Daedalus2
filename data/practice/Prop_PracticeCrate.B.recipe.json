@@ -1,0 +1,212 @@
+{
+ "schema": "blender-recipe/v1",
+ "asset": "Prop_PracticeCrate",
+ "status": "FIXTURE B (staged, not READY)",
+ "spec": {
+  "request_id": "ueb-practice-crate-20261019",
+  "link": 48146,
+  "tri_cap": 500,
+  "sockets": [
+   "Top"
+  ],
+  "size_m": [
+   0.52,
+   0.52,
+   0.5
+  ],
+  "palette": [
+   "wood",
+   "dark"
+  ],
+  "lod": "LOD0 only",
+  "collision": "none",
+  "seed": 0
+ },
+ "units": "metres, Blender Z up, front -Y, origin bottom centre; glTF +Y up",
+ "materials": [
+  {
+   "slot": 0,
+   "name": "Prop_PracticeCrate_M0",
+   "palette": "wood",
+   "hex": "9A6B3F",
+   "glow": false
+  },
+  {
+   "slot": 1,
+   "name": "Prop_PracticeCrate_M1",
+   "palette": "dark",
+   "hex": "4A4D57",
+   "glow": false
+  }
+ ],
+ "parts": [
+  {
+   "name": "Body",
+   "shape": "box",
+   "size": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "centre": [
+    0,
+    0,
+    0.25
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "BandLow",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.52,
+    0.06
+   ],
+   "centre": [
+    0,
+    0,
+    0.1
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "BandHigh",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.52,
+    0.06
+   ],
+   "centre": [
+    0,
+    0,
+    0.4
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "LidBand",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.52,
+    0.04
+   ],
+   "centre": [
+    0,
+    0,
+    0.48
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "SeamFront",
+   "shape": "box",
+   "size": [
+    0.04,
+    0.03,
+    0.38
+   ],
+   "centre": [
+    0,
+    -0.25,
+    0.25
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "SeamBack",
+   "shape": "box",
+   "size": [
+    0.04,
+    0.03,
+    0.38
+   ],
+   "centre": [
+    0,
+    0.25,
+    0.25
+   ],
+   "slot": 1,
+   "tris": 44
+  }
+ ],
+ "sockets": [
+  {
+   "name": "SOCKET_Top",
+   "location": [
+    0.0,
+    0.0,
+    0.5
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "location_gltf": [
+    0.0,
+    0.5,
+    0.0
+   ]
+  }
+ ],
+ "predicted": {
+  "triangles": 264,
+  "parts": 6,
+  "bounds_min": [
+   -0.26,
+   -0.265,
+   0.0
+  ],
+  "bounds_max": [
+   0.26,
+   0.265,
+   0.5
+  ],
+  "dimensions": [
+   0.52,
+   0.53,
+   0.5
+  ],
+  "collision_tris": 12
+ },
+ "export": {
+  "format": "GLB",
+  "export_yup": true,
+  "export_apply": true,
+  "export_extras": true
+ },
+ "build": "blender -b --factory-startup --python tools/blender/weapons/build_rifle.py -- --manifest <this> --out <staging dir outside art>",
+ "variant": "B",
+ "fixture": {
+  "for": "InterchangeTests (unreal-epic-boss, link 48353)",
+  "request_id": "grok-epic-speedup-20261019",
+  "base_glb_sha256": "b1453d459a26a767b6140bf2a0e17496325c3f1d932a916e98ce0516394538c3"
+ },
+ "collision": [
+  {
+   "name": "UCX_Prop_PracticeCrate",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.53,
+    0.5
+   ],
+   "centre": [
+    0.0,
+    0.0,
+    0.25
+   ],
+   "tris": 12,
+   "convex": true
+  }
+ ],
+ "recipe_sha256": "8bb267e99ece8ae2d0219e4c4f16d8f39eccda2513bf600de9d2c106090bdce5"
+}

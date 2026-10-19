@@ -58,6 +58,14 @@ def main():
     for s in m["sockets"]:
         e = bpy.data.objects.new(s["name"], None); e.empty_display_type = "ARROWS"; e.empty_display_size = 0.03
         e.location = s["location"]; e.parent = ob; bpy.context.scene.collection.objects.link(e)
+    ucx = []
+    for c in m.get("collision", []):   # optional: UCX_ convex hull boxes (Unreal naming), unbevelled, parented to the mesh, no material
+        t = bmesh.new(); bmesh.ops.create_cube(t, size=1.0)
+        for v in t.verts:
+            v.co.x = v.co.x * c["size"][0] + c["centre"][0]; v.co.y = v.co.y * c["size"][1] + c["centre"][1]; v.co.z = v.co.z * c["size"][2] + c["centre"][2]
+        me_c = bpy.data.meshes.new(c["name"]); t.to_mesh(me_c); t.free()
+        oc = bpy.data.objects.new(c["name"], me_c); oc.parent = ob; oc.display_type = "WIRE"; bpy.context.scene.collection.objects.link(oc)
+        ucx.append({"name": c["name"], "triangles": sum(len(f.vertices) - 2 for f in me_c.polygons), "dimensions": [round(v, 4) for v in oc.dimensions]})
     tris = sum(len(f.vertices) - 2 for f in me.polygons)
     blend = os.path.join(out, name + ".blend"); glb = os.path.join(out, name + ".glb")
     bpy.ops.wm.save_as_mainfile(filepath=blend)
@@ -65,6 +73,8 @@ def main():
     rep = {"asset": name, "triangles": tris, "predicted_triangles": m["predicted"]["triangles"], "dimensions": [round(v, 4) for v in ob.dimensions],
            "sockets": sorted(o2.name for o2 in bpy.data.objects if o2.name.startswith("SOCKET_")), "files": [blend, glb],
            "match": tris == m["predicted"]["triangles"], "status": "BUILT (staged, not READY)"}
+    if ucx:
+        rep["collision"] = ucx; rep["variant"] = m.get("variant"); rep["recipe_sha256"] = m.get("recipe_sha256")
     json.dump(rep, open(os.path.join(out, "build_report.json"), "w"), indent=1)
     print("BUILDJSON " + json.dumps(rep))
 
