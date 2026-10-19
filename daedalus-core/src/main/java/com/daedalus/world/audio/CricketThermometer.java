@@ -51,6 +51,8 @@ public final class CricketThermometer {
     public static final double STEADY_CV_MAX = 0.11;
     /** Playback level for every chirp, 0-1 (kept soft). */
     public static final double LEVEL = 0.35;
+    /** Hard cap on chirps per voice in one window (integer loop bound). */
+    private static final int MAX_CHIRPS = 1000;
     private static final long SALT = 0x4352_4B31L; // "CRK1"
 
     /** One chirp onset. */
@@ -134,7 +136,7 @@ public final class CricketThermometer {
         List<Double> field = new ArrayList<>();
         double mean = 60.0 / fieldChirpsPerMinute(t);
         double on = mean * roll(rng, 1000) / 1000.0;
-        while (on < WINDOW_S) {
+        for (int k = 0; k < MAX_CHIRPS && on < WINDOW_S; k++) {
             field.add(on);
             on += mean * (1 + FIELD_SPREAD * (roll(rng, 2001) / 1000.0 - 1.0));
         }
