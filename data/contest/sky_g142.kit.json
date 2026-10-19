@@ -1,0 +1,4009 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Release_Crate_Closed",
+   "kind": "Prop",
+   "seed": 14243,
+   "state": "Closed",
+   "state_of": "Prop_Release_Crate",
+   "spec": {
+    "gap": "G142",
+    "ask": "pythagoras 50200",
+    "lod": "LOD0/1",
+    "size_m": "0.8 x 1.0 x 1.5 m aviary crate",
+    "collision": "UCX walls/floor/roof + door",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "code": "10bd3a45",
+    "open_deg": 110
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Release_Crate_Closed_M0",
+     "colour": "crate timber",
+     "hex": "8A6A44",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Release_Crate_Closed_M1",
+     "colour": "planks",
+     "hex": "A88A5E",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Release_Crate_Closed_M2",
+     "colour": "iron fittings / mesh",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Release_Crate_Closed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "SkidL",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        -0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SkidR",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.8,
+        1.0,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Post00",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post01",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post10",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post11",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Roof",
+       "shape": "box",
+       "size": [
+        0.86,
+        1.06,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.52
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "RoofBatten0",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten1",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.0,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten2",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB3",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB4",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB5",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB6",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "CarryBarL",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        -0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketL0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketL1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CarryBarR",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketR0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketR1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Release_Crate_Closed_Door",
+     "parent": "Prop_Release_Crate_Closed",
+     "pivot": [
+      -0.37,
+      -0.5,
+      0.0
+     ],
+     "role": "door (hinge pivot, left front post)",
+     "parts": [
+      {
+       "name": "Stile0",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        -0.34,
+        -0.5,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stile1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        0.32,
+        -0.5,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.01,
+        -0.5,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.01,
+        -0.5,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.01,
+        -0.5,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Brace0",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        -0.01,
+        -0.51,
+        0.46
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Brace1",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        -0.01,
+        -0.51,
+        1.12
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar0",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.27,
+        -0.488,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar1",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.14,
+        -0.488,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar2",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.01,
+        -0.488,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar3",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.12,
+        -0.488,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar4",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.25,
+        -0.488,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Panel",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.012,
+        0.6
+       ],
+       "centre": [
+        -0.01,
+        -0.494,
+        0.46
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Handle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.16,
+       "centre": [
+        0.28,
+        -0.54,
+        0.79
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Strap0",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        -0.3,
+        -0.52,
+        0.28
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap1",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        -0.3,
+        -0.52,
+        1.3
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_00",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      -0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_01",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_02",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.03,
+      1.5
+     ],
+     "centre": [
+      0,
+      0.485,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_03",
+     "shape": "box",
+     "size": [
+      0.8,
+      1.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_04",
+     "shape": "box",
+     "size": [
+      0.86,
+      1.06,
+      0.07
+     ],
+     "centre": [
+      0,
+      0,
+      1.535
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Closed_05",
+     "shape": "box",
+     "size": [
+      0.72,
+      0.05,
+      1.32
+     ],
+     "centre": [
+      -0.01,
+      -0.5,
+      0.81
+     ],
+     "parent": "Prop_Release_Crate_Closed_Door",
+     "tris": 12,
+     "convex": true,
+     "rot": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Crane",
+     "location": [
+      0,
+      0.05,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Release",
+     "location": [
+      0,
+      -1.3,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.3
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_L",
+     "location": [
+      -0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.95,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_R",
+     "location": [
+      0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.95,
+      0.0
+     ]
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 672,
+    "lod1_triangles": 348,
+    "lod1_ratio": 0.518,
+    "objects": {
+     "Prop_Release_Crate_Closed": 472,
+     "Prop_Release_Crate_Closed_Door": 200
+    },
+    "bounds_min": [
+     -0.468,
+     -0.65,
+     0.0
+    ],
+    "bounds_max": [
+     0.468,
+     0.65,
+     1.57
+    ],
+    "dimensions": [
+     0.936,
+     1.3,
+     1.57
+    ],
+    "collision_tris": 72
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9a954066e7721d78a8c12fecc31cc730667a53dde45f780fae0ebe072e8b3ed7"
+  },
+  {
+   "asset": "Prop_Release_Crate_Open",
+   "kind": "Prop",
+   "seed": 14243,
+   "state": "Open",
+   "state_of": "Prop_Release_Crate",
+   "spec": {
+    "gap": "G142",
+    "ask": "pythagoras 50200",
+    "lod": "LOD0/1",
+    "size_m": "0.8 x 1.0 x 1.5 m aviary crate",
+    "collision": "UCX walls/floor/roof + door",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "code": "10bd3a45",
+    "open_deg": 110
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Release_Crate_Open_M0",
+     "colour": "crate timber",
+     "hex": "8A6A44",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Release_Crate_Open_M1",
+     "colour": "planks",
+     "hex": "A88A5E",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Release_Crate_Open_M2",
+     "colour": "iron fittings / mesh",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Release_Crate_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "SkidL",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        -0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SkidR",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.8,
+        1.0,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Post00",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post01",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post10",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post11",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Roof",
+       "shape": "box",
+       "size": [
+        0.86,
+        1.06,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.52
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "RoofBatten0",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten1",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.0,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten2",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB3",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB4",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB5",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB6",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "CarryBarL",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        -0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketL0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketL1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CarryBarR",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketR0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketR1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Release_Crate_Open_Door",
+     "parent": "Prop_Release_Crate_Open",
+     "pivot": [
+      -0.37,
+      -0.5,
+      0.0
+     ],
+     "role": "door (hinge pivot, left front post)",
+     "parts": [
+      {
+       "name": "Stile0",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        -0.38026,
+        -0.52819,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Stile1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        -0.60599,
+        -1.14839,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Rail0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.49313,
+        -0.83829,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Rail1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.49313,
+        -0.83829,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Rail2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        -0.49313,
+        -0.83829,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Brace0",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        -0.50252,
+        -0.83487,
+        0.46
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        -110
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Brace1",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        -0.50252,
+        -0.83487,
+        1.12
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        -110
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar0",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.39293,
+        -0.59807,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Bar1",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.43739,
+        -0.72023,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Bar2",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.48185,
+        -0.84239,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Bar3",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.52631,
+        -0.96455,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Bar4",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        -0.57078,
+        -1.08671,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Panel",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.012,
+        0.6
+       ],
+       "centre": [
+        -0.48749,
+        -0.84034,
+        0.46
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Handle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.16,
+       "centre": [
+        -0.6299,
+        -1.09712,
+        0.79
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Strap0",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        -0.41274,
+        -0.55894,
+        0.28
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      },
+      {
+       "name": "Strap1",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        -0.41274,
+        -0.55894,
+        1.3
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -110
+       ]
+      }
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Release_Crate_Open_00",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      -0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Open_01",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Open_02",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.03,
+      1.5
+     ],
+     "centre": [
+      0,
+      0.485,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Open_03",
+     "shape": "box",
+     "size": [
+      0.8,
+      1.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Open_04",
+     "shape": "box",
+     "size": [
+      0.86,
+      1.06,
+      0.07
+     ],
+     "centre": [
+      0,
+      0,
+      1.535
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_Open_05",
+     "shape": "box",
+     "size": [
+      0.72,
+      0.05,
+      1.32
+     ],
+     "centre": [
+      -0.49313,
+      -0.83829,
+      0.81
+     ],
+     "parent": "Prop_Release_Crate_Open_Door",
+     "tris": 12,
+     "convex": true,
+     "rot": [
+      0,
+      0,
+      -110
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Crane",
+     "location": [
+      0,
+      0.05,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Release",
+     "location": [
+      0,
+      -1.3,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.3
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_L",
+     "location": [
+      -0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.95,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_R",
+     "location": [
+      0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.95,
+      0.0
+     ]
+    }
+   ],
+   "nanite": true,
+   "off_centre_ok": "the open door swings out to -Y; root pivot stays the Closed crate's bottom centre so both states line up",
+   "predicted": {
+    "triangles": 672,
+    "lod1_triangles": 348,
+    "lod1_ratio": 0.518,
+    "objects": {
+     "Prop_Release_Crate_Open": 472,
+     "Prop_Release_Crate_Open_Door": 200
+    },
+    "bounds_min": [
+     -0.6417,
+     -1.1826,
+     0.0
+    ],
+    "bounds_max": [
+     0.468,
+     0.65,
+     1.57
+    ],
+    "dimensions": [
+     1.1097,
+     1.8326,
+     1.57
+    ],
+    "collision_tris": 72
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8606832455046a3b9e19ec2b2683cf2f1d3599a55a6f516f7072f3b791ba9939"
+  },
+  {
+   "asset": "Prop_Release_Crate",
+   "kind": "Prop",
+   "seed": 14243,
+   "frame_of": [
+    "Prop_Release_Crate_Door"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Door",
+     "mover": "Prop_Release_Crate_Door",
+     "pivot_m": [
+      -0.37,
+      -0.5,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -110
+     ],
+     "open_ue_rotator": [
+      0.0,
+      110.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "gap": "G142",
+    "ask": "pythagoras 50200",
+    "lod": "LOD0/1",
+    "size_m": "0.8 x 1.0 x 1.5 m aviary crate",
+    "collision": "UCX walls/floor/roof + door",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "code": "10bd3a45",
+    "open_deg": 110,
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Door"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Release_Crate_M0",
+     "colour": "crate timber",
+     "hex": "8A6A44",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Release_Crate_M1",
+     "colour": "planks",
+     "hex": "A88A5E",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Release_Crate_M2",
+     "colour": "iron fittings / mesh",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Release_Crate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "SkidL",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        -0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SkidR",
+       "shape": "box",
+       "size": [
+        0.08,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        0.34,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.8,
+        1.0,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Post00",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post01",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        -0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post10",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        -0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Post11",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        1.42
+       ],
+       "centre": [
+        0.37,
+        0.47,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Roof",
+       "shape": "box",
+       "size": [
+        0.86,
+        1.06,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.52
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "RoofBatten0",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten1",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.0,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RoofBatten2",
+       "shape": "box",
+       "size": [
+        0.86,
+        0.06,
+        0.03
+       ],
+       "centre": [
+        0,
+        0.44,
+        1.555
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.38667
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.59333
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB3",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB4",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.00667
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatL5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatR5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatB5",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.21333
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SlatL6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        -0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatR6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.92,
+        0.09
+       ],
+       "centre": [
+        0.39,
+        0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SlatB6",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.02,
+        0.09
+       ],
+       "centre": [
+        0,
+        0.49,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "CarryBarL",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        -0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketL0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketL1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        -0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CarryBarR",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 1.3,
+       "centre": [
+        0.45,
+        0,
+        0.95
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BarBracketR0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        -0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BarBracketR1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.03,
+        0.05
+       ],
+       "centre": [
+        0.425,
+        0.42,
+        0.95
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Crane",
+     "location": [
+      0,
+      0.05,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Release",
+     "location": [
+      0,
+      -1.3,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.3
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_L",
+     "location": [
+      -0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.95,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Carry_R",
+     "location": [
+      0.45,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.95,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Door",
+     "location": [
+      -0.37,
+      -0.5,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.0,
+      0.5
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Release_Crate_00",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      -0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_01",
+     "shape": "box",
+     "size": [
+      0.03,
+      1.0,
+      1.5
+     ],
+     "centre": [
+      0.385,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_02",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.03,
+      1.5
+     ],
+     "centre": [
+      0,
+      0.485,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_03",
+     "shape": "box",
+     "size": [
+      0.8,
+      1.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Release_Crate_04",
+     "shape": "box",
+     "size": [
+      0.86,
+      1.06,
+      0.07
+     ],
+     "centre": [
+      0,
+      0,
+      1.535
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c3e2f466e2ee61f8fce89a7b3144e105c22ca4bbe712ebcdb3ce78387ebce94e",
+   "predicted": {
+    "triangles": 472,
+    "lod1_triangles": 264,
+    "lod1_ratio": 0.559,
+    "objects": {
+     "Prop_Release_Crate": 472
+    },
+    "bounds_min": [
+     -0.468,
+     -0.65,
+     0.0
+    ],
+    "bounds_max": [
+     0.468,
+     0.65,
+     1.57
+    ],
+    "dimensions": [
+     0.936,
+     1.3,
+     1.57
+    ],
+    "collision_tris": 60
+   }
+  },
+  {
+   "asset": "Prop_Release_Crate_Door",
+   "kind": "Prop",
+   "seed": 14243,
+   "mover_of": "Prop_Release_Crate",
+   "hinge": {
+    "socket": "SOCKET_Door",
+    "mover": "Prop_Release_Crate_Door",
+    "pivot_m": [
+     -0.37,
+     -0.5,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -110
+    ],
+    "open_ue_rotator": [
+     0.0,
+     110.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "gap": "G142",
+    "ask": "pythagoras 50200",
+    "lod": "LOD0/1",
+    "size_m": "0.8 x 1.0 x 1.5 m aviary crate",
+    "collision": "UCX walls/floor/roof + door",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "code": "10bd3a45",
+    "open_deg": 110,
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Release_Crate_Door_M0",
+     "colour": "crate timber",
+     "hex": "8A6A44",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Release_Crate_Door_M1",
+     "colour": "planks",
+     "hex": "A88A5E",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Release_Crate_Door_M2",
+     "colour": "iron fittings / mesh",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Release_Crate_Door",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Door)",
+     "parts": [
+      {
+       "name": "Stile0",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        0.03,
+        0.0,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stile1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.035,
+        1.32
+       ],
+       "centre": [
+        0.69,
+        0.0,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        0.36,
+        0.0,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        0.36,
+        0.0,
+        0.79
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Rail2",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.035,
+        0.05
+       ],
+       "centre": [
+        0.36,
+        0.0,
+        1.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Brace0",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        0.36,
+        -0.01,
+        0.46
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Brace1",
+       "shape": "box",
+       "size": [
+        0.86279,
+        0.03,
+        0.045
+       ],
+       "centre": [
+        0.36,
+        -0.01,
+        1.12
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -44.0608,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar0",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.1,
+        0.012,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar1",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.23,
+        0.012,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar2",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.36,
+        0.012,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar3",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.49,
+        0.012,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Bar4",
+       "shape": "box",
+       "size": [
+        0.008,
+        0.008,
+        0.58
+       ],
+       "centre": [
+        0.62,
+        0.012,
+        1.12
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Panel",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.012,
+        0.6
+       ],
+       "centre": [
+        0.36,
+        0.006,
+        0.46
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Handle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.16,
+       "centre": [
+        0.65,
+        -0.04,
+        0.79
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Strap0",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        0.07,
+        -0.02,
+        0.28
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap1",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        0.07,
+        -0.02,
+        1.3
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Prop_Release_Crate_Door_00",
+     "shape": "box",
+     "size": [
+      0.72,
+      0.05,
+      1.32
+     ],
+     "centre": [
+      0.36,
+      0.0,
+      0.81
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true,
+     "rot": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Prop_Release_Crate SOCKET_Door)",
+   "nanite": true,
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7730b657ed5459194b6fcd47e618c43d3553b3fa9f639eb9fa8762b2617b448e",
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 84,
+    "lod1_ratio": 0.42,
+    "objects": {
+     "Prop_Release_Crate_Door": 200
+    },
+    "bounds_min": [
+     0.0,
+     -0.0504,
+     0.13
+    ],
+    "bounds_max": [
+     0.72,
+     0.0175,
+     1.45
+    ],
+    "dimensions": [
+     0.72,
+     0.0679,
+     1.32
+    ],
+    "collision_tris": 12
+   }
+  }
+ ]
+}

@@ -3,10 +3,13 @@
   blender -b --factory-startup --python tools/blender/creatures/build_quadruped.py -- --recipe <x.quad.json> --out <staging dir>
 Writes <out>/<Asset>/<Asset>.glb (mesh + armature + skin + 3 animations), <Asset>_LOD1.glb (same skeleton, skin, no clips),
 <Asset>.blend, build_report.json (tris, bones, bind result per part, weight checks, glb read-back: joints, animations, channels).
+Recipes with "sockets" (bone-bound, e.g. bird_rig G142 SOCKET_LegBand) also get SOCKET_ empties parented to their bones in both glbs
+and <Asset>.sockets.json (bone, rest location, offset from the bone head in model axes / bone-local / UE cm): UE builds skeleton
+sockets from the sidecar, since stock glTF Interchange does not turn empties into skeleton sockets.
 Refuses a watched art/ folder. Never marks anything READY."""
 import argparse, hashlib, json, os, struct, sys
 import bpy, bmesh
-from mathutils import Vector
+from mathutils import Matrix, Vector
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "kit")); sys.path.insert(0, HERE)
 import kitlib as K
@@ -97,6 +100,26 @@ def bind(m, me_ob, arm_ob, ranges):
     return result
 
 
+def add_sockets(m, arm_ob):
+    """SOCKET_ empties parented to their bones at the rest location. -> sidecar rows."""
+    rows = []
+    bpy.context.view_layer.update()
+    for sk in m.get("sockets", []):
+        e = bpy.data.objects.new(sk["name"], None); e.empty_display_type = "ARROWS"; e.empty_display_size = 0.03
+        bpy.context.scene.collection.objects.link(e)
+        e.parent = arm_ob; e.parent_type = "BONE"; e.parent_bone = sk["bone"]
+        bpy.context.view_layer.update()
+        e.matrix_world = Matrix.Translation(Vector(sk["location"]))
+        bone = arm_ob.data.bones[sk["bone"]]
+        local = bone.matrix_local.inverted() @ Vector(sk["location"])
+        x, y, z = sk["offset_from_bone_head"]
+        rows.append({"name": sk["name"], "bone": sk["bone"], "location_m": sk["location"], "offset_from_bone_head_m": sk["offset_from_bone_head"],
+                     "offset_bone_local_m": [round(v, 6) + 0.0 for v in local], "offset_from_bone_head_ue_cm": [round(100 * x, 3) + 0.0, round(-100 * y, 3) + 0.0, round(100 * z, 3) + 0.0],
+                     "location_ue_cm": [round(100 * sk["location"][0], 3) + 0.0, round(-100 * sk["location"][1], 3) + 0.0, round(100 * sk["location"][2], 3) + 0.0],
+                     "rotation": sk.get("rotation", [0, 0, 0])})
+    return rows
+
+
 def bake_clips(m, arm_ob):
     ad = arm_ob.animation_data_create(); made = []
     for name, c in m["clips"].items():
@@ -137,16 +160,19 @@ def readback(path):
             "joint_names": sorted(d["nodes"][j]["name"] for s in d.get("skins", []) for j in s["joints"]),
             "skinned_attrs": all("JOINTS_0" in q["attributes"] and "WEIGHTS_0" in q["attributes"] for mm in d["meshes"] for q in mm["primitives"]),
             "inverse_bind_matrices": all("inverseBindMatrices" in s for s in d.get("skins", [])), "animations": an,
-            "mesh_nodes": [x["name"] for x in d["nodes"] if "mesh" in x]}
+            "mesh_nodes": [x["name"] for x in d["nodes"] if "mesh" in x],
+            "socket_nodes": sorted(d["nodes"][c]["name"] for x in d["nodes"] for c in x.get("children", [])
+                                   if d["nodes"][c]["name"].startswith("SOCKET_") and x["name"] in {d["nodes"][j]["name"] for s in d.get("skins", []) for j in s["joints"]})}
 
 
 def one(m, lod, out_glb):
     bpy.ops.wm.read_factory_settings(use_empty=True); materials(m)
     me_ob, ranges = build_mesh(m, lod); arm_ob = build_armature(m); br = bind(m, me_ob, arm_ob, ranges)
+    socks = add_sockets(m, arm_ob)
     clips = bake_clips(m, arm_ob) if lod == 0 else []
     pts = [v.co for v in me_ob.data.vertices]; lo = [round(min(p[i] for p in pts), 4) for i in range(3)]; hi = [round(max(p[i] for p in pts), 4) for i in range(3)]
     t = tris_of(me_ob.data); export(out_glb, lod == 0)
-    return {"triangles": t, "bounds_min": lo, "bounds_max": hi, "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)], "bind": br, "clips": clips}
+    return {"triangles": t, "bounds_min": lo, "bounds_max": hi, "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)], "bind": br, "clips": clips, "sockets": socks}
 
 
 def main():
@@ -165,6 +191,17 @@ def main():
                     "clips": sorted(x["name"] for x in rb0["animations"]) == sorted(m["clips"]) and all(abs(x["seconds"] - m["clips"][x["name"]]["seconds"]) < 0.02 for x in rb0["animations"]),
                     "lod1_no_clips": rb1["animations"] == [],
                     "weights": all(r["bind"]["max_influences"] <= 4 and r["bind"]["unweighted_vertices"] == 0 and r["bind"]["non_normalised_vertices"] == 0 for r in (r0, r1))}
+    if m.get("sockets"):
+        want = sorted(x["name"] for x in m["sockets"])
+        rep["match"]["sockets_on_joints"] = rb0["socket_nodes"] == want and rb1["socket_nodes"] == want
+        sc = {"schema": "bb-skeletal-sockets/1", "asset": a, "status": "STAGED NOT READY", "sockets": r0["sockets"],
+              "how": "UE Skeleton editor: Add Socket on <bone>, Relative Location = offset_from_bone_head_ue_cm rotated into the imported bone frame "
+                     "(offset_bone_local_m is the same offset in the Blender bone frame), Relative Rotation 0; the glb also carries the SOCKET_ empty "
+                     "as a child of the joint for checking. Rotation [0, 0, 0] = model axes at rest (Z up)."}
+        sp = os.path.join(d, a + ".sockets.json")
+        with open(sp, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(sc, f, indent=1); f.write("\n")
+        rep["files"][a + ".sockets.json"] = {"bytes": os.path.getsize(sp), "sha256": sha(sp)}
     rep["ok"] = all(rep["match"].values())
     json.dump(rep, open(os.path.join(d, "build_report.json"), "w"), indent=1)
     print("QUADJSON " + json.dumps({"asset": a, "ok": rep["ok"], "tris": r0["triangles"], "lod1": r1["triangles"], "match": rep["match"], "bind": {k: (len(v) if isinstance(v, list) else v) for k, v in r0["bind"].items()},

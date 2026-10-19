@@ -40,5 +40,36 @@ except ValueError:
 small = R.recipe("Char_Pigeon", 2, body={"length": 0.32})
 t("length param scales the bird", abs(small["predicted"]["dimensions"][1] - 0.32) < 0.015, small["predicted"]["dimensions"])
 t("every slab keeps >= 3 outline points at LOD1 (kitlib halves the outline)", all(len(K._slab_outline(p, 1)) >= 3 for p in m["parts"] if p["shape"] == "slab" and K.in_lod(p, 1)))
+# G142 crane: long-bird params, Walk / Fly / Dance, bone socket SOCKET_LegBand; gull defaults unchanged
+import json as _json
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contest"))
+import crane_g142, gull_g139
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
+t("gull == its pin (new params/clips are opt-in)", _json.loads(_json.dumps(gull_g139.gull())) == _json.load(open(os.path.join(ROOT, "data", "contest", "g139_gull.quad.json"), encoding="utf-8")))
+c = crane_g142.crane(); cb = {b["name"]: b for b in c["bones"]}; cp = c["predicted"]; CC = c["clips"]
+t("crane == its pin", _json.loads(_json.dumps(c)) == _json.load(open(os.path.join(ROOT, "data", "contest", "g142_crane.quad.json"), encoding="utf-8")))
+t("crane ~1.2 m tall (1.1-1.3), feet on z=0, centred", 1.1 <= cp["dimensions"][2] <= 1.3 and abs(cp["bounds_min"][2]) < 1e-6 and abs(cp["bounds_min"][0] + cp["bounds_max"][0]) < 0.01, cp["dimensions"])
+t("crane legs ~half its height", 0.45 <= cb["Leg_L"]["head"][2] / cp["dimensions"][2] <= 0.6)
+t("crane clips Idle, Walk, Fly, Dance", sorted(CC) == ["Dance", "Fly", "Idle", "Walk"])
+t("crane clips loop on real bones", all(b in cb for k in CC.values() for b in k["tracks"]) and all(x[0][1] == x[-1][1] for k in CC.values() for tr in k["tracks"].values() for x in tr.values()))
+t("Walk: legs in antiphase, body drops to keep the stance foot down", all(abs(a[1][0] + b[1][0]) < 1e-9 for a, b in zip(CC["Walk"]["tracks"]["Leg_L"]["rot"], CC["Walk"]["tracks"]["Leg_R"]["rot"])) and max(v[1][2] for v in CC["Walk"]["tracks"]["Body"]["loc"]) <= 0 < -min(v[1][2] for v in CC["Walk"]["tracks"]["Body"]["loc"]))
+fw = CC["Fly"]["tracks"]
+t("Fly: wings spread sideways (mirrored) and flap, legs trail", fw["Wing_L"]["rot"][0][1][2] < -math.radians(80) and fw["Wing_R"]["rot"][0][1][2] > math.radians(80) and max(v[1][0] for v in fw["Wing_L"]["rot"]) - min(v[1][0] for v in fw["Wing_L"]["rot"]) > math.radians(90) and fw["Leg_L"]["rot"][0][1][0] > math.radians(60))
+dw = CC["Dance"]["tracks"]
+t("Dance: hops (body up >= 0.15 m), wings half open (40-70 deg) throughout", max(v[1][2] for v in dw["Body"]["loc"]) >= 0.15 and all(math.radians(40) <= abs(v[1][2]) <= math.radians(70) for v in dw["Wing_L"]["rot"]))
+t("Dance: lands between hops (body back on the ground)", min(v[1][2] for v in dw["Body"]["loc"]) == 0)
+S = {x["name"]: x for x in c.get("sockets", [])}
+t("SOCKET_LegBand on bone Leg_L", list(S) == ["SOCKET_LegBand"] and S["SOCKET_LegBand"]["bone"] == "Leg_L")
+lb = S["SOCKET_LegBand"]["location"]; lh, lt = cb["Leg_L"]["head"], cb["Leg_L"]["tail"]
+t("leg band sits on the lower leg, between foot and hip", lt[2] < lb[2] < 0.5 * lh[2] and abs(lb[0] - lh[0]) < 1e-9 and S["SOCKET_LegBand"]["offset_from_bone_head"] == [round(lb[i] - lh[i], 6) + 0.0 for i in range(3)])
+try:
+    R.recipe("x", 1, clip_names=("Idle", "Moonwalk")); t("unknown clip refused", False)
+except ValueError:
+    t("unknown clip refused", True)
+try:
+    R.recipe("x", 1, sockets=[("X", "Wing_Q", (0, 0, 0))]); t("socket on an unknown bone refused", False)
+except ValueError:
+    t("socket on an unknown bone refused", True)
+t("crane LOD1 35-65%, <= 6000 tris", 0.35 <= cp["lod1_ratio"] <= 0.65 and cp["triangles"] <= 6000)
 print("%d/%d" % (sum(res), len(res)))
 sys.exit(0 if all(res) else 1)
