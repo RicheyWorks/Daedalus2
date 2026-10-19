@@ -142,8 +142,8 @@ ADaedalusSeedSong* ADaedalusSeedSong::Find(const UObject* WorldContext)
 {
 	UWorld* World = GEngine ? GEngine->GetWorldFromContextObject(WorldContext, EGetWorldErrorMode::ReturnNull) : nullptr;
 	if (!World) { return nullptr; }
-	for (TActorIterator<ADaedalusSeedSong> It(World); It; ++It) { return *It; }
-	return nullptr;
+	TActorIterator<ADaedalusSeedSong> It(World);
+	return It ? *It : nullptr;
 }
 
 // ---------------- spring ----------------

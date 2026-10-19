@@ -130,16 +130,15 @@ bool ADaedalusMelodyBench::RecordPlayed(const FString& RecordId)
 
 bool ADaedalusMelodyBench::Brew()
 {
-	using namespace DaedalusMelodyBenchLocal;
 	if (!IsInGameThread() || Pending.IsValid()) { return false; }
 	std::vector<std::string> H, R; std::vector<int> S;
-	for (const FString& X : Herbs) { H.push_back(ToUtf8(X)); }
+	for (const FString& X : Herbs) { H.push_back(DaedalusMelodyBenchLocal::ToUtf8(X)); }
 	for (int32 X : Stages) { S.push_back(X); }
-	for (const FString& X : Records) { R.push_back(ToUtf8(X)); }
+	for (const FString& X : Records) { R.push_back(DaedalusMelodyBenchLocal::ToUtf8(X)); }
 	std::string Json, Why;
 	if (!daedalus::brewmelody::BuildRequest(H, S, R, Json, Why))
 	{
-		Error = FromUtf8(Why);
+		Error = DaedalusMelodyBenchLocal::FromUtf8(Why);
 		OnRefused.Broadcast(400, Error);
 		Tell(FString::Printf(TEXT("The kettle won't take that: %s."), *Error));
 		return false;
@@ -157,7 +156,7 @@ bool ADaedalusMelodyBench::Brew()
 	Request->SetHeader(TEXT("Accept"), TEXT("application/json"));
 	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	Request->SetHeader(TEXT("Authorization"), TEXT("Bearer ") + BearerToken);
-	Request->SetContentAsString(FromUtf8(Json));
+	Request->SetContentAsString(DaedalusMelodyBenchLocal::FromUtf8(Json));
 	Request->SetDelegateThreadPolicy(EHttpRequestDelegateThreadPolicy::CompleteOnGameThread);
 	auto Reply = MakeShared<TArray<uint8>, ESPMode::ThreadSafe>();
 	if (!Request->SetResponseBodyReceiveStreamDelegateV2(FHttpRequestStreamDelegateV2::CreateLambda(
@@ -191,17 +190,16 @@ bool ADaedalusMelodyBench::Brew()
 
 void ADaedalusMelodyBench::Finish(int32 Status, const std::string& Text)
 {
-	using namespace DaedalusMelodyBenchLocal;
 	const daedalus::brewmelody::Result R = daedalus::brewmelody::Parse(Status, Text);
 	if (!R.Ok)
 	{
-		Error = FromUtf8(R.Error);
+		Error = DaedalusMelodyBenchLocal::FromUtf8(R.Error);
 		OnRefused.Broadcast(Status, Error);
 		Tell(FString::Printf(TEXT("The brew fizzles (%s)."), *Error));
 		return;
 	}
 	Error.Reset();
-	LastItemId = FromUtf8(R.Item); LastEffectId = FromUtf8(R.Effect); LastTune = FromUtf8(R.FoundTune); LastTierValue = R.Tier;
+	LastItemId = DaedalusMelodyBenchLocal::FromUtf8(R.Item); LastEffectId = DaedalusMelodyBenchLocal::FromUtf8(R.Effect); LastTune = DaedalusMelodyBenchLocal::FromUtf8(R.FoundTune); LastTierValue = R.Tier;
 	LastNoteList.Reset();
 	for (int N : R.Notes) { LastNoteList.Add(N); }
 	// The server brewed it: the herbs are used up (the gameplay host owns inventory; the kettle just empties).
@@ -265,8 +263,8 @@ bool ADaedalusJukebox::Use(ADaedalusHero*)
 static ADaedalusMelodyBench* DaedalusFirstMelodyBench(UWorld* World)
 {
 	if (!World) { return nullptr; }
-	for (TActorIterator<ADaedalusMelodyBench> It(World); It; ++It) { return *It; }
-	return nullptr;
+	TActorIterator<ADaedalusMelodyBench> It(World);
+	return It ? *It : nullptr;
 }
 
 static FAutoConsoleCommandWithWorldAndArgs GBrewMelody(
