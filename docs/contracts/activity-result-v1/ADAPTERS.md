@@ -36,3 +36,16 @@ policies until the owner approves numbers:
 
 Tie-in: the nest hen that warmed the egg, the Inkpup that fetched, the carrier pigeon on the mail round and the
 magpie that spotted the genuine brick each grow from the game they helped with, credited once.
+
+## Hub III (contest G44)
+
+`ActivityRouter.contestAll(mode)` now also registers four more landed games, again with inactive policies:
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `KennelWaterAdapter` | G17 kennel water loop, `world.companion.KennelWaterLoop` (art-master-flex) | `kennel.quiet-spring` | `Watch.of(questResult, abandoned)` | passed, days, thirsty_days, drunk_l, spilled_l | animal / guarding, carrying |
+| `TemperForgeAdapter` | G19 Anvil and Quench, `world.forge.TemperForge` (hephaestus) | `forge.anvil-quench` | `Temper.of(result, abandoned)` | heat_pm, hammer_pm, quench_pm, perfect_strikes, cracked, temper, ark_plate | animal / smithing, carrying |
+| `AshfallRegrowthAdapter` | G20 Ashfall Regrowth, `world.battlefield.AshfallRegrowth` (pythagoras) | `battlefield.ashfall-regrowth` | `Regrowth.of(report, abandoned)` | restored, seasons, old_growth_pm, strikes, burnt, caches_used, herds_placed | animal, bird / grazing, seeding |
+| `FirelineWardenAdapter` | G27 Fireline Warden, `world.battlefield.FirelineWarden` (pythagoras) | `battlefield.fireline-warden` | `Defence.of(report, abandoned)` (a fire still BURNING is refused) | result (2 saved, 1 held, 0 lost), ticks, saved_pm, burnt, cut, wetted, doused | animal / firefighting, carrying |
+
+Fractions (old growth, saved share) are stored as whole per mille so receipts stay canonical integers.

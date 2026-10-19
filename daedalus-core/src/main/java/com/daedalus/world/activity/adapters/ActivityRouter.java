@@ -45,7 +45,8 @@ public final class ActivityRouter {
 
     /**
      * Every landed contest game: the three from {@link #contest} plus G06 egg care, G11 catch, G14 mail route and
-     * G16 assembly repair (contest G36), all with inactive policies.
+     * G16 assembly repair (contest G36), and G17 kennel water, G19 temper forge, G20 ashfall regrowth and
+     * G27 fireline warden (contest G44), all with inactive policies.
      */
     public static ActivityRouter contestAll(com.daedalus.world.activity.ActivityMode mode) {
         ActivityRouter r = contest(mode);
@@ -57,6 +58,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(MailRouteAdapter.ACTIVITY_ID, "mastery.logistics"));
         r.register(new AssemblyRepairAdapter(mode), AssemblyRepairAdapter.Repair.class,
                 AwardPolicy.inactive(AssemblyRepairAdapter.ACTIVITY_ID, "mastery.restoration"));
+        r.register(new KennelWaterAdapter(mode), KennelWaterAdapter.Watch.class,
+                AwardPolicy.inactive(KennelWaterAdapter.ACTIVITY_ID, "mastery.husbandry"));
+        r.register(new TemperForgeAdapter(mode), TemperForgeAdapter.Temper.class,
+                AwardPolicy.inactive(TemperForgeAdapter.ACTIVITY_ID, "mastery.smithing"));
+        r.register(new AshfallRegrowthAdapter(mode), AshfallRegrowthAdapter.Regrowth.class,
+                AwardPolicy.inactive(AshfallRegrowthAdapter.ACTIVITY_ID, "mastery.regrowth"));
+        r.register(new FirelineWardenAdapter(mode), FirelineWardenAdapter.Defence.class,
+                AwardPolicy.inactive(FirelineWardenAdapter.ACTIVITY_ID, "mastery.firefighting"));
         return r;
     }
 
