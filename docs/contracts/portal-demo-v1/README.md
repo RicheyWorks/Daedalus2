@@ -87,3 +87,11 @@ Earlier failed HTTP receipts and the separate 36-check frontend result remain
 valid historical evidence; a later HTTP pass does not establish the cause of the
 earlier resets. Run outcomes, source/build pins and remaining limits belong in
 the delivery receipt. Native/editor, hardware and art acceptance remain separate.
+
+The retained 19 October 2026 run reached an actual delivery failure: 16 HTTP
+checks passed, then `/prism/backdrops.png` returned status 200 and advertised
+91,463 bytes, but the client received 65,280 bytes before its eight-second body
+deadline. The server recorded a complete write; that is not client-delivery proof.
+The browser loading/reload/save stage was not reached. Real HTTP hosting remains
+blocked on that observed transfer; its cause and any general size cutoff are not
+established. The separate 36-check file-fulfillment result is frontend evidence.
