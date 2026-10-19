@@ -82,6 +82,23 @@ class MoveTest(unittest.TestCase):
             self.assertEqual((o.status, st["a:0000"]), (b.COMMITTED, {"b"}))
             self.assertEqual(o.blocked, (2 - heard) * 5)
 
+    def test_crash_between_log_write_and_broadcast(self):
+        # decision is in the log, nobody heard the bell yet: replay commits both ends
+        st = self.state()
+        o = b.apply_move(st, mv(crash=0), "two_bell_log", 7)
+        self.assertEqual((o.status, o.blocked, st["a:0000"]), (b.COMMITTED, 14, {"b"}))
+        # same crash with a refusal: the logged decision is abort, the save stays home
+        st = self.state()
+        o = b.apply_move(st, mv(rd=True, crash=0), "two_bell_log", 7)
+        self.assertEqual((o.status, st["a:0000"]), (b.ABORTED, {"a"}))
+
+    def test_every_move_crashes_log_still_recovers(self):
+        d = raw()
+        d["harbour"].update(crash_permille=1000, max_blocked=10 ** 9)
+        r = b.simulate(b.validate(d), "two_bell_log")
+        self.assertEqual((r.status, r.torn, r.lost_saves, r.duplicated_saves), (b.WON, 0, 0, 0))
+        self.assertEqual(b.simulate(b.validate(d), "two_bell").reason, b.FAIL_TORN)
+
 
 class GameTest(unittest.TestCase):
     def setUp(self):
@@ -117,6 +134,19 @@ class GameTest(unittest.TestCase):
             r = b.simulate(b.validate(d), "two_bell_log")
             self.assertEqual(r.status, b.WON, seed)
             self.assertEqual(r.committed + r.aborted + r.torn, r.moves)
+
+    def test_invariant_one_island_after_every_move(self):
+        state = b.initial_state(self.c)
+        for i, m in enumerate(b.plan(self.c)):
+            b.apply_move(state, m, "two_bell_log", self.c.recover_ticks)
+            bad = [k for k, v in state.items() if len(v) != 1]
+            self.assertEqual(bad, [], f"after move {i}")
+        broken = b.initial_state(self.c)
+        seen_bad = False
+        for m in b.plan(self.c):
+            b.apply_move(broken, m, "one_bell", self.c.recover_ticks)
+            seen_bad = seen_bad or any(len(v) != 1 for v in broken.values())
+        self.assertTrue(seen_bad)  # the invariant check does catch a torn protocol
 
     def test_deterministic(self):
         self.assertEqual(b.simulate(self.c), b.simulate(self.c))
