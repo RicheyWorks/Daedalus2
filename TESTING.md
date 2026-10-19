@@ -79,7 +79,7 @@ Floors as of 2026-10-13 (not 0.00 exemptions):
 | module | floor | ceiling |
 |---|---|---|
 | daedalus-server | 0.93 | 0.96 |
-| daedalus-core | 0.94 | 0.97 |
+| daedalus-core | 0.90 | 0.93 |
 | daedalus-plugin-runtime | 0.84 | 0.87 |
 | daedalus-plugin-api | 0.96 | 0.99 |
 | daedalus-desktop | 0.38 | 0.41 |

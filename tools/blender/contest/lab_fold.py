@@ -80,7 +80,8 @@ def plain(seed=SEED):
 
 
 def assets(seed=SEED):
-    return [foldwall("Closed", seed), foldwall("Open", seed), plain(seed)]
+    fc, fo = foldwall("Closed", seed), foldwall("Open", seed)
+    return [fc, fo] + K.split_into(CAPS, SOCKETS, 2000, fc, fo) + [plain(seed)]
 
 
 def extra_checks(A):

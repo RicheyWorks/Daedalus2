@@ -114,6 +114,7 @@ def build(m, lod, mats):
             par = s["parent"] or m["asset"]
             e = bpy.data.objects.new(s["name"], None); e.empty_display_type = "ARROWS"; e.empty_display_size = 0.03
             e.parent = obs[par]; e.location = Vector(s["location"]) - Vector(piv[par]); bpy.context.scene.collection.objects.link(e)
+            e.rotation_mode = "QUATERNION"; e.rotation_quaternion = SS.socket_blender_quat(s)   # native == sidecar (UEB 48794/48821)
             extra["sockets"].append(s["name"])
         for c in m.get("collision", []):
             par = c["parent"] or m["asset"]

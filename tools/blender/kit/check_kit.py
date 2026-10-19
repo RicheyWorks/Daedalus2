@@ -65,6 +65,8 @@ def check(m, d):
         if ok:
             sc = json.load(open(sp, encoding="utf-8")); want = SS.from_gltf(doc, name, m)
             add("sidecar = glb sockets in UE space", sc["sockets"] == want["sockets"] and sc["units"] == "cm" and sc["space"] == "unreal")
+            add("native socket rotation == sidecar (pre-rotated empties)", all(x["native_matches"] for x in sc["sockets"]),
+                [(x["name"], x["rotation"], x["native_rotation_predicted"]) for x in sc["sockets"] if not x["native_matches"]])
     lo, hi = world_bounds(doc); pr = m["predicted"]
     want_lo = [pr["bounds_min"][0], pr["bounds_min"][2], -pr["bounds_max"][1]]; want_hi = [pr["bounds_max"][0], pr["bounds_max"][2], -pr["bounds_min"][1]]
     add("render bounds = predicted (1 mm)", all(abs(lo[k] - want_lo[k]) <= 0.001 and abs(hi[k] - want_hi[k]) <= 0.001 for k in range(3)),
