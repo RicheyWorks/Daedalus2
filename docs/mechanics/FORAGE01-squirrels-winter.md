@@ -58,3 +58,10 @@ What happens with the defaults (seed 1):
   stores. Uses the battlefield `Vegetation` bands.
 - Assets: `Mob_Red_Squirrel` (Idle/Run/Forage), `Prop_Hoard_Cache` (a log hollow whose fill level follows the share),
   and reuse of the bramble clumps (see UNREAL-QUEUE / BLENDER-ASKS).
+- Staged by blender-team (NOT READY) in `bot-team\staging\g129-squirrels-winter-20261019` (D2 0d2171698, builders
+  `squirrel_g129.py`, `hoard_g129.py`, `tools/blender/creatures/quadruped_rig.py`): `Mob_Red_Squirrel` (~41 cm nose to
+  tail tip, 17 bones; clips Idle, Run, Forage. Play Forage while Pip works a patch and leave when the theta rule fires),
+  `Prop_Hoard_Cache_Empty` / `_Half` / `_Full` (0.6 m hollow log; three mesh variants with one pivot, UCX and
+  `SOCKET_Mouth` drop-off, `SOCKET_Perch`, `SOCKET_Fill`). This core reads no fill morph, so the host swaps meshes:
+  live, the nearest of hoard/best picks Empty < 0.25 <= Half < 0.75 <= Full (`Prop_Hoard_Cache.fill_variants.json`);
+  at the end STARVED -> Empty, SHORT -> Half, HOARDED -> Full. Brambles reuse the BEE01 clumps.

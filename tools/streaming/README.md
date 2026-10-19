@@ -89,3 +89,12 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Barnacle Scrub (contest G151, quest q_barnacle_scrub)
 - `barnacle_scrub.py`: DiskSaver Island silent-corruption minigame. Each save is kept as two copies and barnacles rot random copies; a scrub diver reads both copies round robin. Checksums plus a tuned scrub rate keep losses and reads in budget; too slow a diver lets both copies rot between visits, too fast a diver blows the read budget, and scrubbing without checksums copies rot over good copies. Keys come from G86 Compaction Shoals (`barnacle_scrub_test.py`; CI `Barnacle Scrub`). Rules: `docs/islands/DISKSAVER-BARNACLE-SCRUB.md`.
+
+## Toll Bridge Tokens (contest G158, quest q_toll_bridge_tokens)
+- `toll_bridge_tokens.py`: DiskSaver Island rate-limiting minigame over the G126 Breakwater Queue harbour waves (read-only). The archive bridge sways if too many writes cross in any window; an open gate and a fixed-window counter (2x the limit at a block edge) both sway it, and a token bucket wins when the jar is sized right. Envelope burst + (t-1) x rate pinned and tight under saturation; largest safe jar equals brute force (`toll_bridge_tokens_test.py`; CI `Toll Bridge Tokens`). Rules: `docs/islands/DISKSAVER-TOLL-BRIDGE-TOKENS.md`.
+
+## Tide Clocks (contest G166, quest q_tide_clocks)
+- `tide_clocks.py`: DiskSaver Island causality minigame over G86 islands and keys (read-only). Islands edit the same saves between ferry syncs; wall-clock and Lamport last-writer-wins silently drop concurrent edits, while vector clocks keep concurrent siblings for the Merge Keeper and lose nothing. Vector order equals a brute-force happens-before oracle, Lamport is consistent but not complete, detected conflicts equal the oracle (`tide_clocks_test.py`; CI `Tide Clocks`). Rules: `docs/islands/DISKSAVER-TIDE-CLOCKS.md`.
+
+## Lighthouse Leases (contest G171, quest q_lighthouse_leases)
+- `lighthouse_leases.py`: DiskSaver Island leader-lease minigame over the G86 islands as keepers (read-only). One keeper may write the save log per epoch; no lease splits the brain, a naive lease on a drifting clock overruns, a drift guard still loses to a pause between check and write, and fencing tokens make the store reject every stale write. Smallest safe guard equals brute force, stale count equals an oracle, seeded replay is deterministic (`lighthouse_leases_test.py`; CI `Lighthouse Leases`). Rules: `docs/islands/DISKSAVER-LIGHTHOUSE-LEASES.md`.

@@ -7,7 +7,11 @@ ARMATURE_AUTO (bone-heat) weights, validated per part against the bone tree, wit
 normalised; each clip exported as its own glTF animation (skinned, so clips are allowed: unreal-epic-boss 48497).
 Body params (body= dict, all optional; the defaults are the Hornback): ratios body_h / body_w / leg / horn (x length), plates
 (ridge count, 0 = none), tail (tail length / length), head_lift (extra neck rise / length) and ornament: "horns" (default), "antlers"
-(seeded branching beams via antlers(): antler size / length, tines per side) or "none". Defaults draw exactly the same random numbers.
+(seeded branching beams via antlers(): antler size / length, tines per side), "ears" (small-mammal head: upright ears + eyes, ear =
+ear height / length) or "none". Bushy tails (G129 squirrel): tail_bones = n splits Tail into a chain Tail, Tail1..Tail{n-1} curving up
+over tail_curl degrees, each link a spindle of radius tail_bush x length; feet = "paw" names the foot blocks Paw*. Extra clips:
+recipe(clip_names=...) picks from Idle / Walk / Run / Forage (sit up on the haunches, forepaws at the mouth, nibbling).
+Defaults draw exactly the same random numbers, and new keys appear only when asked, so existing pins stay byte-identical.
 Axes (blender-kit/v1): metres, Blender Z up, front = Blender -Y = UE +X, origin = ground centre under the body; L = Blender +X
 (the animal's own left when it faces -Y)."""
 import math, os, sys
@@ -21,15 +25,21 @@ PAIRS = {"walk_diagonal": [("FL", "BR"), ("FR", "BL")]}
 
 
 BODY = {"body_h": 0.34, "body_w": 0.34, "leg": 0.32, "horn": 0.17, "plates": None, "tail": 0.18, "head_lift": 0.0,
-        "ornament": "horns", "antler": 0.3, "tines": None}
+        "ornament": "horns", "antler": 0.3, "tines": None, "ear": 0.12, "tail_bones": None, "tail_bush": 0.15, "tail_curl": 110.0, "feet": "hoof"}
+ORNAMENTS = ("horns", "antlers", "ears", "none")
+CLIPS = ("Idle", "Walk", "Run", "Forage")
 
 
 def params(seed, asset, length=1.6, body=None):
     bd = dict(BODY, **(body or {})); unknown = set(body or {}) - set(BODY)
     if unknown:
         raise ValueError("unknown body params: %s" % sorted(unknown))
-    if bd["ornament"] not in ("horns", "antlers", "none"):
-        raise ValueError("ornament must be horns / antlers / none")
+    if bd["ornament"] not in ORNAMENTS:
+        raise ValueError("ornament must be one of %s" % "/".join(ORNAMENTS))
+    if bd["feet"] not in ("hoof", "paw"):
+        raise ValueError("feet must be hoof / paw")
+    if bd["tail_bones"] is not None and not (2 <= bd["tail_bones"] <= 6):
+        raise ValueError("tail_bones must be 2..6")
     r = K.rng(seed, asset); u = lambda a, b: round(r.uniform(a, b), 4)
     P = {"length": length, "body_h": round(length * bd["body_h"] * (1 + u(-0.04, 0.04)), 4), "body_w": round(length * bd["body_w"] * (1 + u(-0.05, 0.05)), 4),
          "leg": round(length * bd["leg"] * (1 + u(-0.04, 0.04)), 4), "horn": round(length * bd["horn"] * (1 + u(-0.1, 0.1)), 4),
@@ -43,7 +53,25 @@ def params(seed, asset, length=1.6, body=None):
         if bd["ornament"] == "antlers":
             P.update({"antler": round(length * bd["antler"] * (1 + rb.uniform(-0.08, 0.08)), 4), "tines": bd["tines"] or rb.randint(5, 6),
                       "antler_spread": round(rb.uniform(28, 36), 3), "antler_seed": rb.randint(0, 10 ** 6)})
+        if bd["ornament"] == "ears":
+            P["ear"] = round(length * bd["ear"], 4)
+        if bd["tail_bones"]:
+            P.update({"tail_bones": bd["tail_bones"], "tail_bush": round(length * bd["tail_bush"], 4), "tail_curl": bd["tail_curl"]})
+        if bd["feet"] != "hoof":
+            P["feet"] = bd["feet"]
     return P
+
+
+def tail_chain(P):
+    """Bushy tail links (G129): [(bone, parent, head, tail)], rising from the rump and curling up over tail_curl degrees.
+    Elevation is measured from the +Y (backwards) horizontal: 20 deg for the first link up to 20 + tail_curl for the last."""
+    L, h, g = P["length"], P["body_h"], P["leg"]; n = P["tail_bones"]; seg = P["tail"] * L / n
+    pt = (0.0, 0.3 * L, g + h * 0.75); out = []
+    for i in range(n):
+        e = math.radians(20 + P["tail_curl"] * i / (n - 1))
+        nxt = (0.0, pt[1] + seg * math.cos(e), pt[2] + seg * math.sin(e))
+        out.append(("Tail" if i == 0 else "Tail%d" % i, "Hips" if i == 0 else ("Tail" if i == 1 else "Tail%d" % (i - 1)), pt, nxt)); pt = nxt
+    return out
 
 
 def _lift(P):
@@ -59,6 +87,8 @@ def skeleton(P):
          ("Neck", "Chest", (0, -0.3 * L, zc + 0.04 * L), (0, -0.38 * L, g + h * 0.85 + hl)),
          ("Head", "Neck", (0, -0.38 * L, g + h * 0.85 + hl), (0, -0.5 * L, g + h * 0.8 + hl)),
          ("Tail", "Hips", (0, 0.3 * L, g + h * 0.75), (0, 0.48 * L, g + h * 0.5) if "tail" not in P else (0, 0.3 * L + P["tail"] * L, g + h * 0.75 - 0.25 * h * P["tail"] / 0.18))]
+    if P.get("tail_bones"):
+        b = b[:-1] + tail_chain(P)
     for l in LEGS:
         x = (0.13 if l[1] == "L" else -0.13) * L; y = (-0.21 if l[0] == "F" else 0.21) * L
         b += [("Leg%s_Upper" % l, "Chest" if l[0] == "F" else "Hips", (x, y, g), (x, y, g * 0.5)),
@@ -85,13 +115,28 @@ def parts(P, seed, asset):
         y = -0.2 * L + 0.4 * L * i / max(1, n - 1); ph = P["plate_h"] * (1 + r.uniform(-0.2, 0.2))
         out.append(bp(K.box("Plate%d" % i, (0.05 * L, 0.06 * L, ph), (0, y, g + h + ph / 2 - 0.01 * L), 1, rot=(r.uniform(-8, 8), 0, 0), lod1={"drop": True}),
                       "Chest" if y < -0.1 * L else ("Spine" if y < 0.1 * L else "Hips")))
-    tlen, tcy = (0.18 * L, 0.39 * L) if "tail" not in P else (P["tail"] * L, 0.3 * L + P["tail"] * L / 2)
-    out.append(bp(K.cyl("Tail", "y", 0.025 * L, 0.012 * L, tlen, (0, tcy, g + h * 0.62), 0, 6, rot=(-P["tail_droop"], 0, 0), lod1={"segments": 4}), "Tail"))
+    if orn == "ears":                                    # small-mammal head: upright ears (cones) + eyes
+        hz = g + h * 0.86 + hl
+        for s, nm in ((1, "L"), (-1, "R")):
+            out.append(bp(K.cyl("Ear%s" % nm, "z", 0.035 * L, 0.006 * L, P["ear"], (s * 0.06 * L, -0.4 * L, hz + 0.08 * L + P["ear"] / 2 - 0.01 * L), 0, 5,
+                                rot=(0, s * 12, 0), lod1={"segments": 3}), "Head"))
+            out.append(bp(K.box("Eye%s" % nm, (0.012 * L, 0.04 * L, 0.04 * L), (s * 0.1 * L, -0.45 * L, hz + 0.02 * L), 1, bevel=False, lod1={"drop": True}), "Head"))
+    if P.get("tail_bones"):                              # bushy tail: one spindle per link, overlapping so the brush reads continuous
+        for i, (bn, _, hd, tl) in enumerate(tail_chain(P)):
+            d = [tl[k] - hd[k] for k in range(3)]; Ln = math.sqrt(sum(v * v for v in d)); dx, dy, dz = (v / Ln for v in d)
+            rot = (round(-math.degrees(math.asin(max(-1.0, min(1.0, dy)))), 4), round(math.degrees(math.atan2(dx, dz)), 4), 0)
+            R = P["tail_bush"] * (0.75 if i == 0 else 1.0); half = Ln * 0.62
+            prof = [(0.0, -half), (R * 0.6, -half * 0.7), (R, -half * 0.1), (R * 0.95, half * 0.4), (R * 0.55, half * 0.85), (0.0, half)]
+            out.append(bp(K.lathe("Tail%s" % ("" if i == 0 else i), prof, tuple((hd[k] + tl[k]) / 2 for k in range(3)), 0, 8, False, False, rot=rot,
+                                  lod1={"segments": 4}), bn))
+    else:
+        tlen, tcy = (0.18 * L, 0.39 * L) if "tail" not in P else (P["tail"] * L, 0.3 * L + P["tail"] * L / 2)
+        out.append(bp(K.cyl("Tail", "y", 0.025 * L, 0.012 * L, tlen, (0, tcy, g + h * 0.62), 0, 6, rot=(-P["tail_droop"], 0, 0), lod1={"segments": 4}), "Tail"))
     for l in LEGS:
         x = (0.13 if l[1] == "L" else -0.13) * L; y = (-0.21 if l[0] == "F" else 0.21) * L
         out += [bp(K.box("Leg%s_Upper" % l, (0.1 * L, 0.11 * L, g * 0.55), (x, y, g * 0.72), 0), "Leg%s_Upper" % l),
                 bp(K.box("Leg%s_Lower" % l, (0.075 * L, 0.085 * L, g * 0.5 - 0.03 * L), (x, y, g * 0.25 + 0.015 * L + 0.015 * L), 0), "Leg%s_Lower" % l),
-                bp(K.box("Hoof%s" % l, (0.085 * L, 0.095 * L, 0.03 * L), (x, y, 0.015 * L), 2, lod1={"drop": True}), "Leg%s_Lower" % l)]
+                bp(K.box(("Paw%s" if P.get("feet") == "paw" else "Hoof%s") % l, (0.085 * L, 0.095 * L, 0.03 * L), (x, y, 0.015 * L), 2, lod1={"drop": True}), "Leg%s_Lower" % l)]
     return out
 
 
@@ -150,24 +195,58 @@ def clips(P):
         tr["Neck"] = {"rot": _keys(n, lambda t: (d(4 if name == "Walk" else 7) * math.sin(2 * t), 0, 0))}
         tr["Tail"] = {"rot": _keys(n, lambda t: (d(10 if name == "Run" else 4) * math.sin(t), 0, d(6) * math.sin(t)))}
         out[name] = {"frames": n, "tracks": tr}
+    if P.get("tail_bones"):                              # the extra links follow through on the base flick, a quarter cycle late
+        for nm in ("Idle", "Walk", "Run"):
+            n = out[nm]["frames"]
+            for i in range(1, P["tail_bones"]):
+                out[nm]["tracks"]["Tail%d" % i] = {"rot": _keys(n, lambda t, i=i: (d(5) * math.sin(t - i * math.pi / 2), 0, d(8) * math.sin(t - i * math.pi / 2)))}
+    out["Forage"] = forage(P)
     for c in out.values():
         c["fps"] = FPS; c["loop"] = True; c["seconds"] = round(c["frames"] / FPS, 4)
     return out
 
 
-def recipe(asset, seed, length=1.6, materials=None, spec=None, body=None):
+def forage(P):
+    """Forage (G129): 2 s loop held sitting up on the haunches, forepaws at the mouth, head nodding to nibble.
+    Bone-local Euler X with roll 0: Hips/Spine point exactly -Y so their local X is world -X (Hips +X lifts the front);
+    legs, Chest, Neck, Head and Tail have local X = world +X (+X tips their tip down / back towards +Z for the tail)."""
+    d = math.radians; up = d(50); n = 60
+    tr = {"Hips": {"rot": _keys(n, lambda t: (up + d(1.5) * math.sin(t), 0, 0))},
+          "Chest": {"rot": _keys(n, lambda t: (d(1.5) * math.sin(t), 0, 0))},
+          "Neck": {"rot": _keys(n, lambda t: (d(30), 0, 0))},
+          "Head": {"rot": _keys(n, lambda t: (d(28) + d(7) * math.sin(4 * t), 0, d(4) * math.sin(t)))},
+          "Tail": {"rot": _keys(n, lambda t: (up + d(10) + d(3) * math.sin(t), 0, d(5) * math.sin(t)))}}
+    for l in LEGS:
+        if l[0] == "B":                                  # hind legs counter the body pitch so the feet stay planted
+            tr["Leg%s_Upper" % l] = {"rot": _keys(n, lambda t: (up + d(1.5) * math.sin(t), 0, 0))}
+        else:                                            # forelegs reach forward and fold up so the paws meet at the mouth
+            tr["Leg%s_Upper" % l] = {"rot": _keys(n, lambda t: (-d(25) + d(5) * math.sin(4 * t), 0, 0))}
+            tr["Leg%s_Lower" % l] = {"rot": _keys(n, lambda t: (-d(95) + d(6) * math.sin(4 * t), 0, 0))}
+    for i in range(1, P.get("tail_bones") or 1):
+        tr["Tail%d" % i] = {"rot": _keys(n, lambda t, i=i: (d(4) * math.sin(t - i * math.pi / 2), 0, d(5) * math.sin(t - i * math.pi / 2)))}
+    return {"frames": n, "tracks": tr}
+
+
+def recipe(asset, seed, length=1.6, materials=None, spec=None, body=None, clip_names=None, bind_mode=None):
     P = params(seed, asset, length, body); B = skeleton(P); Q = parts(P, seed, asset)
+    names = tuple(clip_names or ("Idle", "Walk", "Run"))
+    if set(names) - set(CLIPS):
+        raise ValueError("unknown clips: %s" % sorted(set(names) - set(CLIPS)))
+    C = {k: v for k, v in clips(P).items() if k in names}
     mats = materials or [K.material(asset, 0, "dusty hide", "8A6A4A", 0.9), K.material(asset, 1, "horn ivory", "E8DCC0", 0.7),
                          K.material(asset, 2, "hoof", "3A3030", 0.8)]
     lo, hi = K.bounds(Q); lo1, hi1 = K.bounds(Q, 1)
     t0 = sum(K.part_tris(p) for p in Q if K.in_lod(p, 0)); t1 = sum(K.part_tris(p, 1) for p in Q if K.in_lod(p, 1))
-    m = {"asset": asset, "kind": "Mob", "schema": SCHEMA, "seed": seed, "params": P, "materials": mats, "bones": B, "parts": Q, "clips": clips(P),
+    m = {"asset": asset, "kind": "Mob", "schema": SCHEMA, "seed": seed, "params": P, "materials": mats, "bones": B, "parts": Q, "clips": C,
          "spec": spec or {}, "axes": K.AXES + "; L = Blender +X (the animal's own left)", "status": "STAGED NOT READY",
          "bind": "ARMATURE_AUTO bone-heat weights, validated per part (dominant bone within 2 hops of the part's bone), rigid per-part fallback; <=4 influences, normalised",
-         "unreal": {"type": "skeletal mesh + 3 anim sequences (Idle, Walk, Run), root bone 'Root'", "nanite": "skeletal: Nanite off/not applicable",
+         "unreal": {"type": "skeletal mesh + %d anim sequences (%s), root bone 'Root'" % (len(names), ", ".join(names)), "nanite": "skeletal: Nanite off/not applicable",
                     "collision": "capsule/physics asset in UE (no UCX on skeletal meshes)", "sockets": "none (bone attach in UE)"},
          "predicted": {"triangles": t0, "lod1_triangles": t1, "lod1_ratio": round(t1 / t0, 3), "bounds_min": lo, "bounds_max": hi,
                        "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)], "bones": len(B)}}
+    if bind_mode:
+        m["bind_mode"] = bind_mode
+        m["bind"] = "rigid per part (bind_mode rigid): every part 100% on its bone" if bind_mode == "rigid" else m["bind"]
     return m
 
 
