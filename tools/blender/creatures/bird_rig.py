@@ -1,0 +1,140 @@
+# SPDX-License-Identifier: MIT
+"""Reusable small-bird rig (blender-bird/v1): a gull/pigeon-scale low-poly skeleton, rigid-bound parts and baked clips, built by
+creatures/build_quadruped.py like insect_rig.py (same conventions). First use: Char_YTM_Gull (G139 Harbour Round, youtube-master 50117).
+Sizes in metres; front = -Y (lands on UE +Y), up = +Z, L = +X (the bird's own left). Feet on z=0.
+Skeleton (10 bones): Root (ground) > Body > {Neck > Head > Beak_Lower, Wing_L/R (folded along the flanks, bone along -Y..+Y
+from the shoulder so local Y rotation lifts the wing), Tail, Leg_L/R}.
+Parts: lathe body and head, cone beak (upper on Head, lower on Beak_Lower), slab wings / tail / webbed feet, stick legs.
+Every part is rigid-bound (bind_mode "rigid"): low-poly faceted birds read best with hard part breaks, and beaks must not bend.
+Clips (FPS 30, looping): Idle (breathing, slow head turns, a tail flick) and Squawk (head up and forward, beak opens wide,
+wings half-lift, body leans; the HarbourRound "gulls answer back" on a clash).
+Body params (body=...): length (beak tip to tail tip, m), height_frac (standing height / length), squawk_deg (beak gape),
+squawk_frames, wing_lift_deg."""
+import math, os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "kit"))
+import kitlib as K
+
+SCHEMA = "blender-bird/v1"
+FPS = 30
+SIDES = (("L", 1), ("R", -1))
+BODY = {"length": 0.6, "height_frac": 0.62, "squawk_deg": 38.0, "squawk_frames": 36, "wing_lift_deg": 28.0}
+
+
+def params(seed, asset, body=None):
+    P = dict(BODY)
+    if body:
+        bad = set(body) - set(BODY)
+        if bad:
+            raise ValueError("unknown bird body params: %s" % sorted(bad))
+        P.update(body)
+    r = K.rng(seed, asset + ":bird"); L = P["length"]
+    P["L"] = L; P["leg"] = round(0.2 * L, 6); P["bz"] = round(P["leg"] + 0.12 * L, 6)        # body centre height
+    P["head_turn"] = round(r.uniform(18, 30), 3); P["tail_flick"] = round(r.uniform(6, 10), 3)
+    return P
+
+
+def _g(P):
+    L, bz = P["L"], P["bz"]
+    return {"neck0": (-0.2 * L, bz + 0.06 * L), "head": (-0.3 * L, P["height_frac"] * L - 0.06 * L), "beak0": -0.355 * L, "beak1": -0.5 * L,
+            "tail0": 0.2 * L, "tail1": 0.5 * L, "shoulder": (0.11 * L, -0.12 * L, bz + 0.05 * L), "hip": (0.06 * L, 0.04 * L)}
+
+
+def skeleton(P):
+    L, bz = P["L"], P["bz"]; g = _g(P); hy, hz = g["head"]
+    B = [{"name": "Root", "parent": None, "head": [0, 0, 0], "tail": [0, 0.2 * L, 0]},
+         {"name": "Body", "parent": "Root", "head": [0, -0.15 * L, bz], "tail": [0, 0.2 * L, bz]},
+         {"name": "Neck", "parent": "Body", "head": [0, g["neck0"][0], g["neck0"][1]], "tail": [0, hy + 0.03 * L, hz - 0.04 * L]},
+         {"name": "Head", "parent": "Neck", "head": [0, hy + 0.03 * L, hz - 0.04 * L], "tail": [0, g["beak0"], hz]},
+         {"name": "Beak_Lower", "parent": "Head", "head": [0, g["beak0"], hz - 0.02 * L], "tail": [0, g["beak1"], hz - 0.03 * L]},
+         {"name": "Tail", "parent": "Body", "head": [0, g["tail0"], bz + 0.02 * L], "tail": [0, g["tail1"], bz + 0.08 * L]}]
+    sx, sy, sz = g["shoulder"]
+    for nm, s in SIDES:
+        B.append({"name": "Wing_" + nm, "parent": "Body", "head": [s * sx, sy, sz], "tail": [s * sx, sy + 0.5 * L, sz + 0.02 * L]})
+    for nm, s in SIDES:
+        B.append({"name": "Leg_" + nm, "parent": "Body", "head": [s * g["hip"][0], g["hip"][1], P["leg"] + 0.04 * L], "tail": [s * g["hip"][0], g["hip"][1], 0.01 * L]})
+    for b in B:
+        b["head"] = [round(v, 6) + 0.0 for v in b["head"]]; b["tail"] = [round(v, 6) + 0.0 for v in b["tail"]]
+    return B
+
+
+def _stick(name, p0, p1, r0, r1, slot, seg=4, lod1=None):
+    d = [p1[i] - p0[i] for i in range(3)]; Ln = math.sqrt(sum(v * v for v in d)); dx, dy, dz = (v / Ln for v in d)
+    rot = (round(-math.degrees(math.asin(max(-1.0, min(1.0, dy)))), 4), round(math.degrees(math.atan2(dx, dz)), 4), 0)
+    return K.cyl(name, "z", r0, r1, round(Ln, 6), tuple(round((p0[i] + p1[i]) / 2, 6) for i in range(3)), slot, seg, rot=rot, lod1=lod1)
+
+
+def parts(P):
+    L, bz = P["L"], P["bz"]; g = _g(P); hy, hz = g["head"]; out = []
+    def bp(p, bone):
+        p["bone"] = bone; p["rigid"] = True; out.append(p)
+    prof = [(0.0, -0.17), (0.06, -0.14), (0.1, -0.06), (0.11, 0.04), (0.09, 0.14), (0.05, 0.22), (0.0, 0.26)]   # body along Y (lathe on its side)
+    bp(K.lathe("Body", [(r * L, z * L) for r, z in prof], (0, 0.0, bz), 0, 8, False, False, rot=(-90, 0, 0), lod1={"segments": 6}), "Body")
+    bp(_stick("Neck", (0, g["neck0"][0], g["neck0"][1] - 0.02 * L), (0, hy + 0.02 * L, hz - 0.04 * L), 0.055 * L, 0.045 * L, 0, 6, lod1={"segments": 4}), "Neck")
+    hp = [(0.0, -0.06), (0.045, -0.04), (0.06, 0.0), (0.045, 0.045), (0.0, 0.06)]
+    bp(K.lathe("Head", [(r * L, z * L) for r, z in hp], (0, hy, hz), 0, 8, False, False, rot=(90, 0, 0), lod1={"segments": 5}), "Head")
+    for nm, s in SIDES:
+        bp(K.cyl("Eye_" + nm, "x", 0.012 * L, 0.012 * L, 0.006 * L, (s * 0.05 * L, hy - 0.015 * L, hz + 0.012 * L), 3, 6, lod1={"drop": True}), "Head")
+    bp(K.cyl("Beak_Upper", "y", 0.016 * L, 0.004 * L, g["beak0"] - g["beak1"], (0, (g["beak0"] + g["beak1"]) / 2, hz - 0.004 * L), 1, 6, lod1={"segments": 4}), "Head")
+    bp(K.cyl("Beak_Lower", "y", 0.012 * L, 0.003 * L, (g["beak0"] - g["beak1"]) * 0.85, (0, g["beak0"] - (g["beak0"] - g["beak1"]) * 0.425, hz - 0.024 * L), 1, 6, lod1={"segments": 4}), "Beak_Lower")
+    sx, sy, sz = g["shoulder"]
+    wing = [(0.0, -0.02), (0.02, 0.12), (0.02, 0.36), (0.0, 0.6), (-0.03, 0.42), (-0.05, 0.16), (-0.04, 0.0)]   # (z, y) along the flank
+    for nm, s in SIDES:   # folded wing: a slab standing on its edge against the flank (outline in the YZ plane)
+        pts = [(y * L, z * L) for z, y in wing]; cy = sum(p[0] for p in pts) / len(pts); cz = sum(p[1] for p in pts) / len(pts)
+        bp(K.slab("Wing_" + nm, [(y - cy, z - cz) for y, z in pts], 0.012 * L, (s * (sx + 0.006 * L), sy + cy, sz + cz), 2, rot=(90, 0, 90),
+                  lod1={"segments": 4}), "Wing_" + nm)
+        bp(K.slab("WingTip_" + nm, [(-0.05 * L, 0.0), (0.05 * L, 0.0), (0.0, 0.03 * L)], 0.01 * L, (s * (sx + 0.004 * L), sy + 0.5 * L, sz + 0.0), 3, rot=(90, 0, 90),
+                  lod1={"drop": True}), "Wing_" + nm)
+    bp(K.slab("Tail", [(-0.06 * L, -0.06 * L), (0.06 * L, -0.06 * L), (0.055 * L, 0.12 * L), (-0.055 * L, 0.12 * L)], 0.01 * L, (0, g["tail0"] + 0.18 * L, bz + 0.03 * L), 0,
+              rot=(8, 0, 0)), "Tail")   # 4-point slabs keep their outline at LOD1 (halving leaves 2 points)
+    for nm, s in SIDES:
+        x = s * g["hip"][0]
+        bp(_stick("Leg_" + nm, (x, g["hip"][1], P["leg"] + 0.04 * L), (x, g["hip"][1] - 0.01 * L, 0.012 * L), 0.012 * L, 0.009 * L, 1, 4, lod1={"segments": 3}), "Leg_" + nm)
+        bp(K.slab("Foot_" + nm, [(0.0, 0.01 * L), (0.035 * L, -0.07 * L), (0.0, -0.05 * L), (-0.035 * L, -0.07 * L)], 0.006 * L, (x, g["hip"][1], 0.003 * L), 1), "Leg_" + nm)
+    return out
+
+
+def _keys(n, fn, step=2):
+    fs = list(range(0, n, step)) + [n]
+    return [[f, [round(v, 5) + 0.0 for v in fn(2 * math.pi * f / n)]] for f in fs]
+
+
+def _pulse(t):
+    """0 -> 1 -> 0 over one loop, held open in the middle (a squawk)."""
+    return max(0.0, min(1.0, 1.6 * math.sin(t / 2) ** 2 - 0.25)) / 1.35 if t else 0.0
+
+
+def clips(P):
+    d = math.radians; out = {}
+    ht, tf = P["head_turn"], P["tail_flick"]
+    out["Idle"] = {"frames": 120, "tracks": {
+        "Body": {"rot": _keys(120, lambda t: (d(1.5) * math.sin(2 * t), 0, 0))},
+        "Neck": {"rot": _keys(120, lambda t: (d(2) * math.sin(2 * t + 0.4), 0, 0))},
+        "Head": {"rot": _keys(120, lambda t: (0, 0, d(ht) * math.sin(t)))},
+        "Tail": {"rot": _keys(120, lambda t: (d(tf) * max(0.0, math.sin(3 * t)) ** 4, 0, 0))}}}
+    n = P["squawk_frames"]; gape = P["squawk_deg"]; lift = P["wing_lift_deg"]
+    tr = {"Neck": {"rot": _keys(n, lambda t: (d(-34) * _pulse(t), 0, 0), step=1)},
+          "Head": {"rot": _keys(n, lambda t: (d(-22) * _pulse(t), 0, 0), step=1)},
+          "Beak_Lower": {"rot": _keys(n, lambda t: (d(gape) * _pulse(t) * (1 + 0.15 * math.sin(6 * t)), 0, 0), step=1)},
+          "Body": {"rot": _keys(n, lambda t: (d(-8) * _pulse(t), 0, 0), step=1)},
+          "Tail": {"rot": _keys(n, lambda t: (d(14) * _pulse(t), 0, 0), step=1)}}
+    for nm, s in SIDES:
+        tr["Wing_" + nm] = {"rot": _keys(n, lambda t: (0, -s * d(lift) * _pulse(t), 0), step=1)}
+    out["Squawk"] = {"frames": n, "tracks": tr}
+    for c in out.values():
+        c["fps"] = FPS; c["loop"] = True; c["seconds"] = round(c["frames"] / FPS, 4)
+    return out
+
+
+def recipe(asset, seed, materials=None, spec=None, body=None):
+    P = params(seed, asset, body); B = skeleton(P); Q = parts(P)
+    mats = materials or [K.material(asset, 0, "white plumage", "F2F2EE", 0.85), K.material(asset, 1, "beak / legs (yellow-orange)", "E8A93A", 0.6),
+                         K.material(asset, 2, "grey mantle (wings)", "9AA3AD", 0.85), K.material(asset, 3, "black wingtips / eyes", "1E1E22", 0.7)]
+    lo, hi = K.bounds(Q); lo1, hi1 = K.bounds(Q, 1)
+    t0 = sum(K.part_tris(p) for p in Q if K.in_lod(p, 0)); t1 = sum(K.part_tris(p, 1) for p in Q if K.in_lod(p, 1))
+    return {"asset": asset, "kind": "Char", "schema": SCHEMA, "seed": seed, "params": P, "materials": mats, "bones": B, "parts": Q, "clips": clips(P),
+            "bind_mode": "rigid", "spec": spec or {}, "axes": K.AXES + "; L = Blender +X (the bird's own left)", "status": "STAGED NOT READY",
+            "bind": "rigid per part (bind_mode rigid): every part 100% on its bone; beaks and wings never bend",
+            "unreal": {"type": "skeletal mesh + anim sequences (Idle, Squawk), root bone 'Root' on the ground", "nanite": "skeletal: Nanite off/not applicable",
+                       "collision": "capsule in UE", "sockets": "none (bone attach in UE)"},
+            "predicted": {"triangles": t0, "lod1_triangles": t1, "lod1_ratio": round(t1 / t0, 3), "bounds_min": lo, "bounds_max": hi,
+                          "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)], "bones": len(B)}}

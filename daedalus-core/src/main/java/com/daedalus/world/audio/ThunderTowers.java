@@ -17,7 +17,7 @@ public final class ThunderTowers {
     public static final int GRID = 12;
     /** Cell size, metres. */
     public static final double CELL_M = 250.0;
-    /** Speed of sound, m/s. */
+    /** Speed of sound, m/s (343 m/s = dry air at about 20 C; c = 331.3 + 0.606 T). */
     public static final double SOUND_MPS = 343.0;
     private static final long SALT = 0x5448_5431L; // "THT1"
 
