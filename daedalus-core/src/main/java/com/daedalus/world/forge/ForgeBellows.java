@@ -59,6 +59,13 @@ public final class ForgeBellows {
     /** What the shift did. */
     public record Result(int inBandTicks, int inBandPm, int cinders, boolean doused, int peakC, int finalC, Tier tier,
                          boolean readyToPull, int forgeSpeedPm, String line) {
+
+        /** One-line BLW 1 summary, the same text as Encode() in DaedalusForgeBellowsCore.h. */
+        public String encode() {
+            return "BLW 1 in=" + inBandTicks + " pm=" + inBandPm + " cinders=" + cinders + " doused=" + (doused ? 1 : 0)
+                    + " peak=" + peakC + " final=" + finalC + " " + tier + " ready=" + (readyToPull ? 1 : 0) + " speed="
+                    + forgeSpeedPm + " | " + line;
+        }
     }
 
     private ForgeBellows() {
