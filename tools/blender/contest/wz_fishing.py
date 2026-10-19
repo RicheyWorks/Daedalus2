@@ -37,7 +37,7 @@ def rod(seed=SEED):
         z += 0.17 + r.uniform(-0.015, 0.015) - i * 0.006
         P.append(K.box("Guide%d" % i, (0.006, 0.02 - i * 0.002, 0.006), (0, -0.012 + i * 0.0008, round(z, 4)), 2, lod1={"drop": True}))
     m = {"asset": a, "kind": "Tool", "seed": seed, "spec": SPEC_ROD, "materials": mats, "objects": [K.obj(a, P)],
-         "sockets": [K.socket("Grip", (0, 0, 0.17)), K.socket("Tip", (0, 0, 1.8), forward=(0, 0, 1)), K.socket("Reel", (0, -0.045, 0.37))],
+         "sockets": [K.socket("Grip", (0, 0, 0.17), forward=(0, 0, 1), attach=((0, 0, 1), (0, 1, 0))), K.socket("Tip", (0, 0, 1.8), forward=(0, 0, 1), attach=((0, 0, 1), (0, 1, 0))), K.socket("Reel", (0, -0.045, 0.37))],
          "collision": [K.ucx_prism(a, 0, "z", 0.016, 0.30, (0, 0, 0.17))]}
     return K.finish(m)
 

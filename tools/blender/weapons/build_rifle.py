@@ -58,6 +58,10 @@ def main():
     for s in m["sockets"]:
         e = bpy.data.objects.new(s["name"], None); e.empty_display_type = "ARROWS"; e.empty_display_size = 0.03
         e.location = s["location"]; e.parent = ob; bpy.context.scene.collection.objects.link(e)
+        if any(x.get("attach") for x in m["sockets"]):   # held props: pre-rotate so native == sidecar (the gated crate/fixture stay as built)
+            sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+            import sockets_sidecar as SS
+            e.rotation_mode = "QUATERNION"; e.rotation_quaternion = SS.socket_blender_quat(s)
     ucx = []
     for c in m.get("collision", []):   # optional: UCX_ convex hull boxes (Unreal naming), unbevelled, parented to the mesh, no material
         t = bmesh.new(); bmesh.ops.create_cube(t, size=1.0)
