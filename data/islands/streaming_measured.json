@@ -1,0 +1,33 @@
+{
+  "_comment": "Written by tools/streaming/dsb_measure.py. disk_kib measured from editor package files; ram_kib is a derived upper-bound proxy (uncooked payload) until an in-game memreport.",
+  "islands": {
+    "BlenderBoss": {
+      "disk_kib": 1,
+      "files": 0,
+      "missing": [],
+      "note": "no package files found; dsb_manifest.py keeps the estimate",
+      "ram_kib": 1
+    },
+    "DiskSaver": {
+      "disk_kib": 25470,
+      "files": 341,
+      "missing": [],
+      "ram_kib": 25015
+    },
+    "Hephaestus": {
+      "disk_kib": 1,
+      "files": 0,
+      "missing": [],
+      "note": "no package files found; dsb_manifest.py keeps the estimate",
+      "ram_kib": 1
+    },
+    "OddsReaper": {
+      "disk_kib": 140682,
+      "files": 1908,
+      "missing": [],
+      "ram_kib": 139310
+    }
+  },
+  "measured_at": "2026-10-18T23:24:41-07:00",
+  "ram_factor_pct": 100
+}

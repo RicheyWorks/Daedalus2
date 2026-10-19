@@ -4,7 +4,8 @@
 Sources: every data/islands/*/layout.json that has origin_cm and placements, plus data/islands/streaming_extra.json
 (islands whose layout is not in a layout.json, e.g. DiskSaver at cell 4000000,4000000). Per island the cost is an
 ESTIMATE, not a measurement: ram_kib = BASE_RAM + placements * PER_PLACEMENT_RAM, disk likewise; an island can pin
-exact numbers with "streaming": {"ram_kib": N, "disk_kib": N} in its layout. Output is the canonical DSB 1 text,
+exact numbers with "streaming": {"ram_kib": N, "disk_kib": N} in its layout, and
+data/islands/streaming_measured.json (tools/streaming/dsb_measure.py) replaces the estimate with measured sizes. Output is the canonical DSB 1 text,
 re-parsed before it is written so a bad manifest can never be produced.
 
   python tools/streaming/dsb_manifest.py            # print to stdout
@@ -39,30 +40,43 @@ def cost(placements, pinned=None):
     return max(1, ram), max(1, disk)
 
 
-def entry(doc, source):
+def load_measured(root):
+    p = os.path.join(root, "data", "islands", "streaming_measured.json")
+    if not os.path.isfile(p):
+        return {}
+    with open(p, encoding="utf-8") as f:
+        isl = json.load(f).get("islands", {})
+    return {k: v for k, v in isl.items() if v.get("files", 0) > 0}
+
+
+def entry(doc, source, measured=None):
     o = doc.get("origin_cm")
     if not (isinstance(o, list) and len(o) >= 2 and all(isinstance(v, (int, float)) for v in o[:2])):
         return None
     pl = doc.get("placements")
     n = len(pl) if isinstance(pl, list) else int(doc.get("placement_count", 0))
-    ram, disk = cost(n, doc.get("streaming"))
-    return (island_id(doc.get("island", os.path.basename(os.path.dirname(source)))), int(round(o[0])), int(round(o[1])), ram, disk)
+    iid = island_id(doc.get("island", os.path.basename(os.path.dirname(source))))
+    pinned = dict((measured or {}).get(iid, {}))
+    pinned.update(doc.get("streaming") or {})   # a layout's own pin beats a measurement, which beats the estimate
+    ram, disk = cost(n, pinned)
+    return (iid, int(round(o[0])), int(round(o[1])), ram, disk)
 
 
 def collect(root=ROOT):
     found, skipped = [], []
+    measured = load_measured(root)
     base = os.path.join(root, "data", "islands")
     for d in sorted(os.listdir(base)):
         p = os.path.join(base, d, "layout.json")
         if os.path.isfile(p):
             with open(p, encoding="utf-8") as f:
-                e = entry(json.load(f), p)
+                e = entry(json.load(f), p, measured)
             (found if e else skipped).append(e or p)
     extra = os.path.join(base, "streaming_extra.json")
     if os.path.isfile(extra):
         with open(extra, encoding="utf-8") as f:
             for doc in json.load(f).get("islands", []):
-                e = entry(doc, extra)
+                e = entry(doc, extra, measured)
                 (found if e else skipped).append(e or doc.get("island", "?"))
     ids = [e[0] for e in found]
     dupes = sorted({i for i in ids if ids.count(i) > 1})
