@@ -10,11 +10,12 @@ No foe/party stat, inventory, reward or progression injection is used.
 import functools
 import http.server
 import json
+import mimetypes
 import os
 from pathlib import Path
 import sys
 import threading
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 from playwright.sync_api import sync_playwright
 
@@ -55,6 +56,17 @@ def main(argv):
             browser = playwright.chromium.launch(headless=True, args=["--renderer-process-limit=1"])
             try:
                 context = browser.new_context(viewport={"width": 1024, "height": 896})
+                # This fixture validates built-file/game/storage behavior, not host HTTP transport.
+                # Use the exact real files over the same HTTP URL origin; never synthesize game assets.
+                def built_file(route):
+                    path = (root / unquote(urlsplit(route.request.url).path).lstrip("/")).resolve()
+                    if not path.is_relative_to(root) or not path.is_file():
+                        route.fulfill(status=404, body="Not found")
+                        return
+                    route.fulfill(path=str(path), content_type=mimetypes.guess_type(str(path))[0] or "application/octet-stream")
+                context.route(origin + "/**", built_file)
+                context.route("https://fonts.googleapis.com/**", lambda route: route.abort())
+                context.route("https://fonts.gstatic.com/**", lambda route: route.abort())
                 context.add_init_script("""(() => {
                   const draw = CanvasRenderingContext2D.prototype.drawImage;
                   window.__battleDraws = null;
@@ -238,9 +250,10 @@ def main(argv):
             except Exception:
                 try:
                     page.screenshot(path=str(evidence / "portal-failure.png"))
-                    (evidence / "failure-state.json").write_text(json.dumps({"state": bot.st(), "page_errors": errors,
+                    state = page.evaluate("window.PRISM_DEMO ? PRISM_DEMO.state() : null")
+                    (evidence / "failure-state.json").write_text(json.dumps({"state": state, "page_errors": errors,
                         "boot_status": page.locator("#status").text_content(), "url": page.url,
-                        "boot": page.evaluate("({hidden:document.getElementById('status').hidden,settingsLoaded:PRISM_DEMO.settings().loaded(),resources:performance.getEntriesByType('resource').map(r=>({path:new URL(r.name).pathname,duration:r.duration,bytes:r.transferSize}))})"),
+                        "boot": page.evaluate("({hidden:document.getElementById('status').hidden,settingsLoaded:!!(window.PRISM_DEMO&&PRISM_DEMO.settings().loaded()),resources:performance.getEntriesByType('resource').map(r=>({path:new URL(r.name).pathname,duration:r.duration,bytes:r.transferSize}))})"),
                         "network": network[-100:]}, indent=2) + "\n", encoding="utf-8")
                 except Exception as diagnosis:
                     print("Failure capture: " + str(diagnosis), flush=True)
@@ -250,7 +263,7 @@ def main(argv):
     finally:
         server.shutdown()
         server.server_close()
-        (evidence / "portal-demo-results.json").write_text(json.dumps({"same_origin": True, "checks": results, "page_errors": errors}, indent=2) + "\n", encoding="utf-8")
+        (evidence / "portal-demo-results.json").write_text(json.dumps({"same_origin": True, "asset_fixture": "exact built files via Playwright; host HTTP transport unvalidated", "checks": results, "page_errors": errors}, indent=2) + "\n", encoding="utf-8")
     print("PORTAL DEMO %d/%d PASS" % (len(results), len(results)), flush=True)
 
 
