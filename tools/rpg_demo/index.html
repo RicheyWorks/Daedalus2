@@ -1249,7 +1249,7 @@ function startBattle(zone, boss, only) {
 const ELEM = { tide: "water", gale: "air", stone: "earth", shade: "dark", flame: "fire" };   /* boss data names elements by realm lore */
 const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
 /* PRISM03 summon spirits (summons.js): beaten Wardens' spirits, one call each per battle */
-const SUMMONS = () => window.PrismSummons ? PrismSummons.table(D.dungeons.map(d => d.boss_data)) : [];
+const SUMMONS = () => window.PrismSummons ? PrismSummons.table(D.dungeons.map(d => d.boss_data), D.realm) : [];
 const mySpirits = () => window.PrismSummons ? PrismSummons.unlocked(SUMMONS(), state.beaten) : [];
 const battleCmds = () => mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
 function playChord(sp) {                                  /* soft rolled triad: sine, low-passed, gain <= 0.3 */
