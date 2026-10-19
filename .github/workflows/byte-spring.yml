@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: Byte Spring cistern
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/byte_spring.py'
+      - 'tools/streaming/byte_spring_test.py'
+      - 'tools/streaming/dsb.py'
+      - 'tools/streaming/test_dsb.py'
+      - 'data/islands/disk-saver/byte-spring-v1.json'
+      - 'data/islands/streaming.dsb'
+      - '.github/workflows/byte-spring.yml'
+permissions:
+  contents: read
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G39 Byte Spring rules (validation, quest edges, seeded goldens, DSB composition)
+        run: python -m unittest tools/streaming/byte_spring_test.py -v
+      - name: DSB 1 parity (Python = Java = C++)
+        run: python -m unittest tools/streaming/test_dsb.py -v
+      - name: CLI smoke (seed 1 wins)
+        run: python tools/streaming/byte_spring.py data/islands/disk-saver/byte-spring-v1.json --seed 1

@@ -1,21 +1,37 @@
 {
   "v": 1,
   "quest": "q_byte_spring",
-  "lore": "DiskSaver Island's Byte Spring feeds the cistern that keeps resident island caches hydrated. Overflow dumps a cache; three dry empty ticks fail the quest.",
+  "lore": "DiskSaver Island's Byte Spring wells up from a crack in the shattered planet and feeds the cistern that keeps resident island caches hydrated (RAM + disk, DSB 1 streaming budget). Load too much at once and the budget spills a cache; let the cistern sit empty for three dry ticks and the caches go cold.",
   "cistern": {
     "capacity": 2000,
-    "level": 800,
-    "spring_fill": 250,
-    "leak": 80,
-    "budget_cap": 900
+    "level": 1200,
+    "spring_fill": 400,
+    "leak": 60,
+    "budget_cap": 600
   },
   "islands": [
-    {"id": "disk_saver_home", "cost_kib": 300, "priority": 2},
-    {"id": "cache_north", "cost_kib": 200, "priority": 1},
-    {"id": "cache_south", "cost_kib": 250, "priority": 0},
-    {"id": "vault_east", "cost_kib": 400, "priority": 3}
+    {"id": "disk_saver_home", "cost_kib": 120, "priority": 3},
+    {"id": "cache_north", "cost_kib": 90, "priority": 1},
+    {"id": "cache_south", "cost_kib": 140, "priority": 0},
+    {"id": "vault_east", "cost_kib": 260, "priority": 2}
   ],
   "start_residents": ["disk_saver_home", "cache_north"],
+  "keystone": "disk_saver_home",
   "drought_limit": 3,
-  "win_ticks": 10
+  "win_ticks": 20,
+  "dry_permille": 550,
+  "npc": {
+    "name": "Spigot",
+    "lines": {
+      "start": "The Byte Spring runs thin this season. Keep the cistern wet and the caches loaded.",
+      "wet": "Spring's flowing. Every kibibyte counts.",
+      "dry": "Dry tick. The caches are still drinking.",
+      "spill": "Cistern's brimming; the extra runs off into the sea.",
+      "low": "Water's low. Unload a cache before the spring gives out.",
+      "dump": "Too much streaming at once. The budget spilled and a cache was dumped.",
+      "win": "The rains held. DiskSaver Island stays loaded.",
+      "fail_drought": "The cistern's dry. The caches go cold.",
+      "fail_keystone": "We lost the home cache. The spring has nothing left to guard."
+    }
+  }
 }
