@@ -255,7 +255,7 @@ def check_asset(m, cap):
     p = m["predicted"]; out = []
     out.append(("%s tris %d <= %d" % (m["asset"], p["triangles"], cap), p["triangles"] <= cap, p["triangles"]))
     if m.get("mover_of"):                # frame/mover split: origin is the hinge pivot, placed at the frame's SOCKET_Hinge_*
-        out.append(("%s origin = hinge pivot (by design)" % m["asset"], m["hinge"]["socket"].startswith("SOCKET_Hinge_"), p["bounds_min"]))
+        out.append(("%s origin = hinge pivot (by design)" % m["asset"], m["hinge"]["socket"].startswith(("SOCKET_Hinge_", "SOCKET_Spin")), p["bounds_min"]))
     else:
         out.append(("%s stands on z=0" % m["asset"], abs(p["bounds_min"][2]) < 1e-6, p["bounds_min"][2]))
     if m.get("off_centre_ok"):   # e.g. a gate state whose leaves swing open: pivot stays the closed asset's bottom centre
