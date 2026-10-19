@@ -58,11 +58,7 @@ def _pipeline(plan, report):
     for name in ("reuse_existing_materials", "search_existing_materials"):
         if _try_set(mat, name, o["reuse_existing_materials"], report, "reuse_existing"):
             break
-    for name in ("create_new_materials", "material_import"):
-        if name == "material_import":
-            break
-        if _try_set(mat, name, o["create_new_materials"], report, "create_new"):
-            break
+    _try_set(mat, "create_new_materials", o["create_new_materials"], report, "create_new")
     return p
 
 
@@ -115,6 +111,7 @@ def add_sockets(plan):
     mesh = _mesh(plan)
     if mesh is None:
         return {"error": "mesh missing"}
+    mesh.modify()  # mark for transaction/dirty BEFORE the sockets change (review 48565)
     existing = {str(s.get_editor_property("socket_name")) for s in mesh.get_editor_property("sockets")}
     out = []
     for s in plan["sockets"]["sockets"]:
@@ -130,7 +127,6 @@ def add_sockets(plan):
         socks = list(mesh.get_editor_property("sockets")) + [sock]
         mesh.set_editor_property("sockets", socks)
         out.append({"name": s["name"], "result": "added"})
-    mesh.modify()
     return {"sockets": out}
 
 
@@ -139,11 +135,12 @@ def facts(plan):
     ar = unreal.AssetRegistryHelpers.get_asset_registry()
     inv = sorted("%s [%s]" % (a.package_name, a.asset_class_path.asset_name) for a in ar.get_assets_by_path(plan["destination"], recursive=True))
     if mesh is None:
-        return {"mesh": None, "inventory": inv, "dirty": _dirty()}
+        return {"mesh": None, "mesh_found": False, "inventory": inv, "dirty": _dirty()}
     box = mesh.get_bounding_box()
     body = mesh.get_editor_property("body_setup")
     agg = body.get_editor_property("agg_geom") if body else None
     return {
+        "mesh_found": True,
         "path": mesh.get_path_name(),
         "tris_lod0": mesh.get_num_triangles(0),
         "bounds_min_cm": [box.min.x, box.min.y, box.min.z],

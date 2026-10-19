@@ -156,6 +156,71 @@ class EvaluateTests(Base):
         self.assertFalse(r["checks"]["same_uobject"])
 
 
+class ReviewFixTests(Base):
+    """Review 48565 (buffffff) fixes and nice-to-haves."""
+
+    def test_close_requires_three_values_both_sides(self):
+        self.assertTrue(h._close([0, 0, 0], [0, 0, 0.1], 0.2))
+        for a, b in [([], []), ([], [0, 0, 0]), ([0, 0, 0], []), ([0, 0], [0, 0]), ([0, 0], [0, 0, 0]),
+                     ([0, 0, 0, 0], [0, 0, 0, 0]), (None, [0, 0, 0]), ([0, 0, "x"], [0, 0, 0])]:
+            self.assertFalse(h._close(a, b, 0.2), (a, b))
+
+    def test_bounds_fail_when_facts_missing_or_short(self):
+        ev = EvaluateTests("test_started_is_not_done")
+        ev.tmp = self.tmp
+        p = ev.plan()
+        for kw in ({"bounds_min_cm": [], "bounds_max_cm": []}, {"bounds_max_cm": [1, 1]}):
+            f = ev.facts(**kw)
+            self.assertFalse(h.evaluate(p, {"done": True}, f)["checks"]["bounds"], kw)
+        f = ev.facts()
+        del f["bounds_min_cm"]
+        self.assertFalse(h.evaluate(p, {"done": True}, f)["checks"]["bounds"])
+        p["expect"]["min_cm"] = [0, 0]
+        self.assertFalse(h.evaluate(p, {"done": True}, ev.facts())["checks"]["bounds"])
+
+    def test_mesh_none_fails_nanite_off_plan(self):
+        p = h.build_plan(self.glb(make_glb(socket=False, ucx=False)), "/Game/T", "Crate", checkpoint="cp.json",
+                         overrides={"build_nanite": False})
+        p["expect"] = {}  # no inventory_count: mesh_found alone must catch it
+        r = h.evaluate(p, {"done": True}, {"mesh": None, "mesh_found": False, "inventory": []})
+        self.assertFalse(r["ok"])
+        self.assertFalse(r["checks"]["mesh_found"])
+        self.assertFalse(r["checks"]["nanite_as_planned"])
+        r = h.evaluate(p, {"done": True}, {"mesh": None, "inventory": []})  # older facts shape
+        self.assertFalse(r["checks"]["mesh_found"])
+        self.assertFalse(r["checks"]["nanite_as_planned"])
+
+    def test_mesh_found_and_nanite_off_passes(self):
+        p = h.build_plan(self.glb(make_glb(socket=False, ucx=False)), "/Game/T", "Crate", checkpoint="cp.json",
+                         overrides={"build_nanite": False})
+        p["expect"] = {}
+        r = h.evaluate(p, {"done": True}, {"mesh_found": True, "nanite": False, "inventory": ["a"]})
+        self.assertTrue(r["ok"], r)
+
+    def test_nanite_missing_fact_fails(self):
+        p = h.build_plan(self.glb(make_glb(socket=False, ucx=False)), "/Game/T", "Crate", checkpoint="cp.json",
+                         overrides={"build_nanite": False})
+        p["expect"] = {}
+        self.assertFalse(h.evaluate(p, {"done": True}, {"mesh_found": True})["checks"]["nanite_as_planned"])
+
+    def test_profile_overrides_explicit_overrides(self):
+        prof = {"interchange_requested_options": {"build_nanite": False}, "expect": {}}
+        g = self.glb(make_glb(socket=False, ucx=False))
+        p = h.build_plan(g, "/Game/T", "Crate", checkpoint="cp.json", overrides={"build_nanite": True}, profile=prof)
+        self.assertFalse(p["options"]["build_nanite"])
+        p = h.build_plan(g, "/Game/T", "Crate", checkpoint="cp.json", overrides={"build_nanite": False})
+        self.assertFalse(p["options"]["build_nanite"])
+        self.assertIn("overrides", h.build_plan.__doc__)
+
+    def test_ue_harness_modify_before_sockets_and_no_dead_branch(self):
+        with open(os.path.join(HERE, "ue_harness.py"), encoding="utf-8") as fh:
+            src = fh.read()
+        body = src[src.index("def add_sockets"):src.index("def facts")]
+        self.assertLess(body.index("mesh.modify()"), body.index('set_editor_property("sockets"'))
+        self.assertEqual(body.count("mesh.modify()"), 1)
+        self.assertNotIn("material_import", src[src.index("def _pipeline"):src.index("def _on_done")])
+
+
 class TerrainProfileTests(Base):
     def packet(self):
         sp = {"triangles": 669, "slots": [{"slot": i, "material": {"name": n}} for i, n in [(1, "Sand"), (0, "Grass")]],

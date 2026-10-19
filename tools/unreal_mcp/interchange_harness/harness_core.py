@@ -118,7 +118,12 @@ def material_review(summary):
 
 
 def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=None, profile=None, checkpoint=None):
-    """Build an import plan. Refuses without a checkpoint path (imports are not undoable)."""
+    """Build an import plan. Refuses without a checkpoint path (imports are not undoable).
+
+    Option precedence: profile["interchange_requested_options"] OVERRIDES the explicit
+    ``overrides`` dict (the frozen source packet wins). To test an option on its own, for
+    example the item e Nanite-off proof, pass ``overrides`` WITHOUT a profile.
+    """
     if not checkpoint:
         raise PlanError("checkpoint path required before any import (imports are not undoable)")
     if not test_root.startswith("/Game/"):
@@ -133,7 +138,7 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
     gltf = read_glb(data)
     summary = glb_summary(gltf)
     ov = dict(overrides or {})
-    if profile:
+    if profile:  # profile wins over explicit overrides (see docstring)
         ov.update(profile.get("interchange_requested_options", {}))
     nanite = bool(ov.get("build_nanite", True))  # UE 5.8 default ON for static props
     plan = {
@@ -161,7 +166,19 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
 # ---------------------------------------------------------------- verdict
 
 def _close(a, b, tol):
-    return all(abs(float(x) - float(y)) <= tol for x, y in zip(a, b))
+    """Both sides must be exactly 3 numbers (x, y, z) and each axis within tol.
+
+    zip() alone would let empty or short lists pass vacuously (review 48565 fix 1)."""
+    try:
+        a, b = list(a), list(b)
+    except TypeError:
+        return False
+    if len(a) != 3 or len(b) != 3:
+        return False
+    try:
+        return all(abs(float(x) - float(y)) <= tol for x, y in zip(a, b))
+    except (TypeError, ValueError):
+        return False
 
 
 def evaluate(plan, done, facts, before_identity=None, save_passes=None):
@@ -170,6 +187,12 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
     checks["completed"] = bool(done and done.get("done"))
     if not checks["completed"]:
         return {"ok": False, "checks": checks, "notes": ["not complete: started != done"]}
+    # Review 48565 fix 2: a missing mesh must fail on its own. Without this, a Nanite-off plan
+    # passed nanite_as_planned with mesh None (None == False), and only inventory_count caught it.
+    mesh_found = facts.get("mesh_found", facts.get("mesh", True) is not None)
+    checks["mesh_found"] = bool(mesh_found)
+    if not checks["mesh_found"]:
+        notes.append("mesh %r not found under %s" % (plan.get("asset"), plan.get("destination")))
     exp = plan.get("expect", {})
     inv = facts.get("inventory", [])
     if "inventory_count" in exp:
@@ -182,7 +205,8 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
     if "min_cm" in exp and "max_cm" in exp:
         tol = exp.get("bounds_tolerance_cm", 0.2)
         checks["bounds"] = _close(facts.get("bounds_min_cm", []), exp["min_cm"], tol) and _close(facts.get("bounds_max_cm", []), exp["max_cm"], tol)
-    checks["nanite_as_planned"] = bool(facts.get("nanite")) == bool(plan["options"]["build_nanite"])
+    checks["nanite_as_planned"] = (checks["mesh_found"] and facts.get("nanite") is not None
+                                   and bool(facts.get("nanite")) == bool(plan["options"]["build_nanite"]))
     if plan["glb"]["ucx"] and plan["options"]["collision_from_ucx"]:
         checks["ucx_convex"] = (facts.get("collision", {}).get("convex", 0) >= len(plan["glb"]["ucx"]))
     want = {s["name"] for s in plan["sockets"]["sockets"]}
