@@ -402,6 +402,27 @@ class QuatAndLod1Tests(Base):
         self.assertIn('"lod1_source_tris"', src)
 
 
+class MaterialSearchTests(Base):
+    """buffffff 49583: BIP1 packets reuse the shared M_BB_* set (search UNDER_PARENT), no per-packet copies."""
+
+    def plan(self, **ov):
+        return h.build_plan(self.glb(make_glb(socket=False, ucx=False)), "/Game/T", "Crate", checkpoint="cp.json", overrides=ov)
+
+    def test_default_is_local(self):
+        self.assertEqual(self.plan()["options"]["material_search_location"], "LOCAL")
+
+    def test_under_parent_accepted_case_insensitive(self):
+        self.assertEqual(self.plan(material_search_location="under_parent")["options"]["material_search_location"], "UNDER_PARENT")
+
+    def test_unknown_location_refused(self):
+        with self.assertRaises(h.PlanError):
+            self.plan(material_search_location="EVERYWHERE")
+
+    def test_ue_harness_sets_search_location(self):
+        src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ue_harness.py"), encoding="utf-8").read()
+        self.assertIn('"search_location"', src)
+        self.assertIn("InterchangeMaterialSearchLocation", src)
+
 class TerrainProfileTests(Base):
     def packet(self):
         sp = {"triangles": 669, "slots": [{"slot": i, "material": {"name": n}} for i, n in [(1, "Sand"), (0, "Grass")]],

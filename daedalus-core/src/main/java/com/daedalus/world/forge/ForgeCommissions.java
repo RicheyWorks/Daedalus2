@@ -72,6 +72,12 @@ public final class ForgeCommissions {
     /** One pinned order. */
     public record Commission(int day, int slot, Patron patron, Weapon weapon, Material material, MinTier minTier,
                              int dueShifts, int priceCoins) {
+
+        /** CMS 1 single-line encoding, the same text as Encode(Commission) in DaedalusForgeCommissionsCore.h. */
+        public String encode() {
+            return "CMS 1 day=" + day + " slot=" + slot + " " + patron + " " + weapon + " " + material + " min=" + minTier
+                    + " due=" + dueShifts + " price=" + priceCoins;
+        }
     }
 
     /** What handing the piece over did. */
@@ -79,6 +85,12 @@ public final class ForgeCommissions {
 
         public boolean paid() {
             return verdict == Verdict.PAID || verdict == Verdict.PAID_LATE;
+        }
+
+        /** CMD 1 single-line encoding, the same text as Encode(Delivery) in DaedalusForgeCommissionsCore.h. */
+        public String encode() {
+            return "CMD 1 " + verdict + " coins=" + coins + " tip=" + tipCoins + " regard" + (regardDelta >= 0 ? "+" : "")
+                    + regardDelta + " | " + line;
         }
     }
 
