@@ -49,3 +49,7 @@ the next dawn. After three dawns the storm window closes.
 
 Hull Bay beach set (salvaged-plank ark, four post markers), a muster widget that shows each hound's odds per post
 (the UE binding from G102 already exposes `CanDrill` / `DrillSuccessPct`), and the dawn roll call in Play.
+
+## C++ twin (G128)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusKennelMusterCore.h` mirrors `fits` / `assign` (same search order and tie-breaks) so the UE muster widget shows the crew the server picks. `KennelMusterParityFixtureTest` writes `engines/unreal/core-test/kennel_muster_parity.txt` (fit grid + 300 LCG crews) and must match the committed copy; `kennel_muster_core_test.cpp` replays it with gcc and clang in the Engines workflow. Dawn rolls stay server-side.
