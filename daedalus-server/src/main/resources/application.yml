@@ -52,6 +52,8 @@ daedalus:
     host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
   kennel:
     host-subject: "" # Explicit authenticated engine identity; blank denies brew calculations.
+  brew:
+    host-subject: "" # Explicit authenticated engine identity for YTM melody brews; blank denies.
   tactics:
     host:
       subject: "" # Explicit authenticated JWT subject of the trusted Unreal host; blank denies all requests.
@@ -258,6 +260,11 @@ resilience4j:
         timeout-duration: 0
         register-health-indicator: false
       kennelBrew:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      melodyBrew:
         limit-for-period: 120
         limit-refresh-period: 1m
         timeout-duration: 0
