@@ -71,6 +71,13 @@ public:
     virtual void Render(Frame& Out) const = 0;
     virtual Status GetStatus() const = 0;
     // Optional source-specific facilities. Hosts use virtual dispatch, never UE-disabled RTTI.
+    virtual void EnterTitle() {}
+    // Ordered non-repeat keyboard events: Up,Down,Left,Right,B,A,Enter,Space,R,other.
+    // True means a run transition: discard semantic edges from the old state.
+    virtual bool SourceKeyDown(int) { return false; }
+    // Separate controller events: 0 A, 1 Start. True consumes a source action,
+    // keeping controller events out of keyboard cheat tracking.
+    virtual bool SourceControllerButton(int) { return false; }
     virtual bool OwnPause(bool) { return false; }
     virtual bool IsCorePaused() const { return false; }
     virtual std::string SaveState() const { return {}; }

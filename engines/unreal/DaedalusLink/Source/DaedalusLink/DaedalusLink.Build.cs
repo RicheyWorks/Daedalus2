@@ -17,6 +17,7 @@ public class DaedalusLink : ModuleRules
 			"ProceduralMeshComponent",
 			"InputCore",
 			"EnhancedInput",
+			"WebBrowser",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
