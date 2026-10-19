@@ -59,3 +59,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Bloom Buoys (contest G99, quest q_bloom_buoys)
 - `bloom_buoys.py`: DiskSaver Island Bloom filter minigame. A buoy over each reef holds a Bloom filter of the saves below (G86 Compaction Shoals keys, read-only). "Not here" skips a dive; "maybe" costs one. Under a fixed bit budget per key the keeper picks the hash count: about bits x ln 2 keeps wasted dives in budget, while one hash, too many hashes or no buoy flood the reef. Never a false negative (`bloom_buoys_test.py`; CI `Bloom Buoys`). Rules: `docs/islands/DISKSAVER-BLOOM-BUOYS.md`.
+
+## Hash Ring Atolls (contest G105, quest q_hash_ring_atolls)
+- `hash_ring_atolls.py`: DiskSaver Island consistent-hashing minigame. Archive atolls rise and sink through the season; every save belongs to the first atoll marker clockwise from its hash. Each event may ferry only a budget of saves and no atoll may exceed a load cap. Enough virtual markers per atoll wins; one marker per atoll overloads atolls and mod-N re-sharding swamps the ferries. Every save is checked on the right atoll after every event. Keys come from G86 Compaction Shoals (`hash_ring_atolls_test.py`; CI `Hash Ring Atolls`). Rules: `docs/islands/DISKSAVER-HASH-RING-ATOLLS.md`.
