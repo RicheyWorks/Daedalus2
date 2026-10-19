@@ -1,0 +1,8 @@
+{
+  "version": "activity-result/v1",
+  "activityId": "prismheart.pond-fishing",
+  "attemptId": "cast-windmere-7",
+  "subjectKind": "CREATURE",
+  "outcome": "LEARNED",
+  "learned": "reedling"
+}

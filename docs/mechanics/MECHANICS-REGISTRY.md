@@ -105,6 +105,11 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
   evolved forms / inherited genome. Our hooks: `voxel_flora` tree STAGES (Sapling→Ancient) are the maturity track for
   plants; `voxel_eggs` hatch pools + `voxel_creatures` families are the breeding/genome inputs; dragon `spec()` fields
   (element, form, variant) are the evolved-form axes. No XP curve chosen here (owner tuning stays null).
+  Step 3 also has a lesson envelope beside the chalk-trail receipt:
+  `docs/contracts/activity-result-v1/LEARNED-ENVELOPE.md` and
+  `com.daedalus.world.activity.learned`. That `ActivityResultReceipt` credits a creature or plant
+  exactly once when the same attempt is replayed, retried or delivered twice. The wired game is
+  Prismheart pond fishing (`PrismPondFishing`, `data/rpg/prism-fish.json`).
 - **Sky seed Farm** (Ultra, `tools/economy/island_farm.py`, `docs/mechanics/ISLAND-FARMING.md`): sits over the pinned
   Colony Ledger with managed FOOD suppression; no overlap with ledger core — ACKed on the hub.
 

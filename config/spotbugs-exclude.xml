@@ -218,4 +218,14 @@
         <Method name="world"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
+    <!--
+      ActivityResult's compact constructor copies detail into an unmodifiable
+      TreeMap. The record accessor returns that frozen view; SpotBugs only sees
+      Map and cannot tell the wrapper from a live map (same as Ecosystem.DayReport).
+    -->
+    <Match>
+        <Class name="com.daedalus.world.activity.learned.ActivityResult"/>
+        <Method name="detail"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
 </FindBugsFilter>
