@@ -48,7 +48,9 @@ public final class ActivityRouter {
     /**
      * Every landed contest game: the three from {@link #contest} plus G06 egg care, G11 catch, G14 mail route and
      * G16 assembly repair (contest G36), and G17 kennel water, G19 temper forge, G20 ashfall regrowth and
-     * G27 fireline warden (contest G44), and G26 kennel pantry and G40 herb chord garden (contest G55), all with
+     * G27 fireline warden (contest G44), G26 kennel pantry and G40 herb chord garden (contest G55), G52 fog bell,
+     * G60 wind chime, G64 drip cave and G35 squall cup (contest G74), and the Pythagoras ecology games G34 beaver
+     * waters, G43 ark seed vault, G48 bee bloom, G58 trophic cascade and G71 salmon run (contest G83), all with
      * inactive policies.
      */
     public static ActivityRouter contestAll(com.daedalus.world.activity.ActivityMode mode) {
@@ -81,6 +83,16 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(DripCaveAdapter.ACTIVITY_ID, "mastery.rhythm"));
         r.register(new SquallCupAdapter(mode), SquallCupAdapter.Cup.class,
                 AwardPolicy.inactive(SquallCupAdapter.ACTIVITY_ID, "mastery.fishing"));
+        r.register(new BeaverWatersAdapter(mode), BeaverWatersAdapter.Ponds.class,
+                AwardPolicy.inactive(BeaverWatersAdapter.ACTIVITY_ID, "mastery.building"));
+        r.register(new SeedVaultAdapter(mode), SeedVaultAdapter.Voyage.class,
+                AwardPolicy.inactive(SeedVaultAdapter.ACTIVITY_ID, "mastery.seeding"));
+        r.register(new BeeBloomAdapter(mode), BeeBloomAdapter.Season.class,
+                AwardPolicy.inactive(BeeBloomAdapter.ACTIVITY_ID, "mastery.pollination"));
+        r.register(new TrophicCascadeAdapter(mode), TrophicCascadeAdapter.Valley.class,
+                AwardPolicy.inactive(TrophicCascadeAdapter.ACTIVITY_ID, "mastery.hunting"));
+        r.register(new SalmonRunAdapter(mode), SalmonRunAdapter.Run.class,
+                AwardPolicy.inactive(SalmonRunAdapter.ACTIVITY_ID, "mastery.fishing"));
         return r;
     }
 
