@@ -111,3 +111,25 @@ the overlay and the bust risk are kept as measures so an owner-approved policy c
 
 Tie-in: the Keeper teaches the survivors to stake what the odds justify; the companions that kept the tally, read
 the glass and sniffed out the soft lines each earn their G12 credit once per quest, replayable from the G49 journal.
+
+## Receipts hub VIII (contest G115, 2hot2trot): Youtube Master Island story chapters
+
+Registered in `ActivityRouter.contestAll` under inactive `mastery.island-story` policies (points stay an owner
+decision). Read-only on `world.brew.*`; each snapshot's `of(chapter, abandoned)` refuses a chapter still in play.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `RecordHuntAdapter` | G46 Ark Record Hunt, `world.brew.hunt.RecordHunt` (youtube-master) | `brew.ark-record-hunt` | `Hunt.of(hunt, abandoned)` (quest open refused) | found, remaining, days | animal, bird / scouting, foraging, listening |
+| `ChoirStonesAdapter` | G53 Choir Stones, `world.brew.stones.ChoirStones` (youtube-master) | `brew.choir-stones` | `Watch.of(stones, abandoned)` (open with no cut-off night refused) | stones, held_nights, cut_off | animal, bird / listening, hauling, observation |
+| `FirstWeekAdapter` | G62 The First Week Home, `world.brew.week.FirstWeek` (youtube-master) | `brew.first-week-home` | `Week.of(week, abandoned)` (week running refused) | days, health, sick | animal, bird / foraging, carrying, scouting |
+| `RootCellarAdapter` | G73 The Root Cellar, `world.brew.cellar.RootCellar` (youtube-master) | `brew.root-cellar` | `Cellar.of(cellar, abandoned)` (before the Long Dark ends refused) | jars, bad_seals, day | animal, bird / carrying, foraging, guarding |
+| `HomecomingSupperAdapter` | G85 The Homecoming Supper, `world.brew.supper.HomecomingSupper` (youtube-master) | `brew.homecoming-supper` | `Supper.of(supper, abandoned)` (fewer than 3 courses refused) | seated, courses, discontent | animal, bird / companionship, listening, guarding |
+| `ThirteenthSongAdapter` | G94 The Thirteenth Song, `world.brew.song.ThirteenthSong` (youtube-master) | `brew.thirteenth-song` | `Composing.of(song, abandoned)` (not brewed refused) | verses, composed, brewed | animal, bird / listening, singing, companionship |
+
+What completes: three ark records home, every fragment linked through the tremor nights, seven days survived, the
+cellar quest done, a warm supper and the island's thirteenth song brewed. A night that cut a fragment off, a week
+lost to thirst or hunger, a Long Dark ended without the quest, or a supper that left a guest discontent fails.
+
+Tie-in: the goat that nosed herbs into the kettle and the wren that hummed the verses back walked every chapter of
+the shattered-planet homecoming with you; each earns its G12 credit once per chapter run, replayable from the G49
+journal.
