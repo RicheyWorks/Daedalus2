@@ -64,6 +64,7 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 <script src="controllers/daedalus-pad.js"></script>
 <script src="settings/daedalus-settings.js"></script>
 <script src="summons.js"></script>
+<script src="waystones.js"></script>
 <script>
 "use strict";
 (() => {
@@ -361,7 +362,7 @@ const alive = l => l.filter(x => x.hp > 0);
 
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
-const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {}, day: 1, minute: 8 * 60 };
+const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {}, ways: new Set(), day: 1, minute: 8 * 60 };
 /* ---------- time of day ----------
    A day passes in steps: 4 minutes a step on the world map, 2 in towns and villages, 1 in dungeons (no sky there),
    15 a battle. Dawn 5-7, day 7-18, dusk 18-20, night 20-5. The field darkens toward night and lamps glow; at night
@@ -437,6 +438,26 @@ const pretty = n => n.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase();
 const chestKey = (di, fi, x, y) => "dungeon" + di + "/" + fi + ":" + x + "," + y;
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const DIR_ROW = { down: 0, up: 1, left: 2, right: 3 };
+/* ---------- waystones (G10, data.json waystones, rules in waystones.js) ----------
+   Step on a waystone to wake it; from an awake one, travel to any other awake one for a fare in gold and time.
+   Which are awake is saved at the inn as a WAY1 string. */
+const WAYS = () => (typeof PrismWaystones !== "undefined" && D && D.waystones) ? D.waystones : [];
+function waystoneStep() {
+  const w = PrismWaystones.at(WAYS(), P.x, P.y); if (!w) return false;
+  if (PrismWaystones.activate(state.ways, w)) { sfx("BLESS"); toast("WAYSTONE AWAKENED", w.name.toUpperCase()); return say([w.name.toUpperCase() + " WAKES WITH A LOW HUM.", (w.lore || "").toUpperCase()].filter(Boolean)), true; }
+  const ds = PrismWaystones.destinations(WAYS(), state.ways, w.id, D.waystone_fare); if (!ds.length) return false;
+  const offer = i => {                                          /* the dialog asks two-way questions: offer one stop at a time, nearest first */
+    const d = ds[i], last = i === ds.length - 1;
+    ask(w.name.toUpperCase() + " HUMS. TRAVEL TO " + d.name.toUpperCase() + " FOR " + d.gold + " G? (YOU HAVE " + gold + " G)", ["GO", last ? "STAY" : "NEXT"], k => {
+      if (k === 1) return last ? null : offer(i + 1);
+      const t = PrismWaystones.travel(WAYS(), state.ways, w.id, d.id, gold, D.waystone_fare);
+      if (!t.ok) { sfx("LOCKED"); return say(["THE STONE ASKS " + t.need + " GOLD FOR THE CROSSING."]); }
+      gold = t.gold; passTime(t.minutes); sfx("ENTER"); goto(worldMap(), t.to.x, t.to.y, "down"); toast("ARRIVED", t.to.name.toUpperCase());
+    });
+  };
+  offer(0);
+  return true;
+}
 function townMap() {
   const tt = D.town_tiles;
   return { kind: "town", grid: D.town.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
@@ -689,6 +710,7 @@ function stepDone() {
   if (map.kind === "world" && t === "AirshipPad" && !airUnlocked()) {
     sfx("LOCKED"); return say(["AN AIRSHIP DOCK. THE PRISM SKIFF'S ENVELOPE HANGS SLACK.", "IT NEEDS A WARDEN'S SHARD TO LIFT."]);
   }
+  if (map.kind === "world" && waystoneStep()) return;
   if (map.kind === "world") {
     if (t === "Town") { sfx("ENTER"); return goto(townMap(), 11, 16, "up"); }
     if (D.village && t === D.village.landmark) { sfx("ENTER"); const s0 = D.village.spawn; toast(D.village.name.toUpperCase()); return goto(villageMap(), s0.x, s0.y, s0.facing); }
@@ -770,6 +792,8 @@ function drawField() {
     const c = map.grid[y][x];
     if (c !== "Void" && !tileImg(map.key(c), Math.round(ox + x * T), Math.round(oy + y * T))) { g.fillStyle = "#000"; g.fillRect(Math.round(ox + x * T), Math.round(oy + y * T), T, T); }
   }
+  if (map.kind === "world") for (const w of WAYS()) { const wx = Math.round(ox + w.x * T), wy = Math.round(oy + w.y * T), on = state.ways.has(w.id);   /* a small pixel stone drawn in code (G10 needs no new art) */
+    g.fillStyle = "#3a3550"; g.fillRect(wx + 5, wy + 3, 6, 12); g.fillStyle = on ? "#9ff0ff" : "#6a6488"; g.fillRect(wx + 6, wy + 5, 4, 4); }
   if (map.kind === "world") for (const c of D.sky_caches || []) tileImg(opened.has(skyKey(c)) ? "town:ChestOpen" : "town:Chest", Math.round(ox + c.x * T), Math.round(oy + c.y * T));
   const walkF = Math.floor(performance.now() / 260) % 2;
   for (const n of map.npcs) {
@@ -1602,7 +1626,8 @@ function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) 
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
-      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests, day: state.day, minute: state.minute }));
+      air: state.air && { x: state.air.x, y: state.air.y }, fish: state.fish, quests: state.quests, day: state.day, minute: state.minute,
+      ways: typeof PrismWaystones !== "undefined" ? PrismWaystones.encode(WAYS(), state.ways) : undefined }));
     return true;
   } catch (e) { return false; }
 }
@@ -1617,13 +1642,14 @@ function titleChoose(i) {
   if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.ways = new Set(); state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
   if (item === "CONTINUE") {
     const sv = loadSave();
     party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
     state.air = sv.air ? recoverAir(sv.air) : null;                    /* CONTINUE starts on foot at the inn: never strand the skiff */
     if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"), 1400);
     state.fish = sv.fish || {}; state.quests = sv.quests || {};
+    state.ways = typeof PrismWaystones !== "undefined" && sv.ways ? PrismWaystones.decode(WAYS(), sv.ways).awake : new Set();
     state.day = Number.isInteger(sv.day) && sv.day > 0 ? sv.day : 1; state.minute = Number.isInteger(sv.minute) && sv.minute >= 0 && sv.minute < 1440 ? sv.minute : 7 * 60;                    /* CONTINUE starts at the inn, on foot */
     const it = D.interiors.Inn; state.returnTo = null;
     goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
@@ -1840,6 +1866,8 @@ window.PRISM_DEMO = {
   fishing: () => fishing && { phase: fishing.phase, t: fishing.t, msg: fishing.msg, fish: fishing.fish && fishing.fish.name, wait: fishing.wait },
   fishLog: () => Object.assign({}, state.fish),
   quests: () => Object.assign({}, state.quests),
+  waystones: () => WAYS().map(w => Object.assign({ awake: state.ways.has(w.id) }, w)),
+  setGold: n => { gold = n; },
   clock: () => ({ day: state.day, minute: state.minute, phase: phase(), dark: dark(), text: clockText() }),
   setClock: (day, minute) => { state.day = day; state.minute = minute; },
   fishOdds: n => { const c = {}; for (let i = 0; i < n; i++) { const f = pickFish(); c[f.name] = (c[f.name] || 0) + 1; } return c; },
