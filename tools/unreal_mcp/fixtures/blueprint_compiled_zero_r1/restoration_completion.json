@@ -1,0 +1,33 @@
+{
+  "schema": "codex.blueprint-diagnostic-main-restoration.v1",
+  "completed_utc": "2026-10-19T07:02:36.442092+00:00",
+  "stage": "MAIN_RESTORED_PRESERVED",
+  "resource_floor_changed": false,
+  "available_physical_bytes_observed": 4358692864,
+  "required_physical_bytes": 1740800000,
+  "available_commit_bytes_observed": 22198734848,
+  "required_commit_bytes": 2252800000,
+  "first_readonly_proof": "Known terminal and clean; exact disk/world/selection match, viewport startup camera differed",
+  "remaining_only_camera_calls": 1,
+  "camera_readback_exact": true,
+  "other_scene_exact": true,
+  "selection_exact": true,
+  "protected_files": 252,
+  "disk_changes": [],
+  "map_and_config_bytes_exact": true,
+  "world_actor_count": 22878,
+  "world_actor_digest_sha256": "58fe720c0420b8c1a2df2e4d50241871fefe9df9431aa173b36af256e0bc70b4",
+  "dirty_maps": [],
+  "dirty_content": [],
+  "asset_or_map_save_calls": 0,
+  "actor_mutations": 0,
+  "old_failed_proof_replayed": false,
+  "compute_release_verified": true,
+  "native_camera_source_sha256": "2a3709a8e108047091025eb017ac59d5d21ff088b201f22baba85b04944fa12c",
+  "retained_terminal_sha256": "6b5006949e909b4e7de80c7a74be80d354eb52109d6472e49f560cb07a7d00a6",
+  "retained_release_sha256": "25314079f1ab55b548dc3e945fd950fb4c06335089cec26a59eae30c23578a97",
+  "limits": [
+    "World digest covers actor/component records and instance counts, not every instance transform or serialized property.",
+    "Blueprint requested value 37 remains failed; native automation and DataValidation producer remain unqualified."
+  ]
+}

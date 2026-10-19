@@ -46,6 +46,14 @@ The auditor's `McpToolError.data` preserves bounded tool/error text without
 request arguments. A complete error response does not establish rollback or
 safe replay. Transport failure remains an unknown native outcome.
 
+`BlueprintCDODiagnosticTools` is a separately registered disposable-project
+wrapper around the unchanged stock setter. Its read-only context reports the
+CDO/default/world and editor subsystems. Its setter uses the public scoped
+`tool_raising_exceptions` context to retain stage and observed exception type,
+including empty assertions. It keeps the stock permissions, permits only the
+exact owned integer zero-to-37 fixture, and requires reconciliation after any
+failed write. Its 26 mocked checks pass; native qualification is pending.
+
 ## Blueprint fixture
 
 `fixtures/blueprint_compiled_zero_r1` contains the saved diagnostic asset,
@@ -56,15 +64,24 @@ found zero and no setter retry occurred. Full value-editing acceptance remains
 failed. The wrapper's compile return is `null`; its helper enforces strict native
 Blueprint status. The underlying C++ compile API separately returns a boolean.
 
+After the diagnostic run, memory admission recovered and the restored main
+editor's preservation proof found only a startup viewport-camera reset. The
+remaining-only `viewport_preservation.run` callback restored that recorded
+camera once, then independently checked the scene and camera. All 252 protected
+files, map/config bytes, actor digest, and selection matched; no asset or map
+save occurred. `restoration_completion.json` retains the scoped outcome and
+receipt hashes. This callback requires external admission and pinned clean
+before/target snapshots; it never retries a retained intent.
+
 ## Offline verification
 
 From the repository root, use a new report path:
 
 ```text
-python -B -S -E -m tools.unreal_mcp.offline_gate --report NEW_REPORT.json tools.unreal_mcp.test_asset_receipt_audit tools.unreal_mcp.test_automation_result_contract tools.unreal_mcp.test_validation_result_contract tools.unreal_mcp.test_tool_result_errors tools.unreal_mcp.test_delivery_integration
+python -B -S -E -m tools.unreal_mcp.offline_gate --report NEW_REPORT.json tools.unreal_mcp.test_asset_receipt_audit tools.unreal_mcp.test_automation_result_contract tools.unreal_mcp.test_validation_result_contract tools.unreal_mcp.test_tool_result_errors tools.unreal_mcp.test_delivery_integration tools.unreal_mcp.test_blueprint_cdo_diagnostics
 ```
 
 The runner blocks real sockets and Unreal imports. The recorded 2026-10-19 runs
-passed 107 tests with zero skips, failures, or errors, including 130 mutations of
+passed 133 tests with zero skips, failures, or errors, including 130 mutations of
 delivery wire evidence. Measured times and process memory are in
 `fixtures/source_verification_20261019.json`; these are source-test measurements.

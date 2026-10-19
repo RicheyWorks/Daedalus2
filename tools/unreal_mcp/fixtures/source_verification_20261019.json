@@ -28,10 +28,20 @@
       "elapsed_seconds": 0.7163663000028464,
       "peak_working_set_bytes": 28127232,
       "retained_report_sha256": "d10c2100825532f61013392eefa35fe7674a8373549313c3289c5c31ff4c2c66"
+    },
+    {
+      "modules": ["tools.unreal_mcp.test_blueprint_cdo_diagnostics"],
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "elapsed_seconds": 0.009756699997524265,
+      "peak_working_set_bytes": 22544384,
+      "retained_report_sha256": "57f73d22cbd1d41a9b25231116dc475e454ec3b164fb7994567475ed306e6530"
     }
   ],
   "reproduce_from_repository_root": [
-    "python -B -S -E -m tools.unreal_mcp.offline_gate --report NEW_REPORT.json tools.unreal_mcp.test_asset_receipt_audit tools.unreal_mcp.test_automation_result_contract tools.unreal_mcp.test_validation_result_contract tools.unreal_mcp.test_tool_result_errors tools.unreal_mcp.test_delivery_integration"
+    "python -B -S -E -m tools.unreal_mcp.offline_gate --report NEW_REPORT.json tools.unreal_mcp.test_asset_receipt_audit tools.unreal_mcp.test_automation_result_contract tools.unreal_mcp.test_validation_result_contract tools.unreal_mcp.test_tool_result_errors tools.unreal_mcp.test_delivery_integration tools.unreal_mcp.test_blueprint_cdo_diagnostics"
   ],
   "native_requests": 0,
   "qualifies_native_runtime": false,
@@ -39,6 +49,6 @@
     "Source tests do not qualify a native automation execution or DataValidation serializer/callable.",
     "Post-save class/tag/metadata audit does not prove mesh geometry, source units, collision, palette, or disk persistence.",
     "The native Blueprint diagnostic fixture preserves default zero through save and fresh process reopen; requested default 37 remains failed.",
-    "Production editor native preservation proof remains pending its unchanged physical-memory admission floor."
+    "Production editor preservation subsequently passed after memory recovered and one remaining-only recorded camera restoration; see blueprint_compiled_zero_r1/restoration_completion.json."
   ]
 }
