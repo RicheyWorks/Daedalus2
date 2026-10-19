@@ -91,3 +91,23 @@ RESTORED run. Everything else is FAILED, or ABANDONED when the host quits. Count
 Tie-in: the ark creatures that rebuilt the shattered valley (the beaver colony, the seed-caching jays, the hives,
 the wolf pack and the river bears) each earn their G12 credit once per run, and the G49 journal replays it after a
 restart.
+
+## Hub VII (contest G95)
+
+The five landed OddsReaper quests, registered in `ActivityRouter.contestAll` with inactive policies. Each snapshot
+is taken from the quest object; a quest still in progress is refused unless the host abandoned it.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `KeepersLedgerAdapter` | G56 The Keeper's Ledger, `world.odds.ledger.KeepersLedgerQuest` (oddsreaper) | `odds.keepers-ledger` | `Ledger.of(quest, abandoned)` (OPEN refused) | doubled, keepers_mark, balance, wagers, disciplined | animal, bird / counting, observation |
+| `LaunchWindowAdapter` | G68 The Launch Window, `world.odds.launch.LaunchWindowQuest` (oddsreaper) | `odds.launch-window` | `Launch.of(quest, abandoned)` (not SAILED refused) | wise, route, day, expected_souls, best_souls, souls_home | bird, animal / observation, scouting |
+| `RivalBookAdapter` | G77 The Rival Book, `world.odds.rival.RivalBookQuest` (oddsreaper) | `odds.rival-book` | `Scan.of(quest, abandoned)` (SCANNING refused) | exposed, value_lines, found, miscalls, reward | animal, bird / scouting, observation |
+| `ArkUnderwriterAdapter` | G80 The Ark Underwriter, `world.odds.insurance.UnderwriterQuest` (oddsreaper) | `odds.ark-underwriter` | `Season.of(quest, abandoned)` (QUOTING/REJECTED/APPROVED refused) | solvent, close_herbs, shortfall_herbs, bust_risk_pm | animal, bird / counting, guarding |
+| `KeepersToteAdapter` | G88 The Keeper's Tote, `world.odds.tote.ToteQuest` (oddsreaper) | `odds.keepers-tote` | `Heat.of(quest, abandoned)` (BOARD_OPEN/BACKED refused) | won, overlay, pool | animal, bird / observation, counting |
+
+What completes: a DOUBLED ledger, a wise launch (within the Keeper's 98% tolerance of the best expected life,
+whatever sky the dice brought), every soft rival line EXPOSED, a SOLVENT season and a WON heat. The Keeper's Mark,
+the overlay and the bust risk are kept as measures so an owner-approved policy can reward discipline over luck.
+
+Tie-in: the Keeper teaches the survivors to stake what the odds justify; the companions that kept the tally, read
+the glass and sniffed out the soft lines each earn their G12 credit once per quest, replayable from the G49 journal.

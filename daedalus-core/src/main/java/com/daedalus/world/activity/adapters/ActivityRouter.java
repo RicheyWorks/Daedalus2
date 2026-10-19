@@ -50,8 +50,9 @@ public final class ActivityRouter {
      * G16 assembly repair (contest G36), and G17 kennel water, G19 temper forge, G20 ashfall regrowth and
      * G27 fireline warden (contest G44), G26 kennel pantry and G40 herb chord garden (contest G55), G52 fog bell,
      * G60 wind chime, G64 drip cave and G35 squall cup (contest G74), and the Pythagoras ecology games G34 beaver
-     * waters, G43 ark seed vault, G48 bee bloom, G58 trophic cascade and G71 salmon run (contest G83), all with
-     * inactive policies.
+     * waters, G43 ark seed vault, G48 bee bloom, G58 trophic cascade and G71 salmon run (contest G83), and the
+     * OddsReaper quests G56 keeper's ledger, G68 launch window, G77 rival book, G80 ark underwriter and G88 keeper's
+     * tote (contest G95), all with inactive policies.
      */
     public static ActivityRouter contestAll(com.daedalus.world.activity.ActivityMode mode) {
         ActivityRouter r = contest(mode);
@@ -93,6 +94,16 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(TrophicCascadeAdapter.ACTIVITY_ID, "mastery.hunting"));
         r.register(new SalmonRunAdapter(mode), SalmonRunAdapter.Run.class,
                 AwardPolicy.inactive(SalmonRunAdapter.ACTIVITY_ID, "mastery.fishing"));
+        r.register(new KeepersLedgerAdapter(mode), KeepersLedgerAdapter.Ledger.class,
+                AwardPolicy.inactive(KeepersLedgerAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new LaunchWindowAdapter(mode), LaunchWindowAdapter.Launch.class,
+                AwardPolicy.inactive(LaunchWindowAdapter.ACTIVITY_ID, "mastery.forecasting"));
+        r.register(new RivalBookAdapter(mode), RivalBookAdapter.Scan.class,
+                AwardPolicy.inactive(RivalBookAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new ArkUnderwriterAdapter(mode), ArkUnderwriterAdapter.Season.class,
+                AwardPolicy.inactive(ArkUnderwriterAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new KeepersToteAdapter(mode), KeepersToteAdapter.Heat.class,
+                AwardPolicy.inactive(KeepersToteAdapter.ACTIVITY_ID, "mastery.reckoning"));
         return r;
     }
 
