@@ -189,3 +189,23 @@ fewest predator meetings, and naming the right woodpecker.
 Tie-in: the last ark needs a captain, a chart and a crew that survives the wreck, while the regrown forest below
 counts its cicada years and woodpecker rolls. The gull that watched the interviews and the pup that rowed beside you
 each earn their G12 credit once per run, replayable from the G49 journal.
+
+## Receipts hub XII (contest G153, 2hot2trot): Youtube Master Island story chapters 10-13
+
+Registered in `ActivityRouter.contestAll` under inactive `mastery.island-story` policies. Read-only on `world.brew.*`;
+each snapshot is built from the chapter's own quest progress and result, and a chapter still in play is refused
+unless the host abandoned it.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `LettersByArkAdapter` | G97 Letters by Ark, `world.brew.letters.LettersByArk` (youtube-master) | `brew.letters-by-ark` | `Post.of(post, abandoned)` | steps (0-4), landed_good, replies | animal, bird / hauling, companionship, scouting |
+| `SongSchoolAdapter` | G116 The Song School, `world.brew.school.SongSchool` (youtube-master) | `brew.song-school` | `Term.of(school, abandoned)` | graduates, days | animal, bird / listening, singing, companionship |
+| `GraduationConcertAdapter` | G131 The Graduation Concert, `world.brew.concert.GraduationConcert` (youtube-master) | `brew.graduation-concert` | `Evening.of(concert, abandoned)` | cheered, key_changes, best, evenings | animal, bird / listening, singing, companionship |
+| `HarbourRoundAdapter` | G139 The Harbour Round, `world.brew.round.HarbourRound` (youtube-master) | `brew.harbour-round` | `Harbour.of(round, abandoned)` | sweet, harmony_pct (0-100) | animal, bird / listening, singing, companionship |
+
+What completes: the letters quest finished with Dov, three graduates from Old Wick's school, a cheered concert (a
+rough one fails) and a sweet round sung at the harbour.
+
+Tie-in: after the homecoming the island writes to the far islands, teaches their children the thirteen songs, gives
+them a concert and sings them a round as the next ark comes in. The goat that carried the jars and the wren that
+held a voice in the round each earn their G12 credit once per chapter run, replayable from the G49 journal.

@@ -140,6 +140,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(BroodCyclesAdapter.ACTIVITY_ID, "mastery.listening"));
         r.register(new DrumRollAdapter(mode), DrumRollAdapter.Roll.class,
                 AwardPolicy.inactive(DrumRollAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new LettersByArkAdapter(mode), LettersByArkAdapter.Post.class,
+                AwardPolicy.inactive(LettersByArkAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new SongSchoolAdapter(mode), SongSchoolAdapter.Term.class,
+                AwardPolicy.inactive(SongSchoolAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new GraduationConcertAdapter(mode), GraduationConcertAdapter.Evening.class,
+                AwardPolicy.inactive(GraduationConcertAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new HarbourRoundAdapter(mode), HarbourRoundAdapter.Harbour.class,
+                AwardPolicy.inactive(HarbourRoundAdapter.ACTIVITY_ID, "mastery.island-story"));
         return r;
     }
 
