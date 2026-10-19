@@ -31,3 +31,7 @@ Tests: `ForgeCommissionsTest` (11 tests).
 ## Engine
 
 An order-board actor at the forge workbench shows the three pins (patron portrait, weapon, metal, tier, due). Handing a graded piece to the patron calls `Ledger.record` and plays the patron's line. The Unreal binding belongs on UNREAL-QUEUE.md.
+
+## C++ core (G98)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusForgeCommissionsCore.h` ports the board to header-only C++17 with no Unreal types. It contains `CommissionBoard`, `Deliver`, `CommissionLedger`, patron titles and lines, and `Encode` (the CMS 1 order line and the CMD 1 delivery line), and it uses ForgeGradesCore for the `Grade` sheet. `core-test/forge_commissions_core_test.cpp` passes 7 checks under MSVC /W4 /WX and g++ -Werror with ASan/UBSan. Its `--write` plays 100 seeded days into one running ledger and writes `forge_commissions_parity.txt` (300 deliveries, with every verdict represented). `ForgeCommissionsParityTest` replays the same days in Java and compares the two line by line. Java gains `Commission.encode()` and `Delivery.encode()`.
