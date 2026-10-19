@@ -26,7 +26,7 @@ brute-force oracle over the store log; seeded replays are identical.
 
 Reusable pieces:
   validate(cfg) -> Config ; run(config, mode) -> Result
-  drift_bound / local_elapsed / stale_oracle
+  drift_bound / local_elapsed / last_valid_elapsed / fence / stale_oracle
   islands_from_shoals(shoals_cfg)  tie-in: keepers = G86 islands
   npc_say / receipt (G12-style quest receipt)
 """
@@ -147,6 +147,26 @@ def drift_bound(lease: int, drift: int) -> int:
     return lease - local_elapsed(lease, -drift)
 
 
+def fence(writes: List[Write], fenced: bool) -> List[Tuple[Write, bool]]:
+    """Harbour store in landing order: with fencing, reject a token below the highest accepted."""
+    log: List[Tuple[Write, bool]] = []
+    hi = 0
+    for w in writes:
+        ok = not (fenced and w.token < hi)
+        if ok:
+            hi = max(hi, w.token)
+        log.append((w, ok))
+    return log
+
+
+def last_valid_elapsed(lease: int, drift: int, guard: int) -> int:
+    """Largest true elapsed tick at which a keeper with clock drift -drift still thinks its lease holds."""
+    e = 0
+    while local_elapsed(e + 1, -drift) < lease - guard:
+        e += 1
+    return e
+
+
 def stale_oracle(log: List[Tuple[Write, bool]]) -> int:
     """Brute force: accepted writes with some earlier accepted write of a higher token."""
     acc = [w for w, ok in log if ok]
@@ -182,13 +202,7 @@ def run(c: Config, mode: Optional[str] = None) -> Result:
             if w.land >= s + c.lease:
                 outside += 1
     writes.sort(key=lambda w: (w.land, w.checked, w.token))
-    log: List[Tuple[Write, bool]] = []
-    hi = 0
-    for w in writes:
-        ok = not (mode == "fenced" and w.token < hi)
-        if ok:
-            hi = max(hi, w.token)
-        log.append((w, ok))
+    log = fence(writes, mode == "fenced")
     stale = stale_oracle(log) if mode != "fenced" else 0
     acc = sum(1 for _, ok in log if ok)
     status = WON if stale == 0 else FAILED

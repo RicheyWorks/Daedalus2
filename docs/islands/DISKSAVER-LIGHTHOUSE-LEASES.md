@@ -24,6 +24,8 @@ Win: the store never accepts a stale write. Fail reason `stale_write_accepted`.
 ## Science (pinned in `lighthouse_leases_test.py`)
 - `drift_bound(L, d) = L - floor(L*(1000-d)/1000)` is the smallest safe guard (equals brute force).
 - With no pauses and `guard >= drift_bound`, zero writes land outside the lease.
+- Guard exactly at `drift_bound` stays inside the lease; one tick under overruns it.
+- A restarted keeper replaying an old token is rejected; the current keeper reusing its own epoch token is accepted.
 - Fencing rejects exactly the stale writes the guard alone accepts; accepted tokens never go down.
 - Stale count equals a brute-force oracle over the store log; seeded replays are identical.
 

@@ -75,6 +75,29 @@ class TestLighthouseLeases(unittest.TestCase):
         self.assertGreater(g, 0)
         self.assertGreater(overruns, 0)
 
+    def test_guard_exactly_at_bound_vs_one_tick_under(self):
+        for lease in (7, 20, 64):
+            for d in (50, 150, 333):
+                g = ll.drift_bound(lease, d)
+                self.assertLess(ll.last_valid_elapsed(lease, d, g), lease, (lease, d))
+                self.assertGreaterEqual(ll.last_valid_elapsed(lease, d, g - 1), lease, (lease, d))
+        c = cfg(pause_permille=0)
+        g = ll.drift_bound(c.lease, c.max_drift_permille)
+        self.assertEqual(g, 3)  # shipped lease 20, drift 150
+
+    def test_token_reuse_after_leader_restart(self):
+        W = ll.Write
+        old, new = W(10, 1, 0, 9), W(21, 2, 1, 21)
+        # the old keeper restarts and replays its remembered token 1 after epoch 2 wrote
+        replay = W(25, 1, 0, 25)
+        log = ll.fence([old, new, replay], True)
+        self.assertEqual([ok for _, ok in log], [True, True, False])
+        self.assertEqual(ll.stale_oracle(ll.fence([old, new, replay], False)), 1)
+        # the current keeper restarting inside its own epoch reuses token 2 and is still accepted
+        log = ll.fence([old, new, W(26, 2, 1, 26)], True)
+        self.assertEqual([ok for _, ok in log], [True, True, True])
+        self.assertEqual(ll.stale_oracle(log), 0)
+
     def test_perfect_clocks_naive_wins(self):
         for s in SEEDS:
             r = ll.run(cfg(s, pause_permille=0, max_drift_permille=0), "naive")
