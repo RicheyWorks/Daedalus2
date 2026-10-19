@@ -1,0 +1,502 @@
+[
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S1",
+  "kind": "prop",
+  "size": "~0.42 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S2",
+  "kind": "prop",
+  "size": "~0.59 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S3",
+  "kind": "prop",
+  "size": "~0.76 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S4",
+  "kind": "prop",
+  "size": "~0.93 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Calf",
+  "kind": "mob",
+  "size": "~0.83 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Adult",
+  "kind": "mob",
+  "size": "~1.50 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Elder",
+  "kind": "mob",
+  "size": "~1.72 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Calf",
+  "kind": "mob",
+  "size": "~0.55 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Adult",
+  "kind": "mob",
+  "size": "~1.00 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Elder",
+  "kind": "mob",
+  "size": "~1.15 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Calf",
+  "kind": "mob",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Adult",
+  "kind": "mob",
+  "size": "~0.45 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Elder",
+  "kind": "mob",
+  "size": "~0.52 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Calf",
+  "kind": "mob",
+  "size": "~0.44 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Adult",
+  "kind": "mob",
+  "size": "~0.80 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Elder",
+  "kind": "mob",
+  "size": "~0.92 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Calf",
+  "kind": "mob",
+  "size": "~0.52 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Adult",
+  "kind": "mob",
+  "size": "~0.95 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Elder",
+  "kind": "mob",
+  "size": "~1.09 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Calf",
+  "kind": "mob",
+  "size": "~0.22 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Adult",
+  "kind": "mob",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Elder",
+  "kind": "mob",
+  "size": "~0.46 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Calf",
+  "kind": "mob",
+  "size": "~0.99 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Adult",
+  "kind": "mob",
+  "size": "~1.80 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Elder",
+  "kind": "mob",
+  "size": "~2.07 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Calf",
+  "kind": "mob",
+  "size": "~0.88 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Adult",
+  "kind": "mob",
+  "size": "~1.60 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Elder",
+  "kind": "mob",
+  "size": "~1.84 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Well_V1",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Well_V2",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Spring_V1",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Spring_V2",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Cistern_V1",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Cistern_V2",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_RainBarrel_V1",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_RainBarrel_V2",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_HandPump_V1",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_HandPump_V2",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Fountain_V1",
+  "kind": "prop",
+  "size": "~1.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Fountain_V2",
+  "kind": "prop",
+  "size": "~1.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Filter_V1",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Filter_V2",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Boiler_V1",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Boiler_V2",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Aqueduct_V1",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Aqueduct_V2",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Pool_V1",
+  "kind": "prop",
+  "size": "~0.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Pool_V2",
+  "kind": "prop",
+  "size": "~0.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Brewbench",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Stove",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Smelter",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Mill",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Churn",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Press",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Loom",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Smokehouse",
+  "kind": "prop",
+  "size": "~1.4 m"
+ }
+]
