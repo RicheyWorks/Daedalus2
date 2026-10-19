@@ -13,10 +13,10 @@
   const SHARD_CHORD = { Fire: [0, 7, 12], Tide: [3, 7, 10], Gale: [5, 10, 15], Stone: [0, 5, 10], Light: [7, 12, 15], Shade: [0, 3, 7] };
   const hzOf = s => Math.round(ROOT_HZ * Math.pow(2, s / 12) * 1000) / 1000;
 
-  /* Realm guard: spirits belong to the Prismheart realm only. realm = data.json "realm" (e.g. "Prismheart")
-     or a build id ("prism"); a missing realm means the default Prism build. Any other realm (Portal...) gets none. */
+  /* Realm guard: spirits belong to the Prism realm only. realm = data.json "realm_key", the stable build id
+     ("prism" | "portal"); a missing key means the default Prism build. Any other key (portal...) gets none. */
   function realmAllowed(realm) {
-    return realm === undefined || realm === null || realm === "" || /^prism/i.test(String(realm));
+    return realm === undefined || realm === null || realm === "" || realm === "prism";
   }
   /* bosses: prism-bosses.json entries (or the demo's dungeon boss_data). Returns spirits in data order. */
   function table(bosses, realm) {
