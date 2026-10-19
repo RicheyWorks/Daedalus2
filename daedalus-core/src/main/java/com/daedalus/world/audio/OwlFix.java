@@ -8,7 +8,9 @@ import java.util.List;
  * Owl Fix (contest G150): the owl is back, so the regrown woods have prey again.
  *
  * <p>A great horned owl hoots from one cell of a {@link #GRID} x {@link #GRID} patch of woods
- * ({@link #CELL_M} m cells). Four listening posts at the corners hear the hoot at slightly different times\n * (four, not three: three posts give only two time differences for (x, y), and the hyperbolas can cross twice,\n * a mirror solution).
+ * ({@link #CELL_M} m cells). Four listening posts at the corners hear the hoot at slightly different times
+ * (four, not three: three posts give only two time differences for (x, y), and the hyperbolas can cross twice,
+ * a mirror solution).
  * The player is given the arrival-time differences relative to post 0 and picks the owl's cell.
  * {@link #solve()} checks every cell and keeps the one whose predicted time differences best fit the heard
  * ones (least squares; ties keep the first cell in row-major order, so it is deterministic). The judge
