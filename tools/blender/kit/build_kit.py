@@ -175,4 +175,5 @@ def main():
         print("KITJSON " + json.dumps({"asset": name, "ok": rep["ok"], "tris": got["triangles"], "lod1": rep.get("lod1", {}).get("triangles"), "match": rep["match"]}), flush=True)
 
 
-main()
+if __name__ == "__main__":
+    main()
