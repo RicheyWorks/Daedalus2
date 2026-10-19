@@ -28,3 +28,7 @@ The four parts are water running (30), pens producing (30 × pens full / 6), her
 ## Host and engine
 
 The host holds one `Quest` per player and applies events from validated interactions: drink at a water actor, a trough fill, the quench tub, the drydock plate rack. All outcomes are enums, so an Unreal widget can map them to keeper barks without string matching. Editor work isn't needed for the core. A quest-log widget would go on UNREAL-QUEUE.md.
+
+## C++ core (G51)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusForgeTemperQuestCore.h` ports the quest to header-only C++17 with no Unreal types. It contains `ForgeTemperQuest`, `QuestStep`, `QuestOutcome`, `QuestKeeperLine` and `Encode` (the FTQ 1 line), and it uses DaedalusArkDrydockCore.h for the pen needs and TemperForgeCore for plates. `core-test/forge_temper_quest_core_test.cpp` passes 10 checks under MSVC /W4 /WX and g++ -Werror with ASan/UBSan. Its `--write` plays 100 seeded scripts of 60 events each into `forge_temper_quest_parity.txt`. The events are drinks, pens, beds, tonics, plates forged through Judge(IdealRun) and shift bells. `ForgeTemperQuestParityTest` replays the same scripts in Java and compares the two line by line. Java gains `Quest.encode()`.

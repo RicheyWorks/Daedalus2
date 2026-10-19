@@ -207,6 +207,16 @@ public final class ForgeTemperQuest {
         public int shifts() {
             return shifts;
         }
+
+        /** One-line FTQ 1 summary, the same text as Encode() in DaedalusForgeTemperQuestCore.h. */
+        public String encode() {
+            StringBuilder flags = new StringBuilder();
+            for (Step s : Step.values()) {
+                flags.append(done.contains(s) ? '1' : '0');
+            }
+            return "FTQ 1 " + current() + " glow=" + glow() + " tonic=" + (tonic.isEmpty() ? "-" : tonic) + " shifts=" + shifts
+                    + " done=" + flags;
+        }
     }
 
     private ForgeTemperQuest() {
