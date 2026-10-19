@@ -148,6 +148,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(GraduationConcertAdapter.ACTIVITY_ID, "mastery.island-story"));
         r.register(new HarbourRoundAdapter(mode), HarbourRoundAdapter.Harbour.class,
                 AwardPolicy.inactive(HarbourRoundAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new SalvageLockersAdapter(mode), SalvageLockersAdapter.Salvage.class,
+                AwardPolicy.inactive(SalvageLockersAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new BuzzGardenAdapter(mode), BuzzGardenAdapter.Garden.class,
+                AwardPolicy.inactive(BuzzGardenAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new OwlFixAdapter(mode), OwlFixAdapter.Fix.class,
+                AwardPolicy.inactive(OwlFixAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new SquirrelsWinterAdapter(mode), SquirrelsWinterAdapter.Hoard.class,
+                AwardPolicy.inactive(SquirrelsWinterAdapter.ACTIVITY_ID, "mastery.observation"));
         return r;
     }
 
