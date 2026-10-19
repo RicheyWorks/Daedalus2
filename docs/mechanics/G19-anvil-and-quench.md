@@ -45,3 +45,11 @@ Wood, stone and obsidian are shaped, not tempered (`forgeable` is false).
 - Add an anvil beat cue and a strike input.
 - Add a quench tub with magma, spring and dual dips.
 - Show the result and the ForgeGrades sheet in the HUD, and play an ark-plate stamp effect.
+
+## Native C++ core (G30)
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusTemperForgeCore.h` is a header-only, plain C++17 port with no Unreal types: `MakeBlank`, `Judge`, `IdealRun` and `Encode` (the TFG 1 line). It includes an exact port of `java.util.SplittableRandom` (`SplitRng`), so a seed gives the same blank in Java and in Unreal. It returns `false` wherever the Java side throws. It reuses `DaedalusForgeGradesCore.h` for tier names.
+
+- Test: `engines/unreal/core-test/temper_forge_core_test.cpp` passes 7/7, built with MSVC `/std:c++17 /W4 /WX` and with g++ `-Wall -Wextra -Werror -fsanitize=address,undefined`.
+- Regenerate the parity file by running the test with `--write` from `core-test`.
+- Parity: `temper_forge_parity.txt` has 3,000 lines (5 metals, seeds 0-19, 3 quenches, 10 run variants: ideal, strike shifts +40/+75/+110/+150/+300 ms, early pull, late quench, overwork, cold strike). The MSVC and g++ outputs are identical.
+- `TemperForgeParityTest.java` checks Java against the parity file line by line.

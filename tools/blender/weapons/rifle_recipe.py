@@ -82,6 +82,9 @@ def recipe(seed=DEFAULT_SEED):
     for q in p:
         q["centre"] = [round(q["centre"][k] - off[k], 4) for k in range(3)]
     socks = [{"name": "SOCKET_" + n, "location": [round(sockets[n][k] - off[k], 4) for k in range(3)], "forward": [0, -1, 0]} for n in SPEC["sockets"]]
+    for s in socks:   # held-prop attach sockets (UEB 48793/48810): sidecar +X along the barrel (Blender -Y), +Z up; Magazine stays plain
+        if s["name"] in ("SOCKET_Muzzle", "SOCKET_Grip", "SOCKET_Sight"):
+            s["attach"] = {"barrel": [0, -1, 0], "up": [0, 0, 1]}
     return {"asset": ASSET, "seed": seed, "parts": p, "sockets": socks}
 
 

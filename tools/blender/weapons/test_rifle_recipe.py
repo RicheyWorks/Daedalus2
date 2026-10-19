@@ -31,6 +31,11 @@ for s in range(200):
 check("200 seeds: <= 40000 tris (worst %d), 4 sockets inside bounds, bottom-centre origin, 0.6-1.2 m long" % worst, all_ok)
 mz = {k["name"]: k["location"] for k in a["sockets"]}
 check("muzzle is the front-most socket (front = -Y)", mz["SOCKET_Muzzle"][1] == min(v[1] for v in mz.values()))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+import sockets_sidecar as SS
+att = {k["name"]: SS.matrix_to_rotator(SS.desired_frame(k)) for k in a["sockets"]}
+check("attach sockets Muzzle/Sight/Grip +X along the barrel (UE [0, 90, 0]), Magazine plain [0, 0, 0] (UEB 48810)",
+      att == {"SOCKET_Muzzle": [0.0, 90.0, 0.0], "SOCKET_Sight": [0.0, 90.0, 0.0], "SOCKET_Grip": [0.0, 90.0, 0.0], "SOCKET_Magazine": [0.0, 0.0, 0.0]})
 check("triangle formulas: box 44, 16-segment cylinder 60", R.BOX_TRIS == 44 and R.cyl_tris(16) == 60)
 check("glTF +Y-up mapping (x, y, z) -> (x, z, -y)", R.to_gltf([1, 2, 3]) == [1, 3, -2])
 check("1 to 3 material slots, every part uses one of them", 1 <= len(R.MATERIALS) <= 3 and all(0 <= q["slot"] < len(R.MATERIALS) for q in a["parts"]))

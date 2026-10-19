@@ -22,6 +22,9 @@ from collections import deque
 
 from PIL import Image
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import waystones  # noqa: E402  (G10: places the Prismheart waystones; rules in waystones.js)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 REALM = "prism"
@@ -279,6 +282,13 @@ def main(argv):
                   "loops": {c: round(v["loop_end"] / juke.get("sample_rate", 32000), 4) for c, v in juke["cues"].items() if v.get("loop") and c in cue_files}},
         "reach_check": reach,
     }
+    ws = J("prism-waystones.json")                     # G10 waystones: placed next to their landmarks, reachable on foot
+    try:
+        data["waystones"] = waystones.place(world, walk, ws["waystones"], {t["tile"] for t in wm["tiles"] if t["realm"] == REALM and t.get("kind") == "landmark"},
+                                            avoid=[(c["x"], c["y"]) for c in sky_caches])
+    except ValueError as e:
+        raise SystemExit("prism-waystones.json: %s" % e)
+    data["waystone_fare"] = ws["fare"]
     for f in fish:                                     # every fish is an item too: eat it from ITEM
         data["gear"][f["name"]] = {"name": f["name"], "effect": f["effect"], "price": f["price"], "fish": True}
     missing = [c["item"] for c in data["sky_caches"] if c["item"] not in data["gear"]]
@@ -288,6 +298,7 @@ def main(argv):
         json.dump(data, f, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))
     shutil.copy(os.path.join(HERE, "summons.js"), os.path.join(out, "summons.js"))     # PRISM03 summon spirit rules
+    shutil.copy(os.path.join(HERE, "waystones.js"), os.path.join(out, "waystones.js"))
     ctl = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "controllers")   # the shared controller module
     os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
     for f in ("daedalus-pad.js", "controller-bundle.json"):

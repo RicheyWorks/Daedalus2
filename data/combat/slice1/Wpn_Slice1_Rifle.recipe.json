@@ -3,7 +3,7 @@
  "asset": "Wpn_Slice1_Rifle",
  "status": "SOURCE-ONLY: recipe staged, not built, not exported, not READY",
  "seed": 1101,
- "recipe_sha256": "4e9026546ae39a05472af825e740d20e0289b247bd1636a747182ef2a1030e28",
+ "recipe_sha256": "a6c78b0a4d1a3a80e0ad9aa3e30d00ccc20c8f0bcd70bb62a81623d5a120c551",
  "spec": {
   "file": "connectors/claude-asset-pipeline/specs/combat-slice-1.json",
   "max_triangles": 40000,
@@ -399,6 +399,18 @@
     -1,
     0
    ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
    "location_gltf": [
     0.0,
     0.229,
@@ -417,6 +429,18 @@
     -1,
     0
    ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
    "location_gltf": [
     0.0,
     0.099,
@@ -435,6 +459,18 @@
     -1,
     0
    ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
    "location_gltf": [
     0.0,
     0.329,
