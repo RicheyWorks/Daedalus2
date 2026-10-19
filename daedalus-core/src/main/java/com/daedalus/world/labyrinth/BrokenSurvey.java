@@ -9,8 +9,8 @@ import com.daedalus.solver.solvers.BfsSolver;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
+import java.util.SplittableRandom;
 
 /** LAB04: compare damaged archive surveys, then verify the route in the real maze. */
 public final class BrokenSurvey {
@@ -45,7 +45,7 @@ public final class BrokenSurvey {
         List<Passage> edges = edges(truth);
         // Distinct route edges ensure both surveys are wrong, different, and
         // individually unsolvable in the perfect maze. Noise never carves truth.
-        Random noise = new Random(seed ^ 0x42524F4B454EL);
+        SplittableRandom noise = new SplittableRandom(seed ^ 0x42524F4B454EL);
         int one = noise.nextInt(solution.size() - 1);
         int two = (one + 1 + noise.nextInt(solution.size() - 2)) % (solution.size() - 1);
         first = damaged(edges, solution.get(one), solution.get(one + 1));
