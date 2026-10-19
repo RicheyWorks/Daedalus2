@@ -94,7 +94,7 @@ def build(m, lod, mats):
     piv = {o["name"]: o["pivot"] for o in m["objects"]}
     obs = {}
     for o in m["objects"]:
-        parts = [p for p in o["parts"] if not (lod and p.get("lod1", {}).get("drop"))]
+        parts = [p for p in o["parts"] if K.in_lod(p, lod)]
         used = sorted({p["slot"] for p in parts}); remap = {s: i for i, s in enumerate(used)}
         bm = bmesh.new()
         for p in parts:

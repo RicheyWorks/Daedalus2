@@ -45,6 +45,12 @@ def lathe(name, profile, centre, slot, segments=16, cap_bottom=True, cap_top=Tru
     return p
 
 
+def in_lod(p, lod):
+    """lod1={"drop": True} parts are LOD0 only; lod1={"only": True} parts are LOD1 only (a simpler stand-in)."""
+    l1 = p.get("lod1", {})
+    return not l1.get("drop") if lod else not l1.get("only")
+
+
 def part_tris(p, lod=0):
     seg = p.get("segments")
     if lod and p.get("lod1", {}).get("segments"):
@@ -100,7 +106,7 @@ def part_points(p, lod=0):
 
 
 def bounds(parts, lod=0):
-    pts = [q for p in parts if not (lod and p.get("lod1", {}).get("drop")) for q in part_points(p, lod)]
+    pts = [q for p in parts if in_lod(p, lod) for q in part_points(p, lod)]
     lo = [round(min(q[i] for q in pts), 4) for i in range(3)]; hi = [round(max(q[i] for q in pts), 4) for i in range(3)]
     return lo, hi
 
@@ -140,11 +146,11 @@ def finish(m):
     parts = [p for o in m["objects"] for p in o["parts"]]
     lo, hi = bounds(parts)
     lo1, hi1 = bounds(parts, lod=1)
-    t0 = sum(part_tris(p) for p in parts)
-    t1 = sum(part_tris(p, 1) for p in parts if not p.get("lod1", {}).get("drop"))
+    t0 = sum(part_tris(p) for p in parts if in_lod(p, 0))
+    t1 = sum(part_tris(p, 1) for p in parts if in_lod(p, 1))
     m["predicted"] = {"triangles": t0, "lod1_triangles": t1 if m.get("lod1", True) else None,
                       "lod1_ratio": round(t1 / t0, 3) if m.get("lod1", True) else None,
-                      "objects": {o["name"]: sum(part_tris(p) for p in o["parts"]) for o in m["objects"]},
+                      "objects": {o["name"]: sum(part_tris(p) for p in o["parts"] if in_lod(p, 0)) for o in m["objects"]},
                       "bounds_min": lo, "bounds_max": hi, "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)],
                       "collision_tris": sum(c["tris"] for c in m.get("collision", []))}
     m.setdefault("schema", SCHEMA); m.setdefault("axes", AXES); m.setdefault("status", "STAGED NOT READY")
@@ -172,7 +178,10 @@ def check_asset(m, cap):
     p = m["predicted"]; out = []
     out.append(("%s tris %d <= %d" % (m["asset"], p["triangles"], cap), p["triangles"] <= cap, p["triangles"]))
     out.append(("%s stands on z=0" % m["asset"], abs(p["bounds_min"][2]) < 1e-6, p["bounds_min"][2]))
-    out.append(("%s centred x/y (5 cm)" % m["asset"], abs(p["bounds_min"][0] + p["bounds_max"][0]) / 2 < 0.05 and abs(p["bounds_min"][1] + p["bounds_max"][1]) / 2 < 0.05, p["bounds_min"]))
+    if m.get("off_centre_ok"):   # e.g. a gate state whose leaves swing open: pivot stays the closed asset's bottom centre
+        out.append(("%s off-centre by design: %s" % (m["asset"], m["off_centre_ok"]), True, p["bounds_min"]))
+    else:
+        out.append(("%s centred x/y (5 cm)" % m["asset"], abs(p["bounds_min"][0] + p["bounds_max"][0]) / 2 < 0.05 and abs(p["bounds_min"][1] + p["bounds_max"][1]) / 2 < 0.05, p["bounds_min"]))
     slots = {o["name"]: sorted({q["slot"] for q in o["parts"]}) for o in m["objects"]}
     out.append(("%s 1-3 slots per object, all defined" % m["asset"], all(1 <= len(s) <= 3 and all(x < len(m["materials"]) for x in s) for s in slots.values()), slots))
     names = [o["name"] for o in m["objects"]] + [s["name"] for s in m["sockets"]] + [c["name"] for c in m.get("collision", [])]
