@@ -5,7 +5,9 @@
 // trough pattern in DaedalusTonic.cpp). Checked by engines/unreal/core-test/brew_melody_core_test.cpp against
 // the contract's http-cases.json.
 #pragma once
+#include <cerrno>
 #include <cstdint>
+#include <cstdlib>
 #include <cstdio>
 #include <map>
 #include <memory>
@@ -112,7 +114,16 @@ struct Reader
 		{
 			const size_t S = I;
 			while (I < T.size() && (T[I] == '-' || T[I] == '+' || T[I] == '.' || T[I] == 'e' || T[I] == 'E' || (T[I] >= '0' && T[I] <= '9'))) ++I;
-			if (I > S) { V.K = Json::Kind::Number; V.N = std::stod(T.substr(S, I - S)); Ok = true; }
+			if (I > S)
+			{
+				// strtod, not std::stod: exceptions are off in Unreal targets (preflight P8). Same refusals: the whole token must
+				// parse and must not overflow/underflow (std::stod threw out_of_range on ERANGE).
+				const std::string Num = T.substr(S, I - S);
+				char* End = nullptr;
+				errno = 0;
+				const double D = std::strtod(Num.c_str(), &End);
+				if (End == Num.c_str() + Num.size() && errno != ERANGE) { V.K = Json::Kind::Number; V.N = D; Ok = true; }
+			}
 		}
 		--Depth;
 		return Ok;
@@ -124,7 +135,7 @@ inline bool ParseJson(const std::string& Text, Json& Out)
 {
 	if (Text.size() > static_cast<size_t>(MaxBody)) return false;
 	Reader R(Text);
-	try { if (!R.Value(Out)) return false; } catch (...) { return false; }
+	if (!R.Value(Out)) return false;
 	R.Ws();
 	return R.I == Text.size();
 }
