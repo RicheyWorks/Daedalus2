@@ -17,11 +17,13 @@ namespace daedalus { namespace brewmelody {
 inline const char* Route() { return "/api/v1/brew/melody"; }
 constexpr int MinHerbs = 3, MaxHerbs = 5, MinStage = 1, MaxStage = 4, DefaultStage = 3, MaxRecords = 64, MaxBody = 64 * 1024;
 
-/** The island's seven herbs (PitchTable.ISLAND_CANON: do re mi fa sol la ti). */
+/** PitchTable.ISLAND_CANON: the twelve chromatic island herbs, matched case-insensitively like pitchOf (the server's 400 rule). */
 inline bool KnownHerb(const std::string& H)
 {
-	static const char* const N[] = { "Doleaf", "Rebell", "Mimint", "Fasage", "Solthorn", "Lavine", "Tisquill" };
-	for (const char* K : N) if (H == K) return true;
+	static const char* const N[] = { "doleaf", "sharpcress", "rebell", "flatfern", "mimint", "fasage", "hushmoss", "solthorn", "gloryroot", "lavine", "dronebloom", "tisquill" };
+	std::string L = H;
+	for (char& C : L) if (C >= 'A' && C <= 'Z') C = static_cast<char>(C - 'A' + 'a');
+	for (const char* K : N) if (L == K) return true;
 	return false;
 }
 

@@ -32,3 +32,9 @@ Tests: `RivetLineTest` (9 tests).
 ## Engine
 
 A rivet tray actor at the drydock slip: rivets glow up on their own schedule, the player sets each one with a dolly and strikes it, and the seam lights up when its fourth rivet seats. The Unreal binding belongs on UNREAL-QUEUE.md.
+
+## Native C++ core (G112)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRivetLineCore.h` is a header-only C++17 port for the Unreal binding: `MakeRivetTray`, `SeatRivet`, `JudgeRivets`, `RivetMaster` and `Encode`. It includes `DaedalusArkDrydockCore.h`, so `RivetResult::RivetsPerSeam` goes straight into `Ark::Rivets`. `RivetLine.encode(ArkClass, Result)` in Java gives the same `RVL 1` line (seats as T tight, N snug, L loose, X spoiled).
+
+`engines/unreal/core-test/rivet_line_core_test.cpp` runs 7 checks (MSVC `/W4 /WX`, g++ `-Werror` with ASan/UBSan). `--write` writes `rivet_line_parity.txt`: 3 ark classes x seeds 0..39 x 3 hands (master, eager, sloppy), 360 lines. `RivetLineParityTest` replays the same hands in Java and matches the file line for line.
