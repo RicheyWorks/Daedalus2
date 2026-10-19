@@ -50,6 +50,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test && ./kennel_muster_core_test kennel_muster_parity.txt
       - name: Kennel Isle muster core, clang (G128)
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test_clang && ./kennel_muster_core_test_clang kennel_muster_parity.txt
+      - name: Kennel Isle voyage + landfall core (G154 DaedalusKennelVoyageCore.h replays the Java G140/G147 parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test && ./kennel_voyage_core_test kennel_voyage_parity.txt
+      - name: Kennel Isle voyage + landfall core, clang (G154)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test_clang && ./kennel_voyage_core_test_clang kennel_voyage_parity.txt
       - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
         run: |
           cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h

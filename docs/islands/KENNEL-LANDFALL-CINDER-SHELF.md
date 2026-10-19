@@ -47,3 +47,10 @@ Each plank mends 1 hull, up to 10. Water drops by 1 a day. At most 5 days.
 
 Cinder Shelf beach set, a growing plank pile and hull bar, rescued-animal props boarding the ark, and a day-by-day
 replay of the server's landfall. Rescued animals are good candidates for G12 creature receipts.
+
+## C++ twin (G154)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusKennelVoyageCore.h` replays the roll-driven rules
+(`KennelArkVoyage.crossRolls`, `KennelArkLandfall.repairRolls`) from server rolls. `KennelVoyageParityFixtureTest` writes the
+LCG parity table `engines/unreal/core-test/kennel_voyage_parity.txt` (300 crossings, 300 repair runs) and
+`core-test/kennel_voyage_core_test.cpp` replays it under gcc (ASan/UBSan) and clang with `-Werror`.

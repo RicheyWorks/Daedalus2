@@ -73,13 +73,28 @@ public final class KennelArkVoyage {
             throw new IllegalArgumentException("a crossing has a roster and at most " + LEGS + " legs");
         }
         SplittableRandom r = new SplittableRandom(seed);
+        int[] rolls = new int[troubles.size()];
+        for (int i = 0; i < rolls.length; i++) {
+            rolls[i] = r.nextInt(100);
+        }
+        return crossRolls(roster, troubles, rolls);
+    }
+
+    /**
+     * The roll-driven rule behind {@link #cross}: one roll 0..99 per trouble, answered when below the post's odds. The
+     * C++ twin {@code DaedalusKennelVoyageCore.h} (G154) replays exactly this from server rolls.
+     */
+    public static Voyage crossRolls(KennelArkMuster.Roster roster, List<Trouble> troubles, int[] rolls) {
+        if (roster == null || troubles == null || troubles.size() > LEGS || rolls == null || rolls.length < troubles.size()) {
+            throw new IllegalArgumentException("a crossing has a roster, at most " + LEGS + " legs and one roll per leg");
+        }
         int hull = START_HULL;
         int water = START_WATER;
         List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < troubles.size(); i++) {
             Trouble t = troubles.get(i);
             KennelArkMuster.Post post = roster.posts().stream().filter(p -> p.role().equals(t.role())).findFirst().orElse(null);
-            int roll = r.nextInt(100);
+            int roll = rolls[i];
             boolean answered = post != null && roll < post.pct();
             if (!answered) {
                 hull = Math.max(0, hull - t.hullToll());

@@ -22,6 +22,7 @@ public final class KennelArkLandfall {
     public static final int FETCH_PLANKS = 2;
     public static final int HAUL_PLANKS = 1;
     public static final int STRANDED_COUNT = 3;
+    public static final int ROLLS_PER_DAY = 3;
     /** Animals that can be found stranded on the shelf. */
     public static final List<String> STRANDED = List.of("sky-crane", "salt goat", "ember fox", "reef otter", "cinder hare",
         "ark cat");
@@ -74,16 +75,34 @@ public final class KennelArkLandfall {
             throw new IllegalArgumentException("landfall needs a roster, stranded list, hull 1.." + HULL_FULL
                 + " and water 1.." + KennelArkVoyage.START_WATER);
         }
+        SplittableRandom r = new SplittableRandom(seed);
+        int[] rolls = new int[ROLLS_PER_DAY * DAYS];
+        for (int i = 0; i < rolls.length; i++) {
+            rolls[i] = r.nextInt(100);
+        }
+        return repairRolls(roster, hull, water, stranded, rolls);
+    }
+
+    /**
+     * The roll-driven rule behind {@link #repair}: {@link #ROLLS_PER_DAY} rolls 0..99 per day (fetch, haul, rescue). The
+     * C++ twin {@code DaedalusKennelVoyageCore.h} (G154) replays exactly this from server rolls.
+     */
+    public static Landfall repairRolls(KennelArkMuster.Roster roster, int hull, int water, List<String> stranded, int[] rolls) {
+        if (roster == null || stranded == null || hull < 1 || hull > HULL_FULL || water < 1
+            || water > KennelArkVoyage.START_WATER || rolls == null || rolls.length < ROLLS_PER_DAY * DAYS) {
+            throw new IllegalArgumentException("landfall needs a roster, stranded list, hull 1.." + HULL_FULL
+                + ", water 1.." + KennelArkVoyage.START_WATER + " and " + ROLLS_PER_DAY * DAYS + " rolls");
+        }
         int fetchPct = pct(roster, "fetch");
         int haulPct = pct(roster, "come");
         int rescuePct = pct(roster, "rescue");
-        SplittableRandom r = new SplittableRandom(seed);
         List<Day> days = new ArrayList<>();
         List<String> rescued = new ArrayList<>();
         for (int d = 1; d <= DAYS && hull < HULL_FULL; d++) {
-            boolean fetched = r.nextInt(100) < fetchPct;
-            boolean hauled = r.nextInt(100) < haulPct;
-            boolean swam = r.nextInt(100) < rescuePct;
+            int k = (d - 1) * ROLLS_PER_DAY;
+            boolean fetched = rolls[k] < fetchPct;
+            boolean hauled = rolls[k + 1] < haulPct;
+            boolean swam = rolls[k + 2] < rescuePct;
             String saved = swam && rescued.size() < stranded.size() ? stranded.get(rescued.size()) : null;
             if (saved != null) {
                 rescued.add(saved);

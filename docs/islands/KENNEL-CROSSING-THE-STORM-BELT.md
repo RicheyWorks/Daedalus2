@@ -44,3 +44,10 @@ The ark starts with 10 hull and 10 water and arrives if neither runs out.
 
 Storm-belt skybox, a leg tracker with hull and water bars, a hound callout per trouble (the G102 binding's drill
 delegate can drive the bark/animation), and a leg-by-leg replay from the server's voyage.
+
+## C++ twin (G154)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusKennelVoyageCore.h` replays the roll-driven rules
+(`KennelArkVoyage.crossRolls`, `KennelArkLandfall.repairRolls`) from server rolls. `KennelVoyageParityFixtureTest` writes the
+LCG parity table `engines/unreal/core-test/kennel_voyage_parity.txt` (300 crossings, 300 repair runs) and
+`core-test/kennel_voyage_core_test.cpp` replays it under gcc (ASan/UBSan) and clang with `-Werror`.
