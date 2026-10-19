@@ -3,12 +3,13 @@
 
 Every archived save (islands and keys_per_island of G86 Compaction Shoals,
 read-only) is kept as two copies on the archive reef. Barnacles grow on the
-copies: `barnacles_per_kilotick` barnacles land per 1000 ticks, each on a
-random copy, and a good copy that is hit silently rots. Nothing notices rot
+copies: `barnacles_per_kilotick` barnacles land per 1000 ticks, each
+flipping one bit of a random copy. Each save's CRC32 sits on the diver's
+slate. Nothing notices rot
 until the scrubber visits.
 
 The scrub diver visits `rate` saves a tick, round robin, reading both copies
-(2 reads per visit, counted against `max_reads`). With checksums the diver
+(2 reads per visit, counted against `max_reads`). With checksums (CRC32) the diver
 knows which copy is good and rewrites a rotted copy from the good one; if both
 copies have rotted, the save is lost. Without checksums the diver can only see
 that the copies differ and copies A over B, so half the time it spreads the
@@ -23,16 +24,22 @@ scrub interval. Deterministic and offline: integers only, the shared LCG.
 
 Reusable pieces:
   validate(cfg) -> Config
-  Reef(n): rot(rng, hits) / visit(i, checksum) -> event
+  Reef(keys): rot(rng, hits) / visit(i, checksum) -> event  (CRC32 per save)
   simulate(config, rate=None, checksum=None) -> Result
+  predicted_lost / predicted_loss_per_window / reads_per_tick  (rT model)
+  solve(config) -> rate with the largest window T; brute_force(config, seeds)
   islands_from_shoals(shoals_cfg)  tie-in: islands + keys_per_island = G86
   npc_say / receipt
 """
 from __future__ import annotations
 
 import argparse
+import dataclasses
+import hashlib
 import json
+import math
 import sys
+import zlib
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
@@ -42,6 +49,7 @@ ID_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 WON, FAILED = "won", "failed"
 FAIL_LOST, FAIL_READS = "saves_lost", "reads_exceeded"
 OK, REPAIRED, LOST, SPREAD = "ok", "repaired", "lost", "spread"
+PAYLOAD = 64  # bytes per copy
 NPC_KEYS = ("start", "dive", "barnacle", "win", "fail")
 TOP_KEYS = {"v", "quest", "lore", "reef", "islands", "seed", "npc"}
 R_KEYS = {"keys_per_island", "ticks", "barnacles_per_kilotick", "rate", "checksum", "max_lost", "max_reads"}
@@ -123,38 +131,62 @@ class Lcg:
 
 
 class Reef:
-    """Two copies per save; True = good copy."""
+    """Two 64-byte copies per save plus one CRC32 per save on the diver's slate.
 
-    def __init__(self, n: int):
-        self.a = [True] * n
-        self.b = [True] * n
+    A barnacle flips one random bit of one random copy. A copy is good when its
+    CRC32 matches the slate. CRC32 (zlib, IEEE 802.3 polynomial) catches every
+    single-bit flip; random multi-bit damage slips past it with chance ~2**-32.
+    """
+
+    def __init__(self, keys: List[str]):
+        self.slate = []
+        self.a: List[bytearray] = []
+        self.b: List[bytearray] = []
+        for k in keys:
+            d = hashlib.sha256(k.encode("utf-8")).digest() * 2
+            self.slate.append(zlib.crc32(d))
+            self.a.append(bytearray(d))
+            self.b.append(bytearray(d))
+
+    def good(self, side: List[bytearray], i: int) -> bool:
+        return zlib.crc32(side[i]) == self.slate[i]
 
     def rot(self, rng: Lcg, hits: int) -> int:
-        """`hits` barnacles land on random copies; a good copy that is hit rots."""
-        n, rotted = len(self.a), 0
+        """`hits` barnacles each flip one bit of a random copy; returns good copies spoiled."""
+        n, spoiled = len(self.a), 0
         for _ in range(hits):
             j = rng.next(2 * n)
             side, i = (self.a, j) if j < n else (self.b, j - n)
-            if side[i]:
-                side[i] = False
-                rotted += 1
-        return rotted
+            was = self.good(side, i)
+            bit = rng.next(PAYLOAD * 8)
+            side[i][bit >> 3] ^= 1 << (bit & 7)
+            spoiled += was and not self.good(side, i)
+        return spoiled
 
     def visit(self, i: int, checksum: bool) -> str:
-        a, b = self.a[i], self.b[i]
-        if a and b:
-            return OK
-        if not a and not b:
-            return LOST
         if checksum:
-            self.a[i] = self.b[i] = True
+            ga, gb = self.good(self.a, i), self.good(self.b, i)
+            if ga and gb:
+                return OK
+            if not ga and not gb:
+                return LOST
+            if ga:
+                self.b[i] = bytearray(self.a[i])
+            else:
+                self.a[i] = bytearray(self.b[i])
             return REPAIRED
-        # copies differ but the diver cannot tell which is good: copy A over B
-        self.b[i] = a
-        return REPAIRED if a else SPREAD
+        # no checksum: the diver only sees whether the copies match, then copies A over B
+        if self.a[i] == self.b[i]:
+            return OK if self.good(self.a, i) else LOST
+        right = self.good(self.a, i)
+        bad_both = not right and not self.good(self.b, i)
+        self.b[i] = bytearray(self.a[i])
+        if bad_both:
+            return LOST
+        return REPAIRED if right else SPREAD
 
     def lost(self) -> int:
-        return sum(1 for x, y in zip(self.a, self.b) if not x and not y)
+        return sum(1 for i in range(len(self.a)) if not self.good(self.a, i) and not self.good(self.b, i))
 
 
 def keys_for(c: Config) -> List[str]:
@@ -178,8 +210,9 @@ def simulate(c: Config, rate: Optional[int] = None, checksum: Optional[bool] = N
     cs = c.checksum if checksum is None else checksum
     if rate < 0:
         raise ScrubError("rate must be >= 0")
-    n = len(keys_for(c))
-    reef, rng = Reef(n), Lcg(c.seed)
+    keys = keys_for(c)
+    n = len(keys)
+    reef, rng = Reef(keys), Lcg(c.seed)
     rotted = repaired = spread = reads = 0
     cursor = acc = 0
     for _ in range(c.ticks):
@@ -200,6 +233,53 @@ def simulate(c: Config, rate: Optional[int] = None, checksum: Optional[bool] = N
     else:
         status, reason = WON, None
     return Result(status, reason, n, rotted, repaired, spread, lost, reads)
+
+
+def rot_rate(c: Config) -> float:
+    """r: chance per tick that a given copy is hit (hits land uniformly on 2N copies)."""
+    return c.barnacles_per_kilotick / 1000 / (2 * len(keys_for(c)))
+
+
+def window(c: Config, rate: int) -> float:
+    """T: ticks between two visits to the same save (N / rate)."""
+    return len(keys_for(c)) / rate
+
+
+def predicted_loss_per_window(c: Config, rate: int) -> float:
+    """Both copies hit inside one scrub window: (1 - e^(-rT))^2, about (rT)^2."""
+    return (1 - math.exp(-rot_rate(c) * window(c, rate))) ** 2
+
+
+def predicted_lost(c: Config, rate: int) -> float:
+    """Expected lost saves over the season: N * (ticks / T) * (1 - e^(-rT))^2."""
+    if rate <= 0:
+        return float(len(keys_for(c)))
+    return len(keys_for(c)) * (c.ticks / window(c, rate)) * predicted_loss_per_window(c, rate)
+
+
+def reads_per_tick(c: Config, rate: int) -> float:
+    """Two copies read per visit: 2N / T (= 2 * rate)."""
+    return 2 * len(keys_for(c)) / window(c, rate)
+
+
+def solve(c: Config, max_rate: int = 1000) -> Optional[int]:
+    """Largest window T (smallest rate) whose predicted loss meets max_lost within max_reads."""
+    for rate in range(1, max_rate + 1):
+        if reads_per_tick(c, rate) * c.ticks > c.max_reads:
+            return None
+        if predicted_lost(c, rate) <= c.max_lost:
+            return rate
+    return None
+
+
+def brute_force(c: Config, seeds, max_rate: int = 1000) -> Optional[int]:
+    """Smallest rate (largest T) that wins the simulated season on every seed."""
+    for rate in range(1, max_rate + 1):
+        if 2 * rate * c.ticks > c.max_reads:
+            return None
+        if all(simulate(dataclasses.replace(c, seed=s), rate, True).status == WON for s in seeds):
+            return rate
+    return None
 
 
 def islands_from_shoals(shoals_cfg) -> Tuple[List[dict], int]:
