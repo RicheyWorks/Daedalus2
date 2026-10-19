@@ -105,6 +105,7 @@ class EarRuleSweepTest {
             }
             return out;
         });
+        sweep("G135 BroodCycles", s -> List.of(BroodCycles.chorusHz()));
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 }
