@@ -95,7 +95,7 @@ class ChoirStonesParityTest {
             new TreeSet<>(ni.cutOff()).forEach(f -> cut.add(String.valueOf(f)));
             out.add("night s=" + seed + " n=" + n + " k=" + k + " carve=" + second + " frayed=" + bridges(ni.frayed())
                     + " snapped=" + bridges(ni.snapped()) + " cut=" + String.join(",", cut) + " held=" + (ni.held() ? "1" : "0")
-                    + " heldN=" + c.heldNights() + " re=" + re + " rope=" + plot.count(BridgeLedger.ROPE) + " q="
+                    + " heldN=" + c.heldNights() + " re=" + re + " rope=" + (int) plot.count(BridgeLedger.ROPE) + " q="
                     + c.quest().stepIndex() + "/" + c.quest().stepCount() + " said=" + said + " line=" + MasonLines.line(c));
         }
         ChoirStones.Night again = c.night(12);
