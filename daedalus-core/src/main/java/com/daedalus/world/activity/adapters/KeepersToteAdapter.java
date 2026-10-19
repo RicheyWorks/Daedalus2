@@ -37,7 +37,7 @@ public final class KeepersToteAdapter implements ActivityResultAdapter<KeepersTo
 
     public KeepersToteAdapter(ActivityMode mode) {
         definition = new ActivityDefinition(ACTIVITY_ID, "keepers-tote", 1, "shattered-planet", mode,
-                Set.of("animal", "bird"), Set.of("observation", "counting"),
+                Set.of("animal", "bird"), Set.of("observation", "counting", "scouting"),
                 Map.of("won", 1L, "overlay", 1L, "pool", 1_000_000_000L), 2);
     }
 

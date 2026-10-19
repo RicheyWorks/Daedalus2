@@ -103,7 +103,7 @@ is taken from the quest object; a quest still in progress is refused unless the 
 | `LaunchWindowAdapter` | G68 The Launch Window, `world.odds.launch.LaunchWindowQuest` (oddsreaper) | `odds.launch-window` | `Launch.of(quest, abandoned)` (not SAILED refused) | wise, route, day, expected_souls, best_souls, souls_home | bird, animal / observation, scouting |
 | `RivalBookAdapter` | G77 The Rival Book, `world.odds.rival.RivalBookQuest` (oddsreaper) | `odds.rival-book` | `Scan.of(quest, abandoned)` (SCANNING refused) | exposed, value_lines, found, miscalls, reward | animal, bird / scouting, observation |
 | `ArkUnderwriterAdapter` | G80 The Ark Underwriter, `world.odds.insurance.UnderwriterQuest` (oddsreaper) | `odds.ark-underwriter` | `Season.of(quest, abandoned)` (QUOTING/REJECTED/APPROVED refused) | solvent, close_herbs, shortfall_herbs, bust_risk_pm | animal, bird / counting, guarding |
-| `KeepersToteAdapter` | G88 The Keeper's Tote, `world.odds.tote.ToteQuest` (oddsreaper) | `odds.keepers-tote` | `Heat.of(quest, abandoned)` (BOARD_OPEN/BACKED refused) | won, overlay, pool | animal, bird / observation, counting |
+| `KeepersToteAdapter` | G88 The Keeper's Tote, `world.odds.tote.ToteQuest` (oddsreaper) | `odds.keepers-tote` | `Heat.of(quest, abandoned)` (BOARD_OPEN/BACKED refused) | won, overlay, pool | animal, bird / observation, counting, scouting |
 
 What completes: a DOUBLED ledger, a wise launch (within the Keeper's 98% tolerance of the best expected life,
 whatever sky the dice brought), every soft rival line EXPOSED, a SOLVENT season and a WON heat. The Keeper's Mark,
