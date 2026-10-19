@@ -607,7 +607,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -1286,7 +1286,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -1297,6 +1297,1253 @@
     "export_animations": false
    },
    "recipe_sha256": "f908a9a15c93b40e438d9991a20e4617e8e40fb87d472112ee5132f33d8629b0"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m",
+   "kind": "Bld",
+   "seed": 505,
+   "frame_of": [
+    "Bld_Lab_FoldWall_4m_Panel0",
+    "Bld_Lab_FoldWall_4m_Panel1",
+    "Bld_Lab_FoldWall_4m_Panel2",
+    "Bld_Lab_FoldWall_4m_Panel3"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Panel0",
+     "mover": "Bld_Lab_FoldWall_4m_Panel0",
+     "pivot_m": [
+      -1.6,
+      0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      90
+     ],
+     "open_ue_rotator": [
+      0.0,
+      -90.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_Panel1",
+     "mover": "Bld_Lab_FoldWall_4m_Panel1",
+     "pivot_m": [
+      -0.8,
+      0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      90
+     ],
+     "open_ue_rotator": [
+      0.0,
+      -90.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_Panel2",
+     "mover": "Bld_Lab_FoldWall_4m_Panel2",
+     "pivot_m": [
+      0.8,
+      0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -90
+     ],
+     "open_ue_rotator": [
+      0.0,
+      90.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_Panel3",
+     "mover": "Bld_Lab_FoldWall_4m_Panel3",
+     "pivot_m": [
+      1.6,
+      0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -90
+     ],
+     "open_ue_rotator": [
+      0.0,
+      90.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        4.0,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        0,
+        0,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        -1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        3.7
+       ],
+       "centre": [
+        1.8,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostCap1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.6,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_L",
+     "location": [
+      -1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.6,
+      2.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_R",
+     "location": [
+      1.6,
+      0,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.6,
+      2.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Panel0",
+     "location": [
+      -1.6,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.6,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Panel1",
+     "location": [
+      -0.8,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Panel2",
+     "location": [
+      0.8,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Panel3",
+     "location": [
+      1.6,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.6,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      0.6,
+      0.15
+     ],
+     "centre": [
+      0,
+      0,
+      0.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      -1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.6,
+      3.85
+     ],
+     "centre": [
+      1.8,
+      0,
+      2.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 220,
+    "lod1_triangles": 132,
+    "lod1_ratio": 0.6,
+    "objects": {
+     "Bld_Lab_FoldWall_4m": 220
+    },
+    "bounds_min": [
+     -2.0,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     0.3,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     0.6,
+     4.0
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c3aba093ff17a91abc20c1021f4bc25237463bba5ed491ee31984e2857036662"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Panel0",
+   "kind": "Bld",
+   "seed": 505,
+   "mover_of": "Bld_Lab_FoldWall_4m",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Panel0",
+    "mover": "Bld_Lab_FoldWall_4m_Panel0",
+    "pivot_m": [
+     -1.6,
+     0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     90
+    ],
+    "open_ue_rotator": [
+     0.0,
+     -90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Panel0_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Panel0_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Panel0_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Panel0",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Panel0)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        0.4,
+        -0.18,
+        1.788
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        0.79,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Panel0_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      0.4,
+      0.0,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_FoldWall_4m SOCKET_Hinge_Panel0)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 44,
+    "lod1_ratio": 0.44,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Panel0": 100
+    },
+    "bounds_min": [
+     0.01,
+     -0.21,
+     0.15
+    ],
+    "bounds_max": [
+     0.825,
+     0.15,
+     3.85
+    ],
+    "dimensions": [
+     0.815,
+     0.36,
+     3.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d150d5486313cb30e4998e2c218f63ed9a340e0b1d74b33d7699f95d83da9ab2"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Panel1",
+   "kind": "Bld",
+   "seed": 505,
+   "mover_of": "Bld_Lab_FoldWall_4m",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Panel1",
+    "mover": "Bld_Lab_FoldWall_4m_Panel1",
+    "pivot_m": [
+     -0.8,
+     0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     90
+    ],
+    "open_ue_rotator": [
+     0.0,
+     -90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Panel1_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Panel1_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Panel1_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Panel1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Panel1)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        0.4,
+        -0.18,
+        1.782
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        0.01,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Panel1_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      0.4,
+      0.0,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_FoldWall_4m SOCKET_Hinge_Panel1)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 44,
+    "lod1_ratio": 0.44,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Panel1": 100
+    },
+    "bounds_min": [
+     -0.025,
+     -0.21,
+     0.15
+    ],
+    "bounds_max": [
+     0.79,
+     0.15,
+     3.85
+    ],
+    "dimensions": [
+     0.815,
+     0.36,
+     3.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "246b5d7a0e2e9819e4cf2b6362d04a093fa804f5573fda39952aa470e2503d9b"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Panel2",
+   "kind": "Bld",
+   "seed": 505,
+   "mover_of": "Bld_Lab_FoldWall_4m",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Panel2",
+    "mover": "Bld_Lab_FoldWall_4m_Panel2",
+    "pivot_m": [
+     0.8,
+     0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -90
+    ],
+    "open_ue_rotator": [
+     0.0,
+     90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Panel2_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Panel2_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Panel2_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Panel2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Panel2)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -0.4,
+        -0.18,
+        1.397
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -0.01,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Panel2_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      -0.4,
+      0.0,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_FoldWall_4m SOCKET_Hinge_Panel2)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 44,
+    "lod1_ratio": 0.44,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Panel2": 100
+    },
+    "bounds_min": [
+     -0.79,
+     -0.21,
+     0.15
+    ],
+    "bounds_max": [
+     0.025,
+     0.15,
+     3.85
+    ],
+    "dimensions": [
+     0.815,
+     0.36,
+     3.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2fa9c9f376f2a989d12ca19eed8c89550d11c6207d4f03238ace68552a4590f5"
+  },
+  {
+   "asset": "Bld_Lab_FoldWall_4m_Panel3",
+   "kind": "Bld",
+   "seed": 505,
+   "mover_of": "Bld_Lab_FoldWall_4m",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Panel3",
+    "mover": "Bld_Lab_FoldWall_4m_Panel3",
+    "pivot_m": [
+     1.6,
+     0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -90
+    ],
+    "open_ue_rotator": [
+     0.0,
+     90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     9
+    ],
+    "gap": "G05",
+    "size_m": "4 x 0.6 x 4 m (maze grid)",
+    "tri_cap": 2000,
+    "lod": "LOD0/1",
+    "collision": "UCX per segment",
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "sockets": [
+     "Hinge_L",
+     "Hinge_R"
+    ],
+    "contract": "Daedalus2 47e3db4d docs/mechanics/LAB08-folding-maze.md",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_FoldWall_4m_Panel3_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_FoldWall_4m_Panel3_M1",
+     "colour": "weathered teal",
+     "hex": "4F7A6A",
+     "roughness": 0.85,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_FoldWall_4m_Panel3_M2",
+     "colour": "antique brass",
+     "hex": "B08D57",
+     "roughness": 0.7,
+     "metallic": 0.5,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_FoldWall_4m_Panel3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Panel3)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.3,
+        3.7
+       ],
+       "centre": [
+        -0.4,
+        0.0,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Eye",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.09,
+       "r2": 0.07,
+       "length": 0.06,
+       "centre": [
+        -0.4,
+        -0.18,
+        1.743
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 3.7,
+       "centre": [
+        -0.79,
+        0.0,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_FoldWall_4m_Panel3_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.3,
+      3.7
+     ],
+     "centre": [
+      -0.4,
+      0.0,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_FoldWall_4m SOCKET_Hinge_Panel3)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 44,
+    "lod1_ratio": 0.44,
+    "objects": {
+     "Bld_Lab_FoldWall_4m_Panel3": 100
+    },
+    "bounds_min": [
+     -0.825,
+     -0.21,
+     0.15
+    ],
+    "bounds_max": [
+     -0.01,
+     0.15,
+     3.85
+    ],
+    "dimensions": [
+     0.815,
+     0.36,
+     3.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d3fa912c7f5ab7bc44b670d153cd0482dbf07ecd308ce237d317a8ba517f6947"
   },
   {
    "asset": "Bld_Lab_Wall4m_Plain",
@@ -1543,7 +2790,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {

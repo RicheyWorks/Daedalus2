@@ -398,14 +398,26 @@
      "parent": null,
      "forward": [
       0,
-      -1,
-      0
+      0,
+      1
      ],
      "location_gltf": [
       0,
       0.17,
       0.0
-     ]
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ]
+     }
     },
     {
      "name": "SOCKET_Tip",
@@ -424,7 +436,19 @@
       0,
       1.8,
       0.0
-     ]
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ]
+     }
     },
     {
      "name": "SOCKET_Reel",
@@ -494,7 +518,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -504,7 +528,7 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "4788b78017333f5400bd0b994b1f488432fc0b7f4efacff3bf7a3cdc9afbdcda"
+   "recipe_sha256": "9859f6bd9b8fb72120fd1cd464b57dd2a419f635fb4a54ba775cd110e780ca0f"
   },
   {
    "asset": "Prop_WZ_FishingFloat_Rest",
@@ -731,7 +755,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -988,7 +1012,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {

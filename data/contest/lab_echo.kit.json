@@ -321,7 +321,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -653,7 +653,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -985,7 +985,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -1317,7 +1317,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -1649,7 +1649,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -1981,7 +1981,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -2313,7 +2313,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -2665,7 +2665,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -3166,7 +3166,7 @@
      "location": [
       -1.25,
       -0.48,
-      2.84
+      2.87
      ],
      "parent": null,
      "forward": [
@@ -3176,7 +3176,7 @@
      ],
      "location_gltf": [
       -1.25,
-      2.84,
+      2.87,
       0.48
      ]
     },
@@ -3185,7 +3185,7 @@
      "location": [
       1.25,
       -0.48,
-      2.84
+      2.87
      ],
      "parent": null,
      "forward": [
@@ -3195,7 +3195,7 @@
      ],
      "location_gltf": [
       1.25,
-      2.84,
+      2.87,
       0.48
      ]
     }
@@ -3319,7 +3319,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -3329,7 +3329,7 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "579afe151bcb3a04067f13b75c9851a1dda65faa4554ee5cb2f85aff6f8d2a96"
+   "recipe_sha256": "06ce398d6336243b420a737f307e001e1e3924d793a24a633111aaaad8be8955"
   },
   {
    "asset": "Bld_Lab_EchoGate_Open",
@@ -3870,7 +3870,7 @@
      "location": [
       -1.25,
       -0.48,
-      2.84
+      2.87
      ],
      "parent": null,
      "forward": [
@@ -3880,7 +3880,7 @@
      ],
      "location_gltf": [
       -1.25,
-      2.84,
+      2.87,
       0.48
      ]
     },
@@ -3889,7 +3889,7 @@
      "location": [
       1.25,
       -0.48,
-      2.84
+      2.87
      ],
      "parent": null,
      "forward": [
@@ -3899,7 +3899,7 @@
      ],
      "location_gltf": [
       1.25,
-      2.84,
+      2.87,
       0.48
      ]
     }
@@ -4024,7 +4024,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -4034,7 +4034,965 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "f2b1e23e2785d4ac561520285caadbd2b5bc5a3351be42d04a0a4481f6fd3311"
+   "recipe_sha256": "43d9b4c2616e07920514b3e04993ee153f1424770cfd725aeb7f0fc9d1349545"
+  },
+  {
+   "asset": "Bld_Lab_EchoGate",
+   "kind": "Bld",
+   "seed": 101,
+   "frame_of": [
+    "Bld_Lab_EchoGate_LeafL",
+    "Bld_Lab_EchoGate_LeafR"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_LeafL",
+     "mover": "Bld_Lab_EchoGate_LeafL",
+     "pivot_m": [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      90.0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      -90.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LeafR",
+     "mover": "Bld_Lab_EchoGate_LeafR",
+     "pivot_m": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -90.0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      90.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "rows": [
+     5
+    ],
+    "gap": "G01",
+    "size_m": "3 m wide x 4 m tall",
+    "tri_cap": 6000,
+    "lod": "LOD0/1",
+    "collision": "UCX per leaf (+ pillars, lintel)",
+    "sockets": [
+     "Bell_L",
+     "Bell_R"
+    ],
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_EchoGate_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_EchoGate_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_EchoGate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pillar0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        -1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        -1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pillar1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.6,
+        0.6
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Keystone",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.7,
+        0.5
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell_L",
+     "location": [
+      -1.25,
+      -0.48,
+      2.87
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.25,
+      2.87,
+      0.48
+     ]
+    },
+    {
+     "name": "SOCKET_Bell_R",
+     "location": [
+      1.25,
+      -0.48,
+      2.87
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.25,
+      2.87,
+      0.48
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LeafL",
+     "location": [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LeafR",
+     "location": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_EchoGate_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      -1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_01",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_02",
+     "shape": "box",
+     "size": [
+      3.0,
+      0.6,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      3.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 528,
+    "lod1_triangles": 264,
+    "lod1_ratio": 0.5,
+    "objects": {
+     "Bld_Lab_EchoGate": 528
+    },
+    "bounds_min": [
+     -1.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     1.5,
+     0.5,
+     4.0
+    ],
+    "dimensions": [
+     3.0,
+     1.0,
+     4.0
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3f99f93c082972611cf8e59f78f934d58a1a25395f160c311f29689744339c2f"
+  },
+  {
+   "asset": "Bld_Lab_EchoGate_LeafL",
+   "kind": "Bld",
+   "seed": 101,
+   "mover_of": "Bld_Lab_EchoGate",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LeafL",
+    "mover": "Bld_Lab_EchoGate_LeafL",
+    "pivot_m": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     90.0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     -90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     5
+    ],
+    "gap": "G01",
+    "size_m": "3 m wide x 4 m tall",
+    "tri_cap": 6000,
+    "lod": "LOD0/1",
+    "collision": "UCX per leaf (+ pillars, lintel)",
+    "sockets": [
+     "Bell_L",
+     "Bell_R"
+    ],
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_EchoGate_LeafL_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_EchoGate_LeafL_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_EchoGate_LeafL_M2",
+     "colour": "dark bronze",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_EchoGate_LeafL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LeafL)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        0.5,
+        0.0,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0.0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0.0,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0.0,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        0.725,
+        0.0,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_EchoGate_LeafL_00",
+     "shape": "box",
+     "size": [
+      0.98,
+      0.15,
+      3.35
+     ],
+     "centre": [
+      0.5,
+      0.0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_EchoGate SOCKET_Hinge_LeafL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 220,
+    "lod1_triangles": 108,
+    "lod1_ratio": 0.491,
+    "objects": {
+     "Bld_Lab_EchoGate_LeafL": 220
+    },
+    "bounds_min": [
+     0.01,
+     -0.1,
+     0.025
+    ],
+    "bounds_max": [
+     0.99,
+     0.1,
+     3.375
+    ],
+    "dimensions": [
+     0.98,
+     0.2,
+     3.35
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2c2695cdc2e517e0231995a5e36a422d10f6454da2515d2fcd6ba9c73032ad69"
+  },
+  {
+   "asset": "Bld_Lab_EchoGate_LeafR",
+   "kind": "Bld",
+   "seed": 101,
+   "mover_of": "Bld_Lab_EchoGate",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LeafR",
+    "mover": "Bld_Lab_EchoGate_LeafR",
+    "pivot_m": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -90.0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     90.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "rows": [
+     5
+    ],
+    "gap": "G01",
+    "size_m": "3 m wide x 4 m tall",
+    "tri_cap": 6000,
+    "lod": "LOD0/1",
+    "collision": "UCX per leaf (+ pillars, lintel)",
+    "sockets": [
+     "Bell_L",
+     "Bell_R"
+    ],
+    "states": [
+     "Closed",
+     "Open"
+    ],
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_EchoGate_LeafR_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_EchoGate_LeafR_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_EchoGate_LeafR_M2",
+     "colour": "dark bronze",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_EchoGate_LeafR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LeafR)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        -0.5,
+        0.0,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0.0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0.0,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0.0,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        -0.725,
+        0.0,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_EchoGate_LeafR_00",
+     "shape": "box",
+     "size": [
+      0.98,
+      0.15,
+      3.35
+     ],
+     "centre": [
+      -0.5,
+      0.0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Bld_Lab_EchoGate SOCKET_Hinge_LeafR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 220,
+    "lod1_triangles": 108,
+    "lod1_ratio": 0.491,
+    "objects": {
+     "Bld_Lab_EchoGate_LeafR": 220
+    },
+    "bounds_min": [
+     -0.99,
+     -0.1,
+     0.025
+    ],
+    "bounds_max": [
+     -0.01,
+     0.1,
+     3.375
+    ],
+    "dimensions": [
+     0.98,
+     0.2,
+     3.35
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c154aa66a5b4c5fae71dd526b012f55ab19f0a09ad99b1e4fec8e59286200041"
   },
   {
    "asset": "Prop_Lab_EchoCorridor_Straight",
@@ -4381,7 +5339,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -4771,7 +5729,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -5215,7 +6173,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
@@ -5789,7 +6747,7 @@
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
-    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
     "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
    },
    "export": {
