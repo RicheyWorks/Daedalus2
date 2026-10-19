@@ -209,3 +209,23 @@ rough one fails) and a sweet round sung at the harbour.
 Tie-in: after the homecoming the island writes to the far islands, teaches their children the thirteen songs, gives
 them a concert and sings them a round as the next ark comes in. The goat that carried the jars and the wren that
 held a voice in the round each earn their G12 credit once per chapter run, replayable from the G49 journal.
+
+## Receipts hub XIII (contest G160, 2hot2trot): salvage lockers, buzz garden, owl fix, squirrel's winter
+
+Registered in `ActivityRouter.contestAll` under inactive policies (`mastery.reckoning`, `mastery.listening`,
+`mastery.observation`). Read-only on the game cores; each snapshot is built from the game's own quest stage, judged
+`Verdict` or forager `Report`, and a salvage still dealing is refused unless the host abandoned it.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `SalvageLockersAdapter` | G141 The Salvage Lockers, `world.odds.lockers.LockerQuest` (oddsreaper) | `odds.salvage-lockers` | `Salvage.of(quest, abandoned)` | enough, found, voids, rounds (0-5) | animal, bird / scouting, observation, judgement |
+| `BuzzGardenAdapter` | G145 Buzz Garden, `world.audio.BuzzGarden` (prometheus) | `audio.buzz-garden` | `Garden.of(verdict, abandoned)` | best, pollen, best_pollen | bird, animal / listening, pollination, observation |
+| `OwlFixAdapter` | G150 Owl Fix, `world.audio.OwlFix` (prometheus) | `audio.owl-fix` | `Fix.of(verdict, abandoned)` | exact, score (0-100) | bird, animal / listening, scouting, observation |
+| `SquirrelsWinterAdapter` | G129 Squirrel's Winter, `world.battlefield.PatchForager` (pythagoras) | `ecology.squirrels-winter` | `Hoard.of(report, abandoned)` | hoarded, share_pct (0-200), visits | animal, bird / foraging, observation, companionship |
+
+What completes: finding the compass in three of five salvage rounds, the best bee-to-flower match, the owl's exact
+cell, and a HOARDED day in the squirrel's meadow.
+
+Tie-in: the wreck gives up its compass, the regrown meadow buzzes and hoots, and the red squirrel stocks its hoard for
+the long dark. The gull at the lockers, the owl at the microphones and the vole in the brambles each earn their G12
+credit once per run, replayable from the G49 journal.
