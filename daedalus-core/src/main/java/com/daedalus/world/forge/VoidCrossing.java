@@ -203,6 +203,15 @@ public final class VoidCrossing {
             return weather;
         }
 
+        /** Who is still aboard (read-only copy, for the G170 landfall). */
+        public Map<Life, Integer> aboard() {
+            return Map.copyOf(aboard);
+        }
+
+        public Voyage voyage() {
+            return voyage;
+        }
+
         public Map<Life, Integer> lost() {
             return Map.copyOf(lost);
         }
