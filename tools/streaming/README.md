@@ -38,3 +38,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Parity Reef (contest G67, quest q_parity_reef)
 - `parity_reef.py`: DiskSaver Island redundancy minigame. Caches are striped over reef stones with rotating XOR parity, storms smash a stone, a verified rebuild runs N blocks per tick, and a double loss in a row = data lost. Stripes come from the G63 Defrag Tide caches (`parity_reef_test.py`; CI `Parity Reef`). Rules: `docs/islands/DISKSAVER-PARITY-REEF.md`.
+
+## Tide Chart Cache (contest G70, quest q_tide_chart)
+- `tide_chart_cache.py`: DiskSaver Island RAM-pool caching minigame. Seeded island requests come in, each miss stalls for the island's cost, and the keeper evicts by reading the tide chart (Belady over a visible window) or by LRU. The pool and islands are built from G39 Byte Spring (`tide_chart_cache_test.py`; CI `Tide Chart Cache`). Rules: `docs/islands/DISKSAVER-TIDE-CHART.md`.
