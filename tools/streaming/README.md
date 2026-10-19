@@ -50,3 +50,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Journal Tide (contest G79, quest q_journal_tide)
 - `journal_tide.py`: DiskSaver Island write-ahead-journal minigame. Saves are buffered and then committed as CRC32 records, storm surges lose the buffer, and a torn mid-commit record is caught on replay. Paced commits beat the commit-everything and never-commit traps. The saves come from G78 Coral Wear (`journal_tide_test.py`; CI `Journal Tide`). Rules: `docs/islands/DISKSAVER-JOURNAL-TIDE.md`.
+
+## Compaction Shoals (contest G86, quest q_compaction_shoals)
+- `compaction_shoals.py`: DiskSaver Island LSM-tree minigame. Writes fill a memtable, flush to sorted runs, and compactions merge levels. Lookups pay read amplification and compactions spend write amplification from an io budget. Tuned leveled compaction beats the never-compact and compact-every-flush traps, and every lookup is checked against a dict. Writes come from G79 Journal Tide (`compaction_shoals_test.py`; CI `Compaction Shoals`). Rules: `docs/islands/DISKSAVER-COMPACTION-SHOALS.md`.
