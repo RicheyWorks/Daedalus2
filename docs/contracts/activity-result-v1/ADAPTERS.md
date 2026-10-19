@@ -69,4 +69,25 @@ G49 journal (`ActivityRouter.journal()`).
 | `DripCaveAdapter` | G64 Drip Cave Chorus, `world.audio.DripCaveChorus` (prometheus) | `audio.drip-cave-chorus` | `Chorus.of(verdict, abandoned)` | correct, off_ms | animal, bird / observation, scouting |
 | `SquallCupAdapter` | G35 Squall Cup, `world.odds.tournament.SquallCupQuest` (oddsreaper) | `odds.squall-cup` | `Cup.of(quest, abandoned)` (a cup still ENTERED/ODDS_POSTED is refused) | champion, rounds_won | animal, bird / fishing, scouting |
 
-G34 Beaver Waters is not wrapped yet: it has no result record, so its snapshot would read the live simulation. That is left for a later hub.
+G34 Beaver Waters is wrapped in Hub VI below.
+
+## Hub VI (contest G83)
+
+The five landed Pythagoras ecology games, registered in `ActivityRouter.contestAll` with inactive policies:
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `BeaverWatersAdapter` | G34 Beaver Waters, `world.battlefield.BeaverWaters` (pythagoras) | `battlefield.beaver-waters` | `Ponds.of(spring, abandoned)` copies the final facts out of the live grid | wet, home_flooded, target_wet_pm, pond_cells, wet_cells, felled, layers_left | animal / building, foraging |
+| `SeedVaultAdapter` | G43 Ark Seed Vault, `world.battlefield.SeedVault` (pythagoras) | `battlefield.ark-seed-vault` | `Voyage.of(vault, abandoned)` (a vault still at sea is refused) | all_bands, years, surviving_species, caches | bird, animal / seeding, caching |
+| `BeeBloomAdapter` | G48 Bee Bloom, `world.battlefield.BeeBloom` (pythagoras) | `battlefield.bee-bloom` | `Season.of(report, abandoned)` | thriving, seed_set_pm, hives_alive, frost_day (first frost day + 1, 0 = none), days | social_insect, bird / pollinating, foraging |
+| `TrophicCascadeAdapter` | G58 Trophic Cascade, `world.battlefield.TrophicCascade` (pythagoras) | `battlefield.trophic-cascade` | `Valley.of(report, abandoned)` | cascade, willow_pm, colonies, elk, wolves, years | animal / hunting, guarding |
+| `SalmonRunAdapter` | G71 Salmon Run, `world.battlefield.SalmonRun` (pythagoras) | `battlefield.salmon-run` | `Run.of(report, abandoned)` | restored, fished_out, mean_escapement, total_catch, forest_nitrogen, years | animal, bird / fishing, carrying |
+
+Only the outcome that heals the valley completes: a WET meadow with a dry homestead, every seed band home at
+landfall, a THRIVING bloom, a wolf-driven CASCADE (culling to the same elk count earns no wolf credit) and a
+RESTORED run. Everything else is FAILED, or ABANDONED when the host quits. Counts and fractions are whole numbers
+(per mille, rounded heads and fish) so receipts stay canonical.
+
+Tie-in: the ark creatures that rebuilt the shattered valley (the beaver colony, the seed-caching jays, the hives,
+the wolf pack and the river bears) each earn their G12 credit once per run, and the G49 journal replays it after a
+restart.
