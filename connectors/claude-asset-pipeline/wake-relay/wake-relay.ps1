@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 # wake-relay.ps1 - tails a team-link log.jsonl and POSTs a webhook whenever a bot that
-# cannot read the broker (a "wake-needed" bot) gets a direct message from any other sender.
+# cannot read the broker (a "wake-needed" bot) gets a direct message from any sender, wake-needed bots included.
 #
 # Routing: relay-webhook.json holds a default webhook {url,key,header,prefix}, optional named
 # "overrides" {"<target>": {url,key,header,prefix}}, and an optional "routes" map
@@ -51,7 +51,7 @@ function Select-WakeHits([string]$chunk,[string]$rx){
   foreach($l in ($chunk -split "`n")){
     if(-not $l.Trim()){continue}
     try{$o=$l|ConvertFrom-Json}catch{continue}
-    if($o.to -match $rx -and $o.from -notmatch $rx){
+    if($o.to -ne '*' -and $o.to -match $rx -and $o.from -ne $o.to -and ([string]$o.from -replace '-(linktest|relay-test)$','') -ne $o.to){
       $hits+=[pscustomobject][ordered]@{id=$o.id;ts=$o.ts;from=$o.from;to=$o.to;type=$o.type;topic=[string]$o.topic;reply_to=$o.reply_to;request_id=(Get-RequestId $o);pointer=('log.jsonl#id='+$o.id);text=(Get-Text $o)}
     }
   }
