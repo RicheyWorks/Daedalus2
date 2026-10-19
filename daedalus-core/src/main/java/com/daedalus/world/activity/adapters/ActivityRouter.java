@@ -116,6 +116,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(HomecomingSupperAdapter.ACTIVITY_ID, "mastery.island-story"));
         r.register(new ThirteenthSongAdapter(mode), ThirteenthSongAdapter.Composing.class,
                 AwardPolicy.inactive(ThirteenthSongAdapter.ACTIVITY_ID, "mastery.island-story"));
+        r.register(new ThunderTowersAdapter(mode), ThunderTowersAdapter.Storm.class,
+                AwardPolicy.inactive(ThunderTowersAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new DopplerFlybyAdapter(mode), DopplerFlybyAdapter.Flyby.class,
+                AwardPolicy.inactive(DopplerFlybyAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new HullKnockAdapter(mode), HullKnockAdapter.Survey.class,
+                AwardPolicy.inactive(HullKnockAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new WaveOrganAdapter(mode), WaveOrganAdapter.Tide.class,
+                AwardPolicy.inactive(WaveOrganAdapter.ACTIVITY_ID, "mastery.listening"));
         return r;
     }
 
