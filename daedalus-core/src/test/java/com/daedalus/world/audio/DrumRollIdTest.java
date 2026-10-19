@@ -24,6 +24,42 @@ class DrumRollIdTest {
         assertThat(seen).hasSize(DrumRollId.CARD.size());
     }
 
+    @Test void irregularityCutOffHasMargin() {
+        double minBroken = Double.MAX_VALUE;
+        double maxSmooth = 0;
+        for (long s = 0; s < 300; s++) {
+            DrumRollId d = DrumRollId.seeded(s);
+            double cv = DrumRollId.irregularity(d.onsets());
+            if (d.answer().equals("sapsucker")) {
+                minBroken = Math.min(minBroken, cv);
+            } else {
+                maxSmooth = Math.max(maxSmooth, cv);
+            }
+        }
+        assertThat(minBroken).isGreaterThanOrEqualTo(DrumRollId.BROKEN_CV + 0.05);
+        assertThat(maxSmooth).isLessThanOrEqualTo(DrumRollId.BROKEN_CV - 0.05);
+    }
+
+    @Test void steadyDrummersOpeningRatesAreSeparated() {
+        java.util.Map<String, double[]> range = new java.util.HashMap<>();
+        for (long s = 0; s < 300; s++) {
+            DrumRollId d = DrumRollId.seeded(s);
+            DrumRollId.Drummer card = DrumRollId.CARD.stream().filter(c -> c.name().equals(d.answer())).findFirst().orElseThrow();
+            if (card.broken() || card.slowing() != 1.0) {
+                continue;
+            }
+            double r = DrumRollId.openingRate(d.onsets());
+            range.merge(card.name(), new double[] {r, r}, (a, b) -> new double[] {Math.min(a[0], b[0]), Math.max(a[1], b[1])});
+        }
+        double[] downy = range.get("downy woodpecker");
+        double[] red = range.get("red-bellied woodpecker");
+        double[] hairy = range.get("hairy woodpecker");
+        assertThat(red[0] - downy[1]).as("downy %s vs red-bellied %s", java.util.Arrays.toString(downy), java.util.Arrays.toString(red))
+            .isGreaterThanOrEqualTo(1.0);
+        assertThat(hairy[0] - red[1]).as("red-bellied %s vs hairy %s", java.util.Arrays.toString(red), java.util.Arrays.toString(hairy))
+            .isGreaterThanOrEqualTo(1.0);
+    }
+
     @Test void steadyRollsSeparateByRate() {
         List<Integer> downy = new ArrayList<>();
         List<Integer> hairy = new ArrayList<>();
