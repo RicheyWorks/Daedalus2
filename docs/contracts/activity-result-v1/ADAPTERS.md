@@ -229,3 +229,24 @@ cell, and a HOARDED day in the squirrel's meadow.
 Tie-in: the wreck gives up its compass, the regrown meadow buzzes and hoots, and the red squirrel stocks its hoard for
 the long dark. The gull at the lockers, the owl at the microphones and the vole in the brambles each earn their G12
 credit once per run, replayable from the G49 journal.
+
+## Receipts hub XIV (contest G168, 2hot2trot): guest lofts, scar dig, void crossing, apprentices
+
+Registered in `ActivityRouter.contestAll` under inactive policies (`mastery.companionship`, `mastery.hauling`,
+`mastery.crewing`). Read-only on the game cores; each snapshot is built from the game's own settle/announce outcome,
+dig `Result` or `Crossing`. A visit not yet settled, a board not yet announced, or a crossing still SAILING is refused
+unless the host abandoned it. A dig result is final once run.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `GuestLoftsAdapter` | G149 The Guest Lofts, `world.brew.lofts.GuestLofts` (youtube-master) | `brew.guest-lofts` | `Stay.of(lofts, abandoned)` | aired, fewest, families | animal, bird / companionship, planning, housekeeping |
+| `ScarDigAdapter` | G132 Meteor Scar Dig, `world.forge.ScarDig` (hephaestus) | `forge.scar-dig` | `Dig.of(result, abandoned)` | ingots, starmetal, emberite, water | animal / hauling, endurance, prospecting |
+| `VoidCrossingAdapter` | G152 Void Crossing, `world.forge.VoidCrossing` (hephaestus) | `forge.void-crossing` | `Passage.of(crossing, abandoned)` | days, min_seam, patches, lost | animal, bird / crewing, endurance, hauling, companionship |
+| `ApprenticesAdapter` | G155 The Apprentices, `world.brew.apprentice.Apprenticeships` (youtube-master) | `brew.apprentices` | `Lantern.of(board, abandoned)` | paired, blocking | animal, bird / companionship, matchmaking, observation |
+
+What completes: a snug loft plan (aired = fewest), leaving the scar with an ingot and without fainting, any arrival
+at the shard (losses kept as a measure), and a stable lantern-night announcement (no blocking pair).
+
+Tie-in: the far-island families are housed, the scar gives up its starmetal, the ark crosses the void, and the
+children find their masters. The loft hound, the scar goat and the crew companions each earn their G12 credit once
+per run, replayable from the G49 journal.
