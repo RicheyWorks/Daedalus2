@@ -24,6 +24,8 @@ public final class ActivityRouter {
     private final Map<String, Entry> entries = new TreeMap<>();
     private final Object lock = new Object();
     private final ProgressionLedger ledger = new ProgressionLedger();
+    private final java.util.List<String> journal = new java.util.ArrayList<>();
+    private final java.util.Map<String, String> journalled = new java.util.HashMap<>();
 
     /** Learned points on a track for one life or colony instance. */
     public long total(String instanceId, String track) { return ledger.total(instanceId, track); }
@@ -103,7 +105,55 @@ public final class ActivityRouter {
                                                              Object result) {
         synchronized (lock) {
             ActivityResultReceipt r = receipt(activityId, session, result);
-            return ledger.credit(r, entry(activityId).policy());
+            return record(r, entry(activityId).policy());
+        }
+    }
+
+    /**
+     * Credits an already-issued receipt (read from a journal or the wire) under the activity's current policy. The
+     * receipt must be for a registered activity at the adapter's definition revision and mode (contest G49).
+     */
+    public List<ProgressionLedger.Award> credit(ActivityResultReceipt r) {
+        synchronized (lock) {
+            Entry e = entry(r.activityId());
+            com.daedalus.world.activity.ActivityDefinition d = e.adapter().definition();
+            if (r.definitionRevision() != d.revision() || r.mode() != d.mode())
+                throw new IllegalArgumentException("receipt " + r.sourceKey() + " is for revision "
+                        + r.definitionRevision() + " " + r.mode() + ", router has " + d.revision() + " " + d.mode());
+            return record(r, e.policy());
+        }
+    }
+
+    /** Every settled or credited receipt as journal lines, oldest first; each source key appears once. */
+    public List<String> journal() {
+        synchronized (lock) { return List.copyOf(journal); }
+    }
+
+    /**
+     * Rebuilds progression from journal lines after a restart. Every line is checked first (all or nothing: a tampered
+     * line credits nothing); then each receipt is credited exactly once. Returns how many receipts were new.
+     */
+    public int replay(List<String> lines) {
+        List<ActivityResultReceipt> receipts = com.daedalus.world.activity.ReceiptJournal.readAll(lines);
+        synchronized (lock) {
+            int before = journal.size();
+            for (ActivityResultReceipt r : receipts) credit(r);
+            return journal.size() - before;
+        }
+    }
+
+    private List<ProgressionLedger.Award> record(ActivityResultReceipt r, AwardPolicy policy) {
+        synchronized (lock) {
+            String prev = journalled.get(r.sourceKey());
+            if (prev != null && !prev.equals(r.digest()))
+                throw new ProgressionLedger.ConflictException("receipt " + r.sourceKey()
+                        + " was already journalled with a different digest");
+            List<ProgressionLedger.Award> awards = ledger.credit(r, policy);
+            if (prev == null) {
+                journalled.put(r.sourceKey(), r.digest());
+                journal.add(com.daedalus.world.activity.ReceiptJournal.line(r));
+            }
+            return awards;
         }
     }
 
