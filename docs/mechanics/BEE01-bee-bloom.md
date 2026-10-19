@@ -66,4 +66,12 @@ NPC lines (Wenna Skep):
 
 - `BeeBloom.season(Settings, seed)`, then `sow(Flora, n)` / `hive(n)`, then `run()` → `Report`. The host reads `days()` for the timeline UI: temperature, GDD, frost, flying, open beds and hives alive.
 - `Flora.band()` maps each flower onto the `Vegetation` band of the BattlefieldEcology grid, so the host can place the beds on matching cells (willow catkin on WETLAND from BEAVER01).
-- Assets: hive skep prop and flower bed props (see UNREAL-QUEUE / BLENDER-ASKS G48).
+- Assets (blender-team DONE 49216/49217, staged NOT READY in `bot-team\staging\g48-bee-bloom-20261019\`):
+  - `Prop_Bee_Skep` (+ `_LOD1`), with `SOCKET_Entrance` at the hive mouth for the bee swarm VFX.
+  - `Prop_Bee_FlowerBed` (+ `_LOD1`), with `SOCKET_Plant_00`..`SOCKET_Plant_07`. Each bed holds one Flora: spawn that flora's `plants` list on the bed's sockets.
+  - Clumps keyed by `BeeBloom.Flora` in `G48_BeeFlora.flora_variants.json` (`flora`, `flora_order`, `lookup`):
+    - WILLOW_CATKIN → `Prop_Bee_Flora_WillowCatkin`, CROCUS → `Prop_Bee_Flora_Crocus` and BRAMBLE → `Prop_Bee_Flora_Bramble` are new.
+    - CLOVER → `Prop_Ground_PYT_Clover_V01..V10` and HEATHER → `Prop_Ground_PYT_Wildflower_V01..V10` reuse the pcg-ecology glbs untouched.
+  - Frost is a material swap, not a mesh swap: `MI_BeeFlora_<Petal|Leaf|Wood>_<Bloom|Frost>` on parent `M_BeeFlora` (UE side, not built yet), with params FrostAmount / FrostTint / FrostRoughness / RimeAmount.
+    The rule: switch a bed to FROST when `Day.frost()` falls while its flora is open (those blooms lose their seed); otherwise use BLOOM.
+  - Bee swarm is VFX (Unreal side). Axes: Blender -Y lands on UE +Y; place props with yaw -90 (same as the G03/G20 kits).
