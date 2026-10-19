@@ -1,0 +1,1 @@
+Get-Content C:\Users\730ri\projects\bot-team\link\log.jsonl -Tail 1500 | Select-String '"from": "(prometheus|buffffff|2hot2trot|unreal-team)"' | Select-String 'TURN DONE|HANDOFF|GRANT|TURN START|clock hold|rotation' | Select-Object -Last 5 | ForEach-Object { $_.Line.Substring(0,[math]::Min(420,$_.Line.Length)) }
