@@ -136,7 +136,7 @@ def capture():
                                           ("project", "world", "pie", "game_world", "dirty_maps",
                                            "dirty_content", "scene", "selection", "camera")}, "accepted": True},
         "state_effects": {"assets": 0, "world": 0, "input": 0, "observers": 0,
-                          "ref_cache": "append_or_reuse_one_shared_ref"},
+                          "ref_cache": "scoped_shared_ref_append_or_reuse"},
     }
 
 
@@ -178,6 +178,18 @@ class PanelCaptureTests(unittest.TestCase):
         changed["capture_id"] = "c7a02c90-dc91-46dc-b71b-88c7a8da73bc"
         with self.assertRaisesRegex(ContractViolation, "already consumed"):
             self.read(changed, expected_capture_id=changed["capture_id"])
+
+    def test_r2_scoped_ref_effect_accepts_descendants_and_rejects_r1_exactly_one_claim(self):
+        changed = capture()
+        self.assertIn("[ref=g7]", changed["raw_return_text"])
+        self.assertIn("[ref=t1]", changed["raw_return_text"])
+        changed["state_effects"]["ref_cache"] = "append_or_reuse_one_shared_ref"
+        with self.assertRaisesRegex(ContractViolation, "unexpected ref-cache effect"):
+            self.read(changed)
+        self.assertEqual(self.consumed, set())
+        result = self.read()
+        self.assertEqual(result["capture_contract_sha256"],
+                         "4e930cd79e430f1a9151831cc07b709f936b871abec2577503b829f02f1189d4")
 
     def test_receiver_pid_start_world_and_external_dispatch_ids_are_required(self):
         mutations = (("editor", "pid", PID+1), ("editor", "pid", True),

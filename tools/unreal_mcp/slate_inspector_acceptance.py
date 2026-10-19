@@ -20,7 +20,7 @@ from tools.unreal_mcp.slate_inspector_results import ContractViolation
 SCOPE = "existing_primary_level_editor_details"
 TAB_ID = "LevelEditorSelectionDetails"
 BINDING_CONTRACT_SHA256 = "cba01057e2bcf49f2f6f70bb4bde62c6c53cd4a2a6aa384e0b6656efcd367bfa"
-CAPTURE_CONTRACT_SHA256 = "a0f3ce6776bba94a007bb7adab47d9cef32f2e58a59b8769d6f0886f752bc599"
+CAPTURE_CONTRACT_SHA256 = "4e930cd79e430f1a9151831cc07b709f936b871abec2577503b829f02f1189d4"
 CAPTURE_SCHEMA = "daedalus.official-slate-panel-capture.v1"
 MAX_CAPTURE_AGE_SECONDS = 300
 _CAPTURE_FIELDS = {
@@ -312,7 +312,9 @@ def read_panel_capture(capture, *, expected_process_id, expected_process_start_u
     _keys(effects, {"assets", "world", "input", "observers", "ref_cache"}, "state effects")
     for field in ("assets", "world", "input", "observers"):
         _require(type(effects[field]) is int and effects[field] == 0, "unexpected state effect: " + field)
-    _require(effects["ref_cache"] == "append_or_reuse_one_shared_ref", "unexpected ref-cache effect")
+    # Snapshot registers refs for rendered descendants too. R2 deliberately
+    # rejects R1's unsupported exactly-one-ref claim; no cache count is inferred.
+    _require(effects["ref_cache"] == "scoped_shared_ref_append_or_reuse", "unexpected ref-cache effect")
 
     packet = packets.build_execution_packet(
         approved_ref=binding["approved_ref"], max_depth=2, purpose="official_existing_details_capture",
