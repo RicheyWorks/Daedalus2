@@ -5,7 +5,7 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 | File | Role |
 |---|---|
 | `harness_core.py` | Engine-free plan, sidecar, receiver profile and verdict. Plain stdlib. |
-| `test_harness_core.py` | 29 engine-free tests (`python -m unittest test_harness_core`) |
+| `test_harness_core.py` | 34 engine-free tests (`python -m unittest test_harness_core`) |
 | `ue_harness.py` | Editor stages, one per bridge call: `start`, `poll`, `add_sockets`, `facts`, `save` |
 | `profiles/flagship_terrain_33.json` | Five-slot receiver profile generated from source packet 519f28bb (sha-pinned): 5 slots in order, 669 tris, expected cm bounds, Nanite off, collision off, destination `/Game/Daedalus/Art/Islands/CodexContest/FlagshipBIP1/Terrain33R1` |
 | `samples/Prop_PracticeCrate.sockets.json` | Sample sidecar in the 48521 shape |
@@ -37,7 +37,8 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 - UE 5.8 API facts found on that run and fixed here:
   - `override_pipelines` takes `SoftObjectPath`, not pipeline objects;
   - `StaticMesh.Sockets` is protected from Python, so use `find_socket`/`add_socket`/`get_sockets_by_tag`;
-  - `generate_lightmap_u_vs` isn't on `common_meshes_properties` (it's reported in `overrides.failed`);
+  - `generate_lightmap_u_vs` lives on `mesh_pipeline`, not `common_meshes_properties` (fixed);
+  - `collision=false` must also turn off the automatic collision: `mesh_pipeline.collision` defaults True and `fallback_collision_type` defaults CONVEX18DOP (that made terrain_33's 24-vert hull). The harness sets collision False and fallback NONE, `evaluate()` asserts `no_simple_collision`, and `strip_simple_collision()` cleans existing assets;
   - a **reimport keeps the asset's Nanite setting** and ignores the override's `build_nanite`. `evaluate()` catches this (`nanite_as_planned=False`), and `set_nanite()` applies the plan.
 - **Sockets:** stock 5.8 glTF Interchange DOES import `SOCKET_Top` as socket `Top`. The item e "dropped" result was a false negative: its reader swallowed the protected-property error. The sidecar is kept as a cross-check (`add_sockets` reports "kept existing").
 - **8 triangles (item e):** settled. With Nanite on (fallback target Auto), LOD0 is 256 tris. With Nanite off, it's 264 tris, which matches the glTF. The Nanite fallback mesh was the cause; the source is fine.

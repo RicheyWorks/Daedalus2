@@ -158,6 +158,9 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
             "create_new_materials": bool(ov.get("create_new_materials", True)),
             "import_materials": bool(ov.get("import_materials", True)),
             "collision_from_ucx": bool(ov.get("collision", True)),
+            # collision=false also turns OFF Interchange's automatic simple collision
+            # (mesh_pipeline.collision / fallback_collision_type); readback must be 0 primitives.
+            "generate_collision": bool(ov.get("collision", True)),
             "generate_lightmap_uvs": bool(ov.get("generate_lightmap_u_vs", False)),
             "bake_meshes": bool(ov.get("bake_meshes", True)),
         },
@@ -215,6 +218,8 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
         checks["bounds"] = _close(facts.get("bounds_min_cm", []), exp["min_cm"], tol) and _close(facts.get("bounds_max_cm", []), exp["max_cm"], tol)
     checks["nanite_as_planned"] = (checks["mesh_found"] and facts.get("nanite") is not None
                                    and bool(facts.get("nanite")) == bool(plan["options"]["build_nanite"]))
+    if not plan["options"].get("generate_collision", True):
+        checks["no_simple_collision"] = checks["mesh_found"] and facts.get("simple_collision_count") == 0
     if plan["glb"]["ucx"] and plan["options"]["collision_from_ucx"]:
         checks["ucx_convex"] = (facts.get("collision", {}).get("convex", 0) >= len(plan["glb"]["ucx"]))
     want = {s["name"] for s in plan["sockets"]["sockets"]}
