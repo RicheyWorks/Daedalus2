@@ -1,1 +1,1 @@
-{"url":"<routine webhook URL>","key":"<sender key>","header":"Authorization","prefix":"Bearer "}
+{"url":"<default routine webhook URL, wakes all wake-needed bots>","key":"<sender key>","header":"Authorization","prefix":"Bearer ","overrides":{"<bot name>":{"url":"<that bot's own webhook URL>","key":"<its key>","header":"Authorization","prefix":"Bearer "}}}

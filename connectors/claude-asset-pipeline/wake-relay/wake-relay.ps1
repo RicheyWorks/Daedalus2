@@ -35,6 +35,18 @@ function Select-WakeHits([string]$chunk,[string]$rx){
   }
   ,$hits
 }
+# Config is the default webhook {url,key,header,prefix}, plus optional "overrides": {"<bot>": {url,key,header,prefix}}.
+# A message to a bot with an override goes to that bot's webhook; everything else goes to the default.
+function Group-WakeHits($hits,$cfg){
+  $groups=[ordered]@{}
+  foreach($m in $hits){
+    $name='default'; $target=$cfg
+    if($cfg.overrides -and $cfg.overrides.PSObject.Properties[$m.to]){ $name=$m.to; $target=$cfg.overrides.($m.to) }
+    if(-not $groups.Contains($name)){ $groups[$name]=@{Name=$name;Target=$target;Messages=New-Object System.Collections.ArrayList} }
+    [void]$groups[$name].Messages.Add($m)
+  }
+  @($groups.Values)
+}
 function W($m){ $line=("{0} {1}" -f (Get-Date -f 'MM-dd HH:mm:ss'),$m); if($DryRun){Write-Output $line}else{Add-Content $LogPath $line} }
 
 $grok=Get-WakeRegex $BotsPath
@@ -50,13 +62,16 @@ while($true){
       $last=$txt.LastIndexOf("`n"); if($last -lt 0){ if($DryRun){break}; Start-Sleep 5;continue}
       $chunk=$txt.Substring(0,$last+1); $newPos=$pos+[Text.Encoding]::UTF8.GetByteCount($chunk)
       $hits=Select-WakeHits $chunk $grok
-      if($DryRun){ Write-Output (@{source=$Source;messages=$hits}|ConvertTo-Json -Depth 5 -Compress); break }
+      if($DryRun){ $routes=@{}; if(Test-Path $ConfigPath){ $c=Get-Content $ConfigPath -Raw|ConvertFrom-Json; foreach($g in (Group-WakeHits $hits $c)){ $routes[$g.Name]=@($g.Messages|ForEach-Object{$_.id}) } }; Write-Output (@{source=$Source;messages=$hits;routes=$routes}|ConvertTo-Json -Depth 5 -Compress); break }
       if($hits.Count -gt 0){
         if(-not (Test-Path $ConfigPath)){ W "PENDING $($hits.Count) msgs, no $(Split-Path -Leaf $ConfigPath) yet"; Start-Sleep 20; continue }
-        $c=Get-Content $ConfigPath -Raw|ConvertFrom-Json; $h=@{}; $h[$c.header]=("{0}{1}" -f $c.prefix,$c.key)
-        $body=(@{source=$Source;messages=$hits}|ConvertTo-Json -Depth 5 -Compress)
-        Invoke-RestMethod -Uri $c.url -Method Post -Headers $h -ContentType 'application/json' -Body $body -TimeoutSec 20 | Out-Null
-        W ("POSTED {0}: {1}" -f $hits.Count, (($hits|ForEach-Object{"$($_.id) $($_.from)->$($_.to)"}) -join '; '))
+        $c=Get-Content $ConfigPath -Raw|ConvertFrom-Json
+        foreach($g in (Group-WakeHits $hits $c)){
+          $h=@{}; $h[$g.Target.header]=("{0}{1}" -f $g.Target.prefix,$g.Target.key)
+          $body=(@{source=$Source;messages=@($g.Messages)}|ConvertTo-Json -Depth 5 -Compress)
+          Invoke-RestMethod -Uri $g.Target.url -Method Post -Headers $h -ContentType 'application/json' -Body $body -TimeoutSec 20 | Out-Null
+          W ("POSTED {0} via {1}: {2}" -f $g.Messages.Count, $g.Name, (($g.Messages|ForEach-Object{"$($_.id) $($_.from)->$($_.to)"}) -join '; '))
+        }
       }
       $pos=$newPos; Set-Content $StatePath $pos
     } elseif($DryRun){ Write-Output '{"messages":[]}'; break }

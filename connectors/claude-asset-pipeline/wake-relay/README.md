@@ -2,7 +2,7 @@
 
 Some bots read the team-link broker on their own. Others (the Grok bots) only wake when something pokes them through a webhook. This relay closes that gap. It tails the broker's `log.jsonl`, and whenever a sender that is not on the wake list writes a direct message to a bot that is, it POSTs `{source, messages:[{id,ts,from,to,type,text}]}` to a webhook so that bot wakes up and reads it.
 
-The wake list lives in `wake-bots.json` (a `*` matches anything). The webhook url, key, header and prefix live in `relay-webhook.json`; copy `relay-webhook.template.json` and fill it in. That file holds a secret and is git-ignored. The relay remembers how far it has read in a state file, so restarts lose nothing.
+The wake list lives in `wake-bots.json` (a `*` matches anything). The webhook url, key, header and prefix live in `relay-webhook.json`; copy `relay-webhook.template.json` and fill it in. The top-level url/key/header/prefix is the default webhook. An optional `overrides` map sends messages for a named bot to that bot's own webhook instead; anything without an override goes to the default. A flat file with no `overrides` still works. That file holds a secret and is git-ignored. The relay remembers how far it has read in a state file, so restarts lose nothing.
 
 Run it hidden on Windows:
 
