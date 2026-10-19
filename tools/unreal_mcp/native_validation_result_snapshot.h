@@ -319,7 +319,15 @@ inline std::string Serialize(const FValidationSnapshot& snap) {
 // and performs no validation, loading or invocation of its own.
 namespace unreal_adapter {
 
-inline std::string ToUtf8(const FString& s) { return std::string(TCHAR_TO_UTF8(*s)); }
+// Length-aware: a legal FString/FText may carry embedded NULs ("A\0B").
+// TCHAR_TO_UTF8 into std::string(const char*) would stop at the first NUL and
+// silently drop diagnostic text, so convert with the explicit source length and
+// build the std::string from (data, length). Embedded NULs then reach
+// AppendEscaped and are emitted as \u0000, never truncated.
+inline std::string ToUtf8(const FString& s) {
+    const FTCHARToUTF8 converted(*s, s.Len());
+    return std::string(converted.Get(), static_cast<size_t>(converted.Length()));
+}
 
 inline EResult ToResult(EDataValidationResult r) {
     switch (r) {

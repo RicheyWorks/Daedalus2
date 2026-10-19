@@ -160,6 +160,28 @@ static void TestAttestationOnlyRemovesWhatWasAttested() {
     CHECK(Contains(j, "\"native_runtime_unqualified\""));
 }
 
+// Regression (stdlib half, AUTHORED_UNRUN): an embedded NUL inside diagnostic
+// text survives the serializer as \u0000 with the bytes after it intact. The
+// native half (FString "A\0B" through unreal_adapter::ToUtf8) is authored below
+// under DAEDALUS_WITH_UNREAL_DATAVALIDATION and has NOT been compiled or run.
+static void TestEmbeddedNulPreserved() {
+    FValidationSnapshot s = MakePassing();
+    s.RequestedAssets = {std::string("A\0B", 3)};
+    const std::string j = Serialize(s);
+    CHECK(Contains(j, "\"requested_assets\": [\"A\\u0000B\"]"));
+    CHECK(!Contains(j, "\"requested_assets\": [\"A\"]"));
+}
+
+#if defined(DAEDALUS_WITH_UNREAL_DATAVALIDATION)
+static void TestNativeToUtf8EmbeddedNul() {
+    const TCHAR Raw[] = {TEXT('A'), TEXT('\0'), TEXT('B')};
+    const FString S(3, Raw);
+    const std::string U = daedalus::validation_snapshot::unreal_adapter::ToUtf8(S);
+    CHECK(U.size() == 3);
+    CHECK(U == std::string("A\0B", 3));
+}
+#endif
+
 int main() {
     TestEightCountsAndLimitPreserved();
     TestNativeReturnIsIntNotBool();
@@ -172,6 +194,10 @@ int main() {
     TestEscaping();
     TestHonestUnknownsByDefault();
     TestAttestationOnlyRemovesWhatWasAttested();
+    TestEmbeddedNulPreserved();
+#if defined(DAEDALUS_WITH_UNREAL_DATAVALIDATION)
+    TestNativeToUtf8EmbeddedNul();
+#endif
     std::printf("%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;
 }
