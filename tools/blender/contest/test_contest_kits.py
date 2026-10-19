@@ -6,7 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys
 import kitlib as K
 DATA = os.path.join(HERE, "..", "..", "..", "data", "contest")
 MODULES = {"wz_fishing": "wz_fishing.kit.json", "wz_eggs": "wz_eggs.kit.json"}
-NEW = ("lab_g04", "lab_g02", "lab_marker", "wz_sports", "par_mail", "brk_parts", "gal_frame", "ytm_g33")
+NEW = ("lab_g04", "lab_g02", "lab_marker", "wz_sports", "par_mail", "brk_parts", "gal_frame", "ytm_g33", "kennel_g45")
 for extra in ("lab_echo", "lab_fold", "g03_hornback", "or_parlay", "ash_g20") + NEW:
     if os.path.exists(os.path.join(HERE, extra + ".py")):
         MODULES[extra] = extra + ".kit.json"
