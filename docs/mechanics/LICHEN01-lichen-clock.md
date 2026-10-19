@@ -51,4 +51,4 @@ NPC lines (Tamsin Coire):
 
 - `LichenClock.field(Settings, seed)`, then `measure(event, boulder, n)` for the calipers interaction, `age(d)` for the field notebook UI, and `judge(guesses)` once at the end.
 - `ground(age)` paints the boulder field cells.
-- Assets: boulder field (reuse rock kits), lichen decal (3 sizes), calipers prop (see UNREAL-QUEUE / BLENDER-ASKS).
+- Assets: boulder field (reuse rock kits), lichen decal (3 sizes), calipers prop (see UNREAL-QUEUE / BLENDER-ASKS). Staged by blender-team (NOT READY) in `bot-team\staging\g91-lichen-clock-20261019`: `Decal_Rock_Lichen_S/M/L` (15/30/60 mm; scale L's DecalSize up to 1.31x for the 78.6 mm maximum) with the `Decal_Rock_Lichen.decals.json` index, and `Prop_Survey_Calipers` (`_Jaw` slides on `SOCKET_Slide`, 0-150 mm; `_Static` jaw at 60 mm; `SOCKET_Grip`, `SOCKET_JawTip`).

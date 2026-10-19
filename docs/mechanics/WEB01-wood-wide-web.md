@@ -55,4 +55,4 @@ NPC lines (Hesper Ngaio):
 - `WoodWideWeb.stand(Settings, seed)` or `planted(...)`, then `log(x, y)` / `inoculate(x, y)`, then `run()` → `Report`.
 - `years()` drives the stand timeline: drought, networks, linked trees, seedlings, deaths.
 - `band(i)` paints the forest cells.
-- Assets: reuse the pcg-ecology trees. Fungal threads are a ground decal or VFX, plus a marking-axe blaze decal and a spore pouch prop (see UNREAL-QUEUE / BLENDER-ASKS).
+- Assets: reuse the pcg-ecology trees. Fungal threads are a ground decal or VFX, plus a marking-axe blaze decal and a spore pouch prop (see UNREAL-QUEUE / BLENDER-ASKS). Staged by blender-team (NOT READY) in `bot-team\staging\g82-forest-wood-wide-web-20261019`: `Prop_Forest_SporePouch` (+ `_LOD1`, sockets.json) and `Decal_Forest_Blaze` (`T_Decal_Forest_Blaze_BC/_N/_M` + decal.json).
