@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package com.daedalus.world.activity;
+package com.daedalus.world.activity.learned;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * A finished activity and the lesson it credits to one creature or plant.
  * Parsing, the constructor, and {@link #serialize()} are the v1 contract in
- * {@code docs/contracts/activity-result-v1}.
+ * {@code docs/contracts/activity-result-v1/LEARNED-ENVELOPE.md}.
  */
 public record ActivityResult(
         String version,

@@ -224,7 +224,7 @@
       Map and cannot tell the wrapper from a live map (same as Ecosystem.DayReport).
     -->
     <Match>
-        <Class name="com.daedalus.world.activity.ActivityResult"/>
+        <Class name="com.daedalus.world.activity.learned.ActivityResult"/>
         <Method name="detail"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>

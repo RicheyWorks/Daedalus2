@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package com.daedalus.world.activity;
+package com.daedalus.world.activity.learned;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

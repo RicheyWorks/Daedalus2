@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package com.daedalus.world.activity;
+package com.daedalus.world.activity.learned;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

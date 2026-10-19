@@ -7,7 +7,9 @@ needs a single shape for "this activity finished with this outcome for this subj
 that credits that creature or plant exactly once when the same result is replayed, retried or
 delivered twice.
 
-This folder is the contract. The JDK-only core is `com.daedalus.world.activity`
+This file is the lesson-envelope contract. It sits in this folder beside the chalk-trail receipt
+(`README.md`), which is a different owner's wire form and is left as it is. The JDK-only core is
+`com.daedalus.world.activity.learned`
 (`ActivityResult`, `ActivityCredit`, `ActivityResultReceipt`, `ActivityCreditLedger`).
 It does not import a game, a server, or a JSON library. The first wired game is Prismheart pond
 fishing: `PrismPondFishing` reads a finished Windmere cast and the pond table

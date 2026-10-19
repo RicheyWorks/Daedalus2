@@ -15,8 +15,8 @@ the same result credits that subject exactly once when it is replayed, retried o
 The credit key is `(activityId, attemptId, subjectId)`. A second delivery of that triple does not
 teach the lesson again.
 
-- Contract: `docs/contracts/activity-result-v1`
-- Core: `com.daedalus.world.activity` (`ActivityResult`, `ActivityCredit`, `ActivityResultReceipt`)
+- Contract: `docs/contracts/activity-result-v1/LEARNED-ENVELOPE.md`
+- Core: `com.daedalus.world.activity.learned` (`ActivityResult`, `ActivityCredit`, `ActivityResultReceipt`)
 - First wired game: Prismheart pond fishing, `PrismPondFishing`, reading `data/rpg/prism-fish.json`
 
 A later minigame adds an adapter that builds the same envelope. It does not invent a second one.

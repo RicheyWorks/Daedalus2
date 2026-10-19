@@ -11,11 +11,12 @@ under the `_migration/` portfolios.
 ### Added
 
 - **Activity result (What Life Learns).**
-  One envelope for a finished minigame
-  (`docs/contracts/activity-result-v1`)
-  and a receipt that credits a creature
-  or plant exactly once. Prismheart pond
-  fishing is the first adapter.
+  A lesson envelope
+  (`docs/contracts/activity-result-v1/LEARNED-ENVELOPE.md`,
+  `com.daedalus.world.activity.learned`)
+  credits a creature or plant exactly once.
+  Prismheart pond fishing is the adapter.
+  It sits beside the chalk-trail receipt.
 
 - **Combat and EXP (ADR-037).**
   Zelda II in the realm:

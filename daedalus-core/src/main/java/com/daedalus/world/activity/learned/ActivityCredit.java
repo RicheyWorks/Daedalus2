@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package com.daedalus.world.activity;
+package com.daedalus.world.activity.learned;
 
 /**
  * Credits one finished activity to one creature or plant.
