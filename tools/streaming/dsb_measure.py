@@ -50,7 +50,7 @@ def measure_dirs(content, dirs):
 def measure(content, sources):
     out = {}
     for isl in sources.get("islands", []):
-        m = measure_dirs(content, isl["content_dirs"])
+        m = measure_dirs(content, isl.get("content_dirs", []))
         if m["files"] == 0:
             m["note"] = "no package files found; dsb_manifest.py keeps the estimate"
         out[isl["island"]] = m

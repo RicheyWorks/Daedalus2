@@ -94,7 +94,7 @@ class GeneratorTest(unittest.TestCase):
         by = {i[0]: i for i in isl}
         self.assertIn("DiskSaver", by)
         ds = by["DiskSaver"]
-        res, ram, _, count = dsb.pick(isl, ds[1], ds[2], 100000, 150000, 25000)
+        res, ram, _, count = dsb.pick(isl, ds[1], ds[2], 100000, 150000, ds[3])
         self.assertEqual(count, 1)
         self.assertEqual(ram, ds[3])
         res, _, _, count = dsb.pick(isl, ds[1], ds[2], 100000, 150000, 1)

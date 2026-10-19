@@ -1,9 +1,9 @@
 {
-  "_comment": "Which Unreal Content folders each island owns, for tools/streaming/dsb_measure.py. Paths are relative to the project's Content folder (/Game/<path>). Owners: correct your row if your island keeps assets elsewhere.",
+  "_comment": "Which Unreal Content folders each island owns, for tools/streaming/dsb_measure.py. Paths are relative to the project's Content folder (/Game/<path>). An island with no content_dirs keeps the placement-count estimate. Owners: fill in your row when you know where your island's assets live.",
   "islands": [
-    {"island": "BlenderBoss", "content_dirs": ["BlenderBoss"]},
+    {"island": "BlenderBoss", "content_dirs": [], "note": "Content/BlenderBoss holds only the sublevel map; meshes live in shared folders, owner to list them"},
     {"island": "DiskSaver", "content_dirs": ["DiskSaver"]},
-    {"island": "Hephaestus", "content_dirs": ["Hephaestus"]},
+    {"island": "Hephaestus", "content_dirs": [], "note": "Content/Hephaestus holds only the sublevel map and one material; meshes live in shared folders, owner to list them"},
     {"island": "OddsReaper", "content_dirs": ["OddsReaper"]}
   ]
 }
