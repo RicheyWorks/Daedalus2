@@ -46,7 +46,7 @@ jobs:
       run:
         working-directory: engines/unreal/core-test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and run with sanitizers
         run: |
           for source in photo_pdf_core_test local_app_core_test; do
@@ -59,7 +59,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and run both with warnings as errors
         shell: cmd
         run: engines\unreal\core-test\run_local_app_core.cmd "%RUNNER_TEMP%\local-app-machines"
