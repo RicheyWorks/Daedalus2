@@ -278,3 +278,8 @@ def split_into(caps, sockets, cap, closed, opened=None):
     for m in out:
         caps[m["asset"]] = cap; sockets[m["asset"]] = [x["name"] for x in m["sockets"]]
     return out
+
+
+def plain_lod1(part):
+    """Bevelled box at LOD0, a plain 12-tri copy at LOD1 (same silhouette, a quarter of the cost)."""
+    return [dict(part, lod1={"drop": True}), dict(part, name=part["name"] + "_L1", bevel=False, lod1={"only": True})]
