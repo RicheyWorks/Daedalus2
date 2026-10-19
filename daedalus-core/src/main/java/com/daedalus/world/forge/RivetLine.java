@@ -106,6 +106,20 @@ public final class RivetLine {
                 n[Seat.SPOILED.ordinal()], line(good, t.holes(), n[Seat.SPOILED.ordinal()]));
     }
 
+    /** One-line RVL 1 summary of a judged line, the same text as Encode() in DaedalusRivetLineCore.h. */
+    public static String encode(ArkClass c, Result r) {
+        StringBuilder seams = new StringBuilder();
+        for (int i = 0; i < r.rivetsPerSeam().size(); i++) {
+            seams.append(i == 0 ? "" : ",").append(r.rivetsPerSeam().get(i));
+        }
+        StringBuilder seats = new StringBuilder();
+        for (Seat s : r.seats()) {
+            seats.append("TNLX".charAt(s.ordinal()));
+        }
+        return "RVL 1 " + c + " holes=" + r.seats().size() + " tight=" + r.tight() + " snug=" + r.snug() + " loose=" + r.loose()
+                + " spoiled=" + r.spoiled() + " seams=" + seams + " seats=" + seats + " | " + r.line();
+    }
+
     /** The riveter's run: every rivet set the moment it's ready, three strikes each. */
     public static List<Set> master(Tray t) {
         List<Set> sets = new ArrayList<>(t.holes());
