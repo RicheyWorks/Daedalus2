@@ -45,10 +45,12 @@ int main(int argc, char** argv) {
     Check(EchoBellGate(1, 0, true).GetWindowMs() == 210, "crickets widen");
     EchoBellGate m(99, 0, false, {1, 20, 40});
     Check(m.GetRings()[2].EchoMs - m.GetRings()[2].RingMs == 200 + 70 * 40, "maze depth echo");
-    bool threw = false; try { EchoBellGate(1, 0, false, {0, 2, 3}); } catch (const std::invalid_argument&) { threw = true; }
-    Check(threw, "bad depth rejected");
-    threw = false; try { EchoBellGate(1, 4, false); } catch (const std::invalid_argument&) { threw = true; }
-    Check(threw, "bad difficulty rejected");
+    Check(m.IsValid() && EchoBellGate(42, 2, false).IsValid(), "valid configs are valid");
+    EchoBellGate badDepth(1, 0, false, {0, 2, 3});
+    Check(!badDepth.IsValid() && badDepth.GetRings().empty() && badDepth.GetWindowMs() == 0, "bad depth rejected");
+    EchoBellGate badDiff(1, 4, false);
+    Check(!badDiff.IsValid() && badDiff.GetRings().empty(), "bad difficulty rejected");
+    Check(!EchoBellGate(1, 1, false, {2, 3}).IsValid(), "wrong depth count rejected");
     std::printf("echo_bell: %d checks, %d failed\n", checks, failures);
     return failures ? 1 : 0;
 }
