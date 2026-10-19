@@ -3,8 +3,9 @@
 //
 // Standalone, standard-library-only tests for native_validation_result_snapshot.h.
 // No Unreal headers, no DataValidation plugin, no invocation, no I/O beyond stdout.
-// STATUS: AUTHORED_UNRUN. Do not run until a fresh serialized resource clear is
-// granted. Intended command (one serial process, from tools/unreal_mcp):
+// STATUS: stdlib tests compiled and run offline (MSVC cl /std:c++17 /EHsc /W4
+// /permissive-); the DAEDALUS_WITH_UNREAL_DATAVALIDATION native case is
+// authored and skipped without the engine. Command (from tools/unreal_mcp):
 //   g++ -std=c++17 -Wall -Wextra -o test_nvrs test_native_validation_result_snapshot.cpp && ./test_nvrs
 // (MSVC: cl /std:c++17 /EHsc test_native_validation_result_snapshot.cpp)
 // The JSON produced by MakePassing() is the shape evaluate_native_validation()
@@ -13,6 +14,7 @@
 #include "native_validation_result_snapshot.h"
 
 #include <cstdio>
+#include <limits>
 #include <string>
 
 using namespace daedalus::validation_snapshot;
@@ -172,6 +174,179 @@ static void TestEmbeddedNulPreserved() {
     CHECK(!Contains(j, "\"requested_assets\": [\"A\"]"));
 }
 
+// ---- Output caps (TrySerialize / FSnapshotLimits) ----
+
+static const size_t kSizeMax = std::numeric_limits<size_t>::max();
+
+static bool Refused(const FSnapshotOutcome& o, ESnapshotStatus want) {
+    return o.Status == want && o.Json.empty();
+}
+
+// Defaults are the consumer's OutputCaps values (native_validation_snapshot_consumer.py).
+static void TestCapDefaultsMatchConsumer() {
+    const FSnapshotLimits l;
+    CHECK(l.MaxBytes == 8u * 1024u * 1024u);
+    CHECK(l.MaxRequestedAssets == 4096);
+    CHECK(l.MaxDetails == 4096);
+    CHECK(l.MaxMessagesPerList == 1024);
+    CHECK(l.MaxStringChars == 16384);
+    CHECK(l.MaxTotalMessages == 65536);
+    const FSnapshotOutcome blank;
+    CHECK(blank.Status != ESnapshotStatus::Ok);
+    const FSnapshotOutcome o = TrySerialize(MakePassing());
+    CHECK(o.Status == ESnapshotStatus::Ok);
+    CHECK(o.Json == Serialize(MakePassing()));
+    CHECK(o.Bytes == o.Json.size());
+}
+
+// Exact boundary passes, cap-1 (equivalently output of cap+1) refuses whole,
+// and the refusal happens before the output buffer is reserved.
+static void TestByteCapExactBoundaryAndPlusOne() {
+    const FValidationSnapshot s = MakePassing();
+    const size_t n = Serialize(s).size();
+    FSnapshotLimits l;
+    l.MaxBytes = n;
+    const FSnapshotOutcome at = TrySerialize(s, l);
+    CHECK(at.Status == ESnapshotStatus::Ok);
+    CHECK(at.Bytes == n);
+    CHECK(at.Json == Serialize(s));
+    l.MaxBytes = n - 1;
+    const FSnapshotOutcome over = TrySerialize(s, l);
+    CHECK(Refused(over, ESnapshotStatus::BytesCapExceeded));
+    CHECK(over.Bytes == n);
+    CHECK(over.Json.capacity() < 64);  // nothing near n was reserved
+    FValidationSnapshot grown = s;     // cap+1 input against the exact cap
+    grown.RequestedAssets[0] += "X";
+    l.MaxBytes = n;
+    const FSnapshotOutcome plus1 = TrySerialize(grown, l);
+    CHECK(Refused(plus1, ESnapshotStatus::BytesCapExceeded));
+    CHECK(plus1.Bytes == n + 1);
+}
+
+static void TestEscapingCountsTowardBytes() {
+    const FValidationSnapshot base = MakePassing();
+    FValidationSnapshot s = base;
+    s.Results.ValidatorMessages.push_back({"E", std::string(10, '\x01')});
+    const size_t b0 = TrySerialize(base).Bytes;
+    const FSnapshotOutcome o = TrySerialize(s);
+    CHECK(o.Status == ESnapshotStatus::Ok);
+    CHECK(o.Bytes == o.Json.size());
+    CHECK(o.Bytes - b0 == std::string("{\"Severity\": \"E\", \"Text\": \"").size() + 60 + 2);
+    FSnapshotLimits l;
+    l.MaxBytes = o.Bytes - 1;  // still far above the raw (unescaped) payload size
+    CHECK(Refused(TrySerialize(s, l), ESnapshotStatus::BytesCapExceeded));
+    FValidationSnapshot nul = base;  // embedded NUL costs 6 bytes, not 1
+    nul.RequestedAssets[0] = std::string("A\0B", 3);
+    FValidationSnapshot plain = base;
+    plain.RequestedAssets[0] = "AXB";
+    CHECK(TrySerialize(nul).Bytes == TrySerialize(plain).Bytes + 5);
+}
+
+static void TestRowCapsExactBoundaryAndPlusOne() {
+    FValidationSnapshot s = MakePassing();
+    FSnapshotLimits l;
+    l.MaxRequestedAssets = 1;
+    l.MaxDetails = 1;
+    CHECK(TrySerialize(s, l).Status == ESnapshotStatus::Ok);
+    FValidationSnapshot r = s;
+    r.RequestedAssets.push_back("/Game/Isolated/SM_Two.SM_Two");
+    const FSnapshotOutcome ro = TrySerialize(r, l);
+    CHECK(Refused(ro, ESnapshotStatus::RequestedAssetsCapExceeded));
+    CHECK(ro.Bytes == 0);  // refused before the measuring pass
+    FValidationSnapshot d = s;
+    d.Results.AssetsDetails["/Game/Isolated/SM_Two.SM_Two"] = FDetailSnapshot();
+    CHECK(Refused(TrySerialize(d, l), ESnapshotStatus::DetailsCapExceeded));
+
+    FSnapshotLimits m;
+    m.MaxMessagesPerList = 2;
+    m.MaxTotalMessages = 3;
+    FValidationSnapshot t = s;
+    auto& det = t.Results.AssetsDetails["/Game/Isolated/SM_Crate.SM_Crate"];
+    det.ValidationErrors = {"e1", "e2"};
+    det.ValidationWarnings = {"w1"};
+    const FSnapshotOutcome atTotal = TrySerialize(t, m);
+    CHECK(atTotal.Status == ESnapshotStatus::Ok);
+    CHECK(atTotal.TotalMessages == 3);
+    FValidationSnapshot perList = t;
+    perList.Results.AssetsDetails["/Game/Isolated/SM_Crate.SM_Crate"].ValidationErrors.push_back("e3");
+    CHECK(Refused(TrySerialize(perList, m), ESnapshotStatus::MessagesPerListCapExceeded));
+    FValidationSnapshot vm = s;
+    vm.Results.ValidatorMessages = {{"Info", "a"}, {"Info", "b"}, {"Info", "c"}};
+    CHECK(Refused(TrySerialize(vm, m), ESnapshotStatus::MessagesPerListCapExceeded));
+    FValidationSnapshot total = t;  // every list within 2, cumulative 4 > 3
+    total.Results.ValidatorMessages = {{"Info", "v"}};
+    const FSnapshotOutcome to = TrySerialize(total, m);
+    CHECK(Refused(to, ESnapshotStatus::TotalMessagesCapExceeded));
+    CHECK(to.TotalMessages == 4);
+    FValidationSnapshot ext = s;  // ExternalObjects are not message rows
+    ext.Results.AssetsDetails["/Game/Isolated/SM_Crate.SM_Crate"].ExternalObjects.assign(5, {"/Game/X", "A"});
+    FSnapshotLimits zeroMsgs;
+    zeroMsgs.MaxTotalMessages = 0;
+    CHECK(TrySerialize(ext, zeroMsgs).Status == ESnapshotStatus::Ok);
+}
+
+static void TestStringCharsCapCodePointsExactBoundaryAndPlusOne() {
+    FSnapshotLimits l;
+    l.MaxStringChars = 8;
+    FValidationSnapshot s;  // empty: no requested assets or details
+    s.RequestedAssets = {"12345678"};
+    CHECK(TrySerialize(s, l).Status == ESnapshotStatus::Ok);
+    s.RequestedAssets = {"123456789"};
+    CHECK(Refused(TrySerialize(s, l), ESnapshotStatus::StringCharsCapExceeded));
+    std::string e8;
+    for (int i = 0; i < 8; ++i) e8 += "\xC3\xA9";  // 8 code points, 16 bytes
+    s.RequestedAssets = {e8};
+    CHECK(TrySerialize(s, l).Status == ESnapshotStatus::Ok);
+    s.RequestedAssets = {e8 + "\xC3\xA9"};
+    CHECK(Refused(TrySerialize(s, l), ESnapshotStatus::StringCharsCapExceeded));
+    FValidationSnapshot msg;
+    msg.Results.ValidatorMessages = {{"Error", "123456789"}};
+    CHECK(Refused(TrySerialize(msg, l), ESnapshotStatus::StringCharsCapExceeded));
+    FValidationSnapshot ext;
+    FDetailSnapshot d;
+    d.ExternalObjects.push_back({"/Game/X", "123456789"});
+    ext.Results.AssetsDetails["/G.A"] = d;
+    CHECK(Refused(TrySerialize(ext, l), ESnapshotStatus::StringCharsCapExceeded));
+    FValidationSnapshot key;
+    key.Results.AssetsDetails["/Game/A.A123"] = FDetailSnapshot();
+    CHECK(Refused(TrySerialize(key, l), ESnapshotStatus::StringCharsCapExceeded));
+}
+
+static void TestSizeOverflowRefusedNotWrapped() {
+    size_t sum = 7;
+    CHECK(!detail::CheckedAdd(kSizeMax, 1, &sum));
+    CHECK(sum == 7);
+    CHECK(detail::CheckedAdd(kSizeMax - 1, 1, &sum));
+    CHECK(sum == kSizeMax);
+    detail::FByteCounter c;
+    c.Count = kSizeMax - 3;
+    detail::AppendEscaped(c, std::string("abc"));  // 5 bytes with quotes
+    CHECK(c.Overflow);
+    c.push_back('x');
+    CHECK(c.Overflow);  // latched, never wraps back to a small count
+    detail::FByteCounter whole;
+    whole.Count = kSizeMax - 10;
+    detail::AppendSnapshot(whole, MakePassing());  // same writer TrySerialize measures with
+    CHECK(whole.Overflow);
+    FSnapshotLimits huge;
+    huge.MaxBytes = huge.MaxRequestedAssets = huge.MaxDetails = kSizeMax;
+    huge.MaxMessagesPerList = huge.MaxStringChars = huge.MaxTotalMessages = kSizeMax;
+    CHECK(TrySerialize(MakePassing(), huge).Status == ESnapshotStatus::Ok);
+}
+
+static void TestZeroCaps() {
+    FSnapshotLimits zero;
+    zero.MaxRequestedAssets = zero.MaxDetails = zero.MaxMessagesPerList = 0;
+    zero.MaxStringChars = zero.MaxTotalMessages = 0;
+    const FValidationSnapshot empty;
+    CHECK(TrySerialize(empty, zero).Status == ESnapshotStatus::Ok);  // 0 rows == cap 0
+    CHECK(Refused(TrySerialize(MakePassing(), zero), ESnapshotStatus::RequestedAssetsCapExceeded));
+    FSnapshotLimits noBytes;
+    noBytes.MaxBytes = 0;
+    CHECK(Refused(TrySerialize(empty, noBytes), ESnapshotStatus::BytesCapExceeded));
+    CHECK(std::string(SnapshotStatusName(ESnapshotStatus::BytesCapExceeded)) == "BytesCapExceeded");
+}
+
 #if defined(DAEDALUS_WITH_UNREAL_DATAVALIDATION)
 static void TestNativeToUtf8EmbeddedNul() {
     const TCHAR Raw[] = {TEXT('A'), TEXT('\0'), TEXT('B')};
@@ -195,6 +370,13 @@ int main() {
     TestHonestUnknownsByDefault();
     TestAttestationOnlyRemovesWhatWasAttested();
     TestEmbeddedNulPreserved();
+    TestCapDefaultsMatchConsumer();
+    TestByteCapExactBoundaryAndPlusOne();
+    TestEscapingCountsTowardBytes();
+    TestRowCapsExactBoundaryAndPlusOne();
+    TestStringCharsCapCodePointsExactBoundaryAndPlusOne();
+    TestSizeOverflowRefusedNotWrapped();
+    TestZeroCaps();
 #if defined(DAEDALUS_WITH_UNREAL_DATAVALIDATION)
     TestNativeToUtf8EmbeddedNul();
 #endif

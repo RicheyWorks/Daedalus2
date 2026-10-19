@@ -24,6 +24,9 @@
 //     the actual native invocation, runtime qualification, rich tokenized
 //     message tokens, ValidatorStatistics, non-reflected settings) is reported
 //     in "unknowns" instead of being inferred.
+//   * Bounded output. TrySerialize() enforces FSnapshotLimits (cumulative
+//     output bytes plus row caps) and refuses the whole snapshot, before any
+//     output allocation, instead of truncating. See "Output caps" below.
 //
 // Source provenance (read from the installed engine, not assumed):
 //   UE 5.8.3, Engine/Plugins/Editor/DataValidation/Source/DataValidation/Public/
@@ -32,12 +35,16 @@
 //   FValidateAssetsDetails, FValidateAssetsResults, FValidateAssetsSettings).
 //   That digest matches SOURCE_PROVENANCE["header_sha256"] in the consumer.
 //
-// Status: SOURCE ONLY. test_native_validation_result_snapshot.cpp is authored
-// and unrun until a fresh serialized resource clear is granted.
+// Status: SOURCE ONLY. The standard-library tests in
+// test_native_validation_result_snapshot.cpp compile and pass offline (MSVC,
+// /std:c++17); the engine adapter and its native test remain uncompiled.
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
+#include <limits>
 #include <map>
 #include <string>
 #include <utility>
@@ -135,7 +142,39 @@ struct FValidationSnapshot {
 
 namespace detail {
 
-inline void AppendEscaped(std::string& out, const std::string& s) {
+// Checked size_t addition: returns false, leaving *sum untouched, if a + b
+// would wrap.
+inline bool CheckedAdd(size_t a, size_t b, size_t* sum) {
+    if (b > std::numeric_limits<size_t>::max() - a) return false;
+    *sum = a + b;
+    return true;
+}
+
+// Measuring sink with the same append surface as std::string. It never
+// allocates output; once a length would wrap size_t it latches Overflow.
+struct FByteCounter {
+    size_t Count = 0;
+    bool Overflow = false;
+    void Add(size_t n) {
+        if (!Overflow && !CheckedAdd(Count, n, &Count)) Overflow = true;
+    }
+    void push_back(char) { Add(1); }
+    FByteCounter& operator+=(const char* s) { Add(std::strlen(s)); return *this; }
+    FByteCounter& operator+=(const std::string& s) { Add(s.size()); return *this; }
+};
+
+// Unicode code points in a UTF-8 string (continuation bytes not counted), so
+// string-length caps match the Python consumer's len(str) after json decoding.
+inline size_t CodePoints(const std::string& s) {
+    size_t n = 0;
+    for (unsigned char c : s) {
+        if ((c & 0xC0u) != 0x80u) ++n;
+    }
+    return n;
+}
+
+template <class Out>
+inline void AppendEscaped(Out& out, const std::string& s) {
     out.push_back('"');
     for (unsigned char c : s) {
         switch (c) {
@@ -159,17 +198,21 @@ inline void AppendEscaped(std::string& out, const std::string& s) {
     out.push_back('"');
 }
 
-inline void AppendBool(std::string& out, bool b) { out += b ? "true" : "false"; }
-inline void AppendInt(std::string& out, int64_t v) { out += std::to_string(v); }
+template <class Out>
+inline void AppendBool(Out& out, bool b) { out += b ? "true" : "false"; }
+template <class Out>
+inline void AppendInt(Out& out, int64_t v) { out += std::to_string(v); }
 
-inline void AppendKey(std::string& out, bool& first, const char* key) {
+template <class Out>
+inline void AppendKey(Out& out, bool& first, const char* key) {
     if (!first) out += ", ";
     first = false;
     AppendEscaped(out, key);
     out += ": ";
 }
 
-inline void AppendStrings(std::string& out, const std::vector<std::string>& v) {
+template <class Out>
+inline void AppendStrings(Out& out, const std::vector<std::string>& v) {
     out.push_back('[');
     for (size_t i = 0; i < v.size(); ++i) {
         if (i) out += ", ";
@@ -178,7 +221,8 @@ inline void AppendStrings(std::string& out, const std::vector<std::string>& v) {
     out.push_back(']');
 }
 
-inline void AppendMessages(std::string& out, const std::vector<FMessageSnapshot>& v) {
+template <class Out>
+inline void AppendMessages(Out& out, const std::vector<FMessageSnapshot>& v) {
     out.push_back('[');
     for (size_t i = 0; i < v.size(); ++i) {
         if (i) out += ", ";
@@ -191,7 +235,8 @@ inline void AppendMessages(std::string& out, const std::vector<FMessageSnapshot>
     out.push_back(']');
 }
 
-inline void AppendExternals(std::string& out, const std::vector<FExternalObjectSnapshot>& v) {
+template <class Out>
+inline void AppendExternals(Out& out, const std::vector<FExternalObjectSnapshot>& v) {
     out.push_back('[');
     for (size_t i = 0; i < v.size(); ++i) {
         if (i) out += ", ";
@@ -204,7 +249,8 @@ inline void AppendExternals(std::string& out, const std::vector<FExternalObjectS
     out.push_back(']');
 }
 
-inline void AppendDetail(std::string& out, const FDetailSnapshot& d) {
+template <class Out>
+inline void AppendDetail(Out& out, const FDetailSnapshot& d) {
     bool first = true;
     out.push_back('{');
     AppendKey(out, first, "PackageName"); AppendEscaped(out, d.PackageName);
@@ -217,13 +263,10 @@ inline void AppendDetail(std::string& out, const FDetailSnapshot& d) {
     out.push_back('}');
 }
 
-}  // namespace detail
-
 // Results object: the 8 native counts, the limit flag, per-asset details and
 // validator-wide messages, under the exact native member names.
-inline std::string SerializeResults(const FResultsSnapshot& r) {
-    using namespace detail;
-    std::string out;
+template <class Out>
+inline void AppendResults(Out& out, const FResultsSnapshot& r) {
     bool first = true;
     out.push_back('{');
     AppendKey(out, first, "NumRequested"); AppendInt(out, r.NumRequested);
@@ -248,12 +291,10 @@ inline std::string SerializeResults(const FResultsSnapshot& r) {
     out.push_back('}');
     AppendKey(out, first, "ValidatorMessages"); AppendMessages(out, r.ValidatorMessages);
     out.push_back('}');
-    return out;
 }
 
-inline std::string SerializeSettings(const FSettingsSnapshot& s) {
-    using namespace detail;
-    std::string out;
+template <class Out>
+inline void AppendSettings(Out& out, const FSettingsSnapshot& s) {
     bool first = true;
     out.push_back('{');
     AppendKey(out, first, "bSkipExcludedDirectories"); AppendBool(out, s.bSkipExcludedDirectories);
@@ -270,6 +311,19 @@ inline std::string SerializeSettings(const FSettingsSnapshot& s) {
     AppendKey(out, first, "bValidateReferencersOfDeletedAssets"); AppendBool(out, s.bValidateReferencersOfDeletedAssets);
     AppendKey(out, first, "bSilent"); AppendBool(out, s.bSilent);
     out.push_back('}');
+}
+
+}  // namespace detail
+
+inline std::string SerializeResults(const FResultsSnapshot& r) {
+    std::string out;
+    detail::AppendResults(out, r);
+    return out;
+}
+
+inline std::string SerializeSettings(const FSettingsSnapshot& s) {
+    std::string out;
+    detail::AppendSettings(out, s);
     return out;
 }
 
@@ -286,18 +340,18 @@ inline std::vector<std::string> Unknowns(const FValidationSnapshot& snap) {
     return u;
 }
 
-// Full envelope. results/settings/requested_assets/native_return map 1:1 onto
-// evaluate_native_validation's four arguments.
-inline std::string Serialize(const FValidationSnapshot& snap) {
-    using namespace detail;
-    std::string out;
+namespace detail {
+
+// Full envelope writer shared by the measuring and the emitting pass.
+template <class Out>
+inline void AppendSnapshot(Out& out, const FValidationSnapshot& snap) {
     bool first = true;
     out.push_back('{');
     AppendKey(out, first, "snapshot_kind"); AppendEscaped(out, "explicit_native_members_not_mcp_schema");
     AppendKey(out, first, "requested_assets"); AppendStrings(out, snap.RequestedAssets);
     AppendKey(out, first, "native_return"); AppendInt(out, snap.NativeReturn);
-    AppendKey(out, first, "results"); out += SerializeResults(snap.Results);
-    AppendKey(out, first, "settings"); out += SerializeSettings(snap.Settings);
+    AppendKey(out, first, "results"); AppendResults(out, snap.Results);
+    AppendKey(out, first, "settings"); AppendSettings(out, snap.Settings);
     AppendKey(out, first, "provenance");
     {
         bool f = true;
@@ -310,7 +364,168 @@ inline std::string Serialize(const FValidationSnapshot& snap) {
     AppendKey(out, first, "native_runtime_qualified"); AppendBool(out, false);
     AppendKey(out, first, "unknowns"); AppendStrings(out, Unknowns(snap));
     out.push_back('}');
+}
+
+}  // namespace detail
+
+// Full envelope. results/settings/requested_assets/native_return map 1:1 onto
+// evaluate_native_validation's four arguments. UNBOUNDED convenience form for
+// trusted, small inputs; a producer copying native results must use
+// TrySerialize().
+inline std::string Serialize(const FValidationSnapshot& snap) {
+    std::string out;
+    detail::AppendSnapshot(out, snap);
     return out;
+}
+
+// ---------------------------------------------------------------------------
+// Output caps
+//
+// Names and defaults mirror OutputCaps in
+//   tools/unreal_mcp/native_validation_snapshot_consumer.py
+// so a snapshot this producer emits is never refused by that consumer's caps.
+//   MaxBytes             final JSON length in UTF-8 bytes, escaping included
+//                        (a control byte costs 6 bytes as \u00XX, a quote or
+//                        backslash 2). Same measure as consume()'s len(raw).
+//   MaxRequestedAssets   RequestedAssets rows.
+//   MaxDetails           AssetsDetails rows.
+//   MaxMessagesPerList   rows in any one message list: ValidatorMessages and
+//                        each detail's ValidationErrors / ValidationWarnings /
+//                        ValidationMessages.
+//   MaxTotalMessages     cumulative rows across all of those lists.
+//   MaxStringChars       longest string, in Unicode code points: requested
+//                        paths, detail keys, Package/AssetName, errors,
+//                        warnings, message texts and external-object names.
+// ExternalObjects rows have no row cap of their own (as in the consumer); they
+// are bounded by MaxBytes and MaxStringChars.
+// Every cap is inclusive: exactly the cap passes, cap+1 refuses.
+// Refusal is whole: Json stays empty, never truncated or partial. Row and
+// string caps are checked from container sizes, then the byte cap by a
+// measuring pass that allocates no output; the output buffer is reserved only
+// after every cap passes, at the measured size. Size arithmetic is checked: a
+// sum that would wrap size_t refuses as SizeOverflow.
+// MaxAssetsToValidate is the native validation limit, not a snapshot cap; it
+// is still copied verbatim.
+struct FSnapshotLimits {
+    size_t MaxBytes = 8u * 1024u * 1024u;
+    size_t MaxRequestedAssets = 4096;
+    size_t MaxDetails = 4096;
+    size_t MaxMessagesPerList = 1024;
+    size_t MaxStringChars = 16384;
+    size_t MaxTotalMessages = 65536;
+};
+
+enum class ESnapshotStatus {
+    Ok,
+    RequestedAssetsCapExceeded,
+    DetailsCapExceeded,
+    MessagesPerListCapExceeded,
+    TotalMessagesCapExceeded,
+    StringCharsCapExceeded,
+    BytesCapExceeded,
+    SizeOverflow,
+    InternalMismatch,  // measuring and emitting passes disagreed; never emitted
+};
+
+inline const char* SnapshotStatusName(ESnapshotStatus s) {
+    switch (s) {
+        case ESnapshotStatus::Ok: return "Ok";
+        case ESnapshotStatus::RequestedAssetsCapExceeded: return "RequestedAssetsCapExceeded";
+        case ESnapshotStatus::DetailsCapExceeded: return "DetailsCapExceeded";
+        case ESnapshotStatus::MessagesPerListCapExceeded: return "MessagesPerListCapExceeded";
+        case ESnapshotStatus::TotalMessagesCapExceeded: return "TotalMessagesCapExceeded";
+        case ESnapshotStatus::StringCharsCapExceeded: return "StringCharsCapExceeded";
+        case ESnapshotStatus::BytesCapExceeded: return "BytesCapExceeded";
+        case ESnapshotStatus::SizeOverflow: return "SizeOverflow";
+        case ESnapshotStatus::InternalMismatch: default: return "InternalMismatch";
+    }
+}
+
+struct FSnapshotOutcome {
+    ESnapshotStatus Status = ESnapshotStatus::SizeOverflow;  // never defaults to Ok
+    size_t TotalMessages = 0;  // counted message rows (0 if refused earlier)
+    size_t Bytes = 0;          // measured output bytes (0 if not measured)
+    std::string Json;          // non-empty only when Status == Ok
+};
+
+namespace detail {
+
+inline bool StringOver(const std::string& s, const FSnapshotLimits& l) {
+    return s.size() > l.MaxStringChars && CodePoints(s) > l.MaxStringChars;
+}
+
+inline bool AnyStringOver(const std::vector<std::string>& v, const FSnapshotLimits& l) {
+    for (const std::string& s : v) if (StringOver(s, l)) return true;
+    return false;
+}
+
+inline bool AnyMessageOver(const std::vector<FMessageSnapshot>& v, const FSnapshotLimits& l) {
+    for (const FMessageSnapshot& m : v) if (StringOver(m.Text, l)) return true;
+    return false;
+}
+
+// Row and string caps from container sizes only; no output is allocated.
+inline ESnapshotStatus CheckRowAndStringCaps(const FValidationSnapshot& snap,
+                                             const FSnapshotLimits& l, size_t* totalMessages) {
+    const FResultsSnapshot& r = snap.Results;
+    if (snap.RequestedAssets.size() > l.MaxRequestedAssets) return ESnapshotStatus::RequestedAssetsCapExceeded;
+    if (r.AssetsDetails.size() > l.MaxDetails) return ESnapshotStatus::DetailsCapExceeded;
+    size_t total = 0;
+    if (r.ValidatorMessages.size() > l.MaxMessagesPerList) return ESnapshotStatus::MessagesPerListCapExceeded;
+    if (!CheckedAdd(total, r.ValidatorMessages.size(), &total)) return ESnapshotStatus::SizeOverflow;
+    for (const auto& kv : r.AssetsDetails) {
+        const FDetailSnapshot& d = kv.second;
+        const size_t lists[3] = {d.ValidationErrors.size(), d.ValidationWarnings.size(),
+                                 d.ValidationMessages.size()};
+        for (size_t n : lists) {
+            if (n > l.MaxMessagesPerList) return ESnapshotStatus::MessagesPerListCapExceeded;
+            if (!CheckedAdd(total, n, &total)) return ESnapshotStatus::SizeOverflow;
+        }
+    }
+    *totalMessages = total;
+    if (total > l.MaxTotalMessages) return ESnapshotStatus::TotalMessagesCapExceeded;
+
+    if (AnyStringOver(snap.RequestedAssets, l)) return ESnapshotStatus::StringCharsCapExceeded;
+    for (const auto& kv : r.AssetsDetails) {
+        const FDetailSnapshot& d = kv.second;
+        if (StringOver(kv.first, l) || StringOver(d.PackageName, l) || StringOver(d.AssetName, l) ||
+            AnyStringOver(d.ValidationErrors, l) || AnyStringOver(d.ValidationWarnings, l) ||
+            AnyMessageOver(d.ValidationMessages, l)) {
+            return ESnapshotStatus::StringCharsCapExceeded;
+        }
+        for (const FExternalObjectSnapshot& e : d.ExternalObjects) {
+            if (StringOver(e.PackageName, l) || StringOver(e.AssetName, l)) {
+                return ESnapshotStatus::StringCharsCapExceeded;
+            }
+        }
+    }
+    if (AnyMessageOver(r.ValidatorMessages, l)) return ESnapshotStatus::StringCharsCapExceeded;
+    return ESnapshotStatus::Ok;
+}
+
+}  // namespace detail
+
+// Bounded envelope: every cap checked, then exact size measured, then the
+// output reserved once and written. Any refusal returns empty Json.
+inline FSnapshotOutcome TrySerialize(const FValidationSnapshot& snap,
+                                     const FSnapshotLimits& limits = FSnapshotLimits()) {
+    FSnapshotOutcome o;
+    o.Status = detail::CheckRowAndStringCaps(snap, limits, &o.TotalMessages);
+    if (o.Status != ESnapshotStatus::Ok) return o;
+
+    detail::FByteCounter measure;
+    detail::AppendSnapshot(measure, snap);
+    if (measure.Overflow) { o.Status = ESnapshotStatus::SizeOverflow; return o; }
+    o.Bytes = measure.Count;
+    if (measure.Count > limits.MaxBytes) { o.Status = ESnapshotStatus::BytesCapExceeded; return o; }
+
+    std::string out;
+    out.reserve(measure.Count);
+    detail::AppendSnapshot(out, snap);
+    if (out.size() != measure.Count) { o.Status = ESnapshotStatus::InternalMismatch; return o; }
+    o.Json = std::move(out);
+    o.Status = ESnapshotStatus::Ok;
+    return o;
 }
 
 #if defined(DAEDALUS_WITH_UNREAL_DATAVALIDATION)
@@ -407,6 +622,41 @@ inline FSettingsSnapshot FromNative(const FValidateAssetsSettings& In) {
     S.bValidateReferencersOfDeletedAssets = In.bValidateReferencersOfDeletedAssets;
     S.bSilent = In.bSilent;
     return S;
+}
+
+// Bounded copy. Refuses, before copying anything, when the native result
+// already breaks a row cap (counts from TArray/TMap Num()) or carries a key,
+// error or warning longer than 2 * MaxStringChars TCHAR code units. A code
+// point is at most two UTF-16 code units, so this never refuses a string the
+// exact code-point check would accept. Exact string and byte caps are applied
+// by TrySerialize after the copy, whose size the row caps bound. Out is
+// assigned only on Ok. (Native half: authored, not compiled here.)
+inline ESnapshotStatus TryFromNative(const FValidateAssetsResults& R, const FSnapshotLimits& Limits,
+                                     FResultsSnapshot& Out) {
+    const size_t MaxChars = Limits.MaxStringChars;
+    if (static_cast<size_t>(R.AssetsDetails.Num()) > Limits.MaxDetails) return ESnapshotStatus::DetailsCapExceeded;
+    size_t Total = static_cast<size_t>(R.ValidatorMessages.Num());
+    if (Total > Limits.MaxMessagesPerList) return ESnapshotStatus::MessagesPerListCapExceeded;
+    for (const TPair<FString, FValidateAssetsDetails>& Pair : R.AssetsDetails) {
+        const FValidateAssetsDetails& D = Pair.Value;
+        const size_t Lists[3] = {static_cast<size_t>(D.ValidationErrors.Num()),
+                                 static_cast<size_t>(D.ValidationWarnings.Num()),
+                                 static_cast<size_t>(D.ValidationMessages.Num())};
+        for (size_t N : Lists) {
+            if (N > Limits.MaxMessagesPerList) return ESnapshotStatus::MessagesPerListCapExceeded;
+            if (!detail::CheckedAdd(Total, N, &Total)) return ESnapshotStatus::SizeOverflow;
+        }
+        if (static_cast<size_t>(Pair.Key.Len()) > 2 * MaxChars) return ESnapshotStatus::StringCharsCapExceeded;
+        for (const FText& T : D.ValidationErrors) {
+            if (static_cast<size_t>(T.ToString().Len()) > 2 * MaxChars) return ESnapshotStatus::StringCharsCapExceeded;
+        }
+        for (const FText& T : D.ValidationWarnings) {
+            if (static_cast<size_t>(T.ToString().Len()) > 2 * MaxChars) return ESnapshotStatus::StringCharsCapExceeded;
+        }
+    }
+    if (Total > Limits.MaxTotalMessages) return ESnapshotStatus::TotalMessagesCapExceeded;
+    Out = FromNative(R);
+    return ESnapshotStatus::Ok;
 }
 
 }  // namespace unreal_adapter
