@@ -150,3 +150,21 @@ What completes: the right strike cell, the right ark at the right speed, a perfe
 
 Tie-in: before the arks sail, the island listens: the owl that counted thunder, the hound that heard a cracked
 plate ring dull. Each earns its G12 credit once per run, replayable from the G49 journal.
+
+## Receipts hub X (contest G137, 2hot2trot): regrowth island-audio games
+
+Registered in `ActivityRouter.contestAll` under inactive `mastery.listening` policies. Read-only on `world.audio.*`;
+each snapshot is built from the game's own judged result.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `KeepersCallAdapter` | G121 Keeper's Call, `world.audio.KeepersCall` (prometheus) | `audio.keepers-call` | `Echo.of(run, abandoned)` (refused while the run is in play unless abandoned) | score (0-16), stars (0-3) | bird, animal / listening, singing, memory |
+| `DawnChorusAdapter` | G124 Dawn Chorus Census, `world.audio.DawnChorusCensus` (prometheus) | `audio.dawn-chorus-census` | `Census.of(verdict, abandoned)` | right_loudest, right_missing | bird, animal / listening, counting, observation |
+| `FrogPondAdapter` | G130 Frog Pond Niches, `world.audio.FrogPondNiches` (prometheus) | `audio.frog-pond-niches` | `Wetland.of(wetland, verdict, abandoned)` | clear, species (0-10) | bird, animal / listening, observation, habitat |
+
+What completes: an echo run that earns at least one star (a phrase of 6 or more), a census naming both the most
+abundant and the missing species, and a pond assignment with no masking pair.
+
+Tie-in: regrowth on the shattered planet is heard before it is seen. The wren that echoed the Keeper's bells, the
+hound that sat out the dawn chorus and listened as the frogs sorted themselves into ponds each earn their G12 credit
+once per run, replayable from the G49 journal.

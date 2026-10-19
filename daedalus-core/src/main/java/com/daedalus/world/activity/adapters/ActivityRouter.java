@@ -124,6 +124,12 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(HullKnockAdapter.ACTIVITY_ID, "mastery.listening"));
         r.register(new WaveOrganAdapter(mode), WaveOrganAdapter.Tide.class,
                 AwardPolicy.inactive(WaveOrganAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new KeepersCallAdapter(mode), KeepersCallAdapter.Echo.class,
+                AwardPolicy.inactive(KeepersCallAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new DawnChorusAdapter(mode), DawnChorusAdapter.Census.class,
+                AwardPolicy.inactive(DawnChorusAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new FrogPondAdapter(mode), FrogPondAdapter.Wetland.class,
+                AwardPolicy.inactive(FrogPondAdapter.ACTIVITY_ID, "mastery.listening"));
         return r;
     }
 
