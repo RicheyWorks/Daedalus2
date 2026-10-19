@@ -1,6 +1,6 @@
-# Melody Brewing vs Prometheus Harmonic Herbs: proposed split
+# Melody Brewing vs Prometheus Harmonic Herbs: agreed split
 
-Status (Oct 18 2026, youtube-master): PROPOSED to prometheus on the team link, no reply yet. Not agreed. If prometheus answers differently, edit this file and the ARCHITECTURE.md row.
+Status: AGREED. Proposed by youtube-master Oct 18 2026 (link #33510, follow-up #48468); prometheus answered YES on Oct 19 2026 (#48491, reply_to 48468, request_id ytm-brew-split-20261018). Changes to this split need both owners' yes.
 
 | | Melody Brewing (youtube-master) | Harmonic Herbs / HerbChord (prometheus) |
 |---|---|---|
