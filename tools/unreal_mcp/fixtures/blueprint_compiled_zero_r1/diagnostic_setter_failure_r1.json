@@ -1,0 +1,65 @@
+{
+  "schema": "daedalus.blueprint-cdo-stock-setter-counterexample.v1",
+  "stage": "FAILED_CONTRACT_DIAGNOSTIC_RECONCILED_NO_RETRY",
+  "disposable_project": "DisposableMCPR8",
+  "owned_object": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt",
+  "requested_value": 37,
+  "observed_before": 0,
+  "observed_after_failed_setter": 0,
+  "original_acceptance": "FAIL",
+  "stock_setter_reached": true,
+  "underlying_failure": {
+    "type": "AssertionError",
+    "stage": "require_editable",
+    "source": "ToolsetRegistry/Content/Python/toolset_registry/helpers.py",
+    "line": 60,
+    "expression": "assert les",
+    "before_property_write": true
+  },
+  "wrapper_observed_type": "RuntimeError",
+  "native_context": {
+    "level_editor_subsystem_truthy": false,
+    "unreal_editor_subsystem_truthy": true,
+    "cdo_world": null,
+    "game_world": null,
+    "level_editor_in_pie": null
+  },
+  "context_limits": {
+    "current_level_not_observed_when_subsystem_unavailable": true,
+    "cause_of_unavailable_subsystem": "UNPROVEN",
+    "cdo_world_null_is_expected_for_this_default_object": true
+  },
+  "transport": {
+    "all_current_responses_complete": true,
+    "blueprint_descriptor_response_bytes": 7682,
+    "setter_response_complete": true,
+    "one_failure_readback_complete": true,
+    "session_delete_http_status": 202,
+    "native_transport_outcome_unknown": false
+  },
+  "actions": {
+    "setter_calls": 1,
+    "setter_retries": 0,
+    "property_flag_changes": 0,
+    "module_load_workarounds": 0,
+    "value37_saves": 0
+  },
+  "original_local_receipt": {
+    "sha256": "81bd5410b12cfaa656c3c3f756086f80cc9e6ee57b6229b0492bc138c4c19585",
+    "bytes": 32075
+  },
+  "production_implication": "Actor CDO edits through the stock ObjectTools setter require an available LevelEditorSubsystem. Treat this unavailable-subsystem case as a failed contract; retain the native traceback and reconcile before any separately admitted retry.",
+  "limits": "This proves the observed pre-write assertion in one disposable editor. It does not prove why the subsystem was unavailable or qualify a bypass, property-flag change, production actor edit, or value37 save.",
+  "diagnostic_zero_preservation": {
+    "stage": "DIAGNOSTIC_COMPILED_ZERO_SAVED",
+    "save_return": true,
+    "verified_value": 0,
+    "saved_file": {
+      "bytes": 25567,
+      "sha256": "9f02415bcc6024dc484b099cd26343c1d3edfce966f0985c22defc8fdbb96c72"
+    },
+    "fresh_reopen_verified": false,
+    "original_value37_acceptance": "FAIL",
+    "preservation_receipt_sha256": "1f820ab9eb932694f16fc2d3acff175edbca5a1c1346a4901f23a405ef159f3b"
+  }
+}
