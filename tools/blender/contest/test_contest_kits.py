@@ -29,7 +29,7 @@ for mod, fn in MODULES.items():
         add("%s sockets %s" % (m["asset"], want), sorted(s["name"] for s in m["sockets"]) == sorted(want), [s["name"] for s in m["sockets"]])
         add("%s collision names Unreal-prefixed and unique" % m["asset"], all(c["name"].startswith(("UCX_", "USP_", "UCP_", "UBX_")) and m["asset"] in c["name"] for c in m["collision"]) and len({c["name"] for c in m["collision"]}) == len(m["collision"]))
         add("%s Kind_Name" % m["asset"], m["asset"].split("_")[0] in ("Prop", "Tool", "Bld", "Mob", "Item", "Wpn", "Veh", "Sky"))
-        add("%s axes recorded (front -Y = UE +X)" % m["asset"], "Unreal +X" in m["axes"])
+        add("%s axes recorded (front -Y lands on UE +Y)" % m["asset"], "UE +Y" in m["axes"])
         add("%s Nanite note" % m["asset"], "nanite" in m["unreal"])
         add("%s status staged NOT READY" % m["asset"], "NOT READY" in m["status"])
         add("%s seeded" % m["asset"], isinstance(m["seed"], int))

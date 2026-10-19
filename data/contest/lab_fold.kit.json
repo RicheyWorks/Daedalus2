@@ -603,7 +603,7 @@
     "collision_tris": 84
    },
    "schema": "blender-kit/v1",
-   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
@@ -1282,7 +1282,7 @@
     "collision_tris": 84
    },
    "schema": "blender-kit/v1",
-   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",
@@ -1539,7 +1539,7 @@
     "collision_tris": 12
    },
    "schema": "blender-kit/v1",
-   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",

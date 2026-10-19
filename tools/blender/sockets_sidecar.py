@@ -1,31 +1,34 @@
 # SPDX-License-Identifier: MIT
-"""Socket sidecar for Unreal (blender-team). Stock glTF Interchange drops SOCKET_ empties (unreal-epic-boss 48518/48519,
-PR197), so every socketed asset ships <Asset>.sockets.json next to its glb; the empties stay in the glb as well.
+"""Socket sidecar for Unreal (blender-team): <Asset>.sockets.json next to each socketed glb, a cross-check / rotation carrier.
+Stock UE 5.8 glTF Interchange DOES import SOCKET_ empties natively (unreal-epic-boss 48725; the earlier "dropped" result,
+48518/48519, was a reader false negative). Our empties carry translation only, so the native sockets have rotation 0;
+the sidecar adds the forward-derived rotation and lets intake (PR203 add_sockets) cross-check positions.
 
   {"asset": ..., "units": "cm", "space": "unreal",
    "sockets": [{"name", "parent", "location": [x, y, z], "rotation": [pitch, yaw, roll]}]}
 
-Unreal space: +X forward, +Y right, +Z up, centimetres, left-handed. Our Blender convention (BLENDER-TEAM-BRIEF; buffffff
-48487): front = Blender -Y = Unreal +X, up = Blender Z. Keeping the shape un-mirrored fixes the third axis:
-    UE = 100 * (-y_b, -x_b, z_b)          and from glTF (+Y up, Blender (x,y,z) -> glTF (x,z,-y)):  UE = 100 * (gz, -gx, gy)
-location is relative to the socket's parent node (the static mesh Interchange makes from that node). rotation comes
-from the socket's forward vector (yaw about Z, pitch toward Z; roll 0); sockets without one get [0, 0, 0].
+Unreal space: +X forward, +Y right, +Z up, centimetres, left-handed. Mapping, from native evidence (UEB 48725: terrain_33,
+no node rotation, imported at UE = 100 * (gX, gZ, gY)) and PR203 (no yaw applied; sidecar location -> relative_location):
+    from glTF (+Y up):  UE = 100 * (gx, gz, gy)        from Blender (glTF = (x, z, -y)):  UE = 100 * (x_b, -y_b, z_b)
+So the Blender front (-Y) lands on UE +Y, not +X (corrected 2026-10-19; earlier sidecars used 100 * (-y_b, -x_b, z_b), a 90 deg
+yaw off). location is relative to the socket's parent node. rotation comes from the socket's forward vector (yaw about Z,
+pitch toward Z; roll 0): Blender front (0, -1, 0) -> yaw 90. Sockets without a forward get [0, 0, 0].
 
   python sockets_sidecar.py <asset.glb> [--manifest <recipe or kit json>] [--out <dir>]   -> <dir>/<Asset>.sockets.json
 """
 import argparse, json, math, os, struct
 
-SCHEMA_NOTE = "UE +X forward, +Y right, +Z up, cm; location relative to parent node; rotation [pitch, yaw, roll] deg"
+SCHEMA_NOTE = "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg"
 
 
 def blender_to_ue(v):
     x, y, z = v
-    return [round(-y * 100.0, 4) + 0.0, round(-x * 100.0, 4) + 0.0, round(z * 100.0, 4) + 0.0]
+    return [round(x * 100.0, 4) + 0.0, round(-y * 100.0, 4) + 0.0, round(z * 100.0, 4) + 0.0]
 
 
 def gltf_to_ue(v):
     gx, gy, gz = v
-    return [round(gz * 100.0, 4) + 0.0, round(-gx * 100.0, 4) + 0.0, round(gy * 100.0, 4) + 0.0]
+    return [round(gx * 100.0, 4) + 0.0, round(gz * 100.0, 4) + 0.0, round(gy * 100.0, 4) + 0.0]
 
 
 def forward_to_rotation(fwd_blender):

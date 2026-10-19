@@ -16,7 +16,8 @@ BOX_TRIS = 44            # a cube with all 12 edges bevelled once (segments=1): 
 BOX_PLAIN_TRIS = 12
 BEVEL = 0.12             # bevel offset = BEVEL * the smallest side (same as rifle_recipe.py / build_rifle.py)
 SCHEMA = "blender-kit/v1"
-AXES = "metres; Blender Z up; origin bottom centre; front = Blender -Y = Unreal +X (glTF/Interchange swap, buffffff 48487); glTF +Y up"
+AXES = ("metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) "
+        "(UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review")
 
 
 # ------------------------------------------------------------------ parts
