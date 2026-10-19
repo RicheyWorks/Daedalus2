@@ -130,7 +130,8 @@ def facts(test_root, asset):
     box = mesh.get_bounding_box()
     mn, mx = box.min, box.max
     sockets = []
-    for s in _safe(lambda: list(mesh.get_editor_property("sockets")), []):
+    # StaticMesh.Sockets is protected from Python in 5.8; read via the public API (see PR #203).
+    for s in _safe(lambda: list(mesh.get_sockets_by_tag("") or []), []):
         loc = s.get_editor_property("relative_location")
         sockets.append({"name": str(s.get_editor_property("socket_name")), "location_cm": [loc.x, loc.y, loc.z]})
     mats = []

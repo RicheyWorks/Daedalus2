@@ -22,11 +22,11 @@ Reusable check that a glTF asset imported with UE 5.8 Interchange can be reimpor
 |---|---|---|
 | Completion | started=true, done after 18.2 s, 3 objects | started=true, done after 5.5 s, 1 object |
 | Identity | `.../Prop_PracticeCrate/StaticMeshes/Prop_PracticeCrate` | same path, **same UObject = true** |
-| Tris LOD0 | 132 (= glTF) | **256** (glTF 264; 8 fewer after the mesh build, probably degenerate/duplicate tris on the new seams; not explained yet) |
+| Tris LOD0 | 132 (= glTF) | 256 with Nanite on: the Nanite fallback mesh (target Auto). With Nanite off it's **264**, which matches the glTF. Settled in PR #203 (main a3a019b2) |
 | Bounds cm | 52 x 52 x 50 | 52 x 53 x 50 (+1 cm on UE Y = Blender Y) |
 | Materials | 2 MICs `Prop_PracticeCrate_M0/M1` (parent `/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS`), BaseColorFactor = linear wood/dark | same 2 refs, no new material assets (existing materials reused) |
 | Collision | **UCX_ kept: 1 convex element**, 0 box/sphere/capsule | **1 convex, updated: hull extent 52 x 53 x 50 cm** (24 verts) |
-| Socket | **SOCKET_Top dropped**: 0 sockets on the mesh, no extra asset | still 0 |
+| Socket | **socket `Top` imported** (corrected: the first run reported 0 because `StaticMesh.Sockets` is protected from Python and the reader swallowed the error) | `Top` kept |
 | Nanite | enabled (stock default) | enabled |
 | Save | 3 packages saved true (materials needed a second save to clear dirty) | 1 package saved true, 0 dirty |
 
@@ -34,5 +34,6 @@ Fresh-process reopen: PENDING. This happens in the batched rebuild/restart slot 
 
 Findings for the pipeline owners:
 - glTF `UCX_<Mesh>` children DO become convex collision with stock Interchange, and the collision updates on reimport.
-- glTF `SOCKET_<Name>` empties do NOT become StaticMesh sockets with stock Interchange. Socketed weapons need sockets added after import, or a pipeline that adds them.
+- glTF `SOCKET_<Name>` empties DO become StaticMesh sockets (`SOCKET_Top` becomes socket `Top`) with stock 5.8 Interchange. Correction to the first-run result, verified live in PR #203 (main a3a019b2). The `<Asset>.sockets.json` sidecar stays as a cross-check.
+- The 8-tri gap on B is the Nanite fallback mesh: 256 tris with Nanite on, 264 with Nanite off. The source glb is fine.
 - Nanite is on by default for glTF static meshes here. Packets that freeze `build_nanite=false` must override it.
