@@ -19,6 +19,10 @@ Every rule comes from a real failure on 2026-10-12 (docs/AUTOMATION-LESSONS.md):
   P8 no-eh      try/catch/throw in plugin C++. Unreal builds game targets without C++ exceptions (/EHsc off), so
                 MSVC stops with C4530 (2026-10-13, DaedalusEcologyCore.h std::stoll in try). Parse with from_chars or
                 strtoll/strtod instead. Comments and strings are ignored.
+  P10 uht-name  two reflected types with the same UHT engine name anywhere in the scanned headers (UCLASS and UINTERFACE
+                drop A/U/I, USTRUCT drops F, UENUM and dynamic delegates keep theirs). UHT stops the whole module before
+                compiling: "Class 'ADaedalusBrewBench' shares engine name 'DaedalusBrewBench' with class
+                'ADaedalusBrewBench' in DaedalusHomestead.h(80)" (2026-10-19, #350 vs #285).
 """
 import os
 import re
@@ -40,6 +44,9 @@ PYSTATIC_RE = re.compile(r"\bunreal\.Daedalus\w+\.(get)\(")
 EH_RE = re.compile(r"\btry\s*\{|\bcatch\s*\(|\bthrow\b")
 STRIP_RE = re.compile(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'', re.S)
 STRUCT_RE = re.compile(r"\b(?:struct|class)\s+(\w+)\s*(?::[^{;]*)?\{([^{}]*)\}\s*;")   # plain data structs (no nested braces)
+UTYPE_RE = re.compile(r"^[ \t]*(UCLASS|USTRUCT|UENUM|UINTERFACE)\s*\((?:[^()]|\([^()]*\))*\)\s*"
+                      r"(?:class|struct|enum(?:\s+class)?)\s+(?:\w+_API\s+)?(\w+)", re.M)
+UDELEGATE_RE = re.compile(r"^[ \t]*DECLARE_DYNAMIC_(?:MULTICAST_)?(?:SPARSE_)?DELEGATE\w*\(\s*(?:\w+\s*,\s*)?(F\w+)", re.M)
 TARRAY_RE = re.compile(r"\bTArray<\s*(?P<type>(?:\w+::)*\w+)\s*(?:<[^>]*>)?\s*>")
 
 
@@ -162,6 +169,35 @@ def check_cpp(path, text, errors, sources, holders=frozenset()):
                            "(dangling after a move on MSVC). Use std::vector" % (t, t)))
 
 
+def engine_name(kind, name):
+    """The name UHT registers: UCLASS/UINTERFACE drop A, U or I; USTRUCT drops F; UENUM and delegates keep theirs."""
+    if kind in ("UCLASS", "UINTERFACE") and name[:1] in "AUI" and name[1:2].isupper():
+        return name[1:]
+    if kind == "USTRUCT" and name[:1] == "F" and name[1:2].isupper():
+        return name[1:]
+    return name
+
+
+def check_uht_names(texts, errors):
+    """P10: every reflected type in the scanned headers must have its own engine name."""
+    seen = {}
+    for f, t in sorted(texts.items()):
+        if not f.endswith(".h"):
+            continue
+        code = STRIP_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), t)
+        found = [(m.group(1), m.group(2), m.start()) for m in UTYPE_RE.finditer(code)]
+        found += [("DELEGATE", m.group(1), m.start()) for m in UDELEGATE_RE.finditer(code)]
+        for kind, name, pos in sorted(found, key=lambda x: x[2]):
+            key = engine_name(kind, name)
+            here = (f, line_of(t, pos), kind, name)
+            if key in seen:
+                pf, pl, pk, pn = seen[key]
+                errors.append((f, here[1], "P10", "%s %s shares UHT engine name '%s' with %s %s at %s:%d; rename one or extend the "
+                               "existing type" % (kind, name, key, pk, pn, os.path.basename(pf), pl)))
+            else:
+                seen[key] = here
+
+
 def check_py(path, text, errors):
     for m in PYBOOL_RE.finditer(text):
         errors.append((path, line_of(text, m.start()), "P5", "Python property names drop the b prefix (b_clean_water -> clean_water)"))
@@ -187,6 +223,7 @@ def scan(paths):
             check_cpp(f, t, errors, cpp_sources + [t], holders)
         elif f.endswith(".py") and "preflight" not in os.path.basename(f):
             check_py(f, t, errors)
+    check_uht_names(texts, errors)
     return errors
 
 

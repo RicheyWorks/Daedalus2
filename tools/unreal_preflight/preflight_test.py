@@ -37,6 +37,10 @@ check("P5 + P6: b_ property names and non-UFUNCTION statics in Python are caught
 check("P3: the enum's own header, inside its namespace, is not flagged", rules("ok_enum_home.h") == [], rules("ok_enum_home.h"))
 check("a clean header passes (Category set, Transient array, Name is not an actor member, qualified Error)",
       rules("good.h") == [], preflight.scan([os.path.join(F, "good.h")]))
+uht = preflight.scan([os.path.join(F, "bad_uht_a.h"), os.path.join(F, "bad_uht_b.h")])
+check("P10: the same UCLASS engine name in two headers, a USTRUCT vs UCLASS clash and a duplicate dynamic delegate are caught",
+      sorted((os.path.basename(e[0]), e[2]) for e in uht) == [("bad_uht_b.h", "P10")] * 3, uht)
+check("P10: one header alone is clean", rules("bad_uht_a.h") == [], rules("bad_uht_a.h"))
 n = sum(results)
 print("%d/%d" % (n, len(results)))
 sys.exit(0 if n == len(results) else 1)
