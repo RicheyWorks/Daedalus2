@@ -49,3 +49,13 @@ magpie that spotted the genuine brick each grow from the game they helped with, 
 | `FirelineWardenAdapter` | G27 Fireline Warden, `world.battlefield.FirelineWarden` (pythagoras) | `battlefield.fireline-warden` | `Defence.of(report, abandoned)` (a fire still BURNING is refused) | result (2 saved, 1 held, 0 lost), ticks, saved_pm, burnt, cut, wetted, doused | animal / firefighting, carrying |
 
 Fractions (old growth, saved share) are stored as whole per mille so receipts stay canonical integers.
+
+## Hub IV (contest G55)
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `KennelPantryAdapter` | G26 kennel food loop, `world.companion.KennelPantry` (art-master-flex) | `kennel.pack-order` | `Feeding.of(questResult, abandoned)` | passed, days, hungry_days, crafted, served, spoiled_milk_l | animal / guarding, foraging |
+| `HerbGardenAdapter` | G40 Herb Chord Garden, `world.audio.HerbChordGarden` (prometheus) | `audio.herb-chord-garden` | `Planting.of(verdict, abandoned)` | lines, target, perfect | social_insect, bird / pollinating, observation |
+
+Both are registered in `ActivityRouter.contestAll` with inactive policies, and every settled receipt lands in the
+G49 journal (`ActivityRouter.journal()`).
