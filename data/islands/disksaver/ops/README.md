@@ -11,3 +11,4 @@ record, not a library; the reusable pieces are the island scripts one level up a
 - `diag.py`: read-only Unreal editor diagnostic (world/sublevel actor counts) for the bridge.
 - `turnchk.ps1`: read-only link log check for editor turns.
 - `link/disk-saver-*.ps1|py`: team-link helpers (post a note with free RAM, post with a structured `to`, poll the inbox).
+- `link/disk-saver-reply.py <to> <reply_to> <request_id> <textfile>`: post a note with structured `to`, `reply_to` and `request_id` fields (used for PootScoot coordination).
