@@ -83,14 +83,21 @@ def check(links, pen, out):
     for c in links["connections"]:
         a, b = docks.get(c["departure"]), docks.get(c["destination"])
         ok("connection %s -> %s: both docks exist" % (c["departure"], c["destination"]), a and b)
+        flags_are_bool = all(type(c.get(flag)) is bool for flag in ("boats", "submarines"))
+        ok("connection %s -> %s: boats and submarines must be JSON booleans" % (c["departure"], c["destination"]),
+           flags_are_bool, {flag: type(c[flag]).__name__ if flag in c else "missing" for flag in ("boats", "submarines")})
+        if not flags_are_bool:
+            continue
         if a and b:
             ok("connection %s -> %s: one end is the Ocean (session core: docks lead to the Ocean)" % (a["id"], b["id"]),
                (a["realm"] == "OCEAN") != (b["realm"] == "OCEAN"))
-            ok("connection %s -> %s: a vessel kind both ends take" % (a["id"], b["id"]),
-               (c["boats"] and "boat" in a["vessels"] and "boat" in b["vessels"]) or (c["submarines"] and "sub" in a["vessels"] and "sub" in b["vessels"]))
+            ok("connection %s -> %s: every enabled vessel kind is supported at both ends" % (a["id"], b["id"]),
+               (c["boats"] or c["submarines"])
+               and (not c["boats"] or ("boat" in a["vessels"] and "boat" in b["vessels"]))
+               and (not c["submarines"] or ("sub" in a["vessels"] and "sub" in b["vessels"])))
             if a["realm"] == "OCEAN" and b["realm"] != "OCEAN":
                 ok("connection %s -> %s: Ocean to a realm needs a sub and an underwater dock" % (a["id"], b["id"]),
-                   c["submarines"] and not c["boats"] and R[b["realm"]]["has_sub_dock"])
+                   c["submarines"] and not c["boats"] and b["realm"] in R and R[b["realm"]]["has_sub_dock"])
     ok("tide-pen landing is an Ocean dock", docks.get(pen["landing"], {}).get("realm") == "OCEAN", pen["landing"])
     ok("tide-pen landing is reachable from World-Zero", any(c["destination"] == pen["landing"] and docks.get(c["departure"], {}).get("realm") == "WORLD-ZERO" for c in links["connections"]))
     for r in pen["residents"]:
@@ -117,10 +124,27 @@ def main(argv):
     links = json.load(open(P("data", "ocean", "links.json"), encoding="utf-8"))
     pen = json.load(open(P("data", "ocean", "tidepen.json"), encoding="utf-8"))
     if "--self-test" in argv:
+        baseline_out = []
+        baseline = check(links, pen, baseline_out)
+        baseline_ok = all(baseline)
+        print("LINKS-BASELINE %d/%d %s" % (sum(baseline), len(baseline), "PASS" if baseline_ok else "FAIL"))
+        if not baseline_ok:
+            print("\n".join(baseline_out))
+            return 1
         canaries = []
         L = copy.deepcopy(links); L["docks"][0]["realm"] = "LABYRINTH"; canaries.append(("dock from a realm with no docks", L, pen))
         L = copy.deepcopy(links); L["docks"][1]["anchor"]["xyz"] = [0, 1, 9]; canaries.append(("berth drifted from OceanTerrain", L, pen))
         L = copy.deepcopy(links); L["connections"].append({"departure": "ocean-pier-boat", "destination": "wz-rim-tidepen", "boats": True, "submarines": False}); canaries.append(("boat from the Ocean into a realm", L, pen))
+        L = copy.deepcopy(links); L["connections"][0]["submarines"] = True
+        canaries.append(("boat support cannot authorize an unsupported submarine", L, pen))
+        L = copy.deepcopy(links)
+        departure = next(d for d in L["docks"] if d["id"] == L["connections"][0]["departure"])
+        departure["vessels"].append("sub")
+        L["connections"][0]["destination"] = "ocean-pier-sub"
+        L["connections"][0]["submarines"] = True
+        canaries.append(("submarine support cannot authorize an unsupported boat", L, pen))
+        L = copy.deepcopy(links); L["connections"][0].update(boats=False, submarines=False)
+        canaries.append(("connection with neither vessel enabled", L, pen))
         Q = copy.deepcopy(pen); Q["residents"][0]["species"] = "griffin"; canaries.append(("resident not a sea species", links, Q))
         Q = copy.deepcopy(pen); Q["settled_care"]["requires"]["feedings_min"] = 1; canaries.append(("threshold drifted from TidePenGate", links, Q))
         n = 0
@@ -130,7 +154,48 @@ def main(argv):
             print(("ok   " if failed else "FAIL ") + "canary FAILs: " + name)
             n += failed
         print("LINKS-CANARIES %d/%d %s" % (n, len(canaries), "PASS" if n == len(canaries) else "FAIL"))
-        return 0 if n == len(canaries) else 1
+        flag_canaries = []
+        for flag in ("boats", "submarines"):
+            for label, value in (("string", "false"), ("integer", 1), ("null", None), ("missing", None)):
+                L = copy.deepcopy(links)
+                if label == "missing":
+                    del L["connections"][0][flag]
+                else:
+                    L["connections"][0][flag] = value
+                flag_canaries.append((flag + " " + label, L))
+        flags_ok = 0
+        for name, L in flag_canaries:
+            out = []
+            rejected = not all(check(L, pen, out))
+            failures = [line for line in out if line.startswith("FAIL ")]
+            right_reason = (rejected and len(failures) == 1
+                            and "boats and submarines must be JSON booleans" in failures[0])
+            print(("ok   " if right_reason else "FAIL ") + "flag type rejected for boolean diagnostic: " + name)
+            if not right_reason:
+                print("\n".join(out))
+            flags_ok += right_reason
+        print("LINKS-FLAGS %d/%d %s" % (flags_ok, len(flag_canaries), "PASS" if flags_ok == len(flag_canaries) else "FAIL"))
+        L = copy.deepcopy(links)
+        return_destination = next(d for d in L["docks"] if d["id"] == "wz-rim-tidepen")
+        return_destination["vessels"].append("sub")
+        L["connections"].append({"departure": "ocean-pier-sub", "destination": return_destination["id"],
+                                 "boats": False, "submarines": True})
+        return_destination["realm"] = "MISSING-SESSION"
+        out = []
+        unknown_rejected = not all(check(L, pen, out))
+        failures = [line for line in out if line.startswith("FAIL ")]
+        # This canonical dock also supplies the World-Zero tide-pen route; preserve its reachability failure.
+        expected_failures = (
+            "FAIL dock wz-rim-tidepen: realm MISSING-SESSION is a session realm",
+            "FAIL connection ocean-pier-sub -> wz-rim-tidepen: Ocean to a realm needs a sub and an underwater dock",
+            "FAIL tide-pen landing is reachable from World-Zero")
+        unknown_ok = (unknown_rejected and len(failures) == len(expected_failures)
+                      and all(any(line.startswith(reason) for line in failures) for reason in expected_failures))
+        print(("ok   " if unknown_ok else "FAIL ") + "unknown return realm fails with realm, connection and reachability diagnostics")
+        if not unknown_ok:
+            print("\n".join(out))
+        print("LINKS-RETURN-REALM %d/1 %s" % (int(unknown_ok), "PASS" if unknown_ok else "FAIL"))
+        return 0 if n == len(canaries) and flags_ok == len(flag_canaries) and unknown_ok else 1
     out = []
     res = check(links, pen, out)
     print("\n".join(out + warnings()))
