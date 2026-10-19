@@ -164,6 +164,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(VoidCrossingAdapter.ACTIVITY_ID, "mastery.crewing"));
         r.register(new ApprenticesAdapter(mode), ApprenticesAdapter.Lantern.class,
                 AwardPolicy.inactive(ApprenticesAdapter.ACTIVITY_ID, "mastery.companionship"));
+        r.register(new TagAndCountAdapter(mode), TagAndCountAdapter.Census.class,
+                AwardPolicy.inactive(TagAndCountAdapter.ACTIVITY_ID, "mastery.observation"));
+        r.register(new BirthNightLanternsAdapter(mode), BirthNightLanternsAdapter.Muster.class,
+                AwardPolicy.inactive(BirthNightLanternsAdapter.ACTIVITY_ID, "mastery.reckoning"));
+        r.register(new CricketThermometerAdapter(mode), CricketThermometerAdapter.Listening.class,
+                AwardPolicy.inactive(CricketThermometerAdapter.ACTIVITY_ID, "mastery.listening"));
+        r.register(new PartingJarsAdapter(mode), PartingJarsAdapter.Shelf.class,
+                AwardPolicy.inactive(PartingJarsAdapter.ACTIVITY_ID, "mastery.island-story"));
         return r;
     }
 
