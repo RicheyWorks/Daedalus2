@@ -103,6 +103,17 @@ public final class TemperForge {
             strikes = List.copyOf(strikes);
         }
 
+        /** TFG 1 single-line encoding, stable for the C++ parity test and the link. */
+        public String encode() {
+            StringBuilder s = new StringBuilder();
+            for (Strike k : strikes) {
+                s.append("PGMCW".charAt(k.ordinal()));
+            }
+            return String.format(java.util.Locale.ROOT, "TFG 1 %s heat=%d hammer=%d quench=%d t=%d tier=%s cracked=%d ark=%d strikes=%s",
+                    quench, heatPm, hammerPm, quenchPm, temper, tier, cracked ? 1 : 0, arkPlate ? 1 : 0,
+                    s.length() == 0 ? "-" : s);
+        }
+
         /** The weapon sheet this temper gives, through Forge Weapon Grades. */
         public WeaponGrade grade(Weapon weapon, Material material) {
             return ForgeGrades.grade(weapon, material, temper);
