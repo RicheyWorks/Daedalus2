@@ -1,0 +1,173 @@
+{
+  "schema": "codex.official-blueprint-compiled-zero-sanitized-receipt.v1",
+  "fixture_id": "blueprint_compiled_zero_r1",
+  "diagnostic_subset": "PASS",
+  "original_full37_acceptance": "FAIL",
+  "claim_scope": "diagnostic strict compile, exact save, and persistence witness of observed zero only",
+  "observed_fixture": {
+    "asset_path": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt",
+    "cdo_properties": {
+      "AuditValue": 0
+    },
+    "cdo_reference": {
+      "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.Default__BP_CompileReceipt_C"
+    },
+    "generated_class": {
+      "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt_C"
+    },
+    "graph_references": [
+      {
+        "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt:EventGraph"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt:UserConstructionScript"
+      }
+    ],
+    "local_variables": [
+      "AuditValue"
+    ]
+  },
+  "saved_asset": {
+    "file": "BP_CompileReceipt.uasset",
+    "bytes": 25567,
+    "sha256": "52b31701ca8fe5549aeb2ce9bb403a9e92af0add8702be4554e37e59dd6417aa",
+    "original_content_relative_path": "Content/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.uasset",
+    "copy_verification": "Byte length and SHA-256 match the saved file recorded by both native phases."
+  },
+  "finish": {
+    "stage": "DIAGNOSTIC_COMPILED_ZERO_SAVED",
+    "strict_compile_returned": true,
+    "warnings_as_errors": true,
+    "compile_return_value": null,
+    "save_allowlist": [
+      "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt"
+    ],
+    "save_return": true,
+    "dirty_after_save": false,
+    "editor_pid_external": 49092,
+    "cleanup_http_status": 202,
+    "automatic_retries": 0,
+    "evidence_id": "CompiledZeroR1/finish-result.json"
+  },
+  "readback": {
+    "stage": "DIAGNOSTIC_COMPILED_ZERO_READBACK",
+    "editor_pid_external": 39800,
+    "different_editor_pid": true,
+    "native_mutation_calls": 0,
+    "facts_equal_saved": true,
+    "saved_hash_equal": true,
+    "dirty_after_load": false,
+    "cleanup_http_status": 202,
+    "finish_result_sha256": "e9a53fcbaf14e0c338fc9b5d0002762a19823c6584411f8df0f90befec0a420c",
+    "fresh_reopen_verified_by_client": false,
+    "evidence_id": "CompiledZeroR1/readback-result.json"
+  },
+  "external_lifecycle": {
+    "original_pid": 49092,
+    "original_close_intent_evidence_id": "create-close.json",
+    "original_exit_evidence_id": "create-closed.json",
+    "normal_close_process_exit_verified": true,
+    "forced": false,
+    "reopened_pid": 39800,
+    "reopen_launch_evidence_id": "reopen-launch.json",
+    "ready_evidence_id": "reopen-readiness-1792390906448525000.json",
+    "qualification": "External receipts establish normal close of the original editor, a different launched PID, and owned Slate/loopback readiness before readback; the readback client itself makes no fresh-reopen claim."
+  },
+  "setter_blocker": {
+    "status": "BLOCKED_SOURCE_CAUSE_UNKNOWN_NO_RETRY",
+    "requested_properties": {
+      "AuditValue": 37
+    },
+    "mcp_is_error": true,
+    "native_error": "UserRaisedError in ObjectTools.set_properties",
+    "detailed_native_error": "Unavailable: runtime exception description was empty.",
+    "read_first_properties": {
+      "AuditValue": 0
+    },
+    "read_first_dirty": true,
+    "read_first_variables": [
+      "AuditValue"
+    ],
+    "read_first_disk_assets": [],
+    "read_first_mutation_calls": 0,
+    "setter_retry_count": 0,
+    "instance_editable_toggle_attempted": false,
+    "error_fixture": "setter_error.json"
+  },
+  "compile_contract": {
+    "error_diagnostics_live_qualified": false,
+    "graph_reference_comparison_is_full_topology_proof": false,
+    "limitation": "helper captures node ErrorMsg only; full compiler log is not returned",
+    "native_compile_uses": "SkipSave",
+    "normal_return_implies": "BS_UP_TO_DATE",
+    "status_is_transient": true,
+    "warnings_as_errors": true
+  },
+  "retained_evidence": {
+    "storage": "Full raw receipts/journals retained on authoring PC; not copied into repository.",
+    "relative_audit_root": "native-ingestion/OfficialBlueprintAcceptanceR2",
+    "files": [
+      {
+        "evidence_id": "create-result.json",
+        "bytes": 20690,
+        "sha256": "cdfb9f7b9955a6f4a851401a27ec3e0be6612619151c540e4ca1001b00f9e79e"
+      },
+      {
+        "evidence_id": "create-requests.jsonl",
+        "bytes": 300712,
+        "sha256": "b70231cdeadf82c56dc579cbc00ef4f32041e9f1fa96c16ca76226b2d525949b"
+      },
+      {
+        "evidence_id": "SetterReconcileR2/result.json",
+        "bytes": 5880,
+        "sha256": "d6308874a32fc26e681fb8da7d8664e75cb1029d7833d1a937fbd462694bb204"
+      },
+      {
+        "evidence_id": "CompiledZeroR1/finish-result.json",
+        "bytes": 34830,
+        "sha256": "e9a53fcbaf14e0c338fc9b5d0002762a19823c6584411f8df0f90befec0a420c"
+      },
+      {
+        "evidence_id": "CompiledZeroR1/finish-requests.jsonl",
+        "bytes": 325018,
+        "sha256": "873640b7a7411af69595e55d6897877100f7365841bf93935bbbcc8967ee78f4"
+      },
+      {
+        "evidence_id": "CompiledZeroR1/readback-result.json",
+        "bytes": 24758,
+        "sha256": "d600cb289e21886b3df9625486bb4402e0edc131a1ee4d88aa31b1f2f7414074"
+      },
+      {
+        "evidence_id": "CompiledZeroR1/readback-requests.jsonl",
+        "bytes": 306406,
+        "sha256": "dfd4f6b3655555764de0b7dc8dec15ec1f22661728b617cad59da3de3826c844"
+      },
+      {
+        "evidence_id": "create-close.json",
+        "bytes": 2381,
+        "sha256": "bc528ec45346518b75dee728a6f26315d228f83c8a5c8c075873419926c8d2d5"
+      },
+      {
+        "evidence_id": "create-closed.json",
+        "bytes": 197,
+        "sha256": "605a2f9e896b0fe999a7a3fca8cddba800fed15bba843b42b8e67630786cf99d"
+      },
+      {
+        "evidence_id": "reopen-launch.json",
+        "bytes": 178,
+        "sha256": "60d7f192bd398596a4bf53cc79342c9ab11bca66cf50bdb4f5a770d5284f0d7b"
+      },
+      {
+        "evidence_id": "reopen-readiness-1792390906448525000.json",
+        "bytes": 6845,
+        "sha256": "6c74cafc81fc80dfc73aeef47a2e40d98af045e2015ded2827b3c2dd6897d7fe"
+      }
+    ]
+  },
+  "limitations": [
+    "This is a diagnostic compile/save/persistence witness of default zero, not a pass for the original default-37 acceptance.",
+    "Graph reference equality is not a full graph topology proof.",
+    "Compile Status is transient; no persisted compile-status claim is made.",
+    "Full compiler log and live error-diagnostic completeness were not qualified."
+  ]
+}

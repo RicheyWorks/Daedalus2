@@ -1,0 +1,223 @@
+{
+  "schema": "codex.official-blueprint-compiled-zero-recipe.v1",
+  "fixture_id": "blueprint_compiled_zero_r1",
+  "purpose": "Preserve and inspect the owned diagnostic Actor Blueprint at its observed default zero; original default-37 acceptance remains FAIL.",
+  "asset": {
+    "file": "BP_CompileReceipt.uasset",
+    "content_relative_path": "CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.uasset",
+    "package": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt",
+    "object_path": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt",
+    "expected_properties": {
+      "AuditValue": 0
+    },
+    "sha256": "52b31701ca8fe5549aeb2ce9bb403a9e92af0add8702be4554e37e59dd6417aa",
+    "bytes": 25567
+  },
+  "version_layers": {
+    "engine_static_metadata": {
+      "version": "5.8.3",
+      "changelist": 58210709,
+      "compatible_changelist": 55116800,
+      "branch": "++UE5+Release-5.8",
+      "build_version_engine_relative_path": "Build/Build.version",
+      "build_version_sha256": "eab58750e84719489f3ee0d42d05a533ceb357eb3ee511777e9408d27a85f43c",
+      "qualification": "Static installed metadata read at packaging; runtime build version was not queried separately."
+    },
+    "plugins_static_metadata": [
+      {
+        "name": "ModelContextProtocol",
+        "descriptor_engine_relative_path": "Plugins/Experimental/ModelContextProtocol/ModelContextProtocol.uplugin",
+        "version": 1,
+        "version_name": "1.0",
+        "experimental": true,
+        "descriptor_sha256": "74420534edcd6baafcb48e0af919d53b84891bdade7b97869b0ef485c3ea1518"
+      },
+      {
+        "name": "ToolsetRegistry",
+        "descriptor_engine_relative_path": "Plugins/Experimental/ToolsetRegistry/ToolsetRegistry.uplugin",
+        "version": 1,
+        "version_name": "1.0",
+        "experimental": true,
+        "descriptor_sha256": "2dfc01159b54daea67c62966a48b78254d1d848d84e8df48c708c7a69d3f2062"
+      },
+      {
+        "name": "EditorToolset",
+        "descriptor_engine_relative_path": "Plugins/Experimental/Toolsets/EditorToolset/EditorToolset.uplugin",
+        "version": 1,
+        "version_name": "1.0",
+        "experimental": true,
+        "descriptor_sha256": "69b060160d9b8e57d8e10b611ecea7f572191ced9a7fc4788b447abc3fea9f98"
+      }
+    ],
+    "mcp_protocol_runtime": "2025-06-18",
+    "mcp_server_info_runtime": {
+      "name": "",
+      "title": "",
+      "version": ""
+    },
+    "mcp_server_info_limitation": "Initialize returned empty serverInfo fields; plugin descriptor versions are a separate static layer.",
+    "reference_contract": "Object references use exactly {refPath: string}; user chooses the local endpoint and engine/project roots."
+  },
+  "source_pins": [
+    {
+      "engine_relative_path": "Plugins/Experimental/Toolsets/EditorToolset/Content/Python/editor_toolset/toolsets/asset.py",
+      "bytes": 26385,
+      "sha256": "f69c28f1ca3a8bfd2fb8c27e4cb7607df0264ca278a8166bead6ddd0d4f17d20"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/Toolsets/EditorToolset/Content/Python/editor_toolset/toolsets/blueprint.py",
+      "bytes": 74394,
+      "sha256": "3f5ae7863e68713cacafa90e888175386cbbd21dee94d8108880bad15abe1bfe"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/Toolsets/EditorToolset/Content/Python/editor_toolset/toolsets/object.py",
+      "bytes": 4829,
+      "sha256": "91b7085a5d029d83a020ab8c170acce0b1c7f938976a266daa7c23f36da8126a"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/ToolsetRegistry/Content/Python/toolset_registry/helpers.py",
+      "bytes": 3340,
+      "sha256": "90c07221c39897f1a7529fe75332191a33df45c9295ab326beb9a999eb81657f"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/ToolsetRegistry/Source/ToolsetRegistry/Private/ToolsetRegistry/ReferenceConverter.cpp",
+      "bytes": 18302,
+      "sha256": "3428d0956c0dd5772cb67ebde45e2b9964699ce69270963fca24969c77d06544"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/ToolsetRegistry/Source/ToolsetRegistry/Private/ToolsetRegistry/ObjectFunctionToolCall.cpp",
+      "bytes": 20769,
+      "sha256": "c4fe4757cadeb38cb9d359a81c046d173447b1625f7400ad123d7ca44eb4e56b"
+    },
+    {
+      "engine_relative_path": "Plugins/Experimental/ToolsetRegistry/Content/Python/toolset_registry/tool_call_impl.py",
+      "bytes": 8180,
+      "sha256": "e2925fc50b1526be5556a3266a32e543cb802bac0ca6942ff0fec15a837f86e4"
+    },
+    {
+      "engine_relative_path": "Source/Runtime/JsonUtilities/Private/JsonSchema/JsonSchemaGenerator.cpp",
+      "bytes": 31328,
+      "sha256": "42b536fe820e4b5ec39be24fae4c58e14549cb2a6a2b86b57abbfba51981d02b"
+    },
+    {
+      "engine_relative_path": "Source/Editor/BlueprintEditorLibrary/Private/BlueprintEditorLibrary.cpp",
+      "bytes": 87614,
+      "sha256": "1518b86ff04790cf2b629e3c08c82be9f637afec11b8923ad498c3d18cd22273"
+    },
+    {
+      "engine_relative_path": "Source/Editor/BlueprintEditorLibrary/Private/BlueprintEditorLibrary/BlueprintGraphEditor.cpp",
+      "bytes": 54362,
+      "sha256": "58f72d64790f73c0cac2bac8a39c11b46f9472cb7bafa5462957fbed5599a4f0"
+    },
+    {
+      "engine_relative_path": "Source/Runtime/Engine/Classes/Engine/Blueprint.h",
+      "bytes": 48170,
+      "sha256": "79d9acf9ccc1b555007e67c5d47136ab5e34479ea9b3522925a9d66b85babd03"
+    }
+  ],
+  "protocol_contract": {
+    "transport": "Streamable HTTP",
+    "jsonrpc": "2.0",
+    "meta_envelope": "tools/call name=call_tool arguments={toolset_name,tool_name,arguments}",
+    "return_envelope": "{returnValue: value}",
+    "strict_compile": {
+      "toolset": "editor_toolset.toolsets.blueprint.BlueprintTools",
+      "method": "compile_blueprint",
+      "arguments": {
+        "blueprint": {
+          "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt"
+        },
+        "warnings_as_errors": true
+      },
+      "return_value": null,
+      "normal_return_implies": "BS_UP_TO_DATE",
+      "native_compile_uses": "SkipSave"
+    },
+    "exact_save": {
+      "toolset": "editor_toolset.toolsets.asset.AssetTools",
+      "method": "save_assets",
+      "arguments": {
+        "asset_paths": [
+          "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt"
+        ]
+      },
+      "return_value": true
+    },
+    "cleanup_http_status": 202,
+    "automatic_retries": 0
+  },
+  "preconditions": [
+    "Operator supplies and verifies sole editor ownership, finite deadline, and a separate normal close/relaunch receipt.",
+    "Validate retained failed-create and read-first reconciliation hashes before preservation.",
+    "Existing owned namespace contains exactly this Blueprint; variable inventory is exactly [AuditValue]; live default is integer 0 and dirty is true; saved target is absent before preservation.",
+    "Never replay creation, add_variable, set_properties, or the failed value-37 write."
+  ],
+  "observed_operation_order": {
+    "finish": [
+      "initialize",
+      "notifications/initialized",
+      "tools/list",
+      "meta.list_toolsets",
+      "meta.describe_toolset(editor_toolset.toolsets.asset.AssetTools)",
+      "meta.list_toolsets",
+      "meta.describe_toolset(editor_toolset.toolsets.asset.AssetTools)",
+      "meta.describe_toolset(editor_toolset.toolsets.blueprint.BlueprintTools)",
+      "meta.describe_toolset(editor_toolset.toolsets.object.ObjectTools)",
+      "editor_toolset.toolsets.asset.AssetTools.find_assets",
+      "editor_toolset.toolsets.object.ObjectTools.get_properties",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_variables",
+      "editor_toolset.toolsets.asset.AssetTools.is_dirty",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.compile_blueprint",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_graphs",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.get_default_object",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_variables",
+      "editor_toolset.toolsets.object.ObjectTools.get_properties",
+      "editor_toolset.toolsets.asset.AssetTools.save_assets",
+      "editor_toolset.toolsets.asset.AssetTools.is_dirty",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_graphs",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.get_default_object",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_variables",
+      "editor_toolset.toolsets.object.ObjectTools.get_properties",
+      "editor_toolset.toolsets.asset.AssetTools.find_assets",
+      "HTTP DELETE session"
+    ],
+    "readback": [
+      "initialize",
+      "notifications/initialized",
+      "tools/list",
+      "meta.list_toolsets",
+      "meta.describe_toolset(editor_toolset.toolsets.asset.AssetTools)",
+      "meta.list_toolsets",
+      "meta.describe_toolset(editor_toolset.toolsets.asset.AssetTools)",
+      "meta.describe_toolset(editor_toolset.toolsets.blueprint.BlueprintTools)",
+      "meta.describe_toolset(editor_toolset.toolsets.object.ObjectTools)",
+      "editor_toolset.toolsets.asset.AssetTools.find_assets",
+      "editor_toolset.toolsets.asset.AssetTools.load_asset",
+      "editor_toolset.toolsets.asset.AssetTools.is_dirty",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_graphs",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.get_default_object",
+      "editor_toolset.toolsets.object.ObjectTools.get_class",
+      "editor_toolset.toolsets.blueprint.BlueprintTools.list_variables",
+      "editor_toolset.toolsets.object.ObjectTools.get_properties",
+      "editor_toolset.toolsets.asset.AssetTools.find_assets",
+      "HTTP DELETE session"
+    ]
+  },
+  "readback_contract": [
+    "Run under a different externally verified editor PID after normal close and relaunch.",
+    "Read-only native calls and load_asset only; no compile/save/property changes.",
+    "Compare exact asset/generated-class/observed-graph/CDO references, local variable inventory, integer default 0, clean state, saved bytes, and SHA-256 against preservation."
+  ],
+  "limits": [
+    "This is a diagnostic compile/save/persistence witness of default zero, not a pass for the original default-37 acceptance.",
+    "Graph reference equality is not a full graph topology proof.",
+    "Compile Status is transient; no persisted compile-status claim is made.",
+    "Full compiler log and live error-diagnostic completeness were not qualified."
+  ],
+  "retained_raw_evidence": "Full request journals and local clients remain on the authoring PC; sanitized_receipt.json contains relative evidence IDs and hashes only."
+}

@@ -262,6 +262,51 @@ def _strict_wire(raw):
         _json(text)
 
 
+class McpToolError(ValueError):
+    """A complete MCP reply failed; operation effects are not established.
+
+    Retain only a bounded tool label and returned error text. Request arguments
+    are never copied here. This exception does not authorize an automatic retry
+    or imply that a tool rolled back changes before it reported an error.
+    """
+
+    def __init__(self, tool_name, content_text, *, kind="mcp_tool_error", content_valid=True):
+        tool_name = tool_name if isinstance(tool_name, str) else "unknown_tool"
+        content_text = content_text if isinstance(content_text, str) else "malformed MCP error content"
+        self.tool_name = re.sub(r"[^A-Za-z0-9_.:-]", "_", tool_name[:160])
+        self.content_text = "".join(char if char in "\n\t" or ord(char) >= 32 else "?"
+                                    for char in content_text[:1024])
+        self.response_complete = True
+        self.operation_effects_proven = False
+        self.retryable = False
+        self.replayed = False
+        self.data = {"kind": kind, "tool_name": self.tool_name,
+                     "content_text": self.content_text, "content_valid": content_valid,
+                     "diagnostic_truncated": len(tool_name) > 160 or len(content_text) > 1024,
+                     "response_complete": True, "operation_effects_proven": False,
+                     "effect_state": "unknown", "retryable": False, "replayed": False}
+        super().__init__("MCP %s from %s: %s" % (kind, self.tool_name, self.content_text))
+
+
+def _mcp_text_result(tool_name, result):
+    # Keep the existing strict one-text-result success shape. This function sees
+    # only the completed result, never the original request or its arguments.
+    if not isinstance(result, dict):
+        raise McpToolError(tool_name, "expected complete MCP result object",
+                           kind="malformed_mcp_result", content_valid=False)
+    content = result.get("content")
+    valid = (isinstance(content, list) and len(content) == 1 and isinstance(content[0], dict)
+             and content[0].get("type") == "text" and isinstance(content[0].get("text"), str))
+    error_flag = result.get("isError", False)
+    if error_flag is True:
+        raise McpToolError(tool_name, content[0]["text"] if valid else "malformed MCP error content",
+                           content_valid=valid)
+    if error_flag is not False or not valid:
+        raise McpToolError(tool_name, "expected one complete MCP text result and boolean isError",
+                           kind="malformed_mcp_result", content_valid=False)
+    return content[0]["text"]
+
+
 class _Session:
     def __init__(self, endpoint, timeout, operations, opener):
         parts = urllib.parse.urlsplit(endpoint)
@@ -344,12 +389,10 @@ class _Session:
 
     def meta(self, name, arguments):
         result = self.exchange(name, "tools/call", {"name": name, "arguments": arguments})
-        _require(isinstance(result, dict) and result.get("isError", False) is False, "MCP tool error")
-        content = result.get("content")
-        _require(isinstance(content, list) and len(content) == 1 and isinstance(content[0], dict)
-                 and content[0].get("type") == "text" and isinstance(content[0].get("text"), str),
-                 "expected one complete MCP text result")
-        return content[0]["text"]
+        tool_label = name
+        if name == "call_tool" and isinstance(arguments, dict) and isinstance(arguments.get("tool_name"), str):
+            tool_label = arguments["tool_name"]
+        return _mcp_text_result(tool_label, result)
 
     def read_asset(self, name, path):
         _require(name in READ_TOOLS, "asset tool is not read-only allowlisted")

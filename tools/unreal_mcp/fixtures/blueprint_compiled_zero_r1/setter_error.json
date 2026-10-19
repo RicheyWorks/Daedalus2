@@ -1,0 +1,35 @@
+{
+  "schema": "codex.official-mcp-native-error-fixture.v1",
+  "status": "UNRESOLVED_OBSERVED_ERROR_DO_NOT_RETRY",
+  "request": {
+    "meta_tool": "call_tool",
+    "toolset_name": "editor_toolset.toolsets.object.ObjectTools",
+    "tool_name": "set_properties",
+    "arguments": {
+      "instance": {
+        "refPath": "/Game/CodexToolEvaluation/BlueprintAcceptanceR2/BP_CompileReceipt.BP_CompileReceipt"
+      },
+      "values": "{\"AuditValue\":37}"
+    }
+  },
+  "actual_response": {
+    "jsonrpc": "2.0",
+    "id": 17,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "UserRaisedError in ObjectTools.set_properties"
+        }
+      ],
+      "isError": true
+    }
+  },
+  "original_http_status": 200,
+  "original_response_bytes": 191,
+  "original_response_sha256": "f47ff7396fc4422f2b88cdd6f3fcb00ea656963aa090bd712d6c59727aec09c4",
+  "subsequent_read_first_properties": {
+    "AuditValue": 0
+  },
+  "qualification": "Observed error fixture for error propagation and diagnosis; no successful corrected setter path is established."
+}

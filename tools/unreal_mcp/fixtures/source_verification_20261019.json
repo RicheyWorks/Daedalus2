@@ -1,0 +1,44 @@
+{
+  "schema": "codex.official-mcp-source-verification.v1",
+  "date_utc": "2026-10-19",
+  "execution": "Isolated stdlib Python subprocesses; real socket constructors and Unreal imports blocked",
+  "runs": [
+    {
+      "modules": [
+        "tools.unreal_mcp.test_asset_receipt_audit",
+        "tools.unreal_mcp.test_automation_result_contract",
+        "tools.unreal_mcp.test_validation_result_contract",
+        "tools.unreal_mcp.test_tool_result_errors"
+      ],
+      "tests": 71,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "elapsed_seconds": 0.2121703000011621,
+      "peak_working_set_bytes": 27484160,
+      "retained_report_sha256": "25e856c0c49d7f28d8ae971911147c556f3d80d17a9fcf92a08313cbda9b5d5f"
+    },
+    {
+      "modules": ["tools.unreal_mcp.test_delivery_integration"],
+      "tests": 36,
+      "wire_evidence_mutations": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "elapsed_seconds": 0.7163663000028464,
+      "peak_working_set_bytes": 28127232,
+      "retained_report_sha256": "d10c2100825532f61013392eefa35fe7674a8373549313c3289c5c31ff4c2c66"
+    }
+  ],
+  "reproduce_from_repository_root": [
+    "python -B -S -E -m tools.unreal_mcp.offline_gate --report NEW_REPORT.json tools.unreal_mcp.test_asset_receipt_audit tools.unreal_mcp.test_automation_result_contract tools.unreal_mcp.test_validation_result_contract tools.unreal_mcp.test_tool_result_errors tools.unreal_mcp.test_delivery_integration"
+  ],
+  "native_requests": 0,
+  "qualifies_native_runtime": false,
+  "limits": [
+    "Source tests do not qualify a native automation execution or DataValidation serializer/callable.",
+    "Post-save class/tag/metadata audit does not prove mesh geometry, source units, collision, palette, or disk persistence.",
+    "The native Blueprint diagnostic fixture preserves default zero through save and fresh process reopen; requested default 37 remains failed.",
+    "Production editor native preservation proof remains pending its unchanged physical-memory admission floor."
+  ]
+}

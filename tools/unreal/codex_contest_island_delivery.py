@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "connectors" / "claude-asset-pipeline"))
 from unreal_mcp.client import Mcp
+from unreal_mcp.delivery_integration import audit_saved_receipt, import_static_file
 from asset_pipeline.ship import fingerprint, import_snapshot
 
 SCENE = "editor_toolset.toolsets.scene.SceneTools"
@@ -172,7 +173,8 @@ def _palette(mcp, receipts):
     return materials, save_paths
 
 
-def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
+def deliver(receipt_paths, placements=None, map_path=None, map_file=None, *,
+            official_audit_endpoint=None, unit_qualified_import=False):
     """Hash-bound import skip, stable material binding, then one explicit batch save.
 
     Changed payloads use a revision folder because native import_file refuses
@@ -190,6 +192,8 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
             raise ValueError("FBX changed after export; no import performed")
     for path in receipt_paths:
         journal = Path(path).with_suffix(".unreal.json")
+        if official_audit_endpoint is not None and journal.with_suffix(".official-audit.json").exists():
+            raise FileExistsError("official audit evidence already exists; inspect it before another delivery")
         if journal.is_file():
             previous = json.loads(journal.read_text(encoding="utf-8"))
             if previous.get("stage") not in ("placed_and_saved", "assets_saved"):
@@ -228,6 +232,15 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
         return value
 
     mcp.call = observed_call
+    if unit_qualified_import:
+        original_describe = mcp.describe
+
+        def observed_describe(toolset):
+            value = original_describe(toolset)
+            record({"state": "described", "toolset": toolset, "schema": value})
+            return value
+
+        mcp.describe = observed_describe
     if placements is not None:
         current = mcp.call(SCENE, "get_current_level")
         if package(current) != package(map_path):
@@ -259,8 +272,9 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
             result["import_snapshot"] = snapshot
             result["stage"] = "import_pending"
             write(result_path, result)
-            paths = mcp.call(MESH, "import_file", folder_path=dest, asset_name=name, source_file=snapshot,
-                             import_materials=False, import_textures=False, combine_meshes=False)
+            paths = import_static_file(mcp, folder_path=dest, asset_name=name, source_file=snapshot,
+                                       import_materials=False, import_textures=False, combine_meshes=False,
+                                       unit_qualified=unit_qualified_import)
             if not isinstance(paths, list) or not paths:
                 raise RuntimeError("native import returned no meshes; outcome requires inspection")
             result["import_skipped"] = False
@@ -339,6 +353,14 @@ def deliver(receipt_paths, placements=None, map_path=None, map_file=None):
         if placements is not None:
             result["map"] = {"package": package(map_path), "before": before_map, "after": after_map}
         write(result_path, result)
+        if official_audit_endpoint is not None:
+            audit_path = result_path.with_suffix(".official-audit.json")
+            source = next(r for r in receipts if r["name"] == result["name"])
+            verified = audit_saved_receipt(
+                result_path, audit_path, endpoint=official_audit_endpoint, namespace=result["destination"],
+                required_metadata=_tags(source, result["fbx"]))
+            # Keep the saved producer receipt byte-identical to its audit pin.
+            result["official_audit"] = {"path": str(audit_path.resolve()), "outcome": verified["outcome"]}
     return [result for result, _ in results]
 
 
@@ -348,9 +370,15 @@ def main():
     parser.add_argument("--placements", type=Path, help="JSON {island_name: [x_cm,y_cm,z_cm]} agreed at handoff")
     parser.add_argument("--map", dest="map_path")
     parser.add_argument("--map-file", type=Path)
+    parser.add_argument("--official-audit-endpoint",
+                        help="opt in to a typed read audit after each exact saved receipt")
+    parser.add_argument("--unit-qualified-import", action="store_true",
+                        help="opt in to the separately registered unit-qualified FBX toolset")
     args = parser.parse_args()
     locations = json.loads(args.placements.read_text(encoding="utf-8")) if args.placements else None
-    print(json.dumps(deliver(args.receipts, locations, args.map_path, args.map_file), indent=2))
+    print(json.dumps(deliver(args.receipts, locations, args.map_path, args.map_file,
+                             official_audit_endpoint=args.official_audit_endpoint,
+                             unit_qualified_import=args.unit_qualified_import), indent=2))
 
 
 if __name__ == "__main__":
