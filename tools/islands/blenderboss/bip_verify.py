@@ -2,8 +2,11 @@
 """BIP 1 verifier (blender-team): recomputes everything from the packet files themselves (sizes, sha256, triangle counts from
 index accessors, bounds from the vertex data, caps, finiteness, index ranges), cross-checks the placement manifest, and, when the
 source glb is present, checks the totals against it. Exit 0 only if every check passes.
+R2 prop packets (manifest props_fixup, blender-harness bip1_fixup): UCX_ collision children are not render geometry, so they are
+left out of the triangle and bounds checks and counted against each packet's "ucx"; library node names must be UE-safe and unique;
+--rebuild then compares the fresh split with the archived R1 shas (terrain byte-identical, props equal to props_fixup.r1).
 Usage: python bip_verify.py <manifest.json> <packet dir> [source.glb] [--rebuild]"""
-import hashlib, json, os, subprocess, sys, tempfile
+import hashlib, json, os, re, subprocess, sys, tempfile
 import numpy as np
 from bip_glb import accessor, read_glb
 
@@ -34,8 +37,10 @@ def main(manifest, pdir, src=None, rebuild=False):
         except Exception as e:
             chk(False, p["id"] + ": unreadable glb (%s)" % e); continue
         chk(len(g.get("materials", [])) <= caps["materials"] and len(g.get("materials", [])) == p["materials"], p["id"] + ": materials over cap/differ")
-        tris = 0; lo = np.full(3, np.inf); hi = np.full(3, -np.inf); good = True
+        tris = 0; lo = np.full(3, np.inf); hi = np.full(3, -np.inf); good = True; ucx = 0
         for nd in g["nodes"]:
+            if nd["name"].startswith("UCX_"):
+                ucx += 1; continue
             mt = 0
             for pr in g["meshes"][nd["mesh"]]["primitives"]:
                 pos = accessor(g, b, pr["attributes"]["POSITION"]); idx = accessor(g, b, pr["indices"]); a = g["accessors"][pr["attributes"]["POSITION"]]
@@ -48,6 +53,11 @@ def main(manifest, pdir, src=None, rebuild=False):
         chk(good, p["id"] + ": bad geometry (NaN, index out of range, non-triangles, accessor min/max wrong)")
         chk(tris == p["tris"], p["id"] + ": tris differ (file %d, manifest %d)" % (tris, p["tris"])); chk(tris <= caps["tris"], p["id"] + ": over tri cap")
         tris_by_kind[p["kind"]] += tris
+        chk(ucx == p.get("ucx", 0), p["id"] + ": UCX count differs (file %d, manifest %d)" % (ucx, p.get("ucx", 0)))
+        if m.get("props_fixup") and p["kind"] == "props":
+            rn = [nd["name"] for nd in g["nodes"]]
+            chk(len(rn) == len(set(rn)) and all(re.match(r"^[A-Za-z0-9_]+$", n) for n in rn), p["id"] + ": node names not unique / not UE-safe")
+            chk(all(re.match(r"^M_BB_[A-Za-z0-9_]+$", mt.get("name", "")) for mt in g.get("materials", [])), p["id"] + ": material names not in the shared M_BB_ set")
         if p["kind"] == "terrain":
             chk(np.allclose(lo, p["bounds_min"], atol=1e-3) and np.allclose(hi, p["bounds_max"], atol=1e-3), p["id"] + ": bounds differ from the vertex data")
     props = {pr["name"]: pr for pr in m["props"]}
@@ -81,7 +91,13 @@ def main(manifest, pdir, src=None, rebuild=False):
             here = os.path.dirname(os.path.abspath(__file__)); mj = os.path.join(td, "m.json")
             subprocess.run([sys.executable, os.path.join(here, "bip_split.py"), src, os.path.join(td, "p"), mj], check=True, capture_output=True)
             m2 = json.load(open(mj, encoding="utf-8"))
-            chk([p["sha256"] for p in m2["packets"]] == [p["sha256"] for p in m["packets"]] and m2["placements"] == m["placements"], "rebuild is not byte-identical")
+            fx = m.get("props_fixup")
+            if fx:   # R2: terrain byte-identical; the fresh prop split must be the archived R1 the fixup started from
+                want = [p["sha256"] if p["kind"] == "terrain" else fx["r1"][p["file"]] for p in m["packets"]]
+                ren = lambda n: fx["renamed"].get(n, n)
+                chk([p["sha256"] for p in m2["packets"]] == want and [dict(q, prop=ren(q["prop"])) for q in m2["placements"]] == m["placements"], "rebuild is not R1 / terrain byte-identical")
+            else:
+                chk([p["sha256"] for p in m2["packets"]] == [p["sha256"] for p in m["packets"]] and m2["placements"] == m["placements"], "rebuild is not byte-identical")
     print(json.dumps({"checks_passed": ok, "checks_failed": len(fails), "packets": len(m["packets"]), "max_packet_tris": t["max_packet_tris"], "max_packet_bytes": t["max_packet_bytes"],
                       "tris_by_instance": t["tris_by_instance"], "failures": fails[:10]}))
     return 0 if not fails else 1
