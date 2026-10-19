@@ -12,6 +12,8 @@ The plan file named beside this page is not in this tree. This page records step
 Fishing, egg hatching, arcade cabinets, sports and mazes all end with a result. What Life Learns
 needs one shape for "this activity finished with this outcome for this subject", and a receipt so
 the same result credits that subject exactly once when it is replayed, retried or delivered twice.
+The credit key is `(activityId, attemptId, subjectId)`. A second delivery of that triple does not
+teach the lesson again.
 
 - Contract: `docs/contracts/activity-result-v1`
 - Core: `com.daedalus.world.activity` (`ActivityResult`, `ActivityCredit`, `ActivityResultReceipt`)
