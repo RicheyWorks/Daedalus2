@@ -140,16 +140,46 @@ def _sockets(mesh, names=()):
     return out
 
 
+def _vec(v):
+    return [round(v.x, 3), round(v.y, 3), round(v.z, 3)]
+
+
+def _rot(r):
+    return [round(r.pitch, 3), round(r.yaw, 3), round(r.roll, 3)]
+
+
 def add_sockets(plan):
+    """Add sidecar sockets after import. A socket that already exists natively (stock Interchange
+    imports SOCKET_ empties) is KEPT; by default (plan option sidecar_rotation, opt out with
+    overrides {"sidecar_rotation": False}) its relative_rotation is set from the sidecar, but only
+    when the native position matches the sidecar within 0.5 cm. Native and sidecar rotations are
+    logged in the result as evidence."""
+    import harness_core as hc
     mesh = _mesh(plan)
     if mesh is None:
         return {"error": "mesh missing"}
     mesh.modify()  # mark for transaction/dirty BEFORE the sockets change (review 48565)
-    existing = set(_sockets(mesh, [s["name"] for s in plan["sockets"]["sockets"]]))
+    existing = _sockets(mesh, [s["name"] for s in plan["sockets"]["sockets"]])
+    rot_wins = plan["options"].get("sidecar_rotation", True)
     out = []
     for s in plan["sockets"]["sockets"]:
         if s["name"] in existing:
-            out.append({"name": s["name"], "result": "kept existing"})
+            sock = existing[s["name"]]
+            nl = _vec(sock.get_editor_property("relative_location"))
+            nr = _rot(sock.get_editor_property("relative_rotation"))
+            e = {"name": s["name"], "native_location_cm": nl, "native_rotation_pyr": nr,
+                 "sidecar_location_cm": s["location_cm"], "sidecar_rotation_pyr": s["rotation_pyr"],
+                 "position_ok": hc.socket_position_ok(nl, s["location_cm"])}
+            if not rot_wins:
+                e["result"] = "kept existing (sidecar_rotation opted out)"
+            elif not e["position_ok"]:
+                e["result"] = "kept existing; rotation NOT applied: native position differs from sidecar by more than 0.5 cm"
+            else:
+                p, y, r = s["rotation_pyr"]
+                sock.set_editor_property("relative_rotation", unreal.Rotator(roll=r, pitch=p, yaw=y))
+                e["rotation_after_pyr"] = _rot(sock.get_editor_property("relative_rotation"))
+                e["result"] = "kept existing; rotation from sidecar"
+            out.append(e)
             continue
         sock = unreal.StaticMeshSocket(mesh)
         sock.set_editor_property("socket_name", s["name"])
@@ -230,7 +260,7 @@ def facts(plan):
         "materials": [{"slot": str(m.get_editor_property("material_slot_name")),
                        "material": (m.get_editor_property("material_interface").get_path_name() if m.get_editor_property("material_interface") else None)}
                       for m in mesh.get_editor_property("static_materials")],
-        "sockets": [{"name": n, "location_cm": [round(v, 3) for v in (s.get_editor_property("relative_location").x, s.get_editor_property("relative_location").y, s.get_editor_property("relative_location").z)]}
+        "sockets": [{"name": n, "location_cm": _vec(s.get_editor_property("relative_location")), "rotation_pyr": _rot(s.get_editor_property("relative_rotation"))}
                     for n, s in sorted(_sockets(mesh, [x["name"] for x in plan["sockets"]["sockets"]]).items())],
         "collision": {"convex": len(agg.get_editor_property("convex_elems")) if agg else 0,
                       "hulls": [_convex(c) for c in agg.get_editor_property("convex_elems")] if agg else []},
