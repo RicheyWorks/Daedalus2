@@ -77,6 +77,21 @@ public final class DrumRollId {
         return EarRule.check(KNOCK_HZ, "woodpecker knock");
     }
 
+    /** Irregularity cut-off: rolls more irregular than this are broken (sapsucker-style). */
+    public static final double BROKEN_CV = 0.25;
+
+    /** Coefficient of variation of a roll's beat intervals (0 = metronomic). */
+    public static double irregularity(List<Integer> onsets) {
+        int n = onsets.size() - 1;
+        double mean = (onsets.get(n) - onsets.get(0)) / (double) n;
+        double var = 0;
+        for (int i = 0; i < n; i++) {
+            double v = onsets.get(i + 1) - onsets.get(i) - mean;
+            var += v * v;
+        }
+        return Math.sqrt(var / n) / mean;
+    }
+
     /** Identify a roll from its onsets (ms). */
     public static String identify(List<Integer> onsets) {
         if (onsets == null || onsets.size() < 8) {
@@ -84,18 +99,10 @@ public final class DrumRollId {
         }
         int n = onsets.size() - 1;
         double[] iv = new double[n];
-        double mean = 0;
         for (int i = 0; i < n; i++) {
             iv[i] = onsets.get(i + 1) - onsets.get(i);
-            mean += iv[i];
         }
-        mean /= n;
-        double var = 0;
-        for (double v : iv) {
-            var += (v - mean) * (v - mean);
-        }
-        double cv = Math.sqrt(var / n) / mean;
-        if (cv > 0.25) {
+        if (irregularity(onsets) > BROKEN_CV) {
             return byFlag(true);
         }
         int q = Math.max(2, n / 4);

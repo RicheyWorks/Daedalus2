@@ -24,6 +24,22 @@ class DrumRollIdTest {
         assertThat(seen).hasSize(DrumRollId.CARD.size());
     }
 
+    @Test void irregularityCutOffHasMargin() {
+        double minBroken = Double.MAX_VALUE;
+        double maxSmooth = 0;
+        for (long s = 0; s < 300; s++) {
+            DrumRollId d = DrumRollId.seeded(s);
+            double cv = DrumRollId.irregularity(d.onsets());
+            if (d.answer().equals("sapsucker")) {
+                minBroken = Math.min(minBroken, cv);
+            } else {
+                maxSmooth = Math.max(maxSmooth, cv);
+            }
+        }
+        assertThat(minBroken).isGreaterThanOrEqualTo(DrumRollId.BROKEN_CV + 0.05);
+        assertThat(maxSmooth).isLessThanOrEqualTo(DrumRollId.BROKEN_CV - 0.05);
+    }
+
     @Test void steadyRollsSeparateByRate() {
         List<Integer> downy = new ArrayList<>();
         List<Integer> hairy = new ArrayList<>();
