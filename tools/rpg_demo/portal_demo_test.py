@@ -3,7 +3,9 @@
 
     python tools/rpg_demo/portal_demo_test.py PORTAL_DIR PRISM_DIR EVIDENCE_DIR
 
-Build both folders first. Existing PRISM_DEMO hooks stage a canonical encounter
+Build both folders first. The fixture fulfills their exact files at one HTTP
+origin through Playwright; it does not validate the host's HTTP transport.
+Existing PRISM_DEMO hooks stage a canonical encounter
 and map entrances; movement, battle menus and inn saving use the shared engine.
 No foe/party stat, inventory, reward or progression injection is used.
 """

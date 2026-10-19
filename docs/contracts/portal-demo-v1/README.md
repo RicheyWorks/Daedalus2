@@ -45,6 +45,11 @@ python tools/rpg_demo/build_demo.py ART_ROOT OUT/prism
 python tools/rpg_demo/portal_demo_test.py OUT/portal OUT/prism OUT/evidence
 ```
 
+`ART_ROOT` must contain the complete authored exports, including each realm's
+`title/TitleBg_1x.png` from the existing `rpg_title.py` producer. The builder's
+existing `--sprites` lookup can select a realm's separately staged title background
+without modifying its shared art root.
+
 The browser test checks identity, canonical party, real town-gate and mine-stair
 transitions, a canonical battle through combat menus, actual inn saves, legacy
 Prism continuation and both save keys surviving a same-origin round trip. Existing
@@ -52,3 +57,10 @@ test hooks stage map entrances and one encounter; they do not establish a comple
 walkthrough, hardware compatibility or native readiness. The test retains a PNG
 and JSON results. Build and browser outcomes belong in the delivery receipt, not
 an assumption inferred from these commands.
+
+The fixture serves the exact built JS, JSON, images and audio through Playwright
+file fulfillment at their real HTTP URLs, and disables optional external fonts.
+This isolates observed localhost connection resets without substituting game data
+or images. It keeps one browser context and HTTP origin across page lifecycles,
+explicitly checks both identities, and compares both save values byte for byte.
+It validates the browser frontend; actual HTTP hosting remains unvalidated.
