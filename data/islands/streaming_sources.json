@@ -4,7 +4,16 @@
     {
       "island": "BlenderBoss",
       "content_dirs": [],
-      "note": "Content/BlenderBoss holds only the sublevel map; meshes live in shared folders, owner to list them"
+      "note": "disk pinned to BIP1 packet bytes with owner consent; RAM remains the placement-count ESTIMATE",
+      "pin": {
+        "disk_kib": 16348,
+        "disk_bytes": 16739484,
+        "manifest": "data/islands/blenderboss/flagship.bip.json",
+        "manifest_sha256": "a00fb9ca1255a4cae977ad84fc1f7cd232c7595c96ee498871c0f448707809a9",
+        "basis": "sum of the 67 BIP1 packet byte counts (28 terrain + 39 prop libs), ceil to KiB; FILE-ONLY",
+        "consent": "blender-team 47979 YES_FILE_ONLY via pootscoot-coordination receipt 47991 (request disk-budget-blender-consent-47979-receipt-20261019)",
+        "ram": "ESTIMATE (placement-count model), not measured"
+      }
     },
     {
       "island": "DiskSaver",

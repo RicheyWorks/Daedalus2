@@ -22,3 +22,8 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 - Priority in `dsb_manifest.py`: a layout's own `streaming` pin, then the measurement, then the placement-count estimate.
 - First run (23:24 PT Oct 18): DiskSaver 25,470 KiB disk / 25,015 KiB RAM proxy (341 files); (OddsReaper 140,682 / 139,310 was measured too, then dropped at 23:3x because disk-saver does not own it). BlenderBoss, Hephaestus and OddsReaper keep estimates until their owners list their asset folders.
 
+
+## Owner-consented pins
+- `data/islands/streaming_sources.json` rows may carry `"pin": {"disk_kib": N, ...}` with provenance; priority is layout `streaming` block, then pin, then measurement, then estimate.
+- BlenderBoss (2026-10-18): disk 16,348 KiB = ceil(16,739,484 bytes), the 67 BIP1 packets in `data/islands/blenderboss/flagship.bip.json` (sha256 a00fb9ca...09a9, checked by test_dsb.py). File-only, with blender-team consent (47979, receipt 47991). RAM stays an ESTIMATE.
+

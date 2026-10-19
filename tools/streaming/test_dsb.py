@@ -141,5 +141,35 @@ class MeasureTest(unittest.TestCase):
         self.assertEqual(text, "DSB 1\nisland P x 0 y 0 ram 9 disk 2\n")
 
 
+    def test_sources_pin_beats_measurement_but_not_layout(self):
+        root = tempfile.mkdtemp()
+        for name, doc in (("a", {"island": "A", "origin_cm": [0, 0], "placements": []}),
+                          ("b", {"island": "B", "origin_cm": [5, 5], "placements": [], "streaming": {"disk_kib": 3}})):
+            os.makedirs(os.path.join(root, "data", "islands", name))
+            with open(os.path.join(root, "data", "islands", name, "layout.json"), "w") as f:
+                json.dump(doc, f)
+        with open(os.path.join(root, "data", "islands", "streaming_measured.json"), "w") as f:
+            json.dump({"islands": {"A": {"ram_kib": 1, "disk_kib": 2, "files": 1}}}, f)
+        with open(os.path.join(root, "data", "islands", "streaming_sources.json"), "w") as f:
+            json.dump({"islands": [{"island": "A", "content_dirs": [], "pin": {"disk_kib": 16348, "disk_bytes": 16739484, "sha256": "x"}},
+                                   {"island": "B", "content_dirs": [], "pin": {"disk_kib": 99}}]}, f)
+        text, _ = dsb_manifest.build(root)
+        self.assertEqual(text, "DSB 1\nisland A x 0 y 0 ram 1 disk 16348\nisland B x 5 y 5 ram 16384 disk 3\n")
+
+    def test_blenderboss_bip1_pin_matches_its_manifest(self):
+        src = os.path.join(ROOT, "data", "islands", "streaming_sources.json")
+        with open(src, encoding="utf-8") as f:
+            row = next(r for r in json.load(f)["islands"] if r["island"] == "BlenderBoss")
+        pin = row["pin"]
+        self.assertEqual(pin["disk_kib"], (pin["disk_bytes"] + 1023) // 1024)
+        bip = os.path.join(ROOT, pin["manifest"])
+        import hashlib
+        with open(bip, "rb") as f:
+            data = f.read()
+        self.assertEqual(hashlib.sha256(data).hexdigest(), pin["manifest_sha256"])
+        self.assertEqual(sum(p["bytes"] for p in json.loads(data)["packets"]), pin["disk_bytes"])
+        self.assertIn("island BlenderBoss x -6000000 y 6000000 ram 40456 disk 16348\n", dsb_manifest.build(ROOT)[0])
+
+
 if __name__ == "__main__":
     unittest.main()
