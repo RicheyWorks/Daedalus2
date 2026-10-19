@@ -70,6 +70,9 @@ def _pipeline(plan, report):
         if _try_set(mat, name, o["reuse_existing_materials"], report, "reuse_existing"):
             break
     _try_set(mat, "create_new_materials", o["create_new_materials"], report, "create_new")
+    # UE 5.8 material_pipeline.search_location (probed read-only 2026-10-19; default LOCAL).
+    _try_set(mat, "search_location", getattr(unreal.InterchangeMaterialSearchLocation, o.get("material_search_location", "LOCAL")),
+             report, "search_location")
     return p
 
 
