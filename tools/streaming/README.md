@@ -35,3 +35,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Defrag Tide (contest G63, quest q_defrag_tide)
 - `defrag_tide.py`: DiskSaver Island disk-layout minigame. G39 island caches are scattered over a block shelf. The player moves N blocks per tide, the tide erodes free blocks into bad ones, and the goal is to reach the weighted seek target (`defrag_tide_test.py`; CI `Defrag Tide`). Rules: `docs/islands/DISKSAVER-DEFRAG-TIDE.md`.
+
+## Parity Reef (contest G67, quest q_parity_reef)
+- `parity_reef.py`: DiskSaver Island redundancy minigame. Caches are striped over reef stones with rotating XOR parity, storms smash a stone, a verified rebuild runs N blocks per tick, and a double loss in a row = data lost. Stripes come from the G63 Defrag Tide caches (`parity_reef_test.py`; CI `Parity Reef`). Rules: `docs/islands/DISKSAVER-PARITY-REEF.md`.
