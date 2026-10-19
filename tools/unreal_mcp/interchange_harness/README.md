@@ -5,7 +5,7 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 | File | Role |
 |---|---|
 | `harness_core.py` | Engine-free plan, sidecar, receiver profile and verdict. Plain stdlib. |
-| `test_harness_core.py` | 28 engine-free tests (`python -m unittest test_harness_core`) |
+| `test_harness_core.py` | 29 engine-free tests (`python -m unittest test_harness_core`) |
 | `ue_harness.py` | Editor stages, one per bridge call: `start`, `poll`, `add_sockets`, `facts`, `save` |
 | `profiles/flagship_terrain_33.json` | Five-slot receiver profile generated from source packet 519f28bb (sha-pinned): 5 slots in order, 669 tris, expected cm bounds, Nanite off, collision off, destination `/Game/Daedalus/Art/Islands/CodexContest/FlagshipBIP1/Terrain33R1` |
 | `samples/Prop_PracticeCrate.sockets.json` | Sample sidecar in the 48521 shape |
@@ -32,11 +32,16 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 8. **UCX** stays as glTF children. It becomes convex collision, and the hull extent is read through `export_text()` because 5.8 hides VertexData from Python.
 9. **Second save.** Material instances can be dirty again after the first save, so `save()` loops up to 3 passes and reports the count.
 
-## Native status
-- start, poll, facts and save follow the pattern that passed live in item e. The pipeline override (`override_pipelines` with `InterchangeGenericAssetsPipeline`) and `add_sockets` are **AUTHORED, NOT RUN** natively.
-- Their first run must be in the test folder `/Game/Daedalus/Tests/...`, with a checkpoint before it.
-- terrain_33 into its real root (item g) comes after review, in a claimed turn. It needs a checkpoint, a five-slot readback, and a save of only the 6 new packages. The fresh reopen happens in the batched restart.
+## Native status (first run 2026-10-19, UE 5.8, `/Game/Daedalus/Tests/InterchangeFixture20261019`)
+- All stages ran live: `start` (override pipeline), `poll`, `add_sockets`, `set_nanite`, `facts`, `save`. Verdict ok on the B reimport, with same UObject, 2 slots in order, UCX convex 52x53x50 cm, socket Top at (0,0,50) cm, and a clean 1-pass save.
+- UE 5.8 API facts found on that run and fixed here:
+  - `override_pipelines` takes `SoftObjectPath`, not pipeline objects;
+  - `StaticMesh.Sockets` is protected from Python, so use `find_socket`/`add_socket`/`get_sockets_by_tag`;
+  - `generate_lightmap_u_vs` isn't on `common_meshes_properties` (it's reported in `overrides.failed`);
+  - a **reimport keeps the asset's Nanite setting** and ignores the override's `build_nanite`. `evaluate()` catches this (`nanite_as_planned=False`), and `set_nanite()` applies the plan.
+- **Sockets:** stock 5.8 glTF Interchange DOES import `SOCKET_Top` as socket `Top`. The item e "dropped" result was a false negative: its reader swallowed the protected-property error. The sidecar is kept as a cross-check (`add_sockets` reports "kept existing").
+- **8 triangles (item e):** settled. With Nanite on (fallback target Auto), LOD0 is 256 tris. With Nanite off, it's 264 tris, which matches the glTF. The Nanite fallback mesh was the cause; the source is fine.
+- terrain_33 into its real root (item g) needs a checkpoint, a five-slot readback, and a save of only the 6 new packages. The fresh reopen happens in the batched restart.
 
 ## Open
-- Item e: 8 triangles lost on the B reimport (glTF 264, UE 256). The source has 0 zero-area triangles, 0 duplicates and 0 collapses at weld thresholds from 1e-6 to 1e-3 m, and `remove_degenerates=false`. Suspected cause: Nanite fallback mesh simplification, since Nanite is on. UNVERIFIED: proving it needs a Nanite-off reimport in the test folder.
 - PCG note only, no code (48194): `GenerateLocal`/`GetTaskId` is pending work, not completion. Require the generation callback plus an output count, and keep streaming completion as a separate gate. There is no PCG user yet.

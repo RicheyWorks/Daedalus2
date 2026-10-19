@@ -1,13 +1,16 @@
 """Editor side of the Interchange harness. Runs ONE stage per bridge call on the game thread.
 
-NATIVE STATUS: the start/poll/facts/save stages reuse the pattern that passed live in item e
-(PR197). The pipeline-override and add_sockets stages are AUTHORED, NOT YET RUN natively:
-every property set is attempted, read back and reported, never assumed applied.
+NATIVE STATUS (first run 2026-10-19, UE 5.8, test folder): start/poll/add_sockets/facts/save and
+set_nanite all ran live. Every property set is attempted, read back and reported, never assumed
+applied. Known 5.8 facts: override_pipelines takes SoftObjectPath; StaticMesh.Sockets is protected
+(use find_socket/add_socket); generate_lightmap_u_vs is not on common_meshes_properties (reported
+in overrides.failed); a reimport ignores the override's build_nanite on an existing asset.
 
     import ue_harness as h
     h.start(plan)          # {"started": bool, "overrides": {...applied/failed...}}
     h.poll()               # {"done": bool, "done_objects": [...]}
     h.add_sockets(plan)    # from plan["sockets"]["sockets"] (sidecar), returns per-socket result
+    h.set_nanite(plan)     # only if a reimport kept the old Nanite setting (see below)
     h.facts(plan)          # raw facts for harness_core.evaluate
     h.save(plan)           # only dirty packages under plan["destination"], up to 3 passes
 """
@@ -76,7 +79,13 @@ def start(plan, reimport_obj=None):
     report = {}
     params = unreal.ImportAssetParameters()
     params.is_automated = True
-    params.override_pipelines = [_pipeline(plan, report)]
+    # UE 5.8: OverridePipelines is an array of SoftObjectPath, not objects (native run 2026-10-19
+    # raised "Cannot nativize InterchangeGenericAssetsPipeline as SoftObjectPath"). Keep the
+    # transient pipeline alive in state so the soft path resolves during the async import.
+    pipe = _pipeline(plan, report)
+    st["pipeline"] = pipe
+    params.override_pipelines = [unreal.SoftObjectPath(pipe.get_path_name())]
+    report["pipeline_path"] = pipe.get_path_name()
     if reimport_obj is not None:
         params.reimport_asset = reimport_obj
     params.on_assets_import_done.bind_callable(_on_done)
@@ -107,12 +116,28 @@ def _convex(elem):
     return {"verts": len(pts), "extent_cm": [round(max(a) - min(a), 3) for a in zip(*pts)] if pts else None}
 
 
+def _sockets(mesh, names=()):
+    """UE 5.8 marks StaticMesh.Sockets protected from Python (native run 2026-10-19), so read
+    through the public API: get_sockets_by_tag("") plus find_socket for each expected name."""
+    out = {}
+    try:
+        for s in mesh.get_sockets_by_tag("") or []:
+            out[str(s.get_editor_property("socket_name"))] = s
+    except Exception:
+        pass
+    for n in names:
+        s = mesh.find_socket(n)
+        if s is not None:
+            out[n] = s
+    return out
+
+
 def add_sockets(plan):
     mesh = _mesh(plan)
     if mesh is None:
         return {"error": "mesh missing"}
     mesh.modify()  # mark for transaction/dirty BEFORE the sockets change (review 48565)
-    existing = {str(s.get_editor_property("socket_name")) for s in mesh.get_editor_property("sockets")}
+    existing = set(_sockets(mesh, [s["name"] for s in plan["sockets"]["sockets"]]))
     out = []
     for s in plan["sockets"]["sockets"]:
         if s["name"] in existing:
@@ -124,10 +149,27 @@ def add_sockets(plan):
         p, y, r = s["rotation_pyr"]
         sock.set_editor_property("relative_rotation", unreal.Rotator(roll=r, pitch=p, yaw=y))
         sock.set_editor_property("relative_scale", unreal.Vector(*s["scale"]))
-        socks = list(mesh.get_editor_property("sockets")) + [sock]
-        mesh.set_editor_property("sockets", socks)
-        out.append({"name": s["name"], "result": "added"})
+        mesh.add_socket(sock)
+        out.append({"name": s["name"], "result": "added" if mesh.find_socket(s["name"]) is not None else "add failed"})
     return {"sockets": out}
+
+
+def set_nanite(plan):
+    """Apply plan build_nanite to an EXISTING mesh. Native run 2026-10-19: a reimport kept the
+    asset's Nanite setting and ignored the override pipeline's build_nanite, so evaluate()
+    reported nanite_as_planned=False; this stage fixes it and rebuilds (modify() first)."""
+    mesh = _mesh(plan)
+    if mesh is None:
+        return {"error": "mesh missing"}
+    ns = mesh.get_editor_property("nanite_settings")
+    before = {"enabled": ns.get_editor_property("enabled"), "tris_lod0": mesh.get_num_triangles(0)}
+    want = bool(plan["options"]["build_nanite"])
+    if before["enabled"] != want:
+        ns.set_editor_property("enabled", want)
+        mesh.modify()
+        mesh.set_editor_property("nanite_settings", ns)
+    return {"before": before, "after": {"enabled": mesh.get_editor_property("nanite_settings").get_editor_property("enabled"),
+                                        "tris_lod0": mesh.get_num_triangles(0)}}
 
 
 def facts(plan):
@@ -148,7 +190,8 @@ def facts(plan):
         "materials": [{"slot": str(m.get_editor_property("material_slot_name")),
                        "material": (m.get_editor_property("material_interface").get_path_name() if m.get_editor_property("material_interface") else None)}
                       for m in mesh.get_editor_property("static_materials")],
-        "sockets": [{"name": str(s.get_editor_property("socket_name"))} for s in mesh.get_editor_property("sockets")],
+        "sockets": [{"name": n, "location_cm": [round(v, 3) for v in (s.get_editor_property("relative_location").x, s.get_editor_property("relative_location").y, s.get_editor_property("relative_location").z)]}
+                    for n, s in sorted(_sockets(mesh, [x["name"] for x in plan["sockets"]["sockets"]]).items())],
         "collision": {"convex": len(agg.get_editor_property("convex_elems")) if agg else 0,
                       "hulls": [_convex(c) for c in agg.get_editor_property("convex_elems")] if agg else []},
         "nanite": mesh.get_editor_property("nanite_settings").get_editor_property("enabled"),
