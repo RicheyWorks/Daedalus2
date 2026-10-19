@@ -1,0 +1,36 @@
+{
+  "v": 1,
+  "quest": "q_storm_season_archive",
+  "lore": "Once a year the storm season rolls over DiskSaver Island, and every save the islands have ever written has to come through it. Archivist Maren hands the keeper the season's ledger: seven storms, seven stations, and every save on the island assigned to the storm that will test it. Get a station wrong and that storm takes its share of the archive. When the last storm blows out, Maren counts what survived and seals the ledger, and the seal is a chain of hashes, so nobody can quietly rewrite how a storm went.",
+  "season": {"keys_per_island": 200, "pass_permille": 800, "session_id": "sess-dsa-2026-storm", "clock_boundary_ms": 1792396800000},
+  "acts": [
+    {"id": "bloom_buoys", "stake": 180, "storm": "Fog on the reefs: only the buoys say which reef is worth a dive."},
+    {"id": "hash_ring_atolls", "stake": 180, "storm": "An atoll sinks and a new one rises: move as few saves as you can."},
+    {"id": "quorum_quays", "stake": 180, "storm": "Quays go dark one by one: no read may come back stale."},
+    {"id": "snapshot_shells", "stake": 180, "storm": "A bad write spreads: roll back from a shell without filling the beach."},
+    {"id": "garbage_gulls", "stake": 160, "storm": "Wreckage piles up: the gulls must clear the dead saves, cycles and all."},
+    {"id": "prefetch_pelicans", "stake": 160, "storm": "The ferry runs late: the pelicans must fly saves ahead of the reader."},
+    {"id": "breakwater_queue", "stake": 160, "storm": "Swells hit the harbour: the breakwater must hold without bloating."}
+  ],
+  "islands": [
+    {"id": "cache_north"},
+    {"id": "cache_south"},
+    {"id": "vault_east"},
+    {"id": "archive_a"},
+    {"id": "archive_b"},
+    {"id": "archive_c"}
+  ],
+  "seed": 136,
+  "keeper": {"instanceId": "life:disksaver-keeper-01", "kind": "LIFE", "profile": "human", "role": "archiving"},
+  "npc": {
+    "name": "Archivist Maren",
+    "lines": {
+      "start": "Seven storms this season. Every save on the island is written against one of them. Let's see how many we keep.",
+      "act": "Next station. Remember what the last storm taught you.",
+      "audit": "Storms are done. Ledger open, chain checked, every save counted.",
+      "gold": "Not one save lost. I'm sealing this ledger in gold.",
+      "pass": "We lost a station's share, but the archive stands. Sealed.",
+      "fail": "Too much went into the sea, or someone touched the ledger. I can't seal this."
+    }
+  }
+}
