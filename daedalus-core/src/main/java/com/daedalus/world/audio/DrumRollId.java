@@ -92,6 +92,13 @@ public final class DrumRollId {
         return Math.sqrt(var / n) / mean;
     }
 
+    /** Opening beat rate (beats/s) over the first quarter of the roll's intervals (at least 2). */
+    public static double openingRate(List<Integer> onsets) {
+        int n = onsets.size() - 1;
+        int q = Math.max(2, n / 4);
+        return 1000.0 * q / (onsets.get(q) - onsets.get(0));
+    }
+
     /** Identify a roll from its onsets (ms). */
     public static String identify(List<Integer> onsets) {
         if (onsets == null || onsets.size() < 8) {
@@ -115,7 +122,7 @@ public final class DrumRollId {
         if (late / early > 1.25) {
             return "pileated woodpecker";
         }
-        double rate = 1000.0 * q / early;
+        double rate = openingRate(onsets);
         Drummer best = null;
         for (Drummer d : CARD) {
             if (!d.broken() && d.slowing() == 1.0 && (best == null || Math.abs(d.rate() - rate) < Math.abs(best.rate() - rate))) {
