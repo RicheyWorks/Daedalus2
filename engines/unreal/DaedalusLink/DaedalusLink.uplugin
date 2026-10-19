@@ -26,6 +26,11 @@
 	],
 	"Plugins": [
 		{
+			"Name": "DataValidation",
+			"Enabled": true,
+			"TargetAllowList": [ "Editor" ]
+		},
+		{
 			"Name": "ProceduralMeshComponent",
 			"Enabled": true
 		},

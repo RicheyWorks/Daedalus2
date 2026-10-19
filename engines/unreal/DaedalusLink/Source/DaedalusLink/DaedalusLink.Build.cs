@@ -32,6 +32,22 @@ public class DaedalusLink : ModuleRules
 			"WebSockets",
 		});
 
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { "DataValidation", "UnrealEd" });
+			// One canonical serializer in the repository. setup-unreal.ps1 stages
+			// those exact bytes for projects whose plugin lives outside the repo.
+			string CanonicalContracts = Path.GetFullPath(Path.Combine(PluginDirectory, "../../../tools/unreal_mcp"));
+			string StagedContracts = Path.Combine(PluginDirectory, "Build", "AcceptedContracts");
+			string Contracts = File.Exists(Path.Combine(CanonicalContracts, "native_validation_result_snapshot.h"))
+				? CanonicalContracts : StagedContracts;
+			if (!File.Exists(Path.Combine(Contracts, "native_validation_result_snapshot.h")))
+			{
+				throw new BuildException("Missing canonical validation contract. Stage the exact tools/unreal_mcp/native_validation_result_snapshot.h with setup-unreal.ps1.");
+			}
+			PrivateIncludePaths.Add(Contracts);
+		}
+
 		// A bounded direct-loopback client must disable HTTP redirects before sending credentials.
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl", "nghttp2", "OpenSSL", "zlib");
 
