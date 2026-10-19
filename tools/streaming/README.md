@@ -89,3 +89,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Barnacle Scrub (contest G151, quest q_barnacle_scrub)
 - `barnacle_scrub.py`: DiskSaver Island silent-corruption minigame. Each save is kept as two copies and barnacles rot random copies; a scrub diver reads both copies round robin. Checksums plus a tuned scrub rate keep losses and reads in budget; too slow a diver lets both copies rot between visits, too fast a diver blows the read budget, and scrubbing without checksums copies rot over good copies. Keys come from G86 Compaction Shoals (`barnacle_scrub_test.py`; CI `Barnacle Scrub`). Rules: `docs/islands/DISKSAVER-BARNACLE-SCRUB.md`.
+
+## Toll Bridge Tokens (contest G158, quest q_toll_bridge_tokens)
+- `toll_bridge_tokens.py`: DiskSaver Island rate-limiting minigame over the G126 Breakwater Queue harbour waves (read-only). The archive bridge sways if too many writes cross in any window; an open gate and a fixed-window counter (2x the limit at a block edge) both sway it, and a token bucket wins when the jar is sized right. Envelope burst + (t-1) x rate pinned and tight under saturation; largest safe jar equals brute force (`toll_bridge_tokens_test.py`; CI `Toll Bridge Tokens`). Rules: `docs/islands/DISKSAVER-TOLL-BRIDGE-TOKENS.md`.
