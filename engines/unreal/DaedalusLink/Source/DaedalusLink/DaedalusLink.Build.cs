@@ -40,6 +40,8 @@ public class DaedalusLink : ModuleRules
 		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "Inventory", "*.dic"), StagedFileType.UFS);
 		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "Casts", "*.dcs"), StagedFileType.UFS);
 		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "Realm", "*.drr"), StagedFileType.UFS);
+		// G33 Seed-Song Spring tunes (ADaedalusSeedSong reads them at BeginPlay).
+		RuntimeDependencies.Add(Path.Combine(PluginDirectory, "Content", "YTM", "found_tunes.csv"), StagedFileType.UFS);
 		// Sprite packs are optional (procedural sprites remain the existing fallback).
 		string RealmDirectory = Path.Combine(PluginDirectory, "Content", "Realm");
 		if (Directory.Exists(RealmDirectory))
