@@ -50,21 +50,28 @@ static std::vector<std::string> Scenario(const std::vector<Tune>& Tunes, int64_t
 		{
 			const Draw D = C.DrawAt("d" + std::to_string(I), "spring_1"), D2 = C.DrawAt("d" + std::to_string(I) + "x", "spring_12");
 			L += std::string(" draw=") + DrawName(D.Outcome) + ":" + D.Item + ":" + std::to_string(D.Amount) + " far=" + DrawName(D2.Outcome) + ":" + D2.Item + ":" + std::to_string(D2.Amount);
-			L += " talk=" + C.Talk("k" + std::to_string(I)) + " | tally=" + TallyOf(C);
+			const std::string Said = C.Talk("k" + std::to_string(I)); // sequenced: operator+ operand order is unspecified
+			L += " talk=" + Said + " | tally=" + TallyOf(C);
 		}
 		Out.push_back(L + " keeper=" + KeeperLine(C));
 	}
-	const std::string E = std::string("edge s=") + std::to_string(Seed) + " dup=" + OutcomeName(C.Apply("r0b", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result) +
-		" unknown=" + OutcomeName(C.Apply("e1", "Item_YTM_Record_Nope", Tunes[0].Herbs, true, BrewOutcome::Brewed).Result) +
-		" already=" + OutcomeName(C.Apply("e2", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result) +
-		" blank=" + OutcomeName(C.Apply(" ", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result) +
-		" unknownSpring=" + DrawName(C.DrawAt("e3", "spring_99").Outcome) + " drawDup=" + DrawName(C.DrawAt("d2", "spring_1").Outcome) +
-		" questDone=" + (C.Q.Complete() ? "1" : "0");
+	const Outcome Dup = C.Apply("r0b", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result;
+	const Outcome Unk = C.Apply("e1", "Item_YTM_Record_Nope", Tunes[0].Herbs, true, BrewOutcome::Brewed).Result;
+	const Outcome Already = C.Apply("e2", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result;
+	const Outcome Blank = C.Apply(" ", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::Brewed).Result;
+	const DrawOutcome UnkSpring = C.DrawAt("e3", "spring_99").Outcome;
+	const DrawOutcome DrawDup = C.DrawAt("d2", "spring_1").Outcome;
+	const std::string E = std::string("edge s=") + std::to_string(Seed) + " dup=" + OutcomeName(Dup) + " unknown=" + OutcomeName(Unk) + " already=" + OutcomeName(Already) +
+		" blank=" + OutcomeName(Blank) + " unknownSpring=" + DrawName(UnkSpring) + " drawDup=" + DrawName(DrawDup) + " questDone=" + (C.Q.Complete() ? "1" : "0");
 	Out.push_back(E);
 	Chapter F(Tunes, Chain::Island(), Seed);
-	Out.push_back(std::string("fresh s=") + std::to_string(Seed) + " noRecord=" + OutcomeName(F.Apply("f1", Tunes[0].LearnedFrom, Tunes[0].Herbs, false, BrewOutcome::Brewed).Result) +
-		" missingHerbs=" + OutcomeName(F.Apply("f2", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::MissingHerbs).Result) +
-		" cloudy=" + DrawName(F.DrawAt("f3", "spring_1").Outcome) + " keeper=" + KeeperLine(F) + " talk=" + F.Talk("f4"));
+	const Outcome F1 = F.Apply("f1", Tunes[0].LearnedFrom, Tunes[0].Herbs, false, BrewOutcome::Brewed).Result;
+	const Outcome F2 = F.Apply("f2", Tunes[0].LearnedFrom, Tunes[0].Herbs, true, BrewOutcome::MissingHerbs).Result;
+	const DrawOutcome F3 = F.DrawAt("f3", "spring_1").Outcome;
+	const std::string FreshKeeper = KeeperLine(F);
+	Out.push_back(std::string("fresh s=") + std::to_string(Seed) + " noRecord=" + OutcomeName(F1) +
+		" missingHerbs=" + OutcomeName(F2) +
+		" cloudy=" + DrawName(F3) + " keeper=" + FreshKeeper + " talk=" + F.Talk("f4"));
 	return Out;
 }
 
