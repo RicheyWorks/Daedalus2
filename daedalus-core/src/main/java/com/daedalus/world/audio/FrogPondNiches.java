@@ -14,6 +14,9 @@ import java.util.List;
  * player assigns every species to one of {@link #PONDS} ponds; the judge names the first masking pair.
  * Seeds are re-drawn until a valid assignment exists ({@link #solution()} backtracks). Every call pitch
  * passes {@link EarRule#check}.
+ *
+ * <p>Real peepers call near 2.5-3 kHz; game pitches are compressed into the low band for the ear rule
+ * while keeping the size-pitch ordering (bigger frog, lower call).
  */
 public final class FrogPondNiches {
     /** Ponds in the wetland. */
