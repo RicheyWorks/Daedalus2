@@ -106,7 +106,7 @@ def gate(state, seed=SEED):
         objs.append(K.obj(n, parts, parent=a, pivot=piv, role="leaf %s (hinge pivot; Unreal may swing it)" % side))
         col.append(K.ucx_box(a, len(col), csize, ccent, parent=n))
     m = {"asset": a, "kind": "Bld", "seed": seed, "state": state, "state_of": base, "spec": SPEC_GATE, "materials": mats, "objects": objs,
-         "sockets": [K.socket("Bell_L", (-1.25, -0.48, 2.84), forward=(0, 0, -1)), K.socket("Bell_R", (1.25, -0.48, 2.84), forward=(0, 0, -1))],
+         "sockets": [K.socket("Bell_L", (-1.25, -0.48, 2.87), forward=(0, 0, -1)), K.socket("Bell_R", (1.25, -0.48, 2.87), forward=(0, 0, -1))],
          "collision": col, "nanite": True}
     if op:
         m["off_centre_ok"] = "Open leaves swing 1 m back (+Y); pivot stays the Closed gate's bottom centre so both states line up"
@@ -154,7 +154,8 @@ def corridor(kind, seed=SEED):
 
 
 def assets(seed=SEED):
-    return [bell(s, seed) for s in SEMIS] + [frame(seed)] + [gate(st, seed) for st in ("Closed", "Open")] + \
+    gc, go = gate("Closed", seed), gate("Open", seed)
+    return [bell(s, seed) for s in SEMIS] + [frame(seed)] + [gc, go] + K.split_into(CAPS, SOCKETS, 6000, gc, go) + \
            [corridor(k, seed) for k in ("Straight", "Corner", "DeadEnd", "CricketNook")]
 
 

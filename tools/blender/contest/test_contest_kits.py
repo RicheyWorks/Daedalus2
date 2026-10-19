@@ -6,7 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys
 import kitlib as K
 DATA = os.path.join(HERE, "..", "..", "..", "data", "contest")
 MODULES = {"wz_fishing": "wz_fishing.kit.json", "wz_eggs": "wz_eggs.kit.json"}
-for extra in ("lab_echo", "lab_fold", "g03_hornback", "or_parlay"):
+for extra in ("lab_echo", "lab_fold", "g03_hornback", "or_parlay", "ash_g20"):
     if os.path.exists(os.path.join(HERE, extra + ".py")):
         MODULES[extra] = extra + ".kit.json"
 CAPS = {"Tool_WZ_FishingRod": 2000, "Prop_WZ_FishingFloat_Rest": 400, "Prop_WZ_FishingFloat_Dip": 400, "Prop_WZ_EggNest": 3000, "Prop_WZ_EggIncubator": 3000}
@@ -34,6 +34,22 @@ for mod, fn in MODULES.items():
         add("%s status staged NOT READY" % m["asset"], "NOT READY" in m["status"])
         add("%s seeded" % m["asset"], isinstance(m["seed"], int))
 R, F, D = allassets["Tool_WZ_FishingRod"], allassets["Prop_WZ_FishingFloat_Rest"], allassets["Prop_WZ_FishingFloat_Dip"]
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+import sockets_sidecar as SS
+rr = {k["name"]: SS.matrix_to_rotator(SS.desired_frame(k)) for k in R["sockets"]}
+add("rod Grip + Tip are attach sockets, +X along the shaft (UE [90, 0, -90]); Reel plain", rr == {"SOCKET_Grip": [90.0, 0.0, -90.0], "SOCKET_Tip": [90.0, 0.0, -90.0], "SOCKET_Reel": [0.0, 0.0, 0.0]}, rr)
+for m in allassets.values():          # UEB 48812 frame/mover split: Interchange puts every UCX on the root static mesh
+    if m.get("frame_of"):
+        add("%s frame: root hulls only, hinge socket per mover" % m["asset"], all(c["parent"] is None for c in m["collision"]) and
+            {h["socket"] for h in m["hinges"]} <= {x["name"] for x in m["sockets"]} and all(h["mover"] in allassets for h in m["hinges"]))
+    if m.get("mover_of"):
+        add("%s mover: own UCX, single node, origin at hinge" % m["asset"], len(m["objects"]) == 1 and m["collision"] and all(c["parent"] is None for c in m["collision"]))
+    if m.get("state_of") and any(c.get("parent") for c in m["collision"]):
+        add("%s state snapshot has a frame/mover split" % m["asset"], m["state_of"] in allassets and allassets[m["state_of"]].get("frame_of"))
+g = allassets["Bld_Lab_EchoGate"]; bl = next(x for x in g["sockets"] if x["name"] == "SOCKET_Bell_L")
+brk = next(q for q in g["objects"][0]["parts"] if q["name"] == "BracketF0")
+add("EchoGate bell hangs from the bracket underside (UEB 48794/48812)", abs(bl["location"][2] - (brk["centre"][2] - brk["size"][2] / 2)) < 1e-6 and
+    brk["centre"][1] - brk["size"][1] / 2 <= bl["location"][1] <= brk["centre"][1] + brk["size"][1] / 2, (bl["location"], brk))
 add("rod is 1.8 m long", R["predicted"]["dimensions"][2] == 1.8, R["predicted"]["dimensions"])
 grip = next(p for p in R["objects"][0]["parts"] if p["name"] == "Grip")
 add("rod grip 3 cm diameter", grip["r1"] * 2 == 0.03 and grip["r2"] * 2 == 0.03)
@@ -52,7 +68,7 @@ if "lab_echo" in MODULES:
     import lab_echo as L
     for c in L.extra_checks(allassets):
         add(*c)
-for extra in ("lab_fold", "or_parlay"):
+for extra in ("lab_fold", "or_parlay", "ash_g20"):
     if extra in MODULES:
         for c in importlib.import_module(extra).extra_checks(allassets):
             add(*c)
