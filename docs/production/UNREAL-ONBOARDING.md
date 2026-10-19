@@ -71,3 +71,305 @@ CRLF is accepted.
 - Then run ONE read-only check per `engines/unreal/battlefield-check/README.md`: `BattlefieldCheck snap` ->
   `battlefield_check_ue.py` via `engines/unreal/pcg-ecology/ue_send.py` (load, 5 queries, 1 IGNITE flushed) ->
   `BattlefieldCheck apply` (oak at 2000,1500 burning). No import, save, place or bind. When it passes the row moves off BUILDING.
+
+## 2Hot2Trot — Core Unreal operations (launch, harness, pipeline, evaluation, worktrees, crashes, comms)
+
+Written 2026-10-19 by 2Hot2Trot (Studio CEO, `2hot2trot`) on Richey's order, relayed by Buffffff. Each numbered part stands on its own, so any new bot can read just the part it needs. Every path below was checked on BLACKBEARD or GitHub on 2026-10-19. Anything I could not check is marked **UNVERIFIED**. Times are Pacific (PT) unless marked UTC.
+
+Where things live:
+- Repo `RicheyWorks/Daedalus2` holds this doc at `docs/production/`. The folders `C:\Users\730ri\projects\D2-build`, `Daedalus2-bb-wt`, `D2-ceo*` and the others are worktrees of that one repo. There is no separate "D2-build" repo.
+- `C:\Users\730ri\projects\bot-team` is local to BLACKBEARD and not on GitHub. It holds `BOARD\` (plans, lessons, live view), `art\` (the art handoff board) and `link\` (the team link).
+- `C:\Users\730ri\projects\studio-screen-connector` is a clone of `RicheyWorks/studio-screen-connector`, which holds the watcher, capture and build view.
+- The Unreal project is `C:\Unreal\DaedalusRealm\DaedalusRealm.uproject`. The engine is `C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe`, version UE 5.8.3 (CL58210709, per `Engine/Build/Build.version` in the lessons file).
+
+### 1. How Unreal is launched, and who may touch it
+
+**Hidden launch.**
+- The crash guard in `studio-screen-connector\crashguard.ps1` relaunches the editor hidden. It calls WMI `Win32_Process.Create` with a `Win32_ProcessStartup` whose `ShowWindow = 0` (lines 147-148). No window appears and the user's focus is never taken.
+- Build jobs in `engines/unreal/unreal-job.ps1` start through the same WMI call, but with `ShowWindow = 7` (minimized, no focus).
+- Standing rule (relayed by Buffffff): jobs never show windows, so always launch hidden.
+
+**Flags.**
+- `engines/unreal/setup-unreal.ps1 -Open` always adds `-d3d11 -gpucrashdebugging` to the editor's arguments (commit 45e91309). That script itself starts the editor with `Start-Process`, not WMI.
+- The reason is a lesson from hephaestus (2026-10-13 05:58). A no-flag D3D12 launch hit a GPU page fault twice while importing. `-d3d11` avoids that path, and `-gpucrashdebugging` makes DRED record breadcrumbs.
+- The crash guard on its own adds `-d3d11` after 2 crashes within 60 minutes (`crashguard.json`: `d3d11_after_crashes`, `crash_window_min`). Its `extra_args` is empty, so add `-gpucrashdebugging` there if you need it on every relaunch.
+- Read-only snapshot at 00:3x PT on 2026-10-19: the only running `UnrealEditor.exe` was codex-play-guard's disposable evaluation project (`...\DisposableMCPR7\DisposableMCPR7.uproject`, MCP port 18877), not DaedalusRealm. Check before you assume which project is open.
+
+**Sole editor writer: codex-play-guard.**
+- `bot-team\BOARD\LANES-UNREAL-CODEX.md` has a dated roster override (2026-10-15T03:01Z, `poot-haiku-cancel-20261015`). It says Unreal/editor production custody is **SOLE codex-play-guard**, and Claude does not get editor custody back.
+- Rules from 48059 (2026-10-19): Grok bots submit packets. They never open the editor, call native code, or adopt anything without the operator.
+- Why: one shared editor and one writer prevents the lost turns, crossed replies and unsaved-work collisions recorded in the crash history (part 7).
+
+**Requesting an editor turn.**
+- Send a `NEED` on the team link with structured `to=pootscoot-coordination`. Include:
+  - the exact ask
+  - the files, commits or packets involved
+  - what "done" looks like
+  - the default you will follow if nobody answers
+- PootScoot routes the request to codex-play-guard. Real examples: 47969 (asking team Codex to open and merge a PR) and 48069 (PootScoot asking codex-play-guard for a test window).
+- Longer-lived editor needs also go in `bot-team\BOARD\UNREAL-QUEUE.md`, newest at the bottom, with priority, ask, done-when and status.
+
+**Editor rules.** These are standing rules relayed by Buffffff. The lessons each comes from are in part 7.
+- **One editor at a time.** Never start a second Unreal editor.
+- **Stop Play between tests.** Leftover Play-in-Editor (PIE) blocks imports; see playguard in part 2.
+- **Restarts need approval.** Restarting or relaunching the editor needs Richey's OK or a GO from Buffffff. Any turn that builds C++ counts as a relaunch: `unreal-job.ps1 -Start` closes and reopens the editor.
+- **Import READY art first, then build.**
+- **Check that the editor is alive with a real Python round trip**, not by process or socket checks. A GPU-dead editor still holds port 9877 open.
+
+### 2. The harness watcher (studio-screen-connector)
+
+All of these live in `RicheyWorks/studio-screen-connector` (BLACKBEARD clone at main 7ab51e3). The README in that repo is the full reference.
+
+**Tidy watcher (`tidy.ps1 -Watch`).**
+- `tidy-start.ps1` starts it hidden through WMI and holds a single-instance lock in `tidy.lock`. Use `-Status` and `-Stop` to check or stop it.
+- Every 3 s it closes floating Unreal tabs listed in `tidy.json`. It never touches the main window or dialogs, and it skips while Unreal is importing or busy (e75c1d8). That skip exists because closing the Content Browser mid-import crashed D3D12.
+- It also runs the two guards below.
+- **Not running at the 2026-10-19 00:3x snapshot.** No `tidy` process was found, so the crash guard and play guard are not active right now.
+
+**Crash guard (`crashguard.ps1` + `crashguard.json`).**
+- **Crash reporter dismiss:**
+  - Trigger: no editor is running, `CrashReportClient(Editor)` is alive, and the log tail shows `Critical error`, `Fatal error` or `DXGI_ERROR`.
+  - Action: it kills the crash reporter without sending anything, posts `BLOCKED` on the link, restores autosaves and relaunches hidden.
+  - It writes `bSendUnattendedBugReports=False` to `C:\Unreal\DaedalusRealm\Config\DefaultEditorSettings.ini`.
+  - It never relaunches while UnrealBuildTool or AutomationTool is running, or while an editor is up.
+- **Autosave restore:**
+  - UE 5.8 has no auto-restore setting, and `-AutoDeclinePackageRecovery` and `-unattended` both throw the restore list away, so never launch with either flag.
+  - Before relaunching, the guard copies each `PackageRestoreData.json` entry from `Saved/Autosaves` over `Content`, backing up overwritten files under `bot-team\backups\crashguard-<stamp>`. It then loads and saves the restored packages through the bridge.
+  - Manual run: `.\crashguard.ps1 -RestoreOnly` (only with the editor closed).
+  - A `Restore Packages` dialog cannot be clicked, because Slate exposes no controls. The guard handles it by kill, restore and hidden relaunch.
+- **DX11 fallback:** `-d3d11` is added from the 2nd crash inside `crash_window_min` (60).
+- **Known gap** (codex-play-guard audit, 2026-10-15): an assertion crash such as `NumUVs>0` matched none of the guard's log signatures. Assertion classification is still open.
+
+**Play guard (`playguard.ps1` + `playguard.json`).**
+- Every 15 s it sends the bridge a `ping` and reads `result.playing`.
+- It sends `stop` only when either:
+  - PIE has been on for more than 8 min while `bot-team\art\STATUS.md` or `QUEUE.md` has READY rows, or
+  - STATUS has said "Waiting on: Unreal to leave Play mode" for more than 3 min.
+- Each stop is posted to the link from `2hot2trot`.
+
+**Turn audit (`audit.ps1`).** A read-only check that a turn ended clean: Play stopped, nothing dirty, no floating panels, no dialogs. It never fixes anything.
+
+**Blender splash fix.**
+- Blender 4.3 has no `--no-splash` flag; the splash is the user preference `show_splash`.
+- `set-blender-prefs.ps1` runs `blender -b --python blender_prefs.py` with user prefs loaded (never `--factory-startup`). That sets `preferences.view.show_splash = False` and saves `userpref.blend`.
+- `-Live` sets the same preference in a running Blender through bridge 9876.
+- The local-only launcher `%LOCALAPPDATA%\Daedalus\ops\start-blender-bridge.ps1` calls it. That launcher is deliberately kept off GitHub; it is the only file in that ops folder besides its `.bak-presplash` backup.
+
+**Build view (the "view items").**
+- `status-loop.ps1` refreshes every 60 s. Each pass runs `status-capture.ps1` (which reuses `capture.ps1`, with the same allowlist and denylist) and then `statuspage.py`.
+- Output goes to `C:\Users\730ri\projects\bot-team\BOARD\live\`: `index.html`, `status.json`, `capture-state.json`, `blender.png`, `unreal.png`. The loop's PID is in `loop.lock`.
+- The page shows:
+  - bridge health for 9876, 9877 and 9890
+  - art-queue counts and last events
+  - each bot's last post and recent CLAIM/DONE/STATUS lines (secrets redacted, HTML escaped)
+  - the screenshots
+- Start it with `open-build-view.cmd` (or `.ps1`), which refreshes once, starts the hidden loop and opens the page. Use `status-loop.ps1 -Once` for one refresh and `-Stop` to stop it.
+- Running at the snapshot: PID 46772, with `-BlenderBridge` on. `unreal.png` was last written 2026-10-18 23:27, so it is stale.
+
+**Minimized-editor capture (SceneCapture2D).**
+- `capture.ps1 -Op capture -Target unreal` falls back to the bridge when the editor is minimized, hidden or blank (commit c42c873, 2026-10-13).
+- It spawns a transient SceneCapture2D at the viewport camera, renders one RGBA8 frame, exports it with `RenderingLibrary.export_render_target` to `screens\unreal-bridge-<stamp>.png`, then destroys the actor. Nothing is saved, and `newly_dirty` should come back empty.
+- The build view's `-UnrealBridge` switch uses this path. It stays off unless a bot holds an editor turn, because it is still a bridge call into the shared editor.
+- Lesson from prometheus: a hidden editor never draws its viewport, so HighResShot writes nothing. Always check pixel stats (max and mean) before trusting a shot.
+
+**Art-queue watcher.** This is the separate importer: `connectors/claude-asset-pipeline/art-queue.ps1` with `asset_pipeline/artqueue.py`. It is off by plan. It must be made turn-aware before anyone restarts it, because it once imported into the live editor without an editor turn (the 05:54 crash in part 7). `art\STATUS.md` was last updated 2026-10-13 06:05.
+
+### 3. The Blender-to-Unreal pipeline
+
+**Bridges.**
+- Blender connector: `127.0.0.1:9876`, Blender 4.3.1. Add-on `%APPDATA%\Blender Foundation\Blender\4.3\scripts\addons\claude_blender_bridge\__init__.py` v1.0.2. Repo: `RicheyWorks/claude-blender-connector`; there is no local clone under projects.
+- Unreal bridge: `127.0.0.1:9877`, newline-delimited JSON. It is the Python-only plugin `ClaudeUnrealBridge` in `connectors/claude-unreal-connector` (`PROTOCOL.md`, `clients/python/unreal_client.py`) and runs commands on the game thread.
+- Official Epic MCP is a different interface: Streamable HTTP, default port 8000, auto-start off. Do not confuse the two.
+
+**Bridge rules (lessons file).**
+- Every call gets a request id and a timeout, and you match replies by id (a minimized editor ticks at about 3 fps).
+- Call `main()` directly; an `if __name__ == "__main__"` guard runs nothing over the bridge.
+- One GLB per bridge call (`tools/unreal_play/import_cast.py`).
+- No more than about 150 items per call, and save with `EditorLoadingAndSavingUtils.save_packages` (only dirty packages).
+- An interrupted call may still have run, so check the editor's state before reporting anything.
+
+**Pipeline module.**
+- `connectors/claude-asset-pipeline` covers Blender export to `.glb`, a file witness, Interchange import and a judge, with the verdict `SHIPPED` or `REJECTED`.
+- New reports bind the GLB by SHA256 and byte count before import, and import from a private snapshot under `daedalus-pipeline/import-snapshots`.
+- The combat harness is `asset_pipeline/combat_handoff.py`, `combat_report.py` and `combat_fixtures.py`, with spec `specs/combat-slice-1.json`.
+- The live slice-1 to-do is `bot-team\BOARD\combat-slice-1\TODO-FOR-BLENDER-TEAM.md`; 0 of 5 assets exist.
+
+**Art handoff board (`bot-team\art\`).**
+- `BRIEF.md` is the art brief. `QUEUE.md` holds the rows: TODO, DOING, READY, SHIPPING, SHIPPED, REJECTED, BLOCKED, HOLD, WAITING. `STATUS.md` holds counts and "Waiting on". `feed.jsonl` is the event feed.
+- `glb\` is the watched drop folder. `packets\` sits outside the watched folder.
+- Names must start with `Tool/Item/Mob/Veh/Bld/Prop/Sky/Wpn_`.
+
+**BIP 1 packets** (`tools/islands/blenderboss/BIP1.md`, `bip_split.py`, `bip_verify.py`; manifest `data/islands/blenderboss/flagship.bip.json`).
+- READY at Daedalus2 main a8e9f599. It splits `Prop_Island_Flagship_BlenderBoss.glb` (14.5 MB) into **67 packets**: 28 terrain quadtree chunks plus 39 prop-library packets, covering 1,164 props and 1,730 placements.
+- Caps: 12,000 tris, 1.5 MiB and 64 materials per packet.
+- `bip_verify` passes 7,461 of 7,461 checks, and source tris equal packet tris (448,046).
+- Packets are in `bot-team\art\packets\flagship\`.
+- Ingest **one packet at a time, inside a claimed turn, never from the art watcher: terrain first, then the prop library, then placements**. Only the sole Unreal writer does this, on `-d3d11`.
+- Not yet imported.
+- blender-team works in `C:\Users\730ri\projects\Daedalus2-bb-wt`, and also briefed Unreal Epic Boss directly (link 48073).
+
+**Acceptance means import, save, then a fresh reopen.** These are separate stages; one passing does not prove the next. The reference run is codex-play-guard's static-FBX acceptance r2, 2026-10-19 05:24:52 UTC, in the lessons file:
+1. Import exactly one pinned file into a fresh namespace.
+2. Check the owned asset's class, bounds against the frozen tolerance, topology and material slots.
+3. Save the exact non-empty allowlist and confirm it returns true.
+4. Close the editor normally.
+5. Reopen in a **different process**.
+6. Compare the saved package bytes and facts.
+7. Confirm the main project was preserved.
+
+That run also caught a units bug: a stock-wrapper import came out 4 x 1 x 0.5 cm instead of 400 x 100 x 50 cm. Its opt-in unit adapter is on draft PR147. A cached load in the same process is not a reopen.
+
+### 4. Official UE 5.8.3 MCP and the Slate evaluation
+
+**r1 (isolated, run by codex-play-guard).** 2Hot2Trot's independent review is link 47891, 2026-10-18 23:19, verdict `PASS_DISCOVERY_STATUS; SESSION_RECOVERY_UNPROVEN`.
+
+What passed:
+- missing session returns 400, unknown session returns 404
+- initialize negotiated protocol 2025-06-18
+- `tools/list` returned the 3 meta-tools
+- `list_toolsets` returned one AutomationTestToolset
+- `GetTestStatus` answered
+
+Gaps:
+- Recovery was never exercised. The 404 test used a made-up id, and nothing used a deleted session afterwards.
+- The DELETE calls are not verified on the server side, because no request headers were recorded.
+- `serverInfo` is empty.
+- Results are JSON-in-JSON.
+
+Proposed fix: on "Unknown session id", re-initialize **once** and replay only allowlisted read-only calls. Never auto-replay mutations. Record the `Mcp-Session-Id` sent with every request.
+
+**Later results (lessons file, 2026-10-19).**
+- Live asset inspection passed.
+- One FBX import, save and reopen passed (part 3).
+- Paired warm read: bridge median 16.03 ms vs MCP 31.73 ms, n=2 each, so there is no MCP speedup claim.
+- Blueprint, Automation and DataValidation are still under test.
+- The main-project catalog has **52 unique toolset IDs** (corrected from 67). That is exposure, not 52 tested capabilities.
+
+**SlateInspector contract.**
+- The installed experimental toolset is `SlateInspectorToolset.SlateInspectorToolset`, with Windows, Observe, Snapshot, Screenshot, WaitFor and Unobserve.
+- UI acceptance is untested.
+- Codex's read-only result consumer is on branch `codex/epic-slate-results-20261019` (head acf9ab7a, not merged at the time of writing): `tools/unreal_mcp/slate_inspector_results.py` and `test_slate_inspector_results.py`. Key points:
+  - It is pure and has no transport.
+  - Snapshot returns plain accessibility text, not JSON, and may come from a cache.
+  - `Windows(list)` gives indices and titles only.
+  - `NATIVE_RUNTIME_QUALIFIED = False`.
+  - Source hashes are pinned.
+
+**2Hot2Trot's Slate packet-adapter turn.**
+- When: 07:50-08:20 UTC on 2026-10-19 (00:50-01:20 PT), the Grok half of the 30-minute rotation in 48059. Codex has 07:20-07:50 UTC.
+- What: one isolated adapter plus tests that build execution packets from Codex's contract and the 52-ID schema. New files only, no transport, no shared-file edits. Stop at a save/test checkpoint and hand off findings.
+- Branch `grok/slate-packet-adapter`, **UNVERIFIED**: it did not exist on GitHub at the time of writing, because the turn had not started.
+
+### 5. D2-build and TEAM-BLENDER-UNREAL-HARNESS.md
+
+**What D2-build is.** `C:\Users\730ri\projects\D2-build` is a git worktree of `RicheyWorks/Daedalus2` (gitdir `Daedalus2\.git\worktrees\D2-build`). At the time of writing it was detached at 550e88fd with local changes, so treat it as someone's working folder, not a clean mirror. The production docs it shows are `docs/production/` on Daedalus2 main.
+
+**What [TEAM-BLENDER-UNREAL-HARNESS.md](TEAM-BLENDER-UNREAL-HARNESS.md) says** (Codex, 2026-10-13). It is the shared Codex, Claude and Grok handoff contract:
+- Use the existing teamlink/live_handoff protocol. A queued message is not acceptance.
+- The producer sends one artifact-first request, and the consumer ACKs and returns a source hash and a planned integration window.
+- Engine mutation needs the shared lease. Never restart just because something timed out.
+- Carry exact artifact identity from export to runtime.
+- Build complete is not success. A saved scene is not playable acceptance.
+- Implemented so far:
+  - GLB SHA256 plus byte-count binding before import
+  - private import snapshots
+  - atomic partial failure receipts
+- Next:
+  - durable accepted/running/completed receipts
+  - replay-safe job ids
+  - stage timestamps
+
+Other useful docs on main:
+- `docs/AUTOMATION-LESSONS.md`
+- `docs/production/INTEGRATION-LESSONS.md`
+- `tools/unreal_mcp/DOCTOR.md`
+- `tools/unreal_preflight/preflight.py`: run it before any build slot
+
+### 6. Worktrees versus the dirty shared checkout
+
+- `C:\Users\730ri\projects\Daedalus2` is the **shared** checkout. At the time of writing it was on `main` at caf1b103 with about 195 changed files from many bots.
+- Never `git pull`, `reset`, `checkout` or `stash` in it, and never commit anyone else's files there. Commit only your own files, and only if you must work there at all.
+- Work in your own isolated worktree or clone, made from `origin/main`.
+- Existing worktrees belong to their creators:
+  - `Daedalus2-bb-wt` is blender-team's
+  - `D2-ceo`, `D2-ceo6`, `D2-ceo7` and `D2-watcher` are 2Hot2Trot's
+  - `_wt-wake-relay` holds the running wake relay
+  - many more exist
+- Don't fast-forward or clean another bot's worktree.
+- Build from a clean worktree of origin/main, not from a checkout with other bots' local commits (unreal-team preflight lesson).
+- Local-only PowerShell ops (`%LOCALAPPDATA%\Daedalus\ops\`, `bot-team\link\*.ps1`) stay off GitHub.
+- Don't edit `bot-team\link\grok-relay.ps1`. Buffffff owns it, and it is moving into the wake-relay module.
+
+### 7. Crash and hang history (from bot-team\BOARD\LESSONS-LEARNED-UNREAL.md)
+
+Summarized from each crash or hang entry. Read the full entry before acting on one.
+
+| When (PT) | What happened | Fix |
+|---|---|---|
+| 2026-10-12 14:03 and 14:37 | D3D12/DXGI crashes during glTF imports: the tidy watcher sent WM_CLOSE to the import's Content Browser | `tidy.ps1` skips while importing (e75c1d8); one tidy pass per job end (45bfbc5c) |
+| 2026-10-12 (pythagoras) | Minimized editor at about 3 fps; bridge replies timed out and crossed | Async `ue_send` with request ids and per-call timeouts (30149257, 4a146613) |
+| 2026-10-12 16:43 / 22:32 / 23:25 (prometheus) | Viewport screenshot quit the editor; hidden-editor shots came out black or missing | Transient SceneCapture2D; check pixel stats; Blender render fallback |
+| 2026-10-12 afternoon to 19:18 | D3D12 `DXGI_ERROR_INVALID_CALL` and page faults; one editor stayed alive but GPU-dead; crash-reporter popups | crashguard: `-d3d11` after 2 crashes, crash reporter killed without sending, hidden WMI relaunch, `bSendUnattendedBugReports=False` (ssc 9fd4821); relaunched on DX11 (pid 56584) |
+| 2026-10-12 19:17:55 | Modal "GPU Crashed or D3D Device Removed" (pid 12904); socket alive but no Python ran; turns lost | Prove the editor is alive with a 1+1 `execute_python` round trip ("BBPING"); stand down, never click or kill |
+| 2026-10-12 ~23:00 | Editor died with under 1 GB free RAM; two runners drove one turn | Single-runner lock and RAM/bridge preflight (43ab7c1e) |
+| 2026-10-12/13 (prometheus, hephaestus, buffffff) | Imports under 1 GB free RAM crash the editor | RAM guard: check every 5 meshes, keep above 1.5 GB; imports last; degrade to place-only (c1b76985, 5b1f80f9) |
+| 2026-10-12 (2hot2trot) | Restore Packages dialog blocked unattended recovery | On-disk restore before relaunch (`crashguard.ps1 -RestoreOnly`, ssc 9fd4821) |
+| 2026-10-12 (2hot2trot) | Leftover Play stalled imports | playguard (ssc a37cea8); stop Play between tests |
+| 2026-10-12 (unreal-team) | Saved component array made ADaedalusVoxelIsle crash on every load | Constructor-filled arrays are `UPROPERTY(Transient)`; preflight rule P4 |
+| 2026-10-12 (unreal-team) | Art watcher hung 35 min on shared Remote Execution | `unattended=False` plus `bridge_timeout` (artqueue 63/63) |
+| 2026-10-12 (unreal-team) | Build slots lost when C++ failed after the editor closed | `tools/unreal_preflight/preflight.py` runs first in `unreal-job.ps1 -Run` |
+| 2026-10-13 05:54:12 | GPU page fault (D3D device removed) while the art watcher imported the 14.5 MB flagship GLB into a no-flag D3D12 editor with no turn held | Imports only in a claimed turn; always `-d3d11 -gpucrashdebugging` (45e91309); split GLBs over about 5 MB (led to BIP 1) |
+| 2026-10-13 06:55 | Near miss: a "light" turn would have relaunched without `-d3d11` | `--light` mode (e99155f4); `setup-unreal.ps1 -Open` forces the flags (45e91309) |
+| 2026-10-13 07:40 | Stale BUILD OK: post-build steps ran against a closing editor | Wait on the exact job id (b6ae596c); PR38 hardening |
+| 2026-10-13 09:40 | An interrupted bridge call had still run (14 levels moved) | Reverted from the undo table; check the editor's state after any interrupted call |
+| 2026-10-13 19:14 | Crash during the ADR-055 material reparent: 3.5 min blocked game thread, D3D11 CreateSwapChain `DXGI_ERROR_INVALID_CALL` | Batches capped at 150 per call; `save_packages(only_dirty)`; resumable ledger (314fd845c) |
+| 2026-10-13 22:19 | GPU crash: 22 rigged GLBs in one call (pid 14388, `DXGI_ERROR_DRIVER_INTERNAL_ERROR`) | `import_cast.py`, one GLB per call; save the world after each realm; relaunched as pid 48348 |
+| 2026-10-14 08:41 (15:41 UTC) | Editor 41828 crashed under memory pressure (about 96.8% physical in use); later a Parcels save crash; Richey restarted it (5792) at 08:52 | Recovery under the owner; no blind repeat of the streaming that triggered it; watcher fix in PootScoot's lane |
+| 2026-10-15 09:53 (16:53:53 UTC) | Assert `NumUVs>0` (StaticMesh.cpp:9811) on a Gallery mesh, editor 28232; crash-reporter popup; crashguard signatures missed it | Saved work verified preserved; UV0 source fix prepared; assertion classification is an open watcher gap |
+
+Other hangs in the file:
+- An "Add Level" dialog blocked a job (blender-team).
+- Background jobs freeze between tool calls, so run anything long-lived detached and hidden (pythagoras).
+
+### 8. Comms in brief, and the sync rule
+
+Full standard: `bot-team\BOARD\COMMS-STANDARD.md` (owner Buffffff, set by Richey 2026-10-19). Worked example and PowerShell template: the 2026-10-19 00:15 entry "How a Grok bot talks to PootScoot" in `LESSONS-LEARNED-UNREAL.md`.
+
+**Sending.**
+- There is one broker at `127.0.0.1:9890`. Never start a second broker or relay.
+- `POST /send` with `{from, to, type, reply_to, body:{request_id, text}}`. Read with `GET /pending?me=<you>`; the log is `bot-team\link\log.jsonl`.
+- Put the recipient in the structured `to` field. An @name in the body does not route.
+- One recipient per message. `*` is for FYI only, and it never wakes a Grok bot.
+
+**Each message.**
+- The first word is QUESTION, NEED, ACK, DONE, BLOCKED or FYI.
+- Every reply sets `reply_to` and copies `body.request_id`.
+- Close every ask with ACK and then DONE or BLOCKED.
+- Keep it under about 1,000 characters; put long detail in a file and send its path and hash.
+- No secrets in messages.
+
+**Conduct.**
+- Never bulk-ack.
+- Act only on messages addressed to you.
+- Never hand-forward other bots' messages.
+
+**Wake relay.**
+- Grok bots show `alive:false` in `/bots`, and that is normal. The wake relay (Daedalus2 `connectors/claude-asset-pipeline/wake-relay`, running hidden from `_wt-wake-relay`) wakes the addressed bot.
+- Its endpoint configuration lives only in the git-ignored `bot-team\link\relay-webhook.json`. Never print, copy or commit that file.
+- New bots (for example `unreal-epic-boss`) must ask Buffffff to be added to the relay.
+
+**Human clicks.** Steps that need a human click, such as a GitHub PR review form, go as a NEED to `pootscoot-coordination` so team Codex does them, not Richey (Richey, 2026-10-19). Message Richey in chat only for decisions or major results, and never by text or SMS.
+
+**Claims.** Claim work in `bot-team\BOARD\ARCHITECTURE.md` (registry row plus `CLAIM` on the link) before you build.
+
+**Sync rule (Richey's standing order, given in chat on 2026-10-13 and 2026-10-18; I found it written in no BOARD file):**
+1. The code compiles and passes its tests.
+2. It lands on `main`.
+3. The BLACKBEARD copy matches GitHub exactly.
+4. Then post `SYNCED <repo> <hash>`.
+
+Nothing may live only in a worktree, a temp folder or a bot's box.
+
+**Approvals.**
+- Deletes, keys, release tags, payments, signing keys and outgoing sends in Richey's name always need his explicit yes.
+- Before every push, scan the diff for secrets (Richey, 2026-10-19). If the scan finds anything, stop.
