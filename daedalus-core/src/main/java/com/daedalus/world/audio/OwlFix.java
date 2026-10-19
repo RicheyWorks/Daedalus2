@@ -8,7 +8,7 @@ import java.util.List;
  * Owl Fix (contest G150): the owl is back, so the regrown woods have prey again.
  *
  * <p>A great horned owl hoots from one cell of a {@link #GRID} x {@link #GRID} patch of woods
- * ({@link #CELL_M} m cells). Four listening posts at the corners hear the hoot at slightly different times.
+ * ({@link #CELL_M} m cells). Four listening posts (four, not three: three posts give only two time differences\n * for (x, y) and the hyperbolas can cross twice, a mirror solution) at the corners hear the hoot at slightly different times.
  * The player is given the arrival-time differences relative to post 0 and picks the owl's cell.
  * {@link #solve()} checks every cell and keeps the one whose predicted time differences best fit the heard
  * ones (least squares; ties keep the first cell in row-major order, so it is deterministic). The judge
@@ -25,7 +25,7 @@ public final class OwlFix {
     public static final int GRID = 10;
     /** Cell size, metres (illustrative). */
     public static final double CELL_M = 50.0;
-    /** Speed of sound used, m/s (about 20 C). */
+    /** Speed of sound used, m/s: 343 = dry air at about 20 C (c = 331.3 + 0.606 T); the woods have no temperature model. */
     public static final double SOUND_MPS = 343.0;
     /** Timing jitter amplitude per post, seconds (illustrative recorder clock error). */
     public static final double JITTER_S = 0.001;
@@ -90,6 +90,15 @@ public final class OwlFix {
     public static double travel(Cell c, int i) {
         double[] p = POSTS.get(i);
         return Math.hypot(c.cx() - p[0], c.cy() - p[1]) / SOUND_MPS;
+    }
+
+    /** Noise-free time differences, seconds, relative to post 0, for an owl in cell {@code c}. */
+    public static double[] exactDelays(Cell c) {
+        double[] d = new double[POSTS.size()];
+        for (int i = 0; i < d.length; i++) {
+            d[i] = travel(c, i) - travel(c, 0);
+        }
+        return d;
     }
 
     /** Sum of squared misfits (s^2) between a cell's predicted time differences and heard ones. */

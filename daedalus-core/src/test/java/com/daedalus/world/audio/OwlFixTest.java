@@ -90,4 +90,36 @@ class OwlFixTest {
         assertEquals(0, f.judge(new OwlFix.Cell(-1, 0)).score());
         assertEquals(0, f.judge(null).score());
     }
+
+    @Test
+    void trueCellResidualIsZeroWithNoiseOff() {
+        for (OwlFix.Cell c : OwlFix.cells()) {
+            assertEquals(0.0, OwlFix.misfit(c, OwlFix.exactDelays(c)), 1e-24);
+        }
+    }
+
+    @Test
+    void argminIsUniqueWithNoMirrorWithinTimingTolerance() {
+        // Worst-case noise: each difference off by up to 2 jitters (+ 0.05 ms rounding); 3 differences.
+        double e = 2 * OwlFix.JITTER_S + 0.00005;
+        double tol = 3 * e * e;
+        for (long s = 0; s < 300; s++) {
+            OwlFix f = OwlFix.seeded(s);
+            OwlFix.Cell best = f.solve();
+            double far = Double.MAX_VALUE;
+            int ties = 0;
+            double bm = OwlFix.misfit(best, f.delays());
+            for (OwlFix.Cell c : OwlFix.cells()) {
+                double m = OwlFix.misfit(c, f.delays());
+                if (m == bm) {
+                    ties++;
+                }
+                if (Math.max(Math.abs(c.x() - best.x()), Math.abs(c.y() - best.y())) > 2) {
+                    far = Math.min(far, m);
+                }
+            }
+            assertEquals(1, ties, "seed " + s);
+            assertTrue(far > 10 * tol, "seed " + s + " far " + far);
+        }
+    }
 }
