@@ -95,3 +95,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Tide Clocks (contest G166, quest q_tide_clocks)
 - `tide_clocks.py`: DiskSaver Island causality minigame over G86 islands and keys (read-only). Islands edit the same saves between ferry syncs; wall-clock and Lamport last-writer-wins silently drop concurrent edits, while vector clocks keep concurrent siblings for the Merge Keeper and lose nothing. Vector order equals a brute-force happens-before oracle, Lamport is consistent but not complete, detected conflicts equal the oracle (`tide_clocks_test.py`; CI `Tide Clocks`). Rules: `docs/islands/DISKSAVER-TIDE-CLOCKS.md`.
+
+## Lighthouse Leases (contest G171, quest q_lighthouse_leases)
+- `lighthouse_leases.py`: DiskSaver Island leader-lease minigame over the G86 islands as keepers (read-only). One keeper may write the save log per epoch; no lease splits the brain, a naive lease on a drifting clock overruns, a drift guard still loses to a pause between check and write, and fencing tokens make the store reject every stale write. Smallest safe guard equals brute force, stale count equals an oracle, seeded replay is deterministic (`lighthouse_leases_test.py`; CI `Lighthouse Leases`). Rules: `docs/islands/DISKSAVER-LIGHTHOUSE-LEASES.md`.
