@@ -59,3 +59,14 @@ Fractions (old growth, saved share) are stored as whole per mille so receipts st
 
 Both are registered in `ActivityRouter.contestAll` with inactive policies, and every settled receipt lands in the
 G49 journal (`ActivityRouter.journal()`).
+
+## Hub V (contest G74)
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `FogBellAdapter` | G52 Fog Bell Call Signs, `world.audio.FogBellCallSigns` (prometheus) | `audio.fog-bell-call-signs` | `Call.of(verdict, abandoned)` | correct, blurred | bird, animal / observation, scouting |
+| `WindChimeAdapter` | G60 Wind Chime Tuning, `world.audio.WindChimeTuning` (prometheus) | `audio.wind-chime-tuning` | `Tuning.of(verdict, abandoned)` | tuned, tubes_ok, worst_cents, trim_tenths_mm | bird, animal / observation, crafting |
+| `DripCaveAdapter` | G64 Drip Cave Chorus, `world.audio.DripCaveChorus` (prometheus) | `audio.drip-cave-chorus` | `Chorus.of(verdict, abandoned)` | correct, off_ms | animal, bird / observation, scouting |
+| `SquallCupAdapter` | G35 Squall Cup, `world.odds.tournament.SquallCupQuest` (oddsreaper) | `odds.squall-cup` | `Cup.of(quest, abandoned)` (a cup still ENTERED/ODDS_POSTED is refused) | champion, rounds_won | animal, bird / fishing, scouting |
+
+G34 Beaver Waters is not wrapped yet: it has no result record, so its snapshot would read the live simulation. That is left for a later hub.

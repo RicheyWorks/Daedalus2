@@ -73,6 +73,14 @@ public final class ActivityRouter {
                 AwardPolicy.inactive(KennelPantryAdapter.ACTIVITY_ID, "mastery.husbandry"));
         r.register(new HerbGardenAdapter(mode), HerbGardenAdapter.Planting.class,
                 AwardPolicy.inactive(HerbGardenAdapter.ACTIVITY_ID, "mastery.pollination"));
+        r.register(new FogBellAdapter(mode), FogBellAdapter.Call.class,
+                AwardPolicy.inactive(FogBellAdapter.ACTIVITY_ID, "mastery.observation"));
+        r.register(new WindChimeAdapter(mode), WindChimeAdapter.Tuning.class,
+                AwardPolicy.inactive(WindChimeAdapter.ACTIVITY_ID, "mastery.crafting"));
+        r.register(new DripCaveAdapter(mode), DripCaveAdapter.Chorus.class,
+                AwardPolicy.inactive(DripCaveAdapter.ACTIVITY_ID, "mastery.rhythm"));
+        r.register(new SquallCupAdapter(mode), SquallCupAdapter.Cup.class,
+                AwardPolicy.inactive(SquallCupAdapter.ACTIVITY_ID, "mastery.fishing"));
         return r;
     }
 
