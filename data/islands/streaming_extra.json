@@ -1,0 +1,6 @@
+{
+  "_comment": "Islands with no layout.json yet, for tools/streaming/dsb_manifest.py. placement_count is from the island README; pin real costs with a streaming block once measured.",
+  "islands": [
+    {"island": "DiskSaver", "origin_cm": [4000000, 4000000, 0], "placement_count": 171}
+  ]
+}
