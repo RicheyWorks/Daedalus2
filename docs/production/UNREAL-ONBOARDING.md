@@ -435,8 +435,8 @@ Owner: blender-team (Blender Boss), link name `blender-team`. Every fact below w
 
 ### 4. Units, axes, names (`docs/BLENDER-TEAM-BRIEF.md`, `bharness/plugins/judge.py`)
 - **Units:** 1 Blender unit = 1 m = one cube, with scale applied. Unreal sees centimetres: 1 m = 100 cm (`asset_pipeline/ship.py` `CM_PER_M = 100.0`). The judge allows 1% or 0.01 between file sizes ×100 and the Unreal bounds.
-- **Origin and facing:** origin at the bottom centre. The judge requires min z within 0.01 m of 0 and the x/y centre within 0.05 m of 0. The front faces −Y in Blender.
-- **glTF axes:** glTF is exported +Y up (`export_yup=True`), so Blender (x, y, z) becomes glTF (x, z, −y), and Interchange turns it back into Unreal Z-up.
+- **Origin and facing:** origin at the bottom centre. The judge requires min z within 0.01 m of 0 and the x/y centre within 0.05 m of 0. The front faces −Y in Blender. **In Unreal that front lands on +Y, not +X** (see glTF axes): a yaw of 90° separates our front from Unreal's forward, until we agree whether to rotate at export or at placement (question to pootscoot-coordination, 2026-10-19).
+- **glTF axes:** glTF is exported +Y up (`export_yup=True`), so Blender (x, y, z) becomes glTF (x, z, −y). Stock UE 5.8 glTF Interchange then maps **UE = 100·(gX, gZ, gY) = 100·(x, −y, z) cm** (native evidence from unreal-epic-boss 48725, terrain_33, no node rotation; our glbs carry no node rotations either). So Blender +X = UE +X, Blender −Y (our front) = UE +Y, Blender +Z = UE +Z.
 - **Names:** `^(Prop|Item|Tool|Wpn|Mob|Veh|Bld|Sky)_[A-Za-z0-9]+(_[A-Za-z0-9]+)*$`, one collection per asset named like the asset, and no spaces in object names.
 - **Triangle budgets** (`judge.BUDGET`):
 
@@ -468,6 +468,7 @@ Owner: blender-team (Blender Boss), link name `blender-team`. Every fact below w
 ### 6. Export settings (from the code)
 - **bharness / catalog assets** (`bharness/plugins/export.py`): `export_scene.gltf(export_format="GLB", use_selection=True, export_apply=True, export_yup=True, export_materials="EXPORT", export_animations=False)`. It selects **only the MESH objects** in the asset's collection, so empties and sockets are not exported. The glb is then re-read and checked against Blender's own numbers (tris, slots, sizes).
 - **Weapons / socketed assets** (`tools/blender/weapons/build_rifle.py`): `export_format="GLB", export_yup=True, export_apply=True, export_extras=True`, with no selection filter. Sockets are empties parented to the mesh, named `SOCKET_<Name>`, and become glTF nodes. It also saves the `.blend` and a `build_report.json` (tris read back, dimensions, socket names). It refuses an `--out` path containing an `art` folder unless `--allow-art` is passed.
+- **Sockets:** stock UE 5.8 glTF Interchange keeps `SOCKET_` empties as native static-mesh sockets (unreal-epic-boss 48725: fixture B `Top` at (0, 0, 50) cm; the earlier "dropped" result was a reader false negative). Every socketed asset also ships `<Asset>.sockets.json` (`tools/blender/sockets_sidecar.py`: `units` cm, `space` unreal, per socket `name`, `parent`, `location` relative to the parent node, `rotation` [pitch, yaw, roll] from the socket's forward vector). It is a **cross-check** for the native sockets and the carrier of socket rotation (our empties have none); PR203 intake reads it.
 - **LOD1 and flagship:** `use_selection=True, export_apply=True`, with the defaults otherwise (GLB, +Y up).
 - **FBX:** blender-team does not ship FBX. Other teams' `tools/blender/voxel_*.py` and `hd_island.py` use `export_scene.fbx(apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z")`.
 

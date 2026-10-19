@@ -1,0 +1,5805 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Lab_EchoBell_S00",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S00_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S00_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S00_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S00",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.04639,
+         0.74227
+        ],
+        [
+         0.22268,
+         0.67732
+        ],
+        [
+         0.25052,
+         0.51959
+        ],
+        [
+         0.27835,
+         0.33402
+        ],
+        [
+         0.32474,
+         0.16701
+        ],
+        [
+         0.38849,
+         0.02784
+        ],
+        [
+         0.43937,
+         0.0
+        ],
+        [
+         0.44399,
+         0.04639
+        ],
+        [
+         0.38041,
+         0.16701
+        ],
+        [
+         0.33402,
+         0.35258
+        ],
+        [
+         0.31082,
+         0.53814
+        ],
+        [
+         0.27835,
+         0.6866
+        ],
+        [
+         0.18557,
+         0.77938
+        ],
+        [
+         0.05567,
+         0.80722
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.11134,
+        0.04639,
+        0.09278
+       ],
+       "centre": [
+        0,
+        0,
+        0.85361
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02784,
+       "r2": 0.02784,
+       "length": 0.41753,
+       "centre": [
+        0,
+        0,
+        0.46392
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01856,
+         -0.04639
+        ],
+        [
+         0.06495,
+         0.0
+        ],
+        [
+         0.01856,
+         0.04639
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.22268
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 0,
+    "hz": 146.832,
+    "height_m": 0.9
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.44072,
+      0.09278
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.09278,
+      0.44072
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.41753
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.41753,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S00_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.4546,
+     "r2": 0.4546,
+     "length": 0.9,
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S00": 824
+    },
+    "bounds_min": [
+     -0.444,
+     -0.444,
+     0.0
+    ],
+    "bounds_max": [
+     0.444,
+     0.444,
+     0.9
+    ],
+    "dimensions": [
+     0.888,
+     0.888,
+     0.9
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "03f60183efdfacf307c4f40684df82ab591509568e978f650931041eb4d07752"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S03",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S03_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S03_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S03_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S03",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.04227,
+         0.67629
+        ],
+        [
+         0.20289,
+         0.61711
+        ],
+        [
+         0.22825,
+         0.4734
+        ],
+        [
+         0.25361,
+         0.30433
+        ],
+        [
+         0.29588,
+         0.15216
+        ],
+        [
+         0.35514,
+         0.02536
+        ],
+        [
+         0.40164,
+         0.0
+        ],
+        [
+         0.40587,
+         0.04227
+        ],
+        [
+         0.3466,
+         0.15216
+        ],
+        [
+         0.30433,
+         0.32124
+        ],
+        [
+         0.2832,
+         0.49031
+        ],
+        [
+         0.25361,
+         0.62557
+        ],
+        [
+         0.16907,
+         0.7101
+        ],
+        [
+         0.05072,
+         0.73546
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.10144,
+        0.04227,
+        0.08454
+       ],
+       "centre": [
+        0,
+        0,
+        0.77773
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02536,
+       "r2": 0.02536,
+       "length": 0.38041,
+       "centre": [
+        0,
+        0,
+        0.42268
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01691,
+         -0.04227
+        ],
+        [
+         0.05918,
+         0.0
+        ],
+        [
+         0.01691,
+         0.04227
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.20289
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 3,
+    "hz": 174.614,
+    "height_m": 0.82
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.40155,
+      0.08454
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.08454,
+      0.40155
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.38041
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.38041,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S03_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.4142,
+     "r2": 0.4142,
+     "length": 0.82,
+     "centre": [
+      0,
+      0,
+      0.41
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S03": 824
+    },
+    "bounds_min": [
+     -0.4059,
+     -0.4059,
+     0.0
+    ],
+    "bounds_max": [
+     0.4059,
+     0.4059,
+     0.82
+    ],
+    "dimensions": [
+     0.8118,
+     0.8118,
+     0.82
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "03d8ab2ca4035b27fa7f738f6ff470fb0005c0b9245d4af32e2f41dc55774400"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S05",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S05_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S05_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S05_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S05",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.03952,
+         0.63233
+        ],
+        [
+         0.1897,
+         0.577
+        ],
+        [
+         0.21341,
+         0.44263
+        ],
+        [
+         0.23712,
+         0.28455
+        ],
+        [
+         0.27664,
+         0.14227
+        ],
+        [
+         0.32576,
+         0.02371
+        ],
+        [
+         0.36842,
+         0.0
+        ],
+        [
+         0.3723,
+         0.03952
+        ],
+        [
+         0.32407,
+         0.14227
+        ],
+        [
+         0.28455,
+         0.30036
+        ],
+        [
+         0.26479,
+         0.45844
+        ],
+        [
+         0.23712,
+         0.58491
+        ],
+        [
+         0.15808,
+         0.66395
+        ],
+        [
+         0.04742,
+         0.68766
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.09485,
+        0.03952,
+        0.07904
+       ],
+       "centre": [
+        0,
+        0,
+        0.72718
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02371,
+       "r2": 0.02371,
+       "length": 0.35569,
+       "centre": [
+        0,
+        0,
+        0.39521
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01581,
+         -0.03952
+        ],
+        [
+         0.05533,
+         0.0
+        ],
+        [
+         0.01581,
+         0.03952
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.1897
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 5,
+    "hz": 195.997,
+    "height_m": 0.7667
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.7667
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.7667,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.37545,
+      0.07904
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.07904,
+      0.37545
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.35569
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35569,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S05_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.3873,
+     "r2": 0.3873,
+     "length": 0.7667,
+     "centre": [
+      0,
+      0,
+      0.3834
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S05": 824
+    },
+    "bounds_min": [
+     -0.3723,
+     -0.3723,
+     0.0
+    ],
+    "bounds_max": [
+     0.3723,
+     0.3723,
+     0.7667
+    ],
+    "dimensions": [
+     0.7446,
+     0.7446,
+     0.7667
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "508f5f8c8e7187fa54fdd4901e8ec12940f6cce9a64cfaa83a1ad48ba3a98a0c"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S07",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S07_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S07_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S07_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S07",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.03677,
+         0.58829
+        ],
+        [
+         0.17649,
+         0.53681
+        ],
+        [
+         0.19855,
+         0.4118
+        ],
+        [
+         0.22061,
+         0.26473
+        ],
+        [
+         0.25738,
+         0.13236
+        ],
+        [
+         0.30953,
+         0.02206
+        ],
+        [
+         0.35007,
+         0.0
+        ],
+        [
+         0.35375,
+         0.03677
+        ],
+        [
+         0.3015,
+         0.13236
+        ],
+        [
+         0.26473,
+         0.27944
+        ],
+        [
+         0.24635,
+         0.42651
+        ],
+        [
+         0.22061,
+         0.54417
+        ],
+        [
+         0.14707,
+         0.6177
+        ],
+        [
+         0.04412,
+         0.63976
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.08824,
+        0.03677,
+        0.07354
+       ],
+       "centre": [
+        0,
+        0,
+        0.67653
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02206,
+       "r2": 0.02206,
+       "length": 0.33091,
+       "centre": [
+        0,
+        0,
+        0.36768
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01471,
+         -0.03677
+        ],
+        [
+         0.05148,
+         0.0
+        ],
+        [
+         0.01471,
+         0.03677
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.17649
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 7,
+    "hz": 219.999,
+    "height_m": 0.7133
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.7133
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.7133,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.3493,
+      0.07354
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.07354,
+      0.3493
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.33091
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.33091,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S07_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.3603,
+     "r2": 0.3603,
+     "length": 0.7133,
+     "centre": [
+      0,
+      0,
+      0.3567
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S07": 824
+    },
+    "bounds_min": [
+     -0.3538,
+     -0.3538,
+     0.0
+    ],
+    "bounds_max": [
+     0.3538,
+     0.3538,
+     0.7133
+    ],
+    "dimensions": [
+     0.7076,
+     0.7076,
+     0.7133
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "999ca323a4c22cacad1e690bce0365f01a09fd2297675dbd2f824a00c2e3b19f"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S10",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S10_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S10_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S10_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S10",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.03264,
+         0.52231
+        ],
+        [
+         0.15669,
+         0.47661
+        ],
+        [
+         0.17628,
+         0.36562
+        ],
+        [
+         0.19587,
+         0.23504
+        ],
+        [
+         0.22851,
+         0.11752
+        ],
+        [
+         0.2759,
+         0.01959
+        ],
+        [
+         0.31203,
+         0.0
+        ],
+        [
+         0.31531,
+         0.03264
+        ],
+        [
+         0.26768,
+         0.11752
+        ],
+        [
+         0.23504,
+         0.2481
+        ],
+        [
+         0.21872,
+         0.37867
+        ],
+        [
+         0.19587,
+         0.48314
+        ],
+        [
+         0.13058,
+         0.54842
+        ],
+        [
+         0.03917,
+         0.56801
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.07835,
+        0.03264,
+        0.06529
+       ],
+       "centre": [
+        0,
+        0,
+        0.60066
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.01959,
+       "r2": 0.01959,
+       "length": 0.2938,
+       "centre": [
+        0,
+        0,
+        0.32644
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01306,
+         -0.03264
+        ],
+        [
+         0.0457,
+         0.0
+        ],
+        [
+         0.01306,
+         0.03264
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.15669
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 10,
+    "hz": 261.625,
+    "height_m": 0.6333
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.6333
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.6333,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.31012,
+      0.06529
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06529,
+      0.31012
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.2938
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2938,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S10_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.3199,
+     "r2": 0.3199,
+     "length": 0.6333,
+     "centre": [
+      0,
+      0,
+      0.3166
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S10": 824
+    },
+    "bounds_min": [
+     -0.3153,
+     -0.3153,
+     0.0
+    ],
+    "bounds_max": [
+     0.3153,
+     0.3153,
+     0.6333
+    ],
+    "dimensions": [
+     0.6306,
+     0.6306,
+     0.6333
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7e795ed6e1117f99ef54a6c63ae0e790151d0001358312ae78c42d7168c338cc"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S12",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S12_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S12_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S12_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S12",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0299,
+         0.47835
+        ],
+        [
+         0.14351,
+         0.43649
+        ],
+        [
+         0.16144,
+         0.33485
+        ],
+        [
+         0.17938,
+         0.21526
+        ],
+        [
+         0.20928,
+         0.10763
+        ],
+        [
+         0.25106,
+         0.01794
+        ],
+        [
+         0.28394,
+         0.0
+        ],
+        [
+         0.28692,
+         0.0299
+        ],
+        [
+         0.24515,
+         0.10763
+        ],
+        [
+         0.21526,
+         0.22722
+        ],
+        [
+         0.20031,
+         0.3468
+        ],
+        [
+         0.17938,
+         0.44247
+        ],
+        [
+         0.11959,
+         0.50227
+        ],
+        [
+         0.03588,
+         0.52021
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.07175,
+        0.0299,
+        0.05979
+       ],
+       "centre": [
+        0,
+        0,
+        0.5501
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.01794,
+       "r2": 0.01794,
+       "length": 0.26907,
+       "centre": [
+        0,
+        0,
+        0.29897
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01196,
+         -0.0299
+        ],
+        [
+         0.04186,
+         0.0
+        ],
+        [
+         0.01196,
+         0.0299
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.14351
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 12,
+    "hz": 293.664,
+    "height_m": 0.58
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.58
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.58,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.28402,
+      0.05979
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05979,
+      0.28402
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.26907
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.26907,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S12_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.293,
+     "r2": 0.293,
+     "length": 0.58,
+     "centre": [
+      0,
+      0,
+      0.29
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S12": 824
+    },
+    "bounds_min": [
+     -0.2869,
+     -0.2869,
+     0.0
+    ],
+    "bounds_max": [
+     0.2869,
+     0.2869,
+     0.58
+    ],
+    "dimensions": [
+     0.5738,
+     0.5738,
+     0.58
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b03dc17d0b325e81953f3091beaec6f66311324af6439ca41b11b607b7e1dd86"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_S15",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4,
+     14
+    ],
+    "gap": "G01",
+    "contract": "Daedalus2 9fbeef02 docs/contracts/echo-bell-v1 (EBG 1)",
+    "size_m": "0.9 (S00) to 0.5 (S15) tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX",
+    "sockets": [
+     "Bell",
+     "Strike",
+     "Sound"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_S15_M0",
+     "colour": "dark bronze (weathered)",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_S15_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoBell_S15_M2",
+     "colour": "verdigris",
+     "hex": "4F7A6A",
+     "roughness": 0.9,
+     "metallic": 0.1,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_S15",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.02577,
+         0.41237
+        ],
+        [
+         0.12371,
+         0.37629
+        ],
+        [
+         0.13918,
+         0.28866
+        ],
+        [
+         0.15464,
+         0.18557
+        ],
+        [
+         0.18041,
+         0.09278
+        ],
+        [
+         0.2141,
+         0.01546
+        ],
+        [
+         0.24214,
+         0.0
+        ],
+        [
+         0.24469,
+         0.02577
+        ],
+        [
+         0.21134,
+         0.09278
+        ],
+        [
+         0.18557,
+         0.19588
+        ],
+        [
+         0.17268,
+         0.29897
+        ],
+        [
+         0.15464,
+         0.38144
+        ],
+        [
+         0.10309,
+         0.43299
+        ],
+        [
+         0.03093,
+         0.44845
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 24,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Crown",
+       "shape": "box",
+       "size": [
+        0.06186,
+        0.02577,
+        0.05155
+       ],
+       "centre": [
+        0,
+        0,
+        0.47423
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.01546,
+       "r2": 0.01546,
+       "length": 0.23196,
+       "centre": [
+        0,
+        0,
+        0.25773
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ClapperBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01031,
+         -0.02577
+        ],
+        [
+         0.03608,
+         0.0
+        ],
+        [
+         0.01031,
+         0.02577
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.12371
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "pitch": {
+    "semis": 15,
+    "hz": 349.227,
+    "height_m": 0.5
+   },
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      -0.24485,
+      0.05155
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05155,
+      0.24485
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0,
+      0,
+      0.23196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.23196,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_S15_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.2526,
+     "r2": 0.2526,
+     "length": 0.5,
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "motion": "Unreal drives swing (pivot = SOCKET_Bell)",
+   "predicted": {
+    "triangles": 824,
+    "lod1_triangles": 376,
+    "lod1_ratio": 0.456,
+    "objects": {
+     "Prop_Lab_EchoBell_S15": 824
+    },
+    "bounds_min": [
+     -0.2447,
+     -0.2447,
+     0.0
+    ],
+    "bounds_max": [
+     0.2447,
+     0.2447,
+     0.5
+    ],
+    "dimensions": [
+     0.4894,
+     0.4894,
+     0.5
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "264940173c18cd468eb6dd09d9ecee599d49f10eb8f8e1f0ad460c82832c26ee"
+  },
+  {
+   "asset": "Prop_Lab_EchoBell_Frame",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     4
+    ],
+    "gap": "G01",
+    "size_m": "2.2 m frame",
+    "tri_cap": 4000,
+    "lod": "LOD0/1",
+    "collision": "UCX frame",
+    "sockets": [
+     "Bell"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoBell_Frame_M0",
+     "colour": "dark oak",
+     "hex": "4A3324",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoBell_Frame_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoBell_Frame",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post0",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        2.02
+       ],
+       "centre": [
+        -0.7,
+        0,
+        1.01
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Foot0",
+       "shape": "box",
+       "size": [
+        0.24,
+        0.5,
+        0.1
+       ],
+       "centre": [
+        -0.7,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Brace0",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        0.5
+       ],
+       "centre": [
+        -0.574,
+        0,
+        1.86
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        45,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        2.02
+       ],
+       "centre": [
+        0.7,
+        0,
+        1.01
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Foot1",
+       "shape": "box",
+       "size": [
+        0.24,
+        0.5,
+        0.1
+       ],
+       "centre": [
+        0.7,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Brace1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        0.5
+       ],
+       "centre": [
+        0.574,
+        0,
+        1.86
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -45,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.18,
+        0.18
+       ],
+       "centre": [
+        0,
+        0,
+        2.11
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Hanger",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        1.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.2,
+        0.18
+       ],
+       "centre": [
+        -0.3,
+        0,
+        2.11
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.2,
+        0.18
+       ],
+       "centre": [
+        0.3,
+        0,
+        2.11
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      0,
+      0,
+      1.92
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0,
+      1.92,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoBell_Frame_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.5,
+      2.02
+     ],
+     "centre": [
+      -0.7,
+      0,
+      1.01
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoBell_Frame_01",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.5,
+      2.02
+     ],
+     "centre": [
+      0.7,
+      0,
+      1.01
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoBell_Frame_02",
+     "shape": "box",
+     "size": [
+      1.6,
+      0.22,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      2.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 440,
+    "lod1_triangles": 220,
+    "lod1_ratio": 0.5,
+    "objects": {
+     "Prop_Lab_EchoBell_Frame": 440
+    },
+    "bounds_min": [
+     -0.82,
+     -0.25,
+     0.0
+    ],
+    "bounds_max": [
+     0.82,
+     0.25,
+     2.2
+    ],
+    "dimensions": [
+     1.64,
+     0.5,
+     2.2
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2dccebe1b0150bf013f64a9e9681f693beee3390df36d780ceafbc5ea9d00571"
+  },
+  {
+   "asset": "Bld_Lab_EchoGate_Closed",
+   "kind": "Bld",
+   "seed": 101,
+   "state": "Closed",
+   "state_of": "Bld_Lab_EchoGate",
+   "spec": {
+    "rows": [
+     5
+    ],
+    "gap": "G01",
+    "size_m": "3 m wide x 4 m tall",
+    "tri_cap": 6000,
+    "lod": "LOD0/1",
+    "collision": "UCX per leaf (+ pillars, lintel)",
+    "sockets": [
+     "Bell_L",
+     "Bell_R"
+    ],
+    "states": [
+     "Closed",
+     "Open"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_EchoGate_Closed_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_EchoGate_Closed_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_EchoGate_Closed_M2",
+     "colour": "dark bronze",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_EchoGate_Closed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pillar0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        -1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        -1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pillar1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.6,
+        0.6
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Keystone",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.7,
+        0.5
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_EchoGate_Closed_LeafL",
+     "parent": "Bld_Lab_EchoGate_Closed",
+     "pivot": [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     "role": "leaf L (hinge pivot; Unreal may swing it)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        -0.5,
+        0,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -0.5,
+        0,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        -0.275,
+        0,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_EchoGate_Closed_LeafR",
+     "parent": "Bld_Lab_EchoGate_Closed",
+     "pivot": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "role": "leaf R (hinge pivot; Unreal may swing it)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        0.5,
+        0,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        0.5,
+        0,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        0.275,
+        0,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell_L",
+     "location": [
+      -1.25,
+      -0.48,
+      2.84
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.25,
+      2.84,
+      0.48
+     ]
+    },
+    {
+     "name": "SOCKET_Bell_R",
+     "location": [
+      1.25,
+      -0.48,
+      2.84
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.25,
+      2.84,
+      0.48
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Closed_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      -1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Closed_01",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Closed_02",
+     "shape": "box",
+     "size": [
+      3.0,
+      0.6,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      3.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Closed_03",
+     "shape": "box",
+     "size": [
+      0.98,
+      0.15,
+      3.35
+     ],
+     "centre": [
+      -0.5,
+      0,
+      1.7
+     ],
+     "parent": "Bld_Lab_EchoGate_Closed_LeafL",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Closed_04",
+     "shape": "box",
+     "size": [
+      0.98,
+      0.15,
+      3.35
+     ],
+     "centre": [
+      0.5,
+      0,
+      1.7
+     ],
+     "parent": "Bld_Lab_EchoGate_Closed_LeafR",
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 968,
+    "lod1_triangles": 392,
+    "lod1_ratio": 0.405,
+    "objects": {
+     "Bld_Lab_EchoGate_Closed": 528,
+     "Bld_Lab_EchoGate_Closed_LeafL": 220,
+     "Bld_Lab_EchoGate_Closed_LeafR": 220
+    },
+    "bounds_min": [
+     -1.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     1.5,
+     0.5,
+     4.0
+    ],
+    "dimensions": [
+     3.0,
+     1.0,
+     4.0
+    ],
+    "collision_tris": 60
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "579afe151bcb3a04067f13b75c9851a1dda65faa4554ee5cb2f85aff6f8d2a96"
+  },
+  {
+   "asset": "Bld_Lab_EchoGate_Open",
+   "kind": "Bld",
+   "seed": 101,
+   "state": "Open",
+   "state_of": "Bld_Lab_EchoGate",
+   "spec": {
+    "rows": [
+     5
+    ],
+    "gap": "G01",
+    "size_m": "3 m wide x 4 m tall",
+    "tri_cap": 6000,
+    "lod": "LOD0/1",
+    "collision": "UCX per leaf (+ pillars, lintel)",
+    "sockets": [
+     "Bell_L",
+     "Bell_R"
+    ],
+    "states": [
+     "Closed",
+     "Open"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Bld_Lab_EchoGate_Open_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Bld_Lab_EchoGate_Open_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Bld_Lab_EchoGate_Open_M2",
+     "colour": "dark bronze",
+     "hex": "5E4630",
+     "roughness": 0.85,
+     "metallic": 0.35,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Bld_Lab_EchoGate_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pillar0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        -1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        -1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        -1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Pillar1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.6,
+        3.25
+       ],
+       "centre": [
+        1.25,
+        0,
+        1.775
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plinth1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.3
+       ],
+       "centre": [
+        1.25,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Capital1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.7,
+        0.15
+       ],
+       "centre": [
+        1.25,
+        0,
+        3.325
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketF1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        -0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BracketB1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        1.25,
+        0.4,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.6,
+        0.6
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Keystone",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.7,
+        0.5
+       ],
+       "centre": [
+        0,
+        0,
+        3.7
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_EchoGate_Open_LeafL",
+     "parent": "Bld_Lab_EchoGate_Open",
+     "pivot": [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     "role": "leaf L (hinge pivot; Unreal may swing it)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        -1.0,
+        0.5,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -1.0,
+        0.5,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -1.0,
+        0.5,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        -1.0,
+        0.5,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        -1.0,
+        0.725,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       },
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bld_Lab_EchoGate_Open_LeafR",
+     "parent": "Bld_Lab_EchoGate_Open",
+     "pivot": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "role": "leaf R (hinge pivot; Unreal may swing it)",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.15,
+        3.35
+       ],
+       "centre": [
+        1.0,
+        0.5,
+        1.7
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -90.0
+       ]
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        1.0,
+        0.5,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90.0
+       ]
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        1.0,
+        0.5,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90.0
+       ]
+      },
+      {
+       "name": "Band2",
+       "shape": "box",
+       "size": [
+        0.98,
+        0.17,
+        0.08
+       ],
+       "centre": [
+        1.0,
+        0.5,
+        2.9
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       },
+       "rot": [
+        0,
+        0,
+        -90.0
+       ]
+      },
+      {
+       "name": "Boss",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.2,
+       "centre": [
+        1.0,
+        0.725,
+        1.7
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       },
+       "rot": [
+        0,
+        0,
+        -90.0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell_L",
+     "location": [
+      -1.25,
+      -0.48,
+      2.84
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.25,
+      2.84,
+      0.48
+     ]
+    },
+    {
+     "name": "SOCKET_Bell_R",
+     "location": [
+      1.25,
+      -0.48,
+      2.84
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.25,
+      2.84,
+      0.48
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Open_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      -1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Open_01",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.7,
+      3.4
+     ],
+     "centre": [
+      1.25,
+      0,
+      1.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Open_02",
+     "shape": "box",
+     "size": [
+      3.0,
+      0.6,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      3.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Open_03",
+     "shape": "box",
+     "size": [
+      0.15,
+      0.98,
+      3.35
+     ],
+     "centre": [
+      -1.0,
+      0.5,
+      1.7
+     ],
+     "parent": "Bld_Lab_EchoGate_Open_LeafL",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Bld_Lab_EchoGate_Open_04",
+     "shape": "box",
+     "size": [
+      0.15,
+      0.98,
+      3.35
+     ],
+     "centre": [
+      1.0,
+      0.5,
+      1.7
+     ],
+     "parent": "Bld_Lab_EchoGate_Open_LeafR",
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "off_centre_ok": "Open leaves swing 1 m back (+Y); pivot stays the Closed gate's bottom centre so both states line up",
+   "predicted": {
+    "triangles": 968,
+    "lod1_triangles": 392,
+    "lod1_ratio": 0.405,
+    "objects": {
+     "Bld_Lab_EchoGate_Open": 528,
+     "Bld_Lab_EchoGate_Open_LeafL": 220,
+     "Bld_Lab_EchoGate_Open_LeafR": 220
+    },
+    "bounds_min": [
+     -1.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     1.5,
+     0.99,
+     4.0
+    ],
+    "dimensions": [
+     3.0,
+     1.49,
+     4.0
+    ],
+    "collision_tris": 60
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f2b1e23e2785d4ac561520285caadbd2b5bc5a3351be42d04a0a4481f6fd3311"
+  },
+  {
+   "asset": "Prop_Lab_EchoCorridor_Straight",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     14
+    ],
+    "gap": "G01",
+    "size_m": "4 m cell, 4 m tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX per wall",
+    "sockets": [
+     "Bell",
+     "Cricket (nook)"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoCorridor_Straight_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoCorridor_Straight_M1",
+     "colour": "flagstone",
+     "hex": "56535B",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoCorridor_Straight_M2",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoCorridor_Straight",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        4.0,
+        4.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "WallL",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        -1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallLPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallR",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallRPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BellBracket",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -1.4,
+        0,
+        3.4
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      -1.38,
+      0,
+      3.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.38,
+      3.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Straight_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      4.0,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Straight_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      -1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Straight_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "kit": {
+    "cell_m": 4.0,
+    "height_m": 4.0,
+    "open_sides": "-Y,+Y"
+   },
+   "predicted": {
+    "triangles": 440,
+    "lod1_triangles": 220,
+    "lod1_ratio": 0.5,
+    "objects": {
+     "Prop_Lab_EchoCorridor_Straight": 440
+    },
+    "bounds_min": [
+     -2.0,
+     -2.0,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     2.0,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     4.0,
+     4.0
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a049770e14a71fc067dc14c8a021a7655f33cc6120ca6bb3b00ef3a044b86ec2"
+  },
+  {
+   "asset": "Prop_Lab_EchoCorridor_Corner",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     14
+    ],
+    "gap": "G01",
+    "size_m": "4 m cell, 4 m tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX per wall",
+    "sockets": [
+     "Bell",
+     "Cricket (nook)"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoCorridor_Corner_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoCorridor_Corner_M1",
+     "colour": "flagstone",
+     "hex": "56535B",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoCorridor_Corner_M2",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoCorridor_Corner",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        4.0,
+        4.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "WallL",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        -1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallLPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallB",
+       "shape": "box",
+       "size": [
+        3.6,
+        0.4,
+        3.75
+       ],
+       "centre": [
+        0.2,
+        1.8,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallBCoping",
+       "shape": "box",
+       "size": [
+        3.6,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.2,
+        1.8,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallBPilaster0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.2,
+        3.8
+       ],
+       "centre": [
+        -1.24,
+        1.5,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallBPilaster1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.2,
+        3.8
+       ],
+       "centre": [
+        1.64,
+        1.5,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CornerPost",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.4,
+        3.9
+       ],
+       "centre": [
+        1.8,
+        -1.8,
+        2.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "BellBracket",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -1.4,
+        0,
+        3.4
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      -1.38,
+      0,
+      3.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.38,
+      3.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Corner_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      4.0,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Corner_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      -1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Corner_02",
+     "shape": "box",
+     "size": [
+      3.6,
+      0.4,
+      3.75
+     ],
+     "centre": [
+      0.2,
+      1.8,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_Corner_03",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.4,
+      3.9
+     ],
+     "centre": [
+      1.8,
+      -1.8,
+      2.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "kit": {
+    "cell_m": 4.0,
+    "height_m": 4.0,
+    "open_sides": "-Y,+X"
+   },
+   "predicted": {
+    "triangles": 484,
+    "lod1_triangles": 264,
+    "lod1_ratio": 0.545,
+    "objects": {
+     "Prop_Lab_EchoCorridor_Corner": 484
+    },
+    "bounds_min": [
+     -2.0,
+     -2.0,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     2.0,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     4.0,
+     4.0
+    ],
+    "collision_tris": 48
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "044ab599fa213c9b290ef17fdcb47ede68ace88cc1c09a6ea1a07dd07f31bb05"
+  },
+  {
+   "asset": "Prop_Lab_EchoCorridor_DeadEnd",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     14
+    ],
+    "gap": "G01",
+    "size_m": "4 m cell, 4 m tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX per wall",
+    "sockets": [
+     "Bell",
+     "Cricket (nook)"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoCorridor_DeadEnd_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoCorridor_DeadEnd_M1",
+     "colour": "flagstone",
+     "hex": "56535B",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoCorridor_DeadEnd_M2",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoCorridor_DeadEnd",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        4.0,
+        4.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "WallL",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        -1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallLPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallR",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallRPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallB",
+       "shape": "box",
+       "size": [
+        3.2,
+        0.4,
+        3.75
+       ],
+       "centre": [
+        0,
+        1.8,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallBCoping",
+       "shape": "box",
+       "size": [
+        3.2,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0,
+        1.8,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallBPilaster0",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.2,
+        3.8
+       ],
+       "centre": [
+        -1.28,
+        1.5,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallBPilaster1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.2,
+        3.8
+       ],
+       "centre": [
+        1.28,
+        1.5,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BellBracket",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -1.4,
+        0,
+        3.4
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      -1.38,
+      0,
+      3.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.38,
+      3.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_DeadEnd_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      4.0,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_DeadEnd_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      -1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_DeadEnd_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_DeadEnd_03",
+     "shape": "box",
+     "size": [
+      3.2,
+      0.4,
+      3.75
+     ],
+     "centre": [
+      0,
+      1.8,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "kit": {
+    "cell_m": 4.0,
+    "height_m": 4.0,
+    "open_sides": "-Y"
+   },
+   "predicted": {
+    "triangles": 616,
+    "lod1_triangles": 308,
+    "lod1_ratio": 0.5,
+    "objects": {
+     "Prop_Lab_EchoCorridor_DeadEnd": 616
+    },
+    "bounds_min": [
+     -2.0,
+     -2.0,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     2.0,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     4.0,
+     4.0
+    ],
+    "collision_tris": 48
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2e1581205154a2eae1b73c40e31bf4a5578ec64804ae18789c1beea6ebccb5b0"
+  },
+  {
+   "asset": "Prop_Lab_EchoCorridor_CricketNook",
+   "kind": "Prop",
+   "seed": 101,
+   "spec": {
+    "rows": [
+     14
+    ],
+    "gap": "G01",
+    "size_m": "4 m cell, 4 m tall",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "collision": "UCX per wall",
+    "sockets": [
+     "Bell",
+     "Cricket (nook)"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_EchoCorridor_CricketNook_M0",
+     "colour": "labyrinth stone",
+     "hex": "6E6A73",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_EchoCorridor_CricketNook_M1",
+     "colour": "flagstone",
+     "hex": "56535B",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_EchoCorridor_CricketNook_M2",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_EchoCorridor_CricketNook",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        4.0,
+        4.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "WallL",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        -1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        -1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallLPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallLPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        -1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallR",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        3.75
+       ],
+       "centre": [
+        1.8,
+        0,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRCoping",
+       "shape": "box",
+       "size": [
+        0.4,
+        4.0,
+        0.15
+       ],
+       "centre": [
+        1.8,
+        0,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "WallRPilaster0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        -1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "WallRPilaster1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        3.8
+       ],
+       "centre": [
+        1.5,
+        1.6,
+        2.0
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BellBracket",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -1.4,
+        0,
+        3.4
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Back0",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.4,
+        3.75
+       ],
+       "centre": [
+        -1.0,
+        1.8,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Back1",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.4,
+        3.75
+       ],
+       "centre": [
+        1.0,
+        1.8,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NicheBack",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.15,
+        3.75
+       ],
+       "centre": [
+        0,
+        1.925,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NicheSill",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.25,
+        0.5
+       ],
+       "centre": [
+        0,
+        1.725,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NicheLintel",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.25,
+        2.65
+       ],
+       "centre": [
+        0,
+        1.725,
+        2.525
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BackLOD1",
+       "shape": "box",
+       "size": [
+        3.2,
+        0.4,
+        3.75
+       ],
+       "centre": [
+        0,
+        1.8,
+        1.975
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "BackCoping",
+       "shape": "box",
+       "size": [
+        3.2,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0,
+        1.8,
+        3.925
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bell",
+     "location": [
+      -1.38,
+      0,
+      3.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.38,
+      3.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cricket",
+     "location": [
+      0,
+      1.75,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      -1.75
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_00",
+     "shape": "box",
+     "size": [
+      4.0,
+      4.0,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_01",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      -1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_02",
+     "shape": "box",
+     "size": [
+      0.4,
+      4.0,
+      3.75
+     ],
+     "centre": [
+      1.8,
+      0,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_03",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.4,
+      3.75
+     ],
+     "centre": [
+      -1.0,
+      1.8,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_04",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.4,
+      3.75
+     ],
+     "centre": [
+      1.0,
+      1.8,
+      1.975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_05",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.4,
+      0.5
+     ],
+     "centre": [
+      0,
+      1.8,
+      0.35
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Lab_EchoCorridor_CricketNook_06",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.4,
+      2.65
+     ],
+     "centre": [
+      0,
+      1.8,
+      2.525
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "kit": {
+    "cell_m": 4.0,
+    "height_m": 4.0,
+    "open_sides": "-Y"
+   },
+   "predicted": {
+    "triangles": 704,
+    "lod1_triangles": 308,
+    "lod1_ratio": 0.438,
+    "objects": {
+     "Prop_Lab_EchoCorridor_CricketNook": 704
+    },
+    "bounds_min": [
+     -2.0,
+     -2.0,
+     0.0
+    ],
+    "bounds_max": [
+     2.0,
+     2.0,
+     4.0
+    ],
+    "dimensions": [
+     4.0,
+     4.0,
+     4.0
+    ],
+    "collision_tris": 84
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4d37be6fddbcc65dfb7ae5bf597633a6c2f2dff32cc0e34840b38a7ae80c109f"
+  }
+ ]
+}

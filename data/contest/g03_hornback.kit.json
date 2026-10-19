@@ -1,0 +1,370 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Lab_HornbackTrough_Wood",
+   "kind": "Prop",
+   "seed": 303,
+   "spec": {
+    "row": 16,
+    "gap": "G03",
+    "size_m": "~1.2 m long",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX box",
+    "sockets": [
+     "Water"
+    ],
+    "water": "separate named child node",
+    "asker": "pythagoras 48506"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Lab_HornbackTrough_Wood_M0",
+     "colour": "weathered wood",
+     "hex": "8A6440",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Lab_HornbackTrough_Wood_M1",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.8,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Lab_HornbackTrough_Wood_M2",
+     "colour": "water (opaque)",
+     "hex": "3E7CA8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Lab_HornbackTrough_Wood",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bottom",
+       "shape": "box",
+       "size": [
+        1.1,
+        0.42,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.125
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "SideFront",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.04,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.22,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "SideBack",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.04,
+        0.3
+       ],
+       "centre": [
+        0,
+        0.22,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "EndL",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.4,
+        0.3
+       ],
+       "centre": [
+        0.58,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "EndR",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.4,
+        0.3
+       ],
+       "centre": [
+        -0.58,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Foot0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.6,
+        0.1
+       ],
+       "centre": [
+        -0.45,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "FootLOD1_0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.6,
+        0.1
+       ],
+       "centre": [
+        -0.45,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.47,
+        0.32
+       ],
+       "centre": [
+        -0.45,
+        0,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Foot1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.6,
+        0.1
+       ],
+       "centre": [
+        0.45,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "FootLOD1_1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.6,
+        0.1
+       ],
+       "centre": [
+        0.45,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.47,
+        0.32
+       ],
+       "centre": [
+        0.45,
+        0,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Lab_HornbackTrough_Wood_Water",
+     "parent": "Prop_Lab_HornbackTrough_Wood",
+     "pivot": [
+      0,
+      0,
+      0.34
+     ],
+     "role": "water surface (separate node; Unreal may raise/lower or swap the material)",
+     "parts": [
+      {
+       "name": "Surface",
+       "shape": "box",
+       "size": [
+        1.1,
+        0.4,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.33
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Water",
+     "location": [
+      0,
+      0,
+      0.34
+     ],
+     "parent": "Prop_Lab_HornbackTrough_Wood_Water",
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.34,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Lab_HornbackTrough_Wood_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.6,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 408,
+    "lod1_triangles": 256,
+    "lod1_ratio": 0.627,
+    "objects": {
+     "Prop_Lab_HornbackTrough_Wood": 396,
+     "Prop_Lab_HornbackTrough_Wood_Water": 12
+    },
+    "bounds_min": [
+     -0.6,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.3,
+     0.41
+    ],
+    "dimensions": [
+     1.2,
+     0.6,
+     0.41
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "stock glTF Interchange drops SOCKET_ empties (UEB 48518/48519): use the <Asset>.sockets.json sidecar (tools/blender/sockets_sidecar.py); the empties stay in the glb",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d0c45d2b68c26f5780f13257e15538df781cca990caf1bfa921d9022b6afe8e9"
+  }
+ ]
+}
