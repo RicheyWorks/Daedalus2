@@ -12,6 +12,7 @@ import json
 import mimetypes
 from pathlib import Path
 import sys
+import time
 from urllib.parse import quote
 
 from bot import Bot
@@ -60,12 +61,37 @@ def main(argv):
                 connection = http.client.HTTPConnection("127.0.0.1", host.server.server_port, timeout=8)
                 try:
                     connection.request(method, path)
+                    # HTTP/1.0 getresponse() detaches the connection's public socket.
+                    transport = connection.sock
                     response = connection.getresponse()
-                    body = response.read(host.max_asset_bytes + 1)
                     receipt = {"path": path, "method": method, "status": response.status,
                                "content_length": response.getheader("Content-Length"),
-                               "mime": response.getheader("Content-Type"), "body_bytes": len(body), "sha256": sha(body)}
+                               "mime": response.getheader("Content-Type"), "body_bytes": 0, "sha256": sha(b"")}
                     clients.append(receipt)
+                    # A whole-buffer read loses its partial bytes if the socket times out.
+                    # Preserve actual received progress without relaxing the exact-body check.
+                    body, digest = bytearray(), hashlib.sha256()
+                    started = time.monotonic()
+                    try:
+                        while len(body) <= host.max_asset_bytes:
+                            if response.isclosed():
+                                break
+                            remaining = 8 - (time.monotonic() - started)
+                            if remaining <= 0:
+                                raise TimeoutError("Body read exceeded its progress deadline")
+                            transport.settimeout(remaining)
+                            chunk = response.read1(min(64 * 1024, host.max_asset_bytes + 1 - len(body)))
+                            if not chunk:
+                                break
+                            body.extend(chunk)
+                            digest.update(chunk)
+                            receipt.update(body_bytes=len(body), sha256=digest.hexdigest())
+                    except Exception as error:
+                        receipt["read_error"] = type(error).__name__ + ": " + str(error)
+                        raise
+                    finally:
+                        receipt["elapsed_ms"] = round((time.monotonic() - started) * 1000, 3)
+                    body = bytes(body)
                     check(method + " " + path + " status", response.status == status, receipt)
                     if expected is not None:
                         wanted = expected.read_bytes()
