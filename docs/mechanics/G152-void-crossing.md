@@ -18,4 +18,8 @@ ISLAND.md ends the forge story with "leave on an ark that remembers this forge",
 
 ## Host contract
 
-The host owns the `Crossing`, shows today's weather, and sends one order per day. A native C++ core will be its own claim.
+The host owns the `Crossing`, shows today's weather, and sends one order per day. The native C++ core is its own claim, G165 (below).
+
+## Native C++ core (G165)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusVoidCrossingCore.h` is a header-only C++17 port for the Unreal binding. It provides a `VoidCrossing` struct (`Valid()` is false where Java throws, plus `Today`, `Sail`, `WeakestPatchable` and `MinSeam`), `VoidBosun`, `VoidLine` and `Encode`, and the `VXC 1` line is the same as in Java. `engines/unreal/core-test/void_crossing_core_test.cpp` runs 6 checks under MSVC `/W4 /WX` and g++ `-Werror` with ASan/UBSan. Its `--write` mode writes `void_crossing_parity.txt`: 100 seeded arks x tonic 0/1 x spares 0/6 x 3 crews (bosun, hold, random orders), 1200 lines. `VoidCrossingParityTest` rebuilds the same arks in Java and matches the file line for line.
