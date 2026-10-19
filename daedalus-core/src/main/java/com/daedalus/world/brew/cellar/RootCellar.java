@@ -177,6 +177,19 @@ public final class RootCellar {
         return Outcome.TAKEN;
     }
 
+    /**
+     * Sends a jar out of the cellar unopened (to a ship, G97 Letters by Ark): no soaking, nothing into the store.
+     * Returns the jar, or null when there is no such jar or the event is a duplicate / invalid.
+     */
+    public Jar dispatch(String eventId, int jarId) {
+        if (eventId == null || eventId.isBlank() || eventId.length() > QuestProgress.MAX_EVENT_ID
+                || events.contains(eventId) || !jars.containsKey(jarId)) {
+            return null;
+        }
+        events.add(eventId);
+        return jars.remove(jarId);
+    }
+
     /** The first good jar holding this item (soonest to spoil first), or null. */
     public Jar firstJarOf(String item) {
         return jars.values().stream().filter(j -> j.item().equals(item))
