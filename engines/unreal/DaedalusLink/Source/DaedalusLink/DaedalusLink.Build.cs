@@ -34,7 +34,7 @@ public class DaedalusLink : ModuleRules
 
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "DataValidation", "UnrealEd" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "DataValidation", "UnrealEd", "LevelEditor", "SlateInspectorToolset" });
 			// One canonical serializer in the repository. setup-unreal.ps1 stages
 			// those exact bytes for projects whose plugin lives outside the repo.
 			string CanonicalContracts = Path.GetFullPath(Path.Combine(PluginDirectory, "../../../tools/unreal_mcp"));

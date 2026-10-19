@@ -43,4 +43,9 @@ public:
 	/** Exercise only the disposable virtual Slate button and its cleanup. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
 	static FString RunSlateButtonFixture();
+
+	/** Bind only the already existing primary level-editor Details panel.
+	 * Does not spawn, activate, focus, observe, snapshot, or simulate input. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
+	static FString BindExistingDetailsPanel();
 };

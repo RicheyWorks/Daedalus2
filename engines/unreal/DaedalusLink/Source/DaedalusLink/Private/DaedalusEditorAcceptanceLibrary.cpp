@@ -8,6 +8,15 @@
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 #include "Misc/DataValidation.h"
+#include "Editor.h"
+#include "Engine/World.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Framework/Docking/TabManager.h"
+#include "HAL/PlatformProcess.h"
+#include "LevelEditor.h"
+#include "Modules/ModuleManager.h"
+#include "SlateInspectorToolsetRefCache.h"
+#include "Widgets/Docking/SDockTab.h"
 
 EDataValidationResult UDaedalusAcceptanceValidationFixture::IsDataValid(FDataValidationContext& Context) const
 {
@@ -74,5 +83,121 @@ FString UDaedalusEditorAcceptanceLibrary::RunSlateButtonFixture()
 	return Serialized;
 #else
 	return TEXT("{\"ran\":false,\"passed\":false,\"failure_reason\":\"Editor-only acceptance entry point\"}");
+#endif
+}
+
+FString UDaedalusEditorAcceptanceLibrary::BindExistingDetailsPanel()
+{
+#if WITH_EDITOR
+	const auto Reject = [](const TCHAR* Why)
+	{
+		TSharedRef<FJsonObject> Json = MakeShared<FJsonObject>();
+		Json->SetStringField(TEXT("scope"), TEXT("existing_primary_level_editor_details"));
+		Json->SetStringField(TEXT("status"), TEXT("Rejected"));
+		Json->SetBoolField(TEXT("bound"), false);
+		Json->SetStringField(TEXT("approved_ref"), TEXT(""));
+		Json->SetStringField(TEXT("diagnostic"), Why);
+		FString Text;
+		FJsonSerializer::Serialize(Json, TJsonWriterFactory<>::Create(&Text));
+		return Text;
+	};
+	if (!IsInGameThread() || !GEditor || GEditor->PlayWorld
+		|| !GEditor->GetEditorWorldContext().World() || !FSlateApplication::IsInitialized())
+	{
+		return Reject(TEXT("Requires the current editor game thread, editor world and no PIE."));
+	}
+	FLevelEditorModule* LevelEditor = FModuleManager::GetModulePtr<FLevelEditorModule>(TEXT("LevelEditor"));
+	if (!LevelEditor || !FModuleManager::Get().IsModuleLoaded(TEXT("SlateInspectorToolset")))
+	{
+		return Reject(TEXT("Required existing LevelEditor/SlateInspectorToolset modules are not loaded; no fallback load."));
+	}
+	const TSharedPtr<FTabManager> Manager = LevelEditor->GetLevelEditorTabManager();
+	if (!Manager.IsValid())
+	{
+		return Reject(TEXT("The owning level-editor tab manager is unavailable."));
+	}
+	const TSharedPtr<SDockTab> Tab = Manager->FindExistingLiveTab(FTabId(LevelEditorTabIds::LevelEditorSelectionDetails));
+	const TSharedPtr<SDockTab> Owner = Manager->GetOwnerTab();
+	if (!Tab.IsValid() || !Owner.IsValid() || Owner != LevelEditor->GetLevelEditorTab()
+		|| Tab->GetTabManagerPtr() != Manager
+		|| Tab->GetLayoutIdentifier().TabType != LevelEditorTabIds::LevelEditorSelectionDetails)
+	{
+		return Reject(TEXT("The exact existing primary Details tab and owning manager could not be verified."));
+	}
+	const TSharedRef<SWidget> Panel = Tab->GetContent();
+	FSlateApplication& App = FSlateApplication::Get();
+	const TSharedPtr<SWindow> PanelWindow = App.FindWidgetWindow(Panel);
+	const TSharedPtr<SWindow> OwnerWindow = App.FindWidgetWindow(Owner.ToSharedRef());
+	// FindExistingLiveTab can also return retained hidden drawer/sidebar tabs,
+	// and IsForeground is true without a tab-well parent. Admit a normal docked
+	// panel only, then verify its entire live parent chain to the owning window.
+	if (!Tab->GetParent().IsValid() || !Tab->GetParentDockTabStack().IsValid() || Tab->IsInSidebar()
+		|| !Tab->IsForeground() || !Tab->GetVisibility().IsVisible() || !Panel->GetVisibility().IsVisible()
+		|| !Panel->GetParentWidget().IsValid() || !PanelWindow.IsValid()
+		|| PanelWindow != OwnerWindow || !PanelWindow->IsVisible())
+	{
+		return Reject(TEXT("The exact Details content must already be visible and foreground in its owning editor window."));
+	}
+	TSharedPtr<SWidget> Ancestor = Panel;
+	bool bReachedOwnWindow = false;
+	for (int32 Depth = 0; Depth < 64 && Ancestor.IsValid(); ++Depth)
+	{
+		if (!Ancestor->GetVisibility().IsVisible())
+		{
+			return Reject(TEXT("The Details content has a hidden or collapsed ancestor."));
+		}
+		if (Ancestor == PanelWindow)
+		{
+			bReachedOwnWindow = true;
+			break;
+		}
+		Ancestor = Ancestor->GetParentWidget();
+	}
+	const auto PanelSize = Panel->GetCachedGeometry().GetLocalSize();
+	if (!bReachedOwnWindow || !FMath::IsFinite(PanelSize.X) || !FMath::IsFinite(PanelSize.Y)
+		|| PanelSize.X <= 0 || PanelSize.Y <= 0)
+	{
+		return Reject(TEXT("The Details panel has no bounded visible ancestor path and positive laid-out area."));
+	}
+	const TSharedPtr<SWidget> KeyboardFocus = App.GetKeyboardFocusedWidget();
+	const TSharedPtr<SWindow> ActiveWindow = App.GetActiveTopLevelWindow();
+	// This exported accessor is the same singleton used by official Snapshot's
+	// ResolveRefOrWarn. Never instantiate/copy/reset a private cache or traverse
+	// another panel to bootstrap a ref.
+	FSlateInspectorToolsetRefCache& Cache = FSlateInspectorToolsetRefCache::Get();
+	const bool bPreexisting = !Cache.FindRef(Panel).IsEmpty();
+	const FString Ref = Cache.GetOrAssignRef(Panel, TEXT("panel"));
+	if (Ref.IsEmpty() || Cache.ResolveRef(Ref) != Panel
+		|| App.GetKeyboardFocusedWidget() != KeyboardFocus || App.GetActiveTopLevelWindow() != ActiveWindow)
+	{
+		return Reject(TEXT("Shared-cache identity or untouched focus/window readback failed."));
+	}
+	TSharedRef<FJsonObject> Json = MakeShared<FJsonObject>();
+	Json->SetStringField(TEXT("scope"), TEXT("existing_primary_level_editor_details"));
+	Json->SetStringField(TEXT("status"), TEXT("Bound"));
+	Json->SetBoolField(TEXT("bound"), true);
+	Json->SetStringField(TEXT("approved_ref"), Ref);
+	Json->SetNumberField(TEXT("process_id"), FPlatformProcess::GetCurrentProcessId());
+	Json->SetStringField(TEXT("world"), GEditor->GetEditorWorldContext().World()->GetPathName());
+	Json->SetStringField(TEXT("tab_id"), LevelEditorTabIds::LevelEditorSelectionDetails.ToString());
+	Json->SetStringField(TEXT("tab_label"), Tab->GetTabLabel().ToString());
+	Json->SetStringField(TEXT("panel_type"), Panel->GetTypeAsString());
+	Json->SetStringField(TEXT("window_title"), PanelWindow->GetTitle().ToString());
+	for (const TCHAR* Field : {TEXT("owning_manager_agrees"), TEXT("window_identity_agrees"),
+		TEXT("panel_visible"), TEXT("tab_foreground"), TEXT("window_visible"),
+		TEXT("cache_roundtrip"), TEXT("keyboard_focus_preserved"), TEXT("active_window_preserved")})
+	{
+		Json->SetBoolField(Field, true);
+	}
+	Json->SetBoolField(TEXT("ref_preexisting"), bPreexisting);
+	Json->SetStringField(TEXT("diagnostic"), TEXT(""));
+	FString Text;
+	if (!FJsonSerializer::Serialize(Json, TJsonWriterFactory<>::Create(&Text)))
+	{
+		return Reject(TEXT("Binding receipt serialization failed."));
+	}
+	return Text;
+#else
+	return TEXT("{\"scope\":\"existing_primary_level_editor_details\",\"status\":\"Rejected\",\"bound\":false,\"approved_ref\":\"\",\"diagnostic\":\"Editor only\"}");
 #endif
 }

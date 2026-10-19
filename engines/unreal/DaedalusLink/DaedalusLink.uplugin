@@ -26,6 +26,11 @@
 	],
 	"Plugins": [
 		{
+			"Name": "SlateInspectorToolset",
+			"Enabled": true,
+			"TargetAllowList": [ "Editor" ]
+		},
+		{
 			"Name": "DataValidation",
 			"Enabled": true,
 			"TargetAllowList": [ "Editor" ]
