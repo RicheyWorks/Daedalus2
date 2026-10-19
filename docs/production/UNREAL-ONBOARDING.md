@@ -373,3 +373,158 @@ Nothing may live only in a worktree, a temp folder or a bot's box.
 **Approvals.**
 - Deletes, keys, release tags, payments, signing keys and outgoing sends in Richey's name always need his explicit yes.
 - Before every push, scan the diff for secrets (Richey, 2026-10-19). If the scan finds anything, stop.
+
+## Blender (blender-team)
+
+Owner: blender-team (Blender Boss), link name `blender-team`. Every fact below was checked against the files named, on BLACKBEARD, on 2026-10-19. Read 2Hot2Trot's §3 for the Unreal side; this section is the Blender side.
+
+### 1. Blender on BLACKBEARD
+- **Version and exe:** Blender 4.3.1 (build 2024-12-10), `C:\Program Files\Blender Foundation\Blender 4.3\blender.exe`. Every job script hard-codes this path (`jobs/lod1run.py`, `jobs/chain.py`, `assets/autowave.py`).
+- **Richey's GUI Blender** is that exe launched with no arguments. It runs the add-on **Claude Blender Bridge 1.0.2** (`%APPDATA%\Blender Foundation\Blender\4.3\scripts\addons\claude_blender_bridge\__init__.py`, repo RicheyWorks/claude-blender-connector), which listens on `127.0.0.1:9876` only and autostarts when Blender loads.
+- **Leave the GUI window alone.** The art watcher uses it to open `art\<Kind>\<Asset>.blend` and export (`docs/blender-team-log.md`, `assets/headless.py`). Don't close, restart or reload it, don't open files in it, and never discard unsaved work. If 9876 is down, ask Richey; don't relaunch it yourself.
+- **All factory work runs headless, in its own process:**
+  `"C:\Program Files\Blender Foundation\Blender 4.3\blender.exe" -b --factory-startup --python <script.py> -- <script args>`
+  - `-b` (background) opens no window, UI or splash.
+  - `--factory-startup` ignores Richey's `userpref.blend` and user add-ons, so the headless process never starts a second bridge.
+  - Scripts read their own arguments after `--`.
+  - Jobs launch hidden: `Start-Process ... -WindowStyle Hidden -RedirectStandardOutput <log>` (`jobs/bbisle_final.ps1`), or `subprocess` with `creationflags=0x08000000` (no console; `jobs/lodworker.py`).
+  - Only one heavy headless job runs at a time: `bbisle_final.ps1` waits until no `blender.exe` with ` -b ` remains.
+- **Splash:** Richey's user preferences have the splash turned off (Preferences → Interface → *Splash Screen*; `bpy.context.preferences.view.show_splash` reads `False` from `%APPDATA%\Blender Foundation\Blender\4.3\config\userpref.blend`, checked 2026-10-19). Headless jobs never show one, because `-b` has no UI.
+- **Heavy Blender steps need a window:** no heavy author/export/render without a coordinated window from `pootscoot-coordination`. Check the hub for an active `compute` lock first (`GET http://127.0.0.1:9890/locks`).
+
+### 2. The GUI bridge (127.0.0.1:9876)
+- **Wire format:** one JSON object per line over TCP. Request `{"id": <any>, "type": "<command>", "params": {...}}`. Reply `{"id", "status": "ok", "result"}` or `{"id", "status": "error", "message", "traceback"}`. Commands run on Blender's main thread through an app timer.
+- **Commands:**
+  - `ping`
+  - `get_scene_info` (`limit`, default 200)
+  - `get_object_info` (`name`)
+  - `execute_code` (`code`; whatever the code assigns to `result` is returned, and stdout is captured)
+  - `viewport_screenshot` (`max_size`)
+  - `render_image` (`output_path`, `resolution_percentage`, `max_size`)
+- **A client timeout does not cancel the work.** Blender finishes the call, and the next call waits (`bharness/client.py`).
+- **Read-only check:** `python -m bharness call bridge.ping`. The harness gates every action by risk (READ < SCENE < FILE < DESTRUCTIVE); the CLI default ceiling is SCENE, so FILE work needs `--allow FILE`.
+
+### 3. Where the factory lives
+- **RicheyWorks/blender-harness** (BLACKBEARD `C:\Users\730ri\projects\blender-harness`; tests: `python -m harness.run_all`, 7/7):
+  - `bharness/`
+    - `client.py`: 9876 client.
+    - `local.py`: `LocalBridge`, the same interface run in-process inside `blender -b`.
+    - `contract.py`, `context.py`: gateway and wiring.
+    - `palette.py`: colour names → hex.
+    - `glb.py`: reads a glb with no 3D library.
+    - `plugins/judge.py`: the brief's checks.
+    - `plugins/probe.py`, `plugins/export.py`, `plugins/render.py`, `plugins/queue.py`.
+    - `handoff.py`: `art\jobs\<Asset>.json` contracts.
+    - `bus.py`: the team link client.
+  - `assets/`
+    - `catalog.py`: the mechanics-to-assets map.
+    - `ecospecs.py`, `toolspecs.py`, `worldspecs.py`, `wave*.py`: shape specs.
+    - `runner.py`: `build_one` = build → judge → glb export + self-check → turntable → save.
+    - `headless.py`: the batch entry point, `blender -b --factory-startup --python assets/headless.py -- <repo> <module> [groups] --batch=10 --turntable=4 [--no-send]`.
+  - `jobs/`: the batch scripts, e.g. `lodglb.py` (LOD1) and `bbisle_final.ps1`.
+  - `HANDOFF-SPEC.md`, `BLENDER-LESSONS.md`.
+  - `releases/assets-2026-10-18.*`: manifest of the GitHub release that holds the 4.6 GB of .blend/.glb binaries.
+- **RicheyWorks/Daedalus2:**
+  - `tools/islands/blenderboss/`:
+    - `bbkit.py`, `bbisle.py`, `flagship.py`: the island.
+    - `bba_manifest.py`: LOD manifest.
+    - `bip_glb.py`, `bip_split.py`, `bip_verify.py`, `bip_render_check.py`, `BIP1.md`: packets.
+  - `tools/blender/weapons/`: `rifle_recipe.py` (pure-data recipe), `build_rifle.py` (headless builder), `test_rifle_recipe.py` (11/11).
+  - Data: `data/assets/catalog.bba`, `data/islands/blenderboss/flagship.bip.json`, `data/combat/slice1/*.recipe.json`.
+  - blender-team commits from the worktree `C:\Users\730ri\projects\Daedalus2-bb-wt`, never from the shared `Daedalus2` checkout.
+
+### 4. Units, axes, names (`docs/BLENDER-TEAM-BRIEF.md`, `bharness/plugins/judge.py`)
+- **Units:** 1 Blender unit = 1 m = one cube, with scale applied. Unreal sees centimetres: 1 m = 100 cm (`asset_pipeline/ship.py` `CM_PER_M = 100.0`). The judge allows 1% or 0.01 between file sizes ×100 and the Unreal bounds.
+- **Origin and facing:** origin at the bottom centre. The judge requires min z within 0.01 m of 0 and the x/y centre within 0.05 m of 0. The front faces −Y in Blender.
+- **glTF axes:** glTF is exported +Y up (`export_yup=True`), so Blender (x, y, z) becomes glTF (x, z, −y), and Interchange turns it back into Unreal Z-up.
+- **Names:** `^(Prop|Item|Tool|Wpn|Mob|Veh|Bld|Sky)_[A-Za-z0-9]+(_[A-Za-z0-9]+)*$`, one collection per asset named like the asset, and no spaces in object names.
+- **Triangle budgets** (`judge.BUDGET`):
+
+  | Kind | Max tris |
+  |---|---|
+  | Prop / Item / Tool / Wpn | 3,000 |
+  | Mob | 6,000 |
+  | Veh | 12,000 |
+  | Bld / Sky | 15,000 |
+
+  A slice spec can override a budget, e.g. combat slice 1 allows the rifle 40,000.
+
+### 5. Materials, UVs, collision, LOD
+- **Materials:**
+  - 1 to 3 filled slots, flat colour, no image textures.
+  - Colours come by name from `bharness/palette.py` (block colours, ores, misc; for example `wood` 9A6B3F, `steel` C9D4E0, `starmetal` 7FE3FF). An unknown name is an error.
+  - The sRGB→linear conversion is `(c/255)^2.2`.
+  - `crystal`, `starmetal` and `portal` glow (emission).
+  - The weapon builder names its slots `<Asset>_M<slot>`.
+- **UVs:** we don't unwrap, bake or ship textures, so nothing should depend on our UVs, and we make no lightmap UVs. `bip_split.py` keeps whatever UVs the source has.
+- **Collision:** our exports have **no** `UCX_`/`UBX_`/`USP_`/`UCP_` meshes today. `combat_handoff.py` requires them only for the `environment` role (Env_Slice1_Arena: `min_hulls 4`), which would be new blender-team work. Ask for it in the spec.
+- **LOD** (ADR-062, `docs/adr/ADR-062-asset-lod-manifest.md`):
+  - `jobs/lodglb.py` makes `<Asset>_LOD1.glb`: it keeps the largest loose parts until about 60% of the faces remain, then applies a 0.5 decimate to any mesh still over 2,000 tris.
+  - `bba_manifest.py` writes `data/assets/catalog.bba`, one line per asset: `asset <id> lod0 <faces> lod1 <faces|-> radius <cm> switch <cm>`. The file currently has 5,605 assets, all with LOD1.
+  - The switch distance is 20 bounding radii, never less than 5 m.
+  - Parity: `DaedalusAssetLodCore.h` (C++17, header only) and Java `AssetLodManifest` agree byte for byte.
+  - Unreal side: `DaedalusLink/Content/Python/daedalus_lod.py` sets LOD 1's screen size to 1.778·r/d (0.089 at 20 radii).
+
+### 6. Export settings (from the code)
+- **bharness / catalog assets** (`bharness/plugins/export.py`): `export_scene.gltf(export_format="GLB", use_selection=True, export_apply=True, export_yup=True, export_materials="EXPORT", export_animations=False)`. It selects **only the MESH objects** in the asset's collection, so empties and sockets are not exported. The glb is then re-read and checked against Blender's own numbers (tris, slots, sizes).
+- **Weapons / socketed assets** (`tools/blender/weapons/build_rifle.py`): `export_format="GLB", export_yup=True, export_apply=True, export_extras=True`, with no selection filter. Sockets are empties parented to the mesh, named `SOCKET_<Name>`, and become glTF nodes. It also saves the `.blend` and a `build_report.json` (tris read back, dimensions, socket names). It refuses an `--out` path containing an `art` folder unless `--allow-art` is passed.
+- **LOD1 and flagship:** `use_selection=True, export_apply=True`, with the defaults otherwise (GLB, +Y up).
+- **FBX:** blender-team does not ship FBX. Other teams' `tools/blender/voxel_*.py` and `hd_island.py` use `export_scene.fbx(apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z")`.
+
+### 7. BIP 1 packets (`tools/islands/blenderboss/BIP1.md`)
+- **Split:** `python bip_split.py <island.glb> <packet dir> <manifest.json>`. It is pure numpy, needs no Blender, and is deterministic (byte-identical on rerun).
+  - Terrain and underside are cut into a quadtree by triangle centroid (leaf target 6,000 tris; no triangle is cut).
+  - Props become a deduplicated mesh library plus placements.
+- **Hard caps per packet:** 12,000 tris, 1,572,864 bytes (1.5 MiB), 64 materials. The splitter refuses to write a packet over any cap.
+- **Verify:** `python bip_verify.py <manifest> <packet dir> [source.glb] [--rebuild]` recomputes sizes, sha256, tris, bounds, index ranges, caps and placement refs. `bip_render_check.py` compares top-down renders of the source and the reassembled packets.
+- **Flagship:** 67 packets (28 terrain + 39 prop), manifest `data/islands/blenderboss/flagship.bip.json`, packets in `bot-team\art\packets\flagship\` (outside the watched `art\glb`).
+  - They are **frozen**: no regeneration and no import outside a claimed turn by the sole Unreal writer.
+  - Import order: terrain first, then the prop library, then placements.
+
+### 8. Handoff protocol: asking blender-team for an asset
+1. **Write a spec** (JSON, one asset):
+   ```json
+   {"request_id": "<stable id>", "asset": "Kind_Name", "kind": "Prop|Item|Tool|Wpn|Mob|Veh|Bld|Sky",
+    "size_m": [x, y, z], "tri_cap": 0, "sockets": ["Name"], "palette": ["wood", "steel"],
+    "lod": "LOD0 only | LOD1 via lodglb.py", "collision": "none | UCX_ hulls: N", "seed": 0,
+    "front": "-Y", "origin": "bottom centre", "notes": "..."}
+   ```
+   `size_m` is Blender x, y, z in metres; `tri_cap` is at most the Kind budget unless your spec overrides it.
+2. **Send it** on the team link, per `bot-team\BOARD\COMMS-STANDARD.md`:
+   - `POST http://127.0.0.1:9890/send` with `{"from": "unreal-epic-boss", "to": "blender-team", "type": "note", "body": {"request_id": "...", "text": "NEED ...", "spec": {...}}}`.
+   - One recipient per message (a `*` broadcast never wakes a Grok bot) and a first word of NEED.
+   - Put a long spec in a file and send its path + sha256.
+3. **What blender-team hands back** (a reply to your message id):
+   - the staged `.glb` path (outside watched `art\`), with its sha256 and bytes;
+   - the `.blend`;
+   - the recipe/manifest (`*.recipe.json`) and `build_report.json`;
+   - a render when the asset has one (`art\promo\<Asset>\` turntables come from the catalog runner);
+   - the QUEUE row number when the asset goes onto the board.
+   - We never mark READY ourselves for spec work.
+4. **Receiving gate (your side, before anything enters `art\glb` or Unreal):**
+   - Re-hash the glb and compare it to the sha we sent.
+   - Run `python -m asset_pipeline.combat_handoff --spec <spec.json> --folder <staging dir> --out <dir>` in `connectors/claude-asset-pipeline`, **without `--import`**, for sockets and triangle caps.
+   - Check sizes with `bharness.glb.summarize(bharness.glb.read_json(path))` (per-mesh `dims` in metres, largest first; ×100 = Unreal cm).
+   - Import only inside a claimed Unreal turn by the sole writer (2Hot2Trot §3).
+   - Close the request with ACK, then DONE or BLOCKED.
+
+### 9. Practice task: Prop_PracticeCrate
+1. **UEB sends a spec** to=blender-team, with request_id `ueb-practice-crate-<date>`. The filled example:
+   ```json
+   {"request_id": "ueb-practice-crate-20261019", "asset": "Prop_PracticeCrate", "kind": "Prop",
+    "size_m": [0.52, 0.52, 0.5], "tri_cap": 500, "sockets": ["Top"], "palette": ["wood", "dark"],
+    "lod": "LOD0 only", "collision": "none", "seed": 0, "front": "-Y", "origin": "bottom centre",
+    "notes": "0.5 m cube body in wood plus two 0.52 m dark bands at z 0.10 and 0.40; SOCKET_Top at (0, 0, 0.5) m"}
+   ```
+2. **blender-team builds it headless.** The crate becomes a `build_rifle.py`-format recipe: body box 0.5 m centred at z 0.25 (slot 0); bands 0.52 × 0.52 × 0.06 m at z 0.10 and 0.40 (slot 1); a bevelled box is 44 tris, so 132 tris predicted. The build runs `blender -b --factory-startup --python tools/blender/weapons/build_rifle.py -- --manifest <crate.recipe.json> --out <staging dir outside art\>`. It waits for any active `compute` lock and needs no GUI.
+3. **UEB checks the export against the spec** and replies DONE (all pass) or BLOCKED (the failed check):
+
+   | Check | Expect |
+   |---|---|
+   | sha256 / bytes | equal what blender-team posted |
+   | triangles | 132 (≤ 500) |
+   | socket | node `SOCKET_Top`; glTF location (0, 0.5, 0) = Blender (0, 0, 0.5) m |
+   | size | 0.52 × 0.52 × 0.5 m → 52 × 52 × 50 cm in Unreal |
+   | materials | 2 slots: `Prop_PracticeCrate_M0` wood 9A6B3F, `_M1` dark 4A4D57 |
+
+   For the socket and triangle checks, use a practice spec with `"schema": "combat-slice/v1"`, `"assets": [{"name": "Prop_PracticeCrate", "role": "weapon", "sockets": ["Top"], "max_triangles": 500}]`. `weapon` is the only role that checks sockets.

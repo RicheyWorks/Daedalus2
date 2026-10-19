@@ -1,0 +1,434 @@
+{
+ "care": {
+  "chillPenaltyEvery": 3,
+  "crackAt": 6,
+  "hatchAt": 16,
+  "hatchingAt": 12,
+  "perfectCareShinyMultiplier": 2.0,
+  "warmMax": 39.0,
+  "warmMin": 36.0
+ },
+ "eggs": {
+  "Amethyst": {
+   "hatch": {
+    "bee": 2,
+    "bird": 2,
+    "insect": 2
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Bark": {
+   "hatch": {
+    "animal": 2,
+    "bird": 2,
+    "insect": 2
+   },
+   "pattern": "stripe",
+   "rarity": "common"
+  },
+  "Bauble": {
+   "hatch": {
+    "animal": 3,
+    "bird": 2
+   },
+   "pattern": "bands",
+   "rarity": "rare"
+  },
+  "Bone": {
+   "hatch": {
+    "dino": 3,
+    "zombie": 2
+   },
+   "pattern": "zigzag",
+   "rarity": "rare"
+  },
+  "Bronze": {
+   "hatch": {
+    "animal": 3,
+    "bird": 1
+   },
+   "pattern": "bands",
+   "rarity": "common"
+  },
+  "Candy": {
+   "hatch": {
+    "animal": 3,
+    "bird": 2
+   },
+   "pattern": "spiral",
+   "rarity": "common"
+  },
+  "Chocolate": {
+   "hatch": {
+    "animal": 4
+   },
+   "pattern": "solid",
+   "rarity": "common"
+  },
+  "Cloud": {
+   "hatch": {
+    "bee": 1,
+    "bird": 4
+   },
+   "pattern": "solid",
+   "rarity": "rare"
+  },
+  "Copper": {
+   "hatch": {
+    "animal": 3,
+    "insect": 2
+   },
+   "pattern": "bands",
+   "rarity": "common"
+  },
+  "Coral": {
+   "hatch": {
+    "fish": 1,
+    "sea": 4
+   },
+   "pattern": "dots",
+   "rarity": "rare"
+  },
+  "Crystal": {
+   "hatch": {
+    "bee": 2,
+    "insect": 2,
+    "plant": 1
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Diamond": {
+   "hatch": {
+    "animal": 2,
+    "dino": 2,
+    "sea": 1
+   },
+   "pattern": "facet",
+   "rarity": "legendary"
+  },
+  "Dino": {
+   "hatch": {
+    "dino": 5
+   },
+   "pattern": "speckle",
+   "rarity": "rare"
+  },
+  "Dragon": {
+   "hatch": {
+    "dino": 4
+   },
+   "pattern": "facet",
+   "rarity": "legendary"
+  },
+  "Easter_Painted": {
+   "hatch": {
+    "animal": 3,
+    "bird": 3
+   },
+   "pattern": "zigzag",
+   "rarity": "common"
+  },
+  "Emerald": {
+   "hatch": {
+    "animal": 2,
+    "insect": 2,
+    "plant": 2
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Galaxy": {
+   "hatch": {
+    "bird": 1,
+    "dino": 2,
+    "sea": 2
+   },
+   "pattern": "speckle",
+   "rarity": "ultra"
+  },
+  "Glow": {
+   "hatch": {
+    "insect": 3,
+    "plant": 2
+   },
+   "pattern": "speckle",
+   "rarity": "rare"
+  },
+  "Gold": {
+   "hatch": {
+    "animal": 3,
+    "bird": 2,
+    "dino": 1
+   },
+   "pattern": "solid",
+   "rarity": "legendary"
+  },
+  "Heartstone": {
+   "hatch": {
+    "animal": 2,
+    "bird": 2,
+    "dino": 2
+   },
+   "pattern": "marble",
+   "rarity": "ultra"
+  },
+  "Honeycomb": {
+   "hatch": {
+    "bee": 5,
+    "insect": 1
+   },
+   "pattern": "dots",
+   "rarity": "common"
+  },
+  "Ice": {
+   "hatch": {
+    "animal": 2,
+    "bird": 2,
+    "sea": 1
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Iron": {
+   "hatch": {
+    "animal": 2,
+    "insect": 2,
+    "zombie": 1
+   },
+   "pattern": "solid",
+   "rarity": "common"
+  },
+  "Lava": {
+   "hatch": {
+    "dino": 3,
+    "zombie": 1
+   },
+   "pattern": "marble",
+   "rarity": "legendary"
+  },
+  "Leather": {
+   "hatch": {
+    "animal": 3,
+    "dino": 1
+   },
+   "pattern": "solid",
+   "rarity": "common"
+  },
+  "Linen": {
+   "hatch": {
+    "animal": 2,
+    "bird": 3
+   },
+   "pattern": "stripe",
+   "rarity": "common"
+  },
+  "Marble": {
+   "hatch": {
+    "animal": 2,
+    "sea": 2
+   },
+   "pattern": "marble",
+   "rarity": "common"
+  },
+  "Moss": {
+   "hatch": {
+    "animal": 1,
+    "insect": 2,
+    "plant": 3
+   },
+   "pattern": "speckle",
+   "rarity": "common"
+  },
+  "Obsidian": {
+   "hatch": {
+    "animal": 1,
+    "dino": 2,
+    "zombie": 2
+   },
+   "pattern": "solid",
+   "rarity": "rare"
+  },
+  "Opal": {
+   "hatch": {
+    "animal": 1,
+    "bird": 2,
+    "dino": 1,
+    "sea": 2
+   },
+   "pattern": "marble",
+   "rarity": "legendary"
+  },
+  "Pearl": {
+   "hatch": {
+    "fish": 2,
+    "sea": 4
+   },
+   "pattern": "solid",
+   "rarity": "rare"
+  },
+  "Platinum": {
+   "hatch": {
+    "animal": 2,
+    "bird": 3
+   },
+   "pattern": "solid",
+   "rarity": "legendary"
+  },
+  "Pumpkin": {
+   "hatch": {
+    "animal": 2,
+    "insect": 1,
+    "zombie": 2
+   },
+   "pattern": "stripe",
+   "rarity": "rare"
+  },
+  "Rainbow": {
+   "hatch": {
+    "animal": 2,
+    "bird": 2,
+    "dino": 1,
+    "insect": 1,
+    "sea": 1
+   },
+   "pattern": "bands",
+   "rarity": "ultra"
+  },
+  "Robin": {
+   "hatch": {
+    "bird": 5
+   },
+   "pattern": "speckle",
+   "rarity": "common"
+  },
+  "Ruby": {
+   "hatch": {
+    "animal": 3,
+    "bird": 2,
+    "dino": 1
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Sand": {
+   "hatch": {
+    "animal": 2,
+    "sea": 2
+   },
+   "pattern": "dots",
+   "rarity": "common"
+  },
+  "Sapphire": {
+   "hatch": {
+    "bird": 1,
+    "fish": 2,
+    "sea": 3
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Sea": {
+   "hatch": {
+    "fish": 3,
+    "sea": 4
+   },
+   "pattern": "marble",
+   "rarity": "common"
+  },
+  "Shadow": {
+   "hatch": {
+    "insect": 1,
+    "zombie": 3
+   },
+   "pattern": "spiral",
+   "rarity": "rare"
+  },
+  "Silk": {
+   "hatch": {
+    "bird": 3,
+    "insect": 3
+   },
+   "pattern": "spiral",
+   "rarity": "rare"
+  },
+  "Silver": {
+   "hatch": {
+    "animal": 3,
+    "bird": 3
+   },
+   "pattern": "solid",
+   "rarity": "rare"
+  },
+  "Speckled": {
+   "hatch": {
+    "bird": 5
+   },
+   "pattern": "speckle",
+   "rarity": "common"
+  },
+  "Starmetal": {
+   "hatch": {
+    "animal": 1,
+    "dino": 3,
+    "sea": 1
+   },
+   "pattern": "facet",
+   "rarity": "ultra"
+  },
+  "Stone": {
+   "hatch": {
+    "animal": 2,
+    "zombie": 1
+   },
+   "pattern": "speckle",
+   "rarity": "common"
+  },
+  "Topaz": {
+   "hatch": {
+    "animal": 3,
+    "bird": 3
+   },
+   "pattern": "facet",
+   "rarity": "rare"
+  },
+  "Velvet": {
+   "hatch": {
+    "animal": 3,
+    "bee": 1
+   },
+   "pattern": "solid",
+   "rarity": "rare"
+  },
+  "Wool": {
+   "hatch": {
+    "animal": 4
+   },
+   "pattern": "dots",
+   "rarity": "common"
+  },
+  "Zombie": {
+   "hatch": {
+    "zombie": 5
+   },
+   "pattern": "marble",
+   "rarity": "rare"
+  }
+ },
+ "note": "hatch pools name voxel_creatures families; the game rolls a species from the family by the realm's ecology (PORT06 egg stages)",
+ "rarity_odds": {
+  "common": 0.7,
+  "legendary": 0.07,
+  "rare": 0.22,
+  "ultra": 0.01
+ },
+ "shiny_odds": 0.02,
+ "source": "tools/blender/voxel_eggs.py manifest() (Claude egg props, PORT06/WZ24); care block added by art-master-flex for gap G06",
+ "stages": [
+  "Intact",
+  "Cracked",
+  "Hatching"
+ ],
+ "version": 1
+}
