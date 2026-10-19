@@ -57,3 +57,9 @@ Cinder Key (9, 12).
   and WEB01's mycorrhizal links. Refuge cover uses the battlefield `Vegetation` bands.
 - Assets: `Prop_Sky_Raft` (stepping-stone raft), `Prop_Census_Board` (Vale's tally board with 40 pegs), and existing
   sky-island tiles (see UNREAL-QUEUE / BLENDER-ASKS).
+- Staged by blender-team (NOT READY) in `bot-team\staging\g119-island-biogeography-20261019` (D2 9b435b44e, builder
+  `tools/blender/contest/sky_g119.py`): `Prop_Sky_Raft` (seven lashed logs, 3 m, mast and kite; `SOCKET_Mooring` on the
+  bow post at deck + 0.3 m, `SOCKET_Deck`), `Prop_Census_Board` (1.5 m; 40 peg holes in a 4 x 10 grid,
+  `SOCKET_Peg_00`..`SOCKET_Peg_39` = the pool of 40; GoalRail mark after peg 18 = the THRIVING census, FragileNotch
+  after peg 14 = 75% of it; `SOCKET_Text`) and `Prop_Census_Peg` (`SOCKET_Grip`; seats 3 cm into a hole along the
+  socket axis). Bind: peg i is filled when i < round(`Report.census`). Islands themselves are not built yet.
