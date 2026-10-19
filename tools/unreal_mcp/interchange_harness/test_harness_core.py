@@ -139,7 +139,7 @@ class EvaluateTests(Base):
 
     def facts(self, **kw):
         f = {"inventory": ["a", "b"], "materials": [{"slot": "Crate_M0"}], "tris_lod0": 12, "bounds_min_cm": [0, 0, 0], "bounds_max_cm": [1, 1, 1.1],
-             "nanite": True, "collision": {"convex": 1}, "sockets": [{"name": "Top"}]}
+             "nanite": True, "collision": {"convex": 1}, "sockets": [{"name": "Top", "location_cm": [0, 0, 50], "rotation_pyr": [0, 0, 0]}]}
         f.update(kw)
         return f
 
@@ -282,6 +282,63 @@ class CollisionAndLightmapTests(Base):
         cnt = src[src.index("def _simple_count"):src.index("def strip_simple_collision")]
         self.assertIn('"convex_elems"', cnt)
         self.assertNotIn("get_simple_collision_count(mesh)", cnt)  # excludes convex in 5.8
+
+
+class SidecarRotationTests(Base):
+    """Sidecar is the rotation carrier; native socket kept, rotation from sidecar if position within 0.5 cm."""
+
+    def plan(self, **ov):
+        g = self.glb(make_glb(ucx=False))
+        self.side({"units": "cm", "sockets": [{"name": "SOCKET_Top", "parent": "Crate", "location": [0, 0, 50], "rotation": [0, 90, 0]}]})
+        p = h.build_plan(g, "/Game/T", "Crate", checkpoint="cp.json", overrides=ov)
+        p["expect"] = {}
+        return p
+
+    def facts(self, loc=(0, 0, 50), rot=(0, 90, 0)):
+        return {"mesh_found": True, "nanite": True, "sockets": [{"name": "Top", "location_cm": list(loc), "rotation_pyr": list(rot)}]}
+
+    def test_default_on_and_opt_out(self):
+        self.assertTrue(self.plan()["options"]["sidecar_rotation"])
+        self.assertFalse(self.plan(sidecar_rotation=False)["options"]["sidecar_rotation"])
+
+    def test_position_tolerance(self):
+        self.assertTrue(h.socket_position_ok([0, 0, 50.4], [0, 0, 50]))
+        self.assertFalse(h.socket_position_ok([0, 0, 50.6], [0, 0, 50]))
+        self.assertFalse(h.socket_position_ok([], [0, 0, 50]))
+
+    def test_rotation_wrap(self):
+        self.assertTrue(h.rotation_close([0, 180, -90], [0, -180, -90]))
+        self.assertTrue(h.rotation_close([-90, 0, 0], [-90.01, 0, 360]))
+        self.assertFalse(h.rotation_close([0, 180, -90], [-90, 0, 0]))
+        self.assertFalse(h.rotation_close(None, [0, 0, 0]))
+
+    def test_evaluate_passes_with_sidecar_rotation(self):
+        r = h.evaluate(self.plan(), {"done": True}, self.facts())
+        self.assertTrue(r["ok"], r)
+        self.assertTrue(r["checks"]["socket_rotations"])
+
+    def test_native_basis_artefact_fails(self):
+        r = h.evaluate(self.plan(), {"done": True}, self.facts(rot=(0, 180, -90)))
+        self.assertFalse(r["checks"]["socket_rotations"])
+        self.assertFalse(r["ok"])
+
+    def test_position_mismatch_fails(self):
+        r = h.evaluate(self.plan(), {"done": True}, self.facts(loc=(0, 0, 51)))
+        self.assertFalse(r["checks"]["socket_positions"])
+
+    def test_opt_out_skips_rotation_checks(self):
+        r = h.evaluate(self.plan(sidecar_rotation=False), {"done": True}, self.facts(rot=(0, 180, -90)))
+        self.assertNotIn("socket_rotations", r["checks"])
+        self.assertTrue(r["ok"], r)
+
+    def test_ue_harness_existing_socket_branch(self):
+        with open(os.path.join(HERE, "ue_harness.py"), encoding="utf-8") as fh:
+            src = fh.read()
+        body = src[src.index("def add_sockets"):src.index("def set_nanite")]
+        kept = body[body.index("if s[\"name\"] in existing:"):body.index("continue")]
+        self.assertLess(kept.index("socket_position_ok("), kept.index('set_editor_property("relative_rotation"'))
+        for k in ("native_rotation_pyr", "sidecar_rotation_pyr", "sidecar_rotation"):
+            self.assertIn(k, kept)
 
 
 class TerrainProfileTests(Base):
