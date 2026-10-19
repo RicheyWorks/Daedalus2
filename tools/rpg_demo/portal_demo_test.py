@@ -68,12 +68,15 @@ def main(argv):
 
                 def title(realm):
                     page.goto(urls[realm])
-                    page.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded()", timeout=15000)
+                    page.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded() && document.getElementById('status').hidden", timeout=15000)
+                    # mode starts as title before boot finishes loading its images.
+                    page.evaluate("() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))")
 
                 def new_game(realm):
                     title(realm)
                     bot.press("a", 400)
-                    check(realm + " name entry", bot.st()["mode"] == "name")
+                    page.wait_for_function("PRISM_DEMO.state().mode === 'name'", timeout=5000)
+                    check(realm + " name entry", bot.st()["mode"] == "name", bot.st()["mode"])
                     page.keyboard.press("Enter")
                     page.wait_for_timeout(1300)
                     bot.clear()
@@ -210,6 +213,14 @@ def main(argv):
                 page.evaluate("s => localStorage.setItem('portal.save.v1',s)", portal_raw)
                 check("no browser script errors", not errors, errors)
                 context.close()
+            except Exception:
+                try:
+                    page.screenshot(path=str(evidence / "portal-failure.png"))
+                    (evidence / "failure-state.json").write_text(json.dumps({"state": bot.st(), "page_errors": errors,
+                        "boot_status": page.locator("#status").text_content(), "url": page.url}, indent=2) + "\n", encoding="utf-8")
+                except Exception as diagnosis:
+                    print("Failure capture: " + str(diagnosis), flush=True)
+                raise
             finally:
                 browser.close()
     finally:
