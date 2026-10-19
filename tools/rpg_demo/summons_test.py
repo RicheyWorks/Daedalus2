@@ -52,6 +52,10 @@ with sync_playwright() as p:
                 PrismSummons.damage(s, { def: 0 }, { int: 0 }, 1), PrismSummons.damage(s, { weak: 'fire', def: 0 }, { int: 0 }, 1)]; })()""" % json.dumps([D["dungeons"][0]["boss_data"]]))
     check("weak spot x2, same element x0.5, damage doubles on a weak spot", rz[:3] == [2, 0.5, 1] and abs(rz[4] - 2 * rz[3]) <= 1, rz)
 
+    guard = ev("""[PrismSummons.realmAllowed('prism'), PrismSummons.realmAllowed(undefined), PrismSummons.realmAllowed('portal'),
+        PrismSummons.realmAllowed('PortalRealm'), PrismSummons.table(%s, 'portal').length, PrismSummons.table(%s, 'prism').length]""" % (json.dumps([D["dungeons"][0]["boss_data"]]), json.dumps([D["dungeons"][0]["boss_data"]])))
+    check("realm guard (realm_key): Prism builds get spirits, Portal and other realms get none", guard == [True, True, False, False, 0, 1], guard)
+
     # --- before any Warden falls
     check("a fight with a Gloomspore starts", bot.start_fight(["prism_best_gloomspore"]))
     check("no SUMMON before a Warden falls", ev("PRISM_DEMO.summons()")["cmds"] == ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"])
