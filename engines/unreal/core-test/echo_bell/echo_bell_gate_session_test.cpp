@@ -212,10 +212,10 @@ int main(int argc, char** argv) {
 
     // 2b. Prometheus's oracle (48496): 7 bells, gain 0.6 / 0.3 passing (gap <= 750 ms),
     // echo = ring + 200 + 70 x depth, window 140/120/100/80 by difficulty, x1.5 with crickets.
-    // Hz within 0.001 of the oracle set: the core rounds G3/F4 to 195.997/349.227 (as peals.ebg and
-    // the CUE-SHEET tables do) where the oracle list prints 195.998/349.228.
+    // Hz exactly (to 3 decimals) the canonical CUE-SHEET pitch set (Prometheus b0fe754f):
+    // G3 195.997 and F4 349.227, the core's round(146.832 x 2^(semis/12)) output.
     {
-        const double bells[7] = {146.832, 174.614, 195.998, 219.999, 261.625, 293.664, 349.228};
+        const double bells[7] = {146.832, 174.614, 195.997, 219.999, 261.625, 293.664, 349.227};
         const int windows[4] = {140, 120, 100, 80};
         bool hzOk = true, gainOk = true, echoOk = true, winOk = true, cueOk = true;
         for (int64_t seed = -500; seed < 500; ++seed) {
@@ -228,7 +228,7 @@ int main(int argc, char** argv) {
                     int last = 0;
                     for (const EchoRing& r : s.GetGate()->GetRings()) {
                         bool near = false;
-                        for (double b : bells) near = near || std::abs(r.Hz - b) <= 0.0010001;
+                        for (double b : bells) near = near || std::abs(r.Hz - b) < 0.0000005;
                         hzOk = hzOk && near;
                         gainOk = gainOk && r.Gain == (r.RingMs - last <= 750 ? 0.3 : 0.6);
                         echoOk = echoOk && r.EchoMs == r.RingMs + 200 + 70 * r.DepthCells;
@@ -237,13 +237,13 @@ int main(int argc, char** argv) {
                     for (const EchoCue& q : s.GetCues()) {
                         if (q.Kind == EchoCueKind::Cricket) { cueOk = cueOk && q.Gain <= 0.2 && crk; continue; }
                         bool near = false;
-                        for (double b : bells) near = near || std::abs(q.Hz - b) <= 0.0010001;
+                        for (double b : bells) near = near || std::abs(q.Hz - b) < 0.0000005;
                         cueOk = cueOk && near && q.Gain <= 0.6;
                     }
                 }
             }
         }
-        Check(hzOk, "oracle: every bell within 0.001 Hz of the 7-bell set (8000 peals)");
+        Check(hzOk, "oracle: every bell exactly on the CUE-SHEET 7-bell set, G3 195.997 / F4 349.227 (8000 peals)");
         Check(gainOk, "oracle: gain 0.6, 0.3 for passing notes (gap <= 750 ms)");
         Check(echoOk, "oracle: echoMs = ring + 200 + 70 x depth");
         Check(winOk, "oracle: window 140/120/100/80 by difficulty, x1.5 with crickets");
