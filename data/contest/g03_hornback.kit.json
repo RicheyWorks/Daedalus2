@@ -350,7 +350,7 @@
     "collision_tris": 12
    },
    "schema": "blender-kit/v1",
-   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y (yaw 90 from UE +X) unless rotated at export or placement: convention under review",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
    "status": "STAGED NOT READY",
    "unreal": {
     "nanite": "on by default on the UE side (unreal-epic-boss)",

@@ -27,7 +27,7 @@ combat, Zelda II sword play, Ghost hover bikes.
 |---|---|
 | **Metres, 1 Blender unit = 1 m = one cube.** Apply scale (Ctrl+A → Scale) before export. | The judge compares sizes in cm after import; unapplied scale gets baked per object and fails |
 | **Origin at the bottom centre** (where it stands on the ground). | Things are placed on cube tops |
-| **Facing −Y in Blender** (Blender's front view). | Unreal's forward after the Y/Z swap |
+| **Facing −Y in Blender** (Blender's front view). | Stock UE glTF Interchange maps UE = 100·(x, −y, z), so the front lands on **UE +Y**. Glbs are not rotated at export; placement faces them with actor/component yaw −90, as with the UE mannequin (buffffff 48769). Exception: an asset whose UE attach code needs mesh +X forward (weapon/character attach) is raised by unreal-epic-boss and revisited on its own. |
 | **Modifiers are fine**: they are applied on export. | |
 | **Triangle budget:** props ≤ 3k, creatures ≤ 6k, vehicles ≤ 12k, buildings ≤ 15k. | A metaverse full of players |
 | **Materials: 1 to 3 slots, flat colours (vertex colour or one base colour each).** No image textures yet. | Matches the voxel look; the judge counts slots and they must survive import |
