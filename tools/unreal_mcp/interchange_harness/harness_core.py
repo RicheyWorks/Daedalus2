@@ -11,7 +11,8 @@ live run of item e, PR197):
 * Reuse-existing-materials and create-new-materials are SEPARATE switches.
 * Nanite is ON by default in UE 5.8 for static meshes; a per-asset override turns it off
   (terrain_33 and any packet that says off). Masked/translucent materials are flagged.
-* Stock glTF Interchange drops SOCKET_ empties: sockets come from <Asset>.sockets.json.
+* Stock UE 5.8 glTF Interchange keeps SOCKET_ empties as native sockets (SOCKET_Top -> Top). The
+  <Asset>.sockets.json sidecar is a cross-check and carries the socket rotation.
 * UCX_ children become convex collision; hull extent is read via export_text.
 * Material instances can stay dirty after the first save: save loops until clean (max 3).
 """
