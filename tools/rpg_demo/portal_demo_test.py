@@ -42,7 +42,10 @@ def main(argv):
         def log_message(self, *args):
             pass
 
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=str(root)))
+    class AssetServer(http.server.ThreadingHTTPServer):
+        request_queue_size = 32  # simultaneous scripts, controller JSON and real atlas images
+
+    server = AssetServer(("127.0.0.1", 0), functools.partial(Quiet, directory=str(root)))
     threading.Thread(target=server.serve_forever, daemon=True).start()
     origin = "http://127.0.0.1:%d" % server.server_port
     urls = {"portal": origin + "/" + quote(portal.relative_to(root).as_posix()) + "/index.html",
@@ -63,19 +66,33 @@ def main(argv):
                   };
                 })();""")
                 page = context.new_page()
-                page.on("pageerror", lambda error: errors.append(str(error)))
                 def request_info(url, **detail):
                     parsed = urlsplit(url)
                     network.append({"host": parsed.hostname, "path": parsed.path, **detail})
-                page.on("requestfailed", lambda request: request_info(request.url, failure=request.failure))
-                page.on("response", lambda response: request_info(response.url, status=response.status))
+                def observe(pg):
+                    pg.on("pageerror", lambda error: errors.append(str(error)))
+                    pg.on("requestfailed", lambda request: request_info(request.url, failure=request.failure))
+                    pg.on("response", lambda response: request_info(response.url, status=response.status))
+                observe(page)
                 bot = Bot(page, data)
+                current_realm = None
 
                 def title(realm):
+                    nonlocal page, bot, current_realm
+                    if current_realm is not None and realm != current_realm:
+                        # Close the old page's in-flight media fetches before changing realms.
+                        # Storage remains in this exact context and origin; never create a fresh context.
+                        page.close()
+                        page = context.new_page()
+                        observe(page)
+                        bot = Bot(page, data)
+                    current_realm = realm
                     page.goto(urls[realm])
                     page.wait_for_function("window.PRISM_DEMO && PRISM_DEMO.state().mode === 'title' && PRISM_DEMO.settings().loaded() && document.getElementById('status').hidden", timeout=45000)
                     # mode starts as title before boot finishes loading its images.
                     page.evaluate("() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))")
+                    check(realm + " shares the original HTTP origin and browser context", page.context is context
+                          and page.evaluate("location.origin") == origin)
 
                 def new_game(realm):
                     title(realm)
