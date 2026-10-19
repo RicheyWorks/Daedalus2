@@ -154,6 +154,19 @@ public final class ArkDrydock {
         public Inspection {
             reasons = List.copyOf(reasons);
         }
+
+        /** ADK 1 single-line encoding, stable for the C++ parity test and the link. */
+        public String encode() {
+            StringBuilder r = new StringBuilder();
+            for (Reason x : reasons) {
+                if (r.length() > 0) {
+                    r.append(',');
+                }
+                r.append(x.name());
+            }
+            return "ADK 1 ready=" + (ready ? 1 : 0) + " integrity=" + integrity + " water=" + waterNeedDl + " berths="
+                    + berthsUsed + " reasons=" + (r.length() == 0 ? "-" : r) + " step=" + questStep(this) + " line=" + line;
+        }
     }
 
     /** Shards an ark may sail for (the realm's other islands). */
