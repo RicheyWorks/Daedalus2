@@ -124,7 +124,7 @@ public final class BuzzGarden {
         return sum;
     }
 
-    /** The best matching (flower index per bee) over all 24. */
+    /** The best matching (flower index per bee) over all 24; ties keep the first in generation order (deterministic). */
     public List<Integer> best() {
         List<Integer> bestM = null;
         int bestScore = -1;

@@ -21,6 +21,26 @@ class BuzzGardenTest {
         }
     }
 
+    @Test void solverMatchesIndependentBruteForceAndIsDeterministic() {
+        for (long s = 0; s < 300; s++) {
+            BuzzGarden g = BuzzGarden.seeded(s);
+            int brute = -1;
+            for (int a = 0; a < 4; a++) {
+                for (int b = 0; b < 4; b++) {
+                    for (int c = 0; c < 4; c++) {
+                        int d = 6 - a - b - c;
+                        if (a == b || a == c || b == c || d < 0 || d > 3 || d == a || d == b || d == c) {
+                            continue;
+                        }
+                        brute = Math.max(brute, g.total(List.of(a, b, c, d)));
+                    }
+                }
+            }
+            assertThat(g.total(g.best())).as("seed %d", s).isEqualTo(brute);
+            assertThat(BuzzGarden.seeded(s).best()).isEqualTo(g.best());
+        }
+    }
+
     @Test void pollenFallsWithMismatch() {
         assertThat(BuzzGarden.pollen(300, 300)).isEqualTo(100);
         assertThat(BuzzGarden.pollen(325, 300)).isEqualTo(61);
