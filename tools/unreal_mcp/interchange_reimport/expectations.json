@@ -53,7 +53,10 @@
                 52,
                 52,
                 50
-            ]
+            ],
+            "ue_lod0_tris": {
+                "nanite_off": 132
+            }
         },
         "B": {
             "bytes": 18576,
@@ -69,7 +72,11 @@
                 52,
                 53,
                 50
-            ]
+            ],
+            "ue_lod0_tris": {
+                "nanite_off": 264,
+                "nanite_on_fallback": 256
+            }
         }
     },
     "reimport_must": [
