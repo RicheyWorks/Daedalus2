@@ -76,7 +76,7 @@ class FirstWeekParityTest {
             out.add("d s=" + seed + " d=" + d + " w=" + (k == FirstWeek.Water.CLEAN ? "CLEAN:" : "RAW:") + wo + " v=" + vo + " extra=" + extra
                     + " cook=" + r + ":" + (cooked ? "1" : "0") + " eat=" + eo + " tonic=" + tn + " mid=" + mid + " day=" + day(dy)
                     + " q=" + w.quest().stepIndex() + "/" + w.quest().stepCount() + " said=" + said + " line=" + WickLines.line(w)
-                    + " water=" + p.count("water") + " raw=" + p.count("raw_water"));
+                    + " water=" + (int) p.count("water") + " raw=" + (int) p.count("raw_water"));
         }
         FirstWeek.Outcome z = w.drink("z", FirstWeek.Water.CLEAN, p);
         out.add("end s=" + seed + " late=" + z + " lost=" + (w.lost() ? "1" : "0") + " health=" + w.health() + " done="
