@@ -58,6 +58,7 @@ int main()
 	}
 	std::string Body, Why;
 	Check("unknown herb refused", !BuildRequest({ "Doleaf", "Mimint", "Nettle" }, {}, {}, Body, Why) && Why == "unknown herb Nettle");
+	Check("all twelve canon herbs accepted, any case (server pitchOf)", BuildRequest({ "Sharpcress", "Flatfern", "Hushmoss" }, {}, {}, Body, Why) && BuildRequest({ "Gloryroot", "Dronebloom", "tisquill" }, {}, {}, Body, Why) && Body == "{\"herbs\":[\"Gloryroot\",\"Dronebloom\",\"tisquill\"]}");
 	Check("stage 5 refused", !BuildRequest({ "Doleaf", "Mimint", "Solthorn" }, { 1, 2, 5 }, {}, Body, Why));
 	Check("stages must match herbs", !BuildRequest({ "Doleaf", "Mimint", "Solthorn" }, { 1, 2 }, {}, Body, Why));
 	Check("six herbs refused", !BuildRequest({ "Doleaf", "Doleaf", "Doleaf", "Doleaf", "Doleaf", "Doleaf" }, {}, {}, Body, Why));
