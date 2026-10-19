@@ -71,3 +71,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Garbage Gulls (contest G120, quest q_garbage_gulls)
 - `garbage_gulls.py`: DiskSaver Island garbage-collection minigame. Every save carries fragments that loop back to it; storms cut saves loose and the tide brings new ones, so unreachable loops drift on the beach. Mark-and-sweep gulls clear them at a work cost. A tuned sweep interval keeps the heap under its cap within the work budget; sweeping every window wears the gulls out, never sweeping buries the beach, and reference counting leaks every loop. A sweep never frees a reachable save. Keys come from G86 Compaction Shoals (`garbage_gulls_test.py`; CI `Garbage Gulls`). Rules: `docs/islands/DISKSAVER-GARBAGE-GULLS.md`.
+
+## Prefetch Pelicans (contest G123, quest q_prefetch_pelicans)
+- `prefetch_pelicans.py`: DiskSaver Island streaming-readahead minigame. A traveller walks the save path chunk by chunk while pelicans prefetch chunks with a fixed latency and a flights-per-tick limit; seeded ferries to other islands waste every chunk flown for the old stretch. A readahead of latency + 1 keeps both stalls and waste in budget; shallower readahead stalls and deeper readahead wastes. Path comes from G86 Compaction Shoals (`prefetch_pelicans_test.py`; CI `Prefetch Pelicans`). Rules: `docs/islands/DISKSAVER-PREFETCH-PELICANS.md`.
