@@ -242,6 +242,30 @@ def strip_simple_collision(plan):
     return {"before": before, "after": _simple_count(mesh)}
 
 
+def attach_lod1(plan):
+    """Import plan["lod1"] as LOD 1 of the base mesh after the base import (UE 5.8
+    StaticMeshEditorSubsystem.import_lod, probed read-only 2026-10-19). Re-imports if LOD1 exists."""
+    lod1 = plan.get("lod1")
+    if not lod1:
+        return {"skipped": "no LOD1 file next to the asset"}
+    mesh = _mesh(plan)
+    if mesh is None:
+        return {"error": "mesh missing"}
+    sub = unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
+    before = mesh.get_num_lods()
+    mesh.modify()
+    idx = sub.import_lod(mesh, 1, lod1["path"])
+    return {"index": idx, "lods_before": before, "lods_after": mesh.get_num_lods(), "path": lod1["path"]}
+
+
+def _lod_source_tris(mesh, lod):
+    try:
+        md = mesh.get_static_mesh_description(lod)
+        return md.get_triangle_count() if md else None
+    except Exception:
+        return None
+
+
 def facts(plan):
     mesh = _mesh(plan)
     ar = unreal.AssetRegistryHelpers.get_asset_registry()
@@ -265,6 +289,9 @@ def facts(plan):
         "collision": {"convex": len(agg.get_editor_property("convex_elems")) if agg else 0,
                       "hulls": [_convex(c) for c in agg.get_editor_property("convex_elems")] if agg else []},
         "simple_collision_count": _simple_count(mesh),
+        "lods": mesh.get_num_lods(),
+        "lod0_source_tris": _lod_source_tris(mesh, 0),
+        "lod1_source_tris": _lod_source_tris(mesh, 1) if mesh.get_num_lods() > 1 else None,
         "nanite": mesh.get_editor_property("nanite_settings").get_editor_property("enabled"),
         "inventory": inv,
         "dirty": _dirty(),

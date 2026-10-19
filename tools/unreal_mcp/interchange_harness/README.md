@@ -5,7 +5,7 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 | File | Role |
 |---|---|
 | `harness_core.py` | Engine-free plan, sidecar, receiver profile and verdict. Plain stdlib. |
-| `test_harness_core.py` | 42 engine-free tests (`python -m unittest test_harness_core`) |
+| `test_harness_core.py` | 50 engine-free tests (`python -m unittest test_harness_core`) |
 | `ue_harness.py` | Editor stages, one per bridge call: `start`, `poll`, `add_sockets`, `facts`, `save` |
 | `profiles/flagship_terrain_33.json` | Five-slot receiver profile generated from source packet 519f28bb (sha-pinned): 5 slots in order, 669 tris, expected cm bounds, Nanite off, collision off, destination `/Game/Daedalus/Art/Islands/CodexContest/FlagshipBIP1/Terrain33R1` |
 | `samples/Prop_PracticeCrate.sockets.json` | Sample sidecar in the 48521 shape |
@@ -43,6 +43,10 @@ This applies the Epic primary-source import findings (link 48194) and the lesson
 - **Sockets:** stock 5.8 glTF Interchange DOES import `SOCKET_Top` as socket `Top`. The item e "dropped" result was a false negative: its reader swallowed the protected-property error. The sidecar is kept as a cross-check and is the **rotation carrier**: `add_sockets` keeps the native socket, asserts its position matches the sidecar within 0.5 cm, then sets `relative_rotation` from the sidecar (native empties come in as [0,180,-90], a glTF-to-UE basis artefact). Native and sidecar rotations are logged. Opt out per asset with `sidecar_rotation: false`.
 - **8 triangles (item e):** settled. With Nanite on (fallback target Auto), LOD0 is 256 tris. With Nanite off, it's 264 tris, which matches the glTF. The Nanite fallback mesh was the cause; the source is fine.
 - terrain_33 into its real root (item g) needs a checkpoint, a five-slot readback, and a save of only the 6 new packages. The fresh reopen happens in the batched restart.
+
+## Rotation and LOD1
+- Socket rotations are compared as orientations: both rotators become quaternions, and they pass within 0.5 deg. Gimbal-equivalent values such as the rod Tip [90,90,0] == [90,0,-90] pass.
+- LOD1: if `<Asset>_LOD1.glb` (or the build_report's LOD1 name) is next to the asset, `attach_lod1()` imports it as LOD 1 of the base mesh with `StaticMeshEditorSubsystem.import_lod` after the base import. `evaluate()` checks 2 LODs and the LOD1 source tris against build_report `lod1.triangles`. With Nanite on, LODs only act as the fallback, and the evidence notes that.
 
 ## Open
 - PCG note only, no code (48194): `GenerateLocal`/`GetTaskId` is pending work, not completion. Require the generation callback plus an output count, and keep streaming completion as a separate gate. There is no PCG user yet.
