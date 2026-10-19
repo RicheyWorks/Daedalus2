@@ -1,21 +1,81 @@
 // SPDX-License-Identifier: MIT
 #include "SDaedalusDesktopArcade.h"
 
+#include "Engine/GameViewportClient.h"
+#include "Engine/LocalPlayer.h"
 #include "Framework/Application/SlateApplication.h"
+#include "HAL/IConsoleManager.h"
+#include "Input/HittestGrid.h"
 #include "InputCoreTypes.h"
+#include "Layout/ArrangedChildren.h"
 #include "Layout/WidgetPath.h"
 #include "Rendering/DrawElements.h"
 #include "Rendering/SlateRenderer.h"
+#include "Slate/SGameLayerManager.h"
 #include "Styling/CoreStyle.h"
+#include "Types/NavigationMetaData.h"
+#include "Types/PaintArgs.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/SLeafWidget.h"
+#include "Widgets/SWeakWidget.h"
 #include "Widgets/Text/STextBlock.h"
 
 namespace DesktopArcadeUI
 {
+	/** Above the global HUD while retaining the engine's local-player view rectangle. */
+	class SForegroundPlayerHost : public SCompoundWidget
+	{
+	public:
+		SLATE_BEGIN_ARGS(SForegroundPlayerHost) {}
+			SLATE_ARGUMENT(TWeakObjectPtr<ULocalPlayer>, Player)
+			SLATE_ARGUMENT(TWeakObjectPtr<UGameViewportClient>, Viewport)
+			SLATE_DEFAULT_SLOT(FArguments, Content)
+		SLATE_END_ARGS()
+		void Construct(const FArguments& Args)
+		{
+			Player = Args._Player; Viewport = Args._Viewport;
+			SetVisibility(EVisibility::SelfHitTestInvisible);
+			ChildSlot
+			[
+				SNew(SWeakWidget).PossiblyNullContent(Args._Content.Widget)
+				.Clipping(EWidgetClipping::ClipToBoundsAlways)
+			];
+		}
+		virtual void OnArrangeChildren(const FGeometry& Geometry, FArrangedChildren& Children) const override
+		{
+			UGameViewportClient* Client = Viewport.Get();
+			ULocalPlayer* LocalPlayer = Player.Get();
+			const TSharedPtr<IGameLayerManager> Layers = Client ? Client->GetGameLayerManager() : nullptr;
+			if (!Layers.IsValid() || !LocalPlayer) return;
+			const FGeometry PlayerGeometry = Layers->GetPlayerWidgetHostGeometry(LocalPlayer);
+			const FVector2D Origin = Geometry.AbsoluteToLocal(PlayerGeometry.LocalToAbsolute(FVector2D::ZeroVector));
+			const FVector2D Extent = Geometry.AbsoluteToLocal(PlayerGeometry.LocalToAbsolute(PlayerGeometry.GetLocalSize())) - Origin;
+			if (Origin.ContainsNaN() || Extent.ContainsNaN() || Extent.X <= 0.0 || Extent.Y <= 0.0) return;
+			// Zero/unknown geometry stays empty until the engine supplies a valid player rect.
+			Children.AddWidget(Geometry.MakeChild(ChildSlot.GetWidget(), Extent, FSlateLayoutTransform(Origin)));
+		}
+		virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& Geometry, const FSlateRect& CullRect,
+			FSlateWindowElementList& Elements, int32 LayerId, const FWidgetStyle& Style, bool bParentEnabled) const override
+		{
+			const ULocalPlayer* LocalPlayer = Player.Get();
+			if (!LocalPlayer || !FSlateApplication::IsInitialized()) return LayerId;
+			FHittestGrid& Grid = Args.GetHittestGrid();
+			const int32 PreviousUser = Grid.GetUserIndex();
+			static const IConsoleVariable* PerUserHits = IConsoleManager::Get().FindConsoleVariable(TEXT("Slate.AllowPerUserHitTesting"));
+			const bool bPerUserHits = !PerUserHits || PerUserHits->GetBool();
+			Grid.SetUserIndex(bPerUserHits ? FSlateApplication::Get().GetUserIndexForController(LocalPlayer->GetControllerId()) : INDEX_NONE);
+			const int32 Result = SCompoundWidget::OnPaint(Args, Geometry, CullRect, Elements, LayerId, Style, bParentEnabled);
+			Grid.SetUserIndex(PreviousUser);
+			return Result;
+		}
+	private:
+		TWeakObjectPtr<ULocalPlayer> Player;
+		TWeakObjectPtr<UGameViewportClient> Viewport;
+	};
+
 	const FSlateBrush* WhiteBrush() { return FCoreStyle::Get().GetBrush("GenericWhiteBox"); }
 	FSlateFontInfo Font(int32 Size, bool bBold = false) { return FCoreStyle::GetDefaultFontStyle(bBold ? "Bold" : "Regular", Size); }
 	FLinearColor Tint(daedalus::desktop::Color C) { return FLinearColor::FromSRGBColor(FColor(C.R, C.G, C.B, C.A)); }
@@ -123,6 +183,14 @@ namespace DesktopArcadeUI
 }
 
 namespace DAUI = DesktopArcadeUI;
+
+TSharedRef<SWidget> SDaedalusDesktopArcade::MakeForegroundHost(ULocalPlayer* Player, UGameViewportClient* Viewport, const TSharedRef<SWidget>& Content)
+{
+	TSharedRef<FNavigationMetaData> Boundary = MakeShared<FNavigationMetaData>();
+	for (EUINavigation Direction : {EUINavigation::Up, EUINavigation::Down, EUINavigation::Left, EUINavigation::Right, EUINavigation::Next, EUINavigation::Previous})
+		Boundary->SetNavigationStop(Direction);
+	return SNew(DAUI::SForegroundPlayerHost).Player(Player).Viewport(Viewport).AddMetaData(Boundary)[Content];
+}
 
 void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 {
@@ -286,9 +354,11 @@ FText SDaedalusDesktopArcade::ControlText() const
 	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
-	else if (Id == TEXT("contra")) Text += TEXT("Space/W/A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch; K/B: cheat B action.");
+	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot. Asteroids Left/Right: turn, Up: thrust.");
+	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
+		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
+		: TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);
@@ -429,6 +499,20 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 	{
 		if (ADaedalusDesktopArcade* Actor = Game.Get())
 		{
+			// Preserve every keyboard keydown in event order before held mapping.
+			// Controllers use a separate seam and never enter/reset the keyboard code.
+			if (!Key.IsGamepadKey())
+			{
+				const int32 SourceKey = Key == EKeys::Up ? 0 : Key == EKeys::Down ? 1 : Key == EKeys::Left ? 2 : Key == EKeys::Right ? 3
+					: Key == EKeys::B ? 4 : Key == EKeys::A ? 5 : Key == EKeys::Enter ? 6 : Key == EKeys::SpaceBar ? 7 : Key == EKeys::R ? 8 : 9;
+				Actor->SubmitArcadeSourceKey(SourceKey);
+			}
+			else if (Key == EKeys::Gamepad_FaceButton_Bottom || Key == EKeys::Gamepad_Special_Right)
+			{
+				const bool bConsumed = Actor->SubmitArcadeSourceControllerButton(Key == EKeys::Gamepad_FaceButton_Bottom ? 0 : 1);
+				if (bConsumed && Key == EKeys::Gamepad_Special_Right) { PushInput(); return FReply::Handled(); }
+				// A still enters held jump mapping after its immediate source start.
+			}
 			if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Actor->CloseArcade(); return FReply::Handled(); }
 			if (Key == EKeys::P || Key == EKeys::Gamepad_Special_Right) { Actor->PauseGame(!Actor->GetState().bPaused); return FReply::Handled(); }
 			if (Key == EKeys::R) { Actor->RestartGame(); return FReply::Handled(); }
