@@ -50,6 +50,17 @@ class ShippedOutcome(unittest.TestCase):
         self.assertEqual(tc.receipt(c, a), tc.receipt(c, b))
 
 
+    def test_seeded_replay_determinism(self):
+        for s in SEEDS:
+            for clock in tc.CLOCKS:
+                r1, v1 = tc.run(cfg(s), clock)
+                r2, v2 = tc.run(cfg(s), clock)
+                self.assertEqual(v1, v2, (s, clock))
+                self.assertEqual((r1.lost_vids, r1.oracle_pairs, r1.detected_pairs),
+                                 (r2.lost_vids, r2.oracle_pairs, r2.detected_pairs))
+        self.assertNotEqual(tc.run(cfg(1))[1], tc.run(cfg(2))[1])
+
+
 class Science(unittest.TestCase):
     def test_vc_order_equals_happens_before_oracle(self):
         for s in SEEDS:
@@ -93,14 +104,16 @@ class Science(unittest.TestCase):
 
 class TieIn(unittest.TestCase):
     def test_islands_and_keys_from_g86_read_only(self):
-        before = hashlib.sha256(open(SHOALS, "rb").read()).hexdigest()
+        with open(SHOALS, "rb") as fh:
+            before = hashlib.sha256(fh.read()).hexdigest()
         with open(SHOALS, encoding="utf-8") as fh:
             ids, kpi = tc.islands_from_shoals(json.load(fh))
         c = cfg()
         self.assertEqual(list(c.islands), ids[:len(c.islands)])
         self.assertLessEqual(len(c.saves), kpi)
         tc.run(c)
-        self.assertEqual(hashlib.sha256(open(SHOALS, "rb").read()).hexdigest(), before)
+        with open(SHOALS, "rb") as fh:
+            self.assertEqual(hashlib.sha256(fh.read()).hexdigest(), before)
 
 
 class Validation(unittest.TestCase):
