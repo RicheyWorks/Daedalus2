@@ -1,0 +1,266 @@
+{
+  "schema": "daedalus.shardstead.willow-polish/v2",
+  "version": "pilot-r2",
+  "stage": "source-plan",
+  "synthetic": true,
+  "seed": 8407,
+  "units": "metres",
+  "frame": "WORLD_XY_METRES",
+  "output": "artifacts/biomes/shardstead/WillowWetland/pilot-r2",
+  "terrain": {
+    "name": "Synthetic_WillowPilot_Ground",
+    "bounds": [
+      -26,
+      -26,
+      26,
+      26
+    ],
+    "grid_cells": 104,
+    "basin_floor": -1.0,
+    "shore_height": 0.4,
+    "basin_radius": 5.5,
+    "shore_radius": 8.5
+  },
+  "pond": {
+    "origin": [
+      0,
+      0
+    ],
+    "water_z": 0.0,
+    "radius": 6.0
+  },
+  "paths": [
+    {
+      "name": "Synthetic_North_Path",
+      "aabb": [
+        -2,
+        8,
+        2,
+        26
+      ]
+    }
+  ],
+  "refuges": [
+    {
+      "name": "Synthetic_Pond_Refuge",
+      "circle": [
+        0,
+        0,
+        6
+      ]
+    }
+  ],
+  "unknown_shapes": [],
+  "cast_reference": "Shardstead_Rescuer",
+  "population": {
+    "creatures": 0,
+    "new_workers": 0
+  },
+  "first_intake": [
+    {
+      "name": "WillowPilot_Willow",
+      "role": "flora",
+      "prefix": "Willow_",
+      "path": "exports/WillowPilot_Willow.glb"
+    },
+    {
+      "name": "WillowPilot_Reeds",
+      "role": "flora",
+      "prefix": "DecorativeReed_",
+      "path": "exports/WillowPilot_Reeds.glb"
+    },
+    {
+      "name": "WillowPilot_Pond",
+      "role": "habitats",
+      "suffix": "_WaterSurface",
+      "path": "exports/WillowPilot_Pond.glb"
+    }
+  ],
+  "views": [
+    {
+      "name": "overview",
+      "location": [
+        28,
+        -34,
+        29
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ],
+      "lens": 40
+    },
+    {
+      "name": "player_contact",
+      "location": [
+        16,
+        -18,
+        2
+      ],
+      "target": [
+        9,
+        -8,
+        1
+      ],
+      "lens": 40
+    },
+    {
+      "name": "refuge_detail",
+      "location": [
+        10,
+        -12,
+        9
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ],
+      "lens": 40
+    }
+  ],
+  "render": {
+    "engine": "CYCLES",
+    "device": "CPU",
+    "threads": 2,
+    "samples": 24,
+    "resolution": [
+      1000,
+      1000
+    ],
+    "sun_energy": 2.0,
+    "world_strength": 0.4
+  },
+  "actual": {
+    "authored": null,
+    "exports": null,
+    "views": null,
+    "reopened": null,
+    "native": null,
+    "quality_accepted": null
+  },
+  "placements": [
+    {
+      "id": "WillowWetland:0",
+      "position": [
+        -4.452917612729608,
+        -8.97287328375255,
+        0.40000009536743164
+      ],
+      "yaw": 1.3420877371775153
+    },
+    {
+      "id": "WillowWetland:2",
+      "position": [
+        -2.7642802199378553,
+        14.686611132546604,
+        0.40000009536743164
+      ],
+      "yaw": 1.0845724304711397
+    },
+    {
+      "id": "WillowWetland:4",
+      "position": [
+        -9.114274738503807,
+        11.29067509988287,
+        0.40000009536743164
+      ],
+      "yaw": 2.749414522334561
+    },
+    {
+      "id": "WillowWetland:5",
+      "position": [
+        2.2612098516380237,
+        -9.446402363647456,
+        0.40000009536743164
+      ],
+      "yaw": 0.7562740324049165
+    },
+    {
+      "id": "WillowWetland:7",
+      "position": [
+        4.003302955207641,
+        -14.187326224097882,
+        0.40000009536743164
+      ],
+      "yaw": 5.777578648546167
+    },
+    {
+      "id": "WillowWetland:11",
+      "position": [
+        -10.88088637416691,
+        -8.461826072115358,
+        0.40000009536743164
+      ],
+      "yaw": 3.992253683286834
+    },
+    {
+      "id": "WillowWetland:16",
+      "position": [
+        12.686112260925501,
+        -5.615643674190245,
+        0.40000009536743164
+      ],
+      "yaw": 4.2734001545704645
+    },
+    {
+      "id": "WillowWetland:18",
+      "position": [
+        4.898996941275159,
+        7.358323972098859,
+        0.39712047576904297
+      ],
+      "yaw": 3.7213248531741887
+    },
+    {
+      "id": "WillowWetland:19",
+      "position": [
+        10.71786095781726,
+        5.752679255556693,
+        0.40000009536743164
+      ],
+      "yaw": 5.9321954506246835
+    },
+    {
+      "id": "WillowWetland:22",
+      "position": [
+        -4.756150410950185,
+        9.479505387749034,
+        0.40000009536743164
+      ],
+      "yaw": 1.9522530322937828
+    },
+    {
+      "id": "WillowWetland:27",
+      "position": [
+        -11.902418509466198,
+        2.4519117923103475,
+        0.40000009536743164
+      ],
+      "yaw": 2.2178059496959603
+    },
+    {
+      "id": "WillowWetland:28",
+      "position": [
+        -11.159641526057767,
+        -3.5213136098222546,
+        0.40000009536743164
+      ],
+      "yaw": 6.112432658738723
+    }
+  ],
+  "source_evidence": {
+    "r1_source_sha256": "0f77409dc9f58edecf9bdced92afc458fdb41469b2026f1fd5cfe24c1734a094",
+    "r1_recipe_sha256": "68a256f99ac9e987ef56ffb97076bdb7c01f9e90261093455403f84ab4b02258",
+    "r1_authored_plan_sha256": "26cbe0d0c8d26674d2f2d013180f71547a9e2d24c6e05ca21481b8eef7cdc3cc"
+  },
+  "polish": {
+    "max_exported_triangles": 8000,
+    "willow_footprint_radius": 1.655,
+    "shore_collar": "Visual overlay r6..8.5: water edge z0 to unchanged outer terrain. Underlying terrain unchanged.",
+    "path_grid_metres": 0.5,
+    "quality_status": "UNRENDERED_UNACCEPTED",
+    "notes": "Empty ground/player crop remain matched-view limitations; layout and cameras unchanged."
+  }
+}
