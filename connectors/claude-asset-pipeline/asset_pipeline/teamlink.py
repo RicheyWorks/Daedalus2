@@ -88,7 +88,13 @@ class Broker:
                     if m.get("type") == "bot.register":
                         self.bots[m["from"]] = dict(m.get("body") or {}, registered=m["ts"])
                     if m.get("type") == "ack":
-                        self.acked.add((m.get("from"), (m.get("body") or {}).get("id")))
+                        # Historical /send ACKs may contain prose, not broker receipts.
+                        # Preserve them as messages; never infer receipt IDs from text/reply_to.
+                        body = m.get("body")
+                        mid = body.get("id") if isinstance(body, dict) else None
+                        sender = m.get("from")
+                        if type(mid) is int and mid > 0 and isinstance(sender, str) and sender:
+                            self.acked.add((sender, mid))
                     if m.get("type") in ("lock", "unlock"):
                         self._replay_lock(m)
 
