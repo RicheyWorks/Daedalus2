@@ -211,21 +211,103 @@
   },
   "hotfix_automation": {
     "discovery_started": true,
-    "test_run_dispatched": false,
-    "reason": "Fresh physical-memory floor refused the four-test run before folder creation or native dispatch. No guard lowered, no unchanged retry.",
-    "discovery_receipt": {
-      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixAutomationDiscoverR1/terminal.json",
-      "sha256": "800206f6bbaa7c076abb3c9ab7d82f3fa84297fe4e0bb561c6370f0f40209fc5",
-      "bytes": 1646
+    "test_run_dispatched": true,
+    "known_terminal": true,
+    "actual_results": {
+      "tests": [
+        {
+          "name": "Daedalus.Editor.Validation.NativeProjection",
+          "state": "Success",
+          "duration": 0.014801401644945145,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Editor.Validation.Policy",
+          "state": "Success",
+          "duration": 0.01179320365190506,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.RepeatCleanup",
+          "state": "Success",
+          "duration": 0.016782298684120178,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.VirtualButton",
+          "state": "Success",
+          "duration": 0.0235958993434906,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "total": 4,
+      "duration": 0.06697280704975128
     },
-    "historical_5_8_3_four_test_pass_not_counted_as_5_8_4": true
+    "controller": {
+      "state": "Ready",
+      "numEnabled": 4,
+      "numComplete": 4,
+      "numPassed": 4,
+      "numFailed": 0
+    },
+    "exact_names": [
+      "Daedalus.Slate.Acceptance.VirtualButton",
+      "Daedalus.Slate.Acceptance.RepeatCleanup",
+      "Daedalus.Editor.Validation.Policy",
+      "Daedalus.Editor.Validation.NativeProjection"
+    ],
+    "initial_memory_hold_native_test_dispatches": 0,
+    "unchanged_memory_guard": true,
+    "original_run_consumed_only_after_fresh_headroom_recovered": true,
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixAutomationResultsR1/terminal.json",
+      "sha256": "38b80bcdb552c7bb82a783e36b4a86a471aec8d6eefa9674afa1846d3cf039b7",
+      "bytes": 4653
+    },
+    "full_suite": false,
+    "named_fixtures_test": false
   },
   "limits": [
     "Imported function-call material graphs remain HELD; no RGB or full PBR quality acceptance.",
     "Native three-class validation coverage remains incomplete.",
     "Disposable Slate fixture does not qualify production game UI.",
-    "5.8.4 four-test Automation run not dispatched due to memory floor.",
     "Official updater completed and executable matches5.8.4, but LauncherInstalled.dat retained stale5.8.3 with official install-info-write warning; metadata was not hand-edited.",
     "No all-products integration, new native import/reimport or performance improvement is claimed."
-  ]
+  ],
+  "final_preservation": {
+    "saved_package_count": 27594,
+    "mismatches": [],
+    "scene": {
+      "actors": 22878,
+      "sha256": "828a1b087b3890c7a10747b6aed571fb109b6ae3c2096c58d716b2288f8513dd",
+      "scope": "actor path/class/label/location/rotation/scale"
+    },
+    "camera_preserved": true,
+    "canonical_header_sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7",
+    "world_saved": false,
+    "receipt": {
+      "retained_local_receipt": "Unreal584Update20261020/final-preservation.json",
+      "sha256": "338a72b7b7d971875b3002018c7183c952d556ad60013f390d05112a1b8a363b",
+      "bytes": 2664
+    }
+  },
+  "resource_custody": {
+    "compute_normally_released": true,
+    "explicit_readback_owned_compute_absent": true,
+    "sole_unreal_custody_retained": true,
+    "editor_open": true,
+    "editor_pid": 51600,
+    "receipt": {
+      "retained_local_receipt": "Unreal584Update20261020/compute-release.json",
+      "sha256": "2bfceb08cfe95ffc51c1f65f5f1170d7840f80fcddf3b2e4589451a48162e819",
+      "bytes": 1715
+    }
+  }
 }
