@@ -1,0 +1,78 @@
+{
+  "schema": "daedalus.material-function-diagnostic-evidence.v2",
+  "recorded_utc": "2026-10-20T22:54:41.029446+00:00",
+  "stage": "MEMORY_HOLD_NO_POSTLAUNCH_NATIVE_DISPATCH",
+  "engine": "5.8.4-58902052+++UE5+Release-5.8",
+  "source_contract": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\source-contract-cached-r2.json",
+    "sha256": "a8735b21f9af740521be8f50f21f357e3b53ef36a4ba2af319475762f46822b9",
+    "bytes": 1576
+  },
+  "source_review": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\source-review-cached-r2.json",
+    "sha256": "2d7cecc5f3f3fade5176db6df3ae9cc1733c649013bba142fbbd542569bcd83f",
+    "bytes": 1092
+  },
+  "build": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeCachedBuildR1\\build-terminal.json",
+    "sha256": "c22fe69f1bd2173e498cd52923c47f647d34da6e7dbf656b9173613c15d7c010",
+    "bytes": 471
+  },
+  "actions_succeeded": 5,
+  "build_exit_code": 0,
+  "preservation": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeCachedBuildR1\\postbuild-preservation.json",
+    "sha256": "0b632ba91983664c107b39a6cd70a9212dc5155468f048c2443e877430260d1c",
+    "bytes": 314
+  },
+  "protected_saved_packages_unchanged": 27594,
+  "fresh_launch": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeCachedBuildR1\\launch.json",
+    "sha256": "7b56fd704fe5c24219158475af3dac07ea836aa77014e9e5ac7588e83402990f",
+    "bytes": 841
+  },
+  "fresh_launch_is_not_native_readiness": true,
+  "old_python_capture": {
+    "state": "partial",
+    "receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\CachedFunctionCaptureHostR1\\receipt.json",
+      "sha256": "1dac085c05cb94eb14a244339da1d615ebb2a1f78239e6d2ee6787e55f48574d",
+      "bytes": 6316
+    },
+    "reason": "get_editor_property refuses protected MaterialEditorOnlyData BaseColor/Metallic/Roughness. No retry or property-flag change."
+  },
+  "diagnostic_contract": {
+    "method": "Existing ReadMaterialFactors signature",
+    "field": "materials[].cached_function_facts",
+    "schema": "daedalus.material-cached-function-facts.v2",
+    "maximum_json_bytes": 524288,
+    "maximum_cached_inputs_outputs": 64,
+    "maximum_calls_per_material": 1,
+    "recursive_evaluation": false,
+    "new_object_handle_reads": "Public IsResolved before Get; missing/incomplete objects stay unknown",
+    "virtual_unknown_outputs_called": false,
+    "reader_loads_updates_edits_saves": 0
+  },
+  "original_material_witness": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\MaterialFactorReadR2\\terminal.json",
+    "sha256": "f5ec97569912f6908d160c62c2b6b893c5bb942dcf3f18f551b518f9c97f4d1c",
+    "bytes": 13166
+  },
+  "original_witness_preserved": true,
+  "base_color_admitted": false,
+  "pbr_quality_accepted": false,
+  "native_runtime_qualified": false,
+  "policy_receiver_modified_or_republished": false,
+  "limits": [
+    "Actual function routes require native capture and a separately reviewed strict evaluator.",
+    "Existing f91 policy receiver retains its 64 KiB cap and original HELD verdict.",
+    "Existing C4701 VectorValue warning remains; no warning-free claim.",
+    "Material Python and UCX publication remain stopped after automatic-review denials."
+  ],
+  "memory_hold": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeCachedBuildR1\\postlaunch-memory-hold-r1.json",
+    "sha256": "75ca99ae443760b81c8c9dddcd091951631207116d5b504fd2fc355d4b5b6ed5",
+    "bytes": 1920
+  },
+  "postlaunch_material_reader_calls": 0
+}
