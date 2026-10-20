@@ -13,8 +13,9 @@ class DAEDALUSLINK_API UDaedalusMaterialFactorLibrary : public UBlueprintFunctio
 public:
 	/** Two exact, already loaded, clean UMaterials in an explicit owned subtree.
 	 * No loading, compilation, edits, save, recursive graph traversal or getter fallbacks.
-	 * Function calls remain held; a separate cached_function_facts diagnostic describes
-	 * current public C++ fields without evaluation or refreshing transient bindings. */
+	 * Function calls remain held. The separate v3 cached diagnostic captures a
+	 * <=128 GUID manifest, <=3 selected outputs from <=16 outputs, and <=3 uniquely
+	 * matched rich inputs in one pre-append-budgeted 512KiB envelope; no evaluation. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Material Admission", meta = (DevelopmentOnly))
 	static FString ReadMaterialFactors(const TArray<FString>& MaterialObjectPaths,
 		const FString& AllowedPackageRoot, const FString& PolicyId);

@@ -3,6 +3,7 @@
 
 #if WITH_EDITOR
 #include "Dom/JsonObject.h"
+#include "DaedalusMaterialCachedDiagnostic.h"
 #include "Editor.h"
 #include "Engine/World.h"
 #include "FileHelpers.h"
@@ -239,122 +240,148 @@ static FJson CachedConnection(const FExpressionInput& Input, FValues& Errors)
 	return Value;
 }
 
-static FJson CachedFunctionFacts(UMaterial* Material, UMaterialEditorOnlyData* Data)
+static FJson CachedRichInput(const UMaterialExpressionMaterialFunctionCall* Call, int32 Index)
 {
-	FJson Value = MakeShared<FJsonObject>();
-	FValues Errors, Calls;
-	Value->SetStringField(TEXT("schema"), TEXT("daedalus.material-cached-function-facts.v2"));
-	Value->SetField(TEXT("material"), CachedIdentity(Material));
-	Value->SetBoolField(TEXT("evaluation_performed"), false);
-	Value->SetBoolField(TEXT("admission_changed"), false);
-	Value->SetNumberField(TEXT("explicit_load_requests"), 0);
-	Value->SetNumberField(TEXT("cache_refreshes"), 0);
-	Value->SetNumberField(TEXT("virtual_getoutputs_calls"), 0);
-	FJson Inputs = MakeShared<FJsonObject>();
-	TMap<UMaterialExpressionMaterialFunctionCall*, TSet<int32>> Selected;
-	const auto Add = [&](const TCHAR* Name, EMaterialProperty Property, const FExpressionInput* Typed, bool bUseConstant)
-	{
-		const FExpressionInput* Current = Material->GetExpressionInputForProperty(Property);
-		FJson Fact = MakeShared<FJsonObject>();
-		const bool bSame = Current && Current == Typed;
-		Fact->SetBoolField(TEXT("current_input_pointer_equal"), bSame);
-		Fact->SetBoolField(TEXT("uses_input_constant"), bUseConstant);
-		if (bSame)
-		{
-			Fact->SetObjectField(TEXT("connection"), CachedConnection(*Current, Errors));
-			UMaterialExpression* Expression = Current->Expression;
-			if (CachedReadable(Expression) && Expression->GetClass() == UMaterialExpressionMaterialFunctionCall::StaticClass()
-				&& Expression->GetOuter() == Material)
-				Selected.FindOrAdd(CastChecked<UMaterialExpressionMaterialFunctionCall>(Expression)).Add(Current->OutputIndex);
-		}
-		else Errors.Add(MakeShared<FJsonValueString>(FString(Name) + TEXT(": current/typed input pointer mismatch")));
-		Inputs->SetObjectField(Name, Fact);
-	};
-	if (Data)
-	{
-		Add(TEXT("base_color"), MP_BaseColor, &Data->BaseColor, Data->BaseColor.UseConstant);
-		Add(TEXT("metallic"), MP_Metallic, &Data->Metallic, Data->Metallic.UseConstant);
-		Add(TEXT("roughness"), MP_Roughness, &Data->Roughness, Data->Roughness.UseConstant);
-	}
-	else Errors.Add(MakeShared<FJsonValueString>(TEXT("Current public editor-only data unavailable")));
-	Value->SetObjectField(TEXT("current_typed_inputs"), Inputs);
-	if (Selected.Num() > 1) Errors.Add(MakeShared<FJsonValueString>(TEXT("More than one current function call; bounded capture refuses traversal")));
-	else for (const auto& Item : Selected)
-	{
-		const auto* Call = Item.Key;
-		FJson Captured = MakeShared<FJsonObject>();
-		Captured->SetField(TEXT("caller"), CachedIdentity(Call));
-		Captured->SetField(TEXT("owning_material"), CachedIdentity(Material));
-		Captured->SetField(TEXT("material_function"), CachedIdentity(CachedResolved(Call->MaterialFunction, Call->GetPathName() + TEXT(".MaterialFunction"), Errors)));
-		Captured->SetNumberField(TEXT("function_input_count"), Call->FunctionInputs.Num());
-		Captured->SetNumberField(TEXT("function_output_count"), Call->FunctionOutputs.Num());
-		FValues FunctionInputs, FunctionOutputs;
-		if (Call->FunctionInputs.Num() > 64 || Call->FunctionOutputs.Num() > 64)
-			Errors.Add(MakeShared<FJsonValueString>(Call->GetPathName() + TEXT(": function binding arrays exceed 64; not traversed")));
-		else
-		{
-			for (int32 Index = 0; Index < Call->FunctionInputs.Num(); ++Index)
-			{
-				const auto& Binding = Call->FunctionInputs[Index];
-				FJson Entry = MakeShared<FJsonObject>();
-				Entry->SetNumberField(TEXT("index"), Index);
-				Entry->SetObjectField(TEXT("expression_input_id"), CachedGuid(Binding.ExpressionInputId));
-				const auto* Node = CachedResolved(Binding.ExpressionInput, Call->GetPathName() + FString::Printf(TEXT(".FunctionInputs[%d].ExpressionInput"), Index), Errors);
-				Entry->SetField(TEXT("expression_input"), CachedIdentity(Node));
-				Entry->SetObjectField(TEXT("caller_input"), CachedConnection(Binding.Input, Errors));
-				if (Node)
-				{
-					FJson NodeValue = MakeShared<FJsonObject>();
-					NodeValue->SetObjectField(TEXT("id"), CachedGuid(Node->Id));
-					NodeValue->SetStringField(TEXT("input_name"), Node->InputName.ToString());
-					NodeValue->SetNumberField(TEXT("input_type"), static_cast<int32>(Node->InputType.GetValue()));
-					NodeValue->SetBoolField(TEXT("use_preview_value_as_default"), Node->bUsePreviewValueAsDefault);
-					NodeValue->SetStringField(TEXT("preview_value_type"), TEXT("FVector4f"));
-					const FVector4f& V = Node->PreviewValue;
-					NodeValue->SetField(TEXT("preview_value"), CachedVector(V.X, V.Y, V.Z, V.W, Node->GetPathName(), Errors));
-					NodeValue->SetObjectField(TEXT("preview"), CachedConnection(Node->Preview, Errors));
-					Entry->SetObjectField(TEXT("node"), NodeValue);
-				}
-				else Entry->SetField(TEXT("node"), MakeShared<FJsonValueNull>());
-				FunctionInputs.Add(MakeShared<FJsonValueObject>(Entry));
-			}
-			TArray<int32> Indices = Item.Value.Array();
-			Indices.Sort();
-			for (int32 Index : Indices)
-			{
-				if (!Call->FunctionOutputs.IsValidIndex(Index))
-				{
-					Errors.Add(MakeShared<FJsonValueString>(Call->GetPathName() + TEXT(": selected function output index unavailable")));
-					continue;
-				}
-				const auto& Binding = Call->FunctionOutputs[Index];
-				FJson Entry = MakeShared<FJsonObject>();
-				Entry->SetNumberField(TEXT("index"), Index);
-				Entry->SetObjectField(TEXT("expression_output_id"), CachedGuid(Binding.ExpressionOutputId));
-				const auto& Output = Binding.Output;
-				Entry->SetObjectField(TEXT("binding_output_masks"), CachedMasks(Output.Mask, Output.MaskR, Output.MaskG, Output.MaskB, Output.MaskA));
-				const auto* Node = CachedResolved(Binding.ExpressionOutput, Call->GetPathName() + FString::Printf(TEXT(".FunctionOutputs[%d].ExpressionOutput"), Index), Errors);
-				Entry->SetField(TEXT("expression_output"), CachedIdentity(Node));
-				if (Node)
-				{
-					FJson NodeValue = MakeShared<FJsonObject>();
-					NodeValue->SetObjectField(TEXT("id"), CachedGuid(Node->Id));
-					NodeValue->SetStringField(TEXT("output_name"), Node->OutputName.ToString());
-					NodeValue->SetObjectField(TEXT("a"), CachedConnection(Node->A, Errors));
-					Entry->SetObjectField(TEXT("node"), NodeValue);
-				}
-				else Entry->SetField(TEXT("node"), MakeShared<FJsonValueNull>());
-				FunctionOutputs.Add(MakeShared<FJsonValueObject>(Entry));
-			}
-		}
-		Captured->SetArrayField(TEXT("function_inputs"), FunctionInputs);
-		Captured->SetArrayField(TEXT("selected_function_outputs"), FunctionOutputs);
-		Calls.Add(MakeShared<FJsonValueObject>(Captured));
-	}
-	Value->SetArrayField(TEXT("calls"), Calls);
-	Value->SetArrayField(TEXT("field_errors"), Errors);
-	Value->SetStringField(TEXT("state"), Errors.IsEmpty() ? TEXT("cached_facts_captured") : TEXT("partial"));
-	return Value;
+ FJson Entry = MakeShared<FJsonObject>(); FValues Errors;
+ Entry->SetNumberField(TEXT("index"), Index);
+ if (!Call->FunctionInputs.IsValidIndex(Index))
+ {
+  Entry->SetBoolField(TEXT("capture_complete"), false); return Entry;
+ }
+ const auto& Binding = Call->FunctionInputs[Index];
+ const auto* Node = CachedResolved(Binding.ExpressionInput, Call->GetPathName() + TEXT(".rich_input"), Errors);
+ Entry->SetObjectField(TEXT("expression_input_id"), CachedGuid(Binding.ExpressionInputId));
+ Entry->SetField(TEXT("expression_input"), CachedIdentity(Node));
+ Entry->SetObjectField(TEXT("caller_input"), CachedConnection(Binding.Input, Errors));
+ const bool Ready = Node && Node->GetClass() == UMaterialExpressionFunctionInput::StaticClass();
+ if (Ready)
+ {
+  FJson N = MakeShared<FJsonObject>();
+  N->SetObjectField(TEXT("id"), CachedGuid(Node->Id));
+  N->SetStringField(TEXT("input_name"), Node->InputName.ToString());
+  N->SetNumberField(TEXT("input_type"), static_cast<int32>(Node->InputType.GetValue()));
+  N->SetBoolField(TEXT("use_preview_value_as_default"), Node->bUsePreviewValueAsDefault);
+  N->SetStringField(TEXT("preview_value_type"), TEXT("FVector4f"));
+  const auto& V = Node->PreviewValue;
+  N->SetField(TEXT("preview_value"), CachedVector(V.X, V.Y, V.Z, V.W, Node->GetPathName(), Errors));
+  N->SetObjectField(TEXT("preview"), CachedConnection(Node->Preview, Errors));
+  Entry->SetObjectField(TEXT("node"), N);
+ }
+ else Entry->SetField(TEXT("node"), MakeShared<FJsonValueNull>());
+ Entry->SetBoolField(TEXT("capture_complete"), Ready && Errors.IsEmpty() && Binding.ExpressionInputId.IsValid() && Binding.ExpressionInputId == Node->Id);
+ Entry->SetArrayField(TEXT("field_errors"), Errors);
+ return Entry;
+}
+
+static FJson CachedFunctionFacts(UMaterial* Material, UMaterialEditorOnlyData* Data,
+ const TArray<FString>& DiagnosticPath, TArray<DaedalusMaterialCachedDiagnostic::FProjection>& Work)
+{
+ namespace CD = DaedalusMaterialCachedDiagnostic;
+ FJson Value = MakeShared<FJsonObject>(); FValues Errors, Calls;
+ Value->SetStringField(TEXT("schema"), TEXT("daedalus.material-cached-function-facts.v3"));
+ Value->SetField(TEXT("material"), CachedIdentity(Material));
+ Value->SetBoolField(TEXT("evaluation_performed"), false);
+ Value->SetBoolField(TEXT("admission_changed"), false);
+ Value->SetNumberField(TEXT("explicit_load_requests"), 0);
+ Value->SetNumberField(TEXT("cache_refreshes"), 0);
+ Value->SetNumberField(TEXT("virtual_getoutputs_calls"), 0);
+ Value->SetStringField(TEXT("state"), TEXT("partial"));
+ FJson Inputs = MakeShared<FJsonObject>();
+ TMap<UMaterialExpressionMaterialFunctionCall*, TSet<int32>> Selected;
+ const auto Add = [&](const TCHAR* Name, EMaterialProperty Property, const FExpressionInput* Typed, bool UseConstant)
+ {
+  const FExpressionInput* Current = Material->GetExpressionInputForProperty(Property);
+  FJson Fact = MakeShared<FJsonObject>();
+  const bool Same = Current && Current == Typed;
+  Fact->SetBoolField(TEXT("current_input_pointer_equal"), Same);
+  Fact->SetBoolField(TEXT("uses_input_constant"), UseConstant);
+  if (Same)
+  {
+   Fact->SetObjectField(TEXT("connection"), CachedConnection(*Current, Errors));
+   auto* Expression = Current->Expression;
+   if (CachedReadable(Expression) && Expression->GetClass() == UMaterialExpressionMaterialFunctionCall::StaticClass() && Expression->GetOuter() == Material)
+    Selected.FindOrAdd(CastChecked<UMaterialExpressionMaterialFunctionCall>(Expression)).Add(Current->OutputIndex);
+  }
+  else Errors.Add(MakeShared<FJsonValueString>(FString(Name) + TEXT(": current/typed input pointer mismatch")));
+  Inputs->SetObjectField(Name, Fact);
+ };
+ if (Data)
+ {
+  Add(TEXT("base_color"), MP_BaseColor, &Data->BaseColor, Data->BaseColor.UseConstant);
+  Add(TEXT("metallic"), MP_Metallic, &Data->Metallic, Data->Metallic.UseConstant);
+  Add(TEXT("roughness"), MP_Roughness, &Data->Roughness, Data->Roughness.UseConstant);
+ }
+ else Errors.Add(MakeShared<FJsonValueString>(TEXT("Current editor-only data unavailable")));
+ Value->SetObjectField(TEXT("current_typed_inputs"), Inputs);
+ if (Selected.Num() > 1) Errors.Add(MakeShared<FJsonValueString>(TEXT("More than one current function call; not traversed")));
+ else for (const auto& Item : Selected)
+ {
+  const auto* Call = Item.Key;
+  CD::FProjection P;
+  P.InputCount = Call->FunctionInputs.Num(); P.OutputCount = Call->FunctionOutputs.Num();
+  P.Selected = Item.Value.Array(); P.Selected.Sort();
+  P.Path = DiagnosticPath; P.Path.Append({TEXT("calls"), TEXT("0")});
+  P.Call->SetField(TEXT("caller"), CachedIdentity(Call));
+  P.Call->SetField(TEXT("owning_material"), CachedIdentity(Material));
+  P.Call->SetField(TEXT("material_function"), CachedIdentity(CachedResolved(Call->MaterialFunction, Call->GetPathName() + TEXT(".MaterialFunction"), Errors)));
+  P.Call->SetNumberField(TEXT("function_input_count"), P.InputCount);
+  P.Call->SetNumberField(TEXT("function_output_count"), P.OutputCount);
+  // Output capture is independent of an oversized/missing input manifest.
+  if (P.OutputCount <= CD::MaxOutputs && P.Selected.Num() <= CD::MaxSelected)
+   for (int32 Index : P.Selected)
+   {
+    if (!Call->FunctionOutputs.IsValidIndex(Index)) continue;
+    const auto& Binding = Call->FunctionOutputs[Index];
+    CD::FOutput O; O.Index = Index; O.BindingId = Binding.ExpressionOutputId;
+    const auto* Node = CachedResolved(Binding.ExpressionOutput, Call->GetPathName() + TEXT(".selected_output"), Errors);
+    O.bReady = Node && Node->GetClass() == UMaterialExpressionFunctionOutput::StaticClass();
+    O.Fact->SetNumberField(TEXT("index"), Index);
+    O.Fact->SetObjectField(TEXT("expression_output_id"), CachedGuid(Binding.ExpressionOutputId));
+    O.Fact->SetField(TEXT("expression_output"), CachedIdentity(Node));
+    const auto& Output = Binding.Output;
+    O.Fact->SetObjectField(TEXT("binding_output_masks"), CachedMasks(Output.Mask, Output.MaskR, Output.MaskG, Output.MaskB, Output.MaskA));
+    if (O.bReady)
+    {
+     O.NodeId = Node->Id; O.NodePath = Node->GetPathName();
+     FJson N = MakeShared<FJsonObject>();
+     N->SetObjectField(TEXT("id"), CachedGuid(Node->Id));
+     N->SetStringField(TEXT("output_name"), Node->OutputName.ToString());
+     N->SetObjectField(TEXT("a"), CachedConnection(Node->A, Errors));
+     O.Fact->SetObjectField(TEXT("node"), N);
+     const auto* A = Node->A.Expression;
+     if (CachedReadable(A) && A->GetClass() == UMaterialExpressionFunctionInput::StaticClass())
+     {
+      O.Route = CD::ERoute::FunctionInput;
+      O.AInputId = CastChecked<UMaterialExpressionFunctionInput>(A)->Id; O.AInputPath = A->GetPathName();
+     }
+     else if (CachedReadable(A) && (A->GetClass() == UMaterialExpressionConstant::StaticClass() || A->GetClass() == UMaterialExpressionConstant3Vector::StaticClass()))
+      O.Route = CD::ERoute::DirectLeaf;
+    }
+    else O.Fact->SetField(TEXT("node"), MakeShared<FJsonValueNull>());
+    P.Outputs.Add(MoveTemp(O));
+   }
+  if (P.InputCount <= CD::MaxInputs)
+   for (int32 Index = 0; Index < P.InputCount; ++Index)
+   {
+    const auto& Binding = Call->FunctionInputs[Index];
+    CD::FInput I; I.Index = Index; I.BindingId = Binding.ExpressionInputId;
+    const auto* Node = CachedResolved(Binding.ExpressionInput, Call->GetPathName() + TEXT(".input_manifest"), Errors);
+    I.bReady = Node && Node->GetClass() == UMaterialExpressionFunctionInput::StaticClass();
+    I.Fact->SetNumberField(TEXT("index"), Index);
+    I.Fact->SetObjectField(TEXT("expression_input_id"), CachedGuid(Binding.ExpressionInputId));
+    I.Fact->SetField(TEXT("expression_input"), CachedIdentity(Node));
+    I.Fact->SetBoolField(TEXT("exact_input_class"), I.bReady);
+    if (I.bReady) { I.NodeId = Node->Id; I.NodePath = Node->GetPathName(); I.Fact->SetObjectField(TEXT("node_id"), CachedGuid(Node->Id)); }
+    else I.Fact->SetField(TEXT("node_id"), MakeShared<FJsonValueNull>());
+    P.Inputs.Add(MoveTemp(I));
+   }
+  P.BuildRich = [Call](int32 Index) { return CachedRichInput(Call, Index); };
+  P.Initialize();
+  Calls.Add(MakeShared<FJsonValueObject>(P.Call)); Work.Add(MoveTemp(P));
+ }
+ Value->SetArrayField(TEXT("calls"), Calls);
+ Value->SetArrayField(TEXT("field_errors"), Errors);
+ return Value;
 }
 
 static FJson InputFacts(UMaterial* Material, const TCHAR* Name, FExpressionInput* Current,
@@ -493,7 +520,7 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 		Json->SetArrayField(TEXT("errors"), Errors);
 		Json->SetArrayField(TEXT("materials"), Materials);
 		FString Serialized;
-		if (!FJsonSerializer::Serialize(Json, TJsonWriterFactory<>::Create(&Serialized)) || FTCHARToUTF8(*Serialized).Length() > 524288)
+		if (!FJsonSerializer::Serialize(Json, TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Serialized)) || FTCHARToUTF8(*Serialized).Length() > 524288)
 			return FString(TEXT("{\"state\":\"held\",\"errors\":[\"Native receipt serialization/cap failure\"]}"));
 		return Serialized;
 	};
@@ -549,7 +576,6 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 		Record->SetBoolField(TEXT("two_sided"), Material->TwoSided != 0);
 		Record->SetBoolField(TEXT("uses_material_attributes"), Material->bUseMaterialAttributes != 0);
 		UMaterialEditorOnlyData* Data = Material->GetEditorOnlyData();
-		Record->SetObjectField(TEXT("cached_function_facts"), CachedFunctionFacts(Material, Data));
 		if (!Data)
 		{
 			Record->SetField(TEXT("front_material_connected"), MakeShared<FJsonValueNull>());
@@ -566,6 +592,31 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 		}
 		Materials.Add(MakeShared<FJsonValueObject>(Record));
 	}
+
+ // Establish the complete outer frame, original errors, both materials and every
+ // diagnostic skeleton BEFORE measuring any candidate input/output append.
+ Json->SetArrayField(TEXT("materials"), Materials); Json->SetArrayField(TEXT("errors"), Errors);
+ TArray<DaedalusMaterialCachedDiagnostic::FProjection> Work;
+ for (int32 Index = 0; Index < Targets.Num(); ++Index)
+ {
+  const TArray<FString> Path{TEXT("materials"), FString::FromInt(Index), TEXT("cached_function_facts")};
+  Materials[Index]->AsObject()->SetObjectField(TEXT("cached_function_facts"),
+   CachedFunctionFacts(Targets[Index], Targets[Index]->GetEditorOnlyData(), Path, Work));
+ }
+ DaedalusMaterialCachedDiagnostic::FEnvelopeBudget Budget(Json);
+ DaedalusMaterialCachedDiagnostic::CaptureAll(Budget, Work);
+ for (int32 Index = 0; Index < Targets.Num(); ++Index)
+ {
+  auto Diagnostic = Materials[Index]->AsObject()->GetObjectField(TEXT("cached_function_facts"));
+  bool Complete = Diagnostic->GetArrayField(TEXT("field_errors")).IsEmpty();
+  for (const auto& Call : Diagnostic->GetArrayField(TEXT("calls")))
+   for (const TCHAR* Key : {TEXT("input_manifest_status"), TEXT("selected_outputs_status"), TEXT("rich_inputs_status")})
+    Complete &= Call->AsObject()->GetObjectField(Key)->GetBoolField(TEXT("complete"));
+  Diagnostic->SetStringField(TEXT("state"), Complete ? TEXT("cached_facts_captured") : TEXT("partial"));
+ }
+ if (!Budget.Finish())
+  return TEXT("{\"state\":\"held\",\"native_invoked\":true,\"diagnostic_complete\":false,\"errors\":[\"Bounded diagnostic outer envelope exceeded UTF8 cap\"]}");
+
 	const FValues DirtyAfter = DirtyPackages();
 	Json->SetArrayField(TEXT("dirty_after"), DirtyAfter);
 	if (!DirtyAfter.IsEmpty()) Errors.Add(MakeShared<FJsonValueString>(TEXT("Dirty packages observed after read; no save or rollback attempted.")));
