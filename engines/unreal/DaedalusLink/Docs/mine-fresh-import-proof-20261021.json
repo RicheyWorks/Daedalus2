@@ -1,0 +1,146 @@
+{
+  "schema": "daedalus.mine-fresh-import-proof-source.v1",
+  "state": "COMPILED_PURE_TESTED_NATIVE_TEST_AND_IMPORT_RESOURCE_HELD",
+  "problem": "Original Mine final rate24/start0/stop1.54166662693 are retained, but CommonPipelineDataFactoryNode is absent from the 8-node saved dependency graph. Historical final bake/offset evidence is unavailable; no historical admission is fabricated.",
+  "change": "Two separate closed native read functions capture actual final common/factory attributes plus independent pinned glTF source proof, and fixed private fresh-clip Source poses. Existing exact original-reader function bytes unchanged. One producer isolates exactly Mine, disables all roots on pre-factory qualification failure, and captures post-import/current proof. No general evaluator/service/dependency or engine retention change.",
+  "native_files": [
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusProspectorMineReadLibrary.cpp",
+      "sha256": "7d32478f5a080f514d2772f7d36da75344a7643ead08f54598adcba047a7e3be",
+      "bytes": 31807
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusProspectorMineReadLibrary.h",
+      "sha256": "ef53e67c87b3935336a814d4dbdeccaf4f2bde7d975ee1ca1cb818dbe5fa6e5d",
+      "bytes": 1320
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\Tests\\DaedalusMineFreshScopeTest.cpp",
+      "sha256": "63f801cfbbe0fb6f36e18b7f022479fae7c738326fb46d51eaa61ed120cd91bd",
+      "bytes": 1188
+    }
+  ],
+  "pure_files": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\mine_fresh_import.py",
+      "sha256": "7e56d5f27d9ed32e779a4efa5da7eed0270cfa935591bad1bb454862955206c3",
+      "bytes": 7423
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\tests\\test_mine_fresh_import.py",
+      "sha256": "7bc5aad417ab2bcdcf5e8c3385aeaee0b4a47f366e514c9e32c06b55e8555f1f",
+      "bytes": 5486
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\mine_fresh_capture.inc",
+      "sha256": "75d97d959791c93e19345ec034d297a166fcfa814b331236e967ea3b46417491",
+      "bytes": 5401
+    }
+  ],
+  "scope": {
+    "source_sha256": "0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14",
+    "asset": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine",
+    "skeleton": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "source_copy": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\source\\Twaker_Prospector.glb",
+      "sha256": "0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14",
+      "bytes": 212424
+    },
+    "replace_existing": false,
+    "original_reimports": 0,
+    "world_saves": 0
+  },
+  "comparison_contract": {
+    "name": "FLOAT32_TRANSFORM_8EPS_V1",
+    "epsilon": 9.5367431640625e-07,
+    "why": "Independent converter explicitly narrows transforms through FTransform3f; native references/poses are doubles. Eight binary32 epsilons times max(1,abs(a),abs(b)) is an explicit component acceptance budget for this separate fresh test. It covers the observed two-foot quaternion normalization difference of2.22e-16 and small float packing roundoff; it is not a general retarget/geometry/provenance tolerance.",
+    "quaternions": "Require finite near-unit input; normalize and handle q/-q orientation equivalence before component comparison.",
+    "translation_units": "cm",
+    "exact_checks": [
+      "source digest",
+      "asset and Skeleton identity",
+      "14bone membership and parent hierarchy",
+      "24Hz rate",
+      "sample times0,1",
+      "identity global offset"
+    ],
+    "old_exact_oracle_unchanged": true,
+    "runtime_equivalence_proven": false
+  },
+  "validation": {
+    "pure_test_methods_passed": 6,
+    "synthetic_source_clip_counterexamples": 23,
+    "pure_results": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR2\\focused-tests.txt",
+      "sha256": "a414914c99fa67e4ccb3ee6e7d8c2f910044e36f4f382d744327f7206b6e3c0e",
+      "bytes": 447
+    },
+    "source_review": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR3\\source-review.json",
+      "sha256": "fd32143ca0962fa05f100a9bb71ddf101b4893ef321422e2487fde043ab6478b",
+      "bytes": 2443
+    },
+    "failed_compile": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR2\\build-terminal.json",
+      "sha256": "87a5f6bc104aeca66fe2064b8cb1fcef1f3633738f13e5f274f92f6d1e9fd7bc",
+      "bytes": 453
+    },
+    "failure_repair": "13new-scope Error calls qualified against global class Error; old function unchanged.",
+    "corrected_build": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR3\\build-terminal.json",
+      "sha256": "f53c2649e6595b836389e63c7e1f741a7f083e8ccf7fcb9522420eec59ecbd6a",
+      "bytes": 451
+    },
+    "compiled_binary": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "sha256": "922a751c51b59a74e0e69b8556b30dab11ff3dbf4720672108d843408304b2bb",
+      "bytes": 10546176
+    },
+    "actual_ready_editor": {
+      "pid": 39812,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\MineReady-result.json",
+        "sha256": "874b426a577a0f704152a374ef2cbc56cac4dff6aab8c401392527cce049e627",
+        "bytes": 1610
+      },
+      "scene_camera_clean_preserved": true
+    },
+    "native_scope_test": "AUTHORED_COMPILED_UNRUN",
+    "source_pose_qualification": "NOT_RUN",
+    "fresh_import": "NOT_DISPATCHED",
+    "save_reload": "NOT_RUN",
+    "mismatched_skeleton_native_import": "NOT_RUN",
+    "synthetic_hierarchy_refusal": "PURE_TEST_PASS; actual-proof pre-factory counterexample prepared, not run"
+  },
+  "blocker": {
+    "utc": "2026-10-21T21:43:00.985255+00:00",
+    "action": "Run native MineFreshScopeRefusal before isolated import",
+    "status": "GUARD_REFUSED_BEFORE_DISPATCH",
+    "reason": "fresh memory headroom fails explicit operator floor",
+    "measured_observed_utc": "2026-10-21T21:42:30.007466+00:00",
+    "available_physical": 1151029248,
+    "required_physical": 1740800000,
+    "available_commit": 28048019456,
+    "required_commit": 2252800000,
+    "measurement_source": "Exact retained exec tool output; diagnostic-only zero-floor sample, never used for admission",
+    "native_discovery_stage_exists": false,
+    "imports_dispatched": 0,
+    "source_pose_qualified": false,
+    "scope_test_executed": false,
+    "pending_native_rpc": false,
+    "uncertain_outcome": false
+  },
+  "release": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\hold-release.json",
+    "sha256": "10647212a87b817bf613f263484e75bffb9a899b5bc0f24d39555f05569d39e6",
+    "bytes": 417
+  },
+  "preservation": "All original/source/package pins verified; reopened native snapshot has same22878actors/scene hash, camera,selection,clean/noPIE/idle. No importer/test was dispatched after guard refusal. One editor39812/sole custody retained; compute normally released; Cursor/apps/guards untouched.",
+  "status_correction": "A restricted/default process-list query returned no editor during startup, but subsequent retained native readiness and escalated OS read confirmed the original39812 alive. No recovery/second launch was issued. Absence in an incomplete process view must not trigger a duplicate launch.",
+  "remaining": "Fresh normal admission, one native scope-refusal test, one isolated import with actual pre-factory source qualification, expected final common/timing/tracks and current Source-pose proof, one new-only save/reload and preservation checks. Stop on any mismatch; no unchanged import replay.",
+  "historical_admission": false,
+  "fresh_roundtrip_accepted": false,
+  "compressed_playback_accepted": false,
+  "production_adopted": false,
+  "native_runtime_qualified": false
+}

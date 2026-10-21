@@ -4,6 +4,7 @@
 #include "DaedalusMineSourceHash.h"
 #include "AnimPose.h"
 #include "Animation/AnimSequence.h"
+#include "Animation/AnimData/IAnimationDataModel.h"
 #include "Animation/Skeleton.h"
 #include "Animation/AnimBoneCompressionSettings.h"
 #include "Animation/AnimCurveCompressionSettings.h"
@@ -34,6 +35,7 @@
 #include "InterchangeTranslatorBase.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Misc/PackageName.h"
 #include "Misc/ScopeExit.h"
 #include "Modules/ModuleManager.h"
 #include "ReferenceSkeleton.h"
@@ -93,7 +95,7 @@ static bool Pose(UAnimSequence* Clip,const TArray<double>& Times,A& Samples,A& E
         R->SetStringField(TEXT("evaluation"),TEXT("Source_NoRetarget_NoRootExtraction_NoCurves"));R->SetObjectField(TEXT("poses"),Poses);Samples.Add(MakeShared<FJsonValueObject>(R));}
     return true;
 }
-static bool SourceOracle(double Rate,double Start,double Stop,const FTransform& Offset,const TArray<double>& Times,J Out,A& E,int32& Translations)
+static bool SourceOracle(double Rate,double Start,double Stop,const FTransform& Offset,const TArray<double>& Times,J Out,A& E,int32& Translations,bool IncludeHierarchy=false)
 {
     // Closed actual target profile. Do not guess general pivot/retarget behavior.
     if(!Offset.Equals(FTransform::Identity,0.0)){Error(E,TEXT("Nonidentity final offset requires a separately qualified conversion"));return false;}
@@ -124,6 +126,13 @@ static bool SourceOracle(double Rate,double Start,double Stop,const FTransform& 
         J T=MakeShared<FJsonObject>();if(!Transform(FTransform(FTransform3f(Bind)),T)){Error(E,TEXT("Nonfinite source bind pose"));return false;}Reference->SetObjectField(Alias,T);
         Queries.Emplace(Pair.Key,FInterchangeAnimationPayLoadKey(Pair.Value,EInterchangeAnimationPayLoadType::BAKED),Rate,Start,Stop);}
     for(const TCHAR* N:Names)if(!AliasByUid.FindKey(FString(N))){Error(E,TEXT("Fresh source bone names differ"));return false;}
+    if(IncludeHierarchy){J Parents=MakeShared<FJsonObject>();for(const auto& Pair:AliasByUid){
+        const auto* Joint=Cast<UInterchangeJointNode>(Nodes->GetNode(Pair.Key));
+        const FString* Parent=Joint?AliasByUid.Find(Joint->GetParentUid()):nullptr;
+        if(Pair.Value==TEXT("root")){if(Parent){Error(E,TEXT("Source root has a joint parent"));return false;}Parents->SetField(Pair.Value,MakeShared<FJsonValueNull>());}
+        else if(Parent)Parents->SetStringField(Pair.Value,*Parent);
+        else{Error(E,TEXT("Source joint parent absent from exact roster"));return false;}}
+        Out->SetObjectField(TEXT("bone_parents"),Parents);}
     const auto Payloads=PayloadInterface->GetAnimationPayloadData(Queries);
     if(Payloads.Num()!=14){Error(E,TEXT("Incomplete independent source payloads"));return false;}
     TMap<FString,const UE::Interchange::FAnimationPayloadData*> ByUid;
@@ -147,9 +156,73 @@ static bool SourceOracle(double Rate,double Start,double Stop,const FTransform& 
     Out->SetStringField(TEXT("translator_class"),Translator->GetClass()->GetPathName());Out->SetStringField(TEXT("track_uid"),TrackUid);
     Out->SetObjectField(TEXT("reference_pose"),Reference);Out->SetArrayField(TEXT("samples"),Samples);Out->SetArrayField(TEXT("translator_messages"),Messages);return E.Num()==0;
 }
+
 } // namespace ProspectorRead
 #endif
 
+#if WITH_EDITOR
+namespace ProspectorFresh
+{
+using namespace ProspectorRead;
+static const FString FreshPath=TEXT("/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine");
+static bool Active=false;
+static J Envelope(const TCHAR* Kind){J Out=MakeShared<FJsonObject>();Out->SetStringField(TEXT("schema"),Kind);Out->SetBoolField(TEXT("native_invoked"),true);Out->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());Out->SetStringField(TEXT("observed_utc"),FDateTime::UtcNow().ToIso8601());Out->SetStringField(TEXT("source_sha256"),SourceSha);Out->SetStringField(TEXT("source_path"),SourceFile);Out->SetBoolField(TEXT("native_runtime_qualified"),false);return Out;}
+static bool Context(A& E,bool AllowFreshDirty){
+    if(!IsInGameThread()||Active||!GEditor||GEditor->PlayWorld||!GEditor->GetEditorWorldContext().World()||GEditor->GetEditorWorldContext().World()->GetPathName()!=TEXT("/Game/Daedalus/DaedalusWorld.DaedalusWorld")){ProspectorRead::Error(E,TEXT("Closed fresh editor context refused"));return false;}
+    TArray<UPackage*> Maps,Content;UEditorLoadingAndSavingUtils::GetDirtyMapPackages(Maps);UEditorLoadingAndSavingUtils::GetDirtyContentPackages(Content);
+    if(Maps.Num()){ProspectorRead::Error(E,TEXT("Dirty map refused"));return false;}
+    const FString Package=FPackageName::ObjectPathToPackageName(FreshPath);
+    for(UPackage* P:Content)if(!AllowFreshDirty||!P||P->GetName()!=Package){ProspectorRead::Error(E,TEXT("Unexpected dirty content refused"));return false;}return true;
+}
+static FString Finish(J Out,A& E,int32 Translations=0){Out->SetArrayField(TEXT("errors"),E);Out->SetStringField(TEXT("state"),E.Num()?TEXT("held"):TEXT("complete"));Out->SetNumberField(TEXT("source_translations"),Translations);const FString Text=Serialize(Out);if(FTCHARToUTF8(*Text).Length()>Budget)return TEXT("{\"state\":\"held\",\"errors\":[\"Fresh proof UTF8 cap\"]}");return Text;}
+static bool References(J Out,A& E){
+    auto* Mesh=Cast<USkeletalMesh>(StaticFindObject(USkeletalMesh::StaticClass(),nullptr,*MeshPath));auto* Skeleton=Cast<USkeleton>(StaticFindObject(USkeleton::StaticClass(),nullptr,*SkeletonPath));
+    if(!Readable(Mesh)||!Readable(Skeleton)||Mesh->GetSkeleton()!=Skeleton){ProspectorRead::Error(E,TEXT("Exact original loaded mesh/Skeleton context required"));return false;}
+    A MR,SR;if(!Reference(Mesh->GetRefSkeleton(),MR,E)||!Reference(Skeleton->GetReferenceSkeleton(),SR,E))return false;
+    Out->SetStringField(TEXT("skeleton_path"),SkeletonPath);Out->SetStringField(TEXT("mesh_path"),MeshPath);Out->SetArrayField(TEXT("mesh_reference"),MR);Out->SetArrayField(TEXT("skeleton_reference"),SR);return true;
+}
+}
+#endif
+
+FString UDaedalusProspectorMineReadLibrary::ReadFreshMineSource(UInterchangeBaseNodeContainer* JobNodes)
+{
+#if WITH_EDITOR
+    using namespace ProspectorFresh;J Out=Envelope(TEXT("daedalus.mine-fresh-source.v1"));A E;int32 Translations=0;
+    auto Run=[&](){if(!Context(E,false)||!Readable(JobNodes)){ProspectorRead::Error(E,TEXT("Actual live job nodes required"));return;}TGuardValue<bool> Guard(Active,true);
+        if(!References(Out,E))return;
+        const auto* Factory=Cast<UInterchangeAnimSequenceFactoryNode>(JobNodes->GetFactoryNode(FactoryUid));const auto* Common=UInterchangeCommonPipelineDataFactoryNode::GetUniqueInstance(JobNodes);
+        double Rate=0,Start=0,Stop=0;bool Bake=false,Tracks=false;FTransform Offset;FSoftObjectPath SpecifiedSkeleton;
+        if(!Factory||!Common||!Factory->GetCustomImportBoneTracksSampleRate(Rate)||!Factory->GetCustomImportBoneTracksRangeStart(Start)||!Factory->GetCustomImportBoneTracksRangeStop(Stop)||!Factory->GetCustomImportBoneTracks(Tracks)||!Common->GetBakeMeshes(Bake)||!Common->GetCustomGlobalOffsetTransform(Offset)||Rate!=24||Start!=0||!FMath::IsFinite(Stop)||Stop<=1||Stop>=2||!Tracks||!Bake||!Offset.Equals(FTransform::Identity,0.0)){ProspectorRead::Error(E,TEXT("Closed actual final common/factory profile refused"));return;}
+        if(!Factory->GetCustomSkeletonSoftObjectPath(SpecifiedSkeleton)||SpecifiedSkeleton.ToString()!=SkeletonPath){ProspectorRead::Error(E,TEXT("Explicit final factory Skeleton differs"));return;}
+        J P=MakeShared<FJsonObject>(),OT=MakeShared<FJsonObject>();if(!Transform(Offset,OT)){ProspectorRead::Error(E,TEXT("Nonfinite offset"));return;}P->SetStringField(TEXT("skeleton_path"),SpecifiedSkeleton.ToString());
+        P->SetStringField(TEXT("factory_uid"),FactoryUid);P->SetStringField(TEXT("job_container"),JobNodes->GetPathName());P->SetNumberField(TEXT("sample_rate"),Rate);P->SetNumberField(TEXT("range_start"),Start);P->SetNumberField(TEXT("range_stop"),Stop);P->SetBoolField(TEXT("bake_meshes"),Bake);P->SetBoolField(TEXT("bone_tracks"),Tracks);P->SetObjectField(TEXT("global_offset"),OT);Out->SetObjectField(TEXT("live_profile"),P);
+        J Oracle=MakeShared<FJsonObject>();if(!SourceOracle(Rate,Start,Stop,Offset,{0.0,1.0},Oracle,E,Translations,true))return;Out->SetObjectField(TEXT("source_oracle"),Oracle);
+    };Run();return Finish(Out,E,Translations);
+#else
+    (void)JobNodes;return TEXT("{\"state\":\"held\",\"errors\":[\"Editor only\"]}");
+#endif
+}
+
+FString UDaedalusProspectorMineReadLibrary::ReadFreshMineClip(const FString& AssetPath)
+{
+#if WITH_EDITOR
+    using namespace ProspectorFresh;J Out=Envelope(TEXT("daedalus.mine-fresh-clip.v1"));A E;
+    auto Run=[&](){if(AssetPath!=FreshPath){ProspectorRead::Error(E,TEXT("Exact private fresh Mine path required; no load"));return;}if(!Context(E,true))return;TGuardValue<bool> Guard(Active,true);
+        if(!References(Out,E))return;
+        auto* Clip=Cast<UAnimSequence>(StaticFindObject(UAnimSequence::StaticClass(),nullptr,*AssetPath));auto* Skeleton=Cast<USkeleton>(StaticFindObject(USkeleton::StaticClass(),nullptr,*SkeletonPath));
+        if(!Readable(Clip)||Clip->GetClass()!=UAnimSequence::StaticClass()||Clip->GetSkeleton()!=Skeleton||Clip->GetAdditiveAnimType()!=AAT_None){ProspectorRead::Error(E,TEXT("Fresh clip class/Skeleton/nonadditive context refused"));return;}
+        Out->SetStringField(TEXT("asset_path"),AssetPath);Out->SetStringField(TEXT("clip_skeleton_path"),Clip->GetSkeleton()->GetPathName());Out->SetNumberField(TEXT("length_s"),Clip->GetPlayLength());
+        const auto* Data=Cast<UInterchangeAssetImportData>(UInterchangeAssetImportData::GetFromObject(Clip));const auto* Factory=Data?Cast<UInterchangeAnimSequenceFactoryNode>(Data->GetStoredFactoryNode(FactoryUid)):nullptr;
+        double Rate=0,Start=0,Stop=0;if(!Data||Data->NodeUniqueID!=FactoryUid||Data->GetSourceFileCount()!=1||!Factory||!Factory->GetCustomImportBoneTracksSampleRate(Rate)||!Factory->GetCustomImportBoneTracksRangeStart(Start)||!Factory->GetCustomImportBoneTracksRangeStop(Stop)){ProspectorRead::Error(E,TEXT("Fresh exact stored source/factory profile absent"));return;}
+        Out->SetStringField(TEXT("stored_source_path"),FPaths::ConvertRelativePathToFull(Data->GetFirstFilename()));Out->SetNumberField(TEXT("sample_rate"),Rate);Out->SetNumberField(TEXT("range_start"),Start);Out->SetNumberField(TEXT("range_stop"),Stop);
+        if(!Clip->GetDataModel()){ProspectorRead::Error(E,TEXT("Fresh source animation data model absent"));return;}
+        TArray<FName> Tracks;Clip->GetDataModel()->GetBoneTrackNames(Tracks);if(Tracks.Num()!=14){ProspectorRead::Error(E,TEXT("Fresh exact14 bone tracks required"));return;}A NamesJson;for(FName N:Tracks)NamesJson.Add(MakeShared<FJsonValueString>(N.ToString()));Out->SetArrayField(TEXT("track_names"),NamesJson);
+        A Samples;if(!Pose(Clip,{0.0,1.0},Samples,E))return;Out->SetArrayField(TEXT("samples"),Samples);
+    };Run();return Finish(Out,E);
+#else
+    (void)AssetPath;return TEXT("{\"state\":\"held\",\"errors\":[\"Editor only\"]}");
+#endif
+}
 FString UDaedalusProspectorMineReadLibrary::ReadMinePrerequisites(const TArray<double>& SampleTimes)
 {
 #if WITH_EDITOR
