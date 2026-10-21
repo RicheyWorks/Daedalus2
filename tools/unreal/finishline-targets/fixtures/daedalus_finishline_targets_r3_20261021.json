@@ -1,0 +1,167 @@
+{
+  "schema": "daedalus.finishline-targets/v1",
+  "source_packet_sha256": "f673dd6be0415d5cbab213a0115bca9bebc07814772ccf24b0b7d273c4938190",
+  "stage": "SOURCE_R3_FINITE_OPERATIONS_NATIVE_UNINVOKED",
+  "world": {
+    "object_path": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+    "class_path": "/Script/Engine.World"
+  },
+  "meshes": [
+    {
+      "id": "willow_mature",
+      "object_path": "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature.Prop_Tree_Willow_Mature",
+      "class_path": "/Script/Engine.StaticMesh",
+      "asset_file_sha256": "8d11ff62890e6a9bd86ee5185b0b02c6e65d97b3c40d7d4c79356758ec05d1a2",
+      "purpose": "Existing Blender-authored flora; measure actual LOD geometry first, then select an ordinary justified owned policy. No automatic reduction."
+    },
+    {
+      "id": "willow_young",
+      "object_path": "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Young/Prop_Tree_Willow_Young/StaticMeshes/Prop_Tree_Willow_Young.Prop_Tree_Willow_Young",
+      "class_path": "/Script/Engine.StaticMesh",
+      "asset_file_sha256": "b75977a29fc763a3dab546f0c2bcd19ca8b48407e86874f725c66a9326a4baa1",
+      "purpose": "Existing Blender-authored flora; measure actual LOD geometry first, then select an ordinary justified owned policy. No automatic reduction."
+    },
+    {
+      "id": "cave_floor",
+      "object_path": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+      "class_path": "/Script/Engine.StaticMesh",
+      "asset_file_sha256": "40a7d06576a620b62b1af7f0d85fee429cb7b6b180eb065429a5b4a6e82050e8",
+      "purpose": "Actual original GLB/native import MD5 lineage matched; base main floor1760 source triangles versus wholeassembly2432. Actual native counts still require operator readback."
+    }
+  ],
+  "pcg": {
+    "graph_path": "/Game/Pythagoras/PCGEcology/PCG_Ecology.PCG_Ecology",
+    "graph_class": "/Script/PCG.PCGGraph",
+    "graph_file_sha256": "df7a6bbd97210da29e4397f811a30b11718a0faa7a9a9341ebd9ebd27a1422e1",
+    "component_path": null,
+    "component_class": "/Script/PCG.PCGComponent",
+    "component_source_name_hint_only": "PYTH_PCG_Ecology",
+    "descriptor_mesh_paths": [
+      "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature.Prop_Tree_Willow_Mature",
+      "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Young/Prop_Tree_Willow_Young/StaticMeshes/Prop_Tree_Willow_Young.Prop_Tree_Willow_Young"
+    ],
+    "expected_output_sha256": null,
+    "limits": "Layout source eco.generate(7) is distinct from the actual PCGComponent seed. Existing source never sets the component seed; installed default42 is not a live measurement. Read actual seed and preserve it unless a deliberate future operation policy requests a change. Exact component/output digest remain unbound; manual seed15 WillowRiverbank placement is separate.",
+    "layout_seed": 7,
+    "desired_component_seed": null
+  },
+  "hlod": {
+    "source_actor_paths": [],
+    "source_actor_classes": {},
+    "layer_path": null,
+    "layer_class": null,
+    "nonpartitioned_builder_source_supported": true,
+    "actual_builder_eligibility": null,
+    "limits": "Legacy nonpartitioned HLOD uses LODActor and effective level WorldSettings/FHierarchicalSimplification, not HLODLayer. Exact cluster/settings and existing shared proxy/package closure remain unbound. Single-cluster builder is plain C++, can clean sharedproxy assets and run globalGC; no Python/global-build substitution.",
+    "route": "legacy_nonpartitioned",
+    "lod_actor_path": null,
+    "level_path": null,
+    "world_settings_path": null,
+    "effective_settings_sha256": null
+  },
+  "release": {
+    "project_file": "C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject",
+    "project_file_sha256": "83e12b2965ac20e73c9ef850150ffced2ac936457a9a6b9cc7e829c73baccc7b",
+    "target": "DaedalusRealm",
+    "platform": "Win64",
+    "configuration": "Shipping",
+    "fresh_archive_path": "C:/Unreal/DaedalusRealm/Saved/Packages/WZ-20261021-integration-finishline-r1/Windows",
+    "packaged_executable": "C:/Unreal/DaedalusRealm/Saved/Packages/WZ-20261021-integration-finishline-r1/Windows/DaedalusRealm/Binaries/Win64/DaedalusRealm-Win64-Shipping.exe",
+    "historic_archive_not_current": "C:/Unreal/DaedalusRealm/Saved/Packages/WZ-20261014-native/Windows"
+  },
+  "units": {
+    "mesh.lod_build_policy_operation": {
+      "target_id": "cave-floor-authored-lod-policy-r3",
+      "desired_policy": null
+    },
+    "generation.pcg_consumer": {
+      "target_id": "pythagoras-pcg-ecology-layout7-bound-component-r2"
+    },
+    "streaming.partition_hlod_consumer": {
+      "target_id": "daedalus-world-finite-hlod-r1"
+    },
+    "release.cook_package_launch": {
+      "target_id": "daedalusrealm-win64-shipping-finishline-r1"
+    }
+  },
+  "admission": {
+    "owner": "Existing sole codex-play-guard only AFTER current R5 batch",
+    "transport": "Existing capture path; none supplied/activated by these files",
+    "operator_must_pin": [
+      "reader source SHA256",
+      "policy source SHA256",
+      "raw fixture SHA256 and canonical contract digest",
+      "current map/source/profile and exact stage receipt references"
+    ],
+    "facts_are_not_authority": true,
+    "mutations_or_heavy_jobs_authorized": false,
+    "actual_native_facts": null,
+    "actual_completion": null,
+    "post_operation_package_witness": "Original config/source plan pins remain unchanged. collect observation defaults preflight; post_operation/reopen must name unit_id+operation_id and only explicitly admitted selected native package SHA overrides. LOD permits its chosen mesh only; PCG permits graph only. Saved changed package and fresh reopen must bind to the same actual operation. Mutable native package pins are not immutable Blender source pins.",
+    "usage": "Sole operator explicitly calls collect(config,capture_id,admitted_reader_sha256,admitted_policy_sha256,observation=...,exact_asset_loads=[exact configured source-pinned asset paths],streaming_packages=[exact full retained package names]). Defaults never load assets. Module import makes no Unreal call. Existing transport/custody/profile remain. Component seed is observed separately; no seed changes in reader.",
+    "synthetic_test_limit": "Saved tests use hand-authored records and fake read objects only; not native, asset, graph, HLOD, build or packaged-launch proof."
+  },
+  "source_grounding": {
+    "engine": "Installed UE5.8.4 source declarations, not native invocation",
+    "headers": [
+      {
+        "path": "Source/Editor/StaticMeshEditor/Public/StaticMeshEditorSubsystem.h",
+        "sha256": "9c09f15edadff8121b501d84ee482ef1b6e978884c23aa19f19c388969813d61",
+        "reads": "GetLodCount152/GetLodScreenSizes168/GetLodBuildSettings81"
+      },
+      {
+        "path": "Source/Runtime/Engine/Classes/Engine/StaticMesh.h",
+        "sha256": "8effdddd5ef30d453a6cd8bde93efd8c27b6677eec907fc510503e0e701ceb9e",
+        "reads": "Reflected GetNumVertices2147/GetNumTriangles2153, render-data facts"
+      },
+      {
+        "path": "Source/Editor/UnrealEd/Public/Subsystems/UnrealEditorSubsystem.h",
+        "sha256": "3c41b7d67bb0709d35f8c47a953f1b73b5c29ad59f1860f76dea6950c0d3d15e",
+        "reads": "GetEditorWorld49"
+      },
+      {
+        "path": "Source/Runtime/Engine/Classes/Engine/World.h",
+        "sha256": "bb193a298086bbf10acfc9793071180dab3055dd4e5c66fbdd7f45ad8e01dff6",
+        "reads": "K2_GetWorldSettings2936\u20132937 ScriptName GetWorldSettings; GetWorldPartition is NOT a UFUNCTION"
+      },
+      {
+        "path": "Source/Runtime/Engine/Classes/GameFramework/WorldSettings.h",
+        "sha256": "9dfaf77749f8a50a1721da0607e4ae9c9b6e62df8d7657d5ddfb2590df0a45b2",
+        "reads": "Reflected WorldPartition550\u2013551"
+      },
+      {
+        "path": "Plugins/PCG/Source/PCG/Public/PCGComponent.h",
+        "sha256": "737756b3029c846afd123ac0553114e468b4b385cec3ea4253885be682f526bf",
+        "reads": "GetGraph186\u2013187; Seed313\u2013314; bGenerated402\u2013403; GraphInstance625\u2013626"
+      }
+    ],
+    "unsupported_python_guesses": [
+      "UWorld.GetWorldPartition",
+      "UWorld.IsPartitionedWorld",
+      "PCG.GetGraphInstance",
+      "PCG.IsGenerating"
+    ],
+    "reference_capture": null
+  },
+  "limits": {
+    "max_payload_bytes": 262144,
+    "max_meshes": 8,
+    "max_lods_per_mesh": 8,
+    "max_hlod_source_actors": 128,
+    "max_streaming_levels": 512,
+    "max_small_project_bytes": 65536,
+    "max_asset_source_bytes": 33554432,
+    "on_unknown": "Hold. No false/default promotion, truncation, load_asset, Generate, builder, save, spawn or settings mutation."
+  },
+  "original_fixture_sha256": "98fee3d8080f9572df1804618623610c08763640a266a1181433ff5767036c86",
+  "prior_r2_fixture_sha256": "4ee0da6736790b22dce79c18155843821bef585fa982348c832ae617fee6b529",
+  "source_exports": {
+    "base_file": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Realm_Cave_Floor.glb",
+    "base_sha256": "bdc6eb527776e38f23fc27c2ef169189714c39182b0be61c4af3b9e14081a7b8",
+    "native_import_md5": "bb7c801de79ae91e64c9b0403bbb7cad",
+    "lod1_file": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Realm_Cave_Floor_LOD1.glb",
+    "lod1_sha256": "9d0e89811323db25bd94ae17a1f55765bd96d3f8f1436ea2daba9be71e347dfd",
+    "base_node": "Prop_Realm_Cave_Floor",
+    "actual_native_mapping": null
+  }
+}

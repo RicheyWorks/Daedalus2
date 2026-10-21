@@ -229,7 +229,33 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
     # must already exist in the current world; layer asset loads require an exact pin.
     hlod = {"state": "UNKNOWN", "reason": "Exact finite source set/layer not yet bound"}
     hc = config["hlod"]
-    if hc["source_actor_paths"] and hc["layer_path"]:
+    if hc.get("route")=="legacy_nonpartitioned":
+        hlod={"state":"UNKNOWN","reason":"Exact legacy LODActor/level/WorldSettings not yet bound; no HLODLayer required"}
+        if all(hc.get(k) for k in ("lod_actor_path","level_path","world_settings_path")):
+            def legacy_read():
+                actor=find({"object_path":hc["lod_actor_path"],"class_path":"/Script/Engine.LODActor"})
+                settings=find({"object_path":hc["world_settings_path"],"class_path":"/Script/Engine.WorldSettings"})
+                require(owning_world(actor)==config["world"]["object_path"] and
+                        actor.get_level().get_path_name()==hc["level_path"] and
+                        settings.get_level().get_path_name()==hc["level_path"],"Legacy HLOD level/world mismatch")
+                sources=list(actor.get_editor_property("sub_actors"))
+                require(2<=len(sources)<=128,"Legacy HLOD source count is empty/unbounded")
+                actual={x.get_path_name():x.get_class().get_path_name() for x in sources}
+                require(len(actual)==len(sources) and actual==hc["source_actor_classes"],
+                        "Legacy HLOD source actor set changed")
+                require(all(owning_world(x)==config["world"]["object_path"] and
+                            x.get_level().get_path_name()==hc["level_path"] for x in sources),
+                        "Legacy source level/world changed")
+                return {"state":"IDENTITIES_OBSERVED_SETTINGS_UNRESOLVED","route":"legacy_nonpartitioned",
+                        "world_path":config["world"]["object_path"],"lod_actor_path":actor.get_path_name(),
+                        "level_path":hc["level_path"],"world_settings_path":settings.get_path_name(),
+                        "source_actor_paths":list(hc["source_actor_paths"]),"source_actor_classes":actual,
+                        "lod_level_one_based":actor.get_editor_property("lod_level"),
+                        "effective_settings_sha256":None,
+                        "reason":"Effective level HLOD settings resolve local/setup-asset/global overrides through plain C++; native-owner binding required. No private ULevel getter, local-array assumption or global build.",
+                        "builder_invoked":False}
+            hlod=observed("hlod.legacy_identities",legacy_read) or {"state":"UNKNOWN"}
+    elif hc["source_actor_paths"] and hc["layer_path"]:
         def hlod_read():
             for object_path in hc["source_actor_paths"]:
                 obj = ue.find_object(None, object_path)

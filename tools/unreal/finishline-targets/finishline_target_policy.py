@@ -132,13 +132,24 @@ def validate_contract(config):
     actors = config.get("hlod", {}).get("source_actor_paths")
     require(isinstance(actors, list) and len(actors) <= MAX_ACTORS and
             len(set(actors)) == len(actors) and all(path(x) for x in actors), "Invalid HLOD source set")
+    legacy = config["hlod"].get("route") == "legacy_nonpartitioned"
+    require(config["hlod"].get("route") in (None,"legacy_nonpartitioned","world_partition"),
+            "Unknown HLOD route")
     require(config["hlod"].get("layer_path") is None or path(config["hlod"]["layer_path"]), "Invalid HLOD layer")
     require(config["hlod"].get("layer_file_sha256") is None or
             sha(config["hlod"]["layer_file_sha256"]), "Invalid optional HLOD layer file pin")
     classes = config["hlod"].get("source_actor_classes", {})
     require(isinstance(classes, dict) and set(classes) == set(actors) and all(path(x) for x in classes.values()),
             "Missing exact HLOD source classes")
-    require(path(config["hlod"].get("layer_class")), "Missing HLOD layer class")
+    if legacy:
+        require(config["hlod"].get("layer_path") is None and config["hlod"].get("layer_class") is None,
+                "Legacy HLOD does not require a WorldPartition HLODLayer")
+        for key in ("lod_actor_path","level_path","world_settings_path"):
+            require(config["hlod"].get(key) is None or path(config["hlod"][key]),"Invalid legacy HLOD identity")
+        require(config["hlod"].get("effective_settings_sha256") is None or
+                sha(config["hlod"]["effective_settings_sha256"]),"Invalid effective HLOD settings pin")
+    else:
+        require(path(config["hlod"].get("layer_class")), "Missing HLOD layer class")
     release = config.get("release", {})
     require(release.get("target") == "DaedalusRealm" and release.get("platform") == "Win64" and
             release.get("configuration") == "Shipping", "Unexpected release target")
@@ -255,9 +266,21 @@ def inspect(config, facts):
         partitioned = world.get("partitioned")
         require(partitioned is None or type(partitioned) is bool, "Invalid partition mode")
         source_set = config["hlod"]["source_actor_paths"]
+        legacy=config["hlod"].get("route")=="legacy_nonpartitioned"
         hlod_ready = (type(partitioned) is bool and bool(source_set) and
                       config["hlod"]["layer_path"] is not None and hlod.get("state") == "OBSERVED")
-        if hlod_ready:
+        if legacy:
+            hlod_ready=(partitioned is False and len(source_set)>=2 and hlod.get("state")=="OBSERVED" and
+                        all(config["hlod"].get(k) is not None for k in
+                            ("lod_actor_path","level_path","world_settings_path","effective_settings_sha256")))
+            if hlod_ready:
+                require(hlod.get("world_path")==config["world"]["object_path"] and
+                        hlod.get("source_actor_paths")==source_set and
+                        hlod.get("source_actor_classes")==config["hlod"]["source_actor_classes"],
+                        "Legacy HLOD world/source set mismatch")
+                for key in ("lod_actor_path","level_path","world_settings_path","effective_settings_sha256"):
+                    require(hlod.get(key)==config["hlod"][key],"Legacy HLOD identity/settings mismatch")
+        elif hlod_ready:
             require(hlod.get("world_path") == config["world"]["object_path"], "HLOD world mismatch")
             require(hlod.get("source_actor_paths") == source_set and
                     hlod.get("source_actor_classes") == config["hlod"]["source_actor_classes"] and
