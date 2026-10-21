@@ -1,0 +1,161 @@
+{
+  "schema": "daedalus.native-readers-source-checkpoint.v1",
+  "recorded_utc": "2026-10-21T04:42:00.615985+00:00",
+  "engine": "Unreal Engine 5.8.4, CL 58902052",
+  "source": [
+    {
+      "path": "DaedalusLink.uplugin",
+      "bytes": 1350,
+      "sha256": "ff469d8343d12bb9f698111c420b0fceb0482db4f6f728bc99e26c6a4d845ef0",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/DaedalusLink.Build.cs",
+      "bytes": 3004,
+      "sha256": "6e416c76c6ea25aa35f4de0a4939e1d857829a48400eb5726e3a90fbf17590fc",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusLinkModule.h",
+      "bytes": 697,
+      "sha256": "17731fc318ea29db9a47c74c460469ae49e92f4e3f7b50274d8f2ff29c1391d4",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusLinkModule.cpp",
+      "bytes": 1844,
+      "sha256": "3511b49bbf39896f668d0415827062ac6c595c950d670cab1e52dd65beae3250",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusProspectorMineReadLibrary.h",
+      "bytes": 683,
+      "sha256": "5b282beee8e45d3fd29efd517c3d5f04b0834104069993dea8fc30819b1f8ed4",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusProspectorMineReadLibrary.cpp",
+      "bytes": 23244,
+      "sha256": "02f60394b1b6fd1d7da144f9f8b0617fbf82b65d5ae9225420c540684e91504b",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/StartupUcsAttributionObserver.h",
+      "bytes": 1861,
+      "sha256": "1cb4854bd5cbeffa28a453bb5802919fded238cb084184f7da6c41e1fab753ef",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/StartupUcsAttributionObserver.cpp",
+      "bytes": 7720,
+      "sha256": "f36ea96464ef5536bac349e3a5d0ffca4a0ba1c071a721acc811539b94342025",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusImportedFactorReadLibrary.h",
+      "bytes": 1642,
+      "sha256": "ca1602bfa7bf4d7feddfa58a5a2139874888cc429c1f564ba6373f541163c096",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusImportedFactorReadLibrary.cpp",
+      "bytes": 38337,
+      "sha256": "bae5f0f660e0e025a8f30fe1a926883fd45fca06ba61e479db6da477ab7b95d2",
+      "installed_bytes_match": true
+    }
+  ],
+  "entry_points": {
+    "mine": "unreal.DaedalusProspectorMineReadLibrary.read_mine_prerequisites(sample_times)",
+    "imported_factors": "unreal.DaedalusImportedFactorReadLibrary.read_imported_factor_bindings(paths, allowed_root, policy_id)",
+    "protection": "unreal.DaedalusImportedFactorReadLibrary.read_imported_factor_protection(paths, allowed_root)",
+    "startup_observer_opt_in": "-DaedalusTraceUCS"
+  },
+  "scope": {
+    "readers": "Typed editor-only observations; no arbitrary graph evaluator, import, reimport, save or world mutation entry point.",
+    "protection": "Criterion-scoped current call, named input roster, three factor connections/leaves and applicable parameter proofs; not every serialized graph field or unused parameter.",
+    "observer": "Resident opt-in editor delegate observer. Preserve delegate/module lifetime until normal process exit; no hot reload, forced unload or arbitrary runtime shutdown while attached.",
+    "dependencies": "Existing installed editor Interchange modules; explicit plugin dependency. No new plugin installation or transport."
+  },
+  "build": {
+    "initial_attempt_exit_code": 6,
+    "initial_failure": "Helper Error/Serialize names conflicted with existing names; corrected by exact namespace qualification.",
+    "corrected_attempt_exit_code": 0,
+    "corrected_attempt_known_terminal": true,
+    "corrected_attempt_seconds": 13.60181499999453,
+    "all_three_units_in_link_response": true,
+    "existing_rawinput_deprecation_warning": true,
+    "binary": {
+      "path": "Binaries/Win64/UnrealEditor-DaedalusLink.dll",
+      "sha256": "bbdac5a0cf580ebdfc35271cb99454b179a86664bcd176a12102109b9d4c936c",
+      "bytes": 10496000
+    }
+  },
+  "runtime": {
+    "reflection_discovery": "PASSED in the built process; all three reflected methods were present.",
+    "mine": {
+      "state": "CRASHED_UNKNOWN_NATIVE_SUBSTAGE",
+      "dispatch_utc": "2026-10-21T04:26:08.653669Z",
+      "crash_utc": "2026-10-21T04:26:12.030Z",
+      "exception": "EXCEPTION_ACCESS_VIOLATION reading 0x00007465736c6f18",
+      "available_stack": "Python311 / PythonScriptPlugin / Slate; no project C++ frame or Python filename/line.",
+      "native_reader_entry_proven": false,
+      "returned_raw_present": false,
+      "automatic_replay_permitted": false,
+      "reimport_attempted": false
+    },
+    "material": {
+      "exposure_read_completed": true,
+      "field_categories": 175,
+      "unavailable_categories": 141,
+      "typed_factor_capture_attempted": false,
+      "material_admitted": false
+    },
+    "startup_observer": {
+      "attached": true,
+      "qualifying_observation_rows": 0,
+      "actor_attribution_proven": false,
+      "startup_delay_fixed": false
+    },
+    "world": {
+      "lod_operation_attempted": false,
+      "pcg_operation_attempted": false
+    },
+    "protected_saved_packages_rehashed_after_crash": 27595,
+    "protected_saved_packages_changed": 0,
+    "user_restart": "Two manually restarted same-project instances observed; operator made no new launch or close, and no post-restart native call. Resolution remains pending."
+  },
+  "receipts": [
+    {
+      "local_path": "NativeBuildR2/build-terminal.json",
+      "bytes": 450,
+      "sha256": "19fc05ea0c8e8bc439bc85f7f527bceb689eb3db30a142d6e0ce3f3e60c3467e"
+    },
+    {
+      "local_path": "NativeBuildR2/new-source-inclusion.json",
+      "bytes": 1439,
+      "sha256": "312c1378842a2db0f8ee546177b45a36959a1c3794d62199d8a54b9c0e09eb90"
+    },
+    {
+      "local_path": "NativeBuildR2/ready.json",
+      "bytes": 4390,
+      "sha256": "3e56698107b8206457e91fb66cca9e39b47a9cb6ad9d243efb157139426e00e2"
+    },
+    {
+      "local_path": "StartupObserverR1/result.json",
+      "bytes": 1066,
+      "sha256": "d2671f1054d5a0950ec78c1bdb56f9314601a8dcc0d26bc7de13649569a501da"
+    },
+    {
+      "local_path": "MineCrashR1/failure-reconciliation.json",
+      "bytes": 1171,
+      "sha256": "7dde85e4db338dd7446357b4759ea29d7d4659f9ed684567ed6fb4414e1202a3"
+    },
+    {
+      "local_path": "MineCrashR1/saved-preservation.json",
+      "bytes": 126,
+      "sha256": "6d5e74b9f177fa63c08f24fafe8268bd21e605d3c7091a22ebaa9fd09f534ff2"
+    }
+  ],
+  "native_runtime_qualified": false,
+  "publication_scope": "These ten native/plugin files and this evidence only; stopped Python policy, UCX, PowerShell reporting and combat publication lanes excluded."
+}
