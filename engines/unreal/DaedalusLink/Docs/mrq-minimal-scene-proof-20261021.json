@@ -1,0 +1,175 @@
+{
+  "schema": "daedalus.mrq-minimal-scene-witness.v1",
+  "utc": "2026-10-21T22:55:04.604175+00:00",
+  "scope": "One isolated saved/reloaded translated YTM shot, frame90,320x180 PNG, AA1/1. Minimal visible geometry only. Not generic MRQ/production renderer or production quality acceptance.",
+  "minimal_scene_visible_accepted": true,
+  "generic_native_runtime_qualified": false,
+  "plan": {
+    "operation_id": "4b9d54d2-a24c-4179-b9d9-fddad14efde0",
+    "plan": {
+      "schema": "daedalus.owned-mrq-acceptance.v1",
+      "sequence": "/Game/CodexToolEvaluation/MRQMinimalScene/R1/WB_YTM_Translated.WB_YTM_Translated",
+      "sequence_package_sha256": "754bf546aa0ab0faee47d894e273d2cb4144ceb4e472b563b05f1b0ba207d461",
+      "map": "/Game/Daedalus/DaedalusWorld.DaedalusWorld",
+      "frames": [
+        90
+      ],
+      "resolution": [
+        320,
+        180
+      ],
+      "spatial_samples": 1,
+      "temporal_samples": 1,
+      "overwrite": false,
+      "output_dir": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\frames",
+      "plan_id": "c9358d66b460fcd86d927480274e723bb91bd4ce0dffc7ccf60cb572e262039c"
+    },
+    "copy_package": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\MRQMinimalScene\\R1\\WB_YTM_Translated.uasset",
+      "sha256": "754bf546aa0ab0faee47d894e273d2cb4144ceb4e472b563b05f1b0ba207d461",
+      "bytes": 18547
+    },
+    "scope": "Latest parent authorizes ONE tiny corrected YTM scene-visible render after actual framing. Original old one-job packet consumed, not replayed. New private shot saved and clean reloaded, Ground/Spawn angular checks pass. Private transient queue, shared queue untouched, existing map read/PIE only, no world/map save."
+  },
+  "process": {
+    "pid": 39812,
+    "start_utc": "2026-10-21T21:37:36.0075710Z",
+    "engine": "5.8.4 CL58902052"
+  },
+  "diagnosis": {
+    "YTM_always_loaded": true,
+    "YTM_visible": true,
+    "tagged_actor_count": 381,
+    "old_camera_frame90_cm": [
+      10158.335706084967,
+      -2608431.4999979734,
+      4100.0
+    ],
+    "actual_spawn_cm": [
+      130050.0,
+      105700.0,
+      100.0
+    ],
+    "original_frame90_ground_spawn_outside_FOV": true,
+    "old_render_cause_not_retroactively_proven": true,
+    "D15_is_not_intended_YTM_shot": true,
+    "no_YTM_streaming_warning": true
+  },
+  "copy": {
+    "asset": "/Game/CodexToolEvaluation/MRQMinimalScene/R1/WB_YTM_Translated.WB_YTM_Translated",
+    "package": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\MRQMinimalScene\\R1\\WB_YTM_Translated.uasset",
+      "sha256": "754bf546aa0ab0faee47d894e273d2cb4144ceb4e472b563b05f1b0ba207d461",
+      "bytes": 18547
+    },
+    "saved": true,
+    "clean_reloaded": true,
+    "translation_cm": [
+      130050.0,
+      2705700.0,
+      0.0
+    ],
+    "modified_location_key_values": 14,
+    "recipe": "exact IEEE binary32-rounded original seven-key orbit; source recipe center[0,-2600000,100]",
+    "both_target_centers_inside_FOV_after_reload": true,
+    "other_supported_channel_values_defaults_tangents_rates_and_guid_unchanged": true,
+    "full_hidden_template_metadata_not_attested": true
+  },
+  "native": {
+    "render_submissions": 1,
+    "executor_success": true,
+    "completed_jobs": 1,
+    "callbacks": [
+      {
+        "utc": "2026-10-21T22:53:12.710490+00:00",
+        "success": true
+      }
+    ],
+    "render_start_utc": "2026-10-21T22:52:41.985048+00:00",
+    "executor_finished_utc": "2026-10-21T22:53:12.710490+00:00",
+    "executor_wall_seconds": 30.725442,
+    "png": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\frames\\mrq_0090.png",
+      "sha256": "6659c6baf1a440d508e2753f9f971f7bd7107ec5979636f5db42922df8ef2ae8",
+      "bytes": 80574
+    },
+    "PNG_CRC_deflate_dimensions_verified": true,
+    "pixel_review": "Viewed exact native PNG pixels: large island ground surface with visible shoreline/water boundary and upright prop/tree forms toward the far right. This corrected private YTM shot contains scene geometry; the old frame was pale sky only. Pale surface and tiny props are retained quality limitations; no production lighting/material/occlusion/full-scene acceptance."
+  },
+  "logs": {
+    "complete_interval": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\complete-render-interval.log",
+      "sha256": "df56cf4420eb68deb9d5717e54c580715a8ded28daee7d12b395f629e370d5f9",
+      "bytes": 161588
+    },
+    "errors": 0,
+    "warnings": 435,
+    "distinct_blueprint_streaming_packages": 205,
+    "blueprint_streaming_warning_records": 410,
+    "YTM_streaming_warning_records": 0,
+    "other_warnings": "25 HTTP/backend connection warnings: localhost8088 unavailable during PIE. No backend server started; no backend functionality acceptance.",
+    "Message_Log_scope": "All complete relevant Output Log records retained, not a current all-page UI Message Log snapshot."
+  },
+  "preservation": {
+    "fields": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "named_saved_source_files_unchanged": 31,
+    "shared_queue_before": "5db8dfbbfea49782930d2c7b3bbdeeb398ffd0d2666fbc17082f9ee38408e2d5",
+    "shared_queue_after": "5db8dfbbfea49782930d2c7b3bbdeeb398ffd0d2666fbc17082f9ee38408e2d5",
+    "compute_normally_released": true,
+    "sole_unreal_custody_retained": true,
+    "scene_actors": 22878,
+    "scene_sha256": "828a1b087b3890c7a10747b6aed571fb109b6ae3c2096c58d716b2288f8513dd",
+    "original_saves": 0,
+    "map_saves": 0,
+    "restarts": 0,
+    "Cursor_untouched": true
+  },
+  "local_receipts": {
+    "context": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\ContextR3\\native-result.json",
+      "sha256": "04fded9e372b47bf7df8df341447721d27686aad2356a14a3e8c546ead62fae3",
+      "bytes": 1995
+    },
+    "copy": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\PrivateCameraR2\\native-result.json",
+      "sha256": "bdca59e01b1bf08c17933ce497683ccdf8f3fa07265848f4c8d1e7c908eb6cc5",
+      "bytes": 50141
+    },
+    "native": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\native-receipt.json",
+      "sha256": "94a727f8d18e9bad8b453e19af629875f1885459ea367fbd4fb590f606f68864",
+      "bytes": 2668
+    },
+    "scene": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\scene-review.json",
+      "sha256": "4b8cc7f85416523d15b3b6b84309e29ac922db88440998507f6277e0672c0ba0",
+      "bytes": 830
+    },
+    "logs": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\engine-log-review.json",
+      "sha256": "3816d7b65ac93b2060ea7ff4e234e1ce7beb9ba62539fc8f9830e558c3195eba",
+      "bytes": 139065
+    },
+    "release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MRQMinimalScene20261021\\RenderR1\\normal-compute-release.json",
+      "sha256": "05019cfedc3534b94f4ee8753bd503fed5b2dced86cce3805f3d774ea220bc9f",
+      "bytes": 448
+    }
+  },
+  "retained_failures": "Original sky-only MRQ job and current recipe binary64-only refusal remain immutable. Refusal reconciled before corrected attempt; no duplicate asset/import/render/restart.",
+  "remaining_limits": [
+    "One frame only, editor/PIE path only; no production quality/material/lighting or full island coverage.",
+    "435 warnings retained including410 streaming warnings across205 other sublevels and25 unavailable-backend warnings.",
+    "Generic old MRQ parser remains fixed to original shot and unchanged; it is not relabeled accepted by this isolated witness."
+  ]
+}
