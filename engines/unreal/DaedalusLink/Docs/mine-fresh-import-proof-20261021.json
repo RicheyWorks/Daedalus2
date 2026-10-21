@@ -1,6 +1,6 @@
 {
   "schema": "daedalus.mine-fresh-import-proof-source.v1",
-  "state": "COMPILED_PURE_TESTED_NATIVE_TEST_AND_IMPORT_RESOURCE_HELD",
+  "state": "ACTUAL_FRESH_SOURCE_QUALIFIED_ONE_IMPORT_CLIP_POSE_HELD_UNSAVED",
   "problem": "Original Mine final rate24/start0/stop1.54166662693 are retained, but CommonPipelineDataFactoryNode is absent from the 8-node saved dependency graph. Historical final bake/offset evidence is unavailable; no historical admission is fabricated.",
   "change": "Two separate closed native read functions capture actual final common/factory attributes plus independent pinned glTF source proof, and fixed private fresh-clip Source poses. Existing exact original-reader function bytes unchanged. One producer isolates exactly Mine, disables all roots on pre-factory qualification failure, and captures post-import/current proof. No general evaluator/service/dependency or engine retention change.",
   "native_files": [
@@ -105,14 +105,106 @@
       },
       "scene_camera_clean_preserved": true
     },
-    "native_scope_test": "AUTHORED_COMPILED_UNRUN",
-    "source_pose_qualification": "NOT_RUN",
-    "fresh_import": "NOT_DISPATCHED",
+    "native_scope_test": {
+      "name": "Daedalus.Editor.Animation.MineFreshScopeRefusal",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "warnings": 0,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\native-scope-test.json",
+        "sha256": "965fded092e5968313caf6ba26cfe917f1b4a6df688a5a017f48902f53ec2de4",
+        "bytes": 2486
+      }
+    },
+    "source_pose_qualification": {
+      "pre_factory_source_and_reference_qualified": true,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\source-qualification.json",
+        "sha256": "7a91953d535d152931ef8ad058e5e3b2366c605cd45e5598ce8902dddda641ec",
+        "bytes": 153
+      },
+      "copied_clip_samples_qualified": false
+    },
+    "fresh_import": {
+      "dispatched": 1,
+      "known_terminal": true,
+      "outputs": [
+        "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine"
+      ],
+      "errors": [
+        "completion: copied clip/source sample mismatch"
+      ],
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\import-terminal.json",
+        "sha256": "1d2a103f8709848ed8db05262bc3ec7616c85f90ce01d33250bbdee80aade86f",
+        "bytes": 232
+      }
+    },
     "save_reload": "NOT_RUN",
     "mismatched_skeleton_native_import": "NOT_RUN",
-    "synthetic_hierarchy_refusal": "PURE_TEST_PASS; actual-proof pre-factory counterexample prepared, not run"
+    "synthetic_hierarchy_refusal": {
+      "kind": "synthetic_mutation_of_actual_source_proof_before_factories",
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\synthetic-incompatible-skeleton-refusal.json",
+        "sha256": "209846147fd1c75b70df73f1557915674a3e6f9d09c0130558bb56c101ebbe75",
+        "bytes": 147
+      }
+    }
   },
-  "blocker": {
+  "release": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\hold-release.json",
+    "sha256": "10647212a87b817bf613f263484e75bffb9a899b5bc0f24d39555f05569d39e6",
+    "bytes": 417
+  },
+  "preservation": {
+    "original_package_and_source_hashes_unchanged": true,
+    "mesh_skeleton_reference_arrays_exactly_unchanged": true,
+    "protected_fields_except_new_package_dirty": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "dirty_new_package_only": [
+      "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine"
+    ],
+    "receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\held-preservation.json",
+      "sha256": "36aaa4a7ffafdf62fc0861b0e01d6d146b9f103ef6d1abc4ceefa5b6cd905cc5",
+      "bytes": 2204
+    },
+    "compute_release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\terminal-release.json",
+      "sha256": "1ccff97bab5154fab4925e655097114ba82ab02cc8b4b552036b65beb49dc73e",
+      "bytes": 418
+    },
+    "pending_or_unknown_native": false
+  },
+  "status_correction": "A restricted/default process-list query returned no editor during startup, but subsequent retained native readiness and escalated OS read confirmed the original39812 alive. No recovery/second launch was issued. Absence in an incomplete process view must not trigger a duplicate launch.",
+  "remaining": {
+    "state": "NOT_DISPATCHED",
+    "target": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine",
+    "scope": "Read-only actual raw track transforms at frames0and24 for forearm_L/forearm_R, through already supported AnimationDataModel/AnimationLibrary APIs if exposed. Compare against retained independent baked payload samples and Source-pose capture to locate import-versus-evaluation transformation. No second import, no source/tolerance change.",
+    "reason": "Current source/ref binding qualified and exact expected output was created, but3Source-pose translations exceed the explicit numerical budget. Smallness alone is not equivalence proof. Installed importer stores FTransform3f payload keys and AnimPose uses Source data, but this source read does not establish which stage contributed the deviation.",
+    "before_any_future_mutation": [
+      "fresh normal resource/custody/idle admission",
+      "retain this exact failed comparison and own unsaved package",
+      "justify any comparison or extraction correction from installed code, with focused counterexamples",
+      "never reuse current held result as completed save/reload proof"
+    ]
+  },
+  "historical_admission": false,
+  "fresh_roundtrip_accepted": false,
+  "compressed_playback_accepted": false,
+  "production_adopted": false,
+  "native_runtime_qualified": false,
+  "memory_hold_history": {
     "utc": "2026-10-21T21:43:00.985255+00:00",
     "action": "Run native MineFreshScopeRefusal before isolated import",
     "status": "GUARD_REFUSED_BEFORE_DISPATCH",
@@ -130,17 +222,193 @@
     "pending_native_rpc": false,
     "uncertain_outcome": false
   },
-  "release": {
-    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\hold-release.json",
-    "sha256": "10647212a87b817bf613f263484e75bffb9a899b5bc0f24d39555f05569d39e6",
-    "bytes": 417
+  "actual_live_profile": {
+    "skeleton_path": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "factory_uid": "\\AnimSequence\\SkeletalAnimation\\\\Scene\\Twaker_Prospector_scene_0\\Twaker_Prospector_node_15\\Twaker_Prospector_joint_13_4",
+    "job_container": "/Engine/Transient.InterchangeBaseNodeContainer_134",
+    "sample_rate": 24,
+    "range_start": 0,
+    "range_stop": 1.5416666269302368,
+    "bake_meshes": true,
+    "bone_tracks": true,
+    "global_offset": {
+      "translation_cm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_xyzw": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
   },
-  "preservation": "All original/source/package pins verified; reopened native snapshot has same22878actors/scene hash, camera,selection,clean/noPIE/idle. No importer/test was dispatched after guard refusal. One editor39812/sole custody retained; compute normally released; Cursor/apps/guards untouched.",
-  "status_correction": "A restricted/default process-list query returned no editor during startup, but subsequent retained native readiness and escalated OS read confirmed the original39812 alive. No recovery/second launch was issued. Absence in an incomplete process view must not trigger a duplicate launch.",
-  "remaining": "Fresh normal admission, one native scope-refusal test, one isolated import with actual pre-factory source qualification, expected final common/timing/tracks and current Source-pose proof, one new-only save/reload and preservation checks. Stop on any mismatch; no unchanged import replay.",
-  "historical_admission": false,
-  "fresh_roundtrip_accepted": false,
-  "compressed_playback_accepted": false,
-  "production_adopted": false,
-  "native_runtime_qualified": false
+  "actual_clip_timing_tracks": {
+    "length_s": 1.5416666269302368,
+    "sample_rate": 24,
+    "range_start": 0,
+    "range_stop": 1.5416666269302368,
+    "track_names": [
+      "root",
+      "pelvis",
+      "spine",
+      "head",
+      "arm_l",
+      "forearm_l",
+      "arm_r",
+      "forearm_r",
+      "thigh_l",
+      "calf_l",
+      "foot_l",
+      "thigh_r",
+      "calf_r",
+      "foot_r"
+    ],
+    "clip_skeleton_path": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "stored_source_path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MineClipRoundtrip20261021/FreshImportR1/source/Twaker_Prospector.glb"
+  },
+  "blocker": {
+    "status": "KNOWN_COMPARISON_HOLD_NOT_PERMISSION_DENIAL",
+    "action": "Accept copied Source poses, then save/reload the new private Mine",
+    "target": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine",
+    "reason": "Threeforearm sample translations exceed the unchanged FLOAT32_TRANSFORM_8EPS_V1 component budget. Maximum5.1571152237528395e-5cm. Root cause unresolved; no tolerance increase, retimestamp, save or reimport.",
+    "sample_mismatches": [
+      {
+        "time_s": 0,
+        "bone": "forearm_L",
+        "source_transform": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            -0.09539028257131577,
+            0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "observed_Source_pose": {
+          "translation_cm": [
+            -4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            0.095390280565405,
+            -0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "max_translation_component_delta_cm": 5.1571152237528395e-05,
+        "max_sign_normalized_quaternion_component_delta": 8.282432531481199e-09,
+        "max_scale_component_delta": 1.1281196532486604e-07
+      },
+      {
+        "time_s": 0,
+        "bone": "forearm_R",
+        "source_transform": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            0.09539028257131577,
+            -0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "observed_Source_pose": {
+          "translation_cm": [
+            4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            -0.095390280565405,
+            0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "max_translation_component_delta_cm": 5.1571152237528395e-05,
+        "max_sign_normalized_quaternion_component_delta": 8.282432531481199e-09,
+        "max_scale_component_delta": 1.1281196532486604e-07
+      },
+      {
+        "time_s": 1,
+        "bone": "forearm_L",
+        "source_transform": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            -0.09539028257131577,
+            0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "observed_Source_pose": {
+          "translation_cm": [
+            -4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            0.095390280565405,
+            -0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "max_translation_component_delta_cm": 5.1571152237528395e-05,
+        "max_sign_normalized_quaternion_component_delta": 8.282432531481199e-09,
+        "max_scale_component_delta": 1.1281196532486604e-07
+      }
+    ]
+  }
 }
