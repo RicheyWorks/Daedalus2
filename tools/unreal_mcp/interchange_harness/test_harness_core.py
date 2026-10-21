@@ -165,6 +165,87 @@ class EvaluateTests(Base):
         self.assertFalse(r["checks"]["same_uobject"])
 
 
+class ExactConvexPolicyTests(Base):
+    """Opt-in PracticeCrate cardinality; legacy UCX policy stays a minimum."""
+
+    def setUp(self):
+        super().setUp()
+        self.fixture = EvaluateTests("test_started_is_not_done")
+        self.fixture.tmp = self.tmp
+
+    def evaluate(self, expected, collision):
+        plan = self.fixture.plan()
+        plan["expect"]["convex_elems"] = expected
+        return h.evaluate(plan, {"done": True}, self.fixture.facts(collision=collision))
+
+    def test_pinned_practice_crate_rule_accepts_one_hull(self):
+        path = os.path.join(HERE, "..", "interchange_reimport", "expectations.json")
+        with open(path, encoding="utf-8") as fh:
+            expected = json.load(fh)["collision"]["ue_convex_elems"]
+        self.assertEqual(expected, 1)
+        verdict = self.evaluate(expected, {"convex": 1})
+        self.assertTrue(verdict["ok"], verdict)
+        self.assertTrue(verdict["checks"]["convex_exact"])
+
+    def test_exact_one_refuses_missing_and_extra_hulls(self):
+        for count in (0, 2):
+            with self.subTest(count=count):
+                verdict = self.evaluate(1, {"convex": count})
+                self.assertFalse(verdict["ok"], verdict)
+                self.assertFalse(verdict["checks"]["convex_exact"])
+                self.assertIn("expected 1, observed %d" % count, verdict["notes"][0])
+
+    def test_unknown_and_noninteger_observations_fail(self):
+        collisions = [{}, None, "unknown", []]
+        collisions.extend({"convex": value} for value in (None, True, False, 1.0, "1", -1))
+        for collision in collisions:
+            with self.subTest(collision=collision):
+                verdict = self.evaluate(1, collision)
+                self.assertFalse(verdict["ok"], verdict)
+                self.assertFalse(verdict["checks"]["convex_exact"])
+
+    def test_plan_refuses_malformed_exact_rule_before_source_read(self):
+        for count in (None, True, False, 1.0, "1", -1, []):
+            with self.subTest(count=count):
+                with self.assertRaisesRegex(h.PlanError, "expect.convex_elems"):
+                    h.build_plan(os.path.join(self.tmp, "absent.glb"), "/Game/T", "Crate",
+                                 checkpoint="cp.json", profile={"expect": {"convex_elems": count}})
+
+    def test_zero_and_positive_exact_rules_admitted(self):
+        for count in (0, 1, 2):
+            with self.subTest(count=count):
+                plan = h.build_plan(self.glb(make_glb()), "/Game/T", "Crate", checkpoint="cp.json",
+                                    profile={"expect": {"convex_elems": count}})
+                self.assertEqual(plan["expect"]["convex_elems"], count)
+
+    def test_mutated_malformed_rule_cannot_pass_evaluation(self):
+        for count in (None, True, 1.0, "1", -1):
+            with self.subTest(count=count):
+                verdict = self.evaluate(count, {"convex": 1})
+                self.assertFalse(verdict["ok"], verdict)
+                self.assertFalse(verdict["checks"]["convex_exact"])
+
+    def test_exact_zero_passes_for_source_without_ucx(self):
+        plan = h.build_plan(self.glb(make_glb(ucx=False, socket=False)), "/Game/T", "Crate",
+                            checkpoint="cp.json", profile={"expect": {"convex_elems": 0}})
+        verdict = h.evaluate(plan, {"done": True}, {"nanite": True, "collision": {"convex": 0}})
+        self.assertTrue(verdict["ok"], verdict)
+
+    def test_exact_rule_does_not_relax_authored_ucx_minimum(self):
+        verdict = self.evaluate(0, {"convex": 0})
+        self.assertTrue(verdict["checks"]["convex_exact"])
+        self.assertFalse(verdict["checks"]["ucx_convex"])
+        self.assertFalse(verdict["ok"])
+
+    def test_absent_exact_rule_preserves_minimum_behavior(self):
+        plan = self.fixture.plan()
+        for count, accepted in ((0, False), (1, True), (2, True)):
+            with self.subTest(count=count):
+                verdict = h.evaluate(plan, {"done": True}, self.fixture.facts(collision={"convex": count}))
+                self.assertEqual(verdict["ok"], accepted, verdict)
+                self.assertNotIn("convex_exact", verdict["checks"])
+
+
 class ReviewFixTests(Base):
     """Review 48565 (buffffff) fixes and nice-to-haves."""
 
