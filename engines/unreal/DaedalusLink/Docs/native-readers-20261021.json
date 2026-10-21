@@ -347,5 +347,96 @@
     "positive_original_factory_binding_available": false,
     "consumer_or_provenance_relaxed": false,
     "resolution": "Recover authoritative import-time function/factor provenance or explicitly scope new import-time provenance retention. Reconstructing absent history from current values is not a retained-node witness."
+  },
+  "fresh_material_import_receipt_v1": {
+    "schema": "daedalus.material-import-receipt.v1",
+    "scope": "NEW isolated pinned-source M0 only; original-pair persisted-node admission unchanged",
+    "source_review": "CLEAR: one review plus namespace-only compile-fix delta",
+    "focused_python_tests": {
+      "passed": 50,
+      "native_calls": 0
+    },
+    "native_scope_refusal_test": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "build": {
+      "first": "Known failed before link: unqualified Error and inherited UObject::Serialize name lookup",
+      "correction": "Explicit ImportedFactorProposal namespace on the new wrapper calls only",
+      "corrected_exit_code": 0,
+      "terminal": {
+        "bytes": 450,
+        "sha256": "9ce3ee82f9d8b3ddab6bccbbb1644bd1846359c1effeda40de713425aa8ed297"
+      }
+    },
+    "actual_new_asset": "/Game/CodexToolEvaluation/MaterialProvenanceRecovery/ReceiptR1/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+    "actual_fresh_import_complete": true,
+    "actual_new_only_save_reload": true,
+    "sealed_receipt": {
+      "bytes": 112341,
+      "sha256": "f7b3dd63c70ea9763106958980d4c14a64cb95e54c14c29ec27b25997f811162"
+    },
+    "post_seal_current_read": {
+      "state": "COMPLETE_DISTINCT_CURRENT_CAPTURE",
+      "first_attempt": "Known resource refusal before dispatch, retained",
+      "recovery_physical_kib": 1792496,
+      "unchanged_minimum_physical_kib": 1700000,
+      "native_dispatches": 1,
+      "current_native": {
+        "bytes": 52421,
+        "sha256": "9c161fe5c7c1e8f4f1599e4fb72bf52d42d3dc228d2ca662d7dc078f3f59589f"
+      }
+    },
+    "live_strict_consumer_admission": {
+      "state": "PASS_FRESH_IMPORT_RECEIPT",
+      "receipt_accepted": true,
+      "historical_admission": false,
+      "admission_scope": "FRESH_SOURCE_BASE_COLOR_RGB_BINDING_ONLY",
+      "root_output_equivalence_proven": false,
+      "all_pbr_factors_qualified": false,
+      "native_runtime_qualified": false,
+      "reasons": [],
+      "asset": "/Game/CodexToolEvaluation/MaterialProvenanceRecovery/ReceiptR1/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+      "receipt_sha256": "f7b3dd63c70ea9763106958980d4c14a64cb95e54c14c29ec27b25997f811162",
+      "source_sha256": "4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f",
+      "observed_factors": {
+        "base_color": [
+          0.32972902059555054,
+          0.14799802005290985,
+          0.04614884406328201,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.6000000238418579
+      }
+    },
+    "original_packages_material_projection_and_nine_scene_fields_preserved": true,
+    "current_editor_pid": 30832,
+    "normal_compute_release_confirmed": true,
+    "historical_material_admission": false,
+    "all_pbr_factors_qualified": false,
+    "root_output_equivalence_proven": false,
+    "native_runtime_qualified": false,
+    "limitations": [
+      "Exact closed constant-source M0 profile and direct constant leaves only.",
+      "Trusted caller-owned receipt anchor and fresh independent native witness required.",
+      "Existing saved nodes/history are not reconstructed or promoted.",
+      "Cursor/satellite untouched; no memory-floor reduction or engine retention change."
+    ],
+    "negative_cases_refused": [
+      "missing_receipt",
+      "tampered_bytes",
+      "replayed_reload_witness",
+      "wrong_created_expression",
+      "source_md5_mismatch"
+    ],
+    "verification": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialImportReceipt20261021\\AdoptionR1\\native-completion.json",
+      "sha256": "edceab200d709627294fb8c4678d46bca3f81fda8c0aaf8c3409a4a909949412",
+      "bytes": 7779
+    }
   }
 }

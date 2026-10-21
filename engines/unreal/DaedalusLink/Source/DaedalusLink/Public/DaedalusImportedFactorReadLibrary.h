@@ -29,4 +29,11 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Material Admission", meta=(DevelopmentOnly))
     static FString ReadImportedFactorBindings(const TArray<FString>& MaterialObjectPaths,
         const FString& AllowedPackageRoot, const FString& PolicyId);
+
+    /** Fresh isolated M0 current graph/source witness only. No sidecar admission,
+     * engine graph retention change, load, compile, edit or mesh binding. Allows
+     * only this fresh package to be dirty during import-time observation. */
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Material Admission", meta=(DevelopmentOnly))
+    static FString ReadFreshImportedFactorCurrent(const FString& MaterialObjectPath,
+        const FString& AllowedPackageRoot);
 };

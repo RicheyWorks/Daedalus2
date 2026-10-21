@@ -25,6 +25,7 @@
 #include "Materials/MaterialFunction.h"
 #include "Materials/MaterialParameters.h"
 #include "Misc/FileHelper.h"
+#include "Misc/EngineVersion.h"
 #include "Misc/Paths.h"
 #include "Misc/SecureHash.h"
 #if WITH_DEV_AUTOMATION_TESTS
@@ -308,13 +309,16 @@ static bool Provenance(const UMaterial* Material, const FString& Name, J Out, A&
     Out->SetObjectField(TEXT("factor_attributes"),Attributes); return true;
 }
 
-static bool Material(UMaterial* Mat,const UStaticMesh* Mesh,const FString& Name,J Out,A& Errors,int32& ImportGetterCalls,bool bIncludeProvenance=true)
+static bool Material(UMaterial* Mat,const UStaticMesh* Mesh,const FString& Name,J Out,A& Errors,int32& ImportGetterCalls,bool bIncludeProvenance=true,bool bStandaloneFresh=false)
 {
     int32 SlotMatches=0;
-    if (Mesh->GetStaticMaterials().Num()>32) { Error(Errors,TEXT("Mesh slot bound exceeded")); return false; }
-    for (const FStaticMaterial& Slot:Mesh->GetStaticMaterials())
-        if (Slot.MaterialSlotName==FName(*Name) && Resolved(Slot.MaterialInterface)==Mat) ++SlotMatches;
-    if (SlotMatches!=1 || Mat->GetBlendMode()!=BLEND_Opaque || Mat->MaterialDomain!=MD_Surface || !Mat->IsTwoSided())
+    if (!bStandaloneFresh)
+    {
+        if (!Readable(Mesh) || Mesh->GetStaticMaterials().Num()>32) { Error(Errors,TEXT("Mesh slot bound exceeded")); return false; }
+        for (const FStaticMaterial& Slot:Mesh->GetStaticMaterials())
+            if (Slot.MaterialSlotName==FName(*Name) && Resolved(Slot.MaterialInterface)==Mat) ++SlotMatches;
+    }
+    if ((!bStandaloneFresh && SlotMatches!=1) || Mat->GetBlendMode()!=BLEND_Opaque || Mat->MaterialDomain!=MD_Surface || !Mat->IsTwoSided())
     { Error(Errors,TEXT("Original mesh slot/opaque/two-sided context differs")); return false; }
     const UMaterialEditorOnlyData* Data=Mat->GetEditorOnlyData();
     if (!Readable(Data) || Mat->bUseMaterialAttributes || Mat->HasSubstrateFrontMaterialConnected())
@@ -384,8 +388,13 @@ static bool Material(UMaterial* Mat,const UStaticMesh* Mesh,const FString& Name,
     Current->SetObjectField(TEXT("caller"),Object(Call)); Current->SetObjectField(TEXT("function"),Object(Fn));
     Current->SetObjectField(TEXT("property_bindings"),Bindings); Current->SetNumberField(TEXT("input_count"),Call->FunctionInputs.Num());
     Current->SetBoolField(TEXT("input_roster_complete"),true);
-    Out->SetStringField(TEXT("source_material_name"),Name); Out->SetObjectField(TEXT("material"),Object(Mat)); Out->SetStringField(TEXT("mesh_path"),Mesh->GetPathName());
-    Out->SetStringField(TEXT("slot_name"),Name); Out->SetStringField(TEXT("slot_material_path"),Mat->GetPathName()); Out->SetBoolField(TEXT("two_sided"),Mat->IsTwoSided());
+    Out->SetStringField(TEXT("source_material_name"),Name); Out->SetObjectField(TEXT("material"),Object(Mat));
+    if (!bStandaloneFresh)
+    {
+        Out->SetStringField(TEXT("mesh_path"),Mesh->GetPathName()); Out->SetStringField(TEXT("slot_name"),Name);
+        Out->SetStringField(TEXT("slot_material_path"),Mat->GetPathName());
+    }
+    Out->SetBoolField(TEXT("two_sided"),Mat->IsTwoSided());
     Out->SetStringField(TEXT("blend_mode"),TEXT("BLEND_Opaque")); Out->SetStringField(TEXT("material_domain"),TEXT("MD_Surface"));
     J Context=MakeShared<FJsonObject>(); Context->SetStringField(TEXT("interface_path"),Mat->GetPathName()); Context->SetStringField(TEXT("exact_class"),Mat->GetClass()->GetPathName());
     Context->SetBoolField(TEXT("is_instance"),false); Context->SetArrayField(TEXT("parent_chain"),A()); Out->SetObjectField(TEXT("interface_context"),Context);
@@ -447,6 +456,100 @@ FString UDaedalusImportedFactorReadLibrary::ReadImportedFactorBindings(const TAr
 #else
     (void)MaterialObjectPaths; (void)AllowedPackageRoot; (void)PolicyId;
     return TEXT("{\"schema\":\"daedalus.imported-factor-native-fragment.v1\",\"state\":\"held\",\"errors\":[\"Editor-only producer unavailable\"]}");
+#endif
+}
+
+// Separate fresh-only current graph witness. It does not accept sidecars, invoke
+// legacy provenance, attach a mesh, or promote an import-time receipt itself.
+FString UDaedalusImportedFactorReadLibrary::ReadFreshImportedFactorCurrent(
+    const FString& MaterialObjectPath,const FString& AllowedPackageRoot)
+{
+#if WITH_EDITOR
+    if (!IsInGameThread())
+        return TEXT("{\"schema\":\"daedalus.fresh-material-current.v1\",\"state\":\"held\",\"errors\":[\"Game-thread reader only\"]}");
+    using namespace ImportedFactorProposal;
+    J Out=MakeShared<FJsonObject>(); A Errors; int32 Getters=0;
+    Out->SetStringField(TEXT("schema"),TEXT("daedalus.fresh-material-current.v1"));
+    Out->SetBoolField(TEXT("native_invoked"),true);
+    Out->SetStringField(TEXT("capture_id"),FGuid::NewGuid().ToString(EGuidFormats::DigitsWithHyphens).ToLower());
+    Out->SetNumberField(TEXT("editor_pid"),FPlatformProcess::GetCurrentProcessId());
+    Out->SetStringField(TEXT("observed_at_utc"),FDateTime::UtcNow().ToIso8601());
+    Out->SetStringField(TEXT("engine_version"),FEngineVersion::Current().ToString());
+    Out->SetStringField(TEXT("project_path"),FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()));
+    Out->SetStringField(TEXT("world_path"),GEditor && GEditor->GetEditorWorldContext().World()?GEditor->GetEditorWorldContext().World()->GetPathName():FString());
+    const FString Prefix=TEXT("/Game/CodexToolEvaluation/MaterialProvenanceRecovery/");
+    const FString Run=AllowedPackageRoot.Mid(Prefix.Len());
+    bool Scope=AllowedPackageRoot.StartsWith(Prefix) && Run.Len()>=1 && Run.Len()<=48;
+    for (TCHAR C:Run) Scope &= (C>='a' && C<='z') || (C>='A' && C<='Z') || (C>='0' && C<='9') || C=='_' || C=='-';
+    const FString Name=TEXT("Prop_PracticeCrate_M0"), Package=AllowedPackageRoot+TEXT("/")+Name;
+    Scope &= MaterialObjectPath==Package+TEXT(".")+Name;
+    static bool Active=false;
+    const A Before=Dirty(); Out->SetArrayField(TEXT("dirty_before"),Before);
+    bool DirtyScope=true;
+    for (const auto& Value:Before) DirtyScope &= Value->AsString()==Package;
+    if (!Scope || !IsInGameThread() || Active || !GEditor || GEditor->PlayWorld || !DirtyScope
+        || !GEditor->GetEditorWorldContext().World()
+        || GEditor->GetEditorWorldContext().World()->GetPathName()!=TEXT("/Game/Daedalus/DaedalusWorld.DaedalusWorld"))
+        ImportedFactorProposal::Error(Errors,TEXT("Fresh-only loaded editor/path/dirty scope refused"));
+    else
+    {
+        TGuardValue<bool> Guard(Active,true);
+        UMaterial* Mat=Cast<UMaterial>(StaticFindObject(UMaterial::StaticClass(),nullptr,*MaterialObjectPath));
+        if (!Readable(Mat) || Mat->GetClass()!=UMaterial::StaticClass()) ImportedFactorProposal::Error(Errors,TEXT("Exact loaded fresh material unavailable; no load"));
+        else
+        {
+            J Row=MakeShared<FJsonObject>();
+            if (Material(Mat,nullptr,Name,Row,Errors,Getters,false,true)) Out->SetObjectField(TEXT("current"),Row);
+            const UInterchangeAssetImportData* Data=Cast<UInterchangeAssetImportData>(Resolved(Mat->AssetImportData));
+            if (!Data || Data->GetOuter()!=Mat || Data->SourceData.SourceFiles.Num()!=1 || !Data->SourceData.SourceFiles[0].FileHash.IsValid())
+                ImportedFactorProposal::Error(Errors,TEXT("Fresh import source metadata unavailable"));
+            else
+            {
+                const FString Filename=Data->ScriptGetFirstFilename(); TArray<uint8> Bytes; FString Digest;
+                if (!ValidText(Filename,1024) || FPaths::IsRelative(Filename) || IFileManager::Get().FileSize(*Filename)!=18576
+                    || !FFileHelper::LoadFileToArray(Bytes,*Filename) || Bytes.Num()!=18576
+                    || !SourceSha256(Bytes.GetData(),static_cast<uint32>(Bytes.Num()),Digest) || Digest!=SourceSha)
+                    ImportedFactorProposal::Error(Errors,TEXT("Fresh source bytes/digest differ"));
+                else
+                {
+                    J Metadata=MakeShared<FJsonObject>(); Metadata->SetObjectField(TEXT("asset_import_data"),Object(Data));
+                    Metadata->SetStringField(TEXT("source_filename"),Filename); Metadata->SetObjectField(TEXT("source"),Source());
+                    Metadata->SetStringField(TEXT("source_md5"),LexToString(Data->SourceData.SourceFiles[0].FileHash).ToLower());
+                    Metadata->SetStringField(TEXT("root_uid"),Data->NodeUniqueID);
+                    ++Getters; const auto* Factory=Cast<UInterchangeMaterialFactoryNode>(Data->GetStoredFactoryNode(Data->NodeUniqueID));
+                    if (!Readable(Factory) || Factory->GetUniqueID()!=Data->NodeUniqueID) ImportedFactorProposal::Error(Errors,TEXT("Fresh stored factory root unavailable"));
+                    else
+                    {
+                        Metadata->SetStringField(TEXT("factory_uid"),Factory->GetUniqueID());
+                        Metadata->SetStringField(TEXT("factory_class"),Factory->GetClass()->GetPathName());
+                        A Targets; TArray<FString> Uids; Factory->GetTargetNodeUids(Uids);
+                        for (const FString& Uid:Uids) Targets.Add(MakeShared<FJsonValueString>(Uid));
+                        Metadata->SetArrayField(TEXT("factory_target_uids"),Targets); J Connections=MakeShared<FJsonObject>();
+                        for (int32 Lane=0;Lane<3;++Lane)
+                        {
+                            FString Uid,Output;
+                            if (!UInterchangeShaderPortsAPI::GetInputConnection(Factory,OutputNames[Lane],Uid,Output)) ImportedFactorProposal::Error(Errors,TEXT("Fresh stored factory connection unavailable"));
+                            J C=MakeShared<FJsonObject>(); C->SetStringField(TEXT("uid"),Uid); C->SetStringField(TEXT("output"),Output);
+                            Connections->SetObjectField(Lanes[Lane],C);
+                        }
+                        Metadata->SetObjectField(TEXT("factory_connections"),Connections); Out->SetObjectField(TEXT("metadata"),Metadata);
+                    }
+                }
+            }
+        }
+    }
+    const A After=Dirty(); Out->SetArrayField(TEXT("dirty_after"),After);
+    if (Before.Num()!=After.Num()) ImportedFactorProposal::Error(Errors,TEXT("Dirty state changed during fresh read"));
+    else for (int32 I=0;I<Before.Num();++I) if (Before[I]->AsString()!=After[I]->AsString()) ImportedFactorProposal::Error(Errors,TEXT("Dirty state changed during fresh read"));
+    Out->SetArrayField(TEXT("errors"),Errors); Out->SetStringField(TEXT("state"),Errors.Num()==0 && Out->HasField(TEXT("current")) && Out->HasField(TEXT("metadata"))?TEXT("complete"):TEXT("held"));
+    Out->SetNumberField(TEXT("official_import_getter_invocations"),Getters);
+    for (const TCHAR* Key:{TEXT("explicit_asset_load_requests"),TEXT("authored_material_write_requests"),TEXT("material_cache_refreshes"),TEXT("evaluations"),TEXT("compilations")}) Out->SetNumberField(Key,0);
+    Out->SetBoolField(TEXT("material_admitted"),false); Out->SetBoolField(TEXT("native_runtime_qualified"),false);
+    if (!Fits(Out,0)) return TEXT("{\"schema\":\"daedalus.fresh-material-current.v1\",\"state\":\"held\",\"errors\":[\"UTF8 budget exceeded\"]}");
+    return ImportedFactorProposal::Serialize(Out);
+#else
+    (void)MaterialObjectPath; (void)AllowedPackageRoot;
+    return TEXT("{\"schema\":\"daedalus.fresh-material-current.v1\",\"state\":\"held\",\"errors\":[\"Editor-only reader unavailable\"]}");
 #endif
 }
 
@@ -523,6 +626,32 @@ FString UDaedalusImportedFactorReadLibrary::ReadImportedFactorProtection(
 }
 
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusFreshImportScopeRefusalTest,
+    "Daedalus.Editor.Material.FreshImportScopeRefusal",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusFreshImportScopeRefusalTest::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    const TPair<FString,FString> Cases[] = {
+        {TEXT("/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0"),ImportedFactorProposal::Root},
+        {TEXT("/Game/Other.Other"),TEXT("/Game/CodexToolEvaluation/MaterialProvenanceRecovery/../Other")},
+        {TEXT("/Game/Other.Other"),TEXT("/Game/CodexToolEvaluation/MaterialProvenanceRecovery/ValidRun")}
+    };
+    for (const auto& Case:Cases)
+    {
+        const FString Raw=UDaedalusImportedFactorReadLibrary::ReadFreshImportedFactorCurrent(Case.Key,Case.Value);
+        TSharedPtr<FJsonObject> Json;
+        const bool Parsed=FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Raw),Json);
+        TestTrue(TEXT("Refusal has real JSON envelope"),Parsed && Json.IsValid());
+        if (!Parsed || !Json) continue;
+        TestEqual(TEXT("Original/traversal/mismatched scope remains held"),Json->GetStringField(TEXT("state")),FString(TEXT("held")));
+        TestFalse(TEXT("No current graph supplied on scope refusal"),Json->HasField(TEXT("current")));
+        TestEqual(TEXT("No import getter on scope refusal"),Json->GetIntegerField(TEXT("official_import_getter_invocations")),0);
+    }
+    return true;
+}
+
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusImportedSourceSha256Test,
     "Daedalus.Editor.Material.ImportedSourceSha256",
     EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
