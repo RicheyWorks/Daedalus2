@@ -1,6 +1,6 @@
 {
   "schema": "daedalus.native-readers-source-checkpoint.v1",
-  "recorded_utc": "2026-10-21T04:42:00.615985+00:00",
+  "recorded_utc": "2026-10-21T17:59:41.171277+00:00",
   "engine": "Unreal Engine 5.8.4, CL 58902052",
   "source": [
     {
@@ -59,8 +59,8 @@
     },
     {
       "path": "Source/DaedalusLink/Private/DaedalusImportedFactorReadLibrary.cpp",
-      "bytes": 38337,
-      "sha256": "bae5f0f660e0e025a8f30fe1a926883fd45fca06ba61e479db6da477ab7b95d2",
+      "bytes": 40481,
+      "sha256": "c72166198fad49c1036b1f2c47a6745263ea0c201fc484f0549162e4f9d698ac",
       "installed_bytes_match": true
     }
   ],
@@ -107,8 +107,12 @@
       "exposure_read_completed": true,
       "field_categories": 175,
       "unavailable_categories": 141,
-      "typed_factor_capture_attempted": false,
-      "material_admitted": false
+      "typed_factor_capture_attempted": true,
+      "material_admitted": false,
+      "current_native_state": "held",
+      "current_native_errors": [
+        "Source material graph not bound to factory"
+      ]
     },
     "startup_observer": {
       "attached": true,
@@ -122,7 +126,7 @@
     },
     "protected_saved_packages_rehashed_after_crash": 27595,
     "protected_saved_packages_changed": 0,
-    "user_restart": "Two manually restarted same-project instances observed; operator made no new launch or close, and no post-restart native call. Resolution remains pending."
+    "user_restart": "Duplicate closed normally. Current verified repair session uses one editor; no unsaved state was discarded."
   },
   "receipts": [
     {
@@ -157,5 +161,92 @@
     }
   ],
   "native_runtime_qualified": false,
-  "publication_scope": "These ten native/plugin files and this evidence only; stopped Python policy, UCX, PowerShell reporting and combat publication lanes excluded."
+  "publication_scope": "These ten native/plugin files and this evidence only; stopped Python policy, UCX, PowerShell reporting and combat publication lanes excluded.",
+  "sha256_repair": {
+    "problem": "FPlatformMisc::GetSHA256Signature reached an unimplemented generic-platform assertion in the Windows build.",
+    "backend": "Existing private-static bundled OpenSSL SHA256 API, hash-only header; no new dependency, install or security change.",
+    "failure_behavior": "Null nonempty input or backend failure refuses, clears output and retains the exact source SHA256 equality guard.",
+    "review": "Bounded operator review of the one-file diff, exact built/tested bytes, known-vector oracle, unchanged provenance equality and failure refusal. No separate independent review is claimed.",
+    "source": {
+      "bytes": 40481,
+      "sha256": "c72166198fad49c1036b1f2c47a6745263ea0c201fc484f0549162e4f9d698ac"
+    },
+    "build": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\RemainingIntegration20261021\\MaterialSha256LinkR3\\build-terminal.json",
+      "sha256": "880dcd5bd063fcdec2d2d648c5c692822dd865377a842d543a7135f0a55da8d0",
+      "bytes": 457
+    },
+    "binary": {
+      "bytes": 10499584,
+      "sha256": "bc13b1ed801e1154e6c12e10557783007f7e1aa0cbe95b504c603d8a48610660"
+    },
+    "native_test": {
+      "tests": [
+        {
+          "name": "Daedalus.Editor.Material.ImportedSourceSha256",
+          "state": "Success",
+          "duration": 0.012143801897764206,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "total": 1,
+      "duration": 0.012143801897764206
+    },
+    "known_vectors": [
+      "empty",
+      "abc",
+      "56-byte multi-block"
+    ],
+    "invalid_input_test": "Null pointer with nonzero length refuses and clears stale digest.",
+    "actual_reader": {
+      "returned_without_assert": true,
+      "production_hash_guard_passed_before_import_getters": true,
+      "state": "held",
+      "errors": [
+        "Source material graph not bound to factory"
+      ],
+      "official_import_getter_invocations": 3,
+      "material_admitted": false,
+      "full_pbr_admitted": false,
+      "root_output_equivalence_proven": false
+    },
+    "preservation": {
+      "protection_projections_complete_and_equal": true,
+      "scene_fields": {
+        "project": true,
+        "world": true,
+        "pie": true,
+        "game_world": true,
+        "dirty_maps": true,
+        "dirty_content": true,
+        "scene": true,
+        "selection": true,
+        "camera": true
+      },
+      "original_packages_unchanged": 3,
+      "authored_material_writes": 0,
+      "save_requests": 0
+    },
+    "host_envelope_limit": "host_snapshot expected absolute project path but the existing bridge snapshot reports a relative path; original actual before/after paths and raw facts retained. No host timestamp/provenance was fabricated and no reader was replayed.",
+    "strict_consumer": {
+      "invoked": false,
+      "state": "HELD_INCOMPLETE_HOST_ENVELOPE",
+      "native_material_fragment_also_held": true
+    },
+    "verification_receipt": {
+      "local_path": "Sha256RepairVerificationR2/completion.json",
+      "bytes": 5938,
+      "sha256": "3b0463f2c8af6a74b148af58dbce601731944502a4332ec6108457273570ce1b"
+    },
+    "raw_fragment": {
+      "bytes": 1574,
+      "sha256": "40c8356bd74501a1b2d95232be175e3d75673155050dbc65a04e754c2966ea71"
+    },
+    "repair_verified": true,
+    "broader_material_acceptance": false
+  }
 }

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// CONDITIONAL PROPOSAL ONLY. No build, invocation or adoption has occurred.
+// Bounded editor reader. Runtime qualification is recorded separately.
 #include "DaedalusImportedFactorReadLibrary.h"
 
 #if WITH_EDITOR
@@ -27,6 +27,12 @@
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "Misc/SecureHash.h"
+#if WITH_DEV_AUTOMATION_TESTS
+#include "Misc/AutomationTest.h"
+#endif
+THIRD_PARTY_INCLUDES_START
+#include <openssl/sha.h>
+THIRD_PARTY_INCLUDES_END
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 #include "UObject/Package.h"
@@ -214,6 +220,20 @@ static bool Leaf(const UMaterial* Material, const FExpressionInput& Input, bool 
     Out->SetObjectField(TEXT("parameter"),Proof); return true;
 }
 
+// OpenSSL is already a private static dependency of DaedalusLink. The generic
+// FPlatformMisc SHA256 entry point asserts on this installed Windows build.
+static bool SourceSha256(const uint8* Data, uint32 Size, FString& OutHex)
+{
+    OutHex.Reset();
+    if (!Data && Size!=0) return false;
+    static_assert(SHA256_DIGEST_LENGTH==32,"SHA256 digest contract");
+    uint8 Digest[SHA256_DIGEST_LENGTH] = {};
+    if (SHA256(Data,static_cast<size_t>(Size),Digest)==nullptr)
+        return false;
+    OutHex=BytesToHex(Digest,32).ToLower();
+    return true;
+}
+
 static bool Provenance(const UMaterial* Material, const FString& Name, J Out, A& Errors, int32& ImportGetterCalls)
 {
     const UInterchangeAssetImportData* Data=Cast<UInterchangeAssetImportData>(Resolved(Material->AssetImportData));
@@ -223,8 +243,8 @@ static bool Provenance(const UMaterial* Material, const FString& Name, J Out, A&
     if (!ValidText(Filename,1024) || FPaths::IsRelative(Filename) || IFileManager::Get().FileSize(*Filename)!=18576
         || !FFileHelper::LoadFileToArray(Bytes,*Filename) || Bytes.Num()!=18576)
     { Error(Errors,TEXT("Current resolved source bytes unavailable; no alternate path")); return false; }
-    FSHA256Signature Signature;
-    if (!FPlatformMisc::GetSHA256Signature(Bytes.GetData(),static_cast<uint32>(Bytes.Num()),Signature) || Signature.ToString().ToLower()!=SourceSha)
+    FString Digest;
+    if (!SourceSha256(Bytes.GetData(),static_cast<uint32>(Bytes.Num()),Digest) || Digest!=SourceSha)
     { Error(Errors,TEXT("Current source SHA256 differs")); return false; }
     // OFFICIAL GETTER: may deserialize persisted import nodes to transient objects.
     // No private-cache inspection, Serialize/ExportText snapshot, cache refresh or setter.
@@ -501,3 +521,28 @@ FString UDaedalusImportedFactorReadLibrary::ReadImportedFactorProtection(
     return TEXT("{\"schema\":\"daedalus.imported-factor-protection.v1\",\"state\":\"held\",\"snapshot\":null,\"errors\":[\"Editor-only protection reader unavailable\"]}");
 #endif
 }
+
+#if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusImportedSourceSha256Test,
+    "Daedalus.Editor.Material.ImportedSourceSha256",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusImportedSourceSha256Test::RunTest(const FString& Parameters)
+{
+    (void)Parameters;
+    FString Digest;
+    const uint8 Empty=0;
+    TestTrue(TEXT("Empty input hashes successfully"),ImportedFactorProposal::SourceSha256(&Empty,0,Digest));
+    TestEqual(TEXT("SHA256 empty vector"),Digest,TEXT("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"));
+    const ANSICHAR Abc[]="abc";
+    TestTrue(TEXT("abc hashes successfully"),ImportedFactorProposal::SourceSha256(reinterpret_cast<const uint8*>(Abc),3,Digest));
+    TestEqual(TEXT("SHA256 abc vector"),Digest,TEXT("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"));
+    const ANSICHAR Multi[]="abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq";
+    TestTrue(TEXT("Multi-block input hashes successfully"),ImportedFactorProposal::SourceSha256(reinterpret_cast<const uint8*>(Multi),sizeof(Multi)-1,Digest));
+    TestEqual(TEXT("SHA256 multi-block vector"),Digest,TEXT("248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"));
+    Digest=TEXT("stale");
+    TestFalse(TEXT("Null nonempty input refuses"),ImportedFactorProposal::SourceSha256(nullptr,1,Digest));
+    TestTrue(TEXT("Failure clears digest"),Digest.IsEmpty());
+    return true;
+}
+#endif
