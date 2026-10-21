@@ -20,11 +20,12 @@ public:
 	static FString ReadMaterialFactors(const TArray<FString>& MaterialObjectPaths,
 		const FString& AllowedPackageRoot, const FString& PolicyId);
 
- /** NEW proof observation for the same finite MF_Default_Body fixture mapping.
-  * Three roots, both branch trace identities, effective cached static parameter
-  * query or typed StaticBool, and at most one FunctionInput hop to a typed constant.
-  * Full <=128 GUID manifest; 512KiB envelope; no loads, edits or recursive evaluator.
-  * Unsupported/ambiguous/dynamic routes remain held. The original reader is unchanged. */
+ /** Distinct current proof for the three observed MF_Default_Body switch roots.
+  * Independently capture selectors; resolve only bounded cached plain/named
+  * reroutes and GUID-bound function input/output frames to typed constants.
+  * At most32 steps/lane,4 nested frames/depth4,128 inputs/16 outputs/frame,
+  * 3 parameter queries/material and a prospective512KiB whole-envelope cap.
+  * No graph evaluator/load/refresh/compile/edit/save. Unknowns remain held. */
  UFUNCTION(BlueprintCallable, Category = "Daedalus|Material Admission", meta = (DevelopmentOnly))
  static FString ReadMaterialSwitchProof(const TArray<FString>& MaterialObjectPaths,
   const FString& AllowedPackageRoot, const FString& PolicyId);

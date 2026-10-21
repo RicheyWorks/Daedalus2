@@ -196,3 +196,266 @@ bool FDaedalusMaterialSwitchChosenLeaf::RunTest(const FString& Parameters)
 	return true;
 }
 #endif
+
+// R5 transparent-chain tests append to the existing registered translation unit.
+#if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
+#include "DaedalusMaterialTransparentChainPolicy.h"
+
+namespace
+{
+namespace CP = DaedalusMaterialTransparentChainPolicy;
+
+TArray<CP::FBinding> ChainBindings(int32 Count, const FString& Prefix)
+{
+	TArray<CP::FBinding> Rows;
+	for (int32 Index = 0; Index < Count; ++Index)
+	{
+		CP::FBinding Row;
+		Row.Index = Index;
+		Row.BindingGuid = Row.NodeGuid = FGuid(1, 2, 3, Index + 1);
+		Row.NodePath = FString::Printf(TEXT("%s.Node%d"), *Prefix, Index);
+		Row.bPointerValid = Row.bOwnerExact = Row.bClassExact = true;
+		Rows.Add(Row);
+	}
+	return Rows;
+}
+
+CP::FFrame ChainFrame(const FString& Id, const FString& Parent, const FString& Function,
+	const FString& ParentFunction, int32 Inputs = 0, int32 Outputs = 1)
+{
+	CP::FFrame Frame;
+	Frame.Id = Frame.CallerPath = Id;
+	Frame.Parent = Parent;
+	Frame.FunctionPath = Function;
+	Frame.CallerOwner = ParentFunction;
+	Frame.InputsCount = Inputs; Frame.OutputsCount = Outputs;
+	Frame.bFunctionExact = Frame.bCallerExact = Frame.bCachedBindingsComplete = true;
+	Frame.Inputs = ChainBindings(Inputs, Function + TEXT(".Input"));
+	Frame.Outputs = ChainBindings(Outputs, Function + TEXT(".Output"));
+	return Frame;
+}
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusMaterialChainTraversal,
+	"Daedalus.Material.Chain.Traversal", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FDaedalusMaterialChainTraversal::RunTest(const FString& Parameters)
+{
+	CP::FTraversal Traversal;
+	TestEqual(TEXT("A new lane has zero explicit steps"), Traversal.Steps, 0);
+	TestEqual(TEXT("A new lane has zero visits"), Traversal.Visited.Num(), 0);
+	TestFalse(TEXT("Empty frame is not an observed identity"), Traversal.TryStep(TEXT(""), TEXT("Node"), 0));
+	TestFalse(TEXT("Empty node is not an observed identity"), Traversal.TryVisit(TEXT("root"), TEXT(""), 0));
+	TestFalse(TEXT("Negative output is not a connection"), Traversal.TryStep(TEXT("root"), TEXT("Node"), -1));
+	TestEqual(TEXT("Invalid attempts do not consume steps"), Traversal.Steps, 0);
+	TestEqual(TEXT("Invalid attempts do not insert visits"), Traversal.Visited.Num(), 0);
+	TestTrue(TEXT("First exact connection admitted"), Traversal.TryStep(TEXT("root"), TEXT("Node"), 0));
+	TestFalse(TEXT("Repeated node/frame/output is a cycle"), Traversal.TryStep(TEXT("root"), TEXT("Node"), 0));
+	TestTrue(TEXT("Cycle classified explicitly"), Traversal.Failure == CP::EStepFailure::Cycle);
+	TestEqual(TEXT("Cycle does not consume another step"), Traversal.Steps, 1);
+	TestEqual(TEXT("Cycle does not insert another visit"), Traversal.Visited.Num(), 1);
+	TestTrue(TEXT("Same node and output in distinct frame is distinct"), Traversal.TryStep(TEXT("child"), TEXT("Node"), 0));
+	TestTrue(TEXT("Same frame and node with distinct output is distinct"), Traversal.TryStep(TEXT("root"), TEXT("Node"), 1));
+
+	CP::FTraversal Named;
+	for (int32 Index = 0; Index < 32; ++Index)
+	{
+		TestTrue(TEXT("Explicit named usage step1..32 admitted"),
+			Named.TryStep(TEXT("root"), FString::Printf(TEXT("Usage%d"), Index), 0));
+		TestTrue(TEXT("Implicit declaration is cycle-marked without an extra step"),
+			Named.TryVisit(TEXT("root"), FString::Printf(TEXT("Declaration%d"), Index), 0));
+	}
+	TestEqual(TEXT("32 named usage records are32 explicit steps"), Named.Steps, 32);
+	TestEqual(TEXT("32 declaration visits fit separate64-visit bound"), Named.Visited.Num(), 64);
+	TestFalse(TEXT("Explicit step33 is refused"), Named.TryStep(TEXT("root"), TEXT("ExtraUsage"), 0));
+	TestTrue(TEXT("Explicit exhaustion is classified"), Named.Failure == CP::EStepFailure::StepLimit);
+	TestFalse(TEXT("Implicit visit65 is refused"), Named.TryVisit(TEXT("root"), TEXT("ExtraDeclaration"), 0));
+	TestTrue(TEXT("Visit exhaustion is classified separately"), Named.Failure == CP::EStepFailure::VisitLimit);
+	TestFalse(TEXT("Previously marked declaration cannot be revisited"), Named.TryVisit(TEXT("root"), TEXT("Declaration0"), 0));
+	TestTrue(TEXT("A repeated declaration is a cycle even at visit cap"), Named.Failure == CP::EStepFailure::Cycle);
+	TestEqual(TEXT("All refused attempts retain step cap"), Named.Steps, 32);
+	TestEqual(TEXT("All refused attempts retain visit cap"), Named.Visited.Num(), 64);
+	CP::FTraversal DeclarationCycle;
+	TestTrue(TEXT("Usage starts another lane"), DeclarationCycle.TryStep(TEXT("root"), TEXT("Usage"), 0));
+	TestTrue(TEXT("Cached declaration marked"), DeclarationCycle.TryVisit(TEXT("root"), TEXT("Declaration"), 0));
+	TestFalse(TEXT("Following declaration back to usage is a cycle"), DeclarationCycle.TryStep(TEXT("root"), TEXT("Usage"), 0));
+	TestEqual(TEXT("Named cycle consumes only its first emitted step"), DeclarationCycle.Steps, 1);
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusMaterialChainFrames,
+	"Daedalus.Material.Chain.Frames", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FDaedalusMaterialChainFrames::RunTest(const FString& Parameters)
+{
+	const FString Root = TEXT("/Game/Chain/F0.F0");
+	CP::FFrames Frames(Root);
+	TestEqual(TEXT("Implicit root depth is0"), Frames.Depth(TEXT("root")), 0);
+	TestEqual(TEXT("Unknown frame has no inferred depth"), Frames.Depth(TEXT("missing")), -1);
+	FString Parent = TEXT("root"), ParentFunction = Root;
+	for (int32 Depth = 1; Depth <= 4; ++Depth)
+	{
+		const FString Id = FString::Printf(TEXT("%s.Call%d"), *ParentFunction, Depth);
+		const FString Function = FString::Printf(TEXT("/Game/Chain/F%d.F%d"), Depth, Depth);
+		const auto Frame = ChainFrame(Id, Parent, Function, ParentFunction);
+		TestTrue(TEXT("Parent-before-child frame1..4 admitted with zero input function"), Frames.TryAdd(Frame));
+		TestEqual(TEXT("Exact nested depth retained"), Frames.Depth(Id), Depth);
+		const auto* Found = Frames.Find(Id);
+		TestNotNull(TEXT("Admitted exact caller ID resolves"), Found);
+		if (Found) TestEqual(TEXT("Zero-input function remains factual"), Found->InputsCount, 0);
+		Parent = Id; ParentFunction = Function;
+	}
+	TestFalse(TEXT("Fifth frame/depth5 refused"), Frames.TryAdd(ChainFrame(ParentFunction + TEXT(".Call5"), Parent,
+		TEXT("/Game/Chain/F5.F5"), ParentFunction)));
+	TestEqual(TEXT("Refused fifth frame does not alter retained four"), Frames.Items.Num(), 4);
+	TestEqual(TEXT("No fifth frame was silently registered"), Frames.Depth(ParentFunction + TEXT(".Call5")), -1);
+
+	const auto Base = ChainFrame(Root + TEXT(".Call1"), TEXT("root"), TEXT("/Game/Chain/F1.F1"), Root);
+	const auto Refuse = [this, &Root](const TCHAR* Label, CP::FFrame Frame)
+	{
+		CP::FFrames Candidate(Root);
+		TestFalse(Label, Candidate.TryAdd(Frame));
+		TestEqual(TEXT("Refused frame leaves registry empty"), Candidate.Items.Num(), 0);
+	};
+	auto Frame = Base; Frame.Id = TEXT(""); Refuse(TEXT("Empty child ID refused"), Frame);
+	Frame = Base; Frame.Id = Frame.CallerPath = TEXT("root"); Refuse(TEXT("Root ID cannot be shadowed"), Frame);
+	Frame = Base; Frame.Id = Frame.CallerPath = TEXT("material"); Refuse(TEXT("Material ID cannot be shadowed"), Frame);
+	Frame = Base; Frame.CallerPath += TEXT("Other"); Refuse(TEXT("Child ID must equal exact caller path"), Frame);
+	Frame = Base; Frame.Parent = TEXT("missing"); Refuse(TEXT("Unknown or later parent refused"), Frame);
+	Frame = Base; Frame.Parent = Frame.Id; Refuse(TEXT("Self parent refused"), Frame);
+	Frame = Base; Frame.CallerOwner += TEXT("Wrong"); Refuse(TEXT("Caller must belong to exact parent function"), Frame);
+	Frame = Base; Frame.FunctionPath = Root; Refuse(TEXT("Root function recursion refused"), Frame);
+	Frame = Base; Frame.FunctionPath.Empty(); Refuse(TEXT("Unknown function path refused"), Frame);
+	Frame = Base; Frame.bFunctionExact = false; Refuse(TEXT("Function instances or unknown function classes refused"), Frame);
+	Frame = Base; Frame.bCallerExact = false; Refuse(TEXT("Unknown caller class refused"), Frame);
+	Frame = Base; Frame.bCachedBindingsComplete = false; Refuse(TEXT("Partial binding manifests refuse entire frame"), Frame);
+	Frame = Base; Frame.InputsCount = 1; Refuse(TEXT("Missing counted input manifest refused"), Frame);
+	Frame = Base; Frame.OutputsCount = 0; Refuse(TEXT("Extra output manifest row refused"), Frame);
+	CP::FFrames MissingRoot(TEXT(""));
+	TestFalse(TEXT("Absent exact root function cannot admit frames"), MissingRoot.TryAdd(Base));
+	CP::FFrames Ancestry(Root);
+	TestTrue(TEXT("First ancestor admitted"), Ancestry.TryAdd(Base));
+	TestFalse(TEXT("Duplicate child ID refused, caller may reuse Find instead"), Ancestry.TryAdd(Base));
+	TestFalse(TEXT("Nested repeated function ancestry refused"), Ancestry.TryAdd(ChainFrame(
+		Base.FunctionPath + TEXT(".Recursive"), Base.Id, Base.FunctionPath, Base.FunctionPath)));
+	TestTrue(TEXT("Independent sibling may reference same function without recursion"), Ancestry.TryAdd(ChainFrame(
+		Root + TEXT(".OtherCall"), TEXT("root"), Base.FunctionPath, Root)));
+	CP::FFrames Siblings(Root);
+	for (int32 Index = 0; Index < 4; ++Index)
+		TestTrue(TEXT("Distinct shallow frames1..4 admitted"), Siblings.TryAdd(ChainFrame(
+			Root + FString::Printf(TEXT(".Call%d"), Index), TEXT("root"), Base.FunctionPath, Root)));
+	TestFalse(TEXT("Fifth distinct shallow frame also refused"), Siblings.TryAdd(ChainFrame(
+		Root + TEXT(".Fifth"), TEXT("root"), Base.FunctionPath, Root)));
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusMaterialChainBindings,
+	"Daedalus.Material.Chain.Bindings", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FDaedalusMaterialChainBindings::RunTest(const FString& Parameters)
+{
+	for (int32 Count : {0, 1, 127, 128})
+		TestTrue(TEXT("Complete input manifests including zero and128 qualify"), CP::ValidBindings(ChainBindings(Count, TEXT("Input")), Count, 128));
+	for (int32 Count : {0, 1, 15, 16})
+		TestTrue(TEXT("Complete output manifests including zero and16 qualify independently"), CP::ValidBindings(ChainBindings(Count, TEXT("Output")), Count, 16));
+	TestFalse(TEXT("Input129 refused"), CP::ValidBindings(ChainBindings(129, TEXT("Input")), 129, 128));
+	TestFalse(TEXT("Output17 refused"), CP::ValidBindings(ChainBindings(17, TEXT("Output")), 17, 16));
+	TestFalse(TEXT("Negative count refused"), CP::ValidBindings({}, -1, 128));
+	TestFalse(TEXT("Unknown cap cannot weaken closed manifest bounds"), CP::ValidBindings({}, 0, 129));
+	TestFalse(TEXT("Unpaired missing counted row refused"), CP::ValidBindings(ChainBindings(1, TEXT("Input")), 2, 128));
+	TestFalse(TEXT("Unpaired extra row refused"), CP::ValidBindings(ChainBindings(2, TEXT("Input")), 1, 128));
+	for (int32 Defect = 0; Defect < 8; ++Defect)
+	{
+		auto Rows = ChainBindings(2, TEXT("Input"));
+		if (Defect == 0) Rows[1].Index = 0;
+		if (Defect == 1) Rows[0].Index = 1;
+		if (Defect == 2) Rows[1].BindingGuid = Rows[1].NodeGuid = Rows[0].NodeGuid;
+		if (Defect == 3) Rows[1].NodePath = Rows[0].NodePath;
+		if (Defect == 4) Rows[1].BindingGuid = FGuid(9, 9, 9, 9);
+		if (Defect == 5) Rows[1].BindingGuid = Rows[1].NodeGuid = FGuid();
+		if (Defect == 6) Rows[1].NodePath.Empty();
+		if (Defect == 7) Rows[1].bPointerValid = false;
+		TestFalse(TEXT("Duplicate index/GUID/path, unpaired/zero GUID or invalid pointer refused"), CP::ValidBindings(Rows, 2, 128));
+	}
+	for (int32 Defect = 0; Defect < 2; ++Defect)
+	{
+		auto Rows = ChainBindings(1, TEXT("Input"));
+		if (Defect == 0) Rows[0].bOwnerExact = false;
+		else Rows[0].bClassExact = false;
+		TestFalse(TEXT("Binding requires exact cached node owner/class"), CP::ValidBindings(Rows, 1, 128));
+	}
+	for (const auto Lane : {CP::ELane::Scalar, CP::ELane::Vector3, CP::ELane::StaticBool})
+		for (int32 Type : {-1, 0, 1, 2, 3, 8, 11, 12})
+		{
+			const bool Expected = (Lane == CP::ELane::Scalar && Type == 0)
+				|| (Lane == CP::ELane::Vector3 && Type == 2) || (Lane == CP::ELane::StaticBool && Type == 8);
+			TestEqual(TEXT("Only exact Scalar0/Vector3=2/StaticBool8 qualifies; never Bool11"), CP::InputType(Lane, Type), Expected);
+			TestEqual(TEXT("Exact typed caller binding retains type oracle"), CP::InputBinding(Lane, Type, true, true, true), Expected);
+			TestFalse(TEXT("Input pointer mismatch refused"), CP::InputBinding(Lane, Type, false, true, true));
+			TestFalse(TEXT("Nonunique manifest row refused"), CP::InputBinding(Lane, Type, true, false, true));
+			TestFalse(TEXT("Wrong input owner refused"), CP::InputBinding(Lane, Type, true, true, false));
+		}
+	for (const auto Route : {CP::ERoute::Reroute, CP::ERoute::NamedDeclaration, CP::ERoute::NamedUsage, CP::ERoute::FunctionInput})
+	{
+		TestTrue(TEXT("Known zero-output transparent route qualifies"), CP::RouteAllowed(Route, true, true, true));
+		TestFalse(TEXT("Known non-function-output route needs output0"), CP::RouteAllowed(Route, false, true, true));
+		TestFalse(TEXT("Known route needs exact cached input pointer"), CP::RouteAllowed(Route, true, false, true));
+		TestFalse(TEXT("Known route needs exact graph owner"), CP::RouteAllowed(Route, true, true, false));
+	}
+	TestTrue(TEXT("Function output may select nonzero manifest-validated index"), CP::RouteAllowed(CP::ERoute::FunctionOutput, false, true, true));
+	TestFalse(TEXT("Unknown reroute/subclass is never transparently traversed"), CP::RouteAllowed(CP::ERoute::Unsupported, true, true, true));
+	const FGuid Guid(1, 2, 3, 4), Other(5, 6, 7, 8);
+	TestTrue(TEXT("Exact valid cached named link qualifies"), CP::NamedLink(Guid, Guid, true, true, true));
+	TestFalse(TEXT("Named declaration GUID mismatch refused"), CP::NamedLink(Guid, Other, true, true, true));
+	TestFalse(TEXT("Zero paired named GUIDs refused"), CP::NamedLink(FGuid(), FGuid(), true, true, true));
+	TestFalse(TEXT("Named cached declaration pointer mismatch refused"), CP::NamedLink(Guid, Guid, false, true, true));
+	TestFalse(TEXT("Named declaration validity is mandatory"), CP::NamedLink(Guid, Guid, true, false, true));
+	TestFalse(TEXT("Named declaration must remain in same graph"), CP::NamedLink(Guid, Guid, true, true, false));
+	bool Value = true;
+	auto ParameterProof = Parameter(1, false);
+	TestTrue(TEXT("Existing parameter helper preserves successful false query"), ParameterValue(ParameterProof, Value));
+	TestFalse(TEXT("Successful false is an actual selector result"), Value);
+	ParameterProof.bQuerySucceeded = false; Value = true;
+	TestFalse(TEXT("Failed false query cannot promote an authored default"), ParameterValue(ParameterProof, Value));
+	TestTrue(TEXT("Failed query leaves output unknown to caller"), Value);
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusMaterialChainMasks,
+	"Daedalus.Material.Chain.Masks", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FDaedalusMaterialChainMasks::RunTest(const FString& Parameters)
+{
+	const CP::FMask Zero, RGB{1, 1, 1, 1, 0}, Red{1, 1, 0, 0, 0}, Alpha{1, 0, 0, 0, 1};
+	for (const auto Lane : {CP::ELane::Scalar, CP::ELane::Vector3, CP::ELane::StaticBool})
+	{
+		TestTrue(TEXT("Explicit all-zero mask qualifies every lane"), CP::LaneMask(Lane, Zero));
+		TestEqual(TEXT("Full RGB qualifies Vector3 only"), CP::LaneMask(Lane, RGB), Lane == CP::ELane::Vector3);
+		TestFalse(TEXT("Channel-only mask remains held"), CP::LaneMask(Lane, Red));
+		TestFalse(TEXT("Alpha mask remains held"), CP::LaneMask(Lane, Alpha));
+		TestFalse(TEXT("Mask0 with nonzero normalized channels is not explicit unmasked context"), CP::LaneMask(Lane, {0, 1, 1, 1, 0}));
+	}
+	CP::FMask Effective = Red;
+	TestTrue(TEXT("Zero raw Mask selects valid cached output mask"), CP::EffectiveMasks(Zero, RGB, true, Effective));
+	TestTrue(TEXT("Output fallback is the exact full RGB mask"), CP::SameMask(Effective, RGB));
+	TestFalse(TEXT("A falsified reported effective zero mask cannot equal fallback"), CP::SameMask(Effective, Zero));
+	TestTrue(TEXT("Nonzero raw Mask selects raw input instead of output"), CP::EffectiveMasks(Red, RGB, true, Effective));
+	TestTrue(TEXT("Raw channel-only mask remains actual, not broadened to RGB"), CP::SameMask(Effective, Red));
+	TestFalse(TEXT("Raw channel-only selection remains inadmissible"), CP::LaneMask(CP::ELane::Vector3, Effective));
+	TestTrue(TEXT("Full raw RGB may ignore a valid different output mask"), CP::EffectiveMasks(RGB, Alpha, true, Effective));
+	TestTrue(TEXT("Full raw RGB retained"), CP::SameMask(Effective, RGB));
+	TestFalse(TEXT("Invalid selected output never qualifies even when raw Mask is set"), CP::EffectiveMasks(RGB, Zero, false, Effective));
+	TestTrue(TEXT("Output-invalid refusal leaves prior observation untouched"), CP::SameMask(Effective, RGB));
+	for (int32 Field = 0; Field < 5; ++Field)
+		for (int32 Invalid : {-1, 2})
+		{
+			CP::FMask Bad = Zero;
+			if (Field == 0) Bad.Mask = Invalid;
+			if (Field == 1) Bad.R = Invalid;
+			if (Field == 2) Bad.G = Invalid;
+			if (Field == 3) Bad.B = Invalid;
+			if (Field == 4) Bad.A = Invalid;
+			TestFalse(TEXT("Mask predicates require normalized explicit bits"), CP::ValidMask(Bad));
+			TestFalse(TEXT("Invalid raw mask refuses before fallback"), CP::EffectiveMasks(Bad, Zero, true, Effective));
+			TestFalse(TEXT("Invalid cached output mask refuses even with raw Mask set"), CP::EffectiveMasks(RGB, Bad, true, Effective));
+			TestTrue(TEXT("Invalid mask refusal preserves result"), CP::SameMask(Effective, RGB));
+		}
+	return true;
+}
+#endif
