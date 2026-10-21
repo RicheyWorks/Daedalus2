@@ -23,6 +23,7 @@
 #include "Materials/MaterialInterface.h"
 #include "Dom/JsonObject.h"
 #include "Misc/PackageName.h"
+#include "Policies/CondensedJsonPrintPolicy.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 #include "UObject/Package.h"
@@ -592,42 +593,42 @@ inline FString SerializeLoadedClosure(const FClosureRead& Read)
     TSharedRef<FJsonObject> Json = MakeShared<FJsonObject>();
     Json->SetStringField(TEXT("schema"), TEXT("daedalus.legacy_hlod_closure.v1"));
     Json->SetStringField(TEXT("state"), Read.State);
-    Json->SetValue(TEXT("reason"), OptionalString(Read.Reason));
+    Json->SetField(TEXT("reason"), OptionalString(Read.Reason));
     Json->SetBoolField(TEXT("read_only"), Read.bReadOnly);
     Json->SetBoolField(TEXT("loaded_inventory_complete"), Read.bLoadedInventoryComplete);
     Json->SetBoolField(TEXT("build_admitted"), false);
     Json->SetBoolField(TEXT("serialization_complete"), true);
     Json->SetBoolField(TEXT("truncated"), false);
     Json->SetStringField(TEXT("candidate_scope"), Read.CandidateScope);
-    Json->SetValue(TEXT("world"), Id(Read.World));
-    Json->SetValue(TEXT("lod_actor"), Id(Read.LodActor));
-    Json->SetValue(TEXT("level"), Id(Read.Level));
-    Json->SetValue(TEXT("world_settings"), Id(Read.WorldSettings));
-    Json->SetValue(TEXT("proxy"), Id(Read.Proxy));
-    Json->SetValue(TEXT("existing_proxy_component"), Id(Read.ExistingProxyComponent));
-    Json->SetValue(TEXT("existing_proxy_mesh"), Id(Read.ExistingProxyMesh));
+    Json->SetField(TEXT("world"), Id(Read.World));
+    Json->SetField(TEXT("lod_actor"), Id(Read.LodActor));
+    Json->SetField(TEXT("level"), Id(Read.Level));
+    Json->SetField(TEXT("world_settings"), Id(Read.WorldSettings));
+    Json->SetField(TEXT("proxy"), Id(Read.Proxy));
+    Json->SetField(TEXT("existing_proxy_component"), Id(Read.ExistingProxyComponent));
+    Json->SetField(TEXT("existing_proxy_mesh"), Id(Read.ExistingProxyMesh));
     Json->SetBoolField(TEXT("existing_proxy_transform_observed"), Read.bExistingProxyTransformObserved);
-    Json->SetValue(TEXT("existing_proxy_transform"), Transform(Read.ExistingProxyTransform, Read.bExistingProxyTransformObserved));
-    Json->SetValue(TEXT("proxy_map_path"), OptionalString(Read.ProxyMapPath));
-    Json->SetValue(TEXT("expected_proxy_name"), OptionalString(Read.ExpectedProxyName));
-    Json->SetValue(TEXT("expected_proxy_package"), OptionalString(Read.ExpectedProxyPackage));
-    Json->SetValue(TEXT("lod_level_one_based"), Read.LodLevelOneBased > 0 ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.LodLevelOneBased)) : Null());
-    Json->SetValue(TEXT("lod_index"), Read.LodIndex >= 0 ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.LodIndex)) : Null());
+    Json->SetField(TEXT("existing_proxy_transform"), Transform(Read.ExistingProxyTransform, Read.bExistingProxyTransformObserved));
+    Json->SetField(TEXT("proxy_map_path"), OptionalString(Read.ProxyMapPath));
+    Json->SetField(TEXT("expected_proxy_name"), OptionalString(Read.ExpectedProxyName));
+    Json->SetField(TEXT("expected_proxy_package"), OptionalString(Read.ExpectedProxyPackage));
+    Json->SetField(TEXT("lod_level_one_based"), Read.LodLevelOneBased > 0 ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.LodLevelOneBased)) : Null());
+    Json->SetField(TEXT("lod_index"), Read.LodIndex >= 0 ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.LodIndex)) : Null());
     Json->SetBoolField(TEXT("settings_observed"), Read.bSettingsObserved);
-    Json->SetValue(TEXT("settings_source"), OptionalString(Read.SettingsSource));
-    Json->SetValue(TEXT("selected_level_settings_text"), OptionalString(Read.EffectiveSettingsText));
-    Json->SetValue(TEXT("simplification_method"), Read.bSettingsObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.SimplificationMethod)) : Null());
-    Json->SetValue(TEXT("effective_base_material_path"), OptionalString(Read.EffectiveBaseMaterialPath));
-    Json->SetValue(TEXT("baking_transform"), Transform(Read.BakingTransform, Read.bSettingsObserved));
-    Json->SetValue(TEXT("save_lod_actors_to_proxy_package"), Read.bSettingsObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bSaveLodActorsToProxyPackage)) : Null());
+    Json->SetField(TEXT("settings_source"), OptionalString(Read.SettingsSource));
+    Json->SetField(TEXT("selected_level_settings_text"), OptionalString(Read.EffectiveSettingsText));
+    Json->SetField(TEXT("simplification_method"), Read.bSettingsObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.SimplificationMethod)) : Null());
+    Json->SetField(TEXT("effective_base_material_path"), OptionalString(Read.EffectiveBaseMaterialPath));
+    Json->SetField(TEXT("baking_transform"), Transform(Read.BakingTransform, Read.bSettingsObserved));
+    Json->SetField(TEXT("save_lod_actors_to_proxy_package"), Read.bSettingsObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bSaveLodActorsToProxyPackage)) : Null());
     Json->SetBoolField(TEXT("actor_overrides_observed"), Read.bActorOverridesObserved);
-    Json->SetValue(TEXT("actor_override_material_merge_settings"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideMaterialMergeSettings)) : Null());
-    Json->SetValue(TEXT("actor_override_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideScreenSize)) : Null());
-    Json->SetValue(TEXT("actor_override_transition_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideTransitionScreenSize)) : Null());
-    Json->SetValue(TEXT("actor_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.ActorScreenSize)) : Null());
+    Json->SetField(TEXT("actor_override_material_merge_settings"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideMaterialMergeSettings)) : Null());
+    Json->SetField(TEXT("actor_override_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideScreenSize)) : Null());
+    Json->SetField(TEXT("actor_override_transition_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueBoolean>(Read.bActorOverrideTransitionScreenSize)) : Null());
+    Json->SetField(TEXT("actor_screen_size"), Read.bActorOverridesObserved ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.ActorScreenSize)) : Null());
     if (Read.bActorOverridesObserved && !FMath::IsFinite(Read.ActorTransitionScreenSize)) bFinite = false;
-    Json->SetValue(TEXT("actor_transition_screen_size"), Read.bActorOverridesObserved && FMath::IsFinite(Read.ActorTransitionScreenSize) ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.ActorTransitionScreenSize)) : Null());
-    Json->SetValue(TEXT("actor_material_settings_text"), OptionalString(Read.ActorMaterialSettingsText));
+    Json->SetField(TEXT("actor_transition_screen_size"), Read.bActorOverridesObserved && FMath::IsFinite(Read.ActorTransitionScreenSize) ? TSharedPtr<FJsonValue>(MakeShared<FJsonValueNumber>(Read.ActorTransitionScreenSize)) : Null());
+    Json->SetField(TEXT("actor_material_settings_text"), OptionalString(Read.ActorMaterialSettingsText));
     Json->SetArrayField(TEXT("candidates"), Ids(Read.Candidates));
     Json->SetArrayField(TEXT("sources"), Ids(Read.Sources));
     TArray<TSharedPtr<FJsonValue>> Components;
@@ -635,9 +636,9 @@ inline FString SerializeLoadedClosure(const FClosureRead& Read)
     for (const FComponentRead& Value : Read.Components)
     {
         TSharedRef<FJsonObject> Component = MakeShared<FJsonObject>();
-        Component->SetValue(TEXT("component"), Id(Value.Component));
-        Component->SetValue(TEXT("mesh"), Id(Value.Mesh));
-        Component->SetValue(TEXT("world_transform"), Transform(Value.WorldTransform, true));
+        Component->SetField(TEXT("component"), Id(Value.Component));
+        Component->SetField(TEXT("mesh"), Id(Value.Mesh));
+        Component->SetField(TEXT("world_transform"), Transform(Value.WorldTransform, true));
         Component->SetArrayField(TEXT("materials"), Ids(Value.Materials));
         Components.Add(MakeShared<FJsonValueObject>(Component));
     }
