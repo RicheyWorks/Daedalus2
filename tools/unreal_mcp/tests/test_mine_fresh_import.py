@@ -84,4 +84,28 @@ class Proof(unittest.TestCase):
     s=source();c=clip(s);change(c)
     with self.assertRaises(m.Refused):m.qualify_clip(s,c,expected_pid=123,expected_source_path='C:/owned/source.glb')
 
+class EngineEquivalence(unittest.TestCase):
+ def test_opt_in_requires_raw_equality_and_preserves_v1_refusal(self):
+  s=source();c=clip(s)
+  c['samples'][0]['poses']['forearm_L']['translation_cm'][0]=5e-5
+  raw=[{'frame':frame,'bone':bone,'local':copy.deepcopy(T)} for frame in (0,24) for bone in ('forearm_L','forearm_R')]
+  with self.assertRaises(m.Refused):m.qualify_clip(s,c,expected_pid=123,expected_source_path='C:/owned/source.glb')
+  result=m.qualify_clip_engine_equivalence(s,c,raw,expected_pid=123,expected_source_path='C:/owned/source.glb')
+  self.assertTrue(result['fresh_clip_pose_accepted']);self.assertFalse(result['native_runtime_qualified'])
+  self.assertLess(result['translation_tolerance_cm'],1e-4)
+ def test_engine_boundary_and_provenance_counterexamples(self):
+  for case in ('above_engine_default','wrong_raw_value','missing_raw','wrong_skeleton','unwitnessed_bone','raw_duplicate','wrong_source'):
+   with self.subTest(case=case):
+    s=source();c=clip(s);c['samples'][0]['poses']['forearm_L']['translation_cm'][0]=5e-5
+    raw=[{'frame':frame,'bone':bone,'local':copy.deepcopy(T)} for frame in (0,24) for bone in ('forearm_L','forearm_R')]
+    path='C:/owned/source.glb'
+    if case=='above_engine_default':c['samples'][0]['poses']['forearm_L']['translation_cm'][0]=m.UE_TRANSFORM_TRANSLATION_CM*1.001
+    elif case=='wrong_raw_value':raw[0]['local']['translation_cm'][0]=1e-8
+    elif case=='missing_raw':raw.pop()
+    elif case=='wrong_skeleton':c['clip_skeleton_path']='/Game/Other.Other'
+    elif case=='unwitnessed_bone':c['samples'][0]['poses']['head']['translation_cm'][0]=5e-5
+    elif case=='raw_duplicate':raw[0]=copy.deepcopy(raw[1])
+    elif case=='wrong_source':path='C:/other.glb'
+    with self.assertRaises(m.Refused):m.qualify_clip_engine_equivalence(s,c,raw,expected_pid=123,expected_source_path=path)
+
 if __name__=='__main__':unittest.main()

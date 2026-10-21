@@ -10,6 +10,7 @@ bone membership/parents, rate and sample times remain exact.
 """
 import math
 import ntpath
+import struct
 
 EPS = 8 * 2**-23
 SOURCE_SHA = '0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14'
@@ -98,7 +99,7 @@ def qualify_source(row,*,expected_pid):
  return {'source_qualified':True,'numerical_contract':'FLOAT32_TRANSFORM_8EPS_V1',
          'historical_admission':False,'native_runtime_qualified':False}
 
-def qualify_clip(source,row,*,expected_pid,expected_source_path):
+def _qualify_clip(source,row,*,expected_pid,expected_source_path,sample_compare):
  qualify_source(source,expected_pid=expected_pid)
  envelope(row,'daedalus.mine-fresh-clip.v1',expected_pid)
  need(row.get('asset_path')==ASSET and row.get('skeleton_path')==SKELETON
@@ -118,6 +119,51 @@ def qualify_clip(source,row,*,expected_pid,expected_source_path):
   need(sample.get('valid') is True and sample.get('bone_names_verified') is True
        and sample.get('evaluation')=='Source_NoRetarget_NoRootExtraction_NoCurves','actual Source pose context required')
   observed=poses(sample['poses']);wanted=poses(expected['poses'])
-  need(all(equivalent(observed[n],wanted[n]) for n in PARENTS),'copied clip/source sample mismatch')
+  need(all(sample_compare(n,sample['time_s'],observed[n],wanted[n]) for n in PARENTS),'copied clip/source sample mismatch')
  return {'fresh_clip_pose_accepted':True,'numerical_contract':'FLOAT32_TRANSFORM_8EPS_V1',
          'historical_admission':False,'compressed_playback_accepted':False,'native_runtime_qualified':False}
+
+def qualify_clip(source,row,*,expected_pid,expected_source_path):
+ """Original fresh V1 route: unchanged eight-epsilon comparison on every pose."""
+ return _qualify_clip(source,row,expected_pid=expected_pid,expected_source_path=expected_source_path,
+                      sample_compare=lambda name,time,actual,wanted:equivalent(actual,wanted))
+
+# FTransform<double>::Equals defaults to UE_KINDA_SMALL_NUMBER = (1.e-4f).
+# Preserve the actual float literal promoted to double, not a looser 1.e-4.
+# The installed Sequencer model itself uses Equals in its FK output path.
+UE_TRANSFORM_TRANSLATION_CM = struct.unpack('<f',struct.pack('<f',1e-4))[0]
+
+def qualify_clip_engine_equivalence(source,row,raw_forearms,*,expected_pid,expected_source_path):
+ """V2, explicit opt-in: raw source witness before engine pose equivalence.
+
+Only the four independently decoded forearm samples can use the existing UE
+translation-equivalence budget. Stored translation/scale must equal the pinned
+source values exactly; Euler-decoded rotation must pass V1. All other pose
+components, source/metadata/identity/hierarchy checks and V1 behavior stay strict.
+This accepts bounded numerical equivalence, not an exact FK error mechanism.
+"""
+ qualify_source(source,expected_pid=expected_pid)
+ need(type(raw_forearms) is list and len(raw_forearms)==4,'four raw forearm witnesses required')
+ expected_keys={(frame,bone) for frame in (0,24) for bone in ('forearm_L','forearm_R')}
+ witnesses={}
+ for item in raw_forearms:
+  need(type(item) is dict and type(item.get('frame')) is int,'explicit raw frame required')
+  key=(item['frame'],item.get('bone'))
+  need(key in expected_keys and key not in witnesses,'raw witness roster differs')
+  wanted=source['source_oracle']['samples'][item['frame']//24]['poses'][item['bone']]
+  raw=item.get('local');transform(raw)
+  need(raw['translation_cm']==wanted['translation_cm'] and raw['scale']==wanted['scale']
+       and equivalent(raw,wanted),'raw source equality/rotation witness differs')
+  witnesses[key]=raw
+ need(set(witnesses)==expected_keys,'complete raw witness roster required')
+ def compare(name,time,actual,wanted):
+  if equivalent(actual,wanted):return True
+  if (int(time*24),name) not in witnesses:return False
+  pa,qa,sa=transform(actual);pb,qb,sb=transform(wanted)
+  if sum(x*y for x,y in zip(qa,qb))<0:qb=[-v for v in qb]
+  return all(abs(x-y)<=UE_TRANSFORM_TRANSLATION_CM for x,y in zip(pa,pb)) and all(close(x,y) for aa,bb in ((qa,qb),(sa,sb)) for x,y in zip(aa,bb))
+ result=_qualify_clip(source,row,expected_pid=expected_pid,expected_source_path=expected_source_path,sample_compare=compare)
+ result.update(numerical_contract='RAW_EXACT_THEN_UE_TRANSFORM_TRANSLATION_V2',
+               translation_tolerance_cm=UE_TRANSFORM_TRANSLATION_CM,raw_forearm_witnesses=4,
+               exact_FK_arithmetic_cause_proven=False)
+ return result
