@@ -1,0 +1,296 @@
+{
+  "schema": "daedalus.lod-private-raster-roundtrip.v1",
+  "observed_utc": "2026-10-21T20:28:50.723809+00:00",
+  "state": "PASS_PRIVATE_RASTER_AUTHORED_LOD_SAVE_RELOAD",
+  "engine": "5.8.4-58902052+++UE5+Release-5.8",
+  "source_fixture_pr": 413,
+  "source_parent_commit": "0eed5b74ca701e3a95f3e6e926f9bbd599a565d7",
+  "source_lineage": {
+    "base_sha256": "bdc6eb527776e38f23fc27c2ef169189714c39182b0be61c4af3b9e14081a7b8",
+    "lod1_sha256": "9d0e89811323db25bd94ae17a1f55765bd96d3f8f1436ea2daba9be71e347dfd",
+    "base_node": "Prop_Realm_Cave_Floor",
+    "base_triangles": 1760,
+    "base_vertices": 3840,
+    "lod1_triangles": 1496,
+    "lod1_vertices": 3264,
+    "source_mapping": "LOD1 identity-transform positions/materials are a subset of selected LOD0 component",
+    "native_mapping_observed": false
+  },
+  "diagnosis": {
+    "original_object_path": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+    "authored_lod0": {
+      "triangles": 1760,
+      "vertices": 3840,
+      "vertex_instances": 5280
+    },
+    "conventional_render_lod0": {
+      "triangles": 478,
+      "vertices": 958,
+      "screen_size": 2.0
+    },
+    "nanite_enabled": true,
+    "nanite_settings": "(bEnabled=True,bExplicitTangents=False,bLerpUVs=True,bSeparable=False,bVoxelNDF=True,bVoxelOpacity=False,ShapePreservation=None,PositionPrecision=-2147483648,NormalPrecision=-1,TangentPrecision=-1,BoneWeightPrecision=-1,TargetMinimumResidencyInKB=0,KeepPercentTriangles=1.000000,TrimRelativeError=0.000000,GenerateFallback=PlatformDefault,FallbackTarget=Auto,FallbackPercentTriangles=1.000000,FallbackRelativeError=1.000000,MaxEdgeLengthFactor=0.000000,NumRays=64,VoxelLevel=0,RayBackUp=0.000000,DisplacementUVChannel=0,DisplacementMaps=,NaniteAssemblyData=(Parts=,Nodes=))",
+    "ordinary_lod_reduction": "(PercentTriangles=1.000000,MaxNumOfTriangles=4294967295,PercentVertices=1.000000,MaxNumOfVerts=4294967295,MaxDeviation=0.000000,PixelError=8.000000,WeldingThreshold=0.000000,HardAngleThreshold=80.000000,BaseLODModel=0,SilhouetteImportance=Normal,TextureImportance=Normal,ShadingImportance=Normal,bRecalculateNormals=False,bGenerateUniqueLightmapUVs=False,bKeepSymmetry=False,bVisibilityAided=False,bCullOccluded=False,TerminationCriterion=Triangles,VisibilityAggressiveness=Lowest,VertexColorImportance=Off)",
+    "explanation": "Authored MeshDescription1760/3840 is intact. Nanite is enabled with Auto fallback/error1; conventional LODResources are478/958. Public GetNumTriangles/GetNumVertices return those conventional render resources, not authored source geometry. Ordinary LOD reduction is100%. The controlled copy-only Nanite-off rebuild actually restores1760/3840, independently supporting the fallback attribution; no expected count was replaced."
+  },
+  "isolated_profile": {
+    "object_path": "/Game/CodexToolEvaluation/LODSourceRoundtrip/RasterR2/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+    "new_only": true,
+    "nanite_enabled": false,
+    "scope": "Per-copy raster profile through official StaticMeshEditorSubsystem only; original/project/Nanite renderer untouched.",
+    "original_duplicate_before_profile": [
+      {
+        "index": 0,
+        "triangles": 478,
+        "vertices": 958,
+        "authored": {
+          "triangles": 1760,
+          "vertices": 3840,
+          "vertex_instances": 5280
+        },
+        "screen_size": 2.0,
+        "build_settings": {
+          "recompute_normals": false,
+          "recompute_tangents": true,
+          "use_mikk_t_space": true,
+          "generate_lightmap_u_vs": false,
+          "use_full_precision_u_vs": false
+        },
+        "build_settings_export": "(bUseMikkTSpace=True,bRecomputeNormals=False,bRecomputeTangents=True,bComputeWeightedNormals=False,bRemoveDegenerates=False,bBuildReversedIndexBuffer=False,bUseHighPrecisionTangentBasis=False,bUseFullPrecisionUVs=False,bUseBackwardsCompatibleF16TruncUVs=False,bGenerateLightmapUVs=False,bGenerateDistanceFieldAsIfTwoSided=False,bSupportFaceRemap=False,MinLightmapResolution=64,SrcLightmapIndex=0,DstLightmapIndex=1,BuildScale3D=(X=1.000000,Y=1.000000,Z=1.000000),DistanceFieldResolutionScale=1.000000,DistanceFieldReplacementMesh=None,MaxLumenMeshCards=12)",
+        "reduction_settings_export": "(PercentTriangles=1.000000,MaxNumOfTriangles=4294967295,PercentVertices=1.000000,MaxNumOfVerts=4294967295,MaxDeviation=0.000000,PixelError=8.000000,WeldingThreshold=0.000000,HardAngleThreshold=80.000000,BaseLODModel=0,SilhouetteImportance=Normal,TextureImportance=Normal,ShadingImportance=Normal,bRecalculateNormals=False,bGenerateUniqueLightmapUVs=False,bKeepSymmetry=False,bVisibilityAided=False,bCullOccluded=False,TerminationCriterion=Triangles,VisibilityAggressiveness=Lowest,VertexColorImportance=Off)"
+      }
+    ],
+    "raster_before_import": [
+      {
+        "index": 0,
+        "triangles": 1760,
+        "vertices": 3840,
+        "authored": {
+          "triangles": 1760,
+          "vertices": 3840,
+          "vertex_instances": 5280
+        },
+        "screen_size": 2.0,
+        "build_settings": {
+          "recompute_normals": false,
+          "recompute_tangents": true,
+          "use_mikk_t_space": true,
+          "generate_lightmap_u_vs": false,
+          "use_full_precision_u_vs": false
+        },
+        "build_settings_export": "(bUseMikkTSpace=True,bRecomputeNormals=False,bRecomputeTangents=True,bComputeWeightedNormals=False,bRemoveDegenerates=False,bBuildReversedIndexBuffer=False,bUseHighPrecisionTangentBasis=False,bUseFullPrecisionUVs=False,bUseBackwardsCompatibleF16TruncUVs=False,bGenerateLightmapUVs=False,bGenerateDistanceFieldAsIfTwoSided=False,bSupportFaceRemap=False,MinLightmapResolution=64,SrcLightmapIndex=0,DstLightmapIndex=1,BuildScale3D=(X=1.000000,Y=1.000000,Z=1.000000),DistanceFieldResolutionScale=1.000000,DistanceFieldReplacementMesh=None,MaxLumenMeshCards=12)",
+        "reduction_settings_export": "(PercentTriangles=1.000000,MaxNumOfTriangles=4294967295,PercentVertices=1.000000,MaxNumOfVerts=4294967295,MaxDeviation=0.000000,PixelError=8.000000,WeldingThreshold=0.000000,HardAngleThreshold=80.000000,BaseLODModel=0,SilhouetteImportance=Normal,TextureImportance=Normal,ShadingImportance=Normal,bRecalculateNormals=False,bGenerateUniqueLightmapUVs=False,bKeepSymmetry=False,bVisibilityAided=False,bCullOccluded=False,TerminationCriterion=Triangles,VisibilityAggressiveness=Lowest,VertexColorImportance=Off)"
+      }
+    ],
+    "requested_policy": {
+      "kind": "authored_lod_pair",
+      "source_sha256": "9d0e89811323db25bd94ae17a1f55765bd96d3f8f1436ea2daba9be71e347dfd",
+      "triangles": [
+        1760,
+        1496
+      ],
+      "authored_vertices": [
+        3840,
+        3264
+      ],
+      "screen_sizes": [
+        2.0,
+        0.4000000059604645
+      ],
+      "lod1_build_settings": {
+        "recompute_normals": false,
+        "recompute_tangents": true,
+        "use_mikk_t_space": true,
+        "generate_lightmap_u_vs": false,
+        "use_full_precision_u_vs": false
+      },
+      "nanite_enabled": false,
+      "auto_compute_lod_screen_size_requested": false,
+      "protected_flag_actual_value": null
+    }
+  },
+  "actual_post_lod_import_events": [
+    {
+      "path": "/Game/CodexToolEvaluation/LODSourceRoundtrip/RasterR2/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+      "index": 1
+    }
+  ],
+  "returned_lod_index": 1,
+  "own_callback_removed": true,
+  "persisted": {
+    "saved": true,
+    "clean_package_reloaded": true,
+    "lods": [
+      {
+        "index": 0,
+        "triangles": 1760,
+        "vertices": 3840,
+        "authored": {
+          "triangles": 1760,
+          "vertices": 3840,
+          "vertex_instances": 5280
+        },
+        "screen_size": 2.0,
+        "build_settings": {
+          "recompute_normals": false,
+          "recompute_tangents": true,
+          "use_mikk_t_space": true,
+          "generate_lightmap_u_vs": false,
+          "use_full_precision_u_vs": false
+        },
+        "build_settings_export": "(bUseMikkTSpace=True,bRecomputeNormals=False,bRecomputeTangents=True,bComputeWeightedNormals=False,bRemoveDegenerates=False,bBuildReversedIndexBuffer=False,bUseHighPrecisionTangentBasis=False,bUseFullPrecisionUVs=False,bUseBackwardsCompatibleF16TruncUVs=False,bGenerateLightmapUVs=False,bGenerateDistanceFieldAsIfTwoSided=False,bSupportFaceRemap=False,MinLightmapResolution=64,SrcLightmapIndex=0,DstLightmapIndex=1,BuildScale3D=(X=1.000000,Y=1.000000,Z=1.000000),DistanceFieldResolutionScale=1.000000,DistanceFieldReplacementMesh=None,MaxLumenMeshCards=12)",
+        "reduction_settings_export": "(PercentTriangles=1.000000,MaxNumOfTriangles=4294967295,PercentVertices=1.000000,MaxNumOfVerts=4294967295,MaxDeviation=0.000000,PixelError=8.000000,WeldingThreshold=0.000000,HardAngleThreshold=80.000000,BaseLODModel=0,SilhouetteImportance=Normal,TextureImportance=Normal,ShadingImportance=Normal,bRecalculateNormals=False,bGenerateUniqueLightmapUVs=False,bKeepSymmetry=False,bVisibilityAided=False,bCullOccluded=False,TerminationCriterion=Triangles,VisibilityAggressiveness=Lowest,VertexColorImportance=Off)"
+      },
+      {
+        "index": 1,
+        "triangles": 1496,
+        "vertices": 3264,
+        "authored": {
+          "triangles": 1496,
+          "vertices": 3264,
+          "vertex_instances": 4488
+        },
+        "screen_size": 0.4000000059604645,
+        "build_settings": {
+          "recompute_normals": false,
+          "recompute_tangents": true,
+          "use_mikk_t_space": true,
+          "generate_lightmap_u_vs": false,
+          "use_full_precision_u_vs": false
+        },
+        "build_settings_export": "(bUseMikkTSpace=True,bRecomputeNormals=False,bRecomputeTangents=True,bComputeWeightedNormals=False,bRemoveDegenerates=True,bBuildReversedIndexBuffer=True,bUseHighPrecisionTangentBasis=False,bUseFullPrecisionUVs=False,bUseBackwardsCompatibleF16TruncUVs=False,bGenerateLightmapUVs=False,bGenerateDistanceFieldAsIfTwoSided=False,bSupportFaceRemap=False,MinLightmapResolution=64,SrcLightmapIndex=0,DstLightmapIndex=1,BuildScale3D=(X=1.000000,Y=1.000000,Z=1.000000),DistanceFieldResolutionScale=1.000000,DistanceFieldReplacementMesh=None,MaxLumenMeshCards=12)",
+        "reduction_settings_export": "(PercentTriangles=1.000000,MaxNumOfTriangles=4294967295,PercentVertices=1.000000,MaxNumOfVerts=4294967295,MaxDeviation=0.000000,PixelError=8.000000,WeldingThreshold=0.000000,HardAngleThreshold=80.000000,BaseLODModel=0,SilhouetteImportance=Normal,TextureImportance=Normal,ShadingImportance=Normal,bRecalculateNormals=False,bGenerateUniqueLightmapUVs=False,bKeepSymmetry=False,bVisibilityAided=False,bCullOccluded=False,TerminationCriterion=Triangles,VisibilityAggressiveness=Lowest,VertexColorImportance=Off)"
+      }
+    ],
+    "nanite_enabled": false,
+    "materials": [
+      {
+        "slot": "Prop_Realm_Cave_Floor_M0",
+        "material": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/Materials/Prop_Realm_Cave_Floor_M0.Prop_Realm_Cave_Floor_M0"
+      },
+      {
+        "slot": "Prop_Realm_Cave_Floor_M1",
+        "material": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/Materials/Prop_Realm_Cave_Floor_M1.Prop_Realm_Cave_Floor_M1"
+      }
+    ],
+    "collision_sha256": "46619c0472a0e649c3e1bdf1a35873bec3ebcbf3d33f47f76017a9bd8bf77cb1",
+    "bounds": [
+      [
+        -400.2533874511719,
+        -250.42410278320312,
+        0.0
+      ],
+      [
+        400.2533874511719,
+        250.42410278320312,
+        20.505733489990234
+      ]
+    ],
+    "full_reopened_projection_equals_after_policy": true,
+    "package": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\LODSourceRoundtrip\\RasterR2\\Prop_Realm_Cave_Floor.uasset",
+      "sha256": "a0277f0ef12396941af30812695dd0536c430c8e71b46359e02364892de4914d",
+      "bytes": 139963
+    }
+  },
+  "negative": {
+    "state": "REFUSED",
+    "scope": "REAL_SOURCE_BYTES_REVERSED_ORDER_OFFLINE",
+    "reason": "LOD1 includes geometry outside the selected LOD0 component"
+  },
+  "preservation": {
+    "original_full_projection_unchanged": true,
+    "original_saved_and_source_file_pins_verified": 12,
+    "original_nanite_enabled_unchanged": true,
+    "scene_fields": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "world_saved": false,
+    "compute_normally_released": true,
+    "sole_editor_pid_at_receipt": 30832
+  },
+  "source_and_native_evidence": {
+    "reviewed_lineage_modules": [
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\remaining-integration-source\\daedalus-finishline-worktree\\tools\\unreal\\finishline-targets\\finishline_target_policy.py",
+        "sha256": "3549f3c972a4cd85833d9236533ba296af21aef75d2dcdc234253dccead488de",
+        "bytes": 27699
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\remaining-integration-source\\daedalus-finishline-worktree\\tools\\unreal\\finishline-targets\\ue_finishline_target_facts.py",
+        "sha256": "d548d0aeffa5ec4c832381bf336c9d32fa381e0c9ac42f47814c2df49ed85f6c",
+        "bytes": 18449
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\remaining-integration-source\\daedalus-finishline-worktree\\tools\\unreal\\finishline-targets\\finishline_target_operations.py",
+        "sha256": "b3c9027f9141709e50d90298024b88afb7d8ad1a56ed5dae7ee098364b14c383",
+        "bytes": 25267
+      }
+    ],
+    "diagnostic": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\LODSourceRoundtrip20261021\\LODGeometryDiagnosticR2\\terminal.json",
+      "sha256": "a9e19b1b5471870e7768581d65f3bfc1b25d275fc0afe6c2db6a6c9bec84e456",
+      "bytes": 5193
+    },
+    "native_terminal": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\LODSourceRoundtrip20261021\\LODRasterRoundtripR2\\terminal.json",
+      "sha256": "ae1691ae8166ea6fcd34ecaa1ee3753b5dc3b7c8b9ecf09c358dbb0c55406dc4",
+      "bytes": 33693
+    },
+    "native_callback_source": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\lod_roundtrip_raster_r2.inc",
+      "sha256": "81e8fa90bed2e5e82294ec1c1b2f8369adbf5738b4fa92815be2c8311ba71bc8",
+      "bytes": 11917
+    },
+    "host_source": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\lod_roundtrip_raster_r2.py",
+      "sha256": "67e5eaca36db5c39fbe2738f39f439accfc549f792200f0202c1e1859128b9fe",
+      "bytes": 4492
+    },
+    "release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\LODSourceRoundtrip20261021\\RasterR2\\release.json",
+      "sha256": "dec4f20f7613d59046548cce93abd2e2079b8ee87e4711330ca6d1af2d5f9545",
+      "bytes": 478
+    },
+    "first_failed_cut_preserved": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\LODSourceRoundtrip20261021\\LODPrivateRoundtripR1\\host-error.json",
+      "sha256": "8719296596d5bb940b579eeea33eaa9966245fa13c11f142d39bf9cfdca048fd",
+      "bytes": 312
+    },
+    "first_failure_reconciled_no_mutation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\LODSourceRoundtrip20261021\\LODPreMutationReconcileR1\\terminal.json",
+      "sha256": "5f415de2cb0a32bb41616ef22e8e0328485f97009d5bc3bef4e2f75c42f7ac86",
+      "bytes": 2275
+    }
+  },
+  "recipe": [
+    "Keep exact original/source pins and one-editor/clean/noPIE/idle/resource guards.",
+    "Read authored MeshDescription separately from render LOD resources; record actual Nanite/build/reduction state.",
+    "Duplicate into a new private destination; official SetNaniteSettings(enabled=false) applies only to this new copy; verify1760 raster triangles and unchanged authored/material/collision/build/reduction state.",
+    "Freeze exact source/profile before one ImportLOD(copy,1,pinnedLOD1GLB); require exactly one matching OnAssetPostLODImport event and actual two-LOD geometry.",
+    "Apply the five explicit build flags and float32-canonical screens[2.0,0.4000000059604645]; save/reload only the new clean package and compare the full projection.",
+    "Prove originals/world/scene/camera unchanged and normally release compute. Never use a returned LOD index alone as completion."
+  ],
+  "limits": {
+    "auto_compute_lod_screen_flag_actual": null,
+    "auto_compute_flag_status": "UNKNOWN_PROTECTED_FROM_PYTHON; no retry/bypass or false default. Actual persisted screen values independently verified.",
+    "visual_silhouette_coverage_accepted": false,
+    "production_original_adopted": false,
+    "full_finishline_unit_qualified": false,
+    "active_nanite_geometry_triangle_count_attested": false,
+    "project_or_global_settings_changed": false,
+    "new_native_helper_required": false,
+    "new_editor_build_or_restart": false,
+    "only_one_import": true,
+    "pcg_hlod_skeleton_mrq_actions": 0,
+    "scope": "Private source-to-Unreal raster LOD count/order/build/screen/save-reload proof only. No visual/gameplay/production/Nanite rendering quality claim."
+  }
+}
