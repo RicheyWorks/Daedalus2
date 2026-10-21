@@ -1,6 +1,7 @@
 // Source-only proposal: AUTHORED, UNCOMPILED, UNRUN. Sole operator stages it.
 #include "DaedalusProspectorMineReadLibrary.h"
 #if WITH_EDITOR
+#include "DaedalusMineSourceHash.h"
 #include "AnimPose.h"
 #include "Animation/AnimSequence.h"
 #include "Animation/Skeleton.h"
@@ -96,8 +97,8 @@ static bool SourceOracle(double Rate,double Start,double Stop,const FTransform& 
 {
     // Closed actual target profile. Do not guess general pivot/retarget behavior.
     if(!Offset.Equals(FTransform::Identity,0.0)){Error(E,TEXT("Nonidentity final offset requires a separately qualified conversion"));return false;}
-    TArray<uint8> Bytes;FSHA256Signature Hash;
-    if(IFileManager::Get().FileSize(*SourceFile)!=212424||!FFileHelper::LoadFileToArray(Bytes,*SourceFile)||Bytes.Num()!=212424||!FPlatformMisc::GetSHA256Signature(Bytes.GetData(),Bytes.Num(),Hash)||Hash.ToString().ToLower()!=SourceSha){Error(E,TEXT("Independent source bytes/hash differ"));return false;}
+    TArray<uint8> Bytes;FString Hash;
+    if(IFileManager::Get().FileSize(*SourceFile)!=212424||!FFileHelper::LoadFileToArray(Bytes,*SourceFile)||Bytes.Num()!=212424||!DaedalusMineSourceHash::Compute(Bytes.GetData(),static_cast<uint32>(Bytes.Num()),Hash)||Hash!=SourceSha){Error(E,TEXT("Independent source bytes/hash differ"));return false;}
     UInterchangeManager& Manager=UInterchangeManager::GetInterchangeManager();
     TStrongObjectPtr<UInterchangeSourceData> Data(UInterchangeManager::CreateSourceData(SourceFile));
     TStrongObjectPtr<UInterchangeTranslatorBase> Translator(Data.IsValid()?Manager.GetTranslatorForSourceData(Data.Get()):nullptr);
