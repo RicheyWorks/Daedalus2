@@ -71,6 +71,9 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v7
 
+      - name: Test finishline target policy
+        run: python3 -B -m unittest discover -s tools/unreal/finishline-targets -p test_finishline_target_policy.py -v
+
       - name: Set up Java 21 (Temurin)
         uses: actions/setup-java@v5
         with:
