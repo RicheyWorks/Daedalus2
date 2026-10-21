@@ -1,8 +1,9 @@
 """Explicitly invoked, bounded read-only Unreal facts for the existing four units.
 
-No Unreal import at module import; no transport, loads, generation, saves, builders,
-spawning, editor commands, plugin changes or filesystem writes. The sole operator
-may call collect only after the current R5 batch. Unloaded targets stay unknown.
+No Unreal import at module import; no transport, generation, saves, builders,
+spawning, editor commands, plugin changes or filesystem writes. Ordinary asset
+loads require an explicit finite list of exact configured, source-pinned assets.
+The sole operator retains custody and before/after preservation checks.
 """
 from __future__ import annotations
 
@@ -33,7 +34,8 @@ def _id(obj):
 
 
 def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, *,
-            observation=None, unreal_module=None, file_reader=None):
+            observation=None, exact_asset_loads=(), streaming_packages=(),
+            unreal_module=None, file_reader=None):
     """Return a serializable facts envelope; actual native invocation is operator-only.
 
     Injection supports tiny offline tests; it is not a new runtime authority.
@@ -46,6 +48,26 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
                        "operation_id": None, "package_overrides": {}}
     observation = parse_json(canonical(observation))
     packages = package_expectations(config, observation)
+    require(type(exact_asset_loads) in (list, tuple) and
+            type(streaming_packages) in (list, tuple), "Finite explicit read requests required")
+    require(all(type(x) is str for x in exact_asset_loads) and len(exact_asset_loads) <= 10 and
+            len(set(exact_asset_loads)) == len(exact_asset_loads),
+            "Invalid exact asset load request count")
+    loadable = {x["object_path"]: packages[x["id"]] for x in config["meshes"]}
+    loadable[config["pcg"]["graph_path"]] = packages["pcg_graph"]
+    hc = config["hlod"]
+    if hc.get("layer_path") and hc.get("layer_file_sha256"):
+        require(sha(hc["layer_file_sha256"]), "Missing admitted layer file pin")
+        loadable[hc["layer_path"]] = hc["layer_file_sha256"]
+    require(all(type(x) is str and x in loadable for x in exact_asset_loads),
+            "Asset loads must name exact configured source-pinned assets")
+    require(all(type(x) is str for x in streaming_packages) and len(streaming_packages) <= MAX_LEVELS and
+            len(set(streaming_packages)) == len(streaming_packages) and
+            all(type(x) is str and policy_module.path(x) and x.startswith("/Game/") and
+                "." not in x and ":" not in x for x in streaming_packages),
+            "Streaming lookup requires finite exact full package names")
+    request = parse_json(canonical({"exact_asset_loads": list(exact_asset_loads),
+                                   "streaming_packages": list(streaming_packages)}))
     require(text(capture_id) and sha(expected_reader_sha256) and sha(expected_policy_sha256),
             "Missing admitted capture/source identity")
     actual_reader = _file_pin(__file__, MAX_BYTES)
@@ -57,6 +79,7 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
     ue = unreal_module
     read_file = file_reader or _file_pin
     errors = []
+    load_events = []
 
     def observed(label, fn):
         try:
@@ -69,8 +92,16 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
             return None
 
     def find(target):
-        # find_object observes loaded objects; load_asset/load_object are forbidden.
         obj = ue.find_object(None, target["object_path"])
+        if obj is None and target["object_path"] in request["exact_asset_loads"]:
+            expected_pin = loadable[target["object_path"]]
+            asset_source_pin(target["object_path"], expected_pin)
+            event = {"object_path": target["object_path"], "source_sha256": expected_pin,
+                     "state": "ATTEMPTED"}
+            load_events.append(event)
+            obj = ue.load_asset(target["object_path"])
+            event["state"] = "RETURNED"
+            event["identity"] = _id(obj)
         record = _id(obj)
         require(record == {"object_path": target["object_path"], "class_path": target["class_path"]},
                 "Exact loaded object/class mismatch")
@@ -96,7 +127,8 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
     if world is None:
         return {"schema": FACTS_SCHEMA, "contract_sha256": fingerprint(config), "capture_id": capture_id,
                 "reader_sha256": actual_reader, "policy_sha256": actual_policy, "world": world_info,
-                "observation": observation,
+                "observation": observation, "read_request": request,
+                "read_request_sha256": fingerprint(request), "asset_load_events": load_events,
                 "meshes": [{"id": x["id"], "state": "UNKNOWN"} for x in config["meshes"]],
                 "pcg": {"graph": {"state": "UNKNOWN"}, "component": {"state": "UNKNOWN"}},
                 "hlod": {"state": "UNKNOWN"}, "release": {"state": "UNKNOWN"}, "errors": errors}
@@ -123,13 +155,34 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
             settings = world.get_world_settings()
             return settings.get_editor_property("world_partition") is not None
         world_info["partitioned"] = observed("world.partitioned", partitioned)
-        def level_names():
-            levels = world.get_editor_property("streaming_levels")
-            require(len(levels) <= MAX_LEVELS, "Streaming level count exceeds bound")
+        def loaded_level_names():
+            # Reflected EditorLevelUtils.GetLevels returns loaded ULevels, including
+            # persistent. It is not UWorld's private configured StreamingLevels array.
+            levels = ue.EditorLevelUtils.get_levels(world)
+            require(len(levels) <= MAX_LEVELS, "Loaded level count exceeds bound")
             names = [o.get_path_name() for o in levels if o is not None]
-            require(len(names) == len(levels), "Unknown streaming level")
+            require(len(names) == len(levels) and len(set(names)) == len(names), "Unknown/duplicate loaded level")
             return sorted(names)
-        world_info["streaming_level_objects"] = observed("world.streaming_levels", level_names)
+        world_info["loaded_level_objects"] = observed("world.loaded_levels", loaded_level_names)
+        world_info["loaded_level_scope"] = "Loaded ULevels only, including persistent; not configured streaming inventory"
+        world_info["streaming_level_objects"] = None
+        world_info["streaming_level_scope"] = "Explicit admitted package subset; never a complete configured count"
+        world_info["streaming_level_reason"] = "No exact package names admitted; private StreamingLevels is not read"
+        if request["streaming_packages"]:
+            def streaming_names():
+                names = []
+                for package in request["streaming_packages"]:
+                    level = ue.GameplayStatics.get_streaming_level(world, package)
+                    require(level is not None, "Admitted streaming package unavailable")
+                    # GetStreamingLevel uses suffix matching; verify the full returned package.
+                    require(str(level.get_world_asset_package_f_name()) == package,
+                            "Streaming package identity differs from admitted full name")
+                    require(owning_world(level) == config["world"]["object_path"], "Streaming world mismatch")
+                    names.append(level.get_path_name())
+                require(len(set(names)) == len(names), "Duplicate streaming object projection")
+                return sorted(names)
+            world_info["streaming_level_objects"] = observed("world.streaming_levels", streaming_names)
+            world_info["streaming_level_reason"] = "Source-backed explicit-name lookup; full package/world checked"
     meshes = []
     for target in config["meshes"]:
         def mesh_read(target=target):
@@ -172,8 +225,8 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
                             obj.get_editor_property("generated")),
                         generated_flag_limit="False can be normal for partitionable actors; not completion proof")
         component = observed("pcg.component", component_read) or {"state": "UNKNOWN"}
-    # Enumeration/build of HLOD clusters is deliberately outside this reader. Only
-    # explicitly named loaded source actors and layer can be qualified, no global crawl.
+    # Enumeration/build of HLOD clusters is outside this reader. Actor references
+    # must already exist in the current world; layer asset loads require an exact pin.
     hlod = {"state": "UNKNOWN", "reason": "Exact finite source set/layer not yet bound"}
     hc = config["hlod"]
     if hc["source_actor_paths"] and hc["layer_path"]:
@@ -184,13 +237,16 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
                                     "class_path": hc["source_actor_classes"][object_path]},
                         "HLOD source identity mismatch")
                 require(owning_world(obj) == config["world"]["object_path"], "HLOD source world mismatch")
-            layer = ue.find_object(None, hc["layer_path"])
+            layer = find({"object_path": hc["layer_path"], "class_path": hc["layer_class"]})
             require(_id(layer) == {"object_path": hc["layer_path"], "class_path": hc["layer_class"]},
                     "HLOD layer identity mismatch")
+            layer_pin = (asset_source_pin(hc["layer_path"], hc["layer_file_sha256"])
+                         if hc.get("layer_file_sha256") else None)
             return {"state": "OBSERVED", "world_path": config["world"]["object_path"],
                     "source_actor_paths": list(hc["source_actor_paths"]), "layer_path": hc["layer_path"],
                     "source_actor_classes": dict(hc["source_actor_classes"]),
-                    "layer_class": layer.get_class().get_path_name(), "builder_invoked": False}
+                    "layer_class": layer.get_class().get_path_name(), "layer_file_sha256": layer_pin,
+                    "builder_invoked": False}
         hlod = observed("hlod.targets", hlod_read) or {"state": "UNKNOWN"}
     def release_read():
         value = dict(config["release"])
@@ -201,7 +257,8 @@ def collect(config, capture_id, expected_reader_sha256, expected_policy_sha256, 
     release = observed("release.project", release_read) or {"state": "UNKNOWN"}
     result = {"schema": FACTS_SCHEMA, "contract_sha256": fingerprint(config), "capture_id": capture_id,
               "reader_sha256": actual_reader, "policy_sha256": actual_policy,
-              "observation": observation,
+              "observation": observation, "read_request": request,
+              "read_request_sha256": fingerprint(request), "asset_load_events": load_events,
               "world": world_info, "meshes": meshes,
               "pcg": {"graph": graph, "component": component}, "hlod": hlod,
               "release": release, "errors": errors}

@@ -37,8 +37,14 @@ def integer(value, low=0, high=100000000):
     return type(value) is int and low <= value <= high
 
 
-def finite(value, low=0.0, high=1.0):
-    return type(value) in (int, float) and math.isfinite(value) and low <= value <= high
+def render_screen_size(value):
+    """UE render thresholds include automatic LOD0=2.0; no universal upper clamp."""
+    if type(value) not in (int, float):
+        return False
+    try:
+        return math.isfinite(value) and value >= 0
+    except OverflowError:
+        return False
 
 
 def sha(value):
@@ -107,7 +113,13 @@ def validate_contract(config):
     pcg = config.get("pcg", {})
     require(path(pcg.get("graph_path")) and pcg.get("graph_class") == "/Script/PCG.PCGGraph",
             "Invalid graph identity")
-    require(integer(pcg.get("seed"), -2147483648, 2147483647), "Invalid graph consumer seed")
+    # Legacy v1 `seed` was the source layout hint, never a measured component seed.
+    require(not ("seed" in pcg and "layout_seed" in pcg), "Ambiguous layout seed fields")
+    require(integer(pcg.get("layout_seed", pcg.get("seed")), -2147483648, 2147483647),
+            "Invalid source layout seed")
+    require(pcg.get("desired_component_seed") is None or
+            integer(pcg["desired_component_seed"], -2147483648, 2147483647),
+            "Invalid deliberately requested component seed")
     require(pcg.get("component_path") is None or path(pcg["component_path"]), "Invalid component path")
     require(pcg.get("component_class") == "/Script/PCG.PCGComponent", "Invalid component class")
     require(sha(pcg.get("graph_file_sha256")), "Missing graph file pin")
@@ -121,6 +133,8 @@ def validate_contract(config):
     require(isinstance(actors, list) and len(actors) <= MAX_ACTORS and
             len(set(actors)) == len(actors) and all(path(x) for x in actors), "Invalid HLOD source set")
     require(config["hlod"].get("layer_path") is None or path(config["hlod"]["layer_path"]), "Invalid HLOD layer")
+    require(config["hlod"].get("layer_file_sha256") is None or
+            sha(config["hlod"]["layer_file_sha256"]), "Invalid optional HLOD layer file pin")
     classes = config["hlod"].get("source_actor_classes", {})
     require(isinstance(classes, dict) and set(classes) == set(actors) and all(path(x) for x in classes.values()),
             "Missing exact HLOD source classes")
@@ -199,7 +213,7 @@ def _mesh_facts(config, facts, packages):
             require(lod.get("index") == index and type(lod.get("index")) is int, "LOD index mismatch")
             require(integer(lod.get("triangles"), 1) and integer(lod.get("vertices"), 1),
                     "Missing positive actual render geometry")
-            require(finite(lod.get("screen_size")), "Invalid LOD screen size")
+            require(render_screen_size(lod.get("screen_size")), "Invalid LOD screen size")
             require(isinstance(lod.get("build_settings"), dict) and
                     set(lod["build_settings"]) == set(BUILD_FIELDS), "Unknown or missing actual build fields")
             require(all(type(v) is bool for v in lod["build_settings"].values()), "Invalid build boolean")
@@ -214,6 +228,10 @@ def inspect(config, facts):
         require(facts.get("contract_sha256") == fingerprint(config), "Facts contract pin mismatch")
         require(text(facts.get("capture_id")) and sha(facts.get("reader_sha256")) and
                 sha(facts.get("policy_sha256")), "Missing capture/source identity")
+        if "read_request" in facts:
+            require(isinstance(facts["read_request"], dict) and
+                    facts.get("read_request_sha256") == fingerprint(facts["read_request"]),
+                    "Facts read-request identity mismatch")
         packages = package_expectations(config, facts.get("observation"))
         world = facts.get("world", {})
         require(world.get("state") == "OBSERVED", "Current world unavailable")
@@ -230,8 +248,8 @@ def inspect(config, facts):
             identity(component, config["pcg"]["component_path"], config["pcg"]["component_class"])
             require(component.get("world_path") == config["world"]["object_path"], "PCG consumer world mismatch")
             require(component.get("graph_path") == config["pcg"]["graph_path"], "PCG graph binding mismatch")
-            require(type(component.get("seed")) is int and component["seed"] == config["pcg"]["seed"],
-                    "PCG consumer seed mismatch")
+            require(integer(component.get("seed"), -2147483648, 2147483647),
+                    "PCG component seed is unobserved or invalid")
         pcg_ready = pcg_ready and graph.get("state") == "OBSERVED"
         hlod = facts.get("hlod", {})
         partitioned = world.get("partitioned")
@@ -245,6 +263,9 @@ def inspect(config, facts):
                     hlod.get("source_actor_classes") == config["hlod"]["source_actor_classes"] and
                     hlod.get("layer_path") == config["hlod"]["layer_path"] and
                     hlod.get("layer_class") == config["hlod"]["layer_class"], "HLOD source/layer mismatch")
+            if config["hlod"].get("layer_file_sha256"):
+                require(hlod.get("layer_file_sha256") == config["hlod"]["layer_file_sha256"],
+                        "HLOD layer file witness mismatch")
         release = facts.get("release", {})
         release_ready = release.get("state") == "OBSERVED"
         if release_ready:
@@ -278,6 +299,10 @@ def qualify(config, before, after, evidence):
         require(before["capture_id"] != after["capture_id"], "Fresh readback capture required")
         require(before["reader_sha256"] == after["reader_sha256"], "Reader revision changed")
         require(before["policy_sha256"] == after["policy_sha256"], "Policy revision changed")
+        if "read_request" in before or "read_request" in after:
+            require(before.get("read_request_sha256") == after.get("read_request_sha256") and
+                    "read_request" in before and "read_request" in after,
+                    "Reader request context changed")
         target = config["units"][unit]["target_id"]
         require(evidence.get("target_id") == target and text(evidence.get("operation_id")), "Operation identity mismatch")
         require(before["observation"]["phase"] == "preflight", "Expected original preflight witness")
@@ -322,7 +347,7 @@ def qualify(config, before, after, evidence):
                 require(integer(desired.get("lod1_triangles"), 1), "Invalid desired LOD1 count")
                 screens = desired.get("screen_sizes")
                 require(isinstance(screens, list) and len(screens) == 2 and
-                        all(finite(x) for x in screens) and screens[0] > screens[1], "Invalid desired screens")
+                        all(render_screen_size(x) for x in screens) and screens[0] > screens[1], "Invalid desired screens")
                 require(b[0]["triangles"] == a[0]["triangles"] and b[0]["vertices"] == a[0]["vertices"],
                         "Authored LOD0 changed")
                 require(b[0]["build_settings"] == a[0]["build_settings"], "Unrequested LOD0 build change")
@@ -348,6 +373,10 @@ def qualify(config, before, after, evidence):
                     require(all(old_lod["build_settings"][k] == new_lod["build_settings"].get(k)
                                 for k in old_lod["build_settings"] if k not in allowed), "Unrequested build flag changed")
         elif unit == UNITS[1]:
+            desired_seed = config["pcg"].get("desired_component_seed")
+            expected_seed = (before["pcg"]["component"]["seed"] if desired_seed is None else desired_seed)
+            require(after["pcg"]["component"]["seed"] == expected_seed,
+                    "PCG component seed changed without the deliberately requested policy")
             require(evidence.get("generated_by_pcg") is True and evidence.get("manual_fallback") is False,
                     "Manual placements are not PCG output")
             require(sha(config["pcg"].get("expected_output_sha256")) and
