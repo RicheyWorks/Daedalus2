@@ -4,6 +4,7 @@
 #if WITH_EDITOR
 #include "Dom/JsonObject.h"
 #include "DaedalusMaterialCachedDiagnostic.h"
+#include "DaedalusMaterialSwitchProofPolicy.h"
 #include "Editor.h"
 #include "Engine/World.h"
 #include "FileHelpers.h"
@@ -17,6 +18,12 @@
 #include "Materials/MaterialExpressionFunctionInput.h"
 #include "Materials/MaterialExpressionFunctionOutput.h"
 #include "Materials/MaterialFunctionInterface.h"
+#include "Materials/MaterialInterface.h"
+#include "Materials/MaterialParameters.h"
+#include "Materials/MaterialExpressionStaticSwitchParameter.h"
+#include "Materials/MaterialExpressionStaticSwitch.h"
+#include "Materials/MaterialExpressionStaticBool.h"
+#include "Materials/MaterialExpressionRerouteBase.h"
 #include "Misc/PackageName.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
@@ -384,6 +391,308 @@ static FJson CachedFunctionFacts(UMaterial* Material, UMaterialEditorOnlyData* D
  return Value;
 }
 
+namespace SP = DaedalusMaterialSwitchProofPolicy;
+namespace CD = DaedalusMaterialCachedDiagnostic;
+static const TCHAR* SwitchFunction = TEXT("/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body");
+
+static void ProofError(FValues& Errors, const FString& Where, const TCHAR* Reason)
+{
+ Errors.Add(MakeShared<FJsonValueString>(Where + TEXT(": ") + Reason));
+}
+
+static bool ProofOwner(const UMaterialExpression* Node, const UMaterial* Material, const UObject* Function)
+{
+ return CachedReadable(Node) && (Node->GetOuter() == Material || Node->GetOuter() == Function);
+}
+
+static SP::ELeaf ProofLeafClass(const UMaterialExpression* Node)
+{
+ if (!CachedReadable(Node)) return SP::ELeaf::Unsupported;
+ if (Node->GetClass() == UMaterialExpressionStaticBool::StaticClass()) return SP::ELeaf::StaticBool;
+ if (Node->GetClass() == UMaterialExpressionConstant3Vector::StaticClass()) return SP::ELeaf::RGB;
+ if (Node->GetClass() == UMaterialExpressionConstant::StaticClass()) return SP::ELeaf::Scalar;
+ return SP::ELeaf::Unsupported;
+}
+
+// Inspect only public cached output metadata. No virtual outputs or graph evaluation.
+static bool ProofConnection(const FExpressionInput& Input, bool bRGB)
+{
+ const auto* Node = Input.Expression;
+ if (!CachedReadable(Node) || Input.OutputIndex != 0 || Node->Outputs.Num() > 64
+     || !Node->Outputs.IsValidIndex(Input.OutputIndex)) return false;
+ const auto& Output = Node->Outputs[Input.OutputIndex];
+ const bool M = Input.Mask ? !!Input.Mask : !!Output.Mask;
+ const bool R = Input.Mask ? !!Input.MaskR : !!Output.MaskR;
+ const bool G = Input.Mask ? !!Input.MaskG : !!Output.MaskG;
+ const bool B = Input.Mask ? !!Input.MaskB : !!Output.MaskB;
+ const bool A = Input.Mask ? !!Input.MaskA : !!Output.MaskA;
+ return (!M && !R && !G && !B && !A) || (bRGB && M && R && G && B && !A);
+}
+
+static FJson ProofDetail(const FExpressionInput& Input, FValues& Errors)
+{
+ FJson Fact = CachedConnection(Input, Errors);
+ const auto* Node = Input.Expression;
+ if (CachedReadable(Node) && Node->GetClass() == UMaterialExpressionStaticBool::StaticClass())
+  Fact->SetBoolField(TEXT("static_bool_value"), CastChecked<UMaterialExpressionStaticBool>(Node)->Value != 0);
+ return Fact;
+}
+
+// Metadata only for BOTH branches. Reject reroute ancestry BEFORE tracing: the
+// installed non-reroute GetTracedInput returns *this, so this cannot recurse.
+static FJson ProofBranch(const FExpressionInput& Input, const UMaterial* Material,
+ const UObject* Function, SP::FUsage& Usage, SP::FBranch& Result)
+{
+ FJson Fact = MakeShared<FJsonObject>();
+ const auto* Node = Input.Expression;
+ const bool bAdmitted = Usage.TryMetadata();
+ Result.bPresent = bAdmitted && CachedReadable(Node);
+ Result.bOwnerExact = bAdmitted && ProofOwner(Node, Material, Function);
+ Result.bReroute = Result.bPresent && Node->IsA(UMaterialExpressionRerouteBase::StaticClass());
+ bool bTracedConnected = false;
+ if (Result.bPresent && !Result.bReroute)
+ {
+  const FExpressionInput Traced = Input.GetTracedInput();
+  bTracedConnected = CachedReadable(Traced.Expression);
+  Result.bTraceDirect = bTracedConnected && Traced.Expression == Node
+   && Traced.OutputIndex == Input.OutputIndex && Traced.Mask == Input.Mask
+   && Traced.MaskR == Input.MaskR && Traced.MaskG == Input.MaskG
+   && Traced.MaskB == Input.MaskB && Traced.MaskA == Input.MaskA;
+ }
+ Fact->SetBoolField(TEXT("expression_present"), Node != nullptr);
+ Fact->SetField(TEXT("expression"), CachedIdentity(Node));
+ Fact->SetBoolField(TEXT("traced_connected"), bTracedConnected);
+ Fact->SetBoolField(TEXT("traced_direct_equal"), Result.bTraceDirect);
+ Fact->SetBoolField(TEXT("is_reroute_base"), Result.bReroute);
+ return Fact;
+}
+
+// ONE selected lane, at most FunctionInput -> direct typed caller leaf. This is
+// deliberately not recursive and does not inspect Preview/default expressions.
+static bool ProofLane(const FExpressionInput& Input, SP::ELeaf Expected,
+ const UMaterial* Material, const UObject* Function,
+ const UMaterialExpressionMaterialFunctionCall* Call, const CD::FProjection& Projection,
+ SP::FUsage& Usage, FValues& Rich, FJson& Detail, bool& BoolValue,
+ int32& InputType, FValues& Errors)
+{
+ const auto* Node = Input.Expression;
+ const bool bRGB = Expected == SP::ELeaf::RGB;
+ if (!Usage.TryEdge(1) || !Usage.TryDetail() || !ProofOwner(Node, Material, Function)
+     || !ProofConnection(Input, bRGB)) return false;
+ if (Node->GetClass() != UMaterialExpressionFunctionInput::StaticClass() && ProofLeafClass(Node) != Expected) return false;
+ Detail = ProofDetail(Input, Errors);
+ const FExpressionInput* LeafInput = &Input;
+ InputType = -1;
+ if (Node->GetClass() == UMaterialExpressionFunctionInput::StaticClass())
+ {
+  const auto* FunctionInput = CastChecked<UMaterialExpressionFunctionInput>(Node);
+  const int32 ExpectedType = Expected == SP::ELeaf::StaticBool ? 8 : bRGB ? 2 : 0;
+  InputType = static_cast<int32>(FunctionInput->InputType.GetValue());
+  if (Node->GetOuter() != Function || InputType != ExpectedType || Rich.Num() >= 2
+      || !Usage.TryEdge(2) || !Usage.TryDetail()) return false;
+  int32 MatchIndex = INDEX_NONE, Matches = 0;
+  for (const auto& Entry : Projection.Inputs)
+   if (Entry.bReady && Entry.BindingId == FunctionInput->Id && Entry.NodeId == FunctionInput->Id
+       && Entry.NodePath == FunctionInput->GetPathName()) { MatchIndex = Entry.Index; ++Matches; }
+  if (Matches != 1 || !Call->FunctionInputs.IsValidIndex(MatchIndex)) return false;
+  const auto& Binding = Call->FunctionInputs[MatchIndex];
+  const auto* BoundNode = CachedResolved(Binding.ExpressionInput, TEXT("switch rich binding"), Errors);
+  if (BoundNode != Node || Binding.ExpressionInputId != FunctionInput->Id) return false;
+  LeafInput = &Binding.Input;
+  if (!CachedReadable(LeafInput->Expression) || LeafInput->Expression->GetOuter() != Material) return false;
+  FJson Entry = MakeShared<FJsonObject>();
+  Entry->SetNumberField(TEXT("index"), MatchIndex);
+  Entry->SetObjectField(TEXT("expression_input_id"), CachedGuid(Binding.ExpressionInputId));
+  Entry->SetField(TEXT("expression_input"), CachedIdentity(Node));
+  FJson N = MakeShared<FJsonObject>();
+  N->SetObjectField(TEXT("id"), CachedGuid(FunctionInput->Id));
+  N->SetNumberField(TEXT("input_type"), InputType);
+  N->SetStringField(TEXT("input_type_name"), Expected == SP::ELeaf::StaticBool
+   ? TEXT("FunctionInput_StaticBool") : bRGB ? TEXT("FunctionInput_Vector3") : TEXT("FunctionInput_Scalar"));
+  Entry->SetObjectField(TEXT("node"), N);
+  // Only the expected typed direct leaf is expanded; numeric parameters and
+  // nested graphs do not acquire authored defaults through this helper.
+  if (ProofLeafClass(LeafInput->Expression) != Expected) return false;
+  Entry->SetObjectField(TEXT("caller_input"), ProofDetail(*LeafInput, Errors));
+  Rich.Add(MakeShared<FJsonValueObject>(Entry));
+ }
+ const auto* Leaf = LeafInput->Expression;
+ const bool bOutputValid = CachedReadable(Leaf) && Leaf->Outputs.Num() <= 64 && Leaf->Outputs.IsValidIndex(LeafInput->OutputIndex);
+ if (!SP::ChosenLeaf(ProofLeafClass(Leaf), Expected, LeafInput->OutputIndex == 0,
+      bOutputValid, ProofConnection(*LeafInput, bRGB), ProofOwner(Leaf, Material, Function))) return false;
+ if (Expected == SP::ELeaf::StaticBool) BoolValue = CastChecked<UMaterialExpressionStaticBool>(Leaf)->Value != 0;
+ else if (Expected == SP::ELeaf::RGB)
+ {
+  const auto V = CastChecked<UMaterialExpressionConstant3Vector>(Leaf)->Constant;
+  if (!FMath::IsFinite(V.R) || !FMath::IsFinite(V.G) || !FMath::IsFinite(V.B) || !FMath::IsFinite(V.A)) return false;
+ }
+ else if (!FMath::IsFinite(CastChecked<UMaterialExpressionConstant>(Leaf)->R)) return false;
+ return true;
+}
+
+static bool ProofParameter(const UMaterialExpressionStaticSwitchParameter* Node,
+ const UMaterial* Material, const UMaterialExpressionMaterialFunctionCall* Call,
+ const UObject* Function, SP::FUsage& Usage, FJson Switch, bool& Selected)
+{
+ if (!Usage.TryMetadata() || !Usage.TryQuery()) return false;
+ FJson Info = MakeShared<FJsonObject>();
+ Info->SetStringField(TEXT("name"), Node->ParameterName.ToString());
+ Info->SetStringField(TEXT("association"), TEXT("GlobalParameter"));
+ Info->SetNumberField(TEXT("index"), INDEX_NONE);
+ const FMaterialParameterInfo ParameterInfo(Node->ParameterName, GlobalParameter, INDEX_NONE);
+ TArray<FMaterialParameterInfo> Infos; TArray<FGuid> Guids;
+ Material->GetAllStaticSwitchParameterInfo(Infos, Guids);
+ SP::FParameterProof P;
+ P.InfoCount = Infos.Num(); P.GuidCount = Guids.Num();
+ P.bEnumerationComplete = P.InfoCount == P.GuidCount && P.InfoCount >= 1 && P.InfoCount <= 128;
+ P.bContextExact = Call->GetOuter() == Material && Node->GetOuter() == Function && !Node->ParameterName.IsNone();
+ P.bNodeGuidValid = Node->ExpressionGUID.IsValid();
+ P.bDynamicKnown = true; P.bDynamic = Node->DynamicBranch != 0;
+ FValues Matches;
+ if (P.bEnumerationComplete)
+  for (int32 Index = 0; Index < Infos.Num(); ++Index)
+   if (Infos[Index].Name == ParameterInfo.Name && Infos[Index].Association == ParameterInfo.Association
+       && Infos[Index].Index == ParameterInfo.Index)
+   {
+    ++P.Matches;
+    FJson Match = MakeShared<FJsonObject>(); Match->SetObjectField(TEXT("parameter_info"), Info);
+    Match->SetStringField(TEXT("expression_guid"), Guids[Index].ToString(EGuidFormats::Digits).ToLower());
+    Matches.Add(MakeShared<FJsonValueObject>(Match));
+    if (Guids[Index] != Node->ExpressionGUID) P.bContextExact = false;
+   }
+ bool Value = false; FGuid ReturnedGuid;
+ // No query for invalid/ambiguous/dynamic context, and no authored-default fallback.
+ if (P.bEnumerationComplete && P.Matches == 1 && P.bContextExact && P.bNodeGuidValid && !P.bDynamic)
+  P.bQuerySucceeded = Material->GetStaticSwitchParameterValue(FHashedMaterialParameterInfo(ParameterInfo), Value, ReturnedGuid, false);
+ P.bReturnedGuidExact = P.bQuerySucceeded && ReturnedGuid == Node->ExpressionGUID;
+ P.bValue = Value;
+ FJson Query = MakeShared<FJsonObject>();
+ Query->SetStringField(TEXT("api"), TEXT("UMaterialInterface::GetStaticSwitchParameterValue"));
+ Query->SetStringField(TEXT("material_path"), Material->GetPathName());
+ Query->SetStringField(TEXT("caller_path"), Call->GetPathName());
+ Query->SetStringField(TEXT("function_path"), Function->GetPathName());
+ Query->SetStringField(TEXT("node_expression_guid"), Node->ExpressionGUID.ToString(EGuidFormats::Digits).ToLower());
+ Query->SetObjectField(TEXT("parameter_info"), Info);
+ Query->SetBoolField(TEXT("enumeration_complete"), P.bEnumerationComplete);
+ Query->SetNumberField(TEXT("enumerated_count"), Infos.Num());
+ Query->SetNumberField(TEXT("parameter_info_count"), Infos.Num());
+ Query->SetNumberField(TEXT("parameter_guid_count"), Guids.Num());
+ Query->SetArrayField(TEXT("enumerated_matches"), Matches);
+ Query->SetBoolField(TEXT("query_succeeded"), P.bQuerySucceeded);
+ Query->SetBoolField(TEXT("overridden_only"), false);
+ if (P.bQuerySucceeded)
+ {
+  Query->SetStringField(TEXT("returned_expression_guid"), ReturnedGuid.ToString(EGuidFormats::Digits).ToLower());
+  Query->SetBoolField(TEXT("value"), Value);
+ }
+ else
+ {
+  Query->SetField(TEXT("returned_expression_guid"), MakeShared<FJsonValueNull>());
+  Query->SetField(TEXT("value"), MakeShared<FJsonValueNull>());
+ }
+ Switch->SetBoolField(TEXT("dynamic_branch"), P.bDynamic);
+ Switch->SetStringField(TEXT("expression_guid"), Node->ExpressionGUID.ToString(EGuidFormats::Digits).ToLower());
+ Switch->SetStringField(TEXT("parameter_name"), Node->ParameterName.ToString());
+ Switch->SetObjectField(TEXT("parameter_query"), Query);
+ return SP::ParameterValue(P, Selected);
+}
+
+static void CaptureSwitchProofs(UMaterial* Material, UMaterialEditorOnlyData* Data,
+ CD::FProjection& Projection, FValues& Errors)
+{
+ FValues Routes; Projection.Call->SetArrayField(TEXT("route_proofs"), Routes);
+ if (!Data || Projection.InputCount != 89 || Projection.OutputCount != 12
+     || !CD::ValidManifest(Projection.Inputs, 89) || Projection.Selected != TArray<int32>{0, 1, 3})
+ { ProofError(Errors, Material->GetPathName(), TEXT("Complete exact 89/12 binding projection required")); return; }
+ const auto* Call = Cast<UMaterialExpressionMaterialFunctionCall>(Data->BaseColor.Expression);
+ if (!CachedReadable(Call) || Call->GetClass() != UMaterialExpressionMaterialFunctionCall::StaticClass()
+     || Call->GetOuter() != Material || Call->GetName() != TEXT("MaterialExpressionMaterialFunctionCall_0")
+     || Data->Metallic.Expression != Call || Data->Roughness.Expression != Call)
+ { ProofError(Errors, Material->GetPathName(), TEXT("One exact current material-owned call required")); return; }
+ const auto* Function = CachedResolved(Call->MaterialFunction, TEXT("switch function"), Errors);
+ if (!Function || Function->GetPathName() != SwitchFunction || Function->GetClass()->GetPathName() != TEXT("/Script/Engine.MaterialFunction"))
+ { ProofError(Errors, Material->GetPathName(), TEXT("Exact already resolved MF_Default_Body required")); return; }
+ for (const auto& Entry : Projection.Inputs)
+  if (!Entry.NodePath.StartsWith(FString(SwitchFunction) + TEXT(":MaterialExpressionFunctionInput_")))
+  { ProofError(Errors, Material->GetPathName(), TEXT("Manifest input outside exact function")); return; }
+ const TCHAR* Names[]{TEXT("base_color"), TEXT("metallic"), TEXT("roughness")};
+ const int32 Indices[]{0, 1, 3};
+ const TCHAR* GuidTexts[]{TEXT("a12e80f64d5d5086a53effa8549c2e45"), TEXT("84cbc44b43d0c29c1c8969a5f9388f36"), TEXT("bf502fd74d9826b42ae945948da8833e")};
+ const TCHAR* OutputNames[]{TEXT("MaterialExpressionFunctionOutput_0"), TEXT("MaterialExpressionFunctionOutput_11"), TEXT("MaterialExpressionFunctionOutput_13")};
+ const TCHAR* SwitchNames[]{TEXT("MaterialExpressionStaticSwitchParameter_0"), TEXT("MaterialExpressionStaticSwitch_3"), TEXT("MaterialExpressionStaticSwitch_4")};
+ SP::FUsage Usage;
+ for (int32 Lane = 0; Lane < 3; ++Lane)
+ {
+  const FString Where = Material->GetPathName() + TEXT("/") + Names[Lane];
+  if (!Usage.TryRoot() || !Usage.TryDetail() || !Call->FunctionOutputs.IsValidIndex(Indices[Lane]))
+  { ProofError(Errors, Where, TEXT("Switch/output bound refused")); break; }
+  const auto& Binding = Call->FunctionOutputs[Indices[Lane]];
+  const auto* Output = CachedResolved(Binding.ExpressionOutput, Where, Errors);
+  const auto* Expression = Output ? Output->A.Expression : nullptr;
+  const UClass* ExpectedClass = Lane == 0 ? UMaterialExpressionStaticSwitchParameter::StaticClass() : UMaterialExpressionStaticSwitch::StaticClass();
+  if (!CachedReadable(Output) || Output->GetClass() != UMaterialExpressionFunctionOutput::StaticClass()
+      || Output->GetOuter() != Function || Output->GetName() != OutputNames[Lane]
+      || Output->Id != Binding.ExpressionOutputId || Output->Id.ToString(EGuidFormats::Digits).ToLower() != GuidTexts[Lane]
+      || !CachedReadable(Expression) || Expression->GetClass() != ExpectedClass
+      || Expression->GetName() != SwitchNames[Lane] || Expression->GetOuter() != Function || !ProofConnection(Output->A, false))
+  { ProofError(Errors, Where, TEXT("Exact output GUID/identity/unmasked switch root required")); continue; }
+  FJson Route = MakeShared<FJsonObject>(), Switch = MakeShared<FJsonObject>(); FValues Rich;
+  Route->SetStringField(TEXT("property"), Names[Lane]); Switch->SetField(TEXT("expression"), CachedIdentity(Expression));
+  const FExpressionInput* A = nullptr; const FExpressionInput* B = nullptr;
+  const auto* Parameter = Lane == 0 ? CastChecked<UMaterialExpressionStaticSwitchParameter>(Expression) : nullptr;
+  const auto* Ordinary = Lane != 0 ? CastChecked<UMaterialExpressionStaticSwitch>(Expression) : nullptr;
+  if (Parameter) { A = &Parameter->A; B = &Parameter->B; }
+  else { A = &Ordinary->A; B = &Ordinary->B; }
+  SP::FBranch PA, PB;
+  FJson AF = ProofBranch(*A, Material, Function, Usage, PA), BF = ProofBranch(*B, Material, Function, Usage, PB);
+  Switch->SetObjectField(TEXT("a"), AF); Switch->SetObjectField(TEXT("b"), BF);
+  bool bSelected = false, bSelectorReady = false;
+  if (!SP::BothDirect(PA, PB)) ProofError(Errors, Where, TEXT("Both branches require readable direct trace/owner equality and no reroute ancestry"));
+  else if (Parameter) bSelectorReady = ProofParameter(Parameter, Material, Call, Function, Usage, Switch, bSelected);
+  else if (Usage.TryMetadata())
+  {
+   SP::FBoolProof Proof; Proof.bConnected = Ordinary->Value.Expression != nullptr;
+   Proof.bDefaultKnown = true; Proof.bDefault = Ordinary->DefaultValue != 0;
+   Switch->SetBoolField(TEXT("default_value"), Proof.bDefault);
+   FJson Value = MakeShared<FJsonObject>();
+   Value->SetBoolField(TEXT("expression_present"), Proof.bConnected);
+   Value->SetField(TEXT("expression"), CachedIdentity(Ordinary->Value.Expression));
+   if (Proof.bConnected)
+   {
+    bool TypedValue = false; int32 InputType = -1;
+    Proof.bValueKnown = ProofLane(Ordinary->Value, SP::ELeaf::StaticBool, Material, Function, Call, Projection, Usage, Rich, Value, TypedValue, InputType, Errors);
+    Proof.FunctionInputType = InputType; Proof.bUniqueBinding = InputType == 8;
+    Proof.bTypedStaticBool = Proof.bValueKnown; Proof.bValue = TypedValue;
+   }
+   Switch->SetObjectField(TEXT("value"), Value);
+   bSelectorReady = SP::StaticValue(Proof, bSelected);
+  }
+  if (!bSelectorReady) ProofError(Errors, Where, TEXT("Static selector lacks unique typed current-context proof; no default fallback"));
+  else
+  {
+   FJson Chosen = MakeShared<FJsonObject>(); bool Unused = false; int32 InputType = -1;
+   const bool bLeafReady = ProofLane(bSelected ? *A : *B, Lane == 0 ? SP::ELeaf::RGB : SP::ELeaf::Scalar,
+     Material, Function, Call, Projection, Usage, Rich, Chosen, Unused, InputType, Errors);
+   if (!bLeafReady) ProofError(Errors, Where, TEXT("Chosen lane lacks bounded exact typed constant proof"));
+   // Reuse real trace observations on the selected detailed connection. The
+   // unchosen endpoint keeps identity metadata only, without value expansion.
+   Chosen->SetBoolField(TEXT("traced_connected"), (bSelected ? AF : BF)->GetBoolField(TEXT("traced_connected")));
+   Chosen->SetBoolField(TEXT("traced_direct_equal"), (bSelected ? AF : BF)->GetBoolField(TEXT("traced_direct_equal")));
+   Chosen->SetBoolField(TEXT("is_reroute_base"), (bSelected ? AF : BF)->GetBoolField(TEXT("is_reroute_base")));
+   Switch->SetObjectField(bSelected ? TEXT("a") : TEXT("b"), Chosen);
+   Route->SetStringField(TEXT("selected_branch"), bSelected ? TEXT("a") : TEXT("b"));
+  }
+  Route->SetObjectField(TEXT("switch"), Switch); Route->SetArrayField(TEXT("rich_inputs"), Rich);
+  Routes.Add(MakeShared<FJsonValueObject>(Route));
+ }
+ Projection.Call->SetArrayField(TEXT("route_proofs"), Routes);
+ FJson Counts = MakeShared<FJsonObject>();
+ Counts->SetNumberField(TEXT("roots"), Usage.Roots); Counts->SetNumberField(TEXT("metadata"), Usage.Metadata);
+ Counts->SetNumberField(TEXT("details"), Usage.Details); Counts->SetNumberField(TEXT("queries"), Usage.Queries);
+ Projection.Call->SetObjectField(TEXT("switch_proof_usage"), Counts);
+}
+
+
 static FJson InputFacts(UMaterial* Material, const TCHAR* Name, FExpressionInput* Current,
 	const FExpressionInput* Typed, bool bUseConstant, const FLinearColor* Color,
 	const float* Scalar, FValues& Errors)
@@ -501,8 +810,8 @@ static FJson InputFacts(UMaterial* Material, const TCHAR* Name, FExpressionInput
 } // namespace DaedalusMaterialFactors
 #endif
 
-FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString>& MaterialObjectPaths,
-	const FString& AllowedPackageRoot, const FString& PolicyId)
+static FString ReadMaterialFactsImpl(const TArray<FString>& MaterialObjectPaths,
+	const FString& AllowedPackageRoot, const FString& PolicyId, bool bSwitchProof)
 {
 #if WITH_EDITOR
 	using namespace DaedalusMaterialFactors;
@@ -566,6 +875,15 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 		Targets.Add(CastChecked<UMaterial>(Object));
 	}
 	Json->SetBoolField(TEXT("native_invoked"), true);
+ if (bSwitchProof)
+ {
+  FJson Observation = MakeShared<FJsonObject>();
+  Observation->SetStringField(TEXT("schema"), TEXT("daedalus.material-static-switch-proof-observation.v1"));
+  Observation->SetStringField(TEXT("capture_id"), FGuid::NewGuid().ToString(EGuidFormats::DigitsWithHyphensLower));
+  Observation->SetStringField(TEXT("observed_at_utc"), FDateTime::UtcNow().ToIso8601());
+  Observation->SetBoolField(TEXT("native_invoked"), true);
+  Json->SetObjectField(TEXT("proof_observation"), Observation);
+ }
 	for (UMaterial* Material : Targets)
 	{
 		FJson Record = MakeShared<FJsonObject>();
@@ -585,10 +903,12 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 		{
 			Record->SetBoolField(TEXT("front_material_connected"), Data->FrontMaterial.Expression != nullptr);
 			FJson Inputs = MakeShared<FJsonObject>();
-			Inputs->SetObjectField(TEXT("base_color"), InputFacts(Material, TEXT("base_color"), Material->GetExpressionInputForProperty(MP_BaseColor), &Data->BaseColor, Data->BaseColor.UseConstant, &Data->BaseColor.Constant, nullptr, Errors));
-			Inputs->SetObjectField(TEXT("metallic"), InputFacts(Material, TEXT("metallic"), Material->GetExpressionInputForProperty(MP_Metallic), &Data->Metallic, Data->Metallic.UseConstant, nullptr, &Data->Metallic.Constant, Errors));
-			Inputs->SetObjectField(TEXT("roughness"), InputFacts(Material, TEXT("roughness"), Material->GetExpressionInputForProperty(MP_Roughness), &Data->Roughness, Data->Roughness.UseConstant, nullptr, &Data->Roughness.Constant, Errors));
+   FValues DirectErrors; FValues& InputErrors = bSwitchProof ? DirectErrors : Errors;
+			Inputs->SetObjectField(TEXT("base_color"), InputFacts(Material, TEXT("base_color"), Material->GetExpressionInputForProperty(MP_BaseColor), &Data->BaseColor, Data->BaseColor.UseConstant, &Data->BaseColor.Constant, nullptr, InputErrors));
+			Inputs->SetObjectField(TEXT("metallic"), InputFacts(Material, TEXT("metallic"), Material->GetExpressionInputForProperty(MP_Metallic), &Data->Metallic, Data->Metallic.UseConstant, nullptr, &Data->Metallic.Constant, InputErrors));
+			Inputs->SetObjectField(TEXT("roughness"), InputFacts(Material, TEXT("roughness"), Material->GetExpressionInputForProperty(MP_Roughness), &Data->Roughness, Data->Roughness.UseConstant, nullptr, &Data->Roughness.Constant, InputErrors));
 			Record->SetObjectField(TEXT("inputs"), Inputs);
+   if (bSwitchProof) Record->SetArrayField(TEXT("direct_reader_limits"), DirectErrors);
 		}
 		Materials.Add(MakeShared<FJsonValueObject>(Record));
 	}
@@ -602,7 +922,15 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
   const TArray<FString> Path{TEXT("materials"), FString::FromInt(Index), TEXT("cached_function_facts")};
   Materials[Index]->AsObject()->SetObjectField(TEXT("cached_function_facts"),
    CachedFunctionFacts(Targets[Index], Targets[Index]->GetEditorOnlyData(), Path, Work));
+  if (bSwitchProof)
+  {
+   if (Work.Num() != Index + 1) ProofError(Errors, Targets[Index]->GetPathName(), TEXT("One exact cached call projection required"));
+   else CaptureSwitchProofs(Targets[Index], Targets[Index]->GetEditorOnlyData(), Work[Index], Errors);
+  }
  }
+ // Include the NEW operation's errors and all switch proofs in each prospective
+ // full-envelope append; original direct-reader errors remain informational only.
+ if (bSwitchProof) Json->SetArrayField(TEXT("errors"), Errors);
  DaedalusMaterialCachedDiagnostic::FEnvelopeBudget Budget(Json);
  DaedalusMaterialCachedDiagnostic::CaptureAll(Budget, Work);
  for (int32 Index = 0; Index < Targets.Num(); ++Index)
@@ -613,6 +941,7 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
    for (const TCHAR* Key : {TEXT("input_manifest_status"), TEXT("selected_outputs_status"), TEXT("rich_inputs_status")})
     Complete &= Call->AsObject()->GetObjectField(Key)->GetBoolField(TEXT("complete"));
   Diagnostic->SetStringField(TEXT("state"), Complete ? TEXT("cached_facts_captured") : TEXT("partial"));
+  if (bSwitchProof && !Complete) ProofError(Errors, Targets[Index]->GetPathName(), TEXT("New proof binding capture is incomplete"));
  }
  if (!Budget.Finish())
   return TEXT("{\"state\":\"held\",\"native_invoked\":true,\"diagnostic_complete\":false,\"errors\":[\"Bounded diagnostic outer envelope exceeded UTF8 cap\"]}");
@@ -625,4 +954,17 @@ FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString
 #else
 	return TEXT("{\"state\":\"held\",\"native_invoked\":false,\"errors\":[\"Editor-only material reader\"]}");
 #endif
+}
+
+
+FString UDaedalusMaterialFactorLibrary::ReadMaterialFactors(const TArray<FString>& Paths,
+ const FString& Root, const FString& PolicyId)
+{
+ return ReadMaterialFactsImpl(Paths, Root, PolicyId, false);
+}
+
+FString UDaedalusMaterialFactorLibrary::ReadMaterialSwitchProof(const TArray<FString>& Paths,
+ const FString& Root, const FString& PolicyId)
+{
+ return ReadMaterialFactsImpl(Paths, Root, PolicyId, true);
 }
