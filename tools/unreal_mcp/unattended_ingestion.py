@@ -85,7 +85,11 @@ def utc_seconds(text):
     if not isinstance(text, str):
         raise Refused('Explicit UTC timestamp required')
     try:
-        stamp = datetime.fromisoformat(text.replace('Z', '+00:00'))
+        # Windows StartTime emits seven fractional digits; Python3.10 accepts
+        # only microseconds. Normalize ONLY this numeric conversion; keep the
+        # original full text unchanged for exact process/capture identity.
+        numeric = re.sub(r'(\.\d{6})\d(?=(?:Z|\+00:00)$)', r'\1', text)
+        stamp = datetime.fromisoformat(numeric.replace('Z', '+00:00'))
         if stamp.utcoffset() is None or stamp.utcoffset().total_seconds() != 0:
             raise ValueError()
         return stamp.timestamp()
@@ -236,7 +240,7 @@ def validation(result, item, frozen, operation, now):
     snap = parsed.snapshot
     if (not parsed.accepted or list(snap.requested_assets) != assets
             or snap.provenance.fresh_out_results != 'attested' or snap.provenance.native_invocation != 'attested'
-            or snap.settings.validation_usecase != 'Script' or snap.results.counts['NumExternalObjects'] != 0
+            or snap.settings.validation_usecase != 'EDataValidationUsecase::Script' or snap.results.counts['NumExternalObjects'] != 0
             or any(detail.external_objects or any(m.severity != 'Info' for m in detail.validation_messages)
                    for detail in snap.results.details)):
         raise Refused('Canonical validation/request/policy attestation refused')

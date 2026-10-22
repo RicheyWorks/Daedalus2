@@ -1,10 +1,13 @@
-# Deterministic ingestion runner: first milestone
+# Deterministic ingestion runner
 
-**Source/offline milestone; native adoption is NOT established. Do not start a
-production backlog or overnight run with this cut.** No live owner adapter is
-supplied or implicitly approved. The test adapter is entirely synthetic and must
-never be used as native evidence. Native/runtime/production qualification flags
-stay false.
+**One closed private native fixture is tested; production backlog adoption is
+NOT established. Do not start a bulk or overnight run.** The supplied
+`unattended_codex_adapter.py` supports only the original Codex coupler source hash
+and existing palette/profile. Its actual import/save, native Valid, saved readback,
+stop and resumed no-reimport witness is recorded in
+`engines/unreal/DaedalusLink/Docs/unattended-codex-native-witness-20261022.json`.
+The test adapter remains synthetic and is never native evidence. Generic
+native/runtime/production qualification flags stay false.
 
 The queue itself makes no LLM/paid API calls, starts no editor/service, and does
 not replace an importer. It reuses the exact published PR146
@@ -77,7 +80,7 @@ reviewed manifest/state after reconciliation, not editing an old queue.
 Only host-runner interruption with the SAME editor is covered by this cut;
 editor-process replacement is a hold, not unattended recovery.
 
-## Owner adapter seam (unfinished native prerequisite)
+## Owner adapter seam
 
 The runner loads only the pinned local adapter bytes. That adapter is executable
 trusted code and needs source review plus actual native acceptance; a hash alone
@@ -129,10 +132,54 @@ text; no Unreal imports/network occur. A Windows restricted temp sandbox may den
 atomic `os.replace`; run the same reviewed offline test normally, not a weaker
 non-atomic writer or changed security settings.
 
-**Native proof is still missing:** no current existing importer adapter produces
-the combined strict Valid/provenance/preservation completion shape. The minimal
-next batch is that thin owner adapter for ONE already qualified source/profile,
-then a tiny isolated import, interrupted-host reconciliation/no duplicate effect,
-saved/readback validation and unchanged originals/world/camera proof. Do not
-reinterpret the old watcher's SHIPPED or saved-receipt flag as native validation.
-Only after that proof can a separate explicit selected production batch be admitted.
+The former missing adapter is now supplied for ONE immutable coupler source/profile.
+It calls the existing source-pinned `daedalus_codex_prepared_assets.import_all`,
+existing local retained-call/native baseline guard and installed
+`DaedalusEditorAcceptanceLibrary.ValidateNamedAssets`. No importer/engine code or
+transport is replaced. The closed native profile requires416triangles,2slots,
+the actual existing palette UObject, Naniteoff,0simple primitives, original tags,
+qualified bounds, exactly1new saved mesh and unchanged9-field native baseline.
+The existing helper files, original24manifest, source FBXs, installed DLL,
+canonical header and palette file must remain present and hash-identical on this PC.
+The importer checks all24 source fingerprints but imports only the named coupler.
+No original material, map or asset is saved; no placement occurs. Unexposed import
+flags stay unknown; no final vertex-color/PBR/visual/playability claim.
+
+The native witness caught and retained two adapter assumptions: comparing a
+package-path string with an object-path string, then expecting bare `Script`
+instead of native `EDataValidationUsecase::Script`. The comparison now uses the
+actual palette UObject; the canonical enum is checked exactly and the bare alias
+is refused. Python3.10 Windows seven-fractional-digit UTC conversion is supported
+without changing full identity text. Actual boundary timestamps use milliseconds,
+matching native FDateTime::ToIso8601; no capture was retimestamped.28 focused offline
+methods pass; process interruption remains a synthetic two-child test.
+
+Exactly1native import saved the private asset, then strict adapter refusal held it.
+The failed state/source were preserved. Owner-only read-only reconciliation and
+versioned state recovery consumed ONE actual native Valid capture unchanged within
+300seconds. No import/save/validation replay occurred. A fresh runner process then
+verified the saved DONE item without another effect; STOP also blocked resume
+before any native work. This is reconciled evidence, not a fictional first-attempt
+success or automatic migration of quarantined work. Saved readback is in the same
+editor; a fresh-editor asset reload was not tested here.
+
+## Validated controls for the existing completed fixture
+
+Use the repository's existing Python; keep the SAME editor generation and guarded
+source/dependencies. The proof state is already DONE, so resume performs readback
+only and never imports it again:
+
+```powershell
+python tools/unreal_mcp/unattended_ingestion.py status --state C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/UnattendedRunner20261022/NativeR3/state
+python tools/unreal_mcp/unattended_ingestion.py resume --state C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/UnattendedRunner20261022/NativeR3/state --max-items 1
+python tools/unreal_mcp/unattended_ingestion.py stop --state C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/UnattendedRunner20261022/NativeR3/state
+```
+
+STOP persists. After known terminal, explicitly clear ONLY that owned STOP file
+before resume. Never reset an item, alter its policy/manifest/hash or replay the
+retained R1 import. New source/profile/editor/destination needs a new reviewed
+selected manifest and independent admission. The adapter accepts only1item and
+has a finite import start-byUTC; it is deliberately not a generic backlog importer.
+The source schemas/controls above are functional, but any next production selection
+requires separate reconciliation/admission. Do not reinterpret a watcher SHIPPED
+flag as native validation. No paid/model API is called per item.

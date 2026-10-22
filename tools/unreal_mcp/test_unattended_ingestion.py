@@ -58,7 +58,7 @@ class SyntheticAdapter:
         detail.update(PackageName=asset.split('.')[0], AssetName='Mesh')
         doc['results']['AssetsDetails'][asset] = detail
         doc['requested_assets'] = [asset]
-        doc['settings']['ValidationUsecase'] = 'Script'
+        doc['settings']['ValidationUsecase'] = 'EDataValidationUsecase::Script'
         doc['provenance'] = {'fresh_out_results': 'attested', 'native_invocation': 'attested', 'captured_at_utc': now}
         envelope = {'status': 'Valid', 'accepted': True, 'native_invoked': True,
                     'cancellation_observed': False, 'native_return': 0, 'snapshot_json': json.dumps(doc)}
@@ -240,15 +240,19 @@ t.q.Runner(p,b,sample=t.enough).run()
     def test_unknown_provenance_and_warning_message_refused(self):
         run,backend=self.ready();item=run.frozen['items'][0]
         result=backend.execute(item,'op',item['sources'],self.folder/'native/op.json')
-        for field in ('provenance','messages'):
+        for field in ('provenance','messages','bare_usecase_alias'):
             with self.subTest(field=field):
                 altered=copy.deepcopy(result);doc=json.loads(altered['validation']['snapshot_json'])
                 if field=='provenance':doc['provenance']['native_invocation']='unknown'
-                else:next(iter(doc['results']['AssetsDetails'].values()))['ValidationMessages']=[{'Severity':'Warning','Text':'not accepted'}]
+                elif field=='messages':next(iter(doc['results']['AssetsDetails'].values()))['ValidationMessages']=[{'Severity':'Warning','Text':'not accepted'}]
+                else:doc['settings']['ValidationUsecase']='Script'
                 altered['validation']['snapshot_json']=json.dumps(doc)
                 with self.assertRaises(q.Refused):q.validation(altered,item,run.frozen,'op',time.time())
 
     def test_invalid_utc_and_duplicate_json_refused(self):
+        original='2026-10-22T19:28:25.1856174Z'
+        self.assertEqual(q.utc_seconds(original),q.utc_seconds('2026-10-22T19:28:25.185617+00:00'))
+        self.assertEqual(original,'2026-10-22T19:28:25.1856174Z')
         for value in ('2026-10-22T00:00:00','2026-10-22T00:00:00+02:00','malformed'):
             with self.assertRaises(q.Refused):q.utc_seconds(value)
         self.source.write_text('{"schema":1,"schema":2}')
