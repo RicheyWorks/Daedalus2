@@ -53,6 +53,8 @@ jobs:
         run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
       - name: Minimal Unreal packaging fixture scope guards
         run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
+      - name: Unattended ingestion checkpoint and refusal guards
+        run: python -m unittest tools/unreal_mcp/test_unattended_ingestion.py -v
 
   build:
     name: Build & test
