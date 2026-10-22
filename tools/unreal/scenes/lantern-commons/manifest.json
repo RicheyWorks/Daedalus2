@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v1",
+  "schema": "daedalus.playable-scene-receipt.v2",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -34,8 +34,8 @@
     150
   ],
   "chart_cm": [
-    0,
-    0,
+    2800,
+    500,
     135
   ],
   "existing_native_classes": [
@@ -46,7 +46,9 @@
   "required_existing_static_meshes": [
     "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor",
     "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor_Rocks",
-    "/Game/Daedalus/Art/Item/Item_Orr_Constellation_Chart_Lantern/Item_Orr_Constellation_Chart_Lantern/StaticMeshes/Item_Orr_Constellation_Chart_Lantern"
+    "/Game/Daedalus/Art/Item/Item_Orr_Constellation_Chart_Lantern/Item_Orr_Constellation_Chart_Lantern/StaticMeshes/Item_Orr_Constellation_Chart_Lantern",
+    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature",
+    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature_Top"
   ],
   "source_author": "Unknown; no authorship inferred from filenames.",
   "actual_checks": {
@@ -62,37 +64,155 @@
     "encounter_cvar_during_play": 0,
     "actual_DaedalusTarget_count": 0,
     "encounter_cvar_restored_after_normal_stop": 1,
-    "current_player_progress_rolled_back": false
+    "current_player_progress_rolled_back": false,
+    "route_walk_metres": 37.663590798289654,
+    "route_stops": 3,
+    "largest_route_stop_error_cm": 34.74723022693983,
+    "route_all_walking": true,
+    "successful_E_pickup": true,
+    "saved_reload_owned_floor_materials": true,
+    "original_material_disk_hashes_unchanged": true,
+    "compute_released": true
   },
   "limits": [
-    "Prototype visual quality: inspected overview is overexposed; lighting/material polish remains.",
-    "Two original floor MaterialInstanceConstant packages are dirty in editor memory; left unsaved and undiscarded, cause unproven.",
-    "Scene and rule Blueprint are saved and clean. Original saved files pass the existing preservation guard.",
-    "Encounter suppression uses one process CVar with BeginPlay/EndPlay restoration, intended for one serialized Play world.",
-    "General kid-friendly combat balance is proposed, not implemented or tested here.",
-    "The 830 registered tools remain available/untested except individually demonstrated operations.",
-    "Overview is an editor capture, not a gameplay HUD screenshot."
+    "A readable exploration prototype, not final art-style approval or proof of exceeding the reference quality bar.",
+    "Editor composition images were inspected before disconnect. Final gameplay PNGs are native game-viewport captures with UI and verified hashes; pixel-level feedback/readability inspection remains pending because the local image reader closed executor transport.",
+    "Before views include editor sprites; after views use temporary Game View with the previous flag restored. Camera poses match.",
+    "Two original floor material instances remain live/dirty from automatic InstancedStaticMeshes flags. No original save/discard/revert/restart was performed.",
+    "Visible collision slab obscured the original editor captures. Its rendering was disabled while keeping physical QueryAndPhysics collision.",
+    "Voxel floor repetition, utility-shaped path/gate and sparse distant scenery remain. Decorative trees use no new gameplay collision.",
+    "No fresh-process reopen, production visual/performance/crowd acceptance or general combat tuning.",
+    "Encounter restoration assumes one serialized Play world. Hardware input was not isolated.",
+    "This is independent Daedalus work, not a prebuilt game-jam entry."
   ],
+  "landmark_groups": [
+    "Shade Grove",
+    "Stone Overlook",
+    "Lantern Chart"
+  ],
+  "route_cm": [
+    [
+      -600,
+      0
+    ],
+    [
+      400,
+      400
+    ],
+    [
+      1500,
+      -400
+    ],
+    [
+      2800,
+      500
+    ]
+  ],
+  "reviewed_tree_assemblies": 17,
+  "route_pavers": 18,
+  "owned_materials": {
+    "GroundShade": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade",
+    "GroundSage": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage",
+    "TrailAmber": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber",
+    "BoundaryTeal": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal",
+    "LanternGold": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold"
+  },
+  "lighting": {
+    "scope": "Owned map only",
+    "fixed_luminance_cd_m2": 1,
+    "exposure_bias": 0,
+    "bloom_intensity": 0.1,
+    "destination_point_intensity": 20
+  },
+  "physical_proxy": {
+    "render_visible": false,
+    "collision": "QueryAndPhysics",
+    "footprint_metres": [
+      104,
+      105
+    ]
+  },
+  "reference_bar": "Existing VISUAL-QUALITY-BAR.md and17-image board; Adopt Me minimum to exceed over iteration. Final art style undecided; current slice does not establish exceeding the bar.",
   "artifacts": [
     {
       "path": ".gitattributes",
-      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c",
-      "bytes": 30
-    },
-    {
-      "path": "lantern-commons-overview.png",
-      "sha256": "92dd652378e516d52853b7f491e0531b1a57467aaf75b1d14fa10d9b83b9013c",
-      "bytes": 1790325
+      "bytes": 30,
+      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
-      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8",
-      "bytes": 58791
+      "bytes": 58791,
+      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "sha256": "511bc6b01e91cce2d77ae413706f9ea7448a3eab9a4b2f2e41bb09538526c999",
-      "bytes": 81645
+      "bytes": 235608,
+      "sha256": "365e9c64c7801bfc0f27a7881b39de7b6861cf205365c9920cac618ed612d9c5"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
+      "bytes": 68967,
+      "sha256": "f1d524109a3f387747b6c78de1552bff081e42f4155d1f0a9c34222156ee500c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.uasset",
+      "bytes": 69177,
+      "sha256": "99c1ddad2359d7fbfeb2b91efe287cb64c813c8b259ec48508a6b960a31d8179"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.uasset",
+      "bytes": 68911,
+      "sha256": "0e8b40fe53b406ca11437ccad88c89f19853543f5d2f0a0ceeb02f1d6e55a598"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold.uasset",
+      "bytes": 69512,
+      "sha256": "b998d498cc40b92e7cb3682bed39a1e374ed9fc6aacdb0b4f81936323a1af38e"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.uasset",
+      "bytes": 69361,
+      "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
+    },
+    {
+      "path": "images/after-player.png",
+      "bytes": 2465508,
+      "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
+    },
+    {
+      "path": "images/before-overview.png",
+      "bytes": 1790228,
+      "sha256": "1da8d6569844a8a3ecf41fcdb974b688acec375f350f8984aa997b8e09383359"
+    },
+    {
+      "path": "images/before-player.png",
+      "bytes": 1901562,
+      "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/gameplay-before-pickup.png",
+      "bytes": 2010969,
+      "sha256": "e227d4ac058844b916bcfc482840dce41aa6bc5fd1584a27efa6f5181e2a5a41"
+    },
+    {
+      "path": "images/gameplay-pickup-feedback.png",
+      "bytes": 1990757,
+      "sha256": "8348964607b7cc84e6c85d86f8aef3fafd990e005d266a19512eb8d05b36b886"
+    },
+    {
+      "path": "lantern-commons-overview.png",
+      "bytes": 1317881,
+      "sha256": "0ac83beb416d3e9f7587fd4c2ea111f43e8b8732abc0d6de4585107db23caeb8"
+    },
+    {
+      "path": "native-proof.json",
+      "bytes": 5201,
+      "sha256": "4632ef91d769795e4edaefe7daf96d9bad52e21c39e4d3119c59860eaa1d48bc"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2737,
+      "sha256": "3ca08052e60e3094ac1b1b5b1b3c2172653fc891895a1850e1caa6f4bfa7933d"
     }
   ]
 }

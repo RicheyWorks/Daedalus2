@@ -1,32 +1,45 @@
-# Lantern Commons
+# Lantern Commons exploration loop
 
-A saved 104 x 105 m exploration courtyard for the existing Daedalus project.
-It reuses the approved Blender cave-floor/rock meshes, Lantern chart, native Hero,
-movement/input and pickup behavior. This is a playable prototype with room to roam.
+A saved 104 x 105 m peaceful scene for the existing Daedalus project. Follow the
+amber trail through Shade Grove and Stone Overlook to the Lantern chart. WASD
+and mouse use the existing Hero controls; press E near the chart to collect it.
+The native pickup/quest feedback is reused. No enemies, wallet, external service
+or new gameplay framework was added.
 
-The existing editor already has the scene open. Open the map listed in
-`manifest.json` and press Play. Use WASD and mouse to move/look, and E near the
-central chart to collect it. Stopping Play preserves normal Hero progress.
+This scene reuses the approved cave floor, rocks and chart plus the existing
+Willow trunk/canopy pair, reviewed separately before assembly. Seventeen trees,
+three landmark groups and eighteen low pavers provide a route while retaining
+generous open running space. Five material copies live in the owned namespace;
+original assets were not edited or saved. Exposure/bloom controls are map-local.
 
-For another compatible Daedalus checkout, copy the two files under this pack's
-`Content/` to the same paths under the project's `Content/`, only when those
-destinations are vacant. The native classes and three mesh dependencies listed
-in the manifest must already exist; this pack is not a standalone project.
-Do not put these files under plugin Content, which would change their mount path.
+Actual Play covered 37.66 m across all three stops in MOVE_WALKING, with each stop
+within 35 cm of its target, full health/shields and zero enemies. E removed the
+chart. Map save/reload retained 273 floor instances and the owned material
+bindings. Eight ground rays passed. Normal stop restored encounters from 0 to 1;
+current Hero progress was not rolled back.
 
-The saved rule Blueprint disables automatic encounter packs on BeginPlay and
-restores the previous `daedalus.Encounters` value on EndPlay. This was observed as
-1 -> 0 -> 1 with no enemies during Play. It assumes one serialized Play world.
-No damage, enemy combat behavior, input defaults or project settings were changed.
+Use the existing editor map at the manifest's world path, then press Play.
+For a compatible Daedalus checkout, copy this pack's `Content/` files to the same
+project `Content/` paths only under the normal ownership/preservation workflow;
+do not overwrite another user's work. Do not mount these files under plugin
+Content. The native classes and imported meshes listed in the manifest must
+already exist; this is not a standalone project.
 
-Actual checks: save/reload retained 273 floor instances; eight corner/seam traces
-hit the continuous physical floor; the Hero walked 4.48 m and collected the chart,
-then ran 25.30 m while grounded. Health and shields remained full. Play ended
-normally. The temporary overview camera restored its prior pose.
+Evidence: `images/before-player.png`, `images/after-player.png`, before/after
+overview and the two native gameplay screenshots. Camera poses match, although
+the before views include editor sprites and the after views use Game View.
+The native gameplay PNGs have verified identities but await pixel inspection:
+the image reader closed the execution transport twice. Do not claim visually
+accepted pickup feedback from file existence alone.
 
-Known limits: the overview is visibly overexposed and needs visual polish. Two
-original floor material instances remain dirty in editor memory; their changes
-were neither saved nor discarded, and their cause is not established. The scene
-and rule Blueprint themselves are saved and clean. General forgiving combat
-balance remains a design direction, not a completed feature. See `manifest.json`
-for exact paths, hashes and bounded claims.
+The existing competitor board sets Adopt Me as the minimum to exceed over
+iteration. Final style remains undecided. Current floor repetition, sparse
+distant composition and utility-shaped pavers/gate still need finish; the slice
+does not claim reference-level art or production readiness.
+
+Two original cave-floor material instances remain dirty in editor memory from
+the engine's automatic instancing-usage flags. They were neither saved nor
+discarded. The editor must preserve that state; never blanket-save or force-close
+it. The scene's encounter rule assumes one serialized Play world. General
+kid-friendly combat balance remains design-only. This is independent Daedalus
+work, not game-jam content.
