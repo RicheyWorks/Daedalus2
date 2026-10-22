@@ -1,0 +1,98 @@
+{
+  "schema": "daedalus.playable-scene-receipt.v1",
+  "engine": "Unreal Engine 5.8.4",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
+  "ground_metres": [
+    104,
+    105
+  ],
+  "floor_instances": 273,
+  "floor_grid": [
+    13,
+    21
+  ],
+  "tile_spacing_cm": [
+    800,
+    500
+  ],
+  "continuous_ground_collision": {
+    "extent_cm": [
+      5200,
+      5250,
+      25
+    ],
+    "top_z_cm": 20
+  },
+  "perimeter_walls": {
+    "count": 4,
+    "height_metres": 3
+  },
+  "spawn_cm": [
+    -600,
+    0,
+    150
+  ],
+  "chart_cm": [
+    0,
+    0,
+    135
+  ],
+  "existing_native_classes": [
+    "DaedalusGameMode",
+    "DaedalusHero",
+    "DaedalusStarChart"
+  ],
+  "required_existing_static_meshes": [
+    "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor",
+    "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor_Rocks",
+    "/Game/Daedalus/Art/Item/Item_Orr_Constellation_Chart_Lantern/Item_Orr_Constellation_Chart_Lantern/StaticMeshes/Item_Orr_Constellation_Chart_Lantern"
+  ],
+  "source_author": "Unknown; no authorship inferred from filenames.",
+  "actual_checks": {
+    "saved_reload_floor_instances": 273,
+    "physical_corner_seam_trace_hits": 8,
+    "initial_walk_metres": 4.476296396518948,
+    "long_roam_metres": 25.29712653087267,
+    "long_roam_movement_mode": "MOVE_WALKING",
+    "grounded_capsule_z_cm": 114.1500015258789,
+    "pickup": "Existing E/Interact removed the one native StarChart actor.",
+    "health": 100,
+    "shield": 100,
+    "encounter_cvar_during_play": 0,
+    "actual_DaedalusTarget_count": 0,
+    "encounter_cvar_restored_after_normal_stop": 1,
+    "current_player_progress_rolled_back": false
+  },
+  "limits": [
+    "Prototype visual quality: inspected overview is overexposed; lighting/material polish remains.",
+    "Two original floor MaterialInstanceConstant packages are dirty in editor memory; left unsaved and undiscarded, cause unproven.",
+    "Scene and rule Blueprint are saved and clean. Original saved files pass the existing preservation guard.",
+    "Encounter suppression uses one process CVar with BeginPlay/EndPlay restoration, intended for one serialized Play world.",
+    "General kid-friendly combat balance is proposed, not implemented or tested here.",
+    "The 830 registered tools remain available/untested except individually demonstrated operations.",
+    "Overview is an editor capture, not a gameplay HUD screenshot."
+  ],
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c",
+      "bytes": 30
+    },
+    {
+      "path": "lantern-commons-overview.png",
+      "sha256": "92dd652378e516d52853b7f491e0531b1a57467aaf75b1d14fa10d9b83b9013c",
+      "bytes": 1790325
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
+      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8",
+      "bytes": 58791
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
+      "sha256": "511bc6b01e91cce2d77ae413706f9ea7448a3eab9a4b2f2e41bb09538526c999",
+      "bytes": 81645
+    }
+  ]
+}
