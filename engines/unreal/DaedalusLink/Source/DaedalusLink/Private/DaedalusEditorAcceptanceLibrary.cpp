@@ -4,6 +4,7 @@
 #if WITH_EDITOR
 #include "DaedalusNativeValidationBridge.h"
 #include "DaedalusSlateAcceptanceBridge.h"
+#include "DaedalusLegacyHlodClosure.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
@@ -199,5 +200,18 @@ FString UDaedalusEditorAcceptanceLibrary::BindExistingDetailsPanel()
 	return Text;
 #else
 	return TEXT("{\"scope\":\"existing_primary_level_editor_details\",\"status\":\"Rejected\",\"bound\":false,\"approved_ref\":\"\",\"diagnostic\":\"Editor only\"}");
+#endif
+}
+
+
+FString UDaedalusEditorAcceptanceLibrary::ReadLegacyHlodClosure(const FString& LodActorObjectPath)
+{
+#if WITH_EDITOR
+    UWorld* CurrentWorld = nullptr;
+    if (IsInGameThread() && GEditor && !GEditor->PlayWorld)
+        CurrentWorld = GEditor->GetEditorWorldContext().World();
+    return DaedalusLegacyHlod::ReadLoadedClosureJson(CurrentWorld, LodActorObjectPath);
+#else
+    return TEXT("{\"schema\":\"daedalus.legacy_hlod_closure.v1\",\"state\":\"HELD\",\"reason\":\"Editor-only closure read\",\"read_only\":true,\"loaded_inventory_complete\":false,\"build_admitted\":false,\"serialization_complete\":false,\"truncated\":false}");
 #endif
 }

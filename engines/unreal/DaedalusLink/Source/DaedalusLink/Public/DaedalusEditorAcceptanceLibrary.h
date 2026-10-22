@@ -48,4 +48,8 @@ public:
 	 * Does not spawn, activate, focus, observe, snapshot, or simulate input. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
 	static FString BindExistingDetailsPanel();
+
+	/** Read only an already loaded legacy HLOD closure; never admit/build one. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
+	static FString ReadLegacyHlodClosure(const FString& LodActorObjectPath);
 };
