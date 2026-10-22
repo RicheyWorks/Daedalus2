@@ -3,8 +3,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "DaedalusProspectorMineReadLibrary.generated.h"
 
-class UInterchangeBaseNodeContainer;
-
 /** Source-only staging proposal. No installed callable/build is claimed.
  * Reads already loaded exact targets and independently translates the pinned
  * source into transient nodes/payloads; never imports or saves an asset.
@@ -17,10 +15,14 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Animation Acceptance", meta=(DevelopmentOnly))
     static FString ReadMinePrerequisites(const TArray<double>& SampleTimes);
 
-    /** Fresh isolated test only: capture live final job attributes and independently
-     * translated source. This is evidence, not historical metadata recovery. */
+#if WITH_EDITOR
+    /** Editor-only fresh isolated test: capture live final job attributes and independently
+     * translated source. Core UObject boundary keeps generated runtime cross-module
+     * declarations independent of editor-only Interchange; implementation strictly
+     * casts the object to a node container. Never imports or saves. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Animation Acceptance", meta=(DevelopmentOnly))
-    static FString ReadFreshMineSource(UInterchangeBaseNodeContainer* JobNodes);
+    static FString ReadFreshMineSource(UObject* JobNodes);
+#endif
 
     /** Already-loaded, fixed private Mine fixture only; never loads/imports/saves. */
     UFUNCTION(BlueprintCallable, Category="Daedalus|Animation Acceptance", meta=(DevelopmentOnly))

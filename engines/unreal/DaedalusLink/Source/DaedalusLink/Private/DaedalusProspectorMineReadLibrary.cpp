@@ -184,24 +184,23 @@ static bool References(J Out,A& E){
 }
 #endif
 
-FString UDaedalusProspectorMineReadLibrary::ReadFreshMineSource(UInterchangeBaseNodeContainer* JobNodes)
-{
 #if WITH_EDITOR
+FString UDaedalusProspectorMineReadLibrary::ReadFreshMineSource(UObject* JobNodes)
+{
+    auto* Container=Cast<UInterchangeBaseNodeContainer>(JobNodes);
     using namespace ProspectorFresh;J Out=Envelope(TEXT("daedalus.mine-fresh-source.v1"));A E;int32 Translations=0;
-    auto Run=[&](){if(!Context(E,false)||!Readable(JobNodes)){ProspectorRead::Error(E,TEXT("Actual live job nodes required"));return;}TGuardValue<bool> Guard(Active,true);
+    auto Run=[&](){if(!Context(E,false)||!Readable(Container)){ProspectorRead::Error(E,TEXT("Actual live job nodes required"));return;}TGuardValue<bool> Guard(Active,true);
         if(!References(Out,E))return;
-        const auto* Factory=Cast<UInterchangeAnimSequenceFactoryNode>(JobNodes->GetFactoryNode(FactoryUid));const auto* Common=UInterchangeCommonPipelineDataFactoryNode::GetUniqueInstance(JobNodes);
+        const auto* Factory=Cast<UInterchangeAnimSequenceFactoryNode>(Container->GetFactoryNode(FactoryUid));const auto* Common=UInterchangeCommonPipelineDataFactoryNode::GetUniqueInstance(Container);
         double Rate=0,Start=0,Stop=0;bool Bake=false,Tracks=false;FTransform Offset;FSoftObjectPath SpecifiedSkeleton;
         if(!Factory||!Common||!Factory->GetCustomImportBoneTracksSampleRate(Rate)||!Factory->GetCustomImportBoneTracksRangeStart(Start)||!Factory->GetCustomImportBoneTracksRangeStop(Stop)||!Factory->GetCustomImportBoneTracks(Tracks)||!Common->GetBakeMeshes(Bake)||!Common->GetCustomGlobalOffsetTransform(Offset)||Rate!=24||Start!=0||!FMath::IsFinite(Stop)||Stop<=1||Stop>=2||!Tracks||!Bake||!Offset.Equals(FTransform::Identity,0.0)){ProspectorRead::Error(E,TEXT("Closed actual final common/factory profile refused"));return;}
         if(!Factory->GetCustomSkeletonSoftObjectPath(SpecifiedSkeleton)||SpecifiedSkeleton.ToString()!=SkeletonPath){ProspectorRead::Error(E,TEXT("Explicit final factory Skeleton differs"));return;}
         J P=MakeShared<FJsonObject>(),OT=MakeShared<FJsonObject>();if(!Transform(Offset,OT)){ProspectorRead::Error(E,TEXT("Nonfinite offset"));return;}P->SetStringField(TEXT("skeleton_path"),SpecifiedSkeleton.ToString());
-        P->SetStringField(TEXT("factory_uid"),FactoryUid);P->SetStringField(TEXT("job_container"),JobNodes->GetPathName());P->SetNumberField(TEXT("sample_rate"),Rate);P->SetNumberField(TEXT("range_start"),Start);P->SetNumberField(TEXT("range_stop"),Stop);P->SetBoolField(TEXT("bake_meshes"),Bake);P->SetBoolField(TEXT("bone_tracks"),Tracks);P->SetObjectField(TEXT("global_offset"),OT);Out->SetObjectField(TEXT("live_profile"),P);
+        P->SetStringField(TEXT("factory_uid"),FactoryUid);P->SetStringField(TEXT("job_container"),Container->GetPathName());P->SetNumberField(TEXT("sample_rate"),Rate);P->SetNumberField(TEXT("range_start"),Start);P->SetNumberField(TEXT("range_stop"),Stop);P->SetBoolField(TEXT("bake_meshes"),Bake);P->SetBoolField(TEXT("bone_tracks"),Tracks);P->SetObjectField(TEXT("global_offset"),OT);Out->SetObjectField(TEXT("live_profile"),P);
         J Oracle=MakeShared<FJsonObject>();if(!SourceOracle(Rate,Start,Stop,Offset,{0.0,1.0},Oracle,E,Translations,true))return;Out->SetObjectField(TEXT("source_oracle"),Oracle);
     };Run();return Finish(Out,E,Translations);
-#else
-    (void)JobNodes;return TEXT("{\"state\":\"held\",\"errors\":[\"Editor only\"]}");
-#endif
 }
+#endif
 
 FString UDaedalusProspectorMineReadLibrary::ReadFreshMineClip(const FString& AssetPath)
 {
