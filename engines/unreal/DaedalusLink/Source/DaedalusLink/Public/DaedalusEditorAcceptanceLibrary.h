@@ -52,4 +52,16 @@ public:
 	/** Read only an already loaded legacy HLOD closure; never admit/build one. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
 	static FString ReadLegacyHlodClosure(const FString& LodActorObjectPath);
+
+	/** Native bounded context/policy read; no fixture or settings mutation. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
+	static FString ReadLegacyHlodFixtureContext();
+
+	/** Fixed private Cave Floor pair and one Merge cluster only; never replace. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
+	static FString CreateBuildSaveLegacyHlodFixture();
+
+	/** Read only the fixed saved fixture, without activating its map. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Editor Acceptance", meta = (DevelopmentOnly))
+	static FString ReadSavedLegacyHlodFixture();
 };

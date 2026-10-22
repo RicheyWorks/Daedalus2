@@ -39,7 +39,7 @@ public class DaedalusLink : ModuleRules
 				"DataValidation", "UnrealEd", "LevelEditor", "SlateInspectorToolset",
 				"AnimationBlueprintLibrary", "InterchangeCore", "InterchangeEngine",
 				"InterchangeFactoryNodes", "InterchangeNodes", "InterchangePipelines",
-				"InterchangeImport", "InterchangeCommonParser", "PCG",
+				"InterchangeImport", "InterchangeCommonParser", "PCG", "HierarchicalLODUtilities",
 			});
 			// One canonical serializer in the repository. setup-unreal.ps1 stages
 			// those exact bytes for projects whose plugin lives outside the repo.
