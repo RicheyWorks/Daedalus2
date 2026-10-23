@@ -142,21 +142,30 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Grid]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
         [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectionText).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SAssignNew(SudokuFeedbackRow, STextBlock).Text(this, &SDaedalusJavaArcade::SudokuFeedbackText).AutoWrapText(true)
+            .Visibility_Lambda([this] { const auto S = State(); return S.Cells.Num() == 81 && !HasSudokuResult(S) ? EVisibility::Visible : EVisibility::Collapsed; })]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[SudokuResult()]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)
         [SNew(SBox).Visibility_Lambda(EditingVisibility)[Digits]]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [SNew(STextBlock).Text_Lambda([this] { return FText::FromString(HasSudokuResult(State())
-            ? TEXT("Arrows / D-pad: review cells. Enter / pad A: result actions. F5 / Start: save result to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close.")
-            : TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close.")); }).AutoWrapText(true)]
+            ? TEXT("Arrows / D-pad: review cells. Enter / pad A: result actions. F5 / Start: save result to Java. F6: refresh. F7 / right-stick click: board feedback. Pad B: cabinet controls. Esc / Back: close.")
+            : TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. F7 / right-stick click: board feedback. Pad B: cabinet controls. Esc / Back: close.")); }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
             SNew(SHorizontalBox).Visibility_Lambda(EditingVisibility)
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Undo"), [this] { if (Game.IsValid()) Game->SudokuUndo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Redo"), [this] { if (Game.IsValid()) Game->SudokuRedo(); }, [this] { return State().bCanAct; })]
-            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [SNew(SButton).Text(FText::FromString(TEXT("Hint (Java gem cost)"))).IsEnabled_Lambda([this] { return State().bCanAct; })
+                .OnClicked_Lambda([this] { if (Game.IsValid() && State().bCanAct && Game->RequestSudokuHint()) return ShowSudokuFeedback(); return FReply::Handled(); })]
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { return State().bReady && State().bOwner; })]
         ]
+        + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Left).Padding(0, 0, 0, 10)
+        [SNew(SButton).Text(FText::FromString(TEXT("Read board feedback")))
+            .IsEnabled_Lambda([this] { const auto S = State(); return Game.IsValid() && S.Cells.Num() == 81 && !S.bRemoteClosed; })
+            .OnClicked(this, &SDaedalusJavaArcade::ShowSudokuFeedback)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
         [SNew(STextBlock).Text(FText::FromString(TEXT("Saved games")))]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
@@ -216,6 +225,30 @@ bool SDaedalusJavaArcade::HasSudokuResult(const FDaedalusJavaArcadeState& Snapsh
 {
     return Snapshot.Game == EDaedalusJavaGame::Sudoku && !Snapshot.bRemoteClosed && !Snapshot.SessionId.IsEmpty()
         && Snapshot.Cells.Num() == 81 && Snapshot.Givens.Num() == 81 && (Snapshot.bSolved || Snapshot.bTimeUp);
+}
+FText SDaedalusJavaArcade::SudokuFeedbackText() const
+{
+    const auto S = State();
+    // A refused request can retain an earlier hint. Show its current outcome first, never claim a new hint.
+    return FText::FromString(S.Status + TEXT(" — ") + S.Message
+        + (S.HintText.IsEmpty() ? FString() : TEXT("\nLast Java hint: ") + S.HintText));
+}
+FReply SDaedalusJavaArcade::ShowSudokuFeedback()
+{
+    const auto S = State();
+    if (Game.IsValid() && Game->Game == EDaedalusJavaGame::Sudoku && S.Game == EDaedalusJavaGame::Sudoku
+        && S.Cells.Num() == 81 && !S.bRemoteClosed)
+    {
+        FocusBoard(false);
+        TSharedPtr<SWidget> Target = SudokuFeedbackRow;
+        const bool bResult = HasSudokuResult(S);
+        if (bResult) Target = SudokuResultPanel;
+        if (CabinetScroll.IsValid() && Target.IsValid())
+            // Leave room for the asynchronous reply to grow below the short waiting message.
+            CabinetScroll->ScrollDescendantIntoView(Target, false,
+                bResult ? EDescendantScrollDestination::IntoView : EDescendantScrollDestination::TopOrLeft, 8.f);
+    }
+    return FReply::Handled();
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuResult()
 {
@@ -775,6 +808,7 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     if (Board.Cells.Num() != 81 || Board.Givens.Num() != 81) return FReply::Unhandled();
     // Keep held keys from falling through to Slate navigation or replaying a mutation.
     if (Event.IsRepeat()) return FReply::Handled();
+    if (Key == EKeys::F7 || Key == EKeys::Gamepad_RightThumbstick) return ShowSudokuFeedback();
     int32 Row = SelectedCell / 9, Col = SelectedCell % 9;
     if (Key == EKeys::Left || Key == EKeys::Gamepad_DPad_Left) --Col;
     else if (Key == EKeys::Right || Key == EKeys::Gamepad_DPad_Right) ++Col;

@@ -39,6 +39,8 @@ private:
     FSlateColor CellColor(int32 Index) const;
     FText StatusText() const;
     FText SelectionText() const;
+    FText SudokuFeedbackText() const;
+    FReply ShowSudokuFeedback();
     void RebuildSavedGames();
     static FText SavedGameText(const FDaedalusSudokuSavedGame& Saved);
     FText SelectedSavedGameText() const;
@@ -64,6 +66,7 @@ private:
     TSharedPtr<SScrollBox> CabinetScroll;
     TSharedPtr<STextBlock> CabinetStatus;
     TArray<TSharedPtr<SWidget>> SudokuCellWidgets;
+    TSharedPtr<STextBlock> SudokuFeedbackRow;
     TSharedPtr<SWidget> SudokuResultPanel;
     TSharedPtr<SWidget> SudokuResultAction;
     TSharedPtr<SWidget> SudokuReviewAction;

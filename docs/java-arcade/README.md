@@ -50,6 +50,10 @@ payments or multiplayer authentication.
    another puzzle. Enter / pad A from the finished board focuses result controls;
    arrows / D-pad still review cells. A result is revealed once after a reconciled
    board arrives; refreshing or saving does not pull the view away from review.
+   Hint requests keep board feedback in view while Java replies. Read board
+   feedback, F7 or right-stick click revisits the current outcome and last hint
+   without requesting or charging for another hint. Failed requests keep their
+   current status above any retained earlier hint.
    Blackjack: create a session, choose Java-approved chips, deal, hit, stand,
    double, split, surrender, choose insurance, or end the session. Credits are
    simulated, initially 1000, and cannot be cashed out.
