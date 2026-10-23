@@ -130,6 +130,8 @@ document.querySelectorAll("#pad button").forEach(b => {
 });
 cv.addEventListener("pointerdown", () => { cv.focus(); unlockAudio(); });
 const hit = k => { const v = pressed[k]; pressed[k] = false; return !!v; };
+/* A mode transition consumes this press, while held sources and movement buffering stay intact. */
+function clearActionButtons() { for (const k of ["a", "b", "start"]) hit(k); }
 function menuRepeat(now) {                                        /* held directions repeat in menus, never in the field */
   if (mode === "field" && !dlg) return;
   for (const k of ["up", "down", "left", "right"]) if (held[k] && now >= (repeatAt[k] || Infinity)) { pressed[k] = true; repeatAt[k] = now + 110; }
@@ -927,8 +929,8 @@ function canEquip(m, name) {
   return slot === "armor" || m.armor === "heavy";            /* helms and shields need heavy armour training */
 }
 const MENU_WIN = n => { const w = ((D.menus.screens.Menu || {}).windows || []).find(x => x.name === n); return w ? [w.x, w.y, w.w, w.h] : null; };
-function openMenu() { sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
-function closeMenu() { sfx("TICK"); mode = "field"; menu = null; }
+function openMenu() { clearActionButtons(); sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
+function closeMenu() { clearActionButtons(); sfx("TICK"); mode = "field"; menu = null; }
 function menuMove(k, n) { if (hit("up")) { menu[k] = (menu[k] + n - 1) % n; sfx("TICK"); } if (hit("down")) { menu[k] = (menu[k] + 1) % n; sfx("TICK"); } }
 function menuWho(keep) {                                   /* keep: the item / slot cursor stays put while you change who */
   if (hit("left")) { menu.who = (menu.who + roster().length - 1) % roster().length; if (!keep) menu.ii = 0; sfx("TICK"); }
@@ -1936,6 +1938,10 @@ function drawEnding() {
     notices.forEach((p, i) => text(p, (W - tw(p)) / 2, H - 64 + i * 14, i === 0 ? "#f87878" : "#ffffff"));
   } else if (y0 + lines.length * 14 < H / 2) { const p = titlePrompt(); if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
 }
+function gameOverTick(dt) {
+  goT += dt;
+  if (goT > 1 && (hit("start") || hit("a"))) { clearActionButtons(); mode = "title"; titleT = 0; cue("TITLE"); }
+}
 function drawGameOver() {
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
@@ -1960,7 +1966,7 @@ function frame(now) {
   else if (mode === "shop") shopTick();
   else if (mode === "fish" && fishing) fishTick(dt);
   else if (mode === "battle") battleTick(dt);
-  else if (mode === "gameover") { goT += dt; if (goT > 1 && (hit("start") || hit("a"))) { mode = "title"; titleT = 0; cue("TITLE"); } }
+  else if (mode === "gameover") gameOverTick(dt);
   for (const k in pressed) if (fade > 0) pressed[k] = false;
   for (const k of ["up", "down", "left", "right"]) pressed[k] = false;   /* a direction tap is for this frame only, never a stale menu move */
   for (const k of ["a", "b", "start"]) if (pressed[k] && now - (pressedAt[k] || 0) > 150) pressed[k] = false;   /* buttons buffer 150 ms (a press mid-step still lands), never longer */

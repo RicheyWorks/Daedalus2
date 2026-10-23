@@ -21,6 +21,7 @@ function line(prefix) {
   assert.ok(found, "production declaration exists: " + prefix); return found;
 }
 const source = [
+  line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="),
   between("let menu = null;", "function drawStatus()"), between("const STATUS =", "/* ---------- bestiary"),
   "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, drawMenu, fieldItems, fieldSpells, itemLine, " +

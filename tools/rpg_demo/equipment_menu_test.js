@@ -27,6 +27,7 @@ function between(start, end) {
   return html.slice(a, b);
 }
 const source = [
+  html.split(/\r?\n/).find(line => line.startsWith("function clearActionButtons()")),
   html.split(/\r?\n/).find(line => line.startsWith("const START_LEVEL =")),
   html.split(/\r?\n/).find(line => line.startsWith("const ACTIVE =")),
   html.split(/\r?\n/).find(line => line.startsWith("const roster =")),
