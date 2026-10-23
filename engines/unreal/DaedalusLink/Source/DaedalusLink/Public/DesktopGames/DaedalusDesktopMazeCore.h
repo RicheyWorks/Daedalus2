@@ -289,6 +289,23 @@ public:
     int PowerPelletsLeft() const {
         return static_cast<int>(std::count_if(Pellets.begin(),Pellets.end(),[](const Pellet& P){return P.Alive && P.Power;}));
     }
+    // Presentation only: the shortest living timer marks first recovery, not group safety.
+    struct PowerWindow {
+        int Alive=0,Frightened=0,Frames=0;
+        int Seconds() const { return Frames/60+(Frames%60>0?1:0); }
+    };
+    PowerWindow GetPowerWindow() const {
+        PowerWindow Out;
+        for(const auto& G:Ghosts) if(G.Alive) {
+            ++Out.Alive;
+            if(G.Frightened) {
+                const int Frames=std::max(0,G.FrightenedTimer);
+                if(Out.Frightened==0 || Frames<Out.Frames) Out.Frames=Frames;
+                ++Out.Frightened;
+            }
+        }
+        return Out;
+    }
     void Render(Frame& Out) const override {
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
@@ -312,9 +329,18 @@ public:
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
         Out.AddText(580,225,"Dots left: "+std::to_string(Remaining),White,16);
-        Out.AddText(580,250,"Power: "+std::to_string(PowerPelletsLeft())+" (300-step fright)",White,13);
-        if(RespawnFrames>0 && !Over && !Won)
-            Out.AddText(580,280,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},14);
+        Out.AddText(580,250,"Power pellets: "+std::to_string(PowerPelletsLeft()),White,14);
+        if(!Over && !Won) {
+            const auto Window=GetPowerWindow();
+            Out.AddText(580,275,"Frightened: "+std::to_string(Window.Frightened)+"/"+std::to_string(Window.Alive)+" alive",White,14);
+            if(Window.Frightened>0) {
+                Out.AddText(580,297,"First recovery: "+std::to_string(Window.Seconds())+"s",White,13);
+                if(Window.Frames<=60) Out.AddText(580,319,"FINAL SECOND",{255,180,80,255},13);
+            }
+            else Out.AddText(580,297,"No active fright window",White,13);
+            if(RespawnFrames>0)
+                Out.AddText(580,345,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},13);
+        }
         if(Over || Won) Out.AddText(580,320,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
         if(Over || Won) Out.AddText(580,360,"Fresh Action / Fire / Jump",White,14);
         if(Over || Won) Out.AddText(580,383,"or host R: replay",White,14);
@@ -323,7 +349,12 @@ public:
         std::string Text=Won?"All dots cleared. Fresh Action/Fire/Jump or host R replays."
             :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
                 :"Glowtrail Chase: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
-        if(RespawnFrames>0 && !Over && !Won) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        if(!Over && !Won) {
+            const auto Window=GetPowerWindow();
+            Text+=" Frightened "+std::to_string(Window.Frightened)+"/"+std::to_string(Window.Alive)+" alive.";
+            if(Window.Frightened>0) Text+=" First recovery: "+std::to_string(Window.Seconds())+"s"+(Window.Frames<=60?" (final second).":".");
+            if(RespawnFrames>0) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        }
         return {Score,Lives,Over,Won,Text};
     }
 private:

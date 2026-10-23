@@ -163,3 +163,17 @@ action with cooldown-driven attack state; ghost alive/frightened/color states;
 Link health/invincibility flash and enemy alive/hit-flash/kind states. There is
 no skeleton, rig, animation file, art license grant, Blender acceptance, Unreal
 compile result, or live playtest approval supplied by this core port.
+
+## Power-window display
+
+Pacman's sidebar and status show how many living pursuers are frightened and the
+ceiling seconds until the first of them recovers. Dead pursuers are excluded;
+mixed timers use the shortest active timer. A steady final-second cue replaces
+surprise expiry without changing the source 300-step effect, AI or collision rules.
+Terminal results hide live countdowns. Presentation calls do not advance simulation.
+
+`desktop_pacman_power` / `pacman_power_test.cpp` passed 34/34 checks with strict
+single-TU MSVC C++17. It covers mixed/dead states, timer boundaries, a real power
+pickup through 300 active steps, repeated presentation purity and future RNG/state.
+A controlled MAX-instead-of-MIN timer variant failed seven checks as expected.
+This offline evidence does not establish native layout or human playtest acceptance.
