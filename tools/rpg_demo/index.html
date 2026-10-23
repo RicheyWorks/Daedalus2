@@ -988,21 +988,22 @@ function menuTick() {
     return;
   }
   if (sub === "item") {
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     const items = fieldItems();
     if (!items.length) { menu.sub = null; return; }
     menu.ii = clamp(menu.ii, 0, items.length - 1);
     menuMove("ii", items.length); menuWho(true);
     if (hit("a")) menu.msg = useItem(items[menu.ii], roster()[menu.who]);
-    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic-who") {
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     menuWho();
     if (hit("a")) { if (!fieldSpells(roster()[menu.who]).length) { sfx("LOCKED"); menu.msg = roster()[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
-    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic") {
+    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     const caster = roster()[menu.who], list = fieldSpells(caster);
     menuMove("ii", list.length);
     if (hit("a")) {
@@ -1011,10 +1012,10 @@ function menuTick() {
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
       sfx("PICK"); menu.sub = "magic-target"; menu.spell = sp; menu.target = 0; menu.msg = "WHO?";
     }
-    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic-target") {
+    if (hit("b")) { menu.sub = "magic"; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     menuMove("target", roster().length);
     if (hit("a")) {
       const caster = roster()[menu.who], m = roster()[menu.target], sp = menu.spell;
@@ -1024,7 +1025,6 @@ function menuTick() {
       caster.mp -= sp.mp; m.hp = Math.min(m.max, m.hp + amt); sfx("SPELL"); sfx("HEAL");
       menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + amt + " HP.";
     }
-    if (hit("b")) { menu.sub = "magic"; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "equip") {
@@ -1070,6 +1070,7 @@ function menuTick() {
   if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
+    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); sfx("TICK"); return; }
     menuMove("ii", roster().length);
     if (hit("a")) {
       if (menu.pick < 0) { menu.pick = menu.ii; sfx("PICK"); menu.msg = "AND SWAP WITH?"; }
@@ -1079,7 +1080,6 @@ function menuTick() {
         party = r.slice(0, ACTIVE); reserve = r.slice(ACTIVE); menu.pick = -1; sfx("EQUIP"); menu.msg = "ORDER CHANGED.";
       }
     }
-    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } sfx("TICK"); }
   }
 }
 function equipCandidates(m, slot) {
