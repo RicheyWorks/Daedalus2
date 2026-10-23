@@ -129,3 +129,9 @@ The next recommended content slice is an actual collect-and-plant activity using
 existing interaction/inventory hooks and an owned planter, rather than another
 scenery-only or blanket qualification pass. Keep visual review honest and handle
 concrete errors encountered during implementation.
+
+Final R6 copy/layout follow-up: the entrance now displays only `LANTERN COMMONS`,
+centred on a resized backing. Its optional tagline was removed following the new
+user direction. Existing E interaction/accessibility cues remain unchanged. The
+arrival capture reflects this update; horizon/overview captures predate only this
+small label change. No broader UI rewrite or new test loop was performed.
