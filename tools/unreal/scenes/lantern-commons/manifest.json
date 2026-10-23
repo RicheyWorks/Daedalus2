@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v5",
+  "schema": "daedalus.playable-scene-receipt.v6",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -60,7 +60,9 @@
     "/Game/Daedalus/Art/Prop/Prop_Grass_MeadowGrass/Prop_Grass_MeadowGrass/StaticMeshes/Prop_Grass_MeadowGrass.Prop_Grass_MeadowGrass",
     "/Game/Daedalus/Art/Prop/Prop_Grass_Moss/Prop_Grass_Moss/StaticMeshes/Prop_Grass_Moss.Prop_Grass_Moss",
     "/Game/Daedalus/Art/Prop/Prop_Flower_Bluebell/Prop_Flower_Bluebell/StaticMeshes/Prop_Flower_Bluebell.Prop_Flower_Bluebell",
-    "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy"
+    "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
+    "/Game/Daedalus/Art/Prop/Prop_Aqua_WaterLily/Prop_Aqua_WaterLily/StaticMeshes/Prop_Aqua_WaterLily.Prop_Aqua_WaterLily",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/StaticMeshes/Prop_Orr_Spring_Basin.Prop_Orr_Spring_Basin"
   ],
   "source_author": "Unknown; no authorship inferred from filenames.",
   "actual_checks": {
@@ -91,6 +93,7 @@
     "current_packages_clean": true
   },
   "limits": [
+    "R5 Stillwater is a flat decorative surface above existing solid ground, not a water-gameplay integration. New content awaits independent pixel review.",
     "R4 garden is built/saved, not newly play-tested or pixel-reviewed. New pond candidates remain held; no imports or benchmark acceptance claimed.",
     "R3 real UMG objective/prompt/completion assets are built, compiled and saved; runtime and pixel acceptance were not run in this build-only pass.",
     "The full 104 x 105 m ground and eight sampled collision traces are preserved; this is not exhaustive collision or performance coverage.",
@@ -321,7 +324,7 @@
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 487,
+  "actor_count": 657,
   "objective_ui": {
     "schema": "daedalus.commons-objective-ui-build.v1",
     "status": "BUILT_COMPILED_SAVED",
@@ -385,7 +388,7 @@
       "Broad horizon and blockout-level visual finish remain; the reference benchmark is not met."
     ]
   },
-  "actual_checks_scope": "Historical R1/R2 gameplay checks predate R3 UI and R4 garden. R4 built/saved current map and captured editor files; no gameplay, reload loop or tests rerun.",
+  "actual_checks_scope": "Historical R1/R2 gameplay checks predate R3 UI/R4 garden/R5 Stillwater. Latest content built/saved/captured only; no repeated Play, reload or tests.",
   "garden_r4": {
     "schema": "daedalus.commons-garden-build.v1",
     "created_utc": "2026-10-23T02:07:20.218681+00:00",
@@ -476,8 +479,8 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 1368542,
-      "sha256": "92a0d94162975d64d3fd4a576bc1b2870491b77eec8e43e93c8390478da9a67a"
+      "bytes": 1832795,
+      "sha256": "6cd8e47bad82f3040091c032ab870e96cf80f3bcb19212f2a579c8fa350dd1f9"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -615,6 +618,21 @@
       "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a"
     },
     {
+      "path": "images/stillwater-r5-arrival.png",
+      "bytes": 2474923,
+      "sha256": "08de3cfff70a6811a6555d577110b713f705f0fbfc6e5a75e95072a9fd34e0af"
+    },
+    {
+      "path": "images/stillwater-r5-garden.png",
+      "bytes": 2530208,
+      "sha256": "4620107874dec4ea59314158ea8f1b7632c18f68d2f78fd5ca45e86469fb9d70"
+    },
+    {
+      "path": "images/stillwater-r5-overview.png",
+      "bytes": 1295566,
+      "sha256": "467683a1cbf89f41a7f03007922fa4c1154e0048b6192a0e2776762271fc879d"
+    },
+    {
       "path": "lantern-commons-overview.png",
       "bytes": 1315744,
       "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
@@ -631,8 +649,23 @@
     },
     {
       "path": "README.md",
-      "bytes": 4863,
-      "sha256": "34f1b68f16157ff16edad0ee8a5f9ff96229261a1a9ccaacf7584f597db75bf1"
+      "bytes": 6555,
+      "sha256": "9bc2a1c328d746faf556965475b56857f71178eed6e7799111c49c31dee1f068"
+    },
+    {
+      "path": "stillwater/build.json",
+      "bytes": 4466,
+      "sha256": "55c086ac76c628d0fb98c4689ab3be46785297e4f34212290cd3c56e3f02292d"
+    },
+    {
+      "path": "stillwater/existing-asset-reuse.json",
+      "bytes": 7022,
+      "sha256": "a177b031ea7a00bf3497333692ecddee4a581ebf7ed75e0cda9553b0c1e8af5f"
+    },
+    {
+      "path": "stillwater/layout.json",
+      "bytes": 30817,
+      "sha256": "b47495073db6703352d562e21626c85fa8f0349e8c4ece37c5489f4a23af063b"
     },
     {
       "path": "ui/build.json",
@@ -654,5 +687,117 @@
       "bytes": 1428,
       "sha256": "c646e6f5313e0557c459b883e1f536e75106ac69a15944f492e65c42c8ae1cf7"
     }
+  ],
+  "stillwater_r5": {
+    "schema": "daedalus.stillwater-garden-build.v1",
+    "utc": "2026-10-23T02:17:40.760770+00:00",
+    "status": "BUILT_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "6cd8e47bad82f3040091c032ab870e96cf80f3bcb19212f2a579c8fa350dd1f9",
+    "new_actors": 170,
+    "current_actors": 657,
+    "garden_footprint_metres": [
+      24,
+      23
+    ],
+    "decorative_water_metres": [
+      10,
+      7
+    ],
+    "water_material": "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/Materials/water.water",
+    "water_implementation": "Existing opaque blue basin material on a flat cylinder above unchanged solid ground. No deep water, swimming, depth volumes, water simulation or new shader graphs.",
+    "features": [
+      "Existing spring basin and seven imported Aqua WaterLily props.",
+      "Four benches, eight planters, eight lanterns, cobbled approach and open pool edging.",
+      "Three paired willow shelters, planted margins and non-quest welcome/wayfinding text."
+    ],
+    "kind_counts": {
+      "Prop_Aqua_WaterLily": 7,
+      "Prop_Flower_Bluebell": 15,
+      "Prop_Flower_Poppy": 15,
+      "Prop_Grass_MeadowGrass": 42,
+      "Prop_Orr_Bench_Curved": 4,
+      "Prop_Orr_Lantern_Path": 4,
+      "Prop_Orr_Lantern_Post": 4,
+      "Prop_Orr_Path_Tile_Cobble": 54,
+      "Prop_Orr_Planter_Long": 4,
+      "Prop_Orr_Planter_Round": 4,
+      "Prop_Orr_Spring_Basin": 1,
+      "canopy": 3,
+      "owned_earth": 1,
+      "rocks": 6,
+      "water_surface": 1,
+      "willow": 3
+    },
+    "current_saved_state": {
+      "saved": true,
+      "images": {
+        "arrival": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-arrival.png",
+          "bytes": 2474923,
+          "sha256": "08de3cfff70a6811a6555d577110b713f705f0fbfc6e5a75e95072a9fd34e0af"
+        },
+        "garden": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-garden.png",
+          "bytes": 2530208,
+          "sha256": "4620107874dec4ea59314158ea8f1b7632c18f68d2f78fd5ca45e86469fb9d70"
+        },
+        "overview": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-overview.png",
+          "bytes": 1295566,
+          "sha256": "467683a1cbf89f41a7f03007922fa4c1154e0048b6192a0e2776762271fc879d"
+        }
+      },
+      "actors_current": 657,
+      "new_actors": 170,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "new_imports": 0,
+      "welcome_text": "Pause and enjoy. Explore at your own pace.",
+      "bench_interaction_added": false,
+      "pixel_review": "Pending independent review; known troublesome local image reader not invoked.",
+      "encounters": 1
+    },
+    "composition": {
+      "saved": true,
+      "new_actors": 170,
+      "actors_current": 657,
+      "water": "Flat 10 x 7 m decorative surface above unchanged solid floor; existing opaque basin material. No depth, simulation, swimming or new water gameplay.",
+      "garden_footprint_metres": [
+        24,
+        23
+      ],
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "new_imports": 0,
+      "Play_run": false,
+      "prior_ui_progress_controls_and_collision_edited": false,
+      "original_assets_edited": false
+    },
+    "normal_compute_release": true,
+    "protected_originals": "Existing guard and original floor material hashes unchanged.",
+    "held_sources": {
+      "prepared": 3,
+      "imported": 0,
+      "held": 3,
+      "note": "Unchanged source packet; separate offline adapter worker owns preparation. No forced Coupler reuse."
+    },
+    "limits": [
+      "No Play, movement/pickup repeat, reload loop, collision grid or test suite.",
+      "Screenshots captured but not locally pixel-reviewed; established art benchmark not claimed met.",
+      "Benches are scenery, not a new sitting interaction; arrival text invites a pause without promising that action.",
+      "All added scenery is NoCollision over the unchanged physical floor; no new gameplay, objective or progress writes."
+    ],
+    "terminal_sha256": "bcbcd609aa2fc2f71bba254b3dbfa65139f4ee32ddf149a34bcbb950de626149",
+    "release_sha256": "f2be076ca829a271bdb6c93447df4ca3c120d617819f6fbaabc9d46e13a6174f"
+  },
+  "required_existing_materials": [
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/Materials/water.water"
   ]
 }

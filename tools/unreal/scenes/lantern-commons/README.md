@@ -75,3 +75,31 @@ with compatible source admission required before adding the three new plants.
 Finished batches should hand off the next bounded production slice promptly.
 Model-capacity interruptions require checkpoint reconciliation, not duplicated
 placements, another writer or an assumption that Unreal crashed.
+
+## Stillwater Garden R5
+
+A sheltered, off-route garden now adds a 10 x 7 m still-water feature within a
+roughly 24 x 23 m planted destination. The surface uses the existing Spring Basin
+opaque blue water material over the unchanged solid ground. This is decorative
+water, without deep-water gameplay, swimming, simulation or a new shader system.
+The existing spring basin and seven imported water lilies give it a focal point.
+
+Four benches, eight planters, eight lanterns, paired willow shelters, planted
+margins and a broad cobbled approach make the destination welcoming. Plain signs
+invite a pause and point from the grove; they add no new quest or progress state.
+Benches remain scenery. The existing chart objective, UI, peaceful rules, main
+route, 104 x 105 m physical ground and 273 floor instances are unchanged.
+
+This pass adds 170 scene actors (657 total). Only the owned map changed; original
+mesh/material packages remain unchanged, packages are clean and compute normally
+released. No import, Play/test loop or reload proof was run. The three prepared
+pond sources remain held for the separate compatible-profile work.
+
+Current captures: `images/stillwater-r5-arrival.png`,
+`images/stillwater-r5-garden.png`, `images/stillwater-r5-overview.png`. These await
+independent pixel review; the benchmark is not claimed met. `stillwater/build.json`
+and `stillwater/layout.json` retain the actual build and placement facts.
+
+Next coherent content batch: a welcoming Commons entrance and more natural
+perimeter/horizon framing using existing imported content, while preserving the
+open roaming space and leaving held-source admission to its dedicated owner.
