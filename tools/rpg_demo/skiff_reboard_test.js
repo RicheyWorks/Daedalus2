@@ -23,7 +23,7 @@ function between(start, end) {
 function line(prefix) {
   const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found;
 }
-const source = [between("const LOGICAL =", "const KEYMAP ="), between("const KEYMAP =", 'window.addEventListener("keydown"'),
+const source = [between("const LOGICAL =", "const KEYMAP ="), between("const KEYMAP =", "const keyboardCodes ="),
   between("const hit =", "/* ---------- controllers:"), line("const DIRS ="), line("const find ="), line("const at ="), line("const npcAt ="),
   between("const carriesShard =", "const pretty ="), line("let journeySerial ="),
   between("function enterDungeon(", "function stepDone("),

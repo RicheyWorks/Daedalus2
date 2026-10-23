@@ -14,7 +14,7 @@ function between(start, end) {
   assert.ok(a >= 0 && b > a, "production section exists: " + start); return html.slice(a, b);
 }
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
-const source = [line("const CHARS ="), between("const KEYMAP =", 'window.addEventListener("keydown"'),
+const source = [line("const CHARS ="), between("const KEYMAP =", "const keyboardCodes ="),
   line("let journeySerial ="),
   line("const PAD_TO_DEMO ="), line("let dlg = null;"), line("function say("), line("function wrap("),
   between("function beginJourney(", "function titleTick("), between("function titlePrompt(", "function drawTitle("),

@@ -115,16 +115,42 @@ function setHeld(src, k, v) {
 function releaseSource(src) { if (SRC[src]) for (const k of LOGICAL) setHeld(src, k, false); delete SRC[src]; }
 const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
   KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
+const keyboardCodes = new Set();
+let pageInactive = typeof document.hasFocus === "function" && !document.hasFocus();
+let settingsTransition = false, settingsFramePaused = false;
+let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
+let PAD = null, PANEL = null;                            /* reset callbacks may be synchronous during setup */
+function keyboardHeld(code, down) {
+  if (down) keyboardCodes.add(code); else keyboardCodes.delete(code);
+  const k = KEYMAP[code];
+  if (k) setHeld("kb", k, Array.from(keyboardCodes).some(c => KEYMAP[c] === k));
+}
+function gameplayInputBlocked() {
+  return settingsTransition || pageInactive || document.hidden || !!(PANEL && PANEL.isOpen()) || !!(PAD && PAD.binding());
+}
+function resetGameplayInput() {
+  keyboardCodes.clear(); Object.keys(SRC).forEach(releaseSource);
+  for (const k of LOGICAL) { pressed[k] = false; delete pressedAt[k]; delete repeatAt[k]; }
+  touchEl.querySelectorAll(".held").forEach(b => b.classList.remove("held"));
+  settingsTransition = true; last = performance.now();
+  if (PAD) { PAD.releaseAll(); PAD.clearEdges(); }
+}
+function suspendGameplayInput() {
+  if (PAD && PAD.binding()) PAD.cancelBind();
+  resetGameplayInput();
+}
 window.addEventListener("keydown", e => {
-  if (settingsTransition || (typeof PANEL !== "undefined" && PANEL && PANEL.isOpen())) return;
   if (PAD && PAD.binding() && e.code === "Escape") { e.preventDefault(); return PAD.cancelBind(); }
-  const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) setHeld("kb", k, true); unlockAudio();
+  if (gameplayInputBlocked()) return;
+  const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) keyboardHeld(e.code, true); unlockAudio();
 });
-window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) setHeld("kb", k, false); });
-window.addEventListener("blur", () => Object.keys(SRC).forEach(releaseSource));     /* focus loss releases everything held */
+window.addEventListener("keyup", e => { if (KEYMAP[e.code]) keyboardHeld(e.code, false); });
+window.addEventListener("blur", () => { pageInactive = true; suspendGameplayInput(); });
+window.addEventListener("focus", () => { pageInactive = false; resetGameplayInput(); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) suspendGameplayInput(); else resetGameplayInput(); });
 document.querySelectorAll("#pad button").forEach(b => {
   const k = b.dataset.k;
-  const down = e => { e.preventDefault(); if (settingsTransition || (PANEL && PANEL.isOpen())) return; if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
+  const down = e => { e.preventDefault(); if (gameplayInputBlocked()) return; if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
   const up = e => { e.preventDefault(); setHeld("touch", k, false); b.classList.remove("held"); };
   b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
 });
@@ -144,27 +170,30 @@ function menuRepeat(now) {                                        /* held direct
 const SETTINGS = window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
 if (SETTINGS) SETTINGS.on("*", () => applyAudio());
 const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
-const PAD = window.DaedalusPad ? DaedalusPad.create({
+PAD = window.DaedalusPad ? DaedalusPad.create({
   bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
     if (e.type === "down" || e.type === "up") {
-      if (settingsTransition || (PANEL && PANEL.isOpen())) return;   /* the panel reads the pad itself */
+      if (e.type === "down" && gameplayInputBlocked()) return; /* shared panel keeps polling; releases still reach the game */
       if (e.action === "select" && e.type === "down") { openSettings(); return; }
       const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return;
     }
-    if (e.type === "bind" && e.step) sfx("TICK");
-    if (e.type === "bound") { sfx("PICK"); toast("Buttons taught", e.pad.name); }
+    if (e.type === "bind") { if (e.step) sfx("TICK"); else resetGameplayInput(); }
+    if (e.type === "bound") { resetGameplayInput(); sfx("PICK"); toast("Buttons taught", e.pad.name); }
+    if (e.type === "bindcancel") { resetGameplayInput(); toast("Button teaching cancelled", "Previous controls kept. Try again in Settings."); }
     if (e.type === "connect") toast(e.pad.name + " connected", e.pad.source === "guess" ? "Unknown layout: Settings > Controller > Teach Buttons" : "Ready. View / Select opens Settings.");
-    if (e.type === "disconnect") toast(e.pad.name + " disconnected");
+    if (e.type === "disconnect") {
+      const teaching = PAD && PAD.binding();
+      if (teaching) PAD.cancelBind();
+      toast(e.pad.name + " disconnected", teaching ? "Button teaching stopped. Reconnect, then start Teach Buttons again." : "Keyboard and other connected controllers remain available.");
+    }
   },
 }) : null;
-let settingsTransition = false, settingsFramePaused = false;
 function clearSettingsInput() {
-  Object.keys(SRC).forEach(releaseSource); LOGICAL.forEach(hit);
-  settingsTransition = true;                              /* the panel's closing choice never becomes a game action */
+  resetGameplayInput();                                  /* the panel's closing choice never becomes a game action */
 }
-const PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
-  onOpen: clearSettingsInput, onClose: () => { clearSettingsInput(); cv.focus({ preventScroll: true }); } }) : null;
+PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
+  onOpen: clearSettingsInput, onClose: () => { if (PAD && PAD.binding()) PAD.cancelBind(); clearSettingsInput(); cv.focus({ preventScroll: true }); } }) : null;
 /* A small notice in the corner: a controller arriving or leaving, a save, a bind finished. */
 let toastTimer = 0;
 function toast(title, sub) {
@@ -174,11 +203,14 @@ function toast(title, sub) {
   toastEl.classList.add("on"); clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove("on"), 3800);
 }
-function openSettings() { if (PANEL && !PANEL.isOpen()) { Object.keys(SRC).forEach(releaseSource); PANEL.open(); } }
+function openSettings() { if (PANEL && !PANEL.isOpen()) PANEL.open(); }
 
 /* This demo's own rows in the shared tabs: controllers (shared helper), touch controls, the jukebox monitor, keys, save. */
 if (SETTINGS) {
   DaedalusSettings.addPadRows(SETTINGS, PAD);
+  SETTINGS.extend({ tab: "CONTROLLER", section: "Prismheart", rows: [
+    { id: "PrismControllerHelp", kind: "info", label: "Control Help", value: "Settings pauses your journey.\nQ / E: tabs   R: reset tab   C: copy\nMouse and touch also work.",
+      help: "Teach Buttons maps the seven journey controls. For tabs, reset and copy on a taught pad, use the keyboard, mouse or touch. Release held buttons before returning to your journey." }] });
   SETTINGS.extend({ tab: "CONTROLLER", section: "Touch", rows: [
     { id: "TouchControls", kind: "choice", label: "Touch Controls", choices: ["AUTO", "ON", "OFF"], default: 0, max: 2,
       help: "The on-screen d-pad and buttons. Auto shows them on touch screens only." }] });
@@ -1984,7 +2016,7 @@ function drawTitle() {
   text(M.credit, M.credit_xy[0] - tw(M.credit), M.credit_xy[1], "#8080a8", null);
 }
 cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */
-  if (mode !== "title" || !D || settingsTransition || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "title" || !D || gameplayInputBlocked()) return;
   const b = cv.getBoundingClientRect(), x = (e.clientX - b.left) * W / b.width, y = (e.clientY - b.top) * H / b.height, M = D.title.menu_geometry;
   const i = Math.floor((y - M.item_y + 3) / M.item_step);
   if (x >= M.window[0] && x <= M.window[0] + M.window[2] && i >= 0 && i < TITLE_ITEMS.length) { titleIdx = i; titleChoose(i); }
@@ -2061,12 +2093,12 @@ function nameAt(px, py) {                                 /* canvas pixel -> gri
   return r >= 0 && r < neRows() && c >= 0 && c < 10 && neCell(r, c) ? [r, c] : null;
 }
 cv.addEventListener("pointerdown", e => {
-  if (mode !== "name" || !nameEntry || settingsTransition || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "name" || !nameEntry || gameplayInputBlocked()) return;
   const b = cv.getBoundingClientRect(), at = nameAt((e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height);
   if (at) { nameEntry.r = at[0]; nameEntry.c = at[1]; neActivate(); }
 });
 window.addEventListener("keydown", e => {                 /* typing straight in */
-  if (mode !== "name" || !nameEntry || settingsTransition || (PANEL && PANEL.isOpen()) || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (mode !== "name" || !nameEntry || gameplayInputBlocked() || e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
   if (k === " ") { stop(); neType("SP"); return; }
@@ -2119,11 +2151,10 @@ function drawGameOver() {
 }
 
 /* ---------- loop ---------- */
-let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
 function frame(now) {
   requestAnimationFrame(frame);
   if (PAD) PAD.poll();
-  const paused = settingsFramePaused = settingsTransition || (PANEL && PANEL.isOpen()); settingsTransition = false;
+  const paused = settingsFramePaused = gameplayInputBlocked(); settingsTransition = false;
   const dt = paused ? 0 : Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
   if (paused) LOGICAL.forEach(hit);
   else {
@@ -2223,7 +2254,7 @@ async function boot() {
 }
 
 window.addEventListener("keydown", e => {
-  if (!PANEL || settingsTransition || PANEL.isOpen()) return;
+  if (!PANEL || gameplayInputBlocked()) return;
   if (e.code === "F1" || e.code === "F10" || (e.code === "Escape" && mode === "title")) { e.preventDefault(); openSettings(); }
 });
 

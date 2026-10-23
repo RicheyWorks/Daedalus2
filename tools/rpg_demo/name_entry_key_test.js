@@ -14,13 +14,14 @@ function between(start, end) {
 }
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
 const source = [between("const LOGICAL =", "document.querySelectorAll"), line("const hit ="),
+  "PAD = this.PAD; PANEL = this.PANEL;", // Explicit downstream pad/panel seam for actual registered handlers.
   line("let journeySerial ="),
   between("const START_LEVEL =", "/* Recruits:"), between("function titleChoose(", "function beginJourney("),
   between("function titleTick(", "function titlePrompt("), between("let nameEntry = null;", "/* ---------- ending ---------- */"),
   "function fadeStep(dt) {\n" + between("      fade -= dt * 3;", '    } else if (mode === "title")') + "\n}",
   "function frameCleanup(now) {\n" + between("  for (const k in pressed)", '  if (mode === "title") drawTitle();') + "\n}",
   "this.api = { titleTick, nameTick, fadeStep, frameCleanup, setHeld, entry: () => nameEntry, " +
-  "party: () => party, input: () => ({ held, pressed, SRC }) };"
+  "party: () => party, transition: v => { settingsTransition = v; }, input: () => ({ held, pressed, SRC }) };"
 ].join("\n");
 let checks = 0;
 function check(label, fn) { try { fn(); checks++; } catch (error) { error.message = label + ": " + error.message; throw error; } }
@@ -29,9 +30,9 @@ function surface() {
   return { handlers, addEventListener(type, fn, capture = false) { (handlers[type] ||= []).push({ fn, capture: !!capture }); } };
 }
 function session(productionSource = source) {
-  const win = surface(), cv = surface(), sounds = [], c = {
+  const win = surface(), cv = surface(), doc = surface(), sounds = [], c = {
     D: { title: clone(title), party: clone(party), gear: {} }, W: 320, H: 224,
-    window: win, cv, mode: "title", titleT: 0, titleIdx: 0, TITLE_ITEMS: clone(title.menu),
+    window: win, document: doc, touchEl: { querySelectorAll: () => [] }, cv, mode: "title", titleT: 0, titleIdx: 0, TITLE_ITEMS: clone(title.menu),
     state: { beaten: new Set() }, opened: new Set(), grids: {}, fade: 0, fadeCb: null,
     dlg: null, shop: null, menu: null, B: null, ending: null,
     now: 0, started: 0, settingsTransition: false, modal: false,
@@ -39,6 +40,7 @@ function session(productionSource = source) {
     performance: { now: () => c.now }, sfx: sound => sounds.push(sound), unlockAudio() {},
     beginJourney: () => { c.started++; } // Journey/navigation is the observed downstream seam, not executed here.
   };
+  doc.hidden = false; doc.hasFocus = () => true;
   cv.getBoundingClientRect = () => ({ left: 0, top: 0, width: c.W, height: c.H });
   vm.createContext(c); vm.runInContext(productionSource, c, { timeout: 1000 });
   function dispatch(target, type, fields) {
@@ -107,7 +109,7 @@ for (const modifier of ["ctrlKey", "metaKey", "altKey"]) check(modifier + " stil
   assert.equal(s.api.entry().name, before); assert.equal(s.c.started, 0);
 });
 for (const gate of ["modal", "settingsTransition"]) check(gate + " still gates keyboard and pointer naming", () => {
-  const s = naming(), before = s.api.entry().name; s.up(); s.c[gate] = true;
+  const s = naming(), before = s.api.entry().name; s.up(); if (gate === "settingsTransition") s.api.transition(true); else s.c[gate] = true;
   s.key("Enter", "Enter"); s.key("a", "KeyA"); s.pointer(s.c.W - 50, s.c.H - 27);
   assert.equal(s.api.entry().name, before); assert.equal(s.c.started, 0); assert.equal(s.api.input().held.start, false);
 });

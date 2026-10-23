@@ -18,7 +18,7 @@ const source = [
   between("function drawBattle()", "/* ---------- title:"),
   between('cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */', "/* ---------- name entry"),
   between('cv.addEventListener("pointerdown", e => {\n  if (mode !== "name"', "/* ---------- ending ---------- */"),
-  between("let last = performance.now()", "/* ---------- harness hooks"),
+  between("function frame(", "/* ---------- harness hooks"),
   "this.api = { frame, setHeld, releaseSource, hit, panel: PANEL, inputs: () => ({ held, pressed, SRC, repeatAt }), " +
   "last: () => last, paused: () => settingsFramePaused };"
 ].join("\n");
@@ -39,7 +39,7 @@ function session(productionSource = source, settings = true) {
   const panel = { isOpen: () => panelOpen,
     open: () => { panelOpen = true; panelOptions.onOpen(); },
     close: () => { panelOpen = false; panelOptions.onClose(); } };
-  const pad = { poll: () => { stats.polls++; if (c.onPoll) c.onPoll(); }, binding: () => false };
+  const pad = { poll: () => { stats.polls++; if (c.onPoll) c.onPoll(); }, binding: () => false, releaseAll() {}, clearEdges() {} };
   const settingsModule = { create: () => ({ on() {} }), mountPanel: options => { panelOptions = options; return panel; } };
   const padModule = { create: options => { padOptions = options; return pad; } };
   const c = {
@@ -57,7 +57,8 @@ function session(productionSource = source, settings = true) {
     performance: { now: () => c.now }, requestAnimationFrame: () => { stats.raf++; },
     window: { DaedalusSettings: settings ? settingsModule : null, DaedalusPad: padModule,
       addEventListener: (event, fn) => { (keys[event] ||= []).push(fn); } },
-    document: { querySelectorAll: () => ["up", "a", "start", "opts"].map(makeButton) },
+    document: { hidden: false, hasFocus: () => true, addEventListener() {}, querySelectorAll: () => ["up", "a", "start", "opts"].map(makeButton) },
+    touchEl: { querySelectorAll: () => Object.values(buttons).filter(b => b.classes.has("held")) },
     cv: { addEventListener: (event, fn) => { if (event === "pointerdown") pointers.push(fn); },
       focus: () => { stats.focus++; }, getBoundingClientRect: () => ({ left: 0, top: 0, width: 320, height: 224 }) },
     DaedalusSettings: settingsModule, DaedalusPad: padModule,
@@ -175,17 +176,17 @@ check("closed settings preserve real held field movement, menu input and frame t
 check("without a Settings panel the normal game and rendering remain available", () => {
   const s = session(source, false); assert.equal(s.api.panel, null);
   s.key("KeyZ", "z"); s.step(16); assert.equal(s.stats.interactions, 1); assert.equal(s.stats.draws, 2); // field plus poison overlay
-  assert.equal(s.stats.polls, 1); assert.equal(s.stats.audio, 1); assert.equal(s.api.paused(), null);
+  assert.equal(s.stats.polls, 1); assert.equal(s.stats.audio, 1); assert.equal(s.api.paused(), false);
 });
 check("controlled pre-fix timer, modal-edge, touch and drawing behavior is detected", () => {
-  const ungated = source.replace('const paused = settingsFramePaused = settingsTransition || (PANEL && PANEL.isOpen()); settingsTransition = false;',
+  const ungated = source.replace('const paused = settingsFramePaused = gameplayInputBlocked(); settingsTransition = false;',
     'const paused = settingsFramePaused = false; settingsTransition = false;');
   assert.notEqual(ungated, source); assert.throws(() => pausedFish(ungated), assert.AssertionError);
-  const oldCallbacks = source.replace('onOpen: clearSettingsInput, onClose: () => { clearSettingsInput(); cv.focus({ preventScroll: true }); }',
+  const oldCallbacks = source.replace('onOpen: clearSettingsInput, onClose: () => { if (PAD && PAD.binding()) PAD.cancelBind(); clearSettingsInput(); cv.focus({ preventScroll: true }); }',
     'onOpen: () => { Object.keys(SRC).forEach(releaseSource); }, onClose: () => { cv.focus({ preventScroll: true }); }');
   assert.notEqual(oldCallbacks, source);
   assert.throws(() => { const s = session(oldCallbacks); s.api.setHeld("kb", "a", true); s.panel.open(); allReleased(s); }, assert.AssertionError);
-  const unguardedTouch = source.replace('if (settingsTransition || (PANEL && PANEL.isOpen())) return; if (k === "opts")', 'if (k === "opts")');
+  const unguardedTouch = source.replace('if (gameplayInputBlocked()) return; if (k === "opts")', 'if (k === "opts")');
   assert.notEqual(unguardedTouch, source);
   assert.throws(() => { const s = session(unguardedTouch); s.panel.open(); s.touch("a"); allReleased(s); }, assert.AssertionError);
   const tickingDraw = source.replace('if (fl > 0 && !settingsFramePaused)', 'if (fl > 0)');

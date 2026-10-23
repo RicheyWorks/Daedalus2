@@ -21,7 +21,7 @@ function line(prefix) {
   assert.ok(found, "production declaration exists: " + prefix); return found;
 }
 const source = [
-  between("const LOGICAL =", "const KEYMAP ="), between("const KEYMAP =", 'window.addEventListener("keydown"'), line("const hit ="),
+  between("const LOGICAL =", "const KEYMAP ="), between("const KEYMAP =", "const keyboardCodes ="), line("const hit ="),
   line("const roster ="), between("function makeMember(", "/* Recruits:"),
   between('  SETTINGS.onAction("SaveErase"', '  SETTINGS.on("TouchControls"'),
   between("function innPrompt()", "function openChest("),
