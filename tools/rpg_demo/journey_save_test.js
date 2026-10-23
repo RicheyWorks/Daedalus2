@@ -101,6 +101,22 @@ check("same shared reader accepts the existing Portal writer", () => {
   assert.equal(Save.read(raw, "portal", catalog.portal.members).ok, true);
   assert.equal(Save.read(raw, "prism", catalog.prism.members).ok, false);
 });
+check("old omitted equipment slots resume as unequipped without changing saved bytes or items", () => {
+  const s = session(), v = JSON.parse(text), omitted = [];
+  v.party.forEach((m, i) => {
+    for (const slot of ["weapon", "armor", "helm", "shield"]) if (m.equip[slot] === null) {
+      omitted.push([i, slot]); delete m.equip[slot];
+    }
+  });
+  assert.ok(omitted.length, "real fresh-party catalog includes empty slots");
+  const raw = JSON.stringify(v); s.store.set(s.key, raw);
+  const read = Save.read(raw, "prism", catalog.prism.members);
+  assert.equal(read.ok, true); omitted.forEach(([i, slot]) => assert.equal(read.value.party[i].equip[slot], null));
+  s.c.api.titleChoose(1);
+  omitted.forEach(([i, slot]) => assert.equal(s.c.party[i].equip[slot], null));
+  assert.equal(s.store.get(s.key), raw); assert.equal(s.c.writes, 0);
+  assert.deepEqual(JSON.parse(JSON.stringify(s.c.bag)), fixture.bag);
+});
 
 const corrupt = [
   ["null party", v => { v.party = null; }], ["empty party", v => { v.party = []; }],

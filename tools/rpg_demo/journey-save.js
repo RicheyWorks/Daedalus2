@@ -31,6 +31,11 @@
   }
 
   function member(m, jobs) {
+    // The old empty equipment chooser saved undefined slots by omitting them in JSON.
+    // Treat that exact legacy representation as unequipped on this detached candidate;
+    // returned gear is already in its saved bag, so do not adjust inventory or stored bytes.
+    if (object(m) && object(m.equip)) for (const slot of ["weapon", "armor", "helm", "shield"])
+      if (!own(m.equip, slot)) m.equip[slot] = null;
     if (!object(m) || !string(m.name, 64) || !string(m.job, 64) || !jobs.has(m.job)
       || !integer(m.lv, 1) || !integer(m.exp) || !integer(m.next, 1)
       || !integer(m.max, 1) || !integer(m.hp, 0, m.max) || !integer(m.mmax) || !integer(m.mp, 0, m.mmax)
