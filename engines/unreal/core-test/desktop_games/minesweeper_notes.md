@@ -55,3 +55,18 @@ Native acceptance still needs: Save/Continue after application restart; missing,
 corrupt and unwritable slot behavior; Save & Close failure staying open; gamepad and
 focus cleanup; independent Star files; Slate layout; UHT/link/packaging. The current
 editor owner must schedule that work after the reserved ingestion window.
+
+## Selected-cell guidance
+
+The core derives readable row/column, covered/flagged/open state and adjacent flag
+counts from visible board state. Context explains the safe first opening, unflagging
+before reveal, open-cell flag refusal and the matching-count chord requirement.
+Matching flags are explicitly not proof of safety. Guidance is not saved and adds
+no new state: DGM1 fields, mine placement, actions and active time remain unchanged.
+
+`desktop_minesweeper_guidance` / `minesweeper_guidance_test.cpp` passed 29/29 strict
+single-TU MSVC checks, using real seed-730 actions, idle-clone comparisons for blocked
+actions, successful and wrong-flag chords, and reset/restore/presentation save-byte
+preservation. The same test against the prior header passed12/29 and failed17
+missing-guidance checks as expected. Native footer layout and physical controls
+remain acceptance work; no engine build or live session was run.

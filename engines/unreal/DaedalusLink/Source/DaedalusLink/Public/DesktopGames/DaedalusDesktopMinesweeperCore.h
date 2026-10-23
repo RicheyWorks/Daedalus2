@@ -16,7 +16,7 @@ class MinesweeperGame final : public Game {
     std::uint64_t Ticks=0;
     std::uint32_t BoardSeed=730;
     int Index(int C,int R) const { return R*Width+C; }
-    template<class F> void Neighbours(int I,F Fn) {
+    template<class F> void Neighbours(int I,F Fn) const {
         for(int Dy=-1;Dy<=1;++Dy) for(int Dx=-1;Dx<=1;++Dx) {
             int C=I%Width+Dx,R=I/Width+Dy;
             if((Dx||Dy) && C>=0 && C<Width && R>=0 && R<Height) Fn(Index(C,R));
@@ -58,6 +58,34 @@ class MinesweeperGame final : public Game {
             Value=Value*10+Digit;
         }
         Out=Value;return true;
+    }
+    int AdjacentFlags(int I) const {
+        int Flags=0;Neighbours(I,[&](int J){if(Cells[J].Flag) ++Flags;});return Flags;
+    }
+    std::string ProgressNote() const {
+        int Flags=0;for(const auto& C:Cells) Flags+=C.Flag?1:0;
+        return "Mines remaining "+std::to_string(Mines-Flags)+" | "+std::to_string(Ticks/60)+" active seconds";
+    }
+    std::string CellNote() const {
+        if(Cells.empty()) return "Choose a cell.";
+        const auto& C=Cells[Index(X,Y)];
+        const std::string Position="Row "+std::to_string(Y+1)+", column "+std::to_string(X+1)+": ";
+        if(C.Flag) return Position+"flagged.";
+        if(!C.Open) return Position+"covered.";
+        if(C.Mine) return Position+"mine hit.";
+        return Position+"open "+std::to_string(C.Near)+". Neighbour flags "+std::to_string(AdjacentFlags(Index(X,Y)))+"/"+std::to_string(C.Near)+".";
+    }
+    std::string ActionNote() const {
+        if(Won) return "Cleared! Restart for another run.";
+        if(Lost) return "Mine hit. Restart to try again.";
+        if(Cells.empty()) return "Reveal a covered cell to begin.";
+        const auto& C=Cells[Index(X,Y)];
+        if(C.Flag) return "Unflag before revealing. K / pad B removes this marker.";
+        if(C.Open) return AdjacentFlags(Index(X,Y))==C.Near
+            ? "Matching flags allow chord; wrong flags can hit mines. Open cells cannot be flagged."
+            : "Match neighbour flags to the open number before chording. Open cells cannot be flagged.";
+        return Planted?"Reveal opens this cell. Flag a possible mine; the marker is your choice."
+            :"First reveal and its neighbours are mine-free. Flags are optional.";
     }
 public:
     void Reset(std::uint32_t Seed) override {
@@ -134,12 +162,12 @@ public:
         }
     }
     Status GetStatus() const override {
-        int Flags=0,Open=0;for(const auto& C:Cells){Flags+=C.Flag?1:0;Open+=C.Open&&!C.Mine?1:0;}
-        return {Won?1000:Open,0,Lost||Won,Won,"Mines remaining "+std::to_string(Mines-Flags)+" | "+std::to_string(Ticks/60)+" active seconds"};
+        int Open=0;for(const auto& C:Cells) Open+=C.Open&&!C.Mine?1:0;
+        return {Won?1000:Open,0,Lost||Won,Won,ProgressNote()+" | "+CellNote()+" "+ActionNote()};
     }
     void Render(Frame& F) const override {
         F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"MINESWEEPER",{116,224,195,255},26);
-        F.AddText(25,48,GetStatus().Note,White,18);
+        F.AddText(25,48,ProgressNote(),White,18);
         double Size=std::min(740.0/Width,440.0/Height),Left=(800-Width*Size)/2,Top=90;
         for(int I=0;I<Width*Height;++I) {
             const auto& C=Cells[I];double Px=Left+(I%Width)*Size,Py=Top+(I/Width)*Size;
@@ -151,7 +179,9 @@ public:
         double Px=Left+X*Size,Py=Top+Y*Size;
         F.AddLine(Px,Py,Px+Size,Py,White,2);F.AddLine(Px,Py,Px,Py+Size,White,2);
         F.AddLine(Px+Size,Py,Px+Size,Py+Size,White,2);F.AddLine(Px,Py+Size,Px+Size,Py+Size,White,2);
-        F.AddText(25,550,Won?"Cleared! Restart for another run.":Lost?"Mine hit. Restart to try again.":"Move: arrows | J/Space: reveal | K: flag | Shift: chord",White,18);
+        F.AddText(25,541,CellNote(),White,14);
+        F.AddText(25,561,ActionNote(),White,13);
+        F.AddText(25,582,"Move: arrows/stick | J/Space/pad A/X: reveal | K/pad B: flag | Shift/pad Y/LB: chord",White,12);
     }
 };
 }}
