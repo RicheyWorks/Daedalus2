@@ -20,7 +20,7 @@ function line(prefix) {
 const source = [line("const hit ="), line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="),
   between("let menu = null;", "/* Four rows"), between("const STATUS =", "/* ---------- bestiary"),
-  "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, fieldItems, fieldSpells, " +
+  "this.api = { start: () => { party = buildParty(); }, makeMember, openMenu, menuTick, fieldItems, fieldSpells, " +
   "party: () => party, reserve: () => reserve, bag: () => bag, menu: () => menu };"
 ].join("\n");
 let checks = 0;
@@ -99,6 +99,48 @@ check("Back alone preserves the established ORDER selection-cancel behavior", ()
   const s = prepare("order"), before = resources(s); s.tick("b");
   assert.equal(s.api.menu().sub, "order"); assert.equal(s.api.menu().pick, -1); assert.equal(resources(s), before);
   s.tick("b"); assert.equal(s.api.menu().sub, null);
+});
+function assertDownCaster(sub, productionSource = source, stale = false, longName = false) {
+  const s = prepare(stale ? "magic-who" : sub, productionSource), caster = s.api.party()[1], m = s.api.menu();
+  if (stale) { s.tick("a"); s.tick("a"); assert.equal(m.sub, "magic-target"); }
+  caster.hp = 0; if (longName) caster.name = "A very long saved companion name";
+  const before = resources(s); s.sounds.length = 0; s.tick("a");
+  assert.equal(resources(s), before, "downed caster cannot spend MP, use items or heal anyone");
+  assert.equal(m.sub, sub, "downed caster stays at the current choice");
+  assert.match(m.msg, / IS DOWN\. REVIVE FIRST\.$/); assert.ok(m.msg.length <= 34, "revival guidance fits one message row");
+  assert.deepEqual(s.sounds, ["LOCKED"]); assert.equal(s.pressed.a, false);
+  s.tick(); assert.equal(resources(s), before, "refused Confirm cannot cast on the next frame"); return s;
+}
+check("downed Ysolde cannot enter field spell selection", () => assertDownCaster("magic-who"));
+check("a directly prepared target choice rechecks the downed caster", () => assertDownCaster("magic-target"));
+check("a caster knocked out after target selection cannot finish the stale spell", () => assertDownCaster("magic-target", source, true));
+check("downed-caster revival guidance stays visible for a long saved name", () => assertDownCaster("magic-who", source, false, true));
+for (const sub of ["magic-who", "magic-target"])
+  check("Back plus Confirm still cancels " + sub + " before a downed-caster refusal", () =>
+    assertCancelled(sub, source, true, s => { s.api.party()[1].hp = 0; }));
+check("an actual Feather revival restores ordinary field casting", () => {
+  const s = assertDownCaster("magic-who"), m = s.api.menu(), caster = s.api.party()[1], bag = s.api.bag();
+  const feathers = bag["Feather of Waking"], mp = caster.mp; assert.ok(feathers > 0);
+  Object.assign(m, { sub: "item", who: 1, ii: s.api.fieldItems().indexOf("Feather of Waking") }); s.tick("a");
+  assert.equal(caster.hp, Math.ceil(caster.max / 4)); assert.equal(bag["Feather of Waking"], feathers - 1);
+  Object.assign(m, { sub: "magic-who", who: 1, ii: 0 }); s.tick("a"); s.tick("a"); assert.equal(m.sub, "magic-target");
+  const target = s.api.party()[0], hp = target.hp; s.tick("a");
+  assert.equal(caster.mp, mp - m.spell.mp); assert.ok(target.hp > hp); assert.equal(bag["Feather of Waking"], feathers - 1);
+});
+check("a living caster moved to reserve by ORDER can still heal", () => {
+  const s = prepare("order"), m = s.api.menu(), caster = s.api.party()[1];
+  s.api.reserve().push(s.api.makeMember(s.c.D.party.members.find(member => member.job === "Beastcaller"), 15));
+  Object.assign(m, { pick: 1, ii: 4 }); s.tick("a"); assert.equal(s.api.reserve()[0], caster);
+  Object.assign(m, { sub: "magic-who", who: 4, ii: 0 }); s.tick("a"); s.tick("a");
+  assert.equal(m.sub, "magic-target"); const mp = caster.mp, hp = s.api.party()[0].hp; s.tick("a");
+  assert.equal(caster.mp, mp - m.spell.mp); assert.ok(s.api.party()[0].hp > hp);
+});
+check("removing the actual two caster guards reproduces both old failures", () => {
+  const pattern = /^      if \(caster\.hp <= 0\) \{[^\r\n]*\}\r?$/gm;
+  assert.equal((source.match(pattern) || []).length, 2, "two production caster checks are covered");
+  const legacy = source.replace(pattern, "");
+  for (const sub of ["magic-who", "magic-target"])
+    assert.throws(() => assertDownCaster(sub, legacy), assert.AssertionError);
 });
 function undoCancelPriority(sub) {
   const next = { item: '  if (sub === "magic-who")', "magic-who": '  if (sub === "magic")',

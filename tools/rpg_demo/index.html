@@ -999,7 +999,12 @@ function menuTick() {
   if (sub === "magic-who") {
     if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     menuWho();
-    if (hit("a")) { if (!fieldSpells(roster()[menu.who]).length) { sfx("LOCKED"); menu.msg = roster()[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
+    if (hit("a")) {
+      const caster = roster()[menu.who];
+      if (caster.hp <= 0) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase().slice(0, 11) + " IS DOWN. REVIVE FIRST."; return; }
+      if (!fieldSpells(caster).length) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase() + " KNOWS NO SPELLS."; return; }
+      sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = "";
+    }
     return;
   }
   if (sub === "magic") {
@@ -1019,6 +1024,7 @@ function menuTick() {
     menuMove("target", roster().length);
     if (hit("a")) {
       const caster = roster()[menu.who], m = roster()[menu.target], sp = menu.spell;
+      if (caster.hp <= 0) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase().slice(0, 11) + " IS DOWN. REVIVE FIRST."; return; }
       if (m.hp <= 0) { sfx("LOCKED"); menu.msg = "TOO LATE FOR THAT SPELL."; return; }
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
       const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3);
