@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v4",
+  "schema": "daedalus.playable-scene-receipt.v5",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -48,7 +48,19 @@
     "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor_Rocks",
     "/Game/Daedalus/Art/Item/Item_Orr_Constellation_Chart_Lantern/Item_Orr_Constellation_Chart_Lantern/StaticMeshes/Item_Orr_Constellation_Chart_Lantern",
     "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature",
-    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature_Top"
+    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature_Top",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Bench_Curved/Prop_Orr_Bench_Curved/StaticMeshes/Prop_Orr_Bench_Curved.Prop_Orr_Bench_Curved",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Post/Prop_Orr_Lantern_Post/StaticMeshes/Prop_Orr_Lantern_Post.Prop_Orr_Lantern_Post",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Long/Prop_Orr_Planter_Long/StaticMeshes/Prop_Orr_Planter_Long.Prop_Orr_Planter_Long",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Sign_Welcome/Prop_Orr_Sign_Welcome/StaticMeshes/Prop_Orr_Sign_Welcome.Prop_Orr_Sign_Welcome",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Sundial_Garden/Prop_Orr_Sundial_Garden/StaticMeshes/Prop_Orr_Sundial_Garden.Prop_Orr_Sundial_Garden",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Path_Tile_Cobble/Prop_Orr_Path_Tile_Cobble/StaticMeshes/Prop_Orr_Path_Tile_Cobble.Prop_Orr_Path_Tile_Cobble",
+    "/Game/Daedalus/Art/Prop/Prop_Grass_MeadowGrass/Prop_Grass_MeadowGrass/StaticMeshes/Prop_Grass_MeadowGrass.Prop_Grass_MeadowGrass",
+    "/Game/Daedalus/Art/Prop/Prop_Grass_Moss/Prop_Grass_Moss/StaticMeshes/Prop_Grass_Moss.Prop_Grass_Moss",
+    "/Game/Daedalus/Art/Prop/Prop_Flower_Bluebell/Prop_Flower_Bluebell/StaticMeshes/Prop_Flower_Bluebell.Prop_Flower_Bluebell",
+    "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy"
   ],
   "source_author": "Unknown; no authorship inferred from filenames.",
   "actual_checks": {
@@ -79,8 +91,8 @@
     "current_packages_clean": true
   },
   "limits": [
+    "R4 garden is built/saved, not newly play-tested or pixel-reviewed. New pond candidates remain held; no imports or benchmark acceptance claimed.",
     "R3 real UMG objective/prompt/completion assets are built, compiled and saved; runtime and pixel acceptance were not run in this build-only pass.",
-    "Current scene and feedback captures await independent pixel review; no visual-quality acceptance is claimed.",
     "The full 104 x 105 m ground and eight sampled collision traces are preserved; this is not exhaustive collision or performance coverage.",
     "Original saved material hashes are unchanged and current packages are clean. Earlier unsaved auto-instancing flags were not restored over saved originals after the old editor closed.",
     "All four scene lights are movable, with zero unbuilt interactions; no project render settings or global lighting build changed.",
@@ -309,7 +321,7 @@
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 141,
+  "actor_count": 487,
   "objective_ui": {
     "schema": "daedalus.commons-objective-ui-build.v1",
     "status": "BUILT_COMPILED_SAVED",
@@ -373,5 +385,274 @@
       "Broad horizon and blockout-level visual finish remain; the reference benchmark is not met."
     ]
   },
-  "actual_checks_scope": "Historical R1/R2 checks, before the new R3 UI. No route, pickup, collision grid, reload or test suite was rerun for this build."
+  "actual_checks_scope": "Historical R1/R2 gameplay checks predate R3 UI and R4 garden. R4 built/saved current map and captured editor files; no gameplay, reload loop or tests rerun.",
+  "garden_r4": {
+    "schema": "daedalus.commons-garden-build.v1",
+    "created_utc": "2026-10-23T02:07:20.218681+00:00",
+    "status": "BUILT_AND_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "92a0d94162975d64d3fd4a576bc1b2870491b77eec8e43e93c8390478da9a67a",
+    "new_actors_by_kind": {
+      "Prop_Flower_Bluebell": 42,
+      "Prop_Flower_Poppy": 42,
+      "Prop_Grass_MeadowGrass": 126,
+      "Prop_Grass_Moss": 42,
+      "Prop_Orr_Bench_Curved": 6,
+      "Prop_Orr_Lantern_Path": 8,
+      "Prop_Orr_Lantern_Post": 6,
+      "Prop_Orr_Path_Tile_Cobble": 45,
+      "Prop_Orr_Planter_Long": 6,
+      "Prop_Orr_Planter_Round": 4,
+      "Prop_Orr_Sign_Welcome": 2,
+      "Prop_Orr_Sundial_Garden": 1,
+      "owned_lawn": 14
+    },
+    "ingestion": {
+      "existing_mesh_kinds_reused": 12,
+      "new_imports": 0,
+      "next_sources_prepared": 3,
+      "next_sources_held": 3
+    },
+    "normal_compute_release": true,
+    "protected_original_file_check": "Existing original guard and both original floor material hashes unchanged before/after native stages.",
+    "native_terminal_sha256": "445c598613e0dd6aaae940d817ae1a52cdc724c59925403506ac8fcd2e2a0e01",
+    "release_receipt_sha256": "c5ecc814749d9e33591d2d5abb1717af1a5b51ea3747702d8e072c9539ac3b11",
+    "limits": [
+      "Build mode: no Play, movement/pickup repeat, save/reload loop, collision grid or test suite.",
+      "New decorative props are NoCollision and use existing saved materials; continuous ground collision remains the existing slab.",
+      "Benches are scenery, not a newly implemented sitting interaction. Sundial and garden props add no gameplay or services.",
+      "Screenshots were written successfully but not pixel-reviewed locally; established visual benchmark is not claimed met.",
+      "New UI is unchanged from R3 and remains built/compiled/saved without a new gameplay acceptance claim.",
+      "Source candidates remain held; no generic unattended garden import adoption is claimed."
+    ],
+    "actual_saved_state": {
+      "saved": true,
+      "actors_current": 487,
+      "added_actors": 344,
+      "floor_instances": 273,
+      "ground_metres": [
+        104,
+        105
+      ],
+      "new_mesh_kinds": 12,
+      "existing_imported_assets_reused": true,
+      "new_imports": 0,
+      "landmark_courts": 3,
+      "meadow_pockets": 14,
+      "ui_and_native_pickup_changed": false,
+      "pixel_review": "Pending independent review; local image reader deliberately not used.",
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "save_reload_loop_run": false,
+      "progress_modified": false,
+      "encounters": 1,
+      "selected_actor_paths": []
+    }
+  },
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 30,
+      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
+      "bytes": 27702,
+      "sha256": "22d276f780ea93e40524278b3251374bcd8240189a47b359ab5d875ec056405a"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
+      "bytes": 58791,
+      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost.uasset",
+      "bytes": 49675,
+      "sha256": "8b8f5f14c16d5ec1810da558a19b259b90a16747d28ba32132f65345622d43ad"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
+      "bytes": 1368542,
+      "sha256": "92a0d94162975d64d3fd4a576bc1b2870491b77eec8e43e93c8390478da9a67a"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
+      "bytes": 68967,
+      "sha256": "f1d524109a3f387747b6c78de1552bff081e42f4155d1f0a9c34222156ee500c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.uasset",
+      "bytes": 69177,
+      "sha256": "99c1ddad2359d7fbfeb2b91efe287cb64c813c8b259ec48508a6b960a31d8179"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.uasset",
+      "bytes": 68911,
+      "sha256": "0e8b40fe53b406ca11437ccad88c89f19853543f5d2f0a0ceeb02f1d6e55a598"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold.uasset",
+      "bytes": 69512,
+      "sha256": "b998d498cc40b92e7cb3682bed39a1e374ed9fc6aacdb0b4f81936323a1af38e"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.uasset",
+      "bytes": 69361,
+      "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective.uasset",
+      "bytes": 133146,
+      "sha256": "324ae33c48c5ffa08b67a6ecf12a55e2a638382acf2b2f8f0f9b5dcf68caf29e"
+    },
+    {
+      "path": "feedback-graph.dsl",
+      "bytes": 136,
+      "sha256": "73fb86cd9170ee9aab9a2851f077de60b881609962559c65bfdbcd171a606bb8"
+    },
+    {
+      "path": "garden/build.json",
+      "bytes": 3649,
+      "sha256": "0b262cd304a636f6426e9f525118bb0633f52488163f1d7c366da7f2413df210"
+    },
+    {
+      "path": "garden/existing-import-reuse.json",
+      "bytes": 8944,
+      "sha256": "e491a3a707338191ad22f38d09894c94049673f1e70400256c29e083f879c263"
+    },
+    {
+      "path": "garden/layout.json",
+      "bytes": 68161,
+      "sha256": "78f11abada59f8a471360256508429cab40d16759814b8b49ac11242cede8344"
+    },
+    {
+      "path": "garden/next-ingestion-prepared.json",
+      "bytes": 6391,
+      "sha256": "d210c0b9dbe66ef37028b4a569680a52556a4ac2d52c1e66c2136755d429ac98"
+    },
+    {
+      "path": "images/after-player.png",
+      "bytes": 2465508,
+      "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
+    },
+    {
+      "path": "images/before-overview.png",
+      "bytes": 1790228,
+      "sha256": "1da8d6569844a8a3ecf41fcdb974b688acec375f350f8984aa997b8e09383359"
+    },
+    {
+      "path": "images/before-player.png",
+      "bytes": 1901562,
+      "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/gameplay-before-pickup.png",
+      "bytes": 2010969,
+      "sha256": "e227d4ac058844b916bcfc482840dce41aa6bc5fd1584a27efa6f5181e2a5a41"
+    },
+    {
+      "path": "images/gameplay-pickup-feedback.png",
+      "bytes": 1990757,
+      "sha256": "8348964607b7cc84e6c85d86f8aef3fafd990e005d266a19512eb8d05b36b886"
+    },
+    {
+      "path": "images/garden-r4-overview.png",
+      "bytes": 1290484,
+      "sha256": "40fa1db865c7fde2785ba57aba90008a27887161d881bf920d288f45be71f4ff"
+    },
+    {
+      "path": "images/garden-r4-player.png",
+      "bytes": 2571053,
+      "sha256": "85f12fdebbbdc11aee468a17bc5a756fbf2eede33299614ece75656fc9372f02"
+    },
+    {
+      "path": "images/garden-r4-route.png",
+      "bytes": 2651842,
+      "sha256": "8f06b2162d0aca3a19ce429eb56fbd49f9f32194268478c014618fd8bcb0fc5a"
+    },
+    {
+      "path": "images/presentation-r2/after-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "images/presentation-r2/after-player.png",
+      "bytes": 2381891,
+      "sha256": "afa4e6e59110ca9dfd63eb5b1ce21eea55786626d0ed74d78a66f1b930d5334e"
+    },
+    {
+      "path": "images/presentation-r2/after-route.png",
+      "bytes": 2546560,
+      "sha256": "7056edaf0cfd3e5011f5eb2089e0c86a312f82fdb8b7ebe492b4a39c92a5b78d"
+    },
+    {
+      "path": "images/presentation-r2/before-overview.png",
+      "bytes": 1314120,
+      "sha256": "c1ac8246a9c43911a08f938aefa01235a7d14e1a02101a2ea4ea3aaf28fbf76f"
+    },
+    {
+      "path": "images/presentation-r2/before-player.png",
+      "bytes": 2524451,
+      "sha256": "69664c56c3559b19d0c302b51064f09262279d0eb55a76280451be09daed721c"
+    },
+    {
+      "path": "images/presentation-r2/before-route.png",
+      "bytes": 2671168,
+      "sha256": "daf100b309e3ca8c75d80a8c2f787ca909911afd6e35ad034f0bc03e5dda96e5"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-immediate.png",
+      "bytes": 2729999,
+      "sha256": "04a6955dacec980138fa22836b5f8e4b1eb972fda534737ecf4c41343c20cb52"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-persistent.png",
+      "bytes": 2583021,
+      "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a"
+    },
+    {
+      "path": "lantern-commons-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "native-proof.json",
+      "bytes": 5201,
+      "sha256": "4632ef91d769795e4edaefe7daf96d9bad52e21c39e4d3119c59860eaa1d48bc"
+    },
+    {
+      "path": "presentation-r2-proof.json",
+      "bytes": 10906,
+      "sha256": "f8da7f80fe6845d10fb28dc67f7b6c489e06eb5c48f68c5058490d65415fd4a4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4863,
+      "sha256": "34f1b68f16157ff16edad0ee8a5f9ff96229261a1a9ccaacf7584f597db75bf1"
+    },
+    {
+      "path": "ui/build.json",
+      "bytes": 2668,
+      "sha256": "aedda4ddbf0de10cbb0036de0b15b13dcec4bfc2f3843ae0b9090a54b8fd4477"
+    },
+    {
+      "path": "ui/host.dsl",
+      "bytes": 626,
+      "sha256": "6e6abaa73fabaf92f5a084833e042b244e5d56842243655fc0393458869858f1"
+    },
+    {
+      "path": "ui/objective-events.dsl",
+      "bytes": 336,
+      "sha256": "25830afa464c8b6a6263fcce5887e9dc69976d2909431b5b59f9ad8c81e9fd37"
+    },
+    {
+      "path": "ui/objective-refresh.dsl",
+      "bytes": 1428,
+      "sha256": "c646e6f5313e0557c459b883e1f536e75106ac69a15944f492e65c42c8ae1cf7"
+    }
+  ]
 }

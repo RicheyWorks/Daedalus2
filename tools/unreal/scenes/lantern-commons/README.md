@@ -42,3 +42,36 @@ new gameplay framework, project/input setting change or installation was added.
 The established 17-image visual benchmark board and Adopt Me minimum still apply.
 Final art style remains undecided. This is independent Daedalus work, not prebuilt
 game-jam content.
+
+## Garden production pass R4
+
+Three furnished gathering courts now give Shade Grove, Stone Overlook and the
+Lantern destination distinct arrival spaces: six benches, ten planters, fourteen
+lanterns, forty-five cobble tiles, two welcome signs and a garden sundial. Fourteen
+meadow pockets add 126 grass clumps, 42 moss groups and 84 flowering plants across
+owned green ground patches, concentrated around landmarks and bare boundaries.
+The main roaming lanes remain open. Imported prop sizes were read before placement;
+benches and lanterns stay near character scale.
+
+The pass adds 344 actors for 487 current scene actors. The 104 x 105 m physical
+ground, 273 original floor instances, existing movement/input, peaceful rule,
+chart and R3 Explorer Log are retained. New scenery has no collision; it does not
+replace or resize the physical floor. Only the owned map was saved. No new source
+asset was imported, and original mesh/material packages were not edited or saved.
+
+Current editor captures are `images/garden-r4-player.png`,
+`images/garden-r4-route.png` and `images/garden-r4-overview.png`. They await
+independent visual review; this is not a claim that the benchmark is met. Current
+layout and build facts are in `garden/layout.json` and `garden/build.json`.
+No Play loop, regression suite or reload proof was repeated for this content pass.
+
+The parallel file-only inventory prepared three flowering pond sources in
+`garden/next-ingestion-prepared.json`; all three remain HELD, with zero imports.
+The existing unattended receiver is Coupler-specific. Do not weaken it or replay
+its consumed witness to import these plants. The next coherent production batch
+is a small sheltered water-garden destination, reusing existing content first,
+with compatible source admission required before adding the three new plants.
+
+Finished batches should hand off the next bounded production slice promptly.
+Model-capacity interruptions require checkpoint reconciliation, not duplicated
+placements, another writer or an assumption that Unreal crashed.
