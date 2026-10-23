@@ -116,7 +116,7 @@ function releaseSource(src) { if (SRC[src]) for (const k of LOGICAL) setHeld(src
 const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
   KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
 window.addEventListener("keydown", e => {
-  if (typeof PANEL !== "undefined" && PANEL && PANEL.isOpen()) return;
+  if (settingsTransition || (typeof PANEL !== "undefined" && PANEL && PANEL.isOpen())) return;
   if (PAD && PAD.binding() && e.code === "Escape") { e.preventDefault(); return PAD.cancelBind(); }
   const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) setHeld("kb", k, true); unlockAudio();
 });
@@ -124,7 +124,7 @@ window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) setHeld
 window.addEventListener("blur", () => Object.keys(SRC).forEach(releaseSource));     /* focus loss releases everything held */
 document.querySelectorAll("#pad button").forEach(b => {
   const k = b.dataset.k;
-  const down = e => { e.preventDefault(); if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
+  const down = e => { e.preventDefault(); if (settingsTransition || (PANEL && PANEL.isOpen())) return; if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
   const up = e => { e.preventDefault(); setHeld("touch", k, false); b.classList.remove("held"); };
   b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
 });
@@ -148,7 +148,7 @@ const PAD = window.DaedalusPad ? DaedalusPad.create({
   bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
     if (e.type === "down" || e.type === "up") {
-      if (PANEL && PANEL.isOpen()) return;                  /* the panel reads the pad itself */
+      if (settingsTransition || (PANEL && PANEL.isOpen())) return;   /* the panel reads the pad itself */
       if (e.action === "select" && e.type === "down") { openSettings(); return; }
       const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return;
     }
@@ -158,8 +158,13 @@ const PAD = window.DaedalusPad ? DaedalusPad.create({
     if (e.type === "disconnect") toast(e.pad.name + " disconnected");
   },
 }) : null;
+let settingsTransition = false, settingsFramePaused = false;
+function clearSettingsInput() {
+  Object.keys(SRC).forEach(releaseSource); LOGICAL.forEach(hit);
+  settingsTransition = true;                              /* the panel's closing choice never becomes a game action */
+}
 const PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
-  onOpen: () => { Object.keys(SRC).forEach(releaseSource); }, onClose: () => { cv.focus({ preventScroll: true }); } }) : null;
+  onOpen: clearSettingsInput, onClose: () => { clearSettingsInput(); cv.focus({ preventScroll: true }); } }) : null;
 /* A small notice in the corner: a controller arriving or leaving, a save, a bind finished. */
 let toastTimer = 0;
 function toast(title, sub) {
@@ -1661,7 +1666,7 @@ function drawBattle() {
   if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, W, 180);
   for (const f of B.foes) {
     if (f.hp <= 0 && !(B.flash[f.key + f.x] > 0)) continue;
-    const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
+    const fl = B.flash[f.key + f.x] || 0; if (fl > 0 && !settingsFramePaused) B.flash[f.key + f.x] = fl - 1 / 60;
     if (fl > 0 && Math.floor(fl * 30) % 2) continue;
     spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
     const ft = f.hp > 0 ? tags(f) : []; if (ft.length) { const k = ft[Math.floor(B.t / 1.2) % ft.length]; text(STATUS[k].tag, f.x + f.size / 2 - tw(STATUS[k].tag) / 2, f.y + f.size - 6, STATUS[k].color, "#000000"); }
@@ -1814,7 +1819,7 @@ function drawTitle() {
   text(M.credit, M.credit_xy[0] - tw(M.credit), M.credit_xy[1], "#8080a8", null);
 }
 cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */
-  if (mode !== "title" || !D || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "title" || !D || settingsTransition || (PANEL && PANEL.isOpen())) return;
   const b = cv.getBoundingClientRect(), x = (e.clientX - b.left) * W / b.width, y = (e.clientY - b.top) * H / b.height, M = D.title.menu_geometry;
   const i = Math.floor((y - M.item_y + 3) / M.item_step);
   if (x >= M.window[0] && x <= M.window[0] + M.window[2] && i >= 0 && i < TITLE_ITEMS.length) { titleIdx = i; titleChoose(i); }
@@ -1891,12 +1896,12 @@ function nameAt(px, py) {                                 /* canvas pixel -> gri
   return r >= 0 && r < neRows() && c >= 0 && c < 10 && neCell(r, c) ? [r, c] : null;
 }
 cv.addEventListener("pointerdown", e => {
-  if (mode !== "name" || !nameEntry || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "name" || !nameEntry || settingsTransition || (PANEL && PANEL.isOpen())) return;
   const b = cv.getBoundingClientRect(), at = nameAt((e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height);
   if (at) { nameEntry.r = at[0]; nameEntry.c = at[1]; neActivate(); }
 });
 window.addEventListener("keydown", e => {                 /* typing straight in */
-  if (mode !== "name" || !nameEntry || (PANEL && PANEL.isOpen()) || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (mode !== "name" || !nameEntry || settingsTransition || (PANEL && PANEL.isOpen()) || e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
   if (k === " ") { stop(); neType("SP"); return; }
@@ -1952,21 +1957,26 @@ function drawGameOver() {
 let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
 function frame(now) {
   requestAnimationFrame(frame);
-  if (PAD) PAD.poll(); menuRepeat(now);
-  const dt = Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
-  if (fade > 0) {
-    fade -= dt * 3;
-    if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
-    if (fade < 0) fade = 0;
-  } else if (mode === "title") titleTick(dt);
-  else if (mode === "name" && nameEntry) nameTick(dt);
-  else if (mode === "ending" && ending) endingTick(dt);
-  else if (mode === "field") fieldTick(dt);
-  else if (mode === "menu") menuTick();
-  else if (mode === "shop") shopTick();
-  else if (mode === "fish" && fishing) fishTick(dt);
-  else if (mode === "battle") battleTick(dt);
-  else if (mode === "gameover") gameOverTick(dt);
+  if (PAD) PAD.poll();
+  const paused = settingsFramePaused = settingsTransition || (PANEL && PANEL.isOpen()); settingsTransition = false;
+  const dt = paused ? 0 : Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
+  if (paused) LOGICAL.forEach(hit);
+  else {
+    menuRepeat(now);
+    if (fade > 0) {
+      fade -= dt * 3;
+      if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
+      if (fade < 0) fade = 0;
+    } else if (mode === "title") titleTick(dt);
+    else if (mode === "name" && nameEntry) nameTick(dt);
+    else if (mode === "ending" && ending) endingTick(dt);
+    else if (mode === "field") fieldTick(dt);
+    else if (mode === "menu") menuTick();
+    else if (mode === "shop") shopTick();
+    else if (mode === "fish" && fishing) fishTick(dt);
+    else if (mode === "battle") battleTick(dt);
+    else if (mode === "gameover") gameOverTick(dt);
+  }
   for (const k in pressed) if (fade > 0) pressed[k] = false;
   for (const k of ["up", "down", "left", "right"]) pressed[k] = false;   /* a direction tap is for this frame only, never a stale menu move */
   for (const k of ["a", "b", "start"]) if (pressed[k] && now - (pressedAt[k] || 0) > 150) pressed[k] = false;   /* buttons buffer 150 ms (a press mid-step still lands), never longer */
@@ -2048,7 +2058,7 @@ async function boot() {
 }
 
 window.addEventListener("keydown", e => {
-  if (!PANEL || PANEL.isOpen()) return;
+  if (!PANEL || settingsTransition || PANEL.isOpen()) return;
   if (e.code === "F1" || e.code === "F10" || (e.code === "Escape" && mode === "title")) { e.preventDefault(); openSettings(); }
 });
 

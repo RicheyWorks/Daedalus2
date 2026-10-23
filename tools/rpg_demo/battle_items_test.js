@@ -43,7 +43,7 @@ function session(productionSource = source) {
   const c = {
     D: { party: clone(partyData), spells: clone(spells), rects: { backdrops: {}, sprites: {}, spells: {} } },
     GEAR: clone(gear), party: [], reserve: [], bag: {}, gold: 237,
-    map: { kind: "town" }, mode: "battle", W: 320, H: 224, fade: 0, fadeCb: null,
+    map: { kind: "town" }, mode: "battle", W: 320, H: 224, fade: 0, fadeCb: null, settingsFramePaused: false,
     state: { minute: 480, day: 1, steps: 0 }, Math: fixedMath,
     rnd: (a, b) => (a + b) / 2, ri: a => a, clamp: (n, low, high) => Math.max(low, Math.min(high, n)),
     hit: key => { const v = pressed.has(key); pressed.delete(key); return v; },
