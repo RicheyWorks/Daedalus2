@@ -154,3 +154,15 @@ This integration branch also explicitly includes the handed-off PR415 pond profi
 commits (7c12bc6, 3f82157, cb049a1) and PR416 AGENTS guidance (7959531). Their original
 source-owner PRs remain separate and unmerged; none was overwritten. The new native
 inventory route remains blocked at its protected-context guard, with zero imports.
+
+## Native pond intake — three admitted assets
+
+The previous pond intake hold is resolved for this manual native workflow:
+3 imported, 3 saved, 3 admitted, 0 held, 0 placed. Epic's native tools imported
+the geometry; an explicit native Interchange pipeline corrected their default
+vertex-colour loss. All source palettes and triangle counts now match, and fresh
+native validation returned 3 Valid with no warnings/errors/skips. See
+`pond-native/build.json` and `pond-native/README.md` for exact history and limits.
+The historical custom wrapper context refusal remains unresolved but is not an
+ordinary native-import prerequisite. The current 722-actor Commons map stayed
+unchanged. These three assets are ready for the next Stillwater composition pass.
