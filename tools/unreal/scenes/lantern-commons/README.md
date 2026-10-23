@@ -1,45 +1,48 @@
-# Lantern Commons exploration loop
+# Lantern Commons: presentation and pickup feedback
 
-A saved 104 x 105 m peaceful scene for the existing Daedalus project. Follow the
-amber trail through Shade Grove and Stone Overlook to the Lantern chart. WASD
-and mouse use the existing Hero controls; press E near the chart to collect it.
-The native pickup/quest feedback is reused. No enemies, wallet, external service
-or new gameplay framework was added.
+The saved 104 x 105 m peaceful scene uses the existing Daedalus Hero/input and
+approved Blender floor, rocks, Willow trunk/canopy and Lantern chart. Follow the
+amber route through Shade Grove and the stepped Stone Overlook to the chart
+garden, then press E. Thirty-two paired trees, twelve new planted pockets,
+arrival pads and grouped rocks give the three destinations stronger identities.
+Continuous ground collision and generous roaming space remain intact.
 
-This scene reuses the approved cave floor, rocks and chart plus the existing
-Willow trunk/canopy pair, reviewed separately before assembly. Seventeen trees,
-three landmark groups and eighteen low pavers provide a route while retaining
-generous open running space. Five material copies live in the owned namespace;
-original assets were not edited or saved. Exposure/bloom controls are map-local.
+All four scene lights are movable. Unreal's actual diagnostic reported zero
+unbuilt light and primitive interactions, without a lighting bake or global
+render-setting changes. The saved scene clean-reloaded with 141 actors and 273
+floor instances; eight sampled route/edge collision rays passed.
 
-Actual Play covered 37.66 m across all three stops in MOVE_WALKING, with each stop
-within 35 cm of its target, full health/shields and zero enemies. E removed the
-chart. Map save/reload retained 273 floor instances and the owned material
-bindings. Eight ground rays passed. Normal stop restored encounters from 0 to 1;
-current Hero progress was not rolled back.
+One actual Play traversed 37.62 m across the three stops, all grounded and within
+37 cm of the targets, at full health/shields with zero enemies. E removed the
+owned chart child at 2.18 m. Its native EventDestroyed -> PrintString graph logged
+`LANTERN CHART COLLECTED!` and requests 18 seconds on screen. Two game-viewport
+captures were written immediately and 2.61 seconds after the interaction.
+This is development-only PrintString feedback; a shipping UMG/HUD is not claimed.
+Normal Play stop restored encounters from 0 to 1 and left all packages clean.
+Current player progress was not rolled back; originals were not edited or saved.
 
-Use the existing editor map at the manifest's world path, then press Play.
-For a compatible Daedalus checkout, copy this pack's `Content/` files to the same
-project `Content/` paths only under the normal ownership/preservation workflow;
-do not overwrite another user's work. Do not mount these files under plugin
-Content. The native classes and imported meshes listed in the manifest must
-already exist; this is not a standalone project.
+Current captures are under `images/presentation-r2/`: matched before/after
+player-height, route and overview images, plus both gameplay-success PNGs.
+Their bytes/hashes are verified, but independent pixel review is PENDING because
+the local image reader closed the executor transport. Do not equate the log or
+PNG existence with accepted readability. The parent can inspect these repository
+images directly. Earlier images/native-proof.json remain historical R1 evidence.
 
-Evidence: `images/before-player.png`, `images/after-player.png`, before/after
-overview and the two native gameplay screenshots. Camera poses match, although
-the before views include editor sprites and the after views use Game View.
-The native gameplay PNGs have verified identities but await pixel inspection:
-the image reader closed the execution transport twice. Do not claim visually
-accepted pickup feedback from file existence alone.
+Use the existing map at the manifest world path. On a compatible Daedalus checkout,
+copy only this pack's Content files to their matching project Content paths under
+normal ownership/preservation; do not overwrite other work or mount under plugin
+Content. Listed native classes/imported meshes must already exist. This is not a
+standalone project. The new child Blueprint and editable `feedback-graph.dsl`
+reuse Epic BlueprintTools; no C++/plugin/framework or installation was needed.
 
-The existing competitor board sets Adopt Me as the minimum to exceed over
-iteration. Final style remains undecided. Current floor repetition, sparse
-distant composition and utility-shaped pavers/gate still need finish; the slice
-does not claim reference-level art or production readiness.
+Reusable recipe: use BlueprintTools.create with native DaedalusStarChart parent;
+add ReceiveDestroyed; discover PrintString and its actual pins; write the supplied
+DSL, compile/save and place only in the owned map. Set the scene's single formerly
+stationary destination light to Movable, preserve the other three movable lights,
+then save/reload and inspect DumpUnbuiltLightInteractions. Verify actual E pickup
+through input, retain screenshots and normally stop Play with encounter restoration.
 
-Two original cave-floor material instances remain dirty in editor memory from
-the engine's automatic instancing-usage flags. They were neither saved nor
-discarded. The editor must preserve that state; never blanket-save or force-close
-it. The scene's encounter rule assumes one serialized Play world. General
-kid-friendly combat balance remains design-only. This is independent Daedalus
-work, not game-jam content.
+The established 17-image benchmark board and Adopt Me minimum remain the quality
+bar to exceed over iteration. Final style is undecided. Visual finish, repetition,
+destination clarity and message readability await review; this is not reference-
+quality, production visual/performance acceptance or prebuilt game-jam content.

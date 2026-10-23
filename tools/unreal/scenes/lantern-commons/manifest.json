@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v2",
+  "schema": "daedalus.playable-scene-receipt.v3",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -65,25 +65,29 @@
     "actual_DaedalusTarget_count": 0,
     "encounter_cvar_restored_after_normal_stop": 1,
     "current_player_progress_rolled_back": false,
-    "route_walk_metres": 37.663590798289654,
+    "route_walk_metres": 37.61549281152464,
     "route_stops": 3,
-    "largest_route_stop_error_cm": 34.74723022693983,
+    "largest_route_stop_error_cm": 36.704607391571066,
     "route_all_walking": true,
     "successful_E_pickup": true,
     "saved_reload_owned_floor_materials": true,
     "original_material_disk_hashes_unchanged": true,
-    "compute_released": true
+    "compute_released": true,
+    "feedback_hook_triggered": true,
+    "feedback_configured_seconds": 18,
+    "feedback_pixels_reviewed": false,
+    "current_packages_clean": true
   },
   "limits": [
-    "A readable exploration prototype, not final art-style approval or proof of exceeding the reference quality bar.",
-    "Editor composition images were inspected before disconnect. Final gameplay PNGs are native game-viewport captures with UI and verified hashes; pixel-level feedback/readability inspection remains pending because the local image reader closed executor transport.",
-    "Before views include editor sprites; after views use temporary Game View with the previous flag restored. Camera poses match.",
-    "Two original floor material instances remain live/dirty from automatic InstancedStaticMeshes flags. No original save/discard/revert/restart was performed.",
-    "Visible collision slab obscured the original editor captures. Its rendering was disabled while keeping physical QueryAndPhysics collision.",
-    "Voxel floor repetition, utility-shaped path/gate and sparse distant scenery remain. Decorative trees use no new gameplay collision.",
-    "No fresh-process reopen, production visual/performance/crowd acceptance or general combat tuning.",
-    "Encounter restoration assumes one serialized Play world. Hardware input was not isolated.",
-    "This is independent Daedalus work, not a prebuilt game-jam entry."
+    "Current scene and feedback captures await independent pixel review; no visual-quality acceptance is claimed.",
+    "Success feedback uses native Development|PrintString for 18 seconds. It is a development-play prototype, not a shipping HUD.",
+    "The full 104 x 105 m ground and eight sampled collision traces are preserved; this is not exhaustive collision or performance coverage.",
+    "Original saved material hashes are unchanged and current packages are clean. Earlier unsaved auto-instancing flags were not restored over saved originals after the old editor closed.",
+    "All four scene lights are movable, with zero unbuilt interactions; no project render settings or global lighting build changed.",
+    "Before/after R2 captures use the same three poses and temporary Game View with prior flags restored.",
+    "Composition and readability remain subject to the established 17-image visual benchmark board. Final art style remains undecided.",
+    "Encounter restoration assumes one serialized Play world. Hardware input was not isolated; no production combat balancing is claimed.",
+    "Independent Daedalus work, not prebuilt game-jam content."
   ],
   "landmark_groups": [
     "Shade Grove",
@@ -108,7 +112,7 @@
       500
     ]
   ],
-  "reviewed_tree_assemblies": 17,
+  "reviewed_tree_assemblies": 32,
   "route_pavers": 18,
   "owned_materials": {
     "GroundShade": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade",
@@ -122,7 +126,11 @@
     "fixed_luminance_cd_m2": 1,
     "exposure_bias": 0,
     "bloom_intensity": 0.1,
-    "destination_point_intensity": 20
+    "destination_point_intensity": 20,
+    "all_lights_movable": true,
+    "unbuilt_light_interactions": 0,
+    "unbuilt_primitive_interactions": 0,
+    "lighting_bakes": 0
   },
   "physical_proxy": {
     "render_visible": false,
@@ -140,14 +148,19 @@
       "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
     },
     {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
+      "bytes": 34414,
+      "sha256": "7850dd9873dd2c75f8688e9d47c7d95c9a3fe813c5d38290a478b917c5636510"
+    },
+    {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
       "bytes": 58791,
       "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 235608,
-      "sha256": "365e9c64c7801bfc0f27a7881b39de7b6861cf205365c9920cac618ed612d9c5"
+      "bytes": 411308,
+      "sha256": "6a5f477193ede04e3c7766394bebf0abf4154ce09cd70face62572f5760b6ff4"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -175,6 +188,11 @@
       "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
     },
     {
+      "path": "feedback-graph.dsl",
+      "bytes": 299,
+      "sha256": "399c9cfc1e764c73de8f3cfcb0117c53790048416e5e713cd7382d3afed80340"
+    },
+    {
       "path": "images/after-player.png",
       "bytes": 2465508,
       "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
@@ -200,9 +218,49 @@
       "sha256": "8348964607b7cc84e6c85d86f8aef3fafd990e005d266a19512eb8d05b36b886"
     },
     {
+      "path": "images/presentation-r2/after-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "images/presentation-r2/after-player.png",
+      "bytes": 2381891,
+      "sha256": "afa4e6e59110ca9dfd63eb5b1ce21eea55786626d0ed74d78a66f1b930d5334e"
+    },
+    {
+      "path": "images/presentation-r2/after-route.png",
+      "bytes": 2546560,
+      "sha256": "7056edaf0cfd3e5011f5eb2089e0c86a312f82fdb8b7ebe492b4a39c92a5b78d"
+    },
+    {
+      "path": "images/presentation-r2/before-overview.png",
+      "bytes": 1314120,
+      "sha256": "c1ac8246a9c43911a08f938aefa01235a7d14e1a02101a2ea4ea3aaf28fbf76f"
+    },
+    {
+      "path": "images/presentation-r2/before-player.png",
+      "bytes": 2524451,
+      "sha256": "69664c56c3559b19d0c302b51064f09262279d0eb55a76280451be09daed721c"
+    },
+    {
+      "path": "images/presentation-r2/before-route.png",
+      "bytes": 2671168,
+      "sha256": "daf100b309e3ca8c75d80a8c2f787ca909911afd6e35ad034f0bc03e5dda96e5"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-immediate.png",
+      "bytes": 2729999,
+      "sha256": "04a6955dacec980138fa22836b5f8e4b1eb972fda534737ecf4c41343c20cb52"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-persistent.png",
+      "bytes": 2583021,
+      "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a"
+    },
+    {
       "path": "lantern-commons-overview.png",
-      "bytes": 1317881,
-      "sha256": "0ac83beb416d3e9f7587fd4c2ea111f43e8b8732abc0d6de4585107db23caeb8"
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
     },
     {
       "path": "native-proof.json",
@@ -210,9 +268,16 @@
       "sha256": "4632ef91d769795e4edaefe7daf96d9bad52e21c39e4d3119c59860eaa1d48bc"
     },
     {
+      "path": "presentation-r2-proof.json",
+      "bytes": 10906,
+      "sha256": "f8da7f80fe6845d10fb28dc67f7b6c489e06eb5c48f68c5058490d65415fd4a4"
+    },
+    {
       "path": "README.md",
-      "bytes": 2737,
-      "sha256": "3ca08052e60e3094ac1b1b5b1b3c2172653fc891895a1850e1caa6f4bfa7933d"
+      "bytes": 3232,
+      "sha256": "db296ad262693c0d5dc51c935bb240252ff282165c7504990b3bb42dfbc97f55"
     }
-  ]
+  ],
+  "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
+  "actor_count": 141
 }
