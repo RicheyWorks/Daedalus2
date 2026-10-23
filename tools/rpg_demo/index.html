@@ -527,16 +527,17 @@ function dialogTick(dt) {
     const before = Math.floor(dlg.shown);
     dlg.shown = Math.min(page.length, dlg.shown + dt * 45);
     if (Math.floor(dlg.shown / 3) > Math.floor(before / 3)) sfx("BLIP:" + ((dlg.voice + Math.floor(dlg.shown) % 3) % 12));
-    if (hit("a")) dlg.shown = page.length;
+    if (hit("a")) { dlg.shown = page.length; hit("b"); }
     return;
   }
   if (dlg.choice) {
+    if (hit("b")) { sfx("TICK"); const c = dlg.choice; hit("a"); dlg = null; c.then(1); return; }
     if (hit("up") || hit("down")) { dlg.choice.idx = 1 - dlg.choice.idx; sfx("TICK"); }
     if (hit("a")) { sfx("PICK"); const c = dlg.choice, i = c.idx; dlg = null; c.then(i); }
-    else if (hit("b")) { sfx("TICK"); const c = dlg.choice; dlg = null; c.then(1); }
     return;
   }
-  if (hit("a") || hit("b")) {
+  const confirm = hit("a"), back = hit("b");
+  if (confirm || back) {
     if (dlg.i < dlg.pages.length - 1) { dlg.i++; dlg.shown = 0; sfx("PAGE"); }
     else { const t = dlg.then; dlg = null; t && t(); }
   }
