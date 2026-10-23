@@ -406,12 +406,18 @@ function dark() {                                               /* 0 at noon-ish
 /* ---------- the airship (world map only) ----------
    The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
-   to land on a tile the map marks airship_lands. It stays where you land; walk onto it to fly again. */
+   to land on a tile the map marks airship_lands. It stays where you land; confirm there or walk onto it to fly again. */
 const AIR_SPEED = 2;
 function airUnlocked() { return !!(D && D.dungeons[0] && D.dungeons[0].boss_data && state.beaten.has(D.dungeons[0].boss_data.name)); }
 function airship() {
   if (!state.air) { const p = find(D.world, "AirshipPad"); state.air = p ? { x: p[0], y: p[1], aboard: false } : null; }
   return state.air;
+}
+function boardAirship() {
+  if (map.kind !== "world" || !airUnlocked()) return false;
+  const a = airship();
+  if (!a || a.aboard || a.x !== P.x || a.y !== P.y) return false;
+  a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO LAND ON OPEN GROUND"); return true;
 }
 const flying = () => !!(map && map.kind === "world" && state.air && state.air.aboard);
 /* Where a saved skiff may stay parked: on landable ground the party can walk to from the Town. CONTINUE starts on
@@ -567,6 +573,7 @@ const LINES = {
 };
 const VOICE = { Guard: 2, Merchant: 7, Child: 11, Elder: 0, Farmer: 4, Innkeeper: 6, Sailor: 3, Mage: 9, Ruler: 1 };
 function interact() {
+  if (map.kind === "world" && boardAirship()) return;
   const [dx, dy] = DIRS[P.dir], tx = P.x + dx, ty = P.y + dy;
   let n = npcAt(tx, ty), t = at(tx, ty);
   if (!n && t === "Counter") n = npcAt(tx + dx, ty + dy);
@@ -731,7 +738,7 @@ function stepDone() {
     const a = airship();
     if (a && a.aboard) return;                                                   /* flying: no landmarks, no battles */
     if (openCache(cacheAt(P.x, P.y))) return;
-    if (a && a.x === P.x && a.y === P.y) { a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", "A: LAND ON OPEN GROUND"); return; }
+    if (boardAirship()) return;
   }
   if (map.kind === "world" && t === "AirshipPad" && !airUnlocked()) {
     sfx("LOCKED"); return say(["AN AIRSHIP DOCK. THE PRISM SKIFF'S ENVELOPE HANGS SLACK.", "IT NEEDS A WARDEN'S SHARD TO LIFT."]);
@@ -791,7 +798,7 @@ function fieldTick(dt) {
 function land() {
   const a = airship(), t = at(P.x, P.y), wt = D.world_tiles[t] || {};
   if (!wt.airship_lands) { sfx("BUMP"); toast("NO PLACE TO LAND", t.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase()); return; }
-  a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", "WALK ONTO THE SKIFF TO FLY AGAIN");
+  a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO BOARD AGAIN HERE");
   openCache(cacheAt(P.x, P.y));
 }
 function drawAirship(ox, oy) {
