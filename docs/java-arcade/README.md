@@ -45,6 +45,11 @@ payments or multiplayer authentication.
    a selected board, or open/resume an explicit own game ID;
    select cells and enter/erase digits, undo/redo, save or refresh. Hint is an
    explicit button and may spend the Java account's existing virtual gems.
+   A solved or expired board shows Java's result with Save, Refresh, Review board
+   and New classic puzzle (same difficulty). Save explicitly before starting
+   another puzzle. Enter / pad A from the finished board focuses result controls;
+   arrows / D-pad still review cells. A result is revealed once after a reconciled
+   board arrives; refreshing or saving does not pull the view away from review.
    Blackjack: create a session, choose Java-approved chips, deal, hit, stand,
    double, split, surrender, choose insurance, or end the session. Credits are
    simulated, initially 1000, and cannot be cashed out.

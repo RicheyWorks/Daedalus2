@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "DaedalusJavaArcade.h"
 #include "Fonts/SlateFontInfo.h"
+#include "InputCoreTypes.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Input/SComboBox.h"
 
@@ -20,11 +21,14 @@ public:
     void Construct(const FArguments& Args);
     virtual bool SupportsKeyboardFocus() const override { return true; }
     virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
+    virtual FReply OnKeyUp(const FGeometry& Geometry, const FKeyEvent& Event) override;
     virtual void Tick(const FGeometry& AllottedGeometry, const double CurrentTime, const float DeltaTime) override;
     bool OwnsUserFocus(int32 UserIndex) const;
 
 private:
     TSharedRef<SWidget> SudokuPanel();
+    TSharedRef<SWidget> SudokuResult();
+    static bool HasSudokuResult(const FDaedalusJavaArcadeState& Snapshot);
     TSharedRef<SWidget> BlackjackPanel();
     TSharedRef<SWidget> Button(const TCHAR* Label, TFunction<void()> Action, TFunction<bool()> Enabled = [] { return true; });
     FDaedalusJavaArcadeState State() const;
@@ -50,6 +54,7 @@ private:
     FReply Configure();
     void FocusBoard(bool bRevealGame = true);
     void RevealSelectedCell();
+    void UpdateSudokuResultReveal();
     void UpdateBlackjackReveal();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;
     TSharedPtr<SEditableTextBox> UsernameBox;
@@ -58,6 +63,12 @@ private:
     TSharedPtr<SScrollBox> CabinetScroll;
     TSharedPtr<STextBlock> CabinetStatus;
     TArray<TSharedPtr<SWidget>> SudokuCellWidgets;
+    TSharedPtr<SWidget> SudokuResultPanel;
+    TSharedPtr<SWidget> SudokuResultAction;
+    TSharedPtr<SWidget> SudokuReviewAction;
+    FKey SudokuResultFocusKey;
+    bool bSudokuResultRevealArmed = false;
+    FString RevealedSudokuResultSession;
     TArray<TSharedPtr<SWidget>> BlackjackHandWidgets;
     TSharedPtr<STextBlock> BlackjackDealerRow;
     TSharedPtr<STextBlock> BlackjackResultRow;

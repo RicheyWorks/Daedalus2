@@ -79,6 +79,8 @@ FReply SDaedalusJavaArcade::Configure()
     SecretBox->SetText(FText::GetEmpty());
     if (UsernameBox.IsValid()) UsernameBox->SetText(FText::GetEmpty());
     SelectedSavedGameId.Reset();
+    bSudokuResultRevealArmed = false;
+    RevealedSudokuResultSession.Reset();
     bBlackjackRevealPending = false;
     bBlackjackRevealArmed = false;
     bBlackjackNeedsSyncRevealed = false;
@@ -101,6 +103,7 @@ FText SDaedalusJavaArcade::StatusText() const
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
 {
+    const auto EditingVisibility = [this] { return HasSudokuResult(State()) ? EVisibility::Collapsed : EVisibility::Visible; };
     auto Starts = SNew(SHorizontalBox);
     for (int32 Difficulty = 1; Difficulty <= 5; ++Difficulty)
     {
@@ -138,12 +141,16 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Grid]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
         [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectionText).AutoWrapText(true)]
-        + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Digits]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[SudokuResult()]
+        + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)
+        [SNew(SBox).Visibility_Lambda(EditingVisibility)[Digits]]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
-        [SNew(STextBlock).Text(FText::FromString(TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close."))).AutoWrapText(true)]
+        [SNew(STextBlock).Text_Lambda([this] { return FText::FromString(HasSudokuResult(State())
+            ? TEXT("Arrows / D-pad: review cells. Enter / pad A: result actions. F5 / Start: save result to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close.")
+            : TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close.")); }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
-            SNew(SHorizontalBox)
+            SNew(SHorizontalBox).Visibility_Lambda(EditingVisibility)
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Undo"), [this] { if (Game.IsValid()) Game->SudokuUndo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Redo"), [this] { if (Game.IsValid()) Game->SudokuRedo(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
@@ -202,7 +209,75 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)[SAssignNew(ResumeBox, SEditableTextBox).HintText(FText::FromString(TEXT("Saved Java game ID")))]
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { if (Game.IsValid() && ResumeBox.IsValid()) Game->ResumeSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
         ]
-        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)];
+        + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { return FText::FromString(TEXT("Game ID: ") + State().SessionId); }).AutoWrapText(true)];
+}
+bool SDaedalusJavaArcade::HasSudokuResult(const FDaedalusJavaArcadeState& Snapshot)
+{
+    return Snapshot.Game == EDaedalusJavaGame::Sudoku && !Snapshot.bRemoteClosed && !Snapshot.SessionId.IsEmpty()
+        && Snapshot.Cells.Num() == 81 && Snapshot.Givens.Num() == 81 && (Snapshot.bSolved || Snapshot.bTimeUp);
+}
+TSharedRef<SWidget> SDaedalusJavaArcade::SudokuResult()
+{
+    // A terminal board cannot accept moves, but its owner can still save the result.
+    const auto CanKeepResult = [this]
+    {
+        const auto S = State();
+        return Game.IsValid() && Game->Game == EDaedalusJavaGame::Sudoku && HasSudokuResult(S)
+            && S.bReady && S.bOwner && !S.bBusy && !S.bNeedsSync;
+    };
+    auto Result = SNew(SBorder).Padding(12)
+        .BorderImage(FCoreStyle::Get().GetBrush("WhiteBrush"))
+        .BorderBackgroundColor(FLinearColor(0.06f, 0.16f, 0.20f, 1.f))
+        .Visibility_Lambda([this] { return HasSudokuResult(State()) ? EVisibility::Visible : EVisibility::Collapsed; })
+        [
+            SNew(SVerticalBox)
+            + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+            [SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Bold", 22)).Text_Lambda([this] { return FText::FromString(State().bSolved ? TEXT("Puzzle complete") : TEXT("Time's up")); })]
+            + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+            [SNew(STextBlock).Text_Lambda([this]
+            {
+                const auto S = State();
+                return FText::FromString(FString::Printf(TEXT("Score %lld  ·  Moves %lld  ·  Hints %lld  ·  Elapsed %lld s\nSave this result to Java before starting another puzzle."), S.Score, S.MoveCount, S.HintCount, S.ElapsedSeconds));
+            }).AutoWrapText(true)]
+            + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+            [SNew(STextBlock).Text_Lambda([this]
+            {
+                const auto S = State();
+                return FText::FromString(S.bNeedsSync ? TEXT("Refresh to check the current result before saving or starting another puzzle. ") + S.Message : S.Status + TEXT(" — ") + S.Message);
+            }).AutoWrapText(true)]
+            + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+                [SAssignNew(SudokuResultAction, SButton).Text(FText::FromString(TEXT("Save result to Java"))).IsEnabled_Lambda(CanKeepResult)
+                    .OnClicked_Lambda([this] { RevealedSudokuResultSession = State().SessionId; if (Game.IsValid()) Game->SaveSudokuGame(); FocusBoard(false); return FReply::Handled(); })]
+                + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+                [SNew(SButton).Text(FText::FromString(TEXT("Refresh result")))
+                    .IsEnabled_Lambda([this] { const auto S = State(); return Game.IsValid() && HasSudokuResult(S) && !S.bBusy; })
+                    .OnClicked_Lambda([this] { RevealedSudokuResultSession = State().SessionId; if (Game.IsValid()) Game->RefreshSnapshot(); FocusBoard(false); return FReply::Handled(); })]
+            ]
+            + SVerticalBox::Slot().AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+                [SNew(SButton).Text(FText::FromString(TEXT("New classic puzzle")))
+                    .IsEnabled_Lambda([this, CanKeepResult] { return CanKeepResult() && Game->HasCredentials(); })
+                    .OnClicked_Lambda([this, CanKeepResult]
+                    {
+                        if (CanKeepResult() && Game->HasCredentials())
+                        {
+                            const int32 Difficulty = State().Difficulty;
+                            if (Game->StartSudokuGame(Difficulty)) FocusBoard();
+                        }
+                        return FReply::Handled();
+                    })]
+                + SHorizontalBox::Slot().AutoWidth()
+                [SAssignNew(SudokuReviewAction, SButton).Text(FText::FromString(TEXT("Review board")))
+                    .OnClicked_Lambda([this] { RevealedSudokuResultSession = State().SessionId; FocusBoard(); return FReply::Handled(); })]
+            ]
+        ];
+    SudokuResultPanel = Result;
+    return Result;
 }
 void SDaedalusJavaArcade::RebuildSavedGames()
 {
@@ -440,7 +515,14 @@ FSlateColor SDaedalusJavaArcade::CellColor(int32 Index) const
     if (SelectedCell == Index) return FLinearColor(0.2f, 0.5f, 0.8f, 1.f);
     return S.Givens.IsValidIndex(Index) && S.Givens[Index] ? FLinearColor(0.3f, 0.35f, 0.4f, 1.f) : FLinearColor(0.15f, 0.2f, 0.25f, 1.f);
 }
-FReply SDaedalusJavaArcade::SelectCell(int32 Index) { SelectedCell = FMath::Clamp(Index, 0, 80); FocusBoard(); return FReply::Handled(); }
+FReply SDaedalusJavaArcade::SelectCell(int32 Index)
+{
+    SelectedCell = FMath::Clamp(Index, 0, 80);
+    const auto S = State();
+    if (HasSudokuResult(S)) RevealedSudokuResultSession = S.SessionId;
+    FocusBoard();
+    return FReply::Handled();
+}
 bool SDaedalusJavaArcade::CanEditCell() const
 {
     const auto S = State();
@@ -451,7 +533,11 @@ void SDaedalusJavaArcade::SubmitCellValue(int32 Value)
 {
     if (Value < 0 || Value > 9) return;
     if (Value > 0) SelectedDigit = Value;
-    if (CanEditCell()) Game->SubmitSudokuMove(SelectedCell / 9, SelectedCell % 9, Value);
+    if (CanEditCell())
+    {
+        bSudokuResultRevealArmed = true;
+        Game->SubmitSudokuMove(SelectedCell / 9, SelectedCell % 9, Value);
+    }
     // Keep the cursor and visible value until Java reconciles; never queue or project an edit.
 }
 FText SDaedalusJavaArcade::SelectionText() const
@@ -460,7 +546,7 @@ FText SDaedalusJavaArcade::SelectionText() const
     if (!S.Cells.IsValidIndex(SelectedCell) || !S.Givens.IsValidIndex(SelectedCell))
         return FText::FromString(TEXT("Connect an account, then choose a difficulty or resume a saved game."));
     FString Text = FString::Printf(TEXT("Row %d, column %d · Selected digit %d · "), SelectedCell / 9 + 1, SelectedCell % 9 + 1, SelectedDigit);
-    if (S.Givens[SelectedCell]) Text += FString::Printf(TEXT("Fixed clue %d. Choose another cell to enter a number."), S.Cells[SelectedCell]);
+    if (S.Givens[SelectedCell]) Text += FString::Printf(TEXT("Fixed clue %d.%s"), S.Cells[SelectedCell], S.bCanAct ? TEXT(" Choose another cell to enter a number.") : TEXT(""));
     else if (S.Cells[SelectedCell]) Text += FString::Printf(TEXT("Entry %d.%s"), S.Cells[SelectedCell], S.bCanAct ? TEXT(" Replace or erase it.") : TEXT(""));
     else
     {
@@ -490,12 +576,15 @@ void SDaedalusJavaArcade::RevealSelectedCell()
 }
 void SDaedalusJavaArcade::FocusBoard(bool bRevealGame)
 {
+    SudokuResultFocusKey = FKey();
     if (Game.IsValid() && FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
     {
         FSlateApplication::Get().SetUserFocus(Game->GetSlateUserIndex(), SharedThis(this), EFocusCause::SetDirectly);
         if (bRevealGame)
         {
             RevealSelectedCell();
+            bSudokuResultRevealArmed = Game->Game == EDaedalusJavaGame::Sudoku;
+            UpdateSudokuResultReveal();
             bBlackjackRevealPending = Game->Game == EDaedalusJavaGame::Blackjack;
             bBlackjackRevealArmed = bBlackjackRevealPending;
             UpdateBlackjackReveal();
@@ -505,7 +594,23 @@ void SDaedalusJavaArcade::FocusBoard(bool bRevealGame)
 void SDaedalusJavaArcade::Tick(const FGeometry& AllottedGeometry, const double CurrentTime, const float DeltaTime)
 {
     SCompoundWidget::Tick(AllottedGeometry, CurrentTime, DeltaTime);
+    UpdateSudokuResultReveal();
     UpdateBlackjackReveal();
+}
+void SDaedalusJavaArcade::UpdateSudokuResultReveal()
+{
+    if (!Game.IsValid() || Game->Game != EDaedalusJavaGame::Sudoku)
+    { bSudokuResultRevealArmed = false; RevealedSudokuResultSession.Reset(); return; }
+    if (!bSudokuResultRevealArmed || !CabinetScroll.IsValid() || !SudokuResultPanel.IsValid()) return;
+    const int32 UserIndex = Game->GetSlateUserIndex();
+    if (UserIndex == INDEX_NONE || !HasUserFocus(UserIndex).IsSet()) return;
+    const auto S = State();
+    // Reveal a reconciled finish once. Busy/refresh states retain the marker so review stays put.
+    // Configure disarms this observer even when invalid credentials leave the old board intact.
+    if (!HasSudokuResult(S) || !S.bReady || !S.bOwner || S.bBusy || S.bNeedsSync
+        || RevealedSudokuResultSession == S.SessionId) return;
+    CabinetScroll->ScrollDescendantIntoView(SudokuResultPanel, false, EDescendantScrollDestination::IntoView, 8.f);
+    RevealedSudokuResultSession = S.SessionId;
 }
 void SDaedalusJavaArcade::UpdateBlackjackReveal()
 {
@@ -551,6 +656,7 @@ void SDaedalusJavaArcade::UpdateBlackjackReveal()
 }
 FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event)
 {
+    if (!Event.IsRepeat()) SudokuResultFocusKey = FKey();
     if (!Game.IsValid()) return FReply::Unhandled();
     const FKey Key = Event.GetKey();
     if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Game->CloseArcade(); return FReply::Handled(); }
@@ -601,12 +707,21 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
         }
         const auto S = State();
         if (Key == EKeys::F5 || Key == EKeys::Gamepad_Special_Right)
-        { if (S.bReady && S.bOwner) Game->SaveSudokuGame();return FReply::Handled(); }
-        if (Key == EKeys::F6) { if (!S.bBusy && !S.SessionId.IsEmpty() && !S.bRemoteClosed) Game->RefreshSnapshot();return FReply::Handled(); }
+        { if (S.bReady && S.bOwner) { bSudokuResultRevealArmed = true; Game->SaveSudokuGame(); } return FReply::Handled(); }
+        if (Key == EKeys::F6) { if (!S.bBusy && !S.SessionId.IsEmpty() && !S.bRemoteClosed) { bSudokuResultRevealArmed = true; Game->RefreshSnapshot(); } return FReply::Handled(); }
         if ((Event.IsControlDown() && Key == EKeys::Z) || Key == EKeys::Gamepad_FaceButton_Top)
-        { if (S.bCanAct) Game->SudokuUndo();return FReply::Handled(); }
-        if (Event.IsControlDown() && Key == EKeys::Y) { if (S.bCanAct) Game->SudokuRedo();return FReply::Handled(); }
-        if (Key == EKeys::Enter || Key == EKeys::Gamepad_FaceButton_Bottom) { SubmitCellValue(SelectedDigit);return FReply::Handled(); }
+        { if (S.bCanAct) { bSudokuResultRevealArmed = true; Game->SudokuUndo(); } return FReply::Handled(); }
+        if (Event.IsControlDown() && Key == EKeys::Y) { if (S.bCanAct) { bSudokuResultRevealArmed = true; Game->SudokuRedo(); } return FReply::Handled(); }
+        if (Key == EKeys::Enter || Key == EKeys::Gamepad_FaceButton_Bottom)
+        {
+            if (HasSudokuResult(S))
+            {
+                // Keep repeats on the board until release; a held first press must not activate Save.
+                SudokuResultFocusKey = Key;
+            }
+            else SubmitCellValue(SelectedDigit);
+            return FReply::Handled();
+        }
         const FKey Keys[] = { EKeys::Zero, EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine };
         const FKey Pads[] = { EKeys::NumPadZero, EKeys::NumPadOne, EKeys::NumPadTwo, EKeys::NumPadThree, EKeys::NumPadFour, EKeys::NumPadFive, EKeys::NumPadSix, EKeys::NumPadSeven, EKeys::NumPadEight, EKeys::NumPadNine };
         for (int32 Value = 0; Value <= 9; ++Value) if (Key == Keys[Value] || Key == Pads[Value]) { SubmitCellValue(Value); return FReply::Handled(); }
@@ -614,7 +729,23 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
         return FReply::Unhandled();
     }
     SelectedCell = FMath::Clamp(Row, 0, 8) * 9 + FMath::Clamp(Col, 0, 8);
+    bSudokuResultRevealArmed = true;
+    if (HasSudokuResult(Board)) RevealedSudokuResultSession = Board.SessionId;
     RevealSelectedCell();
     Invalidate(EInvalidateWidgetReason::Paint);
+    return FReply::Handled();
+}
+FReply SDaedalusJavaArcade::OnKeyUp(const FGeometry& Geometry, const FKeyEvent& Event)
+{
+    if (Event.GetKey() != SudokuResultFocusKey) return FReply::Unhandled();
+    SudokuResultFocusKey = FKey();
+    if (Game.IsValid() && Game->Game == EDaedalusJavaGame::Sudoku
+        && HasUserFocus(Event.GetUserIndex()).IsSet() && HasSudokuResult(State())
+        && FSlateApplication::IsInitialized())
+    {
+        // The matching release only enters native controls. A new press is required to activate one.
+        const auto Target = SudokuResultAction.IsValid() && SudokuResultAction->IsEnabled() ? SudokuResultAction : SudokuReviewAction;
+        if (Target.IsValid()) FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), Target, EFocusCause::Navigation);
+    }
     return FReply::Handled();
 }
