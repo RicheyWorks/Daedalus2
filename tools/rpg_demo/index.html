@@ -453,6 +453,8 @@ let grids = {};
 const shardBosses = () => D.dungeons.filter(d => d.boss_data && !d.final).map(d => d.boss_data.name);
 const shardCount = () => shardBosses().filter(n => state.beaten.has(n)).length;
 const pretty = n => n.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase();
+const remainingShardHints = () => D.dungeons.filter(d => d.boss_data && !d.final && d.boss_data.shard && d.boss_data.shard !== "-" && d.boss_data.shard !== "all" && !state.beaten.has(d.boss_data.name))
+  .map(d => "THE " + pretty(d.boss_data.shard) + " SHARD: " + pretty(d.name) + ". MAP: " + pretty(d.landmark) + ".");
 const chestKey = (di, fi, x, y) => "dungeon" + di + "/" + fi + ":" + x + "," + y;
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const DIR_ROW = { down: 0, up: 1, left: 2, right: 3 };
@@ -577,7 +579,7 @@ function interact() {
       const c = shardCount(), healed = state.beaten.has(D.dungeons.find(d => d.final).boss_data.name);
       return say(healed ? ["THE HEART IS WHOLE AGAIN. YOU HAVE THE THANKS OF EVERY ISLAND."]
         : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
-        : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")], null, 1);
+        : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")].concat(c > 0 ? remainingShardHints() : []), null, 1);
     }
     if (n.request) return villageRequest(n);
     return say(n.lines || LINES[n.type] || ["..."], null, VOICE[n.type]);
