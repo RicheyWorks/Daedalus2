@@ -391,7 +391,7 @@ public:
     }
     Status GetStatus() const override {
         if(AtTitle) return {0,Player.Lives,false,false,"IRONWAKE ADVANCE TITLE | Arrows, B, A: keyboard bonus code; Enter/Space or pad A starts. Lives: "+std::to_string(Player.Lives)};
-        const std::string Note=Over ? (Won?"MISSION COMPLETE | R / Restart: play again":"GAME OVER | R / Restart: try again")
+        const std::string Note=Over ? (Won?"MISSION COMPLETE | Enter, pad A/Start or R / Restart: play again":"GAME OVER | Enter, pad A/Start or R / Restart: try again")
             : "IRONWAKE ADVANCE | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
         return {Player.Score,Player.Lives,Over,Won,Note};
     }
@@ -487,7 +487,8 @@ public:
             F.AddText(235,250,Won?"MISSION COMPLETE!":"GAME OVER",Won?Color{50,255,50,255}:Color{255,50,50,255},32);
             F.AddText(190,303,"FINAL SCORE: "+std::to_string(Player.Score),White,22);
             F.AddText(190,341,Won?"Passed the original distance goal.":GoalText(),{200,225,205,255},18);
-            F.AddText(190,382,"R / Restart: new run with the same seed",White,18);
+            F.AddText(180,382,"Enter / pad A or Start: new run",White,18);
+            F.AddText(180,408,"R / Restart also replays the same seed",White,14);
         }
     }
 private:
