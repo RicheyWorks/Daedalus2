@@ -1177,9 +1177,11 @@ function drawMenu() {
     const caster = roster()[menu.who], list = fieldSpells(caster), selected = clamp(menu.ii, 0, Math.max(0, list.length - 1)), rows = 6;
     const from = clamp(selected - rows + 1, 0, Math.max(0, list.length - rows));
     win(20, 60, 220, 112);
-    list.slice(from, from + rows).forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
+    list.slice(from, from + rows).forEach((sp, i) => { const ok = !(sp.target !== "ally" || !/heal/.test((sp.status || "") + (sp.effect || "")) && sp.power <= 0); text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
     if (sub === "magic" && list.length) cursor(28, 72 + (selected - from) * 13);
     if (list.length > rows) text((from + 1) + "-" + Math.min(from + rows, list.length) + "/" + list.length, 28, 145, "#a0a8c0");
+    const sel = list[selected];
+    if (sel) { const battleOnly = sel.target !== "ally" || !/heal/.test((sel.status || "") + (sel.effect || "")) && sel.power <= 0; text(((battleOnly ? "BATTLE ONLY. " : "") + spellHint(sel)).slice(0, 34), 28, 160, "#a0a8c0"); }
   }
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
 }
@@ -1188,7 +1190,7 @@ function drawStatus() {
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 56); win(0, 56, 160, H - 56); win(160, 56, W - 160, H - 56);
   const r = D.rects.sprites[m.sprite]; if (r) spr("sprites", m.sprite, 10, 6, 0, null, null, 44 / r[3]);
-  text(m.name, 56, 10); text(m.job, 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
+  text(m.name, 56, 10); text(m.job + (party.includes(m) ? " / FRONT" : " / RESERVE"), 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
   text("HP " + m.hp + "/" + m.max, 200, 10); if (m.mmax) text("MP " + m.mp + "/" + m.mmax, 200, 22);
   tags(m).forEach((k, i) => text(STATUS[k].word, 200 + i * 56, 36, STATUS[k].color));
   const rows = [["STR", m.st.str], ["AGI", m.st.agi], ["VIT", m.st.vit], ["INT", m.st.int], ["SPR", m.st.spr], ["ATK", atkOf(m)], ["DEF", defOf(m)]];

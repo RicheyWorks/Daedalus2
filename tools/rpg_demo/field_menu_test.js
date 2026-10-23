@@ -24,6 +24,7 @@ const source = [
   line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="),
   between("let menu = null;", "function drawStatus()"), between("const STATUS =", "/* ---------- bestiary"),
+  between("function spellHint(", "function drawBattle("),
   "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, drawMenu, fieldItems, fieldSpells, itemLine, " +
   "getParty: () => party, getBag: () => bag, getMenu: () => menu };"
 ].join("\n");
