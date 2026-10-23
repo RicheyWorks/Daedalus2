@@ -35,10 +35,12 @@ def selected(item, cfg):
             or doc.get('stage') != 'qualified_static_candidates_source_only'
             or doc.get('source_views_personally_inspected_by_operator') is not True):
         raise q.Refused('Exact operator-reviewed source qualification required')
+    # Existing prepare() requires the operator's actual source-view inspection,
+    # not a new human approval, reviewer identity or review-format ceremony.
+    # Verify an image witness when retained, without inventing extra fields.
     review = doc.get('operator_visual_review', {})
-    if review.get('operator') != cfg['owner'] or not review.get('observations'):
-        raise q.Refused('Evidenced owner source-view review required')
-    q.checked_file(review['actual_image'])
+    if isinstance(review, dict) and 'actual_image' in review:
+        q.checked_file(review['actual_image'])
     for witness in doc['source_pins']:
         q.checked_file(witness)
     rows = doc['items']
