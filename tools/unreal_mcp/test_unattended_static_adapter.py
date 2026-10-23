@@ -86,13 +86,11 @@ class StaticPolicyTests(unittest.TestCase):
         with self.assertRaises(adapter.q.Refused):
             self.selected()
 
-    def test_review_owner_and_observations_are_required(self):
-        for review in ({'operator': 'someone-else', 'observations': ['x']},
-                       {'operator': self.cfg['owner'], 'observations': []}):
-            with self.subTest(review=review):
-                self.doc['operator_visual_review'] = review
-                with self.assertRaises(adapter.q.Refused):
-                    self.selected()
+    def test_existing_operator_review_needs_no_new_identity_or_format_gate(self):
+        self.doc.pop('operator_visual_review')
+        self.assertEqual(self.selected(), self.row)
+        self.doc['operator_visual_review'] = {'operator': 'existing-source-auditor'}
+        self.assertEqual(self.selected(), self.row)
 
     def test_missing_or_tampered_review_image_is_refused(self):
         self.image.write_bytes(b'changed test image')

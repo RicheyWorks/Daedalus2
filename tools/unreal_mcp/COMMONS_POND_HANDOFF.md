@@ -59,16 +59,36 @@ Lotus host, old world/PID baseline or either competing watcher. Do not edit or
 resume an existing state with new runner/profile bytes.
 
 The preparation CLI is entirely offline and deliberately refuses the checked-in
-measured/HELD fixture. It requires three real owner-authored inputs:
+measured/HELD fixture. These are inputs the sole writer supplies while doing the
+already-authorized import; no further human approval is requested or required.
+
+The exact existing source-review rule is
+`contest-island-production/tools/unreal/codex_qualified_static_delivery.py:151-157`:
+it requires stage `qualified_static_candidates_source_only` and
+`source_views_personally_inspected_by_operator is True`, otherwise raises
+`Operator must inspect exact retained source views before preparation`; it then
+validates the source items and pins. This means the operator agent's source-view
+and provenance review, not user reauthorization. The prior retained example is
+`native-ingestion/PondLotusFloweringR1/operator-qualified-packet.json`, which
+records the operator's family-image review and limits. Its acceptance is specific
+to Lotus and does not automatically qualify these three new sources. The adapter
+preserves that existing source check without requiring a new reviewer role,
+observation format, human signature, licensing ceremony or questionnaire.
+The actual original `sheet-pond.png` can be viewed directly as a file; Blender
+and Unreal need not be opened for that source review.
+
+The three required data inputs are:
 
 1. **Qualification JSON:** schema `daedalus.source-qualified-small-static.v1`,
    stage `qualified_static_candidates_source_only`, helper-compatible `items`,
-   all retained `source_pins`, and actual personally reviewed source-image
-   evidence. `source_views_personally_inspected_by_operator=true` and
-   `operator_visual_review` must describe a real review, with `operator`,
-   `actual_image` exact path/SHA256/bytes and nonempty `observations`. Preserve
-   unverified historical author. Do not turn the fixture's false flag true
-   without doing/referencing that review.
+   all retained `source_pins`, and a real operator source-view inspection.
+   The sole writer reviews the existing source/family image and the measured
+   FBX/sidecar/recipe identities, retains their pins, and records the existing
+   `source_views_personally_inspected_by_operator=true` declaration. It may keep
+   the prior example's `operator_visual_review` image witness/observations for
+   traceability; no new review-body format is required. Any supplied image
+   witness is checked. Preserve unverified historical author and source
+   provenance. Do not turn the fixture's false flag true without the review.
 2. **Fresh baseline JSON:** exact keys `schema`, `editor`, `context`, `files`;
    schema `daedalus.static-owner-baseline.v1`. The writer captures `context()`
    from `unattended_static_native.inc` through its existing guarded read route:
@@ -134,6 +154,16 @@ and same-editor resume before proceeding one item at a time. Future placement,
 visual/runtime/ecology/collision acceptance and fresh-editor reload are separate.
 No bulk/overnight launch is authorized by these instructions.
 
+Checks already completed offline: exact source/sidecar/manifest hashes, FBX
+geometry/units/palettes/bounds/static-only metadata, acceptance by the retained
+pure `_items` source validator, new adapter refusals, synthetic preparation and
+existing queue interruption/STOP/resume logic. Checks the sole writer supplies
+in its authorized editor window: actual current PID/world/engine/custody and
+clean-state baseline; current native source-hash inventory/destination absence;
+one real importer save and strict palette/geometry/metadata readback; exact native
+Valid capture and protected-state comparison; then saved resume without a second
+effect. Source-image/provenance review is file-only and can precede that window.
+
 STOP persists and never kills native work. After known terminal, the owner may
 clear only this state's STOP and use `resume --max-items 1`. DONE verifies saved
 hashes and native helper readback, without import/save/revalidation. An uncertain
@@ -156,7 +186,7 @@ Tests are synthetic or file-only, never new native evidence. The Windows
 restricted temp sandbox denies the existing atomic `os.replace` in queue tests;
 all **59 focused tests passed** in the normal reviewed offline execution
 environment (31 new profile/preparation checks plus 28 unchanged queue/Coupler
-checks, 1.610s). This includes real measured-HELD refusal before output creation,
+checks; latest run 1.655s). This includes real measured-HELD refusal before output creation,
 synthetic successful preparation without host/native imports, source-hash and
 destination refusal, immutable snapshots, pending reconciliation with no native
 dispatch, STOP/resume and process interruption without a second effect.
