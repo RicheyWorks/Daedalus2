@@ -1473,6 +1473,8 @@ function doAction(a) {
   if (a.kind === "foe" && who.hp <= 0) { B.wait = 0; return; }
   if (!alive(B.foes).length || !alive(party).length) { B.wait = 0; B.queue = []; return; }
   if (has(who, "sleep")) { B.msg = (a.kind === "foe" ? "THE " + who.name.toUpperCase() : who.name) + " IS ASLEEP."; B.wait = 0.45; return; }
+  const heldStatus = a.kind !== "foe" && ["bind", "paralyze"].find(k => has(who, k));
+  if (heldStatus) { B.msg = who.name + " IS " + STATUS[heldStatus].word + "."; B.wait = 0.45; return; }
   if (a.kind === "defend") { who.defend = true; B.msg = who.name + " DEFENDS."; B.wait = 0.4; return; }
   if (a.kind === "run") {
     if (B.boss) { B.msg = "THERE IS NO ESCAPE FROM A WARDEN!"; sfx("LOCKED"); return; }
