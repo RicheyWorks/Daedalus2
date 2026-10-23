@@ -1374,10 +1374,10 @@ function battleTick(dt) {
   if (B.phase === "cmd") {
     const m = party[B.who];
     if (B.sub === "target") {
+      if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; hit("a"); sfx("TICK"); return; }
       const tg = B.list;
       if (hit("left") || hit("up")) { B.target = (B.target + tg.length - 1) % tg.length; sfx("TICK"); }
       if (hit("right") || hit("down")) { B.target = (B.target + 1) % tg.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; sfx("TICK"); return; }
       if (hit("a")) {
         if (B.pending.kind === "item" && !battleItemStock(B.pending.item)) { refuseBattleItems(); return; }
         sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser();
@@ -1385,12 +1385,12 @@ function battleTick(dt) {
       return;
     }
     if (B.sub === "summon") {
+      if (hit("b")) { B.sub = null; hit("a"); sfx("TICK"); return; }
       const opts = mySpirits();
       if (!opts.length) { B.msg = "NO SPIRIT ANSWERS YET."; B.sub = null; sfx("LOCKED"); return; }
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
       if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
       if (hit("a")) {
         const o = opts[B.oi], used = new Set((B.summoned || []).concat(B.acts.filter(x => x.kind === "summon").map(x => x.spirit.name)));
         if (PrismSummons.refusal(o, used, m.mp)) { sfx("LOCKED"); return; }
@@ -1399,6 +1399,7 @@ function battleTick(dt) {
       return;
     }
     if (B.sub === "magic" || B.sub === "item") {
+      if (hit("b")) { B.sub = null; hit("a"); sfx("TICK"); return; }
       const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : battleItems();
       if (!opts.length) {
         if (B.sub === "item") { refuseBattleItems(); return; }
@@ -1407,7 +1408,6 @@ function battleTick(dt) {
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
       if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
       if (hit("a")) {
         const o = opts[B.oi];
         if (B.sub === "magic") {
@@ -1426,7 +1426,11 @@ function battleTick(dt) {
     const cmds = battleCmds();
     if (hit("up")) { B.cmd = (B.cmd + cmds.length - 1) % cmds.length; sfx("TICK"); }
     if (hit("down")) { B.cmd = (B.cmd + 1) % cmds.length; sfx("TICK"); }
-    if (hit("b") && B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); return; }
+    if (hit("b")) {
+      hit("a");
+      if (B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); }
+      return;
+    }
     if (hit("a")) {
       const c = cmds[B.cmd];
       if (c === "ITEM" && !battleItems().length) { refuseBattleItems(); return; }
