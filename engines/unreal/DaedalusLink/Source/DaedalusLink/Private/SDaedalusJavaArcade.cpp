@@ -155,13 +155,26 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
                 .EnableGamepadNavigationMode(true)
                 .IsEnabled_Lambda([this] { const auto S = State(); return Game.IsValid() && Game->HasCredentials() && !S.bBusy && !S.bSavedGamesLoading && S.bSavedGamesReady && S.SavedGames.Num() > 0; })
                 .OnComboBoxOpening(this, &SDaedalusJavaArcade::RebuildSavedGames)
-                .OnGenerateWidget_Lambda([](TSharedPtr<FDaedalusSudokuSavedGame> Saved) -> TSharedRef<SWidget>
+                .OnGenerateWidget_Lambda([this](TSharedPtr<FDaedalusSudokuSavedGame> Saved) -> TSharedRef<SWidget>
                 {
-                    return SNew(STextBlock).Text(Saved.IsValid() ? SavedGameText(*Saved) : FText::GetEmpty()).AutoWrapText(true);
+                    const FString Id = Saved.IsValid() ? Saved->GameId : FString();
+                    return SNew(STextBlock).Text_Lambda([this, Id]
+                    {
+                        // A popup can outlive an account/origin change. Never render its copied metadata.
+                        const auto S = State();
+                        if (S.bSavedGamesReady && !S.bSavedGamesLoading)
+                            for (const auto& Current : S.SavedGames)
+                                if (Current.GameId == Id) return SavedGameText(Current);
+                        return FText::FromString(TEXT("Saved game unavailable"));
+                    }).AutoWrapText(true);
                 })
                 .OnSelectionChanged_Lambda([this](TSharedPtr<FDaedalusSudokuSavedGame> Saved, ESelectInfo::Type)
                 {
-                    SelectedSavedGameId = Saved.IsValid() ? Saved->GameId : FString();
+                    const auto S = State();
+                    SelectedSavedGameId.Reset();
+                    if (Saved.IsValid() && S.bSavedGamesReady && !S.bSavedGamesLoading
+                        && S.SavedGames.ContainsByPredicate([&Saved](const FDaedalusSudokuSavedGame& Current) { return Current.GameId == Saved->GameId; }))
+                        SelectedSavedGameId = Saved->GameId;
                 })
                 [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectedSavedGameText).AutoWrapText(true)]
             ]
