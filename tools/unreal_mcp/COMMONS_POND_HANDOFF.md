@@ -1,0 +1,172 @@
+# Commons pond ingestion profile — sole writer handoff
+
+Code/preparation deliverable only. **Prepared 3; imported 0; admitted 0; held 3;
+native validation NotValidated; this new profile has never run in Unreal.**
+No editor connection, import/save, GUI launch/close, project edit, shared lesson
+edit or PR410 branch edit was performed by the code worker.
+
+The previous receiver deliberately admitted only the original Coupler. These
+sources must not be disguised as that fixture. The separate
+`unattended_static_adapter.py` wraps the retained qualified-small-static
+Interchange helper and the existing retained-call transport. The Coupler,
+queue/checkpoint/STOP logic, receipt primitives and canonical Valid consumer are
+unchanged. This is not general backlog/overnight qualification.
+
+## Exact selection and destination plan
+
+All sources are in
+`C:/Users/730ri/projects/D2-build/engines/unreal/art/claude-aquatic/`.
+Each FBX has the same-basename `.json` sidecar. Full source/sidecar/manifest/helper
+witnesses and independently measured source facts are in
+`fixtures/commons-pond-20261023.json`. Original manifest SHA256:
+`cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87`.
+
+| Source basename | FBX bytes | SHA256 | Triangles |
+|---|---:|---|---:|
+| Prop_Aquatic_Pond_Frogbit_4 | 16668 | 6bd59792c5edff9ab824f111bc13f7c1a082edc9b3a0f1162f9400bd5780adae | 220 |
+| Prop_Aquatic_Pond_PinkLily_4 | 19068 | 8b5fcea2ae0a44926210bf9ccfcd42da3333d77f1187e36287797d0c15ba2eec | 544 |
+| Prop_Aquatic_Pond_WaterLily_4 | 18780 | 5499801cc09c511b9183f3e66b41e9a27540aeea9b57cf2238fbe454e8f1af2d | 492 |
+
+Use the supported existing import namespace, rather than the preparation's
+incompatible `/Game/CodexToolEvaluation/.../20261023/...` proposal:
+
+```text
+/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a
+/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492
+/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b
+```
+
+Each destination owns exactly one `/<source basename>.<source basename>` mesh.
+Destinations remain plans; no native directories/packages were created.
+
+The file-only FBX parse found v7400, one mesh/model/material, UnitScaleFactor100,
+no animations/curves/deformers/textures/videos, exact palettes and bounds. These
+are source measurements, not operator source-view acceptance or native evidence.
+The existing profile requires one slot using the existing vertex-colour material,
+explicit Interchange pipeline, build scale1, Nanite off, lightmap UV generation
+off, collision off, and strict palette/geometry/material/metadata readback.
+`claude_raw_unit100_build1_actor001_v1` remains exact: future actor scale is .01;
+the adapter places no actors. Frogbit is at waterline0..15cm; the two lilies span
+-25..15cm. Sidecar ecology/flowering labels do not establish runtime behavior.
+
+## Apply and prepare safely
+
+Only thread `01a139d3-4615-7398-b0fa-aaacca512030` may operate the editor.
+Finish its current bounded operation first. Apply the code commit in that
+writer's integration checkout only when it is ready; the isolated worker never
+changes that checkout/index. Do not run the old Coupler witness, historical
+Lotus host, old world/PID baseline or either competing watcher. Do not edit or
+resume an existing state with new runner/profile bytes.
+
+The preparation CLI is entirely offline and deliberately refuses the checked-in
+measured/HELD fixture. It requires three real owner-authored inputs:
+
+1. **Qualification JSON:** schema `daedalus.source-qualified-small-static.v1`,
+   stage `qualified_static_candidates_source_only`, helper-compatible `items`,
+   all retained `source_pins`, and actual personally reviewed source-image
+   evidence. `source_views_personally_inspected_by_operator=true` and
+   `operator_visual_review` must describe a real review, with `operator`,
+   `actual_image` exact path/SHA256/bytes and nonempty `observations`. Preserve
+   unverified historical author. Do not turn the fixture's false flag true
+   without doing/referencing that review.
+2. **Fresh baseline JSON:** exact keys `schema`, `editor`, `context`, `files`;
+   schema `daedalus.static-owner-baseline.v1`. The writer captures `context()`
+   from `unattended_static_native.inc` through its existing guarded read route:
+   exact current world, all actor identities/classes/transforms/mesh bindings
+   and viewport camera. `editor` is the current PID/full UTC start/project/world,
+   not the old Coupler generation. `files` lists path/SHA256/bytes for every
+   current protected original/owned file, including installed source/contracts,
+   configuration, progress/user saves as applicable, active saved Commons map,
+   installed DLL and original palette. Save/resolve current dirty work normally
+   before this capture; no blanket save or discard is authorized by this patch.
+3. **Source inventory JSON:** exact keys `schema`, `roots`, `assets`; schema
+   `daedalus.static-source-inventory.v1`, roots exactly
+   `["/Game/Daedalus/Art/Islands"]`; assets maps every current StaticMesh object
+   path in that existing ingestion corpus to `{"sha256":"<actual source hash>"}`.
+   Use current retained receipts plus native source metadata, never filename-only
+   absence. Current registry coverage must exactly equal the inventory plus
+   this queue's verified DONE outputs (1..512 original meshes). Missing/untagged
+   provenance or expanded inventory holds. This excludes source-hash duplicates
+   across states in the declared ingestion corpus and names globally; it does
+   not certify renamed untagged external imports outside that corpus. If that
+   external scope is relevant, reconcile it explicitly before intake.
+
+Create an environment JSON with exact keys `owner`, `editor`, `engine_version`,
+`start_by_utc`, `host`, `wire`, `importer`, `shared`, `dependencies`. The four
+module fields are exact path/SHA256/bytes witnesses, not module names:
+
+- `host`: existing task-2 `official_tools_paired_benchmark_r3.py` (only its
+  ordinary hub custody and OS generation readers are used).
+- `wire`: existing `contest-island-production/connectors/claude-asset-pipeline/asset_pipeline/wire.py`.
+- `importer`: existing `contest-island-production/engines/unreal/DaedalusLink/Content/Python/daedalus_codex_qualified_static.py`,
+  SHA256 `ff67f266fa45b276d287d69d5fa750b445353960d7213234dede15bc1f135df0`.
+- `shared`: same directory `daedalus_codex_catalogue.py`, SHA256
+  `00e48d8a86cd377250c439d6992a5bec6deb09b0f77e9607bf7beebd324d1d03`.
+
+`dependencies` pins the full reviewed local imported host/transport chain,
+including that host, `codex_skyfarm_greenhouse_delivery.py`,
+`codex_qualified_static_delivery.py`, their helper imports, wire, installed
+DLL/header/build version and policy/native wrapper/consumer dependencies.
+Preserve the existing 1..32 explicit-dependency cap. Use the actual exact engine
+version, actual owner and a finite current start-by UTC. The old184/world host
+orchestration is not invoked: its native helper's private dictionary receives
+the explicitly frozen current world while the original guard still executes.
+No installed helper or shared module global is changed.
+
+```powershell
+python tools/unreal_mcp/prepare_static_profile.py --qualification C:/owned/pond-qualified.json --baseline C:/owned/commons-current-baseline.json --dedup C:/owned/source-inventory.json --environment C:/owned/current-environment.json --folder C:/owned/pond-profile-r1
+```
+
+Preparation creates new per-item policies, selected manifest and state; it
+imports no adapter/host module and makes zero native requests. Review all hashes
+and scope before the sole writer uses that state. After current custody/resource
+admission, first run exactly one item through the existing queue interface:
+
+```powershell
+python tools/unreal_mcp/unattended_ingestion.py run --state C:/owned/pond-profile-r1/state --max-items 1
+python tools/unreal_mcp/unattended_ingestion.py status --state C:/owned/pond-profile-r1/state
+python tools/unreal_mcp/unattended_ingestion.py stop --state C:/owned/pond-profile-r1/state
+```
+
+Native acceptance/readback remains untested for this profile. Inspect exact
+saved output, native Valid envelope, protected state, normal exact-lease release
+and same-editor resume before proceeding one item at a time. Future placement,
+visual/runtime/ecology/collision acceptance and fresh-editor reload are separate.
+No bulk/overnight launch is authorized by these instructions.
+
+STOP persists and never kills native work. After known terminal, the owner may
+clear only this state's STOP and use `resume --max-items 1`. DONE verifies saved
+hashes and native helper readback, without import/save/revalidation. An uncertain
+dispatch retains the exact compute lease/journal. Missing complete native receipt
+blocks even reconciliation admission. The owner must establish actual terminal
+and release its exact retained turn; TTL or another own lease is not evidence.
+`reconcile()` itself only reads the unchanged operation-bound completion receipt;
+it never imports, saves, starts validation, rebuilds receipts or retimestamps.
+Incomplete, stale, NotValidated, Skipped, malformed or mismatched evidence stays
+held/quarantined. Preserve every failed state; use a new reviewed state only
+after explicit reconciliation, never reset or edit one to replay work.
+
+## Offline verification and lesson to append later
+
+```powershell
+python -m unittest tools/unreal_mcp/test_unattended_static_adapter.py tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
+```
+
+Tests are synthetic or file-only, never new native evidence. The Windows
+restricted temp sandbox denies the existing atomic `os.replace` in queue tests;
+all **59 focused tests passed** in the normal reviewed offline execution
+environment (31 new profile/preparation checks plus 28 unchanged queue/Coupler
+checks, 1.610s). This includes real measured-HELD refusal before output creation,
+synthetic successful preparation without host/native imports, source-hash and
+destination refusal, immutable snapshots, pending reconciliation with no native
+dispatch, STOP/resume and process interruption without a second effect.
+Do not replace atomic writes to make tests pass.
+
+**Lesson for the writer to append to the shared lessons file later:** A receiver
+proved on one immutable asset is a fixture, not backlog capacity. Bind each new
+source and sidecar hash to the existing import profile, current world/custody,
+protected baseline and destination before declaring it ingestible. Deduplicate
+by source hash independently of policy/path plus native destination coverage.
+Reconciliation must consume the same durable result without import/save or
+validation replay. Report prepared, imported, admitted and native-tested counts
+separately; retain NotValidated/Skipped and unknown provenance exactly.

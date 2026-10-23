@@ -1,5 +1,10 @@
 # Deterministic ingestion runner
 
+The separate **offline-only** small-static pond profile and sole-writer handoff
+are in [COMMONS_POND_HANDOFF.md](COMMONS_POND_HANDOFF.md). Its measured three
+sources remain HELD (zero imported/admitted); the Coupler fixture below is
+unchanged. Do not interpret the new adapter's offline tests as native admission.
+
 **One closed private native fixture is tested; production backlog adoption is
 NOT established. Do not start a bulk or overnight run.** The supplied
 `unattended_codex_adapter.py` supports only the original Codex coupler source hash
