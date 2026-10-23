@@ -194,10 +194,11 @@ public:
         int Mouth=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
         void Update(const Input& I,bool RepairDoor=true) {
-            if(I.Left) Next={-1,0};
-            if(I.Right) Next={1,0};
-            if(I.Up) Next={0,-1};
-            if(I.Down) Next={0,1};
+            // Match the cabinet's digital merge for direct portable/Blueprint Pad input.
+            if(I.Left || I.PadLeft) Next={-1,0};
+            if(I.Right || I.PadRight) Next={1,0};
+            if(I.Up || I.PadUp) Next={0,-1};
+            if(I.Down || I.PadDown) Next={0,1};
             const double Sx=Axis(I.AxisX), Sy=Axis(I.AxisY);
             if(std::abs(Sx)>0.3 || std::abs(Sy)>0.3)
                 Next=std::abs(Sx)>std::abs(Sy) ? maze::Direction{Sx>0 ? 1 : -1,0} : maze::Direction{0,Sy>0 ? 1 : -1};

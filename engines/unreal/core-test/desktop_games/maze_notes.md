@@ -21,7 +21,12 @@ provides bounded procedural draw commands; `GetStatus()` provides score, lives
 or health, terminal flags, and a control note. There are no Unreal types,
 Pygame imports, asset loads, persistence, threads, or unbounded event loops.
 
-Directions use `Left/Right/Up/Down` and sanitized `AxisX/AxisY`. Zelda's sword is
+Directions use `Left/Right/Up/Down`, direct `PadLeft/PadRight/PadUp/PadDown`, and
+sanitized `AxisX/AxisY`. Pac-Man merges direct hats with the existing digital tests,
+retaining right/down last-test precedence and dominant-axis analog override.
+`pacman_input_test.cpp` / target `desktop_pacman_input` checks the direct player
+contract and a bounded 96-frame game/Driver route; no native Blueprint acceptance
+is inferred. Zelda's sword is
 an edge action: `FirePressed`, `ActionPressed`, or `JumpPressed`. The attack
 executes before player movement, matching the source KEYDOWN order, and has the
 source 18-frame cooldown. Pac-Man and Zelda accept one of those press events to
