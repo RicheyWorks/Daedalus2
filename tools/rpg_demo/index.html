@@ -632,11 +632,12 @@ function openShop() {
   const stock = (map.info.stock || []).slice();
   shop = { kind, stock, idx: 0, top: 0, tab: "buy", msg: "WHAT WOULD YOU LIKE?" + (kind === "magic" ? "" : "  LEFT/RIGHT: SELL") }; mode = "shop";
 }
+const magicShopCaster = sp => roster().find(m => m.job === (sp.target === "ally" ? "Lightmender" : "Runecaster"));
 function buy(it) {
   if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
   if (shop.kind === "magic") {
     const sp = spellOf(it.name); if (!sp) return;
-    const caster = sp.target === "ally" ? roster().find(m => m.job === "Lightmender") : roster().find(m => m.job === "Runecaster");
+    const caster = magicShopCaster(sp);
     if (!caster || caster.spells.includes(sp.name)) { shop.msg = "YOU ALREADY KNOW THAT."; return; }
     gold -= it.price; caster.spells.push(sp.name); sfx("BUY"); shop.msg = caster.name + " LEARNS " + sp.name.toUpperCase() + "."; return;
   }
@@ -701,7 +702,9 @@ function drawShop() {
   text("G", W - 82, 37); text(gold, W - 10 - tw(gold), 37);
   shop.stock.slice(shop.top, shop.top + 8).forEach((it, i) => {
     const y = 38 + i * 16;
-    text(it.name.slice(0, 18), 24, y, it.price > gold ? "#808090" : "#ffffff");
+    const sp = shop.kind === "magic" && spellOf(it.name), caster = sp && magicShopCaster(sp);
+    const learnable = shop.kind !== "magic" || caster && !caster.spells.includes(sp.name);
+    text(it.name.slice(0, 18), 24, y, it.price > gold || !learnable ? "#808090" : "#ffffff");
     text(it.price, W - 102 - tw(it.price), y);
   });
   cursor(10, 38 + (shop.idx - shop.top) * 16);
@@ -711,7 +714,16 @@ function drawShop() {
     if (shop.top + 8 < shop.stock.length) g.fillRect(112 - i, 170 - i, 1 + 2 * i, 1);
   }
   win(0, 176, W, 48); text(shop.msg, 12, 190);
-  const it = shop.stock[shop.idx], d = (it.effect && GEAR[it.name] ? itemLine(it.name) : it.effect) || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  const it = shop.stock[shop.idx];
+  let d = (it.effect && GEAR[it.name] ? itemLine(it.name) : it.effect) || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  if (shop.kind === "magic") {
+    const sp = spellOf(it.name), caster = sp && magicShopCaster(sp);
+    if (sp) {
+      const detail = spellHint(sp) + " " + sp.mp + "MP" + (caster && caster.spells.includes(sp.name) ? " KNOWN" : "");
+      const name = caster ? caster.name.toUpperCase() : "NO CASTER", room = Math.max(0, Math.floor((W - 24) / 6) - detail.length - 2);
+      d = name.slice(0, room) + ": " + detail;
+    }
+  }
   text(d, 12, 204, "#a0a8c0");
 }
 

@@ -20,7 +20,7 @@ function line(prefix) {
 const source = [line("const CHARS ="), line("const hit ="), line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), between("function recruitsFor(", "function recruitBeaten("),
   line("const atkOf ="), line("const defOf ="), line("const spellOf ="),
-  between("function buy(", "function shopTick("), between("let menu = null;", "function drawEquip("),
+  line("const magicShopCaster ="), between("function buy(", "function shopTick("), between("let menu = null;", "function drawEquip("),
   between("const STATUS =", "/* ---------- bestiary"), between("function spellHint(", "function drawBattle("),
   "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, drawMenu, drawStatus, fieldSpells, spellHint, buy, recruit, " +
   "roster, party: () => party, reserve: () => reserve, menu: () => menu, chars: CHARS, " +
