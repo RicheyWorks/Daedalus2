@@ -7,6 +7,7 @@
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
+#include "Widgets/Layout/SExpandableArea.h"
 #include "Widgets/Layout/SGridPanel.h"
 #include "Widgets/Layout/SScrollBox.h"
 #include "Widgets/Layout/SSeparator.h"
@@ -355,6 +356,7 @@ FReply SDaedalusJavaArcade::ResumeSelectedSavedGame()
 TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
 {
     auto Chips = SNew(SHorizontalBox);
+    BlackjackBetControls = Chips;
     for (int32 Amount : { 1, 5, 25, 100, 500 })
     {
         const FString Label = FString::Printf(TEXT("Bet %d"), Amount);
@@ -414,6 +416,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Accept insurance"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, true); }, [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")) && State().bInsuranceAcceptAllowed; })]
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Decline insurance"), [this] { if (Game.IsValid()) Game->SubmitBlackjackAction(TEXT("insurance"), 0, false); }, [this] { return Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")); })]
         ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[BlackjackOptions()]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
             SNew(SHorizontalBox)
@@ -425,6 +428,85 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [SNew(STextBlock).Text(FText::FromString(TEXT("D: deal. H: hit. S: stand. Use each shortcut once, then wait for the table. Esc / gamepad Back: close cabinet."))).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text(FText::FromString(TEXT("Java hides the dealer hole card and future shoe. Closing this cabinet cancels local work; end the Java session first when ready. Unreached sessions expire in Java."))).AutoWrapText(true)];
+}
+TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackOptions()
+{
+    // These are explicit commands, not toggles: the visible DTO does not carry current settings.
+    const auto OptionButton = [this](const TCHAR* Label, const TCHAR* Command, TFunction<bool()> Apply) -> TSharedRef<SWidget>
+    {
+        const FString Action(Command);
+        return SNew(SButton).Text(FText::FromString(Label))
+            .IsEnabled_Lambda([this, Action] { return Game.IsValid() && Game->IsBlackjackActionLegal(Action); })
+            .OnClicked_Lambda([this, Action, Apply]
+            {
+                if (Game.IsValid() && Game->IsBlackjackActionLegal(Action) && Apply())
+                {
+                    // Keep the expanded choices and their reply in view until intentional play resumes.
+                    bBlackjackRevealArmed = false; bBlackjackRevealPending = false;
+                }
+                return FReply::Handled();
+            });
+    };
+    auto Options = SNew(SVerticalBox);
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 10)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Apply one choice, then wait for Java. Available changes depend on the session. Current option values are not shown here. Return to table to use play shortcuts."))).AutoWrapText(true)];
+    const auto AddRule = [this, &Options, &OptionButton](const TCHAR* Name, const TCHAR* Label)
+    {
+        const FString Rule(Name);
+        Options->AddSlot().AutoHeight().Padding(0, 0, 0, 4)
+            [SNew(STextBlock).Text(FText::FromString(Label)).AutoWrapText(true)];
+        Options->AddSlot().AutoHeight().Padding(0, 0, 0, 10)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [OptionButton(TEXT("Enable"), TEXT("setRule"), [this, Rule] { return Game.IsValid() && Game->SetBlackjackRule(Rule, true); })]
+            + SHorizontalBox::Slot().AutoWidth()
+            [OptionButton(TEXT("Disable"), TEXT("setRule"), [this, Rule] { return Game.IsValid() && Game->SetBlackjackRule(Rule, false); })]
+        ];
+    };
+    AddRule(TEXT("dealerHitsSoft17"), TEXT("Dealer draws on soft 17 (an Ace counts as 11)"));
+    AddRule(TEXT("lateSurrender"), TEXT("Late surrender"));
+    AddRule(TEXT("offerInsurance"), TEXT("Insurance offer"));
+    AddRule(TEXT("doubleAfterSplit"), TEXT("Double after splitting"));
+    AddRule(TEXT("splitAcesOneCard"), TEXT("One-card limit for split Aces"));
+    auto Decks = SNew(SHorizontalBox);
+    for (int32 Count : { 1, 2, 4, 6, 8 })
+    {
+        const FString Label = FString::Printf(TEXT("Use %d %s"), Count, Count == 1 ? TEXT("deck") : TEXT("decks"));
+        Decks->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
+            [OptionButton(*Label, TEXT("setDecks"), [this, Count] { return Game.IsValid() && Game->SetBlackjackDecks(Count); })];
+    }
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 4)[SNew(STextBlock).Text(FText::FromString(TEXT("Card decks")))];
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 10)[Decks];
+    auto Hands = SNew(SHorizontalBox);
+    for (int32 Count = 2; Count <= 4; ++Count)
+    {
+        const FString Label = FString::Printf(TEXT("Allow %d hands"), Count);
+        Hands->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
+            [OptionButton(*Label, TEXT("setSplitLimit"), [this, Count] { return Game.IsValid() && Game->SetBlackjackSplitLimit(Count); })];
+    }
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 4)[SNew(STextBlock).Text(FText::FromString(TEXT("Maximum hands after splitting")))];
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 10)[Hands];
+    Options->AddSlot().AutoHeight().Padding(0, 0, 0, 10)
+        [SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(S.Status + TEXT(" — ") + S.Message); }).AutoWrapText(true)];
+    Options->AddSlot().AutoHeight().HAlign(HAlign_Left)
+        [SNew(SButton).Text(FText::FromString(TEXT("Return to table")))
+        .IsEnabled_Lambda([this] { return Game.IsValid() && !State().bBusy; }).OnClicked_Lambda([this]
+        {
+            if (!Game.IsValid() || State().bBusy) return FReply::Handled();
+            FocusBoard();
+            const auto S = State();
+            // Betting has no automatic reveal target. Explicit return brings its controls into view.
+            // Other phases keep the normal active-hand/result/recovery-warning target.
+            if (S.Game == EDaedalusJavaGame::Blackjack && S.bReady && !S.bBusy && !S.bNeedsSync && !S.bRemoteClosed
+                && S.Phase == TEXT("BETTING") && CabinetScroll.IsValid() && BlackjackBetControls.IsValid())
+                CabinetScroll->ScrollDescendantIntoView(BlackjackBetControls, false, EDescendantScrollDestination::IntoView, 8.f);
+            return FReply::Handled();
+        })];
+    return SNew(SExpandableArea).InitiallyCollapsed(true).AllowAnimatedTransition(false)
+        .AreaTitle(FText::FromString(TEXT("Change table options")))
+        .BorderBackgroundColor(FLinearColor(0.06f, 0.10f, 0.14f, 1.f)).Padding(10)
+        .BodyContent()[Options];
 }
 FText SDaedalusJavaArcade::BlackjackGuideText() const
 {

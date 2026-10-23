@@ -30,6 +30,7 @@ private:
     TSharedRef<SWidget> SudokuResult();
     static bool HasSudokuResult(const FDaedalusJavaArcadeState& Snapshot);
     TSharedRef<SWidget> BlackjackPanel();
+    TSharedRef<SWidget> BlackjackOptions();
     TSharedRef<SWidget> Button(const TCHAR* Label, TFunction<void()> Action, TFunction<bool()> Enabled = [] { return true; });
     FDaedalusJavaArcadeState State() const;
     FReply SelectCell(int32 Index);
@@ -70,6 +71,7 @@ private:
     bool bSudokuResultRevealArmed = false;
     FString RevealedSudokuResultSession;
     TArray<TSharedPtr<SWidget>> BlackjackHandWidgets;
+    TSharedPtr<SWidget> BlackjackBetControls;
     TSharedPtr<STextBlock> BlackjackDealerRow;
     TSharedPtr<STextBlock> BlackjackResultRow;
     bool bBlackjackRevealPending = false;

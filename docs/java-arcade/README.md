@@ -53,6 +53,11 @@ payments or multiplayer authentication.
    Blackjack: create a session, choose Java-approved chips, deal, hit, stand,
    double, split, surrender, choose insurance, or end the session. Credits are
    simulated, initially 1000, and cannot be cashed out.
+   Expand Change table options for explicit rule Enable/Disable, deck-count and
+   split-hand-limit commands. Each is gated by Java's current legal actions;
+   apply one choice and wait for its reply. Return to table resumes play shortcuts
+   and reveals the active table or recovery message. These controls show commands, with no
+   checked values or assumed defaults because the visible snapshot omits settings.
 
 Blackjack build and launch (from its repository):
 
@@ -121,8 +126,9 @@ cannot be reached, its sessions expire after 15 idle minutes or one hour absolut
   editor import, packaged runtime, multiplayer and in-world acceptance are pending.
 - Sudoku pencil toggle, auto-solve, competitive and spectator UI are deferred.
   Saved-list browsing and explicit own save/resume IDs use existing endpoints.
-- Blackjack rule/deck/split-limit Blueprint calls exist, with their Slate settings
-  UI deferred. 21+3, chatter, achievements and persistence are not exposed.
+- Blackjack rule/deck/split-limit commands are available in Slate; confirmed
+  current-value display needs a settings readback contract. 21+3, chatter,
+  achievements and persistence are not exposed.
 - No account provider, Java runtime bundling or service deployment is included.
 - The native actor requires installed UE modules WebSockets and engine libcurl.
 
