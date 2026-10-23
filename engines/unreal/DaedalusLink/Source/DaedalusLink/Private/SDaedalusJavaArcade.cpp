@@ -33,7 +33,7 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
         [
             SNew(SBox).HAlign(HAlign_Center).MaxDesiredWidth(980)
             [
-                SNew(SScrollBox)
+                SAssignNew(CabinetScroll, SScrollBox).ScrollWhenFocusChanges(EScrollWhenFocusChanges::InstantScroll)
                 + SScrollBox::Slot()
                 [
                     SNew(SVerticalBox)
@@ -86,7 +86,7 @@ FReply SDaedalusJavaArcade::Configure()
         SavedGamePicker->RefreshOptions();
     }
     LocalMessage = Success ? FString() : TEXT("Check the account fields. Passwords and service tokens are kept only in memory.");
-    FocusBoard();
+    FocusBoard(false);
     return FReply::Handled();
 }
 FText SDaedalusJavaArcade::StatusText() const
@@ -105,15 +105,18 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
         [Button(*Label, [this, Difficulty] { if (Game.IsValid()) Game->StartSudokuGame(Difficulty); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
     }
     auto Grid = SNew(SGridPanel);
+    SudokuCellWidgets.Reset();
     for (int32 Index = 0; Index < 81; ++Index)
     {
+        TSharedPtr<SBox> Cell;
         Grid->AddSlot(Index % 9, Index / 9).Padding(FMargin((Index % 3 == 0) ? 4.f : 1.f, (Index / 9 % 3 == 0) ? 4.f : 1.f, 1.f, 1.f))
         [
-            SNew(SBox).WidthOverride(44).HeightOverride(44)
+            SAssignNew(Cell, SBox).WidthOverride(44).HeightOverride(44)
             [SNew(SButton).ButtonColorAndOpacity(this, &SDaedalusJavaArcade::CellColor, Index).ContentPadding(0)
                 .OnClicked_Lambda([this, Index] { return SelectCell(Index); })
                 [SNew(STextBlock).Font(this, &SDaedalusJavaArcade::CellFont, Index).Justification(ETextJustify::Center).Text(this, &SDaedalusJavaArcade::CellText, Index)]]
         ];
+        SudokuCellWidgets.Add(Cell);
     }
     auto Digits = SNew(SHorizontalBox);
     for (int32 Value = 0; Value <= 9; ++Value)
@@ -445,10 +448,19 @@ FText SDaedalusJavaArcade::SelectionText() const
     else if (S.bNeedsSync) Text += TEXT(" Refresh before entering another number.");
     return FText::FromString(Text);
 }
-void SDaedalusJavaArcade::FocusBoard()
+void SDaedalusJavaArcade::RevealSelectedCell()
+{
+    if (Game.IsValid() && Game->Game == EDaedalusJavaGame::Sudoku && CabinetScroll.IsValid()
+        && SudokuCellWidgets.IsValidIndex(SelectedCell) && SudokuCellWidgets[SelectedCell].IsValid())
+        CabinetScroll->ScrollDescendantIntoView(SudokuCellWidgets[SelectedCell], false, EDescendantScrollDestination::IntoView, 8.f);
+}
+void SDaedalusJavaArcade::FocusBoard(bool bRevealCell)
 {
     if (Game.IsValid() && FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
+    {
         FSlateApplication::Get().SetUserFocus(Game->GetSlateUserIndex(), SharedThis(this), EFocusCause::SetDirectly);
+        if (bRevealCell) RevealSelectedCell();
+    }
 }
 FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event)
 {
@@ -507,6 +519,7 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
         return FReply::Unhandled();
     }
     SelectedCell = FMath::Clamp(Row, 0, 8) * 9 + FMath::Clamp(Col, 0, 8);
+    RevealSelectedCell();
     Invalidate(EInvalidateWidgetReason::Paint);
     return FReply::Handled();
 }

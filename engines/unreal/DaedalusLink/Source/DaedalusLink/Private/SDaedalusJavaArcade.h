@@ -7,6 +7,7 @@
 #include "Widgets/Input/SComboBox.h"
 
 class SEditableTextBox;
+class SScrollBox;
 
 /** Small local board/table presentation. Controls send intentions; Java decides all outcomes. */
 class SDaedalusJavaArcade : public SCompoundWidget
@@ -42,11 +43,14 @@ private:
     FText TableText() const;
     FText BlackjackGuideText() const;
     FReply Configure();
-    void FocusBoard();
+    void FocusBoard(bool bRevealCell = true);
+    void RevealSelectedCell();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;
     TSharedPtr<SEditableTextBox> UsernameBox;
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
+    TSharedPtr<SScrollBox> CabinetScroll;
+    TArray<TSharedPtr<SWidget>> SudokuCellWidgets;
     TArray<TSharedPtr<FDaedalusSudokuSavedGame>> SavedGameOptions;
     TSharedPtr<SComboBox<TSharedPtr<FDaedalusSudokuSavedGame>>> SavedGamePicker;
     FString SelectedSavedGameId;
