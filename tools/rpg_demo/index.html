@@ -1488,9 +1488,16 @@ function pop(target, txt, color) {
   const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: W - 52, y: 22 + party.indexOf(target) * 30 };
   B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
 }
+function recoverStolenGold() {
+  let back = 0;
+  B.foes.forEach(f => { if (f.hp <= 0 && f.stolen) { back += f.stolen; f.stolen = 0; } });
+  if (back) { gold += back; B.recoveredGold = (B.recoveredGold || 0) + back; }
+  return back;
+}
 function hurtFoe(f, dmg) {
   f.hp = Math.max(0, f.hp - dmg); B.flash[f.key + f.x] = 0.2; pop(f, dmg, "#ffffff");
   if (f.hp <= 0 && f.beh === "undead" && !f.rose && Math.random() < 0.35) { f.rose = true; f.hp = Math.round(f.max * 0.3); B.rose = f; pop(f, "RISES", "#c8a0f8"); }
+  if (f.hp <= 0) recoverStolenGold();
 }
 const riseNote = () => { const f = B.rose; B.rose = null; return f ? " THE " + f.name.toUpperCase() + " RISES AGAIN!" : ""; };
 function doAction(a) {
@@ -1650,9 +1657,10 @@ function foeTurn(f, tg) {
 }
 function endRound() {
   if (alive(B.foes).length && alive(party).length) roundStatuses();
+  recoverStolenGold();
   if (!alive(B.foes).length) {
-    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0), back = B.foes.reduce((a, f) => a + (f.stolen || 0), 0);
-    gold += gd + back; cue("VICTORY"); sfx("VICTORY"); fell(B.foes);
+    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0), back = B.recoveredGold || 0;
+    gold += gd; cue("VICTORY"); sfx("VICTORY"); fell(B.foes);
     const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."].concat(back ? ["YOU TAKE BACK " + back + " STOLEN GOLD."] : []);
     const grow = (m, e) => { if (m.hp <= 0) return; m.exp += e; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const growth = D.party.members.find(x => x.job === m.job).growth; m.max += growth.hp; m.hp += growth.hp; m.mmax += growth.mp; m.mp += growth.mp; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } };
     party.forEach(m => grow(m, exp)); reserve.forEach(m => grow(m, Math.floor(exp / 2)));   /* the reserve learns by watching: half */

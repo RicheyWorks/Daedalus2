@@ -23,7 +23,7 @@ function line(prefix) {
 }
 const source = [
   between("const START_LEVEL =", "/* Recruits:"), line("const alive ="), line("const clearAll ="), line("let B = null;"),
-  between("function endRound()", "function finishBattle()"), between("function innPrompt()", "function openChest("),
+  between("function recoverStolenGold()", "function hurtFoe("), between("function endRound()", "function finishBattle()"), between("function innPrompt()", "function openChest("),
   "this.api = { start: () => { party = buildParty(); }, makeMember, endRound, innPrompt, getParty: () => party, getReserve: () => reserve, " +
   "getGold: () => gold, getBattle: () => B, setBattle: value => { B = value; } };"
 ].join("\n");
