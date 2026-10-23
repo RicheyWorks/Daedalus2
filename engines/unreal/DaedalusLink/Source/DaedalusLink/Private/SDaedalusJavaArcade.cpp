@@ -78,6 +78,13 @@ FReply SDaedalusJavaArcade::Configure()
         : Game->ConfigureBlackjackToken(Secret);
     SecretBox->SetText(FText::GetEmpty());
     if (UsernameBox.IsValid()) UsernameBox->SetText(FText::GetEmpty());
+    SelectedSavedGameId.Reset();
+    SavedGameOptions.Reset();
+    if (SavedGamePicker.IsValid())
+    {
+        SavedGamePicker->ClearSelection();
+        SavedGamePicker->RefreshOptions();
+    }
     LocalMessage = Success ? FString() : TEXT("Check the account fields. Passwords and service tokens are kept only in memory.");
     FocusBoard();
     return FReply::Handled();
@@ -135,6 +142,40 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)[Button(TEXT("Hint (Java gem cost)"), [this] { if (Game.IsValid()) Game->RequestSudokuHint(); }, [this] { return State().bCanAct; })]
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Save to Java"), [this] { if (Game.IsValid()) Game->SaveSudokuGame(); }, [this] { return State().bReady && State().bOwner; })]
         ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Saved games")))]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot().FillWidth(1).Padding(0, 0, 6, 0)
+            [
+                SAssignNew(SavedGamePicker, SComboBox<TSharedPtr<FDaedalusSudokuSavedGame>>)
+                .OptionsSource(&SavedGameOptions)
+                .MaxListHeight(240.f)
+                .EnableGamepadNavigationMode(true)
+                .IsEnabled_Lambda([this] { const auto S = State(); return Game.IsValid() && Game->HasCredentials() && !S.bBusy && !S.bSavedGamesLoading && S.bSavedGamesReady && S.SavedGames.Num() > 0; })
+                .OnComboBoxOpening(this, &SDaedalusJavaArcade::RebuildSavedGames)
+                .OnGenerateWidget_Lambda([](TSharedPtr<FDaedalusSudokuSavedGame> Saved) -> TSharedRef<SWidget>
+                {
+                    return SNew(STextBlock).Text(Saved.IsValid() ? SavedGameText(*Saved) : FText::GetEmpty()).AutoWrapText(true);
+                })
+                .OnSelectionChanged_Lambda([this](TSharedPtr<FDaedalusSudokuSavedGame> Saved, ESelectInfo::Type)
+                {
+                    SelectedSavedGameId = Saved.IsValid() ? Saved->GameId : FString();
+                })
+                [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectedSavedGameText).AutoWrapText(true)]
+            ]
+            + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 6, 0)
+            [SNew(SButton).Text(FText::FromString(TEXT("Refresh saved")))
+                .IsEnabled_Lambda([this] { const auto S = State(); return Game.IsValid() && Game->HasCredentials() && !S.bBusy && !S.bSavedGamesLoading; })
+                .OnClicked(this, &SDaedalusJavaArcade::RefreshSavedGames)]
+            + SHorizontalBox::Slot().AutoWidth()
+            [SNew(SButton).Text(FText::FromString(TEXT("Resume selected")))
+                .IsEnabled_Lambda([this] { return Game.IsValid() && Game->CanResumeSavedSudokuGame(SelectedSavedGameId); })
+                .OnClicked(this, &SDaedalusJavaArcade::ResumeSelectedSavedGame)]
+        ]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SavedGamesText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
         [
             SNew(SHorizontalBox)
@@ -142,6 +183,79 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             + SHorizontalBox::Slot().AutoWidth()[Button(TEXT("Resume"), [this] { if (Game.IsValid() && ResumeBox.IsValid()) Game->ResumeSudokuGame(ResumeBox->GetText().ToString()); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })]
         ]
         + SVerticalBox::Slot().AutoHeight()[SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(TEXT("Game ID: ") + S.SessionId + (S.bSolved ? TEXT("  ·  Java reports solved") : S.bTimeUp ? TEXT("  ·  Java reports time expired") : TEXT(""))); }).AutoWrapText(true)];
+}
+void SDaedalusJavaArcade::RebuildSavedGames()
+{
+    const auto S = State();
+    SavedGameOptions.Reset();
+    TSharedPtr<FDaedalusSudokuSavedGame> Selection;
+    if (S.bSavedGamesReady && !S.bSavedGamesLoading)
+    {
+        for (const auto& Saved : S.SavedGames)
+        {
+            if (SavedGameOptions.Num() >= 10) break;
+            auto Option = MakeShared<FDaedalusSudokuSavedGame>(Saved);
+            SavedGameOptions.Add(Option);
+            if (Saved.GameId == SelectedSavedGameId) Selection = Option;
+        }
+    }
+    SelectedSavedGameId = Selection.IsValid() ? Selection->GameId : FString();
+    if (SavedGamePicker.IsValid())
+    {
+        SavedGamePicker->RefreshOptions();
+        if (Selection.IsValid()) SavedGamePicker->SetSelectedItem(Selection);
+        else SavedGamePicker->ClearSelection();
+    }
+}
+FText SDaedalusJavaArcade::SavedGameText(const FDaedalusSudokuSavedGame& Saved)
+{
+    return FText::FromString(FString::Printf(TEXT("Level %d · %d/81 filled · %d lives · %lld s%s%s\nID: %s"),
+        Saved.Difficulty, Saved.FilledCells, Saved.Lives, Saved.ElapsedSeconds,
+        Saved.bSolved ? TEXT(" · Solved") : TEXT(""), Saved.bTimeUp ? TEXT(" · Time expired") : TEXT(""), *Saved.GameId));
+}
+FText SDaedalusJavaArcade::SelectedSavedGameText() const
+{
+    const auto S = State();
+    if (S.bSavedGamesReady && !S.bSavedGamesLoading)
+        for (const auto& Saved : S.SavedGames)
+            if (Saved.GameId == SelectedSavedGameId) return SavedGameText(Saved);
+    return FText::FromString(TEXT("Choose a saved game"));
+}
+FText SDaedalusJavaArcade::SavedGamesText() const
+{
+    const auto S = State();
+    if (!Game.IsValid() || !Game->HasCredentials())
+        return FText::FromString(TEXT("Connect an account to find saved Java games."));
+    if (S.bSavedGamesLoading)
+        return FText::FromString(TEXT("Loading saved games from Java…"));
+    if (!S.bSavedGamesReady && !S.SavedGamesMessage.IsEmpty())
+        return FText::FromString(TEXT("Saved games unavailable: ") + S.SavedGamesMessage + TEXT(" Refresh saved to retry, or enter a game ID below."));
+    if (!S.bSavedGamesLoaded)
+        return FText::FromString(TEXT("Saved games have not been loaded. Refresh saved to check Java."));
+    if (!S.bSavedGamesReady)
+        return FText::FromString(TEXT("The saved list is not ready. Refresh saved to retry, or enter a game ID below."));
+    if (S.SavedGames.IsEmpty())
+        return FText::FromString(TEXT("Java returned no saved games for this account. You can also enter a game ID below."));
+    return FText::FromString(FString::Printf(TEXT("Showing %d saved games (up to 10). Choose one, then Resume selected. Enter a game ID below for another."), FMath::Min(S.SavedGames.Num(), 10)));
+}
+FReply SDaedalusJavaArcade::RefreshSavedGames()
+{
+    const auto S = State();
+    if (Game.IsValid() && Game->HasCredentials() && !S.bBusy && !S.bSavedGamesLoading)
+    {
+        LocalMessage.Reset();
+        Game->RefreshSavedSudokuGames();
+    }
+    return FReply::Handled();
+}
+FReply SDaedalusJavaArcade::ResumeSelectedSavedGame()
+{
+    if (Game.IsValid() && Game->CanResumeSavedSudokuGame(SelectedSavedGameId))
+    {
+        LocalMessage.Reset();
+        if (Game->ResumeSavedSudokuGame(SelectedSavedGameId)) FocusBoard();
+    }
+    return FReply::Handled();
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
 {

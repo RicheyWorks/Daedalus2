@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "DaedalusJavaArcade.h"
 #include "Widgets/SCompoundWidget.h"
+#include "Widgets/Input/SComboBox.h"
 
 class SEditableTextBox;
 
@@ -28,6 +29,12 @@ private:
     FSlateColor CellColor(int32 Index) const;
     FText StatusText() const;
     FText SelectionText() const;
+    void RebuildSavedGames();
+    static FText SavedGameText(const FDaedalusSudokuSavedGame& Saved);
+    FText SelectedSavedGameText() const;
+    FText SavedGamesText() const;
+    FReply RefreshSavedGames();
+    FReply ResumeSelectedSavedGame();
     bool CanEditCell() const;
     void SubmitCellValue(int32 Value);
     FText TableText() const;
@@ -38,6 +45,9 @@ private:
     TSharedPtr<SEditableTextBox> UsernameBox;
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
+    TArray<TSharedPtr<FDaedalusSudokuSavedGame>> SavedGameOptions;
+    TSharedPtr<SComboBox<TSharedPtr<FDaedalusSudokuSavedGame>>> SavedGamePicker;
+    FString SelectedSavedGameId;
     TSharedPtr<SWidget> CabinetControls;
     int32 SelectedCell = 0;
     int32 SelectedDigit = 1;
