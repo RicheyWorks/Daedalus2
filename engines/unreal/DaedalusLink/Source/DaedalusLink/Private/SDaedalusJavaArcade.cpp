@@ -91,7 +91,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
     auto Starts = SNew(SHorizontalBox);
     for (int32 Difficulty = 1; Difficulty <= 5; ++Difficulty)
     {
-        const FString Label = FString::Printf(TEXT("New %d"), Difficulty);
+        const FString Label = FString::Printf(TEXT("Level %d"), Difficulty);
         Starts->AddSlot().AutoWidth().Padding(0, 0, 6, 0)
         [Button(*Label, [this, Difficulty] { if (Game.IsValid()) Game->StartSudokuGame(Difficulty); }, [this] { return Game.IsValid() && Game->HasCredentials() && !State().bBusy; })];
     }
@@ -111,14 +111,20 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
     {
         const FString Label = Value == 0 ? TEXT("Erase") : FString::FromInt(Value);
         Digits->AddSlot().AutoWidth().Padding(0, 0, 4, 0)
-        [Button(*Label, [this, Value] { if (Game.IsValid()) Game->SubmitSudokuMove(SelectedCell / 9, SelectedCell % 9, Value); }, [this] { const auto S = State(); return S.bCanAct && S.Givens.IsValidIndex(SelectedCell) && !S.Givens[SelectedCell]; })];
+        [Button(*Label, [this, Value] { SubmitCellValue(Value); }, [this] { return CanEditCell(); })];
     }
     return SNew(SVerticalBox)
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("New puzzle — difficulty")))]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Starts]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [SNew(STextBlock).Text_Lambda([this] { const auto S = State(); return FText::FromString(FString::Printf(TEXT("Difficulty %d  ·  Score %lld  ·  Lives %d  ·  Moves %lld  ·  Elapsed %lld s%s"), S.Difficulty, S.Score, S.Lives, S.MoveCount, S.ElapsedSeconds, S.TimeLimitSeconds > 0 ? *FString::Printf(TEXT("  ·  Remaining %lld s"), S.SecondsLeft) : TEXT(""))); }).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Grid]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+        [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectionText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Digits]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Esc / Back: close."))).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
             SNew(SHorizontalBox)
@@ -197,6 +203,34 @@ FSlateColor SDaedalusJavaArcade::CellColor(int32 Index) const
     return S.Givens.IsValidIndex(Index) && S.Givens[Index] ? FLinearColor(0.3f, 0.35f, 0.4f, 1.f) : FLinearColor(0.15f, 0.2f, 0.25f, 1.f);
 }
 FReply SDaedalusJavaArcade::SelectCell(int32 Index) { SelectedCell = FMath::Clamp(Index, 0, 80); FocusBoard(); return FReply::Handled(); }
+bool SDaedalusJavaArcade::CanEditCell() const
+{
+    const auto S = State();
+    return Game.IsValid() && S.Game == EDaedalusJavaGame::Sudoku && S.bCanAct
+        && S.Cells.IsValidIndex(SelectedCell) && S.Givens.IsValidIndex(SelectedCell) && !S.Givens[SelectedCell];
+}
+void SDaedalusJavaArcade::SubmitCellValue(int32 Value)
+{
+    if (Value < 0 || Value > 9) return;
+    if (Value > 0) SelectedDigit = Value;
+    if (CanEditCell()) Game->SubmitSudokuMove(SelectedCell / 9, SelectedCell % 9, Value);
+    // Keep the cursor and visible value until Java reconciles; never queue or project an edit.
+}
+FText SDaedalusJavaArcade::SelectionText() const
+{
+    const auto S = State();
+    if (!S.Cells.IsValidIndex(SelectedCell) || !S.Givens.IsValidIndex(SelectedCell))
+        return FText::FromString(TEXT("Connect an account, then choose a difficulty or resume a saved game."));
+    FString Text = FString::Printf(TEXT("Row %d, column %d · Selected digit %d · "), SelectedCell / 9 + 1, SelectedCell % 9 + 1, SelectedDigit);
+    if (S.Givens[SelectedCell]) Text += FString::Printf(TEXT("Fixed clue %d. Choose another cell to enter a number."), S.Cells[SelectedCell]);
+    else if (S.Cells[SelectedCell]) Text += FString::Printf(TEXT("Entry %d.%s"), S.Cells[SelectedCell], S.bCanAct ? TEXT(" Replace or erase it.") : TEXT(""));
+    else Text += TEXT("Empty cell.");
+    if (S.bSolved) Text += TEXT(" Java reports this puzzle solved.");
+    else if (S.bTimeUp) Text += TEXT(" Java reports time expired.");
+    else if (S.bBusy) Text += TEXT(" Waiting for Java; entries are not queued.");
+    else if (S.bNeedsSync) Text += TEXT(" Refresh before entering another number.");
+    return FText::FromString(Text);
+}
 void SDaedalusJavaArcade::FocusBoard()
 {
     if (Game.IsValid() && FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
@@ -207,18 +241,35 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     if (!Game.IsValid()) return FReply::Unhandled();
     const FKey Key = Event.GetKey();
     if (Key == EKeys::Escape) { Game->CloseArcade(); return FReply::Handled(); }
-    if (State().Game != EDaedalusJavaGame::Sudoku || Event.IsRepeat()) return FReply::Unhandled();
+    // Text fields and focused buttons own their keys. Only direct board focus edits the puzzle.
+    if (!HasUserFocus(Event.GetUserIndex()).IsSet() || State().Game != EDaedalusJavaGame::Sudoku) return FReply::Unhandled();
+    // Keep held keys from falling through to Slate navigation or replaying a mutation.
+    if (Event.IsRepeat()) return FReply::Handled();
+    if (Key == EKeys::Gamepad_Special_Left) { Game->CloseArcade(); return FReply::Handled(); }
     int32 Row = SelectedCell / 9, Col = SelectedCell % 9;
-    if (Key == EKeys::Left) --Col;
-    else if (Key == EKeys::Right) ++Col;
-    else if (Key == EKeys::Up) --Row;
-    else if (Key == EKeys::Down) ++Row;
+    if (Key == EKeys::Left || Key == EKeys::Gamepad_DPad_Left) --Col;
+    else if (Key == EKeys::Right || Key == EKeys::Gamepad_DPad_Right) ++Col;
+    else if (Key == EKeys::Up || Key == EKeys::Gamepad_DPad_Up) --Row;
+    else if (Key == EKeys::Down || Key == EKeys::Gamepad_DPad_Down) ++Row;
     else
     {
+        if (Key == EKeys::Gamepad_LeftShoulder || Key == EKeys::Gamepad_RightShoulder)
+        {
+            SelectedDigit = (SelectedDigit + (Key == EKeys::Gamepad_RightShoulder ? 1 : 8) - 1) % 9 + 1;
+            Invalidate(EInvalidateWidgetReason::Paint);return FReply::Handled();
+        }
+        const auto S = State();
+        if (Key == EKeys::F5 || Key == EKeys::Gamepad_Special_Right)
+        { if (S.bReady && S.bOwner) Game->SaveSudokuGame();return FReply::Handled(); }
+        if (Key == EKeys::F6) { if (!S.bBusy && !S.SessionId.IsEmpty() && !S.bRemoteClosed) Game->RefreshSnapshot();return FReply::Handled(); }
+        if ((Event.IsControlDown() && Key == EKeys::Z) || Key == EKeys::Gamepad_FaceButton_Top)
+        { if (S.bCanAct) Game->SudokuUndo();return FReply::Handled(); }
+        if (Event.IsControlDown() && Key == EKeys::Y) { if (S.bCanAct) Game->SudokuRedo();return FReply::Handled(); }
+        if (Key == EKeys::Enter || Key == EKeys::Gamepad_FaceButton_Bottom) { SubmitCellValue(SelectedDigit);return FReply::Handled(); }
         const FKey Keys[] = { EKeys::Zero, EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine };
         const FKey Pads[] = { EKeys::NumPadZero, EKeys::NumPadOne, EKeys::NumPadTwo, EKeys::NumPadThree, EKeys::NumPadFour, EKeys::NumPadFive, EKeys::NumPadSix, EKeys::NumPadSeven, EKeys::NumPadEight, EKeys::NumPadNine };
-        for (int32 Value = 0; Value <= 9; ++Value) if (Key == Keys[Value] || Key == Pads[Value]) { Game->SubmitSudokuMove(Row, Col, Value); return FReply::Handled(); }
-        if (Key == EKeys::BackSpace || Key == EKeys::Delete) { Game->SubmitSudokuMove(Row, Col, 0); return FReply::Handled(); }
+        for (int32 Value = 0; Value <= 9; ++Value) if (Key == Keys[Value] || Key == Pads[Value]) { SubmitCellValue(Value); return FReply::Handled(); }
+        if (Key == EKeys::BackSpace || Key == EKeys::Delete || Key == EKeys::Gamepad_FaceButton_Left) { SubmitCellValue(0); return FReply::Handled(); }
         return FReply::Unhandled();
     }
     SelectedCell = FMath::Clamp(Row, 0, 8) * 9 + FMath::Clamp(Col, 0, 8);

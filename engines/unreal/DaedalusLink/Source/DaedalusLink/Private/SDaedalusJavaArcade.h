@@ -27,6 +27,9 @@ private:
     FText CellText(int32 Index) const;
     FSlateColor CellColor(int32 Index) const;
     FText StatusText() const;
+    FText SelectionText() const;
+    bool CanEditCell() const;
+    void SubmitCellValue(int32 Value);
     FText TableText() const;
     FReply Configure();
     void FocusBoard();
@@ -35,5 +38,6 @@ private:
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
     int32 SelectedCell = 0;
+    int32 SelectedDigit = 1;
     FString LocalMessage;
 };
