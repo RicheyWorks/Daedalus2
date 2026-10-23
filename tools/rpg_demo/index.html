@@ -1921,7 +1921,7 @@ window.addEventListener("keydown", e => {                 /* typing straight in 
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
   if (k === " ") { stop(); neType("SP"); return; }
   if (k.length === 1 && D.title.name_entry.grid.some(row => row.includes(k))) { stop(); neType(k); return; }
-  if (k === "Enter") { stop(); neFinish(); return; }
+  if (k === "Enter") { stop(); if (!e.repeat) neFinish(); return; }
   if (k === "Backspace") { stop(); if (!neDelete()) neBack(); return; }
 }, true);
 /* ---------- ending ---------- */
