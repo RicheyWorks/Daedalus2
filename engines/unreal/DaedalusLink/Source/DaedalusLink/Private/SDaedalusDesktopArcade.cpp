@@ -477,7 +477,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
-	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Difficulty buttons start a new run.");
+	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
 	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
 		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
 		: TEXT("Space/J/Z or pad face/bumper: shoot.");
@@ -640,6 +640,13 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 		if (ADaedalusDesktopArcade* Actor = Game.Get())
 		{
 			const FDaedalusDesktopArcadeState State = Actor->GetState();
+			if (State.Id == TEXT("star_shooter") && State.bOver
+				&& (Key == EKeys::Gamepad_FaceButton_Bottom || Key == EKeys::Gamepad_Special_Right))
+			{
+				// Use the existing host restart: it owns the save fence, score submission and input cleanup.
+				Actor->RestartGame();
+				return FReply::Handled();
+			}
 			if (State.Id == TEXT("minesweeper"))
 			{
 				if (Key == EKeys::F5 || (State.bPaused && Key == EKeys::Gamepad_FaceButton_Left))

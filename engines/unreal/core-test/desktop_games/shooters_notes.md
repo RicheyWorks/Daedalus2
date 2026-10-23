@@ -48,6 +48,16 @@ Polish changes: dead enemies cannot score more than once, consumed bullets hit o
 
 ## Evidence and owner acceptance
 
+The native cabinet accepts a fresh pad A or Start press at Star's game-over result
+to invoke its existing host RestartGame, matching R/Restart. This route is handled
+before Start's ordinary pause mapping and before A enters held gameplay input.
+The host retains difficulty/seed and clears score-submission/input bookkeeping;
+its existing pending-save refusal still applies. Active play and source pause-menu
+controls are unchanged. Terminal help names the physical controls. This Slate/copy
+slice has source review only; controller repeat/focus, pending-save refusal and
+successive native leaderboard acceptance remain unverified. No portable core
+controller reset was added, since it would bypass the host score lifecycle.
+
 `shooters_parity.txt` contains 635 executed-source cases across 21 rule categories, with original SHA pins and numeric schemas. The oracle supplies deterministic random fragments; it does not claim Pygame runtime behavior or full-screen script parity. The rectangle stub explicitly models integer construction; real Unreal input, rendering, audio, save integration and live gameplay remain separate verification stages.
 
 Native test results, Daedalus catalog/adapter bindings, UHT/UBT compile evidence and Claude acceptance are reported by the integration owner after final-head validation. Portable native tests alone do not establish an in-game port.

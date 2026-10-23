@@ -742,7 +742,7 @@ public:
             F.AddRect(170,225,460,120,{15,20,40,235});
             F.AddText(280,238,"GAME OVER",Red,40);
             F.AddText(200,288,"Final score "+std::to_string(Score)+"   Wave "+std::to_string(Wave),White,18);
-            F.AddText(200,318,"Fresh R press or cabinet Restart to retry",Cyan,17);
+            F.AddText(200,318,"Pad A / Start or R / Restart: retry",Cyan,17);
         }
         if(Paused) {
             F.AddRect(200,180,400,250,{15,20,40,235});F.AddText(330,195,"PAUSED",White,32);
@@ -753,7 +753,7 @@ public:
     }
     Status GetStatus() const override {
         if(QuitRequested) return {Score,std::max(0,Pilot.Lives),Over,false,SaveRequested?"Save & Quit requested; host persistence pending":"Quit requested"};
-        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh R press or cabinet Restart to retry"};
+        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh pad A/Start or R/Restart to retry"};
         if(Paused) return {Score,std::max(0,Pilot.Lives),false,false,"Paused: Up/Down select; J/X or Space/A confirm; Shift/Y resume"};
         return {Score,std::max(0,Pilot.Lives),false,false,std::string(DifficultyName(Mode))+"; wave "+std::to_string(Wave)+"; shift in "+std::to_string(GetWaveFramesRemaining())+
             " steps; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+"; "+BossNote()+"; "+
