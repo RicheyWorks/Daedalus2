@@ -112,7 +112,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
             SNew(SBox).WidthOverride(44).HeightOverride(44)
             [SNew(SButton).ButtonColorAndOpacity(this, &SDaedalusJavaArcade::CellColor, Index).ContentPadding(0)
                 .OnClicked_Lambda([this, Index] { return SelectCell(Index); })
-                [SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 20)).Justification(ETextJustify::Center).Text(this, &SDaedalusJavaArcade::CellText, Index)]]
+                [SNew(STextBlock).Font(this, &SDaedalusJavaArcade::CellFont, Index).Justification(ETextJustify::Center).Text(this, &SDaedalusJavaArcade::CellText, Index)]]
         ];
     }
     auto Digits = SNew(SHorizontalBox);
@@ -366,9 +366,23 @@ FText SDaedalusJavaArcade::CellText(int32 Index) const
     const auto S = State();
     if (!S.Cells.IsValidIndex(Index)) return FText::FromString(TEXT("·"));
     if (S.Cells[Index] != 0) return FText::AsNumber(S.Cells[Index]);
+    if (!S.PencilMasks.IsValidIndex(Index) || (S.PencilMasks[Index] & 0x3fe) == 0) return FText::GetEmpty();
     FString Marks;
-    if (S.PencilMasks.IsValidIndex(Index)) for (int32 Digit = 1; Digit <= 9; ++Digit) if (S.PencilMasks[Index] & (1 << Digit)) Marks += FString::FromInt(Digit);
+    for (int32 Digit = 1; Digit <= 9; ++Digit)
+    {
+        if (Digit > 1) Marks += Digit % 3 == 1 ? TEXT("\n") : TEXT(" ");
+        // Figure space keeps an absent note aligned with the numeral above it.
+        if (S.PencilMasks[Index] & (1 << Digit)) Marks += FString::FromInt(Digit);
+        else Marks += TEXT("\u2007");
+    }
     return FText::FromString(Marks);
+}
+FSlateFontInfo SDaedalusJavaArcade::CellFont(int32 Index) const
+{
+    const auto S = State();
+    const bool HasNotes = S.Cells.IsValidIndex(Index) && S.Cells[Index] == 0
+        && S.PencilMasks.IsValidIndex(Index) && (S.PencilMasks[Index] & 0x3fe) != 0;
+    return FCoreStyle::GetDefaultFontStyle("Regular", HasNotes ? 10 : 20);
 }
 FSlateColor SDaedalusJavaArcade::CellColor(int32 Index) const
 {
@@ -398,7 +412,20 @@ FText SDaedalusJavaArcade::SelectionText() const
     FString Text = FString::Printf(TEXT("Row %d, column %d · Selected digit %d · "), SelectedCell / 9 + 1, SelectedCell % 9 + 1, SelectedDigit);
     if (S.Givens[SelectedCell]) Text += FString::Printf(TEXT("Fixed clue %d. Choose another cell to enter a number."), S.Cells[SelectedCell]);
     else if (S.Cells[SelectedCell]) Text += FString::Printf(TEXT("Entry %d.%s"), S.Cells[SelectedCell], S.bCanAct ? TEXT(" Replace or erase it.") : TEXT(""));
-    else Text += TEXT("Empty cell.");
+    else
+    {
+        Text += TEXT("Empty cell.");
+        if (S.PencilMasks.IsValidIndex(SelectedCell))
+        {
+            FString Notes;
+            for (int32 Digit = 1; Digit <= 9; ++Digit) if (S.PencilMasks[SelectedCell] & (1 << Digit))
+            {
+                if (!Notes.IsEmpty()) Notes += TEXT(", ");
+                Notes += FString::FromInt(Digit);
+            }
+            if (!Notes.IsEmpty()) Text += TEXT(" Pencil notes: ") + Notes + TEXT(".");
+        }
+    }
     if (S.bSolved) Text += TEXT(" Java reports this puzzle solved.");
     else if (S.bTimeUp) Text += TEXT(" Java reports time expired.");
     else if (S.bBusy) Text += TEXT(" Waiting for Java; entries are not queued.");

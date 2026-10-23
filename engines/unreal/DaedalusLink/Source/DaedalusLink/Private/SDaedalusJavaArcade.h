@@ -2,6 +2,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "DaedalusJavaArcade.h"
+#include "Fonts/SlateFontInfo.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Input/SComboBox.h"
 
@@ -26,6 +27,7 @@ private:
     FDaedalusJavaArcadeState State() const;
     FReply SelectCell(int32 Index);
     FText CellText(int32 Index) const;
+    FSlateFontInfo CellFont(int32 Index) const;
     FSlateColor CellColor(int32 Index) const;
     FText StatusText() const;
     FText SelectionText() const;
