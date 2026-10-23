@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v3",
+  "schema": "daedalus.playable-scene-receipt.v4",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -79,8 +79,8 @@
     "current_packages_clean": true
   },
   "limits": [
+    "R3 real UMG objective/prompt/completion assets are built, compiled and saved; runtime and pixel acceptance were not run in this build-only pass.",
     "Current scene and feedback captures await independent pixel review; no visual-quality acceptance is claimed.",
-    "Success feedback uses native Development|PrintString for 18 seconds. It is a development-play prototype, not a shipping HUD.",
     "The full 104 x 105 m ground and eight sampled collision traces are preserved; this is not exhaustive collision or performance coverage.",
     "Original saved material hashes are unchanged and current packages are clean. Earlier unsaved auto-instancing flags were not restored over saved originals after the old editor closed.",
     "All four scene lights are movable, with zero unbuilt interactions; no project render settings or global lighting build changed.",
@@ -149,8 +149,8 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
-      "bytes": 34414,
-      "sha256": "7850dd9873dd2c75f8688e9d47c7d95c9a3fe813c5d38290a478b917c5636510"
+      "bytes": 27702,
+      "sha256": "22d276f780ea93e40524278b3251374bcd8240189a47b359ab5d875ec056405a"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
@@ -158,9 +158,14 @@
       "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
     },
     {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost.uasset",
+      "bytes": 49675,
+      "sha256": "8b8f5f14c16d5ec1810da558a19b259b90a16747d28ba32132f65345622d43ad"
+    },
+    {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 411308,
-      "sha256": "6a5f477193ede04e3c7766394bebf0abf4154ce09cd70face62572f5760b6ff4"
+      "bytes": 415635,
+      "sha256": "fe5b2f0938e8c50c66271807ca014d4921af89f01dcd8e1c8d25bf1e3847ccf7"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -188,9 +193,14 @@
       "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
     },
     {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective.uasset",
+      "bytes": 133146,
+      "sha256": "324ae33c48c5ffa08b67a6ecf12a55e2a638382acf2b2f8f0f9b5dcf68caf29e"
+    },
+    {
       "path": "feedback-graph.dsl",
-      "bytes": 299,
-      "sha256": "399c9cfc1e764c73de8f3cfcb0117c53790048416e5e713cd7382d3afed80340"
+      "bytes": 136,
+      "sha256": "73fb86cd9170ee9aab9a2851f077de60b881609962559c65bfdbcd171a606bb8"
     },
     {
       "path": "images/after-player.png",
@@ -274,10 +284,94 @@
     },
     {
       "path": "README.md",
-      "bytes": 3232,
-      "sha256": "db296ad262693c0d5dc51c935bb240252ff282165c7504990b3bb42dfbc97f55"
+      "bytes": 2739,
+      "sha256": "e9e1e52594e232d4b1345947622cca408daf65ac7622bb763423b59816b96e9f"
+    },
+    {
+      "path": "ui/build.json",
+      "bytes": 2668,
+      "sha256": "aedda4ddbf0de10cbb0036de0b15b13dcec4bfc2f3843ae0b9090a54b8fd4477"
+    },
+    {
+      "path": "ui/host.dsl",
+      "bytes": 626,
+      "sha256": "6e6abaa73fabaf92f5a084833e042b244e5d56842243655fc0393458869858f1"
+    },
+    {
+      "path": "ui/objective-events.dsl",
+      "bytes": 336,
+      "sha256": "25830afa464c8b6a6263fcce5887e9dc69976d2909431b5b59f9ad8c81e9fd37"
+    },
+    {
+      "path": "ui/objective-refresh.dsl",
+      "bytes": 1428,
+      "sha256": "c646e6f5313e0557c459b883e1f536e75106ac69a15944f492e65c42c8ae1cf7"
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 141
+  "actor_count": 141,
+  "objective_ui": {
+    "schema": "daedalus.commons-objective-ui-build.v1",
+    "status": "BUILT_COMPILED_SAVED",
+    "widget": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective",
+    "host": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost",
+    "objective": "Discover the Lantern chart; follow amber stones past Grove/Overlook to the gold arch.",
+    "context_prompt": {
+      "text": "[E] Collect the Lantern chart",
+      "radius_cm": 300,
+      "input_or_focus_changes": false
+    },
+    "completion": {
+      "source": "Existing DaedalusOrrery Charts contains Lantern",
+      "title": "Lantern chart found!",
+      "detail": "You did it! Take your time and explore the Commons. There is no rush.",
+      "persistent_while_current_widget_is_present": true
+    },
+    "progress_writes_or_resets": false,
+    "refresh_interval_seconds": 0.2,
+    "cleanup": "Widget Destruct clears its own timer; owned host EndPlay removes only this widget class.",
+    "compiled_status": {
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback": "<BlueprintStatus.BS_UP_TO_DATE: 3>"
+    },
+    "saved_packages_clean": true,
+    "compute_released": true,
+    "Play_run": false,
+    "tests_or_previous_route_pickup_reload_repeated": false,
+    "runtime_or_pixel_acceptance": "NOT RUN in this build-only pass, by user direction.",
+    "layout": {
+      "objective_panel": {
+        "position": [
+          32,
+          110
+        ],
+        "size": [
+          540,
+          254
+        ],
+        "title_font_points": 27,
+        "detail_font_points": 18,
+        "background": "Dark teal opaque panel"
+      },
+      "interaction_prompt": {
+        "bottom_centre": true,
+        "size": [
+          600,
+          76
+        ],
+        "font_points": 26
+      },
+      "widget_count": 9,
+      "hit_test": "Invisible; existing game input remains unchanged."
+    },
+    "destination": "Owned contrast signboard and plain-language arrival text; duplicate label hidden. Existing spacious ground and pickup behavior retained.",
+    "source_finding": "Existing shared SDaedalusHud hides the quest panel when no usable actor remains. It was not edited; the owned UMG reads existing progress independently.",
+    "limits": [
+      "No new gameplay/visual/cook/shipping acceptance is claimed.",
+      "Existing screenshot folders document older R1/R2 scenes and do not show this new UI.",
+      "Broad horizon and blockout-level visual finish remain; the reference benchmark is not met."
+    ]
+  },
+  "actual_checks_scope": "Historical R1/R2 checks, before the new R3 UI. No route, pickup, collision grid, reload or test suite was rerun for this build."
 }

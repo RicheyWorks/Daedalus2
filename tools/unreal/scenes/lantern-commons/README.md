@@ -1,48 +1,44 @@
-# Lantern Commons: presentation and pickup feedback
+# Lantern Commons: objective and interaction UI
 
-The saved 104 x 105 m peaceful scene uses the existing Daedalus Hero/input and
-approved Blender floor, rocks, Willow trunk/canopy and Lantern chart. Follow the
-amber route through Shade Grove and the stepped Stone Overlook to the chart
-garden, then press E. Thirty-two paired trees, twelve new planted pockets,
-arrival pads and grouped rocks give the three destinations stronger identities.
-Continuous ground collision and generous roaming space remain intact.
+The current saved scene includes a real UMG Explorer Log, a contextual E prompt,
+and a persistent friendly completion state. These replace the development-only
+PrintString success message. The shared Daedalus HUD and native chart pickup code
+remain unchanged.
 
-All four scene lights are movable. Unreal's actual diagnostic reported zero
-unbuilt light and primitive interactions, without a lighting bake or global
-render-setting changes. The saved scene clean-reloaded with 141 actors and 273
-floor instances; eight sampled route/edge collision rays passed.
+The Explorer Log tells the player to discover the Lantern chart by following the
+amber stones through Shade Grove and Stone Overlook to the gold arch. Within
+three metres, a large bottom-centred `[E] Collect the Lantern chart` prompt appears.
+Existing `DaedalusOrrery.Charts` membership supplies completion; no progress is
+reset or written. After Lantern is present, the panel says `Lantern chart found!`
+and invites the player to explore at their own pace. It does not vanish with the
+collected actor or expire after a debug-message duration.
 
-One actual Play traversed 37.62 m across the three stops, all grounded and within
-37 cm of the targets, at full health/shields with zero enemies. E removed the
-owned chart child at 2.18 m. Its native EventDestroyed -> PrintString graph logged
-`LANTERN CHART COLLECTED!` and requests 18 seconds on screen. Two game-viewport
-captures were written immediately and 2.61 seconds after the interaction.
-This is development-only PrintString feedback; a shipping UMG/HUD is not claimed.
-Normal Play stop restored encounters from 0 to 1 and left all packages clean.
-Current player progress was not rolled back; originals were not edited or saved.
+`WBP_LanternObjective` owns the layout and a 0.2-second native Blueprint refresh
+timer. `BP_LanternUIHost` creates it for the existing player at level BeginPlay and
+removes only this widget class at EndPlay. The widget clears its own timer at
+Destruct. Canvas/panels do not intercept input; existing Hero controls remain.
+The destination now has a contrast-backed sign with plain-language E guidance,
+and its duplicate label is hidden. The peaceful rules, 104 x 105 m ground, 273
+floor instances and original assets are retained.
 
-Current captures are under `images/presentation-r2/`: matched before/after
-player-height, route and overview images, plus both gameplay-success PNGs.
-Their bytes/hashes are verified, but independent pixel review is PENDING because
-the local image reader closed the executor transport. Do not equate the log or
-PNG existence with accepted readability. The parent can inspect these repository
-images directly. Earlier images/native-proof.json remain historical R1 evidence.
+This was a BUILD-ONLY pass: necessary Blueprint compilation and owned asset/map
+saves, with clean packages and normal compute release. No Play, route, pickup,
+reload, collision-grid or standalone test suite was run. Do not describe the new
+UI as runtime-tested, visually accepted, shipping-qualified or bug-free. Earlier
+proof files and screenshots are historical R1/R2 evidence; they do not show R3 UI.
+The broad black horizon and blockout-level visual finish remain unfinished.
 
-Use the existing map at the manifest world path. On a compatible Daedalus checkout,
-copy only this pack's Content files to their matching project Content paths under
-normal ownership/preservation; do not overwrite other work or mount under plugin
-Content. Listed native classes/imported meshes must already exist. This is not a
-standalone project. The new child Blueprint and editable `feedback-graph.dsl`
-reuse Epic BlueprintTools; no C++/plugin/framework or installation was needed.
+Use the existing saved map at the manifest world path. On a compatible Daedalus
+checkout, copy only this pack's Content files to matching project Content paths
+under ordinary ownership/preservation; do not overwrite other work or mount this
+under plugin Content. Existing native Daedalus classes, imported Blender meshes
+and engine UMG must be present. This is not a standalone project.
 
-Reusable recipe: use BlueprintTools.create with native DaedalusStarChart parent;
-add ReceiveDestroyed; discover PrintString and its actual pins; write the supplied
-DSL, compile/save and place only in the owned map. Set the scene's single formerly
-stationary destination light to Movable, preserve the other three movable lights,
-then save/reload and inspect DumpUnbuiltLightInteractions. Verify actual E pickup
-through input, retain screenshots and normally stop Play with encounter restoration.
+Editable native graph source is in `ui/objective-refresh.dsl`,
+`ui/objective-events.dsl` and `ui/host.dsl`; current build details are in
+`ui/build.json`. `feedback-graph.dsl` now has no PrintString node. No C++ wrapper,
+new gameplay framework, project/input setting change or installation was added.
 
-The established 17-image benchmark board and Adopt Me minimum remain the quality
-bar to exceed over iteration. Final style is undecided. Visual finish, repetition,
-destination clarity and message readability await review; this is not reference-
-quality, production visual/performance acceptance or prebuilt game-jam content.
+The established 17-image visual benchmark board and Adopt Me minimum still apply.
+Final art style remains undecided. This is independent Daedalus work, not prebuilt
+game-jam content.
