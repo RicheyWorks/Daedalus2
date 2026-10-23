@@ -65,6 +65,7 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 <script src="settings/daedalus-settings.js"></script>
 <script src="summons.js"></script>
 <script src="waystones.js"></script>
+<script src="journey-save.js"></script>
 <script>
 "use strict";
 (() => {
@@ -337,7 +338,8 @@ function makeMember(m, L) {
   const st = {};
   for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
   const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
-  let next = D.realm_profile ? m.next : 400; for (let i = START_LEVEL; i < L; i++) next = Math.round(next * 1.18);
+  let next = D.realm_profile ? m.next : 400;
+  for (let i = START_LEVEL; i < L; i++) { next = Math.round(next * 1.18); if (!Number.isFinite(next)) break; }
   return { name: m.name, job: m.job, lv: L, exp: 0, next, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
     kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
 }
@@ -353,8 +355,16 @@ function recruit(dungeonName) {
     return n;
   });
 }
-function recruitBeaten() {                                  /* saves from before recruits: bring in whoever is owed */
-  D.dungeons.forEach(d => { if (d.boss_data && state.beaten.has(d.boss_data.name)) recruit(d.name); });
+function recruitBeaten(saved) {                             /* prepare older saves without touching the live roster */
+  const beaten = new Set(saved.beaten);
+  D.dungeons.forEach(d => {
+    if (!d.boss_data || !beaten.has(d.boss_data.name)) return;
+    const have = new Set(saved.party.concat(saved.reserve).map(m => m.job));
+    const lv = Math.max(START_LEVEL, Math.round(saved.party.reduce((a, m) => a + m.lv, 0) / saved.party.length));
+    recruitsFor(d.name).filter(m => !have.has(m.job)).forEach(m => {
+      (saved.party.length < ACTIVE ? saved.party : saved.reserve).push(makeMember(m, lv));
+    });
+  });
 }
 const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
 const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);   /* armour counts now that the gear table has it */
@@ -1625,7 +1635,20 @@ function drawBattle() {
 let SAVE_KEY = "prism.save.v1";
 const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
 let titleT = 0, goT = 0, titleIdx = 0;
-function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 && (v.realm_key || "prism") === (D.realm_key || "prism") ? v : null; } catch (e) { return null; } }
+let saveCacheText, saveCacheData, saveCacheResult;
+function readSavedJourney() {
+  if (!D || !D.party || typeof PrismJourneySave === "undefined") return { ok: false, kind: "unavailable", reason: "The journey reader has not loaded. Reload the game, then try CONTINUE again." };
+  let raw;
+  try { raw = localStorage.getItem(SAVE_KEY); }
+  catch (_) { return { ok: false, kind: "unavailable", reason: "Browser storage is unavailable. Check its access, then try CONTINUE again." }; }
+  // The title draws every frame. Only validate again when the stored record or realm data changes.
+  if (raw !== saveCacheText || D !== saveCacheData || !saveCacheResult) {
+    saveCacheText = raw; saveCacheData = D;
+    saveCacheResult = PrismJourneySave.read(raw, D.realm_key || "prism", D.party.members);
+  }
+  return saveCacheResult;
+}
+function loadSave() { const r = readSavedJourney(); return r.ok ? r.value : null; }
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, realm_key: D.realm_key || "prism", at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
@@ -1635,30 +1658,55 @@ function saveGame() {
   } catch (e) { return false; }
 }
 function saveSummary() {
-  const sv = loadSave(); if (!sv) return "No saved journey";
-  const lead = sv.party[0] || {};
-  const n = (sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])).length;
-  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (D.realm_profile ? "" : " \u00b7 " + n + (n === 1 ? " Warden" : " Wardens")) + " \u00b7 " + new Date(sv.at).toLocaleString();
+  const r = readSavedJourney();
+  if (!r.ok) return r.kind === "missing" ? "No saved journey" : "Saved journey needs attention. Choose CONTINUE for details.";
+  const sv = r.value, lead = sv.party[0], n = sv.beaten.length;
+  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (D.realm_profile ? "" : " \u00b7 " + n + (n === 1 ? " Warden" : " Wardens"))
+    + (sv.at === undefined ? "" : " \u00b7 " + new Date(sv.at).toLocaleString());
+}
+function refuseContinue(r) {
+  sfx("LOCKED");
+  if (r.kind === "missing") toast("No saved journey", "Start NEW GAME, then rest at an inn or choose SAVE in the field menu.");
+  else toast("Continue unavailable", r.reason + " Your saved record and current journey were kept."
+    + (r.kind === "invalid" ? " Try the build that saved this journey." : ""));
+}
+function prepareContinue(snapshot) {
+  // Keep the cached save detached: playing after Continue must not change its summary or stored snapshot.
+  const saved = JSON.parse(JSON.stringify(snapshot));
+  recruitBeaten(saved);
+  const checked = PrismJourneySave.read(JSON.stringify(saved), D.realm_key || "prism", D.party.members);
+  if (!checked.ok) throw new Error(checked.reason);
+  const it = D.interiors.Inn;
+  return { saved, beaten: new Set(saved.beaten), opened: new Set(saved.opened),
+    air: saved.air ? recoverAir(saved.air) : null,
+    ways: typeof PrismWaystones !== "undefined" && saved.ways ? PrismWaystones.decode(WAYS(), saved.ways).awake : new Set(),
+    inn: interiorMap("Inn"), x: it.spawn.x, y: it.spawn.y };
 }
 function titleChoose(i) {
   const item = TITLE_ITEMS[i];
-  if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
+  let resume = null;
+  if (item === "CONTINUE") {
+    const r = readSavedJourney();
+    if (!r.ok) { refuseContinue(r); return; }
+    try { resume = prepareContinue(r.value); }
+    catch (_) { refuseContinue({ kind: "invalid", reason: "This build could not prepare the saved journey." }); return; }
+  }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.ways = new Set(); state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
   if (item === "CONTINUE") {
-    const sv = loadSave();
-    party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
-    state.air = sv.air ? recoverAir(sv.air) : null;                    /* CONTINUE starts on foot at the inn: never strand the skiff */
+    const sv = resume.saved;
+    Object.assign(GEAR, D.gear);
+    party = sv.party; reserve = sv.reserve; bag = sv.bag; gold = sv.gold; state.beaten = resume.beaten;
+    opened.clear(); resume.opened.forEach(k => opened.add(k)); state.seen = sv.seen; grids = {};
+    state.air = resume.air;                                        /* CONTINUE starts on foot at the inn: never strand the skiff */
     if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"), 1400);
-    state.fish = sv.fish || {}; state.quests = sv.quests || {};
-    state.ways = typeof PrismWaystones !== "undefined" && sv.ways ? PrismWaystones.decode(WAYS(), sv.ways).awake : new Set();
-    state.day = Number.isInteger(sv.day) && sv.day > 0 ? sv.day : 1; state.minute = Number.isInteger(sv.minute) && sv.minute >= 0 && sv.minute < 1440 ? sv.minute : 7 * 60;                    /* CONTINUE starts at the inn, on foot */
-    const it = D.interiors.Inn; state.returnTo = null;
-    goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
+    state.fish = sv.fish; state.quests = sv.quests; state.ways = resume.ways;
+    state.day = sv.day; state.minute = sv.minute; state.returnTo = null;
+    goto(resume.inn, resume.x, resume.y, "up");
     setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
     return;
   }
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.ways = new Set(); state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
   nameEntry = { name: party[0].name.toUpperCase(), r: 0, c: 0, t: 0 };
   fade = 1; fadeCb = () => { mode = "name"; };
 }

@@ -317,6 +317,7 @@ def main(argv):
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))
     shutil.copy(os.path.join(HERE, "summons.js"), os.path.join(out, "summons.js"))     # PRISM03 summon spirit rules
     shutil.copy(os.path.join(HERE, "waystones.js"), os.path.join(out, "waystones.js"))
+    shutil.copy(os.path.join(HERE, "journey-save.js"), os.path.join(out, "journey-save.js"))
     ctl = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "controllers")   # the shared controller module
     os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
     for f in ("daedalus-pad.js", "controller-bundle.json"):
