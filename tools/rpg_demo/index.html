@@ -650,6 +650,7 @@ function buy(it) {
 const sellPrice = name => Math.floor(((GEAR[name] || {}).price || 0) / 2);
 const sellList = () => Object.keys(bag).filter(k => bag[k] > 0 && sellPrice(k) > 0).sort();
 function shopTick() {
+  if (hit("b") || hit("start")) { clearActionButtons(); sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); return; }
   if (shop.kind !== "magic" && (hit("left") || hit("right"))) {
     shop.tab = shop.tab === "buy" ? "sell" : "buy"; shop.idx = 0; shop.top = 0; sfx("TICK");
     shop.msg = shop.tab === "sell" ? (sellList().length ? "WHAT WILL YOU SELL?" : "NOTHING I CAN BUY FROM YOU.") : "WHAT WOULD YOU LIKE?";
@@ -662,7 +663,6 @@ function shopTick() {
       shop.idx = Math.min(shop.idx, n - 1); shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
       if (hit("a")) { const k = list[shop.idx], p = sellPrice(k); bag[k]--; gold += p; sfx("BUY"); shop.msg = "SOLD " + k.toUpperCase() + " FOR " + p + " G."; }
     }
-    if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
     return;
   }
   const n = shop.stock.length;
@@ -670,7 +670,6 @@ function shopTick() {
   if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
   shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
   if (hit("a")) buy(shop.stock[shop.idx]);
-  if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
 }
 function drawShop() {
   drawField();

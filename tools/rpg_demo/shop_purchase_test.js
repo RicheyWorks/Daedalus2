@@ -22,7 +22,7 @@ function line(prefix) {
   assert.ok(found, "production declaration exists: " + prefix); return found;
 }
 const source = [
-  between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="), line("const WEAPON_KIND ="),
+  line("function clearActionButtons()"), between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="), line("const WEAPON_KIND ="),
   between("function openChest(", "/* ---------- shops"), between("let shop = null;", "function drawShop()"),
   "this.api = { start: () => { party = buildParty(); }, makeMember, openChest, openShop, buy, sellPrice, sellList, shopTick, " +
   "getParty: () => party, getReserve: () => reserve, getBag: () => bag, getGold: () => gold, setGold: n => { gold = n; }, getShop: () => shop };"
