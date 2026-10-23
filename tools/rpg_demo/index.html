@@ -941,7 +941,17 @@ function itemLine(name) {                                     /* what the item r
 }
 const bagItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
 const fieldItems = () => bagItems().filter(k => itemKind(k) !== "escape");
-const battleItems = () => bagItems().filter(k => itemKind(k) !== "camp");
+const itemStock = name => Number.isSafeInteger(bag[name]) && bag[name] > 0 ? bag[name] : 0;
+const battleItemStock = name => Math.max(0, itemStock(name) - (B && B.phase === "cmd"
+  ? B.acts.filter(a => a.kind === "item" && a.item === name).length : 0));
+const battleItems = () => bagItems().filter(k => itemKind(k) !== "camp" && battleItemStock(k) > 0);
+function refuseBattleItems() {
+  const available = battleItems().length > 0;
+  const planned = bagItems().some(k => itemKind(k) !== "camp" && itemStock(k) > 0);
+  B.msg = available ? "THAT ITEM IS NO LONGER AVAILABLE. CHOOSE ITEM AGAIN." : planned ? "ALL BATTLE ITEMS ARE PLANNED. B: CHANGE AN EARLIER COMMAND." : "THE BAG HOLDS NO BATTLE ITEMS.";
+  B.sub = null; B.pending = null; hit("a"); sfx("LOCKED");
+  toast(available ? "Item no longer available" : planned ? "Items already planned" : "No battle items", available ? "Choose ITEM again to pick an available item." : planned ? "Use B to change an earlier command and free its item." : "Choose another command.");
+}
 const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
 function menuTick() {
   const sub = menu.sub;
@@ -1072,6 +1082,7 @@ function leaveEquipChoice(message, sound) {
 const atkWith = (m, w) => m.st.str * 2 + ((GEAR[w] || {}).attack || 0);
 const defWith = (m, eq) => SLOTS.slice(1).reduce((a, k) => a + ((GEAR[eq[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
 function useItem(name, m) {
+  if (!itemStock(name)) { sfx("LOCKED"); return "NO " + String(name || "ITEM").toUpperCase() + " LEFT."; }
   const e = (GEAR[name] || {}).effect || "";
   if (itemKind(name) === "camp") {
     if (B || !map || map.kind !== "world") return "PITCH THE TENT OUT ON THE OPEN ROAD.";
@@ -1342,7 +1353,10 @@ function battleTick(dt) {
       if (hit("left") || hit("up")) { B.target = (B.target + tg.length - 1) % tg.length; sfx("TICK"); }
       if (hit("right") || hit("down")) { B.target = (B.target + 1) % tg.length; sfx("TICK"); }
       if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; sfx("TICK"); return; }
-      if (hit("a")) { sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser(); }
+      if (hit("a")) {
+        if (B.pending.kind === "item" && !battleItemStock(B.pending.item)) { refuseBattleItems(); return; }
+        sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser();
+      }
       return;
     }
     if (B.sub === "summon") {
@@ -1361,7 +1375,10 @@ function battleTick(dt) {
     }
     if (B.sub === "magic" || B.sub === "item") {
       const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : battleItems();
-      if (!opts.length) { B.msg = B.sub === "magic" ? m.name + " KNOWS NO SPELLS." : "THE BAG IS EMPTY."; B.sub = null; sfx("LOCKED"); return; }
+      if (!opts.length) {
+        if (B.sub === "item") { refuseBattleItems(); return; }
+        B.msg = m.name + " KNOWS NO SPELLS."; B.sub = null; sfx("LOCKED"); return;
+      }
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
       if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
@@ -1386,8 +1403,9 @@ function battleTick(dt) {
     if (hit("down")) { B.cmd = (B.cmd + 1) % cmds.length; sfx("TICK"); }
     if (hit("b") && B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); return; }
     if (hit("a")) {
-      sfx("PICK");
       const c = cmds[B.cmd];
+      if (c === "ITEM" && !battleItems().length) { refuseBattleItems(); return; }
+      sfx("PICK");
       if (c === "ATTACK") { B.pending = { kind: "attack", who: m }; B.list = alive(B.foes); B.target = 0; B.sub = "target"; }
       else if (c === "MAGIC") { B.sub = "magic"; B.oi = 0; }
       else if (c === "ITEM") { B.sub = "item"; B.oi = 0; }
@@ -1505,7 +1523,9 @@ function doAction(a) {
     return;
   }
   if (a.kind === "item") {
-    const name = a.item, e = GEAR[name].effect;
+    const name = a.item;
+    if (!itemStock(name)) { B.msg = "NO " + String(name || "ITEM").toUpperCase() + " LEFT."; sfx("LOCKED"); return; }
+    const e = GEAR[name].effect;
     if (/escape/.test(e)) { if (B.boss) { B.msg = "THE SMOKE DOES NOTHING HERE."; return; } bag[name]--; sfx("RUN"); B.msg = "A PUFF OF SMOKE AND THE PARTY IS GONE."; B.phase = "end"; B.result = "run"; B.wait = 0.6; return; }
     const r = useItem(name, a.target || who); B.msg = r; return;
   }
@@ -1649,7 +1669,7 @@ function drawBattle() {
     text(compact ? party[B.who].name.slice(0, 5) : party[B.who].name, 86, 152, "#fff070");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
     const m = party[B.who], used = new Set(B.summoned || []);
-    const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
+    const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + battleItemStock(k), true]);
     const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
     opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
     cursor(10, 152 + ((B.oi || 0) - from) * 13);
