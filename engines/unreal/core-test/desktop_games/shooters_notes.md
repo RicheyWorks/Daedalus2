@@ -63,3 +63,19 @@ freeze, fresh-event reset and driver input cleanup. Strict MSVC C++17 passed
 487/487 checks. The same test using the prior shooter header failed 30 retry checks
 as expected. Star's class source remained identical. No engine/native runtime
 integration is inferred from this portable check.
+
+## Sega terminal pickup settlement
+
+Lethal contact now skips pickup consumption, preventing a frozen Game Over with a
+restored life (or post-defeat power/speed benefit). Surviving contacts still collect
+same-step pickups. Boss progression, the explicit BOSS DOWN / SHIP LOST outcome,
+500-point boss reward and actor cleanup retain their existing order. A narrow
+Sega-only friend seam arranges ordinary single-step collision fixtures.
+
+`desktop_sega_terminal_pickup` / `sega_terminal_pickup_test.cpp` passed72/72 strict
+single-TU MSVC C++17 checks. It covers all pickup kinds, enemy/boss contact, cleanup,
+surviving companions, mutual boss/ship defeat, held freeze and seeded retries.
+A controlled always-enabled pickup-loop variant (friend unchanged) passed52/72,
+failing20 post-defeat pickup/life assertions as expected. Asteroids/shared prefix
+and Star class source were compared unchanged. No full shooter suite, engine build,
+editor or native play was run; live controller/balance acceptance remains unverified.

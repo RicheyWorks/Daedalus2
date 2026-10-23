@@ -257,6 +257,7 @@ private:
 // Source Sega-themed horizontal shooter. No enemy shots exist in the source.
 // Native boss hit/engagement and held fire repair otherwise unreachable victory.
 class SegaShooterGame final : public Game {
+    friend struct SegaTestAccess;
 public:
     struct Bullet { double X=0,Y=0,Vx=10,Vy=0; bool Alive=true; void Update(){X+=Vx;Y+=Vy;} };
     struct Player {
@@ -349,7 +350,10 @@ public:
             for(auto& E:Enemies) if(E.Alive && Distance(Pilot.X,Pilot.Y,E.X,E.Y)<22) { E.Alive=false; Damage(); break; }
             if(Pilot.Invincible==0 && BossActive && Distance(Pilot.X,Pilot.Y,Boss.X,Boss.Y)<22) Damage();
         }
-        for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
+        // Defeat blocks pickups; the existing boss outcome still settles below, including a mutual loss.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
+        }
         if(Score>=1500 && !BossActive && !Won) { Boss={750,300,1.5,20,60,true,true}; BossActive=true; }
         if(BossActive) {
             Boss.Update(Pilot); Boss.X=std::max(600.0,Boss.X);
