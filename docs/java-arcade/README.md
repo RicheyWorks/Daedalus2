@@ -41,6 +41,9 @@ payments or multiplayer authentication.
    username/password or the Blackjack launch bearer. Masked fields clear after
    configuration; secrets are private transient memory, never actor properties,
    DTO fields, save data or logs. Close/property changes forget them.
+   Rejected field validation appears beside the account controls and leaves the
+   existing session intact. Live waiting, failure and recovery status stays visible;
+   a successful configuration clears the field error.
 5. Sudoku: create a difficulty 1–5 board, refresh saved games and explicitly resume
    a selected board, or open/resume an explicit own game ID;
    select cells and enter/erase digits, undo/redo, save or refresh. Hint is an

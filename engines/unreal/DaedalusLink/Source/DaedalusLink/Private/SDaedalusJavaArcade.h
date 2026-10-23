@@ -90,5 +90,5 @@ private:
     TSharedPtr<SWidget> CabinetControls;
     int32 SelectedCell = 0;
     int32 SelectedDigit = 1;
-    FString LocalMessage;
+    FString CredentialError;
 };

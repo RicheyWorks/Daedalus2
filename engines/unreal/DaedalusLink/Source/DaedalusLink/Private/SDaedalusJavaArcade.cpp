@@ -52,6 +52,9 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
                         + SHorizontalBox::Slot().AutoWidth()
                         [SNew(SButton).Text(FText::FromString(TEXT("Connect account"))).IsEnabled_Lambda([this] { return !State().bBusy; }).OnClicked(this, &SDaedalusJavaArcade::Configure)]
                     ]
+                    + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
+                    [SNew(STextBlock).Text_Lambda([this] { return FText::FromString(CredentialError); }).AutoWrapText(true)
+                        .Visibility_Lambda([this] { return CredentialError.IsEmpty() ? EVisibility::Collapsed : EVisibility::Visible; })]
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
                     [
                         SNew(SHorizontalBox)
@@ -92,14 +95,15 @@ FReply SDaedalusJavaArcade::Configure()
         SavedGamePicker->ClearSelection();
         SavedGamePicker->RefreshOptions();
     }
-    LocalMessage = Success ? FString() : TEXT("Check the account fields. Passwords and service tokens are kept only in memory.");
+    CredentialError = Success ? FString() : TEXT("Account settings were not changed. Check the account fields. Passwords and service tokens are kept only in memory.");
     FocusBoard(false);
     return FReply::Handled();
 }
 FText SDaedalusJavaArcade::StatusText() const
 {
     const auto S = State();
-    const FString Text = (LocalMessage.IsEmpty() || S.bNeedsSync) ? S.Status + TEXT(" — ") + S.Message : LocalMessage;
+    // Form validation must not hide later waiting, recovery or failure messages from a retained session.
+    const FString Text = S.Status + TEXT(" — ") + S.Message;
     return FText::FromString(Text + (S.HintText.IsEmpty() ? FString() : TEXT("\nHint: ") + S.HintText));
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
@@ -372,7 +376,7 @@ FReply SDaedalusJavaArcade::RefreshSavedGames()
     const auto S = State();
     if (Game.IsValid() && Game->HasCredentials() && !S.bBusy && !S.bSavedGamesLoading)
     {
-        LocalMessage.Reset();
+        CredentialError.Reset();
         Game->RefreshSavedSudokuGames();
     }
     return FReply::Handled();
@@ -381,7 +385,7 @@ FReply SDaedalusJavaArcade::ResumeSelectedSavedGame()
 {
     if (Game.IsValid() && Game->CanResumeSavedSudokuGame(SelectedSavedGameId))
     {
-        LocalMessage.Reset();
+        CredentialError.Reset();
         if (Game->ResumeSavedSudokuGame(SelectedSavedGameId)) FocusBoard();
     }
     return FReply::Handled();
