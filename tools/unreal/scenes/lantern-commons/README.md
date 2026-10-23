@@ -166,3 +166,12 @@ native validation returned 3 Valid with no warnings/errors/skips. See
 The historical custom wrapper context refusal remains unresolved but is not an
 ordinary native-import prerequisite. The current 722-actor Commons map stayed
 unchanged. These three assets are ready for the next Stillwater composition pass.
+
+## Stillwater plants R8
+
+All three native pond asset types are now used: twelve scale1 plants in three
+small edge groups, with open water and unchanged paths/collision. Saved map:
+734actors, clean packages. No new import or Play loop. See stillwater-plants/
+for the layout, editor views, material-preserving instancing decision and limits.
+Next suggested production slice is a friendly gardenkeeper activity; the main
+visible environment gap remains repetitive raised ground and dark perimeter.
