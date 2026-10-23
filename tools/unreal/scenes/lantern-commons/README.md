@@ -175,3 +175,13 @@ small edge groups, with open water and unchanged paths/collision. Saved map:
 for the layout, editor views, material-preserving instancing decision and limits.
 Next suggested production slice is a friendly gardenkeeper activity; the main
 visible environment gap remains repetitive raised ground and dark perimeter.
+
+## Gardenkeeper R9
+
+A native gardenkeeper kiosk now gives the existing planting activity a clear
+welcome, seed/planter guidance and completion acknowledgement. It reuses E and
+the garden panel without rewards or progress resets. Owned Blueprint/UMG/map
+compiled and saved; no Play/persistence loop. See gardenkeeper/ for the exact
+built behavior, save preservation and runtime limitations. The static imported
+board needs no character pipeline. No next native ingestion batch is selected
+in current Commons manifests; bulk ingestion has not started.

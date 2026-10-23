@@ -330,7 +330,7 @@
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 734,
+  "actor_count": 736,
   "objective_ui": {
     "schema": "daedalus.commons-objective-ui-build.v1",
     "status": "BUILT_COMPILED_SAVED",
@@ -485,8 +485,8 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity.uasset",
-      "bytes": 434489,
-      "sha256": "8c0219002a37671c5c380c72c65724e4033675fbf5c0b3b3304aeefcdbf460f0"
+      "bytes": 587797,
+      "sha256": "6ab36ea54ffebfd614873ef880fa71aa4b5c1a29f9a9f42c1519ae682dee2b60"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/SG_CommonsGarden.uasset",
@@ -495,13 +495,13 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/WBP_CommonsGarden.uasset",
-      "bytes": 34197,
-      "sha256": "75ee48d5f701c31fb09a2e7b94f22caff8ed995d41491f68b0e84a979fd3e834"
+      "bytes": 37076,
+      "sha256": "5da63dd00b54a685ed62b6568501713e7659baadbceb4952f819304401700df9"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 2043886,
-      "sha256": "0772c23bec01a62744b65c4773b8c5f0656f1d4f7f5a40fd210b2a7444ac65a3"
+      "bytes": 2048748,
+      "sha256": "3c51a81cd1369bdfe023fd77f440c988033f367fff5abb421f52153338a8d0ac"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -589,6 +589,26 @@
       "sha256": "d210c0b9dbe66ef37028b4a569680a52556a4ac2d52c1e66c2136755d429ac98"
     },
     {
+      "path": "gardenkeeper/build.json",
+      "bytes": 3600,
+      "sha256": "feafa3c1420164d5fbeb13e8ca5b5f04e27f0ec5b845b90e5a37bdaf4092f3c6"
+    },
+    {
+      "path": "gardenkeeper/README.md",
+      "bytes": 2185,
+      "sha256": "f7b5ab1afbd02a9d8d0ee97c3426e718c88c9938df876e9cac4c4bb96bc7bac6"
+    },
+    {
+      "path": "gardenkeeper/RefreshGarden.dsl",
+      "bytes": 5642,
+      "sha256": "438873b3370694dde8aff24ef787a0b4bd7e62436d871731df7e05a1697f1da4"
+    },
+    {
+      "path": "gardenkeeper/TryGardenInteract.dsl",
+      "bytes": 1236,
+      "sha256": "4fc512655e728d0d8d57abe41a5ca6be3e7efd061df0329bdc996f7b139522c7"
+    },
+    {
       "path": "images/after-player.png",
       "bytes": 2465508,
       "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
@@ -642,6 +662,11 @@
       "path": "images/garden-r4-route.png",
       "bytes": 2651842,
       "sha256": "8f06b2162d0aca3a19ce429eb56fbd49f9f32194268478c014618fd8bcb0fc5a"
+    },
+    {
+      "path": "images/gardenkeeper-r9-arrival.png",
+      "bytes": 2663357,
+      "sha256": "50c35362b47159208798e0eb0bf54caf4fb9495ecbd182dfa7e5aa1bd1bbc093"
     },
     {
       "path": "images/plant-r7-arrival.png",
@@ -810,8 +835,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 11046,
-      "sha256": "2051e438423241bdb2dee5453c6dee688c53c87caa3e14a1777486869e28efa0"
+      "bytes": 11607,
+      "sha256": "0840fb1540246448fb1fec75dbc291323beec5618a7b3650dff09ae28f0f2d90"
     },
     {
       "path": "stillwater/build.json",
@@ -1892,6 +1917,92 @@
       "No Play/persistence/reload loop repeated. Existing R7 activity remains built/saved with runtime persistence unproven.",
       "No new import or validation rerun; three previously admitted native asset packages remain unchanged.",
       "No claim of benchmark visual quality, production ecology or general unattended adoption."
+    ]
+  },
+  "gardenkeeper_r9": {
+    "schema": "daedalus.gardenkeeper-build.v1",
+    "utc": "2026-10-23T04:31:52.616571+00:00",
+    "status": "BUILT_COMPILED_SAVED_NOT_PLAY_VERIFIED",
+    "native_behavior": {
+      "compiled": true,
+      "written": [
+        "RefreshGarden",
+        "TryGardenInteract"
+      ],
+      "existing_save_load_and_commit_graphs_unchanged": true,
+      "greeting": "Stage0: Welcome! Take a seed from the teal stand.",
+      "carried": "Stage1: Your seed is ready. Plant it in the pink pot.",
+      "completion": "Stage2: Thank you! Your flower brightens the Commons.",
+      "new_rewards": false,
+      "save_format_change": false,
+      "input": "Reuses existing non-consuming E; existing pause/settings/field/dialogue refusal remains. Kiosk branch cannot call CommitGardenStage.",
+      "Play_run": false
+    },
+    "native_scene": {
+      "saved": true,
+      "actors": [
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_712"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.TextRenderActor_10"
+        }
+      ],
+      "board": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_712",
+      "location": [
+        -2370.0,
+        -1050.0,
+        20.0
+      ],
+      "actors_current": 736,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "proximity_cm": 240,
+      "Play_run": false,
+      "preservation": "Existing save/load/commit graphs and SG version1 unchanged; no progress writes, new rewards or chart edits."
+    },
+    "images": [
+      {
+        "path": "images/gardenkeeper-r9-arrival.png",
+        "sha256": "50c35362b47159208798e0eb0bf54caf4fb9495ecbd182dfa7e5aa1bd1bbc093"
+      }
+    ],
+    "editor_pixel_review": "Actual saved PNG inspected via reduced derivative. Sign-board post and Gardenkeeper label are visible beside the arrival arch, with the existing seed/planter route behind. Repeated raised tiles and deep seams dominate the foreground. This capture does not show runtime UMG or prove input.",
+    "preservation": {
+      "utc": "2026-10-23T04:31:08.080730+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Build owned Gardenkeeper kiosk using existing E/UI and garden stage; no save-format/reward/progress writes or Play loops.",
+          "at": 1792729541.3708389,
+          "ttl": 7200.0,
+          "age_s": 326.7,
+          "left_s": 6873.3
+        }
+      },
+      "progress_unchanged": true,
+      "protected_files_unchanged": 310
+    },
+    "changed_assets": [
+      "owned map",
+      "BP_CommonsGardenActivity",
+      "WBP_CommonsGarden"
+    ],
+    "native_compile_correction": "First DSL attempt put a continuation after a multi-output execution branch. Native compiler refused it; retained reply/journal. Guidance now executes inside the existing valid-player branch. No unrelated functions or assets recreated.",
+    "next_ingestion_batch": {
+      "selected": false,
+      "scope": "Focused current Commons qualification/closeout records name only the three completed pond assets. Wider backlog not fully surveyed. No bulk import."
+    },
+    "limits": [
+      "Static kiosk, no animated NPC or new dialogue framework.",
+      "No rewards, save-version changes or persistent conversation state.",
+      "Runtime input/layout and existing R7 persistence remain unverified; no Play loop."
     ]
   }
 }
