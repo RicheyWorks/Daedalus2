@@ -135,3 +135,22 @@ centred on a resized backing. Its optional tagline was removed following the new
 user direction. Existing E interaction/accessibility cues remain unchanged. The
 arrival capture reflects this update; horizon/overview captures predate only this
 small label change. No broader UI rewrite or new test loop was performed.
+
+## Collect-and-plant activity R7
+
+A seed display and round planter now provide a small peaceful collect-and-plant
+activity beside the entrance. It has a real contextual E prompt, objective and
+completion UI, a flower reveal, and a versioned local SaveGame mechanism. Three
+owned Blueprint/UMG assets compile and are saved; this batch deliberately ran no
+Play or persistence-proof loop. It does not modify shared inventory or real chart
+progress. See `plant-activity/README.md` and its precise built-versus-proven limits.
+
+A continuous 14.5 m amber approach replaces the scattered entry stones, and the
+older floating instruction block is hidden. The map has 722 actors and remains
+spacious. Actual captures are `images/plant-r7-arrival.png` and
+`images/plant-r7-garden.png`. Ground repetition and overall blockout quality remain.
+
+This integration branch also explicitly includes the handed-off PR415 pond profile
+commits (7c12bc6, 3f82157, cb049a1) and PR416 AGENTS guidance (7959531). Their original
+source-owner PRs remain separate and unmerged; none was overwritten. The new native
+inventory route remains blocked at its protected-context guard, with zero imports.
