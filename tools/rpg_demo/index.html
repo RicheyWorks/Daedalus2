@@ -1081,9 +1081,9 @@ function menuTick() {
     }
     return;
   }
-  if (sub === "fish") { const n = (D.fish || []).length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
-  if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
-  if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "fish") { const n = (D.fish || []).length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "status") { menuWho(); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
     if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); sfx("TICK"); return; }
     menuMove("ii", roster().length);
