@@ -78,7 +78,7 @@ class RegistryPageTests(unittest.TestCase):
     def scope(self, **extra):
         return functions(['source', 'registry_paths', 'capture_inventory_page', 'deduplicate'],
             Path=Path, json=json, hashlib=hashlib, memory=self.memory,
-            time=SimpleNamespace(monotonic=lambda: 0), inventory_admission=lambda _: None,
+            time=SimpleNamespace(monotonic=lambda: 0), inventory_admission=lambda _, **__: None,
             inventory_reader=lambda _: inventory.__dict__, **extra)
 
     def fixture(self, count=65, folders=10):
@@ -205,6 +205,8 @@ class RegistryPageTests(unittest.TestCase):
         eal = SimpleNamespace(load_asset=lambda p: loads.append(p) or FakeMesh(),
                               get_metadata_tag=lambda mesh, key: 'a' * 64)
         scope = self.scope(unreal=self.unreal(registry, eal))
+        admissions = []
+        scope['inventory_admission'] = lambda _, **stage: admissions.append(stage)
         config = {'inventory_reader': {'fake': True}, 'reader': self.reader, 'registry': capture,
                   'offset': 0, 'editor': self.editor}
         result = scope['capture_inventory_page'](config)
@@ -212,10 +214,33 @@ class RegistryPageTests(unittest.TestCase):
         self.assertEqual(loads, paths[:32])
         self.assertEqual(result['registry_sha256'], capture['sha256'])
         self.assertEqual(result['reader_sha256'], self.reader['sha256'])
-        loads.clear(); config['offset'] = 64
+        self.assertEqual(admissions, [{'phase': 'before_metadata', 'metadata_load_calls': 0},
+                                      {'phase': 'after_metadata', 'metadata_load_calls': 32}])
+        loads.clear(); admissions.clear(); config['offset'] = 64
         result = scope['capture_inventory_page'](config)
         self.assertEqual((result['state'], result['requested'], len(result['rows'])), ('complete', 1, 1))
         self.assertEqual(loads, paths[64:])
+        self.assertEqual(admissions[-1], {'phase': 'after_metadata', 'metadata_load_calls': 1})
+
+    def test_page_refusal_phase_never_claims_an_unknown_zero_load_count(self):
+        registry, _, _, capture, _ = self.fixture()
+        loads = []
+        eal = SimpleNamespace(load_asset=lambda p: loads.append(p) or FakeMesh(),
+                              get_metadata_tag=lambda mesh, key: 'a' * 64)
+        scope = self.scope(unreal=self.unreal(registry, eal))
+        config = {'inventory_reader': {}, 'reader': self.reader, 'registry': capture,
+                  'offset': 0, 'editor': self.editor}
+        for phase, count in [('before_metadata', 0), ('after_metadata', 32)]:
+            with self.subTest(phase=phase):
+                loads.clear()
+                def admission(_, **stage):
+                    if stage['phase'] == phase:
+                        self.assertEqual(stage['metadata_load_calls'], count)
+                        raise RuntimeError('synthetic exact context refusal: ' + phase)
+                scope['inventory_admission'] = admission
+                with self.assertRaisesRegex(RuntimeError, phase):
+                    scope['capture_inventory_page'](config)
+                self.assertEqual(len(loads), count)
 
     def test_unknown_source_page_is_unsupported_with_explicit_missing_provenance(self):
         registry, _, _, capture, _ = self.fixture()

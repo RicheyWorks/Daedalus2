@@ -135,13 +135,91 @@ def registry_paths(registry, root, stop_path=None, candidate_name=None):
                            'native_api': 'GetSubPaths + GetAssetsByPath(recursive=False); full folder arrays'}
 
 
-def inventory_admission(config):
+def inventory_difference(expected, actual, path):
+    """Locate an unequal operand; diagnostic only, never normalizes the guard."""
+    def operand(value):
+        encoded = json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True)
+        return {'type': type(value).__name__, 'json': encoded[:768], 'truncated': len(encoded) > 768}
+    if type(expected) is type(actual) and isinstance(expected, dict):
+        for key in sorted(set(expected) | set(actual)):
+            if key not in expected or key not in actual:
+                return {'path': path + [key], 'expected_present': key in expected,
+                        'actual_present': key in actual,
+                        'expected': operand(expected[key]) if key in expected else {'type': 'absent'},
+                        'actual': operand(actual[key]) if key in actual else {'type': 'absent'}}
+            if expected[key] != actual[key]:
+                return inventory_difference(expected[key], actual[key], path + [key])
+    elif type(expected) is type(actual) and isinstance(expected, (list, tuple)):
+        for index, (left, right) in enumerate(zip(expected, actual)):
+            if left != right:
+                return inventory_difference(left, right, path + [index])
+        if len(expected) != len(actual):
+            index = min(len(expected), len(actual))
+            return {'path': path + [index], 'expected_length': len(expected), 'actual_length': len(actual),
+                    'expected': operand(expected[index]) if index < len(expected) else {'type': 'absent'},
+                    'actual': operand(actual[index]) if index < len(actual) else {'type': 'absent'}}
+    return {'path': path, 'expected': operand(expected), 'actual': operand(actual)}
+
+
+def inventory_refusal(config, phase, metadata_load_calls, started, comparison, expected, actual):
+    """Keep the failing capture in the first-line error/optional owner journal.
+
+    The caller may persist ``inventory_evidence`` in its existing owned journal.
+    This helper writes no file, takes no second context snapshot and changes no
+    equality, transform serialization, baseline or idle-state requirement.
+    """
+    def digest(value):
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
+                                         ensure_ascii=True).encode('utf-8')).hexdigest()
+    evidence = {'schema': 'daedalus.inventory-context-refusal.v1',
+        'capture_started_utc': started, 'capture_finished_utc': datetime.now(timezone.utc).isoformat(),
+        'phase': phase, 'metadata_load_calls': metadata_load_calls, 'offset': config.get('offset'),
+        'baseline_sha256': config['baseline']['sha256'], 'comparison': comparison,
+        'reader_sha256': config.get('reader', {}).get('sha256'),
+        'reader_bytes': config.get('reader', {}).get('bytes'),
+        'digest_format': 'json-sort_keys-compact-ensure_ascii-utf8',
+        'expected_sha256': digest(expected), 'actual_sha256': digest(actual),
+        'first_difference': inventory_difference(expected, actual, [comparison])}
+    path = evidence['first_difference']['path']
+    if len(path) > 2 and path[:2] == ['context', 'actors'] and isinstance(path[2], int):
+        index = path[2]
+        evidence['actor_identity'] = {
+            'expected': expected['actors'][index].get('path') if index < len(expected['actors']) and isinstance(expected['actors'][index], dict) else None,
+            'actual': actual['actors'][index].get('path') if index < len(actual['actors']) and isinstance(actual['actors'][index], dict) else None}
+    encoded = json.dumps(evidence, sort_keys=True, separators=(',', ':'))
+    if len(encoded) > 3500:
+        # Keep a parseable bounded bridge line; the owner's native exception
+        # handler can retain the complete evidence attribute in its journal.
+        encoded = json.dumps({'schema': evidence['schema'], 'phase': str(phase)[:64],
+            'metadata_load_calls': metadata_load_calls, 'comparison': comparison,
+            'evidence_summary': True, 'evidence_sha256': hashlib.sha256(encoded.encode()).hexdigest(),
+            'first_difference_path_prefix': json.dumps(path, ensure_ascii=True)[:256],
+            'detail': 'Oversized detail; retain native exception.inventory_evidence in owned journal'},
+            sort_keys=True, separators=(',', ':'))
+    error = RuntimeError('Inventory editor/current protected context differs: ' + encoded)
+    error.inventory_evidence = evidence
+    raise error
+
+
+def inventory_admission(config, *, phase='unspecified', metadata_load_calls=None):
     memory(128 * 1024**2)
     baseline = json.loads(source(config['baseline']))
-    if (baseline['editor'] != config['editor'] or os.getpid() != config['editor']['pid']
-            or context() != baseline['context']
-            or unreal.SystemLibrary.get_engine_version() != config['engine_version']):
-        raise RuntimeError('Inventory editor/current protected context differs')
+    started = datetime.now(timezone.utc).isoformat()
+    if baseline['editor'] != config['editor']:
+        inventory_refusal(config, phase, metadata_load_calls, started,
+                          'editor', baseline['editor'], config['editor'])
+    pid = os.getpid()
+    if pid != config['editor']['pid']:
+        inventory_refusal(config, phase, metadata_load_calls, started,
+                          'pid', config['editor']['pid'], pid)
+    current = context()
+    if current != baseline['context']:
+        inventory_refusal(config, phase, metadata_load_calls, started,
+                          'context', baseline['context'], current)
+    engine_version = unreal.SystemLibrary.get_engine_version()
+    if engine_version != config['engine_version']:
+        inventory_refusal(config, phase, metadata_load_calls, started,
+                          'engine_version', config['engine_version'], engine_version)
     if (unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()
             or unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()
             or unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()
@@ -154,11 +232,11 @@ def inventory_admission(config):
 
 def capture_registry_steps(config):
     """Optional sole-writer read helper; existing exact R1 path capture also fits."""
-    inventory_admission(config)
+    inventory_admission(config, phase='before_registry', metadata_load_calls=0)
     reader = inventory_reader(config['inventory_reader'])
     paths, evidence = yield from registry_paths(unreal.AssetRegistryHelpers.get_asset_registry(),
                                                reader['ROOT'], config.get('stop_path'))
-    inventory_admission(config)
+    inventory_admission(config, phase='after_registry', metadata_load_calls=0)
     return {'root': reader['ROOT'], 'count': len(paths), 'paths': paths,
             'path_digest': reader['path_digest'](paths), 'enumeration': evidence,
             'source_hashes_verified': False}
@@ -171,7 +249,7 @@ def capture_inventory_page(config):
     evidence, never enter a complete index. Another read can address that page;
     this is independent of the runner's never-replay import checkpoints.
     """
-    inventory_admission(config)
+    inventory_admission(config, phase='before_metadata', metadata_load_calls=0)
     reader = inventory_reader(config['inventory_reader'])
     source(config['reader'])
     paths = reader['capture'](config['registry'])
@@ -179,13 +257,14 @@ def capture_inventory_page(config):
     if type(offset) is not int or offset < 0 or offset >= len(paths) or offset % reader['PAGE_ROWS']:
         raise RuntimeError('Exact aligned inventory page offset required')
     requested = min(reader['PAGE_ROWS'], len(paths) - offset)
-    rows, issues, started = [], [], time.monotonic()
+    rows, issues, started, metadata_load_calls = [], [], time.monotonic(), 0
     content = Path(config['editor']['project']).parent / 'Content'
     for path in paths[offset:offset + requested]:
         memory(128 * 1024**2)
         if time.monotonic() - started > 30 or (config.get('stop_path') and Path(config['stop_path']).exists()):
             issues.append({'reason': 'partial_time_or_stop', 'next_offset': offset + len(rows)})
             break
+        metadata_load_calls += 1
         mesh = unreal.EditorAssetLibrary.load_asset(path)
         sha = unreal.EditorAssetLibrary.get_metadata_tag(mesh, 'codex_sha256') if isinstance(mesh, unreal.StaticMesh) else ''
         if not isinstance(sha, str) or not reader['SHA'].fullmatch(sha):
@@ -195,7 +274,7 @@ def capture_inventory_page(config):
         reader['witness'](package)
         rows.append({'asset': path, 'source_sha256': sha, 'package': package})
         del mesh  # Drop this Python reference; never force GC/unload other work.
-    inventory_admission(config)
+    inventory_admission(config, phase='after_metadata', metadata_load_calls=metadata_load_calls)
     state = ('complete' if not issues and len(rows) == requested else
              'partial' if any(r.get('reason') == 'partial_time_or_stop' for r in issues) else 'unsupported')
     return {'schema': reader['PAGE'], 'state': state,
