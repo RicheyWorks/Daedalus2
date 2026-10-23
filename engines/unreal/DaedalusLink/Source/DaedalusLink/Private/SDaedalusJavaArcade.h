@@ -8,6 +8,7 @@
 
 class SEditableTextBox;
 class SScrollBox;
+class STextBlock;
 
 /** Small local board/table presentation. Controls send intentions; Java decides all outcomes. */
 class SDaedalusJavaArcade : public SCompoundWidget
@@ -19,6 +20,7 @@ public:
     void Construct(const FArguments& Args);
     virtual bool SupportsKeyboardFocus() const override { return true; }
     virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
+    virtual void Tick(const FGeometry& AllottedGeometry, const double CurrentTime, const float DeltaTime) override;
     bool OwnsUserFocus(int32 UserIndex) const;
 
 private:
@@ -40,17 +42,32 @@ private:
     FReply ResumeSelectedSavedGame();
     bool CanEditCell() const;
     void SubmitCellValue(int32 Value);
-    FText TableText() const;
+    static FString CardsText(const TArray<FDaedalusJavaCard>& Cards);
+    FText TableHeadingText() const;
+    FText DealerText() const;
+    FText PlayerHandText(int32 Index) const;
     FText BlackjackGuideText() const;
     FReply Configure();
-    void FocusBoard(bool bRevealCell = true);
+    void FocusBoard(bool bRevealGame = true);
     void RevealSelectedCell();
+    void UpdateBlackjackReveal();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;
     TSharedPtr<SEditableTextBox> UsernameBox;
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
     TSharedPtr<SScrollBox> CabinetScroll;
+    TSharedPtr<STextBlock> CabinetStatus;
     TArray<TSharedPtr<SWidget>> SudokuCellWidgets;
+    TArray<TSharedPtr<SWidget>> BlackjackHandWidgets;
+    TSharedPtr<STextBlock> BlackjackDealerRow;
+    TSharedPtr<STextBlock> BlackjackResultRow;
+    bool bBlackjackRevealPending = false;
+    bool bBlackjackRevealArmed = false;
+    bool bBlackjackNeedsSyncRevealed = false;
+    FString RevealedBlackjackSession;
+    int64 RevealedBlackjackRevision = -1;
+    FString RevealedBlackjackPhase;
+    int32 RevealedBlackjackHand = -2;
     TArray<TSharedPtr<FDaedalusSudokuSavedGame>> SavedGameOptions;
     TSharedPtr<SComboBox<TSharedPtr<FDaedalusSudokuSavedGame>>> SavedGamePicker;
     FString SelectedSavedGameId;

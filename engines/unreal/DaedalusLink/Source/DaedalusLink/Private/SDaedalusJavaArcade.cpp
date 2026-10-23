@@ -40,7 +40,7 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
                     [SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Bold", 25)).Text_Lambda([this] { return FText::FromString(Game.IsValid() && Game->Game == EDaedalusJavaGame::Blackjack ? TEXT("Blackjack — simulated credits") : TEXT("Sudoku")); })]
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 8)
-                    [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::StatusText).AutoWrapText(true)]
+                    [SAssignNew(CabinetStatus, STextBlock).Text(this, &SDaedalusJavaArcade::StatusText).AutoWrapText(true)]
                     + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
                     [
                         SNew(SHorizontalBox)
@@ -79,6 +79,10 @@ FReply SDaedalusJavaArcade::Configure()
     SecretBox->SetText(FText::GetEmpty());
     if (UsernameBox.IsValid()) UsernameBox->SetText(FText::GetEmpty());
     SelectedSavedGameId.Reset();
+    bBlackjackRevealPending = false;
+    bBlackjackRevealArmed = false;
+    bBlackjackNeedsSyncRevealed = false;
+    RevealedBlackjackSession.Reset();
     SavedGameOptions.Reset();
     if (SavedGamePicker.IsValid())
     {
@@ -92,7 +96,7 @@ FReply SDaedalusJavaArcade::Configure()
 FText SDaedalusJavaArcade::StatusText() const
 {
     const auto S = State();
-    const FString Text = LocalMessage.IsEmpty() ? S.Status + TEXT(" — ") + S.Message : LocalMessage;
+    const FString Text = (LocalMessage.IsEmpty() || S.bNeedsSync) ? S.Status + TEXT(" — ") + S.Message : LocalMessage;
     return FText::FromString(Text + (S.HintText.IsEmpty() ? FString() : TEXT("\nHint: ") + S.HintText));
 }
 TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
@@ -298,12 +302,32 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
     AddAction(Decisions, TEXT("double"), TEXT("Double"));
     AddAction(Decisions, TEXT("split"), TEXT("Split"));
     AddAction(Decisions, TEXT("surrender"), TEXT("Surrender"));
+    auto Table = SNew(SVerticalBox);
+    Table->AddSlot().AutoHeight()
+        [SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::TableHeadingText).AutoWrapText(true)];
+    Table->AddSlot().AutoHeight().Padding(0, 6, 0, 0)
+        [SAssignNew(BlackjackDealerRow, STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::DealerText).AutoWrapText(true)];
+    BlackjackHandWidgets.Reset();
+    // The validated Java presentation contract permits at most four player hands.
+    for (int32 Index = 0; Index < 4; ++Index)
+    {
+        TSharedPtr<STextBlock> Hand;
+        Table->AddSlot().AutoHeight().Padding(0, 6, 0, 0)
+            [SAssignNew(Hand, STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22))
+                .Text(this, &SDaedalusJavaArcade::PlayerHandText, Index).AutoWrapText(true)
+                .Visibility_Lambda([this, Index] { return State().PlayerHands.IsValidIndex(Index) ? EVisibility::Visible : EVisibility::Collapsed; })];
+        BlackjackHandWidgets.Add(Hand);
+    }
+    Table->AddSlot().AutoHeight().Padding(0, 6, 0, 0)
+        [SAssignNew(BlackjackResultRow, STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22))
+            .Text_Lambda([this] { return FText::FromString(State().ResultText); }).AutoWrapText(true)
+            .Visibility_Lambda([this] { return State().ResultText.IsEmpty() ? EVisibility::Collapsed : EVisibility::Visible; })];
     return SNew(SVerticalBox)
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)
         [Button(TEXT("Start session"), [this] { if (Game.IsValid()) Game->StartBlackjackSession(); }, [this] { const auto S = State(); return Game.IsValid() && Game->HasCredentials() && !S.bBusy && (S.SessionId.IsEmpty() || S.bRemoteClosed); })]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::BlackjackGuideText).AutoWrapText(true)]
-        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[SNew(STextBlock).Font(FCoreStyle::GetDefaultFontStyle("Regular", 22)).Text(this, &SDaedalusJavaArcade::TableText).AutoWrapText(true)]
+        + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 12)[Table]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 6)[SNew(STextBlock).Text(FText::FromString(TEXT("Simulated credit bet")))]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Chips]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)[Setup]
@@ -353,7 +377,13 @@ FText SDaedalusJavaArcade::BlackjackGuideText() const
         return Guide(FString::Printf(TEXT("Active hand %d of %d. Choose an available hand action."), S.ActiveHand + 1, S.PlayerHands.Num()));
     return Guide(TEXT("Choose an available action to continue. Credits are simulated."));
 }
-FText SDaedalusJavaArcade::TableText() const
+FString SDaedalusJavaArcade::CardsText(const TArray<FDaedalusJavaCard>& Cards)
+{
+    FString Text;
+    for (const auto& Card : Cards) { if (!Text.IsEmpty()) Text += TEXT("   "); Text += Card.Rank + TEXT(" ") + Card.Suit; }
+    return Text;
+}
+FText SDaedalusJavaArcade::TableHeadingText() const
 {
     const auto S = State();
     FString Caption = TEXT("Table");
@@ -363,20 +393,23 @@ FText SDaedalusJavaArcade::TableText() const
     else if (S.Phase == TEXT("PLAYER")) Caption = TEXT("Player hands");
     else if (S.Phase == TEXT("DEALER")) Caption = TEXT("Dealer hand");
     else if (S.Phase == TEXT("SETTLE")) Caption = TEXT("Round result");
-    FString Text = FString::Printf(TEXT("%s  ·  Credits %lld  ·  Bet %lld\n"), *Caption, S.Bankroll, S.PendingBet);
-    auto Cards = [](const TArray<FDaedalusJavaCard>& List)
-    {
-        FString Out;
-        for (const auto& C : List) { if (!Out.IsEmpty()) Out += TEXT("   "); Out += C.Rank + TEXT(" ") + C.Suit; }
-        return Out;
-    };
-    Text += TEXT("Dealer: ") + Cards(S.DealerCards);
+    return FText::FromString(FString::Printf(TEXT("%s  ·  Credits %lld  ·  Bet %lld"), *Caption, S.Bankroll, S.PendingBet));
+}
+FText SDaedalusJavaArcade::DealerText() const
+{
+    const auto S = State();
+    FString Text = TEXT("Dealer: ") + CardsText(S.DealerCards);
     for (int32 I = 0; I < S.HiddenDealerCards; ++I) Text += TEXT("   [hidden]");
     Text += TEXT("\n") + S.DealerCaption;
-    for (int32 I = 0; I < S.PlayerHands.Num(); ++I)
-        Text += FString::Printf(TEXT("\nHand %d%s: %s  ·  Total %d  ·  Bet %lld"), I + 1, I == S.ActiveHand ? TEXT(" (active)") : TEXT(""), *Cards(S.PlayerHands[I].Cards), S.PlayerHands[I].Value, S.PlayerHands[I].Bet);
-    if (!S.ResultText.IsEmpty()) Text += TEXT("\n") + S.ResultText;
     return FText::FromString(Text);
+}
+FText SDaedalusJavaArcade::PlayerHandText(int32 Index) const
+{
+    const auto S = State();
+    if (!S.PlayerHands.IsValidIndex(Index)) return FText::GetEmpty();
+    const auto& Hand = S.PlayerHands[Index];
+    return FText::FromString(FString::Printf(TEXT("Hand %d%s: %s  ·  Total %d  ·  Bet %lld"),
+        Index + 1, Index == S.ActiveHand ? TEXT(" (active)") : TEXT(""), *CardsText(Hand.Cards), Hand.Value, Hand.Bet));
 }
 FText SDaedalusJavaArcade::CellText(int32 Index) const
 {
@@ -455,13 +488,66 @@ void SDaedalusJavaArcade::RevealSelectedCell()
         && SudokuCellWidgets.IsValidIndex(SelectedCell) && SudokuCellWidgets[SelectedCell].IsValid())
         CabinetScroll->ScrollDescendantIntoView(SudokuCellWidgets[SelectedCell], false, EDescendantScrollDestination::IntoView, 8.f);
 }
-void SDaedalusJavaArcade::FocusBoard(bool bRevealCell)
+void SDaedalusJavaArcade::FocusBoard(bool bRevealGame)
 {
     if (Game.IsValid() && FSlateApplication::IsInitialized() && Game->GetSlateUserIndex() != INDEX_NONE)
     {
         FSlateApplication::Get().SetUserFocus(Game->GetSlateUserIndex(), SharedThis(this), EFocusCause::SetDirectly);
-        if (bRevealCell) RevealSelectedCell();
+        if (bRevealGame)
+        {
+            RevealSelectedCell();
+            bBlackjackRevealPending = Game->Game == EDaedalusJavaGame::Blackjack;
+            bBlackjackRevealArmed = bBlackjackRevealPending;
+            UpdateBlackjackReveal();
+        }
     }
+}
+void SDaedalusJavaArcade::Tick(const FGeometry& AllottedGeometry, const double CurrentTime, const float DeltaTime)
+{
+    SCompoundWidget::Tick(AllottedGeometry, CurrentTime, DeltaTime);
+    UpdateBlackjackReveal();
+}
+void SDaedalusJavaArcade::UpdateBlackjackReveal()
+{
+    if (!Game.IsValid() || Game->Game != EDaedalusJavaGame::Blackjack)
+    { RevealedBlackjackSession.Reset(); bBlackjackRevealPending = false; bBlackjackRevealArmed = false; bBlackjackNeedsSyncRevealed = false; return; }
+    if (!bBlackjackRevealArmed) return;
+    const int32 UserIndex = Game->GetSlateUserIndex();
+    if (UserIndex == INDEX_NONE || !HasUserFocus(UserIndex).IsSet() || !CabinetScroll.IsValid()) return;
+    const auto S = State();
+    if (S.Game != EDaedalusJavaGame::Blackjack)
+    { RevealedBlackjackSession.Reset(); return; }
+    // A reply can change the active split hand after its action already returned focus.
+    // Observe only reconciled snapshots; never move focus or consume a child control's view.
+    if (S.bBusy) return;
+    if (S.bNeedsSync)
+    {
+        // Unknown actions require explicit recovery; reveal that warning, never send a retry.
+        if ((!bBlackjackNeedsSyncRevealed || bBlackjackRevealPending) && CabinetStatus.IsValid())
+            CabinetScroll->ScrollDescendantIntoView(CabinetStatus, false, EDescendantScrollDestination::IntoView, 8.f);
+        bBlackjackNeedsSyncRevealed = true; bBlackjackRevealPending = false;
+        return;
+    }
+    if (!S.bReady || S.bRemoteClosed) return;
+    bBlackjackNeedsSyncRevealed = false;
+    if (S.SessionId.IsEmpty()) { RevealedBlackjackSession.Reset(); return; }
+    if (!bBlackjackRevealPending && RevealedBlackjackSession == S.SessionId
+        && RevealedBlackjackRevision == S.Revision && RevealedBlackjackPhase == S.Phase
+        && RevealedBlackjackHand == S.ActiveHand) return;
+    TSharedPtr<SWidget> Target;
+    if (S.Phase == TEXT("PLAYER"))
+    {
+        Target = BlackjackDealerRow;
+        if (S.PlayerHands.IsValidIndex(S.ActiveHand) && BlackjackHandWidgets.IsValidIndex(S.ActiveHand))
+            Target = BlackjackHandWidgets[S.ActiveHand];
+    }
+    else if (S.Phase == TEXT("SETTLE")) Target = S.ResultText.IsEmpty() ? BlackjackDealerRow : BlackjackResultRow;
+    else if (S.Phase == TEXT("INSURANCE") || S.Phase == TEXT("DEALING") || S.Phase == TEXT("DEALER")) Target = BlackjackDealerRow;
+    // BETTING keeps chip controls stationary, even if an old hand/result is still present.
+    if (Target.IsValid()) CabinetScroll->ScrollDescendantIntoView(Target, false, EDescendantScrollDestination::IntoView, 8.f);
+    bBlackjackRevealPending = false;
+    RevealedBlackjackSession = S.SessionId; RevealedBlackjackRevision = S.Revision;
+    RevealedBlackjackPhase = S.Phase; RevealedBlackjackHand = S.ActiveHand;
 }
 FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event)
 {
@@ -489,7 +575,11 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     {
         const FString Action = Key == EKeys::H ? TEXT("hit") : Key == EKeys::S ? TEXT("stand") : Key == EKeys::D ? TEXT("deal") : TEXT("");
         if (Action.IsEmpty()) return FReply::Unhandled();
-        if (!Event.IsRepeat() && Game->IsBlackjackActionLegal(Action)) Game->SubmitBlackjackAction(Action);
+        if (!Event.IsRepeat() && Game->IsBlackjackActionLegal(Action))
+        {
+            bBlackjackRevealArmed = true; bBlackjackRevealPending = true;
+            Game->SubmitBlackjackAction(Action);
+        }
         return FReply::Handled();
     }
     const auto Board = State();
