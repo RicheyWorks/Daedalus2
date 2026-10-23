@@ -180,7 +180,7 @@ public final class ThrowableSports {
         if (offsetMs == null) {
             return Swing.STRIKE;
         }
-        int a = Math.abs(offsetMs);
+        long a = Math.abs((long) offsetMs);
         if (a <= bat.perfectMs()) {
             return Swing.HOME_RUN;
         }
