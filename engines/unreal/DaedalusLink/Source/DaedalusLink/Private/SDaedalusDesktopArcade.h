@@ -35,9 +35,16 @@ private:
 	void PushInput(const FKey& PressedKey = FKey());
 	void SuspendForFocusLoss();
 	void SyncSelection();
+	void ResetCatalogChoice();
+	bool CanSwitchGame() const;
+	FReply BrowseCatalog();
+	FReply SwitchGame();
+	FReply KeepPlaying();
 	void FocusGame();
 	FReply FocusReply();
 	FText CurrentTitle() const;
+	FText CatalogTitle() const;
+	FText CatalogNoticeText() const;
 	FText StatusText() const;
 	FText ControlText() const;
 	FText LeaderboardText() const;
@@ -45,7 +52,7 @@ private:
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
-	void SelectGame(TSharedPtr<FString> Item, ESelectInfo::Type Selection);
+	void SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection);
 	TSharedRef<SWidget> MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun = false);
 
 	TWeakObjectPtr<ADaedalusDesktopArcade> Game;
@@ -55,6 +62,8 @@ private:
 	TSet<FKey> HeldKeys;
 	FDaedalusDesktopArcadeInput PreviousInput;
 	FString LastGameId;
+	FString CatalogChoiceId;
+	FString CatalogError;
 	float StickX = 0.f;
 	float StickY = 0.f;
 	float RightTrigger = 0.f;

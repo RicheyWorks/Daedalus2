@@ -65,6 +65,17 @@ Do not drive a second clock while `bAutoAdvance` is enabled. The Slate host clea
 on focus loss, bounds draw commands and defers close cleanup. The placeholder is an engine
 cube; there is no imported cabinet mesh, character rig or new audio integration.
 
+The cabinet catalog drafts a selection while keeping the current run paused.
+Browsing or accepting a row does not start a game. **Switch game** explicitly
+starts a fresh selected game; **Keep playing** discards that choice and resumes
+the current run. Its title stays visible beside those actions. Existing saved
+runs are retained, and pending Star saves still block switching or resuming.
+F2 / right-stick click opens the native catalog for the opening Slate user.
+Focused catalog controls own their keys and analog navigation, keeping those
+events out of gameplay and Star's paused menu. Failed switching keeps the run
+and draft choice. Native popup, focus, input and save-failure acceptance remain
+pending; this source slice does not establish runtime acceptance.
+
 Star persistence is scoped to `Saved/DaedalusDesktopGames`: validated `DGS1` run state and
 `DGL1` top-ten score/wave/difficulty records. Leaderboard writes reload/merge fresh records;
 failed or malformed reads are refused. Failed run writes retain the pending payload, retry at

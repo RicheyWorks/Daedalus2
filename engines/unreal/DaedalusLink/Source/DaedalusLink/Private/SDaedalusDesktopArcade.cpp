@@ -209,12 +209,13 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				SNew(SHorizontalBox)
 				+ SHorizontalBox::Slot().FillWidth(1.f).Padding(0.f, 0.f, 8.f, 0.f)
 				[
-					SAssignNew(CatalogSelector, SComboBox<TSharedPtr<FString>>).OptionsSource(&GameItems).IsFocusable(false)
+					SAssignNew(CatalogSelector, SComboBox<TSharedPtr<FString>>).OptionsSource(&GameItems).IsFocusable(true)
+					.EnableGamepadNavigationMode(true).MaxListHeight(300.f)
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && !Actor->GetState().bSavePending; })
 					.OnGenerateWidget(this, &SDaedalusDesktopArcade::MakeGameRow)
-					.OnSelectionChanged(this, &SDaedalusDesktopArcade::SelectGame)
+					.OnSelectionChanged(this, &SDaedalusDesktopArcade::SelectCatalogChoice)
 					.OnComboBoxOpening_Lambda([this]() { SuspendForFocusLoss(); })
-					[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::CurrentTitle).Font(DAUI::Font(18, true))]
+					[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::CatalogTitle).Font(DAUI::Font(18, true))]
 				]
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[
@@ -228,6 +229,23 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[MakeAction(TEXT("Close"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->CloseArcade(); }))]
 			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SHorizontalBox)
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[SNew(SButton).ContentPadding(FMargin(12.f, 6.f)).Text(FText::FromString(TEXT("Switch game")))
+					.ToolTipText(FText::FromString(TEXT("Start a fresh run in the selected game. Existing saved runs are kept.")))
+					.IsEnabled_Lambda([this]() { return CanSwitchGame(); }).OnClicked(this, &SDaedalusDesktopArcade::SwitchGame)]
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[SNew(SButton).ContentPadding(FMargin(12.f, 6.f)).Text(FText::FromString(TEXT("Keep playing")))
+					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && !Actor->GetState().bSavePending; })
+					.OnClicked(this, &SDaedalusDesktopArcade::KeepPlaying)]
+				+ SHorizontalBox::Slot().FillWidth(1.f).VAlign(VAlign_Center).Padding(8.f, 0.f)
+				[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::CurrentTitle).Font(DAUI::Font(14, true)).AutoWrapText(true)]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::CatalogNoticeText).AutoWrapText(true)
+				.Visibility_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return !CatalogError.IsEmpty() || (Actor && CatalogChoiceId != Actor->GetSelectedGameId()) ? EVisibility::Visible : EVisibility::Collapsed; })]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::StatusText).Font(DAUI::Font(13)).AutoWrapText(true).ColorAndOpacity(FLinearColor(0.7f, 0.85f, 1.f))]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
@@ -302,11 +320,73 @@ TSharedRef<SWidget> SDaedalusDesktopArcade::MakeGameRow(TSharedPtr<FString> Item
 	return SNew(STextBlock).Text(FText::FromString(Label)).Font(DAUI::Font(15));
 }
 
-void SDaedalusDesktopArcade::SelectGame(TSharedPtr<FString> Item, ESelectInfo::Type Selection)
+void SDaedalusDesktopArcade::SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection)
 {
 	if (Selection == ESelectInfo::Direct || !Item.IsValid()) return;
-	if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->StartGame(*Item, Actor->GetState().Seed);
-	SyncSelection(); FocusGame();
+	if (!GameItems.Contains(Item)) return;
+	// Highlighting or accepting a catalog row only drafts a choice; it never replaces the run.
+	SuspendForFocusLoss();
+	CatalogChoiceId = *Item;
+	CatalogError.Reset();
+}
+
+bool SDaedalusDesktopArcade::CanSwitchGame() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && !Actor->GetState().bSavePending && CatalogChoiceId != Actor->GetSelectedGameId()
+		&& GameItems.ContainsByPredicate([this](const TSharedPtr<FString>& Item) { return Item.IsValid() && *Item == CatalogChoiceId; });
+}
+
+FReply SDaedalusDesktopArcade::BrowseCatalog()
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	if (Actor && !Actor->GetState().bSavePending && CatalogSelector.IsValid() && CatalogSelector->IsEnabled() && FSlateApplication::IsInitialized()
+		&& Actor->GetArcadeSlateUserIndex() != INDEX_NONE)
+	{
+		SuspendForFocusLoss();
+		FSlateApplication::Get().SetUserFocus(Actor->GetArcadeSlateUserIndex(), CatalogSelector, EFocusCause::Navigation);
+		CatalogSelector->SetIsOpen(true, true, Actor->GetArcadeSlateUserIndex());
+	}
+	return FReply::Handled();
+}
+
+FReply SDaedalusDesktopArcade::SwitchGame()
+{
+	ADaedalusDesktopArcade* Actor = Game.Get();
+	if (Actor && CanSwitchGame())
+	{
+		SuspendForFocusLoss();
+		if (Actor->StartGame(CatalogChoiceId, Actor->GetState().Seed))
+		{
+			SyncSelection();
+			return FocusReply();
+		}
+		CatalogError = TEXT("The selected game could not start. Your current run was kept.");
+	}
+	return FReply::Handled();
+}
+
+FReply SDaedalusDesktopArcade::KeepPlaying()
+{
+	if (ADaedalusDesktopArcade* Actor = Game.Get())
+	{
+		if (Actor->GetState().bSavePending) return FReply::Handled();
+		ResetCatalogChoice();
+		ResetHeldInput();
+		Actor->PauseGame(false);
+		return FocusReply();
+	}
+	return FReply::Handled();
+}
+
+void SDaedalusDesktopArcade::ResetCatalogChoice()
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	if (!Actor || !CatalogSelector.IsValid()) return;
+	CatalogChoiceId = Actor->GetSelectedGameId();
+	CatalogError.Reset();
+	for (const TSharedPtr<FString>& Item : GameItems)
+		if (Item.IsValid() && *Item == CatalogChoiceId) { CatalogSelector->SetSelectedItem(Item); break; }
 }
 
 void SDaedalusDesktopArcade::SyncSelection()
@@ -317,13 +397,26 @@ void SDaedalusDesktopArcade::SyncSelection()
 	if (Id == LastGameId) return;
 	LastGameId = Id;
 	ResetHeldInput();
-	for (const TSharedPtr<FString>& Item : GameItems) if (Item.IsValid() && *Item == Id) { CatalogSelector->SetSelectedItem(Item); break; }
+	ResetCatalogChoice();
 }
 
 FText SDaedalusDesktopArcade::CurrentTitle() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return FText::FromString(Actor ? Actor->GetState().Title : TEXT("Desktop Arcade unavailable"));
+	return FText::FromString(Actor ? TEXT("Current game: ") + Actor->GetState().Title : TEXT("Desktop Arcade unavailable"));
+}
+
+FText SDaedalusDesktopArcade::CatalogTitle() const
+{
+	if (const ADaedalusDesktopArcade* Actor = Game.Get())
+		for (const FDaedalusDesktopArcadeEntry& Entry : Actor->GetAvailableGames())
+			if (Entry.Id == CatalogChoiceId) return FText::FromString(Entry.Title);
+	return FText::FromString(TEXT("Choose a game"));
+}
+
+FText SDaedalusDesktopArcade::CatalogNoticeText() const
+{
+	return FText::FromString(CatalogError.IsEmpty() ? TEXT("Switch game replaces the current run.") : CatalogError);
 }
 
 FText SDaedalusDesktopArcade::StatusText() const
@@ -379,7 +472,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
-	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. R: restart. Esc / Back: close. ");
+	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
@@ -524,6 +617,24 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event)
 {
 	const FKey Key = Event.GetKey();
+	if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left)
+	{
+		if (!Event.IsRepeat())
+		{
+			if (CatalogSelector.IsValid() && CatalogSelector->IsOpen())
+			{
+				CatalogSelector->SetIsOpen(false, false, Event.GetUserIndex());
+				if (FSlateApplication::IsInitialized() && CatalogSelector->IsEnabled())
+					FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), CatalogSelector, EFocusCause::Navigation);
+			}
+			else if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->CloseArcade();
+		}
+		return FReply::Handled();
+	}
+	// Focused native catalog/buttons own their input, including Star's paused menu keys.
+	if (!HasUserFocus(Event.GetUserIndex()).IsSet()) return FReply::Unhandled();
+	if (Key == EKeys::F2 || Key == EKeys::Gamepad_RightThumbstick)
+		return Event.IsRepeat() ? FReply::Handled() : BrowseCatalog();
 	if (!Event.IsRepeat())
 	{
 		if (ADaedalusDesktopArcade* Actor = Game.Get())
@@ -550,7 +661,6 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 				if (bConsumed && Key == EKeys::Gamepad_Special_Right) { PushInput(); return FReply::Handled(); }
 				// A still enters held jump mapping after its immediate source start.
 			}
-			if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Actor->CloseArcade(); return FReply::Handled(); }
 			if (Key == EKeys::P || Key == EKeys::Gamepad_Special_Right) { Actor->PauseGame(!Actor->GetState().bPaused); return FReply::Handled(); }
 			if (Key == EKeys::R) { Actor->RestartGame(); return FReply::Handled(); }
 		}
@@ -561,12 +671,14 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 
 FReply SDaedalusDesktopArcade::OnKeyUp(const FGeometry& Geometry, const FKeyEvent& Event)
 {
+	if (!HasUserFocus(Event.GetUserIndex()).IsSet()) return FReply::Unhandled();
 	HeldKeys.Remove(Event.GetKey()); PushInput();
 	return FReply::Handled();
 }
 
 FReply SDaedalusDesktopArcade::OnAnalogValueChanged(const FGeometry& Geometry, const FAnalogInputEvent& Event)
 {
+	if (!HasUserFocus(Event.GetUserIndex()).IsSet()) return FReply::Unhandled();
 	const float Value = FMath::IsFinite(Event.GetAnalogValue()) ? FMath::Clamp(Event.GetAnalogValue(), -1.f, 1.f) : 0.f;
 	if (Event.GetKey() == EKeys::Gamepad_LeftX) StickX = Value;
 	else if (Event.GetKey() == EKeys::Gamepad_LeftY) StickY = -Value;
@@ -577,7 +689,10 @@ FReply SDaedalusDesktopArcade::OnAnalogValueChanged(const FGeometry& Geometry, c
 }
 
 FReply SDaedalusDesktopArcade::OnMouseButtonDown(const FGeometry& Geometry, const FPointerEvent& Event) { return FocusReply(); }
-FNavigationReply SDaedalusDesktopArcade::OnNavigation(const FGeometry& Geometry, const FNavigationEvent& Event) { return FNavigationReply::Stop(); }
+FNavigationReply SDaedalusDesktopArcade::OnNavigation(const FGeometry& Geometry, const FNavigationEvent& Event)
+{
+	return HasUserFocus(Event.GetUserIndex()).IsSet() ? FNavigationReply::Stop() : SCompoundWidget::OnNavigation(Geometry, Event);
+}
 
 void SDaedalusDesktopArcade::OnFocusLost(const FFocusEvent& Event)
 {
