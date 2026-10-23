@@ -1,0 +1,85 @@
+{
+  "schema": "daedalus.commons-care-activity-build.v1",
+  "utc": "2026-10-23T05:11:56.407959+00:00",
+  "status": "BUILT_COMPILED_SAVED_RUNTIME_UNVERIFIED",
+  "behavior": {
+    "compiled": true,
+    "written": [
+      "CommitCareComplete",
+      "RefreshCareUI",
+      "InitGarden",
+      "TryGardenInteract",
+      "RefreshGarden"
+    ],
+    "original_plant_commit_unchanged": true,
+    "built_loop": "Original planting complete -> E collect water at barrel -> E tend same planter -> persistent care acknowledgement and two additional blooms.",
+    "persistence": "One additive CareComplete bool in existing version1 SG/slot, saved before local success; carried water session-only; failed save retains water and old completion state.",
+    "no_new_timers_rewards_or_inventory": true,
+    "Play_run": false
+  },
+  "composition": {
+    "saved": true,
+    "actors_current": 755,
+    "new_blooms": [
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_730"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_731"
+      }
+    ],
+    "barrel_location": [
+      -2700,
+      -1500,
+      20.15
+    ],
+    "kiosk_overlap_fix": "Barrel moved within owned care grouping to separate its2.4m input radius from kiosk; no input priority framework.",
+    "existing_original_flower_and_plant_quest_preserved": true,
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "Play_run": false
+  },
+  "actual_save_defaults": {
+    "Version": 1,
+    "CareComplete": false
+  },
+  "preservation": {
+    "utc": "2026-10-23T05:09:01.097584+00:00",
+    "unlock": {
+      "ok": true,
+      "lock": null
+    },
+    "readback": {
+      "unreal": {
+        "holder": "codex-play-guard",
+        "note": "Build one owned collect-water/tend-flower step using existing E/UI/garden SaveGame. No rewards/reset/new timers/framework/Play loops.",
+        "at": 1792731794.0917494,
+        "ttl": 7200.0,
+        "age_s": 347.0,
+        "left_s": 6853.0
+      }
+    },
+    "progress_unchanged": true,
+    "protected_files_unchanged": 314
+  },
+  "image": {
+    "path": "images/care-r12-station.png",
+    "sha256": "c2701bbb8371ef24c3fb5e351b32560db9da1025066ff35826839cb6f604398d"
+  },
+  "persistence_boundaries": {
+    "slot": "Daedalus_LanternCommons_Garden_v1",
+    "version": 1,
+    "added_saved_field": "CareComplete bool, default false",
+    "HasWater": "Session-only, unlimited recollection, no inventory token/cost.",
+    "save_failure": "Local success/blooms are withheld; water stays carried for retry. On-disk failure transactionality is not claimed.",
+    "legacy_save_compatibility": "Intended additive missing-field default; not exercised against old player files in this build-only pass."
+  },
+  "limits": [
+    "No Play/input/visible-transition/reload/persistence test loop.",
+    "Barrel/planter authored behavior only; feeder/compost/crate stay decorative.",
+    "No rewards, original planting reset, new timer, inventory or economy framework.",
+    "Editor view shows normal saved composition, not completed-care runtime HUD/blooms."
+  ]
+}

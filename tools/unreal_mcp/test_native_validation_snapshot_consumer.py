@@ -90,6 +90,35 @@ class ValidSnapshots(unittest.TestCase):
         d["settings"]["MaxAssetsToValidate"] = 1
         self.assertIn("asset_limit_reached_or_insufficient_headroom", run(d).problems)
 
+    def test_consistent_notvalidated_is_preserved_and_refused(self):
+        # Synthetic canonical result, not evidence of an actual native outcome.
+        d = base()
+        d["results"]["NumValid"] = 0
+        d["results"]["NumUnableToValidate"] = 1
+        d["results"]["AssetsDetails"][P]["Result"] = "NotValidated"
+        res = run(d)
+        self.assertFalse(res.accepted)
+        self.assertEqual(res.snapshot.native_return, 0)
+        self.assertEqual(res.snapshot.results.counts["NumChecked"], 1)
+        self.assertEqual(res.snapshot.results.counts["NumUnableToValidate"], 1)
+        self.assertEqual(res.snapshot.results.counts["NumSkipped"], 0)
+        self.assertEqual(res.snapshot.results.details[0].result, "NotValidated")
+        self.assertIn("invalid_skipped_warning_or_unable", res.problems)
+        self.assertIn("detail_not_valid:" + P, res.problems)
+        self.assertFalse(res.snapshot.native_runtime_qualified)
+
+    def test_skipped_is_distinct_from_notvalidated_and_refused(self):
+        d = base()
+        d["results"].update(NumChecked=0, NumValid=0, NumSkipped=1)
+        d["results"]["AssetsDetails"] = {}
+        res = run(d)
+        self.assertFalse(res.accepted)
+        self.assertEqual(res.snapshot.results.counts["NumSkipped"], 1)
+        self.assertEqual(res.snapshot.results.counts["NumUnableToValidate"], 0)
+        self.assertEqual(res.snapshot.results.details, ())
+        self.assertIn("not_all_requested_checked_valid", res.problems)
+        self.assertIn("invalid_skipped_warning_or_unable", res.problems)
+
 
 class CapViolations(unittest.TestCase):
     def test_requested_cap(self):
