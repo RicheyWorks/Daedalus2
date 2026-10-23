@@ -1502,6 +1502,11 @@ function doAction(a) {
   }
   if (a.kind === "magic") {
     const s = a.spell; if (who.mp < s.mp) { B.msg = who.name + " IS OUT OF MP."; return; }
+    if (s.target === "ally" && (!party.includes(a.target) || a.target.hp <= 0)) {
+      B.msg = party.includes(a.target) ? a.target.name + " IS DOWN. " + s.name.toUpperCase() + " IS NOT CAST."
+        : "THAT ALLY IS NO LONGER HERE. " + s.name.toUpperCase() + " IS NOT CAST.";
+      sfx("LOCKED"); return;
+    }
     who.mp -= s.mp; sfx("SPELL");
     const targets = a.target === "all" ? alive(B.foes) : [a.target && (a.target.hp > 0 || s.target === "ally") ? a.target : alive(B.foes)[0]];
     B.fx = { name: s.name, t: 0, targets };
