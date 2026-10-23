@@ -1,5 +1,5 @@
 {
-  "schema": "daedalus.playable-scene-receipt.v6",
+  "schema": "daedalus.playable-scene-receipt.v7",
   "engine": "Unreal Engine 5.8.4",
   "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
   "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
@@ -62,7 +62,12 @@
     "/Game/Daedalus/Art/Prop/Prop_Flower_Bluebell/Prop_Flower_Bluebell/StaticMeshes/Prop_Flower_Bluebell.Prop_Flower_Bluebell",
     "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
     "/Game/Daedalus/Art/Prop/Prop_Aqua_WaterLily/Prop_Aqua_WaterLily/StaticMeshes/Prop_Aqua_WaterLily.Prop_Aqua_WaterLily",
-    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/StaticMeshes/Prop_Orr_Spring_Basin.Prop_Orr_Spring_Basin"
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/StaticMeshes/Prop_Orr_Spring_Basin.Prop_Orr_Spring_Basin",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Aqueduct_Arch/Prop_Orr_Aqueduct_Arch/StaticMeshes/Prop_Orr_Aqueduct_Arch.Prop_Orr_Aqueduct_Arch",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Fence_Low/Prop_Orr_Fence_Low/StaticMeshes/Prop_Orr_Fence_Low.Prop_Orr_Fence_Low",
+    "/Game/Daedalus/Art/Prop/Prop_Shrub_Hedge/Prop_Shrub_Hedge/StaticMeshes/Prop_Shrub_Hedge.Prop_Shrub_Hedge",
+    "/Game/Daedalus/Art/Prop/Prop_Crater_RimRock/Prop_Crater_RimRock/StaticMeshes/Prop_Crater_RimRock.Prop_Crater_RimRock",
+    "/Game/Daedalus/Art/Prop/Prop_Island_RockCluster_K11V0/Prop_Island_RockCluster_K11V0/StaticMeshes/Prop_Island_RockCluster_K11V0.Prop_Island_RockCluster_K11V0"
   ],
   "source_author": "Unknown; no authorship inferred from filenames.",
   "actual_checks": {
@@ -93,6 +98,7 @@
     "current_packages_clean": true
   },
   "limits": [
+    "R6 retains the already-present atmosphere and adds native height fog; visual horizon improvement remains unreviewed. Three shared-pivot canopy placements corrected.",
     "R5 Stillwater is a flat decorative surface above existing solid ground, not a water-gameplay integration. New content awaits independent pixel review.",
     "R4 garden is built/saved, not newly play-tested or pixel-reviewed. New pond candidates remain held; no imports or benchmark acceptance claimed.",
     "R3 real UMG objective/prompt/completion assets are built, compiled and saved; runtime and pixel acceptance were not run in this build-only pass.",
@@ -324,7 +330,7 @@
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 657,
+  "actor_count": 713,
   "objective_ui": {
     "schema": "daedalus.commons-objective-ui-build.v1",
     "status": "BUILT_COMPILED_SAVED",
@@ -388,7 +394,7 @@
       "Broad horizon and blockout-level visual finish remain; the reference benchmark is not met."
     ]
   },
-  "actual_checks_scope": "Historical R1/R2 gameplay checks predate R3 UI/R4 garden/R5 Stillwater. Latest content built/saved/captured only; no repeated Play, reload or tests.",
+  "actual_checks_scope": "Historical R1/R2 gameplay checks predate later content. Latest R6 content built/saved/captured only; no new Play, reload or test loops.",
   "garden_r4": {
     "schema": "daedalus.commons-garden-build.v1",
     "created_utc": "2026-10-23T02:07:20.218681+00:00",
@@ -479,8 +485,8 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 1832795,
-      "sha256": "6cd8e47bad82f3040091c032ab870e96cf80f3bcb19212f2a579c8fa350dd1f9"
+      "bytes": 1986997,
+      "sha256": "59aaaa14d3f9a86eb1f84d35c0ac4b53c5a76b5dfbaf9d4944f0645cc1724bb4"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -511,6 +517,21 @@
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective.uasset",
       "bytes": 133146,
       "sha256": "324ae33c48c5ffa08b67a6ecf12a55e2a638382acf2b2f8f0f9b5dcf68caf29e"
+    },
+    {
+      "path": "entry/build.json",
+      "bytes": 5472,
+      "sha256": "f74ea189648311729f16c7498ed709e5acebb5921f62d34f851e1b203e40bf01"
+    },
+    {
+      "path": "entry/existing-asset-reuse.json",
+      "bytes": 4167,
+      "sha256": "46f543524d09b51c3284914598bca163bb0d43c8d8fcaeebe98a43bc38e85f2a"
+    },
+    {
+      "path": "entry/layout.json",
+      "bytes": 8839,
+      "sha256": "704517d04789bb4c925e6bce9c34d36a71056f35d845f6535f3f9f257d530f95"
     },
     {
       "path": "feedback-graph.dsl",
@@ -551,6 +572,21 @@
       "path": "images/before-player.png",
       "bytes": 1901562,
       "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/entry-r6-arrival.png",
+      "bytes": 2573656,
+      "sha256": "054db3a6ff72b0bcbecd3694a58341d32383f0edacbcbf1c00b9f8a525cb1a08"
+    },
+    {
+      "path": "images/entry-r6-horizon.png",
+      "bytes": 2671093,
+      "sha256": "cbc4c30ef6eb912e1e902b220b87e73b4db64fed593c6c2f098f1acd3ffe4a4b"
+    },
+    {
+      "path": "images/entry-r6-overview.png",
+      "bytes": 2165606,
+      "sha256": "2b059b8ed0d72902f1a56a66f1ec8cdd4c49939e90f494cfdc0098f1ccea1ccf"
     },
     {
       "path": "images/gameplay-before-pickup.png",
@@ -649,8 +685,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6555,
-      "sha256": "9bc2a1c328d746faf556965475b56857f71178eed6e7799111c49c31dee1f068"
+      "bytes": 8178,
+      "sha256": "d3c97b1d6b93c5696b12fdb021a69c72706e50fce5d6cf4643d56fba9cb25169"
     },
     {
       "path": "stillwater/build.json",
@@ -799,5 +835,138 @@
   },
   "required_existing_materials": [
     "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/Materials/water.water"
-  ]
+  ],
+  "entry_horizon_r6": {
+    "schema": "daedalus.commons-entry-horizon-build.v1",
+    "utc": "2026-10-23T02:28:39.261737+00:00",
+    "status": "BUILT_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "59aaaa14d3f9a86eb1f84d35c0ac4b53c5a76b5dfbaf9d4944f0645cc1724bb4",
+    "added_actors": 56,
+    "current_actors": 713,
+    "imported_placements_by_kind": {
+      "Prop_Crater_RimRock": 8,
+      "Prop_Island_RockCluster_K11V0": 2,
+      "Prop_Orr_Aqueduct_Arch": 1,
+      "Prop_Orr_Fence_Low": 2,
+      "Prop_Orr_Lantern_Post": 2,
+      "Prop_Orr_Path_Tile_Cobble": 8,
+      "Prop_Orr_Planter_Long": 2,
+      "Prop_Shrub_Hedge": 12,
+      "canopy": 8,
+      "willow": 8
+    },
+    "composition": {
+      "saved": true,
+      "new_actors": 56,
+      "actors_current": 713,
+      "perimeter_clusters": 10,
+      "environment_before": [
+        {
+          "label": "CourtyardSun",
+          "class": "DirectionalLight",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.DirectionalLight_0"
+        },
+        {
+          "label": "CourtyardSky",
+          "class": "SkyLight",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyLight_0"
+        },
+        {
+          "label": "CourtyardAtmosphere",
+          "class": "SkyAtmosphere",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyAtmosphere_0"
+        }
+      ],
+      "environment_changes": [
+        {
+          "operation": "existing SkyAtmosphere retained",
+          "paths": [
+            "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyAtmosphere_0"
+          ]
+        },
+        {
+          "operation": "added native height fog",
+          "density": 0.008,
+          "start_distance_cm": 1800,
+          "volumetric_fog_enabled": false
+        }
+      ],
+      "sun_flag_before": true,
+      "sun_flag_after": true,
+      "sky_recaptured_once": true,
+      "ground_routes_ui_progress_unchanged": true,
+      "imports": 0,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "corrected_owned_R5_canopies": [
+        {
+          "label": "CommonsR5ShelterCanopy0",
+          "previous_z": -116.5,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        },
+        {
+          "label": "CommonsR5ShelterCanopy1",
+          "previous_z": -97.0,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        },
+        {
+          "label": "CommonsR5ShelterCanopy2",
+          "previous_z": -84.0,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        }
+      ],
+      "instancing_choice": "Bounded 53 imported mesh placements plus one owned signboard; no original material instancing-usage mutations or new instancing framework."
+    },
+    "saved_state": {
+      "saved": true,
+      "new_actors": 56,
+      "actors_current": 713,
+      "images": {
+        "arrival": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-arrival.png",
+          "bytes": 2573656,
+          "sha256": "054db3a6ff72b0bcbecd3694a58341d32383f0edacbcbf1c00b9f8a525cb1a08"
+        },
+        "horizon": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-horizon.png",
+          "bytes": 2671093,
+          "sha256": "cbc4c30ef6eb912e1e902b220b87e73b4db64fed593c6c2f098f1acd3ffe4a4b"
+        },
+        "overview": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-overview.png",
+          "bytes": 2165606,
+          "sha256": "2b059b8ed0d72902f1a56a66f1ec8cdd4c49939e90f494cfdc0098f1ccea1ccf"
+        }
+      },
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "imports": 0,
+      "encounters": 1,
+      "pixel_review": "Pending independent review; local image reader not invoked. No visual benchmark acceptance claimed."
+    },
+    "protected_originals": "Existing original guard and both saved floor material hashes unchanged.",
+    "normal_compute_released": true,
+    "source_imports": 0,
+    "three_prepared_pond_sources": "HELD; independent offline owner prepares compatible profile.",
+    "ready_to_shift_to_activities": "Recommended: the spacious area now has route, chart, three courts, garden and entrance. Next value is one simple collect-and-plant activity; this is a production recommendation, not gameplay/visual acceptance.",
+    "remaining_gaps": [
+      "Current images await independent review; no art-benchmark or black-horizon resolution claim.",
+      "Current UI and new scenery not newly play-tested, per build mode; benches and sundial are decorative.",
+      "Ground repetition and broader distant composition remain candidates for later visual review, not another tool-certification pass.",
+      "New pond sources remain held until compatible qualified admission."
+    ],
+    "terminal_sha256": "dcd6a28c0a3940aea0e02fc6312460dc1f109c22e77eefc4fc2656f1d98d61ef",
+    "release_sha256": "4332a33a8f768d32b86ca86fdbf336e618fde802d418a4359492693b518516a1"
+  }
 }

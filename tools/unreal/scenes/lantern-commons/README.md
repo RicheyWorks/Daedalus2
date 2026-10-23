@@ -103,3 +103,29 @@ and `stillwater/layout.json` retain the actual build and placement facts.
 Next coherent content batch: a welcoming Commons entrance and more natural
 perimeter/horizon framing using existing imported content, while preserving the
 open roaming space and leaving held-source admission to its dedicated owner.
+
+## Commons entrance and horizon R6
+
+The Commons arrival now has an imported aqueduct arch, contrast-backed welcome
+sign, lanterns, planters and stepping cobbles. Ten composed perimeter groups use
+rocks, shrubs and paired willow meshes without filling the roaming lanes. This
+adds 56 actors (713 total), including one native height-fog actor. Existing
+SkyAtmosphere was already present and retained; the sun flag was already true.
+The skylight was recaptured once. No new sky/weather system or plugin was added.
+
+Three owned R5 canopy placements were corrected: canopy and trunk share a root
+pivot, so independently snapping canopy bounds to ground had lowered the leaves.
+Only those retained placements were corrected; original meshes were not changed.
+Stillwater Garden, existing routes, collision, UI and progress remain intact.
+
+Only the owned map was saved. Packages clean, originals unchanged and compute
+released. No imports, Play/reload/test loop or local image decoding. Captures are
+`images/entry-r6-{arrival,horizon,overview}.png` in the Commons pack. Pixel review
+and benchmark acceptance remain pending; do not claim the black horizon fixed
+from actor presence alone. Prior Stillwater commit has 9/9 CI passing.
+
+Current composition records are in `entry/build.json` and `entry/layout.json`.
+The next recommended content slice is an actual collect-and-plant activity using
+existing interaction/inventory hooks and an owned planter, rather than another
+scenery-only or blanket qualification pass. Keep visual review honest and handle
+concrete errors encountered during implementation.
