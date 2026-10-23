@@ -872,7 +872,7 @@ function pickFish() {
   for (const f of all) { r -= wt(f); if (r < 0) return f; }
   return all[all.length - 1];
 }
-function endFish() { fishing = null; mode = "field"; }
+function endFish() { clearActionButtons(); fishing = null; mode = "field"; }
 function fishTick(dt) {
   const f = fishing; f.t += dt;
   if (f.phase === "wait") {
