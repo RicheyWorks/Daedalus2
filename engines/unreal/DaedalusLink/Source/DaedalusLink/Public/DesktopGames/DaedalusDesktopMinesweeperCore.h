@@ -76,8 +76,8 @@ class MinesweeperGame final : public Game {
         return Position+"open "+std::to_string(C.Near)+". Neighbour flags "+std::to_string(AdjacentFlags(Index(X,Y)))+"/"+std::to_string(C.Near)+".";
     }
     std::string ActionNote() const {
-        if(Won) return "Cleared! Restart for another run.";
-        if(Lost) return "Mine hit. Restart to try again.";
+        if(Won) return "Cleared! Restart for another run. Pad A / R: replay. Start: pause/save.";
+        if(Lost) return "Mine hit. Restart to try again. Pad A / R: replay. Start: pause/save.";
         if(Cells.empty()) return "Reveal a covered cell to begin.";
         const auto& C=Cells[Index(X,Y)];
         if(C.Flag) return "Unflag before revealing. K / pad B removes this marker.";
@@ -96,6 +96,11 @@ public:
     bool SetOption(int Value,std::uint32_t Seed) override {if(Value<0||Value>2)return false;Option=Value;Reset(Seed);return true;}
     int GetOption() const override {return Option;}
     std::uint32_t SeedAfterRestore(std::uint32_t) const override {return BoardSeed;}
+    bool SourceControllerButton(int Button) override {
+        // Start remains available to the host's pause/save controls, even after a result.
+        if(Button==0 && (Lost||Won)) {Reset(BoardSeed);return true;}
+        return false;
+    }
     std::string SaveState() const override {
         if(Cells.size()!=static_cast<std::size_t>(Width*Height)) return {};
         std::ostringstream Out;Out.imbue(std::locale::classic());

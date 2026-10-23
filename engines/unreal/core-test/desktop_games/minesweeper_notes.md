@@ -70,3 +70,20 @@ actions, successful and wrong-flag chords, and reset/restore/presentation save-b
 preservation. The same test against the prior header passed12/29 and failed17
 missing-guidance checks as expected. Native footer layout and physical controls
 remain acceptance work; no engine build or live session was run.
+
+## Controller result replay
+
+A fresh terminal pad A uses the existing source-controller event to reset with the
+board's persisted seed and current difficulty. Start remains unconsumed for the
+host pause/save controls, including saving a completed board. Held Step actions,
+active raw events and Enter/Space do not replace a board. No save-file/schema or
+host changes are involved. The existing native host forwards A into a new Jump
+edge, so it can also reveal the fresh board's safe first cell; no suppression state
+is added. This behavior is modeled offline and remains native acceptance work.
+
+`desktop_minesweeper_replay` / `minesweeper_replay_test.cpp` passed37/37 strict
+single-TU MSVC checks: real win/loss/expert loss, reset and deterministic planting,
+repeat cleanup, restored seed/difficulty, paused refusal, stale-edge cleanup and
+modeled A forwarding. The same test against the preceding header passed12/19,
+failing7 missing-replay/guidance checks as expected; post-replay assertions skip
+when the old core correctly cannot proceed. Original DGM1 snapshots stay restorable.
