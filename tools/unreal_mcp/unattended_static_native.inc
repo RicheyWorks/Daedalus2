@@ -18,13 +18,13 @@ def source(witness):
     return raw
 
 
-def memory():
+def memory(reserve=0):
     class Memory(ctypes.Structure):
         _fields_ = [('length', ctypes.c_uint32), ('load', ctypes.c_uint32)] + [
             (k, ctypes.c_uint64) for k in ('total', 'physical', 'page_total', 'commit', 'virt', 'available', 'extra')]
     state = Memory(); state.length = ctypes.sizeof(state)
     if (not ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(state))
-            or state.physical < 1740800000 or state.commit < 2252800000):
+            or state.physical < 1740800000 + reserve or state.commit < 2252800000 + reserve):
         raise RuntimeError('Native memory floor; preserve work')
 
 
@@ -87,51 +87,173 @@ def idle(shared):
     return guard
 
 
-def deduplicate(item):
-    """Read-only scoped source-hash inventory + global registry-name exclusion.
+def inventory_reader(witness):
+    scope = {'__name__': '_pinned_static_source_inventory'}
+    exec(compile(source(witness), witness['path'], 'exec'), scope)
+    return scope
 
-    No directory sweep or unbounded asset load. Missing provenance/coverage holds.
-    The sole writer supplies all meshes in the existing ingestion corpus roots;
-    the current native registry must prove that inventory complete at dispatch.
+
+def registry_paths(registry, root, stop_path=None, candidate_name=None):
+    """Supported directory enumeration, not fictional native offset pagination.
+
+    GetSubPaths and each direct-folder TArray are materialized by Unreal. Refuse
+    an oversized response explicitly; never take a cap-sized prefix as coverage.
     """
-    inventory = json.loads(source(CFG['policy']['dedup']))
-    roots = ['/Game/Daedalus/Art/Islands']
-    if (set(inventory) != {'schema', 'roots', 'assets'}
-            or inventory['schema'] != 'daedalus.static-source-inventory.v1'
-            or inventory['roots'] != roots or not isinstance(inventory['assets'], dict)
-            or not 1 <= len(inventory['assets']) <= 512):
-        raise RuntimeError('Explicit bounded existing ingestion source inventory required')
-    registry = unreal.AssetRegistryHelpers.get_asset_registry()
-    all_rows = registry.get_assets_by_path('/Game', recursive=True)
-    if len(all_rows) > 100000:
-        raise RuntimeError('Global registry name inventory exceeds cap')
-    if any(str(row.asset_name).casefold() == item['name'].casefold() for row in all_rows):
-        raise RuntimeError('Source asset name already present globally; no new import')
-    expected = dict(inventory['assets'])
-    expected.update({p: {'sha256': sha} for p, sha in CFG['known_outputs'].items()})
-    current = {str(row.package_name) + '.' + str(row.asset_name)
-               for root in roots for row in registry.get_assets_by_path(root, recursive=True)
-               if str(row.asset_class_path.asset_name) == 'StaticMesh'}
-    if current != set(expected):
-        raise RuntimeError('Existing ingestion source coverage changed/unknown; reconcile inventory')
-    for path, witness in expected.items():
-        memory()
-        if not isinstance(witness.get('sha256'), str) or len(witness['sha256']) != 64:
-            raise RuntimeError('Unknown source hash; no absence inference')
+    started = time.monotonic()
+    memory(128 * 1024**2)
+    folders = [root] + [str(p) for p in registry.get_sub_paths(root, True)]
+    if len(folders) > 16384 or len({p.casefold() for p in folders}) != len(folders):
+        raise RuntimeError('Unsupported/inconsistent registry folder response')
+    if any(p != root and not p.startswith(root + '/') for p in folders):
+        raise RuntimeError('Registry returned an outside folder')
+    paths, seen, largest, text_bytes, asset_rows = [], set(), 0, 0, 0
+    for number, folder in enumerate(sorted(folders)):
+        memory(128 * 1024**2)
+        if time.monotonic() - started > 30 or (stop_path and Path(stop_path).exists()):
+            raise RuntimeError('Incomplete registry enumeration: time/STOP boundary')
+        rows = registry.get_assets_by_path(folder, recursive=False)
+        if len(rows) > 4096:
+            raise RuntimeError('Unsupported direct-folder array exceeds 4096; no native paging API')
+        asset_rows += len(rows)
+        if asset_rows > 100000:
+            raise RuntimeError('Unsupported registry asset-row resource bound; incomplete')
+        largest = max(largest, len(rows))
+        for row in rows:
+            if candidate_name and str(row.asset_name).casefold() == candidate_name.casefold():
+                raise RuntimeError('Source asset name already present globally; no new import')
+            if str(row.asset_class_path.asset_name) != 'StaticMesh': continue
+            path = str(row.package_name) + '.' + str(row.asset_name)
+            if not str(row.package_name).rsplit('/', 1)[0] == folder:
+                raise RuntimeError('Registry returned a recursive/outside folder row')
+            if path.casefold() in seen: raise RuntimeError('Duplicate registry object path')
+            seen.add(path.casefold()); paths.append(path); text_bytes += len(path.encode())
+            if len(paths) > 100000 or text_bytes > 16 * 1024**2:
+                raise RuntimeError('Unsupported registry identity/byte resource bound; incomplete')
+        if number % 8 == 7: yield None
+    return sorted(paths), {'complete': True, 'folder_count': len(folders), 'asset_rows': asset_rows,
+                           'largest_direct_response': largest,
+                           'native_api': 'GetSubPaths + GetAssetsByPath(recursive=False); full folder arrays'}
+
+
+def inventory_admission(config):
+    memory(128 * 1024**2)
+    baseline = json.loads(source(config['baseline']))
+    if (baseline['editor'] != config['editor'] or os.getpid() != config['editor']['pid']
+            or context() != baseline['context']
+            or unreal.SystemLibrary.get_engine_version() != config['engine_version']):
+        raise RuntimeError('Inventory editor/current protected context differs')
+    if (unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()
+            or unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()
+            or unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor()
+            or unreal.AssetRegistryHelpers.get_asset_registry().is_loading_assets()
+            or unreal.InterchangeManager.get_interchange_manager_scripted().is_interchange_active()
+            or unreal.get_editor_subsystem(unreal.MoviePipelineQueueSubsystem).get_active_executor() is not None
+            or json.loads(unreal.get_default_object(unreal.AutomationTestToolset).call_method('GetTestStatus')).get('state') == 'Running'):
+        raise RuntimeError('Inventory read requires clean idle native state')
+
+
+def capture_registry_steps(config):
+    """Optional sole-writer read helper; existing exact R1 path capture also fits."""
+    inventory_admission(config)
+    reader = inventory_reader(config['inventory_reader'])
+    paths, evidence = yield from registry_paths(unreal.AssetRegistryHelpers.get_asset_registry(),
+                                               reader['ROOT'], config.get('stop_path'))
+    inventory_admission(config)
+    return {'root': reader['ROOT'], 'count': len(paths), 'paths': paths,
+            'path_digest': reader['path_digest'](paths), 'enumeration': evidence,
+            'source_hashes_verified': False}
+
+
+def capture_inventory_page(config):
+    """ONE read-only page per existing owner-guard call; never import/save/GC.
+
+    The writer persists each return as a new page. Partial/unknown pages stay
+    evidence, never enter a complete index. Another read can address that page;
+    this is independent of the runner's never-replay import checkpoints.
+    """
+    inventory_admission(config)
+    reader = inventory_reader(config['inventory_reader'])
+    source(config['reader'])
+    paths = reader['capture'](config['registry'])
+    offset = config['offset']
+    if type(offset) is not int or offset < 0 or offset >= len(paths) or offset % reader['PAGE_ROWS']:
+        raise RuntimeError('Exact aligned inventory page offset required')
+    requested = min(reader['PAGE_ROWS'], len(paths) - offset)
+    rows, issues, started = [], [], time.monotonic()
+    content = Path(config['editor']['project']).parent / 'Content'
+    for path in paths[offset:offset + requested]:
+        memory(128 * 1024**2)
+        if time.monotonic() - started > 30 or (config.get('stop_path') and Path(config['stop_path']).exists()):
+            issues.append({'reason': 'partial_time_or_stop', 'next_offset': offset + len(rows)})
+            break
         mesh = unreal.EditorAssetLibrary.load_asset(path)
-        if not isinstance(mesh, unreal.StaticMesh):
-            raise RuntimeError('Source inventory object absent/not StaticMesh')
-        actual = unreal.EditorAssetLibrary.get_metadata_tag(mesh, 'codex_sha256')
-        if actual != witness['sha256']:
-            raise RuntimeError('Native source-hash provenance differs/unknown')
-        if actual == item['fingerprint']['sha256']:
+        sha = unreal.EditorAssetLibrary.get_metadata_tag(mesh, 'codex_sha256') if isinstance(mesh, unreal.StaticMesh) else ''
+        if not isinstance(sha, str) or not reader['SHA'].fullmatch(sha):
+            issues.append({'asset': path, 'reason': 'unknown_native_source_sha256'})
+            continue
+        package = reader['pin'](content / (path.split('.')[0][len('/Game/'):] + '.uasset'))
+        reader['witness'](package)
+        rows.append({'asset': path, 'source_sha256': sha, 'package': package})
+        del mesh  # Drop this Python reference; never force GC/unload other work.
+    inventory_admission(config)
+    state = ('complete' if not issues and len(rows) == requested else
+             'partial' if any(r.get('reason') == 'partial_time_or_stop' for r in issues) else 'unsupported')
+    return {'schema': reader['PAGE'], 'state': state,
+            'editor': config['editor'], 'registry_sha256': config['registry']['sha256'],
+            'reader_sha256': config['reader']['sha256'], 'offset': offset, 'requested': requested,
+            'rows': rows, 'issues': issues}
+
+
+def deduplicate(item):
+    """Stream complete native page evidence and saved-package hashes, no loads."""
+    memory(128 * 1024**2)
+    reader = inventory_reader(CFG['policy']['inventory_reader'])
+    index = reader['read_index'](CFG['policy']['dedup'])
+    if index['editor'] != CFG['frozen']['editor'] or index['reader'] != CFG['policy']['native']:
+        raise RuntimeError('Inventory editor/native reader differs')
+    registry = unreal.AssetRegistryHelpers.get_asset_registry()
+    current, enumeration = yield from registry_paths(registry, reader['ROOT'], CFG['stop_path'])
+    expected = set(reader['capture'](index['registry']))
+    if expected.intersection(CFG['known_outputs']):
+        raise RuntimeError('Conflicting original and DONE output inventory identities')
+    expected.update(CFG['known_outputs'])
+    if current != sorted(expected):
+        raise RuntimeError('Existing ingestion source coverage changed/unknown; reconcile inventory')
+    _, global_enumeration = yield from registry_paths(registry, '/Game', CFG['stop_path'],
+                                                     candidate_name=item['name'])
+    global_count = global_enumeration['asset_rows']
+    started, checked, page_count = time.monotonic(), 0, 0
+    content = Path(CFG['frozen']['editor']['project']).parent / 'Content'
+    def check(row):
+        memory(128 * 1024**2)
+        if time.monotonic() - started > 60 or Path(CFG['stop_path']).exists():
+            raise RuntimeError('Incomplete source coverage: time/STOP boundary')
+        if row['source_sha256'] == item['fingerprint']['sha256']:
             raise RuntimeError('Source hash already imported; reuse only after separate admission')
-    return {'roots': roots, 'source_hashes_checked': len(expected), 'global_names_checked': len(all_rows),
-            'scope': 'All meshes in declared existing ingestion corpus; global names. Untagged external renamed sources are not certified.'}
+        file = reader['witness'](row['package'])
+        expected_file = content / (row['asset'].split('.')[0][len('/Game/'):] + '.uasset')
+        if file.resolve() != expected_file.resolve() or reader['fingerprint'](file) != {k: row['package'][k] for k in ('sha256', 'bytes')}:
+            raise RuntimeError('Saved package changed since native source page; recollect read evidence')
+    for page in reader['pages'](index):
+        for row in page: check(row); checked += 1
+        page_count += 1
+        yield None
+    for path, row in CFG['known_outputs'].items():
+        check({'asset': path, **row}); checked += 1
+    after, _ = yield from registry_paths(registry, reader['ROOT'], CFG['stop_path'])
+    if after != current or checked != len(current):
+        raise RuntimeError('Corpus changed during page verification; incomplete coverage')
+    return {'roots': [reader['ROOT']], 'complete': True, 'source_hashes_verified': True,
+            'source_hashes_checked': checked, 'pages_verified': page_count,
+            'registry_path_count': len(current), 'registry_path_digest': reader['path_digest'](current),
+            'global_names_checked': global_count, 'enumeration': enumeration,
+            'global_name_enumeration': global_enumeration,
+            'scope': 'All declared corpus meshes: native source pages bound to unchanged saved packages and clean current editor. Global names only outside corpus.'}
 
 
 def steps():
     cfg, item = CFG['policy'], copy.deepcopy(CFG['selected'])
+    CFG['baseline'] = json.loads(source(CFG['baseline']))  # Pinned file, not a huge embedded request.
     if os.getpid() != CFG['frozen']['editor']['pid']:
         raise RuntimeError('Editor PID differs')
     if unreal.SystemLibrary.get_engine_version() != CFG['frozen']['engine_version']:
@@ -155,14 +277,16 @@ def steps():
     idle(shared)
     phase = CFG['phase']
     if phase == 'admit_execute' or phase == 'execute':
-        duplicate_evidence = deduplicate(item)
+        duplicate_evidence = yield from deduplicate(item)
+        write(Path(CFG['folder']) / 'dedup-coverage.json', duplicate_evidence)
         native['preflight'](native_cfg)
         if time.time() > datetime.fromisoformat(cfg['start_by_utc'].replace('Z', '+00:00')).timestamp():
             raise RuntimeError('Finite profile start window expired')
     if phase.startswith('admit_'):
         protected()
         return {'engine_version': CFG['frozen']['engine_version'], 'preserved': True,
-                'destination_vacant': phase == 'admit_execute'}
+                'destination_vacant': phase == 'admit_execute',
+                'source_coverage': duplicate_evidence if phase == 'admit_execute' else None}
     if phase == 'execute':
         # Existing helper owns every import option, source/static gate, save,
         # journal, exact inventory/material/palette/bounds/metadata readback.

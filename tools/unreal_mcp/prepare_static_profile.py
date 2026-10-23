@@ -49,6 +49,7 @@ def prepare(qualification, baseline, dedup, environment, folder):
     cfg = {'schema': a.VERSION, 'owner': env['owner'], 'selected_name': rows[0]['name'],
            'qualification': a.pin(qualification), 'baseline': a.pin(baseline), 'dedup': a.pin(dedup),
            'native': a.pin(Path(a.__file__).with_name('unattended_static_native.inc')),
+           'inventory_reader': a.pin(a.inventory.__file__),
            'unit_contract': a.UNIT, 'start_by_utc': env['start_by_utc'],
            **{key: env[key] for key in ('importer', 'shared', 'host', 'wire')}}
     frozen = {'schema': q.VERSION, 'owner': env['owner'], 'owned_destination': namespace,
@@ -66,6 +67,11 @@ def prepare(qualification, baseline, dedup, environment, folder):
         a.protected(cfg, frozen)
     for key in ('importer', 'shared', 'host', 'wire'):
         q.checked_file(cfg[key])
+    index = a.inventory.read_index(cfg['dedup'])
+    if index['editor'] != env['editor'] or index['reader'] != cfg['native']:
+        raise q.Refused('Source pages must bind this editor and native reader')
+    if cfg['inventory_reader'] not in frozen['dependencies']:
+        frozen['dependencies'] = [*frozen['dependencies'], cfg['inventory_reader']]
     q.utc_seconds(env['start_by_utc'])
     folder.mkdir(parents=True)
     for row in rows:
