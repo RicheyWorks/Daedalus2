@@ -25,6 +25,8 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
     Game = Args._Game;
     const auto IsSudoku = [this] { return Game.IsValid() && Game->Game == EDaedalusJavaGame::Sudoku; };
     const auto IsBlackjack = [this] { return Game.IsValid() && Game->Game == EDaedalusJavaGame::Blackjack; };
+    const auto RefreshButton = Button(TEXT("Refresh"), [this] { if (Game.IsValid()) Game->RefreshSnapshot(); }, [this] { return Game.IsValid() && !State().bBusy && !State().SessionId.IsEmpty() && !State().bRemoteClosed; });
+    CabinetControls = RefreshButton;
     ChildSlot
     [
         SNew(SBorder).BorderImage(FCoreStyle::Get().GetBrush("WhiteBrush")).BorderBackgroundColor(FLinearColor(0.025f, 0.04f, 0.06f, 0.97f)).Padding(24)
@@ -53,7 +55,7 @@ void SDaedalusJavaArcade::Construct(const FArguments& Args)
                     [
                         SNew(SHorizontalBox)
                         + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 8, 0)
-                        [Button(TEXT("Refresh"), [this] { if (Game.IsValid()) Game->RefreshSnapshot(); }, [this] { return Game.IsValid() && !State().bBusy && !State().SessionId.IsEmpty() && !State().bRemoteClosed; })]
+                        [RefreshButton]
                         + SHorizontalBox::Slot().AutoWidth().Padding(0, 0, 8, 0)
                         [Button(TEXT("Recover create"), [this] { if (Game.IsValid()) Game->RetryBlackjackCreate(); }, [this] { return Game.IsValid() && Game->Game == EDaedalusJavaGame::Blackjack && State().bNeedsSync && State().SessionId.IsEmpty() && !State().bBusy; })]
                         + SHorizontalBox::Slot().AutoWidth()
@@ -124,7 +126,7 @@ TSharedRef<SWidget> SDaedalusJavaArcade::SudokuPanel()
         [SNew(STextBlock).Text(this, &SDaedalusJavaArcade::SelectionText).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0, 0, 0, 10)[Digits]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
-        [SNew(STextBlock).Text(FText::FromString(TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Esc / Back: close."))).AutoWrapText(true)]
+        [SNew(STextBlock).Text(FText::FromString(TEXT("Arrows / D-pad: cell. LB / RB: choose digit. Enter / pad A: enter it. 1–9: enter directly. Delete / pad X: erase. Ctrl+Z / pad Y: undo; Ctrl+Y: redo. F5 / Start: save to Java. F6: refresh. Pad B: cabinet controls. Esc / Back: close."))).AutoWrapText(true)]
         + SVerticalBox::Slot().AutoHeight().Padding(0, 0, 0, 10)
         [
             SNew(SHorizontalBox)
@@ -240,12 +242,25 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
 {
     if (!Game.IsValid()) return FReply::Unhandled();
     const FKey Key = Event.GetKey();
-    if (Key == EKeys::Escape) { Game->CloseArcade(); return FReply::Handled(); }
+    if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Game->CloseArcade(); return FReply::Handled(); }
     // Text fields and focused buttons own their keys. Only direct board focus edits the puzzle.
     if (!HasUserFocus(Event.GetUserIndex()).IsSet() || State().Game != EDaedalusJavaGame::Sudoku) return FReply::Unhandled();
+    const auto Board = State();
+    // Before a board arrives, native Slate navigation must still reach account/new/resume controls.
+    if (Board.Cells.Num() != 81 || Board.Givens.Num() != 81) return FReply::Unhandled();
     // Keep held keys from falling through to Slate navigation or replaying a mutation.
     if (Event.IsRepeat()) return FReply::Handled();
-    if (Key == EKeys::Gamepad_Special_Left) { Game->CloseArcade(); return FReply::Handled(); }
+    if (Key == EKeys::Gamepad_FaceButton_Right)
+    {
+        if (FSlateApplication::IsInitialized())
+        {
+            if (CabinetControls.IsValid() && CabinetControls->IsEnabled())
+                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), CabinetControls, EFocusCause::Navigation);
+            else if (UsernameBox.IsValid())
+                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), UsernameBox, EFocusCause::Navigation);
+        }
+        return FReply::Handled();
+    }
     int32 Row = SelectedCell / 9, Col = SelectedCell % 9;
     if (Key == EKeys::Left || Key == EKeys::Gamepad_DPad_Left) --Col;
     else if (Key == EKeys::Right || Key == EKeys::Gamepad_DPad_Right) ++Col;

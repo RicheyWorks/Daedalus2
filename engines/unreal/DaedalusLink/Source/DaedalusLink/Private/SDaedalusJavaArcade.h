@@ -37,6 +37,7 @@ private:
     TSharedPtr<SEditableTextBox> UsernameBox;
     TSharedPtr<SEditableTextBox> SecretBox;
     TSharedPtr<SEditableTextBox> ResumeBox;
+    TSharedPtr<SWidget> CabinetControls;
     int32 SelectedCell = 0;
     int32 SelectedDigit = 1;
     FString LocalMessage;
