@@ -193,3 +193,12 @@ owned render surface. Three amber route groups connect arrival/activity, spawn,
 chart landmarks and Stillwater approach.104x105m collision slab and273instances
 remain intact; no original material or new terrain system. Matched editor views
 and reversible rendering changes are documented in ground-routes/. No Play loop.
+
+## Garden-care variants R11
+
+Four selected Blender design variants imported/saved/admitted/placed: barrel,
+compost bin, apple crate and bird feeder. Source geometry/colours match; native
+validation returned4Valid, no warnings/errors/skips. All fresh targets, no old
+design overwrites. A small decorative station uses them beside the gardenkeeper.
+Saved753actors, clean packages, progress intact, compute released. No Play loop
+or extra systems. See garden-care/ for exact sources, native settings and limits.
