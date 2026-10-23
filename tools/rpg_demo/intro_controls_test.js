@@ -15,6 +15,7 @@ function between(start, end) {
 }
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
 const source = [line("const CHARS ="), between("const KEYMAP =", 'window.addEventListener("keydown"'),
+  line("let journeySerial ="),
   line("const PAD_TO_DEMO ="), line("let dlg = null;"), line("function say("), line("function wrap("),
   between("function beginJourney(", "function titleTick("), between("function titlePrompt(", "function drawTitle("),
   "if (SETTINGS) {\n" + between('  SETTINGS.extend({ tab: "GAMEPLAY", section: "Saved Game"', '  SETTINGS.onAction("SaveErase"') + "\n}",
@@ -24,7 +25,8 @@ let checks = 0;
 function check(label, fn) { try { fn(); checks++; } catch (error) { error.message = label + ": " + error.message; throw error; } }
 function session(options = {}, productionSource = source) {
   const timers = [], visits = [], rows = [], labels = [], settingsReads = [], c = {
-    D: { realm_profile: options.profile }, PAD: options.pad ? {
+    D: { realm_profile: options.profile }, mode: "field", // Observe the intro after the downstream arrival fade.
+    PAD: options.pad ? {
       devices: () => [{ index: 7 }], label: (action, index) => { labels.push({ action, index }); return options.pad[action]; }
     } : null,
     SETTINGS: options.noSettings ? null : {

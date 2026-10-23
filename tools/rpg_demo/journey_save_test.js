@@ -21,6 +21,8 @@ function between(start, end) {
   return html.slice(a, b);
 }
 const source = [
+  html.split(/\r?\n/).find(line => line.startsWith("let journeySerial =")),
+  between("const carriesShard =", "const pretty ="),
   html.split(/\r?\n/).find(line => line.startsWith("const T =")),
   between("function buildParty()", "let party ="),
   between("function makeMember(", "const atkOf ="),
@@ -48,6 +50,7 @@ function session(realm = "prism", productionSource = source) {
     state: { beaten: new Set(), seen: {}, air: null, fish: {}, quests: {}, ways: new Set(["home"]), day: 3, minute: 421, returnTo: { old: true } },
     opened: new Set(["dungeon0/0:1,2"]), grids: { live: true }, footCache: null,
     mode: "title", map: { live: true }, P: { x: 9, y: 9 }, fade: 0, fadeCb: null, nameEntry: null,
+    dlg: null, shop: null, menu: null, B: null, ending: null,
     WAYS: () => ways, sfx() {}, unlockAudio() {}, cue() {}, openSettings() {}, say() {},
     setTimeout: fn => { pending.push(fn); }, toast: (title, message) => { notices.push(title + ": " + message); },
     localStorage: { getItem: key => { if (c.blockReads) throw new Error("storage unavailable"); return store.get(key) ?? null; },

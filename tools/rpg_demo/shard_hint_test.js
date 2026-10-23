@@ -31,7 +31,7 @@ function between(start, end) {
 }
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
 const source = [line("const CHARS ="), line("const DIRS ="), line("const at ="), line("const npcAt ="),
-  between("const shardBosses =", "const chestKey ="), between("let dlg = null;", "function wrap("),
+  between("const carriesShard =", "const chestKey ="), between("let dlg = null;", "function wrap("),
   between("function wrap(", "function drawDialog("), between("const LINES =", "function innPrompt("),
   "this.api = { interact, wrap, dialog: () => dlg, chars: () => CHARS, setRulerLines: lines => { LINES.Ruler = lines; } };"
 ].join("\n");

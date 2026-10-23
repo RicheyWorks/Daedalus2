@@ -103,7 +103,7 @@ check("text speed, voice blip and Start handling remain unchanged", () => {
   assert.ok(s.api.dialog()); assert.equal(s.pressed.start, true, "dialog does not add a Start action");
 });
 check("controlled former choice priority fails the same inn transaction assertion", () => {
-  const guard = '    if (hit("b")) { sfx("TICK"); const c = dlg.choice; hit("a"); dlg = null; c.then(1); return; }';
+  const guard = '    if (hit("b")) { sfx("TICK"); const c = dlg.choice; hit("a"); dlg = null; c.cancel ? c.cancel() : c.then(1); return; }';
   assert.ok(source.includes(guard)); const confirm = source.match(/^    if \(hit\("a"\)\) \{ sfx\("PICK"\);[^\r\n]*$/m);
   assert.ok(confirm); const late = guard.replace('    if ', '    else if ').replace('hit("a"); ', "");
   const legacy = source.replace(guard, "").replace(confirm[0], confirm[0] + "\n" + late);

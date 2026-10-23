@@ -14,6 +14,7 @@ function between(start, end) {
 }
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
 const source = [between("const LOGICAL =", "document.querySelectorAll"), line("const hit ="),
+  line("let journeySerial ="),
   between("const START_LEVEL =", "/* Recruits:"), between("function titleChoose(", "function beginJourney("),
   between("function titleTick(", "function titlePrompt("), between("let nameEntry = null;", "/* ---------- ending ---------- */"),
   "function fadeStep(dt) {\n" + between("      fade -= dt * 3;", '    } else if (mode === "title")') + "\n}",
@@ -32,6 +33,7 @@ function session(productionSource = source) {
     D: { title: clone(title), party: clone(party), gear: {} }, W: 320, H: 224,
     window: win, cv, mode: "title", titleT: 0, titleIdx: 0, TITLE_ITEMS: clone(title.menu),
     state: { beaten: new Set() }, opened: new Set(), grids: {}, fade: 0, fadeCb: null,
+    dlg: null, shop: null, menu: null, B: null, ending: null,
     now: 0, started: 0, settingsTransition: false, modal: false,
     PANEL: { isOpen: () => c.modal }, PAD: { binding: () => null },
     performance: { now: () => c.now }, sfx: sound => sounds.push(sound), unlockAudio() {},

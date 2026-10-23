@@ -42,7 +42,7 @@ function session(realm = "prism", productionSource = source) {
   const c = {
     SAVE_KEY: key, START_LEVEL: 15, W: realm === "portal" ? 256 : 320, H: 224,
     D: { realm_key: realm, realm: realm === "prism" ? "Prismheart" : "Portal Realm", party: clone(parties[realm]),
-      interiors: { Inn: { rest_price: 10 } } },
+      interiors: { Inn: { rest_price: 10 } }, dungeons: [] },
     party: [], reserve: [], bag: { "Herb Tonic": 3 }, gold: 100,
     state: { beaten: new Set(["PyreWarden"]), seen: {}, air: null, fish: {}, quests: {}, day: 2, minute: 600 },
     opened: new Set(["dungeon0/0:1,2"]), B: null, mode: "field", fade: 0, fadeCb: null, titleT: 17,

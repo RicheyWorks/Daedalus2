@@ -25,6 +25,8 @@ function line(prefix) {
 }
 const source = [between("const LOGICAL =", "const KEYMAP ="), between("const KEYMAP =", 'window.addEventListener("keydown"'),
   between("const hit =", "/* ---------- controllers:"), line("const DIRS ="), line("const find ="), line("const at ="), line("const npcAt ="),
+  between("const carriesShard =", "const pretty ="), line("let journeySerial ="),
+  between("function enterDungeon(", "function stepDone("),
   between("const STEP_MIN =", "function wakeAt("), between("const AIR_SPEED =", "/* The shard quest:"),
   between("function worldMap()", "function dungeonMap("), between("function villageMap()", "function interiorMap("),
   between("let dlg = null;", "function wrap("), between("function interact()", "function innPrompt("),
