@@ -177,3 +177,17 @@ single-TU MSVC C++17. It covers mixed/dead states, timer boundaries, a real powe
 pickup through 300 active steps, repeated presentation purity and future RNG/state.
 A controlled MAX-instead-of-MIN timer variant failed seven checks as expected.
 This offline evidence does not establish native layout or human playtest acceptance.
+
+## Zelda lethal projectile settlement
+
+After projectile cleanup, a lethal hit now ends the live step before overlapping
+pickups can heal, award trinkets or grant a key. Nonlethal projectile pickups and
+the existing pickup-before-enemy-contact order are preserved. A defeated run cannot
+show positive health from a same-step heart; no collision/AI/reward rule is replaced.
+
+`desktop_zelda_terminal` / `zelda_terminal_test.cpp` passed46/46 strict single-TU
+MSVC checks. Small authored heart/trinket and last-enemy key fixtures use a real
+2.5px rock arrival, plus nonlethal companions, cleanup, terminal freeze and fresh
+replay/reset. The same test against the prior header passed40/46 and failed6
+post-defeat pickup/health assertions as expected. No full maze suite, engine build,
+editor or native gameplay was executed. Portable evidence is not runtime acceptance.

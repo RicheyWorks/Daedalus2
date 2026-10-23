@@ -490,6 +490,8 @@ public:
             }
         }
         Projectiles.erase(std::remove_if(Projectiles.begin(),Projectiles.end(),[](const Projectile& P){return !P.Alive;}),Projectiles.end());
+        // Settle lethal projectile damage before a same-step pickup can heal or reward.
+        if(Over) return;
         for(auto It=Collectibles.begin();It!=Collectibles.end();) {
             It->Bob=std::fmod(It->Bob+0.1,6.283185307179586); // bounded animation phase
             if(It->GetRect().Overlaps(Hero.GetRect())) {
