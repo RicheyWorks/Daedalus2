@@ -329,28 +329,29 @@ TSharedRef<SWidget> SDaedalusJavaArcade::BlackjackPanel()
 }
 FText SDaedalusJavaArcade::BlackjackGuideText() const
 {
+    const auto Guide = [](const FString& Message) { return FText::FromString(Message + TEXT(" Pad B: cabinet controls.")); };
     const auto S = State();
-    if (S.bBusy) return FText::FromString(TEXT("Waiting for the table. Another action is not queued."));
-    if (S.bNeedsSync) return FText::FromString(S.SessionId.IsEmpty()
+    if (S.bBusy) return Guide(TEXT("Waiting for the table. Another action is not queued."));
+    if (S.bNeedsSync) return Guide(S.SessionId.IsEmpty()
         ? TEXT("Use Recover create to check the session request before starting again.")
         : TEXT("Refresh the table before choosing another action. Check the result before retrying."));
-    if (S.bRemoteClosed) return FText::FromString(TEXT("Session ended. Start a new session when ready."));
-    if (S.SessionId.IsEmpty()) return FText::FromString(Game.IsValid() && Game->HasCredentials()
+    if (S.bRemoteClosed) return Guide(TEXT("Session ended. Start a new session when ready."));
+    if (S.SessionId.IsEmpty()) return Guide(Game.IsValid() && Game->HasCredentials()
         ? TEXT("Start a session to play with simulated credits.")
         : TEXT("Connect to the local service, then start a session to play with simulated credits."));
-    if (!S.bCanAct) return FText::FromString(TEXT("The table is unavailable. Check the connection status above before continuing."));
+    if (!S.bCanAct) return Guide(TEXT("The table is unavailable. Check the connection status above before continuing."));
     // Phase is a caption only: Java's declared actions decide every available choice.
     if (Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("insurance")))
-        return FText::FromString(TEXT("Choose whether to accept or decline insurance to continue."));
+        return Guide(TEXT("Choose whether to accept or decline insurance to continue."));
     if (Game.IsValid() && Game->IsBlackjackActionLegal(TEXT("deal")))
-        return FText::FromString(TEXT("Bet ready. Deal when you want to begin the round."));
+        return Guide(TEXT("Bet ready. Deal when you want to begin the round."));
     if (S.LegalActions.Contains(TEXT("bet")) && !S.LegalBetAmounts.IsEmpty())
-        return FText::FromString(TEXT("Choose an available simulated-credit bet to start the next round."));
+        return Guide(TEXT("Choose an available simulated-credit bet to start the next round."));
     const bool bHandAction = S.LegalActions.Contains(TEXT("hit")) || S.LegalActions.Contains(TEXT("stand"))
         || S.LegalActions.Contains(TEXT("double")) || S.LegalActions.Contains(TEXT("split")) || S.LegalActions.Contains(TEXT("surrender"));
     if (bHandAction && S.PlayerHands.IsValidIndex(S.ActiveHand))
-        return FText::FromString(FString::Printf(TEXT("Active hand %d of %d. Choose an available hand action."), S.ActiveHand + 1, S.PlayerHands.Num()));
-    return FText::FromString(TEXT("Choose an available action to continue. Credits are simulated."));
+        return Guide(FString::Printf(TEXT("Active hand %d of %d. Choose an available hand action."), S.ActiveHand + 1, S.PlayerHands.Num()));
+    return Guide(TEXT("Choose an available action to continue. Credits are simulated."));
 }
 FText SDaedalusJavaArcade::TableText() const
 {
@@ -469,6 +470,21 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     if (Key == EKeys::Escape || Key == EKeys::Gamepad_Special_Left) { Game->CloseArcade(); return FReply::Handled(); }
     // Text fields and focused buttons own their keys. Only direct board focus edits the puzzle.
     if (!HasUserFocus(Event.GetUserIndex()).IsSet()) return FReply::Unhandled();
+    // Both games need a deliberate route back to controls, including before a board arrives.
+    if (Key == EKeys::Gamepad_FaceButton_Right)
+    {
+        if (Event.IsRepeat()) return FReply::Handled();
+        if (FSlateApplication::IsInitialized())
+        {
+            if (CabinetControls.IsValid() && CabinetControls->IsEnabled())
+                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), CabinetControls, EFocusCause::Navigation);
+            else if (Game->Game == EDaedalusJavaGame::Sudoku && UsernameBox.IsValid())
+                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), UsernameBox, EFocusCause::Navigation);
+            else if (SecretBox.IsValid())
+                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), SecretBox, EFocusCause::Navigation);
+        }
+        return FReply::Handled();
+    }
     if (State().Game == EDaedalusJavaGame::Blackjack)
     {
         const FString Action = Key == EKeys::H ? TEXT("hit") : Key == EKeys::S ? TEXT("stand") : Key == EKeys::D ? TEXT("deal") : TEXT("");
@@ -481,17 +497,6 @@ FReply SDaedalusJavaArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEvent
     if (Board.Cells.Num() != 81 || Board.Givens.Num() != 81) return FReply::Unhandled();
     // Keep held keys from falling through to Slate navigation or replaying a mutation.
     if (Event.IsRepeat()) return FReply::Handled();
-    if (Key == EKeys::Gamepad_FaceButton_Right)
-    {
-        if (FSlateApplication::IsInitialized())
-        {
-            if (CabinetControls.IsValid() && CabinetControls->IsEnabled())
-                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), CabinetControls, EFocusCause::Navigation);
-            else if (UsernameBox.IsValid())
-                FSlateApplication::Get().SetUserFocus(Event.GetUserIndex(), UsernameBox, EFocusCause::Navigation);
-        }
-        return FReply::Handled();
-    }
     int32 Row = SelectedCell / 9, Col = SelectedCell % 9;
     if (Key == EKeys::Left || Key == EKeys::Gamepad_DPad_Left) --Col;
     else if (Key == EKeys::Right || Key == EKeys::Gamepad_DPad_Right) ++Col;
