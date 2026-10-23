@@ -169,8 +169,10 @@ class StaticPolicyTests(unittest.TestCase):
         other['policy'] = {'different-policy-file': True}
         cfg = {'owner': self.cfg['owner'], 'selected_name': 'SyntheticPond'}
         cfg2 = {**cfg, 'selected_name': 'OtherPond'}
-        frozen = {'owner': cfg['owner'], 'items': [self.item, other]}
+        cfg['dedup'] = cfg2['dedup'] = {'synthetic': True}
+        frozen = {'owner': cfg['owner'], 'editor': {'synthetic': True}, 'items': [self.item, other]}
         with patch.object(adapter, 'policy', side_effect=[(cfg, self.row), (cfg2, self.row)]), \
+                patch.object(adapter.inventory, 'read_index', return_value={'editor': frozen['editor']}), \
                 patch.object(adapter, 'protected'), patch.object(adapter, 'load_module') as load:
             with self.assertRaisesRegex(adapter.q.Refused, 'Duplicate source hash'):
                 adapter.Adapter(frozen, self.root)
@@ -183,8 +185,10 @@ class StaticPolicyTests(unittest.TestCase):
         row2['fingerprint']['sha256'] = 'f' * 64
         cfg = {'owner': self.cfg['owner'], 'selected_name': 'SyntheticPond'}
         cfg2 = {**cfg, 'selected_name': 'OtherPond'}
-        frozen = {'owner': cfg['owner'], 'items': [self.item, other]}
+        cfg['dedup'] = cfg2['dedup'] = {'synthetic': True}
+        frozen = {'owner': cfg['owner'], 'editor': {'synthetic': True}, 'items': [self.item, other]}
         with patch.object(adapter, 'policy', side_effect=[(cfg, self.row), (cfg2, row2)]), \
+                patch.object(adapter.inventory, 'read_index', return_value={'editor': frozen['editor']}), \
                 patch.object(adapter, 'protected'), patch.object(adapter, 'load_module') as load:
             with self.assertRaisesRegex(adapter.q.Refused, 'destination'):
                 adapter.Adapter(frozen, self.root)
@@ -332,7 +336,18 @@ class PreparationTests(unittest.TestCase):
             baseline, dedup = root / 'baseline.json', root / 'dedup.json'
             baseline.write_text(json.dumps({'schema': 'daedalus.static-owner-baseline.v1',
                 'editor': editor, 'context': {'world': editor['world']}, 'files': protected}), encoding='utf-8')
-            dedup.write_text('{"synthetic":"not a native inventory"}', encoding='utf-8')
+            existing = '/Game/Daedalus/Art/Islands/Existing.Existing'
+            capture = root / 'source-capture.json'
+            capture.write_text(json.dumps({'root': adapter.inventory.ROOT, 'count': 1,
+                                          'paths': [existing], 'source_hashes_verified': False}))
+            reader = adapter.pin(NATIVE)
+            page = root / 'native-page.json'
+            page.write_text(json.dumps({'schema': adapter.inventory.PAGE, 'state': 'complete',
+                'editor': editor, 'registry_sha256': adapter.pin(capture)['sha256'],
+                'reader_sha256': reader['sha256'], 'offset': 0, 'requested': 1,
+                'rows': [{'asset': existing, 'source_sha256': 'a'*64, 'package': source_pin}], 'issues': []}))
+            index = adapter.inventory.build_index(adapter.pin(capture), editor, reader, [page])
+            dedup.write_text(json.dumps(index), encoding='utf-8')
             host, wire = root / 'must_not_import_host.py', root / 'must_not_import_wire.py'
             for module in (host, wire):
                 module.write_text('raise AssertionError("Preparation imported a host module")', encoding='utf-8')
@@ -343,6 +358,11 @@ class PreparationTests(unittest.TestCase):
                 'host': adapter.pin(host), 'wire': adapter.pin(wire),
                 'dependencies': [adapter.pin(host), adapter.pin(wire)]}), encoding='utf-8')
             destination = root / 'synthetic-prepared'
+            dedup.write_text('{"synthetic":"not a native inventory"}', encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'Paged v2 inventory required'):
+                preparation.prepare(qualification, baseline, dedup, environment, destination)
+            self.assertFalse(destination.exists())
+            dedup.write_text(json.dumps(index), encoding='utf-8')
             with patch.object(adapter, 'load_module', side_effect=AssertionError('Host import forbidden')):
                 result = preparation.prepare(qualification, baseline, dedup, environment, destination)
             self.assertEqual((result['items'], result['imported'], result['admitted']), (1, 0, 0))
@@ -397,63 +417,8 @@ def preflight(cfg):
                 with self.assertRaisesRegex(RuntimeError, 'Native memory floor'):
                     self.memory_function(**sample)()
 
-    def inventory_function(self, *, additional=False, actual_sha=None, item_name='SyntheticNewPond',
-                           inventory_witness=None):
-        path = '/Game/Daedalus/Art/Islands/Existing.Existing'
-        sha = 'a' * 64
-        row = SimpleNamespace(package_name=path.split('.')[0], asset_name='Existing',
-                              asset_class_path=SimpleNamespace(asset_name='StaticMesh'))
-        rows = [row]
-        if additional:
-            rows.append(SimpleNamespace(package_name='/Game/Daedalus/Art/Islands/Unknown',
-                                        asset_name='Unknown', asset_class_path=SimpleNamespace(asset_name='StaticMesh')))
-        registry = SimpleNamespace(get_assets_by_path=lambda *args, **kwargs: rows)
-        mesh_type = type('SyntheticStaticMesh', (), {})
-        mesh = mesh_type()
-        unreal = SimpleNamespace(StaticMesh=mesh_type,
-            AssetRegistryHelpers=SimpleNamespace(get_asset_registry=lambda: registry),
-            EditorAssetLibrary=SimpleNamespace(load_asset=lambda _: mesh,
-                get_metadata_tag=lambda *args: sha if actual_sha is None else actual_sha))
-        inventory = {'schema': 'daedalus.static-source-inventory.v1',
-                     'roots': ['/Game/Daedalus/Art/Islands'],
-                     'assets': {path: {'sha256': sha} if inventory_witness is None else inventory_witness}}
-        item = {'name': item_name, 'fingerprint': {'sha256': 'b' * 64}}
-        fn = native_function('deduplicate', json=json, unreal=unreal, memory=lambda: None,
-                             source=lambda _: json.dumps(inventory),
-                             CFG={'policy': {'dedup': {'synthetic': True}}, 'known_outputs': {}})
-        return fn, item
-
-    def test_complete_source_inventory_allows_new_distinct_source(self):
-        fn, item = self.inventory_function()
-        result = fn(item)
-        self.assertEqual(result['source_hashes_checked'], 1)
-        self.assertEqual(result['global_names_checked'], 1)
-
-    def test_source_inventory_missing_current_mesh_holds(self):
-        fn, item = self.inventory_function(additional=True)
-        with self.assertRaisesRegex(RuntimeError, 'coverage changed/unknown'):
-            fn(item)
-
-    def test_source_hash_already_imported_holds_instead_of_duplicate_import(self):
-        fn, item = self.inventory_function()
-        item['fingerprint']['sha256'] = 'a' * 64
-        with self.assertRaisesRegex(RuntimeError, 'Source hash already imported'):
-            fn(item)
-
-    def test_missing_native_hash_provenance_holds(self):
-        fn, item = self.inventory_function(actual_sha='')
-        with self.assertRaisesRegex(RuntimeError, 'provenance differs/unknown'):
-            fn(item)
-
-    def test_missing_inventory_hash_holds(self):
-        fn, item = self.inventory_function(inventory_witness={})
-        with self.assertRaisesRegex(RuntimeError, 'Unknown source hash'):
-            fn(item)
-
-    def test_global_name_case_duplicate_holds(self):
-        fn, item = self.inventory_function(item_name='eXIsTiNg')
-        with self.assertRaisesRegex(RuntimeError, 'name already present globally'):
-            fn(item)
+    # Source inventory coverage now lives in test_static_source_inventory and
+    # test_static_registry_pages; neither executes Unreal/client imports.
 
 
 if __name__ == '__main__':

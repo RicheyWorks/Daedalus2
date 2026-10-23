@@ -5,6 +5,14 @@ native validation NotValidated; this new profile has never run in Unreal.**
 No editor connection, import/save, GUI launch/close, project edit, shared lesson
 edit or PR410 branch edit was performed by the code worker.
 
+**OperatorR1 follow-up:** the sole writer reviewed the existing source image,
+then stopped before queue/import because the actual Islands corpus is 2,119
+meshes, above the old 512 fixture cap. That refusal was reconciled and compute
+released; no source-inventory meshes were loaded. The updated v2 adapter uses
+complete registry traversal and bounded native source pages. Read
+[COMMONS_POND_CORPUS_DELTA.md](COMMONS_POND_CORPUS_DELTA.md) for the exact next
+writer operations, evidence, supported bounds and remaining native checks.
+
 The previous receiver deliberately admitted only the original Coupler. These
 sources must not be disguised as that fixture. The separate
 `unattended_static_adapter.py` wraps the retained qualified-small-static
@@ -99,17 +107,19 @@ The three required data inputs are:
    configuration, progress/user saves as applicable, active saved Commons map,
    installed DLL and original palette. Save/resolve current dirty work normally
    before this capture; no blanket save or discard is authorized by this patch.
-3. **Source inventory JSON:** exact keys `schema`, `roots`, `assets`; schema
-   `daedalus.static-source-inventory.v1`, roots exactly
-   `["/Game/Daedalus/Art/Islands"]`; assets maps every current StaticMesh object
-   path in that existing ingestion corpus to `{"sha256":"<actual source hash>"}`.
-   Use current retained receipts plus native source metadata, never filename-only
-   absence. Current registry coverage must exactly equal the inventory plus
-   this queue's verified DONE outputs (1..512 original meshes). Missing/untagged
-   provenance or expanded inventory holds. This excludes source-hash duplicates
-   across states in the declared ingestion corpus and names globally; it does
-   not certify renamed untagged external imports outside that corpus. If that
-   external scope is relevant, reconcile it explicitly before intake.
+3. **Paged source inventory JSON:** schema `daedalus.static-source-inventory.v2`,
+   root `/Game/Daedalus/Art/Islands`, one pinned complete registry path capture,
+   exact editor/native-reader witnesses, path count/digest and ordered page
+   descriptors. Each actual native page covers at most 32 exact mesh identities
+   and binds observed `codex_sha256` to its saved `.uasset` file fingerprint.
+   Partial/unsupported pages, gaps, duplicates, unknown provenance, stale saved
+   files and differing reader/editor/corpus identities refuse preparation or
+   dispatch. All 2,119 current meshes need 67 pages (66 x 32 + 7), not a 512-row
+   prefix. The same complete corpus plus verified DONE outputs must match current
+   registry coverage before and after streaming all package hashes. No original
+   corpus asset is loaded again during deduplication. Global names are checked
+   separately; renamed untagged external imports outside this corpus are not
+   certified. See the delta handoff for collection/build commands.
 
 Create an environment JSON with exact keys `owner`, `editor`, `engine_version`,
 `start_by_utc`, `host`, `wire`, `importer`, `shared`, `dependencies`. The four
@@ -132,6 +142,8 @@ version, actual owner and a finite current start-by UTC. The old184/world host
 orchestration is not invoked: its native helper's private dictionary receives
 the explicitly frozen current world while the original guard still executes.
 No installed helper or shared module global is changed.
+Preparation automatically pins the small `static_source_inventory.py` reader
+and its transitive page witnesses; it does not add one dependency per page.
 
 ```powershell
 python tools/unreal_mcp/prepare_static_profile.py --qualification C:/owned/pond-qualified.json --baseline C:/owned/commons-current-baseline.json --dedup C:/owned/source-inventory.json --environment C:/owned/current-environment.json --folder C:/owned/pond-profile-r1
@@ -179,18 +191,20 @@ after explicit reconciliation, never reset or edit one to replay work.
 ## Offline verification and lesson to append later
 
 ```powershell
-python -m unittest tools/unreal_mcp/test_unattended_static_adapter.py tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
+python -m unittest tools/unreal_mcp/test_static_source_inventory.py tools/unreal_mcp/test_static_registry_pages.py tools/unreal_mcp/test_unattended_static_adapter.py tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
 ```
 
 Tests are synthetic or file-only, never new native evidence. The Windows
 restricted temp sandbox denies the existing atomic `os.replace` in queue tests;
-all **59 focused tests passed** in the normal reviewed offline execution
+The original **59 focused tests passed** in the normal reviewed offline execution
 environment (31 new profile/preparation checks plus 28 unchanged queue/Coupler
 checks; latest run 1.655s). This includes real measured-HELD refusal before output creation,
 synthetic successful preparation without host/native imports, source-hash and
 destination refusal, immutable snapshots, pending reconciliation with no native
 dispatch, STOP/resume and process interruption without a second effect.
 Do not replace atomic writes to make tests pass.
+The v2 corpus delta adds large-corpus/page/registry checks and replaces the old
+single-dictionary mocks. Its exact final counts are recorded in the delta handoff.
 
 **Lesson for the writer to append to the shared lessons file later:** A receiver
 proved on one immutable asset is a fixture, not backlog capacity. Bind each new

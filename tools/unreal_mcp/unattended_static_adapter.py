@@ -13,10 +13,12 @@ import uuid
 
 if __package__:
     from . import unattended_ingestion as q
+    from . import static_source_inventory as inventory
 else:
     import unattended_ingestion as q
+    import static_source_inventory as inventory
 
-VERSION = 'daedalus.qualified-static-owner-adapter.v1'
+VERSION = 'daedalus.qualified-static-owner-adapter.v2'
 PREFIX = '/Game/Daedalus/Art/Islands/CodexContest/Ingestion/'
 LABEL = 'Codex qualified small-static packet asset-only import-save'
 UNIT = 'claude_raw_unit100_build1_actor001_v1'
@@ -78,10 +80,10 @@ def selected(item, cfg):
 def policy(item):
     cfg = q.load(q.checked_file(item['policy']))
     required = {'schema', 'owner', 'selected_name', 'qualification', 'importer', 'shared',
-                'native', 'wire', 'host', 'baseline', 'dedup', 'start_by_utc', 'unit_contract'}
+                'native', 'wire', 'host', 'baseline', 'dedup', 'inventory_reader', 'start_by_utc', 'unit_contract'}
     if set(cfg) != required or cfg['schema'] != VERSION or cfg['unit_contract'] != UNIT:
         raise q.Refused('Unknown small-static profile; no Coupler substitution')
-    for key in ('qualification', 'importer', 'shared', 'native', 'wire', 'host', 'baseline', 'dedup'):
+    for key in ('qualification', 'importer', 'shared', 'native', 'wire', 'host', 'baseline', 'dedup', 'inventory_reader'):
         q.checked_file(cfg[key])
     # Only the retained proven importer and catalogue are accepted. Context is
     # parameterized in a private helper scope; their source is never modified.
@@ -89,6 +91,11 @@ def policy(item):
         raise q.Refused('Retained existing importer/catalogue bytes differ')
     if cfg['native'] != pin(Path(__file__).with_name('unattended_static_native.inc')):
         raise q.Refused('Reviewed native wrapper differs')
+    if cfg['inventory_reader'] != pin(inventory.__file__):
+        raise q.Refused('Reviewed paged inventory reader differs')
+    index = inventory.read_index(cfg['dedup'])
+    if index['reader'] != cfg['native']:
+        raise q.Refused('Source pages came from a different native reader')
     q.utc_seconds(cfg['start_by_utc'])
     return cfg, selected(item, cfg)
 
@@ -158,6 +165,8 @@ class Adapter:
                 raise q.Refused('Duplicate source hash or destination across policies')
             hashes.add(sha); destinations.add(dest)
             protected(cfg, frozen)
+            if inventory.read_index(cfg['dedup'])['editor'] != frozen['editor']:
+                raise q.Refused('Source page editor generation differs')
         self.host = load_module(cfg['host'])
         self.wire = self.host.g.d.wire
         if (Path(self.wire.__file__).resolve() != Path(cfg['wire']['path']).resolve()
@@ -215,9 +224,10 @@ class Adapter:
             if checkpoint.get('state') == 'DONE':
                 for asset, witness in checkpoint['result']['outputs'].items():
                     q.checked_file(witness)
-                    known[asset] = previous['sources'][0]['sha256']
+                    if asset in known: raise q.Refused('Duplicate DONE output identity')
+                    known[asset] = {'source_sha256': previous['sources'][0]['sha256'], 'package': witness}
         payload = {'phase': phase, 'operation_id': operation, 'item': item, 'selected': row,
-                   'policy': cfg, 'frozen': self.frozen, 'baseline': baseline,
+                   'policy': cfg, 'frozen': self.frozen, 'baseline': cfg['baseline'],
                    'folder': str(folder), 'snapshots': snapshots, 'completion': completion,
                    'known_outputs': known, 'receipts': pin(q.RECEIPTS),
                    'stop_path': str(self.folder / 'STOP'),
