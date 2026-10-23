@@ -31,6 +31,7 @@ private:
     bool CanEditCell() const;
     void SubmitCellValue(int32 Value);
     FText TableText() const;
+    FText BlackjackGuideText() const;
     FReply Configure();
     void FocusBoard();
     TWeakObjectPtr<ADaedalusJavaArcade> Game;
