@@ -113,3 +113,11 @@ all three difficulties. An always-enabled pickup-loop variant with the same test
 friend passed81/102, failing21 post-defeat assertions as expected. This did not run
 the broad shooter suite, engine builds or native acceptance; Slate controller replay
 and real filesystem/leaderboard behavior remain separate pending native checks.
+
+Host pause or focus suspension after Game Over now keeps the result visible.
+Star's pause flag is retained, but its live pause menu is drawn only before defeat;
+the terminal Step cannot execute those menu choices. A live paused companion still
+renders the menu and resumes on fresh confirmation. The focused target now passes
+110/110 checks. Restoring only the old render condition passed107/110, failing the
+three difficulty-specific final-frame assertions. No other pause or save lifecycle
+code changed; native focus-loss presentation still needs live acceptance.

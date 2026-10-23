@@ -748,7 +748,7 @@ public:
             F.AddText(200,288,"Final score "+std::to_string(Score)+"   Wave "+std::to_string(Wave),White,18);
             F.AddText(200,318,"Pad A / Start or R / Restart: retry",Cyan,17);
         }
-        if(Paused) {
+        if(Paused && !Over) {
             F.AddRect(200,180,400,250,{15,20,40,235});F.AddText(330,195,"PAUSED",White,32);
             const char* Labels[3]={"Resume","Save & Quit","Quit to Menu"};
             for(int N=0;N<3;++N) F.AddText(265,260+N*45,std::string(PauseSelection==N?"> ":"  ")+Labels[N],PauseSelection==N?Cyan:White,22);

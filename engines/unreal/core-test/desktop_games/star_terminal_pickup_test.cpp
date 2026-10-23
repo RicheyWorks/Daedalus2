@@ -52,6 +52,9 @@ using Star=StarShooterGame;
 using Access=StarTerminalTestAccess;
 int Checks=0,Failed=0;
 void Check(bool Ok,const char* What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
+bool HasLabel(const Frame& F,const char* Label) {
+    return std::any_of(F.Commands.begin(),F.Commands.end(),[Label](const auto& C){return C.Kind==Shape::Text && C.Label==Label;});
+}
 bool SameFrame(const Frame& A,const Frame& B) {
     if(A.Width!=B.Width || A.Height!=B.Height || A.Commands.size()!=B.Commands.size()) return false;
     for(std::size_t N=0;N<A.Commands.size();++N) {
@@ -78,6 +81,9 @@ void FrozenAndReset(const Star& Terminal,Star::Difficulty Mode,std::uint32_t See
     Held.FirePressed=Held.JumpPressed=Held.ActionPressed=Held.DashPressed=true;
     for(int N=0;N<8;++N) G.Step(Held);
     Check(Same(G,Terminal),"held terminal input cannot consume deferred pickups or change frozen result");
+    Frame Result,PausedResult;G.Render(Result);G.OwnPause(true);G.Render(PausedResult);
+    Check(G.IsCorePaused() && G.GetStatus().Over && HasLabel(Result,"GAME OVER"),"host can retain its pause flag on a real game-over result");
+    Check(SameFrame(Result,PausedResult),"host pause leaves the final result visible without an inert menu over it");
     G.Reset(Seed);Star Fresh;Fresh.SetDifficulty(Mode);Fresh.Reset(Seed);
     Check(Same(G,Fresh),"existing reset clears final actors while retaining chosen difficulty and seeded state");
     for(int N=0;N<6;++N) {Input I;I.Right=N<3;I.Fire=N<4;G.Step(I);Fresh.Step(I);}
@@ -106,6 +112,12 @@ void RetainLoadoutAndReset(Star::Difficulty Mode) {
         "defeat preserves earlier upgrades without granting the overlapping shield");
     FrozenAndReset(G,Mode,Seed);
 }
+void LivePauseMenu() {
+    Star G;G.Reset(730);G.OwnPause(true);Frame Paused;G.Render(Paused);
+    Check(G.IsCorePaused() && !G.GetStatus().Over && HasLabel(Paused,"PAUSED"),"live pause still renders its working menu");
+    Input Confirm;Confirm.FirePressed=true;G.Step(Confirm);
+    Check(!G.IsCorePaused() && !G.GetStatus().Over && !G.WantsQuit() && !G.HasSaveRequest(),"fresh confirmation still resumes the live default menu choice");
+}
 }
 int main() {
     for(auto Kind:{Star::PowerKind::Triple,Star::PowerKind::Shield,Star::PowerKind::Speed}) {
@@ -113,6 +125,7 @@ int main() {
         ContactCase(Kind,Access::Contact::Bullet,2);ContactCase(Kind,Access::Contact::Bullet,1,true);
     }
     for(auto Mode:{Star::Difficulty::Easy,Star::Difficulty::Medium,Star::Difficulty::Hard}) RetainLoadoutAndReset(Mode);
+    LivePauseMenu();
     std::cout<<"Star terminal pickups: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }
