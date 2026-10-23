@@ -53,7 +53,7 @@ private:
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
 	void SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection);
-	TSharedRef<SWidget> MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun = false);
+	TSharedRef<SWidget> MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun = false, bool bFocusable = false);
 
 	TWeakObjectPtr<ADaedalusDesktopArcade> Game;
 	FTSTicker::FDelegateHandle CoreTickHandle;

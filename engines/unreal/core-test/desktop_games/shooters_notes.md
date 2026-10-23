@@ -58,6 +58,14 @@ slice has source review only; controller repeat/focus, pending-save refusal and
 successive native leaderboard acceptance remain unverified. No portable core
 controller reset was added, since it would bypass the host score lifecycle.
 
+Star's existing New run Easy/Medium/Hard buttons also opt into native focus
+navigation. F2/right-stick click enters the catalog; close its list with Back/Escape,
+then navigate the cabinet controls to choose a difficulty with A/Enter. Those
+buttons retain their existing run-replacement/save fence and option callbacks;
+activation returns board focus. Other MakeAction callers keep their prior focus
+behavior. Source review confirms the wiring; exact controller traversal and
+successive difficulty/restart acceptance still require native play.
+
 `shooters_parity.txt` contains 635 executed-source cases across 21 rule categories, with original SHA pins and numeric schemas. The oracle supplies deterministic random fragments; it does not claim Pygame runtime behavior or full-screen script parity. The rectangle stub explicitly models integer construction; real Unreal input, rendering, audio, save integration and live gameplay remain separate verification stages.
 
 Native test results, Daedalus catalog/adapter bindings, UHT/UBT compile evidence and Claude acceptance are reported by the integration owner after final-head validation. Portable native tests alone do not establish an in-game port.

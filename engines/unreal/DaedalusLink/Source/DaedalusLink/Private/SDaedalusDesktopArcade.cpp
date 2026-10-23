@@ -261,11 +261,11 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(6.f, 2.f)
 				[SNew(STextBlock).Text(FText::FromString(TEXT("New run:"))).Font(DAUI::Font(13))]
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
-				[MakeAction(TEXT("Easy"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(0); }), true)]
+				[MakeAction(TEXT("Easy"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(0); }), true, true)]
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
-				[MakeAction(TEXT("Medium"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(1); }), true)]
+				[MakeAction(TEXT("Medium"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(1); }), true, true)]
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
-				[MakeAction(TEXT("Hard"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(2); }), true)]
+				[MakeAction(TEXT("Hard"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(2); }), true, true)]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -304,9 +304,9 @@ SDaedalusDesktopArcade::~SDaedalusDesktopArcade()
 	FTSTicker::GetCoreTicker().RemoveTicker(CoreTickHandle);
 }
 
-TSharedRef<SWidget> SDaedalusDesktopArcade::MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun)
+TSharedRef<SWidget> SDaedalusDesktopArcade::MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun, bool bFocusable)
 {
-	return SNew(SButton).IsFocusable(false).ContentPadding(FMargin(12.f, 6.f))
+	return SNew(SButton).IsFocusable(bFocusable).ContentPadding(FMargin(12.f, 6.f))
 		.IsEnabled_Lambda([this, bReplacesRun]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && (!bReplacesRun || !Actor->GetState().bSavePending); })
 		.OnClicked_Lambda([this, Action]() { Action.ExecuteIfBound(); return FocusReply(); })
 		[SNew(STextBlock).Text(FText::FromString(Label))];
