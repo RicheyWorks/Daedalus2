@@ -31,6 +31,7 @@ private:
     static bool HasSudokuResult(const FDaedalusJavaArcadeState& Snapshot);
     TSharedRef<SWidget> BlackjackPanel();
     TSharedRef<SWidget> BlackjackOptions();
+    TSharedPtr<SWidget> BlackjackActionTarget() const;
     TSharedRef<SWidget> Button(const TCHAR* Label, TFunction<void()> Action, TFunction<bool()> Enabled = [] { return true; });
     FDaedalusJavaArcadeState State() const;
     FReply SelectCell(int32 Index);
@@ -75,6 +76,17 @@ private:
     FString RevealedSudokuResultSession;
     TArray<TSharedPtr<SWidget>> BlackjackHandWidgets;
     TSharedPtr<SWidget> BlackjackBetControls;
+    struct FBlackjackControl
+    {
+        FString Action;
+        int32 Amount = 0;
+        bool bInsuranceAccept = false;
+        TSharedPtr<SWidget> Widget;
+    };
+    TArray<FBlackjackControl> BlackjackControls;
+    TSharedPtr<SWidget> BlackjackStartControl;
+    FKey BlackjackActionFocusKey;
+    FString BlackjackActionFocusSession;
     TSharedPtr<STextBlock> BlackjackDealerRow;
     TSharedPtr<STextBlock> BlackjackResultRow;
     bool bBlackjackRevealPending = false;

@@ -60,6 +60,12 @@ payments or multiplayer authentication.
    Blackjack: create a session, choose Java-approved chips, deal, hit, stand,
    double, split, surrender, choose insurance, or end the session. Credits are
    simulated, initially 1000, and cannot be cashed out.
+   Enter / pad A from the board focuses an available table control on release;
+   a fresh second press activates it. Deal and Hit are preferred when Java allows
+   them; native navigation reaches the other enabled choices. Holding the first
+   press sends no command. Busy/uncertain states retain the existing wait/recovery
+   flow, and a changed session cancels the focus handoff. Pad B still returns to
+   cabinet controls.
    Expand Change table options for explicit rule Enable/Disable, deck-count and
    split-hand-limit commands. Each is gated by Java's current legal actions;
    apply one choice and wait for its reply. Return to table resumes play shortcuts
