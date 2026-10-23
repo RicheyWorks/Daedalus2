@@ -434,6 +434,7 @@ private:
 // Latest star_shootergpt1_fixed.py. Difficulty, escort bonuses, dive types and
 // multi-stage bosses are separate explicit rules so the host does not duplicate them.
 class StarShooterGame final : public Game {
+    friend struct StarTerminalTestAccess;
 public:
     enum class Difficulty { Easy=0,Medium=1,Hard=2 };
     struct DifficultyConfig { double EnemySpeed,EnemyHp,ShootDelay,DiveChance,BossHp; int SpawnRate,Lives; };
@@ -700,7 +701,10 @@ public:
         if(Pilot.Invincible==0) for(auto& B:Bullets) if(B.Alive && !B.PlayerOwned && B.Bounds().Overlaps(Pilot.Bounds())) {B.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0) for(auto& E:Enemies) if(E.Alive && E.Bounds().Overlaps(Pilot.Bounds())) {E.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0 && BossActive && BossActor.State!=BossState::Entering && BossActor.State!=BossState::Returning && BossActor.Bounds().Overlaps(Pilot.Bounds())) HitPlayer();
-        for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        // Keep the final loadout at the lethal contact; surviving hits still collect normally.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        }
         for(auto& P:Effects) {P.X+=P.Dx;P.Y+=P.Dy;--P.Life;}
         for(auto& P:Popups) {P.Y-=0.65;--P.Life;}
         shooter_detail::Remove(Effects,[](const Effect& P){return P.Life<=0;});

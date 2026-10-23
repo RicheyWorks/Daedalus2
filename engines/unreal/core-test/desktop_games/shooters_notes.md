@@ -89,3 +89,19 @@ A controlled always-enabled pickup-loop variant (friend unchanged) passed52/72,
 failing20 post-defeat pickup/life assertions as expected. Asteroids/shared prefix
 and Star class source were compared unchanged. No full shooter suite, engine build,
 editor or native play was run; live controller/balance acceptance remains unverified.
+
+## Star terminal pickup settlement
+
+Lethal projectile, enemy or boss contact now skips same-step Triple/Shield/Speed
+collection. The frozen result retains its loadout at defeat and leaves the nearby
+item unconsumed. Star has no Life pickup; this is a post-defeat upgrade repair.
+Surviving and shield-absorbed hits still collect normally. Existing upgrades,
+scoring, boss/wave order, effect expiry and entity cleanup retain their behavior.
+
+The focused `desktop_star_terminal_pickup` target / `star_terminal_pickup_test.cpp`
+passed102/102 strict single-TU MSVC C++17 checks. Fifteen contact cases use existing
+Bee shot/dive and boss charge primitives, plus terminal freeze and seeded reset at
+all three difficulties. An always-enabled pickup-loop variant with the same test
+friend passed81/102, failing21 post-defeat assertions as expected. This did not run
+the broad shooter suite, engine builds or native acceptance; Slate controller replay
+and real filesystem/leaderboard behavior remain separate pending native checks.
