@@ -82,6 +82,8 @@ public:
     virtual bool IsCorePaused() const { return false; }
     virtual std::string SaveState() const { return {}; }
     virtual bool RestoreState(const std::string&,std::uint32_t) { return false; }
+    // Games with an exact-board save retain the original restart/first-reveal seed.
+    virtual std::uint32_t SeedAfterRestore(std::uint32_t Fallback) const { return Fallback; }
     virtual bool SavePending() const { return false; }
     virtual void ClearSavePending() {}
     virtual bool WantsExit() const { return false; }

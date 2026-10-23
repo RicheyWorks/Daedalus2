@@ -42,6 +42,7 @@ private:
 	FText ControlText() const;
 	FText LeaderboardText() const;
 	EVisibility StarVisibility() const;
+	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
 	void SelectGame(TSharedPtr<FString> Item, ESelectInfo::Type Selection);

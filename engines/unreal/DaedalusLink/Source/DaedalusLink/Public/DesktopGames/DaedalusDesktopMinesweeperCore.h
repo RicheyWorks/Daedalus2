@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
+#include <limits>
+#include <locale>
+#include <sstream>
+#include <utility>
 namespace daedalus { namespace desktop {
 // Original native implementation. First reveal protects the entire 3x3 neighbourhood.
 class MinesweeperGame final : public Game {
@@ -10,6 +14,7 @@ class MinesweeperGame final : public Game {
     int Width=9, Height=9, Mines=10, Option=0, X=0, Y=0, Repeat=0;
     bool Planted=false, Lost=false, Won=false, WasMoving=false;
     std::uint64_t Ticks=0;
+    std::uint32_t BoardSeed=730;
     int Index(int C,int R) const { return R*Width+C; }
     template<class F> void Neighbours(int I,F Fn) {
         for(int Dy=-1;Dy<=1;++Dy) for(int Dx=-1;Dx<=1;++Dx) {
@@ -42,14 +47,75 @@ class MinesweeperGame final : public Game {
         int Open=0;for(const auto& C:Cells) if(C.Open&&!C.Mine) ++Open;
         Won=Open==Width*Height-Mines;
     }
+    static bool ReadNumber(std::istream& In,std::uint64_t Limit,std::uint64_t& Out) {
+        std::string Token;
+        if(!(In>>Token) || Token.empty() || Token.size()>20) return false;
+        std::uint64_t Value=0;
+        for(char C:Token) {
+            if(C<'0'||C>'9') return false;
+            const auto Digit=static_cast<std::uint64_t>(C-'0');
+            if(Digit>Limit || Value>(Limit-Digit)/10) return false;
+            Value=Value*10+Digit;
+        }
+        Out=Value;return true;
+    }
 public:
     void Reset(std::uint32_t Seed) override {
         Width=Option==0?9:Option==1?16:30;Height=Option==0?9:16;Mines=Option==0?10:Option==1?40:99;
-        Cells.assign(Width*Height,Cell{});Rng.Seed(Seed);X=Y=Repeat=0;Ticks=0;
+        Cells.assign(Width*Height,Cell{});BoardSeed=Seed;Rng.Seed(Seed);X=Y=Repeat=0;Ticks=0;
         Planted=Lost=Won=WasMoving=false;
     }
     bool SetOption(int Value,std::uint32_t Seed) override {if(Value<0||Value>2)return false;Option=Value;Reset(Seed);return true;}
     int GetOption() const override {return Option;}
+    std::uint32_t SeedAfterRestore(std::uint32_t) const override {return BoardSeed;}
+    std::string SaveState() const override {
+        if(Cells.size()!=static_cast<std::size_t>(Width*Height)) return {};
+        std::ostringstream Out;Out.imbue(std::locale::classic());
+        Out<<"DGM1 "<<BoardSeed<<' '<<Option<<' '<<X<<' '<<Y<<' '<<Ticks<<' '
+            <<(Planted?1:0)<<' '<<(Lost?1:0)<<' '<<(Won?1:0)<<' ';
+        for(const auto& C:Cells) Out<<static_cast<char>('0'+(C.Mine?1:0)+(C.Open?2:0)+(C.Flag?4:0));
+        return Out.str();
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t) override {
+        if(Payload.empty() || Payload.size()>4096) return false;
+        std::istringstream In(Payload);In.imbue(std::locale::classic());
+        std::string Version,Layout,Extra;
+        std::uint64_t SavedSeed=0,SavedOption=0,SavedX=0,SavedY=0,SavedTicks=0;
+        std::uint64_t SavedPlanted=0,SavedLost=0,SavedWon=0;
+        if(!(In>>Version) || Version!="DGM1"
+            || !ReadNumber(In,std::numeric_limits<std::uint32_t>::max(),SavedSeed)
+            || !ReadNumber(In,2,SavedOption) || !ReadNumber(In,29,SavedX) || !ReadNumber(In,15,SavedY)
+            || !ReadNumber(In,std::numeric_limits<std::uint64_t>::max(),SavedTicks)
+            || !ReadNumber(In,1,SavedPlanted) || !ReadNumber(In,1,SavedLost) || !ReadNumber(In,1,SavedWon)
+            || !(In>>Layout) || (In>>Extra)) return false;
+        // Restore into a separate board: a refused file must never damage the live run.
+        MinesweeperGame Candidate;
+        Candidate.Option=static_cast<int>(SavedOption);Candidate.Reset(static_cast<std::uint32_t>(SavedSeed));
+        if(SavedX>=static_cast<std::uint64_t>(Candidate.Width) || SavedY>=static_cast<std::uint64_t>(Candidate.Height)
+            || Layout.size()!=Candidate.Cells.size()) return false;
+        int MineCount=0,OpenSafe=0,OpenMines=0;
+        for(std::size_t I=0;I<Layout.size();++I) {
+            if(Layout[I]<'0'||Layout[I]>'7') return false;
+            const int Bits=Layout[I]-'0';auto& C=Candidate.Cells[I];
+            C.Mine=(Bits&1)!=0;C.Open=(Bits&2)!=0;C.Flag=(Bits&4)!=0;
+            if(C.Open&&C.Flag) return false;
+            MineCount+=C.Mine?1:0;OpenSafe+=C.Open&&!C.Mine?1:0;OpenMines+=C.Open&&C.Mine?1:0;
+        }
+        if(!SavedPlanted) {
+            if(MineCount || OpenSafe || OpenMines || SavedTicks || SavedLost || SavedWon) return false;
+        } else {
+            if(MineCount!=Candidate.Mines || OpenSafe==0 || OpenMines>1
+                || (SavedLost && (OpenSafe==Candidate.Width*Candidate.Height-Candidate.Mines || SavedTicks==0))
+                || (SavedLost!=0)!=(OpenMines==1)
+                || (SavedWon!=0)!=(OpenSafe==Candidate.Width*Candidate.Height-Candidate.Mines && !SavedLost)) return false;
+            for(int I=0;I<Candidate.Width*Candidate.Height;++I)
+                Candidate.Neighbours(I,[&](int J){if(Candidate.Cells[J].Mine) ++Candidate.Cells[I].Near;});
+        }
+        Candidate.X=static_cast<int>(SavedX);Candidate.Y=static_cast<int>(SavedY);Candidate.Ticks=SavedTicks;
+        Candidate.Planted=SavedPlanted!=0;Candidate.Lost=SavedLost!=0;Candidate.Won=SavedWon!=0;
+        // Reset repeat/held navigation; the saved seed is sufficient before the first planting.
+        *this=std::move(Candidate);return true;
+    }
     void Step(const Input& I) override {
         if(Lost||Won) return;
         if(Planted && Ticks<UINT64_MAX) ++Ticks;

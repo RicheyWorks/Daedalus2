@@ -122,12 +122,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeEntry> GetAvailableGames() const;
-	/** Star Shooter only: 0 Easy, 1 Medium, 2 Hard; accepted changes start a new run. */
+	/** Star: 0 Easy, 1 Medium, 2 Hard. Minesweeper: 0 Beginner, 1 Intermediate, 2 Expert. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetSelectedGameId() const;
-	/** Continue the native Star DGS1 run. Invalid files leave the current session untouched. */
+	/** Save the current Minesweeper board to its separate local slot. Failed writes preserve the previous save. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SaveGame();
+	/** Continue Minesweeper when selected, otherwise the native Star run. Invalid files preserve the current session. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool ResumeGame();
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<int64> GetHighScores() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeHighScore> GetHighScoreRecords() const;
@@ -153,8 +155,11 @@ private:
 	void RecordScore();
 	bool ReadHighScoreRecords(TArray<FDaedalusDesktopArcadeHighScore>& Records) const;
 	bool WriteOwnedFile(const FString& Filename, const FString& Text) const;
+	void RefreshSavedRun();
+	FString SelectedSavePath() const;
 	static FString SaveDirectory();
 	static FString SavePath();
+	static FString MinesweeperSavePath();
 	static FString ScoresPath();
 
 	daedalus::desktop::Driver Session;

@@ -74,6 +74,28 @@ refuses writing. New/restarted native runs deliberately retain the previous save
 new-game path deletes it. The port never reads or overwrites the Python originals' home save files.
 Per-game controls/features and intentional repairs are documented with each test family.
 
+## Minesweeper saved boards
+
+The existing native Minesweeper now has **Save board**, **Continue saved board** and
+**Save & Close** in its cabinet. Save & Close leaves the cabinet open if writing fails.
+Plain Close, Restart and game selection leave the previous saved board unchanged;
+Continue explicitly replaces the current board. One local slot is shared by this
+installation's Minesweeper cabinets, separate from Star Shooter's files.
+F5 saves and F9 continues the saved board. While paused, gamepad X saves and Y
+continues the saved board; P / Start returns to play.
+
+`Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
+cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
+Saving before the first reveal retains its deterministic 3x3 safe opening. Continue
+does not add elapsed wall time or restore held inputs. Won and lost boards retain
+their result. Invalid saves leave the current run and saved file intact.
+
+The focused portable test covers all difficulties, pre-reveal and planted roundtrips,
+continued play through completion/loss, refused saves, input cleanup and Star save
+compatibility. See [Minesweeper notes](../engines/unreal/core-test/desktop_games/minesweeper_notes.md)
+for format and reproduction. Unreal compilation, native filesystem failure handling
+and live Slate controls remain acceptance work; portable checks do not prove them.
+
 ## Pong pilot parity and polish
 
 The oracle reads the pinned latest `pong (1).py`, reviews/extracts only its numeric update

@@ -106,10 +106,12 @@ public:
     const Frame& GetFrame() const { return Picture; }
     Status GetStatus() const { return Active ? Active->GetStatus() : Status{}; }
     const std::string& ActiveId() const { return Id; }
+    std::uint32_t GetSeed() const { return Seed; }
     std::uint64_t Ticks() const { return StepCount; }
     std::string CaptureSave() const { return Active ? Active->SaveState() : std::string{}; }
     bool RestoreSave(const std::string& Text) {
         if(!Active || Text.size()>4096 || !Active->RestoreState(Text,Seed)) return false;
+        Seed=Active->SeedAfterRestore(Seed);
         Controls={};PendingSeconds=0;Paused=false;Refresh();return true;
     }
     bool HasSaveRequest() const { return Active && Active->SavePending(); }

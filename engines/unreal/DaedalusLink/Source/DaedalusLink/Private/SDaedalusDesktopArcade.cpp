@@ -172,7 +172,9 @@ namespace DesktopArcadeUI
 			{
 				FSlateDrawElement::MakeBox(Elements, ++LayerId, Screen.ToPaintGeometry(), WhiteBrush(), ESlateDrawEffect::None, FLinearColor(0.f, 0.f, 0.f, 0.65f));
 				FSlateDrawElement::MakeText(Elements, ++LayerId, Screen.ToPaintGeometry(LogicalSize, FSlateLayoutTransform(FVector2f(30.f, LogicalSize.Y * 0.45f))),
-					TEXT("PAUSED - P / Start or Resume to continue"), Font(24, true), ESlateDrawEffect::None, FLinearColor::White);
+					State.Id == TEXT("minesweeper")
+						? TEXT("PAUSED - P / Start: resume\nF5 / pad X: save board\nF9 / pad Y: continue saved board")
+						: TEXT("PAUSED - P / Start or Resume to continue"), Font(24, true), ESlateDrawEffect::None, FLinearColor::White);
 			}
 			Elements.PopClip();
 			return LayerId;
@@ -247,6 +249,25 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[MakeAction(TEXT("Hard"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SetGameOption(2); }), true)]
 			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[MakeAction(TEXT("Save board"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }))]
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[
+					SNew(SButton).IsFocusable(false).ContentPadding(FMargin(12.f, 6.f))
+					.ToolTipText(FText::FromString(TEXT("Replace the current board with the last saved Minesweeper board.")))
+					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetState().bHasSavedRun; })
+					.OnClicked_Lambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ResumeGame(); return FocusReply(); })
+					[SNew(STextBlock).Text(FText::FromString(TEXT("Continue saved board")))]
+				]
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[MakeAction(TEXT("Save & Close"), FSimpleDelegate::CreateLambda([this]()
+				{
+					if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->SaveGame()) Actor->CloseArcade();
+				}))]
+			]
 			+ SVerticalBox::Slot().FillHeight(1.f)
 			[SNew(DAUI::SGameCanvas).Game(Game)]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 6.f, 0.f, 0.f)
@@ -310,7 +331,8 @@ FText SDaedalusDesktopArcade::StatusText() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!Actor) return FText::FromString(TEXT("Arcade unavailable."));
 	const FDaedalusDesktopArcadeState State = Actor->GetState();
-	FString Text = FString::Printf(TEXT("Score %lld   Lives / health %d   Seed %d   %s"), State.Score, State.Lives, State.Seed, *State.Note);
+	FString Text = State.Id == TEXT("minesweeper") ? State.Note
+		: FString::Printf(TEXT("Score %lld   Lives / health %d   Seed %d   %s"), State.Score, State.Lives, State.Seed, *State.Note);
 	if (State.bWon) Text += TEXT("   Won");
 	else if (State.bOver) Text += TEXT("   Result / next round");
 	if (!State.PersistenceMessage.IsEmpty()) Text += TEXT("\n") + State.PersistenceMessage;
@@ -321,6 +343,12 @@ EVisibility SDaedalusDesktopArcade::StarVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("star_shooter") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::MinesweeperVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("minesweeper") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
@@ -352,7 +380,8 @@ FText SDaedalusDesktopArcade::ControlText() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
 	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. R: restart. Esc / Back: close. ");
-	if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
+	if (Id == TEXT("minesweeper")) Text += TEXT("J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
+	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Difficulty buttons start a new run.");
@@ -499,6 +528,14 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 	{
 		if (ADaedalusDesktopArcade* Actor = Game.Get())
 		{
+			const FDaedalusDesktopArcadeState State = Actor->GetState();
+			if (State.Id == TEXT("minesweeper"))
+			{
+				if (Key == EKeys::F5 || (State.bPaused && Key == EKeys::Gamepad_FaceButton_Left))
+				{ Actor->SaveGame(); return FReply::Handled(); }
+				if (Key == EKeys::F9 || (State.bPaused && Key == EKeys::Gamepad_FaceButton_Top))
+				{ Actor->ResumeGame(); return FReply::Handled(); }
+			}
 			// Preserve every keyboard keydown in event order before held mapping.
 			// Controllers use a separate seam and never enter/reset the keyboard code.
 			if (!Key.IsGamepadKey())
