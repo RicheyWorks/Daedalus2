@@ -185,3 +185,11 @@ compiled and saved; no Play/persistence loop. See gardenkeeper/ for the exact
 built behavior, save preservation and runtime limitations. The static imported
 board needs no character pipeline. No next native ingestion batch is selected
 in current Commons manifests; bulk ingestion has not started.
+
+## Ground and routes R10
+
+The raised repeating tile visuals are retained but hidden, replaced by a continuous
+owned render surface. Three amber route groups connect arrival/activity, spawn,
+chart landmarks and Stillwater approach.104x105m collision slab and273instances
+remain intact; no original material or new terrain system. Matched editor views
+and reversible rendering changes are documented in ground-routes/. No Play loop.
