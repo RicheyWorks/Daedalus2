@@ -34,6 +34,11 @@ restart after win or game over; held buttons alone do not restart. Dungeon's
 `ActionPressed` resets its prototype. The Daedalus adapter chooses/starts the
 game instead of reproducing the Python standalone TITLE screen.
 
+Pac-Man and Zelda's cabinet prompts name the physical bindings: pad A, Space,
+Enter or R/Restart replays a completed/lost run with its original seed. Pad A,
+Space or Enter also triggers Zelda's sword during play. Start keeps its existing
+pause/resume role; no terminal retry binding or simulation rule was added.
+
 Snapshots are available through const getters. Internal boundary cases in the
 native tests use a test peer, not an exposed mutable gameplay API. Zelda retains
 four source enemies, at most 128 rocks and 16 collectibles; its actual repaired

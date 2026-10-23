@@ -342,12 +342,12 @@ public:
                 Out.AddText(580,345,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},13);
         }
         if(Over || Won) Out.AddText(580,320,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
-        if(Over || Won) Out.AddText(580,360,"Fresh Action / Fire / Jump",White,14);
-        if(Over || Won) Out.AddText(580,383,"or host R: replay",White,14);
+        if(Over || Won) Out.AddText(580,360,"Pad A / Space / Enter",White,14);
+        if(Over || Won) Out.AddText(580,383,"or R / Restart: replay",White,14);
     }
     Status GetStatus() const override {
-        std::string Text=Won?"All dots cleared. Fresh Action/Fire/Jump or host R replays."
-            :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
+        std::string Text=Won?"All dots cleared. Pad A / Space / Enter / R: replay."
+            :(Over?"Game over. Pad A / Space / Enter / R: replay."
                 :"Glowtrail Chase: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
         if(!Over && !Won) {
             const auto Window=GetPowerWindow();
@@ -550,17 +550,17 @@ public:
         Out.AddText(10,35,ObjectiveText(),White,15);
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
-        Out.AddText(10,582,(Over || Won)?"Run ended. Fresh Fire/Action/Jump or host R: replay."
-            :"Move: WASD/arrows/stick/hat. Fresh Fire/Action/Jump: sword. Host R: restart.",White,12);
+        Out.AddText(10,582,(Over || Won)?"Run ended. Pad A / Space / Enter / R: replay."
+            :"Move: WASD/arrows/stick/D-pad. Pad A / Space / Enter: sword. R: restart.",White,12);
         if(Over || Won) {
             Out.AddRect(170,245,470,125,{0,55,0,230});
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
-            Out.AddText(195,325,"Fresh Fire / Action / Jump or host R: replay",White,17);
+            Out.AddText(195,325,"Pad A / Space / Enter / R: replay",White,17);
         }
     }
     Status GetStatus() const override {
-        const std::string Text=Won?"Victory: roster defeated and key collected. Fresh Fire/Action/Jump or host R replays."
-            :(Over?"Defeated. Fresh Fire/Action/Jump or host R replays.":ObjectiveText()+" "+CombatText());
+        const std::string Text=Won?"Victory: roster defeated and key collected. Pad A / Space / Enter / R: replay."
+            :(Over?"Defeated. Pad A / Space / Enter / R: replay.":ObjectiveText()+" "+CombatText());
         return {Score,Hero.Health,Over,Won,Text};
     }
 private:
