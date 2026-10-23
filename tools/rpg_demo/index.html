@@ -1681,6 +1681,13 @@ function bossGate() {
   if (!b || state.beaten.has(b.name)) return;
   ask("SOMETHING VAST WAITS BEYOND THE GATE. FACE THE " + pretty(b.name) + "?", ["YES", "NO"], i => { if (i === 0) startBattle(map.info.encounters.zone, b); });
 }
+function spellHint(s) {
+  const target = s.target === "ally" ? "ALLY" : s.target === "all_enemies" ? "ALL FOES" : "FOE";
+  const effect = s.status === "drain_hp" ? (s.element && s.element !== "none" ? s.element.toUpperCase() + " " : "") + "DRAIN"
+    : s.status === "protect" ? "WARD" : s.status === "heal" || s.effect === "heal" ? "HEAL"
+    : s.status ? s.status.toUpperCase().replace(/_/g, " ") : s.element && s.element !== "none" ? s.element.toUpperCase() : "DAMAGE";
+  return effect + " / " + target;
+}
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
   const compact = W < 320, split = compact ? 120 : 150, statsX = split + 8;
@@ -1716,11 +1723,19 @@ function drawBattle() {
     cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
     text(compact ? party[B.who].name.slice(0, 5) : party[B.who].name, 86, 152, "#fff070");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
-    const m = party[B.who], used = new Set(B.summoned || []);
-    const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + battleItemStock(k), true]);
-    const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
-    opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
-    cursor(10, 152 + ((B.oi || 0) - from) * 13);
+    const m = party[B.who], called = new Set(B.summoned || []), planned = new Set(B.acts.filter(a => a.kind === "summon").map(a => a.spirit.name)), used = new Set([...called, ...planned]);
+    const opts = B.sub === "summon" ? mySpirits().map(s => {
+      const why = PrismSummons.refusal(s, used, m.mp);
+      return [s.name, s.mp + "MP", !why, why === "ALREADY ANSWERED" && !called.has(s.name) ? "CALL PLANNED" : why || s.element.toUpperCase() + " / ALL FOES. ONCE PER BATTLE."];
+    }) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp, spellHint(s)])
+      : battleItems().map(k => [k, ":" + battleItemStock(k), true, itemKind(k) === "escape" && B.boss ? "NO ESCAPE FROM A BOSS." : itemLine(k)]);
+    const selected = clamp(B.oi || 0, 0, Math.max(0, opts.length - 1)), from = clamp(selected - 1, 0, Math.max(0, opts.length - 3));
+    opts.slice(from, from + 3).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
+    if (opts[selected]) {
+      cursor(10, 152 + (selected - from) * 13);
+      text(opts[selected][0], 6, 190, "#fff070");
+      wrap(opts[selected][3], compact ? 18 : 23).slice(0, 2).forEach((l, i) => text(l, 6, 201 + i * 11, "#a0a8c0"));
+    }
   } else {
     wrap(B.msg || "", compact ? 16 : 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
     if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", split - 12, 210, "#fff070");
