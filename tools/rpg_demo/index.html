@@ -193,8 +193,8 @@ if (SETTINGS) {
     { id: "JukeboxNow", kind: "info", label: "Now Playing", value: () => (juke.cue ? juke.cue + " cue" : "Silent") + (actx ? "" : " (press a button to start sound)"),
       help: "The jukebox cue the realm asked for last. The same cue never restarts its song." }] });
   SETTINGS.extend({ tab: "GAMEPLAY", section: "Saved Game", rows: [
-    { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Resting at the inn records your journey. CONTINUE on the title screen picks it up." },
-    { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. CONTINUE goes dark until you rest at an inn again." }] });
+    { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Rest at an inn or choose SAVE in the field menu outside a dungeon to record your journey. CONTINUE on the title screen resumes it." },
+    { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. Rest at an inn or choose SAVE in the field menu outside a dungeon to enable CONTINUE again." }] });
   SETTINGS.onAction("SaveErase", eraseSavedJourney);
   SETTINGS.on("TouchControls", () => fit());
   SETTINGS.on("JukeboxMonitor", v => { logEl.hidden = !v; });
@@ -1809,7 +1809,7 @@ function titleChoose(i) {
 function beginJourney() {
   const spawn = D.realm_profile && D.realm_profile.start_spawn;
   goto(townMap(), spawn ? spawn.x : 11, spawn ? spawn.y : 15, "up");
-  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO TALK. " + titlePrompt("menu", "ENTER OR TAP START") + " FOR MENU. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
 }
 function titleTick(dt) {
   titleT += dt;
