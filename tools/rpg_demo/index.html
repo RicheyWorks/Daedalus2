@@ -188,7 +188,7 @@ if (SETTINGS) {
   SETTINGS.extend({ tab: "GAMEPLAY", section: "Saved Game", rows: [
     { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Resting at the inn records your journey. CONTINUE on the title screen picks it up." },
     { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. CONTINUE goes dark until you rest at an inn again." }] });
-  SETTINGS.onAction("SaveErase", () => { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} toast("Saved journey erased"); });
+  SETTINGS.onAction("SaveErase", eraseSavedJourney);
   SETTINGS.on("TouchControls", () => fit());
   SETTINGS.on("JukeboxMonitor", v => { logEl.hidden = !v; });
 }
@@ -589,7 +589,13 @@ function innPrompt() {
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
     roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster());
-    fade = 1; fadeCb = () => { cue(map.cue); wakeAt(7); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
+    fade = 1; fadeCb = () => {
+      cue(map.cue); wakeAt(7); const ok = saveGame();
+      say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."]
+        : ["YOUR JOURNEY COULD NOT BE SAVED. KEEP THIS GAME OPEN.", "TRY SAVE IN THE FIELD MENU BEFORE YOU LEAVE."]), null, 6);
+      if (ok) toast("Journey saved", saveSummary());
+      else toast("Journey not saved", "Your party is rested. Keep this game open and retry SAVE in the field menu.");
+    };
   });
 }
 function openChest(x, y) {
@@ -1625,7 +1631,11 @@ function finishBattle() {
     if (wasBoss && r === "win" && bf) {
       state.beaten.add(bf.bossName);
       const fl = map.info; if (fl && fl.boss) map.grid[fl.boss.gate.y][fl.boss.gate.x] = "Floor";
-      if (bf.final) { ending = { t: 0 }; mode = "ending"; cue("TITLE"); saveGame(); return; }
+      if (bf.final) {
+        ending = { t: 0, saved: saveGame() }; mode = "ending"; cue("TITLE");
+        if (!ending.saved) toast("Victory not saved", "Keep this game open. You can retry saving from the ending screen.");
+        return;
+      }
       const c = shardCount();
       say(["THE GATE CRUMBLES. THE " + bf.name.toUpperCase() + " IS GONE.",
         c >= 3 ? "THE THREE SHARDS HUM TOGETHER. THE CRYSTAL SHRINE IN THE SOUTH-EAST WILL OPEN NOW." : (3 - c) + (3 - c === 1 ? " SHARD REMAINS OUT THERE." : " SHARDS REMAIN OUT THERE.")], null, 1);
@@ -1711,6 +1721,11 @@ function saveGame() {
     return true;
   } catch (e) { return false; }
 }
+function eraseSavedJourney() {
+  try { localStorage.removeItem(SAVE_KEY); }
+  catch (_) { toast("Saved journey not erased", "Your saved record was kept. Check browser storage access, then try ERASE again."); return; }
+  toast("Saved journey erased");
+}
 function saveSummary() {
   const r = readSavedJourney();
   if (!r.ok) return r.kind === "missing" ? "No saved journey" : "Saved journey needs attention. Choose CONTINUE for details.";
@@ -1775,11 +1790,11 @@ function titleTick(dt) {
   if (hit("down")) { titleIdx = (titleIdx + 1) % TITLE_ITEMS.length; sfx("TICK"); }
   if (hit("start") || hit("a")) titleChoose(titleIdx);
 }
-function titlePrompt() {
+function titlePrompt(action = "confirm", fallback = "START") {
   const d = PAD && PAD.devices()[0];
-  if (!d) return "PRESS START";
-  const g = String(PAD.label("confirm", d.index)).toUpperCase();
-  return /^[A-Z0-9+]{1,8}$/.test(g) ? "PRESS " + g : "PRESS START";
+  if (!d) return "PRESS " + fallback;
+  const g = String(PAD.label(action, d.index)).toUpperCase();
+  return /^[A-Z0-9+]{1,8}$/.test(g) ? "PRESS " + g : "PRESS " + fallback;
 }
 function drawTitle() {
   const f = Math.floor(titleT * 6) % 8, M = D.title.menu_geometry, hasSave = !!loadSave();
@@ -1888,7 +1903,21 @@ const ENDING_LINES = () => ["THE HEART IS WHOLE.", "", "THE WARDENS SLEEP, AND T
   ...roster().map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", D.realm.toUpperCase(), "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
 function endingTick(dt) {
   ending.t += dt;
-  if (ending.t > 3 && (hit("a") || hit("start"))) { ending = null; mode = "title"; titleT = 0; cue("TITLE"); }
+  if (ending.t <= 3) return;
+  const confirm = hit("a"), start = hit("start"), back = hit("b");
+  if (!ending.saved && back) {
+    ending = null; mode = "field"; cue(map.cue);
+    say(["YOUR VICTORY IS STILL HERE, BUT IT IS NOT SAVED.", "LEAVE THE DUNGEON AND TRY SAVE IN THE FIELD MENU.", "KEEP THIS GAME OPEN UNTIL SAVING WORKS."]);
+    return;
+  }
+  if (!confirm && !start) return;
+  if (!ending.saved) {
+    ending.saved = saveGame();
+    if (ending.saved) toast("Victory saved", "CONTINUE will remember the restored Heart. Press again to return to the title.");
+    else toast("Victory not saved", "Keep this game open. Retry saving, or go back to keep playing.");
+    return;
+  }
+  ending = null; mode = "title"; titleT = 0; cue("TITLE");
 }
 function drawEnding() {
   const f = Math.floor(ending.t * 6) % 8;
@@ -1896,7 +1925,11 @@ function drawEnding() {
   g.fillStyle = "rgba(4,2,16,.86)"; g.fillRect(0, 0, W, H);       /* the credits read over a dimmed title, never over the logo */
   const lines = ENDING_LINES(), y0 = H - ending.t * 14;
   lines.forEach((l, i) => { const y = y0 + i * 14; if (y > -10 && y < H) text(l, (W - tw(l)) / 2, Math.round(y), i === lines.length - 1 ? "#fff070" : "#ffffff"); });
-  if (y0 + lines.length * 14 < H / 2) { const p = "PRESS START"; if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
+  if (!ending.saved) {
+    g.fillStyle = "#080410"; g.fillRect(0, H - 72, W, 72);
+    const notices = ["VICTORY NOT SAVED", "KEEP THIS GAME OPEN.", titlePrompt("confirm", "ENTER/START") + " TO RETRY SAVE", titlePrompt("cancel", "X/ESC/B") + " TO KEEP PLAYING"];
+    notices.forEach((p, i) => text(p, (W - tw(p)) / 2, H - 64 + i * 14, i === 0 ? "#f87878" : "#ffffff"));
+  } else if (y0 + lines.length * 14 < H / 2) { const p = titlePrompt(); if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
 }
 function drawGameOver() {
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
