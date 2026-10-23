@@ -1137,17 +1137,21 @@ function drawMenu() {
   text("SHARDS", gw[0] + 8, gw[1] + 30); text(shardCount(), gw[0] + gw[2] - 10 - tw(shardCount()), gw[1] + 30);
   text(clockText(), gw[0] + 8, gw[1] + 46, isNight() ? "#90a8ff" : "#fff070");
   if (sub === "item") {
-    const items = fieldItems();
+    const items = fieldItems(), selected = clamp(menu.ii, 0, Math.max(0, items.length - 1)), rows = 6;
+    const from = clamp(selected - rows + 1, 0, Math.max(0, items.length - rows));
     win(20, 60, 220, 112);
-    items.forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
-    cursor(28, 72 + menu.ii * 13);
-    const sel = items[menu.ii]; if (sel) text(itemLine(sel).slice(0, 34), 28, 160, "#a0a8c0");
+    items.slice(from, from + rows).forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
+    if (items.length) cursor(28, 72 + (selected - from) * 13);
+    if (items.length > rows) text((from + 1) + "-" + Math.min(from + rows, items.length) + "/" + items.length, 28, 145, "#a0a8c0");
+    const sel = items[selected]; if (sel) text(itemLine(sel).slice(0, 34), 28, 160, "#a0a8c0");
   }
   if (sub === "magic" || sub === "magic-target") {
-    const caster = roster()[menu.who], list = fieldSpells(caster);
+    const caster = roster()[menu.who], list = fieldSpells(caster), selected = clamp(menu.ii, 0, Math.max(0, list.length - 1)), rows = 6;
+    const from = clamp(selected - rows + 1, 0, Math.max(0, list.length - rows));
     win(20, 60, 220, 112);
-    list.forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
-    if (sub === "magic") cursor(28, 72 + menu.ii * 13);
+    list.slice(from, from + rows).forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
+    if (sub === "magic" && list.length) cursor(28, 72 + (selected - from) * 13);
+    if (list.length > rows) text((from + 1) + "-" + Math.min(from + rows, list.length) + "/" + list.length, 28, 145, "#a0a8c0");
   }
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
 }
