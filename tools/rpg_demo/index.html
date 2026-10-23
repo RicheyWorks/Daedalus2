@@ -633,6 +633,17 @@ function openShop() {
   shop = { kind, stock, idx: 0, top: 0, tab: "buy", msg: "WHAT WOULD YOU LIKE?" + (kind === "magic" ? "" : "  LEFT/RIGHT: SELL") }; mode = "shop";
 }
 const magicShopCaster = sp => roster().find(m => m.job === (sp.target === "ally" ? "Lightmender" : "Runecaster"));
+function shopGearChoice(it) {
+  if (it.attack) {
+    const kind = WEAPON_KIND[it.name];
+    return { slot: "weapon", who: roster().find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack) };
+  }
+  if (it.defence) {
+    const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
+    return { slot, who: roster().find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor")) };
+  }
+  return null;
+}
 function buy(it) {
   if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
   if (shop.kind === "magic") {
@@ -642,14 +653,13 @@ function buy(it) {
     gold -= it.price; caster.spells.push(sp.name); sfx("BUY"); shop.msg = caster.name + " LEARNS " + sp.name.toUpperCase() + "."; return;
   }
   gold -= it.price; sfx("BUY");
+  const choice = shopGearChoice(it);
   if (it.attack) {
-    const kind = WEAPON_KIND[it.name];
-    const who = roster().find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
+    const who = choice.who;
     if (who) { const old = who.equip.weapon; if (old) bag[old] = (bag[old] || 0) + 1; who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "NO ONE NEEDS IT. INTO THE BAG."; }
   } else if (it.defence) {
-    const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
-    const who = roster().find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor"));
+    const { slot, who } = choice;
     if (who) { const old = who.equip[slot]; if (old) bag[old] = (bag[old] || 0) + 1; who.equip[slot] = it.name; sfx("EQUIP"); shop.msg = who.name + " PUTS ON THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "INTO THE BAG."; }
   } else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "THANK YOU!"; }
@@ -723,6 +733,13 @@ function drawShop() {
       const name = caster ? caster.name.toUpperCase() : "NO CASTER", room = Math.max(0, Math.floor((W - 24) / 6) - detail.length - 2);
       d = name.slice(0, room) + ": " + detail;
     }
+  } else if (it.attack || it.defence) {
+    const { slot, who } = shopGearChoice(it);
+    if (who) {
+      const before = slot === "weapon" ? atkOf(who) : defOf(who), after = slot === "weapon" ? atkWith(who, it.name) : defWith(who, { ...who.equip, [slot]: it.name });
+      const detail = " " + (slot === "weapon" ? "ATK" : "DEF") + " " + before + ">" + after, room = Math.max(0, Math.floor((W - 24) / 6) - d.length - 3 - detail.length);
+      d += " / " + who.name.toUpperCase().slice(0, room) + detail;
+    } else d += " / INTO BAG";
   }
   text(d, 12, 204, "#a0a8c0");
 }

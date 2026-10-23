@@ -18,7 +18,7 @@ function between(start, end) {
 const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWith(prefix)); assert.ok(found, prefix); return found; };
 const source = [line("const CHARS ="), line("const hit ="), line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), between("function recruitsFor(", "function recruitBeaten("),
-  line("const spellOf ="), line("const WEAPON_KIND ="), between("const ITEM_KINDS =", "function menuTick()"),
+  line("const spellOf ="), line("const WEAPON_KIND ="), line("const SLOTS ="), line("const atkOf ="), line("const defOf ="), line("const atkWith ="), line("const defWith ="), between("const ITEM_KINDS =", "function menuTick()"),
   between("let shop = null;", "/* ---------- field ---------- */"), between("function spellHint(", "function drawBattle("),
   "this.api = { start: () => { party = buildParty(); }, roster, recruit, openShop, shopTick, drawShop, buy, magicShopCaster, spellHint, itemLine, " +
   "party: () => party, reserve: () => reserve, shop: () => shop, gold: () => gold, setGold: n => { gold = n; }, chars: CHARS, " +
@@ -114,10 +114,10 @@ for (const width of [320, 256]) check("long displayed recipient preserves full h
   assert.equal(caster.name, "STARLIGHTSAGE"); assert.equal(JSON.stringify(s.api.roster()), before);
   if (width === 256) assert.ok(p.footer.label.split(":")[0].length < caster.name.length, "only the displayed name is shortened when needed");
 });
-for (const [store, name] of [["Item", "Herb Tonic"], ["Weapon", "Steel Saber"]]) check(store + " shop keeps its existing footer, tabs and affordability", () => {
+for (const [store, name] of [["Item", "Herb Tonic"], ["Weapon", "Steel Saber"]]) check(store + " shop preserves item/gear details, tabs and affordability", () => {
   const s = session(256); s.enter(store); const item = select(s, name); s.draw();
   const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 204);
-  assert.equal(footer.label, item.effect ? s.api.itemLine(name) : "ATTACK " + item.attack);
+  assert.equal(footer.label, item.effect ? s.api.itemLine(name) : "ATTACK " + item.attack + " / CORIN ATK 54>68");
   assert.ok(s.draws.some(d => d.kind === "text" && d.label === "BUY" && d.y === 9)); assert.ok(s.draws.some(d => d.kind === "text" && d.label === "SELL" && d.y === 9));
   s.tick("right"); assert.equal(s.api.shop().tab, "sell"); s.draw();
   assert.ok(s.draws.some(d => d.kind === "text" && d.y === 204 && d.label === "SELLS FOR HALF ITS PRICE."));
