@@ -202,3 +202,13 @@ validation returned4Valid, no warnings/errors/skips. All fresh targets, no old
 design overwrites. A small decorative station uses them beside the gardenkeeper.
 Saved753actors, clean packages, progress intact, compute released. No Play loop
 or extra systems. See garden-care/ for exact sources, native settings and limits.
+
+## Optional care activity R12
+
+After original planting, E can collect water at the barrel and tend the existing
+planter. Authored success saves an additive care-completion flag, updates UI and
+reveals two extra blooms. Original plant/chart progress and rewards remain intact.
+Uses existing E/UI/timer/version1 slot; no new inventory/save framework. Built,
+compiled and saved755actors. Runtime input/transition/legacy save compatibility
+are unverified; no Play/reload loop. Feeder/compost/crate remain decorative. See
+care-activity/ for exact persistence and failure/retry boundaries.

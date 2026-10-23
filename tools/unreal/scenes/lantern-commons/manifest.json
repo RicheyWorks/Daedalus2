@@ -330,7 +330,7 @@
     }
   ],
   "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
-  "actor_count": 753,
+  "actor_count": 755,
   "objective_ui": {
     "schema": "daedalus.commons-objective-ui-build.v1",
     "status": "BUILT_COMPILED_SAVED",
@@ -469,6 +469,41 @@
       "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
     },
     {
+      "path": "care-activity/build.json",
+      "bytes": 3334,
+      "sha256": "4c232440d6208bc218888042cf55b12d5cc62cce10cd00dac7fbca5196bcb559"
+    },
+    {
+      "path": "care-activity/CommitCareComplete.dsl",
+      "bytes": 852,
+      "sha256": "dce8aa3f9d1f6bddc616fa08352f82ead33c33714948b01ed5a4bd340bab1725"
+    },
+    {
+      "path": "care-activity/InitGarden.dsl",
+      "bytes": 1400,
+      "sha256": "33cb90f2d84b0c5e41f1d067dcf37d750c1567a29bc2736cf7c7391cc9e1cd67"
+    },
+    {
+      "path": "care-activity/README.md",
+      "bytes": 2156,
+      "sha256": "3cc658c754c686f0bc4246a09d280286e39a542f36ce0d464cd76dd0b9329eb8"
+    },
+    {
+      "path": "care-activity/RefreshCareUI.dsl",
+      "bytes": 2555,
+      "sha256": "295ce80a4d20b30748b6daf2566e032eb6757f35c4d885d06e354101d9363755"
+    },
+    {
+      "path": "care-activity/RefreshGarden.dsl",
+      "bytes": 6817,
+      "sha256": "c867dc75e3730863cfff3ed86b626ab58b40dd9496e639eb284c4808bfa06447"
+    },
+    {
+      "path": "care-activity/TryGardenInteract.dsl",
+      "bytes": 1808,
+      "sha256": "be6cb7ff8a306dd8cd86124235cb7cb5ea8d4a3b38b8c79b463c352ba575a13a"
+    },
+    {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
       "bytes": 27702,
       "sha256": "22d276f780ea93e40524278b3251374bcd8240189a47b359ab5d875ec056405a"
@@ -485,13 +520,13 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity.uasset",
-      "bytes": 587797,
-      "sha256": "6ab36ea54ffebfd614873ef880fa71aa4b5c1a29f9a9f42c1519ae682dee2b60"
+      "bytes": 902127,
+      "sha256": "47e52f4be43bd0298bed351c12d2ba309c3b78de68311172031675b57bf43ee2"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/SG_CommonsGarden.uasset",
-      "bytes": 9011,
-      "sha256": "a67cecdbacb4dd9e9b04c4f324609ee94963ca4c12a38b4fba999c0ee66f41fe"
+      "bytes": 9969,
+      "sha256": "e48ce0ad416c4b44df934e83e46bb7ffc8dc72afa991729a5df4897acadf8719"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/WBP_CommonsGarden.uasset",
@@ -500,8 +535,8 @@
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
-      "bytes": 2097607,
-      "sha256": "1aaf990cd7b58e57f728a25862d8918cdb0a05869d3db987f7b18ca0cf9db9ae"
+      "bytes": 2103515,
+      "sha256": "aa25c13eabf78f48f1dccbf6d7d402dc4ec75abf88796960d264a5b9704aabb2"
     },
     {
       "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
@@ -702,6 +737,11 @@
       "path": "images/before-player.png",
       "bytes": 1901562,
       "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/care-r12-station.png",
+      "bytes": 2247985,
+      "sha256": "c2701bbb8371ef24c3fb5e351b32560db9da1025066ff35826839cb6f604398d"
     },
     {
       "path": "images/entry-r6-arrival.png",
@@ -940,8 +980,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 12566,
-      "sha256": "f1a71b2b3b0f26e80f4d31bf132fb3260e7ce979f3a44e0b43becc3a2c2c5897"
+      "bytes": 13161,
+      "sha256": "6397bc4d893c364af09aa8c1a683d84d834d83a21129adc826d1dcc05bdbc56a"
     },
     {
       "path": "stillwater/build.json",
@@ -3226,6 +3266,91 @@
       "No Play/reload/qualification loops or generic unattended-ingestion acceptance.",
       "Canonical validation snapshot flags/unknowns remain unmodified.",
       "Existing barrel/composter/crate designs are not overwritten; full old/new visual comparison is unavailable."
+    ]
+  },
+  "care_activity_r12": {
+    "schema": "daedalus.commons-care-activity-build.v1",
+    "utc": "2026-10-23T05:11:56.407959+00:00",
+    "status": "BUILT_COMPILED_SAVED_RUNTIME_UNVERIFIED",
+    "behavior": {
+      "compiled": true,
+      "written": [
+        "CommitCareComplete",
+        "RefreshCareUI",
+        "InitGarden",
+        "TryGardenInteract",
+        "RefreshGarden"
+      ],
+      "original_plant_commit_unchanged": true,
+      "built_loop": "Original planting complete -> E collect water at barrel -> E tend same planter -> persistent care acknowledgement and two additional blooms.",
+      "persistence": "One additive CareComplete bool in existing version1 SG/slot, saved before local success; carried water session-only; failed save retains water and old completion state.",
+      "no_new_timers_rewards_or_inventory": true,
+      "Play_run": false
+    },
+    "composition": {
+      "saved": true,
+      "actors_current": 755,
+      "new_blooms": [
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_730"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_731"
+        }
+      ],
+      "barrel_location": [
+        -2700,
+        -1500,
+        20.15
+      ],
+      "kiosk_overlap_fix": "Barrel moved within owned care grouping to separate its2.4m input radius from kiosk; no input priority framework.",
+      "existing_original_flower_and_plant_quest_preserved": true,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false
+    },
+    "actual_save_defaults": {
+      "Version": 1,
+      "CareComplete": false
+    },
+    "preservation": {
+      "utc": "2026-10-23T05:09:01.097584+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Build one owned collect-water/tend-flower step using existing E/UI/garden SaveGame. No rewards/reset/new timers/framework/Play loops.",
+          "at": 1792731794.0917494,
+          "ttl": 7200.0,
+          "age_s": 347.0,
+          "left_s": 6853.0
+        }
+      },
+      "progress_unchanged": true,
+      "protected_files_unchanged": 314
+    },
+    "image": {
+      "path": "images/care-r12-station.png",
+      "sha256": "c2701bbb8371ef24c3fb5e351b32560db9da1025066ff35826839cb6f604398d"
+    },
+    "persistence_boundaries": {
+      "slot": "Daedalus_LanternCommons_Garden_v1",
+      "version": 1,
+      "added_saved_field": "CareComplete bool, default false",
+      "HasWater": "Session-only, unlimited recollection, no inventory token/cost.",
+      "save_failure": "Local success/blooms are withheld; water stays carried for retry. On-disk failure transactionality is not claimed.",
+      "legacy_save_compatibility": "Intended additive missing-field default; not exercised against old player files in this build-only pass."
+    },
+    "limits": [
+      "No Play/input/visible-transition/reload/persistence test loop.",
+      "Barrel/planter authored behavior only; feeder/compost/crate stay decorative.",
+      "No rewards, original planting reset, new timer, inventory or economy framework.",
+      "Editor view shows normal saved composition, not completed-care runtime HUD/blooms."
     ]
   }
 }
