@@ -1,0 +1,22 @@
+def check(name,expected_start_utc=None):
+    guard();launch=load(name+'-launch.json');pid=launch['pid'];os=state()
+    b.require(len(os['editors'])==1 and os['editors'][0]['Id']==pid,'launched editor identity differs')
+    rows=windows(pid);project_name='DaedalusRealm' if launch['main'] else 'DisposableMCPR5'
+    slate=[r for r in rows if r['class']=='UnrealWindow' and project_name in r['title'] and 'Unreal Editor' in r['title']]
+    ready=bool(len(slate)==1 and os['editors'][0]['Responding'])
+    port=9877 if launch['main'] else 18877
+    listeners=[r for r in os['listeners'] if r['LocalPort']==port]
+    ready=ready and len(listeners)==1 and listeners[0]['OwningProcess']==pid and listeners[0]['LocalAddress']=='127.0.0.1'
+    window_result=None
+    if ready:
+        try:
+            window_result=_minimize_checkpoint(pid,project_name,_window_start(launch,expected_start_utc))
+            rows=window_result['after']
+        except Exception as exc:
+            window_result={'status':'HOLD','reason':str(exc),'evidence':getattr(exc,'evidence',{})}
+            ready=False
+    stage='OWNED_SLATE_AND_LOOPBACK_READY' if ready else ('OWNED_WINDOW_MINIMIZE_HOLD' if window_result else 'STARTUP_PENDING')
+    report={'utc':b.utc(),'stage':stage,'state':os,'windows':rows,'pid':pid,'window_checkpoint':window_result}
+    write(name+'-readiness-'+str(time.time_ns())+'.json',report)
+    print(json.dumps(report))
+    b.require(stage!='OWNED_WINDOW_MINIMIZE_HOLD','owned window minimization HOLD; no readiness')
