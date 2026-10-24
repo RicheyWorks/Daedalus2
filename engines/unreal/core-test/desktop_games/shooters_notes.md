@@ -10,7 +10,13 @@ These three cores port the user's selected latest Desktop revisions. The origina
 
 ## Shared contract and deliberate changes
 
-`Game::Reset(seed)` starts an active session; the Daedalus host supplies menus, start and restart. One `Step(Input)` is one 60 Hz source frame. The host accumulates elapsed time and bounds catch-up, forwards digital controls and analog left-stick axes, and calls `Render(Frame)` without mutating simulation state. All render commands and simulation entity vectors have explicit caps. Reset clears live entities, scores, timers and transient requests. Ended games freeze until host restart.
+`Game::Reset(seed)` starts an active session; the Daedalus host supplies menus, start and restart. One `Step(Input)` is one 60 Hz source frame. The host accumulates elapsed time and bounds catch-up, forwards digital controls and analog left-stick axes, and calls `Render(Frame)` without mutating simulation state. All render commands and simulation entity vectors have explicit caps. Reset clears live entities, scores, timers and transient requests. Ended Asteroids/Sega games freeze until an explicit fresh retry event or host restart.
+
+Asteroids/Sega accept terminal `SourceControllerButton(0/1)` (pad A/Start) and
+`SourceKeyDown(6/7)` (Enter/Space), through the existing raw input seam. They retain
+the original reset seed. Active events and held `Step` inputs do not restart; Start
+is consumed before generic pause. The existing native host may forward fresh A
+into new-run gameplay, matching its other games. Star's pause/save flow is separate.
 
 The portable seeded random stream intentionally differs from Python `random`; matching a numeric seed does **not** reproduce a Python run. Tests inject reviewed source values for numeric rule parity and separately test native deterministic replay. Native rendering does not consume game randomness. Stable stars, deterministic thruster visuals and bounded cosmetic effects are adaptations.
 
@@ -49,3 +55,11 @@ Native test results, Daedalus catalog/adapter bindings, UHT/UBT compile evidence
 The family test passed **91,839 / 91,839 checks** using MSVC C++17 `/W4 /WX /permissive-`. All 635 fixture cases were consumed; six cosmetic `STAR_HIT` particle-count fields were deliberately excluded because particles are a bounded presentation adaptation. Four 20,000-frame replays covered deterministic frames/status, terminal freeze, restart, render purity, sanitized nonfinite input and entity bounds. The late-wave run exercised 9,215 boss frames. Observed entity peaks were 27/392 (Asteroids), 47/353 (Sega), 70/1537 (Star) and 122/1537 (late-wave Star).
 
 A render-driven native Sega pilot reached the complete boss victory at seed 1, frame 1,027, score 2,200, and confirmed frozen terminal state and a once-only reward. Host contract tests cover nine-field save roundtrip, 25 malformed/version/range/overflow/boolean/trailing/oversize payload rejections without visible or hidden RNG state changes, difficulty reset/invalid-option rejection, pause/save/quit requests, and simultaneous keyboard/stick/D-pad Asteroids input. This is portable simulation evidence; it does not substitute for Unreal compilation or human playtesting.
+
+`shooter_terminal_test.cpp` / CMake target `desktop_shooter_terminal` adds a bounded
+retry check, independent of the broad shooter fixture suite: real idle losses at
+seeds 0/730/UINT32_MAX, the known seed-1 victory with a 1,200-step cap, held-result
+freeze, fresh-event reset and driver input cleanup. Strict MSVC C++17 passed
+487/487 checks. The same test using the prior shooter header failed 30 retry checks
+as expected. Star's class source remained identical. No engine/native runtime
+integration is inferred from this portable check.

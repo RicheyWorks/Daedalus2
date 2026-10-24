@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusLivingPainting.h"
+#include "DaedalusMuralLayoutCore.h"
 #include "Components/PointLightComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
@@ -11,6 +12,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Materials/MaterialInterface.h"
 #include "UObject/ConstructorHelpers.h"
+#include "UObject/UObjectGlobals.h"
 
 // Named (not anonymous) so unity builds cannot collide with other files' helpers.
 namespace DaedalusLivingPaintingLocal
@@ -66,52 +68,119 @@ void ADaedalusLivingPainting::BeginPlay()
 
 void ADaedalusLivingPainting::SetFromFrame(int64 FrameSeed, int32 FrameW, int32 FrameH)
 {
-	Seed = FrameSeed;
-	Width = FMath::Min(daedalus::gallery::kMaxSide, FrameW * 2);
-	Height = FMath::Min(daedalus::gallery::kMaxSide, FrameH * 2);
-	Rebuild();
+	TrySetFromFrame(FrameSeed, FrameW, FrameH);
+}
+
+bool ADaedalusLivingPainting::TrySetFromFrame(int64 FrameSeed, int32 FrameW, int32 FrameH)
+{
+	DaedalusMuralLayout::Layout Candidate;
+	if (!DaedalusMuralLayout::ForFrame(FrameSeed, FrameW, FrameH, CellSize, Candidate))
+	{
+		RestoreCommittedSettings();
+		UE_LOG(LogTemp, Warning, TEXT("Daedalus living painting: refused frame seed %lld size %dx%d; active mural retained"),
+		       static_cast<long long>(FrameSeed), FrameW, FrameH);
+		return false;
+	}
+	return RebuildLayout(Candidate.Seed, Candidate.Width, Candidate.Height, static_cast<float>(Candidate.CellSize));
 }
 
 bool ADaedalusLivingPainting::Rebuild()
 {
-	Mural = MakeUnique<daedalus::gallery::Painting>(static_cast<int64_t>(Seed), Width, Height);
-	bAwake = false;
-	for (UStaticMeshComponent* C : CellParts) { if (C) { C->DestroyComponent(); } }
-	CellParts.Reset();
-	CellMats.Reset();
-	PaintedWith.Init(-1, Mural->Valid() ? Mural->CellCount() : 0);
-	if (!Mural->Valid())
+	return RebuildLayout(Seed, Width, Height, CellSize);
+}
+
+void ADaedalusLivingPainting::RestoreCommittedSettings()
+{
+	// Indexing and recolouring use these public fields. Merely retaining Mural would
+	// leave a rejected Width/Height edit indexing the old cell arrays incorrectly.
+	if (!Mural.IsValid() || !Mural->Valid()) { return; }
+	Seed = Mural->GetSeed();
+	Width = Mural->GetWidth();
+	Height = Mural->GetHeight();
+	CellSize = CommittedCellSize;
+}
+
+bool ADaedalusLivingPainting::RebuildLayout(int64 InSeed, int32 InWidth, int32 InHeight, float InCellSize)
+{
+	const DaedalusMuralLayout::Layout Layout{InSeed, InWidth, InHeight, InCellSize};
+	if (!DaedalusMuralLayout::Valid(Layout) || !GetWorld())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Daedalus living painting: seed %lld or size %dx%d is out of range (seed 0..999999999, sides 1..12)"),
-		       static_cast<long long>(Seed), Width, Height);
+		RestoreCommittedSettings();
+		UE_LOG(LogTemp, Warning, TEXT("Daedalus living painting: refused seed %lld size %dx%d cell size %g or missing world; active mural retained"),
+		       static_cast<long long>(InSeed), InWidth, InHeight, static_cast<double>(InCellSize));
 		return false;
 	}
+	auto Candidate = MakeUnique<daedalus::gallery::Painting>(static_cast<int64_t>(InSeed), InWidth, InHeight);
 	UStaticMesh* Plane = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Plane.Plane"));
 	UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
-	const float W = Width * CellSize, H = Height * CellSize;
-	Panel->SetRelativeLocation(FVector(-6.f, 0.f, H * 0.5f));
-	Panel->SetRelativeScale3D(FVector(0.1f, (W + 20.f) / 100.f, (H + 20.f) / 100.f));
-	for (int32 Y = 0; Y < Height; ++Y)
+	if (!Candidate->Valid() || !Plane || !Base)
 	{
-		for (int32 X = 0; X < Width; ++X)
+		RestoreCommittedSettings();
+		UE_LOG(LogTemp, Warning, TEXT("Daedalus living painting: replacement geometry/material unavailable; active mural retained"));
+		return false;
+	}
+	TArray<TObjectPtr<UStaticMeshComponent>> PreparedParts;
+	TArray<TObjectPtr<UMaterialInstanceDynamic>> PreparedMats;
+	PreparedParts.Reserve(Candidate->CellCount());
+	PreparedMats.Reserve(Candidate->CellCount());
+	auto RefusePrepared = [this, &PreparedParts]()
+	{
+		for (UStaticMeshComponent* Part : PreparedParts)
 		{
-			UStaticMeshComponent* C = NewObject<UStaticMeshComponent>(this, *FString::Printf(TEXT("Cell_%d_%d"), X, Y));
+			if (Part) { Part->DestroyComponent(); RemoveInstanceComponent(Part); }
+		}
+		RestoreCommittedSettings();
+		UE_LOG(LogTemp, Warning, TEXT("Daedalus living painting: could not prepare replacement cells; active mural retained"));
+		return false;
+	};
+	const float W = InWidth * InCellSize, H = InHeight * InCellSize;
+	for (int32 Y = 0; Y < InHeight; ++Y)
+	{
+		for (int32 X = 0; X < InWidth; ++X)
+		{
+			// Reusing a live component's Outer/name could replace it before commit.
+			UStaticMeshComponent* C = NewObject<UStaticMeshComponent>(this,
+				MakeUniqueObjectName(this, UStaticMeshComponent::StaticClass(), FName(TEXT("MuralCell"))), RF_Transient);
+			if (!C) { return RefusePrepared(); }
+			// The actor retains staged components (and their materials) for GC until commit/cleanup.
+			AddInstanceComponent(C);
+			PreparedParts.Add(C);
 			C->SetupAttachment(Body);
 			C->SetMobility(EComponentMobility::Movable);
 			C->SetCollisionProfileName(TEXT("NoCollision"));
-			if (Plane) { C->SetStaticMesh(Plane); }
+			C->SetVisibility(false);
+			C->SetStaticMesh(Plane);
 			// Plane faces +Z; stand it up facing +X. Row 0 is the top of the mural.
 			C->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
-			C->SetRelativeLocation(FVector(0.f, (X + 0.5f) * CellSize - W * 0.5f, H - (Y + 0.5f) * CellSize));
-			C->SetRelativeScale3D(FVector(CellSize * 0.009f, CellSize * 0.009f, 1.f));
+			C->SetRelativeLocation(FVector(0.f, (X + 0.5f) * InCellSize - W * 0.5f, H - (Y + 0.5f) * InCellSize));
+			C->SetRelativeScale3D(FVector(InCellSize * 0.009f, InCellSize * 0.009f, 1.f));
+			UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);
+			if (!M) { return RefusePrepared(); }
+			M->SetFlags(RF_Transient);
+			M->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.35f, 0.35f, 0.35f));
+			C->SetMaterial(0, M);
+			PreparedMats.Add(M);
 			C->RegisterComponent();
-			UMaterialInstanceDynamic* M = Base ? UMaterialInstanceDynamic::Create(Base, this) : nullptr;
-			if (M) { C->SetMaterial(0, M); }
-			CellParts.Add(C);
-			CellMats.Add(M);
-			Recolour(X, Y);
+			if (!C->IsRegistered()) { return RefusePrepared(); }
 		}
 	}
+	// Nothing above changed progress, supplies, knowledge, awake/glow or the live panel.
+	TArray<TObjectPtr<UStaticMeshComponent>> PreviousParts = MoveTemp(CellParts);
+	Mural = MoveTemp(Candidate);
+	Seed = InSeed; Width = InWidth; Height = InHeight; CellSize = InCellSize;
+	CommittedCellSize = InCellSize;
+	CellParts = MoveTemp(PreparedParts);
+	CellMats = MoveTemp(PreparedMats);
+	PaintedWith.Init(-1, Mural->CellCount());
+	bAwake = false;
+	Glow->SetIntensity(0.f);
+	Panel->SetRelativeLocation(FVector(-6.f, 0.f, H * 0.5f));
+	Panel->SetRelativeScale3D(FVector(0.1f, (W + 20.f) / 100.f, (H + 20.f) / 100.f));
+	for (UStaticMeshComponent* Part : PreviousParts)
+	{
+		if (Part) { Part->DestroyComponent(); RemoveInstanceComponent(Part); }
+	}
+	for (UStaticMeshComponent* Part : CellParts) { Part->SetVisibility(true); }
 	return true;
 }
 

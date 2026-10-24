@@ -104,8 +104,17 @@ public:
     bool IsFireReady() const { return !Over && Bullets.size()<MaxBullets && Player.Cooldown==0; }
     std::size_t EntityCount() const { return Rocks.size()+Bullets.size()+Ufos.size(); }
     void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed;
         Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; RespawnGrace=0; UfoTimer=300;
         Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng); CreateRocks(6);
+    }
+    bool SourceControllerButton(int Button) override {
+        if(Over && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        return false;
+    }
+    bool SourceKeyDown(int Key) override {
+        if(Over && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        return false;
     }
     void Step(const Input& I) override {
         if(Over) return;
@@ -197,17 +206,18 @@ public:
             F.AddRect(170,225,460,115,{15,20,35,235});
             F.AddText(285,238,"GAME OVER",Red,40);
             F.AddText(200,290,"Wave "+std::to_string(Level)+"   Final score "+std::to_string(Score),White,18);
-            F.AddText(200,315,"Fresh R press or cabinet Restart to retry",Cyan,17);
+            F.AddText(185,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
         }
     }
     Status GetStatus() const override {
-        if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; fresh R press or cabinet Restart to retry"};
+        if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
         return {Score,Lives,false,false,"Wave "+std::to_string(Level)+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
             "; "+ProtectionNote()+"; fire "+FireNote()+"; turn / thrust / hold fire"};
     }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
     std::array<shooter_detail::Star,80> Stars{};
+    std::uint32_t SessionSeed=730;
     std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0; bool Over=false;
     std::string ProtectionNote() const {
         // The source-style timer decrements before the next collision pass.
@@ -297,8 +307,17 @@ public:
     bool IsFireReady() const { return !Over && !Won && Bullets.size()+3<=MaxBullets && Pilot.Cooldown==0; }
     std::size_t EntityCount() const { return Bullets.size()+Enemies.size()+Powerups.size()+(BossActive?1:0); }
     void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed;
         Rng.Seed(Seed); Pilot=Player{}; Score=0; SpawnTimer=0; Over=false; Won=false; BossActive=false; Boss=Enemy{};
         Bullets.clear(); Enemies.clear(); Powerups.clear(); shooter_detail::MakeStars(Stars,Rng);
+    }
+    bool SourceControllerButton(int Button) override {
+        if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        return false;
+    }
+    bool SourceKeyDown(int Key) override {
+        if((Over || Won) && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        return false;
     }
     void Step(const Input& I) override {
         if(Over || Won) return;
@@ -370,17 +389,18 @@ public:
             const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":"GAME OVER"):"BOSS DEFEATED!";
             F.AddText(175,238,Result,Over?Red:Green,30);
             F.AddText(175,285,"Final score: "+std::to_string(Score),White,20);
-            F.AddText(175,315,"Fresh R press or cabinet Restart to retry",Cyan,17);
+            F.AddText(175,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
         }
     }
     Status GetStatus() const override {
         if(Over || Won) return {Score,Pilot.Lives,Over,Won,(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
-            std::string("; final score ")+std::to_string(Score)+"; fresh R press or cabinet Restart to retry"};
+            std::string("; final score ")+std::to_string(Score)+"; pad A/Start, Enter/Space or R/Restart to retry"};
         return {Score,Pilot.Lives,false,false,BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
             "; "+ShotName()+"; speed "+std::to_string(static_cast<int>(Pilot.Speed))+"/8; "+ProtectionNote()+"; fire "+FireNote()};
     }
 private:
     Random Rng; Player Pilot; Enemy Boss; std::vector<Bullet> Bullets; std::vector<Enemy> Enemies; std::vector<Powerup> Powerups;
+    std::uint32_t SessionSeed=730;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int SpawnTimer=0; bool Over=false,Won=false,BossActive=false;
     static const char* PickupName(PowerKind Kind) { return Kind==PowerKind::Power?"POWER":(Kind==PowerKind::Speed?"SPEED":"LIFE"); }
