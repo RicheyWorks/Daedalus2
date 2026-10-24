@@ -140,7 +140,7 @@ bool ADaedalusLivingPainting::RebuildLayout(int64 InSeed, int32 InWidth, int32 I
 		{
 			// Reusing a live component's Outer/name could replace it before commit.
 			UStaticMeshComponent* C = NewObject<UStaticMeshComponent>(this,
-				MakeUniqueObjectName(this, UStaticMeshComponent::StaticClass(), FName(TEXT("MuralCell"))), RF_Transient);
+				MakeUniqueObjectName(this, UStaticMeshComponent::StaticClass(), FName(TEXT("MuralCell"))), RF_Transient | RF_DuplicateTransient);
 			if (!C) { return RefusePrepared(); }
 			// The actor retains staged components (and their materials) for GC until commit/cleanup.
 			AddInstanceComponent(C);
@@ -156,7 +156,7 @@ bool ADaedalusLivingPainting::RebuildLayout(int64 InSeed, int32 InWidth, int32 I
 			C->SetRelativeScale3D(FVector(InCellSize * 0.009f, InCellSize * 0.009f, 1.f));
 			UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);
 			if (!M) { return RefusePrepared(); }
-			M->SetFlags(RF_Transient);
+			M->SetFlags(RF_Transient | RF_DuplicateTransient);
 			M->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.35f, 0.35f, 0.35f));
 			C->SetMaterial(0, M);
 			PreparedMats.Add(M);
