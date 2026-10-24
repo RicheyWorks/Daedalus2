@@ -127,6 +127,17 @@ clicks; resume or start another board explicitly. Keyboard/gamepad actions remai
 available. Each accepted mouse press clears prior held inputs and acts once,
 without adding a timer step or changing first-reveal safety.
 
+Minesweeper also uses the native **How to play** panel (F1 / left-stick click).
+Readable sections explain the clear-every-safe-cell goal, safe opening, diagonal
+number clues, flood reveal, optional flags, the estimated mine counter, chording
+risks, mouse/keyboard/controller controls and exact-board save/continue. The
+current board pauses beneath the guide. Resume explicitly returns to a live board;
+Return paused and dismiss keys keep it paused, including after a result. The same
+bounded scroll, held-input guard and save warning behavior serves Star Shooter.
+Help is tied to the game that opened it and closes if the active game changes;
+it cannot resume a different game. No game rules, timer or save records change.
+Native guide layout/focus, mixed input and save/continue acceptance remain pending.
+
 `Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
 cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
 Saving before the first reveal retains its deterministic 3x3 safe opening. Continue

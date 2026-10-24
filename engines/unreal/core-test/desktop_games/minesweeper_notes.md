@@ -129,3 +129,18 @@ This is source/API evidence, not native acceptance: UHT/compilation, DPI/viewpor
 hit alignment, mouse buttons/double-click timing, focus and mixed controller input,
 paused/result clicks and actual save/continue still require runtime checks. No
 engine/editor or full suite was run for this slice.
+
+## Readable beginner guide
+
+The cabinet's existing native help panel now serves Minesweeper as well as Star.
+How to play / F1 / left-stick click pauses the current board and opens readable,
+wrapped, scrollable rules: reveal every safe cell, first-opening safety, diagonal
+number clues, flood/flag interaction, an estimated mine counter, optional chording
+and its risks, physical controls, exact save/continue and explicit result replay.
+No board action is required to dismiss the guide. Resume is explicit and fenced
+against terminal/pending-save states; Return paused and exit keys preserve pause.
+The panel captures the opening game ID and refuses to resume another active game.
+Underlying cabinet controls and mouse canvas stay disabled while help is open.
+This is native presentation only: no core, actor, timer, save operation or format
+changes. Source review is separate from pending layout/scroll/focus/input and
+save/replay runtime acceptance; no portable rule suite was repeated for UI copy.
