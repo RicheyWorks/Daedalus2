@@ -48,6 +48,7 @@ private:
 	FText StatusText() const;
 	FText ControlText() const;
 	FText LeaderboardText() const;
+	FText MinesweeperDifficultyText() const;
 	EVisibility StarVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;

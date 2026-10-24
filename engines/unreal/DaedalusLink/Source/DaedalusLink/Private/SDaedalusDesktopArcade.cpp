@@ -18,6 +18,7 @@
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
+#include "Widgets/Layout/SWrapBox.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/SLeafWidget.h"
 #include "Widgets/SWeakWidget.h"
@@ -269,22 +270,43 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
-				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
-				[MakeAction(TEXT("Save board"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }))]
-				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
+				+ SWrapBox::Slot()
+				[MakeAction(TEXT("Save board"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }), false, true)]
+				+ SWrapBox::Slot()
 				[
-					SNew(SButton).IsFocusable(false).ContentPadding(FMargin(12.f, 6.f))
+					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(12.f, 6.f))
 					.ToolTipText(FText::FromString(TEXT("Replace the current board with the last saved Minesweeper board.")))
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetState().bHasSavedRun; })
 					.OnClicked_Lambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ResumeGame(); return FocusReply(); })
 					[SNew(STextBlock).Text(FText::FromString(TEXT("Continue saved board")))]
 				]
-				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				+ SWrapBox::Slot()
 				[MakeAction(TEXT("Save & Close"), FSimpleDelegate::CreateLambda([this]()
 				{
 					if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->SaveGame()) Actor->CloseArcade();
-				}))]
+				}), false, true)]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SVerticalBox).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
+				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 4.f)
+				[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::MinesweeperDifficultyText).AutoWrapText(true)]
+				+ SVerticalBox::Slot().AutoHeight()
+				[
+					SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f))
+					+ SWrapBox::Slot()
+					[MakeAction(TEXT("9 x 9 / 10 mines"), FSimpleDelegate::CreateLambda([this]()
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(0); }), true, true)]
+					+ SWrapBox::Slot()
+					[MakeAction(TEXT("16 x 16 / 40 mines"), FSimpleDelegate::CreateLambda([this]()
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(1); }), true, true)]
+					+ SWrapBox::Slot()
+					[MakeAction(TEXT("30 x 16 / 99 mines"), FSimpleDelegate::CreateLambda([this]()
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(2); }), true, true)]
+				]
+				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 4.f, 0.f, 0.f)
+				[SNew(STextBlock).Text(FText::FromString(TEXT("New board replaces the current board. Save board first to keep progress. The saved board stays unchanged."))).AutoWrapText(true)]
 			]
 			+ SVerticalBox::Slot().FillHeight(1.f)
 			[SNew(DAUI::SGameCanvas).Game(Game)]
@@ -442,6 +464,16 @@ EVisibility SDaedalusDesktopArcade::MinesweeperVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("minesweeper") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+FText SDaedalusDesktopArcade::MinesweeperDifficultyText() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	if (!Actor || Actor->GetSelectedGameId() != TEXT("minesweeper")) return FText::GetEmpty();
+	const int32 Option = Actor->GetState().Option;
+	const TCHAR* Board = Option == 0 ? TEXT("9 x 9 / 10 mines") : Option == 1 ? TEXT("16 x 16 / 40 mines")
+		: Option == 2 ? TEXT("30 x 16 / 99 mines") : TEXT("unavailable");
+	return FText::FromString(FString::Printf(TEXT("Current board: %s. New board:"), Board));
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

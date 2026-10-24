@@ -95,6 +95,16 @@ installation's Minesweeper cabinets, separate from Star Shooter's files.
 F5 saves and F9 continues the saved board. While paused, gamepad X saves and Y
 continues the saved board; P / Start returns to play.
 
+The Minesweeper cabinet also exposes the engine's three existing **New board**
+presets: 9 x 9 with 10 mines, 16 x 16 with 40, and 30 x 16 with 99. The current preset
+comes from the actor's active option, including after Continue. Selecting any
+preset, even the current one, starts a fresh board at the retained seed. Save
+first to keep the current progress; changing size does not overwrite the saved
+board. Preset, Save board, Continue and Save & Close buttons support native focus
+navigation from the cabinet controls. Their rows wrap to the allotted width.
+Source review covers wiring/save preservation; native layout and controller
+traversal across sizes and Continue still require acceptance.
+
 `Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
 cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
 Saving before the first reveal retains its deterministic 3x3 safe opening. Continue
