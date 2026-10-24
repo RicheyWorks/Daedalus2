@@ -30,7 +30,7 @@ const source = [
   between("const STATUS =", "/* ---------- bestiary"), line("function wakeAt("),
   line("let B = null;"), line("const CMDS ="), line("const battleCmds ="),
   between("function nextChooser(", "/* Foe turns by"),
-  between("function drawBattle()", "/* ---------- title:"),
+  between("function statusPill(", "/* ---------- title:"),
   "this.api = { makeMember, battleItems, battleItemStock, fieldItems, itemStock, itemLine, battleTick, doAction, useItem, drawBattle, commands: () => CMDS, getBattle: () => B, setBattle: value => { B = value; } };"
 ].join("\n");
 let checks = 0;

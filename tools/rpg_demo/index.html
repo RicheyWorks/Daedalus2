@@ -1842,6 +1842,13 @@ function spellHint(s) {
     : s.status ? s.status.toUpperCase().replace(/_/g, " ") : s.element && s.element !== "none" ? s.element.toUpperCase() : "DAMAGE";
   return effect + " / " + target;
 }
+function statusPill(key, x, y) {
+  const info = STATUS[key]; if (!info) return;
+  x = Math.round(x); y = Math.round(y);
+  g.fillStyle = "#101526"; g.fillRect(x, y, 24, 9);
+  g.fillStyle = info.color; g.fillRect(x, y, 1, 9);
+  text(info.tag, x + 3, y + 1, info.color, null);
+}
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
   const compact = W < 320, split = compact ? 120 : 150, statsX = split + 8;
@@ -1852,7 +1859,6 @@ function drawBattle() {
     const fl = B.flash[f.key + f.x] || 0; if (fl > 0 && !settingsFramePaused) B.flash[f.key + f.x] = fl - 1 / 60;
     if (fl > 0 && Math.floor(fl * 30) % 2) continue;
     spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
-    const ft = f.hp > 0 ? tags(f) : []; if (ft.length) { const k = ft[Math.floor(B.t / 1.2) % ft.length]; text(STATUS[k].tag, f.x + f.size / 2 - tw(STATUS[k].tag) / 2, f.y + f.size - 6, STATUS[k].color, "#000000"); }
     if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
   }
   party.forEach((m, i) => {
@@ -1864,18 +1870,28 @@ function drawBattle() {
     const fr = D.rects.spells["fx:" + B.fx.name];
     if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [W - 62, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
   }
+  // Paint tags after every sprite and spell so overlapping foes cannot hide them.
+  for (const f of B.foes) {
+    const ft = f.hp > 0 ? tags(f) : [];
+    if (ft.length) statusPill(ft[Math.floor(B.t / 1.2) % ft.length], f.x + f.size / 2 - 12, f.y + f.size - 7);
+  }
   for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
   win(0, 144, split, 80); win(split, 144, W - split, 80);
+  const hpRight = W - (compact ? 36 : 44), mpRight = W - 10, pillX = W - (compact ? 84 : 104);
+  const statText = n => n > (compact ? 999 : 9999) ? (compact ? "999+" : "9999+") : String(n);
+  g.fillStyle = "#18182c"; g.fillRect(split + 7, 146, W - split - 16, 10);
+  text("PARTY", statsX, 147, "#a0a8c0"); text("HP", hpRight - 12, 147, "#a8e0a0"); text("MP", mpRight - 12, 147, "#a0c8ff");
   party.forEach((m, i) => {
-    const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
-    text(compact ? m.name.slice(0, 7) : m.name, statsX, y, c); text(m.hp, W - (compact ? 52 : 58) - tw(m.hp), y, c); text(m.mp, W - 12 - tw(m.mp), y, "#a0c8ff");
-    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, compact ? W - 44 : 216, compact ? y + 9 : y, STATUS[k].color); }
-    gauge(statsX, y + 9, compact ? 76 : 104, m.hp / m.max, "#58d058");
+    const y = 159 + i * 15, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff", hp = statText(m.hp), mp = statText(m.mp);
+    if (B.phase === "cmd" && B.who === i) { g.fillStyle = "#30304c"; g.fillRect(split + 6, y - 1, W - split - 14, 14); }
+    text(String(m.name).toUpperCase().slice(0, compact ? 7 : 9), statsX, y, c); text(hp, hpRight - tw(hp), y, c); text(mp, mpRight - tw(mp), y, "#a0c8ff");
+    const tg = tags(m); if (tg.length && m.hp > 0) statusPill(tg[Math.floor(B.t / 1.2) % tg.length], pillX, y - 1);
+    gauge(statsX, y + 9, hpRight - statsX - 2, m.hp / m.max, m.hp < m.max / 4 ? "#e8b85c" : "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
     const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13;
     cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
-    text(compact ? party[B.who].name.slice(0, 5) : party[B.who].name, 86, 152, "#fff070");
+    text(String(party[B.who].name).toUpperCase().slice(0, compact ? 5 : 9), 86, 152, "#fff070");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
     const m = party[B.who], called = new Set(B.summoned || []), planned = new Set(B.acts.filter(a => a.kind === "summon").map(a => a.spirit.name)), used = new Set([...called, ...planned]);
     const opts = B.sub === "summon" ? mySpirits().map(s => {

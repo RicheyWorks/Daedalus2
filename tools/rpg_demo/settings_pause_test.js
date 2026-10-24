@@ -15,7 +15,7 @@ const source = [
   between("const SETTINGS =", "/* A small notice"),
   between("function fieldTick(", "function land()"),
   between("function fishTick(", "function drawFishLog()"),
-  between("function drawBattle()", "/* ---------- title:"),
+  between("function statusPill(", "/* ---------- title:"),
   between('cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */', "/* ---------- name entry"),
   between('cv.addEventListener("pointerdown", e => {\n  if (mode !== "name"', "/* ---------- ending ---------- */"),
   between("function frame(", "/* ---------- harness hooks"),
