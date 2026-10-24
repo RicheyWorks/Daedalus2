@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 // G04 LAB07 Twin Doors actor (contract docs/contracts/twin-doors-v1, Java com.daedalus.world.labyrinth.TwinDoors,
 // prometheus core-test/twin_doors). Two bell guards stand by two doors; one always tells the truth, one always lies.
-// Interact once to ask your one question (default: the embedded question, which always solves), then Interact near a
-// door to open it. The safe door swings open (A -90, B +90 yaw, blender-team hinge sidecar); the wrong one resets the
+// Interact to talk to the guards, ask your one question (default: the embedded question, which always solves), and
+// deliberately choose a door. The safe door swings open (A -90, B +90 yaw, blender-team hinge sidecar); the wrong one resets the
 // riddle with the next seed. All rules live in DaedalusTwinDoorsCore.h (exception-free, core-test/twin_doors_plugin).
 // Meshes are engine shapes until the Bld_Lab_TwinDoors / _DoorA / _DoorB / Prop_Lab_GateRiddler art is READY.
 #pragma once
@@ -10,6 +10,7 @@
 #include "CoreMinimal.h"
 #include "DaedalusOrrery.h"
 #include "DaedalusTwinDoorsCore.h"
+#include "DaedalusTwinDoorsGuide.h"
 #include "DaedalusTwinDoors.generated.h"
 
 UENUM(BlueprintType)
@@ -39,7 +40,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|TwinDoors") int64 Seed = 1;
 	/** 0: the low bell means yes. 1: the bell meaning is hidden too. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|TwinDoors", meta = (ClampMin = "0", ClampMax = "1")) int32 Difficulty = 0;
-	/** The question Interact asks (guard AskGuard, about door AskDoor). */
+	/** The question the player can ask through the guard dialogue (guard AskGuard, about door AskDoor). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|TwinDoors") EDaedalusTwinQuestion AskQuestion = EDaedalusTwinQuestion::Embedded;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|TwinDoors", meta = (ClampMin = "0", ClampMax = "1")) int32 AskGuard = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|TwinDoors", meta = (ClampMin = "0", ClampMax = "1")) int32 AskDoor = 0;
@@ -78,7 +79,20 @@ public:
 
 private:
 	void Tell(const FString& Text);
-	int32 NearestDoor(const ADaedalusHero* Hero) const;
+	void ShowGuide(daedalus::twindoors::GuidePage Page);
+	void OnGuideChoice(const FString& Speaker, int32 Choice);
+	void StopGuide();
+	bool IsGuideCurrent() const;
+	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
+
+	TWeakObjectPtr<ADaedalusHero> ListeningHero;
+	FDelegateHandle GuideHandle;
+	daedalus::twindoors::GuidePage CurrentGuidePage = daedalus::twindoors::GuidePage::Welcome;
+	EDaedalusTwinQuestion PresentedQuestion = EDaedalusTwinQuestion::Embedded;
+	int32 PresentedGuard = 0, PresentedDoor = 0;
+	FString GuideRealm;
+	uint64 RiddleRevision = 0, GuideRevision = 0;
+	bool bEndingPlay = false;
 
 	TUniquePtr<daedalus::twindoors::Riddle> Riddle;
 	TUniquePtr<daedalus::twindoors::Session> Run;
