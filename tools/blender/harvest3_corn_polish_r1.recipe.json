@@ -1,0 +1,212 @@
+{
+  "schema": "daedalus.harvest3-corn-polish.recipe.v1",
+  "asset_id": "Prop_Harvest3_Corn_Polish_R1",
+  "revision": 1,
+  "parent_target": "Octet_Harvest_3_Plot0_Meadow_Crop_corn",
+  "parent_descriptor_seed": 300,
+  "parent_realm": "WORLD-ZERO",
+  "kind": "decorative corn patch",
+  "units": "metres",
+  "world_binding": null,
+  "source_node_index": 492,
+  "source_mesh_index": 109,
+  "source_pins": [
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-octets\\Octet_Harvest_3_Plot0_Meadow.glb",
+      "bytes": 2212076,
+      "sha256": "12eb0bcfb57e3070520328c236debc8de30461b5e4b48164ddb640b6b292d140"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-octets\\Octet_Harvest_3_Plot0_Meadow.fbx",
+      "bytes": 2069676,
+      "sha256": "a48452af6e5c46db4883ec8c6d33ffde100aba83e793409d40e5c89dab6425d4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-octets\\Octet_Harvest_3_Plot0_Meadow.json",
+      "bytes": 20017,
+      "sha256": "d13e997215766f98a7ee691ef1f729d138384a8787c0db2188580ebbb2b3a197"
+    }
+  ],
+  "source_node_transform": "identity; plot placement baked in POSITION",
+  "source_anchor_blender_m": [
+    -56.0,
+    -53.39999961853027,
+    0.10000020265579224
+  ],
+  "height_m": 1.4000000357627869,
+  "source_bounds_blender_m": [
+    [
+      -64.51961517333984,
+      -56.19999694824219,
+      0.10000020265579224
+    ],
+    [
+      -47.480384826660156,
+      -50.60000228881836,
+      1.500000238418579
+    ]
+  ],
+  "plant_centres_m": [
+    [
+      -8.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      -6.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      -4.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      -2.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      0.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      2.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      4.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      6.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      8.0,
+      -2.1999988555908203,
+      0.0
+    ],
+    [
+      -8.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      -6.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      -4.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      -2.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      0.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      2.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      4.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      6.0,
+      2.1999988555908203,
+      0.0
+    ],
+    [
+      8.0,
+      2.1999988555908203,
+      0.0
+    ]
+  ],
+  "materials": {
+    "stalk": {
+      "base_color_factor": [
+        0.3,
+        0.42,
+        0.13,
+        1
+      ],
+      "roughness": 0.9
+    },
+    "leaf": {
+      "base_color_factor": [
+        0.6000000238418579,
+        0.699999988079071,
+        0.25,
+        1
+      ],
+      "roughness": 0.8999999761581421
+    },
+    "cob": {
+      "base_color_factor": [
+        0.88,
+        0.56,
+        0.11,
+        1
+      ],
+      "roughness": 0.88
+    }
+  },
+  "budgets": {
+    "max_triangles": 3000,
+    "max_material_slots": 3
+  },
+  "future_selected_allowlist": {
+    "before": [
+      "Reference_Harvest3_Corn_Before_R1"
+    ],
+    "after": [
+      "Prop_Harvest3_Corn_Polish_R1"
+    ]
+  },
+  "future_output_root": "artifacts/harvest3-corn-polish-r1",
+  "matched_before_after_camera": {
+    "position_m": [
+      12,
+      -18,
+      9
+    ],
+    "target_m": [
+      0,
+      0,
+      0.7
+    ],
+    "orthographic_scale_m": 20,
+    "resolution": [
+      1100,
+      825
+    ],
+    "device": "CPU",
+    "threads": 2,
+    "samples": 24,
+    "scope": "one identical overview for each separately named before/after job, only under a future production grant"
+  },
+  "future_route": {
+    "reference": "PR173 f4bc5f1f tools/blender/sky_farm_greenhouse_existing_session_r1.py preserved-session pattern",
+    "required": "Versioned corn-specific operation binding and fresh baseline/grant/floors/own lease before any Blender call; do not call the frozen greenhouse run() or edit its constants",
+    "preserve": "All existing scenes/context and original GLB/FBX/descriptor/hero files; whole-session copy; selected ACTIVE-scene export only",
+    "no_replay": "New explicit output revision; reconcile actual state and partial outputs on unknown outcome"
+  },
+  "stage": "SOURCE_PREPARED_NO_BLENDER_EXPORT_RENDER",
+  "authority": "Decorative source only; no crop/growth/reward/native gameplay bindings"
+}
