@@ -115,6 +115,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void SubmitArcadeSourceKey(int32 Key);
 	/** Source controller A=0 / Start=1; true consumes the source action before generic pause. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SubmitArcadeSourceControllerButton(int32 Button);
+	/** Logical canvas pointer press: 0 left, 1 right, 2 middle. No time step or automatic resume. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SubmitArcadeSourcePointerButton(double X, double Y, int32 Button);
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();

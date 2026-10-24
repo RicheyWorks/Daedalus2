@@ -118,11 +118,22 @@ navigation from the cabinet controls. Their rows wrap to the allotted width.
 Source review covers wiring/save preservation; native layout and controller
 traversal across sizes and Continue still require acceptance.
 
+The native board also accepts **left click to reveal**, **right click to toggle a
+flag**, and **middle click to chord** an open number. Chording keeps the existing
+matching-flag rule; matching flags can still be wrong. Clicks select the rendered
+cell at the current canvas scale, including its narrow gutter. Letterboxing and
+clicks outside the grid do nothing. A paused or completed board ignores gameplay
+clicks; resume or start another board explicitly. Keyboard/gamepad actions remain
+available. Each accepted mouse press clears prior held inputs and acts once,
+without adding a timer step or changing first-reveal safety.
+
 `Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
 cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
 Saving before the first reveal retains its deterministic 3x3 safe opening. Continue
 does not add elapsed wall time or restore held inputs. Won and lost boards retain
 their result. Invalid saves leave the current run and saved file intact.
+Several mouse presses can produce a valid loss before the first timer step; that
+zero-tick result also roundtrips in the same `DGM1` format.
 
 The focused portable test covers all difficulties, pre-reveal and planted roundtrips,
 continued play through completion/loss, refused saves, input cleanup and Star save

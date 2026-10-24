@@ -15,6 +15,11 @@ class MinesweeperGame final : public Game {
     bool Planted=false, Lost=false, Won=false, WasMoving=false;
     std::uint64_t Ticks=0;
     std::uint32_t BoardSeed=730;
+    struct BoardLayout {double Size,Left,Top;};
+    BoardLayout GetBoardLayout() const {
+        const double Size=std::min(740.0/Width,440.0/Height);
+        return {Size,(800-Width*Size)/2,90};
+    }
     int Index(int C,int R) const { return R*Width+C; }
     template<class F> void Neighbours(int I,F Fn) const {
         for(int Dy=-1;Dy<=1;++Dy) for(int Dx=-1;Dx<=1;++Dx) {
@@ -46,6 +51,15 @@ class MinesweeperGame final : public Game {
         }
         int Open=0;for(const auto& C:Cells) if(C.Open&&!C.Mine) ++Open;
         Won=Open==Width*Height-Mines;
+    }
+    void ApplyCellActions(const Input& I) {
+        const int N=Index(X,Y);
+        if(I.ActionPressed&&!Cells[N].Open) Cells[N].Flag=!Cells[N].Flag;
+        if(I.FirePressed||I.JumpPressed) Reveal(N);
+        if(I.DashPressed&&Cells[N].Open) {
+            int Flags=0;Neighbours(N,[&](int J){if(Cells[J].Flag) ++Flags;});
+            if(Flags==Cells[N].Near) Neighbours(N,[&](int J){Reveal(J);});
+        }
     }
     static bool ReadNumber(std::istream& In,std::uint64_t Limit,std::uint64_t& Out) {
         std::string Token;
@@ -101,6 +115,16 @@ public:
         if(Button==0 && (Lost||Won)) {Reset(BoardSeed);return true;}
         return false;
     }
+    bool SourcePointerButton(double Px,double Py,int Button) override {
+        if(Cells.empty() || Lost || Won || Button<0 || Button>2 || !std::isfinite(Px) || !std::isfinite(Py)) return false;
+        const auto L=GetBoardLayout();
+        if(Px<L.Left || Px>=L.Left+Width*L.Size || Py<L.Top || Py>=L.Top+Height*L.Size) return false;
+        X=std::min(Width-1,static_cast<int>((Px-L.Left)/L.Size));
+        Y=std::min(Height-1,static_cast<int>((Py-L.Top)/L.Size));
+        Repeat=0;WasMoving=false;
+        Input I;I.FirePressed=Button==0;I.ActionPressed=Button==1;I.DashPressed=Button==2;
+        ApplyCellActions(I);return true;
+    }
     std::string SaveState() const override {
         if(Cells.size()!=static_cast<std::size_t>(Width*Height)) return {};
         std::ostringstream Out;Out.imbue(std::locale::classic());
@@ -138,7 +162,8 @@ public:
             if(MineCount || OpenSafe || OpenMines || SavedTicks || SavedLost || SavedWon) return false;
         } else {
             if(MineCount!=Candidate.Mines || OpenSafe==0 || OpenMines>1
-                || (SavedLost && (OpenSafe==Candidate.Width*Candidate.Height-Candidate.Mines || SavedTicks==0))
+                // Several pointer events can reveal safely then lose before the next timer step.
+                || (SavedLost && OpenSafe==Candidate.Width*Candidate.Height-Candidate.Mines)
                 || (SavedLost!=0)!=(OpenMines==1)
                 || (SavedWon!=0)!=(OpenSafe==Candidate.Width*Candidate.Height-Candidate.Mines && !SavedLost)) return false;
             for(int I=0;I<Candidate.Width*Candidate.Height;++I)
@@ -158,13 +183,7 @@ public:
         if(Moving&&(!WasMoving||++Repeat>=10)) {X=std::max(0,std::min(Width-1,X+Dx));Y=std::max(0,std::min(Height-1,Y+Dy));Repeat=0;}
         if(!Moving) Repeat=0;
         WasMoving=Moving;
-        int N=Index(X,Y);
-        if(I.ActionPressed&&!Cells[N].Open) Cells[N].Flag=!Cells[N].Flag;
-        if(I.FirePressed||I.JumpPressed) Reveal(N);
-        if(I.DashPressed&&Cells[N].Open) {
-            int Flags=0;Neighbours(N,[&](int J){if(Cells[J].Flag) ++Flags;});
-            if(Flags==Cells[N].Near) Neighbours(N,[&](int J){Reveal(J);});
-        }
+        ApplyCellActions(I);
     }
     Status GetStatus() const override {
         int Open=0;for(const auto& C:Cells) Open+=C.Open&&!C.Mine?1:0;
@@ -173,7 +192,7 @@ public:
     void Render(Frame& F) const override {
         F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"MINESWEEPER",{116,224,195,255},26);
         F.AddText(25,48,ProgressNote(),White,18);
-        double Size=std::min(740.0/Width,440.0/Height),Left=(800-Width*Size)/2,Top=90;
+        const auto L=GetBoardLayout();const double Size=L.Size,Left=L.Left,Top=L.Top;
         for(int I=0;I<Width*Height;++I) {
             const auto& C=Cells[I];double Px=Left+(I%Width)*Size,Py=Top+(I/Width)*Size;
             F.AddRect(Px,Py,Size-1,Size-1,C.Open?Color{39,55,68,255}:Color{78,106,119,255});

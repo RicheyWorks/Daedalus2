@@ -115,7 +115,10 @@ int main() {
     Refuse(Pack(BadLoss)); // cannot lose after the board was already cleared
     BadLoss=Tokens;BadLoss[5]="0";BadLoss[7]="1";
     for(char& C:BadLoss[9]) if((C-'0')&1) {C='3';break;}
-    Refuse(Pack(BadLoss)); // first reveal cannot lose
+    MinesweeperGame FastLoss;
+    Check(FastLoss.RestoreState(Pack(BadLoss),1) && FastLoss.SaveState()==Pack(BadLoss),"multiple pointer events can produce a valid zero-tick later loss");
+    for(char& C:BadLoss[9]) if(!((C-'0')&1)) C='0';
+    Refuse(Pack(BadLoss)); // a first-reveal loss still cannot have any safe cell open
     auto Maximum=Tokens;Maximum[5]="18446744073709551615";
     MinesweeperGame Saturated;
     Check(Saturated.RestoreState(Pack(Maximum),1),"uint64 maximum timer accepted without overflow");

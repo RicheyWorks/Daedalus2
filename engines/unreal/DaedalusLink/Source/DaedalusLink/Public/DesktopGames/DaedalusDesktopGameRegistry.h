@@ -85,6 +85,11 @@ public:
         if(!Active || Paused || !Active->SourceControllerButton(Button)) return false;
         Controls={}; Refresh(); return true;
     }
+    bool SourcePointerButton(double X,double Y,int Button) {
+        if(!Active || IsPaused() || HasSaveRequest() || Button<0 || Button>2 || !std::isfinite(X) || !std::isfinite(Y)
+            || !Active->SourcePointerButton(X,Y,Button)) return false;
+        Controls={};Refresh();return true;
+    }
     void SetPaused(bool Value) { Paused=Active && Active->OwnPause(Value) ? false : Value; Controls={}; PendingSeconds=0; }
     bool IsPaused() const { return Paused || (Active && Active->IsCorePaused()); }
     int Advance(double DeltaSeconds) {

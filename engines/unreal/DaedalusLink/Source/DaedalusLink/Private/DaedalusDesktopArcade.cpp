@@ -130,6 +130,13 @@ bool ADaedalusDesktopArcade::SubmitArcadeSourceControllerButton(int32 Button)
 	return Session.SourceControllerButton(Button);
 }
 
+bool ADaedalusDesktopArcade::SubmitArcadeSourcePointerButton(double X, double Y, int32 Button)
+{
+	if (bClosing || bCloseScheduled || !Session.SourcePointerButton(X, Y, Button)) return false;
+	ResetPresentationInput();
+	return true;
+}
+
 void ADaedalusDesktopArcade::ResetPresentationInput()
 {
 	Session.ClearInput();

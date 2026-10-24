@@ -37,7 +37,7 @@ so Restart and later difficulty changes retain their established deterministic b
 
 ## Focused verification
 
-`minesweeper_test.cpp` runs 213 checks using real input transitions and resumed
+`minesweeper_test.cpp` runs 214 checks using real input transitions and resumed
 boards: all three difficulties at seeds 0, 730 and UINT32_MAX; flags/cursor/timer;
 first-reveal safety; completion and loss; rendered adjacency/result parity; malformed
 save preservation; timer saturation; driver pause/input cleanup and seed adoption;
@@ -87,3 +87,45 @@ repeat cleanup, restored seed/difficulty, paused refusal, stale-edge cleanup and
 modeled A forwarding. The same test against the preceding header passed12/19,
 failing7 missing-replay/guidance checks as expected; post-replay assertions skip
 when the old core correctly cannot proceed. Original DGM1 snapshots stay restorable.
+
+## Native mouse play
+
+Left press reveals, right press toggles a flag and middle press chords. The canvas
+inverts the same native scale/letterbox transform used to paint; core hit testing
+shares the rendered board geometry. Top/left bounds and the narrow cell gutters
+are included; right/bottom bounds, letterboxing and nonfinite coordinates are
+excluded. The selected cell follows a valid press. Existing first-reveal, flag,
+flood, chord and win/loss rules are shared with keyboard/gamepad input.
+
+The optional `Game::SourcePointerButton`/Driver hook consumes one press without a
+fixed step. Paused, terminal and save-pending play is fenced. Accepted presses clear
+prior semantic/held input through the existing presentation helper. Double-clicks
+dispatch their physical second press once through Slate's double-click override;
+there is no automatic retry or pause exit. Other games keep the default refusal.
+Actor changes are limited to a pointer-input declaration and forwarding method;
+save paths and file operations are unchanged.
+
+Two immediate presses can safely plant and then lose at `activeTicks == 0`.
+`DGM1` now accepts this valid later-loss state. It still requires safe cells already
+open, exactly one open mine, the correct mine count and consistent terminal bits.
+Impossible first-reveal losses and malformed records remain atomically refused;
+no format/version change or artificial timer advancement is introduced.
+
+`desktop_minesweeper_pointer` / `minesweeper_pointer_test.cpp` passed 197/197 strict
+single-TU MSVC checks, using actual rendered cell centers across all presets and
+three seeds, bounds/gutters, flagging, safe openings, successful/wrong-flag chords,
+complete wins, zero-tick loss restoration, paused/terminal refusal and stale-input
+cleanup across catch-up steps. The save/resume suite passed 214/214 after its
+zero-tick assertion was updated and impossible-first-loss refusal retained.
+Private controlled variants prove the new regressions: disabling the pointer
+hook passed 51/156 (105 failures; planting-dependent checks skip), and restoring
+the old zero-tick loss rejection passed 178/197 (19 failures). Both exited 1;
+the repository sources were never reverted. Build/run only the named CMake target,
+or compile the single test as C++17 against the plugin Public directory.
+
+Two targeted source reviews found no blockers. Installed UE5.8 source confirms
+double-click routing has no unhandled fallback to a second mouse-down dispatch.
+This is source/API evidence, not native acceptance: UHT/compilation, DPI/viewport
+hit alignment, mouse buttons/double-click timing, focus and mixed controller input,
+paused/result clicks and actual save/continue still require runtime checks. No
+engine/editor or full suite was run for this slice.

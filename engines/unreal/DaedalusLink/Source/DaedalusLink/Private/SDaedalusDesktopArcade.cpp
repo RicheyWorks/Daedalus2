@@ -86,6 +86,18 @@ namespace DesktopArcadeUI
 	{
 		return FMath::IsFinite(P.X) && FMath::IsFinite(P.Y) && FMath::Abs(P.X) < 1000000.0 && FMath::Abs(P.Y) < 1000000.0;
 	}
+	bool CanvasTransform(const FGeometry& Geometry, const daedalus::desktop::Frame& Picture, FVector2f& LogicalSize, float& Scale, FVector2f& Offset)
+	{
+		if (!FMath::IsFinite(Picture.Width) || !FMath::IsFinite(Picture.Height) || Picture.Width <= 0 || Picture.Height <= 0
+			|| Picture.Width > 10000 || Picture.Height > 10000) return false;
+		const FVector2f LocalSize = Geometry.GetLocalSize();
+		if (!FMath::IsFinite(LocalSize.X) || !FMath::IsFinite(LocalSize.Y) || LocalSize.X <= 0 || LocalSize.Y <= 0) return false;
+		LogicalSize = FVector2f(static_cast<float>(Picture.Width), static_cast<float>(Picture.Height));
+		Scale = FMath::Min(LocalSize.X / LogicalSize.X, LocalSize.Y / LogicalSize.Y);
+		if (!FMath::IsFinite(Scale) || Scale <= 0.f) return false;
+		Offset = (LocalSize - LogicalSize * Scale) * 0.5f;
+		return true;
+	}
 
 	/** Commands remain in std::vector. Only trivial Slate vertices/indices use TArray. */
 	class SGameCanvas : public SLeafWidget
@@ -96,19 +108,31 @@ namespace DesktopArcadeUI
 		SLATE_END_ARGS()
 		void Construct(const FArguments& Args) { Game = Args._Game; SetCanTick(false); }
 		virtual FVector2D ComputeDesiredSize(float LayoutScaleMultiplier) const override { return FVector2D(800.f, 600.f); }
+		virtual FReply OnMouseButtonDown(const FGeometry& Geometry, const FPointerEvent& Event) override
+		{
+			ADaedalusDesktopArcade* Actor = Game.Get();
+			if (!Actor) return FReply::Unhandled();
+			const FKey Key = Event.GetEffectingButton();
+			const int32 Button = Key == EKeys::LeftMouseButton ? 0 : Key == EKeys::RightMouseButton ? 1 : Key == EKeys::MiddleMouseButton ? 2 : -1;
+			if (Button < 0) return FReply::Unhandled();
+			const auto& Picture = Actor->GetArcadeFrame();
+			FVector2f LogicalSize, Offset; float Scale;
+			if (!CanvasTransform(Geometry, Picture, LogicalSize, Scale, Offset)) return FReply::Unhandled();
+			const FVector2D Local = Geometry.AbsoluteToLocal(Event.GetScreenSpacePosition());
+			const double X = (Local.X - Offset.X) / Scale, Y = (Local.Y - Offset.Y) / Scale;
+			if (X >= 0 && X < LogicalSize.X && Y >= 0 && Y < LogicalSize.Y) Actor->SubmitArcadeSourcePointerButton(X, Y, Button);
+			// Bubble to the cabinet's existing focus handler; the canvas never traps keyboard focus.
+			return FReply::Unhandled();
+		}
+		virtual FReply OnMouseButtonDoubleClick(const FGeometry& Geometry, const FPointerEvent& Event) override { return OnMouseButtonDown(Geometry, Event); }
 		virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& Geometry, const FSlateRect& CullRect,
 			FSlateWindowElementList& Elements, int32 LayerId, const FWidgetStyle& Style, bool bParentEnabled) const override
 		{
 			const ADaedalusDesktopArcade* Actor = Game.Get();
 			if (!Actor) return LayerId;
 			const daedalus::desktop::Frame& Picture = Actor->GetArcadeFrame();
-			if (!FMath::IsFinite(Picture.Width) || !FMath::IsFinite(Picture.Height)
-				|| Picture.Width <= 0.0 || Picture.Height <= 0.0 || Picture.Width > 10000.0 || Picture.Height > 10000.0) return LayerId;
-			const FVector2f LocalSize = Geometry.GetLocalSize();
-			const FVector2f LogicalSize(static_cast<float>(Picture.Width), static_cast<float>(Picture.Height));
-			const float Scale = FMath::Min(LocalSize.X / LogicalSize.X, LocalSize.Y / LogicalSize.Y);
-			if (!FMath::IsFinite(Scale) || Scale <= 0.f) return LayerId;
-			const FVector2f Offset = (LocalSize - LogicalSize * Scale) * 0.5f;
+			FVector2f LogicalSize, Offset; float Scale;
+			if (!CanvasTransform(Geometry, Picture, LogicalSize, Scale, Offset)) return LayerId;
 			const FGeometry Screen = Geometry.MakeChild(LogicalSize, FSlateLayoutTransform(Scale, Offset));
 			const FLinearColor StyleTint = Style.GetColorAndOpacityTint();
 			FSlateDrawElement::MakeBox(Elements, LayerId, Geometry.ToPaintGeometry(), WhiteBrush(), ESlateDrawEffect::None, FLinearColor::Black * StyleTint);
@@ -617,7 +641,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
 	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
-	if (Id == TEXT("minesweeper")) Text += TEXT("J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
+	if (Id == TEXT("minesweeper")) Text += TEXT("Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
