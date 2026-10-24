@@ -10,9 +10,11 @@
 #include "CoreMinimal.h"
 #include "DaedalusOrrery.h"
 #include "DaedalusBrewMelodyCore.h"
+#include "TimerManager.h"
 #include "DaedalusBrewBench.generated.h"
 
 class IHttpRequest;
+class ADaedalusDesktopArcade;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusMelodyServed, const FString&, Item, int32, Tier, const FString&, FoundTune);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDaedalusMelodyRefused, int32, Status, const FString&, Reason);
@@ -87,11 +89,29 @@ public:
 	/** The bench that listens; when empty, the nearest ADaedalusMelodyBench within BenchReach. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") TObjectPtr<ADaedalusMelodyBench> Bench;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Brew") float BenchReach = 3000.f;
+	/** Opt-in player menu. Legacy brew-record cycling remains the default. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Jukebox") bool bOfferActivityMenu = false;
+	/** Explicit same-world native catalog host; no new game or persistence framework. */
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Daedalus|Jukebox") TObjectPtr<ADaedalusDesktopArcade> Minigames;
 
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Brew") FString NowPlaying() const { return Playing; }
 
+protected:
+	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
+
 private:
 	ADaedalusMelodyBench* FindBench() const;
+	bool OpenActivityMenu(ADaedalusHero* Hero);
+	bool IsActivityMenuCurrent() const;
+	void ShowActivityMenu(const FString& UnavailableMode = FString());
+	void OnActivityChoice(const FString& Speaker, int32 Choice);
+	void StopActivityMenu();
+	TWeakObjectPtr<ADaedalusHero> MenuHero;
+	FString MenuRealm;
+	FDelegateHandle MenuChoiceHandle;
+	FTimerHandle PendingMinigames;
+	bool bUnavailableMenu = false;
+	bool bEndingActivities = false;
 	int32 Next = 0;
 	FString Playing;
 };
