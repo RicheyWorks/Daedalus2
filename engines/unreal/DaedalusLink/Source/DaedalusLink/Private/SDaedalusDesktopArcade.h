@@ -7,6 +7,8 @@
 #include "Widgets/Input/SComboBox.h"
 #include "Widgets/SCompoundWidget.h"
 
+class SScrollBox;
+
 /** Standalone presentation/input host. The actor owns the portable Driver, persistence and pause lease. */
 class SDaedalusDesktopArcade : public SCompoundWidget
 {
@@ -20,6 +22,7 @@ public:
 	static TSharedRef<SWidget> MakeForegroundHost(ULocalPlayer* Player, UGameViewportClient* Viewport, const TSharedRef<SWidget>& Content);
 	virtual ~SDaedalusDesktopArcade() override;
 	virtual bool SupportsKeyboardFocus() const override { return true; }
+	virtual FReply OnPreviewKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
 	virtual FReply OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
 	virtual FReply OnKeyUp(const FGeometry& Geometry, const FKeyEvent& Event) override;
 	virtual FReply OnAnalogValueChanged(const FGeometry& Geometry, const FAnalogInputEvent& Event) override;
@@ -40,6 +43,13 @@ private:
 	FReply BrowseCatalog();
 	FReply SwitchGame();
 	FReply KeepPlaying();
+	TSharedRef<SWidget> StarHelpPanel();
+	FReply ShowStarHelp();
+	FReply DismissStarHelp(bool bResume);
+	FReply FocusStarHelp();
+	FReply ScrollStarHelp(float Delta);
+	bool CanResumeStarHelp() const;
+	FText StarHelpNotice() const;
 	void FocusGame();
 	FReply FocusReply();
 	FText CurrentTitle() const;
@@ -59,6 +69,10 @@ private:
 	TWeakObjectPtr<ADaedalusDesktopArcade> Game;
 	FTSTicker::FDelegateHandle CoreTickHandle;
 	TSharedPtr<SComboBox<TSharedPtr<FString>>> CatalogSelector;
+	TSharedPtr<SScrollBox> StarHelpScroll;
+	TSharedPtr<SWidget> StarHelpResume;
+	TSharedPtr<SWidget> StarHelpReturn;
+	bool bStarHelpOpen = false;
 	TArray<TSharedPtr<FString>> GameItems;
 	TSet<FKey> HeldKeys;
 	FDaedalusDesktopArcadeInput PreviousInput;

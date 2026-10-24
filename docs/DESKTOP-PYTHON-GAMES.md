@@ -76,6 +76,19 @@ events out of gameplay and Star's paused menu. Failed switching keeps the run
 and draft choice. Native popup, focus, input and save-failure acceptance remain
 pending; this source slice does not establish runtime acceptance.
 
+Star Shooter has a native **How to play** panel, also opened with F1 or left-stick
+click from game focus. It groups the survival goal, upgrades, playing controls,
+save/continue behavior and terminal retry at a readable size. Help pauses the
+current run and disables the cabinet beneath it. Mouse wheel, Page Up/Down or
+LB/RB scroll the bounded instructions. **Resume game** explicitly resumes a live
+run; **Return paused**, F1/left-stick click, Esc/Back or pad B dismisses help while
+keeping the run paused. Game-over and pending-save states cannot use Resume.
+Save warnings stay visible and existing save processing continues. The existing
+Continue saved Star run button also participates in native focus navigation.
+Help does not save, restart, change difficulty or replace the active/drafted game.
+Source/API/focus review is separate from pending native layout, controller,
+scrolling, save-failure and focus-loss acceptance. No new save format is introduced.
+
 Star persistence is scoped to `Saved/DaedalusDesktopGames`: validated `DGS1` run state and
 `DGL1` top-ten score/wave/difficulty records. Leaderboard writes reload/merge fresh records;
 failed or malformed reads are refused. Failed run writes retain the pending payload, retry at
