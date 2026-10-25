@@ -34,6 +34,8 @@ struct ContraPlayer {
     bool FacingRight=true,OnGround=false,Crouching=false;
     int Lives=3,Cooldown=0,FireRate=8,SpreadTimer=0,Invincible=0;
     std::int64_t Score=0; bool Spread=false;
+    static constexpr int GroundGraceMaxFrames=6;
+    int GroundGraceFrames=0; // Appended; keep the source state/aggregate order.
     Rect GetRect() const { return PixelRect(X,Y,32,Crouching ? 24 : 48); }
     template<class Platforms>
     void Update(const Input& I,const Platforms& P,double CameraX) {
@@ -45,7 +47,10 @@ struct ContraPlayer {
         X+=Dx;
         Crouching=I.Down || StickY>.5;
         const int H=Crouching ? 24 : 48;
-        if((I.Jump || I.JumpPressed) && OnGround && !Crouching) { VY=-13; OnGround=false; }
+        const bool WasGrounded=OnGround;
+        if(WasGrounded) GroundGraceFrames=GroundGraceMaxFrames;
+        const bool Jumped=(I.Jump || I.JumpPressed) && (OnGround || GroundGraceFrames>0) && !Crouching;
+        if(Jumped) { VY=-13; OnGround=false; GroundGraceFrames=0; }
         VY+=.6; Y+=VY; OnGround=false;
         const Rect BeforeGround=GetRect();
         if(Y+H>=520) { Y=520-H; VY=0; OnGround=true; }
@@ -53,6 +58,10 @@ struct ContraPlayer {
             if(BeforeGround.Overlaps(Platform) && VY>=0 && Y+H-VY<=Platform.Y+5) {
                 Y=Platform.Y-H; VY=0; OnGround=true;
             }
+        }
+        if(!Jumped) {
+            if(OnGround) GroundGraceFrames=GroundGraceMaxFrames;
+            else if(!WasGrounded && GroundGraceFrames>0) --GroundGraceFrames;
         }
         X=std::max(X,CameraX+50);
         if(Cooldown>0) --Cooldown;
@@ -237,6 +246,7 @@ class ContraGame final : public Game {
     }
     void Hurt() {
         if(Player.Invincible>0 || Over) return;
+        Player.GroundGraceFrames=0;
         --Player.Lives; Player.Invincible=90; Explode(Player.X+16,Player.Y+20);
         if(Player.Lives<=0) { Player.Lives=0; Over=true; }
     }
@@ -266,7 +276,7 @@ class ContraGame final : public Game {
     std::string JumpReadiness() const {
         if(Over) return "JUMP: run ended";
         if(Player.Crouching) return "JUMP: release crouch";
-        return Player.OnGround ? "JUMP: ready (hold repeats on landing)" : "JUMP: airborne; land to jump again";
+        return Player.OnGround || Player.GroundGraceFrames>0 ? "JUMP: ready (hold repeats on landing)" : "JUMP: airborne; land to jump again";
     }
     std::string ProtectionText() const {
         if(Player.Invincible==1) return "PROTECTION expires next live step";
@@ -410,6 +420,7 @@ public:
         for(auto& P:Particles) { P.X+=P.VX; P.Y+=P.VY; P.VY+=.2; --P.Life; }
         Particles.erase(std::remove_if(Particles.begin(),Particles.end(),[](const auto& P){return P.Life<=0;}),Particles.end());
         if(Player.Y>650) {
+            Player.GroundGraceFrames=0; // Relocation still happens when Hurt is invincibility-guarded.
             Hurt(); Player.Y=450; Player.VY=-8; Player.X=std::max(100.0,Player.X-100);
         }
     }

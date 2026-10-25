@@ -245,6 +245,12 @@ without new controls. This native extension preserves the map, all 304 dots and
 existing score/life/power/respawn rules; pinned source fixtures retain their
 original boundary behavior. Native visual/input and chase feel remain unverified.
 
+Ironwake Advance likewise accepts a jump shortly after stepping off a platform,
+while keeping its existing held-jump landing hops, crouch restriction and jump
+trajectory. The allowance expires after six decisions and is consumed by a jump;
+accepted damage and new runs clear it. No new controls or mode are needed. Native
+input/feel acceptance remains pending.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
