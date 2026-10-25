@@ -1778,7 +1778,7 @@ const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
 /* PRISM03 summon spirits (summons.js): beaten Wardens' spirits, one call each per battle */
 const SUMMONS = () => window.PrismSummons ? PrismSummons.table(D.dungeons.map(d => d.boss_data).filter(Boolean), D.realm_key) : [];
 const mySpirits = () => window.PrismSummons ? PrismSummons.unlocked(SUMMONS(), state.beaten) : [];
-const battleCmds = () => mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
+const battleCmds = () => (D.realm_key || "prism") === "prism" ? CMDS.concat(mySpirits().length ? ["SUMMON", "PLAN"] : ["PLAN"]) : mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
 function playChord(sp) {                                  /* soft rolled triad: sine, low-passed, gain <= 0.3 */
   sfx("SUMMON:" + sp.name);
   if (!actx) return;
@@ -1798,6 +1798,12 @@ function battleTick(dt) {
   if (B.phase === "intro") { if (B.t > 1.0 || hit("a")) { B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; party.forEach(m => m.defend = false); } return; }
   if (B.phase === "cmd") {
     const m = party[B.who];
+    if (B.sub === "plan") {
+      const back = hit("b"), confirm = hit("a"), start = hit("start");
+      for (const key of ["up", "down", "left", "right"]) hit(key);
+      if (back || confirm || start) { B.sub = null; sfx("TICK"); }
+      return;
+    }
     if (B.sub === "target") {
       if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; hit("a"); sfx("TICK"); return; }
       const tg = B.list;
@@ -1866,6 +1872,7 @@ function battleTick(dt) {
       else if (c === "DEFEND") { B.acts.push({ kind: "defend", who: m }); advanceChooser(); }
       else if (c === "RUN") { B.acts.push({ kind: "run", who: m }); advanceChooser(); }
       else if (c === "SUMMON") { B.sub = "summon"; B.oi = 0; }
+      else if (c === "PLAN") { B.sub = "plan"; }
     }
     return;
   }
@@ -2118,6 +2125,34 @@ function spellHint(s) {
     : s.status ? s.status.toUpperCase().replace(/_/g, " ") : s.element && s.element !== "none" ? s.element.toUpperCase() : "DAMAGE";
   return effect + " / " + target;
 }
+function drawBattlePlan() {
+  const columns = Math.floor((W - 24) / 6), fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1);
+  text("TURN PLAN", 12, 10, "#fff070"); const round = "ROUND " + B.round; text(round, W - 12 - tw(round), 10, "#a0d8f8");
+  text(fit("CHOOSING: " + party[B.who].name), 12, 22);
+  text("CHOICE ORDER / " + B.acts.length + " PLANNED", 12, 34, "#a0a8c0");
+  if (!B.acts.length) text("NO CHOICES YET.", 12, 62, "#a0a8c0");
+  // Four active heroes leave at most three earlier choices while another hero is choosing.
+  B.acts.forEach((act, i) => {
+    const y = 50 + i * 40, magic = act.kind === "magic", summon = act.kind === "summon";
+    const action = magic ? act.spell.name : summon ? act.spirit.name : act.kind === "item" ? act.item : act.kind;
+    const cost = magic ? " " + act.spell.mp + "MP" : summon ? " " + act.spirit.mp + "MP" : "";
+    text(fit((i + 1) + ". " + act.who.name), 12, y, "#a0d8f8");
+    text(fit(action, columns - cost.length) + cost, 12, y + 12);
+    let target = act.target === "all" ? "ALL FOES" : act.kind === "run" || act.kind === "item" && act.target === null ? "ESCAPE ATTEMPT" : "SELF";
+    if (act.target && typeof act.target === "object") {
+      const foe = B.foes.indexOf(act.target), ally = party.indexOf(act.target), suffix = foe >= 0 ? " / FOE " + (foe + 1) : ally >= 0 ? " / ALLY " + (ally + 1) : "";
+      target = fit("TO " + act.target.name, columns - suffix.length) + suffix;
+    }
+    text(target, 12, y + 24, "#a0a8c0"); g.fillStyle = "#243850"; g.fillRect(12, y + 34, W - 24, 1);
+  });
+  text("CHOICE ORDER. TURN ORDER MAY DIFFER.", 12, 184, "#a0a8c0");
+  text("CLOSE, THEN BACK TO UNDO ONE.", 12, 196);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": CLOSE  " + back + ": CLOSE", 12, 212, "#fff070");
+}
 function drawBattleTarget(split) {
   const pending = B.pending, target = B.list[B.target], columns = Math.floor((split - 12) / 6);
   const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
@@ -2210,6 +2245,7 @@ function drawBespokeSpellFx(fx) {
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
   const compact = W < 320, split = compact ? 120 : 150, statsX = split + 8;
+  if (B.phase === "cmd" && B.sub === "plan" && (D.realm_key || "prism") === "prism") return drawBattlePlan();
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, W, 180);
   for (const f of B.foes) {
@@ -2248,9 +2284,11 @@ function drawBattle() {
     gauge(statsX, y + 9, hpRight - statsX - 2, m.hp / m.max, m.hp < m.max / 4 ? "#e8b85c" : "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
-    const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13;
-    cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
+    const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13, rows = (D.realm_key || "prism") === "prism" ? Math.min(6, cmds.length) : cmds.length;
+    const from = clamp(B.cmd - rows + 1, 0, Math.max(0, cmds.length - rows));
+    cmds.slice(from, from + rows).forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + (B.cmd - from) * step);
     text(String(party[B.who].name).toUpperCase().slice(0, compact ? 5 : 9), 86, 152, "#fff070");
+    if (cmds.length > rows) text((B.cmd + 1) + "/" + cmds.length, 86, 166, "#a0a8c0");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
     const m = party[B.who], called = new Set(B.summoned || []), planned = new Set(B.acts.filter(a => a.kind === "summon").map(a => a.spirit.name)), used = new Set([...called, ...planned]);
     const opts = B.sub === "summon" ? mySpirits().map(s => {
