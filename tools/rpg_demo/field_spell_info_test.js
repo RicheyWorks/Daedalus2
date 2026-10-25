@@ -152,9 +152,18 @@ function roles(s) {
   s.api.openMenu(); const m = s.api.menu(); m.sub = "status";
   for (let i = 0; i < s.api.roster().length; i++) {
     m.who = i; const member = s.api.roster()[i], front = s.api.party().includes(member);
-    const row = s.draw().find(d => d.kind === "text" && d.x === 56 && d.y === 22); assert.ok(row);
-    assert.equal(row.label, member.job.toUpperCase() + (front ? " / FRONT" : " / RESERVE"));
-    assert.ok(row.x + row.label.length * 6 < 200 && row.y + 8 <= 36, "job and actual membership fit before the existing MP column");
+    const draws = s.draw();
+    if (s.c.D.realm_key === "prism") {
+      const row = draws.find(d => d.kind === "text" && d.x === 52 && d.y === 22); assert.ok(row);
+      assert.equal(row.label, "LV " + member.lv + (front ? " / FRONT" : " / RESERVE"));
+      const count = draws.find(d => d.kind === "text" && d.y === 22 && d.label === (i + 1) + "/" + s.api.roster().length); assert.ok(count);
+      assert.ok(row.x + row.label.length * 6 < count.x, "actual membership fits before the member counter");
+      assert.ok(draws.some(d => d.kind === "text" && d.x === 52 && d.y === 10 && d.label.endsWith(" - " + member.job.toUpperCase())));
+    } else {
+      const row = draws.find(d => d.kind === "text" && d.x === 56 && d.y === 22); assert.ok(row);
+      assert.equal(row.label, member.job.toUpperCase() + (front ? " / FRONT" : " / RESERVE"));
+      assert.ok(row.x + row.label.length * 6 < 200 && row.y + 8 <= 36, "Portal retains the original role placement");
+    }
   }
 }
 check("STATUS marks all authored front and earned reserve members without changing state", () => roles(earnedRoster(session())));
