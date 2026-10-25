@@ -270,6 +270,12 @@ is selected by the unchanged throw rule. A muted cue during cooldown is a curren
 snapshot; moving players and country supers can change the eventual flight. It
 adds no control or gameplay rule. Native readability/feel acceptance is pending.
 
+Courtyard Clash's country picker accepts **stick flicks** alongside keys and the
+D-pad. Tilt vertically past 0.6 once, then center both axes within 0.3 before the
+next choice. The stick gesture that opens the picker is consumed. Match movement
+and the existing original-stick-versus-hat charge rules are retained. Native
+hardware and selection layout acceptance remain unverified.
+
 After Courtyard Clash's fourth round, the **tournament scorecard** declares the
 overall win, opponent win or draw from the existing cumulative match wins. Large
 counts and four-segment bars distinguish your chosen country from all opponents;
