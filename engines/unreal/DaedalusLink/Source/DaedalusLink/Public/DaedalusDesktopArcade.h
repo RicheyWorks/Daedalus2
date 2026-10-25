@@ -129,7 +129,7 @@ public:
 	/** Star/Mines: difficulty 0..2. Pong: 0 Match, 1 practice, 2 First to 5.
 	 * Football: 0 Match, 1 practice. Sega: 0 full run, 1 boss rehearsal.
 	 * Asteroids: 0 endless, 1 three waves, 2 flight practice. Ninja: 0 adventure, 1 terrace climb.
-	 * Ironwake: 0 full run, 1 target range. Changes start a new run. */
+	 * Ironwake: 0 full run, 1 target range. Glowtrail: 0 classic, 1 bonus fruit. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }

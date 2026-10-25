@@ -325,6 +325,12 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PacmanVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Classic"), 0, TEXT("Changing mode starts over. Classic keeps the existing dot-clear and ghost rules."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Bonus fruit"), 1, TEXT("Changing mode starts over. After 76 and 228 dots, each fruit is worth 100 points and lasts 20 seconds of active play. The second waits if one is already out. Clearing every dot still finishes."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[
@@ -796,6 +802,12 @@ EVisibility SDaedalusDesktopArcade::ContraVisibility() const
 	return Actor && Actor->GetSelectedGameId() == TEXT("contra") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
+EVisibility SDaedalusDesktopArcade::PacmanVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("pacman") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
@@ -829,6 +841,9 @@ FText SDaedalusDesktopArcade::ControlText() const
 		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dungeon")) Text += TEXT("J/Space or pad A/X: light. Shift or pad Y/LB: trail. K/Enter or pad B: reset the circuit.");
+	else if (Id == TEXT("pacman")) Text += Actor && Actor->GetGameOption() == 1
+		? TEXT("Clear every dot. Fruit opportunities follow 76 and 228 collected dots. Each is worth 100 points and lasts 20 seconds of active play; the second waits if one is already out. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.")
+		: TEXT("Clear every dot. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.");
 	else if (Id == TEXT("zelda")) Text += TEXT("Space/J/K/Enter or pad A/B/X/RB: sword. Shift/V or pad Y/LB: toggle hold-to-swing assist (starts off). Assist keeps the usual swing timing and stays selected on retry.");
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: fresh throw; V/pad Y/LB: pass, hold to catch + keep; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
