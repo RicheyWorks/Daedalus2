@@ -319,6 +319,12 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::ContraVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run keeps the original enemies, pickups and distance goal."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Target range"), 1, TEXT("Changing mode starts over. Hit three panels with standing, jumping and low shots; no enemies or clock."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[
@@ -782,6 +788,12 @@ EVisibility SDaedalusDesktopArcade::NinjaVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("shadow_ninja") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::ContraVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("contra") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

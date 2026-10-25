@@ -48,6 +48,42 @@ Shadow Ninja preserves start at (175,380), feet-based platform collision and its
 
 ## Repairs and deliberate adaptations
 
+### Ironwake target range
+
+Optional mode1 / Target range teaches shot heights with three ordered rectangles:
+(340,485,24,20), (620,340,24,40), (970,503,24,15). Source standing-ground shots are
+at496, jump-apex shots at361.6 and settled crouch shots at512. The high panel gives
+15 post-update jump decisions, so the original eight-step held-fire cadence has
+room to connect. Actual truncated PixelContains bullet hits decide success; no
+posture gate rejects valid platform, spread or other source shot alternatives.
+
+Reset keeps the mode and clears targets, entities, weapons, particles and progress;
+range skips the original initial enemies/pickup. The shared input/player/camera/
+bullet prefix remains unchanged. A range branch then consumes one impacting bullet,
+advances at most one target and ticks the same particles, returning before enemy
+fire, random spawns, pickups, damage or source distance victory. It has no timer,
+target score or extra reward. Third hit sets Won/Over and freezes. Position and
+heading carry between goals; existing camera/backtracking and bullet expiry apply.
+Mode0 retains the full original run and RNG/cosmetic order. Title, keyboard bonus,
+selected title lives, controller start and fresh retries retain their existing paths.
+
+Gold/green/muted panels and one offscreen edge arrow identify goals. Existing HUD
+slots show target count/progress and the current shot hint; no tutorial panel/row.
+The native checked mode row uses MakeMode and a game-specific ContraVisibility;
+public actor header is comment-only, with no actor/input API or builder changes.
+Mode changes start over; active native mode is a no-op. Native controls/focus,
+viewport readability and human shot learning remain unverified.
+
+`desktop_contra_target_range` / `contra_target_range_test.cpp` passed 51/51 strict
+single-TU MSVC C++17 checks. A public-input standing/jump/crouch shot route finished
+in198 steps, with no pose/stage assignment. Local fixtures retain real reached
+stage copies and check quantized order, strict edges, expiry and consumed bullets.
+Also covered12 detached player/shoot/bullet/camera parity steps,600-step safe range
+movement past the source finish without spawning/completing, default/mode/RNG,
+title bonus and selected lives, pure reads, terminal retries and Driver cleanup.
+No old ledge/source/platformer/replay bulk or old-header proof was repeated; no
+Unreal compilation, physical input or human play acceptance is implied.
+
 ### Ironwake ledge timing
 
 The existing held-jump landing hop remains unchanged. A short ground-grace window
