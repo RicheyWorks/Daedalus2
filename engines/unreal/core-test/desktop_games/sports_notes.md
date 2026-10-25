@@ -69,6 +69,31 @@ throw direction. Extra rendering/status calls preserve paired future state for
 rerun, no engine build/editor/native acceptance. Visibility at native scale and
 human interpretation of a changing target remain unverified.
 
+### Courtyard stick country selection
+
+The country picker now accepts a vertical stick flick beyond 0.6, once per tilt.
+Both axes must center within 0.3 before the next choice. A stick gesture that
+opens the picker is consumed; a neutral button/key entry permits a fresh flick.
+This completes the existing stick title-entry flow without scrolling past choices
+while the stick is held. Up/Down key and hat edges retain their current priority;
+a simultaneous stick gesture is consumed even when a digital edge wins.
+
+The original axes are untouched for match movement and charge. Hat-only Up still
+does not charge, while original stick Up beyond 0.5 still does. Confirmation,
+country stats, tournament/RNG behavior and reset are retained. The existing
+selection line/status names stick flicks rather than adding a helper row.
+
+`desktop_dodge_country_stick` / `dodge_country_stick_test.cpp` checks actual title
+entry, centering/thresholds/held gestures, wrapping and mixed inputs, Reset,
+confirmation and the live stick/hat charge distinction. Native stick hardware,
+layout and player acceptance remain unverified.
+
+Strict serial single-TU MSVC C++17 passed 48/48 focused checks: actual title
+entry, strict engage/inclusive release thresholds, held/reversed/jittered tilts,
+horizontal centering, wrapping, mixed digital priorities, reset, chosen roster,
+confirmation and unchanged live charge companions. No old sports bulk or source
+fixtures were rerun; the native adapter is unchanged.
+
 ### Courtyard tournament finish
 
 After round four, a dedicated scorecard declares the overall tournament win,

@@ -330,7 +330,16 @@ public:
     } Data;
 private:
     Random Rng;
-    bool UpWasDown=false,DownWasDown=false;
+    bool UpWasDown=false,DownWasDown=false,CountryStickArmed=false;
+    static bool CountryStickCentered(const Input& I) {
+        return std::abs(Axis(I.AxisX))<=0.3 && std::abs(Axis(I.AxisY))<=0.3;
+    }
+    int CountryStickStep(const Input& I) {
+        if(CountryStickCentered(I)) {CountryStickArmed=true;return 0;}
+        const double Y=Axis(I.AxisY);
+        if(!CountryStickArmed || std::abs(Y)<=0.6) return 0;
+        CountryStickArmed=false;return Y<0?-1:1;
+    }
     int Opponent() {
         const int Pick=Rng.Int(0,6);
         return Pick>=Data.SelectedCountry ? Pick+1 : Pick;
@@ -387,7 +396,7 @@ public:
     DodgeBallGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         Rng.Seed(Seed);Data=State{};Data.Particles.reserve(MaxParticles);
-        UpWasDown=DownWasDown=false;
+        UpWasDown=DownWasDown=CountryStickArmed=false;
     }
     static Player MakePlayer(int CountryIndex,int Slot,bool Cpu,int SuperType=1) {
         const int SafeCountry=std::max(0,std::min(7,CountryIndex));
@@ -502,13 +511,17 @@ public:
         const bool UpPressed=UpDown && !UpWasDown,DownPressed=DownDown && !DownWasDown;
         UpWasDown=UpDown;DownWasDown=DownDown;
         if(Data.Mode==Phase::Title) {
-            if(AnyButton || std::abs(Axis(I.AxisX))>0.6 || std::abs(Axis(I.AxisY))>0.6)
+            if(AnyButton || std::abs(Axis(I.AxisX))>0.6 || std::abs(Axis(I.AxisY))>0.6) {
                 Data.Mode=Phase::CountrySelect;
+                CountryStickArmed=CountryStickCentered(I); // Consume a stick gesture that opened the picker.
+            }
             return;
         }
         if(Data.Mode==Phase::CountrySelect) {
+            const int StickStep=CountryStickStep(I); // Consume even when a simultaneous digital edge wins.
             if(UpPressed) Data.SelectedCountry=(Data.SelectedCountry+7)%8;
             else if(DownPressed) Data.SelectedCountry=(Data.SelectedCountry+1)%8;
+            else if(StickStep!=0) Data.SelectedCountry=(Data.SelectedCountry+8+StickStep)%8;
             if(!Confirm) return;
             Data.OpponentCountry=Opponent();Data.HumanScore=Data.CpuScore=0;Data.Round=1;StartMatch();
         } else if(Data.Mode==Phase::Won || Data.Mode==Phase::Lost) {
@@ -609,7 +622,7 @@ public:
         std::string Text;
         if(Data.Mode==Phase::Title) Text="Courtyard Clash: Space/Enter/pad A chooses a country for four rounds. All three living humans share movement and jump. Host R/Restart clears the tournament.";
         else if(Data.Mode==Phase::CountrySelect) Text=std::string("Selected ")+Countries[Data.SelectedCountry].Name
-            +" | "+CountryStats()+" | Up/Down or hat selects; fresh Fire/Action confirms. Random opponents may repeat.";
+            +" | "+CountryStats()+" | Up/Down, hat or stick flick selects; center stick between choices. Fresh Fire/Action confirms. Random opponents may repeat.";
         else {
             Text="Round "+std::to_string(Data.Round)+"/4 | "+Countries[Data.SelectedCountry].Name+" vs "+Countries[Data.OpponentCountry].Name
                 +" | Match wins "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore)
@@ -697,7 +710,7 @@ public:
             F.AddText(450,265,CountrySuperText(),Yellow,14);
             F.AddText(450,305,"Four rounds; cumulative match wins",White,14);
             F.AddText(450,335,"Random opponents can repeat",White,14);
-            F.AddText(125,495,"Select: Up/Down, W/S or hat | Confirm: Space/Enter/pad A",White,17);
+            F.AddText(125,495,"Select: W/S, arrows, hat or stick flick | Confirm: Space/Enter/pad A",White,17);
             F.AddText(125,530,"All three living teammates share your movement and jump.",White,15);
             F.AddText(125,555,"Friendly hits: normal 1 HP, super 2 HP. Host R clears the tournament.",White,14);
         } else if(Data.Mode==Phase::Title) {
